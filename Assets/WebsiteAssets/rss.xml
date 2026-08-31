@@ -1,4 +1,61 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Joplin]]></title><description><![CDATA[Joplin, the open source note-taking application]]></description><link>https://joplinapp.org</link><generator>RSS for Node</generator><lastBuildDate>Tue, 05 May 2026 00:00:00 GMT</lastBuildDate><atom:link href="https://joplinapp.org/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Tue, 05 May 2026 00:00:00 GMT</pubDate><item><title><![CDATA[What's new in Joplin 3.6]]></title><description><![CDATA[<p>Joplin 3.6 brings a more polished editing experience, a much improved OneNote importer, and a clearer view of what's happening when the app syncs. Mobile also gains a number of features that previously were only available on desktop.</p>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Joplin]]></title><description><![CDATA[Joplin, the open source note-taking application]]></description><link>https://joplinapp.org</link><generator>RSS for Node</generator><lastBuildDate>Mon, 31 Aug 2026 00:00:00 GMT</lastBuildDate><atom:link href="https://joplinapp.org/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Mon, 31 Aug 2026 00:00:00 GMT</pubDate><item><title><![CDATA[What's new in Joplin 3.7]]></title><description><![CDATA[<p>Joplin 3.7 is the release where AI arrives in the app. A new chat panel lets you ask questions about the note you're working on, semantic search finds notes by meaning rather than by keyword, and a built-in MCP server allows external tools to work with your notes.</p>
+<p>Alongside this, the desktop app gains whiteboards - a new way to lay out notes and ideas visually - while mobile continues its interface redesign. Both platforms benefit from a more capable Markdown table editor and a number of sync reliability improvements.</p>
+<h2>Improvements across desktop and mobile<a name="improvements-across-desktop-and-mobile" href="#improvements-across-desktop-and-mobile" class="heading-anchor">🔗</a></h2>
+<h3>A real table editor in the Markdown editor<a name="a-real-table-editor-in-the-markdown-editor" href="#a-real-table-editor-in-the-markdown-editor" class="heading-anchor">🔗</a></h3>
+<p>Editing Markdown tables has always been the least pleasant part of writing in plain text. Joplin 3.7 adds an interactive table editor to the Markdown editor, with a context menu to add and delete rows and columns.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20260831-table-editor.png" alt="The Joplin Markdown editor showing a table with the table context menu open, listing the commands to add and delete rows and columns."></p>
+<p>Because the editor is shared between platforms, this is available on mobile as well.</p>
+<h3>More reliable syncing<a name="more-reliable-syncing" href="#more-reliable-syncing" class="heading-anchor">🔗</a></h3>
+<p>Syncing is faster and safer this cycle. Deleting a lot of notes at once on Joplin Server and Joplin Cloud no longer takes as long, and if you happen to be typing in a note just as it's being updated from another device, your changes are no longer at risk of being overwritten.</p>
+<h3>Faster startup<a name="faster-startup" href="#faster-startup" class="heading-anchor">🔗</a></h3>
+<p>Joplin no longer processes plugin files that don't need processing at startup, which noticeably reduces launch time for users with several plugins installed.</p>
+<h2>Desktop-specific improvements<a name="desktop-specific-improvements" href="#desktop-specific-improvements" class="heading-anchor">🔗</a></h2>
+<h3>AI features (Beta)<a name="ai-features-beta" href="#ai-features-beta" class="heading-anchor">🔗</a></h3>
+<p>The headline addition of this release is a set of AI features built into the app.</p>
+<p>The <strong>chat panel</strong> sits alongside the current note and can answer questions about it, summarise it, or make edits to it on your behalf, as well as read images in your notes.</p>
+<p>To use the AI features you need a provider, and this release introduces <strong>Joplin Cloud AI</strong> to make that as simple as possible. If you already sync with Joplin Cloud, you can simply turn it on and start using the chat panel right away - there's no API key to obtain, and nothing to configure.</p>
+<p>If you would rather use your own provider, that remains possible: the chat panel also works with your own OpenAI or Anthropic key. It can equally be pointed at a local model running on your own machine, in which case your notes never leave your computer at all.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20260831-ai-chat.png" alt="The Joplin desktop app with the AI chat panel open beside a note, showing a question about the note and the reply from the model."></p>
+<p><strong>Semantic search</strong> is now available in the sidebar and in Go To Anything. Unlike the regular search, it matches on meaning rather than exact words, so a search for &quot;holiday plans&quot; can surface a note titled &quot;Trip to Portugal&quot;.</p>
+<p>This is powered by a new note embeddings indexer, which runs in the background and indexes both note titles and content.</p>
+<p>Finally, all of this is available to plugin authors too. Plugins can now hold conversations with a model, run semantic searches, and work with the note index directly - which opens the door to a whole new class of plugins, from automatic tagging and summarising to tools that surface related notes as you write.</p>
+<p>All the AI features are marked as <strong>Beta</strong>: they work, but they are new, and we expect to refine them based on how people actually use them.</p>
+<h3>MCP server<a name="mcp-server" href="#mcp-server" class="heading-anchor">🔗</a></h3>
+<p>Joplin now includes an <a href="https://modelcontextprotocol.io/">MCP server</a>, which means external AI tools and assistants can read from and write to your notes through a standard protocol. If you already use an MCP-capable app such as Claude, it can now work directly with your Joplin data.</p>
+<h3>Whiteboards<a name="whiteboards" href="#whiteboards" class="heading-anchor">🔗</a></h3>
+<p>A brand new feature on desktop: whiteboards let you arrange notes, files and free-form cards on an infinite canvas, and connect them with labelled arrows.</p>
+<p>Notebooks and tags are good at filing things away, but they say little about how your notes relate to one another. A whiteboard gives you that missing view: you can map out a project, plan a piece of writing, or lay out the pieces of a problem and see the connections between them at a glance.</p>
+<p>Cards and groups can be coloured, and files can be dragged and dropped straight onto the canvas.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20260831-whiteboard.png" alt="A Joplin whiteboard with several coloured cards linked to notes, arranged on the canvas and connected by labelled arrows."></p>
+<h3>Importing from other apps<a name="importing-from-other-apps" href="#importing-from-other-apps" class="heading-anchor">🔗</a></h3>
+<p>Joplin 3.7 adds support for importing an Obsidian vault, on both desktop and the CLI, making it straightforward to move over from Obsidian while keeping your notes and their structure.</p>
+<p>The Evernote importer now resolves cross-notebook links in many cases where they were previously lost.</p>
+<p>The OneNote importer also received another round of fixes, in particular around note order, printouts and handwriting.</p>
+<h3>Publishing and sharing<a name="publishing-and-sharing" href="#publishing-and-sharing" class="heading-anchor">🔗</a></h3>
+<p>Joplin Cloud users could already publish a note to the internet as a public page. It is now possible to publish a <strong>whole notebook</strong> at once.</p>
+<p>The notes are published together, with their links between each other preserved, which effectively turns a notebook into a small website: a piece of documentation, a recipe collection, a set of course notes, or anything else you want to share as a whole rather than one page at a time. Anyone with the link can read it, and it stays up to date as you edit the notes in Joplin.</p>
+<p>And when sharing a notebook, email addresses are now auto-completed, which makes sharing with the same people repeatedly much quicker.</p>
+<h3>Settings search<a name="settings-search" href="#settings-search" class="heading-anchor">🔗</a></h3>
+<p>Joplin has accumulated a lot of settings over the years, and it is not always obvious which section holds the one you need. The configuration screen now has a search box: type what you are after, and the matching settings appear, wherever they happen to live.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20260831-setting-search.png" alt="The Joplin configuration screen with a term typed into the new search box and the matching settings listed below it."></p>
+<h3>Post-quantum encryption for connections<a name="post-quantum-encryption-for-connections" href="#post-quantum-encryption-for-connections" class="heading-anchor">🔗</a></h3>
+<p>Joplin desktop now supports post-quantum cryptography (PQC) for TLS connections. This protects your synchronisation traffic against &quot;harvest now, decrypt later&quot; attacks, where encrypted data captured today could be decrypted by a quantum computer in the future.</p>
+<h3>Easier installation on Linux<a name="easier-installation-on-linux" href="#easier-installation-on-linux" class="heading-anchor">🔗</a></h3>
+<p>The Linux AppImage no longer depends on the deprecated <code>libfuse2</code> library. On many distributions, installing Joplin used to mean first tracking down and installing that dependency by hand - it should now simply run out of the box.</p>
+<h2>Mobile-specific improvements<a name="mobile-specific-improvements" href="#mobile-specific-improvements" class="heading-anchor">🔗</a></h2>
+<h3>The interface redesign continues<a name="the-interface-redesign-continues" href="#the-interface-redesign-continues" class="heading-anchor">🔗</a></h3>
+<p>The mobile redesign that started in previous releases carries on through 3.7, this time focusing on the menus you reach for constantly - creating a note, acting on one, or long-pressing a notebook. They are now easier to read at a glance, and their options are laid out more sensibly, so common actions take less hunting. The search screen has had the same treatment.</p>
+<p>Dialogs have been tidied up too, with buttons always appearing in the same order throughout the app - a small thing, but it means you stop having to check which side &quot;Cancel&quot; is on before tapping.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20260831-mobile-new-note.png" alt="The redesigned new note menu on Joplin mobile."></p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20260831-mobile-note-menu.png" alt="The redesigned note actions menu on Joplin mobile."></p>
+<h3>Faster encryption<a name="faster-encryption" href="#faster-encryption" class="heading-anchor">🔗</a></h3>
+<p>The native crypto module has been refactored, which makes encryption and decryption substantially faster on mobile. This is most noticeable when first setting up end-to-end encryption or syncing a large collection for the first time.</p>
+<h3>Notebook sort options<a name="notebook-sort-options" href="#notebook-sort-options" class="heading-anchor">🔗</a></h3>
+<p>You can now choose how the notebook list itself is ordered, from the configuration screen: alphabetically, or by which notebook was most recently updated - and in either direction. Sorting by recent activity is particularly handy on mobile, as it keeps the notebooks you are actually working in at the top of the sidebar.</p>
+<h2>Bug fixes and security fixes<a name="bug-fixes-and-security-fixes" href="#bug-fixes-and-security-fixes" class="heading-anchor">🔗</a></h2>
+<p>Beyond the new features, a lot of this release went into making the apps more reliable and more secure: Joplin 3.7 includes <strong>over 100 bug fixes</strong> and <strong>eight security fixes</strong> across desktop and mobile.</p>
+<p>For the full list of changes, see <a href="https://joplinapp.org/help/about/changelog/desktop/">the desktop changelog</a> and <a href="https://joplinapp.org/help/about/changelog/android/">the mobile changelog</a>.</p>
+]]></description><link>https://joplinapp.org/news/20260831-release-3-7</link><guid isPermaLink="false">20260831-release-3-7</guid><pubDate>Mon, 31 Aug 2026 00:00:00 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[What's new in Joplin 3.6]]></title><description><![CDATA[<p>Joplin 3.6 brings a more polished editing experience, a much improved OneNote importer, and a clearer view of what's happening when the app syncs. Mobile also gains a number of features that previously were only available on desktop.</p>
 <h2>Improvements across desktop and mobile<a name="improvements-across-desktop-and-mobile" href="#improvements-across-desktop-and-mobile" class="heading-anchor">🔗</a></h2>
 <h3>A more visual Markdown editor<a name="a-more-visual-markdown-editor" href="#a-more-visual-markdown-editor" class="heading-anchor">🔗</a></h3>
 <p>The Markdown editor now renders formatting directly in the editor by default, which means headings, bold and italic text, links, images and other elements now appear styled as you type, instead of as raw Markdown. This brings the editing experience much closer to the final rendered note, while keeping all the speed and predictability of plain Markdown.</p>
@@ -541,46 +598,4 @@ sys 0m38.013s</p>
 <li>Android: <a href="https://joplinapp.org/help/about/changelog/android">https://joplinapp.org/help/about/changelog/android</a></li>
 <li>iOS: <a href="https://joplinapp.org/help/about/changelog/ios">https://joplinapp.org/help/about/changelog/ios</a></li>
 </ul>
-]]></description><link>https://joplinapp.org/news/20230508-release-2-11</link><guid isPermaLink="false">20230508-release-2-11</guid><pubDate>Fri, 14 Jul 2023 12:00:00 GMT</pubDate><twitter-text>What&apos;s new in Joplin 2.11</twitter-text></item><item><title><![CDATA[What's new in Joplin 2.10]]></title><description><![CDATA[<p>Great news! Joplin 2.10 is here and we've made some amazing improvements and bug fixes, with a focus on the mobile app.</p>
-<h2>New design for &quot;New note&quot; and &quot;New to-do&quot; buttons<a name="new-design-for-new-note-and-new-to-do-buttons" href="#new-design-for-new-note-and-new-to-do-buttons" class="heading-anchor">🔗</a></h2>
-<p>We're excited to announce that we've made it even easier to create new notes and to-do lists with new designs for the &quot;New note&quot; and &quot;New to-do&quot; buttons.</p>
-<p>If there is enough space, the button labels will be shown in full:</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20230508-new-note-1.png" alt=""></p>
-<p>While for those who prefer a more narrow note list, only the button icons will be shown:</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20230508-new-note-2.png" alt=""></p>
-<p>It's a small improvement, but we're confident it will make the app even more intuitive for new users.</p>
-<h2>Fixes and improvements<a name="fixes-and-improvements" href="#fixes-and-improvements" class="heading-anchor">🔗</a></h2>
-<p>This version includes 30 bug fixes and 16 general improvements. Let's dive into some of the highlights:</p>
-<ul>
-<li>
-<p>Self Not Found and Pedro have been working tirelessly on improving the pasting of plain text in the application, and we're happy to say that there is now a brand new &quot;Paste as text&quot; option in the Edit menu.</p>
-</li>
-<li>
-<p>For our amazing plugin developers out there, we have added a few new APIs and fixed a bug that was preventing certain plugins from starting. You can now get even more creative with your plugins!</p>
-</li>
-<li>
-<p>Tao Klerks, has been hard at work fixing and improving the custom sort order of the note list. No more notes in the wrong position when you drop them! Plus, custom sort order is now synchronised too.</p>
-</li>
-<li>
-<p>We've also fixed a few bugs with our Web Clipper, including an issue where certain pages wouldn't import their images. A new Web Clipper has also been released, so you can clip to your heart's content!</p>
-</li>
-</ul>
-<p>Last but not least, we have modernised both the desktop and mobile application modules, just <a href="https://joplinapp.org/news/20221115-renovate/">as we previously announced</a>. Although these changes may not be visible to you, they required a lot of work! But the result is that our applications are now more stable and secure, and it will be easier to maintain them in the long run. We're using a tool called <a href="https://www.mend.io/free-developer-tools/renovate/">Renovate</a>, which will automatically propose package updates that we will review. In total, we've updated a whopping 633 packages so far!</p>
-<h2>Android app is available in the Play Store<a name="android-app-is-available-in-the-play-store" href="#android-app-is-available-in-the-play-store" class="heading-anchor">🔗</a></h2>
-<p>Our latest version, 2.10, is now back in the Play Store and ready for download! Although we had to skip 2.9 due to some of Google's requirements, we worked hard to ensure that our app complies with their standards, and we are excited to announce that we are back and better than ever! Our iOS version is also available, so you can continue to enjoy the app regardless of the platform you use.</p>
-<h3>Biometrics support<a name="biometrics-support" href="#biometrics-support" class="heading-anchor">🔗</a></h3>
-<p>To make your experience even more secure, our Android and iOS apps now support biometric unlock! With just a quick scan of your fingerprint or Face ID, you can unlock your app in no time. To enable this beta feature, just head over to the settings and click on &quot;Use biometrics to secure access to the app&quot;.</p>
-<p>We've tested this feature thoroughly during prerelease, and have already fixed all known issues. However we still consider it as a beta feature for now, so if you run into any issues please let us know.</p>
-<h3>Support for multiple profile<a name="support-for-multiple-profile" href="#support-for-multiple-profile" class="heading-anchor">🔗</a></h3>
-<p>We're thrilled to announce that multiple profiles are now supported in our mobile app! To create a new profile, simply go to the Configuration screen and click on &quot;Manage profiles&quot; under the Tools section.</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20230508-biometrics-1.png" alt=""></p>
-<p>From there, you can easily add or remove profiles as needed.</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20230508-biometrics-2.png" alt=""></p>
-<p>Once multiple profiles are setup, you will see a new option in the sidebar to quickly toggle from one profile to another:</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20230508-biometrics-3.png" alt=""></p>
-<p>Once you've set up multiple profiles, you can easily toggle between them using the new option in the sidebar. This feature is perfect for separating your personal and work notes into independent collections.</p>
-<h3>Support for realtime search<a name="support-for-realtime-search" href="#support-for-realtime-search" class="heading-anchor">🔗</a></h3>
-<p>Our mobile app now has an improved search function that performs text searches in real time! No more waiting for the search results to load, they'll appear instantly as you type.</p>
-<h3>Improved filesystem sync performance<a name="improved-filesystem-sync-performance" href="#improved-filesystem-sync-performance" class="heading-anchor">🔗</a></h3>
-<p>Thanks to the hard work of jd1378, the sync no longer freezes during filesystem synchronisation. We know how frustrating that can be, and we're thrilled to have solved this issue. Getting filesystem sync to work on Android is never easy due to the restrictions put in place by Google, especially since they frequently change, but we're committed to delivering the best possible experience for our Android users.</p>
-]]></description><link>https://joplinapp.org/news/20230508-release-2-10</link><guid isPermaLink="false">20230508-release-2-10</guid><pubDate>Wed, 10 May 2023 12:00:00 GMT</pubDate><twitter-text>What&apos;s new in Joplin 2.10</twitter-text></item></channel></rss>
+]]></description><link>https://joplinapp.org/news/20230508-release-2-11</link><guid isPermaLink="false">20230508-release-2-11</guid><pubDate>Fri, 14 Jul 2023 12:00:00 GMT</pubDate><twitter-text>What&apos;s new in Joplin 2.11</twitter-text></item></channel></rss>
