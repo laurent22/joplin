@@ -2,6 +2,7 @@ import { invertedEffects } from '@codemirror/commands';
 import { EditorState, Extension, StateEffect, StateField, Transaction } from '@codemirror/state';
 import { Decoration, DecorationSet, EditorView, ViewPlugin, ViewUpdate, WidgetType } from '@codemirror/view';
 import { wordDiff, WordDiffSegment } from '@joplin/lib/services/conflict/wordDiff';
+import { focus } from '@joplin/lib/utils/focusHandler';
 
 // One conflicting line. from/to point at the other side's text in the document,
 // localText is the user's version of the same line
@@ -81,6 +82,7 @@ class LocalVersionWidget extends WidgetType {
 		button.textContent = view.state.phrase('Use my version');
 		button.onclick = () => {
 			view.dispatch({ effects: useLocalVersion.of(this.regionId_) });
+			focus('conflictResolution::useMyVersion', view);
 		};
 		container.appendChild(button);
 
