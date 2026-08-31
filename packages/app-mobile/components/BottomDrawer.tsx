@@ -58,12 +58,6 @@ const useStyles = ({ theme, menuType, dragging, alignment, draggable, dragOffset
 		// On web, any spaceBelowScreenEdge results in a scrollbar and extra scroll.
 		const spaceBelowScreenEdge = Platform.OS === 'web' ? 0 : windowHeight;
 
-		const includeSafeAreaPaddingBottom =
-			// Applying safe-area padding on newer versions of Android results in extra space below the
-			// menu:
-			(Platform.OS === 'android' && Platform.Version < 35)
-			|| Platform.OS === 'ios';
-
 		return StyleSheet.create({
 			backgroundStyle: {
 				backgroundColor: theme.backgroundColorTransparent2,
@@ -99,9 +93,7 @@ const useStyles = ({ theme, menuType, dragging, alignment, draggable, dragOffset
 					borderBottomRightRadius: 0,
 					borderBottomLeftRadius: 0,
 					marginBottom: -spaceBelowScreenEdge,
-				} : {
-					marginBottom: includeSafeAreaPaddingBottom ? safeAreaPadding.paddingBottom : 0,
-				}),
+				} : { }),
 				maxWidth: Math.min(
 					menuType === MenuType.Floating ? 250 : 400,
 					windowWidth - menuGapRight - menuGapLeft,
