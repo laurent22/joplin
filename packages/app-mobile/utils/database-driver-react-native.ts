@@ -8,13 +8,14 @@ import shim from '@joplin/lib/shim';
 
 const databaseDirectory = async () => {
 	if (Platform.OS === 'ios') {
-		const path = `${RNFS.LibraryDirectoryPath}/LocalDatabase/`;
+		const databaseDirectory = `${RNFS.LibraryDirectoryPath}/LocalDatabase/`;
 
-		if (!await shim.fsDriver().exists(path)) {
+		if (!await shim.fsDriver().exists(databaseDirectory)) {
 			// For compatibility with react-native-sqlite-storage, exclude the database
 			// directory from iCloud backups:
-			await RNFS.mkdir(path, { NSURLIsExcludedFromBackupKey: true });
+			await RNFS.mkdir(databaseDirectory, { NSURLIsExcludedFromBackupKey: true });
 		}
+		return databaseDirectory;
 	} else if (Platform.OS === 'android') {
 		const databaseDirectory = NativeModules.SystemInformationPackage?.getConstants()?.databaseDirectory;
 		if (!databaseDirectory) throw new Error('Unable to determine database path.');
