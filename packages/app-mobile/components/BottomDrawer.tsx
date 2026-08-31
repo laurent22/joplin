@@ -93,7 +93,9 @@ const useStyles = ({ theme, menuType, dragging, alignment, draggable, dragOffset
 					borderBottomRightRadius: 0,
 					borderBottomLeftRadius: 0,
 					marginBottom: -spaceBelowScreenEdge,
-				} : { }),
+				} : {
+					marginBottom: safeAreaPadding.paddingBottom,
+				}),
 				maxWidth: Math.min(
 					menuType === MenuType.Floating ? 250 : 400,
 					windowWidth - menuGapRight - menuGapLeft,
