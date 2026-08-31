@@ -134,7 +134,7 @@ const NoteItem: React.FC<NoteItemProps> = ({ note, shares }) => {
 	const published = useIsPublished(note, shares);
 
 	const unshareButton = published && (
-		<Button tooltip={_('Unpublish note')} iconName='fas fa-share-alt' onClick={() => onUnshareNoteClick({ noteId: note.id })}/>
+		<Button tooltip={_('Unpublish note')} iconName='fas fa-unlink' onClick={() => onUnshareNoteClick({ noteId: note.id })}/>
 	);
 
 	return (
