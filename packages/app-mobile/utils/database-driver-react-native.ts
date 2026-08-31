@@ -1,15 +1,26 @@
 import * as SQLite from 'expo-sqlite';
 import DatabaseDriver, { DatabaseCloseOptions, DatabaseOpenOptions, SqlSelectParams } from '@joplin/lib/database-driver';
 import * as RNFS from '@dr.pogodin/react-native-fs';
-import { Platform } from 'react-native';
-import { dirname } from 'path';
+import { NativeModules, Platform } from 'react-native';
+import shim from '@joplin/lib/shim';
 
-// For compatibility with react-native-sqlite-storage
-const databaseDirectory = () =>
-	Platform.select({
-		ios: `${RNFS.LibraryDirectoryPath}/LocalDatabase/`,
-		android: `${dirname(RNFS.DocumentDirectoryPath)}/databases/`,
-	});
+// cspell:ignore NSURLI
+
+const databaseDirectory = async () => {
+	if (Platform.OS === 'ios') {
+		const path = `${RNFS.LibraryDirectoryPath}/LocalDatabase/`;
+
+		if (!await shim.fsDriver().exists(path)) {
+			// For compatibility with react-native-sqlite-storage, exclude the database
+			// directory from iCloud backups:
+			await RNFS.mkdir(path, { NSURLIsExcludedFromBackupKey: true });
+		}
+	} else if (Platform.OS === 'android') {
+		const databaseDirectory = NativeModules.SystemInformationModule?.getConstants()?.databaseDirectory;
+		if (!databaseDirectory) throw new Error('Unable to determine database path');
+		return databaseDirectory;
+	}
+};
 
 export default class DatabaseDriverReactNative implements DatabaseDriver {
 	private lastInsertId_: string;
@@ -25,7 +36,7 @@ export default class DatabaseDriverReactNative implements DatabaseDriver {
 				// Work around an FTS-related crash when closing the database (see https://github.com/expo/expo/38168)
 				finalizeUnusedStatementsBeforeClosing: false,
 			},
-			databaseDirectory(),
+			await databaseDirectory(),
 		);
 		// Write-ahead logging (https://sqlite.org/wal.html) helps avoid "database locked" errors
 		// on Android (and, on iOS, seems to match the behavior of react-native-sqlite-storage
@@ -35,7 +46,7 @@ export default class DatabaseDriverReactNative implements DatabaseDriver {
 	}
 
 	public async deleteDatabase(options: DatabaseCloseOptions) {
-		await SQLite.deleteDatabaseAsync(options.name, databaseDirectory());
+		await SQLite.deleteDatabaseAsync(options.name, await databaseDirectory());
 	}
 
 	public sqliteErrorToJsError(error: Error) {

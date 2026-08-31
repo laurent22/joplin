@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SystemVersionInformationPackage implements ReactPackage {
+public class SystemInformationPackage implements ReactPackage {
 
 	@NonNull
 	@Override
@@ -49,13 +49,14 @@ public class SystemVersionInformationPackage implements ReactPackage {
 					result.put("webViewPackage", webViewPackage.packageName);
 				}
 			}
+			result.put("databaseDirectory", context.getDatabasePath("log.sqlite").getParent());
 			return result;
 		}
 
 		@NonNull
 		@Override
 		public String getName() {
-			return "SystemVersionInformationModule";
+			return "SystemInformationPackage";
 		}
 	}
 }
