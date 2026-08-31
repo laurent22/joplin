@@ -129,4 +129,33 @@ describe('autoMerge', () => {
 		expect(autoMerge(base, local, remote)).toEqual(autoMerge(base, local, remote));
 	});
 
+
+	test('should treat table rows that differ only in padding as the same row', () => {
+		// The columns are wider on one side, but only one cell actually changed
+		const local = '| a  | 1 |\n| b  | 2 |\n| c  | 3 |';
+		const remote = '| a | 1 |\n| X | 2 |\n| c | 3 |';
+
+		const result = autoMerge('', local, remote);
+		const conflicts = result.sections.filter(section => section.type === 'conflict');
+
+		expect(conflicts).toHaveLength(1);
+		expect(conflicts[0].localText).toBe('| b  | 2 |');
+	});
+
+	test.each([
+		['an escaped pipe', '| a \\| b  | 1 |', '| a \\| b | 1 |'],
+		['a delimiter row', '| --- |', '| ---------- |'],
+		['empty cells', '|   |   |', '| | |'],
+		['a row with no closing pipe', '| a | 1', '| a  | 1'],
+	])('should not report a conflict for padding alone in %s', (_name, local, remote) => {
+		expect(autoMerge('', local, remote).sections.some(section => section.type === 'conflict')).toBe(false);
+	});
+
+	test('should keep the original padding when auto-merging', () => {
+		// The merged text is written back, so it must not be the normalised form
+		const result = autoMerge('| a | 1 |\n| b | 2 |', '| A  | 1 |\n| b | 2 |', '| a | 1 |\n| b | 2 |');
+
+		expect(result.mergedText).toBe('| A  | 1 |\n| b | 2 |');
+	});
+
 });

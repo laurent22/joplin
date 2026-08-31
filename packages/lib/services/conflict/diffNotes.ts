@@ -44,9 +44,38 @@ const conflictPlaceholder = (local: string, remote: string): string => {
 	return `<<<<<<< local\n${local}\n=======\n${remote}\n>>>>>>> remote`;
 };
 
-// Trailing whitespace is invisible noise which can cause false conflicts
-// Two trailing spaces are kept (markdown hard line break)
+const isTableLine = (line: string) => line.trimStart().startsWith('|');
+const splitCells = (line: string) => {
+	const cells: string[] = [];
+	let current = '';
+
+	for (let i = 0; i < line.length; i++) {
+		if (line[i] === '\\' && i + 1 < line.length) {
+			current += line[i] + line[i + 1];
+			i++;
+		} else if (line[i] === '|') {
+			cells.push(current);
+			current = '';
+		} else {
+			current += line[i];
+		}
+	}
+	cells.push(current);
+
+	return cells;
+};
+
+// Used only to make both versions match, never rendered: the original line is
+// highlighted and written back.
 const normaliseLine = (line: string): string => {
+	if (isTableLine(line)) {
+		return splitCells(line)
+			.map(cell => (/^\s*:?-+:?\s*$/.test(cell) ? cell.replace(/-+/, '-') : cell).trim())
+			.join('|');
+	}
+
+	// Trailing whitespace is invisible noise which can cause false conflicts, but
+	// two trailing spaces are kept (markdown hard line break)
 	return line.replace(/[ \t]+$/, match => match === '  ' ? '  ' : '');
 };
 
@@ -135,15 +164,24 @@ export const autoMerge = (baseRaw: string, localRaw: string, remoteRaw: string):
 	const sections: MergedSection[] = [];
 	const mergedParts: string[] = [];
 
+	// Unstable regions use normalised lines without positions, so kept the original
+	// lines to preserve the user's spacing.
+	let localIndex = 0;
+	let remoteIndex = 0;
+
 	for (const region of regions) {
 		if (region.stable === true) {
 			const text = originalRegionLines(region, sides).join('\n');
+			if (region.buffer === 'a' || region.buffer === 'o') localIndex += region.bufferLength;
+			if (region.buffer === 'b' || region.buffer === 'o') remoteIndex += region.bufferLength;
 			// buffer 'o' = all sides agreed; 'a'/'b' = one side's change, taken cleanly
 			sections.push({ text, type: region.buffer === 'o' ? 'unchanged' : 'auto-merged' });
 			mergedParts.push(text);
 		} else {
-			const localText = region.aContent.join('\n');
-			const remoteText = region.bContent.join('\n');
+			const localText = localLines.original.slice(localIndex, localIndex + region.aContent.length).join('\n');
+			const remoteText = remoteLines.original.slice(remoteIndex, remoteIndex + region.bContent.length).join('\n');
+			localIndex += region.aContent.length;
+			remoteIndex += region.bContent.length;
 
 			// Both sides made the identical change: diff3 flags it as unstable, but it's not a real conflict
 			if (localText === remoteText) {
