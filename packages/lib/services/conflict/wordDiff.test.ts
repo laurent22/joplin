@@ -141,4 +141,28 @@ describe('wordDiff', () => {
 		]);
 	});
 
+
+	test('should not highlight the padding that lines up table columns', () => {
+		const local = '| name | id  |\n| gun  | 789 |';
+		const remote = '| name | id                |\n| hot  | 789               |';
+
+		const diff = wordDiff(local, remote);
+
+		for (const segment of diff.local.concat(diff.remote)) {
+			if (segment.highlighted) expect(segment.text.trim()).not.toBe('');
+		}
+	});
+
+	test('should still highlight an alignment marker in a delimiter row', () => {
+		expect(highlightedText(wordDiff('| --- |', '| :-: |').remote)).toEqual([':', ':']);
+	});
+
+
+	test('should highlight only the changed cell when the columns are padded differently', () => {
+		const diff = wordDiff('| four   | 456 |', '| fives  | 456                |');
+
+		expect(highlightedText(diff.local)).toEqual(['four']);
+		expect(highlightedText(diff.remote)).toEqual(['fives']);
+	});
+
 });

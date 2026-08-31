@@ -74,7 +74,31 @@ export const autoMerge = (baseRaw: string, localRaw: string, remoteRaw: string):
 	if (base === '') {
 		// No base version: we can't tell which side made the changes, so the every
 		// different line is treated as a conflict
-		const comm: CommRegion[] = diffComm(localLines.normalised, remoteLines.normalised);
+		const rawComm: CommRegion[] = diffComm(localLines.normalised, remoteLines.normalised);
+
+		// One conflict can come as multiple regions holding only one side each,
+		// so they are joined to keep the two versions together.
+		const comm: CommRegion[] = [];
+		for (let i = 0; i < rawComm.length; i++) {
+			const region = rawComm[i];
+			const previous = comm[comm.length - 1];
+			const next = rawComm[i + 1];
+			const isBlankCommon = !!region.common && region.common.every(line => line.trim() === '');
+
+			if (isBlankCommon && previous && !previous.common && next && !next.common) {
+				previous.buffer1 = previous.buffer1.concat(region.common);
+				previous.buffer2 = previous.buffer2.concat(region.common);
+				continue;
+			}
+
+			if (previous && !previous.common && !region.common) {
+				previous.buffer1 = previous.buffer1.concat(region.buffer1);
+				previous.buffer2 = previous.buffer2.concat(region.buffer2);
+				continue;
+			}
+
+			comm.push({ ...region, buffer1: [...(region.buffer1 ?? [])], buffer2: [...(region.buffer2 ?? [])] });
+		}
 
 		const sections: MergedSection[] = [];
 		const mergedParts: string[] = [];

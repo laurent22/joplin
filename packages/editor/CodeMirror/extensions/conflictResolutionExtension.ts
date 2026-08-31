@@ -62,6 +62,9 @@ class LocalVersionWidget extends WidgetType {
 
 		const text = document.createElement('div');
 		text.className = 'cm-conflictLocalVersion-text';
+		if (this.localText_.split('\n').some(line => line.trimStart().startsWith('|'))) {
+			text.classList.add('cm-conflictLocalVersion-table');
+		}
 
 		for (const segment of this.segments_) {
 			const span = document.createElement('span');
@@ -305,6 +308,26 @@ export const conflictRegions = (state: { field: <T>(field: StateField<T>)=> T })
 	return state.field(conflictState).regions.filter(region => !region.settled);
 };
 
+// when this is true, the table renderer keeps the markdown as it is
+export const hasUnresolvedConflicts = (state: EditorState) => {
+	// The field is only present when a conflict is open
+	const field = state.field(conflictState, false);
+	if (!field) return false;
+
+	return field.regions.some(region => !region.settled);
+};
+
+// Lets the table renderer know it should rebuild such as when a conflict is resolved
+export const conflictRegionsChanged = (transaction: Transaction) => {
+	if (transaction.effects.some(effect => effect.is(setConflictRegions) || effect.is(resolveConflict) || effect.is(restoreConflict))) {
+		return true;
+	}
+	const before = transaction.startState.field(conflictState, false);
+	const after = transaction.state.field(conflictState, false);
+	if (!before || !after) return before !== after;
+	return before.regions !== after.regions;
+};
+
 const applyLocalVersion = EditorState.transactionFilter.of(transaction => {
 	const chosen = transaction.effects.filter(effect => effect.is(useLocalVersion));
 	if (!chosen.length) return transaction;
@@ -430,6 +453,12 @@ const conflictTheme = EditorView.baseTheme({
 		overflowWrap: 'anywhere',
 		flex: 1,
 		minWidth: 0,
+	},
+	'& .cm-conflictLocalVersion-table': {
+		fontFamily: 'monospace',
+		whiteSpace: 'pre',
+		overflowWrap: 'normal',
+		overflowX: 'auto',
 	},
 	'& .cm-conflictLocalVersion-changedWord': {
 		backgroundColor: `color-mix(in srgb, ${localAccent} 45%, ${surface})`,

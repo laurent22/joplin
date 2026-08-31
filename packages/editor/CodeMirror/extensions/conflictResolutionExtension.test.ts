@@ -1,7 +1,8 @@
 import { history, undo, redo } from '@codemirror/commands';
-import { EditorSelection } from '@codemirror/state';
+import { EditorSelection, StateEffect } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
 import createTestEditor from '../testing/createTestEditor';
+import renderTables from './rendering/renderTables';
 import conflictResolutionExtension, { conflictRegions, resolveConflict, restoreConflict, setConflictRegions, ConflictRegionSpec } from './conflictResolutionExtension';
 
 const createEditor = async (initialText: string, regions: ConflictRegionSpec[] = []) => {
@@ -596,4 +597,48 @@ describe('conflictResolutionExtension', () => {
 		editor.dispatch({ effects: restoreConflict.of(middle) });
 		expect(regionTexts(editor)).toEqual(['one', 'two', 'three']);
 	});
+
+	// Conflicts are reviewed as markdown, so tables are not rendered
+	test('should not render tables while a conflict is unresolved', async () => {
+		const text = '| name | id |\n| --- | --- |\n| hot | 789 |';
+		const editor = await createTestEditor(text, EditorSelection.cursor(0), ['Table'], [
+			renderTables({ onEvent: () => {} } as never),
+		]);
+		const renderedTables = () => editor.dom.querySelectorAll('.cm-tw');
+
+		expect(renderedTables()).toHaveLength(1);
+
+		editor.dispatch({ effects: StateEffect.appendConfig.of([conflictResolutionExtension()]) });
+		editor.dispatch({ effects: setConflictRegions.of({
+			regions: [{ from: 28, to: 41, localText: '| gun | 789 |' }],
+			forText: text,
+		}) });
+
+		expect(renderedTables()).toHaveLength(0);
+		expect(editor.dom.querySelectorAll('.cm-conflictLocalVersion')).toHaveLength(1);
+
+		// Resolving the last region lets the note read normally again
+		const region = conflictRegions(editor.state)[0];
+		editor.dispatch({ effects: resolveConflict.of(region.id) });
+
+		expect(renderedTables()).toHaveLength(1);
+	});
+
+
+	test('should use a monospace font when the local version is a table', async () => {
+		const editor = await createEditor('| name | id |\n| hot  | 789 |', [
+			{ from: 14, to: 27, localText: '| gun  | 789 |' },
+		]);
+
+		expect(editor.dom.querySelectorAll('.cm-conflictLocalVersion-table')).toHaveLength(1);
+	});
+
+	test('should not use a monospace font for ordinary text', async () => {
+		const editor = await createEditor('hello world', [
+			{ from: 0, to: 11, localText: 'hello there' },
+		]);
+
+		expect(editor.dom.querySelectorAll('.cm-conflictLocalVersion-table')).toHaveLength(0);
+	});
+
 });
