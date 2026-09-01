@@ -1,5 +1,5 @@
 import { history, undo, redo } from '@codemirror/commands';
-import { EditorSelection, StateEffect } from '@codemirror/state';
+import { EditorSelection, EditorState, StateEffect } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
 import createTestEditor from '../testing/createTestEditor';
 import renderTables from './rendering/renderTables';
@@ -727,6 +727,28 @@ describe('conflictResolutionExtension', () => {
 
 		expect(editor.state.doc.toString()).toBe(before);
 		expect(conflictRegions(editor.state)).toHaveLength(3);
+	});
+
+
+	test('should not let a read-only note be resolved', async () => {
+		// A trashed or locked note cannot be changed or undone
+		const text = 'remote line';
+		const editor = await createTestEditor(text, EditorSelection.cursor(0), [], [
+			conflictResolutionExtension(),
+			EditorState.readOnly.of(true),
+		]);
+		editor.dispatch({ effects: setConflictRegions.of({
+			regions: [{ from: 0, to: 11, localText: 'local line' }],
+			forText: text,
+		}) });
+
+		const button = editor.dom.querySelector<HTMLButtonElement>('.cm-conflictUseVersionButton');
+		expect(button.disabled).toBe(true);
+
+		button.click();
+
+		expect(editor.state.doc.toString()).toBe(text);
+		expect(conflictRegions(editor.state)).toHaveLength(1);
 	});
 
 });

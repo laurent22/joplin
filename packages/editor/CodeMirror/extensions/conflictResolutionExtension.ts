@@ -54,6 +54,14 @@ class LocalVersionWidget extends WidgetType {
 		return this.regionId_ === other.regionId_ && this.localText_ === other.localText_;
 	}
 
+	// The button is disabled while the note is read-only
+	public updateDOM(dom: HTMLElement, view: EditorView) {
+		const button = dom.querySelector('button');
+		if (!button) return false;
+		button.disabled = view.state.readOnly;
+		return true;
+	}
+
 	public toDOM(view: EditorView) {
 		const container = document.createElement('div');
 		container.className = 'cm-conflictLocalVersion';
@@ -80,6 +88,7 @@ class LocalVersionWidget extends WidgetType {
 		const button = document.createElement('button');
 		button.className = 'cm-conflictUseVersionButton';
 		button.textContent = view.state.phrase('Use my version');
+		button.disabled = view.state.readOnly;
 		button.onclick = () => {
 			view.dispatch({ effects: useLocalVersion.of(this.regionId_) });
 			focus('conflictResolution::useMyVersion', view);
@@ -361,6 +370,8 @@ const applyLocalVersion = EditorState.transactionFilter.of(transaction => {
 	const chosen = transaction.effects.filter(effect => effect.is(useLocalVersion));
 	if (!chosen.length) return transaction;
 
+	if (transaction.startState.readOnly) return [];
+
 	const regions = transaction.startState.field(conflictState).regions;
 	const changes = [];
 	const effects = [];
@@ -507,11 +518,15 @@ const conflictTheme = EditorView.baseTheme({
 		font: 'inherit',
 		fontSize: '0.85em',
 	},
-	'& .cm-conflictUseVersionButton:hover': {
+	'& .cm-conflictUseVersionButton:hover:not(:disabled)': {
 		backgroundColor: 'var(--joplin-background-color-hover3, rgba(0, 0, 0, 0.06))',
 	},
-	'& .cm-conflictUseVersionButton:active': {
+	'& .cm-conflictUseVersionButton:active:not(:disabled)': {
 		backgroundColor: `color-mix(in srgb, ${localAccent} 35%, ${surface})`,
+	},
+	'& .cm-conflictUseVersionButton:disabled': {
+		opacity: 0.5,
+		cursor: 'default',
 	},
 });
 
