@@ -196,6 +196,12 @@ three line \\n no escape`)).toBe(0);
 
 		await Note.delete(conflictNote.id, { toTrash: true });
 		result = await BaseItem.itemsThatNeedSync(syncTargetId());
+		expect(result.items.map(item => item.id)).not.toContain(conflictNote.id);
+		expect(await BaseItem.syncItem(syncTargetId(), conflictNote.id)).toBeFalsy();
+		expect((await BaseItem.deletedItems(syncTargetId())).map(item => item.item_id)).toContain(conflictNote.id);
+
+		await Note.save({ id: conflictNote.id, deleted_time: 0 });
+		result = await BaseItem.itemsThatNeedSync(syncTargetId());
 		expect(result.items.map(item => item.id)).toContain(conflictNote.id);
 	});
 
