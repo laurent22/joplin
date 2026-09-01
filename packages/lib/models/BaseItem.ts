@@ -1,5 +1,5 @@
 import { ModelType, DeleteOptions } from '../BaseModel';
-import { BaseItemEntity, DeletedItemEntity, NoteEntity, SyncItemEntity } from '../services/database/types';
+import { BaseItemEntity, DeletedItemEntity, SyncItemEntity } from '../services/database/types';
 import Setting from './Setting';
 import BaseModel from '../BaseModel';
 import time from '../time';
@@ -327,14 +327,18 @@ export default class BaseItem extends BaseModel {
 		let trackDeleted = true;
 		if (options && options.trackDeleted !== null && options.trackDeleted !== undefined) trackDeleted = options.trackDeleted;
 
-		// Don't create a deleted_items entry when conflicted notes are deleted
-		// since no other client have (or should have) them.
-		let conflictNoteIds: string[] = [];
+		// Conflict notes are only present on sync targets to which they have already
+		// been uploaded. Only create tombstones for those targets.
+		const conflictNoteIds = new Set<string>();
+		const syncedConflictTargets = new Set<string>();
 		if (this.modelType() === BaseModel.TYPE_NOTE) {
 			const conflictNotes = await this.db().selectAll(`SELECT id FROM notes WHERE id IN (${this.escapeIdsForSql(ids)}) AND is_conflict = 1`);
-			conflictNoteIds = conflictNotes.map((n: NoteEntity) => {
-				return n.id;
-			});
+			for (const note of conflictNotes) conflictNoteIds.add(note.id);
+
+			if (conflictNoteIds.size) {
+				const syncItems = await this.db().selectAll(`SELECT item_id, sync_target FROM sync_items WHERE item_type = ? AND item_id IN (${this.escapeIdsForSql([...conflictNoteIds])})`, [this.modelType()]);
+				for (const syncItem of syncItems) syncedConflictTargets.add(`${syncItem.item_id}:${syncItem.sync_target}`);
+			}
 		}
 
 		if (needsShareReadOnlyChecks(this.modelType(), options.changeSource, this.syncShareCache, options.disableReadOnlyCheck)) {
@@ -349,11 +353,11 @@ export default class BaseItem extends BaseModel {
 			const queries = [];
 			const now = time.unixMs();
 			for (let i = 0; i < ids.length; i++) {
-				if (conflictNoteIds.indexOf(ids[i]) >= 0) continue;
-
 				// For each deleted item, for each sync target, we need to add an entry in deleted_items.
 				// That way, each target can later delete the remote item.
 				for (let j = 0; j < syncTargetIds.length; j++) {
+					if (conflictNoteIds.has(ids[i]) && !syncedConflictTargets.has(`${ids[i]}:${syncTargetIds[j]}`)) continue;
+
 					queries.push({
 						sql: 'INSERT INTO deleted_items (item_type, item_id, deleted_time, sync_target) VALUES (?, ?, ?, ?)',
 						params: [this.modelType(), ids[i], now, syncTargetIds[j]],
@@ -751,12 +755,13 @@ export default class BaseItem extends BaseModel {
 			// // CHANGED:
 			// 'SELECT * FROM [ITEMS] items JOIN sync_items s ON s.item_id = items.id WHERE sync_target = ? AND'
 
-			let extraWhere: string[]|string = [];
-			if (className === 'Note') extraWhere.push('is_conflict = 0');
-			if (className === 'Resource') extraWhere.push('encryption_blob_encrypted = 0');
-			if (ItemClass.encryptionSupported()) extraWhere.push('encryption_applied = 0');
+			const commonExtraWhere: string[] = [];
+			if (className === 'Resource') commonExtraWhere.push('encryption_blob_encrypted = 0');
+			if (ItemClass.encryptionSupported()) commonExtraWhere.push('encryption_applied = 0');
 
-			extraWhere = extraWhere.length ? `AND ${extraWhere.join(' AND ')}` : '';
+			const neverSyncedExtraWhere = commonExtraWhere.length ? `AND ${commonExtraWhere.join(' AND ')}` : '';
+			const changedExtraWhere = className === 'Note' ? [...commonExtraWhere, '(is_conflict = 0 OR deleted_time != 0)'] : commonExtraWhere;
+			const changedExtraWhereSql = changedExtraWhere.length ? `AND ${changedExtraWhere.join(' AND ')}` : '';
 
 			// First get all the items that have never been synced under this sync target
 			//
@@ -778,7 +783,7 @@ export default class BaseItem extends BaseModel {
 			this.db().escapeFields(fieldNames),
 			this.db().escapeField(ItemClass.tableName()),
 			Number(syncTarget),
-			extraWhere,
+			neverSyncedExtraWhere,
 			limit,
 			);
 
@@ -808,7 +813,7 @@ export default class BaseItem extends BaseModel {
 					this.db().escapeFields(fieldNames),
 					this.db().escapeField(ItemClass.tableName()),
 					Number(syncTarget),
-					extraWhere,
+					changedExtraWhereSql,
 					newLimit,
 				);
 

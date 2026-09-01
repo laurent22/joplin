@@ -179,6 +179,23 @@ three line \\n no escape`)).toBe(0);
 		expect(await syncTime(note1.id)).toBe(newTime);
 	});
 
+	it('should sync conflict notes once and sync deletion', async () => {
+		const conflictNote = await Note.save({ title: 'Conflict', is_conflict: 1 });
+
+		let result = await BaseItem.itemsThatNeedSync(syncTargetId());
+		expect(result.items.map(item => item.id)).toContain(conflictNote.id);
+
+		await BaseItem.saveSyncTime(syncTargetId(), conflictNote, conflictNote.updated_time);
+		await Note.save({ id: conflictNote.id, title: 'Changed conflict' });
+
+		result = await BaseItem.itemsThatNeedSync(syncTargetId());
+		expect(result.items.map(item => item.id)).not.toContain(conflictNote.id);
+
+		await Note.delete(conflictNote.id, { toTrash: true });
+		result = await BaseItem.itemsThatNeedSync(syncTargetId());
+		expect(result.items.map(item => item.id)).toContain(conflictNote.id);
+	});
+
 	it.each([
 		'test-test!',
 		'This ID has    spaces\ttabs\nand newlines',

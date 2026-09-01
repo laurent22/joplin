@@ -260,7 +260,7 @@ describe('Synchronizer.conflicts', () => {
 		expect(remainingNote2?.id).toBe(note2.id);
 	}));
 
-	it('should not sync notes with conflicts', (async () => {
+	it('should sync newly created conflict notes', (async () => {
 		const f1 = await Folder.save({ title: 'folder' });
 		await Note.save({ title: 'mynote', parent_id: f1.id, is_conflict: 1 });
 		await synchronizerStart();
@@ -270,11 +270,12 @@ describe('Synchronizer.conflicts', () => {
 		await synchronizerStart();
 		const notes = await Note.all();
 		const folders = await Folder.all();
-		expect(notes.length).toBe(0);
+		expect(notes).toHaveLength(1);
+		expect(notes[0].is_conflict).toBe(1);
 		expect(folders.length).toBe(1);
 	}));
 
-	it('should not try to delete on remote conflicted notes that have been deleted', (async () => {
+	it('should delete remotely synced conflict notes', (async () => {
 		const f1 = await Folder.save({ title: 'folder' });
 		const n1 = await Note.save({ title: 'mynote', parent_id: f1.id });
 		await synchronizerStart();
@@ -286,7 +287,13 @@ describe('Synchronizer.conflicts', () => {
 		await Note.delete(n1.id);
 		const deletedItems = await BaseItem.deletedItems(syncTargetId());
 
-		expect(deletedItems.length).toBe(0);
+		expect(deletedItems).toHaveLength(1);
+		expect(deletedItems[0].item_id).toBe(n1.id);
+
+		await synchronizerStart();
+		await switchClient(1);
+		await synchronizerStart();
+		expect(await Note.load(n1.id)).toBeUndefined();
 	}));
 
 	async function ignorableNoteConflictTest(withEncryption: boolean) {
