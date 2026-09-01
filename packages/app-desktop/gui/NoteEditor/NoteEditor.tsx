@@ -226,6 +226,10 @@ function NoteEditorContent(props: NoteEditorProps) {
 		if (choice === 0) onConflictReload();
 	}, [onConflictReload]);
 
+	const onGoToConflict = useCallback((direction: 'previous'|'next') => {
+		editorRef.current?.goToConflict?.(direction);
+	}, []);
+
 	const onConflictFinish = useCallback(async () => {
 		// The awaits allow another click to start before the first one finishes.
 		if (conflictFinishingRef.current) return;
@@ -931,7 +935,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
 					{renderSearchBar()}
 				</div>
-				{isConflictNote ? <ConflictFooter onFinish={onConflictFinish} disabled={isReadOnly}/> : null}
+				{isConflictNote ? <ConflictFooter onFinish={onConflictFinish} onGoToConflict={onGoToConflict} disabled={isReadOnly}/> : null}
 				<StatusBar
 					noteId={formNote.id}
 					setTagsToolbarButtonInfo={props.setTagsToolbarButtonInfo}

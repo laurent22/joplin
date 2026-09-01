@@ -8,6 +8,28 @@
 	border-top: 1px solid var(--joplin-divider-color);
 	background-color: var(--joplin-background-color);
 
+	> .-navigation {
+		display: flex;
+		gap: 20px;
+		margin-right: auto;
+
+		> .-step {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			padding: 4px;
+			cursor: pointer;
+			border: none;
+			background: none;
+			color: var(--joplin-color);
+			font-size: 1em;
+
+			&:hover {
+				color: var(--joplin-color4);
+			}
+		}
+	}
+
 	> .-finish {
 		padding: 10px 28px;
 		cursor: pointer;

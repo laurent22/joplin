@@ -310,6 +310,33 @@ export const conflictRegions = (state: { field: <T>(field: StateField<T>)=> T })
 	return state.field(conflictState).regions.filter(region => !region.settled);
 };
 
+export const goToConflict = (view: EditorView, direction: 'previous'|'next') => {
+	const regions = conflictRegions(view.state);
+	if (!regions.length) return false;
+
+	const sorted = [...regions].sort((a, b) => a.from - b.from);
+	const cursor = view.state.selection.main.head;
+
+	const target = direction === 'next'
+		? sorted.find(region => region.from > cursor) ?? sorted[0]
+		: [...sorted].reverse().find(region => region.from < cursor) ?? sorted[sorted.length - 1];
+
+	// The panel is inside the block holding region's first line, so scrolling
+	// to the block keeps local version at top.
+	const lineStart = view.state.doc.lineAt(target.from).from;
+
+	view.dispatch({ selection: { anchor: target.from }, scrollIntoView: false });
+
+	view.requestMeasure({
+		read: () => view.lineBlockAt(lineStart).top,
+		write: (blockTop: number) => {
+			view.scrollDOM.scrollTop = blockTop;
+		},
+	});
+
+	return true;
+};
+
 // when this is true, the table renderer keeps the markdown as it is
 export const hasUnresolvedConflicts = (state: EditorState) => {
 	// The field is only present when a conflict is open

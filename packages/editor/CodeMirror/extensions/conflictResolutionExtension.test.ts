@@ -3,7 +3,7 @@ import { EditorSelection, StateEffect } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
 import createTestEditor from '../testing/createTestEditor';
 import renderTables from './rendering/renderTables';
-import conflictResolutionExtension, { conflictRegions, resolveConflict, restoreConflict, setConflictRegions, ConflictRegionSpec } from './conflictResolutionExtension';
+import conflictResolutionExtension, { conflictRegions, goToConflict, resolveConflict, restoreConflict, setConflictRegions, ConflictRegionSpec } from './conflictResolutionExtension';
 
 const createEditor = async (initialText: string, regions: ConflictRegionSpec[] = []) => {
 	const editor = await createTestEditor(initialText, EditorSelection.cursor(0), [], [
@@ -639,6 +639,94 @@ describe('conflictResolutionExtension', () => {
 		]);
 
 		expect(editor.dom.querySelectorAll('.cm-conflictLocalVersion-table')).toHaveLength(0);
+	});
+
+
+	const threeConflicts = async () => createEditor('one\ntwo\nsix\nten\nfive\nnine', [
+		{ from: 0, to: 3, localText: 'ONE' },
+		{ from: 8, to: 11, localText: 'SIX' },
+		{ from: 16, to: 20, localText: 'FIVE' },
+	]);
+
+	test('should step forward through the conflicts and wrap around', async () => {
+		const editor = await threeConflicts();
+		const visited = [];
+
+		for (let i = 0; i < 4; i++) {
+			goToConflict(editor, 'next');
+			visited.push(editor.state.selection.main.head);
+		}
+
+		expect(visited).toEqual([8, 16, 0, 8]);
+	});
+
+	test('should step backward through the conflicts and wrap around', async () => {
+		const editor = await threeConflicts();
+		editor.dispatch({ selection: { anchor: 19 } });
+		const visited = [];
+
+		for (let i = 0; i < 4; i++) {
+			goToConflict(editor, 'previous');
+			visited.push(editor.state.selection.main.head);
+		}
+
+		expect(visited).toEqual([16, 8, 0, 16]);
+	});
+
+	test('should do nothing when there is no conflict to go to', async () => {
+		const editor = await createEditor('plain text');
+		expect(goToConflict(editor, 'next')).toBe(false);
+		expect(goToConflict(editor, 'previous')).toBe(false);
+	});
+
+	test('should skip a region once it is resolved', async () => {
+		const editor = await threeConflicts();
+		const middle = conflictRegions(editor.state).find(region => region.from === 8);
+		editor.dispatch({ effects: resolveConflict.of(middle.id) });
+
+		goToConflict(editor, 'next');
+
+		expect(editor.state.selection.main.head).toBe(16);
+	});
+
+	test('should reach a single conflict from either direction', async () => {
+		const editor = await createEditor('one\ntwo', [{ from: 4, to: 7, localText: 'TWO' }]);
+
+		goToConflict(editor, 'next');
+		expect(editor.state.selection.main.head).toBe(4);
+
+		goToConflict(editor, 'previous');
+		expect(editor.state.selection.main.head).toBe(4);
+	});
+
+	test('should reach a conflict that starts part way through a line', async () => {
+		const editor = await createEditor('one two six', [
+			{ from: 4, to: 7, localText: 'TWO' },
+		]);
+
+		goToConflict(editor, 'next');
+
+		expect(editor.state.selection.main.head).toBe(4);
+	});
+
+	test('should leave no room above a region that has no panel', async () => {
+		const editor = await createEditor('one two six', [
+			{ from: 4, to: 7, localText: '', addedByThem: true },
+		]);
+
+		expect(goToConflict(editor, 'next')).toBe(true);
+		expect(editor.dom.querySelectorAll('.cm-conflictLocalVersion')).toHaveLength(0);
+	});
+
+	test('should not change the document', async () => {
+		const editor = await threeConflicts();
+		const before = editor.state.doc.toString();
+
+		goToConflict(editor, 'next');
+		goToConflict(editor, 'previous');
+
+		expect(editor.state.doc.toString()).toBe(before);
+		expect(conflictRegions(editor.state)).toHaveLength(3);
 	});
 
 });

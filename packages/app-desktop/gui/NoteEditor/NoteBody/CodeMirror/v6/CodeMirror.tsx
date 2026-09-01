@@ -24,6 +24,7 @@ import Logger from '@joplin/utils/Logger';
 import useEditorCommands from './useEditorCommands';
 import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
 import useConflictResolution from './utils/useConflictResolution';
+import { goToConflict } from '@joplin/editor/CodeMirror/extensions/conflictResolutionExtension';
 import useContextMenu from '../utils/useContextMenu';
 import useWebviewIpcMessage from '../utils/useWebviewIpcMessage';
 import Toolbar from '../Toolbar';
@@ -154,6 +155,9 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			content: () => (conflictContentRef.current !== null && editorRef.current)
 				? editorRef.current.editor.state.doc.toString()
 				: props.content,
+			goToConflict: (direction: 'previous'|'next') => {
+				if (editorRef.current) goToConflict(editorRef.current.editor, direction);
+			},
 			resetScroll: () => {
 				resetScroll();
 			},

@@ -3,12 +3,26 @@ import { _ } from '@joplin/lib/locale';
 
 interface Props {
 	onFinish: ()=> void;
+	onGoToConflict: (direction: 'previous'|'next')=> void;
 	disabled: boolean;
 }
 
-const ConflictFooter: React.FC<Props> = ({ onFinish, disabled }) => {
+const ConflictFooter: React.FC<Props> = ({ onFinish, onGoToConflict, disabled }) => {
+	const onPrevious = React.useCallback(() => onGoToConflict('previous'), [onGoToConflict]);
+	const onNext = React.useCallback(() => onGoToConflict('next'), [onGoToConflict]);
+
 	return (
 		<div className='conflict-footer'>
+			<div className='-navigation'>
+				<button className='-step' onClick={onPrevious}>
+					<i className='fas fa-chevron-left'></i>
+					<span>{_('Previous change')}</span>
+				</button>
+				<button className='-step' onClick={onNext}>
+					<span>{_('Next change')}</span>
+					<i className='fas fa-chevron-right'></i>
+				</button>
+			</div>
 			<button className='-finish' onClick={onFinish} disabled={disabled}>{_('Finish')}</button>
 		</div>
 	);

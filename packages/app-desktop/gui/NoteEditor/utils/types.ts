@@ -82,6 +82,7 @@ export interface NoteEditorProps {
 export interface NoteBodyEditorRef {
 	content(): string|Promise<string>;
 	blurEditor?(): void;
+	goToConflict?(direction: 'previous'|'next'): void;
 	resetScroll(): void;
 	scrollTo(options: ScrollOptions): void;
 
