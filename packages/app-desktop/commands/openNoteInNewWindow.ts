@@ -29,7 +29,6 @@ export const runtime = (): CommandRuntime => {
 				windowId: `window-${noteId}-${idCounter++}`,
 				defaultAppWindowState: {
 					...createAppDefaultWindowState(),
-					notes: [note],
 					noteVisiblePanes: Setting.value('noteVisiblePanes'),
 					editorCodeView: Setting.value('editor.codeView'),
 				},
