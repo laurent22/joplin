@@ -2,8 +2,10 @@ import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/
 import { _ } from '@joplin/lib/locale';
 import { stateUtils } from '@joplin/lib/reducer';
 import Note from '@joplin/lib/models/Note';
+import Folder from '@joplin/lib/models/Folder';
 import { createAppDefaultWindowState } from '../app.reducer';
 import Setting from '@joplin/lib/models/Setting';
+import { getTrashFolderId } from '@joplin/lib/services/trash';
 
 export const declaration: CommandDeclaration = {
 	name: 'openNoteInNewWindow',
@@ -18,14 +20,16 @@ export const runtime = (): CommandRuntime => {
 		execute: async (context: CommandContext, noteId: string = null) => {
 			noteId = noteId || stateUtils.selectedNoteId(context.state);
 
-			const note = await Note.load(noteId, { fields: ['parent_id'] });
+			const note = await Note.load(noteId, { fields: Note.previewFields() });
+			const folderId = note.is_conflict ? Folder.conflictFolderId() : note.deleted_time ? getTrashFolderId() : note.parent_id;
 			context.dispatch({
 				type: 'WINDOW_OPEN',
 				noteId,
-				folderId: note.parent_id,
+				folderId,
 				windowId: `window-${noteId}-${idCounter++}`,
 				defaultAppWindowState: {
 					...createAppDefaultWindowState(),
+					notes: [note],
 					noteVisiblePanes: Setting.value('noteVisiblePanes'),
 					editorCodeView: Setting.value('editor.codeView'),
 				},
