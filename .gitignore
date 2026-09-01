@@ -1963,6 +1963,7 @@ packages/lib/services/whiteboard/presetColors.js
 packages/lib/services/whiteboard/resolveRef.js
 packages/lib/services/whiteboard/serialize.js
 packages/lib/services/whiteboard/whiteboard.test.js
+packages/lib/shim-init-node.networking.test.js
 packages/lib/shim-init-node.test.js
 packages/lib/shim-init-node.js
 packages/lib/shim.js
@@ -2021,6 +2022,9 @@ packages/lib/utils/replaceUnsupportedCharacters.test.js
 packages/lib/utils/replaceUnsupportedCharacters.js
 packages/lib/utils/resolvePathWithinDir.test.js
 packages/lib/utils/resolvePathWithinDir.js
+packages/lib/utils/tls/loadClientCertificate.test.js
+packages/lib/utils/tls/loadClientCertificate.js
+packages/lib/utils/tls/setExtraRootCertificates.js
 packages/lib/utils/types/pdfJs.js
 packages/lib/utils/userFetcher.js
 packages/lib/utils/webDAVUtils.test.js

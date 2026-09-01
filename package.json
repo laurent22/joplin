@@ -9,7 +9,7 @@
     "url": "git+https://github.com/laurent22/joplin.git"
   },
   "engines": {
-    "node": ">=22.12",
+    "node": ">=22.19",
     "yarn": "4.14.1"
   },
   "scripts": {

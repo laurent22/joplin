@@ -16,11 +16,17 @@ export enum ApplicationType {
 	Cli = 3,
 }
 
+export type DownloadHandler = Pick<DownloadController, 'handleChunk'>;
+
 export type FetchBlobOptions = {
 	path?: string;
 	method?: string;
 	maxRedirects?: number;
+	maxRetry?: number;
 	timeout?: number;
+	ignoreTlsErrors?: boolean;
 	headers?: Record<string, string>;
-	downloadController?: DownloadController;
+	downloadController?: DownloadHandler;
+	// Defaults to true, only respected on mobile:
+	overwrite?: boolean;
 };
