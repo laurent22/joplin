@@ -2,9 +2,19 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"\"%s\" mist de vereiste \"%s\" eigenschap."
 	],
+	"%d card": [
+		"",
+		""
+	],
 	"%d day": [
 		"%d dag",
 		"%d dagen"
+	],
+	"%d edit(s) applied, %d could not be placed automatically.": [
+		""
+	],
+	"%d edit(s) applied.": [
+		""
 	],
 	"%d GB": [
 		"%d GB"
@@ -27,15 +37,18 @@
 		"%d minuten"
 	],
 	"%d note matches this pattern. Delete it?": [
-		"Er komt %d notitie overeen met dit patroon. Wilt u deze verwijderen?",
-		"Er komen %d notities overeen met dit patroon. Wilt u ze verwijderen?"
+		"%d notitie komt overeen met dit patroon. Verwijderen?",
+		"%d notities komen overeen met dit patroon. Verwijderen?"
 	],
 	"%d note will be permanently deleted. Continue?": [
 		"%d notitie zal permanent verwijderd worden. Doorgaan?",
 		"%d notities zullen permanent verwijderd worden. Doorgaan?"
 	],
 	"%d photo(s) taken": [
-		"%d foto's gemaakt"
+		"%d foto(s) gemaakt"
+	],
+	"%d sections found": [
+		""
 	],
 	"%s": [
 		"%s"
@@ -44,7 +57,7 @@
 		"%s %s (%s, %s)"
 	],
 	"%s (%s) could not be uploaded: %s": [
-		"%s (%s) kon niet worden geupload: %s"
+		"%s (%s) kon niet worden geüpload: %s"
 	],
 	"%s (%s) would like to share a notebook with you.": [
 		"%s (%s) wil graag een notitieboek met je delen."
@@ -70,17 +83,26 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s added to toolbar": [
+		""
+	],
 	"%s cannot be greater than %s": [
-		"%s kan niet groter zijn van %s"
+		"%s mag niet groter zijn van %s"
 	],
 	"%s cannot be less than %s": [
-		"%s kan niet kleiner zijn dan %s"
+		"%s mag niet kleiner zijn dan %s"
 	],
 	"%s from %s": [
 		"%s van %s"
 	],
+	"%s input / %s output tokens used.": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s is niet geoptimaliseerd voor het synchroniseren van veel kleine bestanden, dus de initiële synchronisatie zal traag zijn."
+	],
+	"%s moved up": [
+		""
 	],
 	"%s must be a valid whole number": [
 		"%s moet een geldig geheel getal zijn"
@@ -102,7 +124,7 @@
 		"%s: %s"
 	],
 	"%s: Missing password.": [
-		"%s: Ontbrekend wachtwoord"
+		"%s: Wachtwoord ontbreekt."
 	],
 	"&Edit": [
 		"Be&werken"
@@ -111,10 +133,10 @@
 		"&Bestand"
 	],
 	"&Go": [
-		"&Ga"
+		"&Gaan"
 	],
 	"&Help": [
-		"&Help"
+		"&Hulp"
 	],
 	"&Note": [
 		"&Notitie"
@@ -131,8 +153,14 @@
 	"(%s)": [
 		"(%s)"
 	],
+	"(empty — double-click to edit)": [
+		""
+	],
+	"(empty)": [
+		""
+	],
 	"(In plugin: %s)": [
-		"(In toepassing: %s)"
+		"(In plugin: %s)"
 	],
 	"(level %d)": [
 		"(niveau %d)"
@@ -144,10 +172,13 @@
 		"(Alleen lezen)"
 	],
 	"(wysiwyg: %s)": [
-		"(wuziwuk: %s)"
+		"(wysiwyg: %s)"
 	],
 	"(You may disable this prompt in the options)": [
 		"(Je kan deze prompt uitschakelen in de opties)"
+	],
+	"+ Group": [
+		""
 	],
 	"- Camera: to allow taking a picture and attaching it to a note.": [
 		"- Camera: zodat u een foto kunt maken en deze bij een notitie kunt voegen."
@@ -157,6 +188,9 @@
 	],
 	"- Storage: to allow attaching files to notes and to enable filesystem synchronisation.": [
 		"- Opslag: om bestanden bij notities te mogen voegen en synchronisatie in te schakelen."
+	],
+	"14-day free trial. Cancel anytime during the trial and you won't be charged.": [
+		""
 	],
 	"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign or remove [tag] from [note], to list notes associated with [tag], or to list tags associated with [note]. The command `tag list` can be used to list all the tags (use -l for long option).": [
 		"<tag-command> kan \"add\", \"remove\" of \"list\" zijn om [tag] toe te wijzen aan of te verwijderen van [note] of om notities met [tag] als tag weer te geven. De opdracht `tag list` kan worden gebruikt om alle labels weer te geven (gebruik “-l” voor “long” optie)."
@@ -171,10 +205,13 @@
 		"Een korte omschrijving van de afbeelding:"
 	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
-		""
+		"Een lijst met woorden, gescheiden door komma's. Kan worden gebruikt voor minder gebruikelijke woorden, om te helpen dat spraaktypens ze correct spelt."
 	],
 	"A new update (%s) is available": [
 		"Een nieuwe update (%s) is beschikbaar"
+	],
+	"A system-wide keyboard shortcut that toggles the Joplin window. Works even when Joplin is not focused. Example: CommandOrControl+Shift+J. Leave empty to disable.": [
+		""
 	],
 	"A3": [
 		"A3"
@@ -186,7 +223,7 @@
 		"A5"
 	],
 	"ABC musical notation: Options": [
-		""
+		"ABC-muzieknotatie: Opties"
 	],
 	"About": [
 		"Over"
@@ -212,14 +249,26 @@
 	"Accepted: Notebook %s from %s": [
 		"Geaccepteerd: Notitieboek %s van %s"
 	],
+	"Accepting share...": [
+		"Delen accepteren..."
+	],
 	"Access denied: Please check your username and password": [
-		"Geen toegang: Controleer je inlognaam en wachtwoord"
+		"Toegang geweigerd: Controleer je inlognaam en wachtwoord"
 	],
 	"Access denied: Please re-enter your password and/or username": [
-		"Geen toegang: Geen je inlognaam en/of wachtwoord opnieuw"
+		"Toegang geweigerd: Geen je inlognaam en/of wachtwoord opnieuw"
+	],
+	"Access your notes from any web browser at %s.": [
+		""
+	],
+	"Accessible": [
+		""
+	],
+	"Accessible mode saves additional information, enabling creation of accessible PDFs. It increases database size by approximately 10-20 KB per page.": [
+		""
 	],
 	"Account": [
-		"Inloggegevens"
+		"Account"
 	],
 	"Account information": [
 		"Accountinformatie"
@@ -237,7 +286,10 @@
 		"Actief"
 	],
 	"Actual Size": [
-		"Ware Grootte"
+		"Ware grootte"
+	],
+	"Add a text card": [
+		""
 	],
 	"Add body": [
 		"Inhoud toevoegen"
@@ -248,17 +300,20 @@
 	"Add new": [
 		"Nieuw toevoegen"
 	],
+	"Add note to whiteboard...": [
+		""
+	],
 	"Add or remove tags:": [
 		"Labels toevoegen of verwijderen:"
 	],
 	"Add recipient:": [
-		"Voeg ontvanger toe:"
+		"Ontvanger toevoegen:"
 	],
 	"Add row": [
-		"Regel toevoegen"
+		"Rij toevoegen"
 	],
 	"Add tags:": [
-		"Voeg labels toe:"
+		"Labels toevoegen:"
 	],
 	"Add title": [
 		"Titel toevoegen"
@@ -267,13 +322,14 @@
 		"Toevoegen aan woordenboek"
 	],
 	"Add to note": [
-		"Voeg toe aan notitie"
+		"Toevoegen aan notitie"
+	],
+	"Added %d word": [
+		"",
+		""
 	],
 	"Added new: %s": [
 		"Nieuw toegevoegd: %s"
-	],
-	"Added tag: %s": [
-		"Toegevoegd label: %s"
 	],
 	"Adds tag": [
 		"Voegt een label toe"
@@ -293,6 +349,21 @@
 	"Advanced tools": [
 		"Geavanceerde hulpmiddelen"
 	],
+	"AI": [
+		""
+	],
+	"AI Chat": [
+		""
+	],
+	"AI features are disabled. Enable them in Settings → AI.": [
+		""
+	],
+	"AI is running in reduced-quality mode — monthly allowance exceeded. Credits replenish on a rolling 30-day basis, or you can": [
+		""
+	],
+	"AI usage has exceeded your monthly allowance — responses are using a reduced-quality model. Credits replenish on a rolling 30-day basis. Buy more at %s.": [
+		""
+	],
 	"all": [
 		"alle"
 	],
@@ -300,7 +371,7 @@
 		"Alle gegevens, inclusief notities, notitieboeken en labels worden permanent verwijderd."
 	],
 	"All item sync failures have been marked as \"ignored\".": [
-		""
+		"Alle item synchronisatie-fouten zijn als 'genegeerd' gemarkeerd."
 	],
 	"All notes": [
 		"Alle notities"
@@ -311,17 +382,38 @@
 	"All shared folders:": [
 		"Alle gedeelde mappen:"
 	],
+	"Allow editing tags on notes": [
+		""
+	],
+	"Allow editing the current note (chat panel only)": [
+		""
+	],
+	"Allow listing tags": [
+		""
+	],
+	"Allow reading images": [
+		""
+	],
+	"Allow remote AI providers": [
+		""
+	],
+	"Allow semantic search of notes": [
+		""
+	],
 	"Allows debugging mobile plugins. See %s for details.": [
-		"Sta toe mobiele plugins te debuggen. Zie %s voor details."
+		"Staat foutopsporing toe van mobiele plugins. Zie %s voor details."
+	],
+	"Already have an account? Log in": [
+		""
 	],
 	"Also displays unset and hidden config variables.": [
 		"Toont ook niet-ingestelde en verborgen configuratiewaarden."
 	],
 	"Also publish linked notes": [
-		"Ook gekoppelde notities publiceren"
+		"Gekoppelde notities ook publiceren"
 	],
 	"Alternative instance ID: %s": [
-		"Alternatieve instance ID: %s"
+		"Alternative instance ID: %s"
 	],
 	"Always": [
 		"Altijd"
@@ -336,7 +428,7 @@
 		"Altijd verschalen"
 	],
 	"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the short notebook id or use $b for current selected notebook": [
-		"Niet eenduidig notitieboek \"%s\". Gebruik het id van het notitieboek - toets \"ti\" om het korte notitieboek id te zien, of gebruik $b voor het huidige notitieboek"
+		"Niet eenduidig notitieboek \"%s\". Gebruik het id van het notitieboek - toets \"ti\" om het korte notitieboek-id te zien, of gebruik $b voor het huidige notitieboek"
 	],
 	"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti\" to see the short notebook id": [
 		"Niet eenduidig notitieboek \"%s\". Gebruik het id van het notitieboek - toets \"ti\" om het korte notitieboek id te zien"
@@ -344,20 +436,23 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"We hebben een automatisch opgeslagen tekening gevonden. Wil je een kopie ervan toevoegen aan de notitie?"
 	],
-	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
-		""
-	],
 	"An error occurred: %s": [
 		"Er is iets fout gegaan: %s"
 	],
 	"An update is available, do you want to download it now?": [
-		"Er is een update beschikbaar. Wilt u deze nu downloaden?"
+		"Er is een update beschikbaar. Wil je deze nu downloaden?"
 	],
 	"Android API level: %d": [
-		"Android API niveau: %d"
+		"Android API-niveau: %d"
+	],
+	"Anthropic": [
+		""
 	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
-		"Alle email naar dit adres wordt omgezet in een notitie in jouw verzameling. De notitie wordt opgeslagen in het inbox notitieboek"
+		"Alle e-mail naar dit adres wordt omgezet in een notitie in jouw verzameling. De notitie wordt opgeslagen in het notitieboek Inbox"
+	],
+	"API key": [
+		""
 	],
 	"Appearance": [
 		"Weergave"
@@ -368,8 +463,14 @@
 	"Apply": [
 		"Toepassen"
 	],
+	"Are you sure that you want to restore the default toolbar layout?\nThis cannot be undone.": [
+		"Weet je zeker dat je de standaard werkbalkindeling wilt herstellen?\nDit kan niet ongedaan worden gemaakt."
+	],
+	"Are you sure you want to delete all history for this note? This cannot be undone.": [
+		"Weet je zeker dat je alle geschiedenis van deze notitie wilt verwijderen? Dit kan niet ongedaan gemaakt worden."
+	],
 	"Are you sure you want to renew the authorisation token?": [
-		"Weet u zeker dat u het autorisatietoken wilt vernieuwen?"
+		"Weet je zeker dat je het autorisatietoken wilt vernieuwen?"
 	],
 	"Are you sure you want to return to the default layout? The current layout configuration will be lost.": [
 		"Weet je zeker dat je terug wil naar de standaard layout? Alle aanpassingen gaan verloren."
@@ -380,8 +481,17 @@
 	"Aritim Dark": [
 		"Aritim Dark"
 	],
-	"Associated tags:": [
+	"Arrow at target": [
 		""
+	],
+	"Ask about this note, or request a change…": [
+		""
+	],
+	"Ask about this note, or request changes. Select text in the editor first to scope the request to that selection.": [
+		""
+	],
+	"Associated tags:": [
+		"Gerelateerde labels:"
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		"Op dit moment kan Joplin Web alleen geopend worden in één tab tegelijk. Sluit de andere instance van Joplin."
@@ -408,7 +518,7 @@
 		"Bijlage"
 	],
 	"Attachment conflict: \"%s\"": [
-		"Conflict in bijlage: \"%s\""
+		"Conflict met bijlage: \"%s\""
 	],
 	"Attachment download behaviour": [
 		"Bijlage downloadgedrag"
@@ -419,8 +529,11 @@
 	"Attachments that could not be downloaded": [
 		"Bijlagen die niet konden worden gedownload"
 	],
+	"Attention: After resetting your password it will no longer be possible to decrypt any data encrypted with your current password. All encrypted shared notebooks will also be unshared, so please ask the notebook owner to share it again with you.": [
+		""
+	],
 	"Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s": [
-		"Let op: Als u deze locatie wijzigt, zorg dan dat u eerst alle inhoud hier naartoe kopieert voor synchronisatie. Anders worden alle bestanden verwijderd! Zie de FAQ voor meer details: %s"
+		"Let op: Als je deze locatie wijzigt, zorg dan dat u eerst alle inhoud hier naartoe kopieert voor synchronisatie. Anders worden alle bestanden verwijderd! Zie de FAQ voor meer details: %s"
 	],
 	"Authentication was not completed (did not receive an authentication token).": [
 		"Authenticatie is niet voltooid (geen authenticatietoken ontvangen)."
@@ -429,10 +542,13 @@
 		"Autorisatietoken:"
 	],
 	"Authorise": [
-		"Autoriseer"
+		"Autoriseren"
 	],
 	"Auto": [
 		"Auto"
+	],
+	"Auto lock when switching note": [
+		""
 	],
 	"Auto-add disabled accounts for deletion": [
 		"Voeg uitgeschakelde account automatisch toe voor verwijdering"
@@ -441,7 +557,7 @@
 		"Markdown automatisch formateren in de Rich Text Editor"
 	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
-		"Auto-paar accolades, haakjes, citaten, enz."
+		"Autom. dubbele accolades, haakjes, citaten, enz."
 	],
 	"Autocomplete Markdown and HTML": [
 		"Markdown en HTML automatisch aanvullen"
@@ -450,7 +566,7 @@
 		"Automatisch controleren op updates"
 	],
 	"Automatically delete notes in the trash after a number of days": [
-		"Verwijder notities automatisch uit de prullenbak na een aantal dagen"
+		"Automatisch notities uit de prullenbak verwijderen na een aantal dagen"
 	],
 	"Automatically switch theme to match system theme": [
 		"Automatisch omschakelen thema op basis van systeemthema"
@@ -458,17 +574,26 @@
 	"Back": [
 		"Terug"
 	],
+	"Back to %s": [
+		""
+	],
+	"Base URL": [
+		""
+	],
 	"Basic": [
 		"Standaard"
 	],
 	"Beta": [
 		"Beta"
 	],
-	"Block code": [
+	"Billed annually (%s per user per year respectively).": [
 		""
 	],
+	"Block code": [
+		"Codeblok"
+	],
 	"Bold": [
-		"Vetgedrukt"
+		"Vet"
 	],
 	"Browse all plugins": [
 		"Blader door alle plugins"
@@ -481,6 +606,9 @@
 	],
 	"Bulleted List": [
 		"Opsommingslijst"
+	],
+	"buy more credits": [
+		""
 	],
 	"by %s": [
 		"door %s"
@@ -495,31 +623,37 @@
 		"Kan delen"
 	],
 	"Can view": [
-		"Kan bekijken"
+		"Kan weergeven"
 	],
 	"Can view and edit": [
-		"Kan bekijken en bewerken"
+		"Kan weeregeven en bewerken"
 	],
 	"Cancel": [
 		"Annuleren"
 	],
 	"Cancelling background synchronisation... Please wait.": [
-		"Bezig met annuleren van achtergrondsynchronisatie... even geduld."
+		"Annuleren van achtergrondsynchronisatie... Even geduld."
 	],
 	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
-		""
+		"Annuleren zal de opname verwijderen. Dit kan niet ongedaan worden gemaakt. Weet je zeker dat je wilt doorgaan?"
 	],
 	"Cancelling...": [
-		"Bezig met annuleren..."
+		"Annuleren..."
 	],
 	"Cancelling... Please wait.": [
-		"Bezig met annuleren... Een ogenblik geduld."
+		"Annuleren... Even geduld."
 	],
 	"Cannot access %s": [
 		"Geen toegang tot %s"
 	],
+	"Cannot change a locked note while the session is locked": [
+		""
+	],
 	"Cannot change encrypted item": [
 		"Kan versleuteld item niet wijzigen"
+	],
+	"Cannot convert read-only item: \"%s\"": [
+		"Kan alleen-lezen item niet omzetten: \"%s\""
 	],
 	"Cannot copy note to \"%s\" notebook": [
 		"Kan notitie niet kopiëren naar notitieboek \"%s\""
@@ -563,6 +697,9 @@
 	"Case sensitive": [
 		"Hoofdlettergevoelig"
 	],
+	"Certain Markdown formatting is now rendered in the editor by default. For example, **bold** will appear as actual bold text. You can change this behaviour in the \"Editor\" section of Settings.": [
+		""
+	],
 	"Change application layout": [
 		"Wijzig de layout van de applicatie"
 	],
@@ -581,11 +718,14 @@
 	"Characters excluding spaces": [
 		"Karakters zonder spaties"
 	],
+	"Chat provider": [
+		""
+	],
 	"Check": [
 		"Selectievakje"
 	],
 	"Check elements to display in the toolbar": [
-		""
+		"Selecteer de elementen om in de werkbalk weer te geven"
 	],
 	"Check for updates...": [
 		"Controleren op updates..."
@@ -606,7 +746,7 @@
 		"Controleren... Even geduld."
 	],
 	"Chinese/Japanese/Korean characters": [
-		""
+		"Chinese/Japanse/Koreaanse tekens"
 	],
 	"Choose an option": [
 		"Kies een optie"
@@ -623,11 +763,17 @@
 	"Clear search": [
 		"Zoekresultaten wissen"
 	],
+	"Clears the console output.": [
+		""
+	],
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"Klik “%s” om de notitie te herstellen. Het wordt gekopieerd naar het notitieboek genaamd “%s”. De huidige versie van de notitie wordt niet vervangen of aangepast."
 	],
 	"Click \"start\" to attach a new voice memo to the note.": [
-		"Klik \"start\" om een nieuwe voicememo toe te voegen aan de notitie"
+		"Klik \"start\" om een nieuwe voicememo toe te voegen aan de notitie."
+	],
+	"Click the eye icon in the toolbar to switch to the Markdown editor and fix the JSON manually.": [
+		""
 	],
 	"Click to add tags...": [
 		"Klik om labels toe te voegen…"
@@ -651,7 +797,7 @@
 		"Zijmenu sluiten"
 	],
 	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
-		""
+		"Sluit de applicatie, verwijder vervolgens je profiel in \"%s\" en start de applicatie opnieuw. Zorg ervoor dat je eerst een back-up maakt door al je notities als JEX te exporteren."
 	],
 	"Close Window": [
 		"Venster afsluiten"
@@ -702,7 +848,7 @@
 		"Commando"
 	],
 	"COMMAND": [
-		""
+		"OPDRACHT"
 	],
 	"Command palette": [
 		"Opdrachtpalet"
@@ -729,7 +875,7 @@
 		"Decryptie voltooid."
 	],
 	"Completed with warnings:\n%s": [
-		""
+		"Voltooid met waarschuwingen:\n%s"
 	],
 	"Completed: %s (%s)": [
 		"Voltooid: %s (%s)"
@@ -743,7 +889,16 @@
 	"Configuration": [
 		"Configuratie"
 	],
+	"Configured keyboard shortcuts:": [
+		"Geconfigureerde sneltoetsen:"
+	],
 	"Configures the size of scrollbars used in the app.": [
+		"Stelt de grootte van de schuifbalken in die in de app worden gebruikt."
+	],
+	"Confirm": [
+		"Bevestigen"
+	],
+	"Confirm credentials": [
 		""
 	],
 	"Confirm password cannot be empty": [
@@ -792,6 +947,12 @@
 	"Convert it": [
 		"Omzetten"
 	],
+	"Convert this card into a Joplin note": [
+		""
+	],
+	"Convert to Markdown": [
+		"Omzetten naar Markdown"
+	],
 	"Convert to note": [
 		"Omzetten naar notitie"
 	],
@@ -808,35 +969,35 @@
 		"Ontwikkelaarsmodus commando kopiëren naar klembord"
 	],
 	"Copy external link": [
-		"Kopieer externe link"
+		"Externe link kopiëren"
 	],
 	"Copy image": [
-		"Kopieer afbeelding"
+		"Afbeelding kopiëren"
 	],
 	"Copy Link Address": [
 		"Linkadres kopiëren"
 	],
 	"Copy link to website": [
-		"Kopieer link naar website"
+		"Link naar website kopiëren"
 	],
 	"Copy Markdown link": [
 		"Markdownlink kopiëren"
 	],
 	"Copy path to clipboard": [
-		"Pad kopiëren naar klembord"
+		"Pad naar klembord kopiëren"
 	],
 	"Copy Shareable Link": [
-		"Kopieer Deelbare Link",
-		"Kopieer Deelbare Links"
+		"Deelbare link kopiëren",
+		"Deelbare links kopiëren"
 	],
 	"Copy to clipboard": [
 		"Kopiëren naar klembord"
 	],
 	"Copy token": [
-		"Kopieer token"
+		"Token kopiëren"
 	],
 	"Copy version info": [
-		"Kopieer versie-informatie"
+		"Versie-informatie kopiëren"
 	],
 	"Could not authorise application:\n\n%s\n\nPlease try again.": [
 		"Kon applicatie niet autoriseren:\n\n%s\n\nProbeer opnieuw."
@@ -846,6 +1007,9 @@
 	],
 	"Could not connect to plugin repository.": [
 		"Kan geen verbinding maken met de plugin bibliotheek."
+	],
+	"Could not convert notes to Markdown: %s": [
+		"Kon de notities niet omzetten naar Markdown: %s"
 	],
 	"Could not export notes: %s": [
 		"Kon geen notities exporteren: %s"
@@ -863,7 +1027,7 @@
 		"Kon hoofdsleutel niet bijwerken: %s"
 	],
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
-		"Kan de sharestatus van dit notitieboek - afbreken - niet controleren. Probeer het opnieuw wanneer u verbonden bent met internet."
+		"Kan de deelstatus van dit notitieboek - afbreken - niet controleren. Probeer het opnieuw wanneer u verbonden bent met internet."
 	],
 	"Could not verify your identity: %s": [
 		"Identiteit niet gecontroleerd: %s"
@@ -877,8 +1041,11 @@
 	"Create a notebook": [
 		"Creëer een notitieboek"
 	],
+	"Create accessible document": [
+		""
+	],
 	"Create new notebook": [
-		"Creëer een nieuw notitieboek."
+		"Nieuw notitieboek aanmaken"
 	],
 	"Create new profile...": [
 		"Creëer nieuw profiel..."
@@ -974,7 +1141,7 @@
 		"Aangepaste TLS-certificaten"
 	],
 	"Customise the note publishing banner": [
-		""
+		"De banner voor het publiceren van notities aanpassen"
 	],
 	"Cut": [
 		"Knippen"
@@ -1012,6 +1179,9 @@
 	"Default title to use for documents created by the scanner.": [
 		"Standaard titel on te gebruiken voor documenten die gescand worden."
 	],
+	"Default view / edit state": [
+		""
+	],
 	"Default: %s": [
 		"Standaard: %s"
 	],
@@ -1020,6 +1190,9 @@
 	],
 	"Delete attachment \"%s\"?": [
 		"Bijlage “%s” verwijderen?"
+	],
+	"Delete column": [
+		"Kolom verwijderen"
 	],
 	"Delete expired sessions": [
 		"Verwijder verlopen sessies"
@@ -1048,23 +1221,26 @@
 	"Delete profile \"%s\"": [
 		"Verwijder profiel “%s”"
 	],
+	"Delete profile \"%s\"?\n\nAll data, including notes, notebooks and tags will be permanently deleted.": [
+		"Profiel \"%s\" verwijderen?\n\nAlle gegevens, incl. notities, notitieboeken en labels, worden permanent verwijderd."
+	],
 	"Delete row": [
-		"Verwijder regel"
+		"Rij verwijderen"
 	],
 	"Delete selected notes": [
 		"Geselecteerde notities verwijderen"
 	],
-	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
-		""
-	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
-		"Wil je het notitieboek inbox verwijderen?\n\nAls je het inbox-notitieboek weggooit, kunnen recent ontvangen emails kwijt raken.."
+		"Wil je het notitieboek inbox verwijderen?\n\nAls je het notitieboek Inbox weggooit, kunnen recent ontvangen e-mails kwijt raken.."
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"Deze uitnodiging verwijderen? De ontvanger heeft geen toegang meer tot dit gedeelde notitieboek."
 	],
 	"Delete this profile?": [
 		"Dit profiel verwijderen?"
+	],
+	"Deleted": [
+		"Verwijderd"
 	],
 	"Deleted local items: %d.": [
 		"Lokale items verwijderd: %d."
@@ -1086,6 +1262,9 @@
 	],
 	"Deletes the notes without asking for confirmation.": [
 		"Verwijdert de notities zonder te vragen om bevestiging."
+	],
+	"Deletion log": [
+		"Verwijderingslogboek"
 	],
 	"Deselect": [
 		"Deselecteren"
@@ -1157,7 +1336,7 @@
 		"Toont volledige informatie over de notitie."
 	],
 	"Displays the configured keyboard shortcuts.": [
-		""
+		"Toont de ingestelde sneltoetsen."
 	],
 	"Displays the given note.": [
 		"Toont de opgegeven notitie."
@@ -1183,13 +1362,13 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Verlies het wachtwoord niet, want voor veiligheidsdoeleinden is dit de * enige* manier om de gegevens te decoderen! Voer hieronder uw wachtwoord in om versleuteling in te schakelen."
 	],
-	"Do you find the Joplin web app useful?": [
-		"Vind je de Joplin-webapp bruikbaar?"
-	],
 	"Document scanner: Title template": [
-		""
+		"Documentscanner: Titelsjabloon"
 	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		"Sta de ontvanger van de gedeelde notitieboek niet toe om te schrijven in het gedeelde notitieboek. Alleen geldig voor de subopdracht `add`."
+	],
+	"Don't have an account yet?": [
 		""
 	],
 	"Don't show this message again": [
@@ -1201,11 +1380,20 @@
 	"Done": [
 		"Klaar"
 	],
+	"Double tap to open this attachment. Long press to expand or collapse details.": [
+		""
+	],
 	"Download": [
 		"Downloaden"
 	],
 	"Download and install the relevant extension for your browser:": [
 		"Download en installeer de bijbehorende extensie in uw browser:"
+	],
+	"Download it from GitHub Releases": [
+		""
+	],
+	"Download it from the Joplin Android repository": [
+		""
 	],
 	"Download it now": [
 		"Nu downloaden"
@@ -1231,8 +1419,11 @@
 	"Dracula": [
 		"Dracula"
 	],
-	"Draw picture": [
+	"Drag to move group": [
 		""
+	],
+	"Draw picture": [
+		"Teken een plaatje"
 	],
 	"Drawing": [
 		"Tekenen"
@@ -1291,8 +1482,14 @@
 	"Edit profile configuration...": [
 		"Profielconfiguratie bewerken..."
 	],
+	"Edit tag": [
+		"Label bewerken"
+	],
 	"Editor": [
 		"Editor"
+	],
+	"Editor actions": [
+		"Acties van editor"
 	],
 	"Editor font": [
 		"Lettertype van editor"
@@ -1333,6 +1530,9 @@
 	"Emails": [
 		"E-mails"
 	],
+	"Embedding index": [
+		""
+	],
 	"emphasised text": [
 		"benadrukte tekst"
 	],
@@ -1354,6 +1554,9 @@
 	"Enable abbreviation syntax": [
 		"Afkortingen syntaxis inschakelen"
 	],
+	"Enable ABC musical notation support": [
+		"Ondersteuning voor ABC-muziekschrift inschakelen"
+	],
 	"Enable audio player": [
 		"Ondersteuning voor muziekspeler inschakelen"
 	],
@@ -1366,14 +1569,20 @@
 	"Enable encryption": [
 		"Encryptie inschakelen"
 	],
+	"Enable external embeds (e.g. YouTube Videos)": [
+		""
+	],
 	"Enable file:// URLs for images and videos": [
-		"file:// URLs inschakelen voor afbeeldingen en video's"
+		"URL's van type file:// inschakelen voor afbeeldingen en video's"
 	],
 	"Enable footnotes": [
 		"Voetnoten inschakelen"
 	],
 	"Enable Fountain syntax support": [
 		"Ondersteuning voor Fountain syntaxis inschakelen"
+	],
+	"Enable handwritten transcription": [
+		"Handschrifttranscriptie inschakelen"
 	],
 	"Enable HTML-to-Markdown conversion banner": [
 		"HTML-naar-Markdown conversie balk inschakelen"
@@ -1395,9 +1604,6 @@
 	],
 	"Enable note history": [
 		"Inschakelen geschiedenis van notities"
-	],
-	"Enable optical character recognition (OCR)": [
-		"Optische karakterherkenning (OCR) inschakelen"
 	],
 	"Enable or disable plugins": [
 		"Plugins in- of uitschakelen"
@@ -1439,9 +1645,12 @@
 		"Ingeschakeld"
 	],
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
-		""
+		"Maakt het mogelijk om Markdown-lijsten voort te zetten, HTML-tags automatisch te sluiten en andere opmaak automatisch aan te vullen."
 	],
 	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
+		"Maakt het mogelijk om Markdown-patronen te vervangen in de Rich Text Editor. Bijvoorbeeld, als het is ingeschakeld, wordt het typen van **vet** vetgedrukte tekst."
+	],
+	"Enables the default edit operations for notes with an open AI chat panel. When disabled, the chat panel can still read the open note. Does not apply to MCP.": [
 		""
 	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
@@ -1452,6 +1661,9 @@
 	],
 	"Encrypted items cannot be modified": [
 		"Versleutelde items kunnen niet worden bewerkt"
+	],
+	"Encrypting a note requires a note lock password, which has not yet been set. Set it up now?": [
+		""
 	],
 	"Encryption": [
 		"Encryptie"
@@ -1465,11 +1677,17 @@
 	"Encryption keys": [
 		"Encryptie sleutels"
 	],
+	"Encryption was setup previously, but all keys have been disabled. To continue, please use the desktop app to enable a key.": [
+		""
+	],
 	"Encryption:": [
 		"Encryptie:"
 	],
 	"End-to-end encryption": [
 		"End-to end encryptie"
+	],
+	"Ends voice typing": [
+		"Beëindigt steminvoer"
 	],
 	"Enter code here": [
 		"Code hier invoeren"
@@ -1489,6 +1707,9 @@
 	"Enter the code:": [
 		"Code invoeren:"
 	],
+	"Enter the note lock password to unlock encrypted notes for this session.": [
+		""
+	],
 	"Entering selection mode": [
 		"Bezig de selectiemode te openen"
 	],
@@ -1506,6 +1727,9 @@
 	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"Fout. Controleer of de URL, gebruikersnaam, wachtwoord, etc. kloppen en dat het synchronisatiedoel toegankelijk is. De gemelde fout :"
+	],
+	"Error. The AI provider test failed:": [
+		""
 	],
 	"Error: %s": [
 		"Fout: %s"
@@ -1555,6 +1779,9 @@
 	"Export Debug Report": [
 		"Foutopsporingsrapportage exporteren"
 	],
+	"Export deletion log": [
+		"Verwijderingslogboek exporteren"
+	],
 	"Export profile": [
 		"Exporteer profiel"
 	],
@@ -1579,6 +1806,9 @@
 	"Exports only the given notebook.": [
 		"Exporteert alleen het opgegeven notitieboek."
 	],
+	"Exposes Joplin notes to external AI applications (Claude Desktop, Cursor, etc.) via the Model Context Protocol. Requires the Web Clipper service to be running. Connected AI tools can read your note content; any text they retrieve may be sent to the external LLM provider those tools use.": [
+		""
+	],
 	"Fail-safe": [
 		"Faalveilig"
 	],
@@ -1586,19 +1816,19 @@
 		"Fail-safe: Wis lokale gegevens niet wanneer synchronisatiedoel leeg is (vaak het gevolg van een misconfiguratie of softwarefout)"
 	],
 	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
-		""
+		"Fail-safe: De synchronisatie is onderbroken om gegevensverlies te voorkomen, omdat het synchronisatiedoel leeg of beschadigd is. Om dit gedrag te negeren, schakel je de fail-safe uit in de synchronisatie-instellingen."
 	],
 	"Failed to connect to your account. Please try again.": [
 		"De verbinding met de account is mislukt. Probeer het nogmaals."
+	],
+	"Failed to create accessible document: %s": [
+		""
 	],
 	"Fatal error:": [
 		"Fatale fout:"
 	],
 	"Feature flags": [
 		"Optie vlaggen"
-	],
-	"Feedback": [
-		"Terugkoppeling"
 	],
 	"Fetched items: %d/%d.": [
 		"Items opgehaald: %d/%d."
@@ -1615,6 +1845,9 @@
 	"Filter": [
 		"Filter"
 	],
+	"Filtered by section [%s]": [
+		""
+	],
 	"Find": [
 		"Zoek"
 	],
@@ -1622,7 +1855,7 @@
 		"Zoeken: "
 	],
 	"Finishes recording": [
-		""
+		"Beëindigt de opname"
 	],
 	"Firefox Extension": [
 		"Firefox-extensie"
@@ -1632,6 +1865,9 @@
 	],
 	"Fixing search index...": [
 		"Zoekindex repareren..."
+	],
+	"Flip": [
+		""
 	],
 	"Focus": [
 		"Focus"
@@ -1646,7 +1882,7 @@
 		"Map \"%s\" is gedeeld met:"
 	],
 	"Follow link": [
-		""
+		"Link volgen"
 	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"Alleen voor debugging: exporteer uw profiel naar een externe SD-kaart."
@@ -1691,9 +1927,6 @@
 		"Nieuwe link genereren...",
 		"Nieuwe links genereren..."
 	],
-	"Geolocation, spellcheck, editor toolbar, image resize": [
-		"Geolocatie, spellingscontrole, editor knoppenbalk, afbeeldingen verschalen"
-	],
 	"Get a quote": [
 		"Vraag een offerte aan"
 	],
@@ -1706,6 +1939,9 @@
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Verkrijgt of stelt een configuratiewaarde in. Als [value] niet is opgegeven, dan wordt de waarde van [name] getoond. Als zowel [name] als [value] niet zijn opgegeven, dan wordt de huidige configuratie getoond."
 	],
+	"Global shortcut to show/hide Joplin": [
+		""
+	],
 	"Glossary:": [
 		"Woordenlijst:"
 	],
@@ -1714,6 +1950,9 @@
 	],
 	"Go back": [
 		"Ga terug"
+	],
+	"Go to end of note": [
+		""
 	],
 	"Go to Joplin Cloud profile": [
 		"Gaan naar Joplin Cloud profiel"
@@ -1724,11 +1963,17 @@
 	"Go to source URL": [
 		"Ga naar bron-URL"
 	],
+	"Go to start of note": [
+		""
+	],
 	"Goto Anything...": [
 		"Ga naar Alles..."
 	],
 	"Grant authorisation": [
 		"Authorisatie verlenen"
+	],
+	"Group": [
+		""
 	],
 	"Have you authorised the application login in the above URL?": [
 		"Heb je de applicatie login in de bovenstaande URL geauthenticeerd?"
@@ -1803,10 +2048,13 @@
 		"Inactief"
 	],
 	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		"Als een afbeelding als bijlage op een aparte regel staat en gevolgd wordt door een lege regel, wordt deze net onder de Markdown-bron weergegeven."
+	],
+	"If enabled, opening an HTML note displays a prompt to convert the note to Markdown.": [
 		""
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
-		""
+		"Als je al toestemming hebt gegeven, wacht dan tot de applicatie is gesynchroniseerd met Joplin Cloud."
 	],
 	"Ignore": [
 		"Negeren"
@@ -1814,23 +2062,32 @@
 	"Ignore TLS certificate errors": [
 		"TLS-certificaatfouten negeren"
 	],
+	"Ignored items that cannot be synchronised": [
+		"Genegeerde items die niet kunnen worden gesynchroniseerd"
+	],
 	"Images": [
 		"Afbeeldingen"
 	],
 	"Import": [
 		"Importeren"
 	],
-	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
-		"De import is mislukt. Zorg ervoor dat een JEX-bestand gekozen was.\nDetails: %s"
+	"Import a note from a text file (%s). The note will be imported into notebook '%s'.": [
+		""
+	],
+	"Import and Export": [
+		"Import en export"
 	],
 	"Import from JEX": [
 		"Importeren vanuit JEX"
 	],
 	"Import notes from a JEX (Joplin Export) file.": [
-		"Importeer notities uit een JEX (Joplin Export) bestand"
+		"Notities importeren uit een JEX-bestand (Joplin Export)."
 	],
 	"Import or export your data": [
 		"Importeer of exporteer jouw gegevens"
+	],
+	"Import...": [
+		"Import..."
 	],
 	"Imported successfully!": [
 		"Succesvol geïmporteerd!"
@@ -1871,6 +2128,9 @@
 	"In: %s": [
 		"In: %s"
 	],
+	"Incoming shares:": [
+		"Met mij gedeeld:"
+	],
 	"Incompatible": [
 		"Niet compatibel"
 	],
@@ -1889,6 +2149,15 @@
 	"Indent more": [
 		"Meer inspringen"
 	],
+	"Index notes for AI search": [
+		""
+	],
+	"Indexer:": [
+		""
+	],
+	"Indexing…": [
+		""
+	],
 	"Info": [
 		"Info"
 	],
@@ -1901,8 +2170,17 @@
 	"Insert": [
 		"Invoegen"
 	],
+	"Insert column right": [
+		""
+	],
 	"Insert Hyperlink": [
 		"Hyperlink invoegen"
+	],
+	"Insert row above": [
+		""
+	],
+	"Insert row below": [
+		""
 	],
 	"Insert time": [
 		"Tijd invoegen"
@@ -1943,6 +2221,9 @@
 	"Invalid password": [
 		"Ongeldig wachtwoord"
 	],
+	"Invalid password. Please try again. If you have forgotten your password you will need to reset it.": [
+		""
+	],
 	"iOS version: %s": [
 		"iOS versie: %s"
 	],
@@ -1951,6 +2232,9 @@
 	],
 	"Item \"%s\" could not be downloaded: %s": [
 		"Item “%s” kan niet worden gedownload: %s"
+	],
+	"Item upload will be disabled in %s.": [
+		""
 	],
 	"Items": [
 		"Items"
@@ -1973,6 +2257,9 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
+	"Joplin Cloud AI requires Joplin Cloud sync. Pick a different provider or restore Joplin Cloud sync.": [
+		""
+	],
 	"Joplin Cloud Login": [
 		"Joplin Cloud Login"
 	],
@@ -1980,7 +2267,7 @@
 		"Joplin Desktop"
 	],
 	"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. What would you like to do?": [
-		""
+		"Joplin herkent de %s-extensie niet. Het openen van dit bestand kan gevaarlijk zijn. Wat wil je doen?"
 	],
 	"Joplin Export Directory": [
 		"Joplin-exportmap"
@@ -1999,6 +2286,9 @@
 	],
 	"Joplin Mobile": [
 		"Joplin Mobile"
+	],
+	"Joplin needs your permission to access your %s account and to synchronise data with it.": [
+		""
 	],
 	"Joplin Server": [
 		"Joplin Server"
@@ -2025,7 +2315,7 @@
 		"Joplin SSO Authenticatie"
 	],
 	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
-		""
+		"Joplin ondersteunt het opslaan van de locatie waar notities worden opgeslagen of gemaakt. Wil je dit inschakelen? Dit kan op elk moment in de instellingen worden veranderd."
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Webclipper stelt u in staat om webpagina's en schermafbeeldingen van uw browser op te slaan in Joplin."
@@ -2055,7 +2345,7 @@
 		"Ondersteunde Sleutelhanger: %s"
 	],
 	"KEYS": [
-		""
+		"TOETSEN"
 	],
 	"Keys that need upgrading": [
 		"Hoofdsleutels die moeten worden bijgewerkt"
@@ -2155,6 +2445,12 @@
 	"Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at \"%s\" and resume the operation.": [
 		"Het vergrendelbestand wordt al vastgehouden. Als u zeker weet dat er geen synchronisatie plaatsvindt, kunt u uw bestand verwijderen in \"%s\" en de actie hervatten."
 	],
+	"Locked notes are encrypted on this device and can only be read after entering your note lock password. The password is required again after locking or restarting Joplin.": [
+		""
+	],
+	"Locked notes cannot be opened in an external editor": [
+		""
+	],
 	"Log": [
 		"Log"
 	],
@@ -2162,7 +2458,7 @@
 		"Inloggen met je webbrowser"
 	],
 	"Login to Joplin Cloud.": [
-		"Inloggen op de Joplin Cloud"
+		"Inloggen bij Joplin Cloud."
 	],
 	"Login with Dropbox": [
 		"Inloggen met Dropbox"
@@ -2197,11 +2493,17 @@
 	"Manage shared notebooks": [
 		"Gedeelde notitieboek beheren"
 	],
+	"Manage this server's license from the [admin dashboard](%s).": [
+		""
+	],
+	"Manage toolbar options": [
+		"Werkbalkopties beheren"
+	],
 	"Manage your plugins": [
 		"Beheer plugins"
 	],
 	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
-		""
+		"Profielen beheren. Je kunt profielen hernoemen of verwijderen. Het actieve profiel kan niet worden verwijderd."
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Beheert de E2EE-configuratie. Opdrachten zijn: `enable`, `disable`, `decrypt`, `status`, `decrypt-file` en `target-status`."
@@ -2246,7 +2548,7 @@
 		"Hoofdwachtwoord:"
 	],
 	"match case": [
-		""
+		"hoofdlettergevoelig"
 	],
 	"Math": [
 		"Wiskunde"
@@ -2263,11 +2565,14 @@
 	"Max Total Size": [
 		"Maximale totale grootte"
 	],
-	"Media player, math, diagrams, table of contents": [
+	"MCP requires the Web Clipper service. Enable it in Settings → Web Clipper.": [
 		""
 	],
+	"Media player, math, diagrams, table of contents": [
+		"Mediaspeler, wiskunde, diagrammen, inhoudsopgave"
+	],
 	"Medium": [
-		""
+		"Medium"
 	],
 	"Minimise": [
 		"Minimaliseer"
@@ -2282,7 +2587,7 @@
 		"Ontbrekende hoofdsleutels"
 	],
 	"Missing permission to record audio.": [
-		"Toestemming voor opnemen audio ontbreekt"
+		"Toestemming voor opnemen van audio ontbreekt."
 	],
 	"Missing required argument: %s": [
 		"Vereist argument ontbreekt: %s"
@@ -2292,6 +2597,12 @@
 	],
 	"Mobile data - auto-sync disabled": [
 		"Mobiele data - automatische synchronisatie uitgeschakeld"
+	],
+	"Model": [
+		""
+	],
+	"Model:": [
+		""
 	],
 	"More info": [
 		"Meer informatie"
@@ -2309,11 +2620,17 @@
 		"Verplaats %d notitie naar notitieboek \"%s\"?",
 		"Verplaats %d notities naar notitieboek \"%s\"?"
 	],
+	"Move %d notebooks to the trash?\n\nAll notes and sub-notebooks within these notebooks will also be moved to the trash.": [
+		"%d notitieboeken naar de prullenbak verplaatsen?\n\nAlle notities en sub-notitieboeken in dit notitieboek worden eveneens naar de prullenbak verplaatst."
+	],
 	"Move down": [
 		"Verplaats naar beneden"
 	],
 	"Move left": [
 		"Verplaats naar links"
+	],
+	"Move notebook \"%s\" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.": [
+		"Notitieboek \"%s\" naar de prullenbak verplaatsen?\n\nAlle notities en sub-notitieboeken in dit notitieboek worden eveneens naar de prullenbak verplaatst."
 	],
 	"Move right": [
 		"Verplaats naar rechts"
@@ -2351,6 +2668,9 @@
 	"New invitations": [
 		"Nieuwe uitnodiging"
 	],
+	"New model available\nA new voice typing model is available. Do you want to download it?": [
+		"Nieuw model beschikbaar\nEen nieuw stemtypemodel is beschikbaar. Wil je het downloaden?"
+	],
 	"New note": [
 		"Nieuwe notitie"
 	],
@@ -2374,6 +2694,9 @@
 	],
 	"New sub-notebook": [
 		"Nieuw sub-notitieboek"
+	],
+	"New text card": [
+		""
 	],
 	"New to-do": [
 		"Nieuwe taak"
@@ -2411,6 +2734,18 @@
 	"No active notebook.": [
 		"Geen actief notitieboek."
 	],
+	"No AI usage recorded yet.": [
+		""
+	],
+	"No arrow": [
+		""
+	],
+	"No colour": [
+		""
+	],
+	"No embedding model is installed. It is downloaded automatically on first use — check Settings → AI for progress.": [
+		""
+	],
 	"No new invitations": [
 		"Geen nieuwe uitnodigingen"
 	],
@@ -2424,7 +2759,7 @@
 		"Er zijn hier geen notities. Creëer een notitie door de klikken op \"Nieuwe notitie\"."
 	],
 	"No plugins are installed.": [
-		"Geen plug-ins geïnstalleerd"
+		"Geen plug-ins geïnstalleerd."
 	],
 	"No resources!": [
 		"Geen resources!"
@@ -2433,7 +2768,7 @@
 		"Geen resultaten"
 	],
 	"No revision selected": [
-		"Geen revisie geselecteerd."
+		"Geen revisie geselecteerd"
 	],
 	"No such command: %s": [
 		"Opdracht bestaat niet: %s"
@@ -2442,7 +2777,7 @@
 		"Geen suggesties"
 	],
 	"No tab selected": [
-		"Geen tab geselecteerd."
+		"Geen tab geselecteerd"
 	],
 	"No tags": [
 		"Geen labels"
@@ -2450,7 +2785,13 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Geen teksteditor opgegeven. Stel deze in via `config editor <pad-naar-editor>`"
 	],
+	"No updates available": [
+		"Geen updates beschikbaar"
+	],
 	"No URL for SAML authentication set.": [
+		"Geen URL ingesteld voor SAML-authenticatie."
+	],
+	"No valid notebook is available. Please create or select a notebook and try again.": [
 		""
 	],
 	"None": [
@@ -2458,6 +2799,9 @@
 	],
 	"Nord": [
 		"Noord"
+	],
+	"Normal": [
+		""
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Niet geauthenticeerd met %s. Voer ontbrekende inloggegevens in."
@@ -2473,9 +2817,6 @@
 	],
 	"Not now": [
 		"Niet nu"
-	],
-	"Not useful": [
-		"Niet zinvol"
 	],
 	"note": [
 		"notitie"
@@ -2513,6 +2854,9 @@
 	"Note history has been deleted.": [
 		"Notitiegeschiedenis is verwijderd."
 	],
+	"Note indexing is turned off in Settings → AI.": [
+		""
+	],
 	"Note is not a to-do: \"%s\"": [
 		"Notitie is geen taak: \"%s\""
 	],
@@ -2525,6 +2869,9 @@
 	"Note list style": [
 		"Notitielijststijl"
 	],
+	"Note lock password, auto lock": [
+		""
+	],
 	"Note not published: %s": [
 		"Notitie niet gepubliceerd: %s"
 	],
@@ -2536,6 +2883,9 @@
 	],
 	"Note title": [
 		"Titel van notitie"
+	],
+	"Note viewer": [
+		"Notitieweergave"
 	],
 	"Note&book": [
 		"Notitie&boek"
@@ -2579,8 +2929,26 @@
 	"Numbered List": [
 		"Genummerde lijst"
 	],
-	"OCR: Clear cache and re-download language data files": [
+	"Obsidian Vault": [
 		""
+	],
+	"OCR is not complete. Please wait for OCR to finish before creating an accessible document.": [
+		""
+	],
+	"OCR needs to run to generate an accessible document. This may take a moment. Would you like to continue?": [
+		""
+	],
+	"OCR: Clear cache and re-download language data files": [
+		"OCR: De cache wissen en de taalbestanden opnieuw downloaden"
+	],
+	"OCR: Language data URL or path": [
+		"OCR: URL of pad naar taaldata"
+	],
+	"OCR: PDF processing mode": [
+		""
+	],
+	"OCR: Search in extracted content": [
+		"OCR: Zoeken in geëxtraheerde inhoud"
 	],
 	"OK": [
 		"OK"
@@ -2612,6 +2980,9 @@
 	"OneNote Notebook": [
 		"OneNote notitieboek"
 	],
+	"Only do this if you've forgotten your current password. A new password will be created, and any notes locked with the old one will become permanently unreadable.": [
+		""
+	],
 	"Only one note can be printed at a time.": [
 		"Slechts één notitie kan gelijktijdig worden afgedrukt."
 	],
@@ -2637,13 +3008,13 @@
 		"Open de PDF weergave"
 	],
 	"Open primary app instance...": [
-		""
+		"Primaire app-instantie openen..."
 	],
 	"Open profile directory": [
 		"Open profiel map"
 	],
 	"Open secondary app instance...": [
-		""
+		"Secundaire app-instantie openen..."
 	],
 	"Open settings": [
 		"Open instellingen"
@@ -2655,13 +3026,16 @@
 		"Open Sync Wizard..."
 	],
 	"Open-source licences": [
-		""
+		"Open-source licenties"
 	],
 	"Open...": [
 		"Openen..."
 	],
 	"Opening section %s": [
 		"Sectie %s wordt geopend"
+	],
+	"Opens dropdown": [
+		"Opent dropdown-menu"
 	],
 	"Opens note": [
 		"Notitie wordt geopend"
@@ -2676,7 +3050,7 @@
 		"Opties"
 	],
 	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
-		""
+		"Opties die gebruikt moeten worden bij het weergeven van ABC-code. Het moet een JSON5-object zijn. De volledige lijst met opties is beschikbaar op: %s"
 	],
 	"Ordered list": [
 		"Geordende lijst"
@@ -2697,10 +3071,10 @@
 		"Paginaformaat voor PDF-export"
 	],
 	"Panel \"%s\" is visible": [
-		""
+		"Paneel \"%s\" is zichtbaar"
 	],
 	"Panel %s is hidden": [
-		""
+		"Paneel \"%s\" is verborgen"
 	],
 	"Password": [
 		"Wachtwoord"
@@ -2735,9 +3109,15 @@
 	"Permanently delete note \"%s\"?": [
 		"Notitie \"%s\" permanent verwijderen?"
 	],
+	"Permanently delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will be permanently deleted.": [
+		"Notitieboek \"%s\" definitief verwijderen? \n\nAlle notities en sub-notitieboeken worden definitief verwijderd."
+	],
 	"Permanently delete this note?": [
 		"Deze notitie permanent verwijderen?",
 		"Deze notities permanent verwijderen?"
+	],
+	"Permanently deletes the notebook, skipping the trash.": [
+		"Verwijdert het notitieboek permanent, zonder het naar de prullenbak te verplaatsen."
 	],
 	"Photo %d": [
 		"Foto %d"
@@ -2748,8 +3128,14 @@
 	"Please confirm that you would like to re-encrypt your complete database.": [
 		"Bevestig dat u uw complete database opnieuw wilt versleutelen."
 	],
+	"Please disable users from the [admin dashboard](%s) to bring this server under the limit.": [
+		""
+	],
 	"Please enter your password in the master key list below before upgrading the key.": [
 		"Voer uw wachtwoord in onderstaande hoofdsleutellijst voorafgaand aan bijwerken van de sleutel."
+	],
+	"Please make sure you remember your password. It cannot be recovered if lost, and any data encrypted with it will become inaccessible.": [
+		""
 	],
 	"Please note that if it is a large notebook, it may take a few minutes for all the notes to show up on the recipient's device.": [
 		"Houd er rekening mee dat als het een groot notitieboek is, het enkele minuten kan duren voordat alle notities op het apparaat van de ontvanger worden weergegeven."
@@ -2778,32 +3164,47 @@
 	"Please specify the notebook where the notes should be imported to.": [
 		"Geef het notitieboek op waar de notities naar moeten worden geïmporteerd."
 	],
+	"Please update the license key from the [admin dashboard](%s).": [
+		""
+	],
 	"Please upgrade Joplin to version %s or later to use this plugin.": [
-		"Upgrade Joplin naar versie %s of later om deze plug-in te gebruiken"
+		"Upgrade Joplin naar versie %s of later om deze plug-in te gebruiken."
 	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"Wacht tot alle bijlagen zijn gedownload en versleuteld. Je mag ook overschakelen naar %s om de notitie te wijzigen."
 	],
 	"Please wait while we load your organisation sign-in page...": [
-		""
+		"Even geduld terwijl we de loginpagina van je organisatie laden..."
 	],
 	"Please wait...": [
 		"Even geduld..."
 	],
+	"Plugin message": [
+		"Pluginbericht"
+	],
+	"Plugin panels": [
+		"Pluginpanelen"
+	],
 	"Plugin repository failed to load": [
-		""
+		"Pluginbibliotheek kon niet laden"
+	],
+	"Plugin search": [
+		"Plugin zoeken"
+	],
+	"Plugin security": [
+		"Pluginbeveiliging"
 	],
 	"Plugin tools": [
 		"Plugin tools"
 	],
 	"Plugin WebView debugging": [
-		""
+		"Plugin WebView foutopsporing"
 	],
 	"Plugins": [
 		"Plugins"
 	],
 	"Plugins extend Joplin with features that are not present by default. Plugins can extend Joplin's editor, viewer, and more.": [
-		""
+		"Plugins breiden Joplin uit met functies die standaard niet aanwezig zijn. Plugins kunnen de editor, viewer en meer van Joplin uitbreiden."
 	],
 	"Portrait": [
 		"Portret"
@@ -2868,6 +3269,9 @@
 	"Pro": [
 		"Pro"
 	],
+	"Pro 100 GB": [
+		""
+	],
 	"Process failed payment subscriptions": [
 		"Mislukte betalingsabonnementen verwerken"
 	],
@@ -2888,6 +3292,9 @@
 	],
 	"Profile name": [
 		"Profielnaam"
+	],
+	"Profile name cannot be empty": [
+		"Profiel mag niet blanco zijn"
 	],
 	"Profile name:": [
 		"Profielnaam:"
@@ -2916,6 +3323,9 @@
 	"Publish Note": [
 		"Publiceer notitie"
 	],
+	"Publish note \"%s\" (in notebook \"%s\")?": [
+		"Notitie \"%s\" (in notitieboek \"%s\") publiceren?"
+	],
 	"Publish note...": [
 		"Publiceer notitie..."
 	],
@@ -2926,7 +3336,7 @@
 		"Publiceer notities op het internet"
 	],
 	"Publish/unpublish": [
-		""
+		"Publiceren/publicatie intrekken"
 	],
 	"Published at URL: %s": [
 		"Gepubliceerd op URL: %s"
@@ -2939,6 +3349,9 @@
 	],
 	"Quit": [
 		"Afsluiten"
+	],
+	"Quit anyway": [
+		""
 	],
 	"Re-download model": [
 		"Model opnieuw downloaden"
@@ -2955,6 +3368,9 @@
 	"Re-upload local data to sync target": [
 		"Lokale gegevens opnieuw uploaden om het doel te synchroniseren"
 	],
+	"Read all tags": [
+		""
+	],
 	"Read more": [
 		"Lees meer"
 	],
@@ -2965,7 +3381,10 @@
 		"Leestijd: %s min"
 	],
 	"Reading commands from standard input is only available in CLI mode.": [
-		"Opdracht van standaard input lezen is alleen beschikbaar in CLI-modus"
+		"Opdracht van standaard input lezen is alleen beschikbaar in CLI-modus."
+	],
+	"Reading this note requires the note lock password, which has not been set up on this device yet.": [
+		""
 	],
 	"Recipient has accepted the invitation": [
 		"Ontvanger heeft de uitnodiging geaccepteerd"
@@ -3012,14 +3431,20 @@
 	"Reject": [
 		"Weiger"
 	],
+	"Rejecting share...": [
+		"Delen afwijzen..."
+	],
 	"Remove": [
 		"Verwijderen"
+	],
+	"Remove %d tags from all notes? This cannot be undone.": [
+		"%d labels van alle notities verwijderen? Dit kan niet ongedaan worden gemaakt."
 	],
 	"Remove %s": [
 		"Verwijder %s"
 	],
 	"Remove %s from share": [
-		"Verwijder %s van delen"
+		"%s van delen verwijderen"
 	],
 	"Remove tag \"%s\" from all notes?": [
 		"Label “%s” verwijderen van alle notities?"
@@ -3028,10 +3453,7 @@
 		"Deze zoekopdracht verwijderen uit de zijbalk?"
 	],
 	"Removed %s from share.": [
-		"%s is verwijderd van delen"
-	],
-	"Removed tag: %s": [
-		"Label verwijderd: %s"
+		"%s is van delen verwijderd."
 	],
 	"Rename": [
 		"Naam wijzigen"
@@ -3046,13 +3468,13 @@
 		"Wijzigt de naam van het opgegeven <item> (notitie of notitieboek) in <name>."
 	],
 	"Renders markup on all lines that don't include the cursor.": [
-		""
+		"Geeft opmaak weer op alle regels waar de cursor niet staat."
 	],
 	"Renew token": [
 		"Vernieuw token"
 	],
 	"replace": [
-		"Vervang"
+		"vervangen"
 	],
 	"Replace": [
 		"Vervang"
@@ -3070,16 +3492,16 @@
 		"Vervang: "
 	],
 	"replaced $ matches": [
-		""
+		"$ overeenkomsten vervangen"
 	],
 	"replaced match on line $": [
-		""
+		"overeenkomst vervangen p regel $"
 	],
 	"Report an issue": [
 		"Meldt een probleem"
 	],
 	"Report any issues concerning the plugin.": [
-		"Meldt een probleem met de plug-in"
+		"Een probleem melden met deze plug-in."
 	],
 	"Report fraudulent plugin": [
 		"Meldt een frauduleuze plug-in"
@@ -3089,6 +3511,15 @@
 	],
 	"Reports": [
 		"Rapporten"
+	],
+	"Required to use cloud-hosted AI models, including Joplin Cloud AI. When disabled, only on-device providers can be used.": [
+		""
+	],
+	"Reset": [
+		""
+	],
+	"Reset AI token usage counters?": [
+		""
 	],
 	"Reset application layout": [
 		"Herstel de layout van de applicatie"
@@ -3122,6 +3553,9 @@
 	],
 	"Restore notebook": [
 		"Herstel notitieboek"
+	],
+	"Restore the items matching <pattern> from the trash.": [
+		"Items die overeenkomen met <pattern> uit de prullenbak halen."
 	],
 	"Restored items": [
 		"Herstelde items"
@@ -3157,6 +3591,9 @@
 		"Rich Text"
 	],
 	"Rich Text editor. Press Escape then Tab to escape focus.": [
+		"Rijke-teksteditor. Druk op Escape en dan op Tab om de focus te verlaten."
+	],
+	"Run OCR": [
 		""
 	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
@@ -3214,7 +3651,7 @@
 		"Gescande code"
 	],
 	"Scrollbar size": [
-		""
+		"Grootte van de schuifbalk"
 	],
 	"Search": [
 		"Zoeken"
@@ -3241,7 +3678,7 @@
 		"Zoeken tonen"
 	],
 	"Search tags": [
-		"Zoek labels"
+		"Labels zoeken"
 	],
 	"Search...": [
 		"Zoeken..."
@@ -3277,13 +3714,13 @@
 		"Selecteer notitieboek"
 	],
 	"Select one of the other supported sync targets.": [
-		""
+		"Selecteer een van de andere ondersteunde synchronisatiedoelen."
 	],
 	"Select parent notebook": [
 		"Kies hoofdnotitieboek"
 	],
 	"Select the type of file to be imported:": [
-		""
+		"Selecteer het type bestand dat geïmporteerd moet worden:"
 	],
 	"Selected: %s": [
 		"Geselecteerd: %s"
@@ -3296,6 +3733,12 @@
 	],
 	"Self-hosted": [
 		"Zelf gehost"
+	],
+	"Self-hosted instances of the Joplin web app cannot sync with Joplin Cloud. Open the official web app?": [
+		""
+	],
+	"Send": [
+		""
 	],
 	"Send bug report": [
 		"Foutopsporingsrapportage versturen"
@@ -3340,19 +3783,22 @@
 		"Delen van %s (%s)"
 	],
 	"Share Notebook": [
-		"Deel Notitieboek"
+		"Notitieboek delen"
 	],
 	"Share notebook...": [
-		"Deel notitieboek..."
+		"Notitieboek delen..."
 	],
 	"Share permissions": [
-		"Deel rechten"
+		"Rechten delen"
 	],
 	"Shared": [
 		"Gedeeld"
 	],
+	"Shares": [
+		"Shares"
+	],
 	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
-		""
+		"Deelt of stopt met delen van het opgegeven [notebook] met [user]. Vereist Joplin Cloud of Joplin Server."
 	],
 	"Sharing notebook...": [
 		"Notitieboek delen..."
@@ -3369,6 +3815,9 @@
 	"Show all": [
 		"Alles tonen"
 	],
+	"Show checkbox completion chart in note list": [
+		""
+	],
 	"Show completed to-dos": [
 		"Afgeronde taken tonen"
 	],
@@ -3377,6 +3826,12 @@
 	],
 	"Show disabled keys": [
 		"Toon uigeschakelde sleutels"
+	],
+	"Show Joplin icon for note links": [
+		""
+	],
+	"Show monospace fonts only.": [
+		"Alleen monospace-lettertypen weergeven."
 	],
 	"Show note counts": [
 		"Toon notitietellingen"
@@ -3396,14 +3851,20 @@
 	"Show/hide the sidebar": [
 		"Toon/Verberg de zijbalk"
 	],
+	"Showing all matching settings": [
+		""
+	],
 	"Shows notes for tag": [
-		"Toon notitie van labels"
+		"Notities met label weergeven"
 	],
 	"Shrink large images before adding them to notes.": [
 		"Verklein grote afbeeldingen voordat ze aan een notitie toegevoegd worden."
 	],
+	"Side menu closed": [
+		"Zijmenu gesloten"
+	],
 	"Side menu opened": [
-		""
+		"Zijmenu geopend"
 	],
 	"Sidebar": [
 		"Zijbalk"
@@ -3413,6 +3874,9 @@
 	],
 	"Size": [
 		"Grootte"
+	],
+	"Size (smallest first)": [
+		""
 	],
 	"Skip this version": [
 		"Sla deze versie over"
@@ -3436,7 +3900,7 @@
 		"Sommige bijlagen konden niet gedownload worden. Probeer ze nogmaals te downloaden."
 	],
 	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
-		""
+		"Sommige bijlagen moeten worden gedownload. Stel de bijlage-downloadmodus in op 'altijd' en probeer het opnieuw."
 	],
 	"Some items cannot be decrypted.": [
 		"Sommige items kunnen niet worden ontsleuteled."
@@ -3449,6 +3913,9 @@
 	],
 	"Some items could not be synchronised. Please try to synchronise them first.": [
 		"Sommige items kunnen niet worden gesynchroniseerd. Probeer ze eerst te synchroniseren."
+	],
+	"Something went wrong.": [
+		""
 	],
 	"Sort \"%s\" in ascending order": [
 		"Sorteer \"%s\" in oplopende volgorde"
@@ -3481,10 +3948,10 @@
 		"Bron: "
 	],
 	"SPACE": [
-		""
+		"SPATIE"
 	],
 	"Spacer": [
-		""
+		"Opvulling"
 	],
 	"Specify the port that should be used by the API server. If not set, a default will be used.": [
 		"Specificeer de door de API-server te gebruiken poort. Indien niet ingesteld, wordt een standaardwaarde gebruikt."
@@ -3567,6 +4034,9 @@
 	"Success! Synchronisation configuration appears to be correct.": [
 		"Succes! Configuratie van synchronisatie lijkt correct te zijn."
 	],
+	"Success! The AI provider responded:": [
+		""
+	],
 	"Suggestions": [
 		"Suggesties"
 	],
@@ -3579,6 +4049,9 @@
 	"Swap line up": [
 		"Verplaats omhoog"
 	],
+	"Swap source and target": [
+		""
+	],
 	"Switch between note and to-do type": [
 		"Schakel tussen notitie en taak"
 	],
@@ -3586,7 +4059,10 @@
 		"Wissel van profiel"
 	],
 	"Switch to back-facing camera": [
-		""
+		"Overschakelen naar de camera aan de achterkant"
+	],
+	"Switch to front-facing camera": [
+		"Overschakelen naar de camera aan de voorkant"
 	],
 	"Switch to note type": [
 		"Overschakelen naar notitie-type"
@@ -3597,6 +4073,9 @@
 	"Switch to the %s Editor": [
 		"Overschakelen naar de %s Editor"
 	],
+	"Switch to the legacy editor": [
+		"Overschakelen naar de klassieke editor"
+	],
 	"Switch to the new editor": [
 		"Overschakelen naar de nieuwe editor"
 	],
@@ -3605,9 +4084,6 @@
 	],
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Schakelt over naar [notebook] - alle toekomstige handelingen worden gedaan in dit notitieboek."
-	],
-	"Sync": [
-		"Synchroniseer"
 	],
 	"Sync as many devices as you want": [
 		"Synchroniseer met zoveel apparaten als je wil"
@@ -3632,6 +4108,9 @@
 	],
 	"Sync your notes": [
 		"Synchroniseer je notities"
+	],
+	"Sync your notes with Joplin Cloud to access them on all your devices. Other sync options are also available.": [
+		""
 	],
 	"Sync, encryption, proxy": [
 		"Synchroniseer, encryptie, proxy"
@@ -3663,6 +4142,9 @@
 	"Synchronises with remote storage.": [
 		"Synchroniseert met cloudopslag."
 	],
+	"Synchronising remaining changes, please wait...": [
+		""
+	],
 	"Synchronising...": [
 		"Synchroniseren..."
 	],
@@ -3670,13 +4152,19 @@
 		"Synchroniseren..."
 	],
 	"Tab indents": [
-		""
+		"Tab-inspringingen"
 	],
 	"Tab moves focus": [
-		""
+		"Tab verplaatst de focus"
+	],
+	"Table": [
+		"Tabel"
 	],
 	"Tabloid": [
 		"Tabloid"
+	],
+	"Tag: %s": [
+		"Label: %s"
 	],
 	"Tagged: %d.": [
 		"Gelabeld: %d."
@@ -3684,11 +4172,14 @@
 	"Tags": [
 		"Labels"
 	],
+	"Tags cannot be changed for locked notes while the session is locked": [
+		""
+	],
 	"Take photo": [
 		"Foto maken"
 	],
 	"Task \"%s\" failed with error: %s": [
-		""
+		"Taak \"%s\" is mislukt met fout: %s"
 	],
 	"Task list": [
 		"Takenlijst"
@@ -3705,11 +4196,11 @@
 	"Text editor command": [
 		"Tekst editor commando"
 	],
-	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
-		""
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Het huiduge profiel kan niet worden verwijderd. Schakel naar een ander profiel en probeer het opnieuw."
+	],
+	"The API key is missing. Set it in Settings → AI.": [
+		""
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
 		"De applicatie zal nu afsluiten. Gelieve het weer op te starten om het proces te voltooien."
@@ -3741,9 +4232,6 @@
 	"The default encryption method has been changed, you should re-encrypt your data.": [
 		"De standaard versleutelmethode is gewijzigd, je moet je data opnieuw versleutelen."
 	],
-	"The default profile cannot be deleted": [
-		"De standaard profiel kan niet worden verwijderd"
-	],
 	"The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.": [
 		"Het commando van de editor (kan argumenten bevatten) die wordt gebruikt bij het openen van notities. Als er geen wordt opgegeven, dan wordt getracht de standaard editor te achterhalen."
 	],
@@ -3761,7 +4249,7 @@
 		"De volgende sleutels gebruiken een verouderd coderingsalgoritme en het wordt aanbevolen om ze te upgraden. De geüpgradede sleutel kan uw gegevens nog steeds decoderen en versleutelen zoals gewoonlijk."
 	],
 	"The following plugins may not support the current markdown editor:": [
-		"De volgende plug-ins worden mogelijk niet ondersteund in the huidige Markdown Editor"
+		"De volgende plug-ins worden in the huidige Markdown Editor mogelijk niet ondersteund:"
 	],
 	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
 		"Het Joplin-team heeft deze plug-in doorgelicht en voldoet aan onze normen voor beveiliging en prestaties."
@@ -3770,6 +4258,15 @@
 		"De sleutels met deze ID's worden gebruikt om sommige van uw items te versleutelen, maar de toepassing heeft er momenteel geen toegang toe. Het is waarschijnlijk dat ze uiteindelijk via synchronisatie zullen worden gedownload."
 	],
 	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
+		"De klassieke Markdown-editor lijkt gecrasht te zijn vanwege een incompatibiliteit met een plugin. We raden aan de nieuwe editor te gebruiken."
+	],
+	"The license for this server failed to refresh.": [
+		""
+	],
+	"The license key for this Joplin Server Business instance has expired and needs to be renewed.": [
+		""
+	],
+	"The license key for this Joplin Server Business instance has expired or is invalid. Uploading items has been disabled until the license is renewed.": [
 		""
 	],
 	"The master key has been upgraded successfully!": [
@@ -3778,8 +4275,27 @@
 	"The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
 		"De hoofdsleutels met deze ID's worden gebruikt om sommige items te versleutelen, maar de applicatie heeft momenteel geen toegang tot deze items. Waarschijnlijk worden ze uiteindelijk gedownload via synchronisatie."
 	],
+	"The MCP server is disabled. Enable it in Settings → MCP.": [
+		""
+	],
+	"The model identifier to use, for example gpt-4o-mini or claude-3-5-sonnet-latest.": [
+		""
+	],
+	"The model name is missing. Set it in Settings → AI.": [
+		""
+	],
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"De notitie “%s” is succesvol hersteld naar notitieboek “%s”."
+	],
+	"The note changed while the request was running; edits were not applied. Try again.": [
+		""
+	],
+	"The note has been converted to Markdown and the original note has been moved to the trash": [
+		"De notitie is omgezet naar Markdown en de originele notitie is naar de prullenbak verplaatst",
+		"De notities zijn omgezet naar Markdown en de originele notities zijn naar de prullenbak verplaatst"
+	],
+	"The note lock state cannot be changed from the command line": [
+		""
 	],
 	"The note was successfully moved to the trash.": [
 		"De notitie is succesvol verplaatst naar de prullenbak.",
@@ -3794,14 +4310,23 @@
 	"The notes have been imported: %s": [
 		"De notities zijn geïmporteerd: %s"
 	],
+	"The OpenAI-compatible API endpoint. For example, https://api.openai.com/v1 or http://localhost:11434/v1 for Ollama.": [
+		""
+	],
+	"The OpenAI-compatible provider needs a base URL. Set it in Settings → AI.": [
+		""
+	],
 	"The possible commands are:": [
 		"De beschikbare opdrachten zijn:"
+	],
+	"The provider returned an empty response. Check that the base URL ends with /v1 and that a model is loaded.": [
+		""
 	],
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"De ontvanger kon niet worden verwijderd ui de lijst. Probeer heb opnieuw.\n\nDe fout was: \"%s\""
 	],
 	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
-		""
+		"Het synchronisatiedoel kan om de volgende reden niet worden gewijzigd: %s\n\nAls het probleem niet kan worden opgelost, moet je misschien eerst je gegevens wissen door deze instructies te volgen:\n\n%s"
 	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"De sync target moet worden geüpdatet voordat Joplin kan synchroniseren. Het kan een paar minuten duren en de app moet opnieuw opgestart worden. Om door te gaan, klik op de link."
@@ -3819,10 +4344,13 @@
 		"Het doel waarnaar gesynchroniseerd moet worden. Elk doel mag extra argumenten bevatten, welke `sync.NUM.NAME` worden genoemd (wordt hieronder uitgelegd)."
 	],
 	"The web client does not support accepting encrypted shared notebooks. Please switch to the desktop or mobile app before accepting the share.\n\nError: \"%s\"": [
-		""
+		"De webclient ondersteunt het accepteren van versleutelde gedeelde notitieboeken niet. Schakel over naar de desktop- of mobiele app voordat je de gedeelde notitie accepteert.\n\nFout: \"%s\""
 	],
 	"The Web Clipper needs your authorisation to access your data.": [
 		"De Web Clipper heeft uw toestemming nodig om toegang te krijgen tot uw gegevens."
+	],
+	"The web clipper service cannot be enabled in this instance of Joplin.": [
+		"De webclipper-dienst kan niet worden ingeschakeld in deze versie van Joplin."
 	],
 	"The web clipper service is enabled and set to auto-start.": [
 		"De webclipper-dienst is ingeschakeld en wordt automatisch opgestart."
@@ -3835,9 +4363,6 @@
 	],
 	"Theme": [
 		"Thema"
-	],
-	"Themes, editor font": [
-		"Thema's, lettertype van editor"
 	],
 	"There are currently no notes. Create one by clicking on the (+) button.": [
 		"Er zijn momenteel geen notities. Creëer een notitie door te drukken op de knop (+)."
@@ -3858,7 +4383,7 @@
 		"Er is iets misgegaan tijdens het downloaden van deze bijlage:"
 	],
 	"These items failed to sync, but have been marked as \"ignored\". They won't cause the sync warning to appear, but still aren't synced. To unignore, click \"retry\".": [
-		""
+		"Deze items konden niet worden gesynchroniseerd, maar zijn gemarkeerd als 'genegeerd'. Ze zullen de synchronisatiemelding niet veroorzaken, maar zijn nog steeds niet gesynchroniseerd. Om het negeren ongedaan te maken, klik op 'opnieuw proberen'."
 	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Deze items blijven op het apparaat, maar worden niet geüpload naar het synchronisatiedoel. Als u deze items wilt vinden, moet u zoeken naar de titel of ID ervan (welke hierboven tussen haakjes wordt getoond)."
@@ -3867,10 +4392,10 @@
 		"Deze plugins verbeteren de Markdown verwerker met aanvullende mogelijkheden. Merk op dat deze mogelijkheden nuttig kunnen zijn, maar geen standaard Markdown zijn en de meeste ervan alleen in Joplin zullen werken. Bovendien zijn sommige *incompatibel* met de WUZIWUK editor. Als u een notitie opent die van een van deze plugins in die editor gebruikt, verliest u de opmaak van de plugin. Hieronder wordt aangegeven welke plugins als dan niet compatibel zijn met de WUZIWUK editor."
 	],
 	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
-		""
+		"Dit stelt een andere gebruiker in staat om een notitieboek met je te delen, en jullie kunnen er dan samen aan werken. Het geeft je echter niet de mogelijkheid om een notitieboek met iemand anders te delen, tenzij je de functie \"%s\" hebt."
 	],
 	"This attachment does not have OCR data (Status: %s)": [
-		""
+		"Deze bijlage heeft geen OCR-gegevens (Status: %s)"
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"Deze bijlage is niet gedownload of nog niet ontsleuteld"
@@ -3878,17 +4403,27 @@
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		"Dit autorisatie-token is alleen nodig om applicaties van derden toegang te geven tot Joplin."
 	],
+	"This drawing may have unsaved changes.": [
+		"Deze tekening kan onopgeslagen wijzigingen hebben."
+	],
 	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
-		""
+		"Deze functie is standaard uitgeschakeld, je moet hem handmatig inschakelen door de optie 'Handschrifttranscriptie inschakelen' aan te zetten."
 	],
 	"This feature is only available on Joplin Cloud and Joplin Server.": [
-		""
+		"Deze functie is alleen beschikbaar op Joplin Cloud en Joplin Server."
 	],
 	"This image type is not supported by the recognition system.": [
-		""
+		"Dit afbeeldingsformaat wordt niet ondersteund door het herkenningssysteem."
 	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Dit is een geavanceerd hulpmiddel om de bijlagen te tonen die zijn gekoppeld aan uw notities. Wees voorzichtig deze te verwijderen, omdat ze naderhand niet kunnen worden hersteld."
+	],
+	"This Joplin Server Business instance is only licensed for %d user.": [
+		"",
+		""
+	],
+	"This note could not be decrypted. If it was encrypted prior to a password reset, the contents are no longer recoverable.": [
+		""
 	],
 	"This note could not be deleted: %s": [
 		"Deze notitie kan niet worden verwijderd: %s",
@@ -3914,14 +4449,32 @@
 	"This note has no history": [
 		"Deze notitie heeft geen geschiedenis"
 	],
+	"This note is currently being saved. Please try again in a moment.": [
+		""
+	],
+	"This note is encrypted and cannot be used with AI Chat.": [
+		""
+	],
+	"This note is encrypted. Enter the note lock password to unlock encrypted notes for this session.": [
+		""
+	],
 	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
 		"Deze notitie is in HTML-formaat. Converteer het naar Markdown om het eenvoudiger te bewerken."
+	],
+	"This notebook contains Windows-specific files. For maximum compatibility, consider importing the notebook from Windows.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		"Deze plug-in ondersteunt %s niet."
 	],
+	"This provider sends data off your device. Turn on \"Allow remote AI providers\" in Settings → AI.": [
+		""
+	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"Deze Rich Text-editor heeft een aantal beperkingen en het wordt aanbevolen om hiervan op de hoogte te zijn voordat u deze gebruikt."
+	],
+	"This section opens in its own screen and is matched by section title.": [
+		""
 	],
 	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
 		"Deze dienst stelt de browserextensie in staat om te communiceren met Joplin. Na het inschakelen kan uw firewall om toestemming vragen voor het uitvoeren van Joplin op een specifieke poort."
@@ -3950,8 +4503,17 @@
 	"Title": [
 		"Titel"
 	],
+	"To access your recovery codes please enter an authentication code or your password.": [
+		""
+	],
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
 		"Volg de onderstaande stappen om Joplin te synchroniseren met Dropbox:"
+	],
+	"To allow Joplin to synchronise with Joplin Cloud, please login using this URL:": [
+		"Om Joplin te laten synchroniseren met Joplin Cloud, log alsjeblieft in via deze URL:"
+	],
+	"To allow Joplin to synchronise with your account, please follow these steps:": [
+		"Om Joplin te laten synchroniseren met jouw account, volg alsjeblieft de volgend stappen:"
 	],
 	"To continue, please enter your master password below.": [
 		"Om door te gaan, voer het hoofdwachtwoord hieronder in."
@@ -3983,9 +4545,6 @@
 	"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`": [
 		"Om deze items opnieuw te decrypten. Voer 'e2ee decrypt --retry-failed-items' uit"
 	],
-	"To switch the profile, the app is going to close and you will need to restart it.": [
-		"Om van profiel te wisselen zal de app afsluiten en moet je deze opnieuw openen."
-	],
 	"To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions": [
 		"De app heeft de volgende machtigingen nodig om goed te kunnen werken. Schakel ze in bij uw telefooninstellingen via Apps > Joplin > Machtigingen"
 	],
@@ -3998,6 +4557,9 @@
 	"to-do: %s": [
 		"taak: %s"
 	],
+	"Toggle all notebooks": [
+		"Alle notitieboeken schakelen"
+	],
 	"Toggle comment": [
 		"Notitielijst tonen/verbergen"
 	],
@@ -4007,17 +4569,32 @@
 	"Toggle editor layout": [
 		"Bewerkindeling tonen/verbergen"
 	],
+	"Toggle editor plugin": [
+		"Editor-plugin schakelen"
+	],
+	"Toggle editor tab key navigation": [
+		"Editor tab-toetsnavigatie schakelen"
+	],
 	"Toggle editors": [
 		"Schakel tussen editors"
 	],
 	"Toggle external editing": [
 		"Extern bewerken in- of uitschakelen"
 	],
+	"Toggle menu bar": [
+		"Menubalk schakelen"
+	],
+	"Toggle note history, keep notes for": [
+		"Notitiegeschiedenis schakelen, bewaar notities voor"
+	],
 	"Toggle note list": [
 		"Notitielijst tonen/verbergen"
 	],
 	"Toggle own sort order": [
 		"Eigen sorteervolgorde in-/uitschakelen"
+	],
+	"Toggle plugin editor": [
+		"Plugin-editor schakelen"
 	],
 	"Toggle safe mode": [
 		"Veilige modus in-/uitschakelen"
@@ -4028,11 +4605,20 @@
 	"Toggle sort order field": [
 		"Sorteervolgordeveld in-/uitschakelen"
 	],
+	"Toggle whiteboard / Markdown view": [
+		""
+	],
 	"Token has been copied to the clipboard!": [
 		"Token is naar het klembord gekopieerd!"
 	],
+	"Toolbar": [
+		"Werkbalk"
+	],
 	"Tools": [
 		"Hulpmiddelen"
+	],
+	"Tools and services to expose to AI. AI agents can use these tools either via the note chat panel or Joplin's MCP server (if enabled).": [
+		""
 	],
 	"Total Size": [
 		"Totale Grootte"
@@ -4046,11 +4632,8 @@
 	"Try again": [
 		"Probeer opnieuw"
 	],
-	"Try it now": [
-		"Probeer het nu"
-	],
 	"TYPE": [
-		""
+		"TYPE"
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Typ `help [opdracht]` voor meer informatie over een opdracht of typ `help all` voor volledige gebruiksinformatie."
@@ -4061,11 +4644,32 @@
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
 		"Typ de titel van een notitie of een deel van de inhoud om er naartoe te springen. Typ # gevolgd door de naam van een label, @ gevolgd door de naam van een notitieboek, of : om te zoeken op commando's."
 	],
+	"Type a note title to search for it.": [
+		"Typ een notitietitel om te zoeken."
+	],
 	"Type: %s.": [
 		"Type: %s."
 	],
-	"Unchecked": [
+	"Typography, spellcheck, layout": [
 		""
+	],
+	"Unable to access the recording file.": [
+		""
+	],
+	"Unable to edit resource of type %s": [
+		"Kan hulpbron van type %s niet bewerken"
+	],
+	"Unable to share log data. Reason: %s": [
+		"De logboekgegevens kunnen niet worden gedeeld. Reden: %s"
+	],
+	"Unable to share note data. Reason: %s": [
+		"De notitiegegevens kunnen niet worden gedeeld. Reden: %s"
+	],
+	"Unavailable on this platform": [
+		""
+	],
+	"Unchecked": [
+		"Niet geselecteerd"
 	],
 	"Uncompleted to-dos on top": [
 		"Niet-afgeronde taken bovenaan"
@@ -4074,10 +4678,13 @@
 		"Ongedaan maken"
 	],
 	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
-		""
+		"Verwijder de applicatie en installeer deze opnieuw. Zorg ervoor dat je eerst een back-up maakt door al je notities als JEX te exporteren vanuit de desktopapplicatie."
 	],
 	"Unknown": [
 		"Onbekend"
+	],
+	"Unknown file type": [
+		"Onbekend bestandstype"
 	],
 	"Unknown flag: %s": [
 		"Onbekend argument: %s"
@@ -4085,8 +4692,20 @@
 	"Unknown item type downloaded - please upgrade Joplin to the latest version": [
 		"Onbekend type item gedownload - graag Joplin upgraden naar de laatste versie"
 	],
+	"Unknown platform": [
+		"Onbekend platform"
+	],
+	"Unlock": [
+		""
+	],
 	"Unordered list": [
 		"Ongesorteerde lijst"
+	],
+	"Unpublish": [
+		"Publicatie intrekken"
+	],
+	"Unpublish \"%s\"": [
+		"Publicatie van \"%s\" intrekken"
 	],
 	"Unpublish note": [
 		"Publicatie van notitie intrekken"
@@ -4095,7 +4714,7 @@
 		"Delen intrekken"
 	],
 	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
-		""
+		"Notitieboek \"%s\" niet meer delen? Andere gebruikers kunnen hierdoor de toegang tot het notitieboek verliezen."
 	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
 		"Delen van dit notitieboek ongedaan maken? De ontvangers hebben geen toegang meer tot de inhoud ervan."
@@ -4109,14 +4728,23 @@
 	"Unsupported link or message: %s.\nError: %s": [
 		"Niet-ondersteunde link of bericht: %s\nFout: %s"
 	],
+	"Unsupported public key format. Please check that Joplin is updated to the latest version and try again.": [
+		""
+	],
 	"Untitled": [
 		"Naamloos"
+	],
+	"Untitled whiteboard": [
+		""
 	],
 	"Update": [
 		"Bijgewerkt"
 	],
 	"Update available": [
 		"Update beschikbaar"
+	],
+	"Update it from Google Play": [
+		""
 	],
 	"Update later": [
 		"Later bijwerken"
@@ -4157,6 +4785,9 @@
 	"Upgrade the sync target to the latest version.": [
 		"Upgrade het synchronisatiedoel naar de nieuwste versie."
 	],
+	"Upgrade to 100 GB": [
+		""
+	],
 	"Upload photo": [
 		"Foto uploaden"
 	],
@@ -4181,20 +4812,23 @@
 	"Use the arrows to move the layout items. Press \"Escape\" to exit.": [
 		"Gebruik de pijlen om de layout-items te verplaatsen. Druk op \"Escape\" om af te sluiten."
 	],
+	"Use the legacy Markdown editor": [
+		"Klassieke Markdown-editor gebruiken"
+	],
 	"Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.": [
 		"Gebruik dit om de zoekindex opnieuw op te bouwen als er een probleem is met zoeken: Het kan lang duren afhankelijk van het aantal notities."
 	],
 	"Use your biometrics to secure access to your application. You can always set it up later in Settings.": [
 		"Gebruik biometrie voor toegang tot je applicatie. Je kunt dit later instellen bij Instellingen."
 	],
+	"Used": [
+		""
+	],
 	"Used for most text in the markdown editor. If not found, a generic proportional (variable width) font is used.": [
 		"Wordt gebruikt voor de meeste tekst in de markdown-editor. Als dit niet wordt gevonden, wordt een generiek proportioneel lettertype (variabele breedte) gebruikt."
 	],
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"Wordt gebruikt wanneer een lettertype met een vaste breedte nodig is om tekst leesbaar in te delen (bijv. tabellen, selectievakjes, code). Als dit niet wordt gevonden, wordt een generiek monospace-lettertype (vaste breedte) gebruikt."
-	],
-	"Useful": [
-		"Bruikbaar"
 	],
 	"User deletions": [
 		"Gebruiker verwijderen"
@@ -4205,23 +4839,32 @@
 	"Valid": [
 		"Geldig"
 	],
+	"Vector search is not available on this platform": [
+		""
+	],
+	"Vector search is unavailable on this platform (sqlite-vec extension not loaded).": [
+		""
+	],
 	"Verify your identity": [
 		"Valideer je identiteit"
 	],
 	"View": [
-		"Beeld"
+		"Weergave"
 	],
 	"View OCR text": [
-		"Toon OCR-tekst"
+		"OCR-tekst weergeven"
 	],
 	"View on map": [
-		"Tonen op kaart"
+		"Weergeven op kaart"
 	],
 	"View them now": [
-		"Items tonen"
+		"Nu weeregevn"
 	],
 	"Viewer": [
-		"Viewer"
+		"Weergave"
+	],
+	"Viewer and Rich Text Editor font family": [
+		"Lettertypefamilie voor viewer en rijke-tekstdocument-editor"
 	],
 	"Viewer font size": [
 		"Lettergrootte van viewer"
@@ -4254,10 +4897,10 @@
 		"Waarschuwing: niet alle resources getoond om redenen van performance (limiet: %s)."
 	],
 	"We have a system for reporting and removing problematic plugins.": [
-		""
+		"We hebben een systeem om problematische plugins te melden en te verwijderen."
 	],
 	"We mark plugins developed by trusted Joplin community members as \"recommended\".": [
-		""
+		"Plug-ins ontwikkeld door vertrouwde Joplin-communityleden worden gemarkeerd als 'aanbevolen'."
 	],
 	"Web Clipper": [
 		"Webclipper"
@@ -4298,14 +4941,20 @@
 	"When creating a new to-do:": [
 		"Bij het creëren van een nieuwe taak:"
 	],
+	"When enabled, plugins and built-in features can use AI models to generate or analyse text.": [
+		""
+	],
 	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		"Wanneer ingeschakeld, worden verzoeken om de afbeeldingen in de notitie te transcriberen met een hogere kwaliteit via de transcriptieservice op de server. Vereist synchronisatie met een kopie van de desktopapp."
+	],
+	"When enabled, tables are rendered as an interactive widget in the editor. Disable this if you prefer to edit tables as raw Markdown.": [
 		""
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
-		""
+		"Wanneer ingeschakeld, zal de applicatie je bijlagen scannen en de tekst eruit halen. Dit stelt je in staat om naar tekst in deze bijlagen te zoeken."
 	],
 	"Window unresponsive.": [
-		""
+		"Venster reageert niet."
 	],
 	"Words": [
 		"Woorden"
@@ -4323,57 +4972,75 @@
 		"Ja"
 	],
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
-		"U staat op het punt een grote afbeelding (%dx%d pixels) bij te voegen. Wilt u dit verkleinen tot %d pixels voordat het wordt toegevoegd?"
+		"Je staat op het punt een grote afbeelding (%dx%d pixels) bij te voegen. Wil je dit verkleinen tot %d pixels voordat het wordt toegevoegd?"
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
-		""
+		"Je bent ingelogd op Joplin Cloud, je kunt dit scherm nu verlaten."
 	],
 	"You are now logged into your account.": [
-		""
+		"Je bent nu ingelogd op je account."
 	],
 	"You are now using the latest version of the Markdown editor.": [
-		""
+		"Je gebruikt nu de nieuwste versie van de Markdown-editor."
 	],
 	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
-		""
+		"Je gebruikt de Intel-versie van Joplin op een Apple Silicon-processor. Download de Apple Silicon-versie voor betere prestaties."
 	],
 	"You currently have no notebooks.": [
-		"U heeft nog geen notitieboeken."
+		"Je hebt nog geen notitieboeken."
 	],
 	"You do not have any installed plugin.": [
-		"U heeft geen geïnstalleerde plugins."
+		"Je hebt geen geïnstalleerde plugins."
+	],
+	"You have unsaved tag changes. Discard them?": [
+		""
 	],
 	"You may also type `status` for more information.": [
-		"U kunt ook `status` typen voor meer informatie."
+		"Je kunt ook `status` typen voor meer informatie."
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
-		"U kunt onderstaande tool gebruiken om uw data opnieuw te versleutelen, bijvoorbeeld als u weet dat enkele van uw notities zijn versleuteld met een verouderde versleutelmethode."
+		"Je kunt onderstaande tool gebruiken om uw data opnieuw te versleutelen, bijvoorbeeld als je weet dat enkele van je notities zijn versleuteld met een verouderde versleutelmethode."
+	],
+	"You switched notes while the request was running; edits were not applied. Try again.": [
+		""
+	],
+	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
+		"Je kon geen verbinding maken met Joplin Cloud. Controleer je gegevens en probeer het opnieuw. Fout:"
 	],
 	"Your account doesn't have access to this feature": [
-		""
+		"Je account heeft geen toegang tot deze functie"
 	],
 	"Your choice: ": [
 		"Jouw keuze: "
 	],
 	"Your data is going to be re-encrypted and synced again.": [
-		"Uw data wordt opnieuw versleuteld en gesynchroniseerd."
+		"Je gegevens worden opnieuw versleuteld en gesynchroniseerd."
 	],
 	"Your Joplin Cloud credentials are invalid, please login.": [
+		"Je Joplin Cloud-gegevens zijn ongeldig, log alsjeblieft in."
+	],
+	"Your master password is used to protect sensitive information. In particular, it is used to encrypt your notes when end-to-end encryption (E2EE) is enabled, or to share and encrypt notes with someone who has E2EE enabled.": [
+		""
+	],
+	"Your note will be sent to the configured AI provider (%s).": [
 		""
 	],
 	"Your password is needed to decrypt some of your data.": [
-		"Uw wachtwoord is nodig om sommige van uw gegevens te decoderen."
+		"Je wachtwoord is nodig om sommige van je gegevens te decoderen."
 	],
 	"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.": [
-		"Uw wachtwoord is nodig om sommige van uw gegevens te decoderen. Typ ':e2ee decrypt' om het in te stellen."
+		"Je wachtwoord is nodig om sommige van je gegevens te decoderen. Typ ':e2ee decrypt' om het in te stellen."
 	],
 	"Your version: %s": [
-		"Uw versie: %s"
+		"Jouw versie: %s"
 	],
 	"Zoom In": [
 		"Inzoomen"
 	],
 	"Zoom Out": [
 		"Uitzoomen"
+	],
+	"— now viewing: %s —": [
+		""
 	]
 }
