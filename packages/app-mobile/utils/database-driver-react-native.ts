@@ -3,10 +3,11 @@ import DatabaseDriver, { DatabaseCloseOptions, DatabaseOpenOptions, SqlSelectPar
 import * as RNFS from '@dr.pogodin/react-native-fs';
 import { NativeModules, Platform } from 'react-native';
 import shim from '@joplin/lib/shim';
+import { join } from 'path';
 
 // cspell:ignore NSURLI
 
-const databaseDirectory = async () => {
+const getDatabaseDirectory = async () => {
 	if (Platform.OS === 'ios') {
 		const databaseDirectory = `${RNFS.LibraryDirectoryPath}/LocalDatabase/`;
 
@@ -37,7 +38,7 @@ export default class DatabaseDriverReactNative implements DatabaseDriver {
 				// Work around an FTS-related crash when closing the database (see https://github.com/expo/expo/38168)
 				finalizeUnusedStatementsBeforeClosing: false,
 			},
-			await databaseDirectory(),
+			await getDatabaseDirectory(),
 		);
 		// Write-ahead logging (https://sqlite.org/wal.html) helps avoid "database locked" errors
 		// on Android (and, on iOS, seems to match the behavior of react-native-sqlite-storage
@@ -47,7 +48,19 @@ export default class DatabaseDriverReactNative implements DatabaseDriver {
 	}
 
 	public async deleteDatabase(options: DatabaseCloseOptions) {
-		await SQLite.deleteDatabaseAsync(options.name, await databaseDirectory());
+		const databaseDirectory = await getDatabaseDirectory();
+		await SQLite.deleteDatabaseAsync(options.name, databaseDirectory);
+
+		// Workaround: Expo < SDK 56 does not delete database -wal, -shm, and -journal files.
+		// Remove after upgrading Expo.
+		// See https://github.com/expo/expo/pull/49125
+		const databasePath = join(databaseDirectory, options.name);
+		const toDelete = [`${databasePath}-wal`, `${databasePath}-shm`, `${databasePath}-journal`];
+		for (const path of toDelete) {
+			if (await shim.fsDriver().exists(path)) {
+				await shim.fsDriver().remove(path);
+			}
+		}
 	}
 
 	public sqliteErrorToJsError(error: Error) {
