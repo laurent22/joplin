@@ -43,6 +43,7 @@ import { substrWithEllipsis } from '@joplin/lib/string-utils';
 import NoteSearchBar from '../NoteSearchBar';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
+import getTrashFolderId from '@joplin/lib/services/trash/getTrashFolderId';
 import NoteRevisionViewer from '../NoteRevisionViewer';
 import { parseShareCache } from '@joplin/lib/services/share/reducer';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
@@ -211,7 +212,12 @@ function NoteEditorContent(props: NoteEditorProps) {
 
 	const formNoteFolder = useFolder({ folderId: formNote.parent_id });
 
-	const { conflictTitle, resolvedTitle, setResolvedTitle, hasTitleConflict, isConflictNote, remoteUpdatedTime, originalIsStale, reloadConflict } = useConflictTitle(formNote.id);
+	const { conflictTitle, resolvedTitle, setResolvedTitle, hasTitleConflict, isConflictNote: noteHasConflict, remoteUpdatedTime, originalIsStale, reloadConflict } = useConflictTitle(formNote.id);
+
+	// The markdown editor draws the resolution, so the rest of UI waits for it
+	const isConflictNote = noteHasConflict
+		&& props.conflictIsInView
+		&& props.bodyEditor === NoteBodyEditorType.CodeMirror6;
 
 	const onConflictReload = useCallback(() => {
 		reloadConflict();
@@ -681,6 +687,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		enableHtmlToMarkdownBanner: props.enableHtmlToMarkdownBanner,
 		showNoteLinkIcon: props.showNoteLinkIcon,
 		conflictReloadCount,
+		conflictIsInView: isConflictNote,
 	};
 
 	let editor = null;
@@ -993,16 +1000,28 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 	const windowState = stateUtils.windowStateById(state, ownProps.windowId);
 	const noteId = stateUtils.selectedNoteId(windowState);
 
-	// Conflict UI uses CodeMirror, so conflict notes always use the Markdown editor.
-	// Read from the note list because the editor state may not be ready yet.
-	const selectedNote = windowState.notes.find(n => n.id === noteId);
-	const noteIsConflict = !!selectedNote?.is_conflict && !!state.settings['featureFlag.conflictResolution'];
+	const selectedNote = stateUtils
+		.allWindowStates(state)
+		.map(windowNotes => windowNotes.notes.find(n => n.id === noteId))
+		.find(note => !!note);
+	// "All notes" filter leaves the previous folder id in place
+	const inConflictFolder = windowState.notesParentType === 'Folder'
+		&& windowState.selectedFolderId === Folder.conflictFolderId();
+	const noteIsConflict = (!!selectedNote?.is_conflict || (inConflictFolder && !selectedNote))
+		&& !!state.settings['featureFlag.conflictResolution'];
 
-	let bodyEditor = (windowState.editorCodeView || noteIsConflict) ? NoteBodyEditorType.CodeMirror6 : NoteBodyEditorType.TinyMce;
+	// A conflict stays listed in the trash once deleted
+	const inTrash = windowState.notesParentType === 'Folder'
+		&& windowState.selectedFolderId === getTrashFolderId();
+	const conflictIsInView = noteIsConflict && (inConflictFolder || inTrash);
+
+	let bodyEditor = windowState.editorCodeView ? NoteBodyEditorType.CodeMirror6 : NoteBodyEditorType.TinyMce;
 	if (state.settings.isSafeMode) {
 		bodyEditor = NoteBodyEditorType.PlainText;
-	} else if (windowState.editorCodeView && !noteIsConflict && state.settings['editor.legacyMarkdown']) {
-		// Not for a conflict: the merge extension is only built for CodeMirror 6
+	} else if (noteIsConflict) {
+		// The merge extension is only built for CodeMirror 6
+		bodyEditor = NoteBodyEditorType.CodeMirror6;
+	} else if (windowState.editorCodeView && state.settings['editor.legacyMarkdown']) {
 		bodyEditor = NoteBodyEditorType.CodeMirror5;
 	}
 
@@ -1011,6 +1030,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 	return {
 		noteId,
 		bodyEditor,
+		conflictIsInView,
 		isProvisional: state.provisionalNoteIds.includes(noteId),
 		notes: windowState.notes,
 		selectedNoteIds: windowState.selectedNoteIds,

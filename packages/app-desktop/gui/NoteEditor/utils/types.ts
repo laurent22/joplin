@@ -70,6 +70,7 @@ export interface NoteEditorProps {
 	pluginHtmlContents: PluginHtmlContents;
 	onTitleChange?: (title: string)=> void;
 	bodyEditor: NoteBodyEditorType;
+	conflictIsInView: boolean;
 	startupPluginsLoaded: boolean;
 	enableHtmlToMarkdownBanner: boolean;
 	showNoteLinkIcon: boolean;
@@ -158,6 +159,7 @@ export interface NoteBodyEditorProps {
 	enableHtmlToMarkdownBanner: boolean;
 	showNoteLinkIcon: boolean;
 	conflictReloadCount?: number;
+	conflictIsInView?: boolean;
 }
 
 export interface NoteBodyEditorPropsAndRef extends NoteBodyEditorProps {

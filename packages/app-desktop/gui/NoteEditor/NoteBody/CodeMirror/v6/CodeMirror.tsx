@@ -82,6 +82,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 	const { conflictContent } = useConflictResolution({
 		noteId: props.noteId,
+		inView: props.conflictIsInView,
 		contentMarkupLanguage: props.contentMarkupLanguage,
 		editorRef,
 		reloadCount: props.conflictReloadCount ?? 0,

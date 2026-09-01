@@ -11,6 +11,8 @@ const logger = Logger.create('useConflictResolution');
 
 interface Props {
 	noteId: string;
+	// False once another notebook is selected, though the note stays open
+	inView: boolean;
 	contentMarkupLanguage: number;
 	editorRef: RefObject<CodeMirrorControl>;
 	reloadCount: number;
@@ -21,7 +23,7 @@ interface LoadedDocument {
 	document: ConflictDocument;
 }
 
-const useConflictResolution = ({ noteId, contentMarkupLanguage, editorRef, reloadCount }: Props) => {
+const useConflictResolution = ({ noteId, inView, contentMarkupLanguage, editorRef, reloadCount }: Props) => {
 	const [loaded, setLoaded] = useState<LoadedDocument|null>(null);
 
 	const conflictDocument = loaded && loaded.noteId === noteId ? loaded.document : null;
@@ -31,7 +33,7 @@ const useConflictResolution = ({ noteId, contentMarkupLanguage, editorRef, reloa
 
 	useEffect(() => {
 		// loadConflictData rejects everything else, so only markup needs checking here
-		if (contentMarkupLanguage !== MarkupLanguage.Markdown) {
+		if (!inView || contentMarkupLanguage !== MarkupLanguage.Markdown) {
 			setLoaded(null);
 			return () => {};
 		}
@@ -67,7 +69,7 @@ const useConflictResolution = ({ noteId, contentMarkupLanguage, editorRef, reloa
 		return () => {
 			cancelled = true;
 		};
-	}, [noteId, contentMarkupLanguage, reloadCount]);
+	}, [noteId, inView, contentMarkupLanguage, reloadCount]);
 
 	useEffect(() => {
 		if (!conflictDocument) {
