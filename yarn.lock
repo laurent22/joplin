@@ -12917,7 +12917,7 @@ __metadata:
     multiparty: "npm:4.2.3"
     mustache: "npm:4.2.0"
     nanoid: "npm:5.1.11"
-    node-diff3: "npm:3.2.0"
+    node-diff3: "npm:3.2.1"
     node-fetch: "npm:2.6.7"
     node-notifier: "npm:10.0.1"
     node-persist: "npm:3.1.3"
@@ -43990,10 +43990,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-diff3@npm:3.2.0":
-  version: 3.2.0
-  resolution: "node-diff3@npm:3.2.0"
-  checksum: 10/594cdf658d38285bf529e73eadb4abaa73ed05b45ff65614a99fb9be68408918ae332a4e16ceb691855127329b4d6103c9e1ced218f1560f062fbc865fafb592
+"node-diff3@npm:3.2.1":
+  version: 3.2.1
+  resolution: "node-diff3@npm:3.2.1"
+  checksum: 10/0fa41b61c94603d0103c5fe8242de6cc8e15a4a015d1ae89d0a698b83ec45bdc2938a2c85a71a9349777c31f038bf7ccdb0f9c6a8fdca2e0b98c8bec9f2395fd
   languageName: node
   linkType: hard
 
