@@ -28,6 +28,7 @@ import ConflictFooter from './ConflictFooter/ConflictFooter';
 import ConflictBanner from './ConflictBanner/ConflictBanner';
 import bridge from '../../services/bridge';
 import finishConflictResolution, { FinishStatus } from '@joplin/lib/services/conflict/finishConflictResolution';
+import keepConflictCopy, { KeepStatus } from '@joplin/lib/services/conflict/keepConflictCopy';
 import markupLanguageUtils from '@joplin/lib/utils/markupLanguageUtils';
 import Setting from '@joplin/lib/models/Setting';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
@@ -225,6 +226,33 @@ function NoteEditorContent(props: NoteEditorProps) {
 		);
 		if (choice === 0) onConflictReload();
 	}, [onConflictReload]);
+
+	const onKeepBoth = useCallback(async () => {
+		if (conflictFinishingRef.current) return;
+		conflictFinishingRef.current = true;
+
+		try {
+			const note = formNoteRef.current;
+			if (!bridge().showConfirmMessageBox(_('Keep both versions as separate notes?'), { buttons: [_('Keep both'), _('Cancel')] })) return;
+
+			const result = await keepConflictCopy(note.id);
+
+			if (result.status !== KeepStatus.Ok) {
+				logger.warn('Could not keep the conflict note', note.id, result.status, result.reason);
+				bridge().showErrorMessageBox(_('This note could not be kept. It may have been deleted or changed elsewhere.'));
+				return;
+			}
+
+			// The note kept is no longer a conflict, so the editor moves on to the
+			// next one, or to the kept note when that was the last
+			props.dispatch({ type: 'NOTE_SELECT', id: result.nextConflictId || result.noteId });
+		} catch (error) {
+			logger.error('Could not keep the conflict note', error);
+			bridge().showErrorMessageBox(error.message);
+		} finally {
+			conflictFinishingRef.current = false;
+		}
+	}, [props.dispatch]);
 
 	const onGoToConflict = useCallback((direction: 'previous'|'next') => {
 		editorRef.current?.goToConflict?.(direction);
@@ -935,7 +963,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
 					{renderSearchBar()}
 				</div>
-				{isConflictNote ? <ConflictFooter onFinish={onConflictFinish} onGoToConflict={onGoToConflict} disabled={isReadOnly}/> : null}
+				{isConflictNote ? <ConflictFooter onFinish={onConflictFinish} onKeepBoth={onKeepBoth} onGoToConflict={onGoToConflict} disabled={isReadOnly}/> : null}
 				<StatusBar
 					noteId={formNote.id}
 					setTagsToolbarButtonInfo={props.setTagsToolbarButtonInfo}

@@ -1689,6 +1689,8 @@ packages/lib/services/conflict/diffNotes.js
 packages/lib/services/conflict/finishConflictResolution.test.js
 packages/lib/services/conflict/finishConflictResolution.js
 packages/lib/services/conflict/isConflictResolutionEnabled.js
+packages/lib/services/conflict/keepConflictCopy.test.js
+packages/lib/services/conflict/keepConflictCopy.js
 packages/lib/services/conflict/loadConflictData.test.js
 packages/lib/services/conflict/loadConflictData.js
 packages/lib/services/conflict/wordDiff.test.js

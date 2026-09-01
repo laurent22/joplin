@@ -30,6 +30,24 @@
 		}
 	}
 
+	> .-keep-both {
+		padding: 10px 20px;
+		cursor: pointer;
+		border: 1px solid var(--joplin-border-color4);
+		border-radius: 6px;
+		background-color: var(--joplin-background-color);
+		color: var(--joplin-color);
+
+		&:hover:not(:disabled) {
+			background-color: var(--joplin-background-color-hover3);
+		}
+
+		&:disabled {
+			opacity: 0.5;
+			cursor: default;
+		}
+	}
+
 	> .-finish {
 		padding: 10px 28px;
 		cursor: pointer;
