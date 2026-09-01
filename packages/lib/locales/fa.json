@@ -2,11 +2,29 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"«%s» ویژگی ضروری «%s» را ندارد."
 	],
+	"%d card": [
+		"",
+		""
+	],
+	"%d day": [
+		"%d روز",
+		"%d روز"
+	],
+	"%d edit(s) applied, %d could not be placed automatically.": [
+		""
+	],
+	"%d edit(s) applied.": [
+		""
+	],
 	"%d GB": [
 		"%d گیگابایت"
 	],
 	"%d GB storage space": [
 		"%d گیگابایت فضای ذخیره‌سازی"
+	],
+	"%d hour": [
+		"%d ساعت",
+		"%d ساعت"
 	],
 	"%d MB": [
 		"%d مگابایت"
@@ -14,7 +32,22 @@
 	"%d MB per note or attachment": [
 		"%d مگابایت به ازای هر یادداشت یا فایل پیوست"
 	],
+	"%d minute": [
+		"%d دقیقه",
+		"%d دقیقه"
+	],
+	"%d note matches this pattern. Delete it?": [
+		"%d یادداشت‌هایی که مطابق این الگو هستند. آیا حذف شوند؟",
+		"%d یادداشت‌هایی که مطابق این الگو هستند. آیا حذف شوند؟"
+	],
+	"%d note will be permanently deleted. Continue?": [
+		"%d یادداشت برای همیشه حذف خواهد شد. ادامه هید؟",
+		"%d یادداشت برای همیشه حذف خواهد شد. ادامه هید؟"
+	],
 	"%d photo(s) taken": [
+		"%d عکس ها گرفته شدند"
+	],
+	"%d sections found": [
 		""
 	],
 	"%s": [
@@ -50,20 +83,39 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s added to toolbar": [
+		""
+	],
+	"%s cannot be greater than %s": [
+		"%s نمی‌تواند بزرگتر از %s باشد"
+	],
 	"%s cannot be less than %s": [
+		"%s نمی‌تواند کمتر از %s باشد"
+	],
+	"%s from %s": [
+		"%s از %s"
+	],
+	"%s input / %s output tokens used.": [
 		""
 	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s برای همگام سازی بسیاری از فایل های کوچک بهینه نشده است، بنابراین همگام سازی اولیه شما کند خواهد بود."
 	],
-	"%s must be a valid whole number": [
+	"%s moved up": [
 		""
+	],
+	"%s must be a valid whole number": [
+		"%s باید یک عدد معتبر باشد"
 	],
 	"%s tab opened": [
 		"برگه %s باز شد"
 	],
 	"%s: %d": [
 		"%s: %d"
+	],
+	"%s: %d note": [
+		"%s: %d یادداشت",
+		"%s: %d یادداشت"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -101,23 +153,32 @@
 	"(%s)": [
 		"(%s)"
 	],
+	"(empty — double-click to edit)": [
+		""
+	],
+	"(empty)": [
+		""
+	],
 	"(In plugin: %s)": [
 		"(در افزونه: %s )"
 	],
 	"(level %d)": [
-		""
+		"(سطح %d)"
 	],
 	"(None)": [
 		"(هیچ کدام)"
 	],
 	"(Read-only)": [
-		""
+		"(فقط خواندنی)"
 	],
 	"(wysiwyg: %s)": [
 		"(چیزی که بدست خواهی آورد: %s)"
 	],
 	"(You may disable this prompt in the options)": [
 		"(شما می توانید این درخواست را در گزینه ها غیرفعال کنید)"
+	],
+	"+ Group": [
+		""
 	],
 	"- Camera: to allow taking a picture and attaching it to a note.": [
 		"- دوربین: دسترسی برای گرفتن عکس و پیوست آن به یک یادداشت."
@@ -128,16 +189,28 @@
 	"- Storage: to allow attaching files to notes and to enable filesystem synchronisation.": [
 		"- فضای ذخیره‌سازی: برای پیوست فایل‌ها به یادداشت‌ها و فعال کردن همگام‌سازی فایل‌های سیستمی ."
 	],
+	"14-day free trial. Cancel anytime during the trial and you won't be charged.": [
+		""
+	],
 	"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign or remove [tag] from [note], to list notes associated with [tag], or to list tags associated with [note]. The command `tag list` can be used to list all the tags (use -l for long option).": [
 		"<tag-command> می‌تواند \"افزودن\"، \"حذف\"، \"فهرست\" یا \"برچسب یادداشت\" برای تخصیص یا حذف [tag] از [note]، برای فهرست کردن یادداشت های مرتبط با [tag] و یا برای فهرست کردن برچسب های مرتبط با [note] باشد. دستور `tag list` می تواند برای فهرست کردن تمام برچسب‌ها باشد (از -l برای جزئیات بیشتر استفاده نمایید)."
 	],
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> می‌تواند \"تغییر وضعیت\" یا \"پاکسازی\" باشد. از \"تغییر وضعیت\" برای تغییر وضعیت کارها بین حالت تکمیل شده و ناتمام استفاده نمایید. (اگر هدف یک یادداشت معمولی باشد، تبدیل به یک کار می‌شود). از \"پاکسازی\" برای تبدیل یک کار به یک یادداشت معمولی استفاده نمایید."
 	],
+	"[None]": [
+		"[هیچ‌کدام]"
+	],
 	"A brief description of the image:": [
-		""
+		"توضیحی مختصر درباره تصویر:"
 	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+		"فهرستی از کلمات که با ویرگول از هم جدا شده‌اند. این فهرست ممکن است برای کلمات غیرمعمول استفاده شود تا به تایپ صوتی در املای صحیح آن‌ها کمک کند."
+	],
+	"A new update (%s) is available": [
+		"بروز رسانی نسخه جدید %s در دسترس است"
+	],
+	"A system-wide keyboard shortcut that toggles the Joplin window. Works even when Joplin is not focused. Example: CommandOrControl+Shift+J. Leave empty to disable.": [
 		""
 	],
 	"A3": [
@@ -150,7 +223,7 @@
 		"A5"
 	],
 	"ABC musical notation: Options": [
-		""
+		"نت‌نویسی موسیقی ABC:گزینه ها"
 	],
 	"About": [
 		"درباره"
@@ -173,11 +246,26 @@
 	"Accepted invitations": [
 		"دعوت نامه های پذیرفته شده"
 	],
+	"Accepted: Notebook %s from %s": [
+		"قبول شده: دفترچه %s از %s"
+	],
+	"Accepting share...": [
+		"در حال تایید اشتراک گذاری ..."
+	],
 	"Access denied: Please check your username and password": [
 		"دسترسی غیرمجاز: لطفاً نام کاربری و گذرواژه خود را بررسی نمایید"
 	],
 	"Access denied: Please re-enter your password and/or username": [
 		"دسترسی غیرمجاز: لطفاً نام کاربری و یا گذرواژه خود را مجدد وارد نمایید"
+	],
+	"Access your notes from any web browser at %s.": [
+		""
+	],
+	"Accessible": [
+		""
+	],
+	"Accessible mode saves additional information, enabling creation of accessible PDFs. It increases database size by approximately 10-20 KB per page.": [
+		""
 	],
 	"Account": [
 		"حساب کاربری"
@@ -200,14 +288,20 @@
 	"Actual Size": [
 		"اندازه واقعی"
 	],
+	"Add a text card": [
+		""
+	],
 	"Add body": [
 		"افزودن بدنه"
 	],
 	"Add column": [
-		""
+		"افزودن ستون"
 	],
 	"Add new": [
 		"افزودن جدید"
+	],
+	"Add note to whiteboard...": [
+		""
 	],
 	"Add or remove tags:": [
 		"افزودن  یا حذف برچسب‌ها:"
@@ -215,17 +309,30 @@
 	"Add recipient:": [
 		"افزودن دریافت کننده:"
 	],
+	"Add row": [
+		"افزودن ردیف"
+	],
+	"Add tags:": [
+		"افزودن برچسب ها:"
+	],
 	"Add title": [
 		"افزودن عنوان"
 	],
 	"Add to dictionary": [
 		"افزودن به لغت‌نامه"
 	],
-	"Added tag: %s": [
+	"Add to note": [
+		"افزودن به یادداشت"
+	],
+	"Added %d word": [
+		"",
 		""
 	],
+	"Added new: %s": [
+		"مورد جدید اضافه شد: %s"
+	],
 	"Adds tag": [
-		""
+		"برچسب اضافه می‌کند"
 	],
 	"Admin": [
 		"مدیر"
@@ -242,6 +349,24 @@
 	"Advanced tools": [
 		"ابزارهای پیشرفته"
 	],
+	"AI": [
+		""
+	],
+	"AI Chat": [
+		""
+	],
+	"AI features are disabled. Enable them in Settings → AI.": [
+		""
+	],
+	"AI is running in reduced-quality mode — monthly allowance exceeded. Credits replenish on a rolling 30-day basis, or you can": [
+		""
+	],
+	"AI usage has exceeded your monthly allowance — responses are using a reduced-quality model. Credits replenish on a rolling 30-day basis. Buy more at %s.": [
+		""
+	],
+	"all": [
+		"همه"
+	],
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
 		"تمام داده ها اعم از یادداشت‌ها، دفترچه‌ها و برچسب‌ها به طور دائمی حذف خواهند شد."
 	],
@@ -255,16 +380,40 @@
 		"تمام پورت‌های بالقوه در حال استفاده هستند- لطفا این مشکل را در %s گزارش نمایید"
 	],
 	"All shared folders:": [
+		"همه پوشه های اشتراک گذاری شده:"
+	],
+	"Allow editing tags on notes": [
+		""
+	],
+	"Allow editing the current note (chat panel only)": [
+		""
+	],
+	"Allow listing tags": [
+		""
+	],
+	"Allow reading images": [
+		""
+	],
+	"Allow remote AI providers": [
+		""
+	],
+	"Allow semantic search of notes": [
 		""
 	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		"اجازه اشکال زدایی به افزونه های موبایل را می دهد. برای جزئیات بیشتر به %s مراجعه کنید."
+	],
+	"Already have an account? Log in": [
+		""
 	],
 	"Also displays unset and hidden config variables.": [
 		"همچنین متغیر‌های پیکربندی تنظیم نشده و مخفی را نمایش می‌دهد."
 	],
 	"Also publish linked notes": [
 		"همچنین یادداشت‌های مرتبط را منتشر کن"
+	],
+	"Alternative instance ID: %s": [
+		"شناسه نمونه جایگزین: %s"
 	],
 	"Always": [
 		"همیشه"
@@ -287,9 +436,6 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"یک طراحی ذخیره شده خودکار پیدا شد. آیا می‌خواهید یک کپی از آن را به یادداشت پیوست کنید؟"
 	],
-	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
-		""
-	],
 	"An error occurred: %s": [
 		"خطایی روی داده است: %s"
 	],
@@ -299,8 +445,14 @@
 	"Android API level: %d": [
 		"سطح api اندروید : %d"
 	],
+	"Anthropic": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		"هر ایمیلی که به این آدرس ارسال شود به یادداشت تبدیل شده و به مجموعه شما اضافه می شود. یادداشت در صندوق دفترچه ذخیره خواهد شد"
+	],
+	"API key": [
+		""
 	],
 	"Appearance": [
 		"ظاهر"
@@ -310,6 +462,12 @@
 	],
 	"Apply": [
 		"اعمال"
+	],
+	"Are you sure that you want to restore the default toolbar layout?\nThis cannot be undone.": [
+		"آیا مطمئن هستید که می‌خواهید چیدمان پیش‌فرض نوار ابزار را بازیابی کنید؟\nاین عمل قابل بازگشت نیست."
+	],
+	"Are you sure you want to delete all history for this note? This cannot be undone.": [
+		"آیا مطمئن هستید که می‌خواهید تمام تاریخچه این یادداشت را حذف کنید؟ این عمل قابل بازگشت نیست."
 	],
 	"Are you sure you want to renew the authorisation token?": [
 		"آیا مطمئن هستید که می خواهید توکن مجوز را تمدید کنید؟"
@@ -323,11 +481,20 @@
 	"Aritim Dark": [
 		"Aritim Dark"
 	],
-	"Associated tags:": [
+	"Arrow at target": [
 		""
 	],
-	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
+	"Ask about this note, or request a change…": [
 		""
+	],
+	"Ask about this note, or request changes. Select text in the editor first to scope the request to that selection.": [
+		""
+	],
+	"Associated tags:": [
+		"برچسب های مرتبط:"
+	],
+	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
+		"درحال حاضر، Joblin web فقط در یک زبانه قابل اجرا است. لطفا سایر زبانه های دیگر Joplin را ببندید."
 	],
 	"Attach": [
 		"پیوست"
@@ -347,6 +514,9 @@
 	"attachment": [
 		"پیوست"
 	],
+	"Attachment": [
+		"پیوست‌ها"
+	],
 	"Attachment conflict: \"%s\"": [
 		"تداخل پیوست: «%s»"
 	],
@@ -358,6 +528,9 @@
 	],
 	"Attachments that could not be downloaded": [
 		"پیوست‌هایی که دانلود نشده‌اند"
+	],
+	"Attention: After resetting your password it will no longer be possible to decrypt any data encrypted with your current password. All encrypted shared notebooks will also be unshared, so please ask the notebook owner to share it again with you.": [
+		""
 	],
 	"Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s": [
 		"هشدار: اگر این مکان را تغییر دادید، قبل از همگام‌سازی مطمئن شوید که تمام محتوای خود را در آن کپی کنید، در غیر این صورت تمام فایل ها حذف خواهند شد! برای جزئیات بیشتر به سوالات متداول مراجعه کنید:  %s"
@@ -374,17 +547,20 @@
 	"Auto": [
 		"خودکار"
 	],
+	"Auto lock when switching note": [
+		""
+	],
 	"Auto-add disabled accounts for deletion": [
 		"افزودن خودکار حساب های غیرفعال برای حذف"
 	],
 	"Auto-format Markdown in the Rich Text Editor": [
-		""
+		"قالب بندی خودکار Markdown در ویرایشگر متن غنی"
 	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"جفت‌سازی خودکار کروشه، پرانتز، نقل قول و غیره."
 	],
 	"Autocomplete Markdown and HTML": [
-		""
+		"کامل کردن خودکار Markdown و HTML"
 	],
 	"Automatically check for updates": [
 		"بررسی خودکار برای بروزرسانی"
@@ -398,14 +574,23 @@
 	"Back": [
 		"بازگشت"
 	],
+	"Back to %s": [
+		""
+	],
+	"Base URL": [
+		""
+	],
 	"Basic": [
 		"پایه"
 	],
 	"Beta": [
 		"بتا"
 	],
-	"Block code": [
+	"Billed annually (%s per user per year respectively).": [
 		""
+	],
+	"Block code": [
+		"بلوک کد"
 	],
 	"Bold": [
 		"پررنگ"
@@ -422,14 +607,17 @@
 	"Bulleted List": [
 		"لیست گلوله‌ای"
 	],
+	"buy more credits": [
+		""
+	],
 	"by %s": [
 		"توسط %s"
 	],
 	"by word": [
-		""
+		"توسط کلمه"
 	],
 	"Camera": [
-		""
+		"دوربین"
 	],
 	"Can Share": [
 		"می‌توانید به اشتراک بگذارید"
@@ -447,7 +635,7 @@
 		"در حال لغو همگام سازی در پس‌زمینه... لطفا صبور باشید."
 	],
 	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
-		""
+		"با لغو کردن رکورد حذف خواهد شد. این قابل بازگشت نیست. آیا از ادامه مطمئن هستید؟"
 	],
 	"Cancelling...": [
 		"در حال لغو..."
@@ -458,8 +646,14 @@
 	"Cannot access %s": [
 		"عدم دسترسی به %s"
 	],
+	"Cannot change a locked note while the session is locked": [
+		""
+	],
 	"Cannot change encrypted item": [
 		"آیتم رمزنگاری شده را نمی‌توان تغییر داد"
+	],
+	"Cannot convert read-only item: \"%s\"": [
+		"امکان تبدیل مورد فقط‌ خواندنی «%s» وجود ندارد."
 	],
 	"Cannot copy note to \"%s\" notebook": [
 		"یادداشت نمیتوان را به دفترچه‌ی «%s» کپی کرد"
@@ -503,14 +697,20 @@
 	"Case sensitive": [
 		"حساس به حروف کوچک و بزرگ لاتین"
 	],
+	"Certain Markdown formatting is now rendered in the editor by default. For example, **bold** will appear as actual bold text. You can change this behaviour in the \"Editor\" section of Settings.": [
+		""
+	],
 	"Change application layout": [
 		"ویرایش چیدمان برنامه"
 	],
 	"Change language": [
 		"ویرایش زبان"
 	],
+	"Change ratio": [
+		"نسبت تغییر"
+	],
 	"Change shortcut for \"%s\"": [
-		""
+		"میان‌بر را برای %s تغییر دهید"
 	],
 	"Characters": [
 		"کاراکترها"
@@ -518,8 +718,14 @@
 	"Characters excluding spaces": [
 		"کاراکترها به غیر از فاصله‌ها"
 	],
-	"Check elements to display in the toolbar": [
+	"Chat provider": [
 		""
+	],
+	"Check": [
+		"بررسی"
+	],
+	"Check elements to display in the toolbar": [
+		"عناصر را چک کنید تا در نوار ابزار نمایان شوند"
 	],
 	"Check for updates...": [
 		"بررسی برای بروزرسانی..."
@@ -533,11 +739,14 @@
 	"Checkbox list": [
 		"لیست چک‌باکس"
 	],
+	"Checked": [
+		"بررسی شده"
+	],
 	"Checking... Please wait.": [
 		"در حال بررسی... لطفا صبور باشید."
 	],
 	"Chinese/Japanese/Korean characters": [
-		""
+		"کاراکتر های چینی/ژاپنی/کره‌ای"
 	],
 	"Choose an option": [
 		"یک گزینه را انتخاب کنید"
@@ -554,10 +763,16 @@
 	"Clear search": [
 		"پاکسازی جستجو"
 	],
+	"Clears the console output.": [
+		""
+	],
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"برای بازیابی یادداشت بر روی «%s» کلیک نمایید. یادداشت در دفترچه‌ای به نام «%s» کپی می‌شود. این نسخه از یادداشت جایگزین یا تغییر داده نمی‌شود."
 	],
 	"Click \"start\" to attach a new voice memo to the note.": [
+		"بر روی \"شروع\" کلید کنید تا یک یادداشت صوتی جدید به یادداشت اضافه کنید."
+	],
+	"Click the eye icon in the toolbar to switch to the Markdown editor and fix the JSON manually.": [
 		""
 	],
 	"Click to add tags...": [
@@ -566,14 +781,20 @@
 	"Client ID: %s": [
 		"شناسه کاربر: %s"
 	],
+	"close": [
+		"بستن"
+	],
 	"Close": [
 		"بستن"
+	],
+	"Close dialog": [
+		"بستن صفحه"
 	],
 	"Close dropdown": [
 		"بستن حالت کشویی"
 	],
 	"Close side menu": [
-		""
+		"منوی کناری را ببندید"
 	],
 	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
 		"برنامه را ببندید، سپس نمایه خود را در \"%s\" حذف کنید و برنامه را دوباره شروع کنید. اطمینان حاصل کنید که ابتدا با صادرات تمام یادداشت های خود به عنوان JEX یک نسخه پشتیبان ایجاد کرده اید."
@@ -582,7 +803,7 @@
 		"بستن صفحه"
 	],
 	"Closing session...": [
-		""
+		"درحال بستن جلسه..."
 	],
 	"Cmd-click to open": [
 		"کلیک خط فرمان برای باز کردن"
@@ -605,6 +826,15 @@
 	"Collaborate on notebooks with others": [
 		"همکاری با دیگران در دفترچه‌ها"
 	],
+	"Collapse all notebooks": [
+		"جمع کردن همه دفترچه‌ها"
+	],
+	"Collapse title": [
+		"جمع کردن عنوان"
+	],
+	"Collapsed": [
+		"بستن"
+	],
 	"Coming alarms": [
 		"هشدار‌های آینده"
 	],
@@ -618,7 +848,7 @@
 		"فرمان"
 	],
 	"COMMAND": [
-		""
+		"دستور"
 	],
 	"Command palette": [
 		"پالت فرمان"
@@ -627,10 +857,16 @@
 		"پالت فرمان ..."
 	],
 	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
-		""
+		"دستورات:`اضافه کردن`, `حذف کردن`, `لیست کردن`, `پاکسازی کردن`, `قبول کردن`, `ترک کردن`, و  `رد کردن`."
 	],
 	"Compact": [
 		"فشرده"
+	],
+	"Complete": [
+		"تکمیل"
+	],
+	"Complete to-do": [
+		"تکمیل فهرست کارها"
 	],
 	"Completed": [
 		"کامل شده"
@@ -653,7 +889,16 @@
 	"Configuration": [
 		"تنظیمات"
 	],
+	"Configured keyboard shortcuts:": [
+		"میانبرهای صفحه‌کلید پیکربندی‌شده:"
+	],
 	"Configures the size of scrollbars used in the app.": [
+		"اندازه نوارهای پیمایش در برنامه را تنظیم می‌کند."
+	],
+	"Confirm": [
+		"تایید"
+	],
+	"Confirm credentials": [
 		""
 	],
 	"Confirm password cannot be empty": [
@@ -678,10 +923,14 @@
 		"اتصال به سرویس ابری joplin"
 	],
 	"Connect using your organisation account": [
-		""
+		"با استفاده از حساب سازمانی خود متصل شوید"
 	],
 	"Consolidated billing": [
 		"صورتحساب تلفیقی"
+	],
+	"Contains %d note": [
+		"شامل %d یادداشت است",
+		"شامل %d یادداشت است"
 	],
 	"Content provided by %s": [
 		"محتوای ارائه شده توسط %s"
@@ -691,6 +940,18 @@
 	],
 	"Continue": [
 		"ادامه"
+	],
+	"Control character": [
+		"کنترل کاراکتر"
+	],
+	"Convert it": [
+		"تبدیل‌اش کن"
+	],
+	"Convert this card into a Joplin note": [
+		""
+	],
+	"Convert to Markdown": [
+		"تبدیل به Markdown"
 	],
 	"Convert to note": [
 		"تبدیل به یادداشت"
@@ -720,7 +981,7 @@
 		"کپی کردن لینک برای وبسایت"
 	],
 	"Copy Markdown link": [
-		"کپی کردن پیوند نشانه‌گذاری"
+		"کپی کردن پیوند Markdown"
 	],
 	"Copy path to clipboard": [
 		"کپی کردن مسیر در کلیپ‌بورد"
@@ -747,11 +1008,14 @@
 	"Could not connect to plugin repository.": [
 		"نمی توان به مخزن افزونه متصل شد."
 	],
+	"Could not convert notes to Markdown: %s": [
+		"تبدیل یادداشت‌ها به Markdown امکان‌پذیر نبود: %s"
+	],
 	"Could not export notes: %s": [
 		"یادداشت‌ها صادر نشدند: %s"
 	],
 	"Could not install plugin: %s": [
-		"افزونه نصب نصب نشد: %s"
+		"افزونه نصب نشد: %s"
 	],
 	"Could not respond to the invitation. Please try again, or check with the notebook owner if they are still sharing it.\n\nThe error was: \"%s\"": [
 		"به دعوت نمی‌توان پاسخ داد. لطفاً دوباره امتحان کنید و یا با صاحب دفترچه بررسی کنید که آیا کماکان آن را به اشتراک گذاشته است.\n\nخطا: %s"
@@ -777,8 +1041,17 @@
 	"Create a notebook": [
 		"ایجاد دفترچه"
 	],
+	"Create accessible document": [
+		""
+	],
+	"Create new notebook": [
+		"ایجاد دفترچه جدید"
+	],
 	"Create new profile...": [
 		"ایجاد حساب‌کاربری جدید..."
+	],
+	"Create note": [
+		"ایجاد یادداشت"
 	],
 	"Create notebook": [
 		"ایجاد دفترچه"
@@ -810,6 +1083,9 @@
 	"Created: %s": [
 		"ایجاد شده: %s"
 	],
+	"Creates a new note with an attachment of type %s": [
+		"یک یادداشت با یک پیوست از نوع %s ایجاد می‌نمایید"
+	],
 	"Creates a new note.": [
 		"ایجاد یادداشت جدید."
 	],
@@ -825,6 +1101,12 @@
 	"Creating new to-do...": [
 		"ایجاد فهرست کار جدید..."
 	],
+	"Creating note \"%s\"...": [
+		"درحال ایجاد یادداشت \"%s\" ..."
+	],
+	"Creating note.": [
+		"درحال ایجاد یادداشت."
+	],
 	"Creating report...": [
 		"در حال ایجاد گزارش..."
 	],
@@ -833,6 +1115,12 @@
 	],
 	"Ctrl-click to open: %s": [
 		"کلیک کنترل برای باز کردن: %s"
+	],
+	"current match": [
+		"تطابق فعلی"
+	],
+	"Current password": [
+		"گذرواژه کنونی"
 	],
 	"Current version is up-to-date.": [
 		"ورژن فعلی به‌روز است."
@@ -847,7 +1135,7 @@
 		"استایل سفارشی برای joplin در سراسر برنامه"
 	],
 	"Custom stylesheet for rendered Markdown": [
-		"استایل سفارشی برای نشانه‌گذاری ارائه شده"
+		"استایل سفارشی برای Markdown ارائه شده"
 	],
 	"Custom TLS certificates": [
 		"گواهی‌نامه TLS سفارشی"
@@ -889,6 +1177,9 @@
 		"پیش‌فرض"
 	],
 	"Default title to use for documents created by the scanner.": [
+		"عنوان پیشفرض برای استفاده در مستندات ساخته شده توسط اسکنر."
+	],
+	"Default view / edit state": [
 		""
 	],
 	"Default: %s": [
@@ -900,11 +1191,17 @@
 	"Delete attachment \"%s\"?": [
 		"پیوست «%s» حذف شود؟"
 	],
+	"Delete column": [
+		"حذف ستون"
+	],
 	"Delete expired sessions": [
 		"حذف جلسات منقضی"
 	],
 	"Delete expired tokens": [
 		"حذف توکن‌های منقضی شده"
+	],
+	"Delete history": [
+		"حذف تاریخچه"
 	],
 	"Delete line": [
 		"حذف خط"
@@ -924,11 +1221,14 @@
 	"Delete profile \"%s\"": [
 		"حساب‌کاربری «%s» حذف شود؟"
 	],
+	"Delete profile \"%s\"?\n\nAll data, including notes, notebooks and tags will be permanently deleted.": [
+		"حساب‌کاربری «%s» حذف شود؟\n\nتمام داده‌ها، از جمله یادداشت‌ها، دفترچه‌ها و برچسب‌ها، برای همیشه حذف خواهند شد."
+	],
+	"Delete row": [
+		"حذف ردیف"
+	],
 	"Delete selected notes": [
 		"حذف یادداشت‌های انتخاب شده"
-	],
-	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
-		""
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"دفترچه‌ی صندوق ورودی حذف شود؟\n\nاگر دفترچه صندوق ورودی را حذف کنید، ممکن است هر ایمیلی که اخیراً به آن ارسال شده است نیز از بین برود."
@@ -963,14 +1263,23 @@
 	"Deletes the notes without asking for confirmation.": [
 		"یادداشت‌ها را بدون پرسش برای تایید حذف می‌کند."
 	],
+	"Deletion log": [
+		"گزارش حذف"
+	],
+	"Deselect": [
+		"لغو انتخاب"
+	],
 	"Destination format: %s": [
 		"فرمت مقصد: %s"
 	],
 	"Detailed": [
 		"اطلاعات دقیق"
 	],
+	"Dev": [
+		"توسعه"
+	],
 	"Device: %s": [
-		""
+		"دستگاه: %s"
 	],
 	"Directory": [
 		"دایرکتوری"
@@ -987,17 +1296,23 @@
 	"Disable safe mode and restart": [
 		"غیرفعال کردن حالت امن و راه‌اندازی مجدد"
 	],
+	"Disable synchronisation": [
+		"غیرفعال کردن همگام‌سازی"
+	],
 	"Disable Web Clipper Service": [
 		"غیرفعال کردن Web Clipper"
 	],
 	"Disabled": [
 		"غیر‌فعال شده"
 	],
+	"Disabled keys": [
+		"کلیدهای غیرفعال"
+	],
 	"Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?": [
 		"غیرفعال کردن رمزنگاری به این معنی است که *تمام* یادداشت‌ها و پیوست‌های شما دوباره همگام‌سازی شده و بدون رمزنگاری به هدف همگام‌سازی ارسال ‌شوند. آیا مایل هستید ادامه دهید؟"
 	],
 	"Discard": [
-		"لغو تغییرات"
+		"لغو"
 	],
 	"Discard changes": [
 		"لغو تغییرات"
@@ -1021,7 +1336,7 @@
 		"مشخصات کامل یادداشت را نمایش می‌دهد."
 	],
 	"Displays the configured keyboard shortcuts.": [
-		""
+		"میان‌بر های صفحه کلید پیکربندی شده را نمایش می‌دهد."
 	],
 	"Displays the given note.": [
 		"یادداشت مشخص شده را نمایش بده."
@@ -1041,20 +1356,23 @@
 	"Do not ask for confirmation.": [
 		"برای تایید سوال نکن."
 	],
+	"Do not ask for user confirmation.": [
+		"از کاربر برای تایید سوال نکن."
+	],
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"گذرواژه را از دست ندهید زیرا، برای اهداف امنیتی، این *تنها* راه برای رمزگشایی داده ها خواهد بود! برای فعال نمودن رمزنگاری، لطفا گذرواژه خود را در زیر وارد نمایید."
 	],
-	"Do you find the Joplin web app useful?": [
-		""
-	],
 	"Document scanner: Title template": [
-		""
+		"اسکنر اسناد: الگوی قالب"
 	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		"به گیرنده اشتراک گذاری اجازه ندهید تا دفترچه یادداشت مشترک را ویرایش کند. فقط برای زیردستور `add` معتبر است."
+	],
+	"Don't have an account yet?": [
 		""
 	],
 	"Don't show this message again": [
-		""
+		"این پیام را دوباره نشان نده"
 	],
 	"Donate, website": [
 		"کمک مالی، وبسایت"
@@ -1062,11 +1380,23 @@
 	"Done": [
 		"انجام‌شده"
 	],
+	"Double tap to open this attachment. Long press to expand or collapse details.": [
+		""
+	],
 	"Download": [
 		"دانلود"
 	],
 	"Download and install the relevant extension for your browser:": [
 		"افزونه های مرتبط را برای مرورگر خود دانلود و نصب نمایید:"
+	],
+	"Download it from GitHub Releases": [
+		""
+	],
+	"Download it from the Joplin Android repository": [
+		""
+	],
+	"Download it now": [
+		"اکنون دانلود کنید"
 	],
 	"Downloaded": [
 		"دانلود شده"
@@ -1088,6 +1418,9 @@
 	],
 	"Dracula": [
 		"Dracula"
+	],
+	"Drag to move group": [
+		""
 	],
 	"Draw picture": [
 		"رسم تصویر"
@@ -1122,11 +1455,17 @@
 	"Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is duplicated in the current notebook.": [
 		"یادداشت های مطابق با <note> را در [notebook] کپی می‌کند. اگر هیچ دفترچه‌ای مشخص نشده باشد، یادداشت در دفترچه کنونی کپی می‌شود."
 	],
+	"Duration: %s": [
+		"مدت زمان: %s"
+	],
 	"Edit": [
 		"ویرایش"
 	],
+	"Edit as Markdown": [
+		"ویرایش به‌صورت Markdown"
+	],
 	"Edit as Rich Text": [
-		""
+		"ویرایش به صورت متن غنی"
 	],
 	"Edit link": [
 		"ویرایش لینک"
@@ -1143,8 +1482,14 @@
 	"Edit profile configuration...": [
 		"ویرایش تنظیمات حساب کاربری..."
 	],
+	"Edit tag": [
+		"ویرایش برچسب"
+	],
 	"Editor": [
 		"ویرایشگر"
+	],
+	"Editor actions": [
+		"عملکردهای ویرایشگر"
 	],
 	"Editor font": [
 		"فونت ویرایشگر"
@@ -1185,6 +1530,9 @@
 	"Emails": [
 		"ایمیل‌ها"
 	],
+	"Embedding index": [
+		""
+	],
 	"emphasised text": [
 		"متن تأکید شده"
 	],
@@ -1206,6 +1554,9 @@
 	"Enable abbreviation syntax": [
 		"فعال‌سازی نحوه نوشتار مختصر"
 	],
+	"Enable ABC musical notation support": [
+		"فعال‌سازی پشتیبانی از نت‌نویسی موسیقی ABC"
+	],
 	"Enable audio player": [
 		"فعال‌سازی پخش‌کننده صدا"
 	],
@@ -1218,8 +1569,11 @@
 	"Enable encryption": [
 		"فعال‌سازی رمزنگاری"
 	],
-	"Enable file:// URLs for images and videos": [
+	"Enable external embeds (e.g. YouTube Videos)": [
 		""
+	],
+	"Enable file:// URLs for images and videos": [
+		"به file:// URL ها برای تصاویر و ویدیو ها اجازه دهید"
 	],
 	"Enable footnotes": [
 		"فعال‌سازی پاورقی"
@@ -1227,11 +1581,17 @@
 	"Enable Fountain syntax support": [
 		"فعال‌سازی پشتیبانی از نحوه نوشتار فواره‌ای"
 	],
+	"Enable handwritten transcription": [
+		"فعال‌سازی رونویسی دست‌نویس"
+	],
+	"Enable HTML-to-Markdown conversion banner": [
+		"فعال‌سازی نوار تبدیل HTML به Markdown"
+	],
 	"Enable Linkify": [
 		"فعال‌سازی تبدیل به لینک"
 	],
 	"Enable markdown emoji": [
-		"فعال‌سازی شکلک نشانه‌گذاری"
+		"فعال‌سازی شکلک‌های Markdown"
 	],
 	"Enable math expressions": [
 		"فعال‌سازی عبارت‌های ریاضی"
@@ -1240,13 +1600,10 @@
 		"فعال‌سازی پشتیبانی از نمودارهای روندنما"
 	],
 	"Enable multimarkdown table extension": [
-		"فعال‌سازی افزونه جدول نشانه‌گذاری چندگانه"
+		"فعال‌سازی افزونه جدول MultiMarkdown"
 	],
 	"Enable note history": [
 		"فعال‌سازی تاریخچه‌ یادداشت"
-	],
-	"Enable optical character recognition (OCR)": [
-		"فعال سازی تشخیص نوری کاراکتر (OCR)"
 	],
 	"Enable or disable plugins": [
 		"فعال یا غیر فعال سازی افزونه ها"
@@ -1260,6 +1617,9 @@
 	"Enable soft breaks": [
 		"فعال‌سازی شکستن نرم خطوط"
 	],
+	"Enable spell checking in Markdown editor": [
+		"فعال‌سازی بررسی صحت املا در ویرایشگر Markdown"
+	],
 	"Enable spellcheck in the text editor": [
 		"فعال‌سازی بررسی صحت املاء در ویرایشگر متن"
 	],
@@ -1267,7 +1627,7 @@
 		"فعال‌سازی افزونه جدول مطالب"
 	],
 	"Enable the Markdown toolbar": [
-		"فعال‌سازی نوار ابزار نشانه‌گذاری"
+		"فعال‌سازی نوار ابزار Markdown"
 	],
 	"Enable typographer support": [
 		"فعال‌سازی پشتیبانی از تایپوگرافی"
@@ -1285,9 +1645,12 @@
 		"فعال‌شده"
 	],
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
-		""
+		"امکان ادامه فهرست‌های Markdown، بستن خودکار برچسب‌های HTML و سایر قابلیت‌ های تکمیل خودکار نشانه‌ گذاری را فراهم می‌کند."
 	],
 	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
+		"امکان جایگزینی الگو های Markdown را در ویرایشگر متن غنی فراهم می‌کند. برای مثال، در صورت فعال بودن این قابلیت، تایپ کردن **bold** متن را به صورت ضخیم (Bold) درمی‌آورد."
+	],
+	"Enables the default edit operations for notes with an open AI chat panel. When disabled, the chat panel can still read the open note. Does not apply to MCP.": [
 		""
 	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
@@ -1298,6 +1661,9 @@
 	],
 	"Encrypted items cannot be modified": [
 		"موارد رمزنگاری شده نمی‌توانند تغییر پیدا کنند"
+	],
+	"Encrypting a note requires a note lock password, which has not yet been set. Set it up now?": [
+		""
 	],
 	"Encryption": [
 		"رمزنگاری"
@@ -1311,11 +1677,17 @@
 	"Encryption keys": [
 		"کلیدهای رمزنگاری"
 	],
+	"Encryption was setup previously, but all keys have been disabled. To continue, please use the desktop app to enable a key.": [
+		""
+	],
 	"Encryption:": [
 		"رمزنگاری:"
 	],
 	"End-to-end encryption": [
 		"رمز نگاری انتها به انتها یا end-to -end"
+	],
+	"Ends voice typing": [
+		"پایان تایپ صوتی"
 	],
 	"Enter code here": [
 		"کد را وارد نمایید"
@@ -1329,6 +1701,18 @@
 	"Enter password": [
 		"گذرواژه"
 	],
+	"Enter the code": [
+		"کد را وارد نمایید"
+	],
+	"Enter the code:": [
+		"کد را وارد نمایید:"
+	],
+	"Enter the note lock password to unlock encrypted notes for this session.": [
+		""
+	],
+	"Entering selection mode": [
+		"ورود به حالت انتخاب"
+	],
 	"Enum": [
 		"قابل شمارش"
 	],
@@ -1339,10 +1723,13 @@
 		"خطای بازکردن یادداشت در ویرایشگر: %s"
 	],
 	"Error starting camera: %s": [
-		""
+		"خطا در راه اندازی دوربین : %s"
 	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"خطا. لطفا بررسی کنید که آدرس اینترنتی، نام‌کاربری، گذرواژه و غیره صحیح هستند و هدف همگام‌سازی قابل دسترس است. خطای گزارش شده:"
+	],
+	"Error. The AI provider test failed:": [
+		""
 	],
 	"Error: %s": [
 		"خطا: %s"
@@ -1354,19 +1741,28 @@
 		"فایل صادر شده Evernote (به صورت HTML)"
 	],
 	"Evernote Export File (as Markdown)": [
-		"فایل صادر شده Evernote (به صورت نشانه‌گذاری)"
+		"فایل صادر شده Evernote (به صورت Markdown)"
 	],
 	"Evernote Export Files (Directory, as HTML)": [
 		"فایلهای صادر شده Evernote (به صورت HTML)"
 	],
 	"Evernote Export Files (Directory, as Markdown)": [
-		"فایلهای صادر شده Evernote (به صورت نشانه‌گذاری)"
+		"فایلهای صادر شده Evernote (به صورت Markdown)"
 	],
 	"Exits the application.": [
 		"خروح از نرم‌افزار."
 	],
 	"Expand %s": [
 		"گسترش %s"
+	],
+	"Expand all notebooks": [
+		"باز کردن همه دفترچه‌ها"
+	],
+	"Expand title": [
+		"گسترش عنوان"
+	],
+	"Expanded": [
+		"منبسط"
 	],
 	"Export": [
 		"صدور"
@@ -1382,6 +1778,9 @@
 	],
 	"Export Debug Report": [
 		"صدور گزارش اشکال‌زدایی"
+	],
+	"Export deletion log": [
+		"صدور گزارش حذف"
 	],
 	"Export profile": [
 		"صدور حساب‌کاربری"
@@ -1407,6 +1806,9 @@
 	"Exports only the given notebook.": [
 		"تنها دفترچه مشخص شده را صادر می‌کند."
 	],
+	"Exposes Joplin notes to external AI applications (Claude Desktop, Cursor, etc.) via the Model Context Protocol. Requires the Web Clipper service to be running. Connected AI tools can read your note content; any text they retrieve may be sent to the external LLM provider those tools use.": [
+		""
+	],
 	"Fail-safe": [
 		"شکست ایمن"
 	],
@@ -1414,9 +1816,12 @@
 		"شکست ایمن: وقتی هدف همگام‌سازی خالی است، داده‌های محلی را پاک نکنید (اغلب نتیجه یک پیکربندی اشتباه یا اشکال است)"
 	],
 	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
-		""
+		"مکانیزم ایمنی: عملیات همگام سازی برای جلوگیری از دست رفتن داده ها متوقف شد، زیرا مقصد همگام سازی خالی یا آسیب دیده است. برای نادیده گرفتن این رفتار، مکانیزم ایمنی را در تنظیمات همگام سازی غیرفعال کنید."
 	],
 	"Failed to connect to your account. Please try again.": [
+		"اتصال به حساب کاربری شکست خورد. لطفا دوباره امتحان کنید."
+	],
+	"Failed to create accessible document: %s": [
 		""
 	],
 	"Fatal error:": [
@@ -1424,9 +1829,6 @@
 	],
 	"Feature flags": [
 		"پرچم‌های ویژه"
-	],
-	"Feedback": [
-		""
 	],
 	"Fetched items: %d/%d.": [
 		"آیتم های دریافت‌شده: %d از %d."
@@ -1443,11 +1845,17 @@
 	"Filter": [
 		"فیلتر"
 	],
+	"Filtered by section [%s]": [
+		""
+	],
+	"Find": [
+		"جستجو"
+	],
 	"Find: ": [
 		"یافت‌شده: "
 	],
 	"Finishes recording": [
-		""
+		"پایان ضبط"
 	],
 	"Firefox Extension": [
 		"افزونه Firefox"
@@ -1457,6 +1865,9 @@
 	],
 	"Fixing search index...": [
 		"در حال اصلاح فهرست جستجو..."
+	],
+	"Flip": [
+		""
 	],
 	"Focus": [
 		"تمرکز"
@@ -1468,10 +1879,10 @@
 		"عنوان تمرکز"
 	],
 	"Folder \"%s\" is shared with:": [
-		""
+		"پوشه \"%s\" با این موارد به اشتراک گذاشته شده است:"
 	],
 	"Follow link": [
-		""
+		"لینک را دنبال کنید"
 	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"تنها به منظور اشکال‌زدایی: صدور حساب‌کاربری شما به یک حافظه خارجی SD."
@@ -1516,11 +1927,8 @@
 		"در حال تولید لینک...",
 		"در حال بوجود آوردن پیوند..."
 	],
-	"Geolocation, spellcheck, editor toolbar, image resize": [
-		"موقعیت جغرافیایی، بررسی املایی، نوار ابزار ویرایشگر، تغییر اندازه تصویر"
-	],
 	"Get a quote": [
-		""
+		"دریافت استعلام قیمت"
 	],
 	"Get it now:": [
 		"هم‌اکنون دریافت نمایید:"
@@ -1531,29 +1939,41 @@
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"یک مقدار تنظیمات را دریافت یا قرار می‌دهد. اگر [value] (مقدار) داده نشود، مقدار [name] (اسم) نمایش داده خواهد شد. اگر نه [name] (اسم) و نه [value] (مقدار) داده نشده باشند، تنظیمات فعلی لیست می‌شود."
 	],
-	"Glossary:": [
+	"Global shortcut to show/hide Joplin": [
 		""
+	],
+	"Glossary:": [
+		"واژه نامه:"
 	],
 	"go": [
-		""
+		"برو"
 	],
 	"Go back": [
+		"برگشتن"
+	],
+	"Go to end of note": [
 		""
 	],
 	"Go to Joplin Cloud profile": [
 		"ورود به حساب سرویس ابری joplin"
 	],
 	"Go to line": [
-		""
+		"رفتن به خط"
 	],
 	"Go to source URL": [
 		"رفتن به آدرس منبع"
+	],
+	"Go to start of note": [
+		""
 	],
 	"Goto Anything...": [
 		"به هر چیزی بروید..."
 	],
 	"Grant authorisation": [
 		"اعطای مجوز"
+	],
+	"Group": [
+		""
 	],
 	"Have you authorised the application login in the above URL?": [
 		"آیا ورود برنامه را در URL بالا مجاز کرده اید؟"
@@ -1583,13 +2003,19 @@
 		"پنهان‌سازی غیرفعال است"
 	],
 	"Hide disabled keys": [
-		"پنهان‌سازی کلیدها غیرفعال است"
+		"پنهان کردن کلیدهای غیرفعال"
 	],
 	"Hide Joplin": [
 		"پنهان‌سازی joplin"
 	],
 	"Hide keyboard": [
 		"پنهان‌سازی صفحه‌کلید"
+	],
+	"Hide password": [
+		"پنهان کردن گذرواژه"
+	],
+	"Hides warning": [
+		"پنهان کردن هشدار"
 	],
 	"Highlight": [
 		"برجسته"
@@ -1622,6 +2048,9 @@
 		"بیکار"
 	],
 	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		"اگر یک تصویرِ پیوست‌شده در سطری جداگانه قرار داشته باشد و پس از آن یک سطر خالی بیاید، درست در زیر Markdown خود نمایش داده خواهد شد."
+	],
+	"If enabled, opening an HTML note displays a prompt to convert the note to Markdown.": [
 		""
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
@@ -1642,11 +2071,11 @@
 	"Import": [
 		"وارد کردن"
 	],
+	"Import a note from a text file (%s). The note will be imported into notebook '%s'.": [
+		""
+	],
 	"Import and Export": [
 		"واردات و صادرات"
-	],
-	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
-		"واردات انجام نشد. مطمئن شوید که یک فایل JEX انتخاب شده است.\nجزئیات: %s"
 	],
 	"Import from JEX": [
 		"واردات از JEX"
@@ -1656,6 +2085,9 @@
 	],
 	"Import or export your data": [
 		"داده های خود را وارد یا صادر کنید"
+	],
+	"Import...": [
+		"وارد کردن..."
 	],
 	"Imported successfully!": [
 		"با موفقیت وارد شد!"
@@ -1667,7 +2099,7 @@
 		"در حال وارد کردن یادداشت‌ها..."
 	],
 	"Importing...": [
-		"در حال صدور..."
+		"در حال وارد کردن..."
 	],
 	"Imports data into Joplin.": [
 		"داده را در joplin وارد می‌کند."
@@ -1696,8 +2128,17 @@
 	"In: %s": [
 		"در: %s"
 	],
+	"Incoming shares:": [
+		"اشتراک‌های دریافتی:"
+	],
 	"Incompatible": [
 		"ناسازگار"
+	],
+	"Incomplete": [
+		"ناتمام"
+	],
+	"Incomplete to-do": [
+		"کار ناتمام"
 	],
 	"Increase indent level": [
 		"افزایش سطح تورفتگی"
@@ -1708,8 +2149,17 @@
 	"Indent more": [
 		"تورفتگی بیشتر"
 	],
-	"Info": [
+	"Index notes for AI search": [
 		""
+	],
+	"Indexer:": [
+		""
+	],
+	"Indexing…": [
+		""
+	],
+	"Info": [
+		"اطلاعات"
 	],
 	"Information": [
 		"اطلاعات"
@@ -1720,8 +2170,17 @@
 	"Insert": [
 		"درج"
 	],
+	"Insert column right": [
+		""
+	],
 	"Insert Hyperlink": [
 		"درج پیوند برجسته"
+	],
+	"Insert row above": [
+		""
+	],
+	"Insert row below": [
+		""
 	],
 	"Insert time": [
 		"درج زمان"
@@ -1754,13 +2213,16 @@
 		"دستور نامعتبر: «%s»"
 	],
 	"Invalid format. E.g.: 48.8581372, 2.2926735": [
-		""
+		"فرمت نامعتبر. مثال: 48.8581372،2.2926735"
 	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"مقدار گزینه نامعتبر: «%s». مقادیر احتمالی شامل: %s."
 	],
 	"Invalid password": [
 		"گذرواژه نامعتبر"
+	],
+	"Invalid password. Please try again. If you have forgotten your password you will need to reset it.": [
+		""
 	],
 	"iOS version: %s": [
 		"نسخه iOS: %s"
@@ -1771,6 +2233,9 @@
 	"Item \"%s\" could not be downloaded: %s": [
 		"مورد «%s» دانلود نشد: %s"
 	],
+	"Item upload will be disabled in %s.": [
+		""
+	],
 	"Items": [
 		"موارد"
 	],
@@ -1780,20 +2245,29 @@
 	"Items that cannot be synchronised": [
 		"مواردی که نمی‌توانند همگام‌سازی شوند"
 	],
+	"Items with error: %s": [
+		"موارد دارای خطا: %s"
+	],
+	"Join us on %s": [
+		"به ما در %s بپیوندید"
+	],
 	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
 		"جاپلین می تواند یادداشت های شما را با استفاده از ارائه دهندگان مختلف همگام سازی کند. از لیست زیر یکی را انتخاب کنید."
 	],
 	"Joplin Cloud": [
 		"سرویس ابری joplin"
 	],
+	"Joplin Cloud AI requires Joplin Cloud sync. Pick a different provider or restore Joplin Cloud sync.": [
+		""
+	],
 	"Joplin Cloud Login": [
 		"ورود سرویس ابری joplin"
 	],
 	"Joplin Desktop": [
-		"joplin نسخه دسکتاپ"
+		"Joplin نسخه دسکتاپ"
 	],
 	"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. What would you like to do?": [
-		"joplin پسوند %s را نمی شناسد. باز کردن این فایل ممکن است خطرناک باشد. دوست دارید چه کار کنید؟"
+		"Joplin پسوند %s را نمی شناسد. باز کردن این فایل ممکن است خطرناک باشد. دوست دارید چه کار کنید؟"
 	],
 	"Joplin Export Directory": [
 		"پوشه صادرات joplin"
@@ -1807,14 +2281,29 @@
 	"Joplin Forum": [
 		"انجمن joplin"
 	],
+	"Joplin is already running.": [
+		"Joplin در حال حاضر در حال اجراست."
+	],
 	"Joplin Mobile": [
-		"joplin نسخه موبایل"
+		"Joplin نسخه موبایل"
+	],
+	"Joplin needs your permission to access your %s account and to synchronise data with it.": [
+		""
 	],
 	"Joplin Server": [
 		"سرور joplin"
 	],
+	"Joplin Server (SAML)": [
+		"سرور Joplin (SAML)"
+	],
+	"Joplin Server Business": [
+		"سرور Joplin Business"
+	],
 	"Joplin Server email": [
 		"سرور ایمیل joplin"
+	],
+	"Joplin Server Login": [
+		"ورود به سرور Joplin"
 	],
 	"Joplin Server password": [
 		"گذرواژه سرور joplin"
@@ -1823,10 +2312,10 @@
 		"آدرس سرور joplin"
 	],
 	"Joplin SSO Authentication": [
-		""
+		"احراز هویت Joplin SSO"
 	],
 	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
-		""
+		"Joplin از ذخیره موقعیت مکانیِ محل ذخیره یا ایجاد یادداشت‌ ها پشتیبانی می‌کند. آیا می‌خواهید این قابلیت را فعال کنید؟ این تنظیمات را می‌توان هر زمان در بخش تنظیمات تغییر داد."
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web Clipper اجازه می دهد تا صفحات وب و اسکرین‌شات ها را از مرورگر خود در joplin ذخیره کنید."
@@ -1856,13 +2345,13 @@
 		"Keychain پشتیبانی می‌شود: %s"
 	],
 	"KEYS": [
-		""
+		"کلید ها"
 	],
 	"Keys that need upgrading": [
 		"کلید‌ها نیازمند ارتقاء می‌باشند"
 	],
 	"Label": [
-		""
+		"برچسب"
 	],
 	"Landscape": [
 		"افقی"
@@ -1874,7 +2363,7 @@
 		"زبان، فرمت تاریخ"
 	],
 	"Large": [
-		""
+		"بزرگ"
 	],
 	"Last error: %s": [
 		"آخرین خطا: %s"
@@ -1921,6 +2410,10 @@
 	"Link": [
 		"لینک"
 	],
+	"Link created!": [
+		"پیوندها ایجاد شدند!",
+		"پیوند ایجاد شد!"
+	],
 	"Link description": [
 		"توضیحات لینک"
 	],
@@ -1931,6 +2424,12 @@
 	"Link text": [
 		"متن لینک"
 	],
+	"Link to note...": [
+		"پیوند به یادداشت..."
+	],
+	"Links": [
+		"لینک"
+	],
 	"List item": [
 		"آیتم فهرست"
 	],
@@ -1938,7 +2437,7 @@
 		"دانلود‌شده"
 	],
 	"Loading...": [
-		"در حال دانلود..."
+		"در حال بارگذاری..."
 	],
 	"Location": [
 		"موقعیت"
@@ -1946,8 +2445,20 @@
 	"Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at \"%s\" and resume the operation.": [
 		"فایل قفل در حال حاضر نگه داشته شده است. اگر می‌دانید که هیچ همگام‌سازی صورت نمی‌گیرد، می‌توانید فایل قفل را در «%s» حذف کرده و عملیات را ادامه دهید."
 	],
+	"Locked notes are encrypted on this device and can only be read after entering your note lock password. The password is required again after locking or restarting Joplin.": [
+		""
+	],
+	"Locked notes cannot be opened in an external editor": [
+		""
+	],
 	"Log": [
 		"لاگ"
+	],
+	"Log in with your web browser": [
+		"ورود با مرورگر وب"
+	],
+	"Login to Joplin Cloud.": [
+		"ورود به سرویس ابری Joplin."
 	],
 	"Login with Dropbox": [
 		"ورود با Dropbox"
@@ -1982,11 +2493,17 @@
 	"Manage shared notebooks": [
 		"مدیریت دفترچه‌های مشترک"
 	],
+	"Manage this server's license from the [admin dashboard](%s).": [
+		""
+	],
+	"Manage toolbar options": [
+		"مدیریت گزینه‌های نوار ابزار"
+	],
 	"Manage your plugins": [
 		"مدیریت افزونه‌های شما"
 	],
 	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
-		""
+		"نمایه های خود را مدیریت کنید. می‌توانید نام نمایه ها را تغییر دهید یا آن ها را حذف کنید. نمایه فعال را نمی‌توان حذف کرد."
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"تنظیمات رمزنگاری انتها به انتها (E2EE) را مدیریت می‌کند. دستورات شامل `enable`، `disable`، `decrypt`، `status`، `decrypt-file` و `target-status` هستند."
@@ -1995,13 +2512,22 @@
 		"دستی"
 	],
 	"Markdown": [
-		"نشانه‌گذاری"
+		"Markdown"
 	],
 	"Markdown + Front Matter": [
-		"نشانه گذاری + موضوع روبه‌رو"
+		"Markdown + Front Matter"
+	],
+	"Markdown editor": [
+		"ویرایشگر Markdown"
+	],
+	"Markdown editor: Highlight active line": [
+		"ویرایشگر Markdown: برجسته‌سازی خط فعال"
+	],
+	"Markdown editor: Render images": [
+		"ویرایشگر Markdown: نمایش تصاویر"
 	],
 	"Markdown editor: Render markup in editor": [
-		""
+		"ویرایشگر Markdown: نمایش markup در ویرایشگر"
 	],
 	"Marks a to-do as done.": [
 		"یک فهرست کار را به عنوان انجام شده علامت می‌زند."
@@ -2022,10 +2548,10 @@
 		"گذرواژه اصلی:"
 	],
 	"match case": [
-		""
+		"حساس به حروف بزرگ و کوچک"
 	],
 	"Math": [
-		""
+		"ریاضیات"
 	],
 	"Max concurrent connections": [
 		"حداکثر اتصالات همزمان"
@@ -2039,20 +2565,29 @@
 	"Max Total Size": [
 		"حداکثر اندازه مجموع"
 	],
+	"MCP requires the Web Clipper service. Enable it in Settings → Web Clipper.": [
+		""
+	],
 	"Media player, math, diagrams, table of contents": [
 		"پخش کننده رسانه، ریاضی، نمودارها، فهرست مطالب"
 	],
 	"Medium": [
-		""
+		"متوسط"
 	],
 	"Minimise": [
 		"کوچک کردن"
 	],
+	"Missing camera permission": [
+		"دسترسی دوربین وجود ندارد"
+	],
 	"Missing keys": [
-		"کلیدها‌ یافت نشدند"
+		"کلیدها‌ نشدند"
 	],
 	"Missing Master Keys": [
 		"کلید‌های اصلی یافت نشدند"
+	],
+	"Missing permission to record audio.": [
+		"مجوز ضبط صدا موجود نیست."
 	],
 	"Missing required argument: %s": [
 		"کمبود آرگومان در دستور: %s"
@@ -2062,6 +2597,12 @@
 	],
 	"Mobile data - auto-sync disabled": [
 		"داده همراه - غیرفعال شدن همگام‌سازی خودکار"
+	],
+	"Model": [
+		""
+	],
+	"Model:": [
+		""
 	],
 	"More info": [
 		"اطلاعات بیشتر"
@@ -2075,14 +2616,24 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		"اکثر افزونه ها دارای کد منبع برای بررسی در وب سایت افزونه هستند."
 	],
+	"Move %d note to notebook \"%s\"?": [
+		"%d یادداشت به دفترچه «%s» منتقل شود؟",
+		"%d یادداشت به دفترچه «%s» منتقل شود؟"
+	],
+	"Move %d notebooks to the trash?\n\nAll notes and sub-notebooks within these notebooks will also be moved to the trash.": [
+		"%d دفترچه به سطل زباله منتقل شود؟\n\nتمامی یادداشت‌ها و دفترچه‌های فرزند این دفترچه‌ها نیز به سطل زباله منتقل خواهند شد."
+	],
+	"Move down": [
+		"رفتن به پایین"
+	],
 	"Move left": [
-		""
+		"رفتن به چپ"
 	],
 	"Move notebook \"%s\" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.": [
 		"دفترچه «%s» حذف شود؟\n\nتمامی یادداشت‌ها و دفترچه‌های فرزند این دفترچه نیز حذف خواهند شد."
 	],
 	"Move right": [
-		""
+		"رفتن به راست"
 	],
 	"Move to notebook": [
 		"انتقال به دفترچه"
@@ -2094,10 +2645,10 @@
 		"انتقال به دفترچه:"
 	],
 	"Move up": [
-		""
+		"رفتن به بالا"
 	],
 	"Moves the given <item> to [notebook]": [
-		"یادداشت‌هایی که مطابق <note> هستند را به [notebook] منتقل می‌کند."
+		"مورد <item> داده‌شده را به [notebook] منتقل می‌کند."
 	],
 	"n": [
 		"n"
@@ -2108,8 +2659,17 @@
 	"Never resize": [
 		"هرگز بدون تغییر اندازه"
 	],
+	"New attachment": [
+		"پیوست جدید"
+	],
+	"New drawing": [
+		"طراحی جدید"
+	],
 	"New invitations": [
 		"دعوت نامه های جدید"
+	],
+	"New model available\nA new voice typing model is available. Do you want to download it?": [
+		"مدل جدیدی موجود است\nمدل جدیدی برای تایپ صوتی موجود است. آیا می‌خواهید آن را دانلود کنید؟"
 	],
 	"New note": [
 		"یادداشت جدید"
@@ -2123,8 +2683,20 @@
 	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
 		"دفترچه جدید «%s» ساخته می‌شود و فایل «%s» به آن افزوده خواهد شد"
 	],
+	"New notebook title": [
+		"عنوان دفترچه جدید"
+	],
+	"New photo": [
+		"عکس جدید"
+	],
+	"New profile": [
+		"حساب‌کاربری جدید"
+	],
 	"New sub-notebook": [
 		"دفترچه فرزند جدید"
+	],
+	"New text card": [
+		""
 	],
 	"New to-do": [
 		"فهرست کار جدید"
@@ -2133,7 +2705,10 @@
 		"نسخه جدید: %s"
 	],
 	"next": [
-		""
+		"بعدی"
+	],
+	"Next": [
+		"بعدی"
 	],
 	"Next match": [
 		"تطابق بعدی"
@@ -2159,6 +2734,18 @@
 	"No active notebook.": [
 		"دفترچه‌ی فعالی وجود ندارد."
 	],
+	"No AI usage recorded yet.": [
+		""
+	],
+	"No arrow": [
+		""
+	],
+	"No colour": [
+		""
+	],
+	"No embedding model is installed. It is downloaded automatically on first use — check Settings → AI for progress.": [
+		""
+	],
 	"No new invitations": [
 		"دعوتنامه جدیدی وجود ندارد"
 	],
@@ -2180,6 +2767,9 @@
 	"No results": [
 		"بدون نتیجه"
 	],
+	"No revision selected": [
+		"هیچ نسخه‌ای انتخاب نشده است"
+	],
 	"No such command: %s": [
 		"این دستور وجود ندارد: %s"
 	],
@@ -2189,20 +2779,35 @@
 	"No tab selected": [
 		"هیچ برگه ای انتخاب نشده است"
 	],
+	"No tags": [
+		"برچسبی وجود ندارد"
+	],
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"هیچ ویرایشگر متنی مشخص نشده است. لطفا با استفاده از `<editor-path> تنظیمات ویرایشگر` آن را مشخص کنید"
 	],
+	"No updates available": [
+		"به‌روزرسانی جدیدی موجود نیست"
+	],
 	"No URL for SAML authentication set.": [
+		"هیچ URLای برای احراز هویت SAML تنظیم نشده است."
+	],
+	"No valid notebook is available. Please create or select a notebook and try again.": [
 		""
+	],
+	"None": [
+		"هیچ‌کدام"
 	],
 	"Nord": [
 		"Nord"
+	],
+	"Normal": [
+		""
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"با %s تایید نشد. لطفا هر گواهی‌نامه‌ی ناموجود را ارائه نمایید."
 	],
 	"Not checked": [
-		""
+		"بررسی نشده"
 	],
 	"Not downloaded": [
 		"دانلود نشده"
@@ -2212,9 +2817,6 @@
 	],
 	"Not now": [
 		"فعلاً نه"
-	],
-	"Not useful": [
-		""
 	],
 	"note": [
 		"یادداشت"
@@ -2243,8 +2845,17 @@
 	"Note has been saved.": [
 		"یادداشت ذخیره شد."
 	],
+	"Note history": [
+		"تاریخچه‌ی یادداشت"
+	],
 	"Note History": [
 		"تاریخچه‌ی یادداشت"
+	],
+	"Note history has been deleted.": [
+		"تاریخچه یادداشت حذف شد."
+	],
+	"Note indexing is turned off in Settings → AI.": [
+		""
 	],
 	"Note is not a to-do: \"%s\"": [
 		"یادداشت یک فهرست کار نیست: «%s»"
@@ -2258,11 +2869,23 @@
 	"Note list style": [
 		"استایل فهرست یادداشت"
 	],
+	"Note lock password, auto lock": [
+		""
+	],
+	"Note not published: %s": [
+		"یادداشت منتشر نشد: %s"
+	],
+	"Note preview": [
+		"پیش‌نمایش یادداشت"
+	],
 	"Note properties": [
 		"ویژگی‌های یادداشت"
 	],
 	"Note title": [
 		"عنوان یادداشت"
+	],
+	"Note viewer": [
+		"نمایشگر یادداشت"
 	],
 	"Note&book": [
 		"دفترچه"
@@ -2300,11 +2923,32 @@
 	"Notes can only be created within a notebook.": [
 		"یادداشت‌ها فقط می‌توانند در دفترچه ایجاد شوند."
 	],
+	"Notifications": [
+		"اعلان‌ها"
+	],
 	"Numbered List": [
 		"لیست شماره گذاری شده"
 	],
-	"OCR: Clear cache and re-download language data files": [
+	"Obsidian Vault": [
 		""
+	],
+	"OCR is not complete. Please wait for OCR to finish before creating an accessible document.": [
+		""
+	],
+	"OCR needs to run to generate an accessible document. This may take a moment. Would you like to continue?": [
+		""
+	],
+	"OCR: Clear cache and re-download language data files": [
+		"OCR: پاک‌سازی حافظه پنهان و دانلود مجدد فایل‌های داده زبان"
+	],
+	"OCR: Language data URL or path": [
+		"OCR: آدرس یا مسیر داده زبان"
+	],
+	"OCR: PDF processing mode": [
+		""
+	],
+	"OCR: Search in extracted content": [
+		"OCR: جستجو در محتوای استخراج‌شده"
 	],
 	"OK": [
 		"باشه"
@@ -2316,7 +2960,7 @@
 		"در %s: %s"
 	],
 	"on line": [
-		""
+		"بر  خط"
 	],
 	"One of your master keys use an obsolete encryption method.": [
 		"یکی از کلید‌های اصلی شما از یک روش رمزنگاری منسوخ شده استفاده می‌کند."
@@ -2333,6 +2977,12 @@
 	"OneDrive Login": [
 		"ورود به OneDrive"
 	],
+	"OneNote Notebook": [
+		"دفترچه OneNote"
+	],
+	"Only do this if you've forgotten your current password. A new password will be created, and any notes locked with the old one will become permanently unreadable.": [
+		""
+	],
 	"Only one note can be printed at a time.": [
 		"هر بار فقط یک یادداشت می‌تواند چاپ شود."
 	],
@@ -2342,23 +2992,32 @@
 	"Open %s": [
 		"بازکردن %s"
 	],
+	"Open in external editor": [
+		"ویرایش در ویرایشگر خارجی"
+	],
 	"Open in new window": [
-		""
+		"در یک پنجره جدید باز کن"
 	],
 	"Open it": [
 		"باز کن"
+	],
+	"Open log": [
+		"بازکردن گزارش"
 	],
 	"Open PDF viewer": [
 		"بازکردن مشاهده‌کننده PDF"
 	],
 	"Open primary app instance...": [
-		""
+		"باز کردن نمونه اصلی برنامه..."
 	],
 	"Open profile directory": [
 		"بازکردن مسیر حساب کاربری"
 	],
 	"Open secondary app instance...": [
-		""
+		"باز کردن نمونه ثانویهٔ برنامه..."
+	],
+	"Open settings": [
+		"بازکردن تنظیمات"
 	],
 	"Open Source": [
 		"متن باز"
@@ -2367,13 +3026,22 @@
 		"بازکردن راهنمای همگام‌سازی..."
 	],
 	"Open-source licences": [
-		""
+		"مجوز های متن باز"
 	],
 	"Open...": [
 		"باز کردن..."
 	],
 	"Opening section %s": [
 		"بازکردن بخش در %s"
+	],
+	"Opens dropdown": [
+		"باز کردن حالت کشویی"
+	],
+	"Opens note": [
+		"باز کردن یادداشت"
+	],
+	"Opens notebook": [
+		"باز کردن دفترچه"
 	],
 	"Operation cancelled": [
 		"عملیات لغو شد"
@@ -2382,13 +3050,13 @@
 		"گزینه ها"
 	],
 	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
-		""
+		"گزینه‌ هایی که باید هنگام اجرای کد ABC استفاده شوند. این مورد باید یک شیء JSON5 باشد. فهرست کامل گزینه‌ها در این آدرس موجود است: %s"
 	],
 	"Ordered list": [
 		"لیست مرتب شده"
 	],
 	"Other": [
-		""
+		"سایر"
 	],
 	"Other applications...": [
 		"دیگر برنامه‌ها..."
@@ -2403,10 +3071,10 @@
 		"اندازه صفحه برای صدور PDF"
 	],
 	"Panel \"%s\" is visible": [
-		""
+		"پنل \"%s\" قابل مشاهده است"
 	],
 	"Panel %s is hidden": [
-		""
+		"پنل %s مخفی است"
 	],
 	"Password": [
 		"گذرواژه"
@@ -2432,6 +3100,9 @@
 	"PDF File": [
 		"فایل PDF"
 	],
+	"Per user. Minimum of 2 users.": [
+		"به ازای هر کاربر. حداقل 2 کاربر نیاز است."
+	],
 	"Permanently delete note": [
 		"حذف دائمی یادداشت‌"
 	],
@@ -2441,11 +3112,15 @@
 	"Permanently delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will be permanently deleted.": [
 		"دفترچه \"%s\" برای همیشه حذف شود؟\n\nهمه یادداشت‌ها و زیر دفترچه‌های این دفترچه برای همیشه حذف خواهند شد."
 	],
+	"Permanently delete this note?": [
+		"%d یادداشت برای همیشه حذف شود؟",
+		"%d یادداشت برای همیشه حذف شود؟"
+	],
 	"Permanently deletes the notebook, skipping the trash.": [
 		"دفترچه را برای همیشه حذف می کند و از نگهداری در سطل زباله صرف نظر می کند."
 	],
 	"Photo %d": [
-		""
+		"تصویر %d"
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"لطفاً برای ادامه روی «%s» کلیک کنید یا گذرواژه‌ها را در لیست «%s» زیر تنظیم نمایید."
@@ -2453,8 +3128,14 @@
 	"Please confirm that you would like to re-encrypt your complete database.": [
 		"لطفا تایید کنید که شما می‌خواهید تمام پایگاه داده خود را دوباره رمزنگاری نمایید."
 	],
+	"Please disable users from the [admin dashboard](%s) to bring this server under the limit.": [
+		""
+	],
 	"Please enter your password in the master key list below before upgrading the key.": [
 		"لطفا قبل از ارتقای کلید، گذرواژه خود را در لیست کلید اصلی زیر وارد کنید."
+	],
+	"Please make sure you remember your password. It cannot be recovered if lost, and any data encrypted with it will become inaccessible.": [
+		""
 	],
 	"Please note that if it is a large notebook, it may take a few minutes for all the notes to show up on the recipient's device.": [
 		"لطفاً توجه داشته باشید که اگر یک دفترچه حجیم باشد، ممکن است چند دقیقه طول بکشد تا همه یادداشت‌ها در دستگاه گیرنده نمایش داده شوند."
@@ -2463,7 +3144,7 @@
 		"لطفاً آدرس زیر را در مرورگر خود باز کنید تا برنامه تأیید اعتبار شود. برنامه یک دایرکتوری در \"Apps/Joplin\" ایجاد می کند و فقط فایل ها را در این فهرست می خواند و می نویسد. به هیچ فایلی خارج از این فهرست دسترسی نخواهد داشت و به هیچ اطلاعات شخصی دیگری دسترسی نخواهد داشت. هیچ داده ای با هیچ شخص ثالثی به اشتراک گذاشته نخواهد شد."
 	],
 	"Please provide the recipient email": [
-		""
+		"لطفا ایمیل گیرنده را وارد کنید"
 	],
 	"Please record your voice...": [
 		"لطفا صدای خود را ضبط نمایید..."
@@ -2483,6 +3164,9 @@
 	"Please specify the notebook where the notes should be imported to.": [
 		"لطفا دفترچه‌ای که یادداشت‌ها باید به آن وارد شوند را مشخص کنید."
 	],
+	"Please update the license key from the [admin dashboard](%s).": [
+		""
+	],
 	"Please upgrade Joplin to version %s or later to use this plugin.": [
 		"لطفاً برای استفاده از این افزونه، Joplin را به نسخه %s یا جدیدتر ارتقا دهید."
 	],
@@ -2490,7 +3174,7 @@
 		"لطفا صبر کنید تا همه پیوست‌ها دانلود و رمزگشایی شوند. شما همچنین می‌توانید به %s برای ویرایش یادداشت بروید."
 	],
 	"Please wait while we load your organisation sign-in page...": [
-		""
+		"لطفا منتظر بمانید تا صفحه ورود سازمان شما بارگذاری شود..."
 	],
 	"Please wait...": [
 		"لطفاً صبور باشید..."
@@ -2532,7 +3216,7 @@
 		"مقادیر احتمالی: %s."
 	],
 	"Prefer JSON output.": [
-		""
+		"خروجی JSON را ترجیح می‌دهم."
 	],
 	"Preferences": [
 		"تنظیمات"
@@ -2547,7 +3231,7 @@
 		"تم روشن ترجیحی"
 	],
 	"Preserve colours when pasting text in Rich Text Editor": [
-		""
+		"حفظ رنگ‌ها هنگام جای‌گذاری متن در ویرایشگر متن غنی"
 	],
 	"Press Ctrl+D or type \"exit\" to exit the application": [
 		"برای خروج Ctrl+D را فشار دهید یا «exit» را تایپ نمایید"
@@ -2561,8 +3245,14 @@
 	"Press to set the decryption password.": [
 		"برای تنظیم گذرواژه رمزگشایی بفشارید."
 	],
+	"previous": [
+		"قبلی"
+	],
 	"Previous match": [
 		"تطابق قبلی"
+	],
+	"Previous versions": [
+		"نسخه‌های قبلی"
 	],
 	"Previous versions of this note": [
 		"نسخه‌های قبلی این یادداشت"
@@ -2579,6 +3269,9 @@
 	"Pro": [
 		"پیشرفته"
 	],
+	"Pro 100 GB": [
+		""
+	],
 	"Process failed payment subscriptions": [
 		"پردازش پرداخت ناموفق اشتراک‌ها"
 	],
@@ -2591,11 +3284,17 @@
 	"Processing": [
 		"در حال پردازش"
 	],
+	"Processing photo...": [
+		"در حال پردازش عکس..."
+	],
 	"Profile": [
 		"حساب کاربری"
 	],
 	"Profile name": [
 		"نام حساب‌ کاربری"
+	],
+	"Profile name cannot be empty": [
+		"نام حساب‌کاربری نمی‌تواند خالی باشد"
 	],
 	"Profile name:": [
 		"نام حساب‌ کاربری:"
@@ -2621,6 +3320,12 @@
 	"Public-private key pair:": [
 		"جفت کلید عمومی-خصوصی:"
 	],
+	"Publish Note": [
+		"اشتراک‌گذاری یادداشت"
+	],
+	"Publish note \"%s\" (in notebook \"%s\")?": [
+		"یادداشت «%s» منتشر شود؟ (در دفترچه «%s»)"
+	],
 	"Publish note...": [
 		"اشتراک‌گذاری یادداشت..."
 	],
@@ -2631,16 +3336,25 @@
 		"اشتراک‌گذاری یادداشت‌ها در اینترنت"
 	],
 	"Publish/unpublish": [
-		""
+		"انتشار/لغو انتشار"
+	],
+	"Published at URL: %s": [
+		"منتشر شده در آدرس: %s"
 	],
 	"Publishes a note to Joplin Server or Joplin Cloud": [
-		""
+		"یک یادداشت را در سرور Joplin یا فضای ابری Joplin منتشر می‌کند"
+	],
+	"QR Code": [
+		"کد QR"
 	],
 	"Quit": [
 		"خروج"
 	],
-	"Re-download model": [
+	"Quit anyway": [
 		""
+	],
+	"Re-download model": [
+		"دانلود دوباره مدل"
 	],
 	"Re-encrypt data": [
 		"رمزنگاری دوباره داده"
@@ -2648,14 +3362,29 @@
 	"Re-encryption": [
 		"رمزنگاری مجدد"
 	],
+	"Re-enter password": [
+		"گذرواژه را مجدداً وارد کنید"
+	],
 	"Re-upload local data to sync target": [
 		"بارگذاری مجدد داده مجلی در هدف همگام‌سازی"
+	],
+	"Read all tags": [
+		""
+	],
+	"Read more": [
+		"بیشتر بخوانید"
 	],
 	"Read more about it": [
 		"در مورد آن بیشتر بخوانید"
 	],
 	"Read time: %s min": [
 		"زمان تقریبی خواندن: %s دقیقه"
+	],
+	"Reading commands from standard input is only available in CLI mode.": [
+		"خواندن دستورات از ورودی استاندارد فقط در حالت CLI امکان‌پذیر است."
+	],
+	"Reading this note requires the note lock password, which has not been set up on this device yet.": [
+		""
 	],
 	"Recipient has accepted the invitation": [
 		"گیرنده دعوت را پذیرفته است"
@@ -2669,6 +3398,12 @@
 	"Recipients:": [
 		"گیرندگان:"
 	],
+	"Recognise text:": [
+		"شناسایی متن:"
+	],
+	"Recognize handwritten image": [
+		"شناسایی تصویر دست‌نویس"
+	],
 	"Recommended": [
 		"پیشنهاد شده"
 	],
@@ -2676,7 +3411,13 @@
 		"افزونه های پیشنهادی"
 	],
 	"Record audio": [
-		""
+		"ضبط صدا"
+	],
+	"Recording": [
+		"ضبط"
+	],
+	"Recording...": [
+		"در حال ضبط..."
 	],
 	"Redo": [
 		"باز انجام"
@@ -2690,14 +3431,29 @@
 	"Reject": [
 		"رد کردن"
 	],
+	"Rejecting share...": [
+		"در حال رد کردن اشتراک‌گذاری..."
+	],
 	"Remove": [
 		"حذف"
+	],
+	"Remove %d tags from all notes? This cannot be undone.": [
+		"آیا %d برچسب از همه یادداشت‌ها حذف شود؟ این کار قابل بازگشت نیست."
+	],
+	"Remove %s": [
+		"حذف %s"
+	],
+	"Remove %s from share": [
+		"حذف %s از اشتراک‌گذاری"
 	],
 	"Remove tag \"%s\" from all notes?": [
 		"آیا برچسب «%s» از همه‌ی یادداشت‌ها حذف شود؟"
 	],
 	"Remove this search from the sidebar?": [
 		"این جستجو از نوار کناری حذف شود؟"
+	],
+	"Removed %s from share.": [
+		"%s از اشتراک‌گذاری حذف شد."
 	],
 	"Rename": [
 		"تغییر نام"
@@ -2712,13 +3468,19 @@
 		"تغییر نام مورد <item> (یادداشت یا دفترچه) به <name>."
 	],
 	"Renders markup on all lines that don't include the cursor.": [
-		""
+		"مارک‌ آپ را در تمام خطوطی که شامل مکان‌نما نیستند، ارائه می‌دهد."
 	],
 	"Renew token": [
 		"تمدید توکن"
 	],
+	"replace": [
+		"جایگزین کردن"
+	],
 	"Replace": [
 		"جایگزین کردن"
+	],
+	"replace all": [
+		"جایگزین کردن همه"
 	],
 	"Replace all": [
 		"جایگزین کردن همه"
@@ -2730,10 +3492,10 @@
 		"جایگزین کردن: "
 	],
 	"replaced $ matches": [
-		""
+		"مطابقت‌های $ جایگزین شدند"
 	],
 	"replaced match on line $": [
-		""
+		"تطابق در خط $ جایگزین شد"
 	],
 	"Report an issue": [
 		"گزارش مشکل"
@@ -2749,6 +3511,15 @@
 	],
 	"Reports": [
 		"گزارش ها"
+	],
+	"Required to use cloud-hosted AI models, including Joplin Cloud AI. When disabled, only on-device providers can be used.": [
+		""
+	],
+	"Reset": [
+		""
+	],
+	"Reset AI token usage counters?": [
+		""
 	],
 	"Reset application layout": [
 		"بازیابی چیدمان برنامه"
@@ -2774,11 +3545,14 @@
 	"Restore": [
 		"بازگرداندن"
 	],
+	"Restore defaults": [
+		"بازیابی پیش‌فرض‌ها"
+	],
 	"Restore note": [
 		"بازیابی یادداشت"
 	],
 	"Restore notebook": [
-		"بازیابی دفترچه دفترچه"
+		"بازیابی دفترچه"
 	],
 	"Restore the items matching <pattern> from the trash.": [
 		"مواردی که مطابق با <pattern> باشند را از سطل زباله بازیابی کن."
@@ -2807,13 +3581,19 @@
 	"Reverses the sorting order.": [
 		"معکوس کردن ترتیب مرتب‌سازی."
 	],
+	"Revision:": [
+		"تجدید نظر:"
+	],
 	"Revision: %s (%s)": [
 		"تجدید نظر: %s (%s)"
 	],
 	"Rich Text": [
-		""
+		"متن غنی"
 	],
 	"Rich Text editor. Press Escape then Tab to escape focus.": [
+		"ویرایشگر متن غنی. برای خروج از حالت تمرکز، کلید Escape و سپس Tab را فشار دهید."
+	],
+	"Run OCR": [
 		""
 	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
@@ -2847,7 +3627,7 @@
 		"ذخیره هشدار"
 	],
 	"Save as %s": [
-		"ذخیره به عنوان $s"
+		"ذخیره به عنوان %s"
 	],
 	"Save as...": [
 		"ذخیره به عنوان..."
@@ -2861,11 +3641,17 @@
 	"Save geo-location with notes": [
 		"ذخیره موقعیت مکانی با یادداشت‌ها"
 	],
+	"Save geolocation?": [
+		"موقعیت مکانی ذخیره شود؟"
+	],
+	"Scan notebook": [
+		"پویش دفترچه"
+	],
 	"Scanned code": [
-		""
+		"کد اسکن‌ شده"
 	],
 	"Scrollbar size": [
-		""
+		"اندازه نوار پیمایش"
 	],
 	"Search": [
 		"جستجو"
@@ -2885,8 +3671,14 @@
 	"Search in current note": [
 		"جستجو در یادداشت جاری"
 	],
+	"Search results": [
+		"نتایج جستجو"
+	],
 	"Search shown": [
 		"جستجوی نمایش داده شده"
+	],
+	"Search tags": [
+		"جستجوی برچسب‌ها"
 	],
 	"Search...": [
 		"جستجو..."
@@ -2897,11 +3689,17 @@
 	"Searches for the given <pattern> in all the notes.": [
 		"برای <pattern> داده شده، بین تمام یادداشت‌ها جستجو می‌کند."
 	],
+	"See changelog": [
+		"مشاهده تغییرات"
+	],
 	"See the pre-release page for more details: %s": [
 		"برای جزئیات بیشتر به صفحه پیش از انتشار مراجعه کنید: %s"
 	],
 	"Select": [
 		"انتخاب"
+	],
+	"Select a revision...": [
+		"انتخاب یک نسخه..."
 	],
 	"Select all": [
 		"انتخاب همه"
@@ -2912,16 +3710,34 @@
 	"Select file...": [
 		"انتخاب فایل..."
 	],
+	"Select notebook": [
+		"انتخاب دفترچه"
+	],
 	"Select one of the other supported sync targets.": [
-		""
+		"یکی دیگر از مقصد های همگام‌ سازیِ پشتیبانی ‌شده را انتخاب کنید."
 	],
 	"Select parent notebook": [
 		"انتخاب دفترچه والد"
 	],
 	"Select the type of file to be imported:": [
-		""
+		"نوع فایل مورد نظر برای وارد کردن را انتخاب کنید:"
+	],
+	"Selected: %s": [
+		"انتخاب شده: %s"
+	],
+	"Selection deleted": [
+		"انتخاب حذف شد"
+	],
+	"Selects a notebook": [
+		"یک دفترچه را انتخاب می‌کند"
 	],
 	"Self-hosted": [
+		"خود میزبان"
+	],
+	"Self-hosted instances of the Joplin web app cannot sync with Joplin Cloud. Open the official web app?": [
+		""
+	],
+	"Send": [
 		""
 	],
 	"Send bug report": [
@@ -2952,7 +3768,7 @@
 		"ویژگی <name> از <note> داده شده را به [value] (مقدار) داده شده تغییر می‌دهد. ویژگی‌های احتمالی شامل:\n\n%s"
 	],
 	"Settings": [
-		""
+		"تنظیمات"
 	],
 	"Share": [
 		"اشتراک گذاری"
@@ -2975,11 +3791,14 @@
 	"Share permissions": [
 		"مجوزهای اشتراک‌گذاری"
 	],
+	"Shared": [
+		"مشترک"
+	],
 	"Shares": [
 		"اشتراک‌ها"
 	],
 	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
-		""
+		"دفترچه مشخص‌شده در [notebook] را با [user] به اشتراک می‌گذارد یا اشتراک آن را لغو می‌کند. نیازمند Joplin Cloud یا Joplin Server است."
 	],
 	"Sharing notebook...": [
 		"در حال اشتراک‌گذاری دفترچه..."
@@ -2996,6 +3815,9 @@
 	"Show all": [
 		"نمایش همه"
 	],
+	"Show checkbox completion chart in note list": [
+		""
+	],
 	"Show completed to-dos": [
 		"نمایش فهرست کار‌های کامل شده"
 	],
@@ -3005,11 +3827,20 @@
 	"Show disabled keys": [
 		"نمایش کلیدهای غیرفعال"
 	],
+	"Show Joplin icon for note links": [
+		""
+	],
 	"Show monospace fonts only.": [
 		"فقط فونت های monospace نمایش داده شود."
 	],
 	"Show note counts": [
 		"نمایش تعداد یادداشت‌ها"
+	],
+	"Show notebook options": [
+		"نمایش گزینه‌های دفترچه"
+	],
+	"Show password": [
+		"نمایش گذرواژه"
 	],
 	"Show sort order buttons": [
 		"نمایش دکمه های نحوه مرتب سازی"
@@ -3019,6 +3850,12 @@
 	],
 	"Show/hide the sidebar": [
 		"نماش/پنهان نوار کناری"
+	],
+	"Showing all matching settings": [
+		""
+	],
+	"Shows notes for tag": [
+		"یادداشت‌های این برچسب را نمایش می‌دهد"
 	],
 	"Shrink large images before adding them to notes.": [
 		"تصاویر بزرگ را قبل از افزودن به یادداشت ها کوچک کنید."
@@ -3032,8 +3869,14 @@
 	"Sidebar": [
 		"نوار کناری"
 	],
+	"Sign up to Joplin Cloud": [
+		"ثبت‌نام در سرویس ابری joplin"
+	],
 	"Size": [
 		"اندازه"
+	],
+	"Size (smallest first)": [
+		""
 	],
 	"Skip this version": [
 		"از این نسخه بگذرید"
@@ -3045,7 +3888,7 @@
 		"رد شده: %d."
 	],
 	"Small": [
-		""
+		"کوچک"
 	],
 	"Solarised Dark": [
 		"Solarised Dark"
@@ -3071,11 +3914,14 @@
 	"Some items could not be synchronised. Please try to synchronise them first.": [
 		"برخی از موارد را نمی توان همگام سازی کرد. لطفا ابتدا سعی کنید آنها را همگام سازی کنید."
 	],
-	"Sort \"%s\" in ascending order": [
+	"Something went wrong.": [
 		""
 	],
+	"Sort \"%s\" in ascending order": [
+		"مرتب‌سازی «%s» به ترتیب صعودی"
+	],
 	"Sort \"%s\" in descending order": [
-		""
+		"مرتب‌سازی «%s» به ترتیب نزولی"
 	],
 	"Sort notebooks by": [
 		"مرتب‌سازی دفترچه‌ها بر اساس"
@@ -3092,6 +3938,9 @@
 	"Source": [
 		"منبع"
 	],
+	"Source code available": [
+		"کد منبع در دسترس است"
+	],
 	"Source format: %s": [
 		"فرمت مبدا: %s"
 	],
@@ -3099,7 +3948,7 @@
 		"منبع "
 	],
 	"SPACE": [
-		""
+		"فضا"
 	],
 	"Spacer": [
 		"فاصله‌ساز"
@@ -3117,7 +3966,7 @@
 		"شروع برنامه و کوچک‌شده در آیکن تسک‌بار"
 	],
 	"Start recording": [
-		""
+		"ضبط را شروع کن"
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		"شروع، توقف یا بررسی سرور API. از متغیر تنظیمات api.port برای مشخص کردن پورتی که باید روی آن اجرا شود استفاده کنید. دستورات بصورت (%s) هستند."
@@ -3179,8 +4028,17 @@
 	"Subscript": [
 		"اشتراک"
 	],
+	"Success": [
+		"موفقیت"
+	],
 	"Success! Synchronisation configuration appears to be correct.": [
 		"موفق! تنظیمات همگام‌سازی به نظر صحیح است."
+	],
+	"Success! The AI provider responded:": [
+		""
+	],
+	"Suggestions": [
+		"پیشنهادها"
 	],
 	"Superscript": [
 		"بالانویس"
@@ -3191,6 +4049,9 @@
 	"Swap line up": [
 		"تعویض خط به بالا"
 	],
+	"Swap source and target": [
+		""
+	],
 	"Switch between note and to-do type": [
 		"جابجایی میان نوع  یادداشت و فهرست کار"
 	],
@@ -3198,7 +4059,10 @@
 		"تغییر حساب کاربری"
 	],
 	"Switch to back-facing camera": [
-		""
+		"تغییر به دوربین پشت"
+	],
+	"Switch to front-facing camera": [
+		"تغییر به دوربین جلو"
 	],
 	"Switch to note type": [
 		"تغییر به نوع یادداشت"
@@ -3206,14 +4070,20 @@
 	"Switch to profile %d": [
 		"به حساب‌کاربری‌ %d بروید"
 	],
+	"Switch to the %s Editor": [
+		"تغییر به ویرایشگر %s"
+	],
+	"Switch to the legacy editor": [
+		"تغییر به ویرایشگر قدیمی"
+	],
+	"Switch to the new editor": [
+		"تغییر به ویرایشگر جدید"
+	],
 	"Switch to to-do type": [
 		"تغییر به نوع فهرست کار"
 	],
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"به [notebook] تغییر می‌کند - تمامی فعالیت های آینده  در این دفترچه انجام می‌گیرد."
-	],
-	"Sync": [
-		""
 	],
 	"Sync as many devices as you want": [
 		"هر تعداد دستگاهی را که می‌خواهید همگام‌سازی کنید"
@@ -3239,8 +4109,11 @@
 	"Sync your notes": [
 		"یادداشت‌های خود را همگام‌سازی کنید"
 	],
+	"Sync your notes with Joplin Cloud to access them on all your devices. Other sync options are also available.": [
+		""
+	],
 	"Sync, encryption, proxy": [
-		"همگام سازی، رمزگذاری، پروکسی"
+		"همگام سازی، رمزنگاری، پروکسی"
 	],
 	"Synchronisation": [
 		"همگام‌سازی"
@@ -3269,6 +4142,9 @@
 	"Synchronises with remote storage.": [
 		"با فضای ذخیره‌سازی ریموت همگام‌سازی می‌کند."
 	],
+	"Synchronising remaining changes, please wait...": [
+		""
+	],
 	"Synchronising...": [
 		"در حال همگام سازی..."
 	],
@@ -3276,19 +4152,28 @@
 		"در حال همگام سازی..."
 	],
 	"Tab indents": [
-		""
+		"ایجاد تورفتگی با کلید Tab"
 	],
 	"Tab moves focus": [
-		""
+		"کلید Tab تمرکز را جابه‌جا می‌کند"
+	],
+	"Table": [
+		"جدول"
 	],
 	"Tabloid": [
 		"چکیده"
+	],
+	"Tag: %s": [
+		"برچسب: %s"
 	],
 	"Tagged: %d.": [
 		"برچسب گذاری شده: %d."
 	],
 	"Tags": [
 		"برچسب‌ها"
+	],
+	"Tags cannot be changed for locked notes while the session is locked": [
+		""
 	],
 	"Take photo": [
 		"عکس گرفتن"
@@ -3311,11 +4196,11 @@
 	"Text editor command": [
 		"دستور ویرایشگر متن"
 	],
-	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
-		""
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"حساب‌کاربری فعال را نمی توان حذف کرد. به حساب‌کاربری دیگری بروید و دوباره امتحان کنید."
+	],
+	"The API key is missing. Set it in Settings → AI.": [
+		""
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
 		"برنامه اکنون در حال بسته شدن است. لطفاً برای تکمیل مراحل آن را مجدداً راه اندازی کنید."
@@ -3347,9 +4232,6 @@
 	"The default encryption method has been changed, you should re-encrypt your data.": [
 		"روش رمزنگاری پیش فرض تغییر یافته است،‌ شما باید داده‌های خود را دوباره رمزنگاری کنید."
 	],
-	"The default profile cannot be deleted": [
-		"حساب‌کاربری پیش فرض را نمی توان حذف نمود"
-	],
 	"The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.": [
 		"دستور ویرایشگر (ممکن است شامل آرگومان‌هایی نیز باشد) که برای باز کردن یادداشت استفاده می‌شود. اگر هیچ کدام ارائه نشده باشد، سعی می‌کند ویرایشگر پیش فرض را به طور خودکار شناسایی کند."
 	],
@@ -3367,32 +4249,60 @@
 		"کلیدهای زیر از یک الگوریتم رمزنگاری قدیمی استفاده می کنند و توصیه می شود آنها را ارتقا دهید. کلید ارتقا یافته همچنان می‌تواند مانند همیشه داده‌های شما را رمزگشایی و رمزنگاری کند."
 	],
 	"The following plugins may not support the current markdown editor:": [
-		""
+		"افزونه‌ های زیر ممکن است از ویرایشگر فعلی Markdown پشتیبانی نکنند:"
 	],
 	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
 		"تیم joplin این افزونه را بررسی کرده است و استانداردهای ما را برای امنیت و عملکرد مطابقت دارد."
 	],
 	"The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
-		"کلیدهای دارای این شناسه‌ها برای رمزگذاری برخی از آیتم‌های شما استفاده می‌شوند، اما برنامه در حال حاضر به آنها دسترسی ندارد. این احتمال وجود دارد که آنها در نهایت از طریق همگام سازی دانلود شوند."
+		"کلیدهای دارای این شناسه‌ها برای رمزنگاری برخی از آیتم‌های شما استفاده می‌شوند، اما برنامه در حال حاضر به آنها دسترسی ندارد. این احتمال وجود دارد که آنها در نهایت از طریق همگام سازی دانلود شوند."
 	],
 	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
+		"به نظر می‌رسد ویرایشگر قدیمی Markdown به دلیل ناسازگاری با یکی از افزونه‌ها از کار افتاده است. توصیه می‌کنیم از ویرایشگر جدید استفاده کنید."
+	],
+	"The license for this server failed to refresh.": [
+		""
+	],
+	"The license key for this Joplin Server Business instance has expired and needs to be renewed.": [
+		""
+	],
+	"The license key for this Joplin Server Business instance has expired or is invalid. Uploading items has been disabled until the license is renewed.": [
 		""
 	],
 	"The master key has been upgraded successfully!": [
 		"کلید اصلی با موفقیت ارتقا یافت!"
 	],
 	"The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
-		"کلیدهای اصلی با این شناسه ها برای رمزگذاری برخی از موارد شما استفاده می‌شوند، اما برنامه در حال حاضر به آنها دسترسی ندارد. این احتمال وجود دارد که آنها در نهایت از طریق همگام سازی دانلود شوند."
+		"کلیدهای اصلی با این شناسه ها برای رمزنگاری برخی از موارد شما استفاده می‌شوند، اما برنامه در حال حاضر به آنها دسترسی ندارد. این احتمال وجود دارد که آنها در نهایت از طریق همگام سازی دانلود شوند."
+	],
+	"The MCP server is disabled. Enable it in Settings → MCP.": [
+		""
+	],
+	"The model identifier to use, for example gpt-4o-mini or claude-3-5-sonnet-latest.": [
+		""
+	],
+	"The model name is missing. Set it in Settings → AI.": [
+		""
 	],
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"یادداشت «%s» با موفقیت به دفترچه «%s» بازگردانده شد."
+	],
+	"The note changed while the request was running; edits were not applied. Try again.": [
+		""
+	],
+	"The note has been converted to Markdown and the original note has been moved to the trash": [
+		"یادداشت‌ها به Markdown تبدیل شدند و یادداشت‌های اصلی به سطل زباله منتقل شدند",
+		"یادداشت به Markdown تبدیل شد و یادداشت اصلی به سطل زباله منتقل شد"
+	],
+	"The note lock state cannot be changed from the command line": [
+		""
 	],
 	"The note was successfully moved to the trash.": [
 		"یادداشت با موفقیت به سطل زباله منتقل شد.",
 		"یادداشت «%s» با موفقیت به دفترچه «%s» بازگردانده شد."
 	],
 	"The notebook and its content was successfully moved to the trash.": [
-		"پوشه یادداشتها و محتوای آن با موفقیت به سطل زباله منتقل شد."
+		"دفترچه و محتوای آن با موفقیت به سطل زباله منتقل شد."
 	],
 	"The notebook could not be saved: %s": [
 		"دفترچه نتوانست ذخیره شود: %s"
@@ -3400,8 +4310,17 @@
 	"The notes have been imported: %s": [
 		"یادداشت‌ها وارد شدند: %s"
 	],
+	"The OpenAI-compatible API endpoint. For example, https://api.openai.com/v1 or http://localhost:11434/v1 for Ollama.": [
+		""
+	],
+	"The OpenAI-compatible provider needs a base URL. Set it in Settings → AI.": [
+		""
+	],
 	"The possible commands are:": [
 		"دستورات ممکن عبارتند از:"
+	],
+	"The provider returned an empty response. Check that the base URL ends with /v1 and that a model is loaded.": [
+		""
 	],
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"گیرنده را نمی توان از لیست حذف کرد. لطفا دوباره تلاش کنید.\n\nجزئیات خطا: «%s»"
@@ -3425,10 +4344,13 @@
 		"هدف برای همگام سازی. هر هدف همگام‌سازی ممکن است پارامترهای دیگری داشته باشد که به‌عنوان «sync.NUM.NAME» نام‌گذاری شده‌اند (همه در زیر مستند شده‌اند)."
 	],
 	"The web client does not support accepting encrypted shared notebooks. Please switch to the desktop or mobile app before accepting the share.\n\nError: \"%s\"": [
-		""
+		"کلاینت تحت وب از پذیرش دفترچه‌های یادداشت مشترکِ رمزنگاری‌شده پشتیبانی نمی‌کند. لطفا پیش از پذیرش اشتراک، به برنامه دسکتاپ یا موبایل تغییر وضعیت دهید.\n\nخطا: «%s»"
 	],
 	"The Web Clipper needs your authorisation to access your data.": [
 		"Web Clipper برای دسترسی به داده های شما به مجوز شما نیاز دارد."
+	],
+	"The web clipper service cannot be enabled in this instance of Joplin.": [
+		"سرویس Web Clipper در این نمونه از Joplin قابل فعال‌سازی نیست."
 	],
 	"The web clipper service is enabled and set to auto-start.": [
 		"سرویس Web Clipper فعال شده و روی شروع خودکار تنظیم شده است."
@@ -3441,9 +4363,6 @@
 	],
 	"Theme": [
 		"پوسته"
-	],
-	"Themes, editor font": [
-		"پوسته، فونت ویرایشگر"
 	],
 	"There are currently no notes. Create one by clicking on the (+) button.": [
 		"در حال حاضر یادداشتی وجود ندارد. با کلیک بر روی دکمه (+) یکی بسازید."
@@ -3470,7 +4389,7 @@
 		"این موارد در دستگاه باقی می‌مانند اما در هدف همگام‌سازی آپلود نمی‌شوند. برای یافتن این موارد، عنوان یا شناسه (که در پرانتز بالا نمایش داده شده است) را جستجو نمایید."
 	],
 	"These plugins enhance the Markdown renderer with additional features. Please note that, while these features might be useful, they are not standard Markdown and thus most of them will only work in Joplin. Additionally, some of them are *incompatible* with the WYSIWYG editor. If you open a note that uses one of these plugins in that editor, you will lose the plugin formatting. It is indicated below which plugins are compatible or not with the WYSIWYG editor.": [
-		"این افزونه ها رندر نشانه‌گذاری را با ویژگی های اضافی تقویت می کنند. لطفاً توجه داشته باشید که اگرچه این ویژگی‌ها ممکن است مفید باشند، اما نشانه‌گذاری استاندارد نیستند و بنابراین اکثر آنها فقط در joplin کار می‌کنند. علاوه بر این، برخی از آنها با ویرایشگر WYSIWYG *ناسازگار* هستند. اگر یادداشتی را باز کنید که از یکی از این افزونه ها در آن ویرایشگر استفاده می کند، قالب بندی افزونه را از دست خواهید داد. در زیر مشخص شده است که کدام افزونه ها با ویرایشگر WYSIWYG سازگار هستند یا خیر."
+		"این افزونه ها رندر Markdown را با ویژگی های اضافی تقویت می کنند. لطفاً توجه داشته باشید که اگرچه این ویژگی‌ها ممکن است مفید باشند، اما Markdown استاندارد نیستند و بنابراین اکثر آنها فقط در joplin کار می‌کنند. علاوه بر این، برخی از آنها با ویرایشگر WYSIWYG *ناسازگار* هستند. اگر یادداشتی را باز کنید که از یکی از این افزونه ها در آن ویرایشگر استفاده می کند، قالب بندی افزونه را از دست خواهید داد. در زیر مشخص شده است که کدام افزونه ها با ویرایشگر WYSIWYG سازگار هستند یا خیر."
 	],
 	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
 		"این به کاربر دیگری اجازه می دهد تا یک دفترچه‌ را با شما به اشتراک بگذارد و سپس می توانید هر دو در آن همکاری کنید. با این حال به شما اجازه نمی‌دهد یک دفترچه را با شخص دیگری به اشتراک بگذارید، مگر اینکه ویژگی «%s» را داشته باشید."
@@ -3488,16 +4407,23 @@
 		"این طراحی ممکن است دارای تغییرات ذخیره نشده باشد."
 	],
 	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
-		""
+		"این ویژگی به طور پیشفرض غیر فعال است، شما می‌توانید با فعال کردن گزینه 'فعال‌ سازی رونویسی دست‌ نویس' آن را فعال کنید."
 	],
 	"This feature is only available on Joplin Cloud and Joplin Server.": [
-		""
+		"این ویژگی فقط بر روی Joplin Server و Joplin Cloud در دسترس است."
 	],
 	"This image type is not supported by the recognition system.": [
-		""
+		"این نوع تصویر توسط سیستم تشخیص پشتیبانی نمی‌شود."
 	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"این یک ابزار پیشرفته برای نشان دادن پیوست‌هایی است که به یادداشت‌های شما پیوند داده شده‌اند. لطفاً هنگام حذف یکی از آنها مراقب باشید زیرا پس از آن قابل بازیابی نیستند."
+	],
+	"This Joplin Server Business instance is only licensed for %d user.": [
+		"",
+		""
+	],
+	"This note could not be decrypted. If it was encrypted prior to a password reset, the contents are no longer recoverable.": [
+		""
 	],
 	"This note could not be deleted: %s": [
 		"این یادداشت حذف نشد: %s",
@@ -3523,14 +4449,32 @@
 	"This note has no history": [
 		"این یادداشت هیچ تاریخچه ای ندارد"
 	],
+	"This note is currently being saved. Please try again in a moment.": [
+		""
+	],
+	"This note is encrypted and cannot be used with AI Chat.": [
+		""
+	],
+	"This note is encrypted. Enter the note lock password to unlock encrypted notes for this session.": [
+		""
+	],
 	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		"این یادداشت در فرمت HTML است. برای ویرایش راحت تر به Markdown تبدیل‌اش کنید."
+	],
+	"This notebook contains Windows-specific files. For maximum compatibility, consider importing the notebook from Windows.": [
 		""
 	],
 	"This plugin doesn't support %s.": [
 		"این افزونه %s را پشتیبانی نمی کند."
 	],
+	"This provider sends data off your device. Turn on \"Allow remote AI providers\" in Settings → AI.": [
+		""
+	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"ویرایشگر Rich Text دارای تعدادی محدودیت است و توصیه می شود قبل از استفاده از آن ها آگاه باشید."
+	],
+	"This section opens in its own screen and is matched by section title.": [
+		""
 	],
 	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
 		"این سرویس به افزونه مرورگر اجازه می دهد تا با joplin  ارتباط برقرار کند. هنگام فعال کردن آن، فایروال شما ممکن است از شما بخواهد که به joplin  اجازه دهید تا به یک پورت خاص در ارتباط باشد."
@@ -3559,17 +4503,23 @@
 	"Title": [
 		"عنوان"
 	],
+	"To access your recovery codes please enter an authentication code or your password.": [
+		""
+	],
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
 		"برای اینکه به joplin اجازه همگام‌سازی با Dropbox را بدهید، مراحل زیر را دنبال نمایید:"
 	],
 	"To allow Joplin to synchronise with Joplin Cloud, please login using this URL:": [
 		"برای اینکه به Joplin اجازه دهید با سرویس ابری Joplin همگام شود، لطفاً با استفاده از این URL وارد شوید:"
 	],
+	"To allow Joplin to synchronise with your account, please follow these steps:": [
+		"برای اینکه به Joplin اجازه همگام‌سازی با حساب خود را بدهید، مراحل زیر را دنبال نمایید:"
+	],
 	"To continue, please enter your master password below.": [
 		"برای ادامه، لطفاً گذرواژه اصلی خود را در زیر وارد نمایید."
 	],
 	"To create a new tag, type the name and press enter.": [
-		""
+		"برای ساخت یک برچسب، نام را بنویسید و کلید enter را فشار دهید."
 	],
 	"To delete a tag, untag the associated notes.": [
 		"برای حذف یک برچسب، این برچسب را از یادداشت های مرتبط پاک کنید."
@@ -3595,9 +4545,6 @@
 	"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`": [
 		"برای تلاش مجدد رمزگشایی این موارد «e2ee decrypt --retry-failed-items» را اجرا کنید"
 	],
-	"To switch the profile, the app is going to close and you will need to restart it.": [
-		"برای تغییر حساب‌کاربری، برنامه بسته می‌شود و باید آن را دوباره راه‌اندازی نماید."
-	],
 	"To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions": [
 		"برای کارکرد صحیح، برنامه به این دسترسی‌ها نیاز دارد. لطفا آن‌ها را در تنظیمات گوشی خود در برنامه‌ها > joplin > دسترسی‌ها فعال کنید"
 	],
@@ -3610,6 +4557,9 @@
 	"to-do: %s": [
 		"فهرست کار: %s"
 	],
+	"Toggle all notebooks": [
+		"تغییر وضعیت نمایش همه دفترچه‌ها"
+	],
 	"Toggle comment": [
 		"تغییر وضعیت نظر"
 	],
@@ -3618,6 +4568,12 @@
 	],
 	"Toggle editor layout": [
 		"تغییر وضعیت چیدمان ویرایشگر"
+	],
+	"Toggle editor plugin": [
+		"تغییر وضعیت افزونه ویرایشگر"
+	],
+	"Toggle editor tab key navigation": [
+		"تغییر وضعیت پیمایش با کلید Tab در ویرایشگر"
 	],
 	"Toggle editors": [
 		"تغییر وضعیت ویرایشگر"
@@ -3637,6 +4593,9 @@
 	"Toggle own sort order": [
 		"تغییر ترتیب مرتب‌سازی شخصی"
 	],
+	"Toggle plugin editor": [
+		"تغییر وضعیت ویرایشگر افزونه"
+	],
 	"Toggle safe mode": [
 		"تغییر وضعیت حالت امن"
 	],
@@ -3646,11 +4605,20 @@
 	"Toggle sort order field": [
 		"تغییر وضعیت فیلد ترتیب مرتب‌سازی"
 	],
+	"Toggle whiteboard / Markdown view": [
+		""
+	],
 	"Token has been copied to the clipboard!": [
 		"توکن در کلیپ‌بورد کپی شد!"
 	],
+	"Toolbar": [
+		"نوار ابزار"
+	],
 	"Tools": [
 		"&ابزار‌ها"
+	],
+	"Tools and services to expose to AI. AI agents can use these tools either via the note chat panel or Joplin's MCP server (if enabled).": [
+		""
 	],
 	"Total Size": [
 		"اندازه مچموع"
@@ -3664,11 +4632,8 @@
 	"Try again": [
 		"تلاش دوباره"
 	],
-	"Try it now": [
-		"هم‌اکنون تلاش کن"
-	],
 	"TYPE": [
-		""
+		"نوع"
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"برای اطلاعات بیشتر درباره یک فرمان، 'help [command]' را تایپ کنید. یا برای اطلاعات کامل استفاده، «help all» را تایپ کنید."
@@ -3679,8 +4644,17 @@
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
 		"عنوان یادداشت یا بخشی از محتوای آن را تایپ کنید تا به آن بروید. یا # به دنبال نام برچسب یا @ و به دنبال آن نام دفترچه را تایپ کنید. یا برای جستجوی دستورات، دستور «:» تایپ نمایید."
 	],
+	"Type a note title to search for it.": [
+		"عنوان یادداشت را برای جستجوی آن تایپ کنید."
+	],
 	"Type: %s.": [
 		"نوع: %s."
+	],
+	"Typography, spellcheck, layout": [
+		""
+	],
+	"Unable to access the recording file.": [
+		""
 	],
 	"Unable to edit resource of type %s": [
 		"امکان ویرایش منبع از نوع %s وجود ندارد"
@@ -3688,8 +4662,14 @@
 	"Unable to share log data. Reason: %s": [
 		"امکان اشتراک‌گذاری داده های لاگ وجود ندارد. دلیل: %s"
 	],
-	"Unchecked": [
+	"Unable to share note data. Reason: %s": [
+		"امکان اشتراک‌گذاری داده‌های یادداشت وجود ندارد. دلیل: %s"
+	],
+	"Unavailable on this platform": [
 		""
+	],
+	"Unchecked": [
+		"بررسی نشده"
 	],
 	"Uncompleted to-dos on top": [
 		"فهرست کار‌های کامل نشده در بالا"
@@ -3712,8 +4692,20 @@
 	"Unknown item type downloaded - please upgrade Joplin to the latest version": [
 		"نوع آیتم ناشناس دانلود شد - لطفاً joplin را به آخرین نسخه ارتقا دهید"
 	],
+	"Unknown platform": [
+		"پلتفرم ناشناخته"
+	],
+	"Unlock": [
+		""
+	],
 	"Unordered list": [
 		"لیست نامرتب"
+	],
+	"Unpublish": [
+		"لغو انتشار"
+	],
+	"Unpublish \"%s\"": [
+		"لغو انتشار «%s»"
 	],
 	"Unpublish note": [
 		"لغو انتشار یادداشت"
@@ -3722,7 +4714,7 @@
 		"لغو اشتراک‌گذاری"
 	],
 	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
-		""
+		"اشتراک دفترچه یادداشت «%s» لغو شود؟ این کار ممکن است باعث شود سایر کاربران دسترسی خود را به این دفترچه یادداشت از دست بدهند."
 	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
 		"اشتراک‌گذاری این دفترچه لغو شود؟ گیرندگان دیگر به محتوای آن دسترسی نخواهند داشت."
@@ -3733,14 +4725,29 @@
 	"Unsupported link or message: %s": [
 		"پیوند یا پیام پشتیبانی نشده: %s"
 	],
+	"Unsupported link or message: %s.\nError: %s": [
+		"پیوند یا پیام پشتیبانی نشده: %s.\nخطا: %s"
+	],
+	"Unsupported public key format. Please check that Joplin is updated to the latest version and try again.": [
+		""
+	],
 	"Untitled": [
 		"بدون عنوان"
+	],
+	"Untitled whiteboard": [
+		""
 	],
 	"Update": [
 		"بروزرسانی"
 	],
 	"Update available": [
 		"به روز رسانی موجود است"
+	],
+	"Update it from Google Play": [
+		""
+	],
+	"Update later": [
+		"به‌روزرسانی بعداً"
 	],
 	"Update profile": [
 		"بروز رسانی حساب‌ کاربری"
@@ -3778,6 +4785,12 @@
 	"Upgrade the sync target to the latest version.": [
 		"هدف همگام‌سازی را به آخرین نسخه ارتقا دهید."
 	],
+	"Upgrade to 100 GB": [
+		""
+	],
+	"Upload photo": [
+		"بارگذاری عکس"
+	],
 	"URL": [
 		"آدرس اینترنتی"
 	],
@@ -3799,20 +4812,23 @@
 	"Use the arrows to move the layout items. Press \"Escape\" to exit.": [
 		"از فلش ها برای جابجایی آیتم های چیدمان استفاده کنید. برای خروج، \"Esc\" را فشار دهید."
 	],
+	"Use the legacy Markdown editor": [
+		"استفاده از ویرایشگر قدیمی Markdown"
+	],
 	"Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.": [
 		"اگر مشکلی در جستجو وجود دارد از این برای بازسازی فهرست جستجو استفاده کنید. بسته به تعداد یادداشت ها ممکن است زمان زیادی طول بکشد."
 	],
 	"Use your biometrics to secure access to your application. You can always set it up later in Settings.": [
 		"از بیومتریک خود برای دسترسی ایمن به برنامه خود استفاده کنید. همواره می‌توانید بعداً آن را در تنظیمات، تنظیم کنید."
 	],
+	"Used": [
+		""
+	],
 	"Used for most text in the markdown editor. If not found, a generic proportional (variable width) font is used.": [
-		"برای اکثر متن ها در ویرایشگر نشانه گذاری استفاده می شود. اگر یافت نشد، از یک فونت متناسب (یا عرض متغیر) عمومی استفاده می شود."
+		"برای اکثر متن ها در ویرایشگر Markdown استفاده می شود. اگر یافت نشد، از یک فونت متناسب (یا عرض متغیر) عمومی استفاده می شود."
 	],
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"در جاهایی استفاده می شود که برای چیدمان متن به صورت خوانا به یک فونت با عرض ثابت نیاز است (مانند جداول، چک باکس ها، کد). اگر پیدا نشد، از فونت تک فضایی (یا عرض ثابت) عمومی استفاده می شود."
-	],
-	"Useful": [
-		""
 	],
 	"User deletions": [
 		"حذف کاربران"
@@ -3822,6 +4838,12 @@
 	],
 	"Valid": [
 		"معتبر"
+	],
+	"Vector search is not available on this platform": [
+		""
+	],
+	"Vector search is unavailable on this platform (sqlite-vec extension not loaded).": [
+		""
 	],
 	"Verify your identity": [
 		"هویت خود را تأیید نمایید"
@@ -3841,11 +4863,17 @@
 	"Viewer": [
 		"بیننده"
 	],
+	"Viewer and Rich Text Editor font family": [
+		"خانواده فونت نمایشگر و ویرایشگر متن غنی"
+	],
+	"Viewer font size": [
+		"اندازه فونت نمایشگر"
+	],
 	"Vim": [
 		"Vim"
 	],
 	"Voice recorder": [
-		""
+		"ضبط کننده صدا"
 	],
 	"Voice typing language files (URL)": [
 		"فایل های زبان تایپ صوتی (URL)"
@@ -3853,8 +4881,14 @@
 	"Voice typing...": [
 		"تایپ صوتی..."
 	],
+	"Voice typing: Glossary": [
+		"تایپ صوتی: واژه‌نامه"
+	],
 	"Waiting for authorisation...": [
 		"در انتظار احراز هویت..."
+	],
+	"Waiting: Notebook %s from %s": [
+		"در انتظار: دفترچه %s از %s"
 	],
 	"Warning": [
 		"هشدار"
@@ -3907,7 +4941,13 @@
 	"When creating a new to-do:": [
 		"زمان ساخت یک فهرست کار جدید:"
 	],
+	"When enabled, plugins and built-in features can use AI models to generate or analyse text.": [
+		""
+	],
 	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		"در صورت فعال ‌سازی، درخواست می‌کند که متن تصاویر موجود در یادداشت با استفاده از سرویس رونویسیِ باکیفیتِ مستقر در سرور، استخراج شود. این قابلیت نیازمند همگام‌سازی با نسخه‌ای از برنامه دسکتاپ است."
+	],
+	"When enabled, tables are rendered as an interactive widget in the editor. Disable this if you prefer to edit tables as raw Markdown.": [
 		""
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
@@ -3938,13 +4978,13 @@
 		"شما به سرویس ابری Joplin وارد شده اید، اکنون می توانید این صفحه را ترک کنید."
 	],
 	"You are now logged into your account.": [
-		""
+		"اکنون دیگر شما وارد حساب کاربری خود شده اید."
 	],
 	"You are now using the latest version of the Markdown editor.": [
-		""
+		"اکنون شما از آخرین نسخه ویرایشگر Markdown استفاده می‌کنید."
 	],
 	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
-		""
+		"شما در حال اجرای نسخه Intel برنامه Joplin روی پردازنده Apple Silicon هستید. برای عملکرد بهتر، نسخه مخصوص Apple Silicon را دانلود کنید."
 	],
 	"You currently have no notebooks.": [
 		"شما در حال حاضر دفترچه‌ای ندارید."
@@ -3952,11 +4992,17 @@
 	"You do not have any installed plugin.": [
 		"شما هیچ افزونه ای نصب نکرده اید."
 	],
+	"You have unsaved tag changes. Discard them?": [
+		""
+	],
 	"You may also type `status` for more information.": [
 		"شما همچنین می‌توانید `status` را برای اطلاعات بیشتر تایپ کنید."
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
-		"می‌توانید از ابزار زیر برای رمزگذاری مجدد داده‌های خود استفاده کنید، برای مثال اگر می‌دانید برخی از یادداشت‌های شما با روش رمزگذاری منسوخ رمزگذاری شده‌اند."
+		"می‌توانید از ابزار زیر برای رمزنگاری مجدد داده‌های خود استفاده کنید، برای مثال اگر می‌دانید برخی از یادداشت‌های شما با روش رمزنگاری منسوخ رمزنگاری شده‌اند."
+	],
+	"You switched notes while the request was running; edits were not applied. Try again.": [
+		""
 	],
 	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
 		"شما نتوانستید به سرویس ابری Joplin متصل شوید. لطفا اعتبارات خود را بررسی نمایید و دوباره امتحان کنید. خطا:"
@@ -3971,6 +5017,12 @@
 		"داده‌های شما دوباره رمزنگاری و همگام‌سازی خواهند شد."
 	],
 	"Your Joplin Cloud credentials are invalid, please login.": [
+		"اطلاعات ورود شما به Joplin Cloud نامعتبر است؛ لطفاً وارد شوید."
+	],
+	"Your master password is used to protect sensitive information. In particular, it is used to encrypt your notes when end-to-end encryption (E2EE) is enabled, or to share and encrypt notes with someone who has E2EE enabled.": [
+		""
+	],
+	"Your note will be sent to the configured AI provider (%s).": [
 		""
 	],
 	"Your password is needed to decrypt some of your data.": [
@@ -3987,5 +5039,8 @@
 	],
 	"Zoom Out": [
 		"کوچک نمایی"
+	],
+	"— now viewing: %s —": [
+		""
 	]
 }
