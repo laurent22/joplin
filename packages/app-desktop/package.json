@@ -1,6 +1,6 @@
 {
   "name": "@joplin/app-desktop",
-  "version": "3.7.13",
+  "version": "3.7.14",
   "description": "Joplin for Desktop",
   "main": "main.bundle.js",
   "private": true,
@@ -227,7 +227,7 @@
     "taboverride": "4.0.3",
     "tesseract.js": "7.0.0",
     "tinymce": "6.8.5",
-    "ts-jest": "29.4.6",
+    "ts-jest": "29.4.11",
     "ts-node": "10.9.2",
     "typescript": "5.9.3",
     "undici": "8.10.0"
@@ -239,7 +239,7 @@
     "@xyflow/react": "12.10.2",
     "fs-extra": "11.3.5",
     "keytar": "7.9.0",
-    "onnxruntime-node": "1.24.3",
+    "onnxruntime-node": "1.25.1",
     "sqlite-vec": "0.1.9",
     "sqlite3": "5.1.6"
   }

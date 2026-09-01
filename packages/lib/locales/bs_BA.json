@@ -2,6 +2,22 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		""
 	],
+	"%d card": [
+		"",
+		"",
+		""
+	],
+	"%d connection": [
+		"",
+		"",
+		""
+	],
+	"%d edit(s) applied, %d could not be placed automatically.": [
+		""
+	],
+	"%d edit(s) applied.": [
+		""
+	],
 	"%d GB": [
 		""
 	],
@@ -14,6 +30,9 @@
 	"%d photo(s) taken": [
 		""
 	],
+	"%d sections found": [
+		""
+	],
 	"%s": [
 		""
 	],
@@ -21,6 +40,9 @@
 		"%s (%s) nije moguće prenijeti: %s"
 	],
 	"%s (%s) would like to share a notebook with you.": [
+		""
+	],
+	"%s (Beta)": [
 		""
 	],
 	"%s (pre-release)": [
@@ -38,10 +60,19 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s added to toolbar": [
+		""
+	],
 	"%s cannot be less than %s": [
 		""
 	],
+	"%s input / %s output tokens used.": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
+	"%s moved up": [
 		""
 	],
 	"%s must be a valid whole number": [
@@ -77,6 +108,12 @@
 	"(%s)": [
 		""
 	],
+	"(empty — double-click to edit)": [
+		""
+	],
+	"(empty)": [
+		""
+	],
 	"(In plugin: %s)": [
 		""
 	],
@@ -95,6 +132,12 @@
 	"(You may disable this prompt in the options)": [
 		""
 	],
+	"+ Group": [
+		""
+	],
+	"+ Text": [
+		""
+	],
 	"- Camera: to allow taking a picture and attaching it to a note.": [
 		"- Kamera: da bi se moglo slikati i slike priložiti u bilješke."
 	],
@@ -103,6 +146,9 @@
 	],
 	"- Storage: to allow attaching files to notes and to enable filesystem synchronisation.": [
 		"- Uređaj za pohranjivanje: da bi se mogli koristiti prilozi i vršiti sinhronizacija."
+	],
+	"14-day free trial. Cancel anytime during the trial and you won't be charged.": [
+		""
 	],
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> može biti \"toggle\" ili \"clear\". Koristite \"toggle\" da promijenite status zadatka iz završenog u nezavršen (ako se radi o običnoj bilješci, ona će biti preinačena u zadatak). Koristite \"clear\" da zadatak konvertujete u običnu bilješku."
@@ -114,6 +160,9 @@
 		""
 	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+		""
+	],
+	"A system-wide keyboard shortcut that toggles the Joplin window. Works even when Joplin is not focused. Example: CommandOrControl+Shift+J. Leave empty to disable.": [
 		""
 	],
 	"A3": [
@@ -155,6 +204,15 @@
 	"Access denied: Please re-enter your password and/or username": [
 		""
 	],
+	"Access your notes from any web browser at %s.": [
+		""
+	],
+	"Accessible": [
+		""
+	],
+	"Accessible mode saves additional information, enabling creation of accessible PDFs. It increases database size by approximately 10-20 KB per page.": [
+		""
+	],
 	"Account": [
 		""
 	],
@@ -167,10 +225,16 @@
 	"Actual Size": [
 		"Početne dimenzije"
 	],
+	"Add a text card": [
+		""
+	],
 	"Add body": [
 		"Dodaj tekst"
 	],
 	"Add column": [
+		""
+	],
+	"Add note to whiteboard...": [
 		""
 	],
 	"Add or remove tags:": [
@@ -185,7 +249,14 @@
 	"Add to dictionary": [
 		""
 	],
+	"Added %d word": [
+		"",
+		"",
+		""
+	],
 	"Added tag: %s": [
+		"",
+		"",
 		""
 	],
 	"Adds tag": [
@@ -200,6 +271,21 @@
 	"Advanced options": [
 		"Napredne opcije"
 	],
+	"AI": [
+		""
+	],
+	"AI Chat": [
+		""
+	],
+	"AI features are disabled. Enable them in Settings → AI.": [
+		""
+	],
+	"AI is running in reduced-quality mode — monthly allowance exceeded. Credits replenish on a rolling 30-day basis, or you can": [
+		""
+	],
+	"AI usage has exceeded your monthly allowance — responses are using a reduced-quality model. Credits replenish on a rolling 30-day basis. Buy more at %s.": [
+		""
+	],
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
 		""
 	],
@@ -209,13 +295,37 @@
 	"All notes": [
 		"Sve bilješke"
 	],
+	"All notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"All potential ports are in use - please report the issue at %s": [
 		""
 	],
 	"All shared folders:": [
 		""
 	],
+	"Allow editing tags on notes": [
+		""
+	],
+	"Allow editing the current note (chat panel only)": [
+		""
+	],
+	"Allow listing tags": [
+		""
+	],
+	"Allow reading images": [
+		""
+	],
+	"Allow remote AI providers": [
+		""
+	],
+	"Allow semantic search of notes": [
+		""
+	],
 	"Allows debugging mobile plugins. See %s for details.": [
+		""
+	],
+	"Already have an account? Log in": [
 		""
 	],
 	"Also displays unset and hidden config variables.": [
@@ -236,9 +346,6 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		""
 	],
-	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
-		""
-	],
 	"An error occurred: %s": [
 		""
 	],
@@ -248,7 +355,13 @@
 	"Android API level: %d": [
 		""
 	],
+	"Anthropic": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
+		""
+	],
+	"API key": [
 		""
 	],
 	"Appearance": [
@@ -278,6 +391,15 @@
 	"Aritim Dark": [
 		"Aritim tamna"
 	],
+	"Arrow at target": [
+		""
+	],
+	"Ask about this note, or request a change…": [
+		""
+	],
+	"Ask about this note, or request changes. Select text in the editor first to scope the request to that selection.": [
+		""
+	],
 	"Associated tags:": [
 		""
 	],
@@ -299,6 +421,9 @@
 	"Attachment download behaviour": [
 		"Način preuzimanja priloga"
 	],
+	"Attention: After resetting your password it will no longer be possible to decrypt any data encrypted with your current password. All encrypted shared notebooks will also be unshared, so please ask the notebook owner to share it again with you.": [
+		""
+	],
 	"Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s": [
 		"Pažnja: ako promijenite ovu lokaciju, vodite računa o tome da prije sinhronizacije kopirate sav sadržaj jer će, u protivnom, sve datoteke biti uklonjene! Za više detalja vidjeti često postavljana pitanja (FAQ): %s"
 	],
@@ -310,6 +435,9 @@
 	],
 	"Auto": [
 		"Automatski"
+	],
+	"Auto lock when switching note": [
+		""
 	],
 	"Auto-add disabled accounts for deletion": [
 		""
@@ -332,10 +460,22 @@
 	"Back": [
 		"Nazad"
 	],
+	"Back to %s": [
+		""
+	],
+	"Base URL": [
+		""
+	],
 	"Basic": [
 		""
 	],
 	"Beta": [
+		""
+	],
+	"Bidirectional": [
+		""
+	],
+	"Billed annually (%s per user per year respectively).": [
 		""
 	],
 	"Block code": [
@@ -355,6 +495,9 @@
 	],
 	"Bulleted List": [
 		"Nabrajanje"
+	],
+	"buy more credits": [
+		""
 	],
 	"by %s": [
 		""
@@ -389,6 +532,9 @@
 	"Cannot access %s": [
 		"Ne mogu pristupiti %s"
 	],
+	"Cannot change a locked note while the session is locked": [
+		""
+	],
 	"Cannot change encrypted item": [
 		"Nije moguće promijeniti šifriranu stavku"
 	],
@@ -419,6 +565,9 @@
 	"Case sensitive": [
 		""
 	],
+	"Certain Markdown formatting is now rendered in the editor by default. For example, **bold** will appear as actual bold text. You can change this behaviour in the \"Editor\" section of Settings.": [
+		""
+	],
 	"Change application layout": [
 		""
 	],
@@ -430,6 +579,9 @@
 	],
 	"Characters excluding spaces": [
 		"Znakova bez razmaka"
+	],
+	"Chat provider": [
+		""
 	],
 	"Check elements to display in the toolbar": [
 		""
@@ -461,10 +613,16 @@
 	"Clear alarm": [
 		"Ukloni zvučnu napomenu"
 	],
+	"Clears the console output.": [
+		""
+	],
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"Pritisnite na \"%s\" da rekonstruišete bilješku. Rezultat će biti kopiran u bilježnicu \"%s\". Trenutna verzija bilješke ostat će netaknuta."
 	],
 	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
+	"Click the eye icon in the toolbar to switch to the Markdown editor and fix the JSON manually.": [
 		""
 	],
 	"Close": [
@@ -539,6 +697,12 @@
 	"Configures the size of scrollbars used in the app.": [
 		""
 	],
+	"Confirm": [
+		"Potvrdi"
+	],
+	"Confirm credentials": [
+		""
+	],
 	"Conflicted: %d": [
 		"Sukobi: %d"
 	],
@@ -552,6 +716,12 @@
 		""
 	],
 	"Continue": [
+		""
+	],
+	"Continue?": [
+		""
+	],
+	"Convert this card into a Joplin note": [
 		""
 	],
 	"Convert to note": [
@@ -586,6 +756,9 @@
 	],
 	"Create a notebook": [
 		"Kreiraj bilježnicu"
+	],
+	"Create accessible document": [
+		""
 	],
 	"Created": [
 		"Kreirano"
@@ -674,6 +847,9 @@
 	"Default title to use for documents created by the scanner.": [
 		""
 	],
+	"Default view / edit state": [
+		""
+	],
 	"Default: %s": [
 		"Prekonfigurisano: %s"
 	],
@@ -681,9 +857,6 @@
 		"Izbriši"
 	],
 	"Delete local data and re-download from sync target": [
-		""
-	],
-	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
 		""
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
@@ -785,13 +958,16 @@
 	"Do not ask for confirmation.": [
 		"Ne pitaj za potvrdu."
 	],
-	"Do you find the Joplin web app useful?": [
-		""
-	],
 	"Document scanner: Title template": [
 		""
 	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't have an account yet?": [
+		""
+	],
+	"Don't show again": [
 		""
 	],
 	"Don't show this message again": [
@@ -800,8 +976,17 @@
 	"Done": [
 		""
 	],
+	"Double tap to open this attachment. Long press to expand or collapse details.": [
+		""
+	],
 	"Download and install the relevant extension for your browser:": [
 		"Preuzmite i instalirajte odgovarajući dodatak za Vaš internet preglednik:"
+	],
+	"Download it from GitHub Releases": [
+		""
+	],
+	"Download it from the Joplin Android repository": [
+		""
 	],
 	"Downloaded": [
 		"Preuzeto"
@@ -817,6 +1002,9 @@
 	],
 	"Dracula": [
 		"Dracula"
+	],
+	"Drag to move group": [
+		""
 	],
 	"Draw picture": [
 		""
@@ -884,6 +1072,9 @@
 	"Emails": [
 		""
 	],
+	"Embedding index": [
+		""
+	],
 	"Empty trash": [
 		""
 	],
@@ -911,6 +1102,9 @@
 	"Enable encryption": [
 		"Uključi šifriranje"
 	],
+	"Enable external embeds (e.g. YouTube Videos)": [
+		""
+	],
 	"Enable file:// URLs for images and videos": [
 		""
 	],
@@ -931,9 +1125,6 @@
 	],
 	"Enable note history": [
 		"Aktiviraj historiju bilješki"
-	],
-	"Enable optical character recognition (OCR)": [
-		""
 	],
 	"Enable PDF viewer": [
 		"Omogući PDF"
@@ -965,11 +1156,17 @@
 	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
 		""
 	],
+	"Enables the default edit operations for notes with an open AI chat panel. When disabled, the chat panel can still read the open note. Does not apply to MCP.": [
+		""
+	],
 	"Encrypted": [
 		"Šifrirano"
 	],
 	"Encrypted items cannot be modified": [
 		"Šifrirane stavke ne mogu se mijenjati"
+	],
+	"Encrypting a note requires a note lock password, which has not yet been set. Set it up now?": [
+		""
 	],
 	"Encryption": [
 		"Šifriranje"
@@ -979,6 +1176,9 @@
 	],
 	"Encryption is: %s": [
 		"Šifriranje je: %s"
+	],
+	"Encryption was setup previously, but all keys have been disabled. To continue, please use the desktop app to enable a key.": [
+		""
 	],
 	"Ends voice typing": [
 		""
@@ -991,6 +1191,9 @@
 	],
 	"Enter notebook title": [
 		"Unesite naziv za bilježnicu"
+	],
+	"Enter the note lock password to unlock encrypted notes for this session.": [
+		""
 	],
 	"Entering selection mode": [
 		""
@@ -1006,6 +1209,9 @@
 	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"Greška. Provjerite jesu li URL, korisničko ime, lozinka itd. tačni i da li je odredište za sinhronizaciju dostupno. Izvještaj o greški:"
+	],
+	"Error. The AI provider test failed:": [
+		""
 	],
 	"Errors only": [
 		"Samo greške"
@@ -1043,6 +1249,9 @@
 	"Exports only the given notebook.": [
 		"Prenosi samo kopiju date bilježnice."
 	],
+	"Exposes Joplin notes to external AI applications (Claude Desktop, Cursor, etc.) via the Model Context Protocol. Requires the Web Clipper service to be running. Connected AI tools can read your note content; any text they retrieve may be sent to the external LLM provider those tools use.": [
+		""
+	],
 	"Fail-safe": [
 		"Sigurnosni mehanizam"
 	],
@@ -1055,13 +1264,13 @@
 	"Failed to connect to your account. Please try again.": [
 		""
 	],
+	"Failed to create accessible document: %s": [
+		""
+	],
 	"Fatal error:": [
 		"Kritična greška:"
 	],
 	"Feature flags": [
-		""
-	],
-	"Feedback": [
 		""
 	],
 	"Fetched items: %d/%d.": [
@@ -1076,6 +1285,9 @@
 	"File system": [
 		"Datotečni sistem"
 	],
+	"Filtered by section [%s]": [
+		""
+	],
 	"Finishes recording": [
 		""
 	],
@@ -1087,6 +1299,9 @@
 	],
 	"Fixing search index...": [
 		"Popravljam indeks za pretragu..."
+	],
+	"Flip": [
+		""
 	],
 	"Focus": [
 		"Fokus"
@@ -1139,7 +1354,7 @@
 	"General": [
 		"Opće"
 	],
-	"Geolocation, spellcheck, editor toolbar, image resize": [
+	"Geolocation, image resize": [
 		""
 	],
 	"Get a quote": [
@@ -1154,6 +1369,9 @@
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Prima ili podešava konfiguracijske vrijednosti. Ako [value] nije navedena, tada će biti prikazana vrijednost [name]. Ako ni [name] ni [value] nisu precizirane, prikazat će se trenutna konfiguracija."
 	],
+	"Global shortcut to show/hide Joplin": [
+		""
+	],
 	"Glossary:": [
 		""
 	],
@@ -1163,14 +1381,23 @@
 	"Go back": [
 		""
 	],
+	"Go to end of note": [
+		""
+	],
 	"Go to line": [
 		""
 	],
 	"Go to source URL": [
 		"Idi do izvornog URL-a"
 	],
+	"Go to start of note": [
+		""
+	],
 	"Goto Anything...": [
 		"Pronađite bilo šta..."
+	],
+	"Group": [
+		""
 	],
 	"Have you authorised the application login in the above URL?": [
 		""
@@ -1223,6 +1450,9 @@
 	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
 		""
 	],
+	"If enabled, opening an HTML note displays a prompt to convert the note to Markdown.": [
+		""
+	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		""
 	],
@@ -1238,7 +1468,10 @@
 	"Import": [
 		"Unesi"
 	],
-	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
+	"Import a note from a text file (%s). The note will be imported into notebook '%s'.": [
+		""
+	],
+	"Import failed. Make sure a %s file was selected.\nDetails: %s": [
 		""
 	],
 	"Import from JEX": [
@@ -1265,7 +1498,19 @@
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Da biste to učinili, svi Vaši podaci moraju biti šifrirani i sinhronizovani, pa je najbolje da to učinite preko noći.\n\nDa započnete, slijedite sljedeće upute:\n\n1. Sinhronizujte sve svoje uređaje.\n2. Pritisnite \"%s\".\n3. Sačekajte dok se proces ne okonča. Tokom rada, nemojte uređivati bilo koju bilješku na nekom od Vaših uređaja kako biste izbjegli konflikte.\n4. Kad je sinhronizacija završena na ovom uređaju, sinhronizujte i ostale uređaje.\n\nVažno: ovaj proces trebate pokrenuti samo JEDNOM i na samo jednom uređaju."
 	],
+	"In order to synchronise, Please upgrade your application to version %s": [
+		""
+	],
 	"In order to synchronise, please upgrade your application to version %s+": [
+		""
+	],
+	"In order to synchronise, Please upgrade your application to version %s. Joplin could not check update information.": [
+		""
+	],
+	"In order to synchronise, Please upgrade your application to version %s: %s": [
+		""
+	],
+	"In order to synchronise, Please upgrade your application to version %s: %s or update it using your package manager": [
 		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
@@ -1292,6 +1537,18 @@
 	"Indent more": [
 		""
 	],
+	"Index notes for AI search": [
+		""
+	],
+	"Indexed notes:": [
+		""
+	],
+	"Indexer:": [
+		""
+	],
+	"Indexing…": [
+		""
+	],
 	"Info": [
 		""
 	],
@@ -1301,8 +1558,17 @@
 	"Insert": [
 		""
 	],
+	"Insert column right": [
+		""
+	],
 	"Insert Hyperlink": [
 		"Unesi poveznicu"
+	],
+	"Insert row above": [
+		""
+	],
+	"Insert row below": [
+		""
 	],
 	"Install": [
 		"Instalirati"
@@ -1325,11 +1591,17 @@
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"Pogrešna vrijednost: \"%s\". Moguće su sljedeće vrijednosti: %s"
 	],
+	"Invalid password. Please try again. If you have forgotten your password you will need to reset it.": [
+		""
+	],
 	"Italic": [
 		"Kurziv"
 	],
 	"Item \"%s\" could not be downloaded: %s": [
 		"Stavka \"%s\" nije mogla biti preuzeta: %s"
+	],
+	"Item upload will be disabled in %s.": [
+		""
 	],
 	"Items": [
 		""
@@ -1346,6 +1618,9 @@
 	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
 		""
 	],
+	"Joplin Cloud AI requires Joplin Cloud sync. Pick a different provider or restore Joplin Cloud sync.": [
+		""
+	],
 	"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. What would you like to do?": [
 		""
 	],
@@ -1360,6 +1635,9 @@
 	],
 	"Joplin Forum": [
 		"Joplin forum"
+	],
+	"Joplin needs your permission to access your %s account and to synchronise data with it.": [
+		""
 	],
 	"Joplin Server URL": [
 		""
@@ -1448,6 +1726,12 @@
 	"Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at \"%s\" and resume the operation.": [
 		"Zaključavanje datoteke već je aktivno. Ako ste sigurni da sinhronizovanje nije u toku, možete izbrisati datoteku za zaključavanje u \"%s\" i nastaviti s radom."
 	],
+	"Locked notes are encrypted on this device and can only be read after entering your note lock password. The password is required again after locking or restarting Joplin.": [
+		""
+	],
+	"Locked notes cannot be opened in an external editor": [
+		""
+	],
 	"Log": [
 		"Radni dnevnik"
 	],
@@ -1468,6 +1752,9 @@
 	],
 	"Make a donation": [
 		"Donirajte"
+	],
+	"Manage this server's license from the [admin dashboard](%s).": [
+		""
 	],
 	"Manage your plugins": [
 		""
@@ -1511,6 +1798,9 @@
 	"Max Item Size": [
 		""
 	],
+	"MCP requires the Web Clipper service. Enable it in Settings → Web Clipper.": [
+		""
+	],
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
@@ -1529,6 +1819,12 @@
 	"Mobile data - auto-sync disabled": [
 		"Mobilna mreza - auto-sinhronacija iskljucena"
 	],
+	"Model": [
+		""
+	],
+	"Model:": [
+		""
+	],
 	"More information": [
 		"Više informacija"
 	],
@@ -1536,6 +1832,12 @@
 		"Više od jednog rezultata odgovara \"%s\". Molimo suzite obim pretrage."
 	],
 	"Most plugins have source code available for review on the plugin website.": [
+		""
+	],
+	"Move column left": [
+		""
+	],
+	"Move column right": [
 		""
 	],
 	"Move left": [
@@ -1571,6 +1873,9 @@
 	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
 		"Kreirat će se nova bilježnica \"%s\" i u nju će biti unesena datoteka \"%s\""
 	],
+	"New text card": [
+		""
+	],
 	"New to-do": [
 		"Novi zadatak"
 	],
@@ -1600,6 +1905,21 @@
 	],
 	"No active notebook.": [
 		"Nema aktivne bilježnice."
+	],
+	"No AI usage recorded yet.": [
+		""
+	],
+	"No arrow": [
+		""
+	],
+	"No attachments match your search.": [
+		""
+	],
+	"No colour": [
+		""
+	],
+	"No embedding model is installed. It is downloaded automatically on first use — check Settings → AI for progress.": [
+		""
 	],
 	"No new invitations": [
 		""
@@ -1631,11 +1951,17 @@
 	"No URL for SAML authentication set.": [
 		""
 	],
+	"No valid notebook is available. Please create or select a notebook and try again.": [
+		""
+	],
 	"None": [
 		""
 	],
 	"Nord": [
 		"Nord"
+	],
+	"Normal": [
+		""
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Nije ovjereno sa %s. Molimo unesite podatke koji nedostaju."
@@ -1649,7 +1975,10 @@
 	"Not generated": [
 		""
 	],
-	"Not useful": [
+	"Not set": [
+		""
+	],
+	"Not Used": [
 		""
 	],
 	"note": [
@@ -1667,11 +1996,17 @@
 	"Note History": [
 		"Historija bilješke"
 	],
+	"Note indexing is turned off in Settings → AI.": [
+		""
+	],
 	"Note is not a to-do: \"%s\"": [
 		"Bilješka nije zadatak: \"%s\""
 	],
 	"Note list growth factor": [
 		"Faktor rasta popisa bilješki"
+	],
+	"Note lock password, auto lock": [
+		""
 	],
 	"Note properties": [
 		"Svojstva bilješke"
@@ -1703,7 +2038,22 @@
 	"Numbered List": [
 		"Numerisano nabrajanje"
 	],
+	"Obsidian Vault": [
+		""
+	],
+	"OCR is not complete. Please wait for OCR to finish before creating an accessible document.": [
+		""
+	],
+	"OCR needs to run to generate an accessible document. This may take a moment. Would you like to continue?": [
+		""
+	],
 	"OCR: Clear cache and re-download language data files": [
+		""
+	],
+	"OCR: Enable optical character recognition": [
+		""
+	],
+	"OCR: PDF processing mode": [
 		""
 	],
 	"OK": [
@@ -1727,6 +2077,9 @@
 	"OneDrive Login": [
 		"OneDrive prijava"
 	],
+	"Only do this if you've forgotten your current password. A new password will be created, and any notes locked with the old one will become permanently unreadable.": [
+		""
+	],
 	"Open %s": [
 		"Otvori %s"
 	],
@@ -1747,6 +2100,9 @@
 	],
 	"Open...": [
 		"Otvori..."
+	],
+	"OpenAI-compatible": [
+		""
 	],
 	"Opening section %s": [
 		""
@@ -1808,8 +2164,14 @@
 	"Please confirm that you would like to re-encrypt your complete database.": [
 		"Molimo potvrdite da želite ponoviti šifriranje čitave Vaše baze podataka."
 	],
+	"Please disable users from the [admin dashboard](%s) to bring this server under the limit.": [
+		""
+	],
 	"Please enter your password in the master key list below before upgrading the key.": [
 		"Unesite svoju lozinku u popis glavnog ključa naveden ispod prije nego što izvršite nadogradnju ključa."
+	],
+	"Please make sure you remember your password. It cannot be recovered if lost, and any data encrypted with it will become inaccessible.": [
+		""
 	],
 	"Please note that if it is a large notebook, it may take a few minutes for all the notes to show up on the recipient's device.": [
 		""
@@ -1837,6 +2199,9 @@
 	],
 	"Please specify the notebook where the notes should be imported to.": [
 		"Navedite bilježnicu u koju će se bilješke unijeti."
+	],
+	"Please update the license key from the [admin dashboard](%s).": [
+		""
 	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"Pričekajte dok svi prilozi ne budu preuzeti i dešifrovani. Također možete otvoriti %s da uredite bilješku."
@@ -1913,6 +2278,9 @@
 	"Pro": [
 		""
 	],
+	"Pro 100 GB": [
+		""
+	],
 	"Process failed payment subscriptions": [
 		""
 	],
@@ -1958,16 +2326,25 @@
 	"Quit": [
 		"Zatvori"
 	],
+	"Quit anyway": [
+		""
+	],
 	"Re-download model": [
 		""
 	],
 	"Re-upload local data to sync target": [
 		""
 	],
+	"Read all tags": [
+		""
+	],
 	"Read more about it": [
 		"Saznajte vise"
 	],
 	"Read time: %s min": [
+		""
+	],
+	"Reading this note requires the note lock password, which has not been set up on this device yet.": [
 		""
 	],
 	"Recipient has accepted the invitation": [
@@ -2054,6 +2431,15 @@
 	"Report fraudulent plugin": [
 		""
 	],
+	"Required to use cloud-hosted AI models, including Joplin Cloud AI. When disabled, only on-device providers can be used.": [
+		""
+	],
+	"Reset": [
+		""
+	],
+	"Reset AI token usage counters?": [
+		""
+	],
 	"Resize large images:": [
 		""
 	],
@@ -2085,6 +2471,9 @@
 		""
 	],
 	"Rich Text editor. Press Escape then Tab to escape focus.": [
+		""
+	],
+	"Run OCR": [
 		""
 	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
@@ -2165,6 +2554,12 @@
 	"Self-hosted": [
 		""
 	],
+	"Self-hosted instances of the Joplin web app cannot sync with Joplin Cloud. Open the official web app?": [
+		""
+	],
+	"Send": [
+		""
+	],
 	"Server is already running on port %d": [
 		"Server je već pokrenut preko porta %d"
 	],
@@ -2210,13 +2605,22 @@
 	"Show all": [
 		"Prikaži sve"
 	],
+	"Show checkbox completion chart in note list": [
+		""
+	],
 	"Show completed to-dos": [
 		"Prikaži obavljene zadatke"
+	],
+	"Show Joplin icon for note links": [
+		""
 	],
 	"Show tray icon": [
 		"Prikaži sličicu na sistemskoj traci (tray)"
 	],
 	"Show/hide the sidebar": [
+		""
+	],
+	"Showing all matching settings": [
 		""
 	],
 	"Shrink large images before adding them to notes.": [
@@ -2233,6 +2637,12 @@
 	],
 	"Size": [
 		"Veličina"
+	],
+	"Size (largest first)": [
+		""
+	],
+	"Size (smallest first)": [
+		""
 	],
 	"Skip this version": [
 		""
@@ -2261,10 +2671,16 @@
 	"Some items cannot be synchronised.": [
 		"Neke stavke nije moguće sinhronizovati."
 	],
+	"Something went wrong.": [
+		""
+	],
 	"Sort \"%s\" in ascending order": [
 		""
 	],
 	"Sort \"%s\" in descending order": [
+		""
+	],
+	"Sort by size": [
 		""
 	],
 	"Sort notebooks by": [
@@ -2302,6 +2718,9 @@
 	],
 	"Start application minimised in the tray icon": [
 		"Prilikom pokretanja, aplikaciju minimiziraj u sličicu na sistemskoj traci (tray)"
+	],
+	"Start free trial": [
+		""
 	],
 	"Start recording": [
 		""
@@ -2366,6 +2785,9 @@
 	"Success! Synchronisation configuration appears to be correct.": [
 		"Uspjelo! Konfiguracija sinhronizacije izgleda ispravna."
 	],
+	"Success! The AI provider responded:": [
+		""
+	],
 	"Suggestions": [
 		""
 	],
@@ -2376,6 +2798,9 @@
 		""
 	],
 	"Swap line up": [
+		""
+	],
+	"Swap source and target": [
 		""
 	],
 	"Switch between note and to-do type": [
@@ -2392,9 +2817,6 @@
 	],
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Prelazi u [notebook] – sve dalje radnje vršit će se u ovoj bilježnici."
-	],
-	"Sync": [
-		""
 	],
 	"Sync as many devices as you want": [
 		""
@@ -2413,6 +2835,9 @@
 	],
 	"Sync to provided target (defaults to sync.target config value)": [
 		"Sinhronizuj sa datim odredištem (prekonfigurisano sync.target config value)"
+	],
+	"Sync your notes with Joplin Cloud to access them on all your devices. Other sync options are also available.": [
+		""
 	],
 	"Synchronisation": [
 		"Sinhronizacija"
@@ -2441,6 +2866,9 @@
 	"Synchronises with remote storage.": [
 		"Sinhronizuje sa vanjskim medijem za pohranu podataka."
 	],
+	"Synchronising remaining changes, please wait...": [
+		""
+	],
 	"Tab indents": [
 		""
 	],
@@ -2455,6 +2883,9 @@
 	],
 	"Tags": [
 		"Oznake"
+	],
+	"Tags cannot be changed for locked notes while the session is locked": [
+		""
 	],
 	"Take photo": [
 		"Uslikaj"
@@ -2471,10 +2902,10 @@
 	"Text editor command": [
 		"Komanda za uređivača teksta"
 	],
-	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		""
 	],
-	"The active profile cannot be deleted. Switch to a different profile and try again.": [
+	"The API key is missing. Set it in Settings → AI.": [
 		""
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
@@ -2498,13 +2929,16 @@
 	"The command \"%s\" is only available in GUI mode": [
 		"Komanda \"%s\" dostupna je samo u grafičkom okruženju"
 	],
+	"The default admin password has not been changed! [Change it now](%s)": [
+		""
+	],
 	"The default admin password is insecure and has not been changed! [Change it now](%s)": [
 		""
 	],
 	"The default encryption method has been changed to a more secure one and it is recommended that you apply it to your data.": [
 		"Osnovni metod šifriranja promijenjen je u novi, sigurniji i preporučuje se da ga primijenite na svoje podatke."
 	],
-	"The default profile cannot be deleted": [
+	"The default profile has been reset.": [
 		""
 	],
 	"The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.": [
@@ -2530,14 +2964,38 @@
 	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
 		""
 	],
+	"The license for this server failed to refresh.": [
+		""
+	],
+	"The license key for this Joplin Server Business instance has expired and needs to be renewed.": [
+		""
+	],
+	"The license key for this Joplin Server Business instance has expired or is invalid. Uploading items has been disabled until the license is renewed.": [
+		""
+	],
 	"The master key has been upgraded successfully!": [
 		"Glavni ključ uspješno je nadograđen!"
 	],
 	"The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
 		"Glavni ključevi sa ovim identifikacijskim podacima korišteni su za šifriranje nekih stavki, ali su trenutno nedostupni. Vjerovatno će biti preuzeti nakon što se izvrši sinhronizacija."
 	],
+	"The MCP server is disabled. Enable it in Settings → MCP.": [
+		""
+	],
+	"The model identifier to use, for example gpt-4o-mini or claude-3-5-sonnet-latest.": [
+		""
+	],
+	"The model name is missing. Set it in Settings → AI.": [
+		""
+	],
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"Bilješka \"%s\" uspješno je rekonstruisana i pohranjena u bilježnicu \"%s\"."
+	],
+	"The note changed while the request was running; edits were not applied. Try again.": [
+		""
+	],
+	"The note lock state cannot be changed from the command line": [
+		""
 	],
 	"The notebook could not be saved: %s": [
 		"Bilježnicu nije bilo moguće pohraniti: %s"
@@ -2545,8 +3003,17 @@
 	"The notes have been imported: %s": [
 		"Bilješke su unesene: %s"
 	],
+	"The OpenAI-compatible API endpoint. For example, https://api.openai.com/v1 or http://localhost:11434/v1 for Ollama.": [
+		""
+	],
+	"The OpenAI-compatible provider needs a base URL. Set it in Settings → AI.": [
+		""
+	],
 	"The possible commands are:": [
 		"Moguće komande glase:"
+	],
+	"The provider returned an empty response. Check that the base URL ends with /v1 and that a model is loaded.": [
+		""
 	],
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		""
@@ -2623,6 +3090,9 @@
 	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
 		""
 	],
+	"This feature is only available for PDF files.": [
+		""
+	],
 	"This feature is only available on Joplin Cloud and Joplin Server.": [
 		""
 	],
@@ -2631,6 +3101,14 @@
 	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Ovo je napredna alatka za prikazivanje priloga koji se nalaze u Vašim bilješkama. Molimo budite oprezni prilikom brisanja priloga, jer se oni više neće moći rekonstruisati."
+	],
+	"This Joplin Server Business instance is only licensed for %d user.": [
+		"",
+		"",
+		""
+	],
+	"This note could not be decrypted. If it was encrypted prior to a password reset, the contents are no longer recoverable.": [
+		""
 	],
 	"This note does not have geolocation information.": [
 		"Ova bilješka ne sadržava informacije o geografskoj lokaciji."
@@ -2644,14 +3122,32 @@
 	"This note has no history": [
 		"Bilješka nema ranijih verzija"
 	],
+	"This note is currently being saved. Please try again in a moment.": [
+		""
+	],
+	"This note is encrypted and cannot be used with AI Chat.": [
+		""
+	],
+	"This note is encrypted. Enter the note lock password to unlock encrypted notes for this session.": [
+		""
+	],
 	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
+	],
+	"This notebook contains Windows-specific files. For maximum compatibility, consider importing the notebook from Windows.": [
 		""
 	],
 	"This plugin doesn't support %s.": [
 		""
 	],
+	"This provider sends data off your device. Turn on \"Allow remote AI providers\" in Settings → AI.": [
+		""
+	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"Ovaj Text editor ima par ogranicenja i preporucujemo da budete upoznati sa njima prije koristenja."
+	],
+	"This section opens in its own screen and is matched by section title.": [
+		""
 	],
 	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
 		"Ovaj servis dopušta dodatku za internet preglednik da komunicira sa Joplinom. Kada ga aktivirate, Vaš firewall može od Vas tražiti dopuštenje da bi Joplin mogao slušati specificirani port."
@@ -2676,6 +3172,9 @@
 	],
 	"title": [
 		"naziv"
+	],
+	"To access your recovery codes please enter an authentication code or your password.": [
+		""
 	],
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
 		"Slijedite ove korake da dopustite Joplinu sinhronizovanje sa Dropboxom:"
@@ -2707,7 +3206,7 @@
 	"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`": [
 		"Da ponovo pokušate dešifrovati ove stavke, pokrenite komandu `e2ee decrypt --retry-failed-items`"
 	],
-	"To switch the profile, the app is going to close and you will need to restart it.": [
+	"To switch the profile, the app is going to restart.": [
 		""
 	],
 	"To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions": [
@@ -2725,11 +3224,17 @@
 	"Toggle sidebar": [
 		"Bočni meni"
 	],
+	"Toggle whiteboard / Markdown view": [
+		""
+	],
 	"Token has been copied to the clipboard!": [
 		"Token je kopiran u spremnik!"
 	],
 	"Tools": [
 		"Alati"
+	],
+	"Tools and services to expose to AI. AI agents can use these tools either via the note chat panel or Joplin's MCP server (if enabled).": [
+		""
 	],
 	"Total: %d/%d": [
 		"Ukupno: %d/%d"
@@ -2752,6 +3257,12 @@
 	"Type: %s.": [
 		"Vrsta: %s."
 	],
+	"Typography, spellcheck, layout": [
+		""
+	],
+	"Unable to access the recording file.": [
+		""
+	],
 	"Unable to edit resource of type %s": [
 		""
 	],
@@ -2759,6 +3270,9 @@
 		""
 	],
 	"Unable to share note data. Reason: %s": [
+		""
+	],
+	"Unavailable on this platform": [
 		""
 	],
 	"Unchecked": [
@@ -2779,6 +3293,12 @@
 	"Unknown item type downloaded - please upgrade Joplin to the latest version": [
 		""
 	],
+	"Unlock": [
+		""
+	],
+	"Unpublishes a note from Joplin Server or Joplin Cloud": [
+		""
+	],
 	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
 		""
 	],
@@ -2791,8 +3311,17 @@
 	"Unsupported link or message: %s": [
 		"Nepodržana veza ili poruka: %s"
 	],
+	"Unsupported public key format. Please check that Joplin is updated to the latest version and try again.": [
+		""
+	],
 	"Untitled": [
 		"Bez naziva"
+	],
+	"Untitled whiteboard": [
+		""
+	],
+	"Update it from Google Play": [
+		""
 	],
 	"Updated": [
 		"Ažurirano"
@@ -2816,6 +3345,9 @@
 		"Nadogradi"
 	],
 	"Upgrade the sync target to the latest version.": [
+		""
+	],
+	"Upgrade to 100 GB": [
 		""
 	],
 	"URL": [
@@ -2845,19 +3377,25 @@
 	"Use your biometrics to secure access to your application. You can always set it up later in Settings.": [
 		""
 	],
+	"Used": [
+		""
+	],
 	"Used for most text in the markdown editor. If not found, a generic proportional (variable width) font is used.": [
 		""
 	],
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		""
 	],
-	"Useful": [
-		""
-	],
 	"User deletions": [
 		""
 	],
 	"Users": [
+		""
+	],
+	"Vector search is not available on this platform": [
+		""
+	],
+	"Vector search is unavailable on this platform (sqlite-vec extension not loaded).": [
 		""
 	],
 	"Verify your identity": [
@@ -2932,7 +3470,13 @@
 	"When creating a new to-do:": [
 		"Prilikom kreiranja novog zadatka:"
 	],
+	"When enabled, plugins and built-in features can use AI models to generate or analyse text.": [
+		""
+	],
 	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		""
+	],
+	"When enabled, tables are rendered as an interactive widget in the editor. Disable this if you prefer to edit tables as raw Markdown.": [
 		""
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
@@ -2968,14 +3512,23 @@
 	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		""
 	],
+	"You can synchronise your notes using Joplin Cloud, which also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
+		""
+	],
 	"You currently have no notebooks.": [
 		"Trenutno nema nijedna bilježnica."
 	],
 	"You do not have any installed plugin.": [
 		"Nemate instaliranih dodataka."
 	],
+	"You have unsaved tag changes. Discard them?": [
+		""
+	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"Možete koristiti alatku niže da ponovo šifrirate svoje podatke, npr. ako znate da su neke od Vaših bilješki šifrirane koristeći zastarjeli metod."
+	],
+	"You switched notes while the request was running; edits were not applied. Try again.": [
+		""
 	],
 	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
 		""
@@ -2992,6 +3545,12 @@
 	"Your Joplin Cloud credentials are invalid, please login.": [
 		""
 	],
+	"Your master password is used to protect sensitive information. In particular, it is used to encrypt your notes when end-to-end encryption (E2EE) is enabled, or to share and encrypt notes with someone who has E2EE enabled.": [
+		""
+	],
+	"Your note will be sent to the configured AI provider (%s).": [
+		""
+	],
 	"Your password is needed to decrypt some of your data.": [
 		""
 	],
@@ -3006,5 +3565,8 @@
 	],
 	"Zoom Out": [
 		"Smanji"
+	],
+	"— now viewing: %s —": [
+		""
 	]
 }

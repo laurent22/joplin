@@ -10,7 +10,7 @@
   },
   "engines": {
     "node": ">=22.19",
-    "yarn": "4.12.0"
+    "yarn": "4.14.1"
   },
   "scripts": {
     "buildApiDoc": "yarn workspace joplin start apidoc ../../readme/api/references/rest_api.md",
@@ -77,8 +77,8 @@
     "@seiyab/eslint-plugin-react-hooks": "4.5.1-beta.0",
     "@stylistic/eslint-plugin": "5.10.0",
     "@types/jest": "29.5.14",
-    "@typescript-eslint/eslint-plugin": "8.60.0",
-    "@typescript-eslint/parser": "8.60.0",
+    "@typescript-eslint/eslint-plugin": "8.60.1",
+    "@typescript-eslint/parser": "8.60.1",
     "cspell": "5.21.2",
     "eslint": "9.39.4",
     "eslint-interactive": "14.0.0",
@@ -112,9 +112,9 @@
     "@codemirror/language": "6.12.3",
     "@codemirror/lint": "6.9.5",
     "@codemirror/autocomplete": "6.20.1",
-    "onnxruntime-node": "1.24.3",
+    "onnxruntime-node": "1.25.1",
     "eslint": "patch:eslint@9.39.4#./.yarn/patches/eslint-npm-9.39.4-81a84865c0.patch",
-    "yauzl": "3.3.1",
+    "yauzl": "3.3.2",
     "react-native-camera@4.2.1": "patch:react-native-camera@npm%3A4.2.1#./.yarn/patches/react-native-camera-npm-4.2.1-24b2600a7e.patch",
     "app-builder-lib@24.4.0": "patch:app-builder-lib@npm%3A24.4.0#./.yarn/patches/app-builder-lib-npm-24.4.0-05322ff057.patch",
     "nanoid": "patch:nanoid@npm%3A3.3.7#./.yarn/patches/nanoid-npm-3.3.7-98824ba130.patch",
