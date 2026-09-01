@@ -227,7 +227,7 @@
     "taboverride": "4.0.3",
     "tesseract.js": "7.0.0",
     "tinymce": "6.8.5",
-    "ts-jest": "29.4.6",
+    "ts-jest": "29.4.11",
     "ts-node": "10.9.2",
     "typescript": "5.9.3"
   },
