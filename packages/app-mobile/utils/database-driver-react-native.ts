@@ -8,20 +8,20 @@ import { join } from 'path';
 // cspell:ignore NSURLI
 
 const getDatabaseDirectory = async () => {
+	let databaseDirectory;
 	if (Platform.OS === 'ios') {
-		const databaseDirectory = `${RNFS.LibraryDirectoryPath}/LocalDatabase/`;
-
-		if (!await shim.fsDriver().exists(databaseDirectory)) {
-			// For compatibility with react-native-sqlite-storage, exclude the database
-			// directory from iCloud backups:
-			await RNFS.mkdir(databaseDirectory, { NSURLIsExcludedFromBackupKey: true });
-		}
-		return databaseDirectory;
+		databaseDirectory = `${RNFS.LibraryDirectoryPath}/LocalDatabase/`;
 	} else if (Platform.OS === 'android') {
-		const databaseDirectory = NativeModules.SystemInformationPackage?.getConstants()?.databaseDirectory;
-		if (!databaseDirectory) throw new Error('Unable to determine database path.');
-		return databaseDirectory;
+		databaseDirectory = NativeModules.SystemInformationPackage?.getConstants()?.databaseDirectory;
 	}
+	if (!databaseDirectory) throw new Error('Unable to determine database path.');
+
+	if (!await shim.fsDriver().exists(databaseDirectory)) {
+		// For compatibility with react-native-sqlite-storage, exclude the database
+		// directory from iCloud backups:
+		await RNFS.mkdir(databaseDirectory, { NSURLIsExcludedFromBackupKey: true });
+	}
+	return databaseDirectory;
 };
 
 export default class DatabaseDriverReactNative implements DatabaseDriver {
