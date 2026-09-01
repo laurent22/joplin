@@ -76,11 +76,16 @@ export default class DatabaseDriverReactNative implements DatabaseDriver {
 	}
 
 	public loadExtension(path: string) {
-		throw new Error(`No extension support for ${path} in react-native-sqlite-storage`);
+		// Extensions need to be enabled via options when opening the database
+		throw new Error(`No extension support for ${path} in expo-sqlite`);
 	}
 
 	public async exec(sql: string, params: SqlSelectParams = []) {
-		await this.db_.runAsync(sql, params);
+		const result = await this.db_.runAsync(sql, params);
+
+		if (result.lastInsertRowId) {
+			this.lastInsertId_ = String(result.lastInsertRowId);
+		}
 	}
 
 	public lastInsertId() {
