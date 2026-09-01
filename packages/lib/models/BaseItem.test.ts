@@ -186,6 +186,9 @@ three line \\n no escape`)).toBe(0);
 		expect(result.items.map(item => item.id)).toContain(conflictNote.id);
 
 		await BaseItem.saveSyncTime(syncTargetId(), conflictNote, conflictNote.updated_time);
+		await BaseItem.deleteOrphanSyncItems();
+		expect(await BaseItem.syncItem(syncTargetId(), conflictNote.id)).toBeTruthy();
+
 		await Note.save({ id: conflictNote.id, title: 'Changed conflict' });
 
 		result = await BaseItem.itemsThatNeedSync(syncTargetId());

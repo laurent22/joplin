@@ -951,8 +951,7 @@ export default class BaseItem extends BaseModel {
 			const className = classNames[i];
 			const ItemClass = this.getClass(className);
 
-			let selectSql = `SELECT id FROM ${ItemClass.tableName()}`;
-			if (ItemClass.modelType() === this.TYPE_NOTE) selectSql += ' WHERE is_conflict = 0';
+			const selectSql = `SELECT id FROM ${ItemClass.tableName()}`;
 
 			queries.push(`DELETE FROM sync_items WHERE item_location = ${BaseItem.SYNC_ITEM_LOCATION_LOCAL} AND item_type = ${ItemClass.modelType()} AND item_id NOT IN (${selectSql})`);
 		}
