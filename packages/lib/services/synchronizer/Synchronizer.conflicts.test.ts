@@ -275,7 +275,7 @@ describe('Synchronizer.conflicts', () => {
 		expect(folders.length).toBe(1);
 	}));
 
-	it('should delete trashed conflicts remotely and recreate them when restored', (async () => {
+	it('should delete remotely synced conflict notes', (async () => {
 		const f1 = await Folder.save({ title: 'folder' });
 		const n1 = await Note.save({ title: 'mynote', parent_id: f1.id });
 		await synchronizerStart();
@@ -284,26 +284,16 @@ describe('Synchronizer.conflicts', () => {
 
 		await synchronizerStart();
 		await Note.save({ id: n1.id, is_conflict: 1 });
-		await Note.delete(n1.id, { toTrash: true });
+		await Note.delete(n1.id);
 		const deletedItems = await BaseItem.deletedItems(syncTargetId());
 
 		expect(deletedItems).toHaveLength(1);
 		expect(deletedItems[0].item_id).toBe(n1.id);
 
 		await synchronizerStart();
-		expect((await Note.load(n1.id)).deleted_time).toBeGreaterThan(0);
-
 		await switchClient(1);
 		await synchronizerStart();
 		expect(await Note.load(n1.id)).toBeUndefined();
-
-		await switchClient(2);
-		await Note.save({ id: n1.id, deleted_time: 0 });
-		await synchronizerStart();
-
-		await switchClient(1);
-		await synchronizerStart();
-		expect(await Note.load(n1.id)).toMatchObject({ id: n1.id, is_conflict: 1, deleted_time: 0 });
 	}));
 
 	async function ignorableNoteConflictTest(withEncryption: boolean) {

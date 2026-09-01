@@ -386,28 +386,6 @@ export default class BaseItem extends BaseModel {
 		return r['total'];
 	}
 
-	public static async markConflictNotesForRemoteDeletion(noteIds: string[]) {
-		if (!noteIds.length) return;
-
-		const syncItems = await this.db().selectAll(`SELECT item_id, sync_target FROM sync_items WHERE item_type = ? AND item_id IN (${this.escapeIdsForSql(noteIds)})`, [this.TYPE_NOTE]);
-		const queries = [];
-		for (const syncItem of syncItems) {
-			queries.push({
-				sql: 'DELETE FROM deleted_items WHERE item_id = ? AND sync_target = ?',
-				params: [syncItem.item_id, syncItem.sync_target],
-			});
-			queries.push({
-				sql: 'INSERT INTO deleted_items (item_type, item_id, deleted_time, sync_target) VALUES (?, ?, ?, ?)',
-				params: [this.TYPE_NOTE, syncItem.item_id, time.unixMs(), syncItem.sync_target],
-			});
-		}
-		queries.push({
-			sql: `DELETE FROM sync_items WHERE item_type = ? AND item_id IN (${this.escapeIdsForSql(noteIds)})`,
-			params: [this.TYPE_NOTE],
-		});
-		await this.db().transactionExecBatch(queries);
-	}
-
 	public static async allItemsInTrash() {
 		const noteRows = await this.db().selectAll('SELECT id FROM notes WHERE deleted_time != 0');
 		const folderRows = await this.db().selectAll('SELECT id FROM folders WHERE deleted_time != 0');
@@ -781,9 +759,8 @@ export default class BaseItem extends BaseModel {
 			if (className === 'Resource') commonExtraWhere.push('encryption_blob_encrypted = 0');
 			if (ItemClass.encryptionSupported()) commonExtraWhere.push('encryption_applied = 0');
 
-			const neverSyncedExtraWhereParts = className === 'Note' ? [...commonExtraWhere, '(is_conflict = 0 OR deleted_time = 0)'] : commonExtraWhere;
-			const neverSyncedExtraWhere = neverSyncedExtraWhereParts.length ? `AND ${neverSyncedExtraWhereParts.join(' AND ')}` : '';
-			const changedExtraWhere = className === 'Note' ? [...commonExtraWhere, 'is_conflict = 0'] : commonExtraWhere;
+			const neverSyncedExtraWhere = commonExtraWhere.length ? `AND ${commonExtraWhere.join(' AND ')}` : '';
+			const changedExtraWhere = className === 'Note' ? [...commonExtraWhere, '(is_conflict = 0 OR deleted_time != 0)'] : commonExtraWhere;
 			const changedExtraWhereSql = changedExtraWhere.length ? `AND ${changedExtraWhere.join(' AND ')}` : '';
 
 			// First get all the items that have never been synced under this sync target

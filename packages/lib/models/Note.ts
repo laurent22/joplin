@@ -1006,10 +1006,6 @@ export default class Note extends BaseItem {
 			}
 
 			if (toTrash) {
-				if (options.trackDeleted !== false) {
-					await BaseItem.markConflictNotesForRemoteDeletion(notes.filter(note => !!note.is_conflict).map(note => note.id));
-				}
-
 				const now = Date.now();
 
 				const updateSql = [

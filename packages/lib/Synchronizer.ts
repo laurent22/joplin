@@ -1002,12 +1002,8 @@ export default class Synchronizer {
 								ItemClass = BaseItem.itemClass(local);
 								local = ItemClass.filter(local);
 								if (remote.isDeleted) {
-									if (local.type_ === BaseModel.TYPE_NOTE && local.is_conflict && local.deleted_time) {
-										reason = 'remote conflict has been deleted and the local conflict is in trash';
-									} else {
-										action = SyncAction.DeleteLocal;
-										reason = 'remote has been deleted';
-									}
+									action = SyncAction.DeleteLocal;
+									reason = 'remote has been deleted';
 								} else {
 									if (localFoldersToDelete.has(remoteId)) {
 										logger.debug('Removing a scheduled folder deletion (', remoteId, '). It was recreated by sync.');
