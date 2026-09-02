@@ -718,6 +718,11 @@ export default class Synchronizer {
 							}
 						}
 
+						if (action === SyncAction.NoteConflict && (local as NoteEntity).is_conflict) {
+							action = remote ? SyncAction.UpdateRemote : SyncAction.CreateRemote;
+							reason = 'conflict note has conflicting remote changes; local version wins';
+						}
+
 						// We no longer upload Master Keys however we keep them
 						// in the database for extra safety. In a future
 						// version, once it's confirmed that the new E2EE system
