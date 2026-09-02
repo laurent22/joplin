@@ -8,7 +8,7 @@ import Synchronizer, { type ProgressReport } from '@joplin/lib/Synchronizer';
 import NavService from '@joplin/lib/services/NavService';
 import { _ } from '@joplin/lib/locale';
 import { themeStyle } from '../global-style';
-import { buildFolderTree, isFolderSelected, RenderFolderItemEvent, renderFolders } from '@joplin/lib/components/shared/side-menu-shared';
+import { buildFolderTree, isFolderSelected, renderFolders } from '@joplin/lib/components/shared/side-menu-shared';
 import { FolderEntity, FolderIconType } from '@joplin/lib/services/database/types';
 import { AppState } from '../../utils/types';
 import Setting from '@joplin/lib/models/Setting';
@@ -376,7 +376,7 @@ const SideMenuContentComponent = (props: Props) => {
 	}, [performSync, props.dispatch]);
 
 
-	const renderFolderItem = ({ folder, hasChildren, depth }: RenderFolderItemEvent) => {
+	const renderFolderItem = (folder: FolderEntity, hasChildren: boolean, depth: number) => {
 		let selected;
 		if (props.notesParentType === 'Folder') {
 			selected = isFolderSelected(folder, {
@@ -511,16 +511,15 @@ const SideMenuContentComponent = (props: Props) => {
 	items.push(<View style={{ height: theme.marginTop }} key="bottom_top_hack" />);
 
 	items.push(
-		renderFolderItem({
-			folder: {
+		renderFolderItem(
+			{
 				title: _('All notes'),
 				icon: JSON.stringify({ type: FolderIconType.FontAwesome, name: 'ionicon document-outline' }),
 				id: ALL_NOTES_FILTER_ID,
 			},
-			hasChildren: false,
-			depth: 0,
-			indexInParent: 0,
-		}),
+			false,
+			0,
+		),
 	);
 
 	items.push(makeDivider('divider_all'));

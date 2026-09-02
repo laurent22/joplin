@@ -38,7 +38,7 @@ const useSidebarListData = (props: Props): ListItem[] => {
 			folderTree,
 			collapsedFolderIds: props.collapsedFolderIds,
 		};
-		return renderFolders<ListItem>(renderProps, ({ folder, hasChildren, depth }): FolderListItem => {
+		return renderFolders<ListItem>(renderProps, (folder, hasChildren, depth): FolderListItem => {
 			return {
 				kind: ListItemType.Folder,
 				label: Folder.displayTitle(folder),
