@@ -297,6 +297,25 @@ describe('Synchronizer.conflicts', () => {
 		expect((await Note.load(conflictNote.id)).title).toBe('local change');
 	});
 
+	it('should let remote deletion win over a local conflict note update', async () => {
+		const folder = await Folder.save({ title: 'folder' });
+		const conflictNote = await Note.save({ title: 'original', parent_id: folder.id, is_conflict: 1 });
+		await synchronizerStart();
+
+		await switchClient(2);
+		await synchronizerStart();
+		await Note.delete(conflictNote.id);
+		await synchronizerStart();
+
+		await switchClient(1);
+		await sleep(0.1);
+		await Note.save({ id: conflictNote.id, title: 'local change' });
+		await synchronizerStart();
+
+		expect(await Note.load(conflictNote.id)).toBeUndefined();
+		expect(await Note.conflictedNotes()).toHaveLength(0);
+	});
+
 	it('should delete remotely synced conflict notes', (async () => {
 		const f1 = await Folder.save({ title: 'folder' });
 		const n1 = await Note.save({ title: 'mynote', parent_id: f1.id });

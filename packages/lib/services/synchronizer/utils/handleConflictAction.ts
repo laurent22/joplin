@@ -51,7 +51,7 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 		// so in this case we just take the remote content.
 		// ------------------------------------------------------------------------------
 
-		let mustHandleConflict = true;
+		let mustHandleConflict = !(local as NoteEntity).is_conflict || remoteExists;
 		if (!itemIsReadOnly && remoteContent) {
 			mustHandleConflict = Note.mustHandleConflict(local, remoteContent);
 		}
