@@ -179,7 +179,7 @@ three line \\n no escape`)).toBe(0);
 		expect(await syncTime(note1.id)).toBe(newTime);
 	});
 
-	it('should sync conflict notes once and sync deletion', async () => {
+	it('should sync conflict notes once but not sync them when trashed', async () => {
 		const conflictNote = await Note.save({ title: 'Conflict', is_conflict: 1 });
 
 		let result = await BaseItem.itemsThatNeedSync(syncTargetId());
@@ -196,7 +196,7 @@ three line \\n no escape`)).toBe(0);
 
 		await Note.delete(conflictNote.id, { toTrash: true });
 		result = await BaseItem.itemsThatNeedSync(syncTargetId());
-		expect(result.items.map(item => item.id)).toContain(conflictNote.id);
+		expect(result.items.map(item => item.id)).not.toContain(conflictNote.id);
 	});
 
 	it.each([

@@ -760,7 +760,7 @@ export default class BaseItem extends BaseModel {
 			if (ItemClass.encryptionSupported()) commonExtraWhere.push('encryption_applied = 0');
 
 			const neverSyncedExtraWhere = commonExtraWhere.length ? `AND ${commonExtraWhere.join(' AND ')}` : '';
-			const changedExtraWhere = className === 'Note' ? [...commonExtraWhere, '(is_conflict = 0 OR deleted_time != 0)'] : commonExtraWhere;
+			const changedExtraWhere = className === 'Note' ? [...commonExtraWhere, 'is_conflict = 0'] : commonExtraWhere;
 			const changedExtraWhereSql = changedExtraWhere.length ? `AND ${changedExtraWhere.join(' AND ')}` : '';
 
 			// First get all the items that have never been synced under this sync target
