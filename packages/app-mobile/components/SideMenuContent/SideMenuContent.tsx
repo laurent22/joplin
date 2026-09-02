@@ -3,7 +3,6 @@ import { useMemo, useEffect, useCallback, useContext, useState } from 'react';
 import { Easing, Animated, TouchableOpacity, Text, StyleSheet, ScrollView, View } from 'react-native';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import Icon from '../Icon';
 import Folder from '@joplin/lib/models/Folder';
 import Synchronizer, { type ProgressReport } from '@joplin/lib/Synchronizer';
 import NavService from '@joplin/lib/services/NavService';
@@ -28,6 +27,7 @@ import BottomDrawerMenu, { MenuOption, MenuOptionStyle } from '../BottomDrawerMe
 import { MenuAlignment } from '../BottomDrawer';
 import FolderItem from './FolderItem';
 import { ALL_NOTES_FILTER_ID } from '@joplin/lib/reserved-ids';
+import SidebarIcon from './SidebarIcon';
 
 interface Props {
 	syncStarted: boolean;
@@ -64,7 +64,7 @@ const useStyles = (themeId: number) => {
 			flex: 1,
 			flexDirection: 'row',
 			flexBasis: 'auto',
-			height: 36,
+			height: 52,
 			alignItems: 'center',
 			paddingLeft: theme.marginLeft,
 			paddingRight: theme.marginRight,
@@ -75,12 +75,8 @@ const useStyles = (themeId: number) => {
 			paddingLeft: 10,
 			fontSize: theme.fontSize,
 		};
-		const sidebarIconStyle: TextStyle = {
-			fontSize: 22,
+		const sidebarIconStyle = {
 			color: theme.color,
-			width: 26,
-			textAlign: 'center',
-			textAlignVertical: 'center',
 		};
 		const folderButtonStyle: ViewStyle = {
 			...buttonStyle,
@@ -117,9 +113,6 @@ const useStyles = (themeId: number) => {
 				backgroundColor: theme.selectedColor,
 			},
 			sideButton: sideButtonStyle,
-			sideButtonSelected: {
-				...sideButtonStyle,
-			},
 			sideButtonText: {
 				...buttonTextStyle,
 			},
@@ -410,23 +403,22 @@ const SideMenuContentComponent = (props: Props) => {
 
 	type SidebarButtonOptions = {
 		onPress?: ()=> void;
-		selected?: boolean;
 		isHeader?: boolean;
 	};
 	const renderSidebarButton = (
 		key: string,
 		title: string,
 		iconName: string,
-		{ onPress = null, selected = false, isHeader = false }: SidebarButtonOptions = {},
+		{ onPress = null, isHeader = false }: SidebarButtonOptions = {},
 	) => {
-		let icon = <Icon name={`ionicon ${iconName}`} style={styles_.sidebarIcon} accessibilityLabel={null} />;
+		let icon = <SidebarIcon icon={`ionicon ${iconName}`} style={styles_.sidebarIcon} />;
 
 		if (key === 'synchronize_button') {
 			icon = <Animated.View style={{ transform: [{ rotate: syncIconRotation }] }}>{icon}</Animated.View>;
 		}
 
 		const content = (
-			<View key={key} style={selected ? styles_.sideButtonSelected : styles_.sideButton}>
+			<View key={key} style={styles_.sideButton}>
 				{icon}
 				<Text
 					style={styles_.sideButtonText}

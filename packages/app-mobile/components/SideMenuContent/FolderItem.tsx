@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { useCallback, useMemo } from 'react';
-import { Image, StyleSheet, TextStyle, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TextStyle, TouchableOpacity, View } from 'react-native';
 import { FolderEntity, FolderIcon, FolderIconType } from '@joplin/lib/services/database/types';
 import { themeStyle } from '../global-style';
 import Icon from '../Icon';
 import shim from '@joplin/lib/shim';
 import Folder from '@joplin/lib/models/Folder';
 import getTrashFolderId from '@joplin/lib/services/trash/getTrashFolderId';
-import { getTrashFolderIcon } from '@joplin/lib/services/trash';
 import { TouchableRipple, Text } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import useOnLongPressProps from '../../utils/hooks/useOnLongPressProps';
+import SidebarIcon from './SidebarIcon';
 
 type FolderEventHandler = (folder: FolderEntity)=> void;
 interface FolderItemProps {
@@ -30,11 +30,6 @@ interface FolderItemProps {
 const FolderItem: React.FC<FolderItemProps> = props => {
 	const styles = useMemo(() => {
 		const theme = themeStyle(props.themeId);
-
-		const folderIconBase = {
-			fontSize: 23,
-			width: 24,
-		};
 
 		return StyleSheet.create({
 			buttonWrapper: { flex: 1, flexDirection: 'row' },
@@ -67,23 +62,12 @@ const FolderItem: React.FC<FolderItemProps> = props => {
 				color: theme.color,
 			},
 
-			folderEmojiIcon: {
-				...theme.icon,
-				...folderIconBase,
-				fontSize: theme.fontSize,
-			},
-			folderImageIcon: {
-				...folderIconBase,
-				height: 20,
-				resizeMode: 'contain',
-			},
-			folderBaseIcon: {
-				...theme.icon,
-				...folderIconBase,
-			},
 			folderButtonText: {
 				...theme.normalText,
 				paddingLeft: props.depth === 0 ? theme.marginSmall : theme.marginExtraSmall,
+			},
+			icon: {
+				color: theme.color,
 			},
 		});
 	}, [props.selected, props.depth, props.themeId]);
@@ -120,27 +104,28 @@ const FolderItem: React.FC<FolderItemProps> = props => {
 	const renderFolderIcon = (folderId: string, folderIcon: FolderIcon) => {
 		if (!folderIcon) {
 			if (folderId === getTrashFolderId()) {
-				folderIcon = getTrashFolderIcon(FolderIconType.FontAwesome);
+				folderIcon = {
+					dataUrl: '',
+					emoji: '',
+					name: 'ionicon trash-outline',
+					type: FolderIconType.FontAwesome,
+				};
 			} else if (props.alwaysShowFolderIcons) {
-				return <Icon
-					name={collapsed ? 'ionicon folder-outline' : 'ionicon folder-open-outline'}
-					style={styles.folderBaseIcon}
-					accessibilityLabel={null}
-				/>;
+				folderIcon = {
+					type: FolderIconType.FontAwesome,
+					name: collapsed ? 'ionicon folder-outline' : 'ionicon folder-open-outline',
+					emoji: '',
+					dataUrl: '',
+				};
 			} else {
 				return null;
 			}
 		}
 
-		if (folderIcon.type === FolderIconType.Emoji) {
-			return <Text style={styles.folderEmojiIcon}>{folderIcon.emoji}</Text>;
-		} else if (folderIcon.type === FolderIconType.DataUrl) {
-			return <Image style={styles.folderImageIcon} source={{ uri: folderIcon.dataUrl }}/>;
-		} else if (folderIcon.type === FolderIconType.FontAwesome) {
-			return <Icon style={styles.folderBaseIcon} name={folderIcon.name} accessibilityLabel={null}/>;
-		} else {
-			throw new Error(`Unsupported folder icon type: ${folderIcon.type}`);
-		}
+		return <SidebarIcon
+			style={styles.icon}
+			icon={folderIcon}
+		/>;
 	};
 
 	const onPress = useCallback(() => {

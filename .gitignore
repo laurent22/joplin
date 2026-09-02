@@ -816,6 +816,7 @@ packages/app-mobile/components/SideMenu.js
 packages/app-mobile/components/SideMenuContent/FolderItem.js
 packages/app-mobile/components/SideMenuContent/SideMenuButton.js
 packages/app-mobile/components/SideMenuContent/SideMenuContent.js
+packages/app-mobile/components/SideMenuContent/SidebarIcon.js
 packages/app-mobile/components/SideMenuContentNote.js
 packages/app-mobile/components/SyncWizard/JoplinCloudIcon.js
 packages/app-mobile/components/SyncWizard/SyncWizard.js
