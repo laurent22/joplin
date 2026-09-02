@@ -15,7 +15,7 @@ export const fetchWithRetry = async (url: string, opts: FetchWithRetryOptions | 
 
 	while (retry > 0) {
 		try {
-			return fetch(url, opts);
+			return await fetch(url, opts);
 		} catch (e) {
 			if (opts && opts.callback) {
 				opts.callback(retry);
