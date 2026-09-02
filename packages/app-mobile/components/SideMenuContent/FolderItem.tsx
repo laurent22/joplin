@@ -9,7 +9,6 @@ import { _ } from '@joplin/lib/locale';
 import useOnLongPressProps from '../../utils/hooks/useOnLongPressProps';
 import SideMenuItem, { ToggleState } from './SideMenuItem';
 import SidebarIcon from './SidebarIcon';
-import getConflictFolderId from '@joplin/lib/models/utils/getConflictFolderId';
 
 type FolderEventHandler = (folder: FolderEntity)=> void;
 interface FolderItemProps {
@@ -63,8 +62,6 @@ const FolderItem: React.FC<FolderItemProps> = props => {
 				name: 'ionicon trash-outline',
 				type: FolderIconType.FontAwesome,
 			};
-		} else if (props.folder.id === getConflictFolderId() && props.alwaysShowFolderIcons) {
-			folderIcon = undefined;
 		} else if (props.alwaysShowFolderIcons) {
 			folderIcon = {
 				type: FolderIconType.FontAwesome,
