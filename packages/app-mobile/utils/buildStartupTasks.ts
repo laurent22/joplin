@@ -221,7 +221,6 @@ const buildStartupTasks = (
 
 		reg.logger().info('====================================');
 		reg.logger().info(`Starting application ${Setting.value('appId')} v${VersionInfo.appVersion} (${Setting.value('env')})`);
-		reg.logger().info('DB version', await logDatabase.selectOne('SELECT sqlite_version() as v'));
 
 		const dbLogger = new Logger();
 		dbLogger.addTarget(TargetType.Database, { database: logDatabase, source: 'm' });
