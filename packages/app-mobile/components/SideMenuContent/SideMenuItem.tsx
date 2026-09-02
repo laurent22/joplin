@@ -113,7 +113,7 @@ const useStyles = ({ themeId, depth, selected, hasIcon }: StylesProps) => {
 				paddingRight: theme.marginRight,
 
 				backgroundColor: selected ? theme.selectedColor : undefined,
-				paddingLeft: depth * theme.marginSmall + theme.marginLeft,
+				paddingLeft: depth * theme.marginLeft + theme.marginLeft,
 			},
 			text: {
 				...theme.normalText,
