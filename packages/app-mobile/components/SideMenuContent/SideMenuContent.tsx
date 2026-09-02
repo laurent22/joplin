@@ -5,7 +5,6 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import Folder from '@joplin/lib/models/Folder';
 import Synchronizer, { type ProgressReport } from '@joplin/lib/Synchronizer';
-import NavService from '@joplin/lib/services/NavService';
 import { _ } from '@joplin/lib/locale';
 import { themeStyle } from '../global-style';
 import { buildFolderTree, isFolderSelected, renderFolders } from '@joplin/lib/components/shared/side-menu-shared';
@@ -28,6 +27,7 @@ import FolderItem from './FolderItem';
 import { ALL_NOTES_FILTER_ID } from '@joplin/lib/reserved-ids';
 import SidebarIcon from './SidebarIcon';
 import SideMenuItem, { ToggleState } from './SideMenuItem';
+import BottomPanelActions from './BottomPanelActions';
 
 interface Props {
 	syncStarted: boolean;
@@ -232,39 +232,6 @@ const SideMenuContentComponent = (props: Props) => {
 		});
 	};
 
-	const tagButton_press = () => {
-		props.dispatch({ type: 'SIDE_MENU_CLOSE' });
-
-		props.dispatch({
-			type: 'NAV_GO',
-			routeName: 'Tags',
-		});
-	};
-
-	const switchProfileButton_press = () => {
-		props.dispatch({ type: 'SIDE_MENU_CLOSE' });
-
-		props.dispatch({
-			type: 'NAV_GO',
-			routeName: 'ProfileSwitcher',
-		});
-	};
-
-	const configButton_press = () => {
-		props.dispatch({ type: 'SIDE_MENU_CLOSE' });
-		void NavService.go('Config');
-	};
-
-	const newFolderButton_press = () => {
-		props.dispatch({ type: 'SIDE_MENU_CLOSE' });
-
-		props.dispatch({
-			type: 'NAV_GO',
-			routeName: 'Folder',
-			folderId: null,
-		});
-	};
-
 	const performSync = useCallback(async () => {
 		const action = props.syncStarted ? 'cancel' : 'start';
 
@@ -352,17 +319,14 @@ const SideMenuContentComponent = (props: Props) => {
 	type SidebarButtonOptions = {
 		onPress: ()=> void;
 	};
-	const renderSidebarButton = (
+	const renderSynchronizeButton = (
 		key: string,
 		title: string,
-		iconName: string,
 		{ onPress }: SidebarButtonOptions,
 	) => {
-		let icon = <SidebarIcon icon={`ionicon ${iconName}`} style={styles_.sidebarIcon} />;
-
-		if (key === 'synchronize_button') {
-			icon = <Animated.View style={{ transform: [{ rotate: syncIconRotation }] }}>{icon}</Animated.View>;
-		}
+		const icon = <Animated.View style={{ transform: [{ rotate: syncIconRotation }] }}>
+			<SidebarIcon icon='ionicon sync' style={styles_.sidebarIcon} />
+		</Animated.View>;
 
 		return (
 			<SideMenuItem
@@ -391,15 +355,13 @@ const SideMenuContentComponent = (props: Props) => {
 
 		items.push(makeDivider('divider_1'));
 
-		items.push(renderSidebarButton('newFolder_button', _('New Notebook'), 'folder-open-outline', { onPress: newFolderButton_press }));
-
-		items.push(renderSidebarButton('tag_button', _('Tags'), 'pricetag-outline', { onPress: tagButton_press }));
-
-		if (props.profileConfig && props.profileConfig.profiles.length > 1) {
-			items.push(renderSidebarButton('switchProfile_button', _('Switch profile'), 'people-circle-outline', { onPress: switchProfileButton_press }));
-		}
-
-		items.push(renderSidebarButton('config_button', _('Configuration'), 'settings-outline', { onPress: configButton_press }));
+		items.push(<BottomPanelActions
+			key='bottom-panel-actions'
+			dispatch={props.dispatch}
+			profileConfig={props.profileConfig}
+			themeId={props.themeId}
+			iconStyle={styles_.sidebarIcon}
+		/>);
 
 		items.push(makeDivider('divider_2'));
 
@@ -421,7 +383,7 @@ const SideMenuContentComponent = (props: Props) => {
 		if (resourceFetcherText) fullReport.push(resourceFetcherText);
 		if (decryptionReportText) fullReport.push(decryptionReportText);
 
-		items.push(renderSidebarButton('synchronize_button', !props.syncStarted ? _('Synchronise') : _('Cancel'), 'sync', { onPress: synchronize_press }));
+		items.push(renderSynchronizeButton('synchronize_button', !props.syncStarted ? _('Synchronise') : _('Cancel'), { onPress: synchronize_press }));
 
 		if (fullReport.length) {
 			items.push(

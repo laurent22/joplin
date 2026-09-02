@@ -3,8 +3,10 @@ import * as React from 'react';
 import { ImageStyle, TextStyle, Image, Text, StyleSheet, StyleProp, View } from 'react-native';
 import Icon from '../Icon';
 
+export type IconStyle = ImageStyle & TextStyle;
+
 interface Props {
-	style?: StyleProp<ImageStyle & TextStyle>;
+	style?: StyleProp<IconStyle>;
 	icon: FolderIcon|string|null;
 }
 
