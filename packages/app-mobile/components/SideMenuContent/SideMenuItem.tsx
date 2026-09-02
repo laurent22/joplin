@@ -101,7 +101,7 @@ const useStyles = ({ themeId, depth, selected }: StylesProps) => {
 			button: {
 				flex: 1,
 				flexBasis: 'auto',
-				height: 52,
+				height: 42,
 			},
 			buttonContent: {
 				flex: 1,
