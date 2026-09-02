@@ -77,6 +77,13 @@ const useStyles = (themeId: number) => {
 				flex: 0,
 			},
 			sidebarIcon: sidebarIconStyle,
+			divider: {
+				marginTop: theme.marginSmall,
+				marginBottom: theme.marginSmall,
+				flex: -1,
+				borderBottomWidth: 1,
+				borderBottomColor: theme.dividerColor,
+			},
 		});
 
 		return styles;
@@ -374,14 +381,7 @@ const SideMenuContentComponent = (props: Props) => {
 	};
 
 	const makeDivider = (key: string) => {
-		const theme = themeStyle(props.themeId);
-		return <View role='separator' style={{
-			marginTop: theme.marginSmall,
-			marginBottom: theme.marginSmall,
-			flex: -1,
-			borderBottomWidth: 1,
-			borderBottomColor: theme.dividerColor,
-		}} key={key}></View>;
+		return <View role='separator' style={styles_.divider} key={key}></View>;
 	};
 
 	const renderBottomPanel = () => {
