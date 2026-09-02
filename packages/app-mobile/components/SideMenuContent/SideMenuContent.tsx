@@ -448,7 +448,7 @@ const SideMenuContentComponent = (props: Props) => {
 
 	// HACK: inner height of ScrollView doesn't appear to be calculated correctly when
 	// using padding. So instead creating blank elements for padding bottom and top.
-	items.push(<View style={{ height: theme.marginTop }} key="bottom_top_hack" />);
+	items.push(<View style={{ height: theme.marginSmall }} key="bottom_top_hack" />);
 
 	items.push(
 		renderFolderItem(
