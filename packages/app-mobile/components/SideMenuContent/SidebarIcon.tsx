@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
 	baseTextIcon: {
 		textAlign: 'center',
 		textAlignVertical: 'center',
-		width: iconWidth,
+		minWidth: iconWidth,
 	},
 	imageIcon: {
 		height: 20,
