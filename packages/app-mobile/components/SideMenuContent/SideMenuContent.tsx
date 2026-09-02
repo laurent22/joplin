@@ -19,7 +19,6 @@ import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import emptyTrash from '@joplin/lib/services/trash/emptyTrash';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { DialogContext } from '../DialogManager';
-import { TextStyle, ViewStyle } from 'react-native';
 import { StateDecryptionWorker, StateResourceFetcher } from '@joplin/lib/reducer';
 import getConflictFolderId from '@joplin/lib/models/utils/getConflictFolderId';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
@@ -61,35 +60,8 @@ const useStyles = (themeId: number) => {
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
 
-		const buttonStyle: ViewStyle = {
-			flex: 1,
-			flexDirection: 'row',
-			flexBasis: 'auto',
-			height: 52,
-			alignItems: 'center',
-			paddingLeft: theme.marginLeft,
-			paddingRight: theme.marginRight,
-		};
-		const buttonTextStyle: TextStyle = {
-			flex: 1,
-			color: theme.color,
-			paddingLeft: 10,
-			fontSize: theme.fontSize,
-		};
 		const sidebarIconStyle = {
 			color: theme.color,
-		};
-		const folderButtonStyle: ViewStyle = {
-			...buttonStyle,
-			paddingLeft: 0,
-		};
-		const sideButtonStyle: ViewStyle = {
-			...buttonStyle,
-			flex: 0,
-		};
-		const folderButtonTextStyle: ViewStyle = {
-			...buttonTextStyle,
-			paddingLeft: 0,
 		};
 
 		const styles = StyleSheet.create({
@@ -97,8 +69,6 @@ const useStyles = (themeId: number) => {
 				flex: 1,
 				backgroundColor: theme.backgroundColor,
 			},
-			button: buttonStyle,
-			buttonText: buttonTextStyle,
 			syncStatus: {
 				paddingLeft: theme.marginLeft,
 				paddingRight: theme.marginRight,
@@ -107,16 +77,6 @@ const useStyles = (themeId: number) => {
 				flex: 0,
 			},
 			sidebarIcon: sidebarIconStyle,
-			folderButton: folderButtonStyle,
-			folderButtonText: folderButtonTextStyle,
-			folderButtonSelected: {
-				...folderButtonStyle,
-				backgroundColor: theme.selectedColor,
-			},
-			sideButton: sideButtonStyle,
-			sideButtonText: {
-				...buttonTextStyle,
-			},
 		});
 
 		return styles;
