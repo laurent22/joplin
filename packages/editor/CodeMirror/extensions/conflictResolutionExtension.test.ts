@@ -220,6 +220,24 @@ describe('conflictResolutionExtension', () => {
 		}
 	});
 
+	test('should recompute the local panel highlights after the user pauses typing', async () => {
+		jest.useFakeTimers();
+		try {
+			const editor = await createEditor('alpha beta delta', [
+				{ from: 0, to: 16, localText: 'alpha beta gamma' },
+			]);
+			expect(decoratedText(editor, 'cm-conflictLocalVersion-changedWord')).toEqual(['gamma']);
+
+			// The local text is unchanged, but the word that differs moves
+			editor.dispatch({ changes: { from: 0, to: 16, insert: 'zeta beta gamma' } });
+			await jest.advanceTimersByTimeAsync(500);
+
+			expect(decoratedText(editor, 'cm-conflictLocalVersion-changedWord')).toEqual(['alpha']);
+		} finally {
+			jest.useRealTimers();
+		}
+	});
+
 	test('should not recompute the highlights until typing stops', async () => {
 		jest.useFakeTimers();
 		try {

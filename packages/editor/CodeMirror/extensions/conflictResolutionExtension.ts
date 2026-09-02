@@ -50,12 +50,21 @@ class LocalVersionWidget extends WidgetType {
 		super();
 	}
 
-	public eq(other: LocalVersionWidget) {
-		return this.regionId_ === other.regionId_ && this.localText_ === other.localText_;
+	private sameContent_(other: LocalVersionWidget) {
+		return this.regionId_ === other.regionId_
+			&& this.localText_ === other.localText_
+			&& this.segments_.length === other.segments_.length
+			&& this.segments_.every((segment, index) => segment.text === other.segments_[index].text
+				&& segment.highlighted === other.segments_[index].highlighted);
 	}
 
-	// The button is disabled while the note is read-only
-	public updateDOM(dom: HTMLElement, view: EditorView) {
+	public eq(other: LocalVersionWidget) {
+		return this.sameContent_(other);
+	}
+
+	public updateDOM(dom: HTMLElement, view: EditorView, from: LocalVersionWidget) {
+		if (!this.sameContent_(from)) return false;
+
 		const button = dom.querySelector('button');
 		if (!button) return false;
 		button.disabled = view.state.readOnly;
