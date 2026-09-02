@@ -4,6 +4,7 @@ import allToolbarCommandNamesFromState from './allToolbarCommandNamesFromState';
 import { Platform } from 'react-native';
 
 const omitFromDefault: string[] = [
+	'synchronizeEditor',
 	'editor.textHeading1',
 	'editor.textHeading3',
 	'editor.textHeading4',
