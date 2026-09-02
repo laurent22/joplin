@@ -2,7 +2,7 @@ import { EditorSelection } from '@codemirror/state';
 import {
 	insertHorizontalRule,
 	insertOrIncreaseIndent,
-	toggleBolded, toggleCode, toggleHeaderLevel, toggleItalicized, toggleMath, updateLink,
+	toggleBlockQuote, toggleBolded, toggleCode, toggleHeaderLevel, toggleItalicized, toggleMath, updateLink,
 } from '../editorCommands/markdownCommands';
 import createTestEditor from '../testing/createTestEditor';
 import { blockMathTagName } from '../extensions/markdownMathExtension';
@@ -10,6 +10,54 @@ import { blockMathTagName } from '../extensions/markdownMathExtension';
 describe('markdownCommands', () => {
 
 	jest.retryTimes(2);
+
+	it('should toggle one selected line as a blockquote', async () => {
+		const initialText = 'First line\nSecond line';
+		const editor = await createTestEditor(
+			initialText,
+			EditorSelection.range(0, 'First line'.length),
+			[],
+		);
+
+		toggleBlockQuote(editor);
+		expect(editor.state.doc.toString()).toBe('> First line\n\nSecond line');
+
+		toggleBlockQuote(editor);
+		expect(editor.state.doc.toString()).toBe(initialText);
+	});
+
+	it('should toggle only continuously selected lines as blockquotes', async () => {
+		const initialText = 'First line\nSecond line\nThird line\nFourth line';
+		const editor = await createTestEditor(
+			initialText,
+			EditorSelection.range(0, initialText.indexOf('\nFourth line')),
+			[],
+		);
+
+		toggleBlockQuote(editor);
+		expect(editor.state.doc.toString()).toBe('> First line\n> Second line\n> Third line\n\nFourth line');
+
+		toggleBlockQuote(editor);
+		expect(editor.state.doc.toString()).toBe(initialText);
+	});
+
+	it('should blockquote only first selection when selected lines are not continuous', async () => {
+		const initialText = 'First line\nSecond line\nThird line\nFourth line';
+		const thirdLineStart = initialText.indexOf('Third line');
+		const fourthLineStart = initialText.indexOf('Fourth line');
+		const editor = await createTestEditor(
+			initialText,
+			[
+				EditorSelection.range(0, 'First line'.length),
+				EditorSelection.range(thirdLineStart, thirdLineStart + 'Third line'.length),
+				EditorSelection.range(fourthLineStart, initialText.length),
+			],
+			[],
+		);
+
+		toggleBlockQuote(editor);
+		expect(editor.state.doc.toString()).toBe('> First line\n\nSecond line\nThird line\nFourth line');
+	});
 
 	it('should bold/italicize everything selected', async () => {
 		const initialDocText = 'Testing...';
@@ -422,6 +470,4 @@ describe('markdownCommands', () => {
 		expect(editor.state.doc.toString()).toBe('testing\n* * *\n* * *\n\n> this is a test\n> * * *\n> * * *');
 	});
 });
-
-
 
