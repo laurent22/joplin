@@ -559,6 +559,12 @@ export default async function(request: Request, id: string = null, link: string 
 			// Compare through the model's own coercion: Number() reads "1foo" as NaN, but the save path stores it as 1.
 			if ('is_locked' in newProps && !!Note.filter({ is_locked: newProps.is_locked }).is_locked !== !!note.is_locked) throw new ErrorForbidden('The note lock state cannot be changed through the API');
 			if (NoteLockNote.isLocked(note) && 'body' in newProps) throw new ErrorForbidden('The body of a locked note cannot be modified through the API');
+			if (NoteLockNote.isLocked(note)) {
+				// The next sync would upload these markers and attach the note to the share.
+				const gainsShareId = 'share_id' in newProps && !!newProps.share_id && newProps.share_id !== note.share_id;
+				const gainsIsShared = 'is_shared' in newProps && !!Note.filter({ is_shared: newProps.is_shared }).is_shared && !note.is_shared;
+				if (gainsShareId || gainsIsShared) throw new ErrorForbidden('The sharing state of a locked note cannot be changed through the API');
+			}
 		}
 
 		if (!('user_updated_time' in newProps)) newProps.user_updated_time = timestamp;

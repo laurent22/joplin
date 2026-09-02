@@ -29,6 +29,7 @@ import { MarkupToHtml } from '@joplin/renderer';
 import { ALL_NOTES_FILTER_ID } from '../reserved-ids';
 import NoteLockNote from '../services/noteLock/NoteLockNote';
 import isNoteLockEnabled from '../services/noteLock/isNoteLockEnabled';
+import { folderIsInActiveShare } from './utils/noteLockShareGuard';
 import { ShareType, StateShare } from '../services/share/reducer';
 
 export interface PreviewsOrder {
@@ -995,6 +996,15 @@ export default class Note extends BaseItem {
 		const changeSource = options && options.changeSource ? options.changeSource : null;
 		const changeType = options && options.toTrash ? ItemChange.TYPE_UPDATE : ItemChange.TYPE_DELETE;
 		const toTrash = options && !!options.toTrash;
+
+		// Dropping onto a deleted folder re-parents through the batch SQL below without going
+		// through BaseItem.save, so the note lock share guard has to run here as well.
+		if (isNoteLockEnabled() && toTrash && options.toTrashParentId) {
+			if (await folderIsInActiveShare(this.getClass('Folder'), this.syncShareCache, options.toTrashParentId)) {
+				const locked = await this.db().selectOne(`SELECT id FROM notes WHERE id IN (${this.escapeIdsForSql(ids)}) AND is_locked = 1 AND is_conflict = 0 LIMIT 1`);
+				if (locked) throw new Error(_('Locked notes cannot be moved to a shared or published notebook'));
+			}
+		}
 
 		while (ids.length) {
 			const processIds = ids.splice(0, 50);

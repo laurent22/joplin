@@ -14,6 +14,7 @@ import { MasterKeyEntity } from '../e2ee/types';
 import { getMasterPassword } from '../e2ee/utils';
 import ResourceService from '../ResourceService';
 import { addMasterKey, getEncryptionEnabled, localSyncInfo } from '../synchronizer/syncInfoUtils';
+import isNoteLockEnabled from '../noteLock/isNoteLockEnabled';
 import { ShareInvitation, SharePermissions, ShareType, State, stateRootKey, StateShare } from './reducer';
 import PerformanceLogger from '../../PerformanceLogger';
 
@@ -111,6 +112,12 @@ export default class ShareService {
 		const folder = await Folder.load(folderId);
 		if (!folder) throw new Error(`No such folder: ${folderId}`);
 
+		// Recipients cannot read a locked note. Checked here because the steps below already
+		// change the local profile, well before the share request is sent.
+		if (isNoteLockEnabled() && await Folder.hasLockedNotes(folderId)) {
+			throw new Error(_('This notebook cannot be shared because it contains locked notes.'));
+		}
+
 		let folderMasterKey: MasterKeyEntity = null;
 
 		if (getEncryptionEnabled()) {
@@ -178,6 +185,15 @@ export default class ShareService {
 		// shared again.
 		// TODO: Remove the now-unused master key from local sync info.
 		await Folder.save({ id: folderId, master_key_id: '' });
+
+		// The note lock guard reads this list, so a deleted share must leave it right away rather
+		// than at the next sync, otherwise locking stays blocked in a notebook no longer shared.
+		if (isNoteLockEnabled()) {
+			this.store.dispatch({
+				type: 'SHARE_SET',
+				shares: this.shares.filter(s => s.id !== share.id),
+			});
+		}
 
 		// Then reset the "share_id" field for the folder and all sub-items.
 		// This could potentially be done server-side, when deleting the share,
@@ -290,6 +306,10 @@ export default class ShareService {
 	public async shareNote(noteId: string, recursive: boolean): Promise<StateShare> {
 		const note = await Note.load(noteId);
 		if (!note) throw new Error(`No such note: ${noteId}`);
+		// A published locked note would serve its ciphertext to anyone with the link.
+		if (isNoteLockEnabled() && note.is_locked) {
+			throw new Error(_('This note cannot be published because it is locked.'));
+		}
 
 		const share = await this.api().exec('POST', 'api/shares', {}, {
 			note_id: noteId,
@@ -311,6 +331,10 @@ export default class ShareService {
 	public async publishFolder(folderId: string): Promise<StateShare> {
 		const folder = await Folder.load(folderId);
 		if (!folder) throw new Error(`No such folder: ${folderId}`);
+
+		if (isNoteLockEnabled() && await Folder.hasLockedNotes(folderId)) {
+			throw new Error(_('This notebook cannot be published because it contains locked notes.'));
+		}
 
 		const share = await this.api().exec('POST', 'api/shares', {}, {
 			folder_id: folderId,
@@ -350,6 +374,16 @@ export default class ShareService {
 
 		// Clean local state first so next sync can recover if deletion stops midway
 		await this.deleteShare(share.id);
+
+		// Same reason as the SHARE_SET in unshareFolder: the refresh below can fail after a
+		// successful delete, and the note lock guard reads this list.
+		if (isNoteLockEnabled()) {
+			this.store.dispatch({
+				type: 'SHARE_SET',
+				shares: remainingShares,
+			});
+		}
+
 		await this.refreshShares();
 	}
 
@@ -367,6 +401,16 @@ export default class ShareService {
 		}
 
 		await Promise.all(promises);
+
+		// Same reason as the SHARE_SET in unshareFolder: nothing refreshes the list here until a
+		// later sync, and the note lock guard reads it.
+		if (isNoteLockEnabled() && noteShares.length) {
+			const deletedIds = noteShares.map(s => s.id);
+			this.store.dispatch({
+				type: 'SHARE_SET',
+				shares: this.shares.filter(s => !deletedIds.includes(s.id)),
+			});
+		}
 
 		await Note.save({
 			id: note.id,

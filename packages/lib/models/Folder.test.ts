@@ -519,4 +519,59 @@ describe('models/Folder', () => {
 		expect(validFolder).toBeNull();
 	});
 
+	it('should return the folder and its ancestors, and nothing else', async () => {
+		const root = await Folder.save({ title: 'root', share_id: 'share-1' });
+		const child = await Folder.save({ title: 'child', parent_id: root.id });
+		const unrelated = await Folder.save({ title: 'unrelated' });
+
+		const ancestors = await Folder.selfAndAncestors(child.id);
+
+		expect(ancestors.map(folder => folder.id).sort()).toEqual([child.id, root.id].sort());
+		expect(ancestors.map(folder => folder.id)).not.toContain(unrelated.id);
+		expect(ancestors.find(folder => folder.id === root.id).share_id).toBe('share-1');
+	});
+
+	it('should find a locked note in the folder itself or in any descendant', async () => {
+		const withLockedNote = await createFolderTree('', [
+			{ title: 'with locked note', children: [{ title: 'locked here', is_locked: 1 }] },
+		]);
+		const withNestedLockedNote = await createFolderTree('', [
+			{
+				title: 'with nested locked note',
+				children: [{ title: 'sub', children: [{ title: 'locked deeper', is_locked: 1 }] }],
+			},
+		]);
+		const withoutLockedNote = await createFolderTree('', [
+			{ title: 'without locked note', children: [{ title: 'plain' }] },
+		]);
+
+		expect(await Folder.hasLockedNotes(withLockedNote.id)).toBe(true);
+		expect(await Folder.hasLockedNotes(withNestedLockedNote.id)).toBe(true);
+		expect(await Folder.hasLockedNotes(withoutLockedNote.id)).toBe(false);
+	});
+
+	it('should ignore conflicts but still count deleted notes', async () => {
+		const conflictOnly = await createFolderTree('', [
+			{ title: 'conflict only', children: [{ title: 'conflict', is_locked: 1, is_conflict: 1 }] },
+		]);
+		const deletedOnly = await createFolderTree('', [
+			{ title: 'deleted only', children: [{ title: 'deleted', is_locked: 1, deleted_time: 1 }] },
+		]);
+
+		// Conflicts never sync. A trashed note keeps its parent, so restoring it would put it back.
+		expect(await Folder.hasLockedNotes(conflictOnly.id)).toBe(false);
+		expect(await Folder.hasLockedNotes(deletedOnly.id)).toBe(true);
+	});
+
+	it('should keep looking below a deleted folder', async () => {
+		const root = await createFolderTree('', [
+			{
+				title: 'root',
+				children: [{ title: 'deleted sub', deleted_time: 1, children: [{ title: 'still live', is_locked: 1 }] }],
+			},
+		]);
+
+		expect(await Folder.hasLockedNotes(root.id)).toBe(true);
+	});
+
 });

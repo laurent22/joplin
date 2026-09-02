@@ -16,6 +16,8 @@ import JoplinError from '../JoplinError';
 import { LoadOptions, SaveOptions } from './utils/types';
 import { State as ShareState } from '../services/share/reducer';
 import { checkIfItemCanBeAddedToFolder, checkIfItemCanBeChanged, checkIfItemsCanBeChanged, needsShareReadOnlyChecks } from './utils/readOnly';
+import { checkNoteLockShareInvariants } from './utils/noteLockShareGuard';
+import isNoteLockEnabled from '../services/noteLock/isNoteLockEnabled';
 import { checkObjectHasProperties } from '@joplin/utils/object';
 
 const { sprintf } = require('sprintf-js');
@@ -1038,6 +1040,10 @@ export default class BaseItem extends BaseModel {
 					o.parent_id,
 				);
 			}
+		}
+
+		if (isNoteLockEnabled()) {
+			await checkNoteLockShareInvariants(this, this.getClass('Folder'), this.modelType(), options.changeSource, this.syncShareCache, o, isNew);
 		}
 
 		return super.save(o, options);
