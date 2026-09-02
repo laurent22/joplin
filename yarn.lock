@@ -12681,7 +12681,7 @@ __metadata:
     react-native-version-info: "npm:1.1.1"
     react-native-web: "npm:0.21.2"
     react-native-webview: "npm:13.16.1"
-    react-native-zip-archive: "npm:7.0.2"
+    react-native-zip-archive: "npm:7.1.1"
     react-redux: "npm:8.1.3"
     react-refresh: "npm:0.18.0"
     react-test-renderer: "npm:19.1.4"
@@ -50020,13 +50020,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-zip-archive@npm:7.0.2":
-  version: 7.0.2
-  resolution: "react-native-zip-archive@npm:7.0.2"
+"react-native-zip-archive@npm:7.1.1":
+  version: 7.1.1
+  resolution: "react-native-zip-archive@npm:7.1.1"
   peerDependencies:
     react: ">=16.8.6"
     react-native: ">=0.60.0"
-  checksum: 10/63a0bc5e946d84a9564ac1fd0319fa01b8a0af72d841007db41b374254e6dbc5d38d28aea43703c6f5458c72742c9cc8e7d7fc17cee6717da0ab106da71fe35f
+  checksum: 10/59e022fdaceeca7e96330a2341a69a2eda207bb2e02dee09d221100c0fadfd22b26d3ebe7c5dfb3f618b72d732d1c49b9a644e1c868d2134c8c952da108048eb
   languageName: node
   linkType: hard
 
