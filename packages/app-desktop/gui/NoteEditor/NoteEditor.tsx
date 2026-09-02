@@ -29,6 +29,7 @@ import ConflictBanner from './ConflictBanner/ConflictBanner';
 import bridge from '../../services/bridge';
 import finishConflictResolution, { FinishStatus } from '@joplin/lib/services/conflict/finishConflictResolution';
 import keepConflictCopy, { KeepStatus } from '@joplin/lib/services/conflict/keepConflictCopy';
+import isConflictResolutionEnabled from '@joplin/lib/services/conflict/isConflictResolutionEnabled';
 import markupLanguageUtils from '@joplin/lib/utils/markupLanguageUtils';
 import Setting from '@joplin/lib/models/Setting';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
@@ -1008,7 +1009,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 	const inConflictFolder = windowState.notesParentType === 'Folder'
 		&& windowState.selectedFolderId === Folder.conflictFolderId();
 	const noteIsConflict = (!!selectedNote?.is_conflict || (inConflictFolder && !selectedNote))
-		&& !!state.settings['featureFlag.conflictResolution'];
+		&& isConflictResolutionEnabled();
 
 	// A conflict stays listed in the trash once deleted
 	const inTrash = windowState.notesParentType === 'Folder'
