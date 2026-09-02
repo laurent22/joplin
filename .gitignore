@@ -814,7 +814,6 @@ packages/app-mobile/components/SearchInput.js
 packages/app-mobile/components/SelectDateTimeDialog.js
 packages/app-mobile/components/SideMenu.js
 packages/app-mobile/components/SideMenuContent/FolderItem.js
-packages/app-mobile/components/SideMenuContent/SideMenuButton.js
 packages/app-mobile/components/SideMenuContent/SideMenuContent.js
 packages/app-mobile/components/SideMenuContent/SideMenuItem.js
 packages/app-mobile/components/SideMenuContent/SidebarIcon.js

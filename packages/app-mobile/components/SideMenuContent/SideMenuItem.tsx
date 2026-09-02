@@ -13,7 +13,7 @@ export enum ToggleState {
 }
 
 type Props = {
-	icon: React.ReactNode;
+	icon: React.ReactNode|null;
 	text: string;
 	textStyle?: StyleProp<TextStyle>;
 	touchableProps: Partial<TouchableRippleProps>;
@@ -29,7 +29,7 @@ type Props = {
 const SideMenuItem: React.FC<Props> = ({
 	icon, text, textStyle, touchableProps, toggleState, themeId, onToggle, selected, depth,
 }) => {
-	const styles = useStyles({ themeId, depth, selected });
+	const styles = useStyles({ themeId, depth, selected, hasIcon: !!icon });
 
 	let toggleButton: React.ReactNode|null = null;
 	if (toggleState !== ToggleState.Hidden) {
@@ -89,11 +89,13 @@ interface StylesProps {
 	themeId: number;
 	depth: number;
 	selected: boolean;
+	hasIcon: boolean;
 }
 
-const useStyles = ({ themeId, depth, selected }: StylesProps) => {
+const useStyles = ({ themeId, depth, selected, hasIcon }: StylesProps) => {
 	return React.useMemo(() => {
 		const theme = themeStyle(themeId);
+		const iconMarginRight = depth === 0 ? theme.marginSmall : theme.marginExtraSmall;
 		return StyleSheet.create({
 			buttonWrapper: {
 				flexDirection: 'row',
@@ -115,7 +117,7 @@ const useStyles = ({ themeId, depth, selected }: StylesProps) => {
 			},
 			text: {
 				...theme.normalText,
-				paddingLeft: depth === 0 ? theme.marginSmall : theme.marginExtraSmall,
+				paddingLeft: hasIcon ? iconMarginRight : 0,
 			},
 			toggleIcon: {
 				...theme.icon,
@@ -129,7 +131,7 @@ const useStyles = ({ themeId, depth, selected }: StylesProps) => {
 				backgroundColor: selected ? theme.selectedColor : undefined,
 			},
 		});
-	}, [themeId, selected, depth]);
+	}, [themeId, selected, depth, hasIcon]);
 };
 
 export default SideMenuItem;

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useCallback, useMemo } from 'react';
-import { StyleSheet, TextStyle } from 'react-native';
-import { FolderEntity, FolderIconType } from '@joplin/lib/services/database/types';
+import { StyleSheet } from 'react-native';
+import { FolderEntity, FolderIcon, FolderIconType } from '@joplin/lib/services/database/types';
 import { themeStyle } from '../global-style';
 import Folder from '@joplin/lib/models/Folder';
 import getTrashFolderId from '@joplin/lib/services/trash/getTrashFolderId';
@@ -9,6 +9,7 @@ import { _ } from '@joplin/lib/locale';
 import useOnLongPressProps from '../../utils/hooks/useOnLongPressProps';
 import SideMenuItem, { ToggleState } from './SideMenuItem';
 import SidebarIcon from './SidebarIcon';
+import getConflictFolderId from '@joplin/lib/models/utils/getConflictFolderId';
 
 type FolderEventHandler = (folder: FolderEntity)=> void;
 interface FolderItemProps {
@@ -30,6 +31,9 @@ const FolderItem: React.FC<FolderItemProps> = props => {
 		const theme = themeStyle(props.themeId);
 
 		return StyleSheet.create({
+			text: {
+				color: theme.color,
+			},
 			conflictFolderButtonText: {
 				color: theme.colorError,
 			},
@@ -50,7 +54,7 @@ const FolderItem: React.FC<FolderItemProps> = props => {
 
 	const collapsed = props.collapsed;
 
-	let folderIcon = Folder.unserializeIcon(props.folder.icon);
+	let folderIcon: FolderIcon|string|undefined = Folder.unserializeIcon(props.folder.icon);
 	if (!folderIcon) {
 		if (props.folder.id === getTrashFolderId()) {
 			folderIcon = {
@@ -59,6 +63,8 @@ const FolderItem: React.FC<FolderItemProps> = props => {
 				name: 'ionicon trash-outline',
 				type: FolderIconType.FontAwesome,
 			};
+		} else if (props.folder.id === getConflictFolderId() && props.alwaysShowFolderIcons) {
+			folderIcon = undefined;
 		} else if (props.alwaysShowFolderIcons) {
 			folderIcon = {
 				type: FolderIconType.FontAwesome,
@@ -89,7 +95,7 @@ const FolderItem: React.FC<FolderItemProps> = props => {
 	const folderTitle = Folder.displayTitle(props.folder);
 	const isConflictFolder = props.folder.id === Folder.conflictFolderId();
 	const textStyle = useMemo(() => {
-		const result: TextStyle[] = [];
+		const result = [styles.text];
 		if (isConflictFolder) {
 			result.push(styles.conflictFolderButtonText);
 			if (props.selected) {
@@ -107,7 +113,7 @@ const FolderItem: React.FC<FolderItemProps> = props => {
 	return (
 		<SideMenuItem
 			icon={
-				<SidebarIcon icon={folderIcon} style={styles.icon} />
+				folderIcon && <SidebarIcon icon={folderIcon} style={textStyle} />
 			}
 			text={folderTitle}
 			textStyle={textStyle}

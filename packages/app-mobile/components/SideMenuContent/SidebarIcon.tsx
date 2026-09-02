@@ -1,14 +1,18 @@
 import { FolderIcon, FolderIconType } from '@joplin/lib/services/database/types';
 import * as React from 'react';
-import { ImageStyle, TextStyle, Image, Text, StyleSheet } from 'react-native';
+import { ImageStyle, TextStyle, Image, Text, StyleSheet, StyleProp, View } from 'react-native';
 import Icon from '../Icon';
 
 interface Props {
-	style?: ImageStyle & TextStyle;
-	icon: FolderIcon|string;
+	style?: StyleProp<ImageStyle & TextStyle>;
+	icon: FolderIcon|string|null;
 }
 
 const SidebarIcon: React.FC<Props> = ({ icon, style }) => {
+	if (!icon) {
+		return <View style={styles.emptyIcon}/>;
+	}
+
 	if (typeof icon === 'string') {
 		icon = {
 			type: FolderIconType.FontAwesome,
@@ -28,21 +32,26 @@ const SidebarIcon: React.FC<Props> = ({ icon, style }) => {
 	}
 };
 
+const iconWidth = 24;
 const styles = StyleSheet.create({
 	baseTextIcon: {
 		textAlign: 'center',
 		textAlignVertical: 'center',
+		width: iconWidth,
 	},
 	imageIcon: {
 		height: 20,
 		resizeMode: 'contain',
+		width: iconWidth,
 	},
 	fontIcon: {
 		fontSize: 23,
-		width: 24,
 	},
 	emojiIcon: {
 		fontSize: 16,
+	},
+	emptyIcon: {
+		width: iconWidth,
 	},
 });
 

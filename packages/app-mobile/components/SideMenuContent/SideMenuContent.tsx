@@ -125,7 +125,9 @@ const useStyles = (themeId: number) => {
 
 
 const SideMenuContentComponent = (props: Props) => {
-	const alwaysShowFolderIcons = true;
+	const alwaysShowFolderIcons = useMemo(() => {
+		return Folder.shouldShowFolderIcons(props.folders);
+	}, [props.folders]);
 	const styles_ = useStyles(props.themeId);
 
 	useEffect(() => {
@@ -202,28 +204,6 @@ const SideMenuContentComponent = (props: Props) => {
 					await restoreItems(ModelType.Folder, [folder.id]);
 				},
 			});
-
-			// Alert.alert(
-			// 	'',
-			// 	_('Notebook: %s', folder.title),
-			// 	[
-			// 		{
-			// 			text: _('Restore'),
-			// 			onPress: async () => {
-			// 				await restoreItems(ModelType.Folder, [folder.id]);
-			// 			},
-			// 			style: 'destructive',
-			// 		},
-			// 		{
-			// 			text: _('Cancel'),
-			// 			onPress: () => {},
-			// 			style: 'cancel',
-			// 		},
-			// 	],
-			// 	{
-			// 		cancelable: false,
-			// 	},
-			// );
 		} else {
 			const generateFolderDeletion = () => {
 				const folderDeletion = (message: string) => {
