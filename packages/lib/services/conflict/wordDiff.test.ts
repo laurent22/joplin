@@ -68,6 +68,25 @@ describe('wordDiff', () => {
 		expect(joined(diff.remote)).toBe('a\nb\nc');
 	});
 
+	test('should highlight both sides whole when the line diff times out', () => {
+		jest.isolateModules(() => {
+			jest.doMock('diff', () => ({
+				...jest.requireActual('diff'),
+				diffLines: (): undefined => undefined,
+			}));
+
+			// eslint-disable-next-line @typescript-eslint/no-var-requires
+			const timedOut = require('./wordDiff').wordDiff('alpha\nbeta', 'gamma\ndelta');
+
+			expect(highlightedText(timedOut.local)).toEqual(['alpha\nbeta']);
+			expect(highlightedText(timedOut.remote)).toEqual(['gamma\ndelta']);
+			// Resolving must never change text that was not merged
+			expect(joined(timedOut.local)).toBe('alpha\nbeta');
+			expect(joined(timedOut.remote)).toBe('gamma\ndelta');
+		});
+		jest.dontMock('diff');
+	});
+
 	test('should highlight a rewritten line whole rather than word by word', () => {
 		const local = 'This is for example how the web clipper communicates with Joplin, and this is what you need';
 		const remote = 'Iam writing this local version here, to have only just yellow card';

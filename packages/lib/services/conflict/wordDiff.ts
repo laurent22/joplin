@@ -202,7 +202,14 @@ export const wordDiff = (localText: string, remoteText: string): WordDiff => {
 	}
 
 	// Lines are matched first, so word diff cannot match words across different lines.
-	const lineChanges = diffLines(local, remote);
+	const lineChanges = diffLines(local, remote, { timeout: diffTimeoutMs });
+	if (!lineChanges) {
+		return {
+			local: local === '' ? [] : [{ text: local, highlighted: true }],
+			remote: remote === '' ? [] : [{ text: remote, highlighted: true }],
+		};
+	}
+
 	const result: WordDiff = { local: [], remote: [] };
 
 	// diffLines keeps newlines in each value, so joining the segments reproduces the original text.
