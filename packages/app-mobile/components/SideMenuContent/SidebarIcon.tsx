@@ -32,7 +32,7 @@ const SidebarIcon: React.FC<Props> = ({ icon, style }) => {
 	}
 };
 
-const iconWidth = 24;
+const iconWidth = 20;
 const styles = StyleSheet.create({
 	baseTextIcon: {
 		textAlign: 'center',
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
 		width: iconWidth,
 	},
 	fontIcon: {
-		fontSize: 23,
+		fontSize: 18,
 	},
 	emojiIcon: {
 		fontSize: 16,
