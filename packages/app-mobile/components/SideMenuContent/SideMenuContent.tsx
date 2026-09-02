@@ -1,34 +1,33 @@
 import * as React from 'react';
 import { useMemo, useEffect, useCallback, useContext, useState } from 'react';
-import { Easing, Animated, TouchableOpacity, Text, StyleSheet, ScrollView, View, Image, ImageStyle } from 'react-native';
+import { Easing, Animated, TouchableOpacity, Text, StyleSheet, ScrollView, View } from 'react-native';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import Icon from './Icon';
+import Icon from '../Icon';
 import Folder from '@joplin/lib/models/Folder';
 import Synchronizer, { type ProgressReport } from '@joplin/lib/Synchronizer';
 import NavService from '@joplin/lib/services/NavService';
 import { _ } from '@joplin/lib/locale';
-import { themeStyle } from './global-style';
-import { buildFolderTree, isFolderSelected, renderFolders } from '@joplin/lib/components/shared/side-menu-shared';
-import { FolderEntity, FolderIcon, FolderIconType } from '@joplin/lib/services/database/types';
-import { AppState } from '../utils/types';
+import { themeStyle } from '../global-style';
+import { buildFolderTree, isFolderSelected, RenderFolderItemEvent, renderFolders } from '@joplin/lib/components/shared/side-menu-shared';
+import { FolderEntity, FolderIconType } from '@joplin/lib/services/database/types';
+import { AppState } from '../../utils/types';
 import Setting from '@joplin/lib/models/Setting';
 import { reg } from '@joplin/lib/registry';
 import { ProfileConfig } from '@joplin/lib/services/profileConfig/types';
-import { getTrashFolderIcon, getTrashFolderId } from '@joplin/lib/services/trash';
+import { getTrashFolderId } from '@joplin/lib/services/trash';
 import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import emptyTrash from '@joplin/lib/services/trash/emptyTrash';
 import { ModelType } from '@joplin/lib/BaseModel';
-import { DialogContext } from './DialogManager';
+import { DialogContext } from '../DialogManager';
 import { TextStyle, ViewStyle } from 'react-native';
 import { StateDecryptionWorker, StateResourceFetcher } from '@joplin/lib/reducer';
-import useOnLongPressProps from '../utils/hooks/useOnLongPressProps';
-import { TouchableRipple } from 'react-native-paper';
-import shim from '@joplin/lib/shim';
 import getConflictFolderId from '@joplin/lib/models/utils/getConflictFolderId';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
-import BottomDrawerMenu, { MenuOption, MenuOptionStyle } from './BottomDrawerMenu';
-import { MenuAlignment } from './BottomDrawer';
+import BottomDrawerMenu, { MenuOption, MenuOptionStyle } from '../BottomDrawerMenu';
+import { MenuAlignment } from '../BottomDrawer';
+import FolderItem from './FolderItem';
+import { ALL_NOTES_FILTER_ID } from '@joplin/lib/reserved-ids';
 
 interface Props {
 	syncStarted: boolean;
@@ -45,6 +44,7 @@ interface Props {
 	profileConfig: ProfileConfig;
 	inboxJopId: string;
 	selectedFolderIds: string[];
+	selectedSmartFilterId: string;
 }
 
 const syncIconRotationValue = new Animated.Value(0);
@@ -53,8 +53,6 @@ const syncIconRotation = syncIconRotationValue.interpolate({
 	inputRange: [0, 1],
 	outputRange: ['0deg', '360deg'],
 });
-
-const folderIconRightMargin = 10;
 
 let syncIconAnimation: Animated.CompositeAnimation|null = null;
 
@@ -83,10 +81,6 @@ const useStyles = (themeId: number) => {
 			width: 26,
 			textAlign: 'center',
 			textAlignVertical: 'center',
-		};
-		const folderIconBase: ViewStyle&ImageStyle = {
-			marginRight: folderIconRightMargin,
-			width: 27,
 		};
 		const folderButtonStyle: ViewStyle = {
 			...buttonStyle,
@@ -122,11 +116,6 @@ const useStyles = (themeId: number) => {
 				...folderButtonStyle,
 				backgroundColor: theme.selectedColor,
 			},
-			folderToggleIcon: {
-				...theme.icon,
-				fontSize: theme.fontSize,
-				color: theme.color,
-			},
 			sideButton: sideButtonStyle,
 			sideButtonSelected: {
 				...sideButtonStyle,
@@ -134,186 +123,12 @@ const useStyles = (themeId: number) => {
 			sideButtonText: {
 				...buttonTextStyle,
 			},
-			folderBaseIcon: {
-				...sidebarIconStyle,
-				...folderIconBase,
-			},
-			folderEmojiIcon: {
-				...sidebarIconStyle,
-				...folderIconBase,
-				fontSize: theme.fontSize,
-			},
-			folderImageIcon: {
-				...folderIconBase,
-				height: 20,
-				resizeMode: 'contain',
-			},
 		});
 
 		return styles;
 	}, [themeId]);
 };
 
-type Styles = ReturnType<typeof useStyles>;
-
-type FolderEventHandler = (folder: FolderEntity)=> void;
-interface FolderItemProps {
-	themeId: number;
-	hasChildren: boolean;
-	collapsed: boolean;
-	folder: FolderEntity;
-	selected: boolean;
-	depth: number;
-	styles: Styles;
-	alwaysShowFolderIcons: boolean;
-
-	onPress: FolderEventHandler;
-	onTogglePress: FolderEventHandler;
-	onLongPress: FolderEventHandler;
-}
-
-const FolderItem: React.FC<FolderItemProps> = props => {
-	const styles = useMemo(() => {
-		const theme = themeStyle(props.themeId);
-
-		return StyleSheet.create({
-			buttonWrapper: { flex: 1, flexDirection: 'row' },
-			folderButton: {
-				flex: 1,
-				flexDirection: 'row',
-				flexBasis: 'auto',
-				height: 36,
-				alignItems: 'center',
-				paddingRight: theme.marginRight,
-
-				backgroundColor: props.selected ? theme.selectedColor : undefined,
-				paddingLeft: props.depth * 10 + theme.marginLeft,
-			},
-			iconWrapper: {
-				paddingLeft: theme.margin,
-				paddingRight: theme.margin,
-				justifyContent: 'center',
-				backgroundColor: props.selected ? theme.selectedColor : undefined,
-			},
-			conflictFolderButtonText: {
-				color: theme.colorError,
-			},
-			conflictFolderButtonSelectedText: {
-				color: theme.colorErrorSelected,
-			},
-		});
-	}, [props.selected, props.depth, props.themeId]);
-	const baseStyles = props.styles;
-
-	const collapsed = props.collapsed;
-	const iconName = collapsed ? 'ionicon chevron-down' : 'ionicon chevron-up';
-	const iconComp = <Icon name={iconName} style={baseStyles.folderToggleIcon} accessibilityLabel={null} />;
-
-	const onTogglePress = useCallback(() => {
-		props.onTogglePress(props.folder);
-	}, [props.folder, props.onTogglePress]);
-
-	const iconWrapper = !props.hasChildren ? null : (
-		<TouchableOpacity
-			style={styles.iconWrapper}
-			onPress={onTogglePress}
-			accessibilityLabel={_('Expand %s', props.folder.title)}
-
-			aria-pressed={!collapsed}
-			accessibilityState={{ checked: !collapsed }}
-			// The togglebutton role is only supported on Android and iOS.
-			// On web, the button role with aria-pressed creates a togglebutton.
-			accessibilityRole={shim.mobilePlatform() === 'web' ? 'button' : 'togglebutton'}
-		>
-			{iconComp}
-		</TouchableOpacity>
-	);
-
-	const folderIcon = Folder.unserializeIcon(props.folder.icon);
-
-	const renderFolderIcon = (folderId: string, folderIcon: FolderIcon) => {
-		if (!folderIcon) {
-			if (folderId === getTrashFolderId()) {
-				folderIcon = getTrashFolderIcon(FolderIconType.FontAwesome);
-			} else if (props.alwaysShowFolderIcons) {
-				return <Icon
-					name={collapsed ? 'ionicon folder-outline' : 'ionicon folder-open-outline'}
-					style={baseStyles.folderBaseIcon}
-					accessibilityLabel={null}
-				/>;
-			} else {
-				return null;
-			}
-		}
-
-		if (folderIcon.type === FolderIconType.Emoji) {
-			return <Text style={baseStyles.folderEmojiIcon}>{folderIcon.emoji}</Text>;
-		} else if (folderIcon.type === FolderIconType.DataUrl) {
-			return <Image style={baseStyles.folderImageIcon} source={{ uri: folderIcon.dataUrl }}/>;
-		} else if (folderIcon.type === FolderIconType.FontAwesome) {
-			return <Icon style={baseStyles.folderBaseIcon} name={folderIcon.name} accessibilityLabel={null}/>;
-		} else {
-			throw new Error(`Unsupported folder icon type: ${folderIcon.type}`);
-		}
-	};
-
-	const onPress = useCallback(() => {
-		props.onPress(props.folder);
-	}, [props.folder, props.onPress]);
-
-	const onLongPress = useCallback(() => {
-		props.onLongPress(props.folder);
-	}, [props.folder, props.onLongPress]);
-
-	const longPressProps = useOnLongPressProps({
-		onLongPress,
-		actionDescription: _('Show notebook options'),
-	});
-
-	const folderTitle = Folder.displayTitle(props.folder);
-	// React Native doesn't seem to include an equivalent to web's aria-level.
-	// To allow screen reader users to determine whether a notebook is a subnotebook or not,
-	// depth is specified with an accessibilityLabel:
-	const folderDepthDescription = props.depth > 0 ? _('(level %d)', props.depth) : '';
-	const accessibilityLabel = `${folderTitle}  ${folderDepthDescription}`.trim();
-	const isConflictFolder = props.folder.id === Folder.conflictFolderId();
-	const textStyle = useMemo(() => {
-		const result: TextStyle[] = [baseStyles.folderButtonText];
-		if (isConflictFolder) {
-			result.push(styles.conflictFolderButtonText);
-			if (props.selected) {
-				result.push(styles.conflictFolderButtonSelectedText);
-			}
-		}
-		return result;
-	}, [styles, props.selected, isConflictFolder, baseStyles.folderButtonText]);
-
-	return (
-		<View key={props.folder.id} style={styles.buttonWrapper}>
-			<TouchableRipple
-				style={{ flex: 1, flexBasis: 'auto' }}
-				onPress={onPress}
-				{...longPressProps}
-				accessibilityHint={_('Opens notebook')}
-				accessibilityState={{ selected: props.selected }}
-				aria-current={props.selected}
-				role='button'
-			>
-				<View style={styles.folderButton}>
-					{renderFolderIcon(props.folder.id, folderIcon)}
-					<Text
-						numberOfLines={1}
-						style={textStyle}
-						accessibilityLabel={accessibilityLabel}
-					>
-						{folderTitle}
-					</Text>
-				</View>
-			</TouchableRipple>
-			{iconWrapper}
-		</View>
-	);
-};
 
 const SideMenuContentComponent = (props: Props) => {
 	const alwaysShowFolderIcons = true;
@@ -342,10 +157,11 @@ const SideMenuContentComponent = (props: Props) => {
 	const folder_press = (folder: FolderEntity) => {
 		props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 
+		const key = folder.id === ALL_NOTES_FILTER_ID ? 'smartFilterId' : 'folderId';
 		props.dispatch({
 			type: 'NAV_GO',
 			routeName: 'Notes',
-			folderId: folder.id,
+			[key]: folder.id,
 		});
 	};
 
@@ -360,6 +176,7 @@ const SideMenuContentComponent = (props: Props) => {
 		const menuItems: MenuOption[] = [];
 
 		if (folder && folder.id === getConflictFolderId()) return;
+		if (folder && folder.id === ALL_NOTES_FILTER_ID) return;
 
 		if (folder && folder.id === getTrashFolderId()) {
 			menuItems.push({
@@ -497,16 +314,6 @@ const SideMenuContentComponent = (props: Props) => {
 		void NavService.go('Config');
 	};
 
-	const allNotesButton_press = () => {
-		props.dispatch({ type: 'SIDE_MENU_CLOSE' });
-
-		props.dispatch({
-			type: 'NAV_GO',
-			routeName: 'Notes',
-			smartFilterId: 'c3176726992c11e9ac940492261af972',
-		});
-	};
-
 	const newFolderButton_press = () => {
 		props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 
@@ -575,15 +382,24 @@ const SideMenuContentComponent = (props: Props) => {
 	}, [performSync, props.dispatch]);
 
 
-	const renderFolderItem = (folder: FolderEntity, hasChildren: boolean, depth: number) => {
+	const renderFolderItem = ({ folder, hasChildren, depth }: RenderFolderItemEvent) => {
+		let selected;
+		if (props.notesParentType === 'Folder') {
+			selected = isFolderSelected(folder, {
+				selectedFolderIds: props.selectedFolderIds,
+				notesParentType: props.notesParentType,
+			});
+		} else {
+			selected = props.notesParentType === 'SmartFilter' && props.selectedSmartFilterId === folder.id;
+		}
+
 		return <FolderItem
 			key={`folder-item-${folder.id}`}
 			themeId={props.themeId}
 			hasChildren={hasChildren}
 			depth={depth}
 			collapsed={props.collapsedFolderIds.includes(folder.id)}
-			selected={isFolderSelected(folder, { selectedFolderIds: props.selectedFolderIds, notesParentType: props.notesParentType })}
-			styles={styles_}
+			selected={selected}
 			folder={folder}
 			alwaysShowFolderIcons={alwaysShowFolderIcons}
 			onPress={folder_press}
@@ -699,10 +515,18 @@ const SideMenuContentComponent = (props: Props) => {
 	// using padding. So instead creating blank elements for padding bottom and top.
 	items.push(<View style={{ height: theme.marginTop }} key="bottom_top_hack" />);
 
-	items.push(renderSidebarButton('all_notes', _('All notes'), 'document-outline', {
-		onPress: allNotesButton_press,
-		selected: props.notesParentType === 'SmartFilter',
-	}));
+	items.push(
+		renderFolderItem({
+			folder: {
+				title: _('All notes'),
+				icon: JSON.stringify({ type: FolderIconType.FontAwesome, name: 'ionicon document-outline' }),
+				id: ALL_NOTES_FILTER_ID,
+			},
+			hasChildren: false,
+			depth: 0,
+			indexInParent: 0,
+		}),
+	);
 
 	items.push(makeDivider('divider_all'));
 
@@ -753,6 +577,7 @@ export default connect((state: AppState) => {
 		syncStarted: state.syncStarted,
 		syncReport: state.syncReport,
 		selectedFolderIds: state.selectedFolderIds,
+		selectedSmartFilterId: state.selectedSmartFilterId,
 		notesParentType: state.notesParentType,
 		locale: state.settings.locale,
 		themeId: state.settings.theme,

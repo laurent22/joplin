@@ -2,7 +2,13 @@ import { FolderEntity, TagEntity, TagsWithNoteCountEntity } from '../../services
 import { getDisplayParentId } from '../../services/trash';
 import { getCollator } from '../../models/utils/getCollator';
 
-export type RenderFolderItem<T> = (folder: FolderEntity, hasChildren: boolean, depth: number)=> T;
+export interface RenderFolderItemEvent {
+	folder: FolderEntity;
+	hasChildren: boolean;
+	depth: number;
+	indexInParent: number;
+}
+export type RenderFolderItem<T> = (event: RenderFolderItemEvent)=> T;
 export type RenderTagItem<T> = (tag: TagsWithNoteCountEntity)=> T;
 
 interface FolderSelectedContext {
@@ -45,12 +51,13 @@ function folderIsCollapsed(context: RenderFoldersProps, folderId: string) {
 function renderFoldersRecursive_<T>(props: RenderFoldersProps, renderItem: RenderFolderItem<T>, items: T[], parentId: string, depth: number, order: string[]): ItemsWithOrder<T> {
 	const folders = props.folderTree.parentIdToChildren.get(parentId ?? '') ?? [];
 	const parentIdToChildren = props.folderTree.parentIdToChildren;
+	let indexInParent = 0;
 	for (const folder of folders) {
 		if (folderIsCollapsed(props, folder.id)) continue;
 
 		const hasChildren = parentIdToChildren.has(folder.id);
 		order.push(folder.id);
-		items.push(renderItem(folder, hasChildren, depth));
+		items.push(renderItem({ folder, hasChildren, depth, indexInParent: indexInParent++ }));
 		if (hasChildren) {
 			const result = renderFoldersRecursive_(props, renderItem, items, folder.id, depth + 1, order);
 			items = result.items;
