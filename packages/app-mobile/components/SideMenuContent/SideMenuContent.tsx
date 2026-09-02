@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useMemo, useEffect, useCallback, useContext, useState } from 'react';
-import { Easing, Animated, TouchableOpacity, Text, StyleSheet, ScrollView, View } from 'react-native';
+import { Easing, Animated, Text, StyleSheet, ScrollView, View } from 'react-native';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import Folder from '@joplin/lib/models/Folder';
@@ -28,6 +28,7 @@ import { MenuAlignment } from '../BottomDrawer';
 import FolderItem from './FolderItem';
 import { ALL_NOTES_FILTER_ID } from '@joplin/lib/reserved-ids';
 import SidebarIcon from './SidebarIcon';
+import SideMenuItem, { ToggleState } from './SideMenuItem';
 
 interface Props {
 	syncStarted: boolean;
@@ -402,14 +403,13 @@ const SideMenuContentComponent = (props: Props) => {
 	};
 
 	type SidebarButtonOptions = {
-		onPress?: ()=> void;
-		isHeader?: boolean;
+		onPress: ()=> void;
 	};
 	const renderSidebarButton = (
 		key: string,
 		title: string,
 		iconName: string,
-		{ onPress = null, isHeader = false }: SidebarButtonOptions = {},
+		{ onPress }: SidebarButtonOptions,
 	) => {
 		let icon = <SidebarIcon icon={`ionicon ${iconName}`} style={styles_.sidebarIcon} />;
 
@@ -417,28 +417,31 @@ const SideMenuContentComponent = (props: Props) => {
 			icon = <Animated.View style={{ transform: [{ rotate: syncIconRotation }] }}>{icon}</Animated.View>;
 		}
 
-		const content = (
-			<View key={key} style={styles_.sideButton}>
-				{icon}
-				<Text
-					style={styles_.sideButtonText}
-					accessibilityRole={isHeader ? 'header' : undefined}
-				>{title}</Text>
-			</View>
-		);
-
-		if (!onPress) return content;
-
 		return (
-			<TouchableOpacity key={key} onPress={onPress} accessibilityRole='button'>
-				{content}
-			</TouchableOpacity>
+			<SideMenuItem
+				key={key}
+				text={title}
+				touchableProps={{
+					onPress: onPress,
+				}}
+				depth={0}
+				selected={false}
+				icon={icon}
+				themeId={props.themeId}
+				toggleState={ToggleState.Hidden}
+			/>
 		);
 	};
 
 	const makeDivider = (key: string) => {
 		const theme = themeStyle(props.themeId);
-		return <View role='separator' style={{ marginTop: 15, marginBottom: 15, flex: -1, borderBottomWidth: 1, borderBottomColor: theme.dividerColor }} key={key}></View>;
+		return <View role='separator' style={{
+			marginTop: theme.marginSmall,
+			marginBottom: theme.marginSmall,
+			flex: -1,
+			borderBottomWidth: 1,
+			borderBottomColor: theme.dividerColor,
+		}} key={key}></View>;
 	};
 
 	const renderBottomPanel = () => {
