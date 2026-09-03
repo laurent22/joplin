@@ -43,7 +43,7 @@ const SideMenuItem: React.FC<Props> = ({
 			<TouchableRipple
 				style={styles.toggleIconWrapper}
 				onPress={onToggle}
-				accessibilityLabel={_('Expand %s', text)}
+				accessibilityLabel={collapsed ? _('Expand %s', text) : _('Collapse %s', text)}
 
 				aria-pressed={!collapsed}
 				accessibilityState={{ checked: !collapsed }}
