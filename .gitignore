@@ -548,6 +548,7 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameTag.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/resetLayout.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/restoreFolder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/restoreNote.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/commands/revealInNotebook.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/revealResourceFile.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/search.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/setTags.js
