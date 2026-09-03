@@ -11,30 +11,61 @@
 		<link rel="stylesheet" href="./info-page.css"/>
 	</head>
 	<body>
-		<main>
-			<h1>⚠️ Error: Only one copy of Joplin can be open at a time ⚠️</h1>
-			<p>
-				At present, the Joplin web client only supports one open copy at a time in the same browser. This restriction is present to keep your data safe.
-			</p>
-			<p>
-				To use Joplin in this tab, please <button id="close-all-other-web-clients">close all other Joplin web client tabs</button>,
-				then <button id="refresh-this-page">refresh</button> this page.
-			</p>
+		<main class="-loading">
+			<div id="only-one-copy-message">
+				<h1>⚠️ Error: Only one copy of Joplin can be open at a time ⚠️</h1>
+				<p>
+					At present, the Joplin web client only supports one open copy at a time in the same browser. This restriction is present to keep your data safe.
+				</p>
+				<p>
+					To use Joplin in this tab, please <button id="close-all-other-web-clients">close all other Joplin web client tabs</button>,
+					then <button id="refresh-this-page">refresh</button> this page.
+				</p>
+			</div>
+			<div id="loading-message">
+				<p>Loading...</p>
+			</div>
 		</main>
 	</body>
 	<script>
-		for (const refreshLink of document.querySelectorAll('#refresh-this-page')) {
-			refreshLink.onclick = () => location.reload();
-		}
+		function setUpButtons() {
+			for (const refreshLink of document.querySelectorAll('#refresh-this-page')) {
+				refreshLink.onclick = () => location.reload();
+			}
 
-		for (const closeLink of document.querySelectorAll('#close-all-other-web-clients')) {
-			if (navigator.serviceWorker) {
-				closeLink.onclick = () => {
-					window.navigator.serviceWorker.controller.postMessage({ type: 'closeAllJoplinWebTabs' });
-				};
-			} else {
-				closeLink.replaceWith(document.createTextNode(closeLink.textContent));
+			for (const closeLink of document.querySelectorAll('#close-all-other-web-clients')) {
+				if (navigator.serviceWorker) {
+					closeLink.onclick = () => {
+						window.navigator.serviceWorker.controller.postMessage({ type: 'closeAllJoplinWebTabs' });
+					};
+				} else {
+					closeLink.replaceWith(document.createTextNode(closeLink.textContent));
+				}
 			}
 		}
+
+		function handleRetry() {
+			const main = document.querySelector('main');
+			const url = new URL(location.href);
+			if (!url.searchParams.has('no-retry')) {
+				main.classList.add('-loading');
+
+				// In some browsers (e.g. Firefox, Safari), the service worker incorrectly
+				// detects reloading the web app (or the first load) as a new browser tab accessing Joplin,
+				// where a previous tab already has access.
+				// Retry once to work around this issue: 
+				setTimeout(() => {
+					main.classList.remove('-loading');
+
+					url.searchParams.set('no-retry', '1');
+					location.replace(url);
+				}, 150);
+			} else {
+				main.classList.remove('-loading');
+			}
+		}
+
+		setUpButtons();
+		handleRetry();
 	</script>
 </html>
