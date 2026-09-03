@@ -433,11 +433,19 @@ export default class ShareModel extends BaseModel<Share> {
 					}
 
 					if (row.item_count < realShareItemCount) {
-						logger.warn(`checkForMissingUserItems: User is missing some items: Share ${share.id}: User ${row.user_id}`);
+						logger.warn(`checkForMissingUserItems: User is missing some items: Share ${share.id}: User ${row.user_id}: Has ${row.item_count} of ${realShareItemCount} items (share owner: ${share.owner_id})`);
 						await this.createSharedFolderUserItems(share.id, row.user_id);
+
+						// If the count doesn't move, the repair is a no-op and the next run will
+						// log exactly the same warning. Record it so we can tell a stuck share
+						// apart from one that is simply being repaired.
+						const newCount = await this.itemCountByUserAndShareId(share.id, row.user_id);
+						if (newCount === row.item_count) {
+							logger.warn(`checkForMissingUserItems: Repair had no effect: Share ${share.id}: User ${row.user_id}: Still has ${newCount} of ${realShareItemCount} items`);
+						}
 					} else if (row.item_count > realShareItemCount) {
 						// Shouldn't be possible but log it just in case
-						logger.warn(`checkForMissingUserItems: User has too many items (??): Share ${share.id}: User ${row.user_id}`);
+						logger.warn(`checkForMissingUserItems: User has too many items (??): Share ${share.id}: User ${row.user_id}: Has ${row.item_count} of ${realShareItemCount} items (share owner: ${share.owner_id})`);
 					}
 				}
 			}
@@ -477,7 +485,11 @@ export default class ShareModel extends BaseModel<Share> {
 
 		perfTimer.push('Main');
 
+		let loopCount = 0;
+
 		while (true) {
+			loopCount++;
+
 			perfTimer.push('Get latestProcessedChange');
 			const latestProcessedChange = await this.models().keyValue().value<string>('ShareService::latestProcessedChange');
 			perfTimer.pop();
@@ -486,6 +498,13 @@ export default class ShareModel extends BaseModel<Share> {
 			const paginatedChanges = await this.models().change().allFromId(latestProcessedChange || '');
 			perfTimer.pop();
 			const changes = paginatedChanges.items;
+
+			// allFromId computes the cursor and has_more before filtering out changes for
+			// deleted items, so a batch can come back empty while has_more is still true. If
+			// that keeps happening the task is spinning without making progress.
+			if (loopCount % 100 === 0) {
+				logger.warn(`updateSharedItems3: Still looping after ${loopCount} iterations: cursor=${paginatedChanges.cursor} changes=${changes.length} hasMore=${paginatedChanges.has_more}`);
+			}
 
 			if (!changes.length) {
 				perfTimer.push('Set latestProcessedChange');
@@ -701,6 +720,18 @@ export default class ShareModel extends BaseModel<Share> {
 			.count('id', { as: 'item_count' })
 			.where('jop_share_id', '=', shareId);
 		return r[0].item_count;
+	}
+
+	public async itemCountByUserAndShareId(shareId: Uuid, userId: Uuid): Promise<number> {
+		const r = await this.db('user_items')
+			.count('item_id', { as: 'item_count' })
+			.where('user_id', '=', userId)
+			.whereIn('item_id',
+				this.db('items')
+					.select('id')
+					.where('jop_share_id', '=', shareId),
+			);
+		return Number(r[0].item_count);
 	}
 
 	public async itemCountByShareIdPerUser(shareId: Uuid): Promise<{ item_count: number; user_id: Uuid }[]> {

@@ -142,7 +142,17 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		perfTimer.push('Main');
 
 		const items: Item[] = Array.isArray(itemsQuery) ? itemsQuery : await itemsQuery.whereNotIn('id', this.db('user_items').select('item_id').where('user_id', '=', userId));
-		if (!items.length) return;
+
+		// Callers such as ShareModel::createSharedFolderUserItems only call this after
+		// determining that items are missing, so selecting nothing means the caller's view
+		// and this query disagree. Log it to tell that case apart from a failing insert.
+		if (!items.length) {
+			logger.info(`addMulti: No item to add for user ${userId} (caller passed ${Array.isArray(itemsQuery) ? 'an array' : 'a query'})`);
+			perfTimer.pop();
+			return;
+		}
+
+		logger.info(`addMulti: Adding ${items.length} items for user ${userId}: ${items.map(i => i.id).join(', ')}`);
 
 		perfTimer.push(`Processing ${items.length} items`);
 
@@ -171,6 +181,7 @@ export default class UserItemModel extends BaseModel<UserItem> {
 					if (!options.ignoreAlreadyExists || !isUniqueConstraintError(error)) {
 						throw error;
 					}
+					logger.info(`addMulti: Skipping already existing user item: user ${userId}, item ${item.id}`);
 				}
 			}, 'UserItemModel::addMulti');
 		}
