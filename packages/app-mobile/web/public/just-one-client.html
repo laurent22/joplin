@@ -55,10 +55,13 @@
 				// where a previous tab already has access.
 				// Retry once to work around this issue: 
 				setTimeout(() => {
-					main.classList.remove('-loading');
-
-					url.searchParams.set('no-retry', '1');
-					location.replace(url);
+					try {
+						url.searchParams.set('no-retry', '1');
+						location.replace(url);
+					} catch (error) {
+						main.classList.remove('-loading');
+						throw error;
+					}
 				}, 150);
 			} else {
 				main.classList.remove('-loading');
