@@ -9,7 +9,7 @@ for (let i = 0; i < 32; i++) {
 	friendlySafeFilename_blackListChars += String.fromCharCode(i);
 }
 
-const friendlySafeFilename_blackListNames = ['.', '..', 'CON', 'PRN', 'AUX', 'NUL', 'COM1', 'COM2', 'COM3', 'COM4', 'COM5', 'COM6', 'COM7', 'COM8', 'COM9', 'LPT1', 'LPT2', 'LPT3', 'LPT4', 'LPT5', 'LPT6', 'LPT7', 'LPT8', 'LPT9'];
+const friendlySafeFilename_blackListNames = ['.', '..', 'CON', 'PRN', 'AUX', 'NUL', 'COM1', 'COM2', 'COM3', 'COM4', 'COM5', 'COM6', 'COM7', 'COM8', 'COM9', 'LPT1', 'LPT2', 'LPT3', 'LPT4', 'LPT5', 'LPT6', 'LPT7', 'LPT8', 'LPT9', 'COM¹', 'COM²', 'COM³', 'LPT¹', 'LPT²', 'LPT³'];
 
 // The goal of this function is to provide a safe filename, that should work in
 // any filesystem, but that's still user friendly, in particular because it
@@ -68,9 +68,11 @@ export function friendlySafeFilename(e: string, maxLength: number = null, preser
 
 	// The reserved name check must come after trimming, otherwise names like
 	// "con." or " con " would pass the check and then be trimmed down to a
-	// reserved name.
-	if (output.length <= 4) {
-		if (friendlySafeFilename_blackListNames.indexOf(output.toUpperCase()) >= 0) {
+	// reserved name. Windows also rejects a reserved device name followed by
+	// an extension ("CON.txt"), so compare the part before the first dot.
+	const outputBaseName = output.split('.')[0];
+	if (outputBaseName.length <= 4) {
+		if (friendlySafeFilename_blackListNames.indexOf(outputBaseName.toUpperCase()) >= 0) {
 			output = '___';
 		}
 	}

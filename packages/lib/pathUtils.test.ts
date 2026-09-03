@@ -11,6 +11,8 @@ describe('pathUtils', () => {
 			['con.', '___'],
 			['aux ', '___'],
 			[' con ', '___'],
+			['CON.txt', '___'],
+			['COM¹', '___'],
 			['no space at the end ', 'no space at the end'],
 			['nor dots...', 'nor dots'],
 			['  no space before either', 'no space before either'],
