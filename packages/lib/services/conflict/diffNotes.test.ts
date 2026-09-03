@@ -57,14 +57,24 @@ describe('autoMerge', () => {
 		expect(result.sections.some(s => s.type === 'conflict')).toBe(false);
 	});
 
-	test('should not treat an invisible trailing-whitespace edit as a conflict', () => {
-		// Local's only change to the GitHub line is a stray trailing space
+	test('should treat a trailing-whitespace edit to a line the other side also changed as a conflict', () => {
 		const base = 'Visit Google.\n\nVisit GitHub.';
 		const local = 'Visit Google.: https://youtube.com/\n\nVisit GitHub. ';
 		const remote = 'Visit Google.: https://youtube.com/\n\nVisit GitHub.: https://github.com/inbox';
 		const result = autoMerge(base, local, remote);
+		const conflicts = result.sections.filter(s => s.type === 'conflict');
+		expect(conflicts.length).toBe(1);
+		expect(conflicts[0].localText).toBe('Visit GitHub. ');
+		expect(conflicts[0].remoteText).toBe('Visit GitHub.: https://github.com/inbox');
+	});
+
+	test('should apply a whitespace-only edit made by one side', () => {
+		const base = 'Alpha\n\nBeta\n\nGamma';
+		const local = 'Alpha \n\nBeta\n\nGamma';
+		const remote = 'Alpha\n\nBeta\n\nGamma edited';
+		const result = autoMerge(base, local, remote);
 		expect(result.sections.some(s => s.type === 'conflict')).toBe(false);
-		expect(result.mergedText).toBe('Visit Google.: https://youtube.com/\n\nVisit GitHub.: https://github.com/inbox');
+		expect(result.mergedText).toBe('Alpha \n\nBeta\n\nGamma edited');
 	});
 
 	test('should preserve a two-space Markdown hard line break on an untouched line', () => {
@@ -93,8 +103,7 @@ describe('autoMerge', () => {
 	});
 
 	test('should merge a note written with Windows line endings', () => {
-		// Splitting on \n alone would leave a \r on every line, so the trailing space
-		// below would never be normalised and both sides would look changed
+		// Splitting on \n alone would leave a \r on every line, so both sides would look changed
 		const base = 'Alpha \r\nBeta\r\n\r\nGamma';
 		const local = 'Alpha \r\nBeta edited\r\n\r\nGamma';
 		const remote = 'Alpha \r\nBeta\r\n\r\nGamma edited';
@@ -207,6 +216,35 @@ describe('autoMerge', () => {
 		const result = autoMerge(base, edited, edited);
 		expect(result.sections.some(s => s.type === 'conflict')).toBe(false);
 		expect(result.mergedText).toBe(edited);
+	});
+
+	test('should merge a note with heavily repeated lines', () => {
+		const base = Array.from({ length: 2000 }, (_, i) => i % 2 === 0 ? `Text ${i}` : '').join('\n');
+		const local = base.replace('Text 0', 'Text 0 local');
+		const remote = base.replace('Text 1998', 'Text 1998 remote');
+		const result = autoMerge(base, local, remote);
+		expect(result.sections.some(s => s.type === 'conflict')).toBe(false);
+		expect(result.mergedText).toContain('Text 0 local');
+		expect(result.mergedText).toContain('Text 1998 remote');
+	});
+
+	test('should merge a long note whose lines are mostly unique', () => {
+		const base = Array.from({ length: 20000 }, (_, i) => `Line ${i} unique content.`).join('\n');
+		const local = base.replace('Line 0 ', 'Line 0 local ');
+		const remote = base.replace('Line 19999 ', 'Line 19999 remote ');
+		const result = autoMerge(base, local, remote);
+		expect(result.sections.some(s => s.type === 'conflict')).toBe(false);
+		expect(result.mergedText).toContain('Line 0 local');
+		expect(result.mergedText).toContain('Line 19999 remote');
+	});
+
+	test('should conflict when the two versions are too different to diff', () => {
+		const base = Array.from({ length: 20000 }, (_, i) => `Line ${i}`).join('\n');
+		const local = Array.from({ length: 20000 }, (_, i) => `Local ${i}`).join('\n');
+		const remote = Array.from({ length: 20000 }, (_, i) => `Remote ${i}`).join('\n');
+		const result = autoMerge(base, local, remote);
+		expect(result.sections.length).toBe(1);
+		expect(result.sections[0].type).toBe('conflict');
 	});
 
 	test('should be deterministic for the same inputs', () => {

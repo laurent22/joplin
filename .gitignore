@@ -1647,6 +1647,8 @@ packages/lib/services/commands/stateToWhenClauseContext.test.js
 packages/lib/services/commands/stateToWhenClauseContext.js
 packages/lib/services/conflict/autoMergeNote.test.js
 packages/lib/services/conflict/autoMergeNote.js
+packages/lib/services/conflict/boundedDiff3.test.js
+packages/lib/services/conflict/boundedDiff3.js
 packages/lib/services/conflict/decryptNoteInMemory.js
 packages/lib/services/conflict/diffNotes.test.js
 packages/lib/services/conflict/diffNotes.js

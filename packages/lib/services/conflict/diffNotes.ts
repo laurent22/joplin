@@ -1,22 +1,7 @@
 // require: node-diff3's type exports are not resolvable under this moduleResolution
-const { diff3MergeRegions, diffComm, diffIndices } = require('node-diff3');
-
-interface StableRegion {
-	stable: true;
-	buffer: 'a' | 'o' | 'b';
-	bufferStart: number;
-	bufferLength: number;
-	bufferContent: string[];
-}
-
-interface UnstableRegion {
-	stable: false;
-	aContent: string[];
-	oContent: string[];
-	bContent: string[];
-}
-
-type Region = StableRegion | UnstableRegion;
+const { diffComm } = require('node-diff3');
+const { diffArrays } = require('diff');
+import boundedDiff3MergeRegions, { ArrayChange, diffOptions, Region } from './boundedDiff3';
 
 // diffComm's `common` field is missing from the node-diff3 types
 interface CommRegion {
@@ -44,57 +29,53 @@ const conflictPlaceholder = (local: string, remote: string): string => {
 	return `<<<<<<< local\n${local}\n=======\n${remote}\n>>>>>>> remote`;
 };
 
-// Trailing whitespace is invisible noise which can cause false conflicts
-// Two trailing spaces are kept (markdown hard line break)
-const normaliseLine = (line: string): string => {
-	return line.replace(/[ \t]+$/, match => match === '  ' ? '  ' : '');
-};
-
-// Lines are compared normalised so invisible whitespace can't cause a false
-// conflict, but the originals are what get written back. All three line endings are
-// split on, otherwise a note written on Windows keeps a \r on every line.
-const splitLines = (text: string) => {
-	const original = text.split(/\r\n|\n|\r/);
-	return { original, normalised: original.map(normaliseLine) };
-};
-
-// Stable regions keep their original text, while unstable regions use normalised text.
-// KNOWN LIMITATION: trailing-whitespace-only changes can be lost because the
-// normalised line matches the base and the original is taken from the base.
-const originalRegionLines = (region: StableRegion, sides: Record<'a' | 'o' | 'b', string[]>): string[] => {
-	const source = sides[region.buffer];
-	const originals = source.slice(region.bufferStart, region.bufferStart + region.bufferLength);
-	return originals.length === region.bufferContent.length ? originals : region.bufferContent;
-};
-
-interface DiffIndicesRegion {
-	buffer1: [number, number];
-}
+// All three line endings are split on, otherwise a note written on Windows keeps a \r on every line
+const splitLines = (text: string) => text.split(/\r\n|\n|\r/);
 
 // True when the given side edited at or next to two or more identical lines in a row
 const touchesDuplicateRun = (base: string[], side: string[]): boolean => {
-	const changes: DiffIndicesRegion[] = diffIndices(base, side);
+	const changes: ArrayChange[] | undefined = diffArrays(base, side, diffOptions);
+	if (!changes) return true;
 
-	for (const change of changes) {
-		const [start, length] = change.buffer1;
+	let baseIndex = 0;
+	let changedStart = -1;
+	let changedLength = 0;
 
-		// Compare each line with the next to find identical pairs. Check the pairs
-		// touched by an edit; for an insertion, check both sides of the gap.
-		const lastLine = length > 0 ? start + length - 1 : start;
-		const from = Math.max(0, start - 1);
+	const changedRangeTouchesRun = () => {
+		if (changedStart < 0) return false;
+
+		const lastLine = changedLength > 0 ? changedStart + changedLength - 1 : changedStart;
+		const from = Math.max(0, changedStart - 1);
 		const to = Math.min(base.length - 2, lastLine);
 
 		for (let i = from; i <= to; i++) {
 			if (base[i] === base[i + 1]) return true;
 		}
 
-		// An insertion after the last line still touches the final pair.
-		if (length === 0 && start > to && base.length >= 2 && base[base.length - 2] === base[base.length - 1]) {
-			return true;
+		// An insertion past the last line still sits against the final pair
+		if (changedLength === 0 && changedStart > to && base.length >= 2) {
+			return base[base.length - 2] === base[base.length - 1];
+		}
+
+		return false;
+	};
+
+	for (const change of changes) {
+		if (!change.added && !change.removed) {
+			if (changedRangeTouchesRun()) return true;
+			changedStart = -1;
+			changedLength = 0;
+			baseIndex += change.count;
+		} else {
+			if (changedStart < 0) changedStart = baseIndex;
+			if (change.removed) {
+				changedLength += change.count;
+				baseIndex += change.count;
+			}
 		}
 	}
 
-	return false;
+	return changedRangeTouchesRun();
 };
 
 const bothSidesChanged = (base: string[], local: string[], remote: string[]): boolean => {
@@ -107,12 +88,12 @@ export const autoMerge = (baseRaw: string, localRaw: string, remoteRaw: string):
 	const localLines = splitLines(localRaw);
 	const remoteLines = splitLines(remoteRaw);
 
-	const base = baseLines.normalised.join('\n');
+	const base = baseLines.join('\n');
 
 	if (base === '') {
 		// No base version: we can't tell which side made the changes, so the every
 		// different line is treated as a conflict
-		const comm: CommRegion[] = diffComm(localLines.normalised, remoteLines.normalised);
+		const comm: CommRegion[] = diffComm(localLines, remoteLines);
 
 		const sections: MergedSection[] = [];
 		const mergedParts: string[] = [];
@@ -123,14 +104,14 @@ export const autoMerge = (baseRaw: string, localRaw: string, remoteRaw: string):
 
 		for (const region of comm) {
 			if (region.common) {
-				const text = localLines.original.slice(localIndex, localIndex + region.common.length).join('\n');
+				const text = localLines.slice(localIndex, localIndex + region.common.length).join('\n');
 				localIndex += region.common.length;
 				remoteIndex += region.common.length;
 				sections.push({ text, type: 'unchanged' });
 				mergedParts.push(text);
 			} else {
-				const localText = localLines.original.slice(localIndex, localIndex + region.buffer1.length).join('\n');
-				const remoteText = remoteLines.original.slice(remoteIndex, remoteIndex + region.buffer2.length).join('\n');
+				const localText = localLines.slice(localIndex, localIndex + region.buffer1.length).join('\n');
+				const remoteText = remoteLines.slice(remoteIndex, remoteIndex + region.buffer2.length).join('\n');
 				localIndex += region.buffer1.length;
 				remoteIndex += region.buffer2.length;
 				const text = conflictPlaceholder(localText, remoteText);
@@ -142,30 +123,30 @@ export const autoMerge = (baseRaw: string, localRaw: string, remoteRaw: string):
 		return { mergedText: mergedParts.join('\n'), sections };
 	}
 
-	// With duplicate lines, diff3 can't tell which copy was changed, so it may
-	// apply both edits and duplicate content. We raise a conflict instead.
-	const ambiguous = bothSidesChanged(baseLines.normalised, localLines.normalised, remoteLines.normalised) &&
-		(touchesDuplicateRun(baseLines.normalised, localLines.normalised) || touchesDuplicateRun(baseLines.normalised, remoteLines.normalised));
+	// With duplicate lines, diff3 can't tell which copy was changed, so it may apply both
+	// edits and duplicate content. A merge too large to diff is treated the same
+	// way, since blocking the UI is worse than falling back to a conflict.
+	const ambiguous = bothSidesChanged(baseLines, localLines, remoteLines) &&
+		(touchesDuplicateRun(baseLines, localLines) || touchesDuplicateRun(baseLines, remoteLines));
 
-	if (ambiguous) {
-		const localText = localLines.original.join('\n');
-		const remoteText = remoteLines.original.join('\n');
+	const regions: Region[]|null = ambiguous ? null : boundedDiff3MergeRegions(localLines, baseLines, remoteLines);
+
+	// A null result means the diff was too large to compute, so a conflict is safer than blocking the app
+	if (!regions) {
+		const localText = localLines.join('\n');
+		const remoteText = remoteLines.join('\n');
 		return {
 			mergedText: conflictPlaceholder(localText, remoteText),
 			sections: [{ text: conflictPlaceholder(localText, remoteText), type: 'conflict', localText, remoteText }],
 		};
 	}
 
-	const regions: Region[] = diff3MergeRegions(localLines.normalised, baseLines.normalised, remoteLines.normalised);
-
-	const sides = { a: localLines.original, o: baseLines.original, b: remoteLines.original };
-
 	const sections: MergedSection[] = [];
 	const mergedParts: string[] = [];
 
 	for (const region of regions) {
 		if (region.stable === true) {
-			const text = originalRegionLines(region, sides).join('\n');
+			const text = region.bufferContent.join('\n');
 			// buffer 'o' = all sides agreed; 'a'/'b' = one side's change, taken cleanly
 			sections.push({ text, type: region.buffer === 'o' ? 'unchanged' : 'auto-merged' });
 			mergedParts.push(text);
