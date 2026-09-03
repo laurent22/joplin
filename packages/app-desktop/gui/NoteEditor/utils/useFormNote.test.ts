@@ -36,14 +36,17 @@ describe('useFormNote', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
+		// Pinned off regardless of the build's default so the fixtures below save raw bodies.
+		Setting.setValue('featureFlag.noteLock', false);
 	});
 
 	// The session and decryption internals are covered by the lib tests; here they are mocked to
 	// test only the hook's gating: ciphertext must never reach the form note.
 	it('should not produce a form note for a locked note while the session is locked, and decrypt it once unlocked', async () => {
-		Setting.setValue('featureFlag.noteLock', true);
-		// A direct save of a new note with is_locked keeps the raw body, standing in for ciphertext.
+		// Saved with the flag off so the raw body stands in for ciphertext; an ungated save with
+		// the flag on would encrypt it.
 		const testNote = await Note.save({ title: 'Locked note', body: 'ciphertext', is_locked: 1 });
+		Setting.setValue('featureFlag.noteLock', true);
 
 		const isUnlockedMock = jest.spyOn(NoteLockSession.instance(), 'isUnlocked').mockReturnValue(false);
 		const decryptedKeyMock = jest.spyOn(NoteLockSession.instance(), 'decryptedKey').mockReturnValue({ id: 'key-id', plainText: 'key' });
@@ -101,8 +104,8 @@ describe('useFormNote', () => {
 	});
 
 	it('should report a decryption failure instead of throwing, without producing a form note', async () => {
-		Setting.setValue('featureFlag.noteLock', true);
 		const testNote = await Note.save({ title: 'Locked note', body: 'ciphertext', is_locked: 1 });
+		Setting.setValue('featureFlag.noteLock', true);
 		// The save's own change event would otherwise reach the hook's listener and reload the note.
 		await ItemChange.waitForAllSaved();
 

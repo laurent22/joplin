@@ -305,6 +305,8 @@ describe('models/Note', () => {
 
 		await expect(Note.load(note.id, { fields: ['id', 'is_locked'], useNoteLock: true })).rejects.toThrow();
 		await expect(Note.load(note.id, { fields: ['id', 'body'], useNoteLock: true })).rejects.toThrow('Gated note lock load is missing lock state');
+		// Resolves empty like a plain load, so callers keep their deleted-note handling.
+		await expect(Note.load('0123456789abcdef0123456789abcdef', { useNoteLock: true })).resolves.toBeUndefined();
 
 		await Note.save(await Note.load(note.id, { useNoteLock: true }), { useNoteLock: true });
 		expect((await Note.load(note.id)).body).not.toBe(plainTextBody);
@@ -313,7 +315,7 @@ describe('models/Note', () => {
 		await expect(Note.save({
 			id: note.id,
 			body: 'must not be stored',
-		}, { useNoteLock: true })).rejects.toThrow('Gated note lock save is missing lock state');
+		}, { useNoteLock: true })).rejects.toThrow('Gated note lock save is missing decrypted state');
 		await expect(Note.save({
 			id: note.id,
 			is_locked: 1,
@@ -334,6 +336,38 @@ describe('models/Note', () => {
 		const unlockedNote = await Note.load(note.id);
 		expect(unlockedNote.body).toBe('unlocked');
 		expect(unlockedNote.extracted_resource_ids).toBe('');
+	});
+
+	it('should encrypt an ungated save whose body is plaintext for a locked note', async () => {
+		await NoteLockKey.instance().create('123456');
+		await NoteLockSession.instance().unlock('123456');
+		const resourceId = '06894e83b8f84d3d8cbe0f1587f9e226';
+		const note = await Note.save({ body: 'secret', is_locked: 1 }, { useNoteLock: true });
+
+		// Gated loaded data saved through an ungated path is encrypted instead of rejected.
+		await Note.save({ ...await Note.load(note.id, { useNoteLock: true }), body: 'edited' });
+		expect((await Note.load(note.id)).body).not.toBe('edited');
+		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe('edited');
+
+		// A fresh partial save picks up the row's lock state and keeps the lock fields together
+		// even when the caller restricts the saved fields.
+		const partialBody = `partial [](:/${resourceId})`;
+		await Note.save({ id: note.id, body: partialBody }, { fields: ['body'] });
+		const storedNote = await Note.load(note.id);
+		expect(storedNote.is_locked).toBe(1);
+		expect(storedNote.body).not.toBe(partialBody);
+		expect(storedNote.extracted_resource_ids).toBe(resourceId);
+		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe(partialBody);
+
+		// An ungated load returns ciphertext, which passes through unchanged, like sync data does.
+		await Note.save({ id: note.id, body: storedNote.body });
+		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe(partialBody);
+
+		// With the session locked there is no key to encrypt with, so the save fails closed.
+		NoteLockSession.instance().lock();
+		await expect(Note.save({ id: note.id, body: 'plain while locked' })).rejects.toThrow('Note lock session is locked');
+		await NoteLockSession.instance().unlock('123456');
+		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe(partialBody);
 	});
 
 	it('should treat a locked note as a normal note while the feature is disabled', async () => {
@@ -395,7 +429,7 @@ describe('models/Note', () => {
 		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe('edited again');
 
 		const unlocked = await Note.save({ ...await Note.load(note.id, { useNoteLock: true }), is_locked: 0 }, { useNoteLock: true });
-		expect(unlocked).toMatchObject({ isDecrypted: false });
+		expect(unlocked).toMatchObject({ isDecrypted: true });
 	});
 
 	it('should fail closed when note lock encryption cannot decrypt or encrypt', async () => {

@@ -90,7 +90,10 @@ const loadNoteForForm = async (noteId: string): Promise<{ note: NoteEntity|null;
 			}
 		}
 	}
-	return { note: await Note.load(noteId), blocked: false, decryptFailed: false };
+	// An unlocked note still goes through the gate, so the form note carries the marker
+	// that its gated scheduled saves require.
+	const note = await Note.load(noteId, { useNoteLock: true });
+	return { note, blocked: false, decryptFailed: false };
 };
 
 type InitNoteStateCallback = (note: NoteEntity, isNew: boolean, force?: boolean)=> Promise<FormNote>;

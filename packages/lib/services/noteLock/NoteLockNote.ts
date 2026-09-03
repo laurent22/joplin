@@ -18,7 +18,8 @@ export default class NoteLockNote {
 		if (!note) throw new Error('Gated note lock load is missing note');
 		if (note.is_locked === undefined) throw new Error('Gated note lock load is missing lock state');
 		const isLocked = this.isLocked(note);
-		const result = { ...note, isDecrypted: isLocked };
+		// The marker means the note was loaded with the gate, locked or not.
+		const result = { ...note, isDecrypted: true };
 		if (isLocked) {
 			// A missing body here means the gated load did not request enough fields, so pass an empty string and let decryption fail explicitly.
 			result.body = await NoteLockService.withDecryptedKey(scoped => scoped.decryptString(note.body ?? ''), key);
@@ -26,14 +27,13 @@ export default class NoteLockNote {
 		return result;
 	}
 
-	public static async prepareForSave(note: NoteEntity, linkedItemIds: (body: string)=> string[], serializeResourceIds: (resourceIds: string[])=> string, isNew: boolean, key: DecryptedNoteLockKey = null) {
+	public static async prepareForSave(note: NoteEntity, linkedItemIds: (body: string)=> string[], serializeResourceIds: (resourceIds: string[])=> string, isNew: boolean, useNoteLock: boolean, key: DecryptedNoteLockKey = null) {
 		if (!note) throw new Error('Gated note lock save is missing note');
-		// Gated saves do not support partial note objects, so they must be based on a loaded note.
-		if (note.is_locked === undefined && !isNew) throw new Error('Gated note lock save is missing lock state');
 		if (!('body' in note)) throw new Error('Gated note lock save is missing body');
 		const isLocked = this.isLocked(note);
-		// A body that never went through a gated decrypt would be encrypted a second time here.
-		if (isLocked && !isNew && !(note as Record<string, unknown>).isDecrypted) throw new Error('Gated note lock save is missing decrypted state');
+		// The marker proves the data came from a gated load, so a cipher body is never encrypted
+		// a second time and a missed gated load fails during development, locked note or not.
+		if (useNoteLock && !isNew && !(note as Record<string, unknown>).isDecrypted) throw new Error('Gated note lock save is missing decrypted state');
 		if (!isLocked) note.extracted_resource_ids = '';
 
 		const plainTextBody = note.body ?? '';

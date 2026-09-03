@@ -15,7 +15,7 @@ describe('command-edit', () => {
 
 	it('should refuse to edit a locked note without writing a temp file', async () => {
 		Setting.setValue('featureFlag.noteLock', true);
-		const note = await Note.save({ title: 'hello', body: 'ciphertext', is_locked: 1, parent_id: '' });
+		const note = await Note.save({ title: 'hello', body: 'JLD01ciphertext', is_locked: 1, parent_id: '' });
 		const tempDir = Setting.value('tempDir');
 		await fs.ensureDir(tempDir);
 		const filesBefore = await fs.readdir(tempDir);

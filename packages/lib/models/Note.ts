@@ -29,6 +29,7 @@ import { MarkupToHtml } from '@joplin/renderer';
 import { ALL_NOTES_FILTER_ID } from '../reserved-ids';
 import NoteLockNote from '../services/noteLock/NoteLockNote';
 import isNoteLockEnabled from '../services/noteLock/isNoteLockEnabled';
+import { isValidHeaderIdentifier } from '../services/e2ee/EncryptionService';
 import { ShareType, StateShare } from '../services/share/reducer';
 
 export interface PreviewsOrder {
@@ -842,10 +843,20 @@ export default class Note extends BaseItem {
 
 	public static async load(id: string, options: LoadOptions = null): Promise<NoteEntity> {
 		const note = await super.load(id, options);
-		if (isNoteLockEnabled() && !!options?.useNoteLock) return NoteLockNote.decryptBody(note, options.noteLockKey);
+		if (isNoteLockEnabled() && !!options?.useNoteLock && note) return NoteLockNote.decryptBody(note, options.noteLockKey);
 		return note;
 	}
 
+	// Using useNoteLock on save is not mandatory for UI flows which may handle locked notes,
+	// but as a general rule, for any usage where a gated load (the note contents are loaded
+	// with useNoteLock: true) was used to originally populate the note contents, a full note
+	// save should include useNoteLock: true, so that it will throw if the contents were not
+	// loaded via a gated load, to prevent the possibility of the encrypted cipher being
+	// changed directly. For partial saves, it usually does not need to be included. Normally
+	// a partial save to the body is used for a controlled change, but if the save allows
+	// altering the body as free text, a gated save should be used, and the isDecrypted flag
+	// from the note must be passed to the save, so that the gated validation will work
+	// correctly.
 	public static async save(o: NoteEntity, options: SaveOptions = null): Promise<NoteEntity> {
 		const isNew = this.isNew(o, options);
 
@@ -888,13 +899,22 @@ export default class Note extends BaseItem {
 		// in the item_changes table
 		const oldNote = !isNew && o.id ? await Note.load(o.id) : null;
 		let plainTextBodyToReturn: string = null;
-		if (isNoteLockEnabled() && !!options?.useNoteLock) {
+		// An ungated save with a plaintext body goes through the note lock path too, so a missed
+		// gate on a new feature encrypts instead of leaking plaintext. Ciphertext bodies pass
+		// through untouched, the same way data saved via sync does.
+		if (isNoteLockEnabled() && (options?.useNoteLock || ('body' in o && !isValidHeaderIdentifier((o.body ?? '').substring(0, 5), false, true)))) {
+			if (o.is_locked === undefined && !isNew && oldNote) o.is_locked = oldNote.is_locked;
 			// Callers use the returned note to update UI state, so it must carry the plaintext
 			// body even though the encrypted one is what gets persisted.
 			if (NoteLockNote.isLocked(o) && 'body' in o) plainTextBodyToReturn = o.body;
-			await NoteLockNote.prepareForSave(o, this.linkedItemIds, this.serializeExtractedResourceIds, isNew, options.noteLockKey);
+			await NoteLockNote.prepareForSave(o, this.linkedItemIds, this.serializeExtractedResourceIds, isNew, !!options?.useNoteLock, options?.noteLockKey);
+			// The lock state, body and resource ids must land in the row together to keep it consistent.
+			if (options && Array.isArray(options.fields)) {
+				for (const field of ['is_locked', 'body', 'extracted_resource_ids']) {
+					if (!options.fields.includes(field)) options.fields.push(field);
+				}
+			}
 		}
-		// Cleared for ungated saves too, in case a gated load is fed to an ungated save.
 		delete (o as Record<string, unknown>).isDecrypted;
 
 		syncDebugLog.info('Save Note: P:', oldNote);
@@ -979,7 +999,8 @@ export default class Note extends BaseItem {
 			const gatedResult = {
 				...savedNote,
 				body: plainTextBodyToReturn !== null ? plainTextBodyToReturn : savedNote.body,
-				isDecrypted: NoteLockNote.isLocked(o),
+				// Gated data keeps its marker, locked or not, so follow-up gated saves stay valid.
+				isDecrypted: true,
 			};
 			savedNote = gatedResult;
 		}
