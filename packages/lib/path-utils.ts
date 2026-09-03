@@ -44,11 +44,9 @@ export function friendlySafeFilename(e: string, maxLength: number = null, preser
 		}
 	}
 
-	if (output.length <= 4) {
-		if (friendlySafeFilename_blackListNames.indexOf(output.toUpperCase()) >= 0) {
-			output = '___';
-		}
-	}
+	// Truncate before trimming, otherwise the truncation could reintroduce a
+	// trailing space or dot.
+	output = output.substr(0, maxLength);
 
 	while (output.length) {
 		const c = output[output.length - 1];
@@ -68,7 +66,16 @@ export function friendlySafeFilename(e: string, maxLength: number = null, preser
 		}
 	}
 
+	// The reserved name check must come after trimming, otherwise names like
+	// "con." or " con " would pass the check and then be trimmed down to a
+	// reserved name.
+	if (output.length <= 4) {
+		if (friendlySafeFilename_blackListNames.indexOf(output.toUpperCase()) >= 0) {
+			output = '___';
+		}
+	}
+
 	if (!output) return _('Untitled') + fileExt;
 
-	return output.substr(0, maxLength) + fileExt;
+	return output + fileExt;
 }

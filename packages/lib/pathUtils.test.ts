@@ -8,6 +8,9 @@ describe('pathUtils', () => {
 			['not/good', 'not_good'],
 			['really/not/good', 'really_not_good'],
 			['con', '___'],
+			['con.', '___'],
+			['aux ', '___'],
+			[' con ', '___'],
 			['no space at the end ', 'no space at the end'],
 			['nor dots...', 'nor dots'],
 			['  no space before either', 'no space before either'],
@@ -22,6 +25,11 @@ describe('pathUtils', () => {
 
 		expect(!!friendlySafeFilename('')).toBe(true);
 		expect(!!friendlySafeFilename('...')).toBe(true);
+
+		// Truncation to the maximum length should not leave a trailing space
+		// or dot either.
+		expect(friendlySafeFilename(`${'a'.repeat(49)} x`)).toBe('a'.repeat(49));
+		expect(friendlySafeFilename(`${'a'.repeat(49)}.x`)).toBe('a'.repeat(49));
 
 		// Check that it optionally handles filenames with extension
 		expect(friendlySafeFilename('file', null, true)).toBe('file');
