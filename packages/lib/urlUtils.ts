@@ -63,7 +63,15 @@ export const parseResourceUrl = (url: string) => {
 	// In general we want the hash to be decoded so that non-alphabetical languages
 	// appear as-is without being encoded with %.
 	// Fixes https://github.com/laurent22/joplin/issues/1870
-	if (hash) hash = urlDecode(hash.substr(1)); // Remove the first #
+	if (hash) {
+		hash = hash.substr(1); // Remove the first #
+		try {
+			hash = urlDecode(hash);
+		} catch (error) {
+			// If the hash is not valid percent-encoding (eg. it contains a
+			// literal "%"), keep it as-is instead of throwing.
+		}
+	}
 
 	return {
 		itemId: itemId,

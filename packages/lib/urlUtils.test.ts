@@ -34,6 +34,10 @@ describe('urlUtils', () => {
 			['joplin://1234abcd1234abcd1234abcd1234abcd#hash', { itemId: '1234abcd1234abcd1234abcd1234abcd', hash: 'hash' }],
 			[':/1234abcd1234abcd1234abcd1234abc', null],
 			['joplin://1234abcd1234abcd1234abcd1234abc', null],
+			// Anchors that are not valid percent-encoding should be kept
+			// as-is instead of making decoding throw.
+			[':/1234abcd1234abcd1234abcd1234abcd#50%', { itemId: '1234abcd1234abcd1234abcd1234abcd', hash: '50%' }],
+			['joplin://1234abcd1234abcd1234abcd1234abcd#C%20%%20E', { itemId: '1234abcd1234abcd1234abcd1234abcd', hash: 'C%20%%20E' }],
 		];
 
 		for (const t of testCases) {
@@ -85,6 +89,12 @@ describe('urlUtils', () => {
 			),
 		).toMatchObject(expected);
 	});
+
+	it('should not throw when a link anchor contains a raw percent sign', (async () => {
+		const body = 'Progress: [half done](:/1234abcd1234abcd1234abcd1234abcd#50%-done)';
+		expect(() => urlUtils.extractResourceUrls(body)).not.toThrow();
+		expect(urlUtils.extractResourceUrls(body)).toEqual([{ itemId: '1234abcd1234abcd1234abcd1234abcd', hash: '50%-done' }]);
+	}));
 
 	it('should extract resource URLs', (async () => {
 		const testCases: [string, string[]][] = [
