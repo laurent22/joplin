@@ -19,6 +19,7 @@ enum Platform {
 	MacOs = 'macos',
 	Linux = 'linux',
 	Ios = 'ios',
+	Web = 'web',
 	Desktop = 'desktop',
 	Clipper = 'clipper',
 	Server = 'server',
@@ -102,6 +103,7 @@ function platformFromTag(tagName: string): Platform {
 	if (tagName.indexOf('linux') >= 0) return Platform.Linux;
 	if (tagName.indexOf('macos') >= 0) return Platform.MacOs;
 	if (tagName.indexOf('ios') >= 0) return Platform.Ios;
+	if (tagName.indexOf('web') >= 0) return Platform.Web;
 	if (tagName.indexOf('clipper') === 0) return Platform.Clipper;
 	if (tagName.indexOf('cli') === 0) return Platform.Cli;
 	if (tagName.indexOf('server') === 0) return Platform.Server;
@@ -115,7 +117,7 @@ function platformFromTag(tagName: string): Platform {
 
 export const filesApplyToPlatform = (files: string[], platform: string): boolean => {
 	const isMainApp = ['android', 'ios', 'windows', 'linux', 'macos', 'desktop', 'cli', 'server'].includes(platform);
-	const isMobile = ['android', 'ios'].includes(platform);
+	const isMobile = ['android', 'ios', 'web'].includes(platform);
 
 	for (const file of files) {
 		if (file.startsWith('packages/app-cli') && platform === 'cli') return true;
@@ -262,6 +264,7 @@ function filterLogs(logs: LogEntry[], platform: Platform) {
 		if ((platform === 'android' || platform === 'ios') && prefix.indexOf('mobile') >= 0) addIt = true;
 		if (platform === 'android' && prefix.indexOf('android') >= 0) addIt = true;
 		if (platform === 'ios' && prefix.indexOf('ios') >= 0) addIt = true;
+		if (platform === 'web' && prefix.indexOf('web') >= 0) addIt = true;
 		if (platform === 'desktop' && prefix.indexOf('desktop') >= 0) addIt = true;
 		if (platform === 'desktop' && (prefix.indexOf('desktop') >= 0 || prefix.indexOf('api') >= 0 || prefix.indexOf('plugins') >= 0 || prefix.indexOf('macos') >= 0 || prefix.indexOf('windows') >= 0 || prefix.indexOf('linux') >= 0)) addIt = true;
 		if (platform === 'cli' && prefix.indexOf('cli') >= 0) addIt = true;
@@ -323,7 +326,7 @@ function formatCommitMessage(commit: string, msg: string, author: Author, option
 	const isPlatformPrefix = (prefixString: string) => {
 		const prefix = prefixString.split(',').map(p => p.trim().toLowerCase());
 		for (const p of prefix) {
-			if (['android', 'mobile', 'ios', 'desktop', 'windows', 'linux', 'macos', 'cli', 'clipper', 'all', 'api', 'plugins', 'server', 'transcribe', 'cloud'].indexOf(p) >= 0) return true;
+			if (['android', 'mobile', 'ios', 'web', 'desktop', 'windows', 'linux', 'macos', 'cli', 'clipper', 'all', 'api', 'plugins', 'server', 'transcribe', 'cloud'].indexOf(p) >= 0) return true;
 		}
 		return false;
 	};
