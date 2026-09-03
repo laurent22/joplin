@@ -813,6 +813,11 @@ packages/app-mobile/components/ScreenHeader/index.js
 packages/app-mobile/components/SearchInput.js
 packages/app-mobile/components/SelectDateTimeDialog.js
 packages/app-mobile/components/SideMenu.js
+packages/app-mobile/components/SideMenuContent/BottomPanelActions.js
+packages/app-mobile/components/SideMenuContent/FolderItem.js
+packages/app-mobile/components/SideMenuContent/SideMenuContent.js
+packages/app-mobile/components/SideMenuContent/SideMenuItem.js
+packages/app-mobile/components/SideMenuContent/SidebarIcon.js
 packages/app-mobile/components/SideMenuContentNote.js
 packages/app-mobile/components/SyncWizard/JoplinCloudIcon.js
 packages/app-mobile/components/SyncWizard/SyncWizard.js
@@ -957,7 +962,6 @@ packages/app-mobile/components/screens/resourceScreenUtils.test.js
 packages/app-mobile/components/screens/resourceScreenUtils.js
 packages/app-mobile/components/screens/status.js
 packages/app-mobile/components/screens/tags.js
-packages/app-mobile/components/side-menu-content.js
 packages/app-mobile/components/testing/TestProviderStack.js
 packages/app-mobile/components/voiceTyping/AudioRecordingBanner.js
 packages/app-mobile/components/voiceTyping/RecordingControls.js

@@ -54,7 +54,7 @@ import EncryptionConfigScreen from './components/screens/encryption-config';
 import DropboxLoginScreen from './components/screens/dropbox-login.js';
 import { MenuProvider } from 'react-native-popup-menu';
 import SideMenu, { SideMenuPosition } from './components/SideMenu';
-import SideMenuContent from './components/side-menu-content';
+import SideMenuContent from './components/SideMenuContent/SideMenuContent';
 import SideMenuContentNote, { SideMenuContentOptions } from './components/SideMenuContentNote';
 import { reg } from '@joplin/lib/registry';
 import { defaultState } from '@joplin/lib/reducer';
