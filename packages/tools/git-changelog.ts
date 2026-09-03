@@ -116,8 +116,8 @@ function platformFromTag(tagName: string): Platform {
 }
 
 export const filesApplyToPlatform = (files: string[], platform: string): boolean => {
-	const isMainApp = ['android', 'ios', 'windows', 'linux', 'macos', 'desktop', 'cli', 'server'].includes(platform);
 	const isMobile = ['android', 'ios', 'web'].includes(platform);
+	const isMainApp = isMobile || ['windows', 'linux', 'macos', 'desktop', 'cli', 'server'].includes(platform);
 
 	for (const file of files) {
 		if (file.startsWith('packages/app-cli') && platform === 'cli') return true;
