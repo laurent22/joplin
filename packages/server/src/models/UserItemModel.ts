@@ -9,6 +9,15 @@ import { isUniqueConstraintError } from '../db';
 
 const logger = Logger.create('UserItemModel');
 
+// addMulti can process a whole notebook at once, so item IDs are only ever logged
+// as a sample.
+const maxLoggedItemIds = 20;
+
+const itemIdSample = (itemIds: Uuid[]) => {
+	const sample = itemIds.slice(0, maxLoggedItemIds).join(', ');
+	return itemIds.length > maxLoggedItemIds ? `${sample}, ... (${itemIds.length - maxLoggedItemIds} more)` : sample;
+};
+
 interface DeleteByShare {
 	id: Uuid;
 	owner_id: Uuid;
@@ -152,9 +161,11 @@ export default class UserItemModel extends BaseModel<UserItem> {
 			return;
 		}
 
-		logger.info(`addMulti: Adding ${items.length} items for user ${userId}: ${items.map(i => i.id).join(', ')}`);
+		logger.info(`addMulti: Adding ${items.length} items for user ${userId}: ${itemIdSample(items.map(i => i.id))}`);
 
 		perfTimer.push(`Processing ${items.length} items`);
+
+		const skippedItemIds: Uuid[] = [];
 
 		for (const item of items) {
 			if (!('name' in item) || !('id' in item)) throw new Error('item.id and item.name must be set');
@@ -181,9 +192,13 @@ export default class UserItemModel extends BaseModel<UserItem> {
 					if (!options.ignoreAlreadyExists || !isUniqueConstraintError(error)) {
 						throw error;
 					}
-					logger.info(`addMulti: Skipping already existing user item: user ${userId}, item ${item.id}`);
+					skippedItemIds.push(item.id);
 				}
 			}, 'UserItemModel::addMulti');
+		}
+
+		if (skippedItemIds.length) {
+			logger.info(`addMulti: Skipped ${skippedItemIds.length} already existing user items for user ${userId}: ${itemIdSample(skippedItemIds)}`);
 		}
 
 		perfTimer.pop();
