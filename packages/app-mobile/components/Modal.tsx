@@ -240,6 +240,9 @@ const ModalComponent = Platform.OS === 'web' ? (props: ModalElementProps) => {
 		open={props.visible}
 		onCancel={props.onClose}
 		onShow={props.onShow}
+		// 2026-09-03: Work around dialog display issues on Safari by autofocusing
+		// the root dialog element.
+		onBeforeShow={dialog => dialog.setAttribute('autofocus', 'true')}
 		preventAutoCloseOnCancel={true}
 	>
 		{props.children}

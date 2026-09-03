@@ -8,11 +8,13 @@ const { useEffect, useRef, useState } = shim.react();
 
 type OnCancelListener = ()=> void;
 type OnShowListener = ()=> void;
+type OnBeforeShowListener = (dialog: HTMLDialogElement)=> void;
 
 interface Props {
 	className?: string;
 	onCancel?: OnCancelListener;
 	onShow?: OnShowListener;
+	onBeforeShow?: OnBeforeShowListener;
 	contentStyle?: CSSProperties;
 	open?: boolean;
 	preventAutoCloseOnCancel?: boolean;
@@ -38,17 +40,20 @@ const Dialog: FC<Props> = props => {
 
 	const [contentRendered, setContentRendered] = useState(false);
 
+	const propsRef = useRef(props);
+
 	useEffect(() => {
 		if (!dialogElement || !contentRendered) return;
 
 		const open = props.open ?? true;
 		if (!dialogElement.open && open) {
+			propsRef.current.onBeforeShow?.(dialogElement);
 			dialogElement.showModal();
-			props.onShow?.();
+			propsRef.current.onShow?.();
 		} else if (dialogElement.open && !open) {
 			dialogElement.close();
 		}
-	}, [dialogElement, contentRendered, props.open, props.onShow]);
+	}, [dialogElement, contentRendered, props.open]);
 
 	useEffect(() => {
 		if (!dialogElement) return;
