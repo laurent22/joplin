@@ -2,7 +2,7 @@ import { noteToFrontMatter, parse } from './frontMatter';
 import { NoteEntity } from '../services/database/types';
 
 const testNote = (title: string): NoteEntity => {
-	return { title, latitude: '0.00000000', longitude: '0.00000000', altitude: '0.0000' };
+	return { title, latitude: 0, longitude: 0, altitude: 0 };
 };
 
 // Export a note to front matter, then re-import it the way
