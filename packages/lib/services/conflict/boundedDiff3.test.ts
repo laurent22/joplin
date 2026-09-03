@@ -7,7 +7,7 @@ const matchesNodeDiff3 = (a: string[], o: string[], b: string[]) => {
 	expect(boundedDiff3MergeRegions(a, o, b)).toEqual(diff3MergeRegions(a, o, b));
 };
 
-describe('boundedDiff3MergeRegions', () => {
+describe('boundedDiff3', () => {
 
 	test('should match node-diff3 for every small input', () => {
 		for (let length = 1; length <= 5; length++) {

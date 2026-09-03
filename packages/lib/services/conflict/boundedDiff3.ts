@@ -40,11 +40,28 @@ interface Hunk {
 	abLength: number;
 }
 
-export const diffOptions = { maxEditLength: 5000, timeout: 1000 };
+const diffOptions = { maxEditLength: 5000, timeout: 1000 };
+
+// The duplicate line check and the merge diff the same two pairs, so whichever runs
+// second reuses the result
+let cache: { base: string[]; side: string[]; changes: ArrayChange[]|undefined }[] = [];
+
+export const clearDiffCache = () => {
+	cache = [];
+};
+
+export const diffLines = (base: string[], side: string[]): ArrayChange[]|undefined => {
+	const cached = cache.find(entry => entry.base === base && entry.side === side);
+	if (cached) return cached.changes;
+
+	const changes: ArrayChange[]|undefined = diffArrays(base, side, diffOptions);
+	cache.push({ base, side, changes });
+	return changes;
+};
 
 // Where the two buffers differ, in the same shape as node-diff3's diffIndices
 const boundedDiffIndices = (o: string[], side: string[]) => {
-	const changes: ArrayChange[]|undefined = diffArrays(o, side, diffOptions);
+	const changes = diffLines(o, side);
 	if (!changes) return null;
 
 	const result: { oStart: number; oLength: number; sideStart: number; sideLength: number }[] = [];

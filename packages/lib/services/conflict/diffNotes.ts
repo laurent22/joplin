@@ -1,7 +1,6 @@
 // require: node-diff3's type exports are not resolvable under this moduleResolution
 const { diffComm } = require('node-diff3');
-const { diffArrays } = require('diff');
-import boundedDiff3MergeRegions, { ArrayChange, diffOptions, Region } from './boundedDiff3';
+import boundedDiff3MergeRegions, { ArrayChange, clearDiffCache, diffLines, Region } from './boundedDiff3';
 
 // diffComm's `common` field is missing from the node-diff3 types
 interface CommRegion {
@@ -34,7 +33,7 @@ const splitLines = (text: string) => text.split(/\r\n|\n|\r/);
 
 // True when the given side edited at or next to two or more identical lines in a row
 const touchesDuplicateRun = (base: string[], side: string[]): boolean => {
-	const changes: ArrayChange[] | undefined = diffArrays(base, side, diffOptions);
+	const changes: ArrayChange[] | undefined = diffLines(base, side);
 	if (!changes) return true;
 
 	let baseIndex = 0;
@@ -83,7 +82,7 @@ const bothSidesChanged = (base: string[], local: string[], remote: string[]): bo
 	return !same(base, local) && !same(base, remote) && !same(local, remote);
 };
 
-export const autoMerge = (baseRaw: string, localRaw: string, remoteRaw: string): AutoMergeResult => {
+const merge = (baseRaw: string, localRaw: string, remoteRaw: string): AutoMergeResult => {
 	const baseLines = splitLines(baseRaw);
 	const localLines = splitLines(localRaw);
 	const remoteLines = splitLines(remoteRaw);
@@ -171,4 +170,13 @@ export const autoMerge = (baseRaw: string, localRaw: string, remoteRaw: string):
 	}
 
 	return { mergedText: mergedParts.join('\n'), sections };
+};
+
+// The cached diffs hold on to note contents, so they are dropped once the merge is done
+export const autoMerge = (baseRaw: string, localRaw: string, remoteRaw: string): AutoMergeResult => {
+	try {
+		return merge(baseRaw, localRaw, remoteRaw);
+	} finally {
+		clearDiffCache();
+	}
 };
