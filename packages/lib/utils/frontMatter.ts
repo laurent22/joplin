@@ -33,23 +33,13 @@ export const fieldOrder = ['title', 'id', 'updated', 'created', 'source', 'autho
 // These need to be stripped
 function trimQuotes(rawOutput: string): string {
 	return rawOutput.split('\n').map(line => {
-		const index = line.indexOf(': \'-');
-		const indexWithSpace = line.indexOf(': \'- ');
-
-		// We don't apply this processing if the string starts with a dash
-		// followed by a space. Those should actually be in quotes, otherwise
-		// they are detected as invalid list items when we later try to import
-		// the file.
-		if (index === indexWithSpace) return line;
-
-		if (index >= 0) {
-			// The plus 2 eats the : and space characters
-			const start = line.substring(0, index + 2);
-			// The plus 3 eats the quote character
-			const end = line.substring(index + 3, line.length - 1);
-			return start + end;
-		}
-
+		// Only unquote when the whole value is a plain negative number.
+		// Anything else must stay quoted to parse back to the same string:
+		// for example "- " would otherwise be detected as an invalid list
+		// item, an inner "'" would remain doubled ('-5 o''clock'), ": "
+		// would make the line invalid YAML, and " #" would start a comment.
+		const match = line.match(/^([^:]+: )'(-\d+(?:\.\d+)?)'$/);
+		if (match) return match[1] + match[2];
 		return line;
 	}).join('\n');
 }
