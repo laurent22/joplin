@@ -23,7 +23,19 @@ describe('markdownCommands', () => {
 		expect(editor.state.doc.toString()).toBe('> First line\n\nSecond line');
 
 		toggleBlockQuote(editor);
-		expect(editor.state.doc.toString()).toBe(initialText);
+		expect(editor.state.doc.toString()).toBe('First line\n\nSecond line');
+	});
+
+	it('should preserve an existing blank line when removing a blockquote', async () => {
+		const initialText = '> First line\n\nSecond line';
+		const editor = await createTestEditor(
+			initialText,
+			EditorSelection.range(0, '> First line'.length),
+			[],
+		);
+
+		toggleBlockQuote(editor);
+		expect(editor.state.doc.toString()).toBe('First line\n\nSecond line');
 	});
 
 	it('should toggle only continuously selected lines as blockquotes', async () => {
@@ -38,7 +50,7 @@ describe('markdownCommands', () => {
 		expect(editor.state.doc.toString()).toBe('> First line\n> Second line\n> Third line\n\nFourth line');
 
 		toggleBlockQuote(editor);
-		expect(editor.state.doc.toString()).toBe(initialText);
+		expect(editor.state.doc.toString()).toBe('First line\nSecond line\nThird line\n\nFourth line');
 	});
 
 	it('should blockquote only first selection when selected lines are not continuous', async () => {
@@ -470,4 +482,3 @@ describe('markdownCommands', () => {
 		expect(editor.state.doc.toString()).toBe('testing\n* * *\n* * *\n\n> this is a test\n> * * *\n> * * *');
 	});
 });
-

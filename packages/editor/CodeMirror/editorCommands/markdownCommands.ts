@@ -364,8 +364,6 @@ export const toggleBlockQuote: Command = (view: EditorView): boolean => {
 		const nextLine = document.line(lastLine.number + 1);
 		if (!hasBlockQuote && nextLine.text.trim() !== '') {
 			changes.push({ from: lastLine.to, insert: '\n' });
-		} else if (hasBlockQuote && nextLine.text === '' && nextLine.number < document.lines) {
-			changes.push({ from: nextLine.to, to: nextLine.to + 1 });
 		}
 	}
 
