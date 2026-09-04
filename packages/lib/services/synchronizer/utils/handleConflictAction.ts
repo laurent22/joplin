@@ -75,11 +75,15 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 
 			if (!cannotAutoMerge(localNote) && !cannotAutoMerge(decryptedRemoteNote)) {
 				const base = await Note.syncBaseContent(syncTargetId, local.id);
-				merge = autoMergeNote(
-					{ title: base ? base.base_title : '', body: base ? base.base_body : '' },
-					{ title: localNote.title, body: localNote.body },
-					{ title: decryptedRemoteNote.title, body: decryptedRemoteNote.body },
-				);
+
+				// No common ancestor, so use the normal conflict flow
+				if (base && (base.base_body || base.base_title)) {
+					merge = autoMergeNote(
+						{ title: base.base_title, body: base.base_body },
+						{ title: localNote.title, body: localNote.body },
+						{ title: decryptedRemoteNote.title, body: decryptedRemoteNote.body },
+					);
+				}
 			}
 		}
 

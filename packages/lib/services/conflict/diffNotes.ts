@@ -1,13 +1,4 @@
-// require: node-diff3's type exports are not resolvable under this moduleResolution
-const { diffComm } = require('node-diff3');
 import boundedDiff3MergeRegions, { ArrayChange, clearDiffCache, diffLines, Region } from './boundedDiff3';
-
-// diffComm's `common` field is missing from the node-diff3 types
-interface CommRegion {
-	common?: string[];
-	buffer1: string[];
-	buffer2: string[];
-}
 
 export type MergedSectionType = 'unchanged' | 'auto-merged' | 'conflict';
 
@@ -82,45 +73,20 @@ const bothSidesChanged = (base: string[], local: string[], remote: string[]): bo
 	return !same(base, local) && !same(base, remote) && !same(local, remote);
 };
 
+const unchanged = (text: string): AutoMergeResult => ({
+	mergedText: text,
+	sections: [{ text, type: 'unchanged' }],
+});
+
 const merge = (baseRaw: string, localRaw: string, remoteRaw: string): AutoMergeResult => {
 	const baseLines = splitLines(baseRaw);
 	const localLines = splitLines(localRaw);
 	const remoteLines = splitLines(remoteRaw);
 
-	const base = baseLines.join('\n');
-
-	if (base === '') {
-		// No base version: we can't tell which side made the changes, so the every
-		// different line is treated as a conflict
-		const comm: CommRegion[] = diffComm(localLines, remoteLines);
-
-		const sections: MergedSection[] = [];
-		const mergedParts: string[] = [];
-
-		// diffComm does not return buffer positions, so track them to find original locations
-		let localIndex = 0;
-		let remoteIndex = 0;
-
-		for (const region of comm) {
-			if (region.common) {
-				const text = localLines.slice(localIndex, localIndex + region.common.length).join('\n');
-				localIndex += region.common.length;
-				remoteIndex += region.common.length;
-				sections.push({ text, type: 'unchanged' });
-				mergedParts.push(text);
-			} else {
-				const localText = localLines.slice(localIndex, localIndex + region.buffer1.length).join('\n');
-				const remoteText = remoteLines.slice(remoteIndex, remoteIndex + region.buffer2.length).join('\n');
-				localIndex += region.buffer1.length;
-				remoteIndex += region.buffer2.length;
-				const text = conflictPlaceholder(localText, remoteText);
-				sections.push({ text, type: 'conflict', localText, remoteText });
-				mergedParts.push(text);
-			}
-		}
-
-		return { mergedText: mergedParts.join('\n'), sections };
-	}
+	// Nothing changed, so skip the expensive diff
+	if (localRaw === remoteRaw) return unchanged(localRaw);
+	if (localRaw === baseRaw) return unchanged(remoteRaw);
+	if (remoteRaw === baseRaw) return unchanged(localRaw);
 
 	// With duplicate lines, diff3 can't tell which copy was changed, so it may apply both
 	// edits and duplicate content. A merge too large to diff is treated the same

@@ -112,25 +112,6 @@ describe('autoMerge', () => {
 		expect(result.mergedText).toBe('Alpha \nBeta edited\n\nGamma edited');
 	});
 
-	test('with empty base should mark only the differing line as a conflict', () => {
-		const result = autoMerge('', 'my version', 'their version');
-		expect(result.sections.length).toBe(1);
-		expect(result.sections[0].type).toBe('conflict');
-		expect(result.sections[0].localText).toBe('my version');
-		expect(result.sections[0].remoteText).toBe('their version');
-	});
-
-	test('with empty base should keep matching lines unchanged and split on the conflict', () => {
-		const local = 'Shared paragraph\nstays the same\n\nNature is the physical world by "DOGS"';
-		const remote = 'Shared paragraph\nstays the same\n\nNature is the "MORE MENTAL" world by humans';
-		const result = autoMerge('', local, remote);
-		const conflicts = result.sections.filter(s => s.type === 'conflict');
-		expect(conflicts.length).toBe(1);
-		expect(conflicts[0].localText).toBe('Nature is the physical world by "DOGS"');
-		expect(conflicts[0].remoteText).toBe('Nature is the "MORE MENTAL" world by humans');
-		expect(result.sections.some(s => s.type === 'unchanged' && s.text.includes('Shared paragraph'))).toBe(true);
-	});
-
 	test.each([
 		['edits at either end of a run', 'aaa\naaa\naaa', 'aaa --local\naaa\naaa', 'aaa\naaa\naaa --remote'],
 		['both sides inserting near a run', 'x\nx', 'A\nx\nx', 'x\nA\nx'],
@@ -245,6 +226,16 @@ describe('autoMerge', () => {
 		const result = autoMerge(base, local, remote);
 		expect(result.sections.length).toBe(1);
 		expect(result.sections[0].type).toBe('conflict');
+	});
+
+	test.each([
+		['both sides are the same', 'base', 'edited', 'edited', 'edited'],
+		['only the remote changed', 'base', 'base', 'edited', 'edited'],
+		['only the local changed', 'base', 'edited', 'base', 'edited'],
+	])('should take the known result without diffing when %s', (_name, base, local, remote, expected) => {
+		const result = autoMerge(base, local, remote);
+		expect(result.sections.some(s => s.type === 'conflict')).toBe(false);
+		expect(result.mergedText).toBe(expected);
 	});
 
 	test('should be deterministic for the same inputs', () => {
