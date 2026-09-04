@@ -93,6 +93,7 @@ public class DocumentStat {
   public WritableMap getWritableMap() {
     WritableMap fileMap = Arguments.createMap();
     fileMap.putString("uri", UriHelper.denormalize(uri));
+    fileMap.putString("documentUri", internalUri.toString());
     fileMap.putString("name", displayName);
     if (isDirectory) {
       fileMap.putString("type", "directory");

@@ -83,6 +83,32 @@ public class SafXModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public void writeFileInDirectory(
+    String directoryUri,
+    String fileName,
+    String data,
+    String encoding,
+    String mimeType,
+    boolean replaceIfDestinationExists,
+    final Promise promise) {
+    this.efficientDocumentHelper.writeFileInDirectory(
+      directoryUri, fileName, data, encoding, mimeType, replaceIfDestinationExists, promise
+    );
+  }
+
+  @ReactMethod
+  public void copyFileToDirectory(
+    String sourceUri,
+    String directoryUri,
+    String fileName,
+    boolean replaceIfDestinationExists,
+    final Promise promise) {
+    this.efficientDocumentHelper.copyFileToDirectory(
+      sourceUri, directoryUri, fileName, replaceIfDestinationExists, promise
+    );
+  }
+
+  @ReactMethod
   public void transferFile(
     String srcUri, String destUri, boolean replaceIfDestExists, boolean copy, Promise promise) {
     this.efficientDocumentHelper.transferFile(srcUri, destUri, replaceIfDestExists, copy, promise);
