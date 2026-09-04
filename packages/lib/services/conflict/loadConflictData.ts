@@ -1,6 +1,6 @@
 import Note from '../../models/Note';
 import ConflictNoteState from '../../models/ConflictNoteState';
-import { autoMerge, MergedSection } from './diffNotes';
+import { autoMerge, MergedSection, twoWayDiff } from './diffNotes';
 import isConflictResolutionEnabled from './isConflictResolutionEnabled';
 
 export enum ConflictDataStatus {
@@ -51,7 +51,7 @@ export default async (noteId: string): Promise<ConflictData> => {
 	const remoteBody = remoteNote.body ?? '';
 	const baseBody = state.base_body ?? '';
 
-	const merged = autoMerge(baseBody, localBody, remoteBody);
+	const merged = baseBody ? autoMerge(baseBody, localBody, remoteBody) : twoWayDiff(localBody, remoteBody);
 
 	const localTitle = note.title ?? '';
 	const remoteTitle = remoteNote.title ?? '';
