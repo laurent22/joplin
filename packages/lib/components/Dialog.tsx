@@ -41,6 +41,7 @@ const Dialog: FC<Props> = props => {
 	const [contentRendered, setContentRendered] = useState(false);
 
 	const propsRef = useRef(props);
+	propsRef.current = props;
 
 	useEffect(() => {
 		if (!dialogElement || !contentRendered) return;
