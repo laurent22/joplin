@@ -42,8 +42,13 @@ interface Hunk {
 }
 
 // The merge runs during sync, so it times out sooner than the conflict viewer
-const diffOptions = { maxEditLength: 5000, timeout: 1000 };
-export const viewerDiffOptions = { maxEditLength: 10000, timeout: 3000 };
+export interface DiffOptions {
+	maxEditLength: number;
+	timeout: number;
+}
+
+export const diffOptions: DiffOptions = { maxEditLength: 5000, timeout: 1000 };
+export const viewerDiffOptions: DiffOptions = { maxEditLength: 10000, timeout: 3000 };
 
 // The duplicate line check and the merge diff the same two pairs, so whichever runs
 // second reuses the result
@@ -53,7 +58,7 @@ export const clearDiffCache = () => {
 	cache = [];
 };
 
-export const diffLines = (base: string[], side: string[], options = diffOptions): ArrayChange[]|undefined => {
+export const diffLines = (base: string[], side: string[], options: DiffOptions = diffOptions): ArrayChange[]|undefined => {
 	const cached = cache.find(entry => entry.base === base && entry.side === side);
 	if (cached) return cached.changes;
 
@@ -63,8 +68,8 @@ export const diffLines = (base: string[], side: string[], options = diffOptions)
 };
 
 // Where the two buffers differ, in the same shape as node-diff3's diffIndices
-const boundedDiffIndices = (o: string[], side: string[]) => {
-	const changes = diffLines(o, side);
+const boundedDiffIndices = (o: string[], side: string[], options: DiffOptions) => {
+	const changes = diffLines(o, side, options);
 	if (!changes) return null;
 
 	const result: { oStart: number; oLength: number; sideStart: number; sideLength: number }[] = [];
@@ -105,11 +110,11 @@ const boundedDiffIndices = (o: string[], side: string[]) => {
 };
 
 // Null when the diff cannot be merged, so the caller can fall back to a conflict
-export default (a: string[], o: string[], b: string[]): Region[]|null => {
+export default (a: string[], o: string[], b: string[], options: DiffOptions = diffOptions): Region[]|null => {
 	const hunks: Hunk[] = [];
 
 	for (const ab of ['a', 'b'] as const) {
-		const changes = boundedDiffIndices(o, ab === 'a' ? a : b);
+		const changes = boundedDiffIndices(o, ab === 'a' ? a : b, options);
 		if (!changes) return null;
 		for (const change of changes) {
 			hunks.push({ ab, oStart: change.oStart, oLength: change.oLength, abStart: change.sideStart, abLength: change.sideLength });
