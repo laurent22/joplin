@@ -618,7 +618,7 @@ export default class Synchronizer {
 				while (true) {
 					if (this.cancelling()) break;
 
-					const result = await BaseItem.itemsThatNeedSync(syncTargetId);
+					const result = await BaseItem.itemsThatNeedSync(syncTargetId, 100, () => this.cancelling());
 					const locals = result.items;
 
 					await itemUploader.preUploadItems(result.items.filter(it => result.neverSyncedItemIds.includes(it.id)));
@@ -1303,7 +1303,7 @@ export default class Synchronizer {
 		// that the user will close or minimise the app when there are un-synced changes, because the sync is reported as completed.
 		// IMPORTANT: This must be the very last step in the sync, to avoid any window to allow an un-synced change to get missed
 		if (!hasErrors && !hasCaughtError && !cancelledBeforeClearedState && !this.cancelling()) {
-			const result = await BaseItem.itemsThatNeedSync(syncTargetId);
+			const result = await BaseItem.itemsThatNeedSync(syncTargetId, 100, () => this.cancelling());
 
 			if (result.items.length > 0) {
 				logger.info('There are more outgoing changes to sync, schedule the sync again');
