@@ -1,13 +1,4 @@
-// require: node-diff3's type exports are not resolvable under this moduleResolution
-const { diffComm } = require('node-diff3');
-import boundedDiff3MergeRegions, { ArrayChange, clearDiffCache, diffLines, Region } from './boundedDiff3';
-
-// diffComm's `common` field is missing from the node-diff3 types
-interface CommRegion {
-	common?: string[];
-	buffer1: string[];
-	buffer2: string[];
-}
+import boundedDiff3MergeRegions, { ArrayChange, clearDiffCache, diffLines, Region, viewerDiffOptions } from './boundedDiff3';
 
 export type MergedSectionType = 'unchanged' | 'auto-merged' | 'conflict';
 
@@ -87,32 +78,51 @@ const bothSidesChanged = (base: string[], local: string[], remote: string[]): bo
 export const twoWayDiff = (localRaw: string, remoteRaw: string): AutoMergeResult => {
 	const localLines = splitLines(localRaw);
 	const remoteLines = splitLines(remoteRaw);
-	const comm: CommRegion[] = diffComm(localLines, remoteLines);
+	const changes = diffLines(localLines, remoteLines, viewerDiffOptions);
+
+	// Too different to compare without blocking app, so the whole note will be a conflict
+	if (!changes) {
+		const text = conflictPlaceholder(localRaw, remoteRaw);
+		return { mergedText: text, sections: [{ text, type: 'conflict', localText: localRaw, remoteText: remoteRaw }] };
+	}
 
 	const sections: MergedSection[] = [];
 	const mergedParts: string[] = [];
 
-	// diffComm does not return buffer positions, so track them to find original locations
-	let localIndex = 0;
-	let remoteIndex = 0;
+	const addConflict = (local: string[], remote: string[]) => {
+		if (!local.length && !remote.length) return;
+		const localText = local.join('\n');
+		const remoteText = remote.join('\n');
+		const text = conflictPlaceholder(localText, remoteText);
+		sections.push({ text, type: 'conflict', localText, remoteText });
+		mergedParts.push(text);
+	};
 
-	for (const region of comm) {
-		if (region.common) {
-			const text = localLines.slice(localIndex, localIndex + region.common.length).join('\n');
-			localIndex += region.common.length;
-			remoteIndex += region.common.length;
-			sections.push({ text, type: 'unchanged' });
-			mergedParts.push(text);
-		} else {
-			const localText = localLines.slice(localIndex, localIndex + region.buffer1.length).join('\n');
-			const remoteText = remoteLines.slice(remoteIndex, remoteIndex + region.buffer2.length).join('\n');
-			localIndex += region.buffer1.length;
-			remoteIndex += region.buffer2.length;
-			const text = conflictPlaceholder(localText, remoteText);
-			sections.push({ text, type: 'conflict', localText, remoteText });
-			mergedParts.push(text);
+	// A replacement comes as a removal followed by an addition,
+	// so combined them into one conflict.
+	let removed: string[] = [];
+	let added: string[] = [];
+
+	for (const change of changes) {
+		if (change.added) {
+			added = added.concat(change.value);
+			continue;
 		}
+		if (change.removed) {
+			removed = removed.concat(change.value);
+			continue;
+		}
+
+		addConflict(removed, added);
+		removed = [];
+		added = [];
+
+		const text = change.value.join('\n');
+		sections.push({ text, type: 'unchanged' });
+		mergedParts.push(text);
 	}
+
+	addConflict(removed, added);
 
 	return { mergedText: mergedParts.join('\n'), sections };
 };
@@ -123,15 +133,15 @@ const singleSection = (text: string, type: MergedSectionType): AutoMergeResult =
 });
 
 const merge = (baseRaw: string, localRaw: string, remoteRaw: string): AutoMergeResult => {
-	const baseLines = splitLines(baseRaw);
-	const localLines = splitLines(localRaw);
-	const remoteLines = splitLines(remoteRaw);
-
 	// The result is already known, so diffing is skipped. One side changing still counts it as a merge
 	if (localRaw === baseRaw && remoteRaw === baseRaw) return singleSection(localRaw, 'unchanged');
 	if (localRaw === remoteRaw) return singleSection(localRaw, 'auto-merged');
 	if (localRaw === baseRaw) return singleSection(remoteRaw, 'auto-merged');
 	if (remoteRaw === baseRaw) return singleSection(localRaw, 'auto-merged');
+
+	const baseLines = splitLines(baseRaw);
+	const localLines = splitLines(localRaw);
+	const remoteLines = splitLines(remoteRaw);
 
 	// With duplicate lines, diff3 can't tell which copy was changed, so it may apply both
 	// edits and duplicate content. A merge too large to diff is treated the same

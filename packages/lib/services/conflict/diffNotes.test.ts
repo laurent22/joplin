@@ -1,4 +1,4 @@
-import { autoMerge } from './diffNotes';
+import { autoMerge, twoWayDiff } from './diffNotes';
 
 describe('autoMerge', () => {
 
@@ -236,6 +236,17 @@ describe('autoMerge', () => {
 		const result = autoMerge(base, local, remote);
 		expect(result.sections.some(s => s.type === 'conflict')).toBe(false);
 		expect(result.mergedText).toBe(expected);
+	});
+
+	test('should diff a large repeated-line note with no base quickly', () => {
+		const local = Array.from({ length: 5000 }, (_, i) => i % 2 === 0 ? `Text ${i}` : '').join('\n');
+		const remote = local.replace('Text 0', 'Text 0 remote');
+
+		const startTime = Date.now();
+		const result = twoWayDiff(local, remote);
+		expect(Date.now() - startTime).toBeLessThan(500);
+		expect(result.sections.some(s => s.type === 'conflict')).toBe(true);
+		expect(result.sections.some(s => s.type === 'unchanged')).toBe(true);
 	});
 
 	test('should be deterministic for the same inputs', () => {

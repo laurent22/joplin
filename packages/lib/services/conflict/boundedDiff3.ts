@@ -30,6 +30,7 @@ export interface ArrayChange {
 	added?: boolean;
 	removed?: boolean;
 	count: number;
+	value: string[];
 }
 
 interface Hunk {
@@ -40,7 +41,9 @@ interface Hunk {
 	abLength: number;
 }
 
+// The merge runs during sync, so it times out sooner than the conflict viewer
 const diffOptions = { maxEditLength: 5000, timeout: 1000 };
+export const viewerDiffOptions = { maxEditLength: 10000, timeout: 3000 };
 
 // The duplicate line check and the merge diff the same two pairs, so whichever runs
 // second reuses the result
@@ -50,11 +53,11 @@ export const clearDiffCache = () => {
 	cache = [];
 };
 
-export const diffLines = (base: string[], side: string[]): ArrayChange[]|undefined => {
+export const diffLines = (base: string[], side: string[], options = diffOptions): ArrayChange[]|undefined => {
 	const cached = cache.find(entry => entry.base === base && entry.side === side);
 	if (cached) return cached.changes;
 
-	const changes: ArrayChange[]|undefined = diffArrays(base, side, diffOptions);
+	const changes: ArrayChange[]|undefined = diffArrays(base, side, options);
 	cache.push({ base, side, changes });
 	return changes;
 };
