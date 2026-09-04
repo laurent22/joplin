@@ -1,4 +1,4 @@
-import boundedDiff3MergeRegions, { ArrayChange, clearDiffCache, diffLines, diffOptions, DiffOptions, Region, viewerDiffOptions } from './boundedDiff3';
+import boundedDiff3MergeRegions, { ArrayChange, createDiffLines, DiffLines, diffOptions, DiffOptions, Region, viewerDiffOptions } from './boundedDiff3';
 
 export type MergedSectionType = 'unchanged' | 'auto-merged' | 'conflict';
 
@@ -23,8 +23,8 @@ const conflictPlaceholder = (local: string, remote: string): string => {
 const splitLines = (text: string) => text.split(/\r\n|\n|\r/);
 
 // True when the given side edited at or next to two or more identical lines in a row
-const touchesDuplicateRun = (base: string[], side: string[], options: DiffOptions): boolean => {
-	const changes: ArrayChange[] | undefined = diffLines(base, side, options);
+const touchesDuplicateRun = (base: string[], side: string[], diffLines: DiffLines): boolean => {
+	const changes: ArrayChange[] | undefined = diffLines(base, side);
 	if (!changes) return true;
 
 	let baseIndex = 0;
@@ -75,10 +75,10 @@ const bothSidesChanged = (base: string[], local: string[], remote: string[]): bo
 
 // Used by the conflict UI when a note has no base
 // Without an ancestor every difference is a conflict
-const compare = (localRaw: string, remoteRaw: string, options: DiffOptions): AutoMergeResult => {
+export const twoWayDiff = (localRaw: string, remoteRaw: string, options: DiffOptions = viewerDiffOptions): AutoMergeResult => {
 	const localLines = splitLines(localRaw);
 	const remoteLines = splitLines(remoteRaw);
-	const changes = diffLines(localLines, remoteLines, options);
+	const changes = createDiffLines(options)(localLines, remoteLines);
 
 	// Too different to compare without blocking app, so the whole note will be a conflict
 	if (!changes) {
@@ -127,21 +127,12 @@ const compare = (localRaw: string, remoteRaw: string, options: DiffOptions): Aut
 	return { mergedText: mergedParts.join('\n'), sections };
 };
 
-// The cached diffs hold on to note contents, so they are dropped once the diff is done
-export const twoWayDiff = (localRaw: string, remoteRaw: string, options: DiffOptions = viewerDiffOptions): AutoMergeResult => {
-	try {
-		return compare(localRaw, remoteRaw, options);
-	} finally {
-		clearDiffCache();
-	}
-};
-
 const singleSection = (text: string, type: MergedSectionType): AutoMergeResult => ({
 	mergedText: text,
 	sections: [{ text, type }],
 });
 
-const merge = (baseRaw: string, localRaw: string, remoteRaw: string, options: DiffOptions): AutoMergeResult => {
+const merge = (baseRaw: string, localRaw: string, remoteRaw: string, diffLines: DiffLines): AutoMergeResult => {
 	// The result is already known, so diffing is skipped. One side changing still counts it as a merge
 	if (localRaw === baseRaw && remoteRaw === baseRaw) return singleSection(localRaw, 'unchanged');
 	if (localRaw === remoteRaw) return singleSection(localRaw, 'auto-merged');
@@ -156,9 +147,9 @@ const merge = (baseRaw: string, localRaw: string, remoteRaw: string, options: Di
 	// edits and duplicate content. A merge too large to diff is treated the same
 	// way, since blocking the UI is worse than falling back to a conflict.
 	const ambiguous = bothSidesChanged(baseLines, localLines, remoteLines) &&
-		(touchesDuplicateRun(baseLines, localLines, options) || touchesDuplicateRun(baseLines, remoteLines, options));
+		(touchesDuplicateRun(baseLines, localLines, diffLines) || touchesDuplicateRun(baseLines, remoteLines, diffLines));
 
-	const regions: Region[]|null = ambiguous ? null : boundedDiff3MergeRegions(localLines, baseLines, remoteLines, options);
+	const regions: Region[]|null = ambiguous ? null : boundedDiff3MergeRegions(localLines, baseLines, remoteLines, diffLines);
 
 	// A null result means the diff was too large to compute, so a conflict is safer than blocking the app
 	if (!regions) {
@@ -202,11 +193,6 @@ const merge = (baseRaw: string, localRaw: string, remoteRaw: string, options: Di
 	return { mergedText: mergedParts.join('\n'), sections };
 };
 
-// The cached diffs hold on to note contents, so they are dropped once the merge is done
 export const autoMerge = (baseRaw: string, localRaw: string, remoteRaw: string, options: DiffOptions = diffOptions): AutoMergeResult => {
-	try {
-		return merge(baseRaw, localRaw, remoteRaw, options);
-	} finally {
-		clearDiffCache();
-	}
+	return merge(baseRaw, localRaw, remoteRaw, createDiffLines(options));
 };

@@ -52,24 +52,26 @@ export const viewerDiffOptions: DiffOptions = { maxEditLength: 10000, timeout: 3
 
 // The duplicate line check and the merge diff the same two pairs, so whichever runs
 // second reuses the result
-let cache: { base: string[]; side: string[]; changes: ArrayChange[]|undefined }[] = [];
+export type DiffLines = (base: string[], side: string[])=> ArrayChange[]|undefined;
 
-export const clearDiffCache = () => {
-	cache = [];
-};
+// The cache belongs to one merge, so it cannot be shared with another
+// and is released along with it.
+export const createDiffLines = (options: DiffOptions = diffOptions): DiffLines => {
+	const cache: { base: string[]; side: string[]; changes: ArrayChange[]|undefined }[] = [];
 
-export const diffLines = (base: string[], side: string[], options: DiffOptions = diffOptions): ArrayChange[]|undefined => {
-	const cached = cache.find(entry => entry.base === base && entry.side === side);
-	if (cached) return cached.changes;
+	return (base, side) => {
+		const cached = cache.find(entry => entry.base === base && entry.side === side);
+		if (cached) return cached.changes;
 
-	const changes: ArrayChange[]|undefined = diffArrays(base, side, options);
-	cache.push({ base, side, changes });
-	return changes;
+		const changes: ArrayChange[]|undefined = diffArrays(base, side, options);
+		cache.push({ base, side, changes });
+		return changes;
+	};
 };
 
 // Where the two buffers differ, in the same shape as node-diff3's diffIndices
-const boundedDiffIndices = (o: string[], side: string[], options: DiffOptions) => {
-	const changes = diffLines(o, side, options);
+const boundedDiffIndices = (o: string[], side: string[], diffLines: DiffLines) => {
+	const changes = diffLines(o, side);
 	if (!changes) return null;
 
 	const result: { oStart: number; oLength: number; sideStart: number; sideLength: number }[] = [];
@@ -110,11 +112,11 @@ const boundedDiffIndices = (o: string[], side: string[], options: DiffOptions) =
 };
 
 // Null when the diff cannot be merged, so the caller can fall back to a conflict
-export default (a: string[], o: string[], b: string[], options: DiffOptions = diffOptions): Region[]|null => {
+export default (a: string[], o: string[], b: string[], diffLines: DiffLines): Region[]|null => {
 	const hunks: Hunk[] = [];
 
 	for (const ab of ['a', 'b'] as const) {
-		const changes = boundedDiffIndices(o, ab === 'a' ? a : b, options);
+		const changes = boundedDiffIndices(o, ab === 'a' ? a : b, diffLines);
 		if (!changes) return null;
 		for (const change of changes) {
 			hunks.push({ ab, oStart: change.oStart, oLength: change.oLength, abStart: change.sideStart, abLength: change.sideLength });

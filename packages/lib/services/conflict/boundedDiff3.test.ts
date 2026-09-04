@@ -1,10 +1,10 @@
 const { diff3MergeRegions } = require('node-diff3');
-import boundedDiff3MergeRegions from './boundedDiff3';
+import boundedDiff3MergeRegions, { createDiffLines } from './boundedDiff3';
 
 // The region combining is taken from node-diff3, so the two must agree on any input the
 // bounded diff can complete
 const matchesNodeDiff3 = (a: string[], o: string[], b: string[]) => {
-	expect(boundedDiff3MergeRegions(a, o, b)).toEqual(diff3MergeRegions(a, o, b));
+	expect(boundedDiff3MergeRegions(a, o, b, createDiffLines())).toEqual(diff3MergeRegions(a, o, b));
 };
 
 describe('boundedDiff3', () => {
@@ -30,7 +30,7 @@ describe('boundedDiff3', () => {
 		const base = Array.from({ length: 20000 }, (_, i) => `Line ${i}`);
 		const local = Array.from({ length: 20000 }, (_, i) => `Local ${i}`);
 		const remote = Array.from({ length: 20000 }, (_, i) => `Remote ${i}`);
-		expect(boundedDiff3MergeRegions(local, base, remote)).toBeNull();
+		expect(boundedDiff3MergeRegions(local, base, remote, createDiffLines())).toBeNull();
 	});
 
 	test('should merge a large note of repeated lines quickly', () => {
@@ -39,7 +39,7 @@ describe('boundedDiff3', () => {
 		const remote = [...base]; remote[base.length - 2] = 'Text 19998 remote';
 
 		const startTime = Date.now();
-		const regions = boundedDiff3MergeRegions(local, base, remote);
+		const regions = boundedDiff3MergeRegions(local, base, remote, createDiffLines());
 		expect(Date.now() - startTime).toBeLessThan(1000);
 		expect(regions).not.toBeNull();
 	});
