@@ -70,6 +70,8 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
+  - ExpoSQLite (16.0.10):
+    - ExpoModulesCore
   - FBLazyVector (0.81.6)
   - hermes-engine (0.81.6):
     - hermes-engine/Pre-built (= 0.81.6)
@@ -1605,8 +1607,6 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - react-native-sqlite-storage (6.0.1):
-    - React-Core
   - react-native-vector-icons (12.3.0):
     - hermes-engine
     - RCTRequired
@@ -2220,6 +2220,7 @@ DEPENDENCIES:
   - ExpoImageManipulator (from `../node_modules/expo-image-manipulator/ios`)
   - ExpoLocalAuthentication (from `../node_modules/expo-local-authentication/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core`)
+  - ExpoSQLite (from `../node_modules/expo-sqlite/ios`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
   - JoplinCommonShareExtension (from `ShareExtension`)
@@ -2270,7 +2271,6 @@ DEPENDENCIES:
   - react-native-rsa-native (from `../node_modules/react-native-rsa-native`)
   - "react-native-saf-x (from `../node_modules/@joplin/react-native-saf-x`)"
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
-  - react-native-sqlite-storage (from `../node_modules/react-native-sqlite-storage`)
   - "react-native-vector-icons (from `../node_modules/@react-native-vector-icons/get-image`)"
   - "react-native-vector-icons-fontawesome5 (from `../node_modules/@react-native-vector-icons/fontawesome5`)"
   - "react-native-vector-icons-ionicons (from `../node_modules/@react-native-vector-icons/ionicons`)"
@@ -2355,6 +2355,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-local-authentication/ios"
   ExpoModulesCore:
     :path: "../node_modules/expo-modules-core"
+  ExpoSQLite:
+    :path: "../node_modules/expo-sqlite/ios"
   FBLazyVector:
     :path: "../node_modules/react-native/Libraries/FBLazyVector"
   hermes-engine:
@@ -2454,8 +2456,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@joplin/react-native-saf-x"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
-  react-native-sqlite-storage:
-    :path: "../node_modules/react-native-sqlite-storage"
   react-native-vector-icons:
     :path: "../node_modules/@react-native-vector-icons/get-image"
   react-native-vector-icons-fontawesome5:
@@ -2573,6 +2573,7 @@ SPEC CHECKSUMS:
   ExpoImageManipulator: 607a5c8c88085381639458a46cc55fb9d3869148
   ExpoLocalAuthentication: 8a31808565da7af926dd9b595e98594d8b1553b6
   ExpoModulesCore: 9e6a5514828e7dd5ded9e99d33557be2d284e660
+  ExpoSQLite: 7eedbe476870a5f18d6b89c817c4ac6f299830ad
   FBLazyVector: 14ce6e3675cacb2683ad30272f04274a4ee5b67d
   hermes-engine: 7219f6e751ad6ec7f3d7ec121830ee34dae40749
   JoplinCommonShareExtension: a8b60b02704d85a7305627912c0240e94af78db7
@@ -2624,7 +2625,6 @@ SPEC CHECKSUMS:
   react-native-rsa-native: a7931cdda1f73a8576a46d7f431378c5550f0c38
   react-native-saf-x: 5f4d6aed7554454033c39c81d951962dadc8dc5a
   react-native-safe-area-context: ae7587b95fb580d1800c5b0b2a7bd48c2868e67a
-  react-native-sqlite-storage: 0c84826214baaa498796c7e46a5ccc9a82e114ed
   react-native-vector-icons: 8215b0e62bf79d3be628cf658ec23777f9bec53c
   react-native-vector-icons-fontawesome5: 787102f6050e011721d7368d990532debd19bc08
   react-native-vector-icons-ionicons: 7e633927db6ab96e0255b5920c053777cacca505
@@ -2683,4 +2683,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: e822222a3fa702bf2b95fed246a9dab9eaf26905
 
-COCOAPODS: 1.16.2
+COCOAPODS: 1.17.0

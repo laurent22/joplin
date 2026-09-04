@@ -14,7 +14,7 @@ import com.facebook.react.common.ReleaseLevel
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint
 import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
-import net.cozic.joplin.versioninfo.SystemVersionInformationPackage
+import net.cozic.joplin.systeminfo.SystemInformationPackage
 import net.cozic.joplin.share.SharePackage
 import net.cozic.joplin.ssl.SslPackage
 
@@ -27,7 +27,7 @@ class MainApplication : Application(), ReactApplication {
                     // Packages that cannot be autolinked yet can be added manually here, for example:
                     add(SharePackage())
                     add(SslPackage())
-                    add(SystemVersionInformationPackage())
+                    add(SystemInformationPackage())
                 }
 
             override fun getJSMainModuleName(): String = ".expo/.virtual-metro-entry"
