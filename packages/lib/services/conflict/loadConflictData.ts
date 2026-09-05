@@ -1,10 +1,12 @@
 import Note from '../../models/Note';
 import ConflictNoteState from '../../models/ConflictNoteState';
-import { autoMerge, MergedSection } from './diffNotes';
+import { MergedSection, twoWayDiff } from './diffNotes';
 import isConflictResolutionEnabled from './isConflictResolutionEnabled';
 
 export enum ConflictDataStatus {
 	Ok = 'ok',
+	// No three-way data for this note (no state row, or it is still encrypted or
+	// locked), so show the read-only conflict view
 	Unavailable = 'unavailable',
 }
 
@@ -37,31 +39,33 @@ export default async (noteId: string): Promise<ConflictData> => {
 	const note = await Note.load(noteId);
 	if (!note) return unavailable();
 
-	// No readable body yet - decryption re-saves the note, recomputing the merge
+	// No readable body to diff against yet - decryption re-saves the note, so the
+	// merge can be recomputed then.
 	if (note.encryption_applied || note.is_locked) return unavailable();
 
 	const state = await ConflictNoteState.byNoteId(noteId);
 	if (!state) return unavailable();
 
-	// Read the current text instead of an old copy, so the merge uses what still exists.
-	const original = note.conflict_original_id ? await Note.load(note.conflict_original_id) : null;
-	if (!original || original.encryption_applied || original.is_locked) return unavailable();
+	// The remote version stays as the original note.
+	const remoteNote = note.conflict_original_id ? await Note.load(note.conflict_original_id) : null;
+	if (!remoteNote) return unavailable();
+	if (remoteNote.encryption_applied || remoteNote.is_locked) return unavailable();
 
 	const localBody = note.body ?? '';
-	const remoteBody = original.body ?? '';
+	const remoteBody = remoteNote.body ?? '';
 
-	// Two-way on purpose: auto-merge already handled the safe changes, so only
-	// real conflicts remain. Using the base again could merge them silently.
-	const merged = autoMerge('', localBody, remoteBody);
+	// Always use two-way diff. The viewer only shows differences, so it does not
+	// requires base and all conflicts will appear in same way.
+	const merged = twoWayDiff(localBody, remoteBody);
 
 	const localTitle = note.title ?? '';
-	const remoteTitle = original.title ?? '';
+	const remoteTitle = remoteNote.title ?? '';
 
 	return {
 		status: ConflictDataStatus.Ok,
 		sections: merged.sections,
 		mergedText: merged.mergedText,
-		remoteUpdatedTime: original.updated_time,
+		remoteUpdatedTime: remoteNote.updated_time,
 		localTitle,
 		remoteTitle,
 		titleConflict: localTitle !== remoteTitle,

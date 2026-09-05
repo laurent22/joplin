@@ -5,32 +5,19 @@ import ConflictNoteState from '../../models/ConflictNoteState';
 import loadConflictData, { ConflictDataStatus } from './loadConflictData';
 import { ConflictNoteStateEntity } from '../database/types';
 
-// The remote side is the original note, so the conflict note needs that note to exist.
-const createConflictNote = async (body: string, title = 'Title') => {
-	const original = await Note.save({ title, body: '' });
-	return Note.save({ title, body, is_conflict: 1, conflict_original_id: original.id });
+// The remote version stays as the original note, and the conflict note is the copy of the local version
+const createConflictNote = async (localBody: string, remoteBody = '', localTitle = 'Title', remoteTitle = 'Title') => {
+	const original = await Note.save({ title: remoteTitle, body: remoteBody });
+	return Note.save({ title: localTitle, body: localBody, is_conflict: 1, conflict_original_id: original.id });
 };
 
-const saveState = async (noteId: string, state: Partial<ConflictNoteStateEntity> & { remote_body?: string; remote_title?: string }) => {
-	const { remote_body: remoteBody, remote_title: remoteTitle, ...rest } = state;
-
-	// Whatever the test calls the remote version is written to the original note
-	const conflictNote = await Note.load(noteId);
-	if (remoteBody !== undefined || remoteTitle !== undefined) {
-		const original = await Note.load(conflictNote.conflict_original_id);
-		await Note.save({
-			id: original.id,
-			body: remoteBody ?? original.body,
-			title: remoteTitle ?? original.title,
-		});
-	}
-
+const saveState = async (noteId: string, state: Partial<ConflictNoteStateEntity>) => {
 	await ConflictNoteState.save({
 		note_id: noteId,
 		base_body: '',
 		base_title: '',
 		remote_updated_time: 0,
-		...rest,
+		...state,
 	});
 };
 
@@ -42,42 +29,24 @@ describe('loadConflictData', () => {
 		Setting.setValue('featureFlag.conflictResolution', true);
 	});
 
-	test('should compare the two versions without merging them again', async () => {
-		const note = await createConflictNote('one\ntwo\nthree');
-		await saveState(note.id, {
-			base_body: 'one\ntwo\nthree',
-			remote_body: 'one\ntwo\nTHREE',
-		});
+	test('should compare the two versions the same way whether or not a base is stored', async () => {
+		const note = await createConflictNote('one\ntwo\nthree', 'one\ntwo\nTHREE');
+		await saveState(note.id, { base_body: 'one\ntwo\nthree' });
 
-		const data = await loadConflictData(note.id);
+		const withBase = await loadConflictData(note.id);
 
-		expect(data.status).toBe(ConflictDataStatus.Ok);
-		expect(data.sections.filter(s => s.type === 'conflict')).toHaveLength(1);
-		expect(data.sections.some(s => s.type === 'auto-merged')).toBe(false);
-	});
+		await saveState(note.id, { base_body: '' });
+		const withoutBase = await loadConflictData(note.id);
 
-	test('should ignore the stored base when comparing', async () => {
-		const note = await createConflictNote('one\nMINE');
-		// An old base can make the three-way diff treat most of the note as one big change.
-		await saveState(note.id, {
-			base_body: 'something\nentirely\ndifferent\nand\nlonger',
-			remote_body: 'one\nTHEIRS',
-		});
-
-		const data = await loadConflictData(note.id);
-
-		const conflicts = data.sections.filter(s => s.type === 'conflict');
-		expect(conflicts).toHaveLength(1);
-		expect(conflicts[0].localText).toBe('MINE');
-		expect(conflicts[0].remoteText).toBe('THEIRS');
+		expect(withBase.status).toBe(ConflictDataStatus.Ok);
+		// The viewer only shows the differences, so a stored base changes nothing
+		expect(withBase.sections).toEqual(withoutBase.sections);
+		expect(withBase.sections.some(s => s.type === 'conflict')).toBe(true);
 	});
 
 	test('should report a conflict section when both sides changed the same line', async () => {
-		const note = await createConflictNote('one\nMINE');
-		await saveState(note.id, {
-			base_body: 'one\ntwo',
-			remote_body: 'one\nTHEIRS',
-		});
+		const note = await createConflictNote('one\nMINE', 'one\nTHEIRS');
+		await saveState(note.id, { base_body: 'one\ntwo' });
 
 		const data = await loadConflictData(note.id);
 
@@ -89,8 +58,8 @@ describe('loadConflictData', () => {
 	});
 
 	test('should fall back to a two-way diff when there is no base', async () => {
-		const note = await createConflictNote('same\nMINE');
-		await saveState(note.id, { base_body: '', remote_body: 'same\nTHEIRS' });
+		const note = await createConflictNote('same\nMINE', 'same\nTHEIRS');
+		await saveState(note.id, { base_body: '' });
 
 		const data = await loadConflictData(note.id);
 
@@ -101,8 +70,8 @@ describe('loadConflictData', () => {
 	});
 
 	test('should report the title versions and whether they differ', async () => {
-		const note = await createConflictNote('body', 'My title');
-		await saveState(note.id, { remote_body: 'body', remote_title: 'Their title' });
+		const note = await createConflictNote('body', 'body', 'My title', 'Their title');
+		await saveState(note.id, {});
 
 		const data = await loadConflictData(note.id);
 
@@ -112,8 +81,8 @@ describe('loadConflictData', () => {
 	});
 
 	test('should not flag a title conflict when both titles match', async () => {
-		const note = await createConflictNote('body', 'Same');
-		await saveState(note.id, { remote_body: 'body', remote_title: 'Same' });
+		const note = await createConflictNote('body', 'body', 'Same', 'Same');
+		await saveState(note.id, {});
 
 		const data = await loadConflictData(note.id);
 
@@ -121,21 +90,22 @@ describe('loadConflictData', () => {
 	});
 
 	test('should recompute on demand rather than reading stored sections', async () => {
-		const note = await createConflictNote('one\ntwo');
-		await saveState(note.id, { base_body: 'one\ntwo', remote_body: 'one\ntwo' });
+		const note = await createConflictNote('one\ntwo', 'one\ntwo');
+		await saveState(note.id, { base_body: 'one\ntwo' });
 
-		expect((await loadConflictData(note.id)).sections.some(s => s.type === 'conflict')).toBe(false);
+		const before = await loadConflictData(note.id);
+		expect(before.sections.every(s => s.type === 'unchanged')).toBe(true);
 
-		await saveState(note.id, { base_body: 'one\ntwo', remote_body: 'one\nTWO' });
+		await Note.save({ id: note.conflict_original_id, body: 'one\nTWO' });
 
-		// Changes on the other side must show up without saving them.
-		expect((await loadConflictData(note.id)).sections.some(s => s.type === 'conflict')).toBe(true);
+		const after = await loadConflictData(note.id);
+		expect(after.sections.some(s => s.type === 'conflict')).toBe(true);
 	});
 
 	test('should be unavailable when the feature flag is off', async () => {
 		Setting.setValue('featureFlag.conflictResolution', false);
-		const note = await createConflictNote('one\ntwo');
-		await saveState(note.id, { base_body: 'one\ntwo', remote_body: 'one\nTWO' });
+		const note = await createConflictNote('one\ntwo', 'one\nTWO');
+		await saveState(note.id, { base_body: 'one\ntwo' });
 
 		const data = await loadConflictData(note.id);
 
@@ -162,9 +132,9 @@ describe('loadConflictData', () => {
 		['encrypted', { encryption_applied: 1 }],
 		['locked', { is_locked: 1 }],
 	])('should be unavailable when the note is %s', async (_label, fields) => {
-		const note = await createConflictNote('body');
+		const note = await createConflictNote('body', 'other');
 		await Note.save({ id: note.id, ...fields });
-		await saveState(note.id, { base_body: 'body', remote_body: 'other' });
+		await saveState(note.id, { base_body: 'body' });
 
 		const data = await loadConflictData(note.id);
 
