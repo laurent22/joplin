@@ -334,6 +334,43 @@ export const toggleList = (listType: ListType): Command => {
 	};
 };
 
+export const toggleBlockQuote: Command = (view: EditorView): boolean => {
+	const selection = view.state.selection.ranges[0];
+	const document = view.state.doc;
+	const firstLine = document.lineAt(selection.from);
+	const lastLine = document.lineAt(selection.to);
+	const lines: Line[] = [];
+	let hasBlockQuote = false;
+
+	for (let lineNumber = firstLine.number; lineNumber <= lastLine.number; lineNumber++) {
+		const line = document.line(lineNumber);
+		lines.push(line);
+		if (/^>\s?/.test(line.text)) {
+			hasBlockQuote = true;
+		}
+	}
+
+	const changes: ChangeSpec[] = [];
+	for (const line of lines) {
+		const blockQuote = line.text.match(/^>\s?/);
+		if (hasBlockQuote && blockQuote) {
+			changes.push({ from: line.from, to: line.from + blockQuote[0].length });
+		} else if (!hasBlockQuote) {
+			changes.push({ from: line.from, insert: '> ' });
+		}
+	}
+
+	if (lastLine.number < document.lines) {
+		const nextLine = document.line(lastLine.number + 1);
+		if (!hasBlockQuote && nextLine.text.trim() !== '') {
+			changes.push({ from: lastLine.to, insert: '\n' });
+		}
+	}
+
+	view.dispatch({ changes });
+	return true;
+};
+
 
 export const toggleHeaderLevel = (level: number): Command => {
 	return (view: EditorView): boolean => {
