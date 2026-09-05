@@ -71,6 +71,9 @@ export class FileLocker {
 	// We want the unlock operation to be synchronous because it may be performed when the app
 	// is closing.
 	public unlockSync() {
+		// Do not remove a lock owned by another FileLocker instance.
+		if (!this.interval_) return;
+
 		this.stopMonitoring_();
 		removeSync(this.filePath_);
 	}
