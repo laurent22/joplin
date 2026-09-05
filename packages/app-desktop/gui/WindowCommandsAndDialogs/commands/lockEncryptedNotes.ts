@@ -5,7 +5,7 @@ import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
 
 export const declaration: CommandDeclaration = {
 	name: 'lockEncryptedNotes',
-	label: () => _('Lock encrypted notes'),
+	label: () => _('Relock all notes'),
 };
 
 export const runtime = (): CommandRuntime => {
