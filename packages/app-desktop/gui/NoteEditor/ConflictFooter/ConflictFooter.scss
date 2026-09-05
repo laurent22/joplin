@@ -1,0 +1,30 @@
+.conflict-footer {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 12px;
+	padding: 12px var(--joplin-editor-padding-left);
+	border-top: 1px solid var(--joplin-divider-color);
+	background-color: var(--joplin-background-color);
+
+	> .-finish {
+		padding: 10px 28px;
+		cursor: pointer;
+		border: none;
+		border-radius: 6px;
+		background-color: var(--joplin-color4);
+		color: var(--joplin-background-color);
+		font-size: 1.1em;
+		font-weight: bold;
+
+		&:hover:not(:disabled) {
+			background-color: var(--joplin-background-color-hover5);
+		}
+
+		&:disabled {
+			opacity: 0.5;
+			cursor: default;
+		}
+	}
+}

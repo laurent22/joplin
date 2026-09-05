@@ -5,14 +5,14 @@ import isConflictResolutionEnabled from './isConflictResolutionEnabled';
 
 export enum ConflictDataStatus {
 	Ok = 'ok',
-	// No three-way data for this note (no state row, or it is still encrypted or
-	// locked), so show the read-only conflict view
 	Unavailable = 'unavailable',
 }
 
 export interface ConflictData {
 	status: ConflictDataStatus;
 	sections: MergedSection[];
+	mergedText: string;
+	remoteUpdatedTime: number;
 	localTitle: string;
 	remoteTitle: string;
 	titleConflict: boolean;
@@ -22,6 +22,8 @@ const unavailable = (): ConflictData => {
 	return {
 		status: ConflictDataStatus.Unavailable,
 		sections: [],
+		mergedText: '',
+		remoteUpdatedTime: 0,
 		localTitle: '',
 		remoteTitle: '',
 		titleConflict: false,
@@ -35,30 +37,31 @@ export default async (noteId: string): Promise<ConflictData> => {
 	const note = await Note.load(noteId);
 	if (!note) return unavailable();
 
-	// No readable body to diff against yet - decryption re-saves the note, so the
-	// merge can be recomputed then.
+	// No readable body yet - decryption re-saves the note, recomputing the merge
 	if (note.encryption_applied || note.is_locked) return unavailable();
 
 	const state = await ConflictNoteState.byNoteId(noteId);
 	if (!state) return unavailable();
 
-	// The remote version stays as the original note.
-	const remoteNote = note.conflict_original_id ? await Note.load(note.conflict_original_id) : null;
-	if (!remoteNote) return unavailable();
-	if (remoteNote.encryption_applied || remoteNote.is_locked) return unavailable();
+	// Read the current text instead of an old copy, so the merge uses what still exists.
+	const original = note.conflict_original_id ? await Note.load(note.conflict_original_id) : null;
+	if (!original || original.encryption_applied || original.is_locked) return unavailable();
 
 	const localBody = note.body ?? '';
-	const remoteBody = remoteNote.body ?? '';
-	const baseBody = state.base_body ?? '';
+	const remoteBody = original.body ?? '';
 
-	const merged = autoMerge(baseBody, localBody, remoteBody);
+	// Two-way on purpose: auto-merge already handled the safe changes, so only
+	// real conflicts remain. Using the base again could merge them silently.
+	const merged = autoMerge('', localBody, remoteBody);
 
 	const localTitle = note.title ?? '';
-	const remoteTitle = remoteNote.title ?? '';
+	const remoteTitle = original.title ?? '';
 
 	return {
 		status: ConflictDataStatus.Ok,
 		sections: merged.sections,
+		mergedText: merged.mergedText,
+		remoteUpdatedTime: original.updated_time,
 		localTitle,
 		remoteTitle,
 		titleConflict: localTitle !== remoteTitle,

@@ -156,6 +156,7 @@ export interface NoteBodyEditorProps {
 	watchedNoteFiles: string[];
 	enableHtmlToMarkdownBanner: boolean;
 	showNoteLinkIcon: boolean;
+	conflictReloadCount?: number;
 }
 
 export interface NoteBodyEditorPropsAndRef extends NoteBodyEditorProps {
