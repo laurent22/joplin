@@ -12940,7 +12940,7 @@ __metadata:
     string-padding: "npm:1.0.2"
     string-to-stream: "npm:3.0.1"
     tar: "npm:7.5.16"
-    tcp-port-used: "npm:1.0.2"
+    tcp-port-used: "npm:1.0.3"
     tesseract.js: "npm:7.0.0"
     typescript: "npm:5.9.3"
     uglifycss: "npm:0.0.29"
@@ -13282,7 +13282,7 @@ __metadata:
     moment: "npm:2.30.1"
     node-fetch: "npm:2.6.7"
     sprintf-js: "npm:1.1.3"
-    tcp-port-used: "npm:1.0.2"
+    tcp-port-used: "npm:1.0.3"
     ts-jest: "npm:29.4.11"
     typescript: "npm:5.9.3"
   languageName: unknown
@@ -36710,10 +36710,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ip-regex@npm:^4.1.0":
-  version: 4.3.0
-  resolution: "ip-regex@npm:4.3.0"
-  checksum: 10/7ff904b891221b1847f3fdf3dbb3e6a8660dc39bc283f79eb7ed88f5338e1a3d1104b779bc83759159be266249c59c2160e779ee39446d79d4ed0890dfd06f08
+"ip-regex@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "ip-regex@npm:2.1.0"
+  checksum: 10/331d95052aa53ce245745ea0fc3a6a1e2e3c8d6da65fa8ea52bf73768c1b22a9ac50629d1d2b08c04e7b3ac4c21b536693c149ce2c2615ee4796030e5b3e3cba
   languageName: node
   linkType: hard
 
@@ -37744,7 +37744,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-url@npm:^1.2.4":
+"is-url@npm:^1.2.2, is-url@npm:^1.2.4":
   version: 1.2.4
   resolution: "is-url@npm:1.2.4"
   checksum: 10/100e74b3b1feab87a43ef7653736e88d997eb7bd32e71fd3ebc413e58c1cbe56269699c776aaea84244b0567f2a7d68dfaa512a062293ed2f9fdecb394148432
@@ -37869,14 +37869,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is2@npm:^2.0.6":
-  version: 2.0.7
-  resolution: "is2@npm:2.0.7"
+"is2@npm:2.0.1":
+  version: 2.0.1
+  resolution: "is2@npm:2.0.1"
   dependencies:
     deep-is: "npm:^0.1.3"
-    ip-regex: "npm:^4.1.0"
-    is-url: "npm:^1.2.4"
-  checksum: 10/1bc88865a8cef3df9ebb420569886f8815c5935ef7229c0d23f6327a567dd368ae2eb572efe21d450e1e0a0728825b30dd863302b96d70d89a5ef168b9921604
+    ip-regex: "npm:^2.1.0"
+    is-url: "npm:^1.2.2"
+  checksum: 10/b91c1eb740188549874128736a81f95b40b866df30f98db608a57b0c9218cc6567067b33bddf2730d554ebcd0675c833cb09f52dd019b914ba8e41e8d73d9900
   languageName: node
   linkType: hard
 
@@ -38864,7 +38864,7 @@ __metadata:
     sqlite3: "npm:5.1.6"
     string-padding: "npm:1.0.2"
     strip-ansi: "npm:6.0.1"
-    tcp-port-used: "npm:1.0.2"
+    tcp-port-used: "npm:1.0.3"
     temp: "npm:0.9.4"
     terminal-kit: "npm:3.1.2"
     tkwidgets: "npm:0.5.27"
@@ -55991,13 +55991,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tcp-port-used@npm:1.0.2":
-  version: 1.0.2
-  resolution: "tcp-port-used@npm:1.0.2"
+"tcp-port-used@npm:1.0.3":
+  version: 1.0.3
+  resolution: "tcp-port-used@npm:1.0.3"
   dependencies:
     debug: "npm:4.3.1"
-    is2: "npm:^2.0.6"
-  checksum: 10/bbacbcbe15504a274e3da7bdba0973f16f6950ee68c7a71238ff6fd5d55a113518757df98c5842177a3ad6ded7dd38bd822bd6494a0a2728aa8d7f4776c1ba22
+    is2: "npm:2.0.1"
+  checksum: 10/27489ef0f6e5077bb011ce32e20ac4c3c7e8897dc34bc2664ba6ea94855383272c0f036cd339bc319203f98ecf4a4c3e7942e030ed94c80ab6e584cfaf107283
   languageName: node
   linkType: hard
 
