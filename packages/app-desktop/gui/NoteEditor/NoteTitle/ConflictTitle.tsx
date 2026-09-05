@@ -37,7 +37,7 @@ const ConflictTitle: React.FC<Props> = ({ conflictTitle, disabled, resolvedTitle
 			<div className='-subheader'>
 				<div className='-instructions'>
 					<div className='-instructions-title'>{_('Review the highlighted changes below')}</div>
-					<div className='-instructions-detail'>{_('You\'re reviewing changes between your copy of this note and the latest saved version')}</div>
+					<div className='-instructions-detail'>{_('You\'re reviewing changes between your copy of this note and the latest synced version')}</div>
 				</div>
 				{onHelp ? (
 					<button className='-help' onClick={onHelp}>
