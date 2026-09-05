@@ -71,6 +71,22 @@ describe('buildConflictDocument', () => {
 		]);
 	});
 
+	test('should rebuild their version exactly when a section was deleted on their side', () => {
+		// A conflict with no remote text takes no line, so it must not add a blank
+		// one and shift every region after it
+		const sections: MergedSection[] = [
+			{ text: 'one', type: 'unchanged' },
+			{ text: '', type: 'conflict', localText: 'mine only', remoteText: '' },
+			{ text: 'two', type: 'unchanged' },
+			{ text: '', type: 'conflict', localText: 'a', remoteText: 'b' },
+		];
+
+		const doc = buildConflictDocument(sections);
+
+		expect(doc.text).toBe('one\ntwo\nb');
+		expect(doc.text.slice(doc.regions[1].from, doc.regions[1].to)).toBe('b');
+	});
+
 	test('should return an empty document when there are no sections', () => {
 		expect(buildConflictDocument([])).toEqual({ text: '', regions: [] });
 	});
