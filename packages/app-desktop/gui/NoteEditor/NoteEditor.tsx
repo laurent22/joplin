@@ -1014,7 +1014,9 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 	// A conflict stays listed in the trash once deleted
 	const inTrash = windowState.notesParentType === 'Folder'
 		&& windowState.selectedFolderId === getTrashFolderId();
-	const conflictIsInView = noteIsConflict && (inConflictFolder || inTrash);
+	// A secondary window opens in the note's own notebook, not the conflicts folder
+	const isSecondaryWindow = ownProps.windowId !== defaultWindowId;
+	const conflictIsInView = noteIsConflict && (isSecondaryWindow || inConflictFolder || inTrash);
 
 	let bodyEditor = windowState.editorCodeView ? NoteBodyEditorType.CodeMirror6 : NoteBodyEditorType.TinyMce;
 	if (state.settings.isSafeMode) {
