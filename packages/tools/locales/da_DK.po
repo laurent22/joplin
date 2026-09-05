@@ -580,7 +580,7 @@ msgstr "Tilføj brødtekst"
 msgid "Add column"
 msgstr "Tilføj kolonne"
 
-#: packages/app-mobile/components/buttons/FloatingActionButton.tsx:129
+#: packages/app-mobile/components/buttons/FloatingActionButton.tsx:130
 #: packages/app-mobile/components/ComboBox.tsx:103
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:78
 msgid "Add new"
