@@ -20,10 +20,10 @@ describe('markdownCommands', () => {
 		);
 
 		toggleBlockQuote(editor);
-		expect(editor.state.doc.toString()).toBe('> First line\n\nSecond line');
+		expect(editor.state.doc.toString()).toBe('> First line\nSecond line');
 
 		toggleBlockQuote(editor);
-		expect(editor.state.doc.toString()).toBe('First line\n\nSecond line');
+		expect(editor.state.doc.toString()).toBe(initialText);
 	});
 
 	it('should preserve an existing blank line when removing a blockquote', async () => {
@@ -47,10 +47,10 @@ describe('markdownCommands', () => {
 		);
 
 		toggleBlockQuote(editor);
-		expect(editor.state.doc.toString()).toBe('> First line\n> Second line\n> Third line\n\nFourth line');
+		expect(editor.state.doc.toString()).toBe('> First line\n> Second line\n> Third line\nFourth line');
 
 		toggleBlockQuote(editor);
-		expect(editor.state.doc.toString()).toBe('First line\nSecond line\nThird line\n\nFourth line');
+		expect(editor.state.doc.toString()).toBe(initialText);
 	});
 
 	it('should blockquote only first selection when selected lines are not continuous', async () => {
@@ -68,7 +68,7 @@ describe('markdownCommands', () => {
 		);
 
 		toggleBlockQuote(editor);
-		expect(editor.state.doc.toString()).toBe('> First line\n\nSecond line\nThird line\nFourth line');
+		expect(editor.state.doc.toString()).toBe('> First line\nSecond line\nThird line\nFourth line');
 	});
 
 	it('should bold/italicize everything selected', async () => {
