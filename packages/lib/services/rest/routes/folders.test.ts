@@ -2,6 +2,7 @@ import Note from '../../../models/Note';
 import Api, { RequestMethod } from '../Api';
 import { setupDatabaseAndSynchronizer, switchClient } from '../../../testing/test-utils';
 import Folder from '../../../models/Folder';
+import Setting from '../../../models/Setting';
 
 describe('routes/folders', () => {
 
@@ -122,5 +123,23 @@ describe('routes/folders', () => {
 			const notes = await api.route(RequestMethod.GET, `folders/${folder.id}/notes`, { include_deleted: '1' });
 			expect(notes.items.length).toBe(2);
 		}
+	});
+
+	// The next sync serializes the marker and the server attaches the folder tree to the share,
+	// which would carry the locked note along.
+	test('should not let a folder with a locked note gain a sharing state through the API', async () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		const api = new Api();
+		const folder = await Folder.save({ title: 'folder' });
+		await Note.save({ title: 'locked', parent_id: folder.id, is_locked: 1 });
+
+		await expect(api.route(RequestMethod.PUT, `folders/${folder.id}`, null, JSON.stringify({ share_id: 'share-1' }))).rejects.toThrow('sharing state');
+		await expect(api.route(RequestMethod.PUT, `folders/${folder.id}`, null, JSON.stringify({ is_shared: 1 }))).rejects.toThrow('sharing state');
+		expect((await Folder.load(folder.id)).share_id).toBe('');
+		expect((await Folder.load(folder.id)).is_shared).toBe(0);
+
+		Setting.setValue('featureFlag.noteLock', false);
+		await api.route(RequestMethod.PUT, `folders/${folder.id}`, null, JSON.stringify({ title: 'renamed' }));
+		expect((await Folder.load(folder.id)).title).toBe('renamed');
 	});
 });

@@ -269,6 +269,19 @@ describe('routes/notes', () => {
 		expect((await Note.load(note.id)).is_locked).toBe(startLocked);
 	});
 
+	// The next sync serializes these markers and the server attaches the item to the share, so a
+	// locked note must not be able to gain them through the API.
+	test('should not let a locked note gain a sharing state through the API', async () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		const api = new Api();
+		const note = await Note.save({ title: 'locked', body: 'ciphertext', is_locked: 1 });
+
+		await expect(api.route(RequestMethod.PUT, `notes/${note.id}`, null, JSON.stringify({ share_id: 'share-1' }))).rejects.toThrow('sharing state');
+		await expect(api.route(RequestMethod.PUT, `notes/${note.id}`, null, JSON.stringify({ is_shared: 1 }))).rejects.toThrow('sharing state');
+		expect((await Note.load(note.id)).share_id).toBe('');
+		expect((await Note.load(note.id)).is_shared).toBe(0);
+	});
+
 	test('should exclude locked notes from collection responses', async () => {
 		Setting.setValue('featureFlag.noteLock', true);
 		const api = new Api();

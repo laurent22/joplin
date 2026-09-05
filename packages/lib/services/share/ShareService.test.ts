@@ -604,4 +604,138 @@ describe('ShareService', () => {
 		await expect(service.publishFolder('000000000000000000000000000000F9')).rejects.toThrow('No such folder: 000000000000000000000000000000F9');
 	});
 
+	it('should drop a deleted share from live state so locking works again', async () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		const service = testShareFolderService();
+		const { folder } = await testShareFolder(service);
+		await service.refreshShares();
+		expect(service.shares).toHaveLength(1);
+
+		await service.unshareFolder(folder.id);
+
+		// Left behind, the note lock guard would keep rejecting until the next sync refreshed it.
+		expect(service.shares).toHaveLength(0);
+	});
+
+	it('should drop a deleted note share from live state right after unsharing', async () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'note', parent_id: folder.id });
+		const serverShares = [
+			{ id: 'share_n1', type: ShareType.Note, note_id: note.id, folder_id: '', master_key_id: '' },
+			{ id: 'share_u1', type: ShareType.Folder, note_id: '', folder_id: 'unrelated-folder', master_key_id: '' },
+		];
+		const service = testShareFolderService({
+			'GET api/shares': () => ({ items: [...serverShares] }),
+		});
+		await service.refreshShares();
+		expect(service.shares).toHaveLength(2);
+
+		await service.unshareNote(note.id);
+
+		// Only the deleted share leaves; an unrelated active share must survive the eviction.
+		expect(service.shares.map(s => s.id)).toEqual(['share_u1']);
+	});
+
+	// The remote DELETE can succeed and the follow-up refresh fail, so the share must leave live
+	// state before the refresh, or the note lock guard keeps rejecting until a later sync.
+	it('should drop a deleted published folder share from live state even when the refresh fails', async () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		const folder = await Folder.save({ title: 'folder' });
+		const serverShares = [
+			{ id: 'share_p1', type: ShareType.PublishedFolder, note_id: '', folder_id: folder.id, master_key_id: '' },
+			{ id: 'share_u1', type: ShareType.Folder, note_id: '', folder_id: 'unrelated-folder', master_key_id: '' },
+		];
+		let failGet = false;
+		const service = testShareFolderService({
+			'GET api/shares': () => {
+				if (failGet) throw new Error('network down');
+				return { items: [...serverShares] };
+			},
+		});
+		await service.refreshShares();
+		expect(service.shares).toHaveLength(2);
+
+		failGet = true;
+		await expect(service.unpublishFolder(folder.id)).rejects.toThrow('network down');
+
+		expect(service.shares.map(s => s.id)).toEqual(['share_u1']);
+	});
+
+	// The eviction must come after the remote DELETE: a failed DELETE means the share still
+	// exists remotely, so forgetting it locally would let a locked note slip into it.
+	it('should keep the share in live state when the remote delete fails', async () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'note', parent_id: folder.id });
+		const serverShares = [
+			{ id: 'share_n1', type: ShareType.Note, note_id: note.id, folder_id: '', master_key_id: '' },
+			{ id: 'share_p1', type: ShareType.PublishedFolder, note_id: '', folder_id: folder.id, master_key_id: '' },
+		];
+		const service = testShareFolderService({
+			'GET api/shares': () => ({ items: [...serverShares] }),
+			'DELETE api/shares/share_n1': () => { throw new Error('network down'); },
+			'DELETE api/shares/share_p1': () => { throw new Error('network down'); },
+		});
+		await service.refreshShares();
+
+		await expect(service.unshareNote(note.id)).rejects.toThrow('network down');
+		await expect(service.unpublishFolder(folder.id)).rejects.toThrow('network down');
+		expect(service.shares).toHaveLength(2);
+	});
+
+	it('should refuse to share a folder containing a locked note, before posting or moving it', async () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		const parent = await Folder.save({ title: 'parent' });
+		const folder = await Folder.save({ title: 'to share', parent_id: parent.id });
+		await Note.save({ title: 'locked', parent_id: folder.id, is_locked: 1 });
+
+		const postShares = jest.fn();
+		const service = testShareFolderService({ 'POST api/shares': postShares });
+
+		await expect(service.shareFolder(folder.id)).rejects.toThrow();
+		expect(postShares).not.toHaveBeenCalled();
+		// Sharing moves a nested folder to the root, so an unchanged parent shows nothing ran.
+		expect((await Folder.load(folder.id)).parent_id).toBe(parent.id);
+	});
+
+	it('should refuse to publish a locked note or a folder holding one', async () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'locked', parent_id: folder.id, is_locked: 1 });
+
+		const postShares = jest.fn();
+		const service = testShareFolderService({ 'POST api/shares': postShares });
+
+		await expect(service.shareNote(note.id, false)).rejects.toThrow();
+		await expect(service.publishFolder(folder.id)).rejects.toThrow();
+		expect(postShares).not.toHaveBeenCalled();
+	});
+
+	// Trash is a soft delete that keeps the parent, so restoring the note afterwards would
+	// publish it on the next sync without the user ever choosing to.
+	it('should refuse to publish a folder whose only locked note is in the trash', async () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		const folder = await Folder.save({ title: 'folder' });
+		await Note.save({ title: 'locked', parent_id: folder.id, is_locked: 1, deleted_time: 1 });
+
+		const postShares = jest.fn();
+		const service = testShareFolderService({ 'POST api/shares': postShares });
+
+		await expect(service.publishFolder(folder.id)).rejects.toThrow();
+		expect(postShares).not.toHaveBeenCalled();
+	});
+
+	it('should leave sharing and publishing alone when note lock is disabled', async () => {
+		Setting.setValue('featureFlag.noteLock', false);
+		const toShare = await Folder.save({ title: 'to share' });
+		const toPublish = await Folder.save({ title: 'to publish' });
+		const note = await Note.save({ title: 'locked', parent_id: toPublish.id, is_locked: 1 });
+		await Note.save({ title: 'locked too', parent_id: toShare.id, is_locked: 1 });
+
+		await expect(testShareFolderService().shareFolder(toShare.id)).resolves.toBeTruthy();
+		await expect(testShareFolderService().shareNote(note.id, false)).resolves.toBeTruthy();
+		await expect(testShareFolderService().publishFolder(toPublish.id)).resolves.toBeTruthy();
+	});
+
 });

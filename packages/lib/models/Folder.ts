@@ -20,6 +20,8 @@ import getTrashFolderId from '../services/trash/getTrashFolderId';
 import { getCollator } from './utils/getCollator';
 import Setting from './Setting';
 import { itemIsReadOnlySync, ItemSlice } from './utils/readOnly';
+import { folderIsInActiveShare } from './utils/noteLockShareGuard';
+import isNoteLockEnabled from '../services/noteLock/isNoteLockEnabled';
 import ItemChange from './ItemChange';
 import { substrWithEllipsis } from '../string-utils';
 import { unique } from '../ArrayUtils';
@@ -150,6 +152,16 @@ export default class Folder extends BaseItem {
 		const actionLogger = ActionLogger.from(options.sourceDescription);
 		actionLogger.addDescription(`folder titles: ${JSON.stringify(folders.map(folder => folder.title))}`);
 		options.sourceDescription = actionLogger;
+
+		// Same check as the root folder saves below would hit, but before any child is deleted,
+		// so a rejected drop cannot leave a partially trashed tree.
+		if (isNoteLockEnabled() && toTrash && options.toTrashParentId) {
+			if (await folderIsInActiveShare(this, this.syncShareCache, options.toTrashParentId)) {
+				for (const folderId of folderIds) {
+					if (await this.hasLockedNotes(folderId)) throw new Error(_('This notebook cannot be moved to a shared or published notebook because it contains locked notes'));
+				}
+			}
+		}
 
 		if (options.deleteChildren) {
 			const childrenDeleteOptions: DeleteOptions = {
@@ -443,6 +455,52 @@ export default class Folder extends BaseItem {
 		`;
 
 		return this.db().selectAll(sql, [folderId]);
+	}
+
+	// The upward counterpart of allChildrenFolders, so an item can be matched against a share
+	// rooted anywhere above it, by marker or by id. Includes the folder itself.
+	public static async selfAndAncestors(folderId: string) {
+		if (!folderId) return [] as FolderEntity[];
+
+		const sql = `
+			WITH RECURSIVE
+				folders_cte(id, parent_id, share_id, is_shared) AS (
+					SELECT id, parent_id, share_id, is_shared
+						FROM folders
+						WHERE id = ?
+					UNION ALL
+						SELECT folders.id, folders.parent_id, folders.share_id, folders.is_shared
+							FROM folders
+							INNER JOIN folders_cte AS folders_cte ON (folders.id = folders_cte.parent_id)
+				)
+				SELECT id, share_id, is_shared FROM folders_cte;
+		`;
+
+		return this.db().selectAll<FolderEntity>(sql, [folderId]);
+	}
+
+	// Mirrors allChildrenFolders but includes the root, and walks deleted folders that may hold
+	// live notes. Deleted notes count because they can be restored; conflicts never sync.
+	public static async hasLockedNotes(folderId: string) {
+		const sql = `
+			WITH RECURSIVE
+				folders_cte(id) AS (
+					SELECT id
+						FROM folders
+						WHERE id = ?
+					UNION ALL
+						SELECT folders.id
+							FROM folders
+							INNER JOIN folders_cte AS folders_cte ON (folders.parent_id = folders_cte.id)
+				)
+				SELECT 1 FROM notes
+					WHERE parent_id IN (SELECT id FROM folders_cte)
+						AND is_locked = 1
+						AND is_conflict = 0
+					LIMIT 1;
+		`;
+
+		return !!(await this.db().selectOne(sql, [folderId]));
 	}
 
 	public static async rootSharedFolders(activeShares: StateShare[]): Promise<FolderEntity[]> {

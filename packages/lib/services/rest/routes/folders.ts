@@ -7,7 +7,7 @@ import requestFields from '../utils/requestFields';
 import Folder from '../../../models/Folder';
 import { allForDisplay } from '../../../folders-screen-utils';
 import isNoteLockEnabled from '../../noteLock/isNoteLockEnabled';
-const { ErrorNotFound } = require('../utils/errors');
+const { ErrorForbidden, ErrorNotFound } = require('../utils/errors');
 
 export default async function(request: Request, id: string = null, link: string = null) {
 	const includeDeleted = request.query.include_deleted === '1';
@@ -40,6 +40,19 @@ export default async function(request: Request, id: string = null, link: string 
 	if (request.method === RequestMethod.DELETE) {
 		await Folder.delete(id, { toTrash: request.query.permanent !== '1', sourceDescription: 'api/folders DELETE' });
 		return;
+	}
+
+	if (isNoteLockEnabled() && request.method === RequestMethod.PUT && id) {
+		const folder = await Folder.load(id, { fields: ['id', 'share_id', 'is_shared'] });
+		const newProps = request.bodyJson();
+		if (folder) {
+			// The next sync would upload these markers and attach the folder tree to the share.
+			const gainsShareId = 'share_id' in newProps && !!newProps.share_id && newProps.share_id !== folder.share_id;
+			const gainsIsShared = 'is_shared' in newProps && !!Folder.filter({ is_shared: newProps.is_shared }).is_shared && !folder.is_shared;
+			if ((gainsShareId || gainsIsShared) && await Folder.hasLockedNotes(id)) {
+				throw new ErrorForbidden('The sharing state of a notebook that contains locked notes cannot be changed through the API');
+			}
+		}
 	}
 
 	return defaultAction(BaseModel.TYPE_FOLDER, request, id, link);

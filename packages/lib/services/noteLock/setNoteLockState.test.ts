@@ -8,6 +8,10 @@ import NoteLockService from './NoteLockService';
 import NoteLockSession from './NoteLockSession';
 import { disableNoteLock, enableNoteLock } from './setNoteLockState';
 import eventManager, { EventName } from '../../eventManager';
+import BaseItem from '../../models/BaseItem';
+import { defaultState as defaultShareState, ShareType } from '../share/reducer';
+
+const sharedOrPublishedError = 'Cannot lock a note that is being shared or published';
 
 const setUpUnlockedSession = async (password = '123456') => {
 	await NoteLockKey.instance().create(password);
@@ -24,6 +28,7 @@ describe('setNoteLockState', () => {
 		NoteLockKey.destroyInstance();
 		EncryptionService.instance_ = encryptionService();
 		Setting.setValue('featureFlag.noteLock', true);
+		BaseItem.syncShareCache = defaultShareState;
 	});
 
 	afterAll(async () => {
@@ -83,6 +88,84 @@ describe('setNoteLockState', () => {
 		const note = await Note.save({ title: 'note', body: 'secret', ...fields });
 		await expect(enableNoteLock(note.id)).rejects.toThrow();
 		expect((await Note.load(note.id)).is_locked).toBe(0);
+	});
+
+	test.each([
+		['note in a shared notebook', { share_id: 'share-1' }],
+		['published note', { is_shared: 1 }],
+	])('should refuse to lock a %s', async (_label, fields) => {
+		await setUpUnlockedSession();
+		const note = await Note.save({ title: 'note', body: 'secret', ...fields });
+		await expect(enableNoteLock(note.id)).rejects.toThrow();
+		expect((await Note.load(note.id)).is_locked).toBe(0);
+	});
+
+	// Only entering the lock is blocked: a note that reached either state while already locked
+	// would otherwise have no way back.
+	test.each([
+		['note in a shared notebook', { share_id: 'share-1' }],
+		['published note', { is_shared: 1 }],
+	])('should still allow removing the lock from a %s', async (_label, fields) => {
+		await setUpUnlockedSession();
+		// Two steps because the model guard refuses creating a note that is locked and shared at once.
+		const note = await Note.save({ title: 'note', body: 'secret', is_locked: 1 });
+		await Note.save({ id: note.id, ...fields });
+		await expect(disableNoteLock(note.id)).resolves.toBeUndefined();
+	});
+
+	// Sharing and publishing only stamp share_id and is_shared on the notes during the next sync,
+	// so the note row still looks untouched while the share already exists on the server.
+	test.each([
+		['published notebook', ShareType.PublishedFolder],
+		['shared notebook', ShareType.Folder],
+	])('should refuse to lock a note in an already %s before sync marks the note', async (_label, type) => {
+		await setUpUnlockedSession();
+		const parent = await Folder.save({ title: 'parent' });
+		const folder = await Folder.save({ title: 'child', parent_id: parent.id });
+		const note = await Note.save({ title: 'note', body: 'secret', parent_id: folder.id });
+		BaseItem.syncShareCache = {
+			...defaultShareState,
+			shares: [{ id: 'share-1', type, folder_id: parent.id, note_id: '', master_key_id: '' }],
+		};
+
+		await expect(enableNoteLock(note.id)).rejects.toThrow(sharedOrPublishedError);
+		expect((await Note.load(note.id)).is_locked).toBe(0);
+	});
+
+	it('should refuse to lock a note that is already published on its own', async () => {
+		await setUpUnlockedSession();
+		const note = await Note.save({ title: 'note', body: 'secret' });
+		BaseItem.syncShareCache = {
+			...defaultShareState,
+			shares: [{ id: 'share-1', type: ShareType.Note, folder_id: '', note_id: note.id, master_key_id: '' }],
+		};
+
+		await expect(enableNoteLock(note.id)).rejects.toThrow(sharedOrPublishedError);
+	});
+
+	// A note created inside a shared notebook keeps share_id = '' until the next sync propagates
+	// it, so the ancestor's own marker is the only local evidence in the meantime.
+	test.each([
+		['shared', { share_id: 'share-1' }],
+		['published', { is_shared: 1 }],
+	])('should refuse to lock a note whose notebook is %s while the cache is empty', async (_label, fields) => {
+		await setUpUnlockedSession();
+		const root = await Folder.save({ title: 'root', ...fields });
+		const child = await Folder.save({ title: 'child', parent_id: root.id });
+		const note = await Note.save({ title: 'note', body: 'secret', parent_id: child.id });
+		BaseItem.syncShareCache = { ...defaultShareState, shares: [] };
+
+		await expect(enableNoteLock(note.id)).rejects.toThrow(sharedOrPublishedError);
+		expect((await Note.load(note.id)).is_locked).toBe(0);
+	});
+
+	it('should allow locking again once the share is gone from both the rows and the cache', async () => {
+		await setUpUnlockedSession();
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'note', body: 'secret', parent_id: folder.id });
+		BaseItem.syncShareCache = { ...defaultShareState, shares: [] };
+
+		await expect(enableNoteLock(note.id)).resolves.toBeUndefined();
 	});
 
 	it('should throw when note lock is not enabled', async () => {
