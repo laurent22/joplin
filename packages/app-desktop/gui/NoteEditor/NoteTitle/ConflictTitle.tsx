@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { ChangeEvent, ReactNode, useCallback } from 'react';
+import { ChangeEvent, ReactNode, useCallback, useRef } from 'react';
 import { _ } from '@joplin/lib/locale';
+import { focus } from '@joplin/lib/utils/focusHandler';
 
 interface Props {
 	// Null when the two versions agree on the title
@@ -21,7 +22,17 @@ const ConflictTitle: React.FC<Props> = ({ conflictTitle, disabled, resolvedTitle
 		onResolvedTitleChange(event.target.value);
 	}, [onResolvedTitleChange]);
 
+	const resolvedInputRef = useRef<HTMLInputElement>(null);
+
 	const onCopy = useCallback(() => {
+		const input = resolvedInputRef.current;
+
+		if (input && document.execCommand) {
+			focus('ConflictTitle::useThisTitle', input);
+			input.select();
+			if (document.execCommand('insertText', false, conflictTitle)) return;
+		}
+
 		onResolvedTitleChange(conflictTitle);
 	}, [conflictTitle, onResolvedTitleChange]);
 
@@ -64,7 +75,7 @@ const ConflictTitle: React.FC<Props> = ({ conflictTitle, disabled, resolvedTitle
 
 					<label className='-field'>
 						<span className='-label'>{_('Resolved note title')}</span>
-						<input className='-input' type='text' value={resolvedTitle} onChange={onChange} readOnly={disabled} />
+						<input className='-input' type='text' ref={resolvedInputRef} value={resolvedTitle} onChange={onChange} readOnly={disabled} />
 					</label>
 				</div>
 			) : (
