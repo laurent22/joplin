@@ -1,5 +1,9 @@
 # Joplin Android Changelog
 
+## [android-v3.7.8](https://github.com/laurent22/joplin/releases/tag/android-v3.7.8) - 2026-09-05T10:10:01Z
+
+- Fixed: Fix additional space present below new note menu on some devices (#16361 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [android-v3.7.7](https://github.com/laurent22/joplin/releases/tag/android-v3.7.7) - 2026-08-28T18:05:26Z
 
 - Improved: Implement readonly state for mobile RTE and disable the MDE interactive table editor for readonly notes (#16231 by [@mrjo118](https://github.com/mrjo118))
