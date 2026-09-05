@@ -98,7 +98,7 @@ export function PublishFolderDialog(props: Props) {
 						</div>
 					</div>
 					{publishedShare && (
-						<Button disabled={isUnpublishing} tooltip={_('Unpublish notebook')} iconName="fas fa-share-alt" onClick={onUnpublishFolderClick}/>
+						<Button disabled={isUnpublishing} tooltip={_('Unpublish notebook')} iconName="fas fa-unlink" onClick={onUnpublishFolderClick}/>
 					)}
 				</div>
 				<button
