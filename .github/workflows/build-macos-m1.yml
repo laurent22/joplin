@@ -5,7 +5,7 @@ jobs:
   Main:
     # We always process desktop release tags, because they also publish the release
     if: github.repository == 'laurent22/joplin'
-    runs-on: macos-latest
+    runs-on: macos-15
     steps:
 
       - uses: actions/checkout@v6
