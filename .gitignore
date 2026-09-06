@@ -164,6 +164,7 @@ packages/app-desktop/ElectronAppWrapper.js
 packages/app-desktop/InteropServiceHelper.js
 packages/app-desktop/app.reducer.test.js
 packages/app-desktop/app.reducer.js
+packages/app-desktop/app.test.js
 packages/app-desktop/app.js
 packages/app-desktop/bridge.js
 packages/app-desktop/checkForUpdates.js
