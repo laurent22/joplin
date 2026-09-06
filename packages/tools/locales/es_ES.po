@@ -2819,7 +2819,7 @@ msgstr "Editor: %s"
 
 #: packages/app-cli/app/command-ls.ts:32
 msgid "Either \"text\" or \"json\""
-msgstr "cualquiera «text» o «json»"
+msgstr "Cualquiera «text» o «json»"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1913
 msgid "Emacs"
@@ -5847,7 +5847,7 @@ msgstr ""
 
 #: packages/lib/services/plugins/PluginService.ts:607
 msgid "Please upgrade Joplin to version %s or later to use this plugin."
-msgstr "Actualiza Joplin a la versión %s o posterior para usar este plugin"
+msgstr "Actualiza Joplin a la versión %s o posterior para usar este plugin."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1672
 msgid ""
