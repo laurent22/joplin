@@ -1,5 +1,6 @@
-package net.cozic.joplin.versioninfo;
+package net.cozic.joplin.systeminfo;
 
+import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.os.Build;
 import android.webkit.WebView;
@@ -19,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SystemVersionInformationPackage implements ReactPackage {
+public class SystemInformationPackage implements ReactPackage {
 
 	@NonNull
 	@Override
@@ -49,13 +50,17 @@ public class SystemVersionInformationPackage implements ReactPackage {
 					result.put("webViewPackage", webViewPackage.packageName);
 				}
 			}
+
+			Context context = getReactApplicationContext();
+			result.put("databaseDirectory", context.getDatabasePath("log.sqlite").getParent());
+
 			return result;
 		}
 
 		@NonNull
 		@Override
 		public String getName() {
-			return "SystemVersionInformationModule";
+			return "SystemInformationPackage";
 		}
 	}
 }
