@@ -948,6 +948,7 @@ packages/app-mobile/components/screens/JoplinCloudLoginScreen.js
 packages/app-mobile/components/screens/LogScreen.js
 packages/app-mobile/components/screens/Note/Note.test.js
 packages/app-mobile/components/screens/Note/Note.js
+packages/app-mobile/components/screens/Note/NoteLockPanel.js
 packages/app-mobile/components/screens/Note/commands/attachFile.js
 packages/app-mobile/components/screens/Note/commands/hideKeyboard.js
 packages/app-mobile/components/screens/Note/commands/index.js
