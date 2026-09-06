@@ -26,7 +26,7 @@ describe('markdownCommands', () => {
 		expect(editor.state.doc.toString()).toBe(initialText);
 	});
 
-	it('should blockquote only first selection when selected lines are not continuous', async () => {
+	it('should toggle all selections as blockquotes when selected lines are not continuous', async () => {
 		const initialText = 'First line\nSecond line\nThird line\nFourth line';
 		const thirdLineStart = initialText.indexOf('Third line');
 		const fourthLineStart = initialText.indexOf('Fourth line');
@@ -41,7 +41,10 @@ describe('markdownCommands', () => {
 		);
 
 		toggleBlockQuote(editor);
-		expect(editor.state.doc.toString()).toBe('> First line\nSecond line\nThird line\nFourth line');
+		expect(editor.state.doc.toString()).toBe('> First line\nSecond line\n> Third line\n> Fourth line');
+
+		toggleBlockQuote(editor);
+		expect(editor.state.doc.toString()).toBe(initialText);
 	});
 
 	it('should bold/italicize everything selected', async () => {

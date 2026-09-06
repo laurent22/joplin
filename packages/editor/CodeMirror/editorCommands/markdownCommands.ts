@@ -335,10 +335,7 @@ export const toggleList = (listType: ListType): Command => {
 };
 
 export const toggleBlockQuote: Command = (view: EditorView): boolean => {
-	const state = view.state.update({
-		selection: EditorSelection.create([view.state.selection.ranges[0]]),
-	}).state;
-	const { changes } = toggleSelectedLinesStartWith(state, /^>\s?/, '> ', true, /^/);
+	const { changes } = toggleSelectedLinesStartWith(view.state, /^>\s?/, '> ', true, /^/);
 	view.dispatch({ changes });
 	return true;
 };
