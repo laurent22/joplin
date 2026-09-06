@@ -753,7 +753,10 @@ export default class BaseItem extends BaseModel {
 		return !!r;
 	}
 
-	public static async itemsThatNeedSync(syncTarget: number, limit = 100): Promise<ItemsThatNeedSyncResult> {
+	public static async itemsThatNeedSync(syncTarget: number, limit = 100, cancelling: ()=> boolean = () => false): Promise<ItemsThatNeedSyncResult> {
+		const cancelledResult = (): ItemsThatNeedSyncResult => ({ hasMore: false, items: [], neverSyncedItemIds: [] });
+		if (cancelling()) return cancelledResult();
+
 		// Although we keep the master keys in the database, we no longer sync them
 		const classNames = this.syncItemClassNames().filter(n => n !== 'MasterKey');
 
@@ -800,6 +803,7 @@ export default class BaseItem extends BaseModel {
 			);
 
 			const neverSyncedItem = await ItemClass.modelSelectAll(sql);
+			if (cancelling()) return cancelledResult();
 
 			// Secondly get the items that have been synced under this sync target but that have been changed since then
 
@@ -830,6 +834,7 @@ export default class BaseItem extends BaseModel {
 				);
 
 				changedItems = await ItemClass.modelSelectAll(sql);
+				if (cancelling()) return cancelledResult();
 			}
 
 			const neverSyncedItemIds = neverSyncedItem.map((it: BaseItemEntity) => it.id);
