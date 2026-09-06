@@ -877,6 +877,7 @@ function useMenu(props: Props) {
 						separator(),
 						menuItemDic.showNoteProperties,
 						menuItemDic.showNoteContentProperties,
+						menuItemDic.revealInNotebook,
 						separator(),
 						menuItemDic.permanentlyDeleteNote,
 					],
