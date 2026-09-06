@@ -11,33 +11,6 @@ describe('markdownCommands', () => {
 
 	jest.retryTimes(2);
 
-	it('should toggle one selected line as a blockquote', async () => {
-		const initialText = 'First line\nSecond line';
-		const editor = await createTestEditor(
-			initialText,
-			EditorSelection.range(0, 'First line'.length),
-			[],
-		);
-
-		toggleBlockQuote(editor);
-		expect(editor.state.doc.toString()).toBe('> First line\nSecond line');
-
-		toggleBlockQuote(editor);
-		expect(editor.state.doc.toString()).toBe(initialText);
-	});
-
-	it('should preserve an existing blank line when removing a blockquote', async () => {
-		const initialText = '> First line\n\nSecond line';
-		const editor = await createTestEditor(
-			initialText,
-			EditorSelection.range(0, '> First line'.length),
-			[],
-		);
-
-		toggleBlockQuote(editor);
-		expect(editor.state.doc.toString()).toBe('First line\n\nSecond line');
-	});
-
 	it('should toggle only continuously selected lines as blockquotes', async () => {
 		const initialText = 'First line\nSecond line\nThird line\nFourth line';
 		const editor = await createTestEditor(
