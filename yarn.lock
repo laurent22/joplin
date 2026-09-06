@@ -12549,7 +12549,7 @@ __metadata:
     node-fetch: "npm:2.6.7"
     node-notifier: "npm:10.0.1"
     node-rsa: "npm:1.1.1"
-    onnxruntime-node: "npm:1.25.1"
+    onnxruntime-node: "npm:1.26.0"
     pdfjs-dist: "npm:3.11.174"
     pretty-bytes: "npm:5.6.0"
     re-resizable: "npm:6.11.2"
@@ -12922,7 +12922,7 @@ __metadata:
     node-notifier: "npm:10.0.1"
     node-persist: "npm:3.1.3"
     node-rsa: "npm:1.1.1"
-    onnxruntime-node: "npm:1.25.1"
+    onnxruntime-node: "npm:1.26.0"
     pdf-lib: "npm:1.17.1"
     pdfjs-dist: "npm:3.11.174"
     query-string: "npm:7.1.3"
@@ -45303,21 +45303,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"onnxruntime-common@npm:1.25.1":
-  version: 1.25.1
-  resolution: "onnxruntime-common@npm:1.25.1"
-  checksum: 10/0762a7b34fc6523f39730b89570b6e142c9682473b33232ab4de4fb684bbe1c14f239e0998ce9055d775569d74b083599fc501c2454786f23c55293e51e7ec7d
+"onnxruntime-common@npm:1.26.0":
+  version: 1.26.0
+  resolution: "onnxruntime-common@npm:1.26.0"
+  checksum: 10/d1bab04546e069c898ab7b541a662f5e5bc6f5e58781ff62a752aa902da7d495aabe80549fe6e123198ef81d409cf484acbcc052affd41db6f3ddc041deeb2e8
   languageName: node
   linkType: hard
 
-"onnxruntime-node@npm:1.25.1":
-  version: 1.25.1
-  resolution: "onnxruntime-node@npm:1.25.1"
+"onnxruntime-node@npm:1.26.0":
+  version: 1.26.0
+  resolution: "onnxruntime-node@npm:1.26.0"
   dependencies:
     adm-zip: "npm:^0.5.16"
     global-agent: "npm:^4.1.3"
-    onnxruntime-common: "npm:1.25.1"
-  checksum: 10/1851de04603aa69c295f731f53c297302af7c79faa11aefbab328f4f4f930e5532ca4b2e209508dffe1aa646e700befbd45f5bef62242941395ddb038ffbf035
+    onnxruntime-common: "npm:1.26.0"
+  checksum: 10/4f2944124457ecf0fec2200532817ddc448136d76ed72e68eab312feac45cc631899ea2bb21935267c54cdae3a0cddb1ed7359edcb633fbc080fb09ad0a0021e
   conditions: (os=win32 | os=darwin | os=linux)
   languageName: node
   linkType: hard
