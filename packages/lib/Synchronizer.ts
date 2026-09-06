@@ -848,12 +848,14 @@ export default class Synchronizer {
 								// uploading. So we can leave it unspecified and then on the next run of the delta step, it will
 								// get set there
 
-								await ItemClass.saveSyncTime(syncTargetId, local, local.updated_time);
+								// A clean upload leaves no pending conflict, so the link is cleared too
+								const uploadedBase = local.type_ === BaseModel.TYPE_NOTE ? {
+									base_body: (local as NoteEntity).body ?? '',
+									base_title: (local as NoteEntity).title ?? '',
+									base_conflict_note_id: '',
+								} : null;
 
-								if (local.type_ === BaseModel.TYPE_NOTE) {
-									const note = local as NoteEntity;
-									await Note.saveSyncBaseContent(syncTargetId, note.id, note.body, note.title);
-								}
+								await ItemClass.saveSyncTime(syncTargetId, local, local.updated_time, 0, uploadedBase);
 							}
 						}
 
@@ -1062,10 +1064,20 @@ export default class Synchronizer {
 							if (!content.user_updated_time) content.user_updated_time = content.updated_time;
 							if (!content.user_created_time) content.user_created_time = content.created_time;
 
+							// The downloaded version becomes the base, so both sides share an ancestor. An
+							// encrypted note carries no title or body, so the base is left empty until the
+							// decryption worker records it
+							const isNote = content.type_ === BaseModel.TYPE_NOTE;
+							const baseVersion = isNote ? {
+								base_body: (content as NoteEntity).body ?? '',
+								base_title: (content as NoteEntity).title ?? '',
+								base_conflict_note_id: '',
+							} : null;
+
 							// eslint-disable-next-line @typescript-eslint/no-explicit-any -- BaseItem.save options bag with route-specific keys (isNew, oldItem) added below
 							const options: any = {
 								autoTimestamp: false,
-								nextQueries: BaseItem.updateSyncTimeQueries(syncTargetId, content, BaseItem.remoteItemSyncTime(content.updated_time), remote.updated_time),
+								nextQueries: BaseItem.updateSyncTimeQueries(syncTargetId, content, BaseItem.remoteItemSyncTime(content.updated_time), baseVersion, remote.updated_time),
 								changeSource: ItemChange.SOURCE_SYNC,
 							};
 							if (action === SyncAction.CreateLocal) options.isNew = true;
