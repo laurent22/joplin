@@ -5,6 +5,10 @@ import { GotoAnythingOptions, UiType } from './gotoAnything';
 import { ModelType } from '@joplin/lib/BaseModel';
 import Logger from '@joplin/utils/Logger';
 import markdownUtils from '@joplin/lib/markdownUtils';
+import { stateUtils } from '@joplin/lib/reducer';
+import Note from '@joplin/lib/models/Note';
+import { MarkupLanguage } from '@joplin/renderer';
+import { htmlentities } from '@joplin/utils/html';
 
 const logger = Logger.create('linkToNote');
 
@@ -16,7 +20,7 @@ export const declaration: CommandDeclaration = {
 
 export const runtime = (): CommandRuntime => {
 	return {
-		execute: async (_context: CommandContext) => {
+		execute: async (context: CommandContext) => {
 			const options: GotoAnythingOptions = {
 				mode: Mode.TitleOnly,
 				alwaysShowHelp: true,
@@ -29,7 +33,14 @@ export const runtime = (): CommandRuntime => {
 				return null;
 			}
 
-			const link = `[${markdownUtils.escapeTitleText(result.item.title)}](:/${markdownUtils.escapeLinkUrl(result.item.id)})`;
+			const noteId = context?.state?.selectedNoteIds?.length ? stateUtils.selectedNoteId(context.state) : null;
+			const currentNote = noteId ? await Note.load(noteId) : null;
+			const isHtml = currentNote && currentNote.markup_language === MarkupLanguage.Html;
+
+			const link = isHtml
+				? `<a href=":/${markdownUtils.escapeLinkUrl(result.item.id)}">${htmlentities(result.item.title || result.item.id)}</a>`
+				: `[${markdownUtils.escapeTitleText(result.item.title)}](:/${markdownUtils.escapeLinkUrl(result.item.id)})`;
+
 			await CommandService.instance().execute('insertText', link);
 			return result;
 		},
