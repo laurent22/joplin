@@ -56,7 +56,7 @@ let engine: SearchEngine = null;
 // 	return scores;
 // };
 
-describe('services/SearchEngine', () => {
+describe('SearchEngine', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

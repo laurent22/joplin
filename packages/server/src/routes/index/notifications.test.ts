@@ -3,7 +3,7 @@ import routeHandler from '../../middleware/routeHandler';
 import { NotificationKey } from '../../models/NotificationModel';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, models, createUserAndSession } from '../../utils/testing/testUtils';
 
-describe('index_notification', () => {
+describe('notifications', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('index_notification');

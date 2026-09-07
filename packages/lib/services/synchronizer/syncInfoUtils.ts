@@ -11,6 +11,7 @@ import { _ } from '../../locale';
 import JoplinError from '../../JoplinError';
 import { ErrorCode } from '../../errors';
 import fastDeepEqual = require('fast-deep-equal');
+import { createSelector } from 'reselect';
 
 const logger = Logger.create('syncInfoUtils');
 
@@ -204,6 +205,14 @@ export function localSyncInfo(): SyncInfo {
 export function localSyncInfoFromState(state: State): SyncInfo {
 	return new SyncInfo(state.settings['syncInfoCache']);
 }
+
+// Creating SyncInfo also recreates nested values such as masterKeys. This selector keeps
+// the result referentially stable while syncInfoCache is unchanged, so React hook dependencies
+// do not restart asynchronous work in response to unrelated Redux updates.
+export const localSyncInfoSelector = createSelector(
+	(state: State) => state.settings['syncInfoCache'],
+	cache => new SyncInfo(cache),
+);
 
 // When deciding which master key should be active we should take into account
 // whether it's been used or not. If it's been used before it should most likely

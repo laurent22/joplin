@@ -1,5 +1,5 @@
 import { Page, Locator, ElectronApplication } from '@playwright/test';
-import NoteEditorScreen from './NoteEditorScreen';
+import NoteEditorScreen from './NoteEditor/NoteEditorScreen';
 import activateMainMenuItem from '../util/activateMainMenuItem';
 import Sidebar from './Sidebar';
 import GoToAnything from './GoToAnything';

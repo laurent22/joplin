@@ -170,7 +170,6 @@ function ShareFolderDialog(props: Props) {
 
 	useEffect(() => {
 		setRecipientSuggestions([]);
-		setLatestError(null);
 
 		let cancelled = false;
 
@@ -245,7 +244,9 @@ function ShareFolderDialog(props: Props) {
 				ShareService.instance().refreshShares(),
 				ShareService.instance().refreshShareUsers(share.id),
 			]);
-			setRecipientEmail('');
+			// Only clear the input on success, otherwise the user loses the email
+			// they typed and the error message would be wiped by the suggestions effect.
+			if (!errorSet) setRecipientEmail('');
 
 			await synchronize();
 		} catch (error) {
@@ -257,6 +258,7 @@ function ShareFolderDialog(props: Props) {
 
 	const recipientEmail_change = useCallback((value: string) => {
 		setRecipientEmail(value);
+		setLatestError(null);
 	}, []);
 
 	const renderRecipientSuggestion = useCallback((suggestedValue: string) => {

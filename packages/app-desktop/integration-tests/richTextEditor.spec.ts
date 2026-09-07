@@ -11,18 +11,19 @@ test.describe('richTextEditor', () => {
 		const editor = mainScreen.noteEditor;
 
 		// Set the note's content
-		await editor.focusCodeMirrorEditor();
+		await editor.showMarkdownEditor();
 
 		// Attach this file to the note (create a resource ID)
 		await setFilePickerResponse(electronApp, [__filename]);
 		await editor.attachFileButton.click();
 
 		// Wait to render
-		const viewerFrame = editor.getNoteViewerFrameLocator();
-		await viewerFrame.locator('a[data-from-md]').waitFor();
+		const viewerFrame = await editor.showNoteViewer();
+		await viewerFrame.content.locator('a[data-from-md]').waitFor();
 
 		// Should have an attached resource
-		const codeMirrorContent = await editor.codeMirrorEditor.innerText();
+		let markdownEditor = await editor.showMarkdownEditor();
+		const codeMirrorContent = await markdownEditor.innerText();
 
 		const resourceUrlExpression = /\[.*\]\(:\/(\w+)\)/;
 		expect(codeMirrorContent).toMatch(resourceUrlExpression);
@@ -30,22 +31,19 @@ test.describe('richTextEditor', () => {
 
 		// Create a new note with just an HTML link
 		await mainScreen.createNewNote('Another test');
-		await editor.codeMirrorEditor.click();
-		await mainWindow.keyboard.type(`<a href=":/${resourceId}">HTML Link</a>`);
+		await markdownEditor.typeText(`<a href=":/${resourceId}">HTML Link</a>`);
 
 		// Switch to the RTE
-		await editor.toggleEditorsButton.click();
-		await editor.richTextEditor.waitFor();
+		const richTextEditor = await editor.showRichTextEditor();
 
 		// Edit the note to cause the original content to update
-		await editor.getRichTextFrameLocator().locator('a').click();
+		await richTextEditor.body.locator('a').click();
 		await mainWindow.keyboard.type('Test...');
 
-		await editor.toggleEditorsButton.click();
-		await editor.codeMirrorEditor.waitFor();
+		markdownEditor = await editor.showMarkdownEditor();
 
 		// Note should still contain the resource ID and note title
-		const finalCodeMirrorContent = await editor.codeMirrorEditor.innerText();
+		const finalCodeMirrorContent = await markdownEditor.innerText();
 		expect(finalCodeMirrorContent).toContain(`:/${resourceId}`);
 	});
 
@@ -55,7 +53,7 @@ test.describe('richTextEditor', () => {
 		const editor = mainScreen.noteEditor;
 
 		// Set the note's content
-		await editor.focusCodeMirrorEditor();
+		await editor.showMarkdownEditor();
 
 		// Attach this file to the note (create a resource ID)
 		const pathToAttach = join(__dirname, 'resources', 'test-file.txt');
@@ -63,17 +61,16 @@ test.describe('richTextEditor', () => {
 		await editor.attachFileButton.click();
 
 		// Wait for it to render
-		await expect(editor.getNoteViewerFrameLocator().getByText('test-file.txt')).toBeVisible();
+		const noteViewer = await editor.showNoteViewer();
+		await expect(noteViewer.content.getByText('test-file.txt')).toBeVisible();
 
 		// Switch to the RTE
-		await editor.toggleEditorsButton.click();
-		await editor.richTextEditor.waitFor();
-
-		await editor.richTextEditor.click();
+		const richTextEditor = await editor.showRichTextEditor();
+		await richTextEditor.body.click();
 
 		// Click on the attached file URL
 		const openPathResult = waitForNextOpenPath(electronApp);
-		const targetLink = editor.getRichTextFrameLocator().getByRole('link', { name: basename(pathToAttach) });
+		const targetLink = richTextEditor.body.getByRole('link', { name: basename(pathToAttach) });
 		if (process.platform === 'darwin') {
 			await targetLink.click({ modifiers: ['Meta'] });
 		} else {
@@ -91,8 +88,8 @@ test.describe('richTextEditor', () => {
 		const editor = mainScreen.noteEditor;
 
 		// Set the initial content
-		await editor.codeMirrorEditor.click();
-		await mainWindow.keyboard.type([
+		const markdownEditor = await editor.showMarkdownEditor();
+		await markdownEditor.typeText([
 			'<img',
 			' src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAADCAYAAABWKLW/AAAAEklEQVQIW2P8z8AARBDAiJMDAIzoBf635fcVAAAAAElFTkSuQmCC"',
 			' width="200"',
@@ -100,20 +97,18 @@ test.describe('richTextEditor', () => {
 			' alt="test image"',
 			'/>',
 		].join(' '));
-		await mainWindow.keyboard.press('Enter');
-		await mainWindow.keyboard.press('Enter');
-		await mainWindow.keyboard.type('Test secondary paragraph.');
+		await markdownEditor.pressKey('Enter');
+		await markdownEditor.pressKey('Enter');
+		await markdownEditor.typeText('Test secondary paragraph.');
 
 		// Switch to the RTE
-		await editor.toggleEditorsButton.click();
-		await editor.richTextEditor.waitFor();
+		const richTextEditor = await editor.showRichTextEditor();
 
-		const richTextEditorFrame = editor.getRichTextFrameLocator();
-		const testParagraph = richTextEditorFrame.getByText('Test secondary paragraph.');
+		const testParagraph = richTextEditor.content.getByText('Test secondary paragraph.');
 		await expect(testParagraph).toBeAttached();
 
 		// Move the cursor just after the image, then press enter.
-		const testImage = richTextEditorFrame.getByRole('img', { name: 'test image' });
+		const testImage = richTextEditor.content.getByRole('img', { name: 'test image' });
 		await testImage.click();
 		await mainWindow.keyboard.press('ArrowRight');
 		await mainWindow.keyboard.press('Enter');
@@ -128,8 +123,8 @@ test.describe('richTextEditor', () => {
 		await mainScreen.createNewNote('Testing tabs!');
 		const editor = mainScreen.noteEditor;
 
-		await editor.toggleEditorsButton.click();
-		await editor.richTextEditor.click();
+		const richTextEditor = await editor.showRichTextEditor();
+		await richTextEditor.body.click();
 
 		await mainWindow.keyboard.type('This is a');
 		// Tab should add spaces
@@ -144,21 +139,21 @@ test.describe('richTextEditor', () => {
 
 		// Escape then tab should move focus
 		await mainWindow.keyboard.press('Escape');
-		await expect(editor.richTextEditor).toBeFocused();
+		await expect(richTextEditor.container).toBeFocused();
 		await mainWindow.keyboard.press('Tab');
-		await expect(editor.richTextEditor).not.toBeFocused();
+		await expect(richTextEditor.container).not.toBeFocused();
 
 		// After re-focusing the editor, Tab should indent again.
 		await mainWindow.keyboard.press('Shift+Tab');
-		await expect(editor.richTextEditor).toBeFocused();
+		await expect(richTextEditor.container).toBeFocused();
 		await mainWindow.keyboard.type(' Another:');
 		await mainWindow.keyboard.press('Tab');
 		await mainWindow.keyboard.type('!');
 
 		// After switching back to the Markdown editor,
 		await expect(editor.toggleEditorsButton).not.toBeDisabled();
-		await editor.toggleEditorsButton.click();
-		await expect(editor.codeMirrorEditor).toHaveText('This is a        test.        Test! Another:        !');
+		const markdownEditor = await editor.showMarkdownEditor();
+		await expect(markdownEditor.content).toHaveText('This is a        test.        Test! Another:        !');
 	});
 
 	test('should be possible to disable tab indentation from the menu', async ({ mainWindow, electronApp }) => {
@@ -166,23 +161,23 @@ test.describe('richTextEditor', () => {
 		await mainScreen.createNewNote('Testing keyboard navigation!');
 
 		const editor = mainScreen.noteEditor;
-		await editor.toggleEditorsButton.click();
-		await editor.richTextEditor.click();
+		const richTextEditor = await editor.showRichTextEditor();
+		await richTextEditor.focusContent();
 
 		await editor.enableTabNavigation(electronApp);
 		await mainWindow.keyboard.type('This is a');
 
 		// Tab should navigate
-		await expect(editor.richTextEditor).toBeFocused();
+		await expect(richTextEditor.container).toBeFocused();
 		await mainWindow.keyboard.press('Tab');
-		await expect(editor.richTextEditor).not.toBeFocused();
+		await expect(richTextEditor.container).not.toBeFocused();
 
 		await editor.disableTabNavigation(electronApp);
 
 		// Tab should not navigate
-		await editor.richTextEditor.click();
+		await richTextEditor.container.click();
 		await mainWindow.keyboard.press('Tab');
-		await expect(editor.richTextEditor).toBeFocused();
+		await expect(richTextEditor.container).toBeFocused();
 	});
 
 	test('double-clicking a code block should edit it', async ({ mainWindow }) => {
@@ -190,16 +185,16 @@ test.describe('richTextEditor', () => {
 		await mainScreen.createNewNote('Testing code blocks');
 
 		const editor = mainScreen.noteEditor;
-		await editor.toggleEditorsButton.click();
+		const richTextEditor = await editor.showRichTextEditor();
 
 		// Make the code block
 		await editor.toggleCodeBlockButton.click();
-		const codeEditor = editor.richTextCodeEditor;
+		const codeEditor = richTextEditor.codeEditor;
 		await codeEditor.textArea.fill('This is a test code block!');
 		await codeEditor.submit();
 
 		// Double-clicking the code block should open it
-		const renderedCode = editor.getRichTextFrameLocator().locator('pre.hljs', { hasText: 'This is a test code block!' });
+		const renderedCode = richTextEditor.body.locator('pre.hljs', { hasText: 'This is a test code block!' });
 		await renderedCode.first().dblclick();
 		await codeEditor.waitFor();
 	});
@@ -209,11 +204,10 @@ test.describe('richTextEditor', () => {
 		await mainScreen.createNewNote('Testing code blocks');
 
 		const editor = mainScreen.noteEditor;
-		await editor.toggleEditorsButton.click();
-		await editor.richTextEditor.click();
+		const richTextEditor = await editor.showRichTextEditor();
 
 		await editor.toggleCodeBlockButton.click();
-		const codeEditor = editor.richTextCodeEditor;
+		const codeEditor = richTextEditor.codeEditor;
 		await codeEditor.waitFor();
 
 		// Initially, pressing <tab> in the textarea should add a tab
@@ -235,23 +229,21 @@ test.describe('richTextEditor', () => {
 		await mainScreen.createNewNote('Testing keyboard navigation!');
 
 		const editor = mainScreen.noteEditor;
-		await editor.toggleEditorsButton.click();
-
-		await editor.richTextEditor.waitFor();
+		const richTextEditor = await editor.showRichTextEditor();
 
 		await editor.noteTitleInput.click();
 		await expect(editor.noteTitleInput).toBeFocused();
 
 		await mainWindow.keyboard.press('End');
 		await mainWindow.keyboard.press('ArrowDown');
-		await expect(editor.richTextEditor).toBeFocused();
+		await expect(richTextEditor.container).toBeFocused();
 
 		await mainWindow.keyboard.press('ArrowUp');
 		await expect(editor.noteTitleInput).toBeFocused();
 
 		await mainWindow.keyboard.press('Enter');
 		await expect(editor.noteTitleInput).not.toBeFocused();
-		await expect(editor.richTextEditor).toBeFocused();
+		await expect(richTextEditor.container).toBeFocused();
 	});
 
 	test('note should have correct content even if opened quickly after last edit', async ({ mainWindow }) => {
@@ -262,10 +254,7 @@ test.describe('richTextEditor', () => {
 		const test2Header = mainScreen.noteList.getNoteItemByTitle('Test 2');
 
 		const editor = mainScreen.noteEditor;
-		await editor.toggleEditorsButton.click();
-		await editor.richTextEditor.waitFor();
-
-		const editorBody = editor.getRichTextEditorBody();
+		const editorBody = (await editor.showRichTextEditor()).body;
 		const setEditorText = async (targetText: string) => {
 			await editorBody.pressSequentially(targetText);
 			await expect(editorBody).toHaveText(targetText);
@@ -289,9 +278,7 @@ test.describe('richTextEditor', () => {
 		const test2Header = mainScreen.noteList.getNoteItemByTitle('Test 2');
 
 		const editor = mainScreen.noteEditor;
-		await editor.toggleEditorsButton.click();
-		await editor.richTextEditor.waitFor();
-		const editorBody = editor.getRichTextEditorBody();
+		const editorBody = (await editor.showRichTextEditor()).body;
 
 		await test1Header.click();
 		await expect(editor.noteTitleInput).toHaveValue('Test 1');
@@ -315,26 +302,26 @@ test.describe('richTextEditor', () => {
 		await mainScreen.createNewNote('Testing');
 
 		const editor = mainScreen.noteEditor;
-		await editor.switchToRichTextEditor();
-		const editorBody = editor.getRichTextEditorBody();
+		const richTextEditor = await editor.showRichTextEditor();
+		const editorBody = richTextEditor.body;
 		await editorBody.pressSequentially('search-match1 note search-match2');
 
 		// Should highlight initial matches
 		await mainScreen.search('/search-match');
 		await expect.poll(
-			() => editor.getRichTextEditorSearchMatches(),
+			() => richTextEditor.getSearchMatches(),
 		).toEqual(['search-match', 'search-match']);
 
 		// Should highlight new matches
 		await editorBody.pressSequentially('search-match');
 		await expect.poll(
-			() => editor.getRichTextEditorSearchMatches(),
+			() => richTextEditor.getSearchMatches(),
 		).toHaveLength(3);
 
 		// Should stop highlighting old matches
 		await editorBody.press('Backspace');
 		await expect.poll(
-			() => editor.getRichTextEditorSearchMatches(),
+			() => richTextEditor.getSearchMatches(),
 		).toHaveLength(2);
 	});
 });

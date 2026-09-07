@@ -584,7 +584,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 	}, [noteHasWhiteboardFence, props.dispatch]);
 
 	if (useWhiteboardEditor) {
-		editor = <WhiteboardEditor {...editorProps}/>;
+		editor = <WhiteboardEditor key={formNote.id} {...editorProps}/>;
 	} else if (builtInEditorVisible) {
 		if (props.bodyEditor === 'TinyMCE') {
 			editor = <TinyMCE {...editorProps}/>;
@@ -788,7 +788,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		}
 	}
 
-	if (formNote.encryption_applied || !formNote.id || !effectiveNoteId) {
+	if ((!editorPlugin && reloadInProgress) || formNote.encryption_applied || !formNote.id || !effectiveNoteId) {
 		return renderNoNotes(styles.root);
 	}
 

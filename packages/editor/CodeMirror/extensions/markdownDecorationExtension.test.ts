@@ -4,7 +4,7 @@ import decoratorExtension from './markdownDecorationExtension';
 
 jest.retryTimes(2);
 
-describe('decoratorExtension', () => {
+describe('markdownDecorationExtension', () => {
 	it('should highlight code blocks within tables', async () => {
 		// Regression test for https://github.com/laurent22/joplin/issues/9477
 		const editorText = `

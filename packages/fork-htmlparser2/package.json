@@ -52,8 +52,8 @@
     "coveralls": "3.1.1",
     "eslint": "9.39.4",
     "jest": "29.7.0",
-    "prettier": "3.7.4",
-    "ts-jest": "29.4.6",
+    "prettier": "3.8.3",
+    "ts-jest": "29.4.11",
     "typescript": "5.9.3"
   },
   "jest": {
