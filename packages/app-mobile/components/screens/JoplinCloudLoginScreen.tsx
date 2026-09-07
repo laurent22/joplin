@@ -141,9 +141,16 @@ const JoplinCloudScreenComponent = (props: Props) => {
 	};
 
 	const onCopyToClipboardClicked = async () => {
-		const url = await generateApplicationConfirmUrl(await confirmUrl(applicationAuthId));
-		await onButtonUsed();
-		Clipboard.setString(url);
+		try {
+			const url = await generateApplicationConfirmUrl(await confirmUrl(applicationAuthId));
+			await onButtonUsed();
+			Clipboard.setString(url);
+		} catch (error) {
+			dispatch({
+				type: 'ERROR',
+				payload: String(error),
+			});
+		}
 	};
 
 	React.useEffect(() => {
