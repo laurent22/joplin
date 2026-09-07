@@ -164,6 +164,7 @@ packages/app-desktop/ElectronAppWrapper.js
 packages/app-desktop/InteropServiceHelper.js
 packages/app-desktop/app.reducer.test.js
 packages/app-desktop/app.reducer.js
+packages/app-desktop/app.test.js
 packages/app-desktop/app.js
 packages/app-desktop/bridge.js
 packages/app-desktop/checkForUpdates.js
@@ -550,6 +551,7 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameTag.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/resetLayout.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/restoreFolder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/restoreNote.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/commands/revealInNotebook.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/revealResourceFile.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/search.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/setTags.js
@@ -924,6 +926,7 @@ packages/app-mobile/components/screens/JoplinCloudLoginScreen.js
 packages/app-mobile/components/screens/LogScreen.js
 packages/app-mobile/components/screens/Note/Note.test.js
 packages/app-mobile/components/screens/Note/Note.js
+packages/app-mobile/components/screens/Note/NoteLockPanel.js
 packages/app-mobile/components/screens/Note/commands/attachFile.js
 packages/app-mobile/components/screens/Note/commands/hideKeyboard.js
 packages/app-mobile/components/screens/Note/commands/index.js
@@ -1041,6 +1044,7 @@ packages/app-mobile/utils/database-driver-react-native.web.js
 packages/app-mobile/utils/debounce.js
 packages/app-mobile/utils/focusView.js
 packages/app-mobile/utils/fs-driver/constants.js
+packages/app-mobile/utils/fs-driver/fs-driver-rn.test.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.web.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.web.worker.js
@@ -1663,8 +1667,14 @@ packages/lib/services/commands/isEditorCommand.js
 packages/lib/services/commands/propsHaveChanged.js
 packages/lib/services/commands/stateToWhenClauseContext.test.js
 packages/lib/services/commands/stateToWhenClauseContext.js
+packages/lib/services/conflict/autoMergeNote.test.js
+packages/lib/services/conflict/autoMergeNote.js
+packages/lib/services/conflict/boundedDiff3.test.js
+packages/lib/services/conflict/boundedDiff3.js
+packages/lib/services/conflict/decryptNoteInMemory.js
 packages/lib/services/conflict/diffNotes.test.js
 packages/lib/services/conflict/diffNotes.js
+packages/lib/services/conflict/isAutoMergeEnabled.js
 packages/lib/services/conflict/isConflictResolutionEnabled.js
 packages/lib/services/conflict/loadConflictData.test.js
 packages/lib/services/conflict/loadConflictData.js
@@ -1919,6 +1929,7 @@ packages/lib/services/synchronizer/ItemUploader.test.js
 packages/lib/services/synchronizer/ItemUploader.js
 packages/lib/services/synchronizer/LockHandler.js
 packages/lib/services/synchronizer/MigrationHandler.js
+packages/lib/services/synchronizer/Synchronizer.autoMerge.test.js
 packages/lib/services/synchronizer/Synchronizer.baseFields.test.js
 packages/lib/services/synchronizer/Synchronizer.basics.test.js
 packages/lib/services/synchronizer/Synchronizer.conflicts.test.js

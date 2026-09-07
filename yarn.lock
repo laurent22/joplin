@@ -12549,7 +12549,7 @@ __metadata:
     node-fetch: "npm:2.6.7"
     node-notifier: "npm:10.0.1"
     node-rsa: "npm:1.1.1"
-    onnxruntime-node: "npm:1.25.1"
+    onnxruntime-node: "npm:1.26.0"
     pdfjs-dist: "npm:3.11.174"
     pretty-bytes: "npm:5.6.0"
     re-resizable: "npm:6.11.2"
@@ -12604,7 +12604,7 @@ __metadata:
     "@react-native-community/cli-platform-ios": "npm:20.0.0"
     "@react-native-community/datetimepicker": "npm:8.6.0"
     "@react-native-community/geolocation": "npm:3.4.0"
-    "@react-native-community/netinfo": "npm:11.5.2"
+    "@react-native-community/netinfo": "npm:12.0.1"
     "@react-native-community/push-notification-ios": "npm:1.12.0"
     "@react-native-documents/picker": "npm:12.0.1"
     "@react-native-vector-icons/fontawesome5": "npm:12.4.0"
@@ -12641,6 +12641,7 @@ __metadata:
     expo-camera: "npm:17.0.10"
     expo-image-manipulator: "npm:14.0.8"
     expo-local-authentication: "npm:17.0.8"
+    expo-sqlite: "npm:16.0.10"
     fast-deep-equal: "npm:3.1.3"
     fs-extra: "npm:11.3.5"
     gulp: "npm:4.0.2"
@@ -12675,13 +12676,12 @@ __metadata:
     react-native-safe-area-context: "npm:5.7.0"
     react-native-securerandom: "npm:1.0.1"
     react-native-share: "npm:12.2.6"
-    react-native-sqlite-storage: "npm:6.0.1"
     react-native-svg: "npm:15.15.5"
     react-native-url-polyfill: "npm:2.0.0"
     react-native-version-info: "npm:1.1.1"
     react-native-web: "npm:0.21.2"
     react-native-webview: "npm:13.16.1"
-    react-native-zip-archive: "npm:7.0.2"
+    react-native-zip-archive: "npm:7.1.1"
     react-redux: "npm:8.1.3"
     react-refresh: "npm:0.18.0"
     react-test-renderer: "npm:19.1.4"
@@ -12795,7 +12795,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/fork-htmlparser2@npm:^4.1.63, @joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2":
+"@joplin/fork-htmlparser2@npm:^4.1.64, @joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2":
   version: 0.0.0-use.local
   resolution: "@joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2"
   dependencies:
@@ -12816,7 +12816,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/fork-sax@npm:^1.2.67, @joplin/fork-sax@workspace:packages/fork-sax":
+"@joplin/fork-sax@npm:^1.2.68, @joplin/fork-sax@workspace:packages/fork-sax":
   version: 0.0.0-use.local
   resolution: "@joplin/fork-sax@workspace:packages/fork-sax"
   dependencies:
@@ -12825,7 +12825,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/fork-uslug@npm:^2.0.0, @joplin/fork-uslug@npm:^2.0.6, @joplin/fork-uslug@workspace:packages/fork-uslug":
+"@joplin/fork-uslug@npm:^2.0.0, @joplin/fork-uslug@npm:^2.0.7, @joplin/fork-uslug@workspace:packages/fork-uslug":
   version: 0.0.0-use.local
   resolution: "@joplin/fork-uslug@workspace:packages/fork-uslug"
   dependencies:
@@ -12837,12 +12837,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/htmlpack@npm:^3.7, @joplin/htmlpack@workspace:packages/htmlpack":
+"@joplin/htmlpack@npm:^3.7.1, @joplin/htmlpack@workspace:packages/htmlpack":
   version: 0.0.0-use.local
   resolution: "@joplin/htmlpack@workspace:packages/htmlpack"
   dependencies:
     "@adobe/css-tools": "npm:4.4.4"
-    "@joplin/fork-htmlparser2": "npm:^4.1.63"
+    "@joplin/fork-htmlparser2": "npm:^4.1.64"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
     datauri: "npm:4.1.0"
@@ -12853,7 +12853,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/lib@npm:~3.7, @joplin/lib@workspace:packages/lib":
+"@joplin/lib@npm:^3.7.1, @joplin/lib@npm:~3.7, @joplin/lib@workspace:packages/lib":
   version: 0.0.0-use.local
   resolution: "@joplin/lib@workspace:packages/lib"
   dependencies:
@@ -12861,15 +12861,15 @@ __metadata:
     "@aws-sdk/client-s3": "npm:3.296.0"
     "@aws-sdk/s3-request-presigner": "npm:3.296.0"
     "@huggingface/transformers": "npm:4.2.0"
-    "@joplin/fork-htmlparser2": "npm:^4.1.63"
-    "@joplin/fork-sax": "npm:^1.2.67"
-    "@joplin/fork-uslug": "npm:^2.0.6"
-    "@joplin/htmlpack": "npm:^3.7"
-    "@joplin/onenote-converter": "npm:^3.7"
-    "@joplin/renderer": "npm:^3.7"
-    "@joplin/turndown": "npm:^4.0.85"
-    "@joplin/turndown-plugin-gfm": "npm:^1.0.67"
-    "@joplin/utils": "npm:^3.7"
+    "@joplin/fork-htmlparser2": "npm:^4.1.64"
+    "@joplin/fork-sax": "npm:^1.2.68"
+    "@joplin/fork-uslug": "npm:^2.0.7"
+    "@joplin/htmlpack": "npm:^3.7.1"
+    "@joplin/onenote-converter": "npm:^3.7.1"
+    "@joplin/renderer": "npm:^3.7.1"
+    "@joplin/turndown": "npm:^4.0.86"
+    "@joplin/turndown-plugin-gfm": "npm:^1.0.68"
+    "@joplin/utils": "npm:^3.7.1"
     "@testing-library/dom": "npm:10.4.1"
     "@testing-library/react": "npm:16.3.2"
     "@types/adm-zip": "npm:0.5.8"
@@ -12922,7 +12922,7 @@ __metadata:
     node-notifier: "npm:10.0.1"
     node-persist: "npm:3.1.3"
     node-rsa: "npm:1.1.1"
-    onnxruntime-node: "npm:1.25.1"
+    onnxruntime-node: "npm:1.26.0"
     pdf-lib: "npm:1.17.1"
     pdfjs-dist: "npm:3.11.174"
     query-string: "npm:7.1.3"
@@ -12940,7 +12940,7 @@ __metadata:
     string-padding: "npm:1.0.2"
     string-to-stream: "npm:3.0.1"
     tar: "npm:7.5.16"
-    tcp-port-used: "npm:1.0.2"
+    tcp-port-used: "npm:1.0.3"
     tesseract.js: "npm:7.0.0"
     typescript: "npm:5.9.3"
     uglifycss: "npm:0.0.29"
@@ -12951,7 +12951,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/onenote-converter@npm:^3.7, @joplin/onenote-converter@npm:~3.7, @joplin/onenote-converter@workspace:packages/onenote-converter":
+"@joplin/onenote-converter@npm:^3.7.1, @joplin/onenote-converter@npm:~3.7, @joplin/onenote-converter@workspace:packages/onenote-converter":
   version: 0.0.0-use.local
   resolution: "@joplin/onenote-converter@workspace:packages/onenote-converter"
   dependencies:
@@ -12995,9 +12995,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/plugin-repo-cli@workspace:packages/plugin-repo-cli"
   dependencies:
-    "@joplin/lib": "npm:~3.7"
-    "@joplin/tools": "npm:~3.7"
-    "@joplin/utils": "npm:~3.7"
+    "@joplin/lib": "npm:^3.7.1"
+    "@joplin/tools": "npm:^3.7.1"
+    "@joplin/utils": "npm:^3.7.1"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
     "@types/node": "npm:18.19.130"
@@ -13045,13 +13045,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/renderer@npm:^3.7, @joplin/renderer@npm:~3.7, @joplin/renderer@workspace:packages/renderer":
+"@joplin/renderer@npm:^3.7.1, @joplin/renderer@npm:~3.7, @joplin/renderer@workspace:packages/renderer":
   version: 0.0.0-use.local
   resolution: "@joplin/renderer@workspace:packages/renderer"
   dependencies:
-    "@joplin/fork-htmlparser2": "npm:^4.1.63"
-    "@joplin/fork-uslug": "npm:^2.0.6"
-    "@joplin/utils": "npm:~3.7"
+    "@joplin/fork-htmlparser2": "npm:^4.1.64"
+    "@joplin/fork-uslug": "npm:^2.0.7"
+    "@joplin/utils": "npm:^3.7.1"
     "@types/jest": "npm:29.5.14"
     "@types/json5": "npm:2.2.0"
     "@types/markdown-it": "npm:13.0.9"
@@ -13155,15 +13155,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/tools@npm:~3.7, @joplin/tools@workspace:packages/tools":
+"@joplin/tools@npm:^3.7.1, @joplin/tools@npm:~3.7, @joplin/tools@workspace:packages/tools":
   version: 0.0.0-use.local
   resolution: "@joplin/tools@workspace:packages/tools"
   dependencies:
     "@docusaurus/plugin-sitemap": "npm:3.10.1"
-    "@joplin/fork-htmlparser2": "npm:^4.1.63"
-    "@joplin/lib": "npm:~3.7"
-    "@joplin/renderer": "npm:~3.7"
-    "@joplin/utils": "npm:~3.7"
+    "@joplin/fork-htmlparser2": "npm:^4.1.64"
+    "@joplin/lib": "npm:^3.7.1"
+    "@joplin/renderer": "npm:^3.7.1"
+    "@joplin/utils": "npm:^3.7.1"
     "@rmp135/sql-ts": "npm:1.18.1"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
@@ -13233,7 +13233,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/turndown-plugin-gfm@npm:^1.0.67, @joplin/turndown-plugin-gfm@npm:~1.0.62, @joplin/turndown-plugin-gfm@workspace:packages/turndown-plugin-gfm":
+"@joplin/turndown-plugin-gfm@npm:^1.0.68, @joplin/turndown-plugin-gfm@npm:~1.0.62, @joplin/turndown-plugin-gfm@workspace:packages/turndown-plugin-gfm":
   version: 0.0.0-use.local
   resolution: "@joplin/turndown-plugin-gfm@workspace:packages/turndown-plugin-gfm"
   dependencies:
@@ -13245,7 +13245,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/turndown@npm:^4.0.85, @joplin/turndown@npm:~4.0.80, @joplin/turndown@workspace:packages/turndown":
+"@joplin/turndown@npm:^4.0.86, @joplin/turndown@npm:~4.0.80, @joplin/turndown@workspace:packages/turndown":
   version: 0.0.0-use.local
   resolution: "@joplin/turndown@workspace:packages/turndown"
   dependencies:
@@ -13262,11 +13262,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/utils@npm:^3.7, @joplin/utils@npm:~3.7, @joplin/utils@workspace:packages/utils":
+"@joplin/utils@npm:^3.7.1, @joplin/utils@npm:~3.7, @joplin/utils@workspace:packages/utils":
   version: 0.0.0-use.local
   resolution: "@joplin/utils@workspace:packages/utils"
   dependencies:
-    "@joplin/fork-htmlparser2": "npm:^4.1.63"
+    "@joplin/fork-htmlparser2": "npm:^4.1.64"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
     "@types/markdown-it": "npm:13.0.9"
@@ -13282,7 +13282,7 @@ __metadata:
     moment: "npm:2.30.1"
     node-fetch: "npm:2.6.7"
     sprintf-js: "npm:1.1.3"
-    tcp-port-used: "npm:1.0.2"
+    tcp-port-used: "npm:1.0.3"
     ts-jest: "npm:29.4.11"
     typescript: "npm:5.9.3"
   languageName: unknown
@@ -16053,13 +16053,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/netinfo@npm:11.5.2":
-  version: 11.5.2
-  resolution: "@react-native-community/netinfo@npm:11.5.2"
+"@react-native-community/netinfo@npm:12.0.1":
+  version: 12.0.1
+  resolution: "@react-native-community/netinfo@npm:12.0.1"
   peerDependencies:
     react: "*"
     react-native: ">=0.59"
-  checksum: 10/0c388e1beb61d0135eb9303b18d7d953b0f777af15e34a8c0ab03f428669a987d658ead645a37b410afae7844374d07e7ab947897d5720b1e7fee5525fffd5b5
+  checksum: 10/4eb5ee009bca74c601c65370ad95ea6f42357bb822bed15e404b1720d891ce43098432cc724dbb8a9e0d9e5f48ba70e2280732e484ba1b5f5434d4d8bacc671b
   languageName: node
   linkType: hard
 
@@ -22623,6 +22623,13 @@ __metadata:
   dependencies:
     possible-typed-array-names: "npm:^1.0.0"
   checksum: 10/6c9da3a66caddd83c875010a1ca8ef11eac02ba15fb592dc9418b2b5e7b77b645fa7729380a92d9835c2f05f2ca1b6251f39b993e0feb3f1517c74fa1af02cab
+  languageName: node
+  linkType: hard
+
+"await-lock@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "await-lock@npm:2.2.2"
+  checksum: 10/feb11f36768a8545879ed2d214b46aae484e6564ffa466af9212d5782897203770795cae01f813de04a46f66c0b8ee6bc690a0c435b04e00cad5a18ef0842e25
   languageName: node
   linkType: hard
 
@@ -31928,6 +31935,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo-sqlite@npm:16.0.10":
+  version: 16.0.10
+  resolution: "expo-sqlite@npm:16.0.10"
+  dependencies:
+    await-lock: "npm:^2.2.2"
+  peerDependencies:
+    expo: "*"
+    react: "*"
+    react-native: "*"
+  checksum: 10/84057f4b4c04995f1464329ef8a9521859a38f8e608277081891de6f9b4c4d094310ac2e5a583ed02a1ac5414d0f55599987aa0abbdf99200126506735a386c0
+  languageName: node
+  linkType: hard
+
 "expo@npm:54.0.35":
   version: 54.0.35
   resolution: "expo@npm:54.0.35"
@@ -36710,10 +36730,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ip-regex@npm:^4.1.0":
-  version: 4.3.0
-  resolution: "ip-regex@npm:4.3.0"
-  checksum: 10/7ff904b891221b1847f3fdf3dbb3e6a8660dc39bc283f79eb7ed88f5338e1a3d1104b779bc83759159be266249c59c2160e779ee39446d79d4ed0890dfd06f08
+"ip-regex@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "ip-regex@npm:2.1.0"
+  checksum: 10/331d95052aa53ce245745ea0fc3a6a1e2e3c8d6da65fa8ea52bf73768c1b22a9ac50629d1d2b08c04e7b3ac4c21b536693c149ce2c2615ee4796030e5b3e3cba
   languageName: node
   linkType: hard
 
@@ -37744,7 +37764,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-url@npm:^1.2.4":
+"is-url@npm:^1.2.2, is-url@npm:^1.2.4":
   version: 1.2.4
   resolution: "is-url@npm:1.2.4"
   checksum: 10/100e74b3b1feab87a43ef7653736e88d997eb7bd32e71fd3ebc413e58c1cbe56269699c776aaea84244b0567f2a7d68dfaa512a062293ed2f9fdecb394148432
@@ -37869,14 +37889,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is2@npm:^2.0.6":
-  version: 2.0.7
-  resolution: "is2@npm:2.0.7"
+"is2@npm:2.0.1":
+  version: 2.0.1
+  resolution: "is2@npm:2.0.1"
   dependencies:
     deep-is: "npm:^0.1.3"
-    ip-regex: "npm:^4.1.0"
-    is-url: "npm:^1.2.4"
-  checksum: 10/1bc88865a8cef3df9ebb420569886f8815c5935ef7229c0d23f6327a567dd368ae2eb572efe21d450e1e0a0728825b30dd863302b96d70d89a5ef168b9921604
+    ip-regex: "npm:^2.1.0"
+    is-url: "npm:^1.2.2"
+  checksum: 10/b91c1eb740188549874128736a81f95b40b866df30f98db608a57b0c9218cc6567067b33bddf2730d554ebcd0675c833cb09f52dd019b914ba8e41e8d73d9900
   languageName: node
   linkType: hard
 
@@ -38864,7 +38884,7 @@ __metadata:
     sqlite3: "npm:5.1.6"
     string-padding: "npm:1.0.2"
     strip-ansi: "npm:6.0.1"
-    tcp-port-used: "npm:1.0.2"
+    tcp-port-used: "npm:1.0.3"
     temp: "npm:0.9.4"
     terminal-kit: "npm:3.1.2"
     tkwidgets: "npm:0.5.27"
@@ -45283,21 +45303,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"onnxruntime-common@npm:1.25.1":
-  version: 1.25.1
-  resolution: "onnxruntime-common@npm:1.25.1"
-  checksum: 10/0762a7b34fc6523f39730b89570b6e142c9682473b33232ab4de4fb684bbe1c14f239e0998ce9055d775569d74b083599fc501c2454786f23c55293e51e7ec7d
+"onnxruntime-common@npm:1.26.0":
+  version: 1.26.0
+  resolution: "onnxruntime-common@npm:1.26.0"
+  checksum: 10/d1bab04546e069c898ab7b541a662f5e5bc6f5e58781ff62a752aa902da7d495aabe80549fe6e123198ef81d409cf484acbcc052affd41db6f3ddc041deeb2e8
   languageName: node
   linkType: hard
 
-"onnxruntime-node@npm:1.25.1":
-  version: 1.25.1
-  resolution: "onnxruntime-node@npm:1.25.1"
+"onnxruntime-node@npm:1.26.0":
+  version: 1.26.0
+  resolution: "onnxruntime-node@npm:1.26.0"
   dependencies:
     adm-zip: "npm:^0.5.16"
     global-agent: "npm:^4.1.3"
-    onnxruntime-common: "npm:1.25.1"
-  checksum: 10/1851de04603aa69c295f731f53c297302af7c79faa11aefbab328f4f4f930e5532ca4b2e209508dffe1aa646e700befbd45f5bef62242941395ddb038ffbf035
+    onnxruntime-common: "npm:1.26.0"
+  checksum: 10/4f2944124457ecf0fec2200532817ddc448136d76ed72e68eab312feac45cc631899ea2bb21935267c54cdae3a0cddb1ed7359edcb633fbc080fb09ad0a0021e
   conditions: (os=win32 | os=darwin | os=linux)
   languageName: node
   linkType: hard
@@ -49937,24 +49957,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-sqlite-storage@npm:6.0.1":
-  version: 6.0.1
-  resolution: "react-native-sqlite-storage@npm:6.0.1"
-  peerDependencies:
-    react-native: ">=0.14.0"
-  checksum: 10/0bc3fc7e0986ab1d7ebd0ccc75c69b300b1bd6d1701f45402cf2c9071ee6a03dd63caa924725805bef8bb0ca8f548e4bc7e21b41a1cee55a59660531c71b4106
-  languageName: node
-  linkType: hard
-
-"react-native-sqlite-storage@patch:react-native-sqlite-storage@npm%3A6.0.1#./.yarn/patches/react-native-sqlite-storage-npm-6.0.1-8369d747bd.patch::locator=root%40workspace%3A.":
-  version: 6.0.1
-  resolution: "react-native-sqlite-storage@patch:react-native-sqlite-storage@npm%3A6.0.1#./.yarn/patches/react-native-sqlite-storage-npm-6.0.1-8369d747bd.patch::version=6.0.1&hash=da72a2&locator=root%40workspace%3A."
-  peerDependencies:
-    react-native: ">=0.14.0"
-  checksum: 10/1f9453652cadb9b3eb3b43c62f856cbf498e8ca6efc916a081306507708d709b4e636431202cf7ce086a8748516069c3cc7d6f730ae501592b1757aa77f5deaa
-  languageName: node
-  linkType: hard
-
 "react-native-svg@npm:15.15.5":
   version: 15.15.5
   resolution: "react-native-svg@npm:15.15.5"
@@ -50020,13 +50022,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-zip-archive@npm:7.0.2":
-  version: 7.0.2
-  resolution: "react-native-zip-archive@npm:7.0.2"
+"react-native-zip-archive@npm:7.1.1":
+  version: 7.1.1
+  resolution: "react-native-zip-archive@npm:7.1.1"
   peerDependencies:
     react: ">=16.8.6"
     react-native: ">=0.60.0"
-  checksum: 10/63a0bc5e946d84a9564ac1fd0319fa01b8a0af72d841007db41b374254e6dbc5d38d28aea43703c6f5458c72742c9cc8e7d7fc17cee6717da0ab106da71fe35f
+  checksum: 10/59e022fdaceeca7e96330a2341a69a2eda207bb2e02dee09d221100c0fadfd22b26d3ebe7c5dfb3f618b72d732d1c49b9a644e1c868d2134c8c952da108048eb
   languageName: node
   linkType: hard
 
@@ -55991,13 +55993,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tcp-port-used@npm:1.0.2":
-  version: 1.0.2
-  resolution: "tcp-port-used@npm:1.0.2"
+"tcp-port-used@npm:1.0.3":
+  version: 1.0.3
+  resolution: "tcp-port-used@npm:1.0.3"
   dependencies:
     debug: "npm:4.3.1"
-    is2: "npm:^2.0.6"
-  checksum: 10/bbacbcbe15504a274e3da7bdba0973f16f6950ee68c7a71238ff6fd5d55a113518757df98c5842177a3ad6ded7dd38bd822bd6494a0a2728aa8d7f4776c1ba22
+    is2: "npm:2.0.1"
+  checksum: 10/27489ef0f6e5077bb011ce32e20ac4c3c7e8897dc34bc2664ba6ea94855383272c0f036cd339bc319203f98ecf4a4c3e7942e030ed94c80ab6e584cfaf107283
   languageName: node
   linkType: hard
 
