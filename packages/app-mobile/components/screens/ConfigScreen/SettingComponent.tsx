@@ -13,6 +13,7 @@ import shim from '@joplin/lib/shim';
 import { themeStyle } from '../../global-style';
 import SettingsButton from './SettingsButton';
 import { useCallback, useState } from 'react';
+import { _ } from '@joplin/lib/locale';
 
 type OnSettingButtonClick = (key: string)=> Promise<void>;
 
@@ -168,13 +169,12 @@ const SettingButtonComponent: React.FC<SettingButtonProps> = ({ metadata, styles
 		}
 	}, [key, onSettingButtonClick]);
 
-	return <>
-		<SettingsButton
-			title={metadata.label()}
-			styles={styles}
-			clickHandler={onClick}
-			disabled={loading}
-		/>
-		{error && <span className='error'>{error}</span>}
-	</>;
+	return <SettingsButton
+		title={metadata.label()}
+		description={metadata.description?.(AppType.Mobile)}
+		styles={styles}
+		clickHandler={onClick}
+		statusComponent={error && <Text style={styles.styleSheet.warningText}>{_('Failed: %s', error)}</Text>}
+		disabled={loading}
+	/>;
 };
