@@ -282,6 +282,8 @@ shared.saveOneProperty = async function(comp: BaseNoteScreenComponent, name: str
 	toSave[name] = value;
 
 	const saved = await Note.save(toSave) as Record<string, unknown>;
+	// This ungated save stores a locked note's body encrypted, so the state keeps the plaintext it was given.
+	if (isNoteLockEnabled() && name === 'body' && NoteLockNote.isLocked(note)) saved.body = value;
 	(note as Record<string, unknown>)[name] = saved[name];
 
 	const stateNote = { ...note };
@@ -400,6 +402,10 @@ shared.reloadNote = async (comp: BaseNoteScreenComponent, useDefaultEditorState 
 		} else {
 			noteLockBlocked = true;
 		}
+	} else if (isNoteLockEnabled() && note) {
+		// An unlocked note still goes through the gate, so the state note carries the marker
+		// that its gated saves require.
+		note = await Note.load(comp.props.noteId, { useNoteLock: true });
 	}
 	let mode = comp.state.mode;
 
