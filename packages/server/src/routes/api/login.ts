@@ -76,7 +76,6 @@ router.post('api/saml', async (_path: SubPath, ctx: AppContext) => {
 });
 
 router.get('api/web_login_base_url', async () => {
-	// TODO: config().MFA_ENABLED? (Does MFA_ENABLED gate OAuth?)
 	if (!config().LOCAL_AUTH_ENABLED) throw new ErrorNotFound();
 
 	return { uri: config().baseUrl };
