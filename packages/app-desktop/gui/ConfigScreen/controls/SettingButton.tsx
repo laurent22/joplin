@@ -1,22 +1,18 @@
 import * as React from 'react';
 import Setting from '@joplin/lib/models/Setting';
-import { OnUpdateSettingValue } from '../types';
 import Button, { ButtonLevel } from '../../Button/Button';
-import { RefObject, useCallback, useState } from 'react';
-import { SettingsMap } from '@joplin/lib/components/shared/config/config-shared';
+import { useCallback, useState } from 'react';
 import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('SettingButton');
 
 interface Props {
 	settingKey: string;
-	settingsRef: RefObject<SettingsMap>;
-	onUpdateSettingValue: OnUpdateSettingValue;
-	onSettingButtonClick: (key: string)=> void;
+	onSettingButtonClick: (key: string)=> Promise<void>;
 }
 
 const SettingButton: React.FC<Props> = ({
-	settingKey, onUpdateSettingValue, onSettingButtonClick, settingsRef,
+	settingKey, onSettingButtonClick,
 }) => {
 	const key = settingKey;
 	const md = Setting.settingMetadata(key);
@@ -25,29 +21,18 @@ const SettingButton: React.FC<Props> = ({
 	const [error, setError] = useState<string|null>(null);
 
 	const onClick = useCallback(async () => {
-		if (md.onClick) {
-			setError(null);
-			setLoading(true);
+		setError(null);
+		setLoading(true);
 
-			try {
-				await md.onClick({
-					setSettingValue: (key, value) => {
-						onUpdateSettingValue({
-							key, value,
-						});
-					},
-					settings: settingsRef.current,
-				});
-			} catch (error) {
-				logger.warn('Failed to run command for button', key, error);
-				setError(String(error));
-			} finally {
-				setLoading(false);
-			}
-		} else {
-			onSettingButtonClick(key);
+		try {
+			await onSettingButtonClick(key);
+		} catch (error) {
+			logger.warn('Failed to run command for button', key, error);
+			setError(String(error));
+		} finally {
+			setLoading(false);
 		}
-	}, [key, onSettingButtonClick, onUpdateSettingValue, md, settingsRef]);
+	}, [key, onSettingButtonClick]);
 
 	return <>
 		<Button

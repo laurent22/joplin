@@ -12,19 +12,19 @@ import SettingTextInput from './SettingTextInput';
 import shim from '@joplin/lib/shim';
 import { themeStyle } from '../../global-style';
 import SettingsButton from './SettingsButton';
-import { RefObject, useCallback, useState } from 'react';
-import { SettingsMap } from '@joplin/lib/components/shared/config/config-shared';
+import { useCallback, useState } from 'react';
+
+type OnSettingButtonClick = (key: string)=> Promise<void>;
 
 interface Props {
 	settingId: string;
 	value: unknown;
 
-	settingsRef: RefObject<SettingsMap>;
-
 	styles: ConfigScreenStyles;
 	themeId: number;
 
-	updateSettingValue: UpdateSettingValueCallback;
+	onUpdateSettingValue: UpdateSettingValueCallback;
+	onSettingButtonClick: OnSettingButtonClick;
 }
 
 
@@ -69,7 +69,7 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 							fontSize: theme.fontSize,
 						}}
 						onValueChange={(itemValue: string) => {
-							void props.updateSettingValue(props.settingId, itemValue);
+							void props.onUpdateSettingValue(props.settingId, itemValue);
 						}}
 						accessibilityHint={label}
 					/>
@@ -85,7 +85,7 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 				themeId={props.themeId}
 				styles={props.styles}
 				label={md.label()}
-				updateSettingValue={props.updateSettingValue}
+				updateSettingValue={props.onUpdateSettingValue}
 				description={descriptionComp}
 			/>
 		);
@@ -97,7 +97,7 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 				themeId={props.themeId}
 				styles={props.styles}
 				label={md.label()}
-				updateSettingValue={props.updateSettingValue}
+				updateSettingValue={props.onUpdateSettingValue}
 				description={descriptionComp}
 			/>
 		);
@@ -109,7 +109,7 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 					mode={md.key === 'sync.2.path' ? 'readwrite' : 'read'}
 					styles={props.styles}
 					settingMetadata={md}
-					updateSettingValue={props.updateSettingValue}
+					updateSettingValue={props.onUpdateSettingValue}
 					description={descriptionComp}
 				/>
 			);
@@ -122,7 +122,7 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 				themeId={props.themeId}
 				styles={props.styles}
 				label={md.label()}
-				updateSettingValue={props.updateSettingValue}
+				updateSettingValue={props.onUpdateSettingValue}
 				description={descriptionComp}
 			/>
 		);
@@ -131,8 +131,7 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 			<SettingButtonComponent
 				metadata={md}
 				styles={props.styles}
-				onUpdateSettingValue={props.updateSettingValue}
-				settingsRef={props.settingsRef}
+				onSettingButtonClick={props.onSettingButtonClick}
 			/>
 		);
 	} else if (Setting.value('env') === 'dev') {
@@ -147,42 +146,31 @@ export default SettingComponent;
 interface SettingButtonProps {
 	metadata: SettingItem;
 	styles: ConfigScreenStyles;
-	settingsRef: RefObject<SettingsMap>;
-	onUpdateSettingValue: UpdateSettingValueCallback;
+	onSettingButtonClick: OnSettingButtonClick;
 }
 
-const SettingButtonComponent: React.FC<SettingButtonProps> = ({ metadata, styles, onUpdateSettingValue, settingsRef }) => {
+const SettingButtonComponent: React.FC<SettingButtonProps> = ({ metadata, styles, onSettingButtonClick }) => {
 	const key = metadata.key;
-	const md = Setting.settingMetadata(key);
 
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string|null>(null);
 
 	const onClick = useCallback(async () => {
-		if (md.onClick) {
-			setError(null);
-			setLoading(true);
+		setError(null);
+		setLoading(true);
 
-			try {
-				await md.onClick({
-					setSettingValue: (key, value) => {
-						void onUpdateSettingValue(key, value);
-					},
-					settings: settingsRef.current,
-				});
-			} catch (error) {
-				setError(String(error));
-			} finally {
-				setLoading(false);
-			}
-		} else {
-			void shim.showErrorDialog('Invalid setting: No click handler');
+		try {
+			await onSettingButtonClick(key);
+		} catch (error) {
+			setError(String(error));
+		} finally {
+			setLoading(false);
 		}
-	}, [onUpdateSettingValue, md, settingsRef]);
+	}, [key, onSettingButtonClick]);
 
 	return <>
 		<SettingsButton
-			title={md.label()}
+			title={metadata.label()}
 			styles={styles}
 			clickHandler={onClick}
 			disabled={loading}

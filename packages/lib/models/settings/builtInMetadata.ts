@@ -63,6 +63,7 @@ const buildJoplinServerConnectButton = (syncTargetId: number, syncTargetName: st
 			if (!loginUrl && syncTargetId === 9) {
 				event.setSettingValue(`sync.${syncTargetId}.preferPasswordAuth`, true);
 			} else {
+				await event.saveSettings();
 				await NavService.go('JoplinCloudLogin', {
 					syncTarget: syncTargetId,
 					websiteUrl: loginUrl,

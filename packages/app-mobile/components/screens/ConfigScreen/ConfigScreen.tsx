@@ -79,7 +79,6 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 	private componentsY_: Record<string, number> = {};
 	private styles_: Record<number, ConfigScreenStyles> = {};
 	private scrollViewRef_: React.RefObject<ScrollView>;
-	private settingsRef_: React.RefObject<shared.SettingsMap|null> = React.createRef();
 
 	public constructor(props: ConfigScreenProps) {
 		super(props);
@@ -363,10 +362,6 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		this.setState({ activeFolder });
 	}
 
-	public override componentDidUpdate(): void {
-		this.settingsRef_.current = this.state.settings;
-	}
-
 	public componentWillUnmount() {
 		BackButtonService.removeHandler(this.handleBackButtonPress);
 		NavService.removeHandler(this.handleNavigateToNewScreen);
@@ -385,6 +380,19 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			/>
 		);
 	}
+
+	private onSettingButtonPress_ = async (key: string) => {
+		const metadata = Setting.settingMetadata(key);
+		if (!metadata.onClick) {
+			throw new Error(`Missing click handler for setting: ${key}`);
+		}
+
+		await metadata.onClick({
+			settings: this.state.settings,
+			saveSettings: this.saveButton_press,
+			setSettingValue: this.onUpdateSetting_,
+		});
+	};
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See ConfigScreenState.settings — same reason
 	public sectionToComponent(key: string, section: SettingMetadataSection, settings: Record<string, any>, isSelected: boolean) {
@@ -732,6 +740,11 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		/>;
 	}
 
+	private onUpdateSetting_ = async (key: string, value: unknown): Promise<void> => {
+		const handled = await this.handleSetting(key, value);
+		if (!handled) shared.updateSettingValue(this, key, value);
+	};
+
 	private handleSetting = async (key: string, value: unknown): Promise<boolean> => {
 		// When the user tries to enable biometrics unlock, we ask for the
 		// fingerprint or Face ID, and if it's correct we save immediately. If
@@ -756,33 +769,24 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 	};
 
 	public settingToComponent(key: string, value: unknown) {
-		const updateSettingValue = async (key: string, value: unknown) => {
-			const handled = await this.handleSetting(key, value);
-			if (!handled) shared.updateSettingValue(this, key, value);
-		};
-
 		return (
 			<SettingComponent
 				key={key}
 				settingId={key}
 				value={value}
 				themeId={this.props.themeId}
-				updateSettingValue={updateSettingValue}
+				onUpdateSettingValue={this.onUpdateSetting_}
+				onSettingButtonClick={this.onSettingButtonPress_}
 				styles={this.styles()}
-				settingsRef={this.settingsRef_}
 			/>
 		);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See ConfigScreenState.settings — same reason
 	private renderFeatureFlags(settings: Record<string, any>, featureFlagKeys: string[]): ReactElement[] {
-		const updateSettingValue = (key: string, value: unknown) => {
-			return shared.updateSettingValue(this, key, value);
-		};
-
 		const output: ReactElement[] = [];
 		for (const key of featureFlagKeys) {
-			output.push(this.renderToggle(key, key, settings[key], updateSettingValue));
+			output.push(this.renderToggle(key, key, settings[key], this.onUpdateSetting_));
 		}
 		return output;
 	}

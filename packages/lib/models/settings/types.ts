@@ -25,6 +25,7 @@ export enum SettingStorage {
 export interface OnButtonClickEvent {
 	settings: Record<string, unknown>;
 	setSettingValue(key: string, value: unknown): void;
+	saveSettings(): Promise<void>;
 }
 
 // This is the definition of a setting item

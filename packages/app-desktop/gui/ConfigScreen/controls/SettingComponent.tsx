@@ -1,7 +1,7 @@
 import Setting, { AppType, SettingItemSubType } from '@joplin/lib/models/Setting';
 import { themeStyle } from '@joplin/lib/theme';
 import * as React from 'react';
-import { RefObject, useCallback, useId } from 'react';
+import { useCallback, useId } from 'react';
 import control_PluginsStates from './plugins/PluginsStates';
 import control_GlobalHotkeyInput from './GlobalHotkeyInput';
 import bridge from '../../../services/bridge';
@@ -13,7 +13,6 @@ import SettingLabel from './SettingLabel';
 import SettingDescription from './SettingDescription';
 import { OnUpdateSettingValue } from '../types';
 import SettingButton from './SettingButton';
-import { SettingsMap } from '@joplin/lib/components/shared/config/config-shared';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Each control component has different prop types
 const settingKeyToControl: Record<string, React.FC<any>> = {
@@ -24,11 +23,10 @@ const settingKeyToControl: Record<string, React.FC<any>> = {
 interface Props {
 	themeId: number;
 	settingKey: string;
-	settingsRef: RefObject<SettingsMap>;
 	value: unknown;
 	fonts: string[];
 	onUpdateSettingValue: OnUpdateSettingValue;
-	onSettingButtonClick: (key: string)=> void;
+	onSettingButtonClick: (key: string)=> Promise<void>;
 	renderSearchText?: (text: string)=> React.ReactNode;
 }
 
@@ -364,8 +362,6 @@ const SettingComponent: React.FC<Props> = props => {
 				{labelComp}
 				<SettingButton
 					settingKey={key}
-					settingsRef={props.settingsRef}
-					onUpdateSettingValue={props.onUpdateSettingValue}
 					onSettingButtonClick={props.onSettingButtonClick}
 				/>
 				{descriptionComp}

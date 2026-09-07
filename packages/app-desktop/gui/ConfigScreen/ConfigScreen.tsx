@@ -61,7 +61,6 @@ interface State extends shared.ConfigScreenState {
 class ConfigScreenComponent extends React.Component<Props, State> {
 
 	private rowStyle_: React.CSSProperties = null;
-	private settingsRef_ = React.createRef<shared.SettingsMap|null>();
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Constructor signature must match the class's open `any` props type
 	public constructor(props: any) {
@@ -137,10 +136,6 @@ class ConfigScreenComponent extends React.Component<Props, State> {
 		this.setState({ fonts: uniqueFonts });
 	}
 
-	public override componentDidUpdate() {
-		this.settingsRef_.current = this.state.settings;
-	}
-
 	private async handleSettingButton(key: string) {
 		if (key === 'sync.clearLocalSyncStateButton') {
 			if (!await shim.showConfirmationDialog('This cannot be undone. Do you want to continue?')) return;
@@ -169,7 +164,18 @@ class ConfigScreenComponent extends React.Component<Props, State> {
 				name: 'syncWizard',
 			});
 		} else {
-			throw new Error(`Unhandled key: ${key}`);
+			const metadata = Setting.settingMetadata(key);
+			if (metadata.onClick) {
+				await metadata.onClick({
+					setSettingValue: (key, value) => {
+						this.onUpdateSettingValue({ key, value });
+					},
+					saveSettings: () => this.onSaveClick(),
+					settings: this.state.settings,
+				});
+			} else {
+				throw new Error(`Unhandled key: ${key}`);
+			}
 		}
 	}
 
@@ -417,7 +423,6 @@ class ConfigScreenComponent extends React.Component<Props, State> {
 				themeId={this.props.themeId}
 				key={key}
 				settingKey={key}
-				settingsRef={this.settingsRef_}
 				value={value}
 				fonts={this.state.fonts}
 				onUpdateSettingValue={this.onUpdateSettingValue}
