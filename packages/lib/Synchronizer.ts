@@ -1315,9 +1315,19 @@ export default class Synchronizer {
 		// that the user will close or minimise the app when there are un-synced changes, because the sync is reported as completed.
 		// IMPORTANT: This must be the very last step in the sync, to avoid any window to allow an un-synced change to get missed
 		if (!hasErrors && !hasCaughtError && !cancelledBeforeClearedState && !this.cancelling()) {
-			const result = await BaseItem.itemsThatNeedSync(syncTargetId, 100, () => this.cancelling());
+			const cancellingDuringFinalCheck = () => {
+				// Simulates the user cancelling while this check is still running, which the
+				// synchronous cancelling_ flag can't otherwise reproduce in a test.
+				if (this.testingHooks_.indexOf('cancelFinalOutgoingChangesCheck') >= 0) this.cancelling_ = true;
+				return this.cancelling();
+			};
+			const result = await BaseItem.itemsThatNeedSync(syncTargetId, 100, cancellingDuringFinalCheck);
 
-			if (result.items.length > 0) {
+			if (this.cancelling()) {
+				// The check was interrupted before it could confirm there's nothing left to
+				// sync, so don't report the sync as fully up to date.
+				hasOutgoingChanges = true;
+			} else if (result.items.length > 0) {
 				logger.info('There are more outgoing changes to sync, schedule the sync again');
 				void reg.scheduleSync(reg.syncAsYouTypeInterval(), { syncSteps }, true);
 				hasOutgoingChanges = true;

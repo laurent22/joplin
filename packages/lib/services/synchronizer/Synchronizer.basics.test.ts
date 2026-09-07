@@ -310,6 +310,21 @@ describe('Synchronizer.basics', () => {
 		expect(notes.length).toBe(1);
 	}));
 
+	it('should not report the sync as fully up to date when the final outgoing-changes check is cancelled', (async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		await Note.save({ title: 'un', parent_id: folder1.id });
+
+		const dispatchedActions: { type: string; value?: unknown }[] = [];
+		synchronizer().dispatch = (action: { type: string; value?: unknown }) => dispatchedActions.push(action);
+
+		synchronizer().testingHooks_ = ['cancelFinalOutgoingChangesCheck'];
+		await synchronizerStart();
+		synchronizer().testingHooks_ = [];
+
+		const syncPendingUpdates = dispatchedActions.filter(a => a.type === 'SYNC_PENDING_UPDATE');
+		expect(syncPendingUpdates.every(a => a.value !== false)).toBe(true);
+	}));
+
 	it('should skip items that cannot be synced', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'un', is_todo: 1, parent_id: folder1.id });
