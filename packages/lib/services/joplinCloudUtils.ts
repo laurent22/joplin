@@ -185,7 +185,7 @@ export const completePendingAuthentication = async () => {
 	const pendingAuthId = Setting.value(`sync.${syncTarget}.pendingAuthId`);
 	if (!pendingAuthId) return;
 
-	const apiBaseUrl = Setting.value(`sync.${syncTarget}.path`);
+	const apiBaseUrl = normalizeBaseUrl(Setting.value(`sync.${syncTarget}.path`));
 	const applicationsUrl = `${apiBaseUrl}/api/application_auth/${pendingAuthId}`;
 
 	try {
