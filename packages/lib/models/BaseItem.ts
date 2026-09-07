@@ -1,5 +1,5 @@
 import { ModelType, DeleteOptions } from '../BaseModel';
-import { BaseItemEntity, DeletedItemEntity, SyncItemEntity } from '../services/database/types';
+import { BaseItemEntity, DeletedItemEntity, NoteEntity, SyncItemEntity } from '../services/database/types';
 import Setting from './Setting';
 import BaseModel from '../BaseModel';
 import time from '../time';
@@ -333,6 +333,14 @@ export default class BaseItem extends BaseModel {
 		if (!options) options = { sourceDescription: '' };
 		let trackDeleted = true;
 		if (options && options.trackDeleted !== null && options.trackDeleted !== undefined) trackDeleted = options.trackDeleted;
+
+		let conflictNoteIds: string[] = [];
+		if (this.modelType() === BaseModel.TYPE_NOTE) {
+			const conflictNotes = await this.db().selectAll(`SELECT id FROM notes WHERE id IN (${this.escapeIdsForSql(ids)}) AND is_conflict = 1`);
+			conflictNoteIds = conflictNotes.map((n: NoteEntity) => {
+				return n.id;
+			});
+		}
 
 		if (needsShareReadOnlyChecks(this.modelType(), options.changeSource, this.syncShareCache, options.disableReadOnlyCheck)) {
 			const previousItems = await this.loadItemsByTypeAndIds(this.modelType(), ids, { fields: ['share_id', 'id'] });
