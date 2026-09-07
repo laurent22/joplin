@@ -580,7 +580,7 @@ msgstr "Lisää runko"
 msgid "Add column"
 msgstr "Lisää sarake"
 
-#: packages/app-mobile/components/buttons/FloatingActionButton.tsx:129
+#: packages/app-mobile/components/buttons/FloatingActionButton.tsx:130
 #: packages/app-mobile/components/ComboBox.tsx:103
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:78
 msgid "Add new"
@@ -3767,7 +3767,7 @@ msgid ""
 "Details: %s"
 msgstr ""
 "Tuonti epäonnistui. Varmista, että valitsit JEX-tiedoston.\n"
-"\vLisätiedot: %s"
+"Lisätiedot: %s"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:593
 msgid "Import from JEX"
