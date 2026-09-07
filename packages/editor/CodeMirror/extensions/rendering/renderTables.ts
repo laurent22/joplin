@@ -20,7 +20,7 @@ import {
 } from '../../utils/markdown/tableUtils';
 import { getCellContentPosition } from '../../editorCommands/tableCommands';
 import { RenderedContentContext } from './types';
-import { conflictRegionsChanged, hasUnresolvedConflicts } from '../conflictResolutionExtension';
+import { conflictIsOpen, conflictOpened } from '../conflictResolutionExtension';
 import { editorSettingsFacet } from '../editorSettingsExtension';
 
 // Short class name prefix
@@ -1133,7 +1133,7 @@ const renderTables = (context: RenderedContentContext) => [
 		createDecoration: (node: SyntaxNodeRef, state: EditorState) => {
 			if (node.name !== 'TableHeader') return null;
 			// Conflicts are reviewed as markdown, so tables are not rendered
-			if (hasUnresolvedConflicts(state)) return null;
+			if (conflictIsOpen(state)) return null;
 			const startLine = state.doc.lineAt(node.from);
 			let endLine = startLine;
 			for (let n = startLine.number + 1; n <= state.doc.lines; n++) {
@@ -1146,10 +1146,10 @@ const renderTables = (context: RenderedContentContext) => [
 			if (!parseTable(text)) return null;
 			return new TableWidget(text, startLine.from, endLine.to, context, state.readOnly);
 		},
-		shouldFullReRender: transaction => transaction.startState.readOnly !== transaction.state.readOnly || conflictRegionsChanged(transaction),
+		shouldFullReRender: transaction => transaction.startState.readOnly !== transaction.state.readOnly || conflictOpened(transaction),
 		getDecorationRange: (node: SyntaxNodeRef, state: EditorState) => {
 			if (node.name !== 'TableHeader') return null;
-			if (hasUnresolvedConflicts(state)) return null;
+			if (conflictIsOpen(state)) return null;
 			const startLine = state.doc.lineAt(node.from);
 			let endLine = startLine;
 			for (let n = startLine.number + 1; n <= state.doc.lines; n++) {

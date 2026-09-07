@@ -617,7 +617,7 @@ describe('conflictResolutionExtension', () => {
 	});
 
 	// Conflicts are reviewed as markdown, so tables are not rendered
-	test('should not render tables while a conflict is unresolved', async () => {
+	test('should not render tables while a conflict is open', async () => {
 		const text = '| name | id |\n| --- | --- |\n| hot | 789 |';
 		const editor = await createTestEditor(text, EditorSelection.cursor(0), ['Table'], [
 			renderTables({ onEvent: () => {} } as never),
@@ -635,11 +635,12 @@ describe('conflictResolutionExtension', () => {
 		expect(renderedTables()).toHaveLength(0);
 		expect(editor.dom.querySelectorAll('.cm-conflictLocalVersion')).toHaveLength(1);
 
-		// Resolving the last region lets the note read normally again
+		// Resolving the regions does not bring the tables back: the note keeps the
+		// same shape until the conflict is finished
 		const region = conflictRegions(editor.state)[0];
 		editor.dispatch({ effects: resolveConflict.of(region.id) });
 
-		expect(renderedTables()).toHaveLength(1);
+		expect(renderedTables()).toHaveLength(0);
 	});
 
 

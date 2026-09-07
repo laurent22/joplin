@@ -355,24 +355,19 @@ export const goToConflict = (view: EditorView, direction: 'previous'|'next') => 
 	return true;
 };
 
-// when this is true, the table renderer keeps the markdown as it is
-export const hasUnresolvedConflicts = (state: EditorState) => {
-	// The field is only present when a conflict is open
+// The whole note is reviewed as markdown, so the table renderer leaves every
+// table alone while a conflict is open, whether or not it conflicts. Resolving
+// the regions does not bring the tables back: the note keeps the same shape
+// until the conflict is finished and the editor reloads.
+export const conflictIsOpen = (state: EditorState) => {
 	const field = state.field(conflictState, false);
-	if (!field) return false;
-
-	return field.regions.some(region => !region.settled);
+	return !!field && field.regions.length > 0;
 };
 
-// Lets the table renderer know it should rebuild such as when a conflict is resolved
-export const conflictRegionsChanged = (transaction: Transaction) => {
-	if (transaction.effects.some(effect => effect.is(setConflictRegions) || effect.is(resolveConflict) || effect.is(restoreConflict))) {
-		return true;
-	}
-	const before = transaction.startState.field(conflictState, false);
-	const after = transaction.state.field(conflictState, false);
-	if (!before || !after) return before !== after;
-	return before.regions !== after.regions;
+// Only opening a conflict changes whether tables render, so resolving the
+// regions does not have to redraw them
+export const conflictOpened = (transaction: Transaction) => {
+	return conflictIsOpen(transaction.state) && !conflictIsOpen(transaction.startState);
 };
 
 const applyLocalVersion = EditorState.transactionFilter.of(transaction => {
