@@ -1,11 +1,10 @@
 import FileApiDriverJoplinServer from './file-api-driver-joplinServer';
 import Setting from './models/Setting';
 import Synchronizer from './Synchronizer';
-import { _ } from './locale';
 import JoplinServerApi, { Session } from './JoplinServerApi';
+import BaseSyncTarget from './BaseSyncTarget';
 import { FileApi } from './file-api';
 import Logger from '@joplin/utils/Logger';
-import SyncTargetJoplinServerBase from './SyncTargetJoplinServerBase';
 
 const staticLogger = Logger.create('SyncTargetJoplinServer');
 
@@ -42,26 +41,28 @@ export async function initFileApi(syncTargetId: number, logger: Logger, options:
 	return fileApi;
 }
 
-export default class SyncTargetJoplinServer extends SyncTargetJoplinServerBase {
+export default abstract class SyncTargetJoplinServerBase extends BaseSyncTarget {
 
-	public static id() {
-		return 9;
+	public static supportsConfigCheck() {
+		return true;
 	}
 
-	public static targetName() {
-		return 'joplinServer';
+	public async isAuthenticated() {
+		try {
+			const fileApi = await this.fileApi();
+			const api = fileApi.driver().api();
+			const sessionId = await api.sessionId();
+			return !!sessionId;
+		} catch (error) {
+			if (error.code === 403) {
+				return false;
+			}
+			throw error;
+		}
 	}
 
-	public static description() {
-		return 'Besides synchronisation and improved performances, Joplin Server also gives access to Joplin-specific sharing features.';
-	}
-
-	public static label() {
-		return _('Joplin Server');
-	}
-
-	public static requiresPassword() {
-		return Setting.value('sync.9.preferPasswordAuth');
+	public authRouteName() {
+		return 'JoplinCloudLogin';
 	}
 
 	public static override supportsShare(): boolean {
@@ -134,16 +135,6 @@ export default class SyncTargetJoplinServer extends SyncTargetJoplinServerBase {
 		}
 
 		return output;
-	}
-
-	protected async initFileApi() {
-		return initFileApi(SyncTargetJoplinServer.id(), this.logger(), {
-			path: () => Setting.value('sync.9.path'),
-			userContentPath: () => Setting.value('sync.9.userContentPath'),
-			username: () => Setting.value('sync.9.username'),
-			password: () => Setting.value('sync.9.password'),
-			apiKey: () => Setting.value('sync.9.apiKey'),
-		});
 	}
 
 	protected async initSynchronizer() {

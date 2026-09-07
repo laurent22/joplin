@@ -77,7 +77,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 
 	const confirmUrl = async (applicationAuthId: string) => {
 		const baseUrl = props.websiteUrl ?? await fetchLoginUrl(props.syncTargetId, props.syncTargetApi);
-		return `${baseUrl}/${applicationAuthId}/confirm`;
+		return `${baseUrl}/applications/${applicationAuthId}/confirm`;
 	};
 	const applicationAuthUrl = (applicationAuthId: string) => `${props.syncTargetApi}/api/application_auth/${applicationAuthId}`;
 

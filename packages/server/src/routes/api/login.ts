@@ -75,11 +75,11 @@ router.post('api/saml', async (_path: SubPath, ctx: AppContext) => {
 	}
 });
 
-router.get('api/application_login_url', async () => {
+router.get('api/web_login_base_url', async () => {
 	// TODO: config().MFA_ENABLED? (Does MFA_ENABLED gate OAuth?)
 	if (!config().LOCAL_AUTH_ENABLED) throw new ErrorNotFound();
 
-	return { uri: `${config().baseUrl}/applications/` };
+	return { uri: config().baseUrl };
 });
 
 router.get('api/login_with_code/:id', async (path: SubPath, ctx: AppContext) => {

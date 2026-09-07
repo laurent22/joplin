@@ -145,7 +145,7 @@ const useConfirmUrl = (apiBaseUrl: string, websiteUrl: string, applicationAuthId
 			if (event.cancelled) return;
 
 			if (!baseUrl) throw new Error('Failed to determine login URL');
-			setUrl(`${baseUrl}/${applicationAuthId}/confirm`);
+			setUrl(`${baseUrl}/applications/${applicationAuthId}/confirm`);
 		} catch (error) {
 			logger.warn('Failed to determine API base URL', error);
 			dispatch({ type: 'ERROR', payload: String(error) });

@@ -7,6 +7,7 @@ import eventManager, { EventName } from '../eventManager';
 import { reg } from '../registry';
 import Logger from '@joplin/utils/Logger';
 import SyncTargetRegistry from '../SyncTargetRegistry';
+import { isHttpOrHttpsUrl } from '@joplin/utils/url';
 
 const logger = Logger.create('joplinCloudUtils');
 
@@ -118,10 +119,11 @@ export const saveApplicationAuthId = async (applicationAuthId: string, syncTarge
 // Returns null when no login URL can be determined (e.g.)
 export const fetchLoginUrl = async (syncTargetId: number, apiBaseUrl: string) => {
 	if (syncTargetId === SyncTargetRegistry.nameToId('joplinCloud')) return Setting.value('sync.10.website');
+	if (!isHttpOrHttpsUrl(apiBaseUrl)) throw new Error(_('Invalid server base URL. Must start with http:// or https://.'));
 
-	const response = await shim.fetch(`${normalizeBaseUrl(apiBaseUrl)}/api/application_login_url`);
+	const response = await shim.fetch(`${normalizeBaseUrl(apiBaseUrl)}/api/web_login_base_url`);
 	if (response.status === 404) {
-		// The application_login_url API doesn't exist on older Joplin Server versions
+		// The web_login_base_url API doesn't exist on older Joplin Server versions
 		return null;
 	}
 
@@ -130,7 +132,10 @@ export const fetchLoginUrl = async (syncTargetId: number, apiBaseUrl: string) =>
 	if (typeof uri !== 'string') {
 		throw new Error('Invalid response. Missing "uri".');
 	}
-	return uri;
+	if (!isHttpOrHttpsUrl(uri)) {
+		throw new Error('Invalid response. Login URL is not an HTTP or HTTPS URL.');
+	}
+	return normalizeBaseUrl(uri);
 };
 
 // We have isWaitingResponse inside the function to avoid any state from lingering

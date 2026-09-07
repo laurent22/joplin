@@ -1361,6 +1361,7 @@ packages/lib/SyncTargetDropbox.js
 packages/lib/SyncTargetFilesystem.js
 packages/lib/SyncTargetJoplinCloud.js
 packages/lib/SyncTargetJoplinServer.js
+packages/lib/SyncTargetJoplinServerBase.js
 packages/lib/SyncTargetJoplinServerSAML.js
 packages/lib/SyncTargetMemory.js
 packages/lib/SyncTargetNextcloud.js

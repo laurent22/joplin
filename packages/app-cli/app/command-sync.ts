@@ -14,7 +14,7 @@ const { cliUtils } = require('./cli-utils.js');
 const md5 = require('md5');
 import * as locker from 'proper-lockfile';
 import { pathExists, writeFile } from 'fs-extra';
-import { checkIfLoginWasSuccessful, generateApplicationConfirmUrl, JoplinSyncTargetId } from '@joplin/lib/services/joplinCloudUtils';
+import { checkIfLoginWasSuccessful, fetchLoginUrl, generateApplicationConfirmUrl, isJoplinOAuthSyncTarget, normalizeBaseUrl } from '@joplin/lib/services/joplinCloudUtils';
 import Logger from '@joplin/utils/Logger';
 import { uuidgen } from '@joplin/lib/uuid';
 import ShareService from '@joplin/lib/services/share/ShareService';
@@ -89,12 +89,12 @@ class Command extends BaseCommand {
 			Setting.setValue(`sync.${this.syncTargetId_}.auth`, response.access_token);
 			api.setAuthToken(response.access_token);
 			return true;
-		} else if (syncTargetMd.name === 'joplinCloud' || syncTargetMd.name === 'joplinServer') {
-			const id = syncTargetMd.id as JoplinSyncTargetId;
+		} else if (isJoplinOAuthSyncTarget(syncTargetMd.id)) {
+			const id = syncTargetMd.id;
 			const applicationAuthId = uuidgen();
 			const checkForCredentials = async () => {
 				try {
-					const applicationAuthUrl = `${Setting.value(`sync.${id}.path`)}/api/application_auth/${applicationAuthId}`;
+					const applicationAuthUrl = `${normalizeBaseUrl(Setting.value(`sync.${id}.path`))}/api/application_auth/${applicationAuthId}`;
 					const response = await checkIfLoginWasSuccessful(applicationAuthUrl, id);
 					if (response && response.success) {
 						return response;
@@ -106,19 +106,22 @@ class Command extends BaseCommand {
 				}
 			};
 
-			this.stdout(_('To allow Joplin to synchronise with %s, please login using this URL:', syncTargetMd.label));
+			const apiBaseUrl = Setting.value(`sync.${id}.path`);
+			const websiteBaseUrl = await fetchLoginUrl(id, apiBaseUrl);
+			// Older versions of Joplin Server won't return a website base URL
+			if (websiteBaseUrl) {
+				const confirmUrl = `${websiteBaseUrl}/applications/${applicationAuthId}/confirm`;
 
-			// TODO: Use sync.9.website or equivalent
-			const websiteBaseUrl = id === 9 ? Setting.value('sync.9.path') : Setting.value('sync.10.website');
-			const confirmUrl = `${websiteBaseUrl}/applications/${applicationAuthId}/confirm`;
-			const urlWithClient = await generateApplicationConfirmUrl(confirmUrl);
-			this.stdout(urlWithClient);
+				this.stdout(_('To allow Joplin to synchronise with %s, please login using this URL:', syncTargetMd.label));
+				const urlWithClient = await generateApplicationConfirmUrl(confirmUrl);
+				this.stdout(urlWithClient);
 
-			const authorized = await this.prompt(_('Have you authorised the application login in the above URL?'), { booleanAnswerDefault: 'y' });
-			if (!authorized) return false;
-			const result = await checkForCredentials();
-			if (!result) return false;
-			return true;
+				const authorized = await this.prompt(_('Have you authorised the application login in the above URL?'), { booleanAnswerDefault: 'y' });
+				if (!authorized) return false;
+				const result = await checkForCredentials();
+				if (!result) return false;
+				return true;
+			}
 		}
 
 		this.stdout(_('Not authenticated with %s. Please provide any missing credentials.', syncTargetMd.label));
