@@ -88,7 +88,9 @@ const buildJoplinServerDisconnectButton = (syncTargetId: number, syncTargetName:
 		},
 		public: true,
 		appTypes: [AppType.Desktop, AppType.Mobile],
-		show: settings => showJoplinServerConnectDisconnectButtons(settings, syncTargetId),
+		show: settings => {
+			return !!settings[`sync.${syncTargetId}.username`] && showJoplinServerConnectDisconnectButtons(settings, syncTargetId);
+		},
 		section: 'sync',
 	} satisfies SettingItem;
 };
