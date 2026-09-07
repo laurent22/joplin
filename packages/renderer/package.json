@@ -1,6 +1,6 @@
 {
   "name": "@joplin/renderer",
-  "version": "3.7.0",
+  "version": "3.7.1",
   "description": "The Joplin note renderer, used the mobile and desktop application",
   "repository": "https://github.com/laurent22/joplin/tree/dev/packages/renderer",
   "main": "index.js",
@@ -30,9 +30,9 @@
     "typescript": "5.9.3"
   },
   "dependencies": {
-    "@joplin/fork-htmlparser2": "^4.1.63",
-    "@joplin/fork-uslug": "^2.0.6",
-    "@joplin/utils": "~3.7",
+    "@joplin/fork-htmlparser2": "^4.1.64",
+    "@joplin/fork-uslug": "^2.0.7",
+    "@joplin/utils": "^3.7.1",
     "@types/json5": "2.2.0",
     "abcjs": "6.6.3",
     "font-awesome-filetypes": "2.1.0",
