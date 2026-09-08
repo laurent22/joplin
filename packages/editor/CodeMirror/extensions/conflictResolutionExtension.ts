@@ -42,6 +42,13 @@ class LocalVersionWidget extends WidgetType {
 		super();
 	}
 
+	private removeCopyListener_: (()=> void)|null = null;
+
+	public destroy() {
+		this.removeCopyListener_?.();
+		this.removeCopyListener_ = null;
+	}
+
 	private sameContent_(other: LocalVersionWidget) {
 		return this.regionId_ === other.regionId_
 			&& this.localText_ === other.localText_
@@ -71,6 +78,7 @@ class LocalVersionWidget extends WidgetType {
 
 		const text = document.createElement('div');
 		text.className = 'cm-conflictLocalVersion-text';
+		text.tabIndex = -1;
 		if (this.localText_.split('\n').some(line => line.trimStart().startsWith('|'))) {
 			text.classList.add('cm-conflictLocalVersion-table');
 		}
@@ -94,6 +102,19 @@ class LocalVersionWidget extends WidgetType {
 			focus('conflictResolution::useMyVersion', view);
 		};
 		container.appendChild(button);
+
+		// The editor would otherwise copy its own selection, which is current version
+		const onCopy = (event: ClipboardEvent) => {
+			const selection = container.ownerDocument.getSelection();
+			if (!selection || selection.isCollapsed) return;
+			if (!container.contains(selection.getRangeAt(0).commonAncestorContainer)) return;
+
+			event.clipboardData?.setData('text/plain', selection.toString());
+			event.preventDefault();
+			event.stopPropagation();
+		};
+		container.ownerDocument.addEventListener('copy', onCopy, true);
+		this.removeCopyListener_ = () => container.ownerDocument.removeEventListener('copy', onCopy, true);
 
 		return container;
 	}
@@ -455,14 +476,14 @@ const conflictTheme = EditorView.baseTheme({
 		padding: '4px 8px',
 		margin: '2px 0',
 		color: 'var(--joplin-color, inherit)',
-		pointerEvents: 'none',
-		userSelect: 'none',
+		userSelect: 'text',
 	},
 	'& .cm-conflictLocalVersion-text': {
 		whiteSpace: 'pre-wrap',
 		overflowWrap: 'anywhere',
 		flex: 1,
 		minWidth: 0,
+		cursor: 'text',
 	},
 	'& .cm-conflictLocalVersion-table': {
 		fontFamily: 'monospace',
@@ -476,10 +497,10 @@ const conflictTheme = EditorView.baseTheme({
 	},
 	'& .cm-conflictUseVersionButton': {
 		flexShrink: 0,
+		userSelect: 'none',
 		alignSelf: 'center',
 		cursor: 'pointer',
 		whiteSpace: 'nowrap',
-		pointerEvents: 'auto',
 		border: '1px solid var(--joplin-border-color4, rgba(0, 0, 0, 0.3))',
 		borderRadius: '3px',
 		padding: '3px 14px',
