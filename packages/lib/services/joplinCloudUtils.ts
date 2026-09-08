@@ -153,6 +153,16 @@ export const checkIfLoginWasSuccessful = async (applicationsUrl: string, syncTar
 				'X-JOPLIN-CUSTOM-API-KEY': syncTarget === 10 ? Setting.value('sync.10.apiKey') : '',
 			},
 		});
+		if (response.status === 403) { // Not authorized yet
+			isWaitingResponse = false;
+			return undefined;
+		}
+
+		if (!response.ok) {
+			isWaitingResponse = false;
+			throw new Error(`Connection check failed (${response.status}): ${await response.text()}`);
+		}
+
 		const jsonBody = await response.json();
 
 		if (!response.ok || jsonBody.status !== 'finished') {

@@ -21,7 +21,6 @@ const logger = Logger.create('JoplinCloudLoginScreen');
 interface Props {
 	themeId: number;
 	syncTargetId: number;
-	websiteUrl: string;
 	syncTargetApi: string;
 }
 const syncIconRotationValue = new Animated.Value(0);
@@ -76,7 +75,7 @@ const useStyle = (themeId: number) => {
 const JoplinCloudScreenComponent = (props: Props) => {
 
 	const confirmUrl = async (applicationAuthId: string) => {
-		const baseUrl = props.websiteUrl ?? await fetchLoginUrl(props.syncTargetId, props.syncTargetApi);
+		const baseUrl = await fetchLoginUrl(props.syncTargetId, props.syncTargetApi);
 		return `${baseUrl}/applications/${applicationAuthId}/confirm`;
 	};
 	const applicationAuthUrl = (applicationAuthId: string) => `${props.syncTargetApi}/api/application_auth/${applicationAuthId}`;
@@ -181,7 +180,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 				{ state.active !== 'COMPLETED' ?
 					<React.Fragment>
 						<Text style={styles.text}>
-							{_('To allow Joplin to synchronise with %s, please login using this URL:', syncTargetName)}
+							{_('To allow Joplin to synchronise with %s, please log in using this URL:', syncTargetName)}
 						</Text>
 						<View style={styles.buttonsContainer}>
 							<View style={{ marginBottom: 20 }}>
@@ -218,14 +217,19 @@ const JoplinCloudScreenComponent = (props: Props) => {
 	);
 };
 
-type OwnProps = Pick<Props, 'syncTargetId'|'websiteUrl'>;
+type OwnProps = {
+	navigation: {
+		state?: {
+			syncTargetId: number;
+		};
+	};
+};
 
-const JoplinCloudLoginScreen = connect((state: AppState, { syncTargetId, websiteUrl }: OwnProps) => {
-	syncTargetId ??= state.settings['sync.target'];
+const JoplinCloudLoginScreen = connect((state: AppState, { navigation }: OwnProps) => {
+	const syncTargetId = navigation?.state?.syncTargetId ?? state.settings['sync.target'];
 	const apiBaseUrl = (state.settings[`sync.${syncTargetId}.path`] ?? '') as string;
 	return {
 		themeId: state.settings.theme,
-		websiteUrl,
 		syncTargetApi: normalizeBaseUrl(apiBaseUrl),
 		syncTargetId,
 	};

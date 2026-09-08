@@ -16,6 +16,7 @@ interface WrapperProps {
 	shareInvitations?: ShareInvitation[];
 	processingShareInvitationResponse?: boolean;
 	showInvalidJoplinCloudCredential?: boolean;
+	syncTargetId?: number;
 }
 
 const WarningBannerWrapper: React.FC<WrapperProps> = props => {
@@ -30,6 +31,7 @@ const WarningBannerWrapper: React.FC<WrapperProps> = props => {
 		shareInvitations={props.shareInvitations ?? []}
 		processingShareInvitationResponse={props.processingShareInvitationResponse ?? false}
 		showInvalidJoplinCloudCredential={props.showInvalidJoplinCloudCredential ?? false}
+		syncTargetId={props.syncTargetId ?? 0}
 	/>;
 };
 

@@ -31,6 +31,7 @@ import { OnChangeEvent } from '../lib/SearchInput/SearchInput';
 import highlightSearchText from './searchHighlight';
 import { UpdateSettingValueEvent } from './types';
 import { Dispatch } from 'redux';
+import { isJoplinOAuthSyncTarget } from '@joplin/lib/services/joplinCloudUtils';
 
 
 interface Font {
@@ -108,12 +109,14 @@ class ConfigScreenComponent extends React.Component<Props, State> {
 	}
 
 	private async checkSyncConfig_() {
-		if (this.state.settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud')) {
+		const syncTarget = this.state.settings['sync.target'];
+		if (isJoplinOAuthSyncTarget(syncTarget)) {
 			const isAuthenticated = await reg.syncTarget().isAuthenticated();
 			if (!isAuthenticated) {
 				return this.props.dispatch({
 					type: 'NAV_GO',
-					routeName: 'JoplinCloudLogin',
+					routeName: 'JoplinOAuthLogin',
+					syncTargetId: syncTarget,
 				});
 			}
 		}

@@ -47,6 +47,8 @@ const logger = Logger.create('MainScreen');
 import { ipcRenderer } from 'electron';
 import layoutKeyToLabel from '../utils/layout/layoutKeyToLabel';
 import MainLayoutPane from './MainLayoutPane';
+import { isJoplinOAuthSyncTarget } from '@joplin/lib/services/joplinCloudUtils';
+import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 
 interface Props {
 	plugins: PluginStates;
@@ -77,6 +79,7 @@ interface Props {
 	showInvalidJoplinCloudCredential: boolean;
 	toast: Toast;
 	shouldSwitchToAppleSiliconVersion: boolean;
+	syncTargetName: string;
 }
 
 interface ShareFolderDialogOptions {
@@ -671,8 +674,8 @@ class MainScreenComponent extends React.Component<Props, State> {
 			);
 		} else if (this.props.showInvalidJoplinCloudCredential) {
 			msg = this.renderNotificationMessage(
-				_('Your Joplin Cloud credentials are invalid, please login.'),
-				_('Login to Joplin Cloud.'),
+				_('Your %s credentials are invalid, please login.', this.props.syncTargetName),
+				_('Log in to %s.', this.props.syncTargetName),
 				onViewJoplinCloudLoginScreen,
 				_('Disable synchronisation'),
 				onDisableSync,
@@ -837,7 +840,8 @@ const mapStateToProps = (state: AppState) => {
 		lastDeletionNotificationTime: state.lastDeletionNotificationTime,
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
 		syncTargetAppMinVersion: syncInfo.appMinVersion,
-		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
+		showInvalidJoplinCloudCredential: isJoplinOAuthSyncTarget(state.settings['sync.target']) && state.mustAuthenticate,
+		syncTargetName: SyncTargetRegistry.idToLabelOrEmpty(state.settings['sync.target']),
 		toast: state.toast,
 		shouldSwitchToAppleSiliconVersion: shim.isAppleSilicon() && shim.isMac() && process.arch !== 'arm64',
 	};

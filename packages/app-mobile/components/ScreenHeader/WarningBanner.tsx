@@ -13,6 +13,8 @@ import { substrWithEllipsis } from '@joplin/lib/string-utils';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
+import { isJoplinOAuthSyncTarget } from '@joplin/lib/services/joplinCloudUtils';
+import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 
 const logger = Logger.create('WarningBanner');
 
@@ -28,6 +30,7 @@ interface Props {
 	shareInvitations: ShareInvitation[];
 	processingShareInvitationResponse: boolean;
 	showInvalidJoplinCloudCredential: boolean;
+	syncTargetId: number;
 }
 
 const androidGooglePlayUrl = 'https://play.google.com/store/apps/details?id=net.cozic.joplin';
@@ -123,7 +126,8 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 		warningComps.push(renderWarningBox('Status', _('Some items cannot be decrypted.')));
 	}
 	if (props.showInvalidJoplinCloudCredential) {
-		warningComps.push(renderWarningBox('JoplinCloudLogin', _('Your Joplin Cloud credentials are invalid, please login.')));
+		const targetLabel = SyncTargetRegistry.idToLabelOrEmpty(props.syncTargetId);
+		warningComps.push(renderWarningBox('JoplinCloudLogin', _('Your %s credentials are invalid, please login.', targetLabel)));
 	}
 
 	const shareInvitation = props.shareInvitations.find(inv => inv.status === ShareUserStatus.Waiting);
@@ -161,6 +165,7 @@ export default connect((state: AppState) => {
 		syncTargetAppMinVersion: syncInfo.appMinVersion,
 		shareInvitations: state.shareService.shareInvitations,
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
-		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
+		showInvalidJoplinCloudCredential: isJoplinOAuthSyncTarget(state.settings['sync.target']) && state.mustAuthenticate,
+		syncTargetId: state.settings['sync.target'],
 	};
 })(WarningBannerComponent);

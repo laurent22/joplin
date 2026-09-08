@@ -44,6 +44,7 @@ import { UpdateSettingValueCallback } from './types';
 import Folder from '@joplin/lib/models/Folder';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
+import { isJoplinOAuthSyncTarget } from '@joplin/lib/services/joplinCloudUtils';
 
 interface ConfigScreenState {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Settings values are heterogeneous (string/number/boolean/object) and accessed by string key across many call sites; tightening to `unknown` forces casts everywhere
@@ -98,10 +99,6 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		shared.init(reg);
 	}
 
-	private goToJoplinCloudLogin_ = async () => {
-		await NavService.go('JoplinCloudLogin');
-	};
-
 	private goToJoplinServerSamlLogin_ = async () => {
 		// Save the settings to allow for sync when the user completes authentication
 		await this.saveButton_press();
@@ -115,10 +112,10 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 	};
 
 	private checkSyncConfig_ = async () => {
-		if (this.state.settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud')) {
+		if (isJoplinOAuthSyncTarget(this.state.settings['sync.target'])) {
 			const isAuthenticated = await reg.syncTarget().isAuthenticated();
 			if (!isAuthenticated) {
-				void NavService.go('JoplinCloudLogin');
+				void NavService.go('JoplinCloudLogin', { syncTargetId: this.state.settings['sync.target'] });
 				return;
 			}
 		}
@@ -488,9 +485,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 						</View>
 					);
 
-					if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud')) {
-						addSettingButton('go_to_joplin_cloud_login_button', _('Connect to Joplin Cloud'), this.goToJoplinCloudLogin_);
-					} else if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServerSaml')) {
+					if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServerSaml')) {
 						addSettingButton('login_joplin_server_saml_button', _('Connect using your organisation account'), this.goToJoplinServerSamlLogin_);
 
 						if (Setting.value('sync.11.id') !== '' || Setting.value('sync.11.userId') !== '') {

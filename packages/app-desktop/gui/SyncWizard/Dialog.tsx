@@ -237,6 +237,7 @@ export default function(props: Props) {
 		props.dispatch({
 			type: 'NAV_GO',
 			routeName: route.name,
+			syncTargetId: route.target,
 		});
 	}, [props.dispatch, closeDialog]);
 

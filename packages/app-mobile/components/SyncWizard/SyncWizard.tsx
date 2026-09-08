@@ -12,6 +12,7 @@ import { Platform, StyleSheet, View } from 'react-native';
 import CardButton from '../buttons/CardButton';
 import Setting, { Env } from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
+import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 
 interface Props {
 	dispatch: Dispatch;
@@ -112,7 +113,8 @@ const SyncWizard: React.FC<Props> = ({ themeId, visible, dispatch }) => {
 				await shim.openUrl('https://app.joplincloud.com/');
 			}
 		} else {
-			await NavService.go('JoplinCloudLogin');
+			const syncTargetId = SyncTargetRegistry.nameToId('joplinCloud');
+			await NavService.go('JoplinCloudLogin', { syncTargetId });
 		}
 	}, [onDismiss]);
 
