@@ -112,7 +112,7 @@ class Command extends BaseCommand {
 			if (websiteBaseUrl) {
 				const confirmUrl = `${websiteBaseUrl}/applications/${applicationAuthId}/confirm`;
 
-				this.stdout(_('To allow Joplin to synchronise with %s, please login using this URL:', syncTargetMd.label));
+				this.stdout(_('To allow Joplin to synchronise with %s, please log in using this URL:', syncTargetMd.label));
 				const urlWithClient = await generateApplicationConfirmUrl(confirmUrl);
 				this.stdout(urlWithClient);
 

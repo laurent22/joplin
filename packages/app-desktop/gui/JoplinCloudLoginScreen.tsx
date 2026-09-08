@@ -103,7 +103,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 			<div className="page-container">
 				{state.active !== 'COMPLETED' ? (
 					<>
-						<p className="text">{_('To allow Joplin to synchronise with %s, please login using this URL:', syncTargetLabel)}</p>
+						<p className="text">{_('To allow Joplin to synchronise with %s, please log in using this URL:', syncTargetLabel)}</p>
 						<div className="buttons-container">
 							<Button
 								onClick={onAuthorizeClicked}
