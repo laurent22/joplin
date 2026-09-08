@@ -34,7 +34,7 @@
     "bcryptjs": "2.4.3",
     "bulma": "1.0.4",
     "compare-versions": "6.1.1",
-    "dayjs": "1.11.20",
+    "dayjs": "1.11.21",
     "formidable": "2.1.2",
     "fs-extra": "11.3.5",
     "html-entities": "1.4.0",

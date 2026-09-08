@@ -2,6 +2,7 @@ import { DbConnection, truncateTables } from '../../db';
 
 const includedTables = [
 	'changes',
+	'changes_2',
 	'emails',
 	'events',
 	'item_resources',

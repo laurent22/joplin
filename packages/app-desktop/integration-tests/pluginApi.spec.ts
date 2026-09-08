@@ -11,8 +11,8 @@ test.describe('pluginApi', () => {
 		await mainScreen.createNewNote('First note');
 		const editor = mainScreen.noteEditor;
 
-		await editor.focusCodeMirrorEditor();
-		await mainWindow.keyboard.type('This content should be overwritten.');
+		const markdownEditor = await editor.showMarkdownEditor();
+		await markdownEditor.typeText('This content should be overwritten.');
 
 		await editor.expectToHaveText('This content should be overwritten.');
 		await mainScreen.goToAnything.runCommand(app, 'testUpdateEditorText');
@@ -52,6 +52,7 @@ test.describe('pluginApi', () => {
 		await mainScreen.createNewNote('Dialog test note');
 
 		const editor = mainScreen.noteEditor;
+		const markdownEditor = await editor.showMarkdownEditor();
 		const expectVisible = async (visible: boolean) => {
 			// Check UI visibility
 			if (visible) {
@@ -64,8 +65,7 @@ test.describe('pluginApi', () => {
 			await expect.poll(async () => {
 				await mainScreen.goToAnything.runCommand(app, 'getTestDialogVisibility');
 
-				const editorContent = await editor.contentLocator();
-				return editorContent.textContent();
+				return markdownEditor.container.textContent();
 			}).toBe(JSON.stringify({
 				visible: visible,
 				active: visible,
@@ -129,12 +129,13 @@ test.describe('pluginApi', () => {
 		await mainScreen.createNewNote('Test note');
 		const toggleButton = mainScreen.noteEditor.toggleEditorPluginButton;
 
-		// Initially, the toggle button should be visible, and so should the default editor.
-		await expect(mainScreen.noteEditor.codeMirrorEditor).toBeAttached();
-		await toggleButton.click();
+		// Initially, the toggle button should be visible
+		const markdownEditor = await mainScreen.noteEditor.showMarkdownEditor();
 
+		await toggleButton.click();
 		const pluginFrame = mainScreen.noteEditor.editorPluginFrame;
 		await expect(pluginFrame).toBeAttached();
+		await expect(markdownEditor.container).not.toBeAttached();
 
 		// Should describe the frame
 		const frameViewIdLabel = pluginFrame.contentFrame().locator('#view-id-base');
@@ -146,7 +147,7 @@ test.describe('pluginApi', () => {
 
 		// Clicking toggle again should dismiss the editor plugins
 		await toggleButton.click();
-		await expect(mainScreen.noteEditor.codeMirrorEditor).toBeAttached();
+		await expect(markdownEditor.container).toBeAttached();
 		await expect(pluginFrame).not.toBeAttached();
 	});
 
@@ -156,8 +157,8 @@ test.describe('pluginApi', () => {
 		await mainScreen.createNewNote('Test note');
 
 		const noteEditor = mainScreen.noteEditor;
-		await noteEditor.focusCodeMirrorEditor();
-		await mainWindow.keyboard.type('Initial content.');
+		const markdownEditor = await noteEditor.showMarkdownEditor();
+		await markdownEditor.typeText('Initial content.');
 
 		const toggleButton = noteEditor.toggleEditorPluginButton;
 		await toggleButton.click();
@@ -174,13 +175,13 @@ test.describe('pluginApi', () => {
 		// Should have saved
 		await toggleButton.click();
 		const expectedUpdatedText = 'Changed by test-editor-plugin';
-		await expect(noteEditor.codeMirrorEditor).toHaveText(expectedUpdatedText);
+		await noteEditor.expectToHaveText(expectedUpdatedText);
 
 		// Regression test: Historically the editor's content would very briefly be correct, then
 		// almost immediately be replaced with the old content. Doing another check after a brief
 		// delay should cause the test to fail if this bug returns:
 		await msleep(Second);
-		await expect(noteEditor.codeMirrorEditor).toHaveText(expectedUpdatedText);
+		await noteEditor.expectToHaveText(expectedUpdatedText);
 	});
 
 	test('should support hiding and showing panels', async ({ startAppWithPlugins }) => {
@@ -222,8 +223,8 @@ test.describe('pluginApi', () => {
 
 		// Verify the working plugin is functional
 		const editor = mainScreen.noteEditor;
-		await editor.focusCodeMirrorEditor();
-		await mainWindow.keyboard.type('Should be overwritten.');
+		const markdownEditor = await editor.showMarkdownEditor();
+		await markdownEditor.typeText('Should be overwritten.');
 		await mainScreen.goToAnything.runCommand(app, 'testUpdateEditorText');
 		await editor.expectToHaveText('PASS');
 	});

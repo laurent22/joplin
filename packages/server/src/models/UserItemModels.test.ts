@@ -1,6 +1,6 @@
 import { beforeAllDb, afterAllTests, beforeEachDb, models } from '../utils/testing/testUtils';
 
-describe('UserItemModel', () => {
+describe('UserItemModels', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('UserItemModel');

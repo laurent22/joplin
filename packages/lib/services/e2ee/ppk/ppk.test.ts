@@ -3,7 +3,7 @@ import { PublicKeyAlgorithm } from '../types';
 import { decryptPrivateKey, ppkDecryptMasterKeyContent, ppkGenerateMasterKey, ppkPasswordIsValid, mkReencryptFromPasswordToPublicKey, mkReencryptFromPublicKeyToPassword, generateKeyPairWithAlgorithm, supportsPpkAlgorithm } from './ppk';
 import { runIntegrationTests } from './ppkTestUtils';
 
-describe('e2ee/ppk', () => {
+describe('ppk', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

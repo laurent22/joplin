@@ -102,8 +102,8 @@ const useStyles = ({ theme, menuType, dragging, alignment, draggable, dragOffset
 				),
 
 				shadowRadius: 4,
-				shadowColor: theme.color,
-				shadowOpacity: 0.15,
+				shadowColor: theme.shadowColorOpaque,
+				shadowOpacity: theme.shadowOpacity,
 				elevation: 2,
 
 
