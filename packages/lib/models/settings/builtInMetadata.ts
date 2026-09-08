@@ -11,7 +11,6 @@ import type { PublicPrivateKeyPair } from '../../services/e2ee/ppk/ppk';
 import { EmptyObject } from '@joplin/utils/types';
 const ObjectUtils = require('../../ObjectUtils');
 import { toTitleCase } from '../../string-utils';
-import NavService from '../../services/NavService';
 
 const customCssFilePath = (Setting: typeof SettingType, filename: string): string => {
 	return `${Setting.value('rootProfileDir')}/${filename}`;
@@ -57,19 +56,14 @@ const buildJoplinServerConnectButton = (syncTargetId: number, syncTargetName: st
 		type: SettingItemType.Button,
 		label: () => _('Connect to %s', syncTargetName),
 		onClick: async (event) => {
-			const { reg } = await import('../../registry');
-			const { fetchLoginUrl } = await import('../../services/joplinCloudUtils');
+			const { fetchLoginUrl, openLoginScreen } = await import('../../services/joplinCloudUtils');
 			const loginUrl = await fetchLoginUrl(syncTargetId, event.settings[`sync.${syncTargetId}.path`] as string);
 			// Older Joplin Server versions don't support fetching the login URL
 			if (!loginUrl && syncTargetId === 9) {
 				event.setSettingValue(`sync.${syncTargetId}.preferPasswordAuth`, true);
 			} else {
 				await event.saveSettings();
-				const target = reg.syncTarget(syncTargetId);
-				await NavService.go(target.authRouteName(), {
-					syncTarget: syncTargetId,
-					websiteUrl: loginUrl,
-				});
+				await openLoginScreen(syncTargetId);
 			}
 		},
 		public: true,

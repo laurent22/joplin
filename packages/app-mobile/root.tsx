@@ -70,7 +70,7 @@ const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
 import SyncTargetJoplinServerSAML from '@joplin/lib/SyncTargetJoplinServerSAML';
 import BiometricPopup from './components/biometrics/BiometricPopup';
 import { isCallbackUrl, parseCallbackUrl, CallbackUrlCommand } from '@joplin/lib/callbackUrlUtils';
-import JoplinCloudLoginScreen from './components/screens/JoplinCloudLoginScreen';
+import JoplinOAuthLoginScreen from './components/screens/JoplinOAuthLoginScreen';
 
 import SyncTargetNone from '@joplin/lib/SyncTargetNone';
 
@@ -763,8 +763,8 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 			Folder: { screen: FolderScreen },
 			OneDriveLogin: { screen: OneDriveLoginScreen },
 			DropboxLogin: { screen: DropboxLoginScreen },
-			JoplinCloudLogin: { screen: JoplinCloudLoginScreen, props: { syncTargetId: 10 } },
-			JoplinServerLogin: { screen: JoplinCloudLoginScreen, props: { syncTargetId: 9 } },
+			JoplinCloudLogin: { screen: JoplinOAuthLoginScreen, props: { syncTargetId: 10 } },
+			JoplinServerLogin: { screen: JoplinOAuthLoginScreen, props: { syncTargetId: 9 } },
 			JoplinServerSamlLogin: { screen: SsoLoginScreen(new SamlShared()) },
 			EncryptionConfig: { screen: EncryptionConfigScreen },
 			UpgradeSyncTarget: { screen: UpgradeSyncTargetScreen },

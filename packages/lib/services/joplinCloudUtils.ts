@@ -8,6 +8,7 @@ import { reg } from '../registry';
 import Logger from '@joplin/utils/Logger';
 import SyncTargetRegistry from '../SyncTargetRegistry';
 import { isHttpOrHttpsUrl } from '@joplin/utils/url';
+import NavService from './NavService';
 
 const logger = Logger.create('joplinCloudUtils');
 
@@ -136,6 +137,13 @@ export const fetchLoginUrl = async (syncTargetId: number, apiBaseUrl: string) =>
 		throw new Error('Invalid response. Login URL is not an HTTP or HTTPS URL.');
 	}
 	return normalizeBaseUrl(uri);
+};
+
+export const openLoginScreen = (syncTargetId: number) => {
+	const target = reg.syncTarget(syncTargetId);
+	return NavService.go(target.authRouteName(), {
+		syncTarget: syncTargetId,
+	});
 };
 
 // We have isWaitingResponse inside the function to avoid any state from lingering

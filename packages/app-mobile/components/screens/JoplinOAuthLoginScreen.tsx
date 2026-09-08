@@ -72,7 +72,7 @@ const useStyle = (themeId: number) => {
 	}, [themeId]);
 };
 
-const JoplinCloudScreenComponent = (props: Props) => {
+const JoplinOAuthScreenComponent = (props: Props) => {
 
 	const confirmUrl = async (applicationAuthId: string) => {
 		const baseUrl = await fetchLoginUrl(props.syncTargetId, props.syncTargetApi);
@@ -218,22 +218,17 @@ const JoplinCloudScreenComponent = (props: Props) => {
 };
 
 type OwnProps = {
-	navigation: {
-		state?: {
-			syncTargetId: number;
-		};
-	};
+	syncTargetId: number;
 };
 
-const JoplinCloudLoginScreen = connect((state: AppState, { navigation }: OwnProps) => {
-	const syncTargetId = navigation?.state?.syncTargetId ?? state.settings['sync.target'];
+const JoplinOAuthLoginScreen = connect((state: AppState, { syncTargetId }: OwnProps) => {
 	const apiBaseUrl = (state.settings[`sync.${syncTargetId}.path`] ?? '') as string;
 	return {
 		themeId: state.settings.theme,
 		syncTargetApi: normalizeBaseUrl(apiBaseUrl),
 		syncTargetId,
 	};
-})(JoplinCloudScreenComponent);
+})(JoplinOAuthScreenComponent);
 
-export default JoplinCloudLoginScreen;
+export default JoplinOAuthLoginScreen;
 

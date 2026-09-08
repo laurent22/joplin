@@ -116,7 +116,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			const syncTarget = reg.syncTarget();
 			const isAuthenticated = await syncTarget.isAuthenticated();
 			if (!isAuthenticated) {
-				void NavService.go(syncTarget.authRouteName(), { syncTargetId: this.state.settings['sync.target'] });
+				void NavService.go(syncTarget.authRouteName());
 				return;
 			}
 		}
