@@ -34,7 +34,7 @@ test.describe('settings', () => {
 		await expect(sortOrderLocator).not.toBeVisible();
 	});
 
-	test('clicking the sync wizard button in settings should open a dialog', async ({ electronApp, mainWindow }) => {
+	test('clicking the sync wizard button in settings should open a dialog and allow selecting "Joplin Cloud"', async ({ electronApp, mainWindow }) => {
 		const mainScreen = await new MainScreen(mainWindow).setup();
 		await mainScreen.waitFor();
 		await mainScreen.openSettings(electronApp);
@@ -49,6 +49,11 @@ test.describe('settings', () => {
 		await syncWizardButton.click();
 
 		await expect(mainScreen.dialog).toBeVisible();
+
+		// Should allow navigating to the Joplin Cloud login screen
+		const joplinCloudButton = mainScreen.dialog.getByRole('link', { name: 'Already have an account? Log in' });
+		await joplinCloudButton.click();
+		await expect(mainWindow.getByRole('button', { name: 'Copy link to website' })).toBeVisible();
 	});
 
 	test('should be possible to navigate settings screen tabs with the arrow keys', async ({ electronApp, mainWindow, startupPluginsLoaded }) => {
