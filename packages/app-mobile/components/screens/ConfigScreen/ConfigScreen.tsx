@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Platform, Linking, View, ScrollView, Text, TouchableOpacity, Alert, PermissionsAndroid, Dimensions, AccessibilityInfo, LayoutChangeEvent } from 'react-native';
-import Setting, { AppType, SettingMetadataSection, SettingsRecord } from '@joplin/lib/models/Setting';
+import Setting, { AppType, SettingMetadataSection } from '@joplin/lib/models/Setting';
 import NavService from '@joplin/lib/services/NavService';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import checkPermissions from '../../../utils/checkPermissions';
@@ -374,7 +374,8 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		);
 	}
 
-	public sectionToComponent(key: string, section: SettingMetadataSection, settings: SettingsRecord, isSelected: boolean) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See ConfigScreenState.settings — same reason
+	public sectionToComponent(key: string, section: SettingMetadataSection, settings: Record<string, any>, isSelected: boolean) {
 		const settingComps: ReactElement[] = [];
 		const advancedSettingComps: ReactElement[] = [];
 
