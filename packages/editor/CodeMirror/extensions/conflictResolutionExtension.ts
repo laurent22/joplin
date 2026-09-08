@@ -438,11 +438,11 @@ const surface = 'var(--joplin-background-color, #ffffff)';
 
 const conflictTheme = EditorView.baseTheme({
 	'& .cm-conflictRegion': {
-		backgroundColor: `color-mix(in srgb, ${remoteAccent} 14%, ${surface})`,
+		backgroundColor: `color-mix(in srgb, ${remoteAccent} 14%, transparent)`,
 	},
 
 	'& .cm-conflictIncoming': {
-		backgroundColor: `color-mix(in srgb, ${remoteAccent} 12%, ${surface})`,
+		backgroundColor: `color-mix(in srgb, ${remoteAccent} 12%, transparent)`,
 		borderLeft: `2px solid ${remoteAccent}`,
 		paddingLeft: '6px',
 	},
@@ -462,7 +462,7 @@ const conflictTheme = EditorView.baseTheme({
 		userSelect: 'none',
 	},
 	'& .cm-conflictChangedWord': {
-		backgroundColor: `color-mix(in srgb, ${remoteAccent} 35%, ${surface})`,
+		backgroundColor: `color-mix(in srgb, ${remoteAccent} 22%, transparent)`,
 		borderRadius: '2px',
 	},
 
