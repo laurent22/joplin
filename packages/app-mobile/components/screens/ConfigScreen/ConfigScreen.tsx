@@ -67,7 +67,7 @@ interface ConfigScreenProps {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See ConfigScreenState.settings — same reason
 	settings: Record<string, any>;
 	themeId: number;
-	navigation: { state?: { sectionName?: string; hideSyncWizardButton?: boolean } };
+	navigation: { state?: { sectionName?: string } };
 	dispatch: Dispatch;
 }
 
@@ -133,13 +133,6 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 	private e2eeConfig_ = () => {
 		void NavService.go('EncryptionConfig');
-	};
-
-	private onShowSyncWizard_ = () => {
-		this.props.dispatch({
-			type: 'SYNC_WIZARD_VISIBLE_CHANGE',
-			visible: true,
-		});
 	};
 
 	private saveButton_press = async () => {
@@ -549,9 +542,6 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		}
 
 		if (section.name === 'sync') {
-			if (settings['sync.target'] === 0 && !this.props.navigation?.state?.hideSyncWizardButton) {
-				addSettingButton('sync_wizard_button', _('Open Sync Wizard...'), this.onShowSyncWizard_);
-			}
 			addSettingButton('e2ee_config_button', _('Encryption Config'), this.e2eeConfig_);
 		}
 
