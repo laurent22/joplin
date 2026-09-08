@@ -2,8 +2,7 @@ import Setting from './models/Setting';
 import Synchronizer from './Synchronizer';
 import { _ } from './locale.js';
 import { FileApi } from './file-api';
-import { initFileApi } from './SyncTargetJoplinServer';
-import SyncTargetJoplinServerBase from './SyncTargetJoplinServerBase';
+import SyncTargetJoplinServerBase, { initFileApi } from './SyncTargetJoplinServerBase';
 
 export default class SyncTargetJoplinCloud extends SyncTargetJoplinServerBase {
 

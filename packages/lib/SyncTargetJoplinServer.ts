@@ -1,11 +1,9 @@
-import FileApiDriverJoplinServer from './file-api-driver-joplinServer';
 import Setting from './models/Setting';
 import Synchronizer from './Synchronizer';
 import { _ } from './locale';
-import JoplinServerApi, { Session } from './JoplinServerApi';
 import { FileApi } from './file-api';
 import Logger from '@joplin/utils/Logger';
-import SyncTargetJoplinServerBase from './SyncTargetJoplinServerBase';
+import SyncTargetJoplinServerBase, { initFileApi, newFileApi } from './SyncTargetJoplinServerBase';
 
 const staticLogger = Logger.create('SyncTargetJoplinServer');
 
@@ -15,31 +13,6 @@ export interface FileApiOptions {
 	username(): string;
 	password(): string;
 	apiKey(): string;
-}
-
-export async function newFileApi(id: number, options: FileApiOptions) {
-	const apiOptions = {
-		baseUrl: () => options.path(),
-		userContentBaseUrl: () => options.userContentPath(),
-		username: () => options.username(),
-		password: () => options.password(),
-		apiKey: () => options.apiKey(),
-		session: (): Session => null,
-		env: Setting.value('env'),
-	};
-
-	const api = new JoplinServerApi(apiOptions);
-	const driver = new FileApiDriverJoplinServer(api);
-	const fileApi = new FileApi('', driver);
-	fileApi.setSyncTargetId(id);
-	await fileApi.initialize();
-	return fileApi;
-}
-
-export async function initFileApi(syncTargetId: number, logger: Logger, options: FileApiOptions) {
-	const fileApi = await newFileApi(syncTargetId, options);
-	fileApi.setLogger(logger);
-	return fileApi;
 }
 
 export default class SyncTargetJoplinServer extends SyncTargetJoplinServerBase {
