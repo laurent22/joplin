@@ -4,8 +4,6 @@ import { Decoration, DecorationSet, EditorView, ViewPlugin, ViewUpdate, WidgetTy
 import { wordDiff, WordDiffSegment } from '@joplin/lib/services/conflict/wordDiff';
 import { focus } from '@joplin/lib/utils/focusHandler';
 
-// One conflicting line. from/to point at the other side's text in the document,
-// localText is the user's version of the same line
 export interface ConflictRegionSpec {
 	from: number;
 	to: number;
@@ -16,16 +14,12 @@ export interface ConflictRegionSpec {
 
 export interface ConflictRegion extends ConflictRegionSpec {
 	id: number;
-	// Empty by nature rather than because it was dealt with
 	startedEmpty: boolean;
-	// Edited to match localText. Kept so undo brings the conflict back
 	settled: boolean;
 }
 
 export interface SetConflictRegions {
 	regions: ConflictRegionSpec[];
-	// The document these belong to, or null to clear them. The editor value is
-	// set separately, so they cannot be used with another note.
 	forText: string|null;
 }
 
@@ -33,8 +27,6 @@ export const setConflictRegions = StateEffect.define<SetConflictRegions>();
 export const resolveConflict = StateEffect.define<number>();
 export const restoreConflict = StateEffect.define<ConflictRegion>();
 
-// Separate from resolveConflict because the text must be replaced first, which
-// the state field cannot do on its own
 const useLocalVersion = StateEffect.define<number>();
 
 const refreshConflictHighlights = StateEffect.define<void>();
@@ -74,7 +66,6 @@ class LocalVersionWidget extends WidgetType {
 	public toDOM(view: EditorView) {
 		const container = document.createElement('div');
 		container.className = 'cm-conflictLocalVersion';
-		// The editor's theme takes priority, so used the same colours as the editor.
 		const editorColor = view.dom.ownerDocument.defaultView?.getComputedStyle(view.contentDOM).color;
 		if (editorColor) container.style.color = editorColor;
 
@@ -132,7 +123,6 @@ class CurrentVersionWidget extends WidgetType {
 
 const regionDecoration = Decoration.mark({ class: 'cm-conflictRegion' });
 
-// Line decorations, so the panel can be drawn without replacing the editable text
 const incomingLine = Decoration.line({ class: 'cm-conflictIncoming' });
 const incomingFirstLine = Decoration.line({ class: 'cm-conflictIncoming cm-conflictIncoming-first' });
 const incomingLastLine = Decoration.line({ class: 'cm-conflictIncoming cm-conflictIncoming-last' });
@@ -161,7 +151,6 @@ interface DecorationDoc {
 	lineAt: (pos: number)=> { from: number; to: number };
 }
 
-// Positions are limited because the region is checked in both documents.
 const lineSpan = (doc: { length: number; lineAt: (pos: number)=> { number: number } }, from: number, to: number) => {
 	const end = Math.min(Math.max(to, 0), doc.length);
 	const start = Math.min(Math.max(from, 0), end);
@@ -177,7 +166,6 @@ const buildDecorations = (doc: DecorationDoc, regions: ConflictRegion[]) => {
 		const regionText = doc.sliceString(region.from, region.to);
 		const diff = wordDiff(region.localText, regionText);
 
-		// Their additions are already on screen, so a widget would be empty
 		if (!region.addedByThem) {
 			// Block widgets must be at a line boundary or else they split the line in two
 			const lineStart = doc.lineAt(region.from).from;
@@ -188,7 +176,6 @@ const buildDecorations = (doc: DecorationDoc, regions: ConflictRegion[]) => {
 			}).range(lineStart));
 		}
 
-		// A region with no text cannot have a mark. The widget above it shows the text.
 		if (region.from < region.to) {
 			const firstLine = doc.lineAt(region.from);
 			const lastLine = doc.lineAt(region.to);
@@ -241,21 +228,16 @@ const conflictState = StateField.define<ConflictState>({
 		let rebuild = false;
 
 		if (transaction.docChanged) {
-			// Mapping both edges keeps text typed at the region's boundary inside it.
 			regions = regions.map(region => {
 				const from = transaction.changes.mapPos(region.from, -1);
 				const to = transaction.changes.mapPos(region.to, 1);
-				// Re-checked after every change so undo can bring the conflict back.
-				// A region that only exists on this side starts empty, so empty does not mean resolved.
 				const settled = from >= to
 					? !region.startedEmpty
 					: transaction.state.doc.sliceString(from, to) === region.localText;
 
-				// Waiting would leave the widget visible after the text already matches.
 				if (settled !== region.settled) rebuild = true;
 
-				// One decoration per line. Mapping moves existing ones but can't add new ones,
-				// so splitting or joining lines needs a redraw.
+				// Mapping moves line decorations but cannot add them
 				if (lineSpan(transaction.startState.doc, region.from, region.to) !== lineSpan(transaction.state.doc, from, to)) {
 					rebuild = true;
 				}
@@ -276,7 +258,6 @@ const conflictState = StateField.define<ConflictState>({
 
 		for (const effect of transaction.effects) {
 			if (effect.is(setConflictRegions)) {
-				// Whatever the editor holds now, they no longer describe it
 				regions = [];
 				pending = effect.value.forText === null ? null : effect.value;
 				rebuild = true;
@@ -298,7 +279,6 @@ const conflictState = StateField.define<ConflictState>({
 					...spec,
 					id: nextRegionId++,
 					startedEmpty: spec.from >= spec.to,
-					// A region may already match, such as when resolved parts are added back.
 					settled: spec.from >= spec.to
 						? spec.localText === ''
 						: transaction.state.doc.sliceString(spec.from, spec.to) === spec.localText,
@@ -339,8 +319,7 @@ export const goToConflict = (view: EditorView, direction: 'previous'|'next') => 
 		? sorted.find(region => region.from > cursor) ?? sorted[0]
 		: [...sorted].reverse().find(region => region.from < cursor) ?? sorted[sorted.length - 1];
 
-	// The panel is inside the block holding region's first line, so scrolling
-	// to the block keeps local version at top.
+	// The panel is inside this block, so scrolling to it keeps the panel on screen
 	const lineStart = view.state.doc.lineAt(target.from).from;
 
 	view.dispatch({ selection: { anchor: target.from }, scrollIntoView: false });
@@ -355,17 +334,11 @@ export const goToConflict = (view: EditorView, direction: 'previous'|'next') => 
 	return true;
 };
 
-// The whole note is reviewed as markdown, so the table renderer leaves every
-// table alone while a conflict is open, whether or not it conflicts. Resolving
-// the regions does not bring the tables back: the note keeps the same shape
-// until the conflict is finished and the editor reloads.
 export const conflictIsOpen = (state: EditorState) => {
 	const field = state.field(conflictState, false);
 	return !!field && field.regions.length > 0;
 };
 
-// Only opening a conflict changes whether tables render, so resolving the
-// regions does not have to redraw them
 export const conflictOpened = (transaction: Transaction) => {
 	return conflictIsOpen(transaction.state) && !conflictIsOpen(transaction.startState);
 };
@@ -390,12 +363,9 @@ const applyLocalVersion = EditorState.transactionFilter.of(transaction => {
 
 	if (!changes.length) return transaction;
 
-	// Replaces the transaction so the text and the resolution are one undo step
 	return { changes, effects };
 });
 
-// Undo already handles the text, so this keeps the region change with it.
-// One undo brings back both.
 const undoableResolutions = invertedEffects.of(transaction => {
 	const regions = transaction.startState.field(conflictState).regions;
 	const restored = [];
@@ -465,11 +435,8 @@ const conflictTheme = EditorView.baseTheme({
 		color: remoteAccent,
 		fontSize: '0.85em',
 		textAlign: 'right',
-		// The panel background, not the left bar. Extending it past the last line
-		// makes the label look like part of the note.
 		backgroundColor: `color-mix(in srgb, ${remoteAccent} 12%, ${surface})`,
 		padding: '0 8px 3px 8px',
-		// A block widget occupies a position, so a click on it moves the cursor
 		pointerEvents: 'none',
 		userSelect: 'none',
 	},
@@ -487,7 +454,6 @@ const conflictTheme = EditorView.baseTheme({
 		borderRadius: '4px',
 		padding: '4px 8px',
 		margin: '2px 0',
-		// Outside the line, so the editor's own text colour does not reach it
 		color: 'var(--joplin-color, inherit)',
 		pointerEvents: 'none',
 		userSelect: 'none',

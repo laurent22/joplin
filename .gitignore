@@ -85,6 +85,7 @@ packages/app-cli/app/cli-utils.js
 packages/app-cli/app/command-apidoc.js
 packages/app-cli/app/command-attach.js
 packages/app-cli/app/command-batch.js
+packages/app-cli/app/command-cat.test.js
 packages/app-cli/app/command-cat.js
 packages/app-cli/app/command-clear.js
 packages/app-cli/app/command-config.js
@@ -93,6 +94,7 @@ packages/app-cli/app/command-done.test.js
 packages/app-cli/app/command-done.js
 packages/app-cli/app/command-dump.js
 packages/app-cli/app/command-e2ee.js
+packages/app-cli/app/command-edit.test.js
 packages/app-cli/app/command-edit.js
 packages/app-cli/app/command-exit.js
 packages/app-cli/app/command-export-sync-status.js
@@ -117,6 +119,7 @@ packages/app-cli/app/command-rmnote.test.js
 packages/app-cli/app/command-rmnote.js
 packages/app-cli/app/command-search.js
 packages/app-cli/app/command-server.js
+packages/app-cli/app/command-set.test.js
 packages/app-cli/app/command-set.js
 packages/app-cli/app/command-settingschema.js
 packages/app-cli/app/command-share.test.js
@@ -161,6 +164,7 @@ packages/app-desktop/ElectronAppWrapper.js
 packages/app-desktop/InteropServiceHelper.js
 packages/app-desktop/app.reducer.test.js
 packages/app-desktop/app.reducer.js
+packages/app-desktop/app.test.js
 packages/app-desktop/app.js
 packages/app-desktop/bridge.js
 packages/app-desktop/checkForUpdates.js
@@ -249,6 +253,7 @@ packages/app-desktop/gui/KeymapConfig/utils/useCommandStatus.js
 packages/app-desktop/gui/KeymapConfig/utils/useKeymap.js
 packages/app-desktop/gui/MainLayoutPane.js
 packages/app-desktop/gui/MainScreen.js
+packages/app-desktop/gui/MainScreen/handleCallbackUrl.test.js
 packages/app-desktop/gui/MainScreen/handleCallbackUrl.js
 packages/app-desktop/gui/MasterPasswordDialog/Dialog.js
 packages/app-desktop/gui/MenuBar.js
@@ -305,6 +310,7 @@ packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useContextMenu.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useCursorPositioning.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useEditDialog.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useEditDialogEventListeners.js
+packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useHighlightedSearchTerms.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useKeyboardRefocusHandler.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useScroll.js
@@ -321,6 +327,8 @@ packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/GroupNode.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/LinkNode.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/TextNode.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/handlePositions.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/stripUnsafeStyles.test.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/stripUnsafeStyles.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/useCardWheel.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/useCheckboxToggle.test.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/useCheckboxToggle.js
@@ -546,6 +554,7 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameTag.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/resetLayout.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/restoreFolder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/restoreNote.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/commands/revealInNotebook.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/revealResourceFile.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/search.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/setTags.js
@@ -606,10 +615,14 @@ packages/app-desktop/integration-tests/main.spec.js
 packages/app-desktop/integration-tests/markdownEditor.spec.js
 packages/app-desktop/integration-tests/models/ChangeAppLayoutScreen.js
 packages/app-desktop/integration-tests/models/ChatPanel.js
-packages/app-desktop/integration-tests/models/EditorCodeDialog.js
 packages/app-desktop/integration-tests/models/GoToAnything.js
 packages/app-desktop/integration-tests/models/MainScreen.js
-packages/app-desktop/integration-tests/models/NoteEditorScreen.js
+packages/app-desktop/integration-tests/models/NoteEditor/BaseEditor.js
+packages/app-desktop/integration-tests/models/NoteEditor/EditorCodeDialog.js
+packages/app-desktop/integration-tests/models/NoteEditor/MarkdownEditor.js
+packages/app-desktop/integration-tests/models/NoteEditor/NoteEditorScreen.js
+packages/app-desktop/integration-tests/models/NoteEditor/NoteViewer.js
+packages/app-desktop/integration-tests/models/NoteEditor/RichTextEditor.js
 packages/app-desktop/integration-tests/models/NoteList.js
 packages/app-desktop/integration-tests/models/SettingsScreen.js
 packages/app-desktop/integration-tests/models/Sidebar.js
@@ -630,7 +643,6 @@ packages/app-desktop/integration-tests/util/getMainWindow.js
 packages/app-desktop/integration-tests/util/ignoreFlakyReporter.js
 packages/app-desktop/integration-tests/util/mockClipboard.js
 packages/app-desktop/integration-tests/util/retryOnFailure.js
-packages/app-desktop/integration-tests/util/seedProfileSettings.js
 packages/app-desktop/integration-tests/util/setDarkMode.js
 packages/app-desktop/integration-tests/util/setFilePickerResponse.js
 packages/app-desktop/integration-tests/util/setMessageBoxResponse.js
@@ -917,6 +929,7 @@ packages/app-mobile/components/screens/JoplinCloudLoginScreen.js
 packages/app-mobile/components/screens/LogScreen.js
 packages/app-mobile/components/screens/Note/Note.test.js
 packages/app-mobile/components/screens/Note/Note.js
+packages/app-mobile/components/screens/Note/NoteLockPanel.js
 packages/app-mobile/components/screens/Note/commands/attachFile.js
 packages/app-mobile/components/screens/Note/commands/hideKeyboard.js
 packages/app-mobile/components/screens/Note/commands/index.js
@@ -1034,6 +1047,7 @@ packages/app-mobile/utils/database-driver-react-native.web.js
 packages/app-mobile/utils/debounce.js
 packages/app-mobile/utils/focusView.js
 packages/app-mobile/utils/fs-driver/constants.js
+packages/app-mobile/utils/fs-driver/fs-driver-rn.test.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.web.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.web.worker.js
@@ -1131,8 +1145,6 @@ packages/editor/CodeMirror/extensions/links/ctrlClickLinksExtension.js
 packages/editor/CodeMirror/extensions/links/followLinkTooltipExtension.test.js
 packages/editor/CodeMirror/extensions/links/followLinkTooltipExtension.js
 packages/editor/CodeMirror/extensions/links/referenceLinksStateField.js
-packages/editor/CodeMirror/extensions/links/utils/findLineMatchingLink.test.js
-packages/editor/CodeMirror/extensions/links/utils/findLineMatchingLink.js
 packages/editor/CodeMirror/extensions/links/utils/getUrlAtPosition.js
 packages/editor/CodeMirror/extensions/links/utils/openLink.js
 packages/editor/CodeMirror/extensions/markdownDecorationExtension.test.js
@@ -1185,6 +1197,8 @@ packages/editor/CodeMirror/testing/pressReleaseKey.js
 packages/editor/CodeMirror/testing/typeText.js
 packages/editor/CodeMirror/testing/visibleEditorText.js
 packages/editor/CodeMirror/theme.js
+packages/editor/CodeMirror/utils/findPositionMatchingLink.test.js
+packages/editor/CodeMirror/utils/findPositionMatchingLink.js
 packages/editor/CodeMirror/utils/formatting/RegionSpec.js
 packages/editor/CodeMirror/utils/formatting/computeSelectionFormatting.test.js
 packages/editor/CodeMirror/utils/formatting/computeSelectionFormatting.js
@@ -1330,6 +1344,7 @@ packages/lib/BaseModel.test.js
 packages/lib/BaseModel.js
 packages/lib/BaseSyncTarget.js
 packages/lib/Cache.js
+packages/lib/ClipperServer.test.js
 packages/lib/ClipperServer.js
 packages/lib/CssUtils.js
 packages/lib/EventDispatcher.test.js
@@ -1735,6 +1750,8 @@ packages/lib/services/interop/InteropService_Importer_Md.test.js
 packages/lib/services/interop/InteropService_Importer_Md.js
 packages/lib/services/interop/InteropService_Importer_Md_frontmatter.test.js
 packages/lib/services/interop/InteropService_Importer_Md_frontmatter.js
+packages/lib/services/interop/InteropService_Importer_Obsidian.test.js
+packages/lib/services/interop/InteropService_Importer_Obsidian.js
 packages/lib/services/interop/InteropService_Importer_OneNote.postprocessHtml.test.js
 packages/lib/services/interop/InteropService_Importer_OneNote.test.js
 packages/lib/services/interop/InteropService_Importer_OneNote.js
@@ -1879,6 +1896,7 @@ packages/lib/services/rest/routes/notes.test.js
 packages/lib/services/rest/routes/notes.js
 packages/lib/services/rest/routes/ping.js
 packages/lib/services/rest/routes/resources.js
+packages/lib/services/rest/routes/revisions.test.js
 packages/lib/services/rest/routes/revisions.js
 packages/lib/services/rest/routes/search.js
 packages/lib/services/rest/routes/tags.js
@@ -1922,6 +1940,7 @@ packages/lib/services/synchronizer/ItemUploader.test.js
 packages/lib/services/synchronizer/ItemUploader.js
 packages/lib/services/synchronizer/LockHandler.js
 packages/lib/services/synchronizer/MigrationHandler.js
+packages/lib/services/synchronizer/Synchronizer.autoMerge.test.js
 packages/lib/services/synchronizer/Synchronizer.baseFields.test.js
 packages/lib/services/synchronizer/Synchronizer.basics.test.js
 packages/lib/services/synchronizer/Synchronizer.conflicts.test.js
@@ -2129,6 +2148,7 @@ packages/tools/checkIgnoredFiles.js
 packages/tools/checkLibPaths.test.js
 packages/tools/checkLibPaths.js
 packages/tools/convertThemesToCss.js
+packages/tools/eslint-rules/describeFilename.test.js
 packages/tools/fuzzer/ActionRunner.js
 packages/tools/fuzzer/Fuzzer.js
 packages/tools/fuzzer/cli.js
@@ -2206,8 +2226,8 @@ packages/tools/updateMarkdownDoc.js
 packages/tools/utils/discourse.test.js
 packages/tools/utils/discourse.js
 packages/tools/utils/loadSponsors.js
+packages/tools/utils/parsePluralLocalizationForm.test.js
 packages/tools/utils/parsePluralLocalizationForm.js
-packages/tools/utils/parsePlurallLocalizationForm.test.js
 packages/tools/utils/translation.js
 packages/tools/validateFilenames.js
 packages/tools/website/build.js
