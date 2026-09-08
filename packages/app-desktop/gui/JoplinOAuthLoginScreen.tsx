@@ -6,7 +6,7 @@ import { clipboard } from 'electron';
 import Button, { ButtonLevel } from './Button/Button';
 import { uuidgen } from '@joplin/lib/uuid';
 import { Dispatch } from 'redux';
-import { reducer, defaultState, generateApplicationConfirmUrl, checkIfLoginWasSuccessful, saveApplicationAuthId, isJoplinOAuthSyncTarget, assertIsJoplinOAuthSyncTarget, Action, fetchLoginUrl, normalizeBaseUrl } from '@joplin/lib/services/joplinCloudUtils';
+import { reducer, defaultState, generateApplicationConfirmUrl, checkIfLoginWasSuccessful, saveApplicationAuthId, isJoplinOAuthSyncTarget, assertIsJoplinOAuthSyncTarget, Action, fetchLoginUrl, normalizeBaseUrl } from '@joplin/lib/services/joplinOAuthUtils';
 import { AppState } from '../app.reducer';
 import Logger from '@joplin/utils/Logger';
 import { reg } from '@joplin/lib/registry';

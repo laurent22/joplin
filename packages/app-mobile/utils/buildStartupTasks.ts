@@ -14,7 +14,7 @@ import { loadKeychainServiceAndSettings } from '@joplin/lib/services/SettingUtil
 import { setLocale } from '@joplin/lib/locale';
 import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
-import { completePendingAuthentication } from '@joplin/lib/services/joplinCloudUtils';
+import { completePendingAuthentication } from '@joplin/lib/services/joplinOAuthUtils';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 import initProfile from '@joplin/lib/services/profileConfig/initProfile';
 import VersionInfo from 'react-native-version-info';

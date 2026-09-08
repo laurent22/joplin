@@ -1753,7 +1753,7 @@ packages/lib/services/interop/types.js
 packages/lib/services/interop/utils.test.js
 packages/lib/services/interop/utils.js
 packages/lib/services/interop/xpsToPngPowerShellScript.js
-packages/lib/services/joplinCloudUtils.js
+packages/lib/services/joplinOAuthUtils.js
 packages/lib/services/joplinServer/personalizedUserContentBaseUrl.js
 packages/lib/services/keychain/KeychainService.test.js
 packages/lib/services/keychain/KeychainService.js

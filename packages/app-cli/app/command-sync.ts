@@ -14,7 +14,7 @@ const { cliUtils } = require('./cli-utils.js');
 const md5 = require('md5');
 import * as locker from 'proper-lockfile';
 import { pathExists, writeFile } from 'fs-extra';
-import { checkIfLoginWasSuccessful, fetchLoginUrl, generateApplicationConfirmUrl, isJoplinOAuthSyncTarget, normalizeBaseUrl } from '@joplin/lib/services/joplinCloudUtils';
+import { checkIfLoginWasSuccessful, fetchLoginUrl, generateApplicationConfirmUrl, isJoplinOAuthSyncTarget, normalizeBaseUrl } from '@joplin/lib/services/joplinOAuthUtils';
 import Logger from '@joplin/utils/Logger';
 import { uuidgen } from '@joplin/lib/uuid';
 import ShareService from '@joplin/lib/services/share/ShareService';

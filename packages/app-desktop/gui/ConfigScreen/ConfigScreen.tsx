@@ -31,7 +31,7 @@ import { OnChangeEvent } from '../lib/SearchInput/SearchInput';
 import highlightSearchText from './searchHighlight';
 import { UpdateSettingValueEvent } from './types';
 import { Dispatch } from 'redux';
-import { isJoplinOAuthSyncTarget } from '@joplin/lib/services/joplinCloudUtils';
+import { isJoplinOAuthSyncTarget } from '@joplin/lib/services/joplinOAuthUtils';
 
 
 interface Font {

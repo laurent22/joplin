@@ -56,7 +56,7 @@ const buildJoplinServerConnectButton = (syncTargetId: number, syncTargetName: st
 		type: SettingItemType.Button,
 		label: () => _('Connect to %s', syncTargetName),
 		onClick: async (event) => {
-			const { fetchLoginUrl, openLoginScreen } = await import('../../services/joplinCloudUtils');
+			const { fetchLoginUrl, openLoginScreen } = await import('../../services/joplinOAuthUtils');
 			const loginUrl = await fetchLoginUrl(syncTargetId, event.settings[`sync.${syncTargetId}.path`] as string);
 			// Older Joplin Server versions don't support fetching the login URL
 			if (!loginUrl && syncTargetId === 9) {

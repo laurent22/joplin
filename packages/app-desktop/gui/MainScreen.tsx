@@ -47,7 +47,7 @@ const logger = Logger.create('MainScreen');
 import { ipcRenderer } from 'electron';
 import layoutKeyToLabel from '../utils/layout/layoutKeyToLabel';
 import MainLayoutPane from './MainLayoutPane';
-import { isJoplinOAuthSyncTarget } from '@joplin/lib/services/joplinCloudUtils';
+import { isJoplinOAuthSyncTarget } from '@joplin/lib/services/joplinOAuthUtils';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import { reg } from '@joplin/lib/registry';
 

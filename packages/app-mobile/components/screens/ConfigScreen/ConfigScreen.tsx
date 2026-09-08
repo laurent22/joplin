@@ -44,7 +44,7 @@ import { UpdateSettingValueCallback } from './types';
 import Folder from '@joplin/lib/models/Folder';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
-import { isJoplinOAuthSyncTarget } from '@joplin/lib/services/joplinCloudUtils';
+import { isJoplinOAuthSyncTarget } from '@joplin/lib/services/joplinOAuthUtils';
 
 interface ConfigScreenState {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Settings values are heterogeneous (string/number/boolean/object) and accessed by string key across many call sites; tightening to `unknown` forces casts everywhere

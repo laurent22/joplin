@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { _ } from '@joplin/lib/locale';
 import { themeStyle } from '../global-style';
 import { AppState } from '../../utils/types';
-import { generateApplicationConfirmUrl, reducer, checkIfLoginWasSuccessful, saveApplicationAuthId, defaultState, assertIsJoplinOAuthSyncTarget, fetchLoginUrl, normalizeBaseUrl } from '@joplin/lib/services/joplinCloudUtils';
+import { generateApplicationConfirmUrl, reducer, checkIfLoginWasSuccessful, saveApplicationAuthId, defaultState, assertIsJoplinOAuthSyncTarget, fetchLoginUrl, normalizeBaseUrl } from '@joplin/lib/services/joplinOAuthUtils';
 import { uuidgen } from '@joplin/lib/uuid';
 import { Button } from 'react-native-paper';
 import createRootStyle from '../../utils/createRootStyle';

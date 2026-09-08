@@ -13,7 +13,7 @@ import { substrWithEllipsis } from '@joplin/lib/string-utils';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
-import { isJoplinOAuthSyncTarget } from '@joplin/lib/services/joplinCloudUtils';
+import { isJoplinOAuthSyncTarget } from '@joplin/lib/services/joplinOAuthUtils';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import { reg } from '@joplin/lib/registry';
 
