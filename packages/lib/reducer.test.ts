@@ -1142,4 +1142,21 @@ describe('reducer', () => {
 
 		jest.useRealTimers();
 	});
+
+	it('should reset authentication state when switching sync targets', () => {
+		let state = defaultState;
+		state = reducer(state, {
+			type: 'MUST_AUTHENTICATE',
+			value: true,
+		});
+		expect(state).toMatchObject({ mustAuthenticate: true });
+
+		state = reducer(state, {
+			type: 'SETTING_UPDATE_ONE',
+			key: 'sync.target',
+			value: 9,
+		});
+
+		expect(state).toMatchObject({ mustAuthenticate: false });
+	});
 });
