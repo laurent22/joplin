@@ -18,6 +18,8 @@ import { checkIfLoginWasSuccessful, fetchLoginUrl, generateApplicationConfirmUrl
 import Logger from '@joplin/utils/Logger';
 import { uuidgen } from '@joplin/lib/uuid';
 import ShareService from '@joplin/lib/services/share/ShareService';
+import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
+import SyncTargetDropbox from '@joplin/lib/SyncTargetDropbox';
 
 const logger = Logger.create('command-sync');
 
@@ -57,7 +59,7 @@ class Command extends BaseCommand {
 
 		if (this.syncTargetId_ === 3 || this.syncTargetId_ === 4) {
 			// OneDrive
-			this.oneDriveApiUtils_ = new OneDriveApiNodeUtils(syncTarget.api());
+			this.oneDriveApiUtils_ = new OneDriveApiNodeUtils((syncTarget as SyncTargetOneDrive).api());
 			const auth = await this.oneDriveApiUtils_.oauthDance({
 				log: (s: string) => {
 					return this.stdout(s);
@@ -74,7 +76,7 @@ class Command extends BaseCommand {
 			return true;
 		} else if (syncTargetMd.name === 'dropbox') {
 			// Dropbox
-			const api = await syncTarget.api();
+			const api = await (syncTarget as SyncTargetDropbox).api();
 			const loginUrl = api.loginUrl();
 			this.stdout(_('To allow Joplin to synchronise with Dropbox, please follow the steps below:'));
 			this.stdout(_('Step 1: Open this URL in your browser to authorise the application:'));

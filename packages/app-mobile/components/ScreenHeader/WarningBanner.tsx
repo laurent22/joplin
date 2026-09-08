@@ -15,6 +15,7 @@ import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import { isJoplinOAuthSyncTarget } from '@joplin/lib/services/joplinCloudUtils';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
+import { reg } from '@joplin/lib/registry';
 
 const logger = Logger.create('WarningBanner');
 
@@ -126,8 +127,11 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 		warningComps.push(renderWarningBox('Status', _('Some items cannot be decrypted.')));
 	}
 	if (props.showInvalidJoplinCloudCredential) {
-		const targetLabel = SyncTargetRegistry.idToLabelOrEmpty(props.syncTargetId);
-		warningComps.push(renderWarningBox('JoplinCloudLogin', _('Your %s credentials are invalid, please login.', targetLabel)));
+		const syncTarget = reg.syncTarget(props.syncTargetId);
+		const syncTargetLabel = SyncTargetRegistry.idToLabelOrEmpty(props.syncTargetId);
+		warningComps.push(renderWarningBox(
+			syncTarget.authRouteName(), _('Your %s credentials are invalid, please login.', syncTargetLabel)),
+		);
 	}
 
 	const shareInvitation = props.shareInvitations.find(inv => inv.status === ShareUserStatus.Waiting);

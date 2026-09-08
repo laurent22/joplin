@@ -62,7 +62,7 @@ export default abstract class SyncTargetJoplinServerBase extends BaseSyncTarget 
 	}
 
 	public authRouteName() {
-		return 'JoplinCloudLogin';
+		return 'JoplinServerLogin';
 	}
 
 	public static override supportsShare(): boolean {

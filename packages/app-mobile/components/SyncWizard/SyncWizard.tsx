@@ -13,6 +13,7 @@ import CardButton from '../buttons/CardButton';
 import Setting, { Env } from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
+import { reg } from '@joplin/lib/registry';
 
 interface Props {
 	dispatch: Dispatch;
@@ -114,7 +115,8 @@ const SyncWizard: React.FC<Props> = ({ themeId, visible, dispatch }) => {
 			}
 		} else {
 			const syncTargetId = SyncTargetRegistry.nameToId('joplinCloud');
-			await NavService.go('JoplinCloudLogin', { syncTargetId });
+			const route = reg.syncTarget(syncTargetId).authRouteName();
+			await NavService.go(route, { syncTargetId });
 		}
 	}, [onDismiss]);
 

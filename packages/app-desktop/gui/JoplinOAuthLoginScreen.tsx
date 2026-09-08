@@ -22,13 +22,13 @@ import Setting from '@joplin/lib/models/Setting';
 interface Props {
 	dispatch: Dispatch;
 	syncTargetId: number;
-	joplinCloudApi: string;
+	serverApi: string;
 }
 
-const JoplinCloudScreenComponent = (props: Props) => {
+const JoplinOAuthScreenComponent = (props: Props) => {
 	const isJoplinCloud = props.syncTargetId === SyncTargetRegistry.nameToId('joplinCloud');
 	const syncTargetLabel = SyncTargetRegistry.idToMetadata(props.syncTargetId).label;
-	const joplinCloudApi = normalizeBaseUrl(props.joplinCloudApi);
+	const joplinCloudApi = normalizeBaseUrl(props.serverApi);
 
 	const applicationAuthId = useMemo(() => uuidgen(), []);
 	const applicationAuthUrl = (applicationAuthId: string) => `${joplinCloudApi}/api/application_auth/${applicationAuthId}`;
@@ -153,16 +153,12 @@ const useConfirmUrl = (apiBaseUrl: string, applicationAuthId: string, dispatch: 
 	return { url };
 };
 
-interface OwnProps {
-	syncTarget: number;
-}
-
-const mapStateToProps = (state: AppState, ownProps: OwnProps) => {
-	const syncTargetId = ownProps.syncTarget ?? state.settings['sync.target'];
+const buildMapStateToProps = (syncTargetId: number) => (state: AppState) => {
 	return {
 		syncTargetId,
-		joplinCloudApi: state.settings[`sync.${syncTargetId as 9|10}.path`],
+		serverApi: state.settings[`sync.${syncTargetId as 9|10}.path`],
 	};
 };
 
-export default connect(mapStateToProps)(JoplinCloudScreenComponent);
+export const JoplinCloudLoginScreen = connect(buildMapStateToProps(10))(JoplinOAuthScreenComponent);
+export const JoplinServerLoginScreen = connect(buildMapStateToProps(9))(JoplinOAuthScreenComponent);

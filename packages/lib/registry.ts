@@ -5,6 +5,7 @@ import shim from './shim';
 import SyncTargetRegistry from './SyncTargetRegistry';
 import { AnyAction, Dispatch } from 'redux';
 import Synchronizer, { SyncStartOptions } from './Synchronizer';
+import BaseSyncTarget from './BaseSyncTarget';
 
 class Registry {
 
@@ -81,7 +82,7 @@ class Registry {
 		return 1000 * 10;
 	}
 
-	public syncTarget = (syncTargetId: number = null) => {
+	public syncTarget = (syncTargetId: number = null): BaseSyncTarget => {
 		if (syncTargetId === null) syncTargetId = Setting.value('sync.target');
 		if (this.syncTargets_[syncTargetId]) return this.syncTargets_[syncTargetId];
 

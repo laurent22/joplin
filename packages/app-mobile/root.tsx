@@ -39,7 +39,7 @@ import BackButtonService, { BackButtonHandler } from './services/BackButtonServi
 import NavService from '@joplin/lib/services/NavService';
 import { createStore, applyMiddleware, Dispatch } from 'redux';
 import reduxSharedMiddleware from '@joplin/lib/components/shared/reduxSharedMiddleware';
-const { AppNav } = require('./components/app-nav.js');
+import AppNav from './components/app-nav';
 import Folder from '@joplin/lib/models/Folder';
 import NotesScreen from './components/screens/Notes/Notes';
 import TagsScreen from './components/screens/tags';
@@ -763,7 +763,8 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 			Folder: { screen: FolderScreen },
 			OneDriveLogin: { screen: OneDriveLoginScreen },
 			DropboxLogin: { screen: DropboxLoginScreen },
-			JoplinCloudLogin: { screen: JoplinCloudLoginScreen },
+			JoplinCloudLogin: { screen: JoplinCloudLoginScreen, props: { syncTargetId: 10 } },
+			JoplinServerLogin: { screen: JoplinCloudLoginScreen, props: { syncTargetId: 9 } },
 			JoplinServerSamlLogin: { screen: SsoLoginScreen(new SamlShared()) },
 			EncryptionConfig: { screen: EncryptionConfigScreen },
 			UpgradeSyncTarget: { screen: UpgradeSyncTargetScreen },

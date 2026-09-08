@@ -49,6 +49,7 @@ import layoutKeyToLabel from '../utils/layout/layoutKeyToLabel';
 import MainLayoutPane from './MainLayoutPane';
 import { isJoplinOAuthSyncTarget } from '@joplin/lib/services/joplinCloudUtils';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
+import { reg } from '@joplin/lib/registry';
 
 interface Props {
 	plugins: PluginStates;
@@ -520,10 +521,17 @@ class MainScreenComponent extends React.Component<Props, State> {
 			});
 		};
 
-		const onViewJoplinCloudLoginScreen = () => {
+		const onViewJoplinServerLoginScreen = () => {
+			const syncTarget = Setting.value('sync.target');
+			if (!isJoplinOAuthSyncTarget(syncTarget)) {
+				void shim.showErrorDialog(_('Error: Not connected to Joplin Cloud or Joplin Server'));
+				return;
+			}
+
+			const routeName = reg.syncTarget(syncTarget).authRouteName();
 			this.props.dispatch({
 				type: 'NAV_GO',
-				routeName: 'JoplinCloudLogin',
+				routeName: routeName,
 			});
 		};
 
@@ -676,7 +684,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 			msg = this.renderNotificationMessage(
 				_('Your %s credentials are invalid, please login.', this.props.syncTargetName),
 				_('Log in to %s.', this.props.syncTargetName),
-				onViewJoplinCloudLoginScreen,
+				onViewJoplinServerLoginScreen,
 				_('Disable synchronisation'),
 				onDisableSync,
 			);
