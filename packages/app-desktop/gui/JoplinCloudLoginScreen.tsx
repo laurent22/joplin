@@ -22,7 +22,6 @@ import Setting from '@joplin/lib/models/Setting';
 interface Props {
 	dispatch: Dispatch;
 	syncTargetId: number;
-	websiteUrl: string|undefined;
 	joplinCloudApi: string;
 }
 
@@ -37,7 +36,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 	const [intervalIdentifier, setIntervalIdentifier] = useState(undefined);
 	const [state, dispatch] = useReducer(reducer, defaultState(syncTargetLabel));
 	const { url: confirmUrl } = useConfirmUrl(
-		joplinCloudApi, props.websiteUrl, applicationAuthId, dispatch,
+		joplinCloudApi, applicationAuthId, dispatch,
 	);
 
 	const periodicallyCheckForCredentials = () => {
@@ -134,13 +133,12 @@ const JoplinCloudScreenComponent = (props: Props) => {
 	);
 };
 
-const useConfirmUrl = (apiBaseUrl: string, websiteUrl: string, applicationAuthId: string, dispatch: React.ActionDispatch<[action: Action]>) => {
+const useConfirmUrl = (apiBaseUrl: string, applicationAuthId: string, dispatch: React.ActionDispatch<[action: Action]>) => {
 	const [url, setUrl] = useState('');
 	useAsyncEffect(async event => {
 		try {
-			const baseUrl = websiteUrl ?? await fetchLoginUrl(
-				Setting.value('sync.target'),
-				apiBaseUrl,
+			const baseUrl = await fetchLoginUrl(
+				Setting.value('sync.target'), apiBaseUrl,
 			);
 			if (event.cancelled) return;
 
@@ -157,14 +155,12 @@ const useConfirmUrl = (apiBaseUrl: string, websiteUrl: string, applicationAuthId
 
 interface OwnProps {
 	syncTarget: number;
-	websiteUrl?: string;
 }
 
 const mapStateToProps = (state: AppState, ownProps: OwnProps) => {
 	const syncTargetId = ownProps.syncTarget ?? state.settings['sync.target'];
 	return {
 		syncTargetId,
-		websiteUrl: syncTargetId === 10 ? state.settings['sync.10.website'] : ownProps.websiteUrl,
 		joplinCloudApi: state.settings[`sync.${syncTargetId as 9|10}.path`],
 	};
 };
