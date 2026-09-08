@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Platform, Linking, View, ScrollView, Text, TouchableOpacity, Alert, PermissionsAndroid, Dimensions, AccessibilityInfo, LayoutChangeEvent } from 'react-native';
-import Setting, { AppType, SettingMetadataSection } from '@joplin/lib/models/Setting';
+import Setting, { AppType, SettingMetadataSection, SettingsRecord } from '@joplin/lib/models/Setting';
 import NavService from '@joplin/lib/services/NavService';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import checkPermissions from '../../../utils/checkPermissions';
@@ -67,7 +67,7 @@ interface ConfigScreenProps {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See ConfigScreenState.settings — same reason
 	settings: Record<string, any>;
 	themeId: number;
-	navigation: { state?: { sectionName?: string } };
+	navigation: { state?: { sectionName?: string; hideSyncWizardButton?: boolean } };
 	dispatch: Dispatch;
 }
 
@@ -381,8 +381,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See ConfigScreenState.settings — same reason
-	public sectionToComponent(key: string, section: SettingMetadataSection, settings: Record<string, any>, isSelected: boolean) {
+	public sectionToComponent(key: string, section: SettingMetadataSection, settings: SettingsRecord, isSelected: boolean) {
 		const settingComps: ReactElement[] = [];
 		const advancedSettingComps: ReactElement[] = [];
 
@@ -550,7 +549,9 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		}
 
 		if (section.name === 'sync') {
-			addSettingButton('sync_wizard_button', _('Open Sync Wizard...'), this.onShowSyncWizard_);
+			if (settings['sync.target'] === 0 && !this.props.navigation?.state?.hideSyncWizardButton) {
+				addSettingButton('sync_wizard_button', _('Open Sync Wizard...'), this.onShowSyncWizard_);
+			}
 			addSettingButton('e2ee_config_button', _('Encryption Config'), this.e2eeConfig_);
 		}
 

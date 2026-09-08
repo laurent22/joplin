@@ -118,7 +118,12 @@ const SyncWizard: React.FC<Props> = ({ themeId, visible, dispatch }) => {
 
 	const onSelectOtherTarget = useCallback(async () => {
 		onDismiss();
-		await NavService.go('Config', { sectionName: 'sync' });
+		await NavService.go('Config', {
+			sectionName: 'sync',
+			// Showing the sync wizard button after selecting "Other" can be confusing
+			// See #16442.
+			hideSyncWizardButton: true,
+		});
 	}, [onDismiss]);
 
 	const showOther = useShouldShowOtherButton();
