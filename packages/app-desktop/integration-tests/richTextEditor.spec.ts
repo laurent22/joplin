@@ -3,8 +3,31 @@ import MainScreen from './models/MainScreen';
 import setFilePickerResponse from './util/setFilePickerResponse';
 import waitForNextOpenPath from './util/waitForNextOpenPath';
 import { basename, join } from 'path';
+import { writeFile } from 'fs-extra';
 
 test.describe('richTextEditor', () => {
+	test('should preserve the font size of OneNote outlines without ink', async ({ electronApp, mainWindow, profileDirectory }) => {
+		const htmlPath = join(profileDirectory, 'onenote-text.html');
+		await writeFile(htmlPath, `<!DOCTYPE html>
+			<html><body>
+				<p>Outside outline</p>
+				<div class="container-outline">
+					<p>Inside outline</p>
+				</div>
+			</body></html>
+		`);
+
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.importHtmlFile(electronApp, htmlPath);
+		await mainScreen.noteList.getNoteItemByTitle('onenote-text').click();
+
+		const richTextEditor = await mainScreen.noteEditor.showRichTextEditor();
+		const outsideText = richTextEditor.body.getByText('Outside outline');
+		await expect(outsideText).toBeVisible();
+		const fontSize = await outsideText.evaluate(element => getComputedStyle(element).fontSize);
+		await expect(richTextEditor.body.getByText('Inside outline')).toHaveCSS('font-size', fontSize);
+	});
+
 	test('HTML links should be preserved when editing a note', async ({ electronApp, mainWindow }) => {
 		const mainScreen = await new MainScreen(mainWindow).setup();
 		await mainScreen.createNewNote('Testing!');
@@ -325,4 +348,3 @@ test.describe('richTextEditor', () => {
 		).toHaveLength(2);
 	});
 });
-
