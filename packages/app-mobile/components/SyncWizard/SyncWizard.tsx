@@ -13,6 +13,7 @@ import CardButton from '../buttons/CardButton';
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
+import Logger from '@joplin/utils/Logger';
 
 interface Props {
 	dispatch: Dispatch;
@@ -21,6 +22,7 @@ interface Props {
 }
 
 const iconSize = 24;
+const logger = Logger.create('SyncWizard');
 const styles = StyleSheet.create({
 	titleContainer: {
 		flexDirection: 'row',
@@ -162,15 +164,20 @@ const SyncWizard: React.FC<Props> = ({ themeId, visible, dispatch }) => {
 		// Persist the selection so that it is kept even if the user cancels the
 		// login or configuration step that follows.
 		Setting.setValue('sync.target', info.id);
-		await Setting.saveAll();
 
-		onDismiss();
+		try {
+			await Setting.saveAll();
 
-		const routeName = syncTargetRoutes[name];
-		if (routeName) {
-			await NavService.go(routeName);
-		} else {
-			await NavService.go('Config', { sectionName: 'sync' });
+			onDismiss();
+
+			const routeName = syncTargetRoutes[name];
+			if (routeName) {
+				await NavService.go(routeName);
+			} else {
+				await NavService.go('Config', { sectionName: 'sync' });
+			}
+		} catch (error) {
+			logger.error('Failed to save sync target setting:', error);
 		}
 	}, [onDismiss]);
 
