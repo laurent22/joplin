@@ -250,6 +250,8 @@ async function renderNote(
 	bannerInfo: BannerInfo,
 	folderTree: RenderedFolderTree = null,
 ): Promise<FileViewerResponse> {
+	if (note.is_locked) throw new ErrorForbidden('The note cannot be displayed because it is locked');
+
 	const markupToHtml = new MarkupToHtml({
 		ResourceModel: Resource as OptionsResourceModel,
 	});
