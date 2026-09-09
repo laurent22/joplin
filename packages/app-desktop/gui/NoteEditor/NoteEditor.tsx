@@ -30,7 +30,7 @@ import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
 import { itemIsReadOnly } from '@joplin/lib/models/utils/readOnly';
 import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
 import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
-import { SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import hasNoteLockKey from '../utils/hasNoteLockKey';
 import NoteLockPanel from './NoteLockPanel/NoteLockPanel';
 import { themeStyle } from '@joplin/lib/theme';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
@@ -634,7 +634,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 
 		return (
 			<div style={revStyle} ref={containerRef}>
-				<NoteRevisionViewer customCss={props.customCss} noteId={formNote.id} onBack={noteRevisionViewer_onBack} />
+				<NoteRevisionViewer customCss={props.customCss} noteId={isNoteLockEnabled() ? effectiveNoteId : formNote.id} onBack={noteRevisionViewer_onBack} />
 			</div>
 		);
 	}
@@ -852,15 +852,6 @@ function NoteEditorContent(props: NoteEditorProps) {
 interface ConnectProps {
 	windowId: string;
 }
-
-// Memoized because mapStateToProps runs on every dispatch and SyncInfo parses the cached JSON.
-let hasNoteLockKeyCache: { syncInfoCache: string; value: boolean } = null;
-const hasNoteLockKey = (syncInfoCache: string) => {
-	if (!hasNoteLockKeyCache || hasNoteLockKeyCache.syncInfoCache !== syncInfoCache) {
-		hasNoteLockKeyCache = { syncInfoCache, value: !!new SyncInfo(syncInfoCache).noteLockKey };
-	}
-	return hasNoteLockKeyCache.value;
-};
 
 const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 	const whenClauseContext = stateToWhenClauseContext(state, { windowId: ownProps.windowId });

@@ -15,6 +15,9 @@ import MasterKey from './models/MasterKey';
 import BaseModel, { DeleteOptions, ModelType } from './BaseModel';
 import time from './time';
 import ResourceService from './services/ResourceService';
+import RevisionService from './services/RevisionService';
+import isNoteLockEnabled from './services/noteLock/isNoteLockEnabled';
+import NoteLockNote from './services/noteLock/NoteLockNote';
 import EncryptionService from './services/e2ee/EncryptionService';
 import JoplinError from './JoplinError';
 import ShareService from './services/share/ShareService';
@@ -1119,12 +1122,24 @@ export default class Synchronizer {
 									locals.push(saved);
 								}
 
+								// Dispatched before the revision cleanup below: the reload marker is what
+								// makes queued editor saves stale, so it must advance before any await here.
 								if (action === SyncAction.UpdateLocal && content.type_ === BaseModel.TYPE_NOTE && content.id) {
 									// Force the viewer / editor to reload on mobile, if a note is updated and it is currently open
 									this.dispatch({
 										type: 'EDITOR_NOTE_NEEDS_RELOAD',
 										noteId: content.id,
 									});
+								}
+
+								if (isNoteLockEnabled() && content.type_ === BaseModel.TYPE_NOTE && NoteLockNote.isLocking(content, local)) {
+									// A note that was locked on another device may still have plaintext
+									// revisions locally, so clear them when the lock state arrives through sync.
+									try {
+										await RevisionService.instance().deleteUnencryptedHistoryForNote(content.id, { sourceDescription: 'Synchronizer: note lock' });
+									} catch (error) {
+										logger.warn(`Could not delete unencrypted revisions for locked note ${content.id}`, error);
+									}
 								}
 							}
 

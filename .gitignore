@@ -602,6 +602,7 @@ packages/app-desktop/gui/utils/NoteListUtils.js
 packages/app-desktop/gui/utils/announceForAccessibility.js
 packages/app-desktop/gui/utils/convertToScreenCoordinates.js
 packages/app-desktop/gui/utils/dragAndDrop.js
+packages/app-desktop/gui/utils/hasNoteLockKey.js
 packages/app-desktop/gui/utils/loadScript.js
 packages/app-desktop/gulpfile.js
 packages/app-desktop/integration-tests/chatPanel.spec.js
@@ -1601,6 +1602,7 @@ packages/lib/services/ResourceEditWatcher/reducer.js
 packages/lib/services/ResourceFetcher.js
 packages/lib/services/ResourceService.test.js
 packages/lib/services/ResourceService.js
+packages/lib/services/RevisionService.noteLock.test.js
 packages/lib/services/RevisionService.test.js
 packages/lib/services/RevisionService.js
 packages/lib/services/SettingUtils.js

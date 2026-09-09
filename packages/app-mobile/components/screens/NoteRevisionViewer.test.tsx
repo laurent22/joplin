@@ -12,6 +12,9 @@ import { useMemo } from 'react';
 import Revision from '@joplin/lib/models/Revision';
 import { ModelType } from '@joplin/lib/BaseModel';
 import getWebViewDomById from '../../utils/testing/getWebViewDomById';
+import Setting from '@joplin/lib/models/Setting';
+import NoteLockKey from '@joplin/lib/services/noteLock/NoteLockKey';
+import NoteLockService from '@joplin/lib/services/noteLock/NoteLockService';
 
 interface WrapperProps {
 	noteId: string;
@@ -72,6 +75,7 @@ describe('screens/NoteRevisionViewer', () => {
 	});
 	afterEach(() => {
 		screen.unmount();
+		jest.restoreAllMocks();
 	});
 
 	test('should render "No revision selected" when no revisions are selected', async () => {
@@ -81,6 +85,46 @@ describe('screens/NoteRevisionViewer', () => {
 		expect(await getRevisionViewerText()).toBe('No revision selected');
 
 		unmount();
+	});
+
+	test('should gate an encrypted revision behind the unlock panel until the session is unlocked', async () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		const note = await Note.save({ title: 'Note', body: 'enc(secret)', is_locked: 1, parent_id: '' });
+		await Revision.save({
+			item_type: ModelType.Note,
+			item_id: note.id,
+			item_updated_time: note.updated_time,
+			parent_id: '',
+			is_locked: 1,
+			title_diff: Revision.createTextPatch('', 'Note'),
+			body_diff: Revision.createTextPatch('', 'enc(secret)'),
+			metadata_diff: '{"new":{},"deleted":[]}',
+		});
+		jest.spyOn(NoteLockKey.instance(), 'load').mockReturnValue({ id: 'key-id' });
+		jest.spyOn(NoteLockService, 'instance').mockReturnValue({
+			decryptString: async (cipherText: string) => {
+				if (cipherText !== 'enc(secret)') throw new Error('Unexpected cipher text');
+				return 'secret';
+			},
+		} as ReturnType<typeof NoteLockService.instance>);
+
+		render(<WrappedRevisionViewerScreen noteId={note.id}/>);
+
+		const dropdown = screen.getByRole('button', { name: 'Select a revision...' });
+		fireEvent.press(dropdown);
+		await waitFor(() => {
+			fireEvent.press(screen.getAllByRole('menuitem')[0]);
+		});
+
+		await waitFor(() => {
+			expect(screen.getByText('This note is encrypted. Enter the note lock password to unlock encrypted notes for this session.')).toBeVisible();
+		});
+
+		store.dispatch({ type: 'SET_NOTE_LOCK_SESSION_UNLOCKED', value: true });
+
+		await waitFor(async () => {
+			expect(await getRevisionViewerText()).toBe('secret');
+		});
 	});
 
 	test('selecting a revision should render its content', async () => {
