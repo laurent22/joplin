@@ -29,13 +29,34 @@ describe('AiService', () => {
 			.rejects.toMatchObject({ code: 'aiRemoteNotAllowed' });
 	});
 
-	it('classifies localhost openai-compatible as local', () => {
-		expect(deriveClassification('openai-compatible', 'http://localhost:11434/v1')).toBe('local');
-		expect(deriveClassification('openai-compatible', 'http://127.0.0.1:11434/v1')).toBe('local');
-	});
-
-	it('classifies LAN openai-compatible as remote', () => {
-		expect(deriveClassification('openai-compatible', 'http://192.168.1.50:11434/v1')).toBe('remote');
+	it.each([
+		['http://localhost:11434/v1', 'local'],
+		['http://127.0.0.1:11434/v1', 'local'],
+		['http://[::1]:11434/v1', 'local'],
+		['http://10.0.0.5:11434/v1', 'local'],
+		['http://172.16.3.9:11434/v1', 'local'],
+		['http://192.168.1.50:11434/v1', 'local'],
+		['http://169.254.1.1:11434/v1', 'local'],
+		['http://ollama.internal:11434/v1', 'local'],
+		['http://ollama.home.arpa:11434/v1', 'local'],
+		['http://[fd12:3456::1]:11434/v1', 'local'],
+		['http://[fe80::1]:11434/v1', 'local'],
+		// Obfuscated loopback: new URL() resolves these to 127.0.0.1.
+		['http://0177.0.0.1:11434/v1', 'local'],
+		['http://2130706433:11434/v1', 'local'],
+		['http://127.1:11434/v1', 'local'],
+		['http://ollama.local:11434/v1', 'remote'],
+		// Just outside the private ranges.
+		['http://172.32.0.1:11434/v1', 'remote'],
+		['http://[fec0::1]:11434/v1', 'remote'],
+		// Leading zero makes this octal, so it resolves to the public 8.0.0.5.
+		['http://010.0.0.5:11434/v1', 'remote'],
+		['http://8.8.8.8:11434/v1', 'remote'],
+		['https://api.openai.com/v1', 'remote'],
+		['not a url', 'remote'],
+		['', 'remote'],
+	])('classifies openai-compatible %s as %s', (baseUrl, expected) => {
+		expect(deriveClassification('openai-compatible', baseUrl)).toBe(expected);
 	});
 
 	it('classifies anthropic and joplin-cloud as remote regardless of baseUrl', () => {
