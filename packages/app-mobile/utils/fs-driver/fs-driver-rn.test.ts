@@ -20,7 +20,7 @@ jest.mock('@joplin/react-native-saf-x', () => ({
 
 import FsDriverRN from './fs-driver-rn';
 
-describe('FsDriverRN SAF destination lookup', () => {
+describe('fs-driver-rn', () => {
 	const parentPath = 'content://provider/tree/root';
 	const destinationPath = `${parentPath}/existing.md`;
 	const destinationUri = 'content://provider/document/existing';
