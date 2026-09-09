@@ -112,8 +112,9 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 	};
 
 	private checkSyncConfig_ = async () => {
-		if (isJoplinOAuthSyncTarget(this.state.settings['sync.target'])) {
-			const syncTarget = reg.syncTarget();
+		const syncTargetId = this.state.settings['sync.target'];
+		if (isJoplinOAuthSyncTarget(syncTargetId)) {
+			const syncTarget = reg.syncTarget(syncTargetId);
 			const isAuthenticated = await syncTarget.isAuthenticated();
 			if (!isAuthenticated) {
 				void NavService.go(syncTarget.authRouteName());
