@@ -6,7 +6,8 @@ import { AppState } from '../../utils/types';
 import WarningBox from './WarningBox';
 import { _ } from '@joplin/lib/locale';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
-import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import { localSyncInfoFromState, NoteLockKeyConflict } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
 import Setting from '@joplin/lib/models/Setting';
 import { ShareInvitation, ShareUserStatus } from '@joplin/lib/services/share/reducer';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
@@ -28,6 +29,7 @@ interface Props {
 	shareInvitations: ShareInvitation[];
 	processingShareInvitationResponse: boolean;
 	showInvalidJoplinCloudCredential: boolean;
+	showNoteLockKeyConflictMessage: boolean;
 }
 
 const androidGooglePlayUrl = 'https://play.google.com/store/apps/details?id=net.cozic.joplin';
@@ -122,6 +124,9 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 	if (props.hasDisabledEncryptionItems) {
 		warningComps.push(renderWarningBox('Status', _('Some items cannot be decrypted.')));
 	}
+	if (props.showNoteLockKeyConflictMessage) {
+		warningComps.push(renderWarningBox('NoteLockMigration', _('The sync target uses a different note lock password. Press to migrate your locked notes.')));
+	}
 	if (props.showInvalidJoplinCloudCredential) {
 		warningComps.push(renderWarningBox('JoplinCloudLogin', _('Your Joplin Cloud credentials are invalid, please login.')));
 	}
@@ -162,5 +167,6 @@ export default connect((state: AppState) => {
 		shareInvitations: state.shareService.shareInvitations,
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
 		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
+		showNoteLockKeyConflictMessage: isNoteLockEnabled() && !!(state.settings['noteLock.conflictNoteLockKey'] as Partial<NoteLockKeyConflict>)?.noteLockKey,
 	};
 })(WarningBannerComponent);

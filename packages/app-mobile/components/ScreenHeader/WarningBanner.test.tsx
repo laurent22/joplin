@@ -16,6 +16,7 @@ interface WrapperProps {
 	shareInvitations?: ShareInvitation[];
 	processingShareInvitationResponse?: boolean;
 	showInvalidJoplinCloudCredential?: boolean;
+	showNoteLockKeyConflictMessage?: boolean;
 }
 
 const WarningBannerWrapper: React.FC<WrapperProps> = props => {
@@ -30,6 +31,7 @@ const WarningBannerWrapper: React.FC<WrapperProps> = props => {
 		shareInvitations={props.shareInvitations ?? []}
 		processingShareInvitationResponse={props.processingShareInvitationResponse ?? false}
 		showInvalidJoplinCloudCredential={props.showInvalidJoplinCloudCredential ?? false}
+		showNoteLockKeyConflictMessage={props.showNoteLockKeyConflictMessage ?? false}
 	/>;
 };
 
@@ -42,17 +44,20 @@ describe('WarningBanner', () => {
 		jest.useFakeTimers();
 	});
 
-	test('the missing master key alert should link to the encryption config screen', async () => {
-		render(<WarningBannerWrapper showMissingMasterKeyMessage={true}/>);
+	test.each([
+		['showMissingMasterKeyMessage', /decryption password/, 'EncryptionConfig'],
+		['showNoteLockKeyConflictMessage', /note lock password/, 'NoteLockMigration'],
+	])('the %s alert should link to its screen', async (prop, message, routeName) => {
+		render(<WarningBannerWrapper {...{ [prop]: true }}/>);
 		expect(await screen.findAllByTestId('warning-box')).toHaveLength(1);
 
 		expect(navServiceMock).not.toHaveBeenCalled();
 
-		const masterKeyWarning = screen.getByText(/decryption password/);
+		const warning = screen.getByText(message);
 		const user = userEvent.setup();
-		await user.press(masterKeyWarning);
+		await user.press(warning);
 
-		expect(navServiceMock.mock.lastCall).toMatchObject([{ routeName: 'EncryptionConfig' }]);
+		expect(navServiceMock.mock.lastCall).toMatchObject([{ routeName }]);
 	});
 
 	test.each([
