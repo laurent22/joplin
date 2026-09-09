@@ -46,7 +46,8 @@ jobs:
           path: packages/app-desktop/playwright-report/
           retention-days: 7
   Mobile:
-    if: github.repository == 'laurent22/joplin'
+    # Disabled temporarily due to compiler errors in CI
+    if: github.repository == 'laurent22/joplin' && false
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v6
