@@ -156,6 +156,13 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 export default connect((state: AppState) => {
 	const syncInfo = localSyncInfoFromState(state);
 
+	let isLoginRoute = false;
+	const syncTargetId = state.settings['sync.target'];
+	const syncTarget = syncTargetId ? reg.syncTarget(syncTargetId) : null;
+	if (syncTarget) {
+		isLoginRoute = state.route?.routeName === syncTarget.authRouteName();
+	}
+
 	return {
 		themeId: state.settings.theme,
 		hasDisabledEncryptionItems: state.hasDisabledEncryptionItems,
@@ -169,7 +176,7 @@ export default connect((state: AppState) => {
 		syncTargetAppMinVersion: syncInfo.appMinVersion,
 		shareInvitations: state.shareService.shareInvitations,
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
-		showInvalidJoplinCloudCredential: isJoplinOAuthSyncTarget(state.settings['sync.target']) && state.mustAuthenticate,
+		showInvalidJoplinCloudCredential: isJoplinOAuthSyncTarget(state.settings['sync.target']) && !isLoginRoute && state.mustAuthenticate,
 		syncTargetId: state.settings['sync.target'],
 	};
 })(WarningBannerComponent);
