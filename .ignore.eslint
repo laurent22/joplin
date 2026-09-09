@@ -1203,6 +1203,7 @@ packages/editor/CodeMirror/pluginApi/PluginLoader.js
 packages/editor/CodeMirror/pluginApi/codeMirrorRequire.js
 packages/editor/CodeMirror/pluginApi/customEditorCompletion.test.js
 packages/editor/CodeMirror/pluginApi/customEditorCompletion.js
+packages/editor/CodeMirror/testing/backspaceOnce.js
 packages/editor/CodeMirror/testing/createEditorControl.js
 packages/editor/CodeMirror/testing/createTestEditor.js
 packages/editor/CodeMirror/testing/findNodesWithName.js
@@ -1212,6 +1213,8 @@ packages/editor/CodeMirror/testing/pressReleaseKey.js
 packages/editor/CodeMirror/testing/typeText.js
 packages/editor/CodeMirror/testing/visibleEditorText.js
 packages/editor/CodeMirror/theme.js
+packages/editor/CodeMirror/utils/clampSelectionToDocument.test.js
+packages/editor/CodeMirror/utils/clampSelectionToDocument.js
 packages/editor/CodeMirror/utils/findPositionMatchingLink.test.js
 packages/editor/CodeMirror/utils/findPositionMatchingLink.js
 packages/editor/CodeMirror/utils/formatting/RegionSpec.js
