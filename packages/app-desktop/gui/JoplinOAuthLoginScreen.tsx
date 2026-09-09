@@ -17,7 +17,6 @@ const logger = Logger.create('JoplinCloudLoginScreen');
 import { connect } from 'react-redux';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
-import Setting from '@joplin/lib/models/Setting';
 
 interface Props {
 	dispatch: Dispatch;
@@ -36,7 +35,7 @@ const JoplinOAuthScreenComponent = (props: Props) => {
 	const [intervalIdentifier, setIntervalIdentifier] = useState(undefined);
 	const [state, dispatch] = useReducer(reducer, defaultState(syncTargetLabel));
 	const { url: confirmUrl } = useConfirmUrl(
-		joplinCloudApi, applicationAuthId, dispatch,
+		props.syncTargetId, joplinCloudApi, applicationAuthId, dispatch,
 	);
 
 	const periodicallyCheckForCredentials = () => {
@@ -109,12 +108,14 @@ const JoplinOAuthScreenComponent = (props: Props) => {
 								title={_('Authorise')}
 								iconName='fa fa-external-link-alt'
 								level={ButtonLevel.Primary}
+								disabled={!confirmUrl}
 							/>
 							<Button
 								onClick={onCopyToClipboardClicked}
 								title={_('Copy link to website')}
 								iconName='fa fa-clone'
 								level={ButtonLevel.Secondary}
+								disabled={!confirmUrl}
 							/>
 
 						</div>
@@ -133,13 +134,11 @@ const JoplinOAuthScreenComponent = (props: Props) => {
 	);
 };
 
-const useConfirmUrl = (apiBaseUrl: string, applicationAuthId: string, dispatch: React.ActionDispatch<[action: Action]>) => {
+const useConfirmUrl = (syncTarget: number, apiBaseUrl: string, applicationAuthId: string, dispatch: React.ActionDispatch<[action: Action]>) => {
 	const [url, setUrl] = useState('');
 	useAsyncEffect(async event => {
 		try {
-			const baseUrl = await fetchLoginUrl(
-				Setting.value('sync.target'), apiBaseUrl,
-			);
+			const baseUrl = await fetchLoginUrl(syncTarget, apiBaseUrl);
 			if (event.cancelled) return;
 
 			if (!baseUrl) throw new Error('Failed to determine login URL');
@@ -148,7 +147,7 @@ const useConfirmUrl = (apiBaseUrl: string, applicationAuthId: string, dispatch: 
 			logger.warn('Failed to determine API base URL', error);
 			dispatch({ type: 'ERROR', payload: String(error) });
 		}
-	}, [apiBaseUrl, applicationAuthId]);
+	}, [syncTarget, apiBaseUrl, applicationAuthId]);
 
 	return { url };
 };
