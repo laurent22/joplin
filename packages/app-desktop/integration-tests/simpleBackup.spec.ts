@@ -1,6 +1,6 @@
 import { test } from './util/test';
 import MainScreen from './models/MainScreen';
-import SettingsScreen from './models/SettingsScreen';
+import SettingsScreen from './models/SettingsScreen/SettingsScreen';
 import activateMainMenuItem from './util/activateMainMenuItem';
 
 test.describe('simpleBackup', () => {

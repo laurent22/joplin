@@ -639,6 +639,7 @@ packages/app-desktop/integration-tests/markdownEditor.spec.js
 packages/app-desktop/integration-tests/models/ChangeAppLayoutScreen.js
 packages/app-desktop/integration-tests/models/ChatPanel.js
 packages/app-desktop/integration-tests/models/GoToAnything.js
+packages/app-desktop/integration-tests/models/JoplinCloudLoginScreen.js
 packages/app-desktop/integration-tests/models/MainScreen.js
 packages/app-desktop/integration-tests/models/NoteEditor/BaseEditor.js
 packages/app-desktop/integration-tests/models/NoteEditor/EditorCodeDialog.js
@@ -647,7 +648,8 @@ packages/app-desktop/integration-tests/models/NoteEditor/NoteEditorScreen.js
 packages/app-desktop/integration-tests/models/NoteEditor/NoteViewer.js
 packages/app-desktop/integration-tests/models/NoteEditor/RichTextEditor.js
 packages/app-desktop/integration-tests/models/NoteList.js
-packages/app-desktop/integration-tests/models/SettingsScreen.js
+packages/app-desktop/integration-tests/models/SettingsScreen/SettingsScreen.js
+packages/app-desktop/integration-tests/models/SettingsScreen/SyncTab.js
 packages/app-desktop/integration-tests/models/Sidebar.js
 packages/app-desktop/integration-tests/multiWindow.spec.js
 packages/app-desktop/integration-tests/noteList.spec.js
