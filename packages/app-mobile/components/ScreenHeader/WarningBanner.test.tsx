@@ -2,9 +2,10 @@ import * as React from 'react';
 import { WarningBannerComponent } from './WarningBanner';
 import Setting from '@joplin/lib/models/Setting';
 import NavService from '@joplin/lib/services/NavService';
-import { render, screen, userEvent } from '../../utils/testing/testingLibrary';
+import { fireEvent, render, screen, userEvent } from '../../utils/testing/testingLibrary';
 import { ShareInvitation, ShareUserStatus } from '@joplin/lib/services/share/reducer';
 import makeShareInvitation from '@joplin/lib/testing/share/makeMockShareInvitation';
+import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 
 interface WrapperProps {
 	showMissingMasterKeyMessage?: boolean;
@@ -38,7 +39,10 @@ const WarningBannerWrapper: React.FC<WrapperProps> = props => {
 
 describe('WarningBanner', () => {
 	let navServiceMock: jest.Mock<(route: unknown)=> void>;
-	beforeEach(() => {
+	beforeEach(async () => {
+		await setupDatabaseAndSynchronizer(0);
+		await switchClient(0);
+
 		navServiceMock = jest.fn();
 		NavService.dispatch = navServiceMock;
 		jest.useFakeTimers();
@@ -95,5 +99,21 @@ describe('WarningBanner', () => {
 
 		render(<WarningBannerWrapper shareInvitations={invitations} processingShareInvitationResponse={false}/>);
 		expect(screen.getByText(query)).toBeVisible();
+	});
+
+	test.each([
+		'Joplin Cloud' as const,
+		'Joplin Server' as const,
+	])('should display a warning banner when %s credentials are invalid', (syncTarget) => {
+		const isJoplinCloud = syncTarget === 'Joplin Cloud';
+		Setting.setValue('sync.target', isJoplinCloud ? 10 : 9);
+		render(<WarningBannerWrapper showInvalidJoplinCloudCredential={true} syncTargetId={Setting.value('sync.target')}/>);
+		const button = screen.getByRole('button', { name: `Your ${syncTarget} credentials are invalid, please log in.` });
+		expect(button).toBeVisible();
+		fireEvent.press(button);
+
+		expect(navServiceMock.mock.lastCall).toMatchObject([
+			{ routeName: isJoplinCloud ? 'JoplinCloudLogin' : 'JoplinServerLogin' },
+		]);
 	});
 });
