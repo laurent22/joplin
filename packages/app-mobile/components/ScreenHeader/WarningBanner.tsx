@@ -130,7 +130,7 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 		const syncTarget = reg.syncTarget(props.syncTargetId);
 		const syncTargetLabel = SyncTargetRegistry.idToLabelOrEmpty(props.syncTargetId);
 		warningComps.push(renderWarningBox(
-			syncTarget.authRouteName(), _('Your %s credentials are invalid, please login.', syncTargetLabel)),
+			syncTarget.authRouteName(), _('Your %s credentials are invalid, please log in.', syncTargetLabel)),
 		);
 	}
 
