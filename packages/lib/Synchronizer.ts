@@ -1112,6 +1112,14 @@ export default class Synchronizer {
 									await MasterKey.save(content);
 								}
 							} else {
+								// An older client does not know is_locked and drops it when it edits a shared locked note,
+								// so the local copy is kept as a conflict and the row stops claiming a lock its body no
+								// longer has. A lock toggled here is already conflicted by the upload step.
+								if (content.type_ === BaseModel.TYPE_NOTE && content.is_locked === undefined && content.share_id && local?.is_locked) {
+									await Note.createConflictNote(local, ItemChange.SOURCE_SYNC);
+									content.is_locked = 0;
+								}
+
 								const saved = await ItemClass.save(content, options);
 
 								// Ensure that the item can be found if another create/update event is received for the same item:
