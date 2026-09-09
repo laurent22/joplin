@@ -8,7 +8,7 @@ import checkPermissions from '../../../utils/checkPermissions';
 import NoteEditor from '../../NoteEditor/NoteEditor';
 import { EditorControl } from '../../NoteEditor/types';
 import * as React from 'react';
-import { Keyboard, View, TextInput, StyleSheet, Linking, Share, NativeSyntheticEvent, useWindowDimensions } from 'react-native';
+import { Keyboard, View, TextInput, StyleSheet, Linking, Share, NativeSyntheticEvent, useWindowDimensions, Text } from 'react-native';
 import { Platform, PermissionsAndroid } from 'react-native';
 import { connect } from 'react-redux';
 import Note from '@joplin/lib/models/Note';
@@ -536,6 +536,13 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			markdownButtons: {
 				borderColor: theme.dividerColor,
 				color: theme.urlColor,
+			},
+			lockedInShareBanner: {
+				backgroundColor: theme.warningBackgroundColor,
+				color: theme.color,
+				paddingLeft: theme.marginLeft,
+				paddingRight: theme.marginRight,
+				paddingVertical: 8,
 			},
 		};
 
@@ -1742,9 +1749,14 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		});
 	}
 
+	private lockedInShare() {
+		return !!this.state.note?.is_locked && !!this.state.note?.share_id;
+	}
+
 	public folderPickerOptions() {
 		const options = {
-			visible: !this.state.readOnly,
+			// Moving the note out of the share is how a locked note becomes editable again.
+			visible: !this.state.readOnly || this.lockedInShare(),
 			disabled: false,
 			selectedFolderId: this.state.folder ? this.state.folder.id : null,
 			onValueChange: this.folderPickerOptions_valueChanged,
@@ -2078,6 +2090,10 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			viewEditToggleMode = ViewToggleButtonMode.Hidden;
 		}
 
+		const lockedInShareBanner = this.lockedInShare() ? (
+			<Text style={this.styles().lockedInShareBanner}>{_('This note is locked and may not be readable because it is contained within a share. To enable editing, it must be moved outside of the share.')}</Text>
+		) : null;
+
 		const header = <ScreenHeader
 			folderPickerOptions={this.folderPickerOptions()}
 			menuOptions={this.menuOptions()}
@@ -2098,6 +2114,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			<View style={this.rootStyle(this.props.themeId).root}>
 				{!increaseSpaceForEditor && header}
 				{!increaseSpaceForEditor && titleComp}
+				{lockedInShareBanner}
 				{bodyComponent}
 				{renderVoiceTypingDialogs()}
 

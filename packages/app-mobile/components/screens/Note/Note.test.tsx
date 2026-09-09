@@ -430,6 +430,17 @@ describe('screens/Note/Note', () => {
 		unmount();
 	});
 
+	it('should make a locked note inside a share read-only', async () => {
+		await openNewNote({ title: 'Locked in a share', body: 'plain', is_locked: 1, share_id: 'share-1' });
+		const { unmount } = render(<WrappedNoteScreen />);
+
+		const titleInput = await screen.findByDisplayValue('Locked in a share');
+		expect(titleInput).toBeDisabled();
+		expect(await screen.findByText('This note is locked and may not be readable because it is contained within a share. To enable editing, it must be moved outside of the share.')).toBeVisible();
+
+		unmount();
+	});
+
 	it('delete should be disabled in a read-only note', async () => {
 		const shareId = 'testShare';
 		const noteId = await openNewNote({

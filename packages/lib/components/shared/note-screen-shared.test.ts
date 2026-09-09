@@ -324,6 +324,15 @@ describe('note-screen-shared', () => {
 		expect(savedNote.body).toBe('enc(edited text)');
 	});
 
+	it('should make a locked note inside a share read-only', async () => {
+		const testNote = await Note.save({ title: 'Shared', body: 'JLD01ciphertext', is_locked: 1, share_id: 'share-1', parent_id: folderId });
+		const comp = makeComp(testNote);
+
+		await shared.reloadNote(comp);
+
+		expect(comp.state.readOnly).toBe(true);
+	});
+
 	it('should reload an encrypted note after decrypting it', async () => {
 		jest.spyOn(shared, 'attachedResources').mockResolvedValue({});
 		const encryptedNote = { id: 'note-id', encryption_cipher_text: 'cipher text', deleted_time: 0 };

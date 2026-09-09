@@ -375,13 +375,17 @@ function NoteEditorContent(props: NoteEditorProps) {
 		return parseShareCache(props.shareCacheSetting);
 	}, [props.shareCacheSetting]);
 
+	const noteMetadata = effectiveNoteId ? props.notes.find(n => n.id === effectiveNoteId) : null;
+	// An older client editing it inside the share would drop the lock, so it is read-only until moved out.
+	const lockedInShare = !!noteMetadata?.is_locked && !!noteMetadata?.share_id;
+
 	useAsyncEffect(async event => {
 		if (!formNote.id) return;
 
 		try {
 			const result = await itemIsReadOnly(BaseItem, ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, formNote.id, props.syncUserId, shareCache);
 			if (event.cancelled) return;
-			setIsReadOnly(result);
+			setIsReadOnly(result || lockedInShare);
 		} catch (error) {
 			if (error.code === ErrorCode.NotFound) {
 				// Can happen if the note has been deleted but a render is
@@ -390,7 +394,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 				throw error;
 			}
 		}
-	}, [formNote.id, props.syncUserId, shareCache]);
+	}, [formNote.id, props.syncUserId, shareCache, lockedInShare]);
 
 	const onBodyWillChange = useCallback((event: { changeId: number }) => {
 		handleProvisionalFlag();
@@ -754,7 +758,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 	// A locked note has no form note while the session is locked (see loadNoteForForm), so the
 	// panel is driven by the note metadata. A loaded form note stays mounted on lock only if it
 	// has unsaved changes, so they are not thrown away.
-	const lockedNoteMetadata = isNoteLockEnabled() && effectiveNoteId ? props.notes.find(n => n.id === effectiveNoteId) : null;
+	const lockedNoteMetadata = isNoteLockEnabled() ? noteMetadata : null;
 	if (lockedNoteMetadata?.is_locked) {
 		// The session is unlocked but the note content failed to decrypt (e.g. it was encrypted
 		// prior to a password reset) - locking the session again shows the regular unlock panel.
@@ -843,7 +847,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 					setTagsToolbarButtonInfo={props.setTagsToolbarButtonInfo}
 					selectedNoteTags={props.selectedNoteTags}
 				/>
-				<WarningBanner bodyEditor={props.bodyEditor}/>
+				<WarningBanner bodyEditor={props.bodyEditor} lockedInShare={lockedInShare}/>
 			</div>
 		</div>
 	);
