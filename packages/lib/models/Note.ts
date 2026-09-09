@@ -843,7 +843,8 @@ export default class Note extends BaseItem {
 
 	public static async load(id: string, options: LoadOptions = null): Promise<NoteEntity> {
 		const note = await super.load(id, options);
-		if (isNoteLockEnabled() && !!options?.useNoteLock && note) return NoteLockNote.decryptBody(note, options.noteLockKey);
+		// A row still encrypted by sync has no note lock body to decrypt yet.
+		if (isNoteLockEnabled() && !!options?.useNoteLock && note && !note.encryption_applied) return NoteLockNote.decryptBody(note, options.noteLockKey);
 		return note;
 	}
 
@@ -995,14 +996,19 @@ export default class Note extends BaseItem {
 			});
 		}
 
-		if (isNoteLockEnabled() && !!options?.useNoteLock) {
-			const gatedResult = {
+		if (plainTextBodyToReturn !== null) {
+			savedNote = {
 				...savedNote,
-				body: plainTextBodyToReturn !== null ? plainTextBodyToReturn : savedNote.body,
+				body: plainTextBodyToReturn,
+			};
+		}
+
+		if (isNoteLockEnabled() && !!options?.useNoteLock) {
+			savedNote = {
+				...savedNote,
 				// Gated data keeps its marker, locked or not, so follow-up gated saves stay valid.
 				isDecrypted: true,
 			};
-			savedNote = gatedResult;
 		}
 
 		return savedNote;

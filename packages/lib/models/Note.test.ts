@@ -307,6 +307,10 @@ describe('models/Note', () => {
 		await expect(Note.load(note.id, { fields: ['id', 'body'], useNoteLock: true })).rejects.toThrow('Gated note lock load is missing lock state');
 		// Resolves empty like a plain load, so callers keep their deleted-note handling.
 		await expect(Note.load('0123456789abcdef0123456789abcdef', { useNoteLock: true })).resolves.toBeUndefined();
+		// A row still encrypted by sync has no note lock body yet, so it comes back untouched.
+		const syncEncryptedId = '0123456789abcdef0123456789abcdee';
+		await Note.save({ id: syncEncryptedId, parent_id: '', is_locked: 1, encryption_applied: 1, encryption_cipher_text: 'cipher' }, { isNew: true });
+		expect(await Note.load(syncEncryptedId, { useNoteLock: true })).toMatchObject({ encryption_applied: 1, body: '' });
 
 		await Note.save(await Note.load(note.id, { useNoteLock: true }), { useNoteLock: true });
 		expect((await Note.load(note.id)).body).not.toBe(plainTextBody);
@@ -344,8 +348,10 @@ describe('models/Note', () => {
 		const resourceId = '06894e83b8f84d3d8cbe0f1587f9e226';
 		const note = await Note.save({ body: 'secret', is_locked: 1 }, { useNoteLock: true });
 
-		// Gated loaded data saved through an ungated path is encrypted instead of rejected.
-		await Note.save({ ...await Note.load(note.id, { useNoteLock: true }), body: 'edited' });
+		// Gated loaded data saved through an ungated path is encrypted instead of rejected, and the
+		// caller still gets the plaintext back.
+		const editedNote = await Note.save({ ...await Note.load(note.id, { useNoteLock: true }), body: 'edited' });
+		expect(editedNote.body).toBe('edited');
 		expect((await Note.load(note.id)).body).not.toBe('edited');
 		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe('edited');
 

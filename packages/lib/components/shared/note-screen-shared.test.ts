@@ -323,7 +323,7 @@ describe('note-screen-shared', () => {
 		expect(savedNote.body).toBe('enc(edited text)');
 	});
 
-	it('should load an unlocked note through the gate so its gated saves pass the marker check', async () => {
+	it('should mark an unlocked note as gated on reload so its gated saves pass the marker check', async () => {
 		const testNote = await Note.save({ title: 'Plain', body: 'plain text', parent_id: folderId });
 		const comp = makeComp(testNote);
 
@@ -337,7 +337,6 @@ describe('note-screen-shared', () => {
 		mockUnlockedSession();
 		const testNote = await Note.save({ title: 'Locked', body: '- [ ] task', is_locked: 1, parent_id: folderId });
 
-		// The viewer checkbox toggle saves the body without the gate, which hands back the encrypted row.
 		const comp = makeComp(testNote, { note: { ...testNote, body: '- [ ] task', isDecrypted: true } });
 		await shared.saveOneProperty(comp, 'body', '- [x] task');
 
@@ -352,8 +351,7 @@ describe('note-screen-shared', () => {
 		const decryptedNote = { ...encryptedNote, encryption_cipher_text: '', title: 'Title', body: 'Body' };
 		const decryptStarted = deferred<void>();
 		const decryption = deferred<typeof decryptedNote>();
-		// The gated reload after the decrypt reads back the row the decrypt saved.
-		jest.spyOn(Note, 'load').mockResolvedValueOnce(encryptedNote as never).mockResolvedValue(decryptedNote as never);
+		jest.spyOn(Note, 'load').mockResolvedValue(encryptedNote as never);
 		jest.spyOn(Note, 'decrypt').mockImplementation(() => {
 			decryptStarted.resolve();
 			return decryption.promise as never;
@@ -367,7 +365,7 @@ describe('note-screen-shared', () => {
 		decryption.resolve(decryptedNote);
 		await reloadPromise;
 
-		expect(component.setState).toHaveBeenCalledWith(expect.objectContaining({ note: decryptedNote }));
+		expect(component.setState).toHaveBeenCalledWith(expect.objectContaining({ note: { ...decryptedNote, isDecrypted: true } }));
 	});
 
 	it.each([
