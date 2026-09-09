@@ -672,7 +672,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Desktop],
 			show: (settings) => !!settings['ai.enabled'],
 			label: () => _('Allow remote AI providers'),
-			description: () => _('Required to use cloud-hosted AI models, including Joplin Cloud AI. When disabled, only on-device providers can be used.'),
+			description: () => _('Required to use cloud-hosted AI models, including Joplin Cloud AI. When disabled, only providers on your own device or private network can be used.'),
 			storage: SettingStorage.File,
 		},
 
