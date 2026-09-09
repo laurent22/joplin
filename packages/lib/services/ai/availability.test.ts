@@ -37,7 +37,7 @@ describe('availability', () => {
 
 	test.each([
 		['http://localhost:11434/v1'],
-		['http://192.168.1.50:11434/v1'],
+		['http://127.0.0.1:11434/v1'],
 	])('chatAvailability does not require an API key for %s', (baseUrl) => {
 		Setting.setValue('ai.enabled', true);
 		Setting.setValue('ai.allowRemote', false);
@@ -46,6 +46,16 @@ describe('availability', () => {
 		Setting.setValue('ai.chat.apiKey', '');
 		Setting.setValue('ai.chat.model', 'llama3');
 		expect(chatAvailability().available).toBe(true);
+	});
+
+	test('chatAvailability requires consent for a LAN endpoint', () => {
+		Setting.setValue('ai.enabled', true);
+		Setting.setValue('ai.allowRemote', false);
+		Setting.setValue('ai.chat.providerType', 'openai-compatible');
+		Setting.setValue('ai.chat.baseUrl', 'http://192.168.1.50:11434/v1');
+		Setting.setValue('ai.chat.apiKey', 'unused');
+		Setting.setValue('ai.chat.model', 'llama3');
+		expect(chatAvailability().reason).toBe(AvailabilityReason.RemoteNotAllowed);
 	});
 
 	test('chatAvailability reports missing-api-key for a remote openai-compatible endpoint', () => {

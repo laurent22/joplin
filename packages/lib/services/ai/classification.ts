@@ -1,46 +1,38 @@
 import { ProviderClassification, ProviderType } from './types';
 
-// The split is "does my data leave my private network", so loopback, LAN and
-// internal-only hostnames all count as local. `.local` is excluded on purpose:
-// mDNS can resolve it to any machine on an untrusted network.
-const loopbackHosts = new Set(['localhost', '::1', '0.0.0.0', '::']);
+// The split is "does this leave the user's device", because that is what
+// ai.allowRemote asks them to consent to. Only loopback stays on the device, so
+// LAN and internal-only hostnames are remote: a note sent to 192.168.1.50 goes
+// to another machine, over a link that is often plaintext HTTP. `.local` is
+// remote for the same reason plus mDNS resolving it to an untrusted machine.
+const loopbackHosts = new Set(['localhost', '::1']);
 
-const privateSuffixes = ['.localhost', '.internal', '.home.arpa'];
+const loopbackSuffixes = ['.localhost'];
 
 // Dotted quad is enough because new URL() has already canonicalised octal, hex,
 // decimal and short forms - `http://2130706433/` arrives here as "127.0.0.1".
-const isPrivateIpV4 = (host: string) => {
+const isLoopbackIpV4 = (host: string) => {
 	const parts = host.split('.');
 	if (parts.length !== 4) return false;
 
 	const bytes = parts.map(p => (/^\d{1,3}$/.test(p) ? Number(p) : -1));
 	if (bytes.some(b => b < 0 || b > 255)) return false;
 
-	const [a, b] = bytes;
-	if (a === 10) return true;
-	if (a === 127) return true;
-	if (a === 172 && b >= 16 && b <= 31) return true;
-	if (a === 192 && b === 168) return true;
-	if (a === 169 && b === 254) return true;
-	return false;
+	return bytes[0] === 127;
 };
 
-const isPrivateIpV6 = (host: string) => {
+const isLoopbackIpV6 = (host: string) => {
 	// URL.hostname keeps the brackets around IPv6 literals.
 	const address = host.replace(/^\[/, '').replace(/\]$/, '');
-	if (loopbackHosts.has(address)) return true;
-	// Unique local (fc00::/7) then link-local (fe80::/10).
-	if (/^f[cd][0-9a-f]{2}:/.test(address)) return true;
-	if (/^fe[89ab][0-9a-f]:/.test(address)) return true;
-	return false;
+	return loopbackHosts.has(address);
 };
 
-const isPrivateHost = (host: string) => {
+const isLoopbackHost = (host: string) => {
 	if (!host) return false;
 	if (loopbackHosts.has(host)) return true;
-	if (privateSuffixes.some(suffix => host === suffix.substring(1) || host.endsWith(suffix))) return true;
-	if (isPrivateIpV4(host)) return true;
-	if (isPrivateIpV6(host)) return true;
+	if (loopbackSuffixes.some(suffix => host === suffix.substring(1) || host.endsWith(suffix))) return true;
+	if (isLoopbackIpV4(host)) return true;
+	if (isLoopbackIpV6(host)) return true;
 	return false;
 };
 
@@ -60,7 +52,7 @@ const deriveClassification = (
 	if (providerType === 'anthropic') return 'remote';
 	if (providerType === 'joplin-cloud') return 'remote';
 	if (providerType === 'openai-compatible') {
-		return isPrivateHost(hostFromBaseUrl(baseUrl)) ? 'local' : 'remote';
+		return isLoopbackHost(hostFromBaseUrl(baseUrl)) ? 'local' : 'remote';
 	}
 	return 'remote';
 };
