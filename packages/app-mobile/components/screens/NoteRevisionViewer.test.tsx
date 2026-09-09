@@ -117,7 +117,7 @@ describe('screens/NoteRevisionViewer', () => {
 		});
 
 		await waitFor(() => {
-			expect(screen.getByText('This note is encrypted. Enter the note lock password to unlock encrypted notes for this session.')).toBeVisible();
+			expect(screen.getByText('This note is locked. Enter your password to unlock your notes for this session.')).toBeVisible();
 		});
 
 		store.dispatch({ type: 'SET_NOTE_LOCK_SESSION_UNLOCKED', value: true });
