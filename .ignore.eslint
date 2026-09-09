@@ -1895,6 +1895,7 @@ packages/lib/services/rest/routes/events.js
 packages/lib/services/rest/routes/folders.test.js
 packages/lib/services/rest/routes/folders.js
 packages/lib/services/rest/routes/master_keys.js
+packages/lib/services/rest/routes/mcp.test.js
 packages/lib/services/rest/routes/mcp.js
 packages/lib/services/rest/routes/notes.test.js
 packages/lib/services/rest/routes/notes.js
