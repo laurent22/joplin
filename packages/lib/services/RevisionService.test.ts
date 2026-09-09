@@ -274,6 +274,7 @@ describe('services/RevisionService', () => {
 	it('should create a revision for notes that are older than a given interval', (async () => {
 		const n1 = await Note.save({ title: 'hello' });
 		const noteId = n1.id;
+		const originalUpdatedTime = n1.updated_time;
 
 		await msleep(100);
 
@@ -291,8 +292,8 @@ describe('services/RevisionService', () => {
 			await revisionService().collectRevisions(); // Rev for old note created + Rev for new note
 			const all = await Revision.allByType(BaseModel.TYPE_NOTE, noteId);
 			expect(all.length).toBe(2);
-			expect(all[0].item_old_note_updated_time).toBe(n1.updated_time);
-			expect(all[1].item_old_note_updated_time).toBe(0);
+			expect(all[0].item_original_updated_time).toBe(originalUpdatedTime);
+			expect(all[1].item_original_updated_time).toBe(0);
 			const revNote1 = await revisionService().revisionNote(all, 0);
 			const revNote2 = await revisionService().revisionNote(all, 1);
 			expect(revNote1.title).toBe('hello');

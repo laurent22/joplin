@@ -341,7 +341,7 @@ export interface RevisionEntity {
   'id'?: string | null;
   'is_locked'?: number;
   'item_id'?: string;
-  'item_old_note_updated_time'?: number;
+  'item_original_updated_time'?: number;
   'item_type'?: number;
   'item_updated_time'?: number;
   'metadata_diff'?: string;
@@ -471,7 +471,7 @@ export const databaseSchema: DatabaseTables = {
 		force_sync: { type: 'number' },
 		id: { type: 'number' },
 		item_id: { type: 'string' },
-		item_old_note_updated_time: { type: 'number' },
+		item_original_updated_time: { type: 'number' },
 		item_location: { type: 'number' },
 		item_type: { type: 'number' },
 		remote_item_updated_time: { type: 'number' },

@@ -75,7 +75,7 @@ export default class RevisionService extends BaseService {
 		return md;
 	}
 
-	public async createNoteRevision_(note: NoteEntity, parentRevId: string = null, bypassInterval = false, itemOldNoteUpdatedTime = 0): Promise<RevisionEntity> {
+	public async createNoteRevision_(note: NoteEntity, parentRevId: string = null, bypassInterval = false, itemOriginalUpdatedTime = 0): Promise<RevisionEntity> {
 		try {
 			const parentRev = parentRevId ? await Revision.load(parentRevId) : await Revision.latestRevision(BaseModel.TYPE_NOTE, note.id);
 
@@ -84,7 +84,7 @@ export default class RevisionService extends BaseService {
 				item_type: BaseModel.TYPE_NOTE,
 				item_id: note.id,
 				item_updated_time: note.updated_time,
-				item_old_note_updated_time: itemOldNoteUpdatedTime,
+				item_original_updated_time: itemOriginalUpdatedTime,
 			};
 
 			const noteMd = this.noteMetadata_(note);
