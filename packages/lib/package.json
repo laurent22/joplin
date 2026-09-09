@@ -84,7 +84,7 @@
     "md5": "2.3.0",
     "md5-file": "5.0.0",
     "moment": "2.30.1",
-    "multiparty": "4.2.3",
+    "multiparty": "4.3.0",
     "mustache": "4.2.0",
     "nanoid": "5.1.11",
     "node-diff3": "3.2.1",
