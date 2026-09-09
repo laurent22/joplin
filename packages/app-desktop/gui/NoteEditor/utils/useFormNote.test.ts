@@ -191,6 +191,43 @@ describe('useFormNote', () => {
 	});
 
 
+	it('should show a locked note again after sync re-encrypts it and the decryption worker restores it', async () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		const testNote = await Note.save({ title: 'Locked', body: 'JLD01ciphertext', is_locked: 1 });
+		jest.spyOn(NoteLockSession.instance(), 'isUnlocked').mockReturnValue(true);
+		jest.spyOn(NoteLockSession.instance(), 'decryptedKey').mockReturnValue({ id: 'key-id', plainText: 'key' });
+		// Like the real decrypt, a row sync has not decrypted yet has no note lock body and fails.
+		const decryptBodyMock = jest.spyOn(NoteLockNote, 'decryptBody').mockImplementation(async note => {
+			if (note.encryption_applied) throw new Error('Invalid encryption identifier');
+			return { ...note, isDecrypted: true, body: 'secret' };
+		});
+		const onReloadInProgressChange = jest.fn();
+		const props = { ...defaultFormNoteProps, noteId: testNote.id, noteLockSessionUnlocked: true, editorNoteReloadTimeRequest: 0, onReloadInProgressChange };
+
+		try {
+			const formNote = renderHook(hookProps => useFormNote(hookProps), { initialProps: props });
+			await waitFor(() => expect(formNote.result.current.formNote.body).toBe('secret'));
+
+			// Sync overwrites the row with the encrypted item and asks the editor to reload.
+			await act(async () => {
+				await Note.save({ id: testNote.id, encryption_cipher_text: 'cipher_text', encryption_applied: 1 });
+			});
+			formNote.rerender({ ...props, editorNoteReloadTimeRequest: 1 });
+			await waitFor(() => expect(formNote.result.current.formNote).toMatchObject({ encryption_applied: 1 }));
+
+			// The decryption worker then writes the decrypted item back.
+			await act(async () => {
+				await Note.save({ id: testNote.id, title: 'Locked', body: 'JLD01ciphertext', is_locked: 1, encryption_cipher_text: '', encryption_applied: 0 }, { autoTimestamp: false, changeSource: ItemChange.SOURCE_DECRYPTION });
+			});
+			await waitFor(() => expect(formNote.result.current.formNote).toMatchObject({ encryption_applied: 0, body: 'secret' }), { timeout: 15_000 });
+			await waitFor(() => expect(onReloadInProgressChange).toHaveBeenLastCalledWith(false));
+			formNote.unmount();
+		} finally {
+			decryptBodyMock.mockRestore();
+			Setting.setValue('featureFlag.noteLock', false);
+		}
+	});
+
 	// Lacking is_conflict has previously caused UI issues. See https://github.com/laurent22/joplin/pull/10913
 	// for details.
 	it('should preserve value of is_conflict on save', async () => {
