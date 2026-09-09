@@ -210,7 +210,7 @@ describe('useFormNote', () => {
 
 			// Sync overwrites the row with the encrypted item and asks the editor to reload.
 			await act(async () => {
-				await Note.save({ id: testNote.id, encryption_cipher_text: 'cipher_text', encryption_applied: 1 });
+				await Note.save({ id: testNote.id, encryption_cipher_text: 'cipher_text', encryption_applied: 1, body: '' });
 			});
 			formNote.rerender({ ...props, editorNoteReloadTimeRequest: 1 });
 			await waitFor(() => expect(formNote.result.current.formNote).toMatchObject({ encryption_applied: 1 }));

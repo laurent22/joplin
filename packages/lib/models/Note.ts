@@ -902,8 +902,9 @@ export default class Note extends BaseItem {
 		let plainTextBodyToReturn: string = null;
 		// An ungated save with a plaintext body goes through the note lock path too, so a missed
 		// gate on a new feature encrypts instead of leaking plaintext. Ciphertext bodies pass
-		// through untouched, the same way data saved via sync does.
-		if (isNoteLockEnabled() && (options?.useNoteLock || ('body' in o && !isValidHeaderIdentifier((o.body ?? '').substring(0, 5), false, true)))) {
+		// through untouched, the same way data saved via sync does, and so does a row that sync
+		// still holds encrypted, since its empty body is not a note lock body yet.
+		if (isNoteLockEnabled() && (options?.useNoteLock || ('body' in o && !o.encryption_applied && !isValidHeaderIdentifier((o.body ?? '').substring(0, 5), false, true)))) {
 			if (o.is_locked === undefined && !isNew && oldNote) o.is_locked = oldNote.is_locked;
 			// Callers use the returned note to update UI state, so it must carry the plaintext
 			// body even though the encrypted one is what gets persisted.
