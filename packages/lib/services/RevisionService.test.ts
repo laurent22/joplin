@@ -291,6 +291,8 @@ describe('services/RevisionService', () => {
 			await revisionService().collectRevisions(); // Rev for old note created + Rev for new note
 			const all = await Revision.allByType(BaseModel.TYPE_NOTE, noteId);
 			expect(all.length).toBe(2);
+			expect(all[0].item_old_note_updated_time).toBe(n1.updated_time);
+			expect(all[1].item_old_note_updated_time).toBe(0);
 			const revNote1 = await revisionService().revisionNote(all, 0);
 			const revNote2 = await revisionService().revisionNote(all, 1);
 			expect(revNote1.title).toBe('hello');

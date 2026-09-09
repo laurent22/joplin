@@ -183,7 +183,7 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 
 		revisionListItems.push(
 			<option key={rev.id} value={rev.id}>
-				{`${time.formatMsToLocal(rev.item_updated_time)} (${stats})`}
+				{`${time.formatMsToLocal(rev.item_old_note_updated_time || rev.item_updated_time)} (${stats})`}
 			</option>,
 		);
 	}

@@ -75,7 +75,7 @@ export default class RevisionService extends BaseService {
 		return md;
 	}
 
-	public async createNoteRevision_(note: NoteEntity, parentRevId: string = null, bypassInterval = false): Promise<RevisionEntity> {
+	public async createNoteRevision_(note: NoteEntity, parentRevId: string = null, bypassInterval = false, itemOldNoteUpdatedTime = 0): Promise<RevisionEntity> {
 		try {
 			const parentRev = parentRevId ? await Revision.load(parentRevId) : await Revision.latestRevision(BaseModel.TYPE_NOTE, note.id);
 
@@ -84,6 +84,7 @@ export default class RevisionService extends BaseService {
 				item_type: BaseModel.TYPE_NOTE,
 				item_id: note.id,
 				item_updated_time: note.updated_time,
+				item_old_note_updated_time: itemOldNoteUpdatedTime,
 			};
 
 			const noteMd = this.noteMetadata_(note);
@@ -165,7 +166,7 @@ export default class RevisionService extends BaseService {
 									// We also want to avoid creating 2 revisions with exactly the same timestamp, so deduct 1 ms from the timestamp on the old revision to avoid this
 									oldNote.updated_time = note.updated_time - 1;
 									oldNote.user_updated_time = oldNote.updated_time;
-									const rev = await this.createNoteRevision_(oldNote);
+									const rev = await this.createNoteRevision_(oldNote, null, false, oldNote.updated_time);
 									if (rev) {
 										oldNoteSaved = true;
 										logger.debug(sprintf('collectRevisions: Saved revision %s (old note)', rev.id));

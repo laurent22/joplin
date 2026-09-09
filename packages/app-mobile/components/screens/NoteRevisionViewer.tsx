@@ -150,7 +150,7 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 		for (const revision of reversedRevisions) {
 			const stats = Revision.revisionPatchStatsText(revision);
 			result.push({
-				label: `${formatMsToLocal(revision.item_updated_time)} (${stats})`,
+				label: `${formatMsToLocal(revision.item_old_note_updated_time || revision.item_updated_time)} (${stats})`,
 				value: revision.id,
 			});
 		}
