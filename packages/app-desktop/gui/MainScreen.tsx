@@ -31,6 +31,8 @@ import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import executeCallbackUrl from './MainScreen/handleCallbackUrl';
 import ElectronAppWrapper from '../ElectronAppWrapper';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
+import type { NoteLockKeyConflict } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import invitationRespond from '@joplin/lib/services/share/invitationRespond';
 import restart from '../services/restart';
@@ -61,6 +63,7 @@ interface Props {
 	hasDisabledEncryptionItems: boolean;
 	hasMissingSyncCredentials: boolean;
 	showMissingMasterKeyMessage: boolean;
+	showNoteLockKeyConflictMessage: boolean;
 	showNeedUpgradingMasterKeyMessage: boolean;
 	showShouldReencryptMessage: boolean;
 	themeId: number;
@@ -517,6 +520,13 @@ class MainScreenComponent extends React.Component<Props, State> {
 			});
 		};
 
+		const onMigrateLockedNotes = () => {
+			this.props.dispatch({
+				type: 'DIALOG_OPEN',
+				name: 'noteLockMigration',
+			});
+		};
+
 		const onViewJoplinCloudLoginScreen = () => {
 			this.props.dispatch({
 				type: 'NAV_GO',
@@ -579,6 +589,12 @@ class MainScreenComponent extends React.Component<Props, State> {
 				_('The synchronisation password is missing.'),
 				_('Set the password'),
 				onViewSyncSettingsScreen,
+			);
+		} else if (this.props.showNoteLockKeyConflictMessage) {
+			msg = this.renderNotificationMessage(
+				_('Synchronisation is stopped because the sync target uses a different note lock password.'),
+				_('Migrate your locked notes'),
+				onMigrateLockedNotes,
 			);
 		} else if (this.props.shouldUpgradeSyncTarget) {
 			msg = this.renderNotificationMessage(
@@ -697,6 +713,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		if (!props) props = this.props;
 		return props.hasDisabledSyncItems ||
 			props.showMissingMasterKeyMessage ||
+			props.showNoteLockKeyConflictMessage ||
 			props.hasMissingSyncCredentials ||
 			props.showNeedUpgradingMasterKeyMessage ||
 			props.showShouldReencryptMessage ||
@@ -818,6 +835,7 @@ const mapStateToProps = (state: AppState) => {
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
 		hasDisabledEncryptionItems: state.hasDisabledEncryptionItems,
 		showMissingMasterKeyMessage: showMissingMasterKeyMessage(syncInfo, state.notLoadedMasterKeys),
+		showNoteLockKeyConflictMessage: isNoteLockEnabled() && !!(state.settings['noteLock.conflictNoteLockKey'] as Partial<NoteLockKeyConflict>)?.noteLockKey,
 		showNeedUpgradingMasterKeyMessage: showNeedUpgradingEnabledMasterKeyMessage,
 		showShouldReencryptMessage: state.settings['encryption.shouldReencrypt'] >= Setting.SHOULD_REENCRYPT_YES,
 		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,

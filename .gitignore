@@ -421,6 +421,8 @@ packages/app-desktop/gui/NoteListItem/utils/useRenderedNote.js
 packages/app-desktop/gui/NoteListItem/utils/useRootElement.test.js
 packages/app-desktop/gui/NoteListItem/utils/useRootElement.js
 packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.js
+packages/app-desktop/gui/NoteLockMigrationDialog/Dialog.test.js
+packages/app-desktop/gui/NoteLockMigrationDialog/Dialog.js
 packages/app-desktop/gui/NoteLockUnlockDialog/Dialog.js
 packages/app-desktop/gui/NotePropertiesDialog.js
 packages/app-desktop/gui/NoteRevisionViewer.js
