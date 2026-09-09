@@ -111,9 +111,12 @@ describe('InteropService_Importer_OneNote', () => {
 		const notes = await importNote(`${supportDir}/onenote/simple_notebook.zip`);
 		const note = notes.find(note => note.title === 'Page title');
 		const { window } = new JSDOM(note.body);
-		const outline = window.document.querySelector('.container-outline');
+		const outline = window.document.querySelector('.container-outline:has(p)');
 		expect(outline.querySelector('.ink-text, .ink-space')).toBeNull();
 		expectWithInstructions(window.getComputedStyle(outline).fontSize).toBe('');
+		const paragraph = outline.querySelector('p');
+		paragraph.style.removeProperty('font-size');
+		expectWithInstructions(window.getComputedStyle(paragraph).fontSize).toBe('');
 	});
 
 	it('should convert XPS printouts to image resources on Windows', async () => {
