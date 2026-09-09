@@ -380,10 +380,11 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			{
 				attachFile: this.attachFile.bind(this),
 				hideKeyboard: () => {
+					// The search panel is a native TextInput outside the editor WebView.
+					// Dismiss the native keyboard regardless of which editor is enabled.
+					Keyboard.dismiss();
 					if (this.useEditorBeta()) {
 						this.editorRef?.current?.hideKeyboard();
-					} else {
-						Keyboard.dismiss();
 					}
 				},
 				insertText: this.insertText.bind(this),
