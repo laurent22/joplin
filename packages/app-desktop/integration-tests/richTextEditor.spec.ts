@@ -29,7 +29,7 @@ test.describe('richTextEditor', () => {
 		const outsideText = richTextEditor.body.getByText('Outside outline');
 		await expect(outsideText).toBeVisible();
 		const fontSize = await outsideText.evaluate(element => getComputedStyle(element).fontSize);
-		await expect(richTextEditor.body.getByText('Inside outline')).toHaveCSS('font-size', fontSize);
+		await expect(richTextEditor.body.locator('.container-outline').getByText('Inside outline')).toHaveCSS('font-size', fontSize);
 		const mixedOutline = richTextEditor.body.locator('.container-outline').filter({ hasText: 'Text beside ink' });
 		await expect(mixedOutline.locator('.ink-text img')).toHaveCount(1);
 		await expect(mixedOutline.getByText('Text beside ink')).toHaveCSS('font-size', fontSize);
