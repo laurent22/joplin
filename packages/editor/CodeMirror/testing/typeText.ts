@@ -7,7 +7,7 @@ const typeText = (editor: EditorView, text: string, key?: KeyInfo) => {
 	const isBackspace = !!key && key.key === 'Backspace' && text === '';
 
 	let backspaceOffset = 0;
-	if (selection.main.empty && isBackspace) {
+	if (isBackspace && selection.main.empty && selection.main.from > 0) {
 		backspaceOffset = -1;
 	}
 
