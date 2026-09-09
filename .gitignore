@@ -1776,6 +1776,8 @@ packages/lib/services/noteList/renderViewProps.test.js
 packages/lib/services/noteList/renderViewProps.js
 packages/lib/services/noteList/renderers.js
 packages/lib/services/noteLock/NoteLockKey.js
+packages/lib/services/noteLock/NoteLockKeyMigration.test.js
+packages/lib/services/noteLock/NoteLockKeyMigration.js
 packages/lib/services/noteLock/NoteLockNote.js
 packages/lib/services/noteLock/NoteLockService.test.js
 packages/lib/services/noteLock/NoteLockService.js
@@ -1936,6 +1938,7 @@ packages/lib/services/synchronizer/Synchronizer.baseFields.test.js
 packages/lib/services/synchronizer/Synchronizer.basics.test.js
 packages/lib/services/synchronizer/Synchronizer.conflicts.test.js
 packages/lib/services/synchronizer/Synchronizer.e2ee.test.js
+packages/lib/services/synchronizer/Synchronizer.noteLock.test.js
 packages/lib/services/synchronizer/Synchronizer.ppk.test.js
 packages/lib/services/synchronizer/Synchronizer.resources.test.js
 packages/lib/services/synchronizer/Synchronizer.revisions.test.js

@@ -596,6 +596,16 @@ export default class Note extends BaseItem {
 		return r && r.total ? r.total : 0;
 	}
 
+	// Trashed and conflict notes count too: their content still depends on the note lock key.
+	public static async hasLockedNotes() {
+		return !!(await this.db().selectOne('SELECT 1 FROM notes WHERE is_locked = 1 LIMIT 1'));
+	}
+
+	public static async lockedNoteIds() {
+		const rows = await this.db().selectAll<{ id: string }>('SELECT id FROM notes WHERE is_locked = 1');
+		return rows.map(row => row.id);
+	}
+
 	public static unconflictedNotes() {
 		return this.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0');
 	}

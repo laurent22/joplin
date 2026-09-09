@@ -8,6 +8,7 @@ import { AppType, SettingItemSubType, SettingItemType, SettingStorage, SyncStart
 import { defaultListColumns } from '../../services/plugins/api/noteListType';
 import type { PluginSettings } from '../../services/plugins/PluginService';
 import type { PublicPrivateKeyPair } from '../../services/e2ee/ppk/ppk';
+import type { NoteLockKeyConflict } from '../../services/synchronizer/syncInfoUtils';
 import { EmptyObject } from '@joplin/utils/types';
 const ObjectUtils = require('../../ObjectUtils');
 import { toTitleCase } from '../../string-utils';
@@ -2323,6 +2324,24 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			label: () => _('Auto relock when switching notes'),
 			show: (settings) => !!settings['featureFlag.noteLock'],
 			storage: SettingStorage.File,
+		},
+
+		'noteLock.passwordReset': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: false,
+		},
+
+		'noteLock.keyIdToReset': {
+			value: '',
+			type: SettingItemType.String,
+			public: false,
+		},
+
+		'noteLock.conflictNoteLockKey': {
+			value: {} as Partial<NoteLockKeyConflict>,
+			type: SettingItemType.Object,
+			public: false,
 		},
 
 		'featureFlag.autoUpdaterServiceEnabled': {

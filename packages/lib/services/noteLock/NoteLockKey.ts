@@ -1,4 +1,5 @@
 import uuid from '../../uuid';
+import Setting from '../../models/Setting';
 import EncryptionService from '../e2ee/EncryptionService';
 import { MasterKeyEntity } from '../e2ee/types';
 import { localSyncInfo, saveLocalSyncInfo } from '../synchronizer/syncInfoUtils';
@@ -39,6 +40,8 @@ export default class NoteLockKey {
 
 		const syncInfo = localSyncInfo();
 		syncInfo.noteLockKey = key;
+		// Only a key migration replaces the sync migration id, so a reset keeps the lineage it belongs to.
+		if (!syncInfo.syncMigrationId) syncInfo.syncMigrationId = uuid.create();
 		saveLocalSyncInfo(syncInfo);
 
 		return key;
@@ -56,7 +59,12 @@ export default class NoteLockKey {
 	// Rotate through NoteLockSession.reset() rather than calling this directly, so the session locks
 	// and drops the old key as part of the rotation.
 	public async reset(password: string) {
-		return this.save(await this.encryptionService_.generateMasterKey(password));
+		// The replaced id is what the sync target is expected to hold; a second reset before that sync keeps the first.
+		if (!Setting.value('noteLock.keyIdToReset')) Setting.setValue('noteLock.keyIdToReset', this.load()?.id ?? '');
+		const key = this.save(await this.encryptionService_.generateMasterKey(password));
+		// Lets the next sync push the new key to the target instead of adopting the old one back.
+		Setting.setValue('noteLock.passwordReset', true);
+		return key;
 	}
 
 	public async changePassword(currentPassword: string, newPassword: string) {

@@ -1,11 +1,13 @@
 import { afterAllCleanUp, setupDatabaseAndSynchronizer, logger, switchClient, encryptionService, msleep, fileApi } from '../../testing/test-utils';
 import MasterKey from '../../models/MasterKey';
-import { checkIfCanSync, localSyncInfo, localSyncInfoSelector, masterKeyEnabled, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyEnabled, setMasterKeyHasBeenUsed, SyncInfo, syncInfoEquals, checkSyncTargetIsValid, fetchSyncInfo, onRevisionServiceSettingsChanged, setAppMinVersion } from './syncInfoUtils';
+import { checkIfCanSync, localSyncInfo, localSyncInfoSelector, masterKeyEnabled, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyEnabled, setMasterKeyHasBeenUsed, SyncInfo, syncInfoEquals, checkSyncTargetIsValid, fetchSyncInfo, onRevisionServiceSettingsChanged, setAppMinVersion, checkNoteLockKeyConflict, checkNoteLockKeyMigrationId } from './syncInfoUtils';
 import Setting from '../../models/Setting';
 import BaseItem from '../../models/BaseItem';
 import BaseModel from '../../models/BaseItem';
 import Logger from '@joplin/utils/Logger';
 import { State } from '../../reducer';
+import { MasterKeyEntity } from '../e2ee/types';
+import { ErrorCode } from '../../errors';
 
 describe('syncInfoUtils', () => {
 	it('should keep selected sync info stable while the cache is unchanged', () => {
@@ -150,23 +152,82 @@ describe('syncInfoUtils', () => {
 		expect(mergeSyncInfos(syncInfo1, syncInfo2).appMinVersion).toBe('0.0.0');
 	});
 
-	it('should merge sync target info and keep the latest note lock key', () => {
-		const syncInfo1 = new SyncInfo();
-		syncInfo1.noteLockKey = {
-			id: '1',
-			content: 'content1',
-			updated_time: 100,
-		};
+	const noteLockKey = (id: string, updated_time: number): MasterKeyEntity => ({ id, content: `content${id}-${updated_time}`, updated_time });
 
-		const syncInfo2 = new SyncInfo();
-		syncInfo2.noteLockKey = {
-			id: '2',
-			content: 'content2',
-			updated_time: 200,
-		};
+	const syncInfoWithNoteLockKey = (key: MasterKeyEntity, syncMigrationId: string) => {
+		const syncInfo = new SyncInfo();
+		syncInfo.noteLockKey = key;
+		syncInfo.syncMigrationId = syncMigrationId;
+		return syncInfo;
+	};
 
-		expect(mergeSyncInfos(syncInfo1, syncInfo2).noteLockKey).toEqual(syncInfo2.noteLockKey);
-		expect(mergeSyncInfos(new SyncInfo(), syncInfo1).noteLockKey).toEqual(syncInfo1.noteLockKey);
+	test.each([
+		['the newest copy of the same key', noteLockKey('1', 100), 'L1', noteLockKey('1', 200), 'L1', false, 'remote'],
+		['the local key when a password reset in the same lineage propagates', noteLockKey('2', 100), 'L1', noteLockKey('1', 200), 'L1', true, 'local'],
+		['the remote key in the same lineage without a propagating reset', noteLockKey('2', 300), 'L1', noteLockKey('1', 200), 'L1', false, 'remote'],
+		['the remote key from a different lineage even with a propagating reset', noteLockKey('2', 300), 'L2', noteLockKey('1', 200), 'L1', true, 'remote'],
+		['the only key, when it is remote', null, '', noteLockKey('1', 200), 'L1', false, 'remote'],
+		['the only key, when it is local', noteLockKey('1', 200), 'L1', null, '', false, 'local'],
+	])('should merge sync target info and keep %s', (_description, localKey, localLineage, remoteKey, remoteLineage, resetPropagates, winner) => {
+		const local = syncInfoWithNoteLockKey(localKey, localLineage);
+		const remote = syncInfoWithNoteLockKey(remoteKey, remoteLineage);
+		const expected = winner === 'local' ? local : remote;
+
+		const merged = mergeSyncInfos(local, remote, { resetPropagates });
+
+		expect(merged.noteLockKey).toEqual(expected.noteLockKey);
+		expect(merged.syncMigrationId).toBe(expected.syncMigrationId);
+	});
+
+	it('should stop the sync and park the remote key when lineages differ and local notes are locked', () => {
+		const local = syncInfoWithNoteLockKey(noteLockKey('2', 300), 'L2');
+		const remote = syncInfoWithNoteLockKey(noteLockKey('1', 200), 'L1');
+
+		expect(() => checkNoteLockKeyConflict(local, remote, true)).toThrow(expect.objectContaining({ code: ErrorCode.NoteLockKeyConflict }));
+		expect(Setting.value('noteLock.conflictNoteLockKey')).toEqual({ noteLockKey: remote.noteLockKey, syncMigrationId: 'L1' });
+	});
+
+	test.each([
+		['lineages differ but no local note is locked', 'L2', false],
+		['the keys share a lineage', 'L1', true],
+	])('should let the sync continue when %s', (_description, localLineage, hasLocalLockedNotes) => {
+		const local = syncInfoWithNoteLockKey(noteLockKey('2', 300), localLineage);
+		const remote = syncInfoWithNoteLockKey(noteLockKey('1', 200), 'L1');
+
+		expect(() => checkNoteLockKeyConflict(local, remote, hasLocalLockedNotes)).not.toThrow();
+		expect(Setting.value('noteLock.conflictNoteLockKey')).toEqual({});
+	});
+
+	it('should keep rejecting syncs while a conflict key is parked', () => {
+		const parked = { noteLockKey: noteLockKey('1', 200), syncMigrationId: 'L1' };
+		Setting.setValue('noteLock.conflictNoteLockKey', parked);
+		const local = syncInfoWithNoteLockKey(noteLockKey('3', 300), 'L3');
+		const remote = syncInfoWithNoteLockKey(noteLockKey('3', 300), 'L3');
+
+		expect(() => checkNoteLockKeyConflict(local, remote, false)).toThrow(expect.objectContaining({ code: ErrorCode.NoteLockKeyConflict }));
+		expect(Setting.value('noteLock.conflictNoteLockKey')).toEqual(parked);
+	});
+
+	test.each([
+		['a key without a sync migration id', noteLockKey('1', 200), '', true],
+		['a key with a sync migration id', noteLockKey('1', 200), 'L1', false],
+		['no key', null, '', false],
+	])('should check the sync migration id: %s', (_description, key, syncMigrationId, throws) => {
+		const syncInfo = syncInfoWithNoteLockKey(key, syncMigrationId);
+		for (const isRemote of [false, true]) {
+			const check = () => checkNoteLockKeyMigrationId(syncInfo, isRemote);
+			if (throws) {
+				expect(check).toThrow('migration ID');
+			} else {
+				expect(check).not.toThrow();
+			}
+		}
+	});
+
+	it('should serialize and load the sync migration id', () => {
+		const syncInfo = syncInfoWithNoteLockKey(noteLockKey('1', 200), 'L1');
+		expect(new SyncInfo(syncInfo.serialize()).syncMigrationId).toBe('L1');
+		expect(new SyncInfo(JSON.stringify({ version: 3 })).syncMigrationId).toBe('');
 	});
 
 	it('should merge sync target info and takes into account usage of master key - 1', async () => {
@@ -313,6 +374,7 @@ describe('syncInfoUtils', () => {
 				'value': '400227d2222c4d3bb7346514861c643b',
 			},
 			'appMinVersion': '0.0.0',
+			'syncMigrationId': '',
 			'e2ee': {
 				'updatedTime': 0,
 				'value': true,

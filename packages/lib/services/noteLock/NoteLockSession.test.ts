@@ -1,4 +1,5 @@
 import { afterAllCleanUp, encryptionService, setupDatabaseAndSynchronizer, switchClient, synchronizerStart } from '../../testing/test-utils';
+import Setting from '../../models/Setting';
 import EncryptionService from '../e2ee/EncryptionService';
 import { localSyncInfo, saveLocalSyncInfo } from '../synchronizer/syncInfoUtils';
 import NoteLockKey, { DecryptedNoteLockKey } from './NoteLockKey';
@@ -137,6 +138,23 @@ describe('NoteLockSession', () => {
 
 		await expect(unlocking).rejects.toThrow('key changed while unlocking');
 		expect(session.isUnlocked()).toBe(false);
+	});
+
+	it('should keep the sync migration id and the first replaced key id through password resets', async () => {
+		const session = NoteLockSession.instance();
+		const firstKey = await NoteLockKey.instance().create('123456');
+		const syncMigrationId = localSyncInfo().syncMigrationId;
+		expect(syncMigrationId).toHaveLength(32);
+		expect(Setting.value('noteLock.passwordReset')).toBe(false);
+
+		await session.reset('654321');
+		expect(localSyncInfo().syncMigrationId).toBe(syncMigrationId);
+		expect(Setting.value('noteLock.passwordReset')).toBe(true);
+		expect(Setting.value('noteLock.keyIdToReset')).toBe(firstKey.id);
+
+		// A second reset before a sync still has to replace the key the sync target holds.
+		await session.reset('999999');
+		expect(Setting.value('noteLock.keyIdToReset')).toBe(firstKey.id);
 	});
 
 	it('should not install a key that was reset while unlocking', async () => {
