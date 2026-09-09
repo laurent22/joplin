@@ -71,16 +71,16 @@ export default class SyncTargetRegistry {
 		return this.infoById(id);
 	}
 
-	public static exists(id: number) {
+	private static exists_(id: number) {
 		return hasOwnProperty(this.reg, String(id));
 	}
 
 	public static idToLabelOrEmpty(id: number) {
-		return this.exists(id) ? this.classById(id)?.label() : '';
+		return this.exists_(id) ? this.classById(id)?.label() : '';
 	}
 
 	public static idToName(id: number) {
-		return this.reg[id]?.targetName();
+		return this.reg[id].targetName();
 	}
 
 	public static idAndLabelPlainObject(os: string, includeKeys: string[]|null = null) {
