@@ -1,6 +1,6 @@
 {
   "name": "@joplin/plugin-repo-cli",
-  "version": "3.7.3",
+  "version": "3.7.4",
   "description": "",
   "main": "./dist/index.js",
   "bin": "./dist/index.js",
@@ -25,9 +25,9 @@
     "yargs": "17.7.2"
   },
   "devDependencies": {
-    "@joplin/lib": "~3.7",
-    "@joplin/tools": "~3.7",
-    "@joplin/utils": "~3.7",
+    "@joplin/lib": "^3.7.1",
+    "@joplin/tools": "^3.7.1",
+    "@joplin/utils": "^3.7.1",
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.14",
     "@types/node": "18.19.130",

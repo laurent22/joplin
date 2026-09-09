@@ -2303,13 +2303,24 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 		},
 
+		'sync.autoMergeConflicts': {
+			value: true,
+			type: SettingItemType.Bool,
+			section: 'sync',
+			public: true,
+			label: () => _('Automatically merge non-conflicting note changes'),
+			description: () => _('When the same note is edited on two devices, changes made to different lines are usually merged automatically. In rare cases, automatic merging may result in duplicated content or formatting changes'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+
 		'noteLock.lockOnNoteSwitch': {
 			value: false,
 			type: SettingItemType.Bool,
 			public: true,
 			appTypes: [AppType.Desktop, AppType.Mobile],
 			section: 'noteLock',
-			label: () => _('Auto lock when switching note'),
+			label: () => _('Auto relock when switching notes'),
 			show: (settings) => !!settings['featureFlag.noteLock'],
 			storage: SettingStorage.File,
 		},
