@@ -42,7 +42,7 @@ const clampSelectionToDocument = (selection: EditorSelection, doc: Text) => {
 
 export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) => ViewPlugin.fromClass(class {
 	public decorations: DecorationSet = Decoration.set([]);
-	private mouseSelection_: MouseSelectionState|null = null;
+	private mouseSelectionBefore_: MouseSelectionState|null = null;
 
 	public constructor(private view: EditorView) {
 		view.dom.addEventListener('mousedown', this.onMouseDown, true);
@@ -57,16 +57,16 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 
 	private onMouseDown = (event: MouseEvent) => {
 		if (event.button === 0) {
-			this.mouseSelection_ = { initialSelection: this.view.state.selection };
+			this.mouseSelectionBefore_ = { initialSelection: this.view.state.selection };
 		}
 	};
 
 	private onMouseUp = () => {
-		if (this.mouseSelection_) {
+		if (this.mouseSelectionBefore_) {
 			// To prevent unnecessary scroll on iOS, decoration changes need to
 			// happen *after* the gesture ends.
 			requestAnimationFrame(() => {
-				this.mouseSelection_ = null;
+				this.mouseSelectionBefore_ = null;
 				this.view.dispatch({
 					effects: updateInlineDecorationsEffect.of(null),
 				});
@@ -77,10 +77,10 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 	private updateDecorations(state: EditorState, visibleRanges: readonly VisibleRange[]) {
 		const doc = state.doc;
 		let selection = state.selection;
-		if (this.mouseSelection_?.initialSelection) {
-			selection = clampSelectionToDocument(this.mouseSelection_.initialSelection, doc);
+		if (this.mouseSelectionBefore_?.initialSelection) {
+			selection = clampSelectionToDocument(this.mouseSelectionBefore_.initialSelection, doc);
 		}
-		if (this.mouseSelection_) {
+		if (this.mouseSelectionBefore_) {
 			state = state.update(
 				{ selection },
 			).state;
@@ -188,6 +188,12 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 			transaction.effects.some(effect => effect.is(updateInlineDecorationsEffect))
 			|| extensionSpec.shouldFullReRender?.(transaction)
 		));
+
+		// Document changes move the selection, so the original selection may no longer
+		// be valid:
+		if (update.docChanged) {
+			this.mouseSelectionBefore_ = null;
+		}
 
 		if (update.docChanged || update.viewportChanged || update.selectionSet || forceUpdate) {
 			this.updateDecorations(update.state, update.view.visibleRanges);
