@@ -104,7 +104,7 @@ describe('WarningBanner', () => {
 	test.each([
 		'Joplin Cloud' as const,
 		'Joplin Server' as const,
-	])('should display a warning banner when %s credentials are invalid', (syncTarget) => {
+	])('invalid credentials banner for %s should link to a login screen', (syncTarget) => {
 		const isJoplinCloud = syncTarget === 'Joplin Cloud';
 		Setting.setValue('sync.target', isJoplinCloud ? 10 : 9);
 		render(<WarningBannerWrapper showInvalidJoplinCloudCredential={true} syncTargetId={Setting.value('sync.target')}/>);
