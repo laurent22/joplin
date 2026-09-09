@@ -111,12 +111,12 @@ class ConfigScreenComponent extends React.Component<Props, State> {
 	private async checkSyncConfig_() {
 		const syncTarget = this.state.settings['sync.target'];
 		if (isJoplinOAuthSyncTarget(syncTarget)) {
-			const isAuthenticated = await reg.syncTarget().isAuthenticated();
+			const syncTarget = reg.syncTarget();
+			const isAuthenticated = await syncTarget.isAuthenticated();
 			if (!isAuthenticated) {
 				return this.props.dispatch({
 					type: 'NAV_GO',
-					routeName: 'JoplinOAuthLogin',
-					syncTargetId: syncTarget,
+					routeName: syncTarget.authRouteName(),
 				});
 			}
 		}
