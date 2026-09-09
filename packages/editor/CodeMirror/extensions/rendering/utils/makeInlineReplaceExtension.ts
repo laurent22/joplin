@@ -4,10 +4,11 @@
 import { EditorView, Decoration, DecorationSet, WidgetType } from '@codemirror/view';
 import { ViewPlugin, ViewUpdate } from '@codemirror/view';
 import { syntaxTree } from '@codemirror/language';
-import { EditorSelection, EditorState, Range, StateEffect, Text } from '@codemirror/state';
+import { EditorSelection, EditorState, Range, StateEffect } from '@codemirror/state';
 import { SyntaxNodeRef } from '@lezer/common';
 import { ReplacementExtension } from '../types';
 import nodeIntersectsSelection from './nodeIntersectsSelection';
+import clampSelectionToDocument from '../../../utils/clampSelectionToDocument';
 
 const updateInlineDecorationsEffect = StateEffect.define();
 
@@ -19,26 +20,6 @@ interface VisibleRange {
 	from: number;
 	to: number;
 }
-
-const clampSelectionToDocument = (selection: EditorSelection, doc: Text) => {
-	const newRanges = [];
-	let changed = false;
-	for (const range of selection.ranges) {
-		const newAnchor = Math.min(range.anchor, doc.length);
-		const newHead = Math.min(range.head, doc.length);
-		if (newAnchor !== range.anchor || newHead !== range.head) {
-			newRanges.push(EditorSelection.range(newAnchor, newHead));
-			changed = true;
-		} else {
-			newRanges.push(range);
-		}
-	}
-	if (changed) {
-		return EditorSelection.create(newRanges, selection.mainIndex);
-	} else {
-		return selection;
-	}
-};
 
 export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) => ViewPlugin.fromClass(class {
 	public decorations: DecorationSet = Decoration.set([]);
@@ -81,9 +62,7 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 			selection = clampSelectionToDocument(this.mouseSelectionBefore_.initialSelection, doc);
 		}
 		if (this.mouseSelectionBefore_) {
-			state = state.update(
-				{ selection },
-			).state;
+			state = state.update({ selection }).state;
 		}
 		const cursorLine = doc.lineAt(selection.main.anchor);
 

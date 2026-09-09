@@ -1187,6 +1187,8 @@ packages/editor/CodeMirror/testing/pressReleaseKey.js
 packages/editor/CodeMirror/testing/typeText.js
 packages/editor/CodeMirror/testing/visibleEditorText.js
 packages/editor/CodeMirror/theme.js
+packages/editor/CodeMirror/utils/clampSelectionToDocument.test.js
+packages/editor/CodeMirror/utils/clampSelectionToDocument.js
 packages/editor/CodeMirror/utils/findPositionMatchingLink.test.js
 packages/editor/CodeMirror/utils/findPositionMatchingLink.js
 packages/editor/CodeMirror/utils/formatting/RegionSpec.js
