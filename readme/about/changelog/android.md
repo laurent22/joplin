@@ -1,5 +1,9 @@
 # Joplin Android Changelog
 
+## [android-v3.7.10](https://github.com/laurent22/joplin/releases/tag/android-v3.7.10) - 2026-09-10T17:52:30Z
+
+- Fixed: Fix WebDAV sync error "Protocol https: not supported" on servers that redirect (#16488) (#16486)
+
 ## [android-v3.7.9](https://github.com/laurent22/joplin/releases/tag/android-v3.7.9) - 2026-09-10T15:15:18Z
 
 - Improved: Remove sync wizard button from config screen (#16458) (#16442 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
