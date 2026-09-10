@@ -1186,15 +1186,20 @@ export default class ItemModel extends BaseModel<Item> {
 		}
 
 		return this.withTransaction(async () => {
+			// Savepoint needed because on Postgres a failed statement aborts the whole
+			// transaction, and we recover from the unique constraint error below.
+			const savePoint = await this.setSavePoint();
+
 			try {
 				item = await super.save(item, options);
+				await this.releaseSavePoint(savePoint);
 			} catch (error) {
+				await this.rollbackSavePoint(savePoint);
+
 				if (isUniqueConstraintError(error)) {
-					// The item was created by a concurrent request between the moment we
-					// checked whether it exists and the moment we inserted it. This happens
-					// when a client retries an upload that is in fact still being processed.
-					// Since (name, owner_id) already identifies the item, save it again as an
-					// update, so that retrying an upload is not treated as an error.
+					// The item was created by a concurrent request - typically a client
+					// retrying an upload that is still being processed. Save it as an update
+					// so that the retry is not treated as an error.
 					const existingItem = await this.loadByName(item.owner_id || userId, item.name, { fields: ['id'] });
 
 					if (!existingItem) {
