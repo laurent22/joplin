@@ -17,6 +17,7 @@ import com.facebook.react.defaults.DefaultReactNativeHost
 import net.cozic.joplin.systeminfo.SystemInformationPackage
 import net.cozic.joplin.share.SharePackage
 import net.cozic.joplin.ssl.SslPackage
+import net.cozic.joplin.widget.WidgetPackage
 
 class MainApplication : Application(), ReactApplication {
     override val reactNativeHost: ReactNativeHost = ReactNativeHostWrapper(
@@ -28,6 +29,7 @@ class MainApplication : Application(), ReactApplication {
                     add(SharePackage())
                     add(SslPackage())
                     add(SystemInformationPackage())
+                    add(WidgetPackage())
                 }
 
             override fun getJSMainModuleName(): String = ".expo/.virtual-metro-entry"

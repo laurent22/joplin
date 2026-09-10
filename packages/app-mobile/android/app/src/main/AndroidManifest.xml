@@ -115,6 +115,15 @@
 			<!-- /EXTERNAL LINK -->
 		</activity>
 
+		<activity
+			android:name=".widget.WidgetConfigActivity"
+			android:exported="true"
+			android:theme="@style/AppTheme">
+			<intent-filter>
+				<action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+			</intent-filter>
+		</activity>
+
 		<receiver
 			android:name=".widget.JoplinQuickActionsWidgetProvider"
 			android:exported="false"
