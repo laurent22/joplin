@@ -140,4 +140,8 @@ dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
     implementation("com.facebook.react:hermes-android")
+    testImplementation("junit:junit:4.13.2")
+    // The android.jar org.json classes throw "not mocked" in JVM unit tests;
+    // the standalone org.json artifact provides a real implementation.
+    testImplementation("org.json:json:20240303")
 }
