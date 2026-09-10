@@ -243,7 +243,7 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 			<button disabled={!revisions.length || restoring || showLockPanel} onClick={importButton_onClick} className='restore'style={{ ...theme.buttonStyle, marginLeft: 10, height: theme.inputStyle.height }}>
 				{restoreButtonTitle}
 			</button>
-			<button disabled={!revisions.length || deleting || showLockPanel} onClick={deleteHistoryButton_onClick} className='deleteHistory'style={{ ...theme.buttonStyle, marginLeft: 10, height: theme.inputStyle.height }}>
+			<button disabled={!revisions.length || deleting} onClick={deleteHistoryButton_onClick} className='deleteHistory'style={{ ...theme.buttonStyle, marginLeft: 10, height: theme.inputStyle.height }}>
 				{deleteHistoryButtonTitle}
 			</button>
 			<HelpButton tip={helpMessage} id="noteRevisionHelpButton" onClick={helpButton_onClick} />

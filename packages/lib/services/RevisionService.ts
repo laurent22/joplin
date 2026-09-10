@@ -86,6 +86,8 @@ export default class RevisionService extends BaseService {
 				item_type: BaseModel.TYPE_NOTE,
 				item_id: note.id,
 				item_updated_time: note.updated_time,
+				// Carried with the flag off too, so the revision still marks its body as ciphertext.
+				is_locked: note.is_locked ? 1 : 0,
 			};
 
 			const noteMd = this.noteMetadata_(note);
@@ -96,7 +98,6 @@ export default class RevisionService extends BaseService {
 				// A locked note body is ciphertext, so diffing it against other revisions would produce
 				// large meaningless patches. Each revision is standalone instead: no parent, full contents.
 				if (parentRev && !bypassInterval && Date.now() - parentRev.updated_time < Setting.value('revisionService.intervalBetweenRevisions')) return null;
-				output.is_locked = 1;
 				output.title_diff = Revision.createTextPatch('', noteTitle);
 				output.body_diff = Revision.createTextPatch('', noteBody);
 				output.metadata_diff = Revision.createObjectPatch({}, noteMd);

@@ -226,7 +226,7 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 		resetScreenState,
 	});
 
-	const disableDeleteHistory = deleting || !hasRevisions || showLockPanel;
+	const disableDeleteHistory = deleting || !hasRevisions;
 	const menuOptions = useMemo(() => {
 		const output: MenuOption[] = [{
 			title: _('Delete history'),

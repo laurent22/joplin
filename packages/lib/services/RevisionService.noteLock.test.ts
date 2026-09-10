@@ -110,6 +110,18 @@ describe('RevisionService.noteLock', () => {
 		expect(revNote.body).toBe('secret v2');
 	});
 
+	it('should keep marking revisions of a locked note while the feature flag is off', async () => {
+		const note = await createLockedNoteWithHistory();
+
+		Setting.setValue('featureFlag.noteLock', false);
+		await Note.save({ id: note.id, title: 'renamed' });
+		await revisionService().collectRevisions();
+
+		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, note.id);
+		expect(revisions.length).toBe(2);
+		expect(revisions[1].is_locked).toBe(1);
+	});
+
 	it('should restore an encrypted revision as a locked note', async () => {
 		const note = await createLockedNoteWithHistory();
 
