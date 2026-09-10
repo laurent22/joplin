@@ -483,8 +483,6 @@ class WebDavApi {
 		}
 		const url = `${this.baseUrl()}/${ltrimSlashes(path)}`;
 
-		if (shim.httpAgent(url)) fetchOptions.agent = shim.httpAgent(url);
-
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- shim.fetch/uploadBlob/fetchBlob return slightly different response shapes (node-fetch vs blob); narrowing forces per-branch typing
 		let response: any = null;
 
