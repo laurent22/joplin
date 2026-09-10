@@ -1,8 +1,8 @@
 import { setupDatabaseAndSynchronizer, switchClient } from '../testing/test-utils';
 import ExternalEditWatcher from './ExternalEditWatcher';
-import { appendFile } from 'fs/promises';
+import { appendFile, readFile, utimes } from 'fs/promises';
 import Note from '../models/Note';
-import { msleep } from '@joplin/utils/time';
+import { msleep, Second } from '@joplin/utils/time';
 import waitFor from '../testing/waitFor';
 import { NoteEntity } from './database/types';
 
@@ -96,6 +96,43 @@ describe('ExternalEditWatcher', () => {
 					body: 'Test (updated 2)',
 				});
 			});
+		} finally {
+			await watcher.stopWatchingAll();
+		}
+	});
+
+	// In some cases, multiple "update" events are received when Joplin updates an external
+	// editor's temporary file. If an update event doesn't change the temp file's content (e.g.
+	// if the update event only adjusts the timestamp), Joplin should ignore the event to avoid
+	// overwriting the note with old content.
+	// See #16350.
+	test('should ignore change events that don\'t change the file\'s content', async () => {
+		const { filePaths, watcher, notes } = await createAndWatchNotes([
+			{ title: 'Test', body: 'Initial content' },
+		]);
+		try {
+			// Apply an edit and wait to ensure that the initial watcher events
+			// have been processed.
+			await appendFile(filePaths[0], ' (updated)');
+			await waitFor(async () => {
+				expect(await Note.load(notes[0].id)).toMatchObject({
+					title: 'Test',
+					body: 'Initial content (updated)',
+				});
+			});
+
+			await Note.save({ id: notes[0].id, body: 'Out-of-sync' });
+			expect(await readFile(filePaths[0], 'utf-8')).toContain('Initial content');
+
+			// Updating the file without changing its content should not overwrite the new content
+			// in the note:
+			await utimes(filePaths[0], new Date(new Date().getTime() + Second), new Date(new Date().getTime() + Second));
+
+			// Should be unchanged after a brief delay
+			await msleep(200);
+			// ...and after any pending change events are applied
+			await watcher.stopWatching(notes[0].id);
+			expect(await Note.load(notes[0].id)).toMatchObject({ body: 'Out-of-sync' });
 		} finally {
 			await watcher.stopWatchingAll();
 		}

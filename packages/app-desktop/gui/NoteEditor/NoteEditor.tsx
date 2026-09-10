@@ -583,7 +583,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 	}, [noteHasWhiteboardFence, props.dispatch]);
 
 	if (useWhiteboardEditor) {
-		editor = <WhiteboardEditor {...editorProps}/>;
+		editor = <WhiteboardEditor key={formNote.id} {...editorProps}/>;
 	} else if (builtInEditorVisible) {
 		if (props.bodyEditor === 'TinyMCE') {
 			editor = <TinyMCE {...editorProps}/>;
@@ -787,7 +787,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		}
 	}
 
-	if (formNote.encryption_applied || !formNote.id || !effectiveNoteId) {
+	if ((!editorPlugin && reloadInProgress) || formNote.encryption_applied || !formNote.id || !effectiveNoteId) {
 		return renderNoNotes(styles.root);
 	}
 
@@ -799,6 +799,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		const note = props.notes.find(n => n.id === props.selectedNoteIds[0]);
 		if (!note) return null;
 		if (note.markup_language !== MarkupLanguage.Html) return null;
+		if (isNoteLockEnabled() && note.is_locked && !props.noteLockSessionUnlocked) return null;
 
 		return (
 			<div style={styles.resourceWatchBanner}>

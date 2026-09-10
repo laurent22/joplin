@@ -40,7 +40,7 @@ async function doLoginWithMFA(email: string, password: string, mfaCode: string, 
 	return context;
 }
 
-describe('index_login', () => {
+describe('login', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('index_login', {

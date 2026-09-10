@@ -39,7 +39,6 @@ import TrashNotification from './TrashNotification/TrashNotification';
 import UpdateNotification from './UpdateNotification/UpdateNotification';
 import PluginNotification from './PluginNotification/PluginNotification';
 import { Toast } from '@joplin/lib/services/plugins/api/types';
-import QuitSyncDialog from './QuitSyncDialog';
 import Logger from '@joplin/utils/Logger';
 import checkForUpdates, { isReleaseVersion } from '../checkForUpdates';
 
@@ -803,7 +802,6 @@ class MainScreenComponent extends React.Component<Props, State> {
 					themeId={this.props.themeId}
 					toast={this.props.toast}
 				/>
-				<QuitSyncDialog themeId={this.props.themeId} />
 				{messageComp}
 				{layoutComp}
 			</div>

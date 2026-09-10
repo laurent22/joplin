@@ -237,6 +237,7 @@ export interface Token extends WithDates {
 	id?: number;
 	value?: string;
 	user_id?: Uuid;
+	purpose?: string;
 }
 
 export interface Subscription {
@@ -488,6 +489,7 @@ export const databaseSchema: DatabaseTables = {
 		id: { type: 'number', defaultValue: null },
 		value: { type: 'string', defaultValue: null },
 		user_id: { type: 'string', defaultValue: '' },
+		purpose: { type: 'string', defaultValue: '' },
 		updated_time: { type: 'string', defaultValue: null },
 		created_time: { type: 'string', defaultValue: null },
 	},

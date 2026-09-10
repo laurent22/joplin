@@ -7,8 +7,8 @@ test.describe('chatPanel', () => {
 		await mainScreen.createNewNote('test');
 
 		const noteEditor = mainScreen.noteEditor;
-		await noteEditor.focusCodeMirrorEditor();
-		await mainWindow.keyboard.type('Testing');
+		const markdownEditor = await noteEditor.showMarkdownEditor();
+		await markdownEditor.typeText('Testing');
 		await noteEditor.expectToHaveText('Testing');
 
 		await mainScreen.chatPanel.configure(electronApp);

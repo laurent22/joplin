@@ -7,7 +7,7 @@ import shim, { MessageBoxType } from '@joplin/lib/shim';
 import dialogs from '../dialogs';
 import { decryptedStatText, determineKeyPassword, dontReencryptData, enableEncryptionConfirmationMessages, onSavePasswordClick, onToggleEnabledClick, reencryptData, upgradeMasterKey, useInputPasswords, useNeedMasterPassword, usePasswordChecker, useStats, useToggleShowDisabledMasterKeys } from '@joplin/lib/components/EncryptionConfigScreen/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
-import { getEncryptionEnabled, masterKeyEnabled, SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import { getEncryptionEnabled, localSyncInfoSelector, masterKeyEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { getDefaultMasterKey, getMasterPasswordStatusMessage, masterPasswordIsValid, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
 import Button, { ButtonLevel } from '../Button/Button';
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
@@ -606,7 +606,7 @@ export const EncryptionConfigScreen = (props: Props) => {
 };
 
 const mapStateToProps = (state: AppState) => {
-	const syncInfo = new SyncInfo(state.settings['syncInfoCache']);
+	const syncInfo = localSyncInfoSelector(state);
 
 	return {
 		themeId: state.settings.theme,

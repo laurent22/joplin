@@ -34,6 +34,7 @@ import Logger from '@joplin/utils/Logger';
 import useWebViewApi from './utils/useWebViewApi';
 import useLinkTooltips from './utils/useLinkTooltips';
 import { blur, focus } from '@joplin/lib/utils/focusHandler';
+import useHighlightedSearchTerms from './utils/useHighlightedSearchTerms';
 const md5 = require('md5');
 import { clipboard } from 'electron';
 const supportedLocales = require('./supportedLocales');
@@ -1202,6 +1203,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		};
 	}, [editor, onEditorContentClick]);
 
+	useHighlightedSearchTerms(editor, props.searchMarkers.keywords, props.themeId);
+
 	// This is to handle dropping notes on the editor. In this case, we add an
 	// overlay over the editor, which makes it a valid drop target. This in
 	// turn makes NoteEditor get the drop event and dispatch it.
@@ -1555,6 +1558,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		editor.on(TinyMceEditorEvents.JoplinChange, onChangeHandler);
 		editor.on(TinyMceEditorEvents.Undo, onChangeHandler);
 		editor.on(TinyMceEditorEvents.Redo, onChangeHandler);
+		editor.on(TinyMceEditorEvents.FormatApply, onChangeHandler);
+		editor.on(TinyMceEditorEvents.FormatRemove, onChangeHandler);
 		editor.on(TinyMceEditorEvents.ExecCommand, onExecCommand);
 		editor.on(TinyMceEditorEvents.SetAttrib, onSetAttrib);
 		editor.on('TableModified', onTableModified);
@@ -1572,6 +1577,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 				editor.off(TinyMceEditorEvents.JoplinChange, onChangeHandler);
 				editor.off(TinyMceEditorEvents.Undo, onChangeHandler);
 				editor.off(TinyMceEditorEvents.Redo, onChangeHandler);
+				editor.off(TinyMceEditorEvents.FormatApply, onChangeHandler);
+				editor.off(TinyMceEditorEvents.FormatRemove, onChangeHandler);
 				editor.off(TinyMceEditorEvents.ExecCommand, onExecCommand);
 				editor.off(TinyMceEditorEvents.SetAttrib, onSetAttrib);
 				editor.off('TableModified', onTableModified);

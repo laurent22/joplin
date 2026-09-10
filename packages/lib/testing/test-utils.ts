@@ -1185,9 +1185,34 @@ export const mockFetch = (requestHandler: MockFetchRequestHandler) => {
 	};
 };
 
-export const withWarningSilenced = async <T> (warningRegex: RegExp, task: ()=> Promise<T>): Promise<T> => {
+interface WithWarningSilencedOptions {
+	requireWarning: boolean;
+}
+
+export const withWarningSilenced = async <T> (
+	warningRegex: RegExp, task: ()=> Promise<T>, { requireWarning }: WithWarningSilencedOptions = { requireWarning: false },
+): Promise<T> => {
 	type MockSlice = { mockRestore(): void };
 	const mocks: MockSlice[] = [];
+	const warnings: string[] = [];
+
+	const removeMocks = () => {
+		for (const mock of mocks) {
+			mock.mockRestore();
+		}
+	};
+
+	const applyMocks = () => {
+		mockConsoleFunction('warn');
+		mockConsoleFunction('error');
+	};
+
+	// Log an error without recursively calling the mock:
+	const logError = (...args: unknown[]) => {
+		removeMocks();
+		console.error(...args);
+		applyMocks();
+	};
 
 	const mockConsoleFunction = (key: 'warn'|'error') => {
 		const mock = jest.spyOn(console, key);
@@ -1197,23 +1222,24 @@ export const withWarningSilenced = async <T> (warningRegex: RegExp, task: ()=> P
 		// shows how to use .spyOn to hide warnings
 		mock.mockImplementation((message?: unknown, ...args: unknown[]) => {
 			const fullMessage = [message, ...args].join(' ');
+			warnings.push(fullMessage);
 			if (!fullMessage.match(warningRegex)) {
-				// Avoid recursively calling the mock:
-				mock.mockRestore();
-
-				console.error(`Unexpected warning: ${message}\nNote: Further warnings will not be silenced.`, ...args);
+				logError(`Unexpected warning: ${message}`, ...args);
 			}
 		});
 	};
 
 	try {
-		mockConsoleFunction('warn');
-		mockConsoleFunction('error');
-		return await task();
-	} finally {
-		for (const mock of mocks) {
-			mock.mockRestore();
+		applyMocks();
+		const result = await task();
+
+		if (requireWarning) {
+			expect(warnings).toContainEqual(expect.stringMatching(warningRegex));
 		}
+
+		return result;
+	} finally {
+		removeMocks();
 	}
 };
 

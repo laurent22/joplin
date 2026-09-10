@@ -1,6 +1,6 @@
 {
   "name": "@joplin/server",
-  "version": "3.7.1",
+  "version": "3.7.2",
   "private": true,
   "scripts": {
     "start-dev": "yarn build && JOPLIN_IS_TESTING=1 nodemon --config nodemon.json --ext ts,js,mustache,css,tsx dist/index.js --env dev",
@@ -34,7 +34,7 @@
     "bcryptjs": "2.4.3",
     "bulma": "1.0.4",
     "compare-versions": "6.1.1",
-    "dayjs": "1.11.20",
+    "dayjs": "1.11.21",
     "formidable": "2.1.2",
     "fs-extra": "11.3.5",
     "html-entities": "1.4.0",

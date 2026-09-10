@@ -59,7 +59,8 @@ const useMenuMarginBottom = (buttonContainerRef: RefObject<View>, themeId: numbe
 		buttonContainerRef.current?.measure((_x, _y, _width, _height, _pageX, pageY) => {
 			// On Android, the safe area padding doesn't seem to be included in windowHeight,
 			// but **does** seem to be taken into account when determining absolute/relative positioning
-			const includeSafeArea = Platform.OS === 'android';
+			// 2026-08-31: Android 15 and later seem to include safe area padding in windowHeight
+			const includeSafeArea = Platform.OS === 'android' && Platform.Version < 35;
 			const extraMargin = theme.marginBottom + (includeSafeArea ? safeAreaPadding.paddingBottom : 0);
 
 			setMenuMarginBottom(windowHeight - pageY + extraMargin);

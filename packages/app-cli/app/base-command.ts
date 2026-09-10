@@ -1,5 +1,7 @@
 import { _ } from '@joplin/lib/locale';
 import { reg } from '@joplin/lib/registry.js';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
+import NoteLockNote from '@joplin/lib/services/noteLock/NoteLockNote';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Stdout can be called with formatted strings or arbitrary values
 type StdoutFn = (text: any)=> void;
@@ -18,8 +20,9 @@ export default class BaseCommand {
 		throw new Error('Usage not defined');
 	}
 
-	public encryptionCheck(item: { encryption_applied?: number } | null) {
+	public encryptionCheck(item: { encryption_applied?: number; is_locked?: number } | null) {
 		if (item && item.encryption_applied) throw new Error(_('Cannot change encrypted item'));
+		if (isNoteLockEnabled() && NoteLockNote.isLocked(item)) throw new Error(_('Cannot change a locked note'));
 	}
 
 	public description(): string {
