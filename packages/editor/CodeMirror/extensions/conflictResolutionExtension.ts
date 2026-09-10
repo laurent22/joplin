@@ -472,7 +472,7 @@ const conflictTheme = EditorView.baseTheme({
 	},
 	'& .cm-conflictLocalVersion': {
 		backgroundColor: `color-mix(in srgb, ${localAccent} 22%, ${surface})`,
-		paddingRight: '2px',
+		paddingRight: '0',
 		color: 'var(--joplin-color, inherit)',
 		userSelect: 'text',
 		overflowX: 'auto',
@@ -500,12 +500,13 @@ const conflictTheme = EditorView.baseTheme({
 		borderRadius: '2px',
 	},
 	'& .cm-conflictUseVersionButton': {
+		marginRight: '8px',
 		userSelect: 'none',
 		cursor: 'pointer',
 		whiteSpace: 'nowrap',
 		border: '1px solid var(--joplin-border-color4, rgba(0, 0, 0, 0.3))',
 		borderRadius: '3px',
-		padding: '0 8px',
+		padding: '0 6px',
 		backgroundColor: surface,
 		color: 'var(--joplin-color, inherit)',
 		font: 'inherit',
