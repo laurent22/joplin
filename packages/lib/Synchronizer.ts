@@ -1116,7 +1116,8 @@ export default class Synchronizer {
 								// so the local copy is kept as a conflict and the row stops claiming a lock its body no
 								// longer has. A lock toggled here is already conflicted by the upload step.
 								if (content.type_ === BaseModel.TYPE_NOTE && content.is_locked === undefined && content.share_id && local?.is_locked) {
-									await Note.createConflictNote(local, ItemChange.SOURCE_SYNC);
+									// A row still awaiting E2EE decryption cannot be copied: its cipher text carries the original id.
+									if (!local.encryption_applied) await Note.createConflictNote(local, ItemChange.SOURCE_SYNC);
 									content.is_locked = 0;
 								}
 
