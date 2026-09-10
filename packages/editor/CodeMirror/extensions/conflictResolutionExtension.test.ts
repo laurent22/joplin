@@ -601,6 +601,18 @@ describe('conflictResolutionExtension', () => {
 		expect(decoratedText(editor, 'cm-conflictIncoming-last')).toHaveLength(1);
 	});
 
+	test('should keep the button out of the copyable local text', async () => {
+		const editor = await createEditor('remote line\nrest', [
+			{ from: 0, to: 11, localText: 'local line' },
+		]);
+
+		const button = editor.dom.querySelector('.cm-conflictUseVersionButton');
+		const localText = editor.dom.querySelector('.cm-conflictLocalVersion-text');
+		expect(button.parentElement.contains(localText)).toBe(true);
+		expect(localText.contains(button)).toBe(false);
+		expect(localText.textContent).toBe('local line');
+	});
+
 	test('should drop a resolved region and restore it in document order', async () => {
 		const editor = await createEditor('one\ntwo\nthree', [
 			{ from: 0, to: 3, localText: 'ONE' },

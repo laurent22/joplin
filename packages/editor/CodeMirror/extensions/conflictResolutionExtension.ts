@@ -91,7 +91,6 @@ class LocalVersionWidget extends WidgetType {
 			span.textContent = segment.text;
 			text.appendChild(span);
 		}
-		container.appendChild(text);
 
 		const button = document.createElement('button');
 		button.className = 'cm-conflictUseVersionButton';
@@ -101,7 +100,12 @@ class LocalVersionWidget extends WidgetType {
 			view.dispatch({ effects: useLocalVersion.of(this.regionId_) });
 			focus('conflictResolution::useMyVersion', view);
 		};
-		container.appendChild(button);
+
+		const flow = document.createElement('div');
+		flow.className = 'cm-conflictLocalVersion-flow';
+		flow.appendChild(text);
+		flow.appendChild(button);
+		container.appendChild(flow);
 
 		// The editor would otherwise copy its own selection, which is current version
 		const onCopy = (event: ClipboardEvent) => {
@@ -467,47 +471,47 @@ const conflictTheme = EditorView.baseTheme({
 	},
 
 	'& .cm-conflictLocalVersion': {
-		display: 'flex',
-		alignItems: 'flex-start',
-		gap: '8px',
 		backgroundColor: `color-mix(in srgb, ${localAccent} 16%, ${surface})`,
 		border: `1px solid color-mix(in srgb, ${localAccent} 50%, ${surface})`,
 		borderRadius: '4px',
-		padding: '4px 8px',
+		padding: '2px 7px',
 		margin: '2px 0',
 		color: 'var(--joplin-color, inherit)',
 		userSelect: 'text',
+		overflowX: 'auto',
+	},
+	'& .cm-conflictLocalVersion-flow': {
+		display: 'flow-root',
+		textAlign: 'right',
 	},
 	'& .cm-conflictLocalVersion-text': {
 		whiteSpace: 'pre-wrap',
 		overflowWrap: 'anywhere',
-		flex: 1,
-		minWidth: 0,
 		cursor: 'text',
+		display: 'block',
+		textAlign: 'left',
 	},
 	'& .cm-conflictLocalVersion-table': {
 		fontFamily: 'monospace',
 		whiteSpace: 'pre',
 		overflowWrap: 'normal',
-		overflowX: 'auto',
 	},
 	'& .cm-conflictLocalVersion-changedWord': {
 		backgroundColor: `color-mix(in srgb, ${localAccent} 45%, ${surface})`,
 		borderRadius: '2px',
 	},
 	'& .cm-conflictUseVersionButton': {
-		flexShrink: 0,
 		userSelect: 'none',
-		alignSelf: 'center',
 		cursor: 'pointer',
 		whiteSpace: 'nowrap',
 		border: '1px solid var(--joplin-border-color4, rgba(0, 0, 0, 0.3))',
 		borderRadius: '3px',
-		padding: '3px 14px',
+		padding: '0 8px',
 		backgroundColor: surface,
 		color: 'var(--joplin-color, inherit)',
 		font: 'inherit',
 		fontSize: '0.85em',
+		lineHeight: 'inherit',
 	},
 	'& .cm-conflictUseVersionButton:hover:not(:disabled)': {
 		backgroundColor: 'var(--joplin-background-color-hover3, rgba(0, 0, 0, 0.06))',
