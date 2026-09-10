@@ -8,6 +8,7 @@ import Setting from '../Setting';
 import { checkObjectHasProperties } from '@joplin/utils/object';
 import isTrashableItem from '../../services/trash/isTrashableItem';
 import isJoplinServerVariant from './isJoplinServerVariant';
+import { NoteEntity } from '../../services/database/types';
 
 const logger = Logger.create('models/utils/readOnly');
 
@@ -76,6 +77,9 @@ export const checkIfItemCanBeAddedToFolder = async (itemType: ModelType, Folder:
 // for share-related checks (and does not exist on Resource objects). So this is why there's this
 // extra `sharePermissionCheckOnly` boolean to do the check for one case or the other. A bit of a
 // hack but good enough for now.
+// A locked note inside a share is read-only until moved out: an older client editing it there would drop the lock.
+export const noteIsLockedInShare = (note: Pick<NoteEntity, 'is_locked' | 'share_id'>) => !!note?.is_locked && !!note?.share_id;
+
 export const itemIsReadOnlySync = (itemType: ModelType, changeSource: number, item: ItemSlice, userId: string, shareState: ShareState, sharePermissionCheckOnly = false): boolean => {
 	if (!sharePermissionCheckOnly && isTrashableItem(itemType, item)) {
 		checkObjectHasProperties(item, ['deleted_time']);

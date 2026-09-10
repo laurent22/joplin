@@ -8,7 +8,7 @@ import ResourceFetcher from '../../services/ResourceFetcher';
 import DecryptionWorker from '../../services/DecryptionWorker';
 import Setting from '../../models/Setting';
 import { Mutex } from 'async-mutex';
-import { itemIsReadOnlySync, ItemSlice } from '../../models/utils/readOnly';
+import { itemIsReadOnlySync, ItemSlice, noteIsLockedInShare } from '../../models/utils/readOnly';
 import ItemChange from '../../models/ItemChange';
 import BaseItem from '../../models/BaseItem';
 import isNoteLockEnabled from '../../services/noteLock/isNoteLockEnabled';
@@ -437,8 +437,7 @@ shared.reloadNote = async (comp: BaseNoteScreenComponent, useDefaultEditorState 
 			isLoading: false,
 			fromShare: !!comp.props.sharedData,
 			noteResources: await shared.attachedResources(note ? note.body : ''),
-			// A locked note inside a share is read-only until moved out: an older client editing it there would drop the lock.
-			readOnly: noteLockBlocked || (!!note.is_locked && !!note.share_id) || itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, note as ItemSlice, Setting.value('sync.userId'), BaseItem.syncShareCache),
+			readOnly: noteLockBlocked || noteIsLockedInShare(note) || itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, note as ItemSlice, Setting.value('sync.userId'), BaseItem.syncShareCache),
 			noteLastLoadTime: Date.now(),
 			noteLockKey,
 			noteLockUndecryptable,

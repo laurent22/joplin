@@ -67,6 +67,19 @@ describe('stateToWhenClauseContext', () => {
 		expect(resultingState.noteIsReadOnlyShare).toBe(false);
 	});
 
+	it('should make a locked note inside a share read-only without touching the share permission', () => {
+		const applicationState = buildState({
+			selectedNoteIds: ['1'],
+			notes: [{ id: '1', is_locked: 1, share_id: 'share-1', deleted_time: 0 }],
+			noteLockSessionUnlocked: true,
+			activeNoteIsUndecryptable: false,
+		});
+		const resultingState = stateToWhenClauseContext(applicationState);
+
+		expect(resultingState.noteIsReadOnly).toBe(true);
+		expect(resultingState.noteIsReadOnlyShare).toBe(false);
+	});
+
 	it('should be in trash if selected note has been deleted and selected folder is trash', async () => {
 		const applicationState = buildState({
 			selectedNoteIds: ['1'],

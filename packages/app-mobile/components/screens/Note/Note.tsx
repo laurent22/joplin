@@ -13,6 +13,8 @@ import { Platform, PermissionsAndroid } from 'react-native';
 import { connect } from 'react-redux';
 import Note from '@joplin/lib/models/Note';
 import BaseItem from '@joplin/lib/models/BaseItem';
+import ItemChange from '@joplin/lib/models/ItemChange';
+import { itemIsReadOnlySync, ItemSlice, noteIsLockedInShare } from '@joplin/lib/models/utils/readOnly';
 import Resource from '@joplin/lib/models/Resource';
 import Folder from '@joplin/lib/models/Folder';
 import Clipboard from '@react-native-clipboard/clipboard';
@@ -1750,13 +1752,13 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 
 	private lockedInShare() {
-		return !!this.state.note?.is_locked && !!this.state.note?.share_id;
+		return noteIsLockedInShare(this.state.note);
 	}
 
 	public folderPickerOptions() {
 		const options = {
-			// Moving the note out of the share is how a locked note becomes editable again.
-			visible: !this.state.readOnly || this.lockedInShare(),
+			// Moving the note out of the share is how a locked note becomes editable again, when the share allows it.
+			visible: !this.state.readOnly || (this.lockedInShare() && !itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, this.state.note as ItemSlice, Setting.value('sync.userId'), BaseItem.syncShareCache)),
 			disabled: false,
 			selectedFolderId: this.state.folder ? this.state.folder.id : null,
 			onValueChange: this.folderPickerOptions_valueChanged,
@@ -2090,7 +2092,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			viewEditToggleMode = ViewToggleButtonMode.Hidden;
 		}
 
-		const lockedInShareBanner = this.lockedInShare() ? (
+		const lockedInShareBanner = this.lockedInShare() && !noteLockPanelVisible ? (
 			<Text style={this.styles().lockedInShareBanner}>{_('This note is locked and may not be readable because it is contained within a share. To enable editing, it must be moved outside of the share.')}</Text>
 		) : null;
 

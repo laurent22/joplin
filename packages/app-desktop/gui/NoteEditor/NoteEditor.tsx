@@ -27,7 +27,7 @@ import markupLanguageUtils from '@joplin/lib/utils/markupLanguageUtils';
 import Setting from '@joplin/lib/models/Setting';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
 import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
-import { itemIsReadOnly } from '@joplin/lib/models/utils/readOnly';
+import { itemIsReadOnly, noteIsLockedInShare } from '@joplin/lib/models/utils/readOnly';
 import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
 import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
 import { SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
@@ -376,8 +376,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 	}, [props.shareCacheSetting]);
 
 	const noteMetadata = effectiveNoteId ? props.notes.find(n => n.id === effectiveNoteId) : null;
-	// An older client editing it inside the share would drop the lock, so it is read-only until moved out.
-	const lockedInShare = !!noteMetadata?.is_locked && !!noteMetadata?.share_id;
+	const lockedInShare = noteIsLockedInShare(noteMetadata);
 
 	useAsyncEffect(async event => {
 		if (!formNote.id) return;
