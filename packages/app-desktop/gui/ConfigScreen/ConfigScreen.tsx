@@ -109,9 +109,9 @@ class ConfigScreenComponent extends React.Component<Props, State> {
 	}
 
 	private async checkSyncConfig_() {
-		const syncTarget = this.state.settings['sync.target'];
-		if (isJoplinOAuthSyncTarget(syncTarget)) {
-			const syncTarget = reg.syncTarget();
+		const syncTargetId = this.state.settings['sync.target'];
+		if (isJoplinOAuthSyncTarget(syncTargetId)) {
+			const syncTarget = reg.syncTarget(syncTargetId);
 			const isAuthenticated = await syncTarget.isAuthenticated();
 			if (!isAuthenticated) {
 				return this.props.dispatch({
