@@ -1163,7 +1163,7 @@ export default class ItemModel extends BaseModel<Item> {
 		if (!userId) throw new Error('userId is required');
 
 		item = { ... item };
-		const isNew = await this.isNew(item, options);
+		let isNew = await this.isNew(item, options);
 
 		let previousItem: ChangePreviousItem = null;
 		let previousName: string|null = null;
@@ -1190,8 +1190,22 @@ export default class ItemModel extends BaseModel<Item> {
 				item = await super.save(item, options);
 			} catch (error) {
 				if (isUniqueConstraintError(error)) {
-					modelLogger.error(`Unique constraint error on item: ${JSON.stringify({ id: item.id, name: item.name, jop_id: item.jop_id, owner_id: item.owner_id })}`, error);
-					throw new ErrorConflict(`This item is already present and cannot be added again: ${item.name}`);
+					// The item was created by a concurrent request between the moment we
+					// checked whether it exists and the moment we inserted it. This happens
+					// when a client retries an upload that is in fact still being processed.
+					// Since (name, owner_id) already identifies the item, save it again as an
+					// update, so that retrying an upload is not treated as an error.
+					const existingItem = await this.loadByName(item.owner_id || userId, item.name, { fields: ['id'] });
+
+					if (!existingItem) {
+						modelLogger.error(`Unique constraint error on item, but the item could not be found: ${JSON.stringify({ id: item.id, name: item.name, jop_id: item.jop_id, owner_id: item.owner_id })}`, error);
+						throw new ErrorConflict(`This item is already present and cannot be added again: ${item.name}`);
+					}
+
+					modelLogger.info(`Item was created by a concurrent request - updating it instead: ${JSON.stringify({ name: item.name, jop_id: item.jop_id, owner_id: item.owner_id })}`);
+
+					isNew = false;
+					item = await super.save({ ...item, id: existingItem.id }, { ...options, isNew: false });
 				} else {
 					throw error;
 				}
