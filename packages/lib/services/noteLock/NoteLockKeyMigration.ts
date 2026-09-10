@@ -15,9 +15,8 @@ export interface NoteLockKeyMigrationResult {
 	failed: number;
 }
 
-// Re-encrypts every note locked with the local key to the sync target's parked key. Notes already under
-// the target key are left alone, so a retry only touches what is still outstanding. The local key stays
-// in place until finishNoteLockKeyMigration(), so an interrupted run loses nothing.
+// Re-encrypts the notes locked with the local key to the parked target key; notes already under it are left
+// alone, so a retry only touches the rest. The local key stays until finish, so an interrupted run loses nothing.
 export const migrateLockedNotes = async (localPassword: string, targetPassword: string): Promise<NoteLockKeyMigrationResult> => {
 	if (!isNoteLockEnabled()) throw new Error('Note lock is not enabled');
 	const conflict = noteLockKeyConflict();
@@ -64,9 +63,8 @@ const countNotesUnderKey = async (keyId: string) => {
 	return count;
 };
 
-// Adopts the sync target's key and lineage and returns 0. A note still locked with the local key, e.g. one an
-// editor re-saved after the migration passed it, would become permanently unreadable, so without acceptLoss
-// nothing is adopted and the count of such notes is returned instead, for the UI to offer a retry.
+// Adopts the target key and lineage, unless a note is still locked with the local key (an editor can re-save one
+// after the migration passed it): then nothing is adopted and their count comes back, so the UI can offer a retry.
 export const finishNoteLockKeyMigration = async (acceptLoss = false) => {
 	if (!acceptLoss) {
 		const remaining = await countNotesUnderKey(NoteLockKey.instance().load()?.id);
