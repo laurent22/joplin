@@ -1534,7 +1534,7 @@ PODS:
     - React-Core
   - react-native-rsa-native (2.0.5):
     - React
-  - react-native-saf-x (3.7.0):
+  - react-native-saf-x (3.7.1):
     - React-Core
   - react-native-safe-area-context (5.7.0):
     - hermes-engine
@@ -2622,7 +2622,7 @@ SPEC CHECKSUMS:
   react-native-netinfo: f852c868bf5175e46165c7e4db48a204a95c3800
   react-native-quick-base64: 6568199bb2ac8e72ecdfdc73a230fbc5c1d3aac4
   react-native-rsa-native: a7931cdda1f73a8576a46d7f431378c5550f0c38
-  react-native-saf-x: 5f4d6aed7554454033c39c81d951962dadc8dc5a
+  react-native-saf-x: 0e7b108f24b0e3e7b10ad14008b32b70f57d227f
   react-native-safe-area-context: ae7587b95fb580d1800c5b0b2a7bd48c2868e67a
   react-native-sqlite-storage: 0c84826214baaa498796c7e46a5ccc9a82e114ed
   react-native-vector-icons: 8215b0e62bf79d3be628cf658ec23777f9bec53c
