@@ -1112,9 +1112,8 @@ export default class Synchronizer {
 									await MasterKey.save(content);
 								}
 							} else {
-								// An older client does not know is_locked and drops it when it edits a shared locked note,
-								// so the local copy is kept as a conflict and the row stops claiming a lock its body no
-								// longer has. A lock toggled here is already conflicted by the upload step.
+								// An older client drops is_locked when it edits a shared locked note: keep the local copy as a conflict and
+								// stop the row claiming a lock its body lost. A lock toggled here is already conflicted by the upload step.
 								if (content.type_ === BaseModel.TYPE_NOTE && content.is_locked === undefined && content.share_id && local?.is_locked) {
 									// A row still awaiting E2EE decryption cannot be copied: its cipher text carries the original id.
 									if (!local.encryption_applied) await Note.createConflictNote(local, ItemChange.SOURCE_SYNC);
