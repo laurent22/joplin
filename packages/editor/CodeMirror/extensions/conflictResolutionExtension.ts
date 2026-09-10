@@ -436,6 +436,8 @@ const refreshOnTypingPause = ViewPlugin.fromClass(class {
 	}
 });
 
+const sectionPaddingLeft = '1px';
+
 const remoteAccent = 'var(--joplin-color4, #2D5BE5)';
 const localAccent = 'var(--joplin-search-marker-background-color, #F7D26E)';
 const surface = 'var(--joplin-background-color, #ffffff)';
@@ -444,11 +446,10 @@ const conflictTheme = EditorView.baseTheme({
 	'& .cm-conflictRegion': {
 		backgroundColor: `color-mix(in srgb, ${remoteAccent} 14%, transparent)`,
 	},
-
 	'& .cm-conflictIncoming': {
 		backgroundColor: `color-mix(in srgb, ${remoteAccent} 12%, transparent)`,
 		borderLeft: `2px solid ${remoteAccent}`,
-		paddingLeft: '6px',
+		paddingLeft: sectionPaddingLeft,
 	},
 	'& .cm-conflictIncoming-first': {
 		paddingTop: '2px',
@@ -469,13 +470,9 @@ const conflictTheme = EditorView.baseTheme({
 		backgroundColor: `color-mix(in srgb, ${remoteAccent} 22%, transparent)`,
 		borderRadius: '2px',
 	},
-
 	'& .cm-conflictLocalVersion': {
-		backgroundColor: `color-mix(in srgb, ${localAccent} 16%, ${surface})`,
-		border: `1px solid color-mix(in srgb, ${localAccent} 50%, ${surface})`,
-		borderRadius: '4px',
-		padding: '2px 7px',
-		margin: '2px 0',
+		backgroundColor: `color-mix(in srgb, ${localAccent} 22%, ${surface})`,
+		paddingRight: '2px',
 		color: 'var(--joplin-color, inherit)',
 		userSelect: 'text',
 		overflowX: 'auto',
@@ -490,6 +487,8 @@ const conflictTheme = EditorView.baseTheme({
 		cursor: 'text',
 		display: 'block',
 		textAlign: 'left',
+		borderLeft: `2px solid color-mix(in srgb, ${localAccent} 80%, ${surface})`,
+		paddingLeft: sectionPaddingLeft,
 	},
 	'& .cm-conflictLocalVersion-table': {
 		fontFamily: 'monospace',
