@@ -119,7 +119,7 @@ describe('NoteLockKeyMigration', () => {
 		eventManager.on(EventName.NoteLockSessionChange, listener);
 
 		try {
-			finishNoteLockKeyMigration();
+			expect(await finishNoteLockKeyMigration()).toBe(0);
 
 			// The lock is announced right away rather than on the next session check, so the UI follows.
 			expect(events).toEqual([{ unlocked: false }]);
@@ -134,11 +134,34 @@ describe('NoteLockKeyMigration', () => {
 		}
 	});
 
+	it('should not adopt the target key while a note is still locked with the local key', async () => {
+		await Note.save({ title: 'one', body: 'one', is_locked: 1 }, { useNoteLock: true });
+		await migrateLockedNotes(localPassword, targetPassword);
+		// An editor that still holds the local key saves after the migration passed its note.
+		const lateNote = await Note.save({ title: 'late', body: 'late', is_locked: 1 }, { useNoteLock: true });
+
+		expect(await finishNoteLockKeyMigration()).toBe(1);
+		expect(NoteLockKey.instance().load().id).toBe(decryptedLocalKey.id);
+		expect(noteLockKeyConflict()).not.toBeNull();
+
+		expect(await migrateLockedNotes(localPassword, targetPassword)).toEqual({ migrated: 1, skipped: 0, failed: 0 });
+		expect(await finishNoteLockKeyMigration()).toBe(0);
+		expect(NoteLockKey.instance().load()).toEqual(targetKey);
+		expect(await bodyDecryptedWith(lateNote.id, decryptedTargetKey)).toBe('late');
+	});
+
+	it('should adopt the target key anyway when the loss is accepted', async () => {
+		await Note.save({ title: 'one', body: 'one', is_locked: 1 }, { useNoteLock: true });
+
+		expect(await finishNoteLockKeyMigration(true)).toBe(0);
+		expect(NoteLockKey.instance().load()).toEqual(targetKey);
+	});
+
 	it('should refuse to migrate or finish without a parked key', async () => {
 		Setting.setValue('noteLock.conflictNoteLockKey', {});
 
 		await expect(migrateLockedNotes(localPassword, targetPassword)).rejects.toThrow('No note lock key conflict');
-		expect(() => finishNoteLockKeyMigration()).toThrow('No note lock key conflict');
+		await expect(finishNoteLockKeyMigration()).rejects.toThrow('No note lock key conflict');
 		expect(NoteLockKey.instance().load().id).toBe(decryptedLocalKey.id);
 	});
 });

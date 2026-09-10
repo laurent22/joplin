@@ -44,7 +44,7 @@ export default function(props: Props) {
 
 		if (event.buttonName === 'skip') {
 			if (!bridge().showConfirmMessageBox(_('Notes still locked with the password of this device will become permanently unreadable. Continue without migrating them?'))) return;
-			finishNoteLockKeyMigration();
+			await finishNoteLockKeyMigration(true);
 			onClose();
 			return;
 		}
@@ -52,24 +52,23 @@ export default function(props: Props) {
 		if (event.buttonName === 'ok') {
 			setMigrating(true);
 			setErrorMessage('');
-			let result;
+			let remaining = 0;
 			try {
-				result = await migrateLockedNotes(localPassword, targetPassword);
+				const result = await migrateLockedNotes(localPassword, targetPassword);
+				remaining = result.failed || await finishNoteLockKeyMigration();
 			} catch (error) {
 				setErrorMessage(error.name === 'OperationError' ? _('Invalid password') : error.message);
 				setMigrating(false);
 				return;
 			}
 			setMigrating(false);
-			setFailedCount(result.failed);
-			if (result.failed) return;
-			finishNoteLockKeyMigration();
-			onClose();
+			setFailedCount(remaining);
+			if (!remaining) onClose();
 		}
 	}, [localPassword, targetPassword, onClose]);
 
 	return (
-		<Dialog onCancel={onClose} className="note-lock-migration-dialog">
+		<Dialog onCancel={migrating ? undefined : onClose} className="note-lock-migration-dialog">
 			<div className="dialog-root">
 				<DialogTitle title={_('Migrate locked notes')}/>
 				<div className="dialog-content">

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -10,6 +10,7 @@ import { finishNoteLockKeyMigration, migrateLockedNotes } from '@joplin/lib/serv
 import ScreenHeader from '../ScreenHeader';
 import { PrimaryButton, SecondaryButton } from '../buttons';
 import { AppState } from '../../utils/types';
+import BackButtonService from '../../services/BackButtonService';
 
 interface Props {
 	themeId: number;
@@ -58,39 +59,43 @@ export const NoteLockMigrationScreenComponent: React.FC<Props> = props => {
 		});
 	}, [theme]);
 
-	const onDone = useCallback(() => {
-		finishNoteLockKeyMigration();
-		props.dispatch({ type: 'NAV_BACK' });
-	}, [props.dispatch]);
+	// Leaving mid-run would let the migration finish and navigate from under whatever screen replaced this one.
+	useEffect(() => {
+		if (!migrating) return () => {};
+		const handler = () => true;
+		BackButtonService.addHandler(handler);
+		return () => BackButtonService.removeHandler(handler);
+	}, [migrating]);
 
 	const onMigrate = useCallback(async () => {
 		setMigrating(true);
 		setErrorMessage('');
-		let result;
+		let remaining = 0;
 		try {
-			result = await migrateLockedNotes(localPassword, targetPassword);
+			const result = await migrateLockedNotes(localPassword, targetPassword);
+			remaining = result.failed || await finishNoteLockKeyMigration();
 		} catch (error) {
 			setErrorMessage(error.name === 'OperationError' ? _('Invalid password') : error.message);
 			setMigrating(false);
 			return;
 		}
 		setMigrating(false);
-		setFailedCount(result.failed);
-		if (result.failed) return;
-		onDone();
-	}, [localPassword, targetPassword, onDone]);
+		setFailedCount(remaining);
+		if (!remaining) props.dispatch({ type: 'NAV_BACK' });
+	}, [localPassword, targetPassword, props.dispatch]);
 
 	const onSkip = useCallback(async () => {
 		if (!await shim.showConfirmationDialog(_('Notes still locked with the password of this device will become permanently unreadable. Continue without migrating them?'))) return;
-		onDone();
-	}, [onDone]);
+		await finishNoteLockKeyMigration(true);
+		props.dispatch({ type: 'NAV_BACK' });
+	}, [props.dispatch]);
 
 	const localLabelId = 'note-lock-migration-local-password';
 	const targetLabelId = 'note-lock-migration-target-password';
 
 	return (
 		<View style={styles.root}>
-			<ScreenHeader title={_('Migrate locked notes')} showSearchButton={false}/>
+			<ScreenHeader title={_('Migrate locked notes')} showSearchButton={false} showBackButton={!migrating} showNoteLockKeyConflictMessage={false}/>
 			<View style={styles.container}>
 				<Text style={styles.normalText}>{_('The sync target uses a different note lock password. Your locked notes must be re-encrypted with that password before synchronisation can continue.')}</Text>
 				<Text nativeID={localLabelId} style={styles.normalText}>{_('Note lock password on this device')}</Text>

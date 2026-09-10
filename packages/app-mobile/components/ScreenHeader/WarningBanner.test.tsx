@@ -16,7 +16,7 @@ interface WrapperProps {
 	shareInvitations?: ShareInvitation[];
 	processingShareInvitationResponse?: boolean;
 	showInvalidJoplinCloudCredential?: boolean;
-	showNoteLockKeyConflictMessage?: boolean;
+	noteLockKeyConflict?: boolean;
 }
 
 const WarningBannerWrapper: React.FC<WrapperProps> = props => {
@@ -31,7 +31,7 @@ const WarningBannerWrapper: React.FC<WrapperProps> = props => {
 		shareInvitations={props.shareInvitations ?? []}
 		processingShareInvitationResponse={props.processingShareInvitationResponse ?? false}
 		showInvalidJoplinCloudCredential={props.showInvalidJoplinCloudCredential ?? false}
-		showNoteLockKeyConflictMessage={props.showNoteLockKeyConflictMessage ?? false}
+		noteLockKeyConflict={props.noteLockKeyConflict ?? false}
 	/>;
 };
 
@@ -46,7 +46,7 @@ describe('WarningBanner', () => {
 
 	test.each([
 		['showMissingMasterKeyMessage', /decryption password/, 'EncryptionConfig'],
-		['showNoteLockKeyConflictMessage', /note lock password/, 'NoteLockMigration'],
+		['noteLockKeyConflict', /note lock password/, 'NoteLockMigration'],
 	])('the %s alert should link to its screen', async (prop, message, routeName) => {
 		render(<WarningBannerWrapper {...{ [prop]: true }}/>);
 		expect(await screen.findAllByTestId('warning-box')).toHaveLength(1);

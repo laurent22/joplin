@@ -50,9 +50,29 @@ export const migrateLockedNotes = async (localPassword: string, targetPassword: 
 	return result;
 };
 
-// Adopts the sync target's key and lineage. Any note still locked with the local key becomes permanently
-// unreadable, so the UI warns before calling this, for skip and dismiss alike.
-export const finishNoteLockKeyMigration = () => {
+const countNotesUnderKey = async (keyId: string) => {
+	const encryptionService = EncryptionService.instance();
+	let count = 0;
+	for (const noteId of await Note.lockedNoteIds()) {
+		const { body } = await Note.load(noteId, { fields: ['id', 'body'] });
+		try {
+			if ((await encryptionService.decodeHeaderString(body)).masterKeyId === keyId) count++;
+		} catch (error) {
+			logger.warn(`Could not read the key of note ${noteId}:`, error);
+		}
+	}
+	return count;
+};
+
+// Adopts the sync target's key and lineage and returns 0. A note still locked with the local key, e.g. one an
+// editor re-saved after the migration passed it, would become permanently unreadable, so without acceptLoss
+// nothing is adopted and the count of such notes is returned instead, for the UI to offer a retry.
+export const finishNoteLockKeyMigration = async (acceptLoss = false) => {
+	if (!acceptLoss) {
+		const remaining = await countNotesUnderKey(NoteLockKey.instance().load()?.id);
+		if (remaining) return remaining;
+	}
 	adoptNoteLockKeyConflict();
 	NoteLockSession.instance().lock();
+	return 0;
 };

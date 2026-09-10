@@ -29,7 +29,8 @@ interface Props {
 	shareInvitations: ShareInvitation[];
 	processingShareInvitationResponse: boolean;
 	showInvalidJoplinCloudCredential: boolean;
-	showNoteLockKeyConflictMessage: boolean;
+	noteLockKeyConflict: boolean;
+	showNoteLockKeyConflictMessage?: boolean|undefined;
 }
 
 const androidGooglePlayUrl = 'https://play.google.com/store/apps/details?id=net.cozic.joplin';
@@ -124,7 +125,7 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 	if (props.hasDisabledEncryptionItems) {
 		warningComps.push(renderWarningBox('Status', _('Some items cannot be decrypted.')));
 	}
-	if (props.showNoteLockKeyConflictMessage) {
+	if (props.noteLockKeyConflict && props.showNoteLockKeyConflictMessage !== false) {
 		warningComps.push(renderWarningBox('NoteLockMigration', _('The sync target uses a different note lock password. Press to migrate your locked notes.')));
 	}
 	if (props.showInvalidJoplinCloudCredential) {
@@ -167,6 +168,6 @@ export default connect((state: AppState) => {
 		shareInvitations: state.shareService.shareInvitations,
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
 		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
-		showNoteLockKeyConflictMessage: isNoteLockEnabled() && !!(state.settings['noteLock.conflictNoteLockKey'] as Partial<NoteLockKeyConflict>)?.noteLockKey,
+		noteLockKeyConflict: isNoteLockEnabled() && !!(state.settings['noteLock.conflictNoteLockKey'] as Partial<NoteLockKeyConflict>)?.noteLockKey,
 	};
 })(WarningBannerComponent);

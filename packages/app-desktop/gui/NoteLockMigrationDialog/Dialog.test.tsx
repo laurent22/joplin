@@ -4,7 +4,6 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import shim from '@joplin/lib/shim';
 import NoteLockMigrationDialog from './Dialog';
 import { finishNoteLockKeyMigration, migrateLockedNotes } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
-import bridge from '../../services/bridge';
 
 jest.mock('@joplin/lib/services/noteLock/NoteLockKeyMigration', () => ({
 	migrateLockedNotes: jest.fn(),
@@ -37,6 +36,7 @@ const renderDialog = () => {
 describe('NoteLockMigrationDialog/Dialog', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
+		finishMock.mockResolvedValue(0);
 	});
 
 	test('should adopt the sync target key once every note is migrated', async () => {
@@ -62,6 +62,18 @@ describe('NoteLockMigrationDialog/Dialog', () => {
 		expect(dispatch).not.toHaveBeenCalled();
 	});
 
+	test('should keep the local key and offer a retry when a note is still locked with it at the end', async () => {
+		migrateMock.mockResolvedValue({ migrated: 1, skipped: 0, failed: 0 });
+		finishMock.mockResolvedValue(1);
+		const dispatch = renderDialog();
+
+		fireEvent.click(screen.getByText('Migrate'));
+
+		expect((await screen.findByRole('alert')).textContent).toContain('1 locked notes could not be migrated');
+		expect(screen.getByText('Retry')).toBeTruthy();
+		expect(dispatch).not.toHaveBeenCalled();
+	});
+
 	test('should report a wrong password without adopting anything', async () => {
 		migrateMock.mockRejectedValue(Object.assign(new Error('bad'), { name: 'OperationError' }));
 		renderDialog();
@@ -72,14 +84,13 @@ describe('NoteLockMigrationDialog/Dialog', () => {
 		expect(finishMock).not.toHaveBeenCalled();
 	});
 
-	test('should adopt the sync target key when skipping after the warning', () => {
+	test('should adopt the sync target key when skipping after the warning', async () => {
 		const dispatch = renderDialog();
 
 		fireEvent.click(screen.getByText('Skip'));
 
-		expect(bridge().showConfirmMessageBox).toBeDefined();
-		expect(finishMock).toHaveBeenCalled();
+		await waitFor(() => expect(dispatch).toHaveBeenCalledWith({ type: 'DIALOG_CLOSE', name: 'noteLockMigration' }));
+		expect(finishMock).toHaveBeenCalledWith(true);
 		expect(migrateMock).not.toHaveBeenCalled();
-		expect(dispatch).toHaveBeenCalledWith({ type: 'DIALOG_CLOSE', name: 'noteLockMigration' });
 	});
 });

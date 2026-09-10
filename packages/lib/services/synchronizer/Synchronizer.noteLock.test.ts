@@ -103,7 +103,7 @@ describe('Synchronizer.noteLock', () => {
 		}
 
 		expect(await migrateLockedNotes('222222', '333333')).toEqual({ migrated: 1, skipped: 0, failed: 0 });
-		finishNoteLockKeyMigration();
+		await finishNoteLockKeyMigration();
 		expect(Setting.value('noteLock.passwordReset')).toBe(false);
 		expect(Setting.value('noteLock.keyIdToReset')).toBe('');
 		await synchronizerStart(null, { throwOnError: true });
@@ -182,7 +182,7 @@ describe('Synchronizer.noteLock', () => {
 		await expect(synchronizerStart(null, { throwOnError: true })).rejects.toMatchObject({ code: ErrorCode.NoteLockKeyConflict });
 
 		expect(await migrateLockedNotes('222222', '111111')).toEqual({ migrated: 1, skipped: 0, failed: 0 });
-		finishNoteLockKeyMigration();
+		await finishNoteLockKeyMigration();
 		await synchronizerStart(null, { throwOnError: true });
 		expect(NoteLockKey.instance().load()).toEqual(remoteKey);
 		expect(localSyncInfo().syncMigrationId).toBe(remoteSyncMigrationId);
@@ -374,7 +374,7 @@ describe('Synchronizer.noteLock', () => {
 		const realHasLockedNotes = Note.hasLockedNotes.bind(Note);
 		const spy = jest.spyOn(Note, 'hasLockedNotes').mockImplementation(async () => {
 			spy.mockRestore();
-			finishNoteLockKeyMigration();
+			await finishNoteLockKeyMigration();
 			return realHasLockedNotes();
 		});
 
