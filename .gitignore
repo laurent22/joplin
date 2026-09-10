@@ -1185,6 +1185,7 @@ packages/editor/CodeMirror/pluginApi/PluginLoader.js
 packages/editor/CodeMirror/pluginApi/codeMirrorRequire.js
 packages/editor/CodeMirror/pluginApi/customEditorCompletion.test.js
 packages/editor/CodeMirror/pluginApi/customEditorCompletion.js
+packages/editor/CodeMirror/testing/backspaceOnce.js
 packages/editor/CodeMirror/testing/createEditorControl.js
 packages/editor/CodeMirror/testing/createTestEditor.js
 packages/editor/CodeMirror/testing/findNodesWithName.js
@@ -1194,6 +1195,8 @@ packages/editor/CodeMirror/testing/pressReleaseKey.js
 packages/editor/CodeMirror/testing/typeText.js
 packages/editor/CodeMirror/testing/visibleEditorText.js
 packages/editor/CodeMirror/theme.js
+packages/editor/CodeMirror/utils/clampSelectionToDocument.test.js
+packages/editor/CodeMirror/utils/clampSelectionToDocument.js
 packages/editor/CodeMirror/utils/findPositionMatchingLink.test.js
 packages/editor/CodeMirror/utils/findPositionMatchingLink.js
 packages/editor/CodeMirror/utils/formatting/RegionSpec.js
@@ -1373,6 +1376,7 @@ packages/lib/SyncTargetWebDAV.js
 packages/lib/Synchronizer.js
 packages/lib/TaskQueue.test.js
 packages/lib/TaskQueue.js
+packages/lib/WebDavApi.test.js
 packages/lib/WebDavApi.js
 packages/lib/WelcomeUtils.test.js
 packages/lib/WelcomeUtils.js
@@ -1882,6 +1886,7 @@ packages/lib/services/rest/routes/events.js
 packages/lib/services/rest/routes/folders.test.js
 packages/lib/services/rest/routes/folders.js
 packages/lib/services/rest/routes/master_keys.js
+packages/lib/services/rest/routes/mcp.test.js
 packages/lib/services/rest/routes/mcp.js
 packages/lib/services/rest/routes/notes.test.js
 packages/lib/services/rest/routes/notes.js

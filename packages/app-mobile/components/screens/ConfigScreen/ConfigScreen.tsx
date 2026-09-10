@@ -135,13 +135,6 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		void NavService.go('EncryptionConfig');
 	};
 
-	private onShowSyncWizard_ = () => {
-		this.props.dispatch({
-			type: 'SYNC_WIZARD_VISIBLE_CHANGE',
-			visible: true,
-		});
-	};
-
 	private saveButton_press = async () => {
 		if (this.state.changedSettingKeys.includes('sync.target') && this.state.settings['sync.target'] === SyncTargetRegistry.nameToId('filesystem')) {
 			if (Platform.OS === 'android') {
@@ -550,7 +543,6 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		}
 
 		if (section.name === 'sync') {
-			addSettingButton('sync_wizard_button', _('Open Sync Wizard...'), this.onShowSyncWizard_);
 			addSettingButton('e2ee_config_button', _('Encryption Config'), this.e2eeConfig_);
 		}
 
