@@ -349,3 +349,7 @@ collegeboom
 jsdiff
 unmerged
 unspaced
+appwidget
+APPWIDGET
+jordanbyron
+uimanager
