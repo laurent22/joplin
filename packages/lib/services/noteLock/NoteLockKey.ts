@@ -59,9 +59,11 @@ export default class NoteLockKey {
 	// Rotate through NoteLockSession.reset() rather than calling this directly, so the session locks
 	// and drops the old key as part of the rotation.
 	public async reset(password: string) {
-		// The replaced id is what the sync target is expected to hold; a second reset before that sync keeps the first.
+		const generated = await this.encryptionService_.generateMasterKey(password);
+		// The replaced id is what the sync target is expected to hold, read once the key is ready so a sync that
+		// finished meanwhile is accounted for; a second reset before that sync keeps the first.
 		if (!Setting.value('noteLock.keyIdToReset')) Setting.setValue('noteLock.keyIdToReset', this.load()?.id ?? '');
-		const key = this.save(await this.encryptionService_.generateMasterKey(password));
+		const key = this.save(generated);
 		// Lets the next sync push the new key to the target instead of adopting the old one back.
 		Setting.setValue('noteLock.passwordReset', true);
 		return key;

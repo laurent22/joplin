@@ -1,6 +1,6 @@
 import Setting from '../../models/Setting';
 import Note from '../../models/Note';
-import { afterAllCleanUp, encryptionService, fileApi, setupDatabaseAndSynchronizer, switchClient, synchronizer, synchronizerStart } from '../../testing/test-utils';
+import { afterAllCleanUp, encryptionService, fileApi, loadEncryptionMasterKey, setupDatabaseAndSynchronizer, switchClient, synchronizer, synchronizerStart } from '../../testing/test-utils';
 import EncryptionService from '../e2ee/EncryptionService';
 import NoteLockKey from '../noteLock/NoteLockKey';
 import NoteLockSession from '../noteLock/NoteLockSession';
@@ -10,6 +10,7 @@ import { ErrorCode } from '../../errors';
 import NoteLockNote from '../noteLock/NoteLockNote';
 import { finishNoteLockKeyMigration, migrateLockedNotes } from '../noteLock/NoteLockKeyMigration';
 import { MasterKeyEntity } from '../e2ee/types';
+import { setupAndEnableEncryption } from '../e2ee/utils';
 
 // Duplicates the singleton reset from NoteLockSession.test.ts: the note lock singletons cache the
 // encryption service, so each client switch has to rebuild them.
@@ -229,7 +230,7 @@ describe('Synchronizer.noteLock', () => {
 
 		await switchToClient(2);
 		await synchronizerStart();
-		// Resets after the sync took its local snapshot and before it read the flag.
+		// Resets after the sync read its snapshot and flag, before the conflict check.
 		const realHasLockedNotes = Note.hasLockedNotes.bind(Note);
 		let resetKey: MasterKeyEntity = null;
 		const spy = jest.spyOn(Note, 'hasLockedNotes').mockImplementation(async () => {
@@ -267,6 +268,94 @@ describe('Synchronizer.noteLock', () => {
 		await synchronizerStart(null, { throwOnError: true });
 		expect(await remoteNoteLockKeyId()).toBe(resetKey.id);
 		expect(Setting.value('noteLock.passwordReset')).toBe(false);
+	});
+
+	it('should hand a reset that lands after the local save the key the sync target holds', async () => {
+		await NoteLockKey.instance().create('111111');
+		await synchronizerStart();
+
+		await switchToClient(2);
+		await synchronizerStart();
+		const firstResetKey = await NoteLockSession.instance().reset('222222');
+		// Resets again while the sync is finishing up, after the merged info was saved locally.
+		const handler = synchronizer().lockHandler();
+		const realReleaseLock = handler.releaseLock.bind(handler);
+		let secondResetKey: MasterKeyEntity = null;
+		const spy = jest.spyOn(handler, 'releaseLock').mockImplementation(async (...args) => {
+			spy.mockRestore();
+			secondResetKey = await NoteLockSession.instance().reset('333333');
+			return realReleaseLock(...args);
+		});
+		await synchronizerStart(null, { throwOnError: true });
+
+		expect(await remoteNoteLockKeyId()).toBe(firstResetKey.id);
+		expect(Setting.value('noteLock.passwordReset')).toBe(true);
+		expect(Setting.value('noteLock.keyIdToReset')).toBe(firstResetKey.id);
+		await synchronizerStart(null, { throwOnError: true });
+		expect(await remoteNoteLockKeyId()).toBe(secondResetKey.id);
+		expect(Setting.value('noteLock.passwordReset')).toBe(false);
+	});
+
+	it('should back up the key the target holds when a sync finishes while a second reset is generating its key', async () => {
+		await NoteLockKey.instance().create('111111');
+		await synchronizerStart();
+
+		await switchToClient(2);
+		await synchronizerStart();
+		const firstResetKey = await NoteLockSession.instance().reset('222222');
+		const service = encryptionService();
+		const realGenerate = service.generateMasterKey.bind(service);
+		const spy = jest.spyOn(service, 'generateMasterKey').mockImplementation(async (...args) => {
+			spy.mockRestore();
+			await synchronizerStart(null, { throwOnError: true });
+			return realGenerate(...args);
+		});
+		const secondResetKey = await NoteLockSession.instance().reset('333333');
+
+		expect(Setting.value('noteLock.keyIdToReset')).toBe(firstResetKey.id);
+		await synchronizerStart(null, { throwOnError: true });
+		expect(await remoteNoteLockKeyId()).toBe(secondResetKey.id);
+	});
+
+	it('should adopt the sync target key in the sync that first uses a local master key', async () => {
+		const remoteKey = await NoteLockKey.instance().create('111111');
+		await synchronizerStart();
+
+		await switchToClient(2);
+		await setupAndEnableEncryption(encryptionService(), await loadEncryptionMasterKey());
+		await synchronizerStart(null, { throwOnError: true });
+
+		expect(NoteLockKey.instance().load()).toEqual(remoteKey);
+	});
+
+	it('should keep a password change that lands during the info upload', async () => {
+		await NoteLockKey.instance().create('111111');
+		await synchronizerStart();
+
+		await switchToClient(2);
+		await synchronizerStart();
+
+		await switchToClient(1);
+		await NoteLockKey.instance().changePassword('111111', '222222');
+		await synchronizerStart();
+
+		await switchToClient(2);
+		const api = synchronizer().api();
+		const realPut = api.put.bind(api);
+		const putSpy = jest.spyOn(api, 'put').mockImplementation(async (path, content, options) => {
+			if (path === 'info.json') {
+				putSpy.mockRestore();
+				await NoteLockKey.instance().changePassword('111111', '333333');
+			}
+			return realPut(path, content, options);
+		});
+		try {
+			await expect(synchronizerStart(null, { throwOnError: true })).rejects.toThrow('changed on this device');
+		} finally {
+			putSpy.mockRestore();
+		}
+
+		await expect(NoteLockKey.instance().decrypt('333333')).resolves.toBeTruthy();
 	});
 
 	it('should not park the key again when the migration finishes while a sync is in flight', async () => {

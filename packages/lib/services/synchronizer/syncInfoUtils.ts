@@ -605,8 +605,7 @@ export const setMasterKeyHasBeenUsed = (s: SyncInfo, mkId: string) => {
 		updated_time: Date.now(),
 	};
 
-	saveLocalSyncInfo(s);
-
+	// Saved by the caller with the rest of the merge, so the sync never persists a candidate its checks may still reject.
 	return s;
 };
 
@@ -670,11 +669,11 @@ export const checkNoteLockKeyConflict = (local: SyncInfo, remote: SyncInfo, hasL
 	throw new JoplinError(_('Synchronisation was stopped because the sync target uses a different note lock password. Your locked notes must be migrated to that password before synchronisation can continue.'), ErrorCode.NoteLockKeyConflict);
 };
 
-// A reset or migration that lands while a sync is in flight would be clobbered by the sync's local save,
-// so the sync stops instead and the next one starts from the new state.
+// A reset, password change or migration that lands while a sync is in flight would be clobbered by the sync's
+// local save, so the sync stops instead and the next one starts from the new state.
 export const checkNoteLockKeyUnchanged = (snapshot: SyncInfo) => {
 	const current = localSyncInfo();
-	if (current.noteLockKey?.id === snapshot.noteLockKey?.id && current.syncMigrationId === snapshot.syncMigrationId) return;
+	if (current.noteLockKey?.id === snapshot.noteLockKey?.id && current.noteLockKey?.updated_time === snapshot.noteLockKey?.updated_time && current.syncMigrationId === snapshot.syncMigrationId) return;
 	throw new Error(_('Synchronisation was stopped because the note lock key changed on this device during the sync. Please synchronise again.'));
 };
 

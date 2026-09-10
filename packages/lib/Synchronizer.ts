@@ -514,7 +514,7 @@ export default class Synchronizer {
 				const appVersion = shim.appVersion();
 				if (appVersion !== 'unknown') checkIfCanSync(remoteInfo, appVersion);
 
-				let localInfo = await localSyncInfo();
+				let localInfo = localSyncInfo();
 				// Read in the same tick as the key, so a reset landing mid-sync is seen whole or not at all.
 				const noteLockPasswordReset = Setting.value('noteLock.passwordReset');
 				const noteLockKeyIdToReset = Setting.value('noteLock.keyIdToReset');
@@ -537,6 +537,7 @@ export default class Synchronizer {
 				// console.info('LOCAL', localInfo);
 				// console.info('REMOTE', remoteInfo);
 
+				let reconciledNoteLockKeyId = localInfo.noteLockKey?.id;
 				if (!syncInfoEquals(localInfo, remoteInfo)) {
 					let newInfo = mergeSyncInfos(localInfo, remoteInfo, { resetPropagates });
 					if (newInfo.activeMasterKeyId) newInfo = setMasterKeyHasBeenUsed(newInfo, newInfo.activeMasterKeyId);
@@ -552,6 +553,7 @@ export default class Synchronizer {
 						checkNoteLockKeyUnchanged(localInfo);
 					}
 					await saveLocalSyncInfo(newInfo);
+					reconciledNoteLockKeyId = newInfo.noteLockKey?.id;
 					await this.lockHandler().releaseLock(LockType.Exclusive, this.lockClientType(), this.clientId_);
 
 					// console.info('NEW', newInfo);
@@ -584,10 +586,15 @@ export default class Synchronizer {
 					if (noteLockPasswordReset) checkNoteLockKeyUnchanged(localInfo);
 				}
 
-				// Either the reset key is on the target now or a different lineage replaced it, so the flag is spent.
+				// Either the reset key is on the target now or a different lineage replaced it, so the flag is spent. A reset
+				// that landed after the local save replaces the key the target holds now, so it keeps its flag.
 				if (noteLockPasswordReset) {
-					Setting.setValue('noteLock.passwordReset', false);
-					Setting.setValue('noteLock.keyIdToReset', '');
+					if (localSyncInfo().noteLockKey?.id === reconciledNoteLockKeyId) {
+						Setting.setValue('noteLock.passwordReset', false);
+						Setting.setValue('noteLock.keyIdToReset', '');
+					} else {
+						Setting.setValue('noteLock.keyIdToReset', reconciledNoteLockKeyId);
+					}
 				}
 			} catch (error) {
 				if (error.code === 403) {
