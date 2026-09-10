@@ -29,11 +29,10 @@ import { setDateFormat, setTimeFormat, setTimeLocale } from '@joplin/utils/time'
 import { reg } from './registry';
 import time from './time';
 import BaseSyncTarget from './BaseSyncTarget';
-import reduxSharedMiddleware from './components/shared/reduxSharedMiddleware';
 import dns = require('dns');
+import reduxSharedMiddleware from './components/shared/reduxSharedMiddleware';
 import fs = require('fs-extra');
 import { EventEmitter } from 'events';
-const syswidecas = require('./vendor/syswide-cas');
 import SyncTargetRegistry from './SyncTargetRegistry';
 import SyncTargetFilesystem from './SyncTargetFilesystem';
 import SyncTargetNextcloud from './SyncTargetNextcloud';
@@ -76,6 +75,8 @@ import NoteLockKey from './services/noteLock/NoteLockKey';
 import isNoteLockEnabled from './services/noteLock/isNoteLockEnabled';
 import NoteLockSession from './services/noteLock/NoteLockSession';
 import NoteLockService from './services/noteLock/NoteLockService';
+import loadClientCertificate from './utils/tls/loadClientCertificate';
+import setExtraRootCertificates from './utils/tls/setExtraRootCertificates';
 import { BuiltInMetadataKeys } from './models/settings/builtInMetadata';
 
 const appLogger: LoggerWrapper = Logger.create('App');
@@ -373,6 +374,14 @@ export default class BaseApplication {
 		}
 	}
 
+	private async updateCustomCertificates_() {
+		try {
+			await loadClientCertificate({});
+		} catch (error) {
+			this.logger().error('Failed to set client certificate:', error);
+		}
+	}
+
 	protected async applySettingsSideEffects(action: { type?: string; key?: string; keys?: string[] } = null) {
 		type SideEffects = Partial<Record<BuiltInMetadataKeys, ()=> Promise<void>>>;
 		const sideEffects: SideEffects = {
@@ -389,12 +398,14 @@ export default class BaseApplication {
 			},
 			'net.customCertificates': async () => {
 				const caPaths = Setting.value('net.customCertificates').split(',');
-				for (let i = 0; i < caPaths.length; i++) {
-					const f = caPaths[i].trim();
-					if (!f) continue;
-					syswidecas.addCAs(f);
+				try {
+					await setExtraRootCertificates(caPaths);
+				} catch (error) {
+					this.logger().error('Failed to add extra CA certificates:', error);
 				}
 			},
+			'net.clientCertificate': () => this.updateCustomCertificates_(),
+			'net.clientCertificate.password': () => this.updateCustomCertificates_(),
 			'net.proxyEnabled': async () => {
 				setupProxySettings({
 					maxConcurrentConnections: Setting.value('sync.maxConcurrentConnections'),
