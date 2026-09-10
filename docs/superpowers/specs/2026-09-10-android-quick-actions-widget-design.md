@@ -57,12 +57,12 @@ A second `ReactActivity` (`getMainComponentName() == "widgetConfig"`), launched 
 
 ### Native — `WidgetManager` module
 
-A native module following the `SharePackage` pattern. Single method: `saveConfig(appWidgetId, orderedItems)` where `orderedItems` is an array of `{type, title, icon}`. It persists the configuration as JSON in `SharedPreferences` keyed by `appWidgetId`, pushes the updated `RemoteViews` through `AppWidgetManager`, and finishes the config activity with `RESULT_OK`.
+A native module following the `SharePackage` pattern. Single method: `saveConfig(appWidgetId, orderedItems)` where `orderedItems` is an array of `{type, title}` pairs (icons are mapped to drawables natively by type). It persists the configuration as JSON in `SharedPreferences` keyed by `appWidgetId`, pushes the updated `RemoteViews` through `AppWidgetManager`, and finishes the config activity with `RESULT_OK`. A `getConfigInfo()` method returns the current `appWidgetId` and saved items (`null` items on fresh creation, so the screen starts empty; saved items on reconfigure, pre-filling the selection).
 
 ### Native — manifest
 
 - `<receiver>` for the provider with `APPWIDGET_UPDATE` intent filter and `META_DATA_APPWIDGET_PROVIDER` metadata.
-- `<activity android:name=".widget.WidgetConfigActivity" android:exported="false">` with a standard full-screen activity theme (a dialog-like theme may be a follow-up polish item, but ReactActivity + dialog themes carry known edge cases, so the initial implementation uses the standard theme).
+- `<activity android:name=".widget.WidgetConfigActivity" android:exported="true">` with an `android.appwidget.action.APPWIDGET_CONFIGURE` intent filter — the launcher (not the app) launches it, so it must be exported — and a standard full-screen activity theme (a dialog-like theme may be a follow-up polish item, but ReactActivity + dialog themes carry known edge cases, so the initial implementation uses the standard theme).
 
 ### Native — resources
 
@@ -79,7 +79,7 @@ A self-contained configuration screen with no redux dependency (theme provider +
 
 - List of the five available actions, localized via `_()` with icons from the existing icon font.
 - Tap-to-add ordering: tapping an available action appends it to the selected sequence; the selected list shows numbered order and tapping a selected item removes it; a live preview row mirrors the final widget.
-- Save is disabled while the selection is empty. Save calls the native `saveConfig` with the ordered `{type, title, icon}` triples. Titles are the localized strings at save time, stored for RemoteViews use — native `strings.xml` is not fed by Joplin's Crowdin pipeline, so labels must originate in JS.
+- Save is disabled while the selection is empty. Save calls the native `saveConfig` with the ordered `{type, title}` pairs. Titles are the localized strings at save time, stored for RemoteViews use — native `strings.xml` is not fed by Joplin's Crowdin pipeline, so labels must originate in JS.
 
 ## Data flow
 
