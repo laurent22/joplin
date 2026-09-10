@@ -56,13 +56,11 @@ export default function(props: Props) {
 			try {
 				result = await migrateLockedNotes(localPassword, targetPassword);
 			} catch (error) {
-				// WebCrypto reports a wrong password as a generic OperationError.
 				setErrorMessage(error.name === 'OperationError' ? _('Invalid password') : error.message);
 				setMigrating(false);
 				return;
 			}
 			setMigrating(false);
-			// A retry only touches the notes that are still outstanding, so the local key stays until it succeeds.
 			setFailedCount(result.failed);
 			if (result.failed) return;
 			finishNoteLockKeyMigration();
