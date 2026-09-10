@@ -10,8 +10,9 @@ import './utils/initReact';
 import './utils/polyfills';
 
 import Root from './root';
-import { LogBox } from 'react-native';
+import { LogBox, AppRegistry } from 'react-native';
 import { registerRootComponent } from 'expo';
+import WidgetConfigScreen from './components/WidgetConfig/WidgetConfigScreen';
 // Allows loading image assets. See https://github.com/expo/expo/issues/31240
 import 'expo-asset';
 
@@ -50,6 +51,8 @@ LogBox.ignoreLogs([
 ]);
 
 registerRootComponent(Root);
+
+AppRegistry.registerComponent('widgetConfig', () => WidgetConfigScreen);
 
 // Using streams on react-native requires to polyfill process.nextTick()
 global.process.nextTick = setImmediate;

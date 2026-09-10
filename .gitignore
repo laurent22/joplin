@@ -826,6 +826,10 @@ packages/app-mobile/components/SyncWizard/SyncWizard.js
 packages/app-mobile/components/TagEditor.test.js
 packages/app-mobile/components/TagEditor.js
 packages/app-mobile/components/TextInput.js
+packages/app-mobile/components/WidgetConfig/WidgetConfigScreen.test.js
+packages/app-mobile/components/WidgetConfig/WidgetConfigScreen.js
+packages/app-mobile/components/WidgetConfig/quickActions.js
+packages/app-mobile/components/WidgetConfig/types.js
 packages/app-mobile/components/accessibility/AccessibleView.test.js
 packages/app-mobile/components/accessibility/AccessibleView.js
 packages/app-mobile/components/accessibility/FocusControl/AutoFocusProvider.js
