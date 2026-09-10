@@ -36,7 +36,7 @@
 - Consumes: nothing (first task).
 - Produces: `data class WidgetAction(val type: String, val title: String)`; `object WidgetConfigCodec { fun serialize(actions: List<WidgetAction>): String; fun deserialize(json: String?): List<WidgetAction> }`; `object DefaultWidgetActions { val all: List<WidgetAction> }` (five actions in canonical order). Used by Tasks 2–4.
 
-- [ ] **Step 1: Add JUnit + org.json test dependencies**
+- [x] **Step 1: Add JUnit + org.json test dependencies**
 
 In `packages/app-mobile/android/app/build.gradle`, the `dependencies` block currently reads:
 
@@ -62,7 +62,7 @@ dependencies {
 }
 ```
 
-- [ ] **Step 2: Write the failing test**
+- [x] **Step 2: Write the failing test**
 
 Create `packages/app-mobile/android/app/src/test/java/net/cozic/joplin/widget/WidgetConfigCodecTest.kt`:
 
@@ -107,12 +107,12 @@ class WidgetConfigCodecTest {
 }
 ```
 
-- [ ] **Step 3: Run the test to verify it fails**
+- [x] **Step 3: Run the test to verify it fails**
 
 Run: `cd packages/app-mobile/android && ./gradlew :app:testDebugUnitTest`
 Expected: compile FAILURE — `WidgetAction` / `WidgetConfigCodec` unresolved. (First gradle run may download dependencies; be patient.)
 
-- [ ] **Step 4: Write the implementation**
+- [x] **Step 4: Write the implementation**
 
 Create `packages/app-mobile/android/app/src/main/java/net/cozic/joplin/widget/WidgetAction.kt`:
 
@@ -167,12 +167,12 @@ object WidgetConfigCodec {
 }
 ```
 
-- [ ] **Step 5: Run the test to verify it passes**
+- [x] **Step 5: Run the test to verify it passes**
 
 Run: `cd packages/app-mobile/android && ./gradlew :app:testDebugUnitTest`
 Expected: PASS — `WidgetConfigCodecTest` green (5 tests).
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add packages/app-mobile/android/app/build.gradle packages/app-mobile/android/app/src/main/java/net/cozic/joplin/widget/WidgetAction.kt packages/app-mobile/android/app/src/main/java/net/cozic/joplin/widget/WidgetConfigCodec.kt packages/app-mobile/android/app/src/test/java/net/cozic/joplin/widget/WidgetConfigCodecTest.kt
@@ -191,7 +191,7 @@ git commit -m "Mobile: Add widget config codec with unit tests"
 - Consumes: `WidgetAction` from Task 1.
 - Produces: `data class WidgetSlot(val slotIndex: Int, val action: WidgetAction?, val labelVisible: Boolean)` (index 0–4, `null` action = slot hidden); `object WidgetSlotMapper { const val SLOT_COUNT = 5; fun slotsFor(actions: List<WidgetAction>, showLabels: Boolean): List<WidgetSlot> }`. Used by Task 3.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Create `packages/app-mobile/android/app/src/test/java/net/cozic/joplin/widget/WidgetSlotMapperTest.kt`:
 
@@ -243,12 +243,12 @@ class WidgetSlotMapperTest {
 }
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `cd packages/app-mobile/android && ./gradlew :app:testDebugUnitTest`
 Expected: compile FAILURE — `WidgetSlotMapper` unresolved.
 
-- [ ] **Step 3: Write the implementation**
+- [x] **Step 3: Write the implementation**
 
 Create `packages/app-mobile/android/app/src/main/java/net/cozic/joplin/widget/WidgetSlotMapper.kt`:
 
@@ -269,12 +269,12 @@ object WidgetSlotMapper {
 }
 ```
 
-- [ ] **Step 4: Run the test to verify it passes**
+- [x] **Step 4: Run the test to verify it passes**
 
 Run: `cd packages/app-mobile/android && ./gradlew :app:testDebugUnitTest`
 Expected: PASS — `WidgetSlotMapperTest` (4 tests) and `WidgetConfigCodecTest` (5 tests) both green.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add packages/app-mobile/android/app/src/main/java/net/cozic/joplin/widget/WidgetSlotMapper.kt packages/app-mobile/android/app/src/test/java/net/cozic/joplin/widget/WidgetSlotMapperTest.kt
@@ -299,7 +299,7 @@ git commit -m "Mobile: Add widget slot mapper with unit tests"
 - Consumes: `WidgetAction`, `DefaultWidgetActions`, `WidgetConfigCodec` (Task 1); `WidgetSlot`, `WidgetSlotMapper` (Task 2).
 - Produces: `class WidgetConfigStore(context: Context)` with `fun load(appWidgetId: Int): List<WidgetAction>`, `fun has(appWidgetId: Int): Boolean`, `fun save(appWidgetId: Int, actions: List<WidgetAction>)`, `fun clear(appWidgetId: Int)`; `object WidgetRefresher { fun refresh(context: Context, appWidgetId: Int) }`; provider class in the manifest. Used by Task 4.
 
-- [ ] **Step 1: Create the icon drawables**
+- [x] **Step 1: Create the icon drawables**
 
 Create `packages/app-mobile/android/app/src/main/res/drawable/ic_widget_new_note.xml`:
 
@@ -374,7 +374,7 @@ Create `packages/app-mobile/android/app/src/main/res/drawable/ic_widget_new_draw
 </vector>
 ```
 
-- [ ] **Step 2: Create color and background resources**
+- [x] **Step 2: Create color and background resources**
 
 Create `packages/app-mobile/android/app/src/main/res/values/widget_colors.xml`:
 
@@ -416,7 +416,7 @@ Create `packages/app-mobile/android/app/src/main/res/drawable-night/widget_backg
 </shape>
 ```
 
-- [ ] **Step 3: Create the widget layout**
+- [x] **Step 3: Create the widget layout**
 
 Create `packages/app-mobile/android/app/src/main/res/layout/widget_quick_actions.xml`. Five identical slot blocks; only the trailing digit of every id differs (`slot_1`…`slot_5`, `icon_1`…`icon_5`, `label_1`…`label_5`). Full file:
 
@@ -463,7 +463,7 @@ Create `packages/app-mobile/android/app/src/main/res/layout/widget_quick_actions
 
 Repeat the slot block four more times so the file literally contains `slot_2`…`slot_5` (do not leave the comment in place of real blocks). The `ImageView` `src` placeholder for every slot is `@drawable/ic_widget_new_note` — the builder overrides it at runtime.
 
-- [ ] **Step 4: Create the provider-info XML and picker label string**
+- [x] **Step 4: Create the provider-info XML and picker label string**
 
 Create `packages/app-mobile/android/app/src/main/res/xml/joplin_quick_actions_widget_info.xml`:
 
@@ -493,7 +493,7 @@ In `packages/app-mobile/android/app/src/main/res/values/strings.xml`, inside `<r
 	<string name="widget_quick_actions_label">Joplin quick actions</string>
 ```
 
-- [ ] **Step 5: Write the store, icon map, views builder, refresher, provider**
+- [x] **Step 5: Write the store, icon map, views builder, refresher, provider**
 
 Create `packages/app-mobile/android/app/src/main/java/net/cozic/joplin/widget/WidgetConfigStore.kt`:
 
@@ -690,7 +690,7 @@ class JoplinQuickActionsWidgetProvider : AppWidgetProvider() {
 }
 ```
 
-- [ ] **Step 6: Register the receiver in the manifest**
+- [x] **Step 6: Register the receiver in the manifest**
 
 In `packages/app-mobile/android/app/src/main/AndroidManifest.xml`, inside `<application>`, insert the following directly before the closing `</application>` tag (the `WidgetConfigActivity` referenced by the provider-info XML is added to the manifest itself only in Task 4 — that is fine, the `android:configure` link is resolved at runtime, not at build time):
 
@@ -710,12 +710,12 @@ In `packages/app-mobile/android/app/src/main/AndroidManifest.xml`, inside `<appl
 
 (The provider-info XML references `WidgetConfigActivity` before it exists; the manifest link to the activity is only resolved at runtime, so this compiles now and works once Task 4 adds the activity.)
 
-- [ ] **Step 7: Compile and run unit tests**
+- [x] **Step 7: Compile and run unit tests**
 
 Run: `cd packages/app-mobile/android && ./gradlew :app:compileDebugKotlin :app:testDebugUnitTest`
 Expected: BUILD SUCCESSFUL, both test classes green.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add packages/app-mobile/android/app/src/main/res packages/app-mobile/android/app/src/main/java/net/cozic/joplin/widget packages/app-mobile/android/app/src/main/AndroidManifest.xml
@@ -736,7 +736,7 @@ git commit -m "Mobile: Add quick actions widget provider and resources"
 - Consumes: `WidgetConfigStore`, `WidgetRefresher` (Task 3).
 - Produces: JS-facing native module `NativeModules.JoplinWidget` with `getConfigInfo(): Promise<{ appWidgetId: number, items: { type: string, title: string }[] | null }>` (items `null` on fresh creation), `saveConfig(appWidgetId: number, items: { type: string, title: string }[]): Promise<null>`, `cancelConfig(): Promise<null>`. Also Android activity `net.cozic.joplin.widget.WidgetConfigActivity` hosting React component name `widgetConfig` (registered in Task 5).
 
-- [ ] **Step 1: Create the config activity**
+- [x] **Step 1: Create the config activity**
 
 Create `packages/app-mobile/android/app/src/main/java/net/cozic/joplin/widget/WidgetConfigActivity.kt`:
 
@@ -775,7 +775,7 @@ class WidgetConfigActivity : ReactActivity() {
 }
 ```
 
-- [ ] **Step 2: Create the native module and package**
+- [x] **Step 2: Create the native module and package**
 
 Create `packages/app-mobile/android/app/src/main/java/net/cozic/joplin/widget/WidgetPackage.kt`:
 
@@ -871,7 +871,7 @@ class WidgetManagerModule(reactContext: ReactApplicationContext) : ReactContextB
 }
 ```
 
-- [ ] **Step 3: Register the package and the activity**
+- [x] **Step 3: Register the package and the activity**
 
 In `packages/app-mobile/android/app/src/main/java/net/cozic/joplin/MainApplication.kt`, add to the imports (alphabetical position, after `import net.cozic.joplin.systeminfo.SystemInformationPackage`):
 
@@ -902,12 +902,12 @@ In `packages/app-mobile/android/app/src/main/AndroidManifest.xml`, inside `<appl
 
 (`exported="true"` with the `APPWIDGET_CONFIGURE` filter is required because the launcher app — not Joplin — launches this activity.)
 
-- [ ] **Step 4: Compile and run unit tests**
+- [x] **Step 4: Compile and run unit tests**
 
 Run: `cd packages/app-mobile/android && ./gradlew :app:compileDebugKotlin :app:testDebugUnitTest`
 Expected: BUILD SUCCESSFUL.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add packages/app-mobile/android/app/src/main/java/net/cozic/joplin packages/app-mobile/android/app/src/main/AndroidManifest.xml
@@ -929,7 +929,7 @@ git commit -m "Mobile: Add widget config activity and JoplinWidget native module
 - Consumes: `NativeModules.JoplinWidget` from Task 4 (`getConfigInfo`, `saveConfig`, `cancelConfig`).
 - Produces: React component `WidgetConfigScreen` (default export) registered under AppRegistry name `widgetConfig`; `type QuickActionType = 'newNote' | 'newTodo' | 'newPhoto' | 'newResource' | 'newDrawing'`; `quickActionDefs` array of `{ type, title(): string, icon }`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 Create `packages/app-mobile/components/WidgetConfig/WidgetConfigScreen.test.tsx` (the `jest.mock` block must be the first thing in the file — before any import that touches `NativeModules`):
 
@@ -1046,12 +1046,12 @@ describe('WidgetConfigScreen', () => {
 });
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `cd packages/app-mobile && yarn test WidgetConfigScreen`
 Expected: FAIL — cannot resolve `./WidgetConfigScreen`.
 
-- [ ] **Step 3: Write types and quick-action definitions**
+- [x] **Step 3: Write types and quick-action definitions**
 
 Create `packages/app-mobile/components/WidgetConfig/types.ts`:
 
@@ -1091,7 +1091,7 @@ export const defForType = (type: QuickActionType): QuickActionDef => {
 };
 ```
 
-- [ ] **Step 4: Write the config screen**
+- [x] **Step 4: Write the config screen**
 
 Create `packages/app-mobile/components/WidgetConfig/WidgetConfigScreen.tsx`:
 
@@ -1252,7 +1252,7 @@ const WidgetConfigScreen: React.FC = () => {
 export default WidgetConfigScreen;
 ```
 
-- [ ] **Step 5: Register the widgetConfig entry**
+- [x] **Step 5: Register the widgetConfig entry**
 
 In `packages/app-mobile/index.js`, add to the imports near the top (after `import Root from './root';`):
 
@@ -1267,12 +1267,12 @@ and after `registerRootComponent(Root);` add:
 AppRegistry.registerComponent('widgetConfig', () => WidgetConfigScreen);
 ```
 
-- [ ] **Step 6: Run the tests to verify they pass**
+- [x] **Step 6: Run the tests to verify they pass**
 
 Run: `cd packages/app-mobile && yarn test WidgetConfigScreen`
 Expected: PASS — 5 tests green. If `Icon` rendering fails in tests, wrap it: the `Icon` component needs no provider; a failure usually means a typo in the icon name.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add packages/app-mobile/components/WidgetConfig packages/app-mobile/index.js
@@ -1291,37 +1291,37 @@ git commit -m "Mobile: Add widget configuration screen"
 - Consumes: everything from Tasks 1–5.
 - Produces: verified green build.
 
-- [ ] **Step 1: Run `yarn updateIgnored` (new TypeScript files were added)**
+- [x] **Step 1: Run `yarn updateIgnored` (new TypeScript files were added)**
 
 Run: `yarn updateIgnored`
 Expected: exits 0; may update ignore lists — commit any changed files it produces.
 
-- [ ] **Step 2: Type-check**
+- [x] **Step 2: Type-check**
 
 Run: `yarn tsc --noEmit`
 Expected: no errors. (If a pre-existing unrelated error appears, verify it exists on `HEAD~` too before ignoring it.)
 
-- [ ] **Step 3: Lint new JS/TS files**
+- [x] **Step 3: Lint new JS/TS files**
 
 Run: `yarn eslint packages/app-mobile/components/WidgetConfig packages/app-mobile/index.js`
 Expected: no errors. Fix style issues (tabs, quotes) that ESLint reports.
 
-- [ ] **Step 4: Run the full app-mobile Jest suite**
+- [x] **Step 4: Run the full app-mobile Jest suite**
 
 Run: `cd packages/app-mobile && yarn test`
 Expected: all tests pass, including the pre-existing suite (regressions would indicate the `index.js` change or the react-native mock leaked).
 
-- [ ] **Step 5: Run Android unit tests and compile**
+- [x] **Step 5: Run Android unit tests and compile**
 
 Run: `cd packages/app-mobile/android && ./gradlew :app:testDebugUnitTest :app:compileDebugKotlin`
 Expected: BUILD SUCCESSFUL.
 
-- [ ] **Step 6: cSpell check (if CI runs it locally)**
+- [x] **Step 6: cSpell check (if CI runs it locally)**
 
 Run: `yarn spellcheck 2>/dev/null || npx cspell lint "packages/app-mobile/components/WidgetConfig/**" "packages/app-mobile/android/app/src/main/java/net/cozic/joplin/widget/**" --no-progress`
 Expected: no unknown words. If flagged, follow `readme/dev/spellcheck.md` (words like `appwidget`, `RemoteViews` may need adding to the project dictionary via `cspell.json` `words` list or inline ignore, exactly as that doc specifies).
 
-- [ ] **Step 7: Commit hygiene changes**
+- [x] **Step 7: Commit hygiene changes**
 
 ```bash
 git add -A
@@ -1330,7 +1330,7 @@ git commit -m "Mobile: Widget quick actions - repo hygiene" --allow-empty
 
 (Skip committing if nothing changed; `--allow-empty` makes the step safe either way.)
 
-- [ ] **Step 8: Manual QA checklist (emulator with API 33+ recommended)**
+- [x] **Step 8: Manual QA checklist (emulator with API 33+ recommended)**
 
 Build and install: `cd packages/app-mobile/android && ./gradlew :app:installDebug`, then:
 

@@ -353,3 +353,7 @@ appwidget
 APPWIDGET
 jordanbyron
 uimanager
+drawables
+systeminfo
+recents
+Robolectric
