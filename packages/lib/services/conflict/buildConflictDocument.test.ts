@@ -45,14 +45,27 @@ describe('buildConflictDocument', () => {
 
 	test('should handle a side that was deleted on the other version', () => {
 		const sections: MergedSection[] = [
-			{ text: 'x', type: 'conflict', localText: 'kept', remoteText: '' },
+			{ text: 'x', type: 'conflict', localText: 'kept', remoteText: '', localLineCount: 1, remoteLineCount: 0 },
 			{ text: 'after', type: 'unchanged' },
 		];
 
 		const document = buildConflictDocument(sections);
 
-		expect(document.text).toBe('\nafter');
+		// Their version does not have that line, so the document does not either
+		expect(document.text).toBe('after');
 		expect(document.regions).toEqual([{ from: 0, to: 0, localText: 'kept', kind: ConflictRegionKind.OnlyMine }]);
+	});
+
+	test('should keep a blank line the other version added', () => {
+		const sections: MergedSection[] = [
+			{ text: 'before', type: 'unchanged' },
+			{ text: 'x', type: 'conflict', localText: '', remoteText: '', localLineCount: 0, remoteLineCount: 1 },
+			{ text: 'after', type: 'unchanged' },
+		];
+
+		const document = buildConflictDocument(sections);
+
+		expect(document.text).toBe('before\n\nafter');
 	});
 
 	test('should classify each region by which version has the text', () => {

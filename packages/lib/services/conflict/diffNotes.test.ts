@@ -249,6 +249,32 @@ describe('diffNotes', () => {
 		expect(result.sections.some(s => s.type === 'unchanged')).toBe(true);
 	});
 
+	test('should keep one replacement together when a blank line falls inside it', () => {
+		const local = 'table\n\n\nmine';
+		const remote = 'table\n\ntheirs\n\nextra line';
+		const result = twoWayDiff(local, remote);
+
+		const conflicts = result.sections.filter(section => section.type === 'conflict');
+		expect(conflicts).toHaveLength(1);
+		expect(conflicts[0].localText).toBe('\nmine');
+		expect(conflicts[0].remoteText).toBe('theirs\n\nextra line');
+	});
+
+	test('should still separate two edits that a blank line really divides', () => {
+		const result = twoWayDiff('first mine\n\nsecond', 'first\n\nsecond theirs');
+		expect(result.sections.filter(section => section.type === 'conflict')).toHaveLength(2);
+	});
+
+	test('should tell a blank line they added from one they removed', () => {
+		const added = twoWayDiff('a\nb', 'a\n\nb').sections.find(section => section.type === 'conflict');
+		const removed = twoWayDiff('a\n\nb', 'a\nb').sections.find(section => section.type === 'conflict');
+
+		expect(added.remoteLineCount).toBe(1);
+		expect(added.localLineCount).toBe(0);
+		expect(removed.remoteLineCount).toBe(0);
+		expect(removed.localLineCount).toBe(1);
+	});
+
 	test('should be deterministic for the same inputs', () => {
 		const base = 'a\nb\nc';
 		const local = 'A\nb\nc';

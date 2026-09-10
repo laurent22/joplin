@@ -29,6 +29,7 @@ export default (sections: MergedSection[]): ConflictDocument => {
 	const parts: string[] = [];
 	const regions: ConflictDocumentRegion[] = [];
 	let offset = 0;
+	let wroteALine = false;
 
 	for (const section of sections) {
 		const isConflict = section.type === 'conflict';
@@ -36,10 +37,8 @@ export default (sections: MergedSection[]): ConflictDocument => {
 		const remoteText = section.remoteText ?? '';
 		const text = isConflict ? remoteText : section.text;
 
-		// A conflict the other side deleted has no text of its own, so it takes no
-		// line in the document. Adding a separator for it would insert a blank line
-		// that is not in their version and shift every region after it.
-		const separated = parts.length > 0 && !(isConflict && text === '');
+		const holdsNoLine = isConflict && (section.remoteLineCount ?? (text === '' ? 0 : 1)) === 0;
+		const separated = wroteALine && !holdsNoLine;
 		if (separated) {
 			parts.push('\n');
 			offset += 1;
@@ -56,6 +55,7 @@ export default (sections: MergedSection[]): ConflictDocument => {
 
 		parts.push(text);
 		offset += text.length;
+		if (!holdsNoLine) wroteALine = true;
 	}
 
 	return { text: parts.join(''), regions };
