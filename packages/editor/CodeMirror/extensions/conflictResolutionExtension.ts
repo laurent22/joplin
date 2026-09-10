@@ -443,9 +443,6 @@ const localAccent = 'var(--joplin-search-marker-background-color, #F7D26E)';
 const surface = 'var(--joplin-background-color, #ffffff)';
 
 const conflictTheme = EditorView.baseTheme({
-	'& .cm-conflictRegion': {
-		backgroundColor: `color-mix(in srgb, ${remoteAccent} 14%, transparent)`,
-	},
 	'& .cm-conflictIncoming': {
 		backgroundColor: `color-mix(in srgb, ${remoteAccent} 12%, transparent)`,
 		borderLeft: `2px solid ${remoteAccent}`,
