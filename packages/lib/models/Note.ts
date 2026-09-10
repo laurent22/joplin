@@ -583,7 +583,7 @@ export default class Note extends BaseItem {
 
 	public static async titlesLike(pattern: string): Promise<string[]> {
 		const rows = await this.db().selectAll<NoteEntity>(
-			'SELECT title FROM notes WHERE title LIKE ? AND deleted_time = 0',
+			'SELECT title FROM notes WHERE title LIKE ? ESCAPE \'\\\' AND deleted_time = 0',
 			[pattern],
 		);
 		return rows.map(row => row.title);

@@ -64,6 +64,16 @@ describe('keepConflictCopy', () => {
 		expect(result.title).toBe('Title (conflicted copy 2)');
 	});
 
+	test('should not reuse a number when the title contains LIKE wildcards', async () => {
+		// % and _ are wildcards, so the search has to treat them as ordinary characters
+		const { conflictNote } = await createConflict('100% a_b');
+		await Note.save({ title: '100% a_b (conflicted copy)' });
+
+		const result = await keepConflictCopy(conflictNote.id);
+
+		expect(result.title).toBe('100% a_b (conflicted copy 2)');
+	});
+
 	test('should report a note that is not a conflict', async () => {
 		const note = await Note.save({ title: 'Plain' });
 		expect((await keepConflictCopy(note.id)).status).toBe(KeepStatus.Unavailable);
