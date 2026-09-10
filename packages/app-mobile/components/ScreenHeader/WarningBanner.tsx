@@ -13,6 +13,7 @@ import { substrWithEllipsis } from '@joplin/lib/string-utils';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
+import { reg } from '@joplin/lib/registry';
 
 const logger = Logger.create('WarningBanner');
 
@@ -41,7 +42,7 @@ const fetchAndroidVersionIsPreRelease = async (version: string) => {
 	return !!release.prerelease;
 };
 
-export const WarningBannerComponent: React.FC<Props> = props => {
+const WarningBannerComponent: React.FC<Props> = props => {
 	const warningComps = [];
 
 	const [isAndroidTargetPreRelease, setIsAndroidTargetPreRelease] = useState<boolean|null>(null);
@@ -145,6 +146,16 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 	return warningComps;
 };
 
+const isSyncLoginRoute = (state: AppState) => {
+	const syncTargetId = state.settings['sync.target'];
+	const syncTarget = syncTargetId ? reg.syncTarget(syncTargetId) : null;
+	if (syncTarget) {
+		return state.route?.routeName === syncTarget.authRouteName();
+	}
+
+	return false;
+};
+
 export default connect((state: AppState) => {
 	const syncInfo = localSyncInfoFromState(state);
 
@@ -161,6 +172,6 @@ export default connect((state: AppState) => {
 		syncTargetAppMinVersion: syncInfo.appMinVersion,
 		shareInvitations: state.shareService.shareInvitations,
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
-		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
+		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && !isSyncLoginRoute(state) && state.mustAuthenticate,
 	};
 })(WarningBannerComponent);
