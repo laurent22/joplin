@@ -299,6 +299,26 @@ describe('useFormNote', () => {
 		formNote.unmount();
 	});
 
+	test('should refresh a conflict note that was changed outside the editor', async () => {
+		const original = await Note.save({ title: 'Title', body: 'remote' });
+		const conflict = await Note.save({
+			title: 'Title', body: 'local', is_conflict: 1, conflict_original_id: original.id,
+		});
+
+		const formNote = renderHook(props => useFormNote(props), {
+			initialProps: { ...defaultFormNoteProps, noteId: conflict.id },
+		});
+		await waitFor(() => expect(formNote.result.current.formNote.body).toBe('local'));
+
+		await act(async () => {
+			await Note.save({ id: conflict.id, body: 'edited outside' });
+			await ItemChange.waitForAllSaved();
+		});
+
+		await waitFor(() => expect(formNote.result.current.formNote.body).toBe('edited outside'));
+		formNote.unmount();
+	});
+
 	test('should refresh resource infos when changed outside the editor', async () => {
 		let note = await Note.save({});
 		note = await shim.attachFileToNote(note, join(supportDir, 'sample.txt'));
