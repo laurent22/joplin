@@ -3,8 +3,40 @@ import MainScreen from './models/MainScreen';
 import setFilePickerResponse from './util/setFilePickerResponse';
 import waitForNextOpenPath from './util/waitForNextOpenPath';
 import { basename, join } from 'path';
+import { writeFile } from 'fs-extra';
 
 test.describe('richTextEditor', () => {
+	test('should preserve text size in OneNote outlines with and without ink', async ({ electronApp, mainWindow, profileDirectory }) => {
+		const htmlPath = join(profileDirectory, 'onenote-text.html');
+		await writeFile(htmlPath, `<!DOCTYPE html>
+			<html><body>
+				<p>Outside outline</p>
+				<div class="container-outline">
+					<p>Inside outline</p>
+				</div>
+				<div class="container-outline">
+					<div class="outline-element"><p>Text beside ink</p></div>
+					<div class="outline-element"><p><span class="ink-text" style="width: 40px; height: 30px;"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=" width="40" height="30"></span></p></div>
+				</div>
+			</body></html>
+		`);
+
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.importHtmlFile(electronApp, htmlPath);
+		await mainScreen.noteList.getNoteItemByTitle('onenote-text').click();
+
+		const richTextEditor = await mainScreen.noteEditor.showRichTextEditor();
+		const outsideText = richTextEditor.body.getByText('Outside outline');
+		await expect(outsideText).toBeVisible();
+		const fontSize = await outsideText.evaluate(element => getComputedStyle(element).fontSize);
+		await expect(richTextEditor.body.locator('.container-outline').getByText('Inside outline')).toHaveCSS('font-size', fontSize);
+		const mixedOutline = richTextEditor.body.locator('.container-outline').filter({ hasText: 'Text beside ink' });
+		await expect(mixedOutline.locator('.ink-text img')).toHaveCount(1);
+		await expect(mixedOutline.getByText('Text beside ink')).toHaveCSS('font-size', fontSize);
+		const inkFontSize = '8px';
+		await expect(mixedOutline.locator('p:has(.ink-text)')).toHaveCSS('font-size', inkFontSize);
+	});
+
 	test('HTML links should be preserved when editing a note', async ({ electronApp, mainWindow }) => {
 		const mainScreen = await new MainScreen(mainWindow).setup();
 		await mainScreen.createNewNote('Testing!');

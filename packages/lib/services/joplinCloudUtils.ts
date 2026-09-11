@@ -71,6 +71,8 @@ export const getApplicationInformation = async () => {
 		return { type: ApplicationType.Mobile, platform: ApplicationPlatform.Ios };
 	case 'android':
 		return { type: ApplicationType.Mobile, platform: ApplicationPlatform.Android };
+	case 'web':
+		return { type: ApplicationType.Mobile, platform: ApplicationPlatform.Web };
 	case 'darwin':
 		return { type: ApplicationType.Desktop, platform: ApplicationPlatform.MacOs };
 	case 'win32':

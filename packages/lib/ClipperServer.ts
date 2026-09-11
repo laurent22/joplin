@@ -195,14 +195,18 @@ export default class ClipperServer {
 						'Content-Length': body.length,
 					});
 					response.end(instance.body);
+				} else if (typeof instance.body === 'string' || instance.body === null || instance.body === undefined) {
+					writeCorsHeaders(code, instance.contentType ? instance.contentType : 'text/plain');
+					response.end(instance.body ? instance.body : '');
 				} else {
-					throw new Error('Not implemented');
+					writeCorsHeaders(code, instance.contentType ? instance.contentType : 'application/json');
+					response.end(JSON.stringify(instance.body));
 				}
 			};
 
 			const writeResponse = (code: number, response: unknown) => {
 				if (response instanceof ApiResponse) {
-					writeResponseInstance(code, response);
+					writeResponseInstance(response.status ? response.status : code, response);
 				} else if (typeof response === 'string') {
 					writeResponseText(code, response);
 				} else if (response === null || response === undefined) {

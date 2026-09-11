@@ -1130,7 +1130,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 				if (!hasOneNoteInkContentStyle && new DOMParser().parseFromString(result.html, 'text/html').querySelector('.ink-text, .ink-space, .container-outline')) {
 					const styleElement = editor.getDoc().createElement('style');
 					styleElement.id = oneNoteInkContentStyleId;
-					styleElement.textContent = '.ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; } .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; font-weight: normal; }';
+					styleElement.textContent = '.ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; } .container-outline p:has(> .ink-text, > .ink-space) { font-family: Calibri, sans-serif; font-size: 6pt; font-weight: normal; }';
 					editor.getDoc().head.appendChild(styleElement);
 				}
 				const htmlAndCss = [

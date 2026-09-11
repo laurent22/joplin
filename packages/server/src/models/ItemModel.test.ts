@@ -661,4 +661,28 @@ describe('ItemModel', () => {
 		expect(trashedNote.deleted_time).toBe(123);
 	});
 
+	test('should update the item when it was created by a concurrent request', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+
+		// Simulates a client retrying an upload while the original request is still being
+		// processed: the item does not exist when the caller checks for it, but does by the
+		// time it is inserted.
+		await models().item().saveForUser(user1.id, {
+			name: 'test.txt',
+			content: Buffer.from('original'),
+		});
+
+		const savedItem = await models().item().saveForUser(user1.id, {
+			name: 'test.txt',
+			content: Buffer.from('retried'),
+		});
+
+		const allItems = await models().item().all();
+		expect(allItems.length).toBe(1);
+		expect(savedItem.id).toBe(allItems[0].id);
+
+		const content = await models().item().loadWithContent(savedItem.id);
+		expect(content.content.toString()).toBe('retried');
+	});
+
 });

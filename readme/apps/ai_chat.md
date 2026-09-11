@@ -25,14 +25,19 @@ AI features are only available on the desktop app.
 
 You can change provider at any time.
 
-## Local vs remote: the "Allow remote providers" switch
+## Private network vs remote: the "Allow remote providers" switch
 
 To protect against accidentally sending your notes to a cloud service, Joplin keeps a second, separate switch: **Allow remote AI providers**. By default it is off.
 
-- **Local providers** (Ollama, LM Studio, or any other server running on `localhost` / `127.0.0.1`) work with this switch off — nothing leaves your computer.
-- **Remote providers** (Joplin Cloud AI, Anthropic, OpenAI, anything not on localhost — including services on your local network) need this switch on. If it's off, AI calls to a remote provider fail with a clear error.
+- **Private-network providers** work with this switch off — your notes never leave your own network. This covers Ollama, LM Studio, or any other OpenAI-compatible server reachable at:
+	- `localhost`, `127.0.0.1` or `::1`
+	- a private LAN address: `10.x.x.x`, `172.16.x.x`–`172.31.x.x`, `192.168.x.x`, `169.254.x.x`, or an IPv6 unique-local (`fc00::/7`) / link-local (`fe80::/10`) address
+	- a hostname ending in `.localhost`, `.internal` or `.home.arpa`
+- **Remote providers** (Joplin Cloud AI, Anthropic, OpenAI, and any other public endpoint) need this switch on. If it's off, AI calls to a remote provider fail with a clear error.
 
-LAN addresses are deliberately treated as remote. The idea is "did my data leave this device", not "did it leave my house".
+A private-network provider does not require an API key, since these servers usually have no authentication. You can still set one if your server expects it — leave the field empty otherwise.
+
+Note that `.local` hostnames are treated as remote. Unlike the names above, `.local` is resolved via mDNS/Bonjour and can point at any machine on the network you happen to be joined to, which isn't a safe assumption on public Wi-Fi. Use the machine's LAN IP address instead.
 
 ## Token usage
 

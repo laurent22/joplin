@@ -2,6 +2,7 @@
 .editor-status-indicator {
 	width: 0;
 	overflow: hidden;
+	white-space: nowrap;
 
 	&:has(> :focus-visible), &.-show {
 		width: unset;

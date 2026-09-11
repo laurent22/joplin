@@ -171,6 +171,14 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 			({ response, json } = await doFetch());
 		}
 
+		// Reasoning models apply a reasoning_effort default server-side, which OpenAI then rejects
+		// alongside tools on /chat/completions. Opt out of the default to keep tools working.
+		if (response.status === 400 && 'tools' in body && /reasoning_effort/i.test(errorMessage())) {
+			logger.warn(`Model ${this.model_} rejected function tools with reasoning; retrying with reasoning disabled.`);
+			body.reasoning_effort = 'none';
+			({ response, json } = await doFetch());
+		}
+
 		// Older OpenAI models might reject `response_format` json_schema (see https://stackoverflow.com/q/79039544).
 		// For compatibility, retry without response_format on failure:
 		if (response.status === 400 && 'response_format' in body && /json_schema|response_format/i.test(errorMessage())) {
