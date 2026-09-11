@@ -7,6 +7,23 @@
 	android:padding="4dp">
 
 	<LinearLayout
+		android:id="@+id/slot_app"
+		android:layout_width="0dp"
+		android:layout_height="match_parent"
+		android:layout_weight="1"
+		android:gravity="center"
+		android:orientation="vertical"
+		android:padding="4dp">
+
+		<ImageView
+			android:id="@+id/icon_app"
+			android:layout_width="32dp"
+			android:layout_height="32dp"
+			android:src="@mipmap/ic_launcher"
+			android:contentDescription="@string/app_name" />
+	</LinearLayout>
+
+	<LinearLayout
 		android:id="@+id/slot_1"
 		android:layout_width="0dp"
 		android:layout_height="match_parent"
@@ -21,15 +38,6 @@
 			android:layout_height="24dp"
 			android:src="@drawable/ic_widget_new_note"
 			android:contentDescription="@string/widget_quick_actions_label" />
-
-		<TextView
-			android:id="@+id/label_1"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:textColor="@color/widget_label_color"
-			android:textSize="11sp"
-			android:maxLines="1"
-			android:ellipsize="end" />
 	</LinearLayout>
 
 	<LinearLayout
@@ -47,15 +55,6 @@
 			android:layout_height="24dp"
 			android:src="@drawable/ic_widget_new_todo"
 			android:contentDescription="@string/widget_quick_actions_label" />
-
-		<TextView
-			android:id="@+id/label_2"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:textColor="@color/widget_label_color"
-			android:textSize="11sp"
-			android:maxLines="1"
-			android:ellipsize="end" />
 	</LinearLayout>
 
 	<LinearLayout
@@ -73,15 +72,6 @@
 			android:layout_height="24dp"
 			android:src="@drawable/ic_widget_new_photo"
 			android:contentDescription="@string/widget_quick_actions_label" />
-
-		<TextView
-			android:id="@+id/label_3"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:textColor="@color/widget_label_color"
-			android:textSize="11sp"
-			android:maxLines="1"
-			android:ellipsize="end" />
 	</LinearLayout>
 
 	<LinearLayout
@@ -99,15 +89,6 @@
 			android:layout_height="24dp"
 			android:src="@drawable/ic_widget_new_attachment"
 			android:contentDescription="@string/widget_quick_actions_label" />
-
-		<TextView
-			android:id="@+id/label_4"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:textColor="@color/widget_label_color"
-			android:textSize="11sp"
-			android:maxLines="1"
-			android:ellipsize="end" />
 	</LinearLayout>
 
 	<LinearLayout
@@ -125,14 +106,5 @@
 			android:layout_height="24dp"
 			android:src="@drawable/ic_widget_new_drawing"
 			android:contentDescription="@string/widget_quick_actions_label" />
-
-		<TextView
-			android:id="@+id/label_5"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:textColor="@color/widget_label_color"
-			android:textSize="11sp"
-			android:maxLines="1"
-			android:ellipsize="end" />
 	</LinearLayout>
 </LinearLayout>

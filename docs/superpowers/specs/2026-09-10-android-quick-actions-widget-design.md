@@ -41,9 +41,9 @@ Rationale: the widget is static buttons, where plain RemoteViews are the most ro
 
 An `AppWidgetProvider` that renders the widget from saved configuration:
 
-- Layout `res/layout/widget_quick_actions.xml` contains five pre-declared button slots (RemoteViews cannot create views dynamically). Each slot is a weighted `LinearLayout` cell containing an `ImageView` (icon) and a `TextView` (label). Unselected slots are set to `GONE`; visible slots divide the row evenly at any widget width. Column count affects total width only, never which buttons are shown.
-- Each button's `PendingIntent` targets `MainActivity` with `action="ACTION_SHORTCUT"` and a `SHORTCUT_ITEM` `PersistableBundle` (`type`, `title`, `icon`, `userInfo: {url: ''}`) — the exact intent contract `react-native-quick-actions` produces. This intentionally duplicates the library's private intent format; a comment must reference `AppShortcutsModule.java` in `jordanbyron/react-native-quick-actions` per the repo's duplication guidelines.
-- `onAppWidgetOptionsChanged` reads `OPTION_APPWIDGET_MIN_WIDTH` (and max width): below 180dp, labels are hidden (icons only); at or above, labels are shown.
+- Layout `res/layout/widget_quick_actions.xml` contains six pre-declared cells (RemoteViews cannot create views dynamically): a fixed leading cell holding the Joplin launcher icon (32dp, opens the app via the standard launch intent), followed by five weighted action cells each containing an icon-only `ImageView` (24dp). Unselected action cells are set to `GONE`; visible cells divide the row evenly at any widget width. Column count affects total width only, never which buttons are shown. The widget never displays text labels.
+- Each action button's `PendingIntent` targets `MainActivity` with `action="ACTION_SHORTCUT"` and a `SHORTCUT_ITEM` `PersistableBundle` (`type`, `title`, `icon`, `userInfo: {url: ''}`) — the exact intent contract `react-native-quick-actions` produces. The leading app cell uses the standard package launch intent (`getLaunchIntentForPackage`). This intentionally duplicates the library's private intent format; a comment must reference `AppShortcutsModule.java` in `jordanbyron/react-native-quick-actions` per the repo's duplication guidelines.
+- `onAppWidgetOptionsChanged` re-renders the widget (defensively; the views themselves are size-independent).
 - `onDeleted` removes that widget's preferences entry.
 - Provider logic (config load, slot mapping, RemoteViews construction) lives in a plain Kotlin class with no Android framework dependencies beyond `RemoteViews`/`Context`, kept testable; the provider class is a thin shell.
 
@@ -86,7 +86,7 @@ A self-contained configuration screen with no redux dependency (theme provider +
 - **Creation**: launcher → config activity (`EXTRA_APPWIDGET_ID`) → user builds ordered selection → Save → `saveConfig` persists prefs, updates RemoteViews, `RESULT_OK` → widget visible.
 - **Tap, warm**: button PendingIntent → `MainActivity` (`singleTask`) → `onNewIntent` → library emits `quickActionShortcut` → existing `setupQuickActions.ts` handler runs the `newNote` command with appropriate options.
 - **Tap, cold**: PendingIntent becomes the launch intent → app boots → `popInitialAction()` reads it → same handler. Identical to shortcut cold start today.
-- **Resize**: launcher → `onAppWidgetOptionsChanged` → re-read prefs, rebuild RemoteViews, toggle label visibility by width.
+- **Resize**: launcher → `onAppWidgetOptionsChanged` → re-read prefs, rebuild RemoteViews (cells stretch via weights; content is size-independent).
 - **Reconfigure**: launcher "Reconfigure" (API 31+) or delete-and-re-add → config screen pre-filled from prefs.
 
 ## Edge cases and error handling
@@ -100,7 +100,7 @@ A self-contained configuration screen with no redux dependency (theme provider +
 
 ## Testing
 
-- **Kotlin unit tests**: prefs round-trip preserves ordered types; fallback to defaults on corrupt/missing JSON; cleanup on delete; RemoteViews construction yields the right number of visible slots with correct labels/icons per type.
+- **Kotlin unit tests**: prefs round-trip preserves ordered types; fallback to defaults on corrupt/missing JSON; cleanup on delete; slot mapping yields the right number of visible cells in order per selection.
 - **JS Jest tests**: ordered selection by tap sequence; removal from the middle reorders correctly; Save payload matches the exact ordered array; Save disabled when empty; preview mirrors selection.
 - **Manual QA**: add at 1×1 and 5×1; resize across the range; warm/cold taps for all five actions; multiple instances with distinct configs; reconfigure; dark mode; RTL layout; behavior on API 24–30 emulator.
 

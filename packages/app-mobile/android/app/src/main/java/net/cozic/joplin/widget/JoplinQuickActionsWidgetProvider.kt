@@ -12,14 +12,15 @@ class JoplinQuickActionsWidgetProvider : AppWidgetProvider() {
 		}
 	}
 
+	// Re-render on resize so launcher-provided geometry changes never leave
+	// a stale layout, even though the views themselves are size-independent.
 	override fun onAppWidgetOptionsChanged(
 		context: Context,
 		appWidgetManager: AppWidgetManager,
 		appWidgetId: Int,
 		newOptions: Bundle,
 	) {
-		val minWidth = newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 0)
-		WidgetRefresher.refresh(context, appWidgetId, minWidth)
+		WidgetRefresher.refresh(context, appWidgetId)
 	}
 
 	override fun onDeleted(context: Context, appWidgetIds: IntArray) {
