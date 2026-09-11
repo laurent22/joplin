@@ -9,25 +9,34 @@ import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('handleCallbackUrl');
 
-// Opens the caller's x-success / x-error URL with the result appended as query params.
+// Schemes of known apps, which are allowed whatever their callback format. Add
+// any legitimate app here - it's preferred over relying on the host check below.
+// From https://x-callback-url.com/apps/ and https://app-talk.com/
+const knownCallbackProtocols = [
+	'agenda:', 'airmail:', 'bear:', 'beorg:', 'byword:', 'calca:', 'copied:',
+	'dayone:', 'devonthink:', 'drafts:', 'drafts5:', 'due:', 'editorial:',
+	'fantastical2:', 'gladys:', 'hook:', 'instapaper:', 'launcher:', 'omnifocus:',
+	'omnifocus3:', 'onewriter:', 'opener:', 'outlinely:', 'overcast:', 'prizmo:',
+	'pyto:', 'scriptable:', 'shortcutsiosopen:', 'terminology:', 'textastic:',
+	'things:', 'timepage:', 'todoist:', 'trello:', 'twodo:', 'ulysses:',
+	'working-copy:', 'x-devonthink:',
+];
+
 const respond = (target: string, params: Record<string, string> = {}) => {
 	if (!target) return;
 
-	// The callback target is untrusted input from the x-callback-url. Anything
-	// that is not file: is handed straight to shell.openExternal(), i.e. the OS
-	// URI dispatcher, so restrict it to schemes we're willing to invoke. This
-	// also covers the x-error path below, which fires on any thrown exception.
-	let protocol;
+	// A joplin:// URL can be triggered from a web page and the target is passed to
+	// the OS URI dispatcher, so it must not reach an arbitrary handler.
+	let url;
 	try {
-		protocol = new URL(target).protocol;
+		url = new URL(target);
 	} catch (error) {
-		// Don't log the caller-supplied target: it's untrusted and may contain
-		// secrets in its query or fragment.
+		// The target is untrusted and may contain secrets, so don't log it.
 		logger.warn('Rejected malformed callback target');
 		return;
 	}
-	if (protocol !== 'http:' && protocol !== 'https:') {
-		logger.warn(`Rejected callback target with disallowed scheme "${protocol}"`);
+	if (url.host !== 'x-callback-url' && !knownCallbackProtocols.includes(url.protocol)) {
+		logger.warn(`Rejected callback target with host "${url.host}" and scheme "${url.protocol}"`);
 		return;
 	}
 
