@@ -529,7 +529,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 				return;
 			}
 
-			if (hasValidBaseUrl(syncTarget, null)) {
+			if (!hasValidBaseUrl(syncTarget, null)) {
 				void NavService.go('Config', { props: { defaultSection: 'sync' } });
 			} else {
 				const routeName = reg.syncTarget(syncTarget).authRouteName();
