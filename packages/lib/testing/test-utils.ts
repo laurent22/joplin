@@ -1185,6 +1185,18 @@ export const mockFetch = (requestHandler: MockFetchRequestHandler) => {
 	};
 };
 
+export const withExtraRootCa = async <T> (caPemData: string, task: ()=> Promise<T>) => {
+	// Dynamically import node:tls
+	const tls = require('node:tls');
+	const trustedCas = tls.getCACertificates();
+	try {
+		tls.setDefaultCACertificates([...trustedCas, caPemData]);
+		await task();
+	} finally {
+		tls.setDefaultCACertificates([...trustedCas]);
+	}
+};
+
 interface WithWarningSilencedOptions {
 	requireWarning: boolean;
 }

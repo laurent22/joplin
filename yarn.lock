@@ -12932,6 +12932,7 @@ __metadata:
     redux: "npm:4.2.1"
     relative: "npm:3.0.2"
     reselect: "npm:4.1.8"
+    selfsigned: "npm:5.5.0"
     server-destroy: "npm:1.0.1"
     sharp: "npm:0.34.5"
     sprintf-js: "npm:1.1.3"
@@ -52606,22 +52607,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"selfsigned@npm:^2.1.1":
-  version: 2.1.1
-  resolution: "selfsigned@npm:2.1.1"
-  dependencies:
-    node-forge: "npm:^1"
-  checksum: 10/6005206e0d005448274aceceaded5195b944f67a42b72d212a6169d2e5f4bdc87c15a3fe45732c544db8c7175702091aaf95403ad6632585294a6ec8cca63638
-  languageName: node
-  linkType: hard
-
-"selfsigned@npm:^5.5.0":
+"selfsigned@npm:5.5.0, selfsigned@npm:^5.5.0":
   version: 5.5.0
   resolution: "selfsigned@npm:5.5.0"
   dependencies:
     "@peculiar/x509": "npm:^1.14.2"
     pkijs: "npm:^3.3.3"
   checksum: 10/fe9be2647507c3ee21dcaf5cab20e1ae4b8b84eac83d2fe4d82f9a3b6c70636f9aaeeba0089e3343dcb13fbb31ef70c2e72c41f2e2dcf38368040b49830c670e
+  languageName: node
+  linkType: hard
+
+"selfsigned@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "selfsigned@npm:2.1.1"
+  dependencies:
+    node-forge: "npm:^1"
+  checksum: 10/6005206e0d005448274aceceaded5195b944f67a42b72d212a6169d2e5f4bdc87c15a3fe45732c544db8c7175702091aaf95403ad6632585294a6ec8cca63638
   languageName: node
   linkType: hard
 
