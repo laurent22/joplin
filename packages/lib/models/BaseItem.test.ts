@@ -3,6 +3,7 @@ import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, syncTarget
 import BaseItem from './BaseItem';
 import Folder from './Folder';
 import Note from './Note';
+import ItemChange from './ItemChange';
 
 describe('BaseItem', () => {
 
@@ -179,11 +180,21 @@ three line \\n no escape`)).toBe(0);
 		expect(await syncTime(note1.id)).toBe(newTime);
 	});
 
-	it('should sync all conflict note updates', async () => {
-		const conflictNote = await Note.save({ title: 'Conflict', is_conflict: 1 });
+	it('should only sync updates to conflict notes with an original note and no share', async () => {
+		const originalNote = await Note.save({ title: 'Original' });
+		const conflictNote = await Note.createConflictNote(originalNote, ItemChange.SOURCE_SYNC);
+		const conflictWithoutOriginal = await Note.save({ title: 'Conflict without original', is_conflict: 1 });
+		const sharedConflict = await Note.save({
+			title: 'Shared conflict',
+			is_conflict: 1,
+			conflict_original_id: originalNote.id,
+			share_id: 'share-id',
+		});
 
 		let result = await BaseItem.itemsThatNeedSync(syncTargetId());
 		expect(result.items.map(item => item.id)).toContain(conflictNote.id);
+		expect(result.items.map(item => item.id)).not.toContain(conflictWithoutOriginal.id);
+		expect(result.items.map(item => item.id)).not.toContain(sharedConflict.id);
 
 		await BaseItem.saveSyncTime(syncTargetId(), conflictNote, conflictNote.updated_time);
 		await BaseItem.deleteOrphanSyncItems();
@@ -208,6 +219,41 @@ three line \\n no escape`)).toBe(0);
 		await Note.save({ id: conflictNote.id, deleted_time: 0 });
 		result = await BaseItem.itemsThatNeedSync(syncTargetId());
 		expect(result.items.map(item => item.id)).toContain(conflictNote.id);
+
+		await BaseItem.saveSyncTime(syncTargetId(), conflictWithoutOriginal, conflictWithoutOriginal.updated_time);
+		await BaseItem.saveSyncTime(syncTargetId(), sharedConflict, sharedConflict.updated_time);
+		await msleep(1);
+		await Note.save({ id: conflictWithoutOriginal.id, title: 'Changed without original' });
+		await Note.save({ id: sharedConflict.id, title: 'Changed shared conflict' });
+		result = await BaseItem.itemsThatNeedSync(syncTargetId());
+		expect(result.items.map(item => item.id)).not.toContain(conflictWithoutOriginal.id);
+		expect(result.items.map(item => item.id)).not.toContain(sharedConflict.id);
+	});
+
+	it('should not track deletions of conflict notes that are ineligible for sync', async () => {
+		const normalNote = await Note.save({ title: 'Normal' });
+		const originalNote = await Note.save({ title: 'Original' });
+		const eligibleConflict = await Note.createConflictNote(originalNote, ItemChange.SOURCE_SYNC);
+		const conflictWithoutOriginal = await Note.save({ title: 'Conflict without original', is_conflict: 1 });
+		const sharedConflict = await Note.save({
+			title: 'Shared conflict',
+			is_conflict: 1,
+			conflict_original_id: originalNote.id,
+			share_id: 'share-id',
+		});
+
+		await Note.batchDelete([
+			normalNote.id,
+			eligibleConflict.id,
+			conflictWithoutOriginal.id,
+			sharedConflict.id,
+		], { disableReadOnlyCheck: true });
+
+		const deletedItemIds = (await BaseItem.deletedItems(syncTargetId())).map(item => item.item_id);
+		expect(deletedItemIds).toContain(normalNote.id);
+		expect(deletedItemIds).toContain(eligibleConflict.id);
+		expect(deletedItemIds).not.toContain(conflictWithoutOriginal.id);
+		expect(deletedItemIds).not.toContain(sharedConflict.id);
 	});
 
 	it.each([

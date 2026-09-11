@@ -7,8 +7,15 @@ import BaseItem from '../../models/BaseItem';
 import Setting from '../../models/Setting';
 import { setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 import { NoteEntity } from '../database/types';
+import ItemChange from '../../models/ItemChange';
 
 describe('Synchronizer.conflicts', () => {
+	const createConflictNote = async (note: Partial<NoteEntity>) => {
+		const originalNote = await Note.save(note);
+		const conflictNote = await Note.createConflictNote(originalNote, ItemChange.SOURCE_SYNC);
+		await Note.delete(originalNote.id, { trackDeleted: false });
+		return conflictNote;
+	};
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
@@ -263,7 +270,7 @@ describe('Synchronizer.conflicts', () => {
 
 	it('should sync newly created conflict notes', (async () => {
 		const f1 = await Folder.save({ title: 'folder' });
-		await Note.save({ title: 'mynote', parent_id: f1.id, is_conflict: 1 });
+		await createConflictNote({ title: 'mynote', parent_id: f1.id });
 		await synchronizerStart();
 
 		await switchClient(2);
@@ -278,7 +285,7 @@ describe('Synchronizer.conflicts', () => {
 
 	it('should retain the local version when a synced conflict note has conflicting changes', async () => {
 		const folder = await Folder.save({ title: 'folder' });
-		const conflictNote = await Note.save({ title: 'original', parent_id: folder.id, is_conflict: 1 });
+		const conflictNote = await createConflictNote({ title: 'original', parent_id: folder.id });
 		await synchronizerStart();
 
 		await switchClient(2);
@@ -300,7 +307,7 @@ describe('Synchronizer.conflicts', () => {
 
 	it('should let remote deletion win over a local conflict note update', async () => {
 		const folder = await Folder.save({ title: 'folder' });
-		const conflictNote = await Note.save({ title: 'original', parent_id: folder.id, is_conflict: 1 });
+		const conflictNote = await createConflictNote({ title: 'original', parent_id: folder.id });
 		await synchronizerStart();
 
 		await switchClient(2);
