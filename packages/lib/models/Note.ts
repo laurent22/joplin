@@ -1290,13 +1290,13 @@ export default class Note extends BaseItem {
 		}
 	}
 
-	public static async createConflictNote(sourceNote: NoteEntity, changeSource: number): Promise<NoteEntity> {
+	public static async createConflictNote(sourceNote: NoteEntity, changeSource: number, includeConflictOriginalId = true): Promise<NoteEntity> {
 		const conflictNote = { ...sourceNote };
 		delete conflictNote.id;
 		delete conflictNote.is_shared;
 		delete conflictNote.share_id;
 		conflictNote.is_conflict = 1;
-		conflictNote.conflict_original_id = sourceNote.id;
+		conflictNote.conflict_original_id = includeConflictOriginalId ? sourceNote.id : '';
 		return await Note.save(conflictNote, { autoTimestamp: false, changeSource: changeSource });
 	}
 

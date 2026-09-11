@@ -66,6 +66,31 @@ describe('handleConflictAction', () => {
 		expect(notes.length).toBe(1);
 	});
 
+	test('conflict created for a remote deletion does not reference the deleted local note', async () => {
+		const local = await Note.save({ title: 'Locally changed', body: 'local body' });
+
+		await handleConflictAction(
+			SyncAction.NoteConflict,
+			Note,
+			false,
+			null,
+			local,
+			1,
+			false,
+			jest.fn(),
+		);
+
+		expect(await Note.load(local.id)).toBeFalsy();
+		const notes = await Note.all();
+		expect(notes).toHaveLength(1);
+		expect(notes[0]).toMatchObject({
+			title: local.title,
+			body: local.body,
+			is_conflict: 1,
+			conflict_original_id: '',
+		});
+	});
+
 	test('conflict of a conflict is not created for a read-only note', async () => {
 		const local = await Note.save({ title: 'Local conflict', body: 'local', is_conflict: 1 });
 		const remoteContent = { ...local, title: 'Remote conflict', body: 'remote' };

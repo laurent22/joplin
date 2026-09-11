@@ -150,7 +150,9 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 				} as NoteEntity;
 			}
 
-			const conflictNote = await Note.createConflictNote(local, ItemChange.SOURCE_SYNC);
+			// If the remote no longer exists, the local note will be permanently deleted
+			// further down, so the conflict note must not refer back to it as its original.
+			const conflictNote = await Note.createConflictNote(local, ItemChange.SOURCE_SYNC, remoteExists);
 			createdConflictNoteId = conflictNote.id;
 
 			// Read the base before the rebuild below. The remote version is the original
