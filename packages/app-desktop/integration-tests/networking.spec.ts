@@ -20,7 +20,7 @@ test.describe('networking', () => {
 
 	for (const protocol of ['http' as const, 'https' as const]) {
 		test(`shim.fetch and shim.fetchBlob should fetch an ${protocol} URL`, async ({ mainWindow, electronApp, profileDirectory }) => {
-			const server = await createLocalhostServer((request, response) => {
+			await using server = await createLocalhostServer((request, response) => {
 				response.writeHead(200, { 'content-type': 'application/json' });
 				response.end(JSON.stringify({ success: 1, method: request.method }));
 			}, { https: protocol === 'https' });
