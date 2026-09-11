@@ -1,5 +1,20 @@
 # Joplin Desktop Changelog
 
+## [v3.7.18](https://github.com/laurent22/joplin/releases/tag/v3.7.18) - 2026-09-11T17:47:56Z
+
+- Improved: Fix notes imported from OneNote are displayed with a very small font size ([#16440](https://github.com/laurent22/joplin/issues/16440)) ([#16424](https://github.com/laurent22/joplin/issues/16424) by [@Rygaa](https://github.com/Rygaa))
+- Improved: Tag area broken with Japanese language ([#16483](https://github.com/laurent22/joplin/issues/16483)) ([#16427](https://github.com/laurent22/joplin/issues/16427) by [@Rygaa](https://github.com/Rygaa))
+- Improved: Whiteboard: Double-click empty canvas to add a note ([#16470](https://github.com/laurent22/joplin/issues/16470))
+- Fixed: Allow OpenAI reasoning models to be used with tools ([#16451](https://github.com/laurent22/joplin/issues/16451)) ([#16444](https://github.com/laurent22/joplin/issues/16444))
+- Fixed: Fix WebDAV sync failing with 409 errors after 3.7 upgrade ([#16471](https://github.com/laurent22/joplin/issues/16471)) ([#16422](https://github.com/laurent22/joplin/issues/16422))
+- Fixed: Fix keyboard navigation issues related to level-1 headings ([#16409](https://github.com/laurent22/joplin/issues/16409)) ([#16407](https://github.com/laurent22/joplin/issues/16407) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: In-editor Markdown rendering: Fix markup syntax is visible while clicking and dragging the scrollbar ([#16461](https://github.com/laurent22/joplin/issues/16461)) ([#16454](https://github.com/laurent22/joplin/issues/16454) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Return 202 for MCP notification requests ([#16473](https://github.com/laurent22/joplin/issues/16473)) ([#16414](https://github.com/laurent22/joplin/issues/16414))
+- Fixed: Toggle AI Chat keystroke shortcut does nothing ([#16433](https://github.com/laurent22/joplin/issues/16433))
+- Fixed: Treat private network AI providers as local and make their API key optional ([#16472](https://github.com/laurent22/joplin/issues/16472)) ([#16431](https://github.com/laurent22/joplin/issues/16431))
+- Fixed: Whiteboard: Add missing "Add note to whiteboard" menu item ([#16468](https://github.com/laurent22/joplin/issues/16468)) ([#16457](https://github.com/laurent22/joplin/issues/16457))
+- Fixed: Fix WebDAV sync error "Protocol https: not supported" on servers that redirect ([#16488](https://github.com/laurent22/joplin/issues/16488)) ([#16486](https://github.com/laurent22/joplin/issues/16486))
+
 ## [v3.7.16](https://github.com/laurent22/joplin/releases/tag/v3.7.16) - 2026-09-06T09:17:56Z
 
 - Improved: External editor: Add additional logic to avoid overwriting a note with older content ([#16352](https://github.com/laurent22/joplin/issues/16352)) ([#16350](https://github.com/laurent22/joplin/issues/16350) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
