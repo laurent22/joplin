@@ -127,8 +127,8 @@ const renderer: ListRenderer = {
 					flex-shrink: 0;
 					height: 1em;
 					margin-right: 4px;
-					mask: url('images/cloud-offline-outline.svg') center / contain no-repeat;
-					-webkit-mask: url('images/cloud-offline-outline.svg') center / contain no-repeat;
+					mask: url('vendor/lib/images/cloud-offline-outline.svg') center / contain no-repeat;
+					-webkit-mask: url('vendor/lib/images/cloud-offline-outline.svg') center / contain no-repeat;
 					width: 1em;
 				}
 	
