@@ -9,7 +9,6 @@ import Logger from '@joplin/utils/Logger';
 import SyncTargetRegistry from '../SyncTargetRegistry';
 import { isHttpOrHttpsUrl } from '@joplin/utils/url';
 import NavService from './NavService';
-import { createSecureRandom } from '../uuid';
 import { SettingsMap } from '../components/shared/config/config-shared';
 
 const logger = Logger.create('joplinCloudUtils');
@@ -29,7 +28,7 @@ type DefaultState = {
 	errorMessage?: string;
 };
 
-export const generateAppId = () => createSecureRandom(22);
+export const generateAppId = () => shim.crypto.randomUuid();
 
 export const normalizeBaseUrl = (url: string) => url.replace(/\/$/, '');
 
