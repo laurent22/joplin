@@ -58,9 +58,12 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 		// so in this case we just take the remote content.
 		// ------------------------------------------------------------------------------
 
-		let mustHandleConflict = !(local as NoteEntity).is_conflict || remoteExists;
+		let mustHandleConflict = true;
 		if (!itemIsReadOnly && remoteContent) {
 			mustHandleConflict = Note.mustHandleConflict(local, remoteContent);
+		}
+		if ((local as NoteEntity).is_conflict) {
+			mustHandleConflict = false;
 		}
 
 		// The remote note is only decrypted after it's saved, so decrypt it in memory here

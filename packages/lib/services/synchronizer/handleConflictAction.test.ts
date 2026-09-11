@@ -66,6 +66,27 @@ describe('handleConflictAction', () => {
 		expect(notes.length).toBe(1);
 	});
 
+	test('conflict of a conflict is not created for a read-only note', async () => {
+		const local = await Note.save({ title: 'Local conflict', body: 'local', is_conflict: 1 });
+		const remoteContent = { ...local, title: 'Remote conflict', body: 'remote' };
+
+		await handleConflictAction(
+			SyncAction.NoteConflict,
+			Note,
+			true,
+			remoteContent,
+			local,
+			1,
+			true,
+			jest.fn(),
+		);
+
+		const notes = await Note.all();
+		expect(notes).toHaveLength(1);
+		expect(notes[0].id).toBe(local.id);
+		expect(notes[0].title).toBe(remoteContent.title);
+	});
+
 	test('editor reload event is emitted for note conflict', async () => {
 		const local = await Note.save({ title: 'Test', body: 'body' });
 		const remoteContent = { ...local, title: 'TestRemote' };
