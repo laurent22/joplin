@@ -56,7 +56,7 @@ const useEditorSettings = (props: EditorSettingsProps) => {
 			inlineRenderingEnabled: settings.inlineRendering && !plainText,
 			plainTextEnabled: plainText,
 			tableEditingEnabled: settings.tableEditing && !plainText,
-			imageRenderingEnabled: settings.imageRendering,
+			imageRenderingEnabled: settings.imageRendering && !plainText,
 			highlightActiveLine: settings.highlightActiveLine,
 			themeData: {
 				...props.baseTheme,
