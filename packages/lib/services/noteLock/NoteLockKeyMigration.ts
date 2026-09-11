@@ -17,7 +17,7 @@ export interface NoteLockKeyMigrationResult {
 
 // Re-encrypts the notes locked with the local key to the parked target key; notes already under it are left
 // alone, so a retry only touches the rest. The local key stays until finish, so an interrupted run loses nothing.
-export const migrateLockedNotes = async (localPassword: string, targetPassword: string): Promise<NoteLockKeyMigrationResult> => {
+export const migrateLockedNotes = async (localPassword: string, targetPassword: string) => {
 	if (!isNoteLockEnabled()) throw new Error('Note lock is not enabled');
 	const conflict = noteLockKeyConflict();
 	if (!conflict) throw new Error('No note lock key conflict to migrate');

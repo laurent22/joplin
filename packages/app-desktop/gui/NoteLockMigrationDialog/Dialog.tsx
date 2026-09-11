@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Dispatch } from 'redux';
 import { useCallback, useState } from 'react';
-import { _ } from '@joplin/lib/locale';
+import { _, _n } from '@joplin/lib/locale';
 import DialogButtonRow, { ClickEvent } from '../DialogButtonRow';
 import Dialog from '@joplin/lib/components/Dialog';
 import DialogTitle from '../DialogTitle';
@@ -83,7 +83,7 @@ export default function(props: Props) {
 						value={targetPassword}
 						onChange={onTargetPasswordChange}
 					/>
-					{!!failedCount && <p className="error-message" role="alert">{_('%d locked notes could not be migrated. Please try again, or skip them to continue without them.', failedCount)}</p>}
+					{!!failedCount && <p className="error-message" role="alert">{_n('%d locked note could not be migrated. Please try again, or skip it to continue without it.', '%d locked notes could not be migrated. Please try again, or skip them to continue without them.', failedCount, failedCount)}</p>}
 					{!!errorMessage && <p className="error-message" role="alert">{errorMessage}</p>}
 				</div>
 				<DialogButtonRow

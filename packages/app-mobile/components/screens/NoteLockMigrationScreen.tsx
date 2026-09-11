@@ -4,7 +4,7 @@ import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { themeStyle } from '../global-style';
-import { _ } from '@joplin/lib/locale';
+import { _, _n } from '@joplin/lib/locale';
 import shim from '@joplin/lib/shim';
 import { finishNoteLockKeyMigration, migrateLockedNotes } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
 import ScreenHeader from '../ScreenHeader';
@@ -67,6 +67,7 @@ export const NoteLockMigrationScreenComponent: React.FC<Props> = props => {
 		return () => BackButtonService.removeHandler(handler);
 	}, [migrating]);
 
+	// Duplicates the migrate and skip handlers in app-desktop/gui/NoteLockMigrationDialog/Dialog.tsx.
 	const onMigrate = useCallback(async () => {
 		setMigrating(true);
 		setErrorMessage('');
@@ -124,7 +125,7 @@ export const NoteLockMigrationScreenComponent: React.FC<Props> = props => {
 					value={targetPassword}
 					onChangeText={setTargetPassword}
 				/>
-				{!!failedCount && <Text style={styles.errorText} role='alert'>{_('%d locked notes could not be migrated. Please try again, or skip them to continue without them.', failedCount)}</Text>}
+				{!!failedCount && <Text style={styles.errorText} role='alert'>{_n('%d locked note could not be migrated. Please try again, or skip it to continue without it.', '%d locked notes could not be migrated. Please try again, or skip them to continue without them.', failedCount, failedCount)}</Text>}
 				{!!errorMessage && <Text style={styles.errorText} role='alert'>{errorMessage}</Text>}
 				<View style={styles.buttonContainer}>
 					<PrimaryButton onPress={onMigrate} disabled={!localPassword || !targetPassword || migrating}>{failedCount ? _('Retry') : _('Migrate')}</PrimaryButton>

@@ -69,7 +69,7 @@ describe('NoteLockMigrationDialog/Dialog', () => {
 
 		fireEvent.click(screen.getByText('Migrate'));
 
-		expect((await screen.findByRole('alert')).textContent).toContain('1 locked notes could not be migrated');
+		expect((await screen.findByRole('alert')).textContent).toContain('1 locked note could not be migrated');
 		expect(screen.getByText('Retry')).toBeTruthy();
 		expect(dispatch).not.toHaveBeenCalled();
 	});

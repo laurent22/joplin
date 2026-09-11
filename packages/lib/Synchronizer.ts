@@ -550,7 +550,6 @@ export default class Synchronizer {
 					checkNoteLockKeyUnchanged(localInfo);
 					if (localInfo.noteLockKey && newInfo.noteLockKey?.id !== localInfo.noteLockKey.id) {
 						checkNoteLockKeyConflict(localInfo, remoteInfo, await Note.hasLockedNotes(), staleReset);
-						checkNoteLockKeyUnchanged(localInfo);
 					}
 					await saveLocalSyncInfo(newInfo);
 					reconciledNoteLockKeyId = newInfo.noteLockKey?.id;

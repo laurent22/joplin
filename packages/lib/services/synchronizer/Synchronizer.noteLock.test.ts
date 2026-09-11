@@ -24,6 +24,16 @@ const switchToClient = async (id: number) => {
 
 const remoteNoteLockKeyId = async () => (await fetchSyncInfo(fileApi())).noteLockKey?.id;
 
+// Lands the action inside the running sync, after it took its local snapshot and before the conflict check.
+const duringTheLockedNotesCheck = (action: ()=> Promise<unknown>) => {
+	const realHasLockedNotes = Note.hasLockedNotes.bind(Note);
+	const spy = jest.spyOn(Note, 'hasLockedNotes').mockImplementation(async () => {
+		spy.mockRestore();
+		await action();
+		return realHasLockedNotes();
+	});
+};
+
 describe('Synchronizer.noteLock', () => {
 
 	beforeEach(async () => {
@@ -230,14 +240,8 @@ describe('Synchronizer.noteLock', () => {
 
 		await switchToClient(2);
 		await synchronizerStart();
-		// Resets after the sync read its snapshot and flag, before the conflict check.
-		const realHasLockedNotes = Note.hasLockedNotes.bind(Note);
 		let resetKey: MasterKeyEntity = null;
-		const spy = jest.spyOn(Note, 'hasLockedNotes').mockImplementation(async () => {
-			spy.mockRestore();
-			resetKey = await NoteLockSession.instance().reset('222222');
-			return realHasLockedNotes();
-		});
+		duringTheLockedNotesCheck(async () => { resetKey = await NoteLockSession.instance().reset('222222'); });
 		await synchronizerStart(null, { throwOnError: true });
 
 		expect(NoteLockKey.instance().load()).toEqual(resetKey);
@@ -253,15 +257,10 @@ describe('Synchronizer.noteLock', () => {
 
 		await switchToClient(2);
 		await synchronizerStart();
-		// A flag left behind by an interrupted earlier sync, with a reset landing while this sync is in flight.
+		// A flag left behind by an interrupted earlier sync.
 		Setting.setValue('noteLock.passwordReset', true);
-		const realHasLockedNotes = Note.hasLockedNotes.bind(Note);
 		let resetKey: MasterKeyEntity = null;
-		const spy = jest.spyOn(Note, 'hasLockedNotes').mockImplementation(async () => {
-			spy.mockRestore();
-			resetKey = await NoteLockSession.instance().reset('222222');
-			return realHasLockedNotes();
-		});
+		duringTheLockedNotesCheck(async () => { resetKey = await NoteLockSession.instance().reset('222222'); });
 
 		await expect(synchronizerStart(null, { throwOnError: true })).rejects.toThrow('changed on this device');
 		expect(Setting.value('noteLock.passwordReset')).toBe(true);
@@ -370,13 +369,7 @@ describe('Synchronizer.noteLock', () => {
 		await Note.save({ title: 'secret', body: 'secret body', is_locked: 1 }, { useNoteLock: true });
 		await expect(synchronizerStart(null, { throwOnError: true })).rejects.toMatchObject({ code: ErrorCode.NoteLockKeyConflict });
 		await migrateLockedNotes('222222', '111111');
-		// Finishes after the sync took its local snapshot and before the conflict check.
-		const realHasLockedNotes = Note.hasLockedNotes.bind(Note);
-		const spy = jest.spyOn(Note, 'hasLockedNotes').mockImplementation(async () => {
-			spy.mockRestore();
-			await finishNoteLockKeyMigration();
-			return realHasLockedNotes();
-		});
+		duringTheLockedNotesCheck(() => finishNoteLockKeyMigration());
 
 		await expect(synchronizerStart(null, { throwOnError: true })).rejects.toThrow('changed on this device');
 		expect(noteLockKeyConflict()).toBeNull();

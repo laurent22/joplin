@@ -76,7 +76,7 @@ describe('NoteLockMigrationScreen', () => {
 
 		fireEvent.press(screen.getByText('Migrate'));
 
-		expect(await screen.findByRole('alert')).toHaveTextContent(/1 locked notes could not be migrated/);
+		expect(await screen.findByRole('alert')).toHaveTextContent(/1 locked note could not be migrated/);
 		expect(screen.getByText('Retry')).toBeVisible();
 		expect(dispatch).not.toHaveBeenCalled();
 	});

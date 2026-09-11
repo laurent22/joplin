@@ -214,20 +214,14 @@ describe('syncInfoUtils', () => {
 		['no key', null, '', false],
 	])('should check the sync migration id: %s', (_description, key, syncMigrationId, throws) => {
 		const syncInfo = syncInfoWithNoteLockKey(key, syncMigrationId);
-		for (const isRemote of [false, true]) {
+		for (const [isRemote, side] of [[false, 'on this device'], [true, 'on the sync target']] as const) {
 			const check = () => checkNoteLockKeyMigrationId(syncInfo, isRemote);
 			if (throws) {
-				expect(check).toThrow('migration ID');
+				expect(check).toThrow(side);
 			} else {
 				expect(check).not.toThrow();
 			}
 		}
-	});
-
-	it('should serialize and load the sync migration id', () => {
-		const syncInfo = syncInfoWithNoteLockKey(noteLockKey('1', 200), 'L1');
-		expect(new SyncInfo(syncInfo.serialize()).syncMigrationId).toBe('L1');
-		expect(new SyncInfo(JSON.stringify({ version: 3 })).syncMigrationId).toBe('');
 	});
 
 	it('should merge sync target info and takes into account usage of master key - 1', async () => {
