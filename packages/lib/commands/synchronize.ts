@@ -7,7 +7,7 @@ import NavService from '../services/NavService';
 export const declaration: CommandDeclaration = {
 	name: 'synchronize',
 	label: () => _('Synchronise'),
-	iconName: 'fas fa-sync-alt',
+	iconName: 'ionicon sync',
 };
 
 // Note that this command actually acts as a toggle - it starts or cancels
