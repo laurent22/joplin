@@ -326,7 +326,7 @@ describe('Synchronizer.conflicts', () => {
 
 	it('should delete remotely synced conflict notes', (async () => {
 		const f1 = await Folder.save({ title: 'folder' });
-		const n1 = await Note.save({ title: 'mynote', parent_id: f1.id });
+		const n1 = await createConflictNote({ title: 'mynote', parent_id: f1.id });
 		await synchronizerStart();
 
 		await switchClient(2);
@@ -379,40 +379,25 @@ describe('Synchronizer.conflicts', () => {
 		await Note.save(note2conf);
 		note2conf = await Note.load(note1.id);
 		await synchronizerStart();
+		if (withEncryption) await decryptionWorker().start();
 
-		if (!withEncryption) {
-			// That was previously a common conflict:
-			// - Client 1 mark todo as "done", and sync
-			// - Client 2 doesn't sync, mark todo as "done" todo. Then sync.
-			// In theory it is a conflict because the todo_completed dates are different
-			// but in practice it doesn't matter, we can just take the date when the
-			// todo was marked as "done" the first time.
+		// This is a metadata-only conflict: Both clients marked the same todo as done,
+		// but at slightly different times. Once encrypted remote content is decrypted,
+		// it can be ignored in the same way as an unencrypted conflict.
+		const conflictedNotes = await Note.conflictedNotes();
+		expect(conflictedNotes.length).toBe(0);
 
-			const conflictedNotes = await Note.conflictedNotes();
-			expect(conflictedNotes.length).toBe(0);
-
-			const notes = await Note.all();
-			expect(notes.length).toBe(1);
-			expect(notes[0].id).toBe(note1.id);
-			expect(notes[0].todo_completed).toBe(note2.todo_completed);
-		} else {
-			// If the notes are encrypted however it's not possible to do this kind of
-			// smart conflict resolving since we don't know the content, so in that
-			// case it's handled as a regular conflict.
-
-			const conflictedNotes = await Note.conflictedNotes();
-			expect(conflictedNotes.length).toBe(1);
-
-			const notes = await Note.all();
-			expect(notes.length).toBe(2);
-		}
+		const notes = await Note.all();
+		expect(notes.length).toBe(1);
+		expect(notes[0].id).toBe(note1.id);
+		expect(notes[0].todo_completed).toBe(note2.todo_completed);
 	}
 
 	it('should not consider it is a conflict if neither the title nor body of the note have changed', (async () => {
 		await ignorableNoteConflictTest(false);
 	}));
 
-	it('should always handle conflict if local or remote are encrypted', (async () => {
+	it('should ignore metadata-only conflicts when the remote note is encrypted', (async () => {
 		await ignorableNoteConflictTest(true);
 	}));
 

@@ -188,7 +188,7 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 					<input class="checkbox" data-id="todo-checkbox" type="checkbox" {{#note.todo_completed}}checked="checked"{{/note.todo_completed}}>
 				{{/note.is_todo}}
 				<i class="watchedicon fa fa-share-square"></i>
-				{{#note.syncDisabled}}<i class="syncdisabledicon"></i>{{/note.syncDisabled}}
+				{{#note.syncDisabled}}<i class="syncdisabledicon" role="img" aria-label="{{note.syncDisabledLabel}}"></i>{{/note.syncDisabled}}
 				{{#note.is_locked}}<i class="lockedicon fa fa-lock"></i>{{/note.is_locked}}
 				<div class="titlecontent">{{note.title}}</div>
 			</div>
@@ -206,6 +206,7 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 				...props.note,
 				is_locked: isLocked,
 				syncDisabled: isSyncDisabledConflict(props.note),
+				syncDisabledLabel: _('Not synced'),
 			},
 			// A locked note's body is ciphertext, so there is no meaningful preview to show.
 			notePreview: isLocked ? '' : markupToHtml_.stripMarkup(MarkupLanguage.Markdown, props.note.body).substring(0, 200),

@@ -203,7 +203,7 @@ const renderer: ListRenderer = {
 			{{/note.is_todo}}
 			<div class="title" data-id="{{note.id}}">
 				<i class="watchedicon fa fa-share-square"></i>
-				{{#note.syncDisabled}}<i class="syncdisabledicon"></i>{{/note.syncDisabled}}
+				{{#note.syncDisabled}}<i class="syncdisabledicon" role="img" aria-label="{{note.syncDisabledLabel}}"></i>{{/note.syncDisabled}}
 				{{#note.is_locked}}<i class="lockedicon fa fa-lock"></i>{{/note.is_locked}}
 				<span>{{note.title}}</span>
 			</div>
@@ -227,6 +227,7 @@ const renderer: ListRenderer = {
 				...props.note,
 				is_locked: isNoteLockEnabled() ? props.note.is_locked : 0,
 				syncDisabled: isSyncDisabledConflict(props.note),
+				syncDisabledLabel: _('Not synced'),
 			},
 			checkboxStats: props.note.checkboxes,
 		};

@@ -138,7 +138,7 @@ const renderer: ListRenderer = {
 				{{#cells}}
 					<div data-name="{{name}}" class="item" style="{{{styleHtml}}}">
 						<div class="content">
-							<i class="watchedicon fa fa-share-square"></i><i class="syncdisabledicon"></i><i class="lockedicon fa fa-lock"></i>{{{contentHtml}}}
+							<i class="watchedicon fa fa-share-square"></i><i class="syncdisabledicon" role="img" aria-label="{{note.syncDisabledLabel}}"></i><i class="lockedicon fa fa-lock"></i>{{{contentHtml}}}
 						</div>
 					</div>
 				{{/cells}}
@@ -182,6 +182,7 @@ const renderer: ListRenderer = {
 				...props.note,
 				is_locked: isNoteLockEnabled() ? props.note.is_locked : 0,
 				syncDisabled: isSyncDisabledConflict(props.note),
+				syncDisabledLabel: _('Not synced'),
 			},
 		};
 	},
