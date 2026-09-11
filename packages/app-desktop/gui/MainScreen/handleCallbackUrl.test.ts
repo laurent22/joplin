@@ -12,9 +12,8 @@ jest.mock('../../services/bridge', () => ({
 }));
 
 const setSelectedNoteId = (noteId: string | null) => {
-	// executeCallbackUrl reads the selected note id via commandUtils.store; a
-	// null id makes handleGetCurrentNote take its x-error branch, which routes
-	// the caller-supplied target through respond() without touching the DB.
+	// A null id makes handleGetCurrentNote take its x-error branch, which reaches
+	// respond() without touching the database.
 	commandUtils.store = {
 		getState: () => ({ selectedNoteIds: noteId ? [noteId] : [] }),
 	};
@@ -27,22 +26,34 @@ describe('handleCallbackUrl', () => {
 	});
 
 	test.each([
-		'x-custom-scheme://arbitrary-scheme-reached',
+		'ms-msdt:/id PCWDiagnostic',
+		'search-ms:query=secret',
+		'shell:startup',
 		'file:///etc/passwd',
-		'ms-msdt://something',
+		'javascript:alert(1)',
+		'data:text/html,<script>alert(1)</script>',
 		'mailto:someone@example.com',
+		'http://example.com/cb',
+		'https://example.com/cb',
+		'unknown-app://attacker.example.com/cb',
+		'unknown-app:///hostless',
 		'not a url',
-	])('should not dispatch a callback target with a disallowed scheme (%s)', async (target) => {
-		await withWarningSilenced(/Rejected malformed callback|Rejected callback target with disallowed scheme/, async () => {
+	])('should not dispatch an unrecognised callback target (%s)', async (target) => {
+		await withWarningSilenced(/Rejected malformed callback|Rejected callback target with host/, async () => {
 			await executeCallbackUrl(`joplin://x-callback-url/getCurrentNote?x-error=${encodeURIComponent(target)}`);
 		}, { requireWarning: true });
 		expect(mockOpenExternal).not.toHaveBeenCalled();
 	});
 
 	test.each([
-		'http://example.com/cb',
-		'https://example.com/cb',
-	])('should dispatch a callback target with an allowed scheme (%s)', async (target) => {
+		'hook://x-callback-url/setCurrentNode',
+		'drafts://x-callback-url/create',
+		'bear://x-callback-url/open-note',
+		'ulysses://x-callback-url/new-sheet',
+		'new-app://x-callback-url/cb',
+		'editorial://workflow-callback',
+		'things:///add',
+	])('should dispatch a recognised callback target (%s)', async (target) => {
 		await executeCallbackUrl(`joplin://x-callback-url/getCurrentNote?x-error=${encodeURIComponent(target)}`);
 		expect(mockOpenExternal).toHaveBeenCalledTimes(1);
 		expect(mockOpenExternal.mock.calls[0][0]).toContain(`${target}?`);
@@ -55,7 +66,7 @@ describe('handleCallbackUrl', () => {
 		};
 
 		await withWarningSilenced(/Error handling callback URL command "getCurrentNote":.*secret path \/home\/victim/, async () => {
-			await executeCallbackUrl(`joplin://x-callback-url/getCurrentNote?x-error=${encodeURIComponent('https://example.com/cb')}`);
+			await executeCallbackUrl(`joplin://x-callback-url/getCurrentNote?x-error=${encodeURIComponent('hook://x-callback-url/cb')}`);
 		}, { requireWarning: true });
 
 		expect(mockOpenExternal).toHaveBeenCalledTimes(1);
