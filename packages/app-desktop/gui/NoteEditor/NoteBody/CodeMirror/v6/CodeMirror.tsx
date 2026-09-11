@@ -391,6 +391,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		disabled: props.disabled,
 		keyboardMode: props.keyboardMode,
 		tabMovesFocus: props.tabMovesFocus,
+		resolvingConflict: conflictContent !== null,
 	});
 
 	const renderEditor = () => {

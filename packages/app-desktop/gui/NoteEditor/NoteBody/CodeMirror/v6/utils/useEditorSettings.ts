@@ -13,6 +13,8 @@ interface EditorSettingsProps {
 	disabled: boolean;
 	tabMovesFocus: boolean;
 	baseTheme: EditorTheme;
+	// True while the conflict resolution UI is showing both versions
+	resolvingConflict: boolean;
 }
 
 const useEditorSettings = (props: EditorSettingsProps) => {
@@ -28,6 +30,7 @@ const useEditorSettings = (props: EditorSettingsProps) => {
 		automatchBraces: state.settings['editor.autoMatchingBraces'],
 		autocompleteMarkup: state.settings['editor.autocompleteMarkup'],
 		spellcheckEnabled: state.settings['editor.spellcheckBeta'],
+		conflictPlainText: state.settings['conflict.plainTextEditor'],
 	});
 	type SelectedSettings = ReturnType<typeof stateToSettings>;
 	const settings = useSelector<AppState, SelectedSettings>(stateToSettings, isDeepStrictEqual);
@@ -42,14 +45,17 @@ const useEditorSettings = (props: EditorSettingsProps) => {
 			keyboardMode = EditorKeymap.Emacs;
 		}
 
+		const plainText = props.resolvingConflict && settings.conflictPlainText;
+
 		return {
 			language: isHTMLNote ? EditorLanguageType.Html : EditorLanguageType.Markdown,
 			readOnly: props.disabled,
 			markdownMarkEnabled: settings.markdownMark,
 			markdownInsertEnabled: settings.markdownInsert,
 			katexEnabled: settings.katex,
-			inlineRenderingEnabled: settings.inlineRendering,
-			tableEditingEnabled: settings.tableEditing,
+			inlineRenderingEnabled: settings.inlineRendering && !plainText,
+			plainTextEnabled: plainText,
+			tableEditingEnabled: settings.tableEditing && !plainText,
 			imageRenderingEnabled: settings.imageRendering,
 			highlightActiveLine: settings.highlightActiveLine,
 			themeData: {
@@ -72,7 +78,7 @@ const useEditorSettings = (props: EditorSettingsProps) => {
 		};
 	}, [
 		props.contentMarkupLanguage, props.disabled, props.keyboardMode, props.baseTheme,
-		props.tabMovesFocus, settings,
+		props.tabMovesFocus, props.resolvingConflict, settings,
 	]);
 };
 

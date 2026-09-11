@@ -25,7 +25,7 @@ import { EditorTheme } from '../types';
 // use '&.cm-focused' in the theme.
 //
 // [theme] should be a joplin theme (see @joplin/lib/theme)
-const createTheme = (theme: EditorTheme): Extension[] => {
+const createTheme = (theme: EditorTheme, plainText = false): Extension[] => {
 	// If the theme hasn't loaded yet, return nothing.
 	// (createTheme should be called again after the theme has loaded).
 	if (!theme) {
@@ -313,11 +313,15 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 
 	return [
 		codeMirrorTheme,
-		syntaxHighlighting(highlightingStyle),
 
-		// If we haven't defined highlighting for tags, fall back
-		// to the default.
-		syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+		// Plain text shows the note as stored, so tokens are not coloured
+		...(plainText ? [] : [
+			syntaxHighlighting(highlightingStyle),
+
+			// If we haven't defined highlighting for tags, fall back
+			// to the default.
+			syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+		]),
 	];
 };
 
