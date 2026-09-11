@@ -75,6 +75,7 @@ const JoplinOAuthScreenComponent = (props: Props) => {
 
 	const confirmUrl = async (applicationAuthId: string) => {
 		const baseUrl = await fetchLoginUrl(props.syncTargetId, props.syncTargetApi);
+		if (!baseUrl) throw new Error('Unable to determine login URL');
 		return `${baseUrl}/applications/${applicationAuthId}/confirm`;
 	};
 	const applicationAuthUrl = (applicationAuthId: string) => `${props.syncTargetApi}/api/application_auth/${applicationAuthId}`;
