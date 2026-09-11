@@ -435,6 +435,14 @@ const shim = {
 		throw new Error('Not implemented: httpAgent');
 	},
 
+	// Returns the agents for both protocols, so that callers which follow redirects can pick the
+	// right one for each hop. Binding a single agent up-front breaks when a redirect switches
+	// between http: and https: - see https://github.com/laurent22/joplin/issues/16486
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See httpAgent_ above
+	httpAgents: (): { http: any; https: any } => {
+		throw new Error('Not implemented: httpAgents');
+	},
+
 	openOrCreateFile: (_path: string, _defaultContents: string): string => {
 		throw new Error('Not implemented: openOrCreateFile');
 	},
