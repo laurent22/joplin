@@ -152,7 +152,7 @@ describe('EditorToolbar', () => {
 	});
 
 	it('should enable the synchronize button based on sync events', async () => {
-		Setting.setValue('editor.toolbarButtons', ['synchronizeEditor']);
+		Setting.setValue('editor.toolbarButtons', ['synchronize']);
 
 		const toolbar = render(<WrappedToolbar/>);
 		const syncButton = () => screen.getByRole('button', { name: 'Synchronise' });
