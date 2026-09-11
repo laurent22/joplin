@@ -43,6 +43,96 @@
 		color: var(--joplin-color-faded);
 	}
 
+	> .-single-title {
+		display: flex;
+		padding-top: 6px;
+		padding-bottom: 14px;
+		border-bottom: 1px solid var(--joplin-divider-color);
+	}
+
+	.-help-anchor {
+		position: relative;
+		flex-shrink: 0;
+	}
+
+	// Floats over the note
+	.-help-popover {
+		position: absolute;
+		top: calc(100% + 6px);
+		right: 0;
+		z-index: 20;
+		width: 340px;
+		max-width: 80vw;
+		padding: 12px 14px 14px 14px;
+		border: 1px solid var(--joplin-divider-color);
+		border-radius: 6px;
+		background-color: var(--joplin-background-color);
+		box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+		color: var(--joplin-color-faded);
+		text-align: left;
+		cursor: default;
+
+		p {
+			margin: 0;
+			padding-bottom: 8px;
+
+			&:last-child {
+				padding-bottom: 0;
+			}
+		}
+
+		.-help-section {
+			margin-top: 4px;
+			padding-top: 10px;
+			border-top: 1px solid var(--joplin-divider-color);
+		}
+
+		.-swatch {
+			display: inline-block;
+			width: 10px;
+			height: 10px;
+			border-radius: 2px;
+			margin-right: 8px;
+			outline: 1px solid var(--joplin-divider-color);
+
+			&.-incoming {
+				background-color: #2D5BE5;
+			}
+
+			&.-local {
+				background-color: #F7D26E;
+			}
+		}
+	}
+
+	.-help-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 8px;
+		padding-bottom: 10px;
+	}
+
+	.-help-title {
+		font-weight: bold;
+		color: var(--joplin-color);
+	}
+
+	.-help-close {
+		flex-shrink: 0;
+		padding: 2px 6px;
+		border: none;
+		border-radius: 4px;
+		background: none;
+		color: var(--joplin-color-faded);
+		cursor: pointer;
+
+		&:hover {
+			background-color: var(--joplin-background-color-hover3);
+			color: var(--joplin-color);
+		}
+	}
+
 	.-help {
 		flex-shrink: 0;
 		display: flex;
@@ -66,13 +156,6 @@
 		align-items: flex-end;
 		gap: 12px;
 		padding-top: 14px;
-		padding-bottom: 14px;
-		border-bottom: 1px solid var(--joplin-divider-color);
-	}
-
-	> .-single-title {
-		display: flex;
-		padding-top: 6px;
 		padding-bottom: 14px;
 		border-bottom: 1px solid var(--joplin-divider-color);
 	}

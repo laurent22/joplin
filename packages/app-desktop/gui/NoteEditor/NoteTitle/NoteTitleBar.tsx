@@ -24,7 +24,6 @@ interface Props {
 	conflictTitle?: string;
 	resolvedTitle?: string;
 	onResolvedTitleChange?: (title: string)=> void;
-	onConflictHelp?: ()=> void;
 }
 
 function styles_(props: Props) {
@@ -155,7 +154,6 @@ export default function NoteTitleBar(props: Props) {
 					onResolvedTitleChange={props.onResolvedTitleChange}
 					infoGroup={infoGroup}
 					titleInput={titleInput}
-					onHelp={props.onConflictHelp}
 				/>
 			</div>
 		);
