@@ -781,7 +781,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 
 
 		// const statusBarStyle = theme.appearance === 'light-content';
-		const statusBarStyle = 'light-content';
+		const statusBarStyle = theme.appearance === ThemeAppearance.Light ? 'dark-content' : 'light-content';
 
 		const shouldShowMainContent = !biometricsEnabled(this.state.sensorInfo) || this.props.biometricsDone;
 
@@ -793,7 +793,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 		const mainContent = (
 			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 				<View style={{ flexGrow: 1, flexShrink: 1, flexBasis: '100%' }}>
-					<SafeAreaView style={{ flex: 1 }} titleBarUnderlayColor={theme.backgroundColor2}>
+					<SafeAreaView style={{ flex: 1 }} titleBarUnderlayColor={theme.backgroundColor}>
 						<SideMenu
 							menu={sideMenuContent}
 							toleranceX={4}

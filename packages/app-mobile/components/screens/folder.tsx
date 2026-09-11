@@ -126,7 +126,6 @@ class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 						selectedFolderId={this.state.folder.parent_id}
 						onValueChange={newValue => this.parent_changeValue(newValue)}
 						mustSelect
-						darkText
 					/>
 				</View>
 				<View style={{ flex: 1 }} />
