@@ -71,7 +71,6 @@ describe('Synchronizer.conflicts', () => {
 		const note = await Note.save({ title: 'Locked', body: 'JLD01cipher', is_locked: 1, parent_id: folder.id });
 		await synchronizerStart();
 
-		// The note sits in a share, and an older client that does not know is_locked edited it there.
 		const path = `${note.id}.md`;
 		const remote = (await fileApi().get(path)).replace('share_id: \n', 'share_id: share-1\n').replace('is_locked: 1\n', '').replace('JLD01cipher', 'edited on an old client').replace(/^updated_time: .*$/m, `updated_time: ${time.unixMsToIso(note.updated_time + 1000)}`);
 		await fileApi().put(path, remote);

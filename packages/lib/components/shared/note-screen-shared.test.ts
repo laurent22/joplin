@@ -325,6 +325,8 @@ describe('note-screen-shared', () => {
 	});
 
 	it('should make a locked note inside a share read-only', async () => {
+		// With the flag on, the locked session would make it read-only anyway, so this also pins the rule as ungated.
+		Setting.setValue('featureFlag.noteLock', false);
 		const testNote = await Note.save({ title: 'Shared', body: 'JLD01ciphertext', is_locked: 1, share_id: 'share-1', parent_id: folderId });
 		const comp = makeComp(testNote);
 
