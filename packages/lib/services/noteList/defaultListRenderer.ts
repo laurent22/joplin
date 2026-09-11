@@ -3,6 +3,7 @@ import CommandService from '../CommandService';
 import { ItemFlow, ListRenderer, OnClickEvent } from '../plugins/api/noteListType';
 import checkboxPieCss from './checkboxPieCss';
 import isNoteLockEnabled from '../noteLock/isNoteLockEnabled';
+import isSyncDisabledConflict from './isSyncDisabledConflict';
 
 interface CheckboxStats {
 	total: number;
@@ -18,6 +19,9 @@ interface Props {
 		is_todo: number;
 		todo_completed: number;
 		is_locked: number;
+		is_conflict: number;
+		conflict_original_id: string;
+		is_shared: number;
 		checkboxes: CheckboxStats | null;
 	};
 	item: {
@@ -47,9 +51,11 @@ const renderer: ListRenderer = {
 		'item.size.height',
 		'note.checkboxes',
 		'note.id',
+		'note.is_conflict',
 		'note.is_locked',
 		'note.is_published',
 		'note.is_shared',
+		'note.conflict_original_id',
 		'note.is_todo',
 		'note.isWatched',
 		'note.title',
@@ -113,6 +119,17 @@ const renderer: ListRenderer = {
 				> .lockedicon {
 					padding-right: 4px;
 					color: var(--joplin-color);
+				}
+
+				> .syncdisabledicon {
+					background-color: var(--joplin-color);
+					display: inline-block;
+					flex-shrink: 0;
+					height: 1em;
+					margin-right: 4px;
+					mask: url('images/cloud-offline-outline.svg') center / contain no-repeat;
+					-webkit-mask: url('images/cloud-offline-outline.svg') center / contain no-repeat;
+					width: 1em;
 				}
 	
 			}
@@ -186,6 +203,7 @@ const renderer: ListRenderer = {
 			{{/note.is_todo}}
 			<div class="title" data-id="{{note.id}}">
 				<i class="watchedicon fa fa-share-square"></i>
+				{{#note.syncDisabled}}<i class="syncdisabledicon"></i>{{/note.syncDisabled}}
 				{{#note.is_locked}}<i class="lockedicon fa fa-lock"></i>{{/note.is_locked}}
 				<span>{{note.title}}</span>
 			</div>
@@ -205,7 +223,11 @@ const renderer: ListRenderer = {
 	onRenderNote: async (props: Props) => {
 		return {
 			...props,
-			note: { ...props.note, is_locked: isNoteLockEnabled() ? props.note.is_locked : 0 },
+			note: {
+				...props.note,
+				is_locked: isNoteLockEnabled() ? props.note.is_locked : 0,
+				syncDisabled: isSyncDisabledConflict(props.note),
+			},
 			checkboxStats: props.note.checkboxes,
 		};
 	},

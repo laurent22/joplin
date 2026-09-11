@@ -385,7 +385,7 @@ export default class Note extends BaseItem {
 	public static previewFields(options: { includeTimestamps?: boolean } = null) {
 		options = { includeTimestamps: true, ...options };
 
-		const output = ['id', 'title', 'is_todo', 'todo_completed', 'todo_due', 'parent_id', 'encryption_applied', 'is_locked', 'order', 'markup_language', 'is_conflict', 'is_shared', 'share_id', 'deleted_time'];
+		const output = ['id', 'title', 'is_todo', 'todo_completed', 'todo_due', 'parent_id', 'encryption_applied', 'is_locked', 'order', 'markup_language', 'is_conflict', 'conflict_original_id', 'is_shared', 'share_id', 'deleted_time'];
 
 		if (options.includeTimestamps) {
 			output.push('updated_time');
