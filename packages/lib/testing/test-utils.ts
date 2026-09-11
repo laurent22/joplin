@@ -1186,7 +1186,8 @@ export const mockFetch = (requestHandler: MockFetchRequestHandler) => {
 };
 
 export const withExtraRootCa = async <T> (caPemData: string, task: ()=> Promise<T>) => {
-	// Dynamically import node:tls
+	// getCACertificates requires a newer NodeJS version than the current @types/node version.
+	// Dynamically import tls to work around the missing types:
 	const tls = require('node:tls');
 	const trustedCas = tls.getCACertificates();
 	try {
