@@ -4,9 +4,8 @@ import ButtonBar from './ConfigScreen/ButtonBar';
 import { _ } from '@joplin/lib/locale';
 import { clipboard } from 'electron';
 import Button, { ButtonLevel } from './Button/Button';
-import { uuidgen } from '@joplin/lib/uuid';
 import { Dispatch } from 'redux';
-import { reducer, defaultState, generateApplicationConfirmUrl, checkIfLoginWasSuccessful, saveApplicationAuthId, isJoplinOAuthSyncTarget, assertIsJoplinOAuthSyncTarget, Action, fetchLoginUrl, normalizeBaseUrl } from '@joplin/lib/services/joplinOAuthUtils';
+import { reducer, defaultState, generateApplicationConfirmUrl, checkIfLoginWasSuccessful, saveApplicationAuthId, isJoplinOAuthSyncTarget, assertIsJoplinOAuthSyncTarget, Action, fetchLoginUrl, normalizeBaseUrl, generateAppId } from '@joplin/lib/services/joplinOAuthUtils';
 import { AppState } from '../app.reducer';
 import Logger from '@joplin/utils/Logger';
 import { reg } from '@joplin/lib/registry';
@@ -29,7 +28,7 @@ const JoplinOAuthScreenComponent = (props: Props) => {
 	const syncTargetLabel = SyncTargetRegistry.idToMetadata(props.syncTargetId).label;
 	const joplinCloudApi = normalizeBaseUrl(props.serverApi);
 
-	const applicationAuthId = useMemo(() => uuidgen(), []);
+	const applicationAuthId = useMemo(() => generateAppId(), []);
 	const applicationAuthUrl = (applicationAuthId: string) => `${joplinCloudApi}/api/application_auth/${applicationAuthId}`;
 
 	const [intervalIdentifier, setIntervalIdentifier] = useState(undefined);
