@@ -158,7 +158,7 @@ export const checkIfLoginWasSuccessful = async (applicationsUrl: string, syncTar
 		if (isWaitingResponse) return undefined;
 		isWaitingResponse = true;
 
-		const response = await fetch(applicationsUrl, {
+		const response = await shim.fetch(applicationsUrl, {
 			headers: {
 				'X-JOPLIN-CUSTOM-API-KEY': syncTarget === 10 ? Setting.value('sync.10.apiKey') : '',
 			},
