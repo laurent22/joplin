@@ -1,6 +1,6 @@
 import Note from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
-import { setupDatabaseAndSynchronizer, supportDir, switchClient } from '@joplin/lib/testing/test-utils';
+import { setupDatabaseAndSynchronizer, supportDir, switchClient, withWarningSilenced } from '@joplin/lib/testing/test-utils';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import useFormNote, { HookDependencies } from './useFormNote';
 import shim from '@joplin/lib/shim';
@@ -114,9 +114,11 @@ describe('useFormNote', () => {
 			const render = renderHook(props => useFormNote(props), {
 				initialProps: { ...defaultFormNoteProps, noteId: testNote.id, noteLockSessionUnlocked: true, onDecryptFailedChange },
 			});
-			await waitFor(() => {
-				expect(render.result.current.decryptFailed).toBe(true);
-			});
+			await withWarningSilenced(/Could not decrypt locked note/, async () => {
+				await waitFor(() => {
+					expect(render.result.current.decryptFailed).toBe(true);
+				});
+			}, { requireWarning: true });
 			expect(render.result.current.formNote).toMatchObject({
 				id: '',
 				body: '',
