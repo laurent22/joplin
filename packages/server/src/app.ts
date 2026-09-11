@@ -170,7 +170,11 @@ async function main() {
 		} catch (error) {
 			ctx.status = error.httpCode || 500;
 
-			appLogger().error(`Middleware error on ${ctx.path}:`, error);
+			if (ctx.status >= 500) {
+				appLogger().error(`Middleware error on ${ctx.path}:`, error);
+			} else {
+				appLogger().info(`Middleware error on ${ctx.path}:`, error);
+			}
 
 			const responseFormat = routeResponseFormat(ctx);
 
