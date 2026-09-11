@@ -24,14 +24,19 @@ const ConflictTitle: React.FC<Props> = ({ conflictTitle, disabled, resolvedTitle
 	const resolvedInputRef = useRef<HTMLInputElement>(null);
 	const [helpVisible, setHelpVisible] = useState(false);
 	const toggleHelp = useCallback(() => setHelpVisible(visible => !visible), []);
-	const closeHelp = useCallback(() => setHelpVisible(false), []);
 	const helpRef = useRef<HTMLDivElement>(null);
+	const helpButtonRef = useRef<HTMLButtonElement>(null);
+
+	const closeHelp = useCallback((keepFocus = false) => {
+		setHelpVisible(false);
+		if (keepFocus && helpButtonRef.current) focus('ConflictTitle::closeHelp', helpButtonRef.current);
+	}, []);
 
 	useEffect(() => {
 		if (!helpVisible) return () => {};
 
 		const onKeyDown = (event: KeyboardEvent) => {
-			if (event.key === 'Escape') closeHelp();
+			if (event.key === 'Escape') closeHelp(true);
 		};
 		const onPointerDown = (event: PointerEvent) => {
 			if (!helpRef.current?.contains(event.target as Node)) closeHelp();
@@ -73,7 +78,7 @@ const ConflictTitle: React.FC<Props> = ({ conflictTitle, disabled, resolvedTitle
 					<div className='-instructions-detail'>{_('You\'re reviewing changes between your copy of this note and the latest synced version')}</div>
 				</div>
 				<div className='-help-anchor' ref={helpRef}>
-					<button className='-help' onClick={toggleHelp} aria-expanded={helpVisible}>
+					<button ref={helpButtonRef} className='-help' onClick={toggleHelp} aria-expanded={helpVisible}>
 						<i className='fas fa-question-circle'></i>
 						<span>{_('Help')}</span>
 					</button>
@@ -82,7 +87,7 @@ const ConflictTitle: React.FC<Props> = ({ conflictTitle, disabled, resolvedTitle
 						<div className='-help-popover' role='dialog' aria-label={_('How conflict resolution works')}>
 							<div className='-help-header'>
 								<span className='-help-title'>{_('How conflict resolution works')}</span>
-								<button className='-help-close' onClick={closeHelp} aria-label={_('Close')}>
+								<button className='-help-close' onClick={() => closeHelp(true)} aria-label={_('Close')}>
 									<i className='fas fa-times'></i>
 								</button>
 							</div>
