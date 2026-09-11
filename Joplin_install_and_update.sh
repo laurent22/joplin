@@ -310,13 +310,7 @@ if [[ $DESKTOP =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.*|.*lxqt.*|.*unity.*|.*x-cin
   DATA_HOME=${XDG_DATA_HOME:-~/.local/share}
   DESKTOP_FILE_LOCATION="$DATA_HOME/applications"
 
-  # Only later versions of Joplin default to Wayland
-  IS_WAYLAND_BY_DEFAULT=$(compareVersions "$RELEASE_VERSION" "3.5.6")
-  # Joplin has a different startup WM class on Wayland and X11:
-  STARTUP_WM_CLASS=Joplin
-  if [[ $XDG_SESSION_TYPE != "x11" && $IS_WAYLAND_BY_DEFAULT == "1" ]]; then
-    STARTUP_WM_CLASS=@joplin/app-desktop
-  fi
+  STARTUP_WM_CLASS=appimagekit-joplin
 
   # Only delete the desktop file if it will be replaced
   rm -f "$DESKTOP_FILE_LOCATION/appimagekit-joplin.desktop"
@@ -332,8 +326,6 @@ Name=Joplin
 Comment=Joplin for Desktop
 Exec=env APPIMAGELAUNCHER_DISABLE=TRUE "${INSTALL_DIR}/Joplin.AppImage" ${SANDBOXPARAM} %u
 Icon=joplin
-# This will be different between Wayland and X11. On Wayland, the startup
-# WM class is "@joplin/app-desktop". On X11, it's "Joplin".
 StartupWMClass=${STARTUP_WM_CLASS}
 Type=Application
 Categories=Office;

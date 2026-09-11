@@ -20,6 +20,7 @@ const builtInCommandNames = [
 	EditorCommandType.ToggleBulletedList,
 	EditorCommandType.ToggleCheckList,
 	'-',
+	`editor.${EditorCommandType.ToggleBlockQuote}`,
 	`editor.${EditorCommandType.InsertTable}`,
 	`editor.${EditorCommandType.InsertCodeBlock}`,
 	'-',

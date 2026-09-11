@@ -169,6 +169,9 @@ test.describe('pluginApi', () => {
 		const pluginFrameContent = pluginFrame.contentFrame();
 		await expect(pluginFrameContent.getByText('Loaded!')).toBeAttached();
 
+		// The plugin only knows which note to save after its first onUpdate event.
+		await expect(pluginFrameContent.locator('#note-id')).not.toBeEmpty();
+
 		// Editor plugin tests should pass
 		await mainScreen.goToAnything.runCommand(app, 'testEditorPluginSave-test-editor-plugin');
 
