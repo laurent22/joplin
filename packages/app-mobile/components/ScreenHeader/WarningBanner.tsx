@@ -30,7 +30,7 @@ interface Props {
 	syncTargetAppMinVersion?: string;
 	shareInvitations: ShareInvitation[];
 	processingShareInvitationResponse: boolean;
-	showInvalidJoplinCloudCredential: boolean;
+	showInvalidJoplinOAuthCredential: boolean;
 	syncTargetId: number;
 }
 
@@ -126,7 +126,7 @@ const WarningBannerComponent: React.FC<Props> = props => {
 	if (props.hasDisabledEncryptionItems) {
 		warningComps.push(renderWarningBox('Status', _('Some items cannot be decrypted.')));
 	}
-	if (props.showInvalidJoplinCloudCredential) {
+	if (props.showInvalidJoplinOAuthCredential) {
 		const syncTarget = reg.syncTarget(props.syncTargetId);
 		const syncTargetLabel = SyncTargetRegistry.idToLabelOrEmpty(props.syncTargetId);
 		warningComps.push(renderWarningBox(
@@ -179,7 +179,7 @@ export default connect((state: AppState) => {
 		syncTargetAppMinVersion: syncInfo.appMinVersion,
 		shareInvitations: state.shareService.shareInvitations,
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
-		showInvalidJoplinCloudCredential: isJoplinOAuthSyncTarget(state.settings['sync.target']) && !isSyncLoginRoute(state) && state.mustAuthenticate,
+		showInvalidJoplinOAuthCredential: isJoplinOAuthSyncTarget(state.settings['sync.target']) && !isSyncLoginRoute(state) && state.mustAuthenticate,
 		syncTargetId: state.settings['sync.target'],
 	};
 })(WarningBannerComponent);
