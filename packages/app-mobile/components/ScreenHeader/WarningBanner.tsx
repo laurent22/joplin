@@ -45,7 +45,7 @@ const fetchAndroidVersionIsPreRelease = async (version: string) => {
 	return !!release.prerelease;
 };
 
-export const WarningBannerComponent: React.FC<Props> = props => {
+const WarningBannerComponent: React.FC<Props> = props => {
 	const warningComps = [];
 
 	const [isAndroidTargetPreRelease, setIsAndroidTargetPreRelease] = useState<boolean|null>(null);
@@ -153,15 +153,18 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 	return warningComps;
 };
 
-export default connect((state: AppState) => {
-	const syncInfo = localSyncInfoFromState(state);
-
-	let isLoginRoute = false;
+const isSyncLoginRoute = (state: AppState) => {
 	const syncTargetId = state.settings['sync.target'];
 	const syncTarget = syncTargetId ? reg.syncTarget(syncTargetId) : null;
 	if (syncTarget) {
-		isLoginRoute = state.route?.routeName === syncTarget.authRouteName();
+		return state.route?.routeName === syncTarget.authRouteName();
 	}
+
+	return false;
+};
+
+export default connect((state: AppState) => {
+	const syncInfo = localSyncInfoFromState(state);
 
 	return {
 		themeId: state.settings.theme,
@@ -176,7 +179,7 @@ export default connect((state: AppState) => {
 		syncTargetAppMinVersion: syncInfo.appMinVersion,
 		shareInvitations: state.shareService.shareInvitations,
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
-		showInvalidJoplinCloudCredential: isJoplinOAuthSyncTarget(state.settings['sync.target']) && !isLoginRoute && state.mustAuthenticate,
+		showInvalidJoplinCloudCredential: isJoplinOAuthSyncTarget(state.settings['sync.target']) && !isSyncLoginRoute(state) && state.mustAuthenticate,
 		syncTargetId: state.settings['sync.target'],
 	};
 })(WarningBannerComponent);

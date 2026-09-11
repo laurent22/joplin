@@ -299,10 +299,9 @@ export default function(state: AppState, action: any) {
 		}
 
 		case 'WHITEBOARD_ACTIVE_NOTE_SET':
-			newState = {
-				...state,
-				activeNoteIsWhiteboard: !!action.value,
-			};
+			newState = withWindowStateUpdated(
+				state, action.windowId, 'activeNoteIsWhiteboard', () => !!action.value,
+			);
 			break;
 
 		case 'AI_CHAT_APPEND':
