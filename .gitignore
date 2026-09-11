@@ -622,6 +622,7 @@ packages/app-desktop/integration-tests/models/NoteList.js
 packages/app-desktop/integration-tests/models/SettingsScreen.js
 packages/app-desktop/integration-tests/models/Sidebar.js
 packages/app-desktop/integration-tests/multiWindow.spec.js
+packages/app-desktop/integration-tests/networking.spec.js
 packages/app-desktop/integration-tests/noteList.spec.js
 packages/app-desktop/integration-tests/pluginApi.spec.js
 packages/app-desktop/integration-tests/resizableLayout.spec.js
@@ -1989,6 +1990,7 @@ packages/lib/shim.js
 packages/lib/string-utils.test.js
 packages/lib/string-utils.js
 packages/lib/testing/ai/semanticSearch.js
+packages/lib/testing/createLocalhostServer.js
 packages/lib/testing/dom-test-environment.js
 packages/lib/testing/plugins/createTestPlugin.js
 packages/lib/testing/share/makeMockShareInvitation.js
