@@ -45,7 +45,7 @@
 			android:id="@+id/icon_2"
 			android:layout_width="24dp"
 			android:layout_height="24dp"
-			android:src="@drawable/ic_widget_new_note"
+			android:src="@drawable/ic_widget_new_todo"
 			android:contentDescription="@string/widget_quick_actions_label" />
 
 		<TextView
@@ -71,7 +71,7 @@
 			android:id="@+id/icon_3"
 			android:layout_width="24dp"
 			android:layout_height="24dp"
-			android:src="@drawable/ic_widget_new_note"
+			android:src="@drawable/ic_widget_new_photo"
 			android:contentDescription="@string/widget_quick_actions_label" />
 
 		<TextView
@@ -97,7 +97,7 @@
 			android:id="@+id/icon_4"
 			android:layout_width="24dp"
 			android:layout_height="24dp"
-			android:src="@drawable/ic_widget_new_note"
+			android:src="@drawable/ic_widget_new_attachment"
 			android:contentDescription="@string/widget_quick_actions_label" />
 
 		<TextView
@@ -123,7 +123,7 @@
 			android:id="@+id/icon_5"
 			android:layout_width="24dp"
 			android:layout_height="24dp"
-			android:src="@drawable/ic_widget_new_note"
+			android:src="@drawable/ic_widget_new_drawing"
 			android:contentDescription="@string/widget_quick_actions_label" />
 
 		<TextView
