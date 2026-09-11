@@ -44,7 +44,6 @@ import { UpdateSettingValueCallback } from './types';
 import Folder from '@joplin/lib/models/Folder';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
-import { isJoplinOAuthSyncTarget } from '@joplin/lib/services/joplinOAuthUtils';
 
 interface ConfigScreenState {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Settings values are heterogeneous (string/number/boolean/object) and accessed by string key across many call sites; tightening to `unknown` forces casts everywhere
@@ -112,15 +111,6 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 	};
 
 	private checkSyncConfig_ = async () => {
-		const syncTargetId = this.state.settings['sync.target'];
-		if (isJoplinOAuthSyncTarget(syncTargetId)) {
-			const syncTarget = reg.syncTarget(syncTargetId);
-			const isAuthenticated = await syncTarget.isAuthenticated();
-			if (!isAuthenticated) {
-				void NavService.go(syncTarget.authRouteName());
-				return;
-			}
-		}
 		// to ignore TLS errors we need to change the global state of the app, if the check fails we need to restore the original state
 		// this call sets the new value and returns the previous one which we can use later to revert the change
 		const prevIgnoreTlsErrors = await setIgnoreTlsErrors(this.state.settings['net.ignoreTlsErrors']);

@@ -5,11 +5,13 @@ import { createSelector } from 'reselect';
 import Logger from '@joplin/utils/Logger';
 
 import { type ReactNode } from 'react';
-import { type Registry } from '../../../registry';
+import { reg, type Registry } from '../../../registry';
 import settingValidations from '../../../models/settings/settingValidations';
 import { convertValuesToFunctions } from '../../../ObjectUtils';
 import aiSettingsTransition from '../../../services/ai/aiSettingsTransition';
 import { ChatRole } from '../../../services/ai/types';
+import { hasValidBaseUrl, isJoplinOAuthSyncTarget } from '../../../services/joplinOAuthUtils';
+import NavService from '../../../services/NavService';
 
 const logger = Logger.create('config-shared');
 
@@ -80,6 +82,19 @@ export const checkSyncConfig = async (comp: ConfigScreenComponent, settings: Set
 
 	const syncTargetId = settings['sync.target'];
 	const SyncTargetClass = SyncTargetRegistry.classById(syncTargetId);
+
+	if (isJoplinOAuthSyncTarget(syncTargetId) && hasValidBaseUrl(syncTargetId, settings)) {
+		// Settings need to be saved in order for the authentication check to be successful
+		await saveSettings(comp);
+
+		const syncTarget = reg.syncTarget(syncTargetId);
+		const isAuthenticated = await syncTarget.isAuthenticated();
+		if (!isAuthenticated) {
+			await NavService.go(syncTarget.authRouteName());
+
+			return { ok: false, errorMessage: 'Not signed in' };
+		}
+	}
 
 	const options = {
 		...Setting.subValues(`sync.${syncTargetId}`, settings, { includeConstants: true }),

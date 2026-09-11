@@ -10,6 +10,7 @@ import SyncTargetRegistry from '../SyncTargetRegistry';
 import { isHttpOrHttpsUrl } from '@joplin/utils/url';
 import NavService from './NavService';
 import { createSecureRandom } from '../uuid';
+import { SettingsMap } from '../components/shared/config/config-shared';
 
 const logger = Logger.create('joplinCloudUtils');
 
@@ -115,6 +116,11 @@ export function assertIsJoplinOAuthSyncTarget(id: number): asserts id is JoplinS
 	if (!isJoplinOAuthSyncTarget(id)) {
 		throw new Error('Sync target must be Joplin Server or Joplin Cloud');
 	}
+};
+
+export const hasValidBaseUrl = (id: JoplinSyncTargetId, settings: SettingsMap|null) => {
+	const url = settings ? settings[`sync.${id}.path`] : Setting.value(`sync.${id}.path`);
+	return isHttpOrHttpsUrl(url);
 };
 
 export const saveApplicationAuthId = async (applicationAuthId: string, syncTarget: JoplinSyncTargetId) => {

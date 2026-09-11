@@ -5,6 +5,7 @@ import JoplinServerApi, { Session } from './JoplinServerApi';
 import BaseSyncTarget from './BaseSyncTarget';
 import { FileApi } from './file-api';
 import Logger from '@joplin/utils/Logger';
+import { isHttpOrHttpsUrl } from '@joplin/utils/url';
 
 const staticLogger = Logger.create('SyncTargetJoplinServer');
 
@@ -80,6 +81,11 @@ export default abstract class SyncTargetJoplinServerBase extends BaseSyncTarget 
 		};
 
 		syncTargetId = syncTargetId === null ? this.id() : syncTargetId;
+
+		if (!isHttpOrHttpsUrl(options.path())) {
+			output.errorMessage = `Invalid path: Not an HTTP or HTTPS URL: ${options.path()}`;
+			return output;
+		}
 
 		if (!fileApi) {
 			try {

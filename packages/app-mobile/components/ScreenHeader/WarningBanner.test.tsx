@@ -142,6 +142,7 @@ describe('WarningBanner', () => {
 	])('invalid credentials banner for %s should link to a login screen', (syncTarget) => {
 		const isJoplinCloud = syncTarget === 'Joplin Cloud';
 		Setting.setValue('sync.target', isJoplinCloud ? 10 : 9);
+		Setting.setValue('sync.9.path', 'http://localhost:22300/');
 		const mock = createMockStore();
 
 		mock.setMustAuthenticate();
