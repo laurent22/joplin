@@ -815,6 +815,11 @@ packages/app-mobile/components/ScreenHeader/index.js
 packages/app-mobile/components/SearchInput.js
 packages/app-mobile/components/SelectDateTimeDialog.js
 packages/app-mobile/components/SideMenu.js
+packages/app-mobile/components/SideMenuContent/BottomPanelActions.js
+packages/app-mobile/components/SideMenuContent/FolderItem.js
+packages/app-mobile/components/SideMenuContent/SideMenuContent.js
+packages/app-mobile/components/SideMenuContent/SideMenuItem.js
+packages/app-mobile/components/SideMenuContent/SidebarIcon.js
 packages/app-mobile/components/SideMenuContentNote.js
 packages/app-mobile/components/SyncWizard/JoplinCloudIcon.js
 packages/app-mobile/components/SyncWizard/SyncWizard.js
@@ -960,7 +965,6 @@ packages/app-mobile/components/screens/resourceScreenUtils.test.js
 packages/app-mobile/components/screens/resourceScreenUtils.js
 packages/app-mobile/components/screens/status.js
 packages/app-mobile/components/screens/tags.js
-packages/app-mobile/components/side-menu-content.js
 packages/app-mobile/components/testing/TestProviderStack.js
 packages/app-mobile/components/voiceTyping/AudioRecordingBanner.js
 packages/app-mobile/components/voiceTyping/RecordingControls.js
@@ -1181,6 +1185,7 @@ packages/editor/CodeMirror/pluginApi/PluginLoader.js
 packages/editor/CodeMirror/pluginApi/codeMirrorRequire.js
 packages/editor/CodeMirror/pluginApi/customEditorCompletion.test.js
 packages/editor/CodeMirror/pluginApi/customEditorCompletion.js
+packages/editor/CodeMirror/testing/backspaceOnce.js
 packages/editor/CodeMirror/testing/createEditorControl.js
 packages/editor/CodeMirror/testing/createTestEditor.js
 packages/editor/CodeMirror/testing/findNodesWithName.js
@@ -1190,6 +1195,8 @@ packages/editor/CodeMirror/testing/pressReleaseKey.js
 packages/editor/CodeMirror/testing/typeText.js
 packages/editor/CodeMirror/testing/visibleEditorText.js
 packages/editor/CodeMirror/theme.js
+packages/editor/CodeMirror/utils/clampSelectionToDocument.test.js
+packages/editor/CodeMirror/utils/clampSelectionToDocument.js
 packages/editor/CodeMirror/utils/findPositionMatchingLink.test.js
 packages/editor/CodeMirror/utils/findPositionMatchingLink.js
 packages/editor/CodeMirror/utils/formatting/RegionSpec.js
@@ -1369,6 +1376,7 @@ packages/lib/SyncTargetWebDAV.js
 packages/lib/Synchronizer.js
 packages/lib/TaskQueue.test.js
 packages/lib/TaskQueue.js
+packages/lib/WebDavApi.test.js
 packages/lib/WebDavApi.js
 packages/lib/WelcomeUtils.test.js
 packages/lib/WelcomeUtils.js
@@ -1878,6 +1886,7 @@ packages/lib/services/rest/routes/events.js
 packages/lib/services/rest/routes/folders.test.js
 packages/lib/services/rest/routes/folders.js
 packages/lib/services/rest/routes/master_keys.js
+packages/lib/services/rest/routes/mcp.test.js
 packages/lib/services/rest/routes/mcp.js
 packages/lib/services/rest/routes/notes.test.js
 packages/lib/services/rest/routes/notes.js

@@ -18,6 +18,7 @@ export default function isEditorCommand(commandName: string) {
         commandName === 'textNumberedList' ||
         commandName === 'textBulletedList' ||
         commandName === 'textCheckbox' ||
+        commandName === 'textBlockQuote' ||
         commandName === 'textHeading' ||
         commandName === 'textHorizontalRule' ||
         commandName === 'insertDateTime'
