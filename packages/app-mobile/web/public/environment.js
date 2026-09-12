@@ -1,5 +1,6 @@
-// Change to enable or disable React Native dev mode.
-window.__DEV__ = window.location.origin.includes('localhost');
+// __DEV__ is defined at build time by webpack (see web/webpack.config.ts), so
+// that release builds never include the React Refresh runtime, regardless of
+// the hostname the app is served from. See https://github.com/laurent22/joplin/issues/16435
 
 // Silences errors related to generated code.
 window.exports = {};
@@ -10,7 +11,3 @@ window.process = {
 		EXPO_OS: 'web',
 	},
 };
-
-if (__DEV__) {
-	document.title = 'Joplin DEV';
-}

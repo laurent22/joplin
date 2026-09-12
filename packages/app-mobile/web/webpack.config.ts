@@ -10,7 +10,7 @@ const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin'
 const appDirectory = path.resolve(__dirname, '../');
 const babelConfig = require('../babel.config');
 
-const buildSharedConfig = (hotReload: boolean): webpack.Configuration => {
+const buildSharedConfig = (hotReload: boolean, isDev: boolean): webpack.Configuration => {
 	const babelLoaderConfiguration = {
 		test: /\.(tsx|jsx|ts|js|mjs)$/,
 		exclude: [
@@ -59,9 +59,16 @@ const buildSharedConfig = (hotReload: boolean): webpack.Configuration => {
 			],
 		},
 
-		plugins: hotReload ? [
-			new ReactRefreshWebpackPlugin(),
-		] : [],
+		plugins: [
+			// Like Metro, webpack defines __DEV__ at build time. It must reflect the
+			// build mode and not the hostname the app is served from, otherwise a
+			// release build served on localhost would load the React Refresh runtime
+			// and fail. See https://github.com/laurent22/joplin/issues/16435
+			new webpack.DefinePlugin({
+				__DEV__: JSON.stringify(isDev),
+			}),
+			...(hotReload ? [new ReactRefreshWebpackPlugin()] : []),
+		],
 
 		resolve: {
 			alias: {
@@ -117,8 +124,9 @@ const buildSharedConfig = (hotReload: boolean): webpack.Configuration => {
 	};
 };
 
-export default (env: Record<string, boolean>) => {
+export default (env: Record<string, boolean>, argv: { mode?: string }) => {
 	const hotReload = !!env.HOT_RELOAD;
+	const isDev = argv.mode !== 'production';
 	const appConfig: webpack.Configuration = {
 		target: 'web',
 
@@ -126,7 +134,7 @@ export default (env: Record<string, boolean>) => {
 			app: path.resolve(appDirectory, 'index.web.ts'),
 		},
 
-		...buildSharedConfig(hotReload),
+		...buildSharedConfig(hotReload, isDev),
 
 		devServer: {
 			// Required by @sqlite.org/sqlite-wasm
@@ -144,7 +152,7 @@ export default (env: Record<string, boolean>) => {
 		entry: {
 			serviceWorker: path.resolve(appDirectory, 'web/serviceWorker.ts'),
 		},
-		...buildSharedConfig(false),
+		...buildSharedConfig(false, isDev),
 	};
 
 	return [serviceWorkerConfig, appConfig];

@@ -29,6 +29,8 @@ interface ExtendedWindow extends Window {
 }
 declare const window: ExtendedWindow;
 if (__DEV__) {
+	document.title = 'Joplin DEV';
+
 	window.joplin = {
 		Setting,
 		Note,
