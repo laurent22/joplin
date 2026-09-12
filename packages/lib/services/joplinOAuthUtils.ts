@@ -119,7 +119,7 @@ export function assertIsJoplinOAuthSyncTarget(id: number): asserts id is JoplinS
 
 export const hasValidBaseUrl = (id: JoplinSyncTargetId, settings: SettingsMap|null) => {
 	const url = settings ? settings[`sync.${id}.path`] : Setting.value(`sync.${id}.path`);
-	return isHttpOrHttpsUrl(url);
+	return !!url && isHttpOrHttpsUrl(url);
 };
 
 export const saveApplicationAuthId = async (applicationAuthId: string, syncTarget: JoplinSyncTargetId) => {
