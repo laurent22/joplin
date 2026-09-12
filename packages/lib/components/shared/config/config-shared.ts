@@ -85,7 +85,9 @@ export const checkSyncConfig = async (comp: ConfigScreenComponent, settings: Set
 
 	if (isJoplinOAuthSyncTarget(syncTargetId) && hasValidBaseUrl(syncTargetId, settings)) {
 		// Settings need to be saved in order for the authentication check to be successful
-		await saveSettings(comp);
+		if (!await saveSettings(comp)) {
+			return { ok: false, errorMessage: _('Failed to save settings') };
+		}
 
 		const syncTarget = reg.syncTarget(syncTargetId);
 		const isAuthenticated = await syncTarget.isAuthenticated();
