@@ -186,7 +186,11 @@ export default class FileApiDriverJoplinServer {
 	}
 
 	private isRejectedBySyncTargetError(error: { code?: number | string; httpCode?: number }) {
-		return error.code === 413 || error.code === 409 || error.httpCode === 413 || error.httpCode === 409;
+		// 422 means the server permanently refuses the item (for example its
+		// content contains a null byte). Without it the sync would abort and
+		// retry the same item forever.
+		const rejectedCodes = [409, 413, 422];
+		return rejectedCodes.includes(error.code as number) || rejectedCodes.includes(error.httpCode);
 	}
 
 	private isReadyOnlyError(error: { code?: string }) {
