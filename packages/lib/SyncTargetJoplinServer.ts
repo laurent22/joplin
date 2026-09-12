@@ -31,7 +31,7 @@ export default class SyncTargetJoplinServer extends SyncTargetJoplinServerBase {
 	}
 
 	public static requiresPassword() {
-		return Setting.value('sync.9.preferPasswordAuth');
+		return !!Setting.value(`sync.${this.id()}.preferPasswordAuth`);
 	}
 
 	public static override supportsShare(): boolean {
