@@ -133,6 +133,31 @@ Besides the database and filesystem, it's also possible to use AWS S3 for storag
 
 	STORAGE_DRIVER=Type=S3; Region=YOUR_REGION_CODE; AccessKeyId=YOUR_ACCESS_KEY; SecretAccessKeyId=YOUR_SECRET_ACCESS_KEY; Bucket=YOUR_BUCKET
 
+## Setting up email (SMTP)
+
+This step is optional.
+
+By default, the server does not send any email. It can however be configured to send messages — for example password reset links, email change confirmations or payment failure notices — through an SMTP server, by setting the following variables in the `.env` file:
+
+```conf
+MAILER_ENABLED=true
+MAILER_HOST=smtp.example.com
+MAILER_PORT=465
+MAILER_SECURITY=tls
+MAILER_AUTH_USER=username
+MAILER_AUTH_PASSWORD=password
+MAILER_NOREPLY_NAME=Joplin
+MAILER_NOREPLY_EMAIL=noreply@example.com
+```
+
+- **MAILER_ENABLED** — set to `true` to enable sending emails. If it is `false` or if **MAILER_HOST** is not set, the email service is disabled.
+- **MAILER_HOST** and **MAILER_PORT** — the address and port of the SMTP server. Port 465 is typically used for TLS, and 587 for STARTTLS.
+- **MAILER_SECURITY** — how the connection is secured. Can be `tls` (the default), `starttls` or `none`.
+- **MAILER_AUTH_USER** and **MAILER_AUTH_PASSWORD** — credentials to login to the SMTP server. Leave them empty if the server does not require authentication.
+- **MAILER_NOREPLY_NAME** and **MAILER_NOREPLY_EMAIL** — the display name and email address used as the sender of all outgoing emails. **MAILER_NOREPLY_EMAIL** must be set for the email service to work.
+
+Restart the server for these variables to take effect.
+
 ## Verify access to the admin page
 
 Once Joplin Server is exposed to the internet, open the admin UI. For the following instructions, we'll assume that Joplin Server is running on `https://example.com/joplin`.
