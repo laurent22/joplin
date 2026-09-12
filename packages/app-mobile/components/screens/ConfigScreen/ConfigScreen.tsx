@@ -98,10 +98,6 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		shared.init(reg);
 	}
 
-	private goToJoplinCloudLogin_ = async () => {
-		await NavService.go('JoplinCloudLogin');
-	};
-
 	private goToJoplinServerSamlLogin_ = async () => {
 		// Save the settings to allow for sync when the user completes authentication
 		await this.saveButton_press();
@@ -115,13 +111,6 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 	};
 
 	private checkSyncConfig_ = async () => {
-		if (this.state.settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud')) {
-			const isAuthenticated = await reg.syncTarget().isAuthenticated();
-			if (!isAuthenticated) {
-				void NavService.go('JoplinCloudLogin');
-				return;
-			}
-		}
 		// to ignore TLS errors we need to change the global state of the app, if the check fails we need to restore the original state
 		// this call sets the new value and returns the previous one which we can use later to revert the change
 		const prevIgnoreTlsErrors = await setIgnoreTlsErrors(this.state.settings['net.ignoreTlsErrors']);
@@ -374,6 +363,19 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		);
 	}
 
+	private onSettingButtonPress_ = async (key: string) => {
+		const metadata = Setting.settingMetadata(key);
+		if (!metadata.onClick) {
+			throw new Error(`Missing click handler for setting: ${key}`);
+		}
+
+		await metadata.onClick({
+			settings: this.state.settings,
+			saveSettings: this.saveButton_press,
+			setSettingValue: this.onUpdateSetting_,
+		});
+	};
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See ConfigScreenState.settings — same reason
 	public sectionToComponent(key: string, section: SettingMetadataSection, settings: Record<string, any>, isSelected: boolean) {
 		const settingComps: ReactElement[] = [];
@@ -468,9 +470,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 						</View>
 					);
 
-					if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud')) {
-						addSettingButton('go_to_joplin_cloud_login_button', _('Connect to Joplin Cloud'), this.goToJoplinCloudLogin_);
-					} else if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServerSaml')) {
+					if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServerSaml')) {
 						addSettingButton('login_joplin_server_saml_button', _('Connect using your organisation account'), this.goToJoplinServerSamlLogin_);
 
 						if (Setting.value('sync.11.id') !== '' || Setting.value('sync.11.userId') !== '') {
@@ -719,6 +719,11 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		/>;
 	}
 
+	private onUpdateSetting_ = async (key: string, value: unknown): Promise<void> => {
+		const handled = await this.handleSetting(key, value);
+		if (!handled) shared.updateSettingValue(this, key, value);
+	};
+
 	private handleSetting = async (key: string, value: unknown): Promise<boolean> => {
 		// When the user tries to enable biometrics unlock, we ask for the
 		// fingerprint or Face ID, and if it's correct we save immediately. If
@@ -743,18 +748,14 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 	};
 
 	public settingToComponent(key: string, value: unknown) {
-		const updateSettingValue = async (key: string, value: unknown) => {
-			const handled = await this.handleSetting(key, value);
-			if (!handled) shared.updateSettingValue(this, key, value);
-		};
-
 		return (
 			<SettingComponent
 				key={key}
 				settingId={key}
 				value={value}
 				themeId={this.props.themeId}
-				updateSettingValue={updateSettingValue}
+				onUpdateSettingValue={this.onUpdateSetting_}
+				onSettingButtonClick={this.onSettingButtonPress_}
 				styles={this.styles()}
 			/>
 		);
@@ -762,13 +763,9 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See ConfigScreenState.settings — same reason
 	private renderFeatureFlags(settings: Record<string, any>, featureFlagKeys: string[]): ReactElement[] {
-		const updateSettingValue = (key: string, value: unknown) => {
-			return shared.updateSettingValue(this, key, value);
-		};
-
 		const output: ReactElement[] = [];
 		for (const key of featureFlagKeys) {
-			output.push(this.renderToggle(key, key, settings[key], updateSettingValue));
+			output.push(this.renderToggle(key, key, settings[key], this.onUpdateSetting_));
 		}
 		return output;
 	}

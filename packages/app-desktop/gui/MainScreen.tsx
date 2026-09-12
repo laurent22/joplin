@@ -47,6 +47,10 @@ const logger = Logger.create('MainScreen');
 import { ipcRenderer } from 'electron';
 import layoutKeyToLabel from '../utils/layout/layoutKeyToLabel';
 import MainLayoutPane from './MainLayoutPane';
+import { hasValidBaseUrl, isJoplinOAuthSyncTarget } from '@joplin/lib/services/joplinOAuthUtils';
+import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
+import { reg } from '@joplin/lib/registry';
+import NavService from '@joplin/lib/services/NavService';
 
 interface Props {
 	plugins: PluginStates;
@@ -77,6 +81,7 @@ interface Props {
 	showInvalidJoplinCloudCredential: boolean;
 	toast: Toast;
 	shouldSwitchToAppleSiliconVersion: boolean;
+	syncTargetName: string;
 }
 
 interface ShareFolderDialogOptions {
@@ -517,11 +522,19 @@ class MainScreenComponent extends React.Component<Props, State> {
 			});
 		};
 
-		const onViewJoplinCloudLoginScreen = () => {
-			this.props.dispatch({
-				type: 'NAV_GO',
-				routeName: 'JoplinCloudLogin',
-			});
+		const onViewJoplinServerLoginScreen = () => {
+			const syncTarget = Setting.value('sync.target');
+			if (!isJoplinOAuthSyncTarget(syncTarget)) {
+				void shim.showErrorDialog(_('Error: Not connected to Joplin Cloud or Joplin Server'));
+				return;
+			}
+
+			if (!hasValidBaseUrl(syncTarget, null)) {
+				void NavService.go('Config', { props: { defaultSection: 'sync' } });
+			} else {
+				const routeName = reg.syncTarget(syncTarget).authRouteName();
+				void NavService.go(routeName);
+			}
 		};
 
 		const onDisableSync = () => {
@@ -671,9 +684,9 @@ class MainScreenComponent extends React.Component<Props, State> {
 			);
 		} else if (this.props.showInvalidJoplinCloudCredential) {
 			msg = this.renderNotificationMessage(
-				_('Your Joplin Cloud credentials are invalid, please login.'),
-				_('Login to Joplin Cloud.'),
-				onViewJoplinCloudLoginScreen,
+				_('Your %s credentials are invalid, please login.', this.props.syncTargetName),
+				_('Log in to %s.', this.props.syncTargetName),
+				onViewJoplinServerLoginScreen,
 				_('Disable synchronisation'),
 				onDisableSync,
 			);
@@ -837,7 +850,8 @@ const mapStateToProps = (state: AppState) => {
 		lastDeletionNotificationTime: state.lastDeletionNotificationTime,
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
 		syncTargetAppMinVersion: syncInfo.appMinVersion,
-		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
+		showInvalidJoplinCloudCredential: isJoplinOAuthSyncTarget(state.settings['sync.target']) && state.mustAuthenticate,
+		syncTargetName: SyncTargetRegistry.idToLabelOrEmpty(state.settings['sync.target']),
 		toast: state.toast,
 		shouldSwitchToAppleSiliconVersion: shim.isAppleSilicon() && shim.isMac() && process.arch !== 'arm64',
 	};

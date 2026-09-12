@@ -1,6 +1,7 @@
 import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
-import SettingsScreen from './models/SettingsScreen';
+import SettingsScreen from './models/SettingsScreen/SettingsScreen';
+import JoplinCloudLoginScreen from './models/JoplinCloudLoginScreen';
 
 test.describe('settings', () => {
 	test('should be possible to remove sort order buttons in settings', async ({ electronApp, mainWindow }) => {
@@ -34,21 +35,35 @@ test.describe('settings', () => {
 		await expect(sortOrderLocator).not.toBeVisible();
 	});
 
-	test('clicking the sync wizard button in settings should open a dialog', async ({ electronApp, mainWindow }) => {
+	test('clicking the sync wizard button in settings should open a dialog and allow selecting "Joplin Cloud"', async ({ electronApp, mainWindow }) => {
 		const mainScreen = await new MainScreen(mainWindow).setup();
 		await mainScreen.waitFor();
 		await mainScreen.openSettings(electronApp);
 
 		const settingsScreen = new SettingsScreen(mainWindow);
-		const generalTab = settingsScreen.getTabLocator('Synchronisation');
-		await generalTab.click();
+		const syncTab = await settingsScreen.openSyncTab();
 
 		await expect(mainScreen.dialog).not.toBeVisible();
-
-		const syncWizardButton = mainWindow.getByRole('button', { name: 'Open Sync Wizard' });
-		await syncWizardButton.click();
-
+		await syncTab.syncWizardButton.click();
 		await expect(mainScreen.dialog).toBeVisible();
+
+		// Should allow navigating to the Joplin Cloud login screen
+		const joplinCloudButton = mainScreen.dialog.getByRole('link', { name: 'Already have an account? Log in' });
+		await joplinCloudButton.click();
+		await new JoplinCloudLoginScreen(mainWindow).waitFor();
+	});
+
+	test('clicking "Connect to Joplin Cloud" should open the Joplin Cloud login screen', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.waitFor();
+		await mainScreen.openSettings(electronApp);
+
+		const settingsScreen = new SettingsScreen(mainWindow);
+		const syncTab = await settingsScreen.openSyncTab();
+		await syncTab.syncTargetDropdown.selectOption({ label: 'Joplin Cloud' });
+
+		await syncTab.connectToJoplinCloudButton.click();
+		await new JoplinCloudLoginScreen(mainWindow).waitFor();
 	});
 
 	test('should be possible to navigate settings screen tabs with the arrow keys', async ({ electronApp, mainWindow, startupPluginsLoaded }) => {

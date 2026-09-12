@@ -51,6 +51,7 @@ export interface Crypto {
 	decrypt(password: string, data: EncryptionResult, options: EncryptionParameters): Promise<CryptoBuffer>;
 	encryptString(password: string, salt: CryptoBuffer, data: string, encoding: CryptoBufferEncoding, options: EncryptionParameters): Promise<EncryptionResult>;
 	bufferToString(buffer: CryptoBuffer, encoding: CryptoBufferEncoding): string;
+	randomUuid(): string;
 }
 
 // Reject views backed by SharedArrayBuffer

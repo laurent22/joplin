@@ -30,6 +30,67 @@ const showAiTools = (settings: Record<string, unknown>) => {
 	return !!settings['mcp.enabled'] || !!settings['ai.enabled'];
 };
 
+export const showJoplinServerUsernamePassword = (settings: Record<string, unknown>) => {
+	const joplinServerId = SyncTargetRegistry.nameToId('joplinServer');
+	const isJoplinServer = settings['sync.target'] === joplinServerId;
+	if (!isJoplinServer) return false;
+
+	const email = (settings[`sync.${joplinServerId}.username`] ?? '') as string;
+	// A UUID email implies that Joplin Server is configured to use OAuth
+	const isUuidEmail = !!email.replace(/-/g, '').match(/^[a-zA-Z0-9]{32}$/i);
+	const hasNonUuidEmail = !!email && !isUuidEmail;
+	return hasNonUuidEmail || (!email && !!settings[`sync.${joplinServerId}.preferPasswordAuth`]);
+};
+
+const showJoplinServerConnectDisconnectButtons = (settings: Record<string, unknown>, targetId: number) => {
+	if (settings['sync.target'] !== targetId) return false;
+	const isJoplinServer = targetId === SyncTargetRegistry.nameToId('joplinServer');
+	const showingUsernameAndPassword = showJoplinServerUsernamePassword(settings);
+	if (isJoplinServer && showingUsernameAndPassword) return false;
+	return true;
+};
+
+const buildJoplinServerConnectButton = (syncTargetId: number, syncTargetName: string) => {
+	return {
+		value: null as null,
+		type: SettingItemType.Button,
+		label: () => _('Connect to %s', syncTargetName),
+		onClick: async (event) => {
+			const { fetchLoginUrl, openLoginScreen } = await import('../../services/joplinOAuthUtils');
+			const loginUrl = await fetchLoginUrl(syncTargetId, event.settings[`sync.${syncTargetId}.path`] as string);
+			// Older Joplin Server versions don't support fetching the login URL
+			if (!loginUrl && syncTargetId === 9) {
+				event.setSettingValue(`sync.${syncTargetId}.preferPasswordAuth`, true);
+			} else {
+				await event.saveSettings();
+				await openLoginScreen(syncTargetId);
+			}
+		},
+		public: true,
+		appTypes: [AppType.Desktop, AppType.Mobile],
+		show: settings => showJoplinServerConnectDisconnectButtons(settings, syncTargetId),
+		section: 'sync',
+	} satisfies SettingItem;
+};
+
+const buildJoplinServerDisconnectButton = (syncTargetId: number, syncTargetName: string) => {
+	return {
+		value: null as null,
+		type: SettingItemType.Button,
+		label: () => _('Disconnect from %s', syncTargetName),
+		onClick: (event) => {
+			event.setSettingValue(`sync.${syncTargetId}.username`, '');
+			event.setSettingValue(`sync.${syncTargetId}.password`, '');
+		},
+		public: true,
+		appTypes: [AppType.Desktop, AppType.Mobile],
+		show: settings => {
+			return !!settings[`sync.${syncTargetId}.username`] && showJoplinServerConnectDisconnectButtons(settings, syncTargetId);
+		},
+		section: 'sync',
+	} satisfies SettingItem;
+};
+
 const addBetaMarker = (text: string) => _('%s (Beta)', text);
 
 export enum CameraDirection {
@@ -357,9 +418,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: '',
 			type: SettingItemType.String,
 			section: 'sync',
-			show: settings => {
-				return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServer');
-			},
+			show: showJoplinServerUsernamePassword,
 			public: true,
 			label: () => _('Joplin Server email'),
 			storage: SettingStorage.File,
@@ -368,13 +427,25 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: '',
 			type: SettingItemType.String,
 			section: 'sync',
-			show: settings => {
-				return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServer');
-			},
+			show: showJoplinServerUsernamePassword,
 			public: true,
 			label: () => _('Joplin Server password'),
 			secure: true,
 		},
+		'sync.9.preferPasswordAuth': {
+			value: false,
+			type: SettingItemType.Bool,
+			section: 'sync',
+			show: settings => settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServer'),
+			public: true,
+			label: () => _('Prefer email/password authentication'),
+			description: () => _('By default, Joplin Server uses OAuth to authenticate. Enable this setting to prefer email/password authentication.'),
+			advanced: true,
+		},
+		'sync.9.pendingAuthId': { value: '', type: SettingItemType.String, public: false },
+		'sync.9.connect': buildJoplinServerConnectButton(9, _('Joplin Server')),
+		'sync.9.disconnect': buildJoplinServerDisconnectButton(9, _('Joplin Server')),
+
 		'sync.11.path': {
 			value: '',
 			type: SettingItemType.String,
@@ -440,6 +511,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			public: false,
 			secure: true,
 		},
+		'sync.10.connect': buildJoplinServerConnectButton(10, _('Joplin Cloud')),
 
 		'sync.10.pendingAuthId': { value: '', type: SettingItemType.String, public: false },
 

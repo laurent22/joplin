@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { connect } from 'react-redux';
 import { Platform } from 'react-native';
 import { AppState } from '../../utils/types';
-import WarningBox from './WarningBox';
+import WarningBox, { WarningBoxTarget } from './WarningBox';
 import { _ } from '@joplin/lib/locale';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
@@ -13,6 +13,8 @@ import { substrWithEllipsis } from '@joplin/lib/string-utils';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
+import { hasValidBaseUrl, isJoplinOAuthSyncTarget } from '@joplin/lib/services/joplinOAuthUtils';
+import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import { reg } from '@joplin/lib/registry';
 
 const logger = Logger.create('WarningBanner');
@@ -28,7 +30,8 @@ interface Props {
 	syncTargetAppMinVersion?: string;
 	shareInvitations: ShareInvitation[];
 	processingShareInvitationResponse: boolean;
-	showInvalidJoplinCloudCredential: boolean;
+	showInvalidJoplinOAuthCredential: boolean;
+	syncTargetId: number;
 }
 
 const androidGooglePlayUrl = 'https://play.google.com/store/apps/details?id=net.cozic.joplin';
@@ -59,12 +62,11 @@ const WarningBannerComponent: React.FC<Props> = props => {
 		}
 	}, [props.mustUpgradeAppMessage, props.syncTargetAppMinVersion]);
 
-	const renderWarningBox = (screen: string, message: string, url?: string) => {
+	const renderWarningBox = (key: string, message: string, target: WarningBoxTarget) => {
 		return <WarningBox
-			key={screen}
+			key={key}
 			themeId={props.themeId}
-			targetScreen={screen}
-			url={url}
+			target={target}
 			message={message}
 			testID='warning-box'
 		/>;
@@ -83,14 +85,14 @@ const WarningBannerComponent: React.FC<Props> = props => {
 					return renderWarningBox(
 						'UpgradeApp',
 						upgradeMessage(_('Download it from the Joplin Android repository')),
-						androidPreReleaseUrl,
+						{ url: androidPreReleaseUrl },
 					);
 				}
 
 				return renderWarningBox(
 					'UpgradeApp',
 					upgradeMessage(_('Update it from Google Play')),
-					androidGooglePlayUrl,
+					{ url: androidGooglePlayUrl },
 				);
 			}
 
@@ -98,33 +100,43 @@ const WarningBannerComponent: React.FC<Props> = props => {
 				return renderWarningBox(
 					'UpgradeApp',
 					upgradeMessage(_('Update it from the App Store')),
-					iosAppStoreUrl,
+					{ url: iosAppStoreUrl },
 				);
 			}
 
-			return renderWarningBox('UpgradeApp', _('In order to synchronise, Please upgrade your application to version %s', props.syncTargetAppMinVersion));
+			return renderWarningBox('UpgradeApp', _('In order to synchronise, Please upgrade your application to version %s', props.syncTargetAppMinVersion), null);
 		}
 
-		return renderWarningBox('UpgradeApp', props.mustUpgradeAppMessage);
+		return renderWarningBox('UpgradeApp', props.mustUpgradeAppMessage, null);
 	};
 
 	if (props.showMissingMasterKeyMessage) {
-		warningComps.push(renderWarningBox('EncryptionConfig', _('Press to set the decryption password.')));
+		warningComps.push(renderWarningBox('missing_master_key', _('Press to set the decryption password.'), { screen: 'EncryptionConfig' }));
 	}
 	if (props.hasDisabledSyncItems) {
-		warningComps.push(renderWarningBox('Status', _('Some items cannot be synchronised. Press for more info.')));
+		warningComps.push(renderWarningBox('disabled_items', _('Some items cannot be synchronised. Press for more info.'), { screen: 'Status' }));
 	}
 	if (props.shouldUpgradeSyncTarget && props.showShouldUpgradeSyncTargetMessage !== false) {
-		warningComps.push(renderWarningBox('UpgradeSyncTarget', _('The sync target needs to be upgraded. Press this banner to proceed.')));
+		warningComps.push(renderWarningBox('upgrade_sync', _('The sync target needs to be upgraded. Press this banner to proceed.'), { screen: 'UpgradeSyncTarget' }));
 	}
 	if (props.mustUpgradeAppMessage) {
 		warningComps.push(renderMustUpgradeAppMessage());
 	}
 	if (props.hasDisabledEncryptionItems) {
-		warningComps.push(renderWarningBox('Status', _('Some items cannot be decrypted.')));
+		warningComps.push(renderWarningBox('cannot_decrypt', _('Some items cannot be decrypted.'), { screen: 'Status' }));
 	}
-	if (props.showInvalidJoplinCloudCredential) {
-		warningComps.push(renderWarningBox('JoplinCloudLogin', _('Your Joplin Cloud credentials are invalid, please login.')));
+	if (props.showInvalidJoplinOAuthCredential) {
+		const syncTarget = reg.syncTarget(props.syncTargetId);
+		const syncTargetLabel = SyncTargetRegistry.idToLabelOrEmpty(props.syncTargetId);
+		if (isJoplinOAuthSyncTarget(props.syncTargetId) && !hasValidBaseUrl(props.syncTargetId, null)) {
+			warningComps.push(renderWarningBox(
+				'auth', _('Invalid or missing %s URL.', syncTargetLabel), { screen: 'Config', screenProps: { sectionName: 'sync' } },
+			));
+		} else {
+			warningComps.push(renderWarningBox(
+				'auth', _('Your %s credentials are invalid, please log in.', syncTargetLabel), { screen: syncTarget.authRouteName() },
+			));
+		}
 	}
 
 	const shareInvitation = props.shareInvitations.find(inv => inv.status === ShareUserStatus.Waiting);
@@ -136,10 +148,11 @@ const WarningBannerComponent: React.FC<Props> = props => {
 		const sharer = invitation.share.user;
 
 		warningComps.push(renderWarningBox(
-			'ShareManager',
+			'share',
 			_('%s (%s) would like to share a notebook with you.',
 				substrWithEllipsis(sharer?.full_name ?? 'Unknown', 0, 48),
 				substrWithEllipsis(sharer?.email ?? 'Unknown', 0, 52)),
+			{ screen: 'ShareManager' },
 		));
 	}
 
@@ -172,6 +185,7 @@ export default connect((state: AppState) => {
 		syncTargetAppMinVersion: syncInfo.appMinVersion,
 		shareInvitations: state.shareService.shareInvitations,
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
-		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && !isSyncLoginRoute(state) && state.mustAuthenticate,
+		showInvalidJoplinOAuthCredential: isJoplinOAuthSyncTarget(state.settings['sync.target']) && !isSyncLoginRoute(state) && state.mustAuthenticate,
+		syncTargetId: state.settings['sync.target'],
 	};
 })(WarningBannerComponent);

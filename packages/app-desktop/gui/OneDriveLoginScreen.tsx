@@ -9,6 +9,7 @@ import Setting from '@joplin/lib/models/Setting';
 import bridge from '../services/bridge';
 import { themeStyle } from '@joplin/lib/theme';
 import { OneDriveApiNodeUtils } from '@joplin/lib/onedrive-api-node-utils';
+import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 
 interface Props {
 	themeId: number;
@@ -43,7 +44,7 @@ class OneDriveLoginScreenComponent extends React.Component<Props, State> {
 		};
 
 		const syncTargetId = Setting.value('sync.target');
-		const syncTarget = reg.syncTarget(syncTargetId);
+		const syncTarget = reg.syncTarget(syncTargetId) as SyncTargetOneDrive;
 		const oneDriveApiUtils = new OneDriveApiNodeUtils(syncTarget.api());
 		const auth = await oneDriveApiUtils.oauthDance({
 			log: (s: string) => log(s),
@@ -60,11 +61,11 @@ class OneDriveLoginScreenComponent extends React.Component<Props, State> {
 	}
 
 	public startUrl() {
-		return reg.syncTarget().api().authCodeUrl(this.redirectUrl());
+		return (reg.syncTarget() as SyncTargetOneDrive).api().authCodeUrl(this.redirectUrl());
 	}
 
 	public redirectUrl() {
-		return reg.syncTarget().api().nativeClientRedirectUrl();
+		return (reg.syncTarget() as SyncTargetOneDrive).api().nativeClientRedirectUrl();
 	}
 
 	public render() {

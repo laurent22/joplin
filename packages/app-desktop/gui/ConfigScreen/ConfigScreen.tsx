@@ -4,7 +4,7 @@ import ButtonBar from './ButtonBar';
 import Button, { ButtonLevel } from '../Button/Button';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../services/bridge';
-import Setting, { AppType, SettingMetadataSection, SettingValueType, SyncStartupOperation } from '@joplin/lib/models/Setting';
+import Setting, { AppType, SettingMetadataSection, SettingsRecord, SettingValueType, SyncStartupOperation } from '@joplin/lib/models/Setting';
 import { AppState } from '../../app.reducer';
 import EncryptionConfigScreen from '../EncryptionConfigScreen/EncryptionConfigScreen';
 import NoteLockSettings from './controls/NoteLockSettings';
@@ -25,10 +25,12 @@ import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
 import AiIndexStatus from './controls/AiIndexStatus';
 import AiStatus from './controls/AiStatus';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
-import SettingComponent, { UpdateSettingValueEvent } from './controls/SettingComponent';
+import SettingComponent from './controls/SettingComponent';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
 import { OnChangeEvent } from '../lib/SearchInput/SearchInput';
 import highlightSearchText from './searchHighlight';
+import { UpdateSettingValueEvent } from './types';
+import { Dispatch } from 'redux';
 
 
 interface Font {
@@ -42,8 +44,21 @@ declare global {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old class component without props/state interfaces; tightening requires structural refactor
-class ConfigScreenComponent extends React.Component<any, any> {
+interface Props {
+	dispatch: Dispatch;
+	defaultSection?: string;
+	settings: SettingsRecord;
+	themeId: number;
+	style: React.CSSProperties;
+}
+interface State extends shared.ConfigScreenState {
+	selectedSectionName: string;
+	screenName: string;
+	needRestart: boolean;
+	fonts: string[];
+}
+
+class ConfigScreenComponent extends React.Component<Props, State> {
 
 	private rowStyle_: React.CSSProperties = null;
 
@@ -93,16 +108,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	}
 
 	private async checkSyncConfig_() {
-		if (this.state.settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud')) {
-			const isAuthenticated = await reg.syncTarget().isAuthenticated();
-			if (!isAuthenticated) {
-				return this.props.dispatch({
-					type: 'NAV_GO',
-					routeName: 'JoplinCloudLogin',
-				});
-			}
-		}
-		await shared.checkSyncConfig(this, this.state.settings);
+		return await shared.checkSyncConfig(this, this.state.settings);
 	}
 
 	public UNSAFE_componentWillMount() {
@@ -149,7 +155,18 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				name: 'syncWizard',
 			});
 		} else {
-			throw new Error(`Unhandled key: ${key}`);
+			const metadata = Setting.settingMetadata(key);
+			if (metadata.onClick) {
+				await metadata.onClick({
+					setSettingValue: (key, value) => {
+						this.onUpdateSettingValue({ key, value });
+					},
+					saveSettings: () => this.onSaveClick(),
+					settings: this.state.settings,
+				});
+			} else {
+				throw new Error(`Unhandled key: ${key}`);
+			}
 		}
 	}
 
@@ -222,7 +239,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		);
 	}
 
-	public sectionToComponent(key: string, section: SettingMetadataSection, settings: Record<string, unknown>, selected: boolean) {
+	public sectionToComponent(key: string, section: SettingMetadataSection, settings: shared.SettingsMap, selected: boolean) {
 		const theme = themeStyle(this.props.themeId);
 		const searchMode = !!normalizeQuery(this.state.searchQuery);
 
@@ -308,24 +325,6 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					</div>
 				);
 
-				if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud')) {
-					const goToJoplinCloudLogin = () => {
-						this.props.dispatch({
-							type: 'NAV_GO',
-							routeName: 'JoplinCloudLogin',
-						});
-					};
-					settingComps.push(
-						<div key="connect_to_joplin_cloud_button" style={this.rowStyle_}>
-							<Button
-								title={_('Connect to Joplin Cloud')}
-								level={ButtonLevel.Primary}
-								onClick={goToJoplinCloudLogin}
-							/>
-						</div>,
-					);
-				}
-
 				if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServerSaml')) {
 					const server = settings['sync.11.path'] as string;
 
@@ -397,7 +396,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		);
 	}
 
-	private onUpdateSettingValue = ({ key, value }: UpdateSettingValueEvent) => {
+	private onUpdateSettingValue = ({ key, value }: UpdateSettingValueEvent<string>) => {
 		const md = Setting.settingMetadata(key);
 		if (md.needRestart) {
 			this.setState({ needRestart: true });
@@ -471,7 +470,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		const searchMode = !!searchQuery;
 		const sectionFilter = this.state.searchSectionFilter;
 
-		const style = {
+		const style: React.CSSProperties = {
 			...this.props.style,
 			overflow: 'hidden',
 			display: 'flex',

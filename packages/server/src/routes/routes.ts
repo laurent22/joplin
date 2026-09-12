@@ -53,6 +53,7 @@ const routes: Routers = {
 	'api/ping': apiPing,
 	'api/saml': apiLogin,
 	'api/login_with_code': apiLogin,
+	'api/web_login_base_url': apiLogin,
 	'api/sessions': apiSessions,
 	'api/share_users': apiShareUsers,
 	'api/shares': apiShares,

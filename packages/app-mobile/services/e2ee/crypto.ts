@@ -123,6 +123,8 @@ const crypto: Crypto = {
 	generateNonce: generateNonceShared,
 
 	increaseNonce: increaseNonceShared,
+
+	randomUuid: () => QuickCrypto.randomUUID(),
 };
 
 setRandomBytesImplementation(crypto.randomBytes);

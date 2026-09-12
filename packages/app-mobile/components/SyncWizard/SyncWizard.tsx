@@ -10,8 +10,10 @@ import JoplinCloudIcon from './JoplinCloudIcon';
 import NavService from '@joplin/lib/services/NavService';
 import { Platform, StyleSheet, View } from 'react-native';
 import CardButton from '../buttons/CardButton';
-import Setting from '@joplin/lib/models/Setting';
+import Setting, { Env } from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
+import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
+import { reg } from '@joplin/lib/registry';
 
 interface Props {
 	dispatch: Dispatch;
@@ -105,14 +107,16 @@ const SyncWizard: React.FC<Props> = ({ themeId, visible, dispatch }) => {
 
 	const onSelectJoplinCloud = useCallback(async () => {
 		onDismiss();
-		if (Platform.OS === 'web' && !isAppJoplinCloud()) {
+		if (Platform.OS === 'web' && (!isAppJoplinCloud() && Setting.value('env') !== Env.Dev)) {
 			if (await shim.showConfirmationDialog(
 				_('Self-hosted instances of the Joplin web app cannot sync with Joplin Cloud. Open the official web app?'),
 			)) {
 				await shim.openUrl('https://app.joplincloud.com/');
 			}
 		} else {
-			await NavService.go('JoplinCloudLogin');
+			const syncTargetId = SyncTargetRegistry.nameToId('joplinCloud');
+			const route = reg.syncTarget(syncTargetId).authRouteName();
+			await NavService.go(route, { syncTargetId });
 		}
 	}, [onDismiss]);
 

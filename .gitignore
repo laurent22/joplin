@@ -211,6 +211,7 @@ packages/app-desktop/gui/ConfigScreen/controls/GlobalHotkeyInput.test.js
 packages/app-desktop/gui/ConfigScreen/controls/GlobalHotkeyInput.js
 packages/app-desktop/gui/ConfigScreen/controls/MissingPasswordHelpLink.js
 packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.js
+packages/app-desktop/gui/ConfigScreen/controls/SettingButton.js
 packages/app-desktop/gui/ConfigScreen/controls/SettingComponent.js
 packages/app-desktop/gui/ConfigScreen/controls/SettingDescription.js
 packages/app-desktop/gui/ConfigScreen/controls/SettingHeader.js
@@ -222,6 +223,7 @@ packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js
 packages/app-desktop/gui/ConfigScreen/controls/useNoteLockMode.js
 packages/app-desktop/gui/ConfigScreen/searchHighlight.test.js
 packages/app-desktop/gui/ConfigScreen/searchHighlight.js
+packages/app-desktop/gui/ConfigScreen/types.js
 packages/app-desktop/gui/DialogButtonRow.js
 packages/app-desktop/gui/DialogButtonRow/useKeyboardHandler.js
 packages/app-desktop/gui/DialogTitle.js
@@ -243,8 +245,8 @@ packages/app-desktop/gui/InlineCombobox.js
 packages/app-desktop/gui/InlineMarkdownDisplay.js
 packages/app-desktop/gui/ItemList.js
 packages/app-desktop/gui/JoplinCloudConfigScreen.js
-packages/app-desktop/gui/JoplinCloudLoginScreen.js
 packages/app-desktop/gui/JoplinCloudSignUpCallToAction.js
+packages/app-desktop/gui/JoplinOAuthLoginScreen.js
 packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js
 packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js
 packages/app-desktop/gui/KeymapConfig/styles/index.js
@@ -611,6 +613,7 @@ packages/app-desktop/integration-tests/markdownEditor.spec.js
 packages/app-desktop/integration-tests/models/ChangeAppLayoutScreen.js
 packages/app-desktop/integration-tests/models/ChatPanel.js
 packages/app-desktop/integration-tests/models/GoToAnything.js
+packages/app-desktop/integration-tests/models/JoplinCloudLoginScreen.js
 packages/app-desktop/integration-tests/models/MainScreen.js
 packages/app-desktop/integration-tests/models/NoteEditor/BaseEditor.js
 packages/app-desktop/integration-tests/models/NoteEditor/EditorCodeDialog.js
@@ -619,7 +622,8 @@ packages/app-desktop/integration-tests/models/NoteEditor/NoteEditorScreen.js
 packages/app-desktop/integration-tests/models/NoteEditor/NoteViewer.js
 packages/app-desktop/integration-tests/models/NoteEditor/RichTextEditor.js
 packages/app-desktop/integration-tests/models/NoteList.js
-packages/app-desktop/integration-tests/models/SettingsScreen.js
+packages/app-desktop/integration-tests/models/SettingsScreen/SettingsScreen.js
+packages/app-desktop/integration-tests/models/SettingsScreen/SyncTab.js
 packages/app-desktop/integration-tests/models/Sidebar.js
 packages/app-desktop/integration-tests/multiWindow.spec.js
 packages/app-desktop/integration-tests/networking.spec.js
@@ -926,7 +930,7 @@ packages/app-mobile/components/screens/ConfigScreen/plugins/utils/useUpdateState
 packages/app-mobile/components/screens/ConfigScreen/types.js
 packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.js
 packages/app-mobile/components/screens/DocumentScanner/NotePreview.js
-packages/app-mobile/components/screens/JoplinCloudLoginScreen.js
+packages/app-mobile/components/screens/JoplinOAuthLoginScreen.js
 packages/app-mobile/components/screens/LogScreen.js
 packages/app-mobile/components/screens/Note/Note.test.js
 packages/app-mobile/components/screens/Note/Note.js
@@ -1367,6 +1371,7 @@ packages/lib/SyncTargetDropbox.js
 packages/lib/SyncTargetFilesystem.js
 packages/lib/SyncTargetJoplinCloud.js
 packages/lib/SyncTargetJoplinServer.js
+packages/lib/SyncTargetJoplinServerBase.js
 packages/lib/SyncTargetJoplinServerSAML.js
 packages/lib/SyncTargetMemory.js
 packages/lib/SyncTargetNextcloud.js
@@ -1759,7 +1764,7 @@ packages/lib/services/interop/types.js
 packages/lib/services/interop/utils.test.js
 packages/lib/services/interop/utils.js
 packages/lib/services/interop/xpsToPngPowerShellScript.js
-packages/lib/services/joplinCloudUtils.js
+packages/lib/services/joplinOAuthUtils.js
 packages/lib/services/joplinServer/personalizedUserContentBaseUrl.js
 packages/lib/services/keychain/KeychainService.test.js
 packages/lib/services/keychain/KeychainService.js

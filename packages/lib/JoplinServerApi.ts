@@ -6,7 +6,7 @@ import { Env } from './models/Setting';
 import Logger from '@joplin/utils/Logger';
 import personalizedUserContentBaseUrl from './services/joplinServer/personalizedUserContentBaseUrl';
 import { getHttpStatusMessage } from './net-utils';
-import { getApplicationInformation } from './services/joplinCloudUtils';
+import { getApplicationInformation } from './services/joplinOAuthUtils';
 import { stringify } from 'query-string';
 
 const logger = Logger.create('JoplinServerApi');

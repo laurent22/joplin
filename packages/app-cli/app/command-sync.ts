@@ -14,10 +14,11 @@ const { cliUtils } = require('./cli-utils.js');
 const md5 = require('md5');
 import * as locker from 'proper-lockfile';
 import { pathExists, writeFile } from 'fs-extra';
-import { checkIfLoginWasSuccessful, generateApplicationConfirmUrl } from '@joplin/lib/services/joplinCloudUtils';
+import { checkIfLoginWasSuccessful, fetchLoginUrl, generateAppId, generateApplicationConfirmUrl, isJoplinOAuthSyncTarget, normalizeBaseUrl } from '@joplin/lib/services/joplinOAuthUtils';
 import Logger from '@joplin/utils/Logger';
-import { uuidgen } from '@joplin/lib/uuid';
 import ShareService from '@joplin/lib/services/share/ShareService';
+import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
+import SyncTargetDropbox from '@joplin/lib/SyncTargetDropbox';
 
 const logger = Logger.create('command-sync');
 
@@ -57,7 +58,7 @@ class Command extends BaseCommand {
 
 		if (this.syncTargetId_ === 3 || this.syncTargetId_ === 4) {
 			// OneDrive
-			this.oneDriveApiUtils_ = new OneDriveApiNodeUtils(syncTarget.api());
+			this.oneDriveApiUtils_ = new OneDriveApiNodeUtils((syncTarget as SyncTargetOneDrive).api());
 			const auth = await this.oneDriveApiUtils_.oauthDance({
 				log: (s: string) => {
 					return this.stdout(s);
@@ -74,7 +75,7 @@ class Command extends BaseCommand {
 			return true;
 		} else if (syncTargetMd.name === 'dropbox') {
 			// Dropbox
-			const api = await syncTarget.api();
+			const api = await (syncTarget as SyncTargetDropbox).api();
 			const loginUrl = api.loginUrl();
 			this.stdout(_('To allow Joplin to synchronise with Dropbox, please follow the steps below:'));
 			this.stdout(_('Step 1: Open this URL in your browser to authorise the application:'));
@@ -89,12 +90,13 @@ class Command extends BaseCommand {
 			Setting.setValue(`sync.${this.syncTargetId_}.auth`, response.access_token);
 			api.setAuthToken(response.access_token);
 			return true;
-		} else if (syncTargetMd.name === 'joplinCloud') {
-			const applicationAuthId = uuidgen();
+		} else if (isJoplinOAuthSyncTarget(syncTargetMd.id)) {
+			const id = syncTargetMd.id;
+			const applicationAuthId = generateAppId();
 			const checkForCredentials = async () => {
 				try {
-					const applicationAuthUrl = `${Setting.value('sync.10.path')}/api/application_auth/${applicationAuthId}`;
-					const response = await checkIfLoginWasSuccessful(applicationAuthUrl);
+					const applicationAuthUrl = `${normalizeBaseUrl(Setting.value(`sync.${id}.path`))}/api/application_auth/${applicationAuthId}`;
+					const response = await checkIfLoginWasSuccessful(applicationAuthUrl, id);
 					if (response && response.success) {
 						return response;
 					}
@@ -105,17 +107,22 @@ class Command extends BaseCommand {
 				}
 			};
 
-			this.stdout(_('To allow Joplin to synchronise with Joplin Cloud, please login using this URL:'));
+			const apiBaseUrl = Setting.value(`sync.${id}.path`);
+			const websiteBaseUrl = await fetchLoginUrl(id, apiBaseUrl);
+			// Older versions of Joplin Server won't return a website base URL
+			if (websiteBaseUrl) {
+				const confirmUrl = `${websiteBaseUrl}/applications/${applicationAuthId}/confirm`;
 
-			const confirmUrl = `${Setting.value('sync.10.website')}/applications/${applicationAuthId}/confirm`;
-			const urlWithClient = await generateApplicationConfirmUrl(confirmUrl);
-			this.stdout(urlWithClient);
+				this.stdout(_('To allow Joplin to synchronise with %s, please log in using this URL:', syncTargetMd.label));
+				const urlWithClient = await generateApplicationConfirmUrl(confirmUrl);
+				this.stdout(urlWithClient);
 
-			const authorized = await this.prompt(_('Have you authorised the application login in the above URL?'), { booleanAnswerDefault: 'y' });
-			if (!authorized) return false;
-			const result = await checkForCredentials();
-			if (!result) return false;
-			return true;
+				const authorized = await this.prompt(_('Have you authorised the application login in the above URL?'), { booleanAnswerDefault: 'y' });
+				if (!authorized) return false;
+				const result = await checkForCredentials();
+				if (!result) return false;
+				return true;
+			}
 		}
 
 		this.stdout(_('Not authenticated with %s. Please provide any missing credentials.', syncTargetMd.label));
