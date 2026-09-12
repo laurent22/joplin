@@ -240,7 +240,7 @@ const NoteItemComponent: React.FC<Props> = memo(props => {
 			>
 				{showSyncDisabledIcon || showLockIcon ? (
 					<View style={styles.titleRow}>
-						{showSyncDisabledIcon && <Icon name='ionicon cloud-offline-outline' style={styles.syncDisabledIcon} accessibilityLabel={_('Sync disabled')} />}
+						{showSyncDisabledIcon && <Icon name='ionicon cloud-offline-outline' style={styles.syncDisabledIcon} accessibilityLabel={_('Local only')} />}
 						{showLockIcon && <Icon name='fas fa-lock' style={styles.lockIcon} accessibilityLabel={_('Locked')} />}
 						{titleElement}
 					</View>

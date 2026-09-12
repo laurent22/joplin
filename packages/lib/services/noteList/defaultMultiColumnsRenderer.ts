@@ -77,14 +77,15 @@ const renderer: ListRenderer = {
 			}
 
 			> .item > .content > .syncdisabledicon {
-				background-color: var(--joplin-color);
+				background-color: var(--joplin-color-faded);
 				display: none;
 				flex-shrink: 0;
-				height: 1em;
+				height: 14px;
 				margin-right: 8px;
 				mask: url('vendor/lib/images/cloud-offline-outline.svg') center / contain no-repeat;
 				-webkit-mask: url('vendor/lib/images/cloud-offline-outline.svg') center / contain no-repeat;
-				width: 1em;
+				vertical-align: -3px;
+				width: 14px;
 			}
 		}
 
@@ -97,7 +98,7 @@ const renderer: ListRenderer = {
 		}
 
 		> .row.-sync-disabled > .item[data-name="note.title"] > .content > .syncdisabledicon {
-			display: inline-flex;
+			display: inline-block;
 		}
 
 		> .row.-selected {
@@ -138,7 +139,7 @@ const renderer: ListRenderer = {
 				{{#cells}}
 					<div data-name="{{name}}" class="item" style="{{{styleHtml}}}">
 						<div class="content">
-							<i class="watchedicon fa fa-share-square"></i><i class="syncdisabledicon" role="img" aria-label="{{note.syncDisabledLabel}}"></i><i class="lockedicon fa fa-lock"></i>{{{contentHtml}}}
+							<i class="syncdisabledicon" role="img" aria-label="{{note.syncDisabledLabel}}"></i><i class="watchedicon fa fa-share-square"></i><i class="lockedicon fa fa-lock"></i>{{{contentHtml}}}
 						</div>
 					</div>
 				{{/cells}}
@@ -182,7 +183,7 @@ const renderer: ListRenderer = {
 				...props.note,
 				is_locked: isNoteLockEnabled() ? props.note.is_locked : 0,
 				syncDisabled: isSyncDisabledConflict(props.note),
-				syncDisabledLabel: _('Not synced'),
+				syncDisabledLabel: _('Local only'),
 			},
 		};
 	},

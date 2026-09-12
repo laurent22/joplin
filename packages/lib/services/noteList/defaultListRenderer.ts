@@ -122,14 +122,14 @@ const renderer: ListRenderer = {
 				}
 
 				> .syncdisabledicon {
-					background-color: var(--joplin-color);
+					background-color: var(--joplin-color-faded);
 					display: inline-block;
 					flex-shrink: 0;
-					height: 1em;
+					height: 14px;
 					margin-right: 4px;
 					mask: url('vendor/lib/images/cloud-offline-outline.svg') center / contain no-repeat;
 					-webkit-mask: url('vendor/lib/images/cloud-offline-outline.svg') center / contain no-repeat;
-					width: 1em;
+					width: 14px;
 				}
 	
 			}
@@ -202,8 +202,8 @@ const renderer: ListRenderer = {
 				</div>
 			{{/note.is_todo}}
 			<div class="title" data-id="{{note.id}}">
-				<i class="watchedicon fa fa-share-square"></i>
 				{{#note.syncDisabled}}<i class="syncdisabledicon" role="img" aria-label="{{note.syncDisabledLabel}}"></i>{{/note.syncDisabled}}
+				<i class="watchedicon fa fa-share-square"></i>
 				{{#note.is_locked}}<i class="lockedicon fa fa-lock"></i>{{/note.is_locked}}
 				<span>{{note.title}}</span>
 			</div>
@@ -227,7 +227,7 @@ const renderer: ListRenderer = {
 				...props.note,
 				is_locked: isNoteLockEnabled() ? props.note.is_locked : 0,
 				syncDisabled: isSyncDisabledConflict(props.note),
-				syncDisabledLabel: _('Not synced'),
+				syncDisabledLabel: _('Local only'),
 			},
 			checkboxStats: props.note.checkboxes,
 		};
