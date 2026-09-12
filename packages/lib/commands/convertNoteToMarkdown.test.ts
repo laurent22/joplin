@@ -43,6 +43,26 @@ describe('convertNoteToMarkdown', () => {
 		expect(backupNote.markup_language).toBe(MarkupLanguage.Html);
 	});
 
+	it('should preserve an existing internal link after converting an HTML note', async () => {
+		const folder = await Folder.save({ title: 'test_folder' });
+		const htmlNote = await Note.save({ title: 'Target', body: '<p>Hello</p>', parent_id: folder.id, markup_language: MarkupLanguage.Html });
+		const linkNote = await Note.save({ title: 'Link', body: `[Target](:/${htmlNote.id})`, parent_id: folder.id });
+		state.selectedNoteIds = [htmlNote.id];
+
+		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: jest.fn() });
+
+		const savedLinkNote = await Note.load(linkNote.id);
+		expect(savedLinkNote.body).toBe(linkNote.body);
+
+		const linkedIds = await Note.linkedNoteIds(savedLinkNote.body);
+		expect(linkedIds).toEqual([htmlNote.id]);
+
+		const target = await Note.load(linkedIds[0]);
+		expect(target.deleted_time).toBe(0);
+		expect(target.markup_language).toBe(MarkupLanguage.Markdown);
+		expect(target.body).toBe('Hello');
+	});
+
 	it('should preserve note metadata when converting in place', async () => {
 		const folder = await Folder.save({ title: 'test_folder' });
 		const htmlNoteProperties = {
