@@ -375,7 +375,9 @@ class WebDavApi {
 		}
 	}
 
-	private async fetchWithIfNoneMatchTest(url: string, fetchOptions: FetchOptions): Promise<Response> {
+	// fetchFunction is a parameter so blob transfers get this detection too, not just shim.fetch
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- shim.fetch/uploadBlob/fetchBlob return different response shapes
+	private async fetchWithIfNoneMatchTest(url: string, fetchOptions: FetchOptions, fetchFunction: (url: string, options: FetchOptions)=> Promise<any>): Promise<Response> {
 		let response: Response = null;
 
 		if (['GET', 'HEAD'].indexOf(fetchOptions.method) < 0 && this.excludeIfNoneMatch === ExcludeIfNoneMatch.Unknown) {
@@ -389,22 +391,21 @@ class WebDavApi {
 			// if first request with invalid If-None-Match header fails, it's retried without the header
 			// if successful, excludeIfNoneMatch is set to Yes, to indicate,
 			// that subsequent request will be sent without If-None-Match header
-			response = await shim.fetch(url, fetchOptions);
+			response = await fetchFunction(url, fetchOptions);
 			// These are known error codes used for servers which reject when the If-None-Match header is sent. As these
 			// particular error codes are terminal, there should not be a risk of an intermittent failure selecting the
 			// wrong mode for the lifetime of the app.
 			//
-			// 405 is excluded for MKCOL because per RFC 4918 that is the normal response when the collection already
-			// exists, and has nothing to do with If-None-Match. Treating it as a rejection made the retry succeed for
-			// the wrong reason and permanently disabled the header, which broke sync on servers that need it.
-			const terminalRejectionCodes = fetchOptions.method === 'MKCOL' ? [400] : [400, 405];
+			// Excluded for MKCOL, where per RFC 4918 they instead mean the collection already exists (405) or
+			// its parent is missing (409), which would permanently disable the header for the wrong reason.
+			const terminalRejectionCodes = fetchOptions.method === 'MKCOL' ? [400] : [400, 405, 409];
 			if (response.ok) {
 				this.excludeIfNoneMatch = ExcludeIfNoneMatch.No;
 			} else if (terminalRejectionCodes.includes(response.status)) {
 				const fetchOptionsAlt = { ... fetchOptions };
 				fetchOptionsAlt.headers = { ... fetchOptions.headers };
 				delete fetchOptionsAlt.headers['If-None-Match'];
-				const responseAlt = await shim.fetch(url, fetchOptionsAlt);
+				const responseAlt = await fetchFunction(url, fetchOptionsAlt);
 				if (responseAlt.ok) {
 					this.excludeIfNoneMatch = ExcludeIfNoneMatch.Yes;
 					return responseAlt;
@@ -413,7 +414,7 @@ class WebDavApi {
 				}
 			}
 		} else {
-			response = await shim.fetch(url, fetchOptions);
+			response = await fetchFunction(url, fetchOptions);
 		}
 		return response;
 	}
@@ -494,13 +495,13 @@ class WebDavApi {
 				const fileStat = await shim.fsDriver().stat(fetchOptions.path);
 				if (fileStat) fetchOptions.headers['Content-Length'] = `${fileStat.size}`;
 			}
-			response = await shim.uploadBlob(url, fetchOptions);
+			response = await this.fetchWithIfNoneMatchTest(url, fetchOptions, (u, o) => shim.uploadBlob(u, o));
 		} else if (options.target === 'string') {
 			if (typeof body === 'string') fetchOptions.headers['Content-Length'] = `${shim.stringByteLength(body)}`;
-			response = await this.fetchWithIfNoneMatchTest(url, fetchOptions);
+			response = await this.fetchWithIfNoneMatchTest(url, fetchOptions, (u, o) => shim.fetch(u, o));
 		} else {
 			// file
-			response = await shim.fetchBlob(url, fetchOptions);
+			response = await this.fetchWithIfNoneMatchTest(url, fetchOptions, (u, o) => shim.fetchBlob(u, o));
 		}
 
 		const responseText = await response.text();

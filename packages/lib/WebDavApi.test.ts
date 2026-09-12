@@ -20,13 +20,22 @@ const makeResponse = (status: number, text = '') => {
 describe('WebDavApi', () => {
 
 	let originalFetch: typeof shim.fetch;
+	let originalUploadBlob: typeof shim.uploadBlob;
+	let originalFetchBlob: typeof shim.fetchBlob;
+	let originalFsDriver: typeof shim.fsDriver;
 
 	beforeEach(() => {
 		originalFetch = shim.fetch;
+		originalUploadBlob = shim.uploadBlob;
+		originalFetchBlob = shim.fetchBlob;
+		originalFsDriver = shim.fsDriver;
 	});
 
 	afterEach(() => {
 		shim.fetch = originalFetch;
+		shim.uploadBlob = originalUploadBlob;
+		shim.fetchBlob = originalFetchBlob;
+		shim.fsDriver = originalFsDriver;
 	});
 
 	test.each([
@@ -75,6 +84,87 @@ describe('WebDavApi', () => {
 		requests.length = 0;
 		await expect(api.exec('PUT', 'test2.md', 'content')).rejects.toThrow();
 		expect('If-None-Match' in requests[0]).toBe(true);
+	});
+
+	test.each([
+		[400],
+		[405],
+		[409],
+	])('should retry without If-None-Match when the server rejects it with a %i', async (status) => {
+		const requests: Record<string, string | number>[] = [];
+		shim.fetch = (async (_url: string, options: FetchOptions) => {
+			const headers = options.headers as Record<string, string | number>;
+			requests.push(headers);
+			if ('If-None-Match' in headers) return makeResponse(status);
+			return makeResponse(200, '');
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- test double only implements the subset of shim.fetch used here
+		}) as any;
+
+		const api = makeApi();
+
+		await api.exec('PUT', 'test.md', 'content');
+		expect(requests.length).toBe(2);
+		expect('If-None-Match' in requests[1]).toBe(false);
+	});
+
+	test('should not treat a 409 on MKCOL as an If-None-Match rejection', async () => {
+		const requests: Record<string, string | number>[] = [];
+		shim.fetch = (async (_url: string, options: FetchOptions) => {
+			requests.push(options.headers as Record<string, string | number>);
+			// On MKCOL a 409 means the parent is missing, not that the header was rejected
+			return makeResponse(409);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- test double only implements the subset of shim.fetch used here
+		}) as any;
+
+		const api = makeApi();
+
+		await expect(api.exec('MKCOL', 'dir/')).rejects.toThrow();
+		expect(requests.length).toBe(1);
+
+		// The header must be kept, since the 409 said nothing about it
+		requests.length = 0;
+		await expect(api.exec('PROPFIND', 'dir/')).rejects.toThrow();
+		expect('If-None-Match' in requests[0]).toBe(true);
+	});
+
+	// Resource content goes through shim.uploadBlob, which must run the detection too
+	test('should run the If-None-Match detection when uploading a blob', async () => {
+		const requests: Record<string, string | number>[] = [];
+		shim.uploadBlob = (async (_url: string, options: FetchOptions) => {
+			const headers = options.headers as Record<string, string | number>;
+			requests.push(headers);
+			if ('If-None-Match' in headers) return makeResponse(409);
+			return makeResponse(200, '');
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- test double only implements the subset used here
+		}) as any;
+		shim.fsDriver = (() => ({ stat: async () => ({ size: 123 }) })
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- test double only implements the subset used here
+		) as any;
+
+		const api = makeApi();
+
+		await api.exec('PUT', 'test.bin', null, null, { source: 'file', path: '/tmp/test.bin' });
+
+		expect(requests.length).toBe(2);
+		expect('If-None-Match' in requests[0]).toBe(true);
+		expect('If-None-Match' in requests[1]).toBe(false);
+	});
+
+	test('should not send If-None-Match when downloading a blob', async () => {
+		const requests: Record<string, string | number>[] = [];
+		shim.fetchBlob = (async (_url: string, options: FetchOptions) => {
+			requests.push(options.headers as Record<string, string | number>);
+			return makeResponse(200, '');
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- test double only implements the subset used here
+		}) as any;
+
+		const api = makeApi();
+
+		await api.exec('GET', 'test.bin', null, null, { target: 'file', path: '/tmp/test.bin' });
+
+		// GET never carries the header, so there is nothing to detect
+		expect(requests.length).toBe(1);
+		expect('If-None-Match' in requests[0]).toBe(false);
 	});
 
 	test('should stop sending If-None-Match when the server rejects it with a 400', async () => {
