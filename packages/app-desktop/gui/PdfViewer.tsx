@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Dispatch } from 'redux';
 import { useCallback, useRef, useEffect } from 'react';
 import { ResourceEntity } from '@joplin/lib/services/database/types';
 import Resource from '@joplin/lib/models/Resource';
@@ -32,8 +33,7 @@ const IFrame = styled.iframe`
 
 interface Props {
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 	resource: ResourceEntity;
 	pageNo: number;
 }

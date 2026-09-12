@@ -70,7 +70,7 @@ export default class ShareModel extends BaseModel<Share> {
 	}
 
 	protected async validate(share: Share, options: ValidateOptions = {}): Promise<Share> {
-		if ('type' in share && ![ShareType.Note, ShareType.Folder].includes(share.type)) throw new ErrorBadRequest(`Invalid share type: ${share.type}`);
+		if ('type' in share && ![ShareType.Note, ShareType.PublishedFolder, ShareType.Folder].includes(share.type)) throw new ErrorBadRequest(`Invalid share type: ${share.type}`);
 		if (share.type !== ShareType.Note && await this.itemIsShared(share.type, share.item_id)) throw new ErrorBadRequest('A shared item cannot be shared again');
 
 		const item = await this.models().item().load(share.item_id);
@@ -169,11 +169,14 @@ export default class ShareModel extends BaseModel<Share> {
 		return query1.union(query2);
 	}
 
-	public async byUserAndItemId(userId: Uuid, itemId: Uuid): Promise<Share> {
-		return this.db(this.tableName).select(this.defaultFields)
+	public async byUserAndItemId(userId: Uuid, itemId: Uuid, type: ShareType = null): Promise<Share> {
+		const query = this.db(this.tableName).select(this.defaultFields)
 			.where('owner_id', '=', userId)
-			.where('item_id', '=', itemId)
-			.first();
+			.where('item_id', '=', itemId);
+
+		if (type !== null) void query.andWhere('type', '=', type);
+
+		return query.first();
 	}
 
 	public async sharesByUser(userId: Uuid, type: ShareType = null): Promise<Share[]> {
@@ -216,7 +219,10 @@ export default class ShareModel extends BaseModel<Share> {
 			try {
 				await this.models().userItem().add(shareUserId, itemId, { queryContext: { uniqueConstraintErrorLoggingDisabled: true } });
 			} catch (error) {
-				if (!isUniqueConstraintError(error)) throw error;
+				if (!isUniqueConstraintError(error)) {
+					logger.error(`OrphanTrace: addUserItem failed user=${shareUserId} item=${itemId}`, error);
+					throw error;
+				}
 			}
 		};
 
@@ -227,6 +233,7 @@ export default class ShareModel extends BaseModel<Share> {
 				if (error.httpCode === ErrorNotFound.httpCode) {
 					logger.warn('Could not remove a user item because it has already been removed:', error);
 				} else {
+					logger.error(`OrphanTrace: removeUserItem failed user=${shareUserId} item=${itemId}`, error);
 					throw error;
 				}
 			}
@@ -298,6 +305,13 @@ export default class ShareModel extends BaseModel<Share> {
 						if (shareUserId === change.user_id) continue;
 						await addUserItem(shareUserId, item.id);
 					}
+				}
+
+				// Cross-check: is the item owner still in user_items? If not,
+				// this transition just produced an orphan.
+				const ownerUserItem = await this.models().userItem().byUserAndItemId(item.owner_id, item.id);
+				if (!ownerUserItem) {
+					logger.error(`OrphanTrace: handleUpdated produced orphan item=${item.id} owner=${item.owner_id} previousShare=${previousShareId} nextShare=${nextShareId} changeUser=${change.user_id}`);
 				}
 			} finally {
 				perfTimer.pop();
@@ -419,11 +433,19 @@ export default class ShareModel extends BaseModel<Share> {
 					}
 
 					if (row.item_count < realShareItemCount) {
-						logger.warn(`checkForMissingUserItems: User is missing some items: Share ${share.id}: User ${row.user_id}`);
+						logger.warn(`checkForMissingUserItems: User is missing some items: Share ${share.id}: User ${row.user_id}: Has ${row.item_count} of ${realShareItemCount} items (share owner: ${share.owner_id})`);
 						await this.createSharedFolderUserItems(share.id, row.user_id);
+
+						// If the count doesn't move, the repair is a no-op and the next run will
+						// log exactly the same warning. Record it so we can tell a stuck share
+						// apart from one that is simply being repaired.
+						const newCount = await this.itemCountByUserAndShareId(share.id, row.user_id);
+						if (newCount === row.item_count) {
+							logger.warn(`checkForMissingUserItems: Repair had no effect: Share ${share.id}: User ${row.user_id}: Still has ${newCount} of ${realShareItemCount} items`);
+						}
 					} else if (row.item_count > realShareItemCount) {
 						// Shouldn't be possible but log it just in case
-						logger.warn(`checkForMissingUserItems: User has too many items (??): Share ${share.id}: User ${row.user_id}`);
+						logger.warn(`checkForMissingUserItems: User has too many items (??): Share ${share.id}: User ${row.user_id}: Has ${row.item_count} of ${realShareItemCount} items (share owner: ${share.owner_id})`);
 					}
 				}
 			}
@@ -463,7 +485,11 @@ export default class ShareModel extends BaseModel<Share> {
 
 		perfTimer.push('Main');
 
+		let loopCount = 0;
+
 		while (true) {
+			loopCount++;
+
 			perfTimer.push('Get latestProcessedChange');
 			const latestProcessedChange = await this.models().keyValue().value<string>('ShareService::latestProcessedChange');
 			perfTimer.pop();
@@ -472,6 +498,13 @@ export default class ShareModel extends BaseModel<Share> {
 			const paginatedChanges = await this.models().change().allFromId(latestProcessedChange || '');
 			perfTimer.pop();
 			const changes = paginatedChanges.items;
+
+			// allFromId computes the cursor and has_more before filtering out changes for
+			// deleted items, so a batch can come back empty while has_more is still true. If
+			// that keeps happening the task is spinning without making progress.
+			if (loopCount % 100 === 0) {
+				logger.warn(`updateSharedItems3: Still looping after ${loopCount} iterations: cursor=${paginatedChanges.cursor} changes=${changes.length} hasMore=${paginatedChanges.has_more}`);
+			}
 
 			if (!changes.length) {
 				perfTimer.push('Set latestProcessedChange');
@@ -601,7 +634,7 @@ export default class ShareModel extends BaseModel<Share> {
 		const folderItem = await this.models().item().loadByJopId(owner.id, folderId);
 		if (!folderItem) throw new ErrorNotFound(`No such folder: ${folderId}`);
 
-		const share = await this.models().share().byUserAndItemId(owner.id, folderItem.id);
+		const share = await this.models().share().byUserAndItemId(owner.id, folderItem.id, ShareType.Folder);
 		if (share) return share;
 
 		const shareToSave: Share = {
@@ -614,6 +647,24 @@ export default class ShareModel extends BaseModel<Share> {
 
 		await this.checkIfAllowed(owner, AclAction.Create, shareToSave);
 		return super.save(shareToSave);
+	}
+
+	public async sharePublishedFolder(owner: User, folderId: string): Promise<Share> {
+		const folderItem = await this.models().item().loadByJopId(owner.id, folderId);
+		if (!folderItem) throw new ErrorNotFound(`No such folder: ${folderId}`);
+
+		const existingShare = await this.models().share().byUserAndItemId(owner.id, folderItem.id, ShareType.PublishedFolder);
+		if (existingShare) return existingShare;
+
+		const shareToSave: Share = {
+			type: ShareType.PublishedFolder,
+			item_id: folderItem.id,
+			owner_id: owner.id,
+			folder_id: folderId,
+		};
+
+		await this.checkIfAllowed(owner, AclAction.Create, shareToSave);
+		return this.save(shareToSave);
 	}
 
 	public async shareNote(owner: User, noteId: string, masterKeyId: string, recursive: boolean): Promise<Share> {
@@ -669,6 +720,18 @@ export default class ShareModel extends BaseModel<Share> {
 			.count('id', { as: 'item_count' })
 			.where('jop_share_id', '=', shareId);
 		return r[0].item_count;
+	}
+
+	public async itemCountByUserAndShareId(shareId: Uuid, userId: Uuid): Promise<number> {
+		const r = await this.db('user_items')
+			.count('item_id', { as: 'item_count' })
+			.where('user_id', '=', userId)
+			.whereIn('item_id',
+				this.db('items')
+					.select('id')
+					.where('jop_share_id', '=', shareId),
+			);
+		return Number(r[0].item_count);
 	}
 
 	public async itemCountByShareIdPerUser(shareId: Uuid): Promise<{ item_count: number; user_id: Uuid }[]> {

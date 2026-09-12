@@ -2,7 +2,7 @@ import { getDisplayParentId, getTrashFolderId } from '.';
 import { ModelType } from '../../BaseModel';
 import Folder from '../../models/Folder';
 
-describe('services/trash', () => {
+describe('trash/index', () => {
 
 	test.each([
 		[

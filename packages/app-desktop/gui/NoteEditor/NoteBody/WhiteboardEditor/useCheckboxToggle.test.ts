@@ -5,7 +5,7 @@ import { flipNthCheckbox } from './useCheckboxToggle';
 // `flipNthCheckbox` must count exactly the same subset so the Nth rendered
 // checkbox maps to the Nth source-text checkbox.
 
-describe('flipNthCheckbox', () => {
+describe('useCheckboxToggle', () => {
 	test('flips an unchecked box to checked', () => {
 		expect(flipNthCheckbox('- [ ] todo', 0)).toBe('- [x] todo');
 	});

@@ -14,7 +14,7 @@ import useQueuedAsyncEffect from '@joplin/lib/hooks/useQueuedAsyncEffect';
 import { getCollator, getCollatorLocale } from '@joplin/lib/models/utils/getCollator';
 import { DialogContext } from '../DialogManager';
 import useOnLongPressProps from '../../utils/hooks/useOnLongPressProps';
-import { substrWithEllipsis } from '@joplin/lib/string-utils';
+import { escapeRegExp, substrWithEllipsis } from '@joplin/lib/string-utils';
 import { PromptButtonSpec } from '../DialogManager/types';
 import MultiTouchableOpacity from '../buttons/MultiTouchableOpacity';
 import SearchBar from './SearchScreen/SearchBar';
@@ -27,40 +27,51 @@ interface Props {
 	themeId: number;
 }
 
-const useStyles = (themeId: number) => {
+const useStyles = (themeId: number, showTopBorder = false) => {
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
 
 		return StyleSheet.create({
-			listItem: {
-				flexDirection: 'row',
-				borderBottomWidth: 1,
-				borderBottomColor: theme.dividerColor,
-				alignItems: 'flex-start',
+			listItemDivider: {
+				borderTopWidth: showTopBorder ? 1 : 0,
+				borderTopColor: theme.dividerColor,
+				marginLeft: theme.marginLeft,
+				marginRight: theme.marginRight,
+			},
+			listItemPressable: {
 				paddingLeft: theme.marginLeft,
 				paddingRight: theme.marginRight,
-				paddingTop: theme.itemMarginTop,
-				paddingBottom: theme.itemMarginBottom,
+				paddingTop: theme.marginTop,
+				paddingBottom: theme.marginBottom,
 			},
 			listItemText: {
-				flex: 1,
+				flexShrink: 1,
 				color: theme.color,
 				fontSize: theme.fontSize,
 			},
+			highlightedText: {
+				backgroundColor: theme.searchMarkerBackgroundColor,
+				color: theme.searchMarkerColor,
+			},
 			rootStyle: theme.rootStyle,
 		});
-	}, [themeId]);
+	}, [themeId, showTopBorder]);
 };
 
 interface TagItemProps {
 	tag: TagEntity;
+	index: number;
+	highlightedWord: string;
 	themeId: number;
 	onPress: (id: string)=> void;
 	onLongPress: (tag: TagEntity)=> void;
 }
 
-const TagItem: React.FC<TagItemProps> = ({ tag, themeId, onPress, onLongPress }) => {
-	const styles = useStyles(themeId);
+const TagItem: React.FC<TagItemProps> = ({ tag, index, highlightedWord, themeId, onPress, onLongPress }) => {
+	const styles = useStyles(themeId, index !== 0);
+	const displayedTagTitle = highlightedWord ? tag.title.split(new RegExp(`(${escapeRegExp(highlightedWord)})`, 'i')).map((part, partIndex) => {
+		return part.toLowerCase() === highlightedWord.toLowerCase() ? <Text key={partIndex} style={styles.highlightedText}>{part}</Text> : part;
+	}) : tag.title;
 	const onLongPressProps = useOnLongPressProps({ onLongPress: () => onLongPress(tag), actionDescription: _('Edit tag') });
 	const accessibilityRole: AccessibilityRole = 'button';
 	const pressableProps = {
@@ -70,18 +81,17 @@ const TagItem: React.FC<TagItemProps> = ({ tag, themeId, onPress, onLongPress })
 	};
 
 	return (
-		<MultiTouchableOpacity
-			{...pressableProps}
-			containerProps={{
-				style: {},
-			}}
-			onPress={() => onPress(tag.id)}
-			beforePressable={null}
-		>
-			<View style={styles.listItem}>
-				<Text style={styles.listItemText}>{tag.title}</Text>
-			</View>
-		</MultiTouchableOpacity>
+		<View>
+			<View style={styles.listItemDivider}/>
+			<MultiTouchableOpacity
+				{...pressableProps}
+				style={styles.listItemPressable}
+				onPress={() => onPress(tag.id)}
+				beforePressable={null}
+			>
+				<Text style={styles.listItemText}>{displayedTagTitle}</Text>
+			</MultiTouchableOpacity>
+		</View>
 	);
 };
 
@@ -155,23 +165,41 @@ const TagsScreenComponent: React.FC<Props> = props => {
 		const menuItems: PromptButtonSpec[] = [];
 
 		const generateTagDeletion = () => {
+			const options = [
+				{
+					text: _('Cancel'),
+					onPress: () => { },
+					style: 'cancel' as const,
+				},
+				{
+					text: _('OK'),
+					onPress: async () => {
+						await Tag.delete(tag.id, { sourceDescription: 'tags-screen (long-press)' });
+						setRefreshTrigger(prev => prev + 1);
+					},
+				},
+
+			];
 			return () => {
-				dialogs.prompt('', _('Delete tag "%s"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.', substrWithEllipsis(tag.title, 0, 32)), [
-					{
-						text: _('OK'),
-						onPress: async () => {
-							await Tag.delete(tag.id, { sourceDescription: 'tags-screen (long-press)' });
-							setRefreshTrigger(prev => prev + 1);
-						},
-					},
-					{
-						text: _('Cancel'),
-						onPress: () => { },
-						style: 'cancel',
-					},
-				]);
+				dialogs.prompt(
+					_('Delete tag "%s"?', substrWithEllipsis(tag.title, 0, 32)),
+					_('All notes associated with this tag will remain, but the tag will be removed from all notes.'),
+					options,
+				);
 			};
 		};
+
+		menuItems.push({
+			text: _('Cancel'),
+			onPress: () => {},
+			style: 'cancel',
+		});
+
+		menuItems.push({
+			text: _('Delete'),
+			onPress: generateTagDeletion(),
+			style: 'destructive',
+		});
 
 		menuItems.push({
 			text: _('Rename'),
@@ -189,18 +217,6 @@ const TagsScreenComponent: React.FC<Props> = props => {
 			},
 		});
 
-		menuItems.push({
-			text: _('Delete'),
-			onPress: generateTagDeletion(),
-			style: 'destructive',
-		});
-
-		menuItems.push({
-			text: _('Cancel'),
-			onPress: () => {},
-			style: 'cancel',
-		});
-
 		dialogs.prompt(
 			'',
 			_('Tag: %s', tag.title),
@@ -208,17 +224,19 @@ const TagsScreenComponent: React.FC<Props> = props => {
 		);
 	}, [dialogs]);
 
-	type RenderItemEvent = { item: TagEntity };
-	const onRenderItem = useCallback(({ item }: RenderItemEvent) => {
+	type RenderItemEvent = { item: TagEntity; index: number };
+	const onRenderItem = useCallback(({ item, index }: RenderItemEvent) => {
 		return (
 			<TagItem
 				tag={item}
+				index={index}
+				highlightedWord={searchQuery.trim()}
 				themeId={props.themeId}
 				onPress={(id) => onTagItemPress({ id })}
 				onLongPress={onTagItemLongPress}
 			/>
 		);
-	}, [onTagItemPress, onTagItemLongPress, props.themeId]);
+	}, [onTagItemPress, onTagItemLongPress, props.themeId, searchQuery]);
 
 	return (
 		<View style={styles.rootStyle}>
@@ -237,7 +255,7 @@ const TagsScreenComponent: React.FC<Props> = props => {
 					onClearButtonPress={clearButton_press}
 				/>
 			)}
-			<FlatList style={{ flex: 1 }} data={tags} renderItem={onRenderItem} keyExtractor={tag => tag.id} />
+			<FlatList style={{ flex: 1 }} data={showSearch && !searchQuery.trim() ? [] : tags} renderItem={onRenderItem} keyExtractor={tag => tag.id} />
 		</View>
 	);
 };

@@ -1,6 +1,9 @@
 import { RefObject } from 'react';
 
-const getWindowCommandPriority = <T extends HTMLElement> (contentContainer: RefObject<T>) => {
+const getWindowCommandPriority = <T extends HTMLElement> (contentContainer: RefObject<T>, inTargetWindow: boolean) => {
+	// If there's an explicit target window, always prefer the runtime
+	if (inTargetWindow) return 3;
+
 	if (!contentContainer.current) return 0;
 	const containerDocument = contentContainer.current.getRootNode() as Document;
 	if (!containerDocument || !containerDocument.hasFocus()) return 0;

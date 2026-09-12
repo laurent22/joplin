@@ -18,7 +18,7 @@ interface MockApi {
 		query?: unknown,
 		body?: unknown,
 		headers?: Record<string, string>,
-		options?: Record<string, unknown>
+		options?: Record<string, unknown>,
 	)=> Promise<Response>>;
 }
 

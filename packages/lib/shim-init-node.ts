@@ -6,7 +6,7 @@ import FsDriverNode from './fs-driver-node';
 import Note from './models/Note';
 import Resource from './models/Resource';
 import { basename, fileExtension, safeFileExtension } from './path-utils';
-import * as fs from 'fs-extra';
+import fs from 'fs-extra';
 import { writeFile } from 'fs/promises';
 import { ResourceEntity } from './services/database/types';
 import replaceUnsupportedCharacters from './utils/replaceUnsupportedCharacters';
@@ -20,16 +20,16 @@ import BaseItem from './models/BaseItem';
 import { Size } from '@joplin/utils/types';
 import { cpus } from 'os';
 import { pathToFileURL } from 'url';
-import * as tls from 'tls';
+import tls from 'tls';
 import type PdfJs from './utils/types/pdfJs';
 import { _ } from './locale';
-import * as http from 'http';
-import * as https from 'https';
+import http from 'http';
+import https from 'https';
 const { HttpProxyAgent, HttpsProxyAgent } = require('hpagent');
 const toRelative = require('relative');
-import * as timers from 'timers';
-import * as zlib from 'zlib';
-import * as dgram from 'dgram';
+import timers from 'timers';
+import zlib from 'zlib';
+import dgram from 'dgram';
 
 interface ProxySettings {
 	maxConcurrentConnections?: number;
@@ -118,6 +118,10 @@ export interface ShimInitOptions {
 	electronBridge?: any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- node sqlite driver shape is per-platform; see shim.nodeSqlite_
 	nodeSqlite?: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- sqlite-vec is only bundled with desktop; see shim.sqliteVec_
+	sqliteVec?: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- onnxruntime-node is only bundled with desktop; see shim.onnxRuntime_
+	onnxRuntime?: any;
 	pdfJs?: PdfJs;
 	isAppleSilicon?: ()=> boolean;
 }
@@ -130,6 +134,8 @@ function shimInit(options: ShimInitOptions = null) {
 		appVersion: null,
 		electronBridge: null,
 		nodeSqlite: null,
+		sqliteVec: null,
+		onnxRuntime: null,
 		pdfJs: null,
 		isAppleSilicon: () => false,
 		...options,
@@ -141,6 +147,8 @@ function shimInit(options: ShimInitOptions = null) {
 	const pdfJs = options.pdfJs;
 
 	shim.setNodeSqlite(options.nodeSqlite);
+	shim.setSqliteVec(options.sqliteVec);
+	shim.setOnnxRuntime(options.onnxRuntime);
 
 	shim.fsDriver = () => {
 		throw new Error('Not implemented');
@@ -484,6 +492,19 @@ function shimInit(options: ShimInitOptions = null) {
 			}
 
 			return image.toDataURL();
+		} else if (shim.sharpEnabled()) {
+			let image = sharp(filePath);
+			const metadata = await image.metadata();
+
+			const maxDimensionIsWidth = metadata.width > metadata.height;
+			if (metadata.width > maxSize && maxDimensionIsWidth) {
+				image = image.resize({ width: maxSize });
+			} else if (metadata.height > maxSize) {
+				image = image.resize({ height: maxSize });
+			}
+
+			const base64 = (await image.png().toBuffer()).toString('base64');
+			return `data:image/png;base64,${base64}`;
 		} else {
 			throw new Error('Unsupported method');
 		}
@@ -531,7 +552,14 @@ function shimInit(options: ShimInitOptions = null) {
 			throw new Error(`Not a valid URL: ${url}`);
 		}
 		const resolvedProxyUrl = resolveProxyUrl(proxySettings.proxyUrl);
-		options.agent = (resolvedProxyUrl && proxySettings.proxyEnabled) ? shim.proxyAgent(url, resolvedProxyUrl) : shim.httpAgent(url);
+		if (resolvedProxyUrl && proxySettings.proxyEnabled) {
+			options.agent = shim.proxyAgent(url, resolvedProxyUrl);
+		} else {
+			// node-fetch calls this for every request, including each redirect hop, so the agent
+			// always matches the protocol actually being used.
+			const agents = shim.httpAgents();
+			options.agent = (parsedUrl: URL) => parsedUrl.protocol === 'https:' ? agents.https : agents.http;
+		}
 		return shim.fetchWithRetry(() => {
 			return nodeFetch(url, options);
 		}, options);
@@ -585,7 +613,13 @@ function shimInit(options: ShimInitOptions = null) {
 		};
 
 		const resolvedProxyUrl = resolveProxyUrl(proxySettings.proxyUrl);
-		requestOptions.agent = (resolvedProxyUrl && proxySettings.proxyEnabled) ? shim.proxyAgent(url.href, resolvedProxyUrl) : shim.httpAgent(url.href);
+		if (resolvedProxyUrl && proxySettings.proxyEnabled) {
+			requestOptions.agent = shim.proxyAgent(url.href, resolvedProxyUrl);
+		} else {
+			// follow-redirects re-picks from this map on each hop, so a redirect that switches
+			// protocol gets the matching agent.
+			requestOptions.agents = shim.httpAgents();
+		}
 
 		const doFetchOperation = async () => {
 			return new Promise((resolve, reject) => {
@@ -707,7 +741,7 @@ function shimInit(options: ShimInitOptions = null) {
 		tlsEcdhCurve = 'auto';
 	}
 
-	shim.httpAgent = url => {
+	shim.httpAgents = () => {
 		if (!shim.httpAgent_) {
 			const AgentSettings = {
 				keepAlive: true,
@@ -720,7 +754,12 @@ function shimInit(options: ShimInitOptions = null) {
 				https: new https.Agent(AgentSettings),
 			};
 		}
-		return url.startsWith('https') ? shim.httpAgent_.https : shim.httpAgent_.http;
+		return shim.httpAgent_;
+	};
+
+	shim.httpAgent = url => {
+		const agents = shim.httpAgents();
+		return url.startsWith('https') ? agents.https : agents.http;
 	};
 
 	shim.proxyAgent = (serverUrl: string, proxyUrl: string) => {

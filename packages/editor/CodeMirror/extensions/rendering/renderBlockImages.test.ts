@@ -15,7 +15,7 @@ const createEditor = async (initialMarkdown: string, expectedTags: string[] = ['
 		initialMarkdown,
 		EditorSelection.cursor(0),
 		expectedTags,
-		[renderBlockImages({ resolveImageSrc })],
+		[renderBlockImages({ resolveImageSrc, openLink: () => {} })],
 	);
 	await allowImageUrlsToBeFetched();
 	return editor;

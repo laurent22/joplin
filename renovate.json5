@@ -49,6 +49,7 @@
 	],
 	"ignoreDeps": [
 		"@babel/core",
+		"node-gyp",
 		// ProseMirror and CodeMirror often need to be deduplicated after updating (e.g. with
 		// yarn dedupe 'prosemirror-*'). Renovate doesn't do this, and, without the deduplication,
 		// multiple instances of some parts of the libraries can be loaded, breaking parts of the editor. 
@@ -151,6 +152,8 @@
 		"cocoapods",
 		"@react-native/metro-config",
 		"@react-native/babel-preset",
+		"nitrogen",
+		"react-native-nitro-modules",
 
 		// We currently don't have automated tests that verify that the
 		// sidemenus work correctly in the mobile app. Because an update to

@@ -14,6 +14,7 @@ pub(crate) struct PageTimestamps {
 #[template(path = "page.html", escape = "none")]
 struct PageTemplate<'a> {
     page_id_attr: &'a str,
+    page_order_index_attr: &'a str,
     created_date_attr: &'a str,
     updated_date_attr: &'a str,
     name: &'a str,
@@ -23,6 +24,7 @@ struct PageTemplate<'a> {
 
 pub(crate) fn render(
     page_id: &str,
+    page_order_index: u32,
     timestamps: &PageTimestamps,
     name: &str,
     content: &str,
@@ -32,6 +34,7 @@ pub(crate) fn render(
         content,
         name: &html_entities(name),
         page_id_attr: &html_entities(page_id),
+        page_order_index_attr: &page_order_index.to_string(),
         created_date_attr: &timestamps.created_time.to_string(),
         updated_date_attr: &timestamps.updated_time.to_string(),
         global_styles: global_styles

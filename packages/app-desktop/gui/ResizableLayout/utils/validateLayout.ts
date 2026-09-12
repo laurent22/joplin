@@ -2,6 +2,11 @@ import { produce } from 'immer';
 import iterateItems from './iterateItems';
 import { LayoutItem, LayoutItemDirection } from './types';
 
+// Fallback size assigned to a non-absorber sibling that has none, so the
+// absorber stays the only width/height-less child of its container.
+const itemMinWidthFallback = 250;
+const itemMinHeightFallback = 250;
+
 function isLastVisible(itemIndex: number, item: LayoutItem, parent: LayoutItem) {
 	if (item.visible === false) return false;
 
@@ -11,6 +16,28 @@ function isLastVisible(itemIndex: number, item: LayoutItem, parent: LayoutItem) 
 	}
 
 	return false;
+}
+
+// A subtree counts as flexible if it carries the flag at any nested level, so
+// the absorber role propagates up to the root container.
+function containsFlexible(item: LayoutItem): boolean {
+	if (item.visible === false) return false;
+	if (item.flexible) return true;
+	if (!item.children) return false;
+	for (const child of item.children) {
+		if (containsFlexible(child)) return true;
+	}
+	return false;
+}
+
+function explicitAbsorberIndex(parent: LayoutItem) {
+	if (!parent.children) return -1;
+	for (let i = 0; i < parent.children.length; i++) {
+		const child = parent.children[i];
+		if (child.visible === false) continue;
+		if (containsFlexible(child)) return i;
+	}
+	return -1;
 }
 
 function updateItemSize(itemIndex: number, itemDraft: LayoutItem, parent: LayoutItem) {
@@ -23,24 +50,48 @@ function updateItemSize(itemIndex: number, itemDraft: LayoutItem, parent: Layout
 		delete itemDraft.height;
 	}
 
-	// If all children of a container have a fixed width, the
-	// latest visible child should have a flexible width (i.e. no "width"
-	// property), so that it fills up the remaining space
+	const explicitIdx = explicitAbsorberIndex(parent);
+
+	if (explicitIdx !== -1) {
+		// Strip the absorber's size and assign fallback sizes to any sibling
+		// that lacks one, so the absorber alone fills remaining space.
+		if (explicitIdx !== itemIndex || itemDraft.visible === false) return;
+
+		if (parent.direction === LayoutItemDirection.Row) {
+			delete itemDraft.width;
+			for (let i = 0; i < parent.children.length; i++) {
+				if (i === itemIndex) continue;
+				const child = parent.children[i];
+				if (child.visible === false) continue;
+				if (!('width' in child)) {
+					(child as { width?: number }).width = child.minWidth || itemMinWidthFallback;
+				}
+			}
+		} else {
+			delete itemDraft.height;
+			for (let i = 0; i < parent.children.length; i++) {
+				if (i === itemIndex) continue;
+				const child = parent.children[i];
+				if (child.visible === false) continue;
+				if (!('height' in child)) {
+					(child as { height?: number }).height = child.minHeight || itemMinHeightFallback;
+				}
+			}
+		}
+		return;
+	}
+
+	// No explicit absorber: legacy fallback makes the last visible child
+	// flexible when every other sibling is already sized.
 	if (isLastVisible(itemIndex, itemDraft, parent)) {
 		let allChildrenAreSized = true;
 		for (const child of parent.children) {
 			if (child.visible === false) continue;
 
 			if (parent.direction === LayoutItemDirection.Row) {
-				if (!child.width) {
-					allChildrenAreSized = false;
-					break;
-				}
+				if (!child.width) { allChildrenAreSized = false; break; }
 			} else {
-				if (!child.height) {
-					allChildrenAreSized = false;
-					break;
-				}
+				if (!child.height) { allChildrenAreSized = false; break; }
 			}
 		}
 
@@ -54,8 +105,8 @@ function updateItemSize(itemIndex: number, itemDraft: LayoutItem, parent: Layout
 	}
 }
 
-// All items should be resizable, except for the root and the latest visible child
-// of a container.
+// All items get a draggable trailing edge except the last visible child,
+// whose trailing edge is the container's edge.
 function updateResizeRules(itemIndex: number, itemDraft: LayoutItem, parent: LayoutItem) {
 	if (!parent) return;
 	const isLastVisibleChild = isLastVisible(itemIndex, itemDraft, parent);

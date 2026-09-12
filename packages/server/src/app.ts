@@ -1,7 +1,7 @@
 // Allows displaying error stack traces with TypeScript file paths
 require('source-map-support').install();
 
-import * as Koa from 'koa';
+import Koa from 'koa';
 import * as fs from 'fs-extra';
 import Logger, { LogLevel, LoggerWrapper, TargetType } from '@joplin/utils/Logger';
 import config, { fullVersionString, initConfig, runningInDocker } from './config';
@@ -170,7 +170,11 @@ async function main() {
 		} catch (error) {
 			ctx.status = error.httpCode || 500;
 
-			appLogger().error(`Middleware error on ${ctx.path}:`, error);
+			if (ctx.status >= 500) {
+				appLogger().error(`Middleware error on ${ctx.path}:`, error);
+			} else {
+				appLogger().info(`Middleware error on ${ctx.path}:`, error);
+			}
 
 			const responseFormat = routeResponseFormat(ctx);
 

@@ -7,7 +7,7 @@ export interface HtmlNodeInfo {
 	closing: boolean;
 	from: number;
 	to: number;
-	tagName: ()=> string;
+	tagName: ()=> string|null;
 	getAttr: (attributeName: string)=> string;
 }
 
@@ -72,12 +72,16 @@ const htmlNodeInfo = (node: SyntaxNodeRef, state: EditorState, offset = 0): Html
 		// CodeMirror adds HTML information to Markdown documents using overlays attached
 		// to HTMLTag and HTMLBlock nodes.
 		// Use .enter to enter the overlay and visit the HTML nodes:
-		node.node.enter(node.from, 1).toTree().iterate({
-			enter: (subNode) => {
-				resolved ??= htmlNodeInfo(subNode, state, globalOffset);
-				return !resolved;
-			},
-		});
+		const overlay = node.node.enter(node.from, 1);
+		// Handle the case where the overlay has yet to load
+		if (overlay) {
+			overlay.toTree().iterate({
+				enter: (subNode) => {
+					resolved ??= htmlNodeInfo(subNode, state, globalOffset);
+					return !resolved;
+				},
+			});
+		}
 
 		return resolved;
 	}

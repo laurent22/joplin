@@ -4,7 +4,7 @@ import Setting from './models/Setting';
 import shim from './shim';
 import SyncTargetRegistry from './SyncTargetRegistry';
 import { AnyAction, Dispatch } from 'redux';
-import Synchronizer from './Synchronizer';
+import Synchronizer, { SyncStartOptions } from './Synchronizer';
 
 class Registry {
 
@@ -113,8 +113,7 @@ class Registry {
 		}
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- syncOptions passes through to Synchronizer.start(options: any); tightening would diverge from the underlying signature
-	public scheduleSync = async (delay: number = null, syncOptions: any = null, doWifiConnectionCheck = false) => {
+	public scheduleSync = async (delay: number = null, syncOptions: SyncStartOptions = null, doWifiConnectionCheck = false) => {
 		this.schedSyncCalls_.push(true);
 
 		try {

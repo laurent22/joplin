@@ -1,4 +1,5 @@
 import InteropService from '@joplin/lib/services/interop/InteropService';
+import { Dispatch } from 'redux';
 import CommandService from '@joplin/lib/services/CommandService';
 import shim from '@joplin/lib/shim';
 import { ExportModuleOutputFormat, ExportOptions, FileSystemItem } from '@joplin/lib/services/interop/types';
@@ -192,8 +193,7 @@ export default class InteropServiceHelper {
 		return `${filename}.${fileExtension}`;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public static async export(_dispatch: Function, module: ExportModule, options: ExportNoteOptions = null) {
+	public static async export(_dispatch: Dispatch, module: ExportModule, options: ExportNoteOptions = null) {
 		if (!options) options = {};
 
 		let path = null;

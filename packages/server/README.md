@@ -1,5 +1,7 @@
 # Installing
 
+Using Joplin Server for a business or organisation? **Joplin Server Business** provides a commercial licence and additional business features. [Try it free for 14 days or purchase a licence directly](https://joplinapp.org/plans/?hosting=self).
+
 ## Requirements
 
 - Docker Engine runs Joplin Server. See [Install Docker Engine](https://docs.docker.com/engine/install/) for steps to install Docker Engine for your operating system.

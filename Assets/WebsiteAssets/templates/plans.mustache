@@ -88,7 +88,7 @@
 					Joplin Server Business
 				</h1>
 				<p translate class="text-center sub-title">
-					Joplin Server Business is a synchronisation server that you can install on your own infrastructure, so that your data remains private and secure within your business.
+					Joplin Server Business is the self-hosted solution for businesses and organisations. Install it on your own infrastructure, keeping your data private and secure within your organisation while retaining full control over where it is stored.
 				</p>
 			</div>
 		</div>
@@ -118,10 +118,9 @@
 				{{> plan}}
 			{{/plans.pro}}
 
-			{{! TODO: Enable, when supported by Joplin Cloud
-			\{\{#plans.pro100Gb\}\}
-				\{\{> plan\}\}
-			\{\{/plans.pro100Gb\}\} }}
+			{{#plans.pro100Gb}}
+				{{> plan}}
+			{{/plans.pro100Gb}}
 
 			{{#plans.teams}}
 				{{> plan}}
@@ -217,6 +216,11 @@
 				applyPeriod(period);
 			});
 
+			// Keep the ?source= label so it can be sent to Stripe at checkout.
+			// Only overwrite when the param is present, to preserve an earlier one.
+			const sourceParam = urlQuery.get('source');
+			if (sourceParam) localStorage.setItem('source', sourceParam);
+
 			setupBetaHandling(urlQuery);
 			if (urlQuery.get('period') === 'monthly') {
 				// Nothing - this is the default
@@ -233,7 +237,7 @@
 			});
 		});
 
-		const setHostingType = (type) => {
+		const setHostingType = (type, updateUrl = true) => {
 			const other = type === 'managed' ? 'self' : 'managed';
 			$('.toggle-button-' + type).addClass('active');
 			$('.toggle-button-' + type).removeClass('inactive');
@@ -242,6 +246,12 @@
 
 			$('.hosting-type-' + type).show();
 			$('.hosting-type-' + other).hide();
+
+			if (updateUrl) {
+				const url = new URL(location.href);
+				url.searchParams.set('hosting', type);
+				history.replaceState(null, '', url);
+			}
 		}
 
 		$('.toggle-button-managed').click((event) => {
@@ -251,10 +261,12 @@
 
 		$('.toggle-button-self').click((event) => {
 			event.preventDefault();
+			// Self-hosting is currently yearly-only
+			applyPeriod('yearly');
 			setHostingType('self');
 		});
 
 		const initialHostingType = urlQuery.get('hosting') ? urlQuery.get('hosting') : 'managed';
-		setHostingType(initialHostingType);
+		setHostingType(initialHostingType, false);
 	</script>
 </div>

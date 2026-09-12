@@ -2,8 +2,7 @@ import { useEffect, useState, useMemo, RefObject } from 'react';
 import useMessageHandler from './useMessageHandler';
 const md5 = require('md5');
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied, Old code before rule was applied
-export default function(viewRef: RefObject<HTMLIFrameElement>, isReady: boolean, postMessage: Function, html: string) {
+export default function(viewRef: RefObject<HTMLIFrameElement>, isReady: boolean, postMessage: (name: string, args?: unknown)=> void, html: string) {
 	const [loadedHtmlHash, setLoadedHtmlHash] = useState('');
 
 	const htmlHash = useMemo(() => {

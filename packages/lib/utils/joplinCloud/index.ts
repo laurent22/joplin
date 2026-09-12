@@ -38,11 +38,17 @@ enum PlanHostingType {
 	Self = 'self',
 }
 
+export interface PlanTieredPricingTableRow {
+	condition: string;
+	priceMonthly: string;
+}
+
 export interface Plan {
 	name: string;
 	title: string;
 	priceMonthly?: StripePublicConfigPrice;
 	priceYearly?: StripePublicConfigPrice;
+	pricingTable?: { rows: PlanTieredPricingTableRow[]; billedAnnually: string };
 	featured: boolean;
 	iconName: string;
 	featuresOn: FeatureId[];
@@ -50,6 +56,7 @@ export interface Plan {
 	featureLabelsOn: FeatureRow[];
 	featureLabelsOff: FeatureRow[];
 	cfaLabel: string;
+	cfaDescription?: string;
 	cfaUrl: string;
 	footnote: string;
 	learnMoreUrl?: string;
@@ -67,15 +74,69 @@ export enum PriceCurrency {
 	USD = 'USD',
 }
 
-export interface StripePublicConfigPrice {
-	accountType: number; // AccountType
+
+export enum ProductType {
+	Subscription = 'subscription',
+	AiCredits = 'ai-credits',
+}
+
+export enum AccountType {
+	Default = 0,
+	Basic = 1,
+	Pro = 2,
+	Team = 3,
+	Pro100Gb = 4,
+	SelfHosted = 5,
+}
+
+interface StripeBasePrice {
 	id: string;
+	currency: PriceCurrency;
+}
+
+interface StripeBaseSubscriptionPrice extends StripeBasePrice {
+	accountType: AccountType;
 	period: PricePeriod;
+	productType: ProductType.Subscription|undefined;
+	aiCredits?: undefined;
+}
+
+export interface StripeFixedSubscriptionPrice extends StripeBaseSubscriptionPrice {
 	amount: string;
 	formattedAmount: string;
 	formattedMonthlyAmount: string;
-	currency: PriceCurrency;
+	amounts: undefined;
 }
+
+export interface StripeTieredAmount {
+	amount: string;
+	formattedAmount: string;
+	users: [number, number|'infinity'];
+	userRange: { min: number; max: number };
+}
+
+export interface StripeTieredSubscriptionPrice extends StripeBaseSubscriptionPrice {
+	amounts: StripeTieredAmount[];
+
+	quantityMinimum: number;
+	amount: undefined;
+	formattedAmount: undefined;
+	formattedMonthlyAmount: undefined;
+}
+
+type StripeSubscriptionPrice = StripeTieredSubscriptionPrice | StripeFixedSubscriptionPrice;
+
+export interface StripePublicConfigAiProductPrice extends StripeBasePrice {
+	productType: ProductType.AiCredits;
+	amount: string;
+	formattedAmount: string;
+	aiCredits: number;
+
+	accountType?: undefined;
+	period?: undefined;
+}
+
+export type StripePublicConfigPrice = StripeSubscriptionPrice | StripePublicConfigAiProductPrice;
 
 export interface StripePublicConfig {
 	publishableKey: string;
@@ -92,22 +153,51 @@ function formatPrice(amount: string | number, currency: PriceCurrency): string {
 	throw new Error(`Unsupported currency: ${currency}`);
 }
 
-interface FindPriceQuery {
-	accountType?: number;
-	period?: PricePeriod;
-	priceId?: string;
-}
+export const isTieredPrice = (p: StripePublicConfigPrice): p is StripeTieredSubscriptionPrice => {
+	return 'amounts' in p;
+};
 
 export function loadStripeConfig(env: string, filePath: string): StripePublicConfig {
 	const config: StripePublicConfig = JSON.parse(fs.readFileSync(filePath, 'utf8'))[env];
 	if (!config) throw new Error(`Invalid env: ${env}`);
 
+	const isSubscriptionPrice = (p: StripePublicConfigPrice): p is StripeSubscriptionPrice => {
+		return p.productType === undefined || p.productType === ProductType.Subscription;
+	};
+
 	const decoratePrices = (p: StripePublicConfigPrice) => {
-		return {
-			...p,
-			formattedAmount: formatPrice(p.amount, p.currency),
-			formattedMonthlyAmount: p.period === PricePeriod.Monthly ? formatPrice(p.amount, p.currency) : formatPrice(Number(p.amount) / 12, p.currency),
-		};
+		const price = p;
+		if (isTieredPrice(p)) {
+			return {
+				...p,
+				amounts: p.amounts.map(amount => ({
+					...amount,
+					formattedAmount: formatPrice(amount.amount, p.currency),
+					userRange: {
+						min: amount.users[0],
+						max: amount.users[1] === 'infinity' ? Number.POSITIVE_INFINITY : amount.users[1],
+					},
+				})),
+			};
+		}
+		if (isSubscriptionPrice(p)) {
+			return {
+				...p,
+				productType: ProductType.Subscription,
+				formattedAmount: formatPrice(p.amount, p.currency),
+				formattedMonthlyAmount: p.period === PricePeriod.Monthly ? formatPrice(p.amount, p.currency) : formatPrice(Number(p.amount) / 12, p.currency),
+			} satisfies StripeSubscriptionPrice;
+		}
+		if (p.productType === ProductType.AiCredits) {
+			return {
+				...p,
+				formattedAmount: formatPrice(p.amount, p.currency),
+			} satisfies StripePublicConfigAiProductPrice;
+		}
+
+		const exhaustivenessCheck: never = p;
+		// Use the exhaustivenessCheck to prevent unused variable warnings
+		throw new Error(`Unexpected product type: ${exhaustivenessCheck && price.productType}`);
 	};
 
 	config.prices = config.prices.map(decoratePrices);
@@ -115,6 +205,25 @@ export function loadStripeConfig(env: string, filePath: string): StripePublicCon
 
 	return config;
 }
+
+
+type FindPriceQuery = {
+	accountType?: number;
+	period?: PricePeriod;
+
+	priceId?: undefined;
+}|{
+	accountType?: undefined;
+	period?: undefined;
+
+	priceId?: string;
+}|{
+	accountType?: undefined;
+	period?: undefined;
+	priceId?: undefined;
+
+	productType: ProductType;
+};
 
 export function findPrice(config: StripePublicConfig, query: FindPriceQuery): StripePublicConfigPrice {
 	let output: StripePublicConfigPrice = null;
@@ -124,6 +233,8 @@ export function findPrice(config: StripePublicConfig, query: FindPriceQuery): St
 			output = prices.filter(p => p.accountType === query.accountType).find(p => p.period === query.period);
 		} else if (query.priceId) {
 			output = prices.find(p => p.id === query.priceId);
+		} else if ('productType' in query) {
+			output = prices.find(p => p.productType === query.productType);
 		} else {
 			throw new Error(`Invalid query: ${JSON.stringify(query)}`);
 		}
@@ -230,6 +341,15 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			teams: true,
 			joplinServerBusiness: true,
 		},
+		joplinCloudAi: {
+			title: _('Joplin Cloud AI (beta)'),
+			description: '[Joplin Cloud AI](https://joplinapp.org/help/apps/ai_chat) is a chat model hosted by Joplin Cloud that can summarise, rewrite, or answer questions about your notes from the desktop app. This is a beta feature and may change or contain bugs.',
+			basic: true,
+			pro: true,
+			pro100Gb: true,
+			teams: true,
+			joplinServerBusiness: false,
+		},
 		customBanner: {
 			title: _('Customise the note publishing banner'),
 			description: 'You can [customise the banner](https://joplinapp.org/help/apps/publish_note#customising-the-publishing-banner) that appears on top of your published notes, for example by adding a custom logo and text, and changing the banner colour.',
@@ -319,11 +439,10 @@ const getFeatureActions = (planName: PlanName, featureId: FeatureId, featureEnab
 
 	if (featureId === 'maxStorage' && featureEnabled) {
 		if (planName === PlanName.Pro) {
-			// TODO: Enable, when supported by the server
-			// result.push({
-			// 	label: _('Upgrade to 100 GB'),
-			// 	actionId: 'toggleIncreaseStorage',
-			// });
+			result.push({
+				label: _('Upgrade to 100 GB'),
+				actionId: 'toggleIncreaseStorage',
+			});
 		} else if (planName === PlanName.Pro100Gb) {
 			const defaultPlan = features().maxStorage.proInfoShort;
 			result.push({
@@ -400,11 +519,10 @@ export const createFeatureTableMd = () => {
 			name: 'pro',
 			label: 'Pro',
 		},
-		// TODO: Enable, when supported by Joplin Cloud
-		// {
-		// 	name: 'pro100Gb',
-		// 	label: 'Pro 100 GB',
-		// },
+		{
+			name: 'pro100Gb',
+			label: 'Pro 100 GB',
+		},
 		{
 			name: 'teams',
 			label: 'Teams',
@@ -446,8 +564,7 @@ export const createFeatureTableMd = () => {
 			featureLabel: makeFeatureLabel(id, feature),
 			basic: getCellInfo(PlanName.Basic, id, feature),
 			pro: getCellInfo(PlanName.Pro, id, feature),
-			// TODO: Enable when supported by Joplin Cloud
-			// pro100Gb: getCellInfo(PlanName.Pro100Gb, id, feature),
+			pro100Gb: getCellInfo(PlanName.Pro100Gb, id, feature),
 			teams: getCellInfo(PlanName.Teams, id, feature),
 			joplinServerBusiness: getCellInfo(PlanName.JoplinServerBusiness, id, feature),
 		};
@@ -458,7 +575,39 @@ export const createFeatureTableMd = () => {
 	return markdownUtils.createMarkdownTable(headers, rows);
 };
 
+const getTieredPricingTable = (price: StripePublicConfigPrice) => {
+	if (!isTieredPrice(price)) throw new Error(`Not a tiered price: ${price.id}`);
+
+	const formatUserCount = (count: number) => {
+		if (count === Number.POSITIVE_INFINITY) {
+			return '∞';
+		}
+		return String(count);
+	};
+
+	const rows: PlanTieredPricingTableRow[] = [];
+	for (const amount of price.amounts) {
+		// The tiered amounts are yearly per-user prices, so derive the monthly
+		// price shown in the table by dividing by 12.
+		const monthlyAmount = formatPrice(Math.round(Number(amount.amount) / 12 * 100) / 100, price.currency);
+		rows.push({
+			condition: `${
+				formatUserCount(amount.userRange.min)
+			}—${
+				formatUserCount(amount.userRange.max)
+			} users`,
+			priceMonthly: `${monthlyAmount} / user / month`,
+		});
+	}
+
+	const yearlyAmounts = price.amounts.map(amount => amount.formattedAmount).join(' / ');
+	const billedAnnually = _('Billed annually (%s per user per year respectively).', yearlyAmounts);
+
+	return { rows, billedAnnually };
+};
+
 export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Plan> {
+	const selfServiceSelfHostingEnabled = true;
 	return {
 		basic: {
 			name: 'basic',
@@ -477,7 +626,7 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			featuresOff: getFeatureIdsByPlan(PlanName.Basic, false),
 			featureLabelsOn: getFeatureLabelsByPlan(PlanName.Basic, true),
 			featureLabelsOff: getFeatureLabelsByPlan(PlanName.Basic, false),
-			cfaLabel: _('Try it now'),
+			cfaLabel: _('Start free trial'),
 			cfaUrl: '',
 			footnote: '',
 			hostingType: PlanHostingType.Managed,
@@ -500,7 +649,7 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			featuresOff: getFeatureIdsByPlan(PlanName.Pro, false),
 			featureLabelsOn: getFeatureLabelsByPlan(PlanName.Pro, true),
 			featureLabelsOff: getFeatureLabelsByPlan(PlanName.Pro, false),
-			cfaLabel: _('Try it now'),
+			cfaLabel: _('Start free trial'),
 			cfaUrl: '',
 			footnote: '',
 			hostingType: PlanHostingType.Managed,
@@ -523,7 +672,7 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			featuresOff: getFeatureIdsByPlan(PlanName.Pro100Gb, false),
 			featureLabelsOn: getFeatureLabelsByPlan(PlanName.Pro100Gb, true),
 			featureLabelsOff: getFeatureLabelsByPlan(PlanName.Pro100Gb, false),
-			cfaLabel: _('Try it now'),
+			cfaLabel: _('Start free trial'),
 			cfaUrl: '',
 			footnote: '',
 			hostingType: PlanHostingType.Managed,
@@ -546,7 +695,7 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			featuresOff: getFeatureIdsByPlan(PlanName.Teams, false),
 			featureLabelsOn: getFeatureLabelsByPlan(PlanName.Teams, true),
 			featureLabelsOff: getFeatureLabelsByPlan(PlanName.Teams, false),
-			cfaLabel: _('Try it now'),
+			cfaLabel: _('Start free trial'),
 			cfaUrl: '',
 			footnote: _('Per user. Minimum of 2 users.'),
 			hostingType: PlanHostingType.Managed,
@@ -563,10 +712,24 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			featuresOff: [],
 			featureLabelsOn: getFeatureLabelsByPlan(PlanName.JoplinServerBusiness, true),
 			featureLabelsOff: [],
-			cfaLabel: _('Get a quote'),
-			cfaUrl: 'https://tally.so/r/D4BlOE',
+			...(selfServiceSelfHostingEnabled ? {
+				pricingTable: getTieredPricingTable(findPrice(stripeConfig, {
+					accountType: 5,
+					period: PricePeriod.Yearly,
+				})),
+				cfaLabel: _('Start free trial'),
+				cfaUrl: '',
+				priceYearly: findPrice(stripeConfig, {
+					accountType: 5,
+					period: PricePeriod.Yearly,
+				}),
+			} : {
+				cfaLabel: _('Get a quote'),
+				cfaUrl: 'https://tally.so/r/D4BlOE',
+			}),
 			footnote: '',
 			learnMoreUrl: 'https://joplinapp.org/help/apps/joplin_server_business',
+			cfaDescription: _('14-day free trial. Cancel anytime during the trial and you won\'t be charged.'),
 			hostingType: PlanHostingType.Self,
 		},
 	};

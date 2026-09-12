@@ -1,14 +1,17 @@
 import { _ } from '../../locale';
 import { MarkupLanguage, MarkupToHtml } from '@joplin/renderer';
 import { ItemFlow, ListRenderer } from '../plugins/api/noteListType';
+import isNoteLockEnabled from '../noteLock/isNoteLockEnabled';
 
 interface Props {
 	note: {
 		id: string;
 		title: string;
+		is_published: boolean;
 		is_todo: number;
 		todo_completed: number;
 		body: string;
+		is_locked: number;
 	};
 	item: {
 		size: {
@@ -37,6 +40,8 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 		'item.size.height',
 		'note.body',
 		'note.id',
+		'note.is_locked',
+		'note.is_published',
 		'note.is_shared',
 		'note.is_todo',
 		'note.isWatched',
@@ -103,6 +108,11 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 					color: var(--joplin-color);
 				}
 
+				> .lockedicon {
+					padding-right: 4px;
+					color: var(--joplin-color);
+				}
+
 				> .titlecontent {
 					word-break: break-all;
 					overflow: hidden;
@@ -126,6 +136,18 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 			}
 		}
 
+		> .content.-published {
+			> .title {
+				color: var(--joplin-color4);
+			}
+		}
+
+		> .content.-published.-selected {
+			> .title {
+				color: var(--joplin-color);
+			}
+		}
+
 		> .content.-completed {
 			> .title {
 				opacity: 0.5;
@@ -143,12 +165,13 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 
 	itemTemplate: // html
 		`
-		<div class="content {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
+		<div class="content {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.is_published}}-published{{/note.is_published}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
 			<div style="width: {{titleWidth}}px;" class="title" data-id="{{note.id}}">
 				{{#note.is_todo}}
 					<input class="checkbox" data-id="todo-checkbox" type="checkbox" {{#note.todo_completed}}checked="checked"{{/note.todo_completed}}>
 				{{/note.is_todo}}
 				<i class="watchedicon fa fa-share-square"></i>
+				{{#note.is_locked}}<i class="lockedicon fa fa-lock"></i>{{/note.is_locked}}
 				<div class="titlecontent">{{note.title}}</div>
 			</div>
 			<div class="preview">{{notePreview}}</div>
@@ -157,10 +180,13 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 
 	onRenderNote: async (props: Props) => {
 		const markupToHtml_ = new MarkupToHtml();
+		const isLocked = isNoteLockEnabled() ? props.note.is_locked : 0;
 
 		return {
 			...props,
-			notePreview: markupToHtml_.stripMarkup(MarkupLanguage.Markdown, props.note.body).substring(0, 200),
+			note: { ...props.note, is_locked: isLocked },
+			// A locked note's body is ciphertext, so there is no meaningful preview to show.
+			notePreview: isLocked ? '' : markupToHtml_.stripMarkup(MarkupLanguage.Markdown, props.note.body).substring(0, 200),
 			titleWidth: props.item.size.width - 32,
 		};
 	},

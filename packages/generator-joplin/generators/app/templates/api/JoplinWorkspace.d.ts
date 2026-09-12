@@ -1,5 +1,6 @@
 import Plugin from '../Plugin';
-import { FolderEntity } from '../../database/types';
+import { PluginStore } from '../ViewController';
+import { FolderEntity, NoteEntity } from '../../database/types';
 import { Disposable, EditContextMenuFilterObject, FilterHandler } from './types';
 declare enum ItemChangeEventType {
     Create = 1,
@@ -40,7 +41,7 @@ type ResourceChangeHandler = WorkspaceEventHandler<ResourceChangeEvent>;
 export default class JoplinWorkspace {
     private store;
     private plugin;
-    constructor(plugin: Plugin, store: any);
+    constructor(plugin: Plugin, store: PluginStore);
     /**
      * Called when a new note or notes are selected.
      */
@@ -83,7 +84,7 @@ export default class JoplinWorkspace {
      *
      * On desktop, this returns the selected note in the focused window.
      */
-    selectedNote(): Promise<any>;
+    selectedNote(): Promise<NoteEntity | null>;
     /**
      * Gets the currently selected folder. In some cases, for example during
      * search or when viewing a tag, no folder is actually selected in the user

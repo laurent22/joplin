@@ -1,6 +1,7 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, expectThrow, expectHttpError, createUser } from '../utils/testing/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, expectThrow, expectHttpError, createUser, koaAppContext } from '../utils/testing/testUtils';
 import { EmailSender, UserFlagType } from '../services/database/types';
-import { ErrorBadRequest, ErrorUnprocessableEntity } from '../utils/errors';
+import { ErrorBadRequest, ErrorNotFound, ErrorUnprocessableEntity } from '../utils/errors';
+import { TokenPurpose } from './TokenModel';
 import { betaUserDateRange, stripeConfig } from '../utils/stripe';
 import { accountByType, AccountType } from './UserModel';
 import { failedPaymentFinalAccount, failedPaymentWarningInterval } from './SubscriptionModel';
@@ -552,12 +553,36 @@ describe('UserModel', () => {
 		expect(applications.length).toBe(0);
 	});
 
+	test('should not reset the password using a token that was not issued for that purpose', async () => {
+		const user = await models().user().save({
+			email: 'test@example.com',
+			password: '111111',
+		});
+		const ctx = await koaAppContext();
+
+		// A CSRF or confirmation token has no purpose and must be rejected here.
+		const genericToken = await models().token().generate(user.id);
+
+		await expectHttpError(async () => {
+			await models().user().resetPassword(genericToken, { password: '222222', password2: '222222' });
+		}, ErrorNotFound.httpCode);
+
+		// The password must be unchanged.
+		expect(await models().user().login('test@example.com', '111111', ctx.joplin.services)).toBeTruthy();
+
+		// A token generated for the reset purpose still works.
+		const resetToken = await models().token().generate(user.id, TokenPurpose.PasswordReset);
+		await models().user().resetPassword(resetToken, { password: '222222', password2: '222222' });
+		expect(await models().user().login('test@example.com', '222222', ctx.joplin.services)).toBeTruthy();
+	});
+
 	test('should not log in an user using a email/password combo when the local auth is disabled', async () => {
 		config().LOCAL_AUTH_ENABLED = false;
 
 		const user = await createUser();
+		const ctx = await koaAppContext();
 
-		expect(await models().user().login(user.email, '123456')).toBe(null);
+		expect(await models().user().login(user.email, '123456', ctx.joplin.services)).toBe(null);
 	});
 
 	test('should not change user properties managed by SAML', async () => {
@@ -593,6 +618,23 @@ describe('UserModel', () => {
 		}
 	});
 
+	test('should not log in as a local account via SSO based on email match alone', async () => {
+		const localUser = await createUser(1);
+
+		config().SAML_ENABLED = true;
+
+		try {
+			const ctx = await koaAppContext();
+			const result = await models().user().ssoLogin(localUser.email, 'Attacker Controlled Name', ctx.joplin.services);
+			expect(result).toBeNull();
+
+			const reloaded = await models().user().load(localUser.id);
+			expect(reloaded.is_external).toBe(0);
+		} finally {
+			config().SAML_ENABLED = false;
+		}
+	});
+
 	test('should generate a unique SSO code', async () => {
 		const createExternalUser = async (index: number) => {
 			const user = await createUser(index);
@@ -617,4 +659,62 @@ describe('UserModel', () => {
 		}
 	});
 
+	test('should correctly return whether a user has MFA enabled', async () => {
+		const createTestUser = async (index: number, mfaEnabled: boolean) => {
+			const user = await createUser(index);
+			await models().user().save({
+				id: user.id,
+				totp_secret: mfaEnabled ? '111111' : '',
+			});
+			return await models().user().load(user.id);
+		};
+
+		const user1 = await createTestUser(1, true);
+		expect(await models().user().hasMFAEnabled(user1.email, { requireUserExists: true })).toBe(true);
+		const user2 = await createTestUser(2, false);
+		expect(await models().user().hasMFAEnabled(user2.email, { requireUserExists: true })).toBe(false);
+
+		expect(
+			await models().user().hasMFAEnabled('no-exist@localhost', { requireUserExists: false }),
+		).toBe(false);
+		await expectHttpError(async () => {
+			await models().user().hasMFAEnabled('no-exist@localhost', { requireUserExists: true });
+		}, 403);
+	});
+
+	test('should return the number of enabled non-admin users from enabledUserCount', async () => {
+		const user1 = await createUser(1);
+		const user2 = await createUser(2);
+		await createUser(3, true);
+
+		expect(await models().user().enabledUserCount({ excludeMainAdmin: true })).toBe(2);
+		expect(await models().user().enabledUserCount({ excludeMainAdmin: false })).toBe(3);
+
+		await models().user().save({
+			id: user2.id,
+			enabled: 0,
+		});
+		expect(await models().user().enabledUserCount({ excludeMainAdmin: true })).toBe(1);
+		expect(await models().user().enabledUserCount({ excludeMainAdmin: false })).toBe(2);
+
+		await models().user().save({
+			id: user1.id,
+			enabled: 0,
+		});
+		expect(await models().user().enabledUserCount({ excludeMainAdmin: true })).toBe(0);
+	});
+
+	test('should return the number of enabled non-admin users from enabledNonAdminUserCount', async () => {
+		const user1 = await createUser(1);
+		await createUser(2);
+		await createUser(3, true);
+
+		expect(await models().user().enabledNonAdminUserCount()).toBe(2);
+
+		await models().user().save({
+			id: user1.id,
+			enabled: 0,
+		});
+		expect(await models().user().enabledNonAdminUserCount()).toBe(1);
+	});
 });

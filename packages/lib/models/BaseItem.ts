@@ -7,7 +7,10 @@ import markdownUtils from '../markdownUtils';
 import { _ } from '../locale';
 import Database from '../database';
 import ItemChange from './ItemChange';
+import ConflictNoteState from './ConflictNoteState';
 import ShareService from '../services/share/ShareService';
+import type EncryptionService from '../services/e2ee/EncryptionService';
+import type RevisionService from '../services/RevisionService';
 import itemCanBeEncrypted from './utils/itemCanBeEncrypted';
 import { getEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
 import JoplinError from '../JoplinError';
@@ -43,6 +46,7 @@ export interface ItemsThatNeedSyncResult {
 export interface RemoteItemMetadata {
 	item_id: string;
 	updated_time: number;
+	sync_time: number;
 }
 
 export interface EncryptedItemsStats {
@@ -50,12 +54,16 @@ export interface EncryptedItemsStats {
 	total: number;
 }
 
+export interface SyncItemBaseVersion {
+	base_body: string;
+	base_title: string;
+	base_conflict_note_id: string;
+}
+
 export default class BaseItem extends BaseModel {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- EncryptionService is set at app startup; lib references it structurally to avoid a circular import (EncryptionService -> BaseItem)
-	public static encryptionService_: any = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- RevisionService is set at app startup; see encryptionService_ above
-	public static revisionService_: any = null;
+	public static encryptionService_: EncryptionService = null;
+	public static revisionService_: RevisionService = null;
 	public static shareService_: ShareService = null;
 	private static syncShareCache_: ShareState | null = null;
 
@@ -209,12 +217,13 @@ export default class BaseItem extends BaseModel {
 
 	public static async remoteItemMetadata(syncTarget: number): Promise<Map<string, RemoteItemMetadata>> {
 		if (!syncTarget) throw new Error('No syncTarget specified');
-		const temp = await this.db().selectAll('SELECT item_id, remote_item_updated_time FROM sync_items WHERE sync_time > 0 AND sync_target = ?', [syncTarget]);
+		const temp = await this.db().selectAll('SELECT item_id, remote_item_updated_time, sync_time FROM sync_items WHERE sync_time > 0 AND sync_target = ?', [syncTarget]);
 		const output = new Map<string, RemoteItemMetadata>();
 		for (let i = 0; i < temp.length; i++) {
 			const metadata: RemoteItemMetadata = {
 				item_id: temp[i].item_id,
 				updated_time: temp[i].remote_item_updated_time,
+				sync_time: temp[i].sync_time,
 			};
 			output.set(temp[i].item_id, metadata);
 		}
@@ -341,6 +350,9 @@ export default class BaseItem extends BaseModel {
 		}
 
 		await super.batchDelete(ids, options);
+
+		// The conflict state is only useful while its conflict note exists
+		await ConflictNoteState.deleteByNoteIds(conflictNoteIds);
 
 		if (trackDeleted) {
 			const syncTargetIds = Setting.enumOptionValues('sync.target');
@@ -555,7 +567,7 @@ export default class BaseItem extends BaseModel {
 
 		// List of keys that won't be encrypted - mostly foreign keys required to link items
 		// with each others and timestamp required for synchronisation.
-		const keepKeys = ['id', 'note_id', 'tag_id', 'parent_id', 'share_id', 'updated_time', 'deleted_time', 'type_'];
+		const keepKeys = ['id', 'note_id', 'tag_id', 'parent_id', 'share_id', 'updated_time', 'deleted_time', 'type_', 'is_locked', 'extracted_resource_ids'];
 		const reducedItem: Record<string, unknown> = {};
 
 		for (let i = 0; i < keepKeys.length; i++) {
@@ -581,7 +593,14 @@ export default class BaseItem extends BaseModel {
 		plainItem.updated_time = item.updated_time;
 		plainItem.encryption_cipher_text = '';
 		plainItem.encryption_applied = 0;
-		return ItemClass.save(plainItem, { autoTimestamp: false, changeSource: ItemChange.SOURCE_DECRYPTION });
+		const saved = await ItemClass.save(plainItem, { autoTimestamp: false, changeSource: ItemChange.SOURCE_DECRYPTION });
+
+		// First point where a downloaded note has a readable body to record as the base
+		if (plainItem.type_ === BaseModel.TYPE_NOTE) {
+			await this.saveSyncBaseContent(Setting.value('sync.target'), plainItem.id, plainItem.body ?? '', plainItem.title ?? '');
+		}
+
+		return saved;
 	}
 
 	public static async unserialize(content: string) {
@@ -620,6 +639,19 @@ export default class BaseItem extends BaseModel {
 
 		const ItemClass = this.itemClass(output.type_);
 		output = ItemClass.removeUnknownFields(output);
+
+		// Reject any field that could be used to escape the resource directory
+		// when concatenated into a file path (resourceFullPath uses raw string
+		// concat on id and file_extension). The id format is universally a 32
+		// char hex string; the extension must not contain path separators.
+		// Throws a malformedItem JoplinError so the sync loop can log+skip the
+		// item rather than abort the whole batch.
+		if ('id' in output && output.id !== '' && !/^[a-fA-F0-9]{32}$/.test(output.id)) {
+			throw new JoplinError(`Invalid item ID format: ${JSON.stringify(output.id)}`, 'malformedItem');
+		}
+		if ('file_extension' in output && /[/\\]|\.\./.test(output.file_extension)) {
+			throw new JoplinError(`Invalid file extension: ${JSON.stringify(output.file_extension)}`, 'malformedItem');
+		}
 
 		for (const n in output) {
 			if (!output.hasOwnProperty(n)) continue;
@@ -721,7 +753,10 @@ export default class BaseItem extends BaseModel {
 		return !!r;
 	}
 
-	public static async itemsThatNeedSync(syncTarget: number, limit = 100): Promise<ItemsThatNeedSyncResult> {
+	public static async itemsThatNeedSync(syncTarget: number, limit = 100, cancelling: ()=> boolean = () => false): Promise<ItemsThatNeedSyncResult> {
+		const cancelledResult = (): ItemsThatNeedSyncResult => ({ hasMore: false, items: [], neverSyncedItemIds: [] });
+		if (cancelling()) return cancelledResult();
+
 		// Although we keep the master keys in the database, we no longer sync them
 		const classNames = this.syncItemClassNames().filter(n => n !== 'MasterKey');
 
@@ -768,6 +803,7 @@ export default class BaseItem extends BaseModel {
 			);
 
 			const neverSyncedItem = await ItemClass.modelSelectAll(sql);
+			if (cancelling()) return cancelledResult();
 
 			// Secondly get the items that have been synced under this sync target but that have been changed since then
 
@@ -798,6 +834,7 @@ export default class BaseItem extends BaseModel {
 				);
 
 				changedItems = await ItemClass.modelSelectAll(sql);
+				if (cancelling()) return cancelledResult();
 			}
 
 			const neverSyncedItemIds = neverSyncedItem.map((it: BaseItemEntity) => it.id);
@@ -874,36 +911,62 @@ export default class BaseItem extends BaseModel {
 		return this.syncDisabledItemsCount(syncTargetId, true);
 	}
 
+	// The row is re-created here, so the base version is carried over in SQL, otherwise the sync
+	// steps would lose it on every run. A null `base` keeps the existing one, without a select.
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- item is an entity slice with id/type_ — tests pass loose objects with `id` as number
-	public static updateSyncTimeQueries(syncTarget: number, item: any, syncTime: number, remoteItemUpdatedTime = 0, syncDisabled = false, syncDisabledReason = '', itemLocation: number = null) {
+	public static updateSyncTimeQueries(syncTarget: number, item: any, syncTime: number, base: SyncItemBaseVersion = null, remoteItemUpdatedTime = 0, syncDisabled = false, syncDisabledReason = '', itemLocation: number = null) {
 		const itemType = item.type_;
 		const itemId = item.id;
 		if (!itemType || !itemId || syncTime === undefined) throw new Error(sprintf('Invalid parameters in updateSyncTimeQueries(): %d, %s, %d', syncTarget, JSON.stringify(item), syncTime));
 
 		if (itemLocation === null) itemLocation = BaseItem.SYNC_ITEM_LOCATION_LOCAL;
 
+		const insertParams = [syncTarget, itemType, itemId, itemLocation, syncTime, remoteItemUpdatedTime, syncDisabled ? 1 : 0, `${syncDisabledReason}`];
+
+		const baseSelect = base ? '?, ?, ?' : `
+			COALESCE(existing.base_body, ''),
+			COALESCE(existing.base_title, ''),
+			COALESCE(existing.base_conflict_note_id, '')`;
+
+		if (base) insertParams.push(base.base_body, base.base_title, base.base_conflict_note_id);
+
 		return [
 			{
-				sql: 'DELETE FROM sync_items WHERE sync_target = ? AND item_type = ? AND item_id = ?',
-				params: [syncTarget, itemType, itemId],
+				sql: `
+					INSERT INTO sync_items (sync_target, item_type, item_id, item_location, sync_time, remote_item_updated_time, sync_disabled, sync_disabled_reason, base_body, base_title, base_conflict_note_id)
+					SELECT ?, ?, ?, ?, ?, ?, ?, ?, ${baseSelect}
+					FROM (SELECT 1) AS seed
+					LEFT JOIN sync_items AS existing ON existing.id = (
+						SELECT MAX(candidate.id) FROM sync_items AS candidate
+						WHERE candidate.sync_target = ? AND candidate.item_type = ? AND candidate.item_id = ?
+					)`,
+				params: insertParams.concat([syncTarget, itemType, itemId]),
 			},
 			{
-				sql: 'INSERT INTO sync_items (sync_target, item_type, item_id, item_location, sync_time, remote_item_updated_time, sync_disabled, sync_disabled_reason) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-				params: [syncTarget, itemType, itemId, itemLocation, syncTime, remoteItemUpdatedTime, syncDisabled ? 1 : 0, `${syncDisabledReason}`],
+				sql: 'DELETE FROM sync_items WHERE sync_target = ? AND item_type = ? AND item_id = ? AND id != (SELECT MAX(id) FROM sync_items WHERE sync_target = ? AND item_type = ? AND item_id = ?)',
+				params: [syncTarget, itemType, itemId, syncTarget, itemType, itemId],
 			},
 		];
 	}
 
+	// Records the note content a sync has just made common to both sides. It is the
+	// ancestor the auto-merge and the conflict resolution work from. The link to any
+	// earlier conflict note is dropped, since it no longer relates to this base.
+	public static async saveSyncBaseContent(syncTarget: number, noteId: string, body: string, title: string) {
+		const sql = 'UPDATE sync_items SET base_body = ?, base_title = ?, base_conflict_note_id = ? WHERE item_id = ? AND item_type = ? AND sync_target = ?';
+		await this.db().exec(sql, [body, title, '', noteId, ModelType.Note, syncTarget]);
+	}
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See updateSyncTimeQueries; tests pass loose objects with `id` as number
-	public static async saveSyncTime(syncTarget: number, item: any, syncTime: number, remoteItemUpdatedTime = 0) {
-		const queries = this.updateSyncTimeQueries(syncTarget, item, syncTime, remoteItemUpdatedTime);
+	public static async saveSyncTime(syncTarget: number, item: any, syncTime: number, remoteItemUpdatedTime = 0, base: SyncItemBaseVersion = null) {
+		const queries = this.updateSyncTimeQueries(syncTarget, item, syncTime, base, remoteItemUpdatedTime);
 		return this.db().transactionExecBatch(queries);
 	}
 
 	public static async saveSyncDisabled(syncTargetId: number, item: { id?: string; type_?: number; sync_time?: number; remote_item_updated_time?: number }, syncDisabledReason: string, itemLocation: number = null) {
 		const syncTime = 'sync_time' in item ? item.sync_time : 0;
 		const remoteItemUpdatedTime = 'remote_item_updated_time' in item ? item.remote_item_updated_time : 0;
-		const queries = this.updateSyncTimeQueries(syncTargetId, item, syncTime, remoteItemUpdatedTime, true, syncDisabledReason, itemLocation);
+		const queries = this.updateSyncTimeQueries(syncTargetId, item, syncTime, null, remoteItemUpdatedTime, true, syncDisabledReason, itemLocation);
 		return this.db().transactionExecBatch(queries);
 	}
 

@@ -1,7 +1,7 @@
 import { cookieGet } from './cookies';
 import { ErrorForbidden } from './errors';
 import { AppContext } from './types';
-import * as formidable from 'formidable';
+import formidable from 'formidable';
 import { Fields, Files } from 'formidable';
 import { IncomingMessage } from 'http';
 import { uuidgen } from './uuid';
@@ -72,8 +72,7 @@ export async function formParse(request: IncomingMessage): Promise<FormParseResu
 
 	// Note that for Formidable to work, the content-type must be set in the
 	// headers
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	return new Promise((resolve: Function, reject: Function) => {
+	return new Promise<FormParseResult>((resolve, reject) => {
 		let promiseCompleted = false;
 
 		const form = formidable({

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createContext, useEffect, useMemo, useRef, useState } from 'react';
-import { StyleSheet, useWindowDimensions } from 'react-native';
+import { StyleSheet, useWindowDimensions, ViewStyle } from 'react-native';
 import { Portal } from 'react-native-paper';
 import Modal from '../Modal';
 import shim from '@joplin/lib/shim';
@@ -24,22 +24,31 @@ const useStyles = (themeId: number) => {
 
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
+		const dialogContainer = {
+			backgroundColor: theme.backgroundColor,
+			borderRadius: theme.borderRadius,
+			paddingTop: theme.marginTop,
+			marginLeft: 'auto',
+			marginRight: 'auto',
+
+			width: '100%',
+		} satisfies ViewStyle;
+
 		return StyleSheet.create({
 			modalContainer: {
 				marginLeft: 'auto',
 				marginRight: 'auto',
 				marginTop: 'auto',
 				marginBottom: 'auto',
-				width: Math.max(windowSize.width / 2, 400),
+				paddingHorizontal: 4,
+				width: Math.max(windowSize.width / 2, 360),
 				maxWidth: '100%',
 			},
 
-			dialogContainer: {
-				backgroundColor: theme.backgroundColor,
-				borderRadius: theme.borderRadius,
-				paddingTop: theme.borderRadius,
-				marginLeft: 4,
-				marginRight: 4,
+			dialogContainer: dialogContainer,
+			promptDialogContainer: {
+				...dialogContainer,
+				maxWidth: 450,
 			},
 		});
 	}, [windowSize.width, themeId]);
@@ -65,15 +74,12 @@ const DialogManager: React.FC<Props> = props => {
 
 	const dialogComponents: React.ReactNode[] = [];
 	for (const dialog of dialogModels) {
-		const dialogProps = {
-			containerStyle: styles.dialogContainer,
-			themeId: props.themeId,
-		};
 		if (dialog.type === DialogType.Menu || dialog.type === DialogType.ButtonPrompt) {
 			dialogComponents.push(
 				<PromptDialog
 					dialog={dialog}
-					{...dialogProps}
+					containerStyle={dialog.type === DialogType.ButtonPrompt ? styles.promptDialogContainer : styles.dialogContainer}
+					themeId={props.themeId}
 					key={dialog.key}
 				/>,
 			);
@@ -81,7 +87,8 @@ const DialogManager: React.FC<Props> = props => {
 			dialogComponents.push(
 				<TextInputDialog
 					dialog={dialog}
-					{...dialogProps}
+					containerStyle={styles.promptDialogContainer}
+					themeId={props.themeId}
 					key={dialog.key}
 				/>,
 			);

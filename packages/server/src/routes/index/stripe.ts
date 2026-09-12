@@ -16,6 +16,7 @@ import { Models } from '../../models/factory';
 import { confirmUrl } from '../../utils/urlUtils';
 import { msleep } from '../../utils/time';
 import { IncomingMessage } from 'http';
+import { ErrorTaskInProgress } from '../../models/StripeEventModel';
 
 const logger = Logger.create('index/stripe');
 
@@ -46,10 +47,8 @@ interface CreateCheckoutSessionFields {
 type StripeRouteHandler = (stripe: Stripe, path: SubPath, ctx: AppContext)=> Promise<unknown>;
 
 interface PostHandlers {
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	createCheckoutSession: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	webhook: Function;
+	createCheckoutSession: StripeRouteHandler;
+	webhook: (stripe: Stripe, path: SubPath, ctx: AppContext, event?: Stripe.Event, logErrors?: boolean)=> Promise<unknown>;
 }
 
 interface SubscriptionInfo {
@@ -64,7 +63,7 @@ async function getSubscriptionInfo(event: Stripe.Event, ctx: AppContext): Promis
 	return { sub, stripeSub };
 }
 
-export const handleSubscriptionCreated = async (stripe: Stripe, models: Models, customerName: string, userEmail: string, accountType: AccountType, stripeUserId: string, stripeSubscriptionId: string) => {
+export const handleSubscriptionCreated = async (stripe: Stripe, models: Models, customerName: string, userEmail: string, accountType: AccountType, stripeUserId: string, stripeSubscriptionId: string, source: string) => {
 	const existingUser = await models.user().loadByEmail(userEmail);
 
 	if (existingUser) {
@@ -95,6 +94,7 @@ export const handleSubscriptionCreated = async (stripe: Stripe, models: Models, 
 				stripe_user_id: stripeUserId,
 				stripe_subscription_id: stripeSubscriptionId,
 				last_payment_time: Date.now(),
+				source,
 			});
 		} else {
 			if (sub.stripe_subscription_id === stripeSubscriptionId) {
@@ -118,6 +118,7 @@ export const handleSubscriptionCreated = async (stripe: Stripe, models: Models, 
 			accountType,
 			stripeUserId,
 			stripeSubscriptionId,
+			source,
 		);
 	}
 };
@@ -138,6 +139,22 @@ const waitForUserCreation = async (models: Models, userEmail: string): Promise<U
 		await msleep(1000);
 	}
 	return null;
+};
+
+let serverSetupTask: Promise<void>|null = null;
+const handleFirstEvent = async (models: Models) => {
+	serverSetupTask ??= (async () => {
+		logger.info('Clearing old Stripe tasks');
+		// Any events that were interrupted by server shutdown can be retried:
+		await models.stripeEvent().clearInProgressEvents();
+	})();
+
+	try {
+		await serverSetupTask;
+	} catch (error) {
+		serverSetupTask = null;
+		throw error;
+	}
 };
 
 export const postHandlers: PostHandlers = {
@@ -242,16 +259,7 @@ export const postHandlers: PostHandlers = {
 		event = event ? event : await stripeEvent(stripe, ctx.req);
 
 		const models = ctx.joplin.models;
-
-		// Webhook endpoints might occasionally receive the same event more than
-		// once.
-		// https://stripe.com/docs/webhooks/best-practices#duplicate-events
-		const eventDoneKey = `stripeEventDone::${event.id}`;
-		if (await models.keyValue().value<number>(eventDoneKey)) {
-			logger.info(`Skipping event that has already been done: ${event.id}`);
-			return;
-		}
-		await models.keyValue().setValue(eventDoneKey, 1);
+		await handleFirstEvent(models);
 
 		// console.info('EVENT', JSON.stringify(event, null, 4));
 
@@ -273,7 +281,7 @@ export const postHandlers: PostHandlers = {
 				const checkoutSession: Stripe.Checkout.Session = event.data.object as Stripe.Checkout.Session;
 				const userEmail = checkoutSession.customer_details.email || checkoutSession.customer_email;
 				const customer = await stripe.customers.retrieve(checkoutSession.customer as string) as Stripe.Customer;
-				await stripe.customers.update(customer.id, { metadata: { source: checkoutSession.metadata.source } });
+				await stripe.customers.update(customer.id, { metadata: { source: checkoutSession.metadata?.source || '' } });
 				logger.info('Checkout session completed:', checkoutSession.id);
 				logger.info('User email:', userEmail);
 			},
@@ -303,7 +311,13 @@ export const postHandlers: PostHandlers = {
 					accountType,
 					stripeUserId,
 					stripeSubscriptionId,
+					customer.metadata?.source || '',
 				);
+
+				const subscription = await models.subscription().byStripeSubscriptionId(stripeSubscriptionId);
+				if (subscription) {
+					await models.subscription().updateFromStripe(subscription, stripeSub);
+				}
 			},
 
 			'invoice.paid': async () => {
@@ -354,16 +368,25 @@ export const postHandlers: PostHandlers = {
 
 				logger.info(`Updating subscription of user ${user.id} to ${newAccountType}`);
 				await models.user().save({ id: user.id, account_type: newAccountType });
+
+				await models.subscription().updateFromStripe(sub, stripeSub);
 			},
 
 		};
 
 		if (hooks[event.type]) {
-			logger.info(`Got Stripe event: ${event.type} [Handled]`);
 			try {
-				await hooks[event.type]();
+				await models.stripeEvent().withTask(
+					async () => {
+						logger.info(`Got Stripe event: ${event.type} [Handled]`);
+						await hooks[event.type]();
+					},
+					{ stripeEventId: event.id },
+				);
 			} catch (error) {
-				if (logErrors) {
+				if (error instanceof ErrorTaskInProgress) {
+					logger.info(`Skipped duplicate event ${event.type}`, event.id);
+				} else if (logErrors) {
 					logger.error(`Error processing event ${event.type}:`, event, error);
 				} else {
 					throw error;

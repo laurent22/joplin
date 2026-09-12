@@ -27,10 +27,13 @@ interface KatexTrustContext {
 	protocol?: string;
 }
 
+type KatexStrict = boolean | 'error' | 'warn' | 'ignore' | ((errorCode: string, errorMsg: string)=> 'error' | 'warn' | 'ignore');
+
 interface KatexOptions {
 	macros?: Record<string, string | KatexMacro>;
 	displayMode?: boolean;
 	trust?: boolean | ((context: KatexTrustContext)=> boolean);
+	strict?: KatexStrict;
 }
 
 // KaTeX's `\href` and `\url` commands accept arbitrary URLs when trust is
@@ -352,6 +355,12 @@ export default {
 		const katexOptions: KatexOptions = {};
 		katexOptions.macros = options.context.userData.__katex.macros as KatexOptions['macros'];
 		katexOptions.trust = isTrustedKatexContext;
+		// Callers can pass `plugins: { katex: { strict: 'ignore' } }` via
+		// RenderOptions to silence KaTeX's console warnings for LaTeX-
+		// incompatible input (e.g. U+00A0 pasted from email/Word). Output
+		// is unchanged — only the warning stream is suppressed.
+		const strict = (options as unknown as { strict?: KatexStrict }).strict;
+		if (strict !== undefined) katexOptions.strict = strict;
 
 		// When targeting inline math, the `containerTag` should be a `span` to prevent issues
 		// with converting back to Markdown from the Rich Text Editor:

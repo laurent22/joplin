@@ -1,11 +1,12 @@
-import { EditorNoteStatuses } from '@joplin/lib/reducer';
-import { RefObject } from 'react';
+import { EditorNoteStatuses, State } from '@joplin/lib/reducer';
+import { RefObject, useContext } from 'react';
 import usePrintToCallback from './usePrintToCallback';
 import useWindowControl, { OnSetDialogState, WindowControl } from './useWindowControl';
 import commands from '../commands';
 import CommandService, { CommandRuntime, ComponentCommandSpec } from '@joplin/lib/services/CommandService';
 import useNowEffect from '@joplin/lib/hooks/useNowEffect';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
+import { WindowIdContext } from '../../NewWindowOrIFrame';
 
 interface Props {
 	documentRef: RefObject<Document|null>;
@@ -22,13 +23,15 @@ const useWindowCommands = ({ documentRef, customCss, plugins, editorNoteStatuses
 		plugins: plugins,
 	});
 	const windowControl = useWindowControl(setDialogState, onPrintCallback, documentRef);
+	const windowId = useContext(WindowIdContext);
 
 	// This effect needs to run as soon as possible. Certain components may fail to load if window
 	// commands are not registered on their first render.
 	useNowEffect(() => {
 		const runtimeHandles = commands.map((command: ComponentCommandSpec<WindowControl>) => {
 			const runtime: CommandRuntime = {
-				getPriority: () => {
+				getPriority: (_state: State, targetWindowId: string|null) => {
+					if (targetWindowId === windowId) return 2;
 					return documentRef.current?.hasFocus() ? 1 : 0;
 				},
 				...command.runtime(windowControl),
@@ -45,7 +48,7 @@ const useWindowCommands = ({ documentRef, customCss, plugins, editorNoteStatuses
 				runtimeHandle.deregister();
 			}
 		};
-	}, [windowControl]);
+	}, [windowControl, windowId]);
 };
 
 export default useWindowCommands;

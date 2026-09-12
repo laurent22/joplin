@@ -1,3 +1,4 @@
+import { mock as stripeMock, stripe, reset as resetStripe } from '../utils/testing/mockStripe';
 import { beforeAllDb, afterAllTests, beforeEachDb, models } from '../utils/testing/testUtils';
 import { AccountType } from './UserModel';
 import { MB } from '../utils/bytes';
@@ -15,6 +16,7 @@ describe('SubscriptionModel', () => {
 
 	beforeEach(async () => {
 		await beforeEachDb();
+		resetStripe();
 	});
 
 	test('should create a user and subscription', async () => {
@@ -62,4 +64,20 @@ describe('SubscriptionModel', () => {
 		expect(user.enabled).toBe(1);
 	});
 
+	test('should fetch the trial_end/current_period_end from Stripe if not stored in the database', async () => {
+		const periodEnd = new Date('2026-05-06');
+		const trialEnd = new Date('2026-05-05');
+		stripeMock.setMockSubscription('sub_001', { periodEnd, trialEnd });
+
+		const { subscription, user } = await models().subscription().saveUserAndSubscription('user@example.com', 'Test', AccountType.Basic, 'cus_001', 'sub_001');
+		const fetched = await models().subscription().retrievePeriodEnd(stripe, subscription);
+		expect(fetched.currentPeriodEnd).toBe(periodEnd.getTime());
+		expect(fetched.trialEnd).toBe(trialEnd.getTime());
+
+		// Period end and trial end should be saved in the database for future accesses:
+		expect(await models().subscription().byUserId(user.id)).toMatchObject({
+			current_period_end: periodEnd.getTime(),
+			trial_end: trialEnd.getTime(),
+		});
+	});
 });

@@ -78,6 +78,8 @@ Counts captured 2026-05-11 before any work. Note: the original `app-cli` row cou
 
 Total in-scope comments at start: **2,952** across **633 files**.
 
+A later follow-up pass (June 2026, branch `chore/claude/better-types`) revisited `any` that the per-package effort deliberately deferred — cases where the type had to be tightened at its **source** so caller skips cascade away, or that spanned multiple packages. See the "Multiple packages - June 2026" section in [any_cleanup_progress_details.md](./any_cleanup_progress_details.md) for the per-change detail.
+
 ## Recommended order
 
 Smallest packages first to validate the workflow and surface common patterns before tackling the large ones:

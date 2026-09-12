@@ -75,6 +75,7 @@ interface Props {
 	onUndoRedoDepthChange: OnUndoRedoDepthChange;
 	onAttach: OnAttach;
 	refreshKey?: number;
+	onLoadEnd?: ()=> void;
 }
 
 function fontFamilyFromSettings() {
@@ -493,6 +494,7 @@ function NoteEditor(props: Props) {
 					noteResources={props.noteResources}
 					plugins={props.plugins}
 					onAttach={onAttach}
+					onLoadEnd={props.onLoadEnd}
 				/>
 			</View>
 

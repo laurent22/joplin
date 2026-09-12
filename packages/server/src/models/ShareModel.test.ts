@@ -1,4 +1,4 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, createItem, createItemTree, expectNotThrow, createNote } from '../utils/testing/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, createItem, createItemTree, expectNotThrow, createNote, createFolder } from '../utils/testing/testUtils';
 import { ErrorBadRequest, ErrorNotFound } from '../utils/errors';
 import { Change2, ChangeType, ShareType } from '../services/database/types';
 import { inviteUserToShare, shareFolderWithUser, shareWithUserAndAccept, updateItemShareId } from '../utils/testing/shareApiUtils';
@@ -351,6 +351,61 @@ describe('ShareModel', () => {
 		// ...but it should still be part of the share.
 		expect(updatedNote.jop_share_id).toBe(share.id);
 	});
+
+
+
+
+
+
+
+
+	test('should create a published folder share', async () => {
+		const { user, session } = await createUserAndSession(1);
+		await createFolder(session.id, { id: '000000000000000000000000000000F1', title: 'My Folder' });
+
+		const share = await models().share().sharePublishedFolder(user, '000000000000000000000000000000F1');
+
+		expect(share.type).toBe(ShareType.PublishedFolder);
+		expect(share.folder_id).toBe('000000000000000000000000000000F1');
+		expect(share.owner_id).toBe(user.id);
+	});
+
+	test('should return the same share if the folder is already published', async () => {
+		const { user, session } = await createUserAndSession(1);
+		await createFolder(session.id, { id: '000000000000000000000000000000F1', title: 'My Folder' });
+
+		const share1 = await models().share().sharePublishedFolder(user, '000000000000000000000000000000F1');
+		const share2 = await models().share().sharePublishedFolder(user, '000000000000000000000000000000F1');
+
+		expect(share1.id).toBe(share2.id);
+	});
+
+	test('should throw when publishing a folder that does not exist', async () => {
+		const { user } = await createUserAndSession(1);
+		const error = await checkThrowAsync(async () => models().share().sharePublishedFolder(user, '000000000000000000000000000000F9'));
+		expect(error instanceof ErrorNotFound).toBe(true);
+	});
+
+	test('should not mix up a published folder share with a regular folder share', async () => {
+		const { user, session } = await createUserAndSession(1);
+		await createFolder(session.id, { id: '000000000000000000000000000000F1', title: 'My Folder' });
+
+		const publishedShare = await models().share().sharePublishedFolder(user, '000000000000000000000000000000F1');
+		const folderItem = await models().item().loadByJopId(user.id, '000000000000000000000000000000F1');
+
+		const folderTypeResult = await models().share().byUserAndItemId(user.id, folderItem.id, ShareType.Folder);
+		expect(folderTypeResult).toBeFalsy();
+
+		const publishedTypeResult = await models().share().byUserAndItemId(user.id, folderItem.id, ShareType.PublishedFolder);
+		expect(publishedTypeResult).toBeTruthy();
+		expect(publishedTypeResult.id).toBe(publishedShare.id);
+	});
+
+
+
+
+
+
 
 	test('should not update owner_id after unsharing if an item has been moved out of a share by the item\'s owner', async () => {
 		const { shareUser, note, session2 } = await createShareWithNoteOwnedByRecipient();

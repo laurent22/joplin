@@ -140,6 +140,7 @@ export default class JoplinDatabase extends Database {
 	private version_: number = null;
 	private tableFieldNames_: Record<string, string[]> = {};
 	private tableDescriptions_: Record<string, Record<string, string>>;
+	private sqliteVecAvailable_ = false;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Base Database class uses `any` for driver — different drivers (sqlite, better-sqlite3, web) have different shapes
 	public constructor(driver: any) {
@@ -150,9 +151,36 @@ export default class JoplinDatabase extends Database {
 		return this.initialized_;
 	}
 
+	// Returns true if the sqlite-vec extension loaded successfully when the
+	// database was opened. False on platforms where the prebuilt is missing or
+	// extension loading is otherwise blocked. Callers that need vector search
+	// (the AI embeddings index) should gate on this and degrade gracefully
+	// rather than throwing.
+	public sqliteVecAvailable() {
+		return this.sqliteVecAvailable_;
+	}
+
 	public async open(options: Record<string, unknown>) {
 		await super.open(options);
+		await this.tryLoadSqliteVec();
 		return this.initialize();
+	}
+
+	private async tryLoadSqliteVec() {
+		const sqliteVec = shim.sqliteVec();
+		if (!sqliteVec) {
+			this.sqliteVecAvailable_ = false;
+			this.logger().info('sqlite-vec not provided by the host app; vector search disabled');
+			return;
+		}
+		try {
+			await this.loadExtension(sqliteVec.getLoadablePath());
+			this.sqliteVecAvailable_ = true;
+			this.logger().info('sqlite-vec extension loaded');
+		} catch (error) {
+			this.sqliteVecAvailable_ = false;
+			this.logger().warn('sqlite-vec extension failed to load; vector search disabled:', error);
+		}
 	}
 
 	public tableFieldNames(tableName: string) {
@@ -326,6 +354,7 @@ export default class JoplinDatabase extends Database {
 				if (tableName.indexOf('items_fts') === 0) continue;
 				if (tableName === 'notes_spellfix') continue;
 				if (tableName === 'search_aux') continue;
+				if (tableName.startsWith('note_embeddings_vec')) continue;
 
 				pragmas = await this.selectAll(`PRAGMA table_info("${tableName}")`);
 

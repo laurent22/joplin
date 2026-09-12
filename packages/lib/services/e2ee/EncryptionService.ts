@@ -53,6 +53,7 @@ export interface EncryptOptions {
 	onProgress?: (event: { doneSize: number })=> void;
 	encryptionHandler?: EncryptionCustomHandler;
 	masterKeyId?: string;
+	decryptedMasterKey?: string;
 }
 
 type GetPasswordCallback = ()=> string|Promise<string>;
@@ -581,7 +582,7 @@ export default class EncryptionService {
 
 		const method = options.encryptionMethod;
 		const masterKeyId = options.masterKeyId ? options.masterKeyId : this.activeMasterKeyId();
-		const masterKeyPlainText = (await this.loadedMasterKey(masterKeyId)).plainText;
+		const masterKeyPlainText = await this.masterKeyPlainText_(masterKeyId, options);
 		const chunkSize = this.chunkSize(method);
 		const crypto = shim.crypto;
 
@@ -618,7 +619,7 @@ export default class EncryptionService {
 		if (!options) options = {};
 
 		const header = await this.decodeHeaderSource_(source) as { encryptionMethod: number; masterKeyId: string };
-		const masterKeyPlainText = (await this.loadedMasterKey(header.masterKeyId)).plainText;
+		const masterKeyPlainText = await this.masterKeyPlainText_(header.masterKeyId, options);
 
 		let doneSize = 0;
 
@@ -639,6 +640,14 @@ export default class EncryptionService {
 			const plainText = await this.decrypt(header.encryptionMethod, masterKeyPlainText, block);
 			await destination.append(plainText);
 		}
+	}
+
+	private async masterKeyPlainText_(masterKeyId: string, options: EncryptOptions) {
+		if (options.decryptedMasterKey !== undefined) {
+			if (options.masterKeyId !== masterKeyId) throw new Error(`Supplied master key ID does not match encrypted content: ${masterKeyId}`);
+			return options.decryptedMasterKey;
+		}
+		return (await this.loadedMasterKey(masterKeyId)).plainText;
 	}
 
 	private stringReader_(string: string, sync = false) {

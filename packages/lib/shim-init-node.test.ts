@@ -1,7 +1,8 @@
 import { shimInit } from './shim-init-node';
 import shim from './shim';
-import { createTempDir, setupDatabaseAndSynchronizer, supportDir } from './testing/test-utils';
+import { createTempDir, setupDatabaseAndSynchronizer, supportDir, withExtraRootCa } from './testing/test-utils';
 import { copyFile } from 'fs-extra';
+import createLocalhostServer from './testing/createLocalhostServer';
 
 describe('shim-init-node', () => {
 
@@ -30,4 +31,32 @@ describe('shim-init-node', () => {
 		expect(resource.file_extension).toBe('mscz');
 	});
 
+	// https://github.com/laurent22/joplin/issues/16486 - the agent used to be bound once from the
+	// initial URL, which made the request fail with ERR_INVALID_PROTOCOL when a redirect switched
+	// between http: and https:.
+	test('should handle redirects from http to https', async () => {
+		await using httpsServer = await createLocalhostServer((_req, res) => {
+			res.writeHead(200);
+			res.end('success!');
+		}, { https: true });
+		await using httpServer = await createLocalhostServer((_req, res) => {
+			res.writeHead(302, { location: `${httpsServer.baseUrl}/` });
+			res.end('done');
+		}, { https: false });
+
+		await withExtraRootCa(httpsServer.cert, async () => {
+			const response = await shim.fetch(`${httpServer.baseUrl}`);
+			expect(response.status).toBe(200);
+			expect(await response.text()).toBe('success!');
+		});
+	});
+
+	test('should expose an agent per protocol', async () => {
+		const agents = shim.httpAgents();
+		expect(agents.http).toBeTruthy();
+		expect(agents.https).toBeTruthy();
+		expect(agents.http).not.toBe(agents.https);
+		expect(shim.httpAgent('http://example.com')).toBe(agents.http);
+		expect(shim.httpAgent('https://example.com')).toBe(agents.https);
+	});
 });

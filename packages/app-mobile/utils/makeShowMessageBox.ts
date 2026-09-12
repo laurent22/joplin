@@ -17,7 +17,7 @@ const makeShowMessageBox = (dialogControl: null|RefObject<DialogControl>) => (me
 			onPress: () => resolve(1),
 			style: 'cancel',
 		};
-		const defaultConfirmButtons = [okButton, cancelButton];
+		const defaultConfirmButtons = [cancelButton, okButton];
 		const defaultAlertButtons = [okButton];
 
 		const dialogType = options.type ?? MessageBoxType.Confirm;
@@ -26,20 +26,44 @@ const makeShowMessageBox = (dialogControl: null|RefObject<DialogControl>) => (me
 			buttons = options.buttons.map((text, index) => {
 				return {
 					text,
+					style: index === options.cancelId ? 'cancel' : 'default',
 					onPress: () => resolve(index),
 				};
 			});
+			// Android and iOS usually have the cancel button first.
+			buttons = moveCancelFirst(buttons);
 		}
+
 		// This will be -1 for dialogs that don't include the default "cancel" button
-		const cancelIndex = buttons.indexOf(cancelButton);
+		// Even though cancel is at position 0, this needs to return 1 for cancel for compatibility
+		// reasons.
+		const defaultCancelId = buttons.includes(cancelButton) ? 1 : -1;
+		const cancelId = options.cancelId ?? defaultCancelId;
 
 		// Web doesn't support Alert.alert -- prefer using the global dialogControl if available.
 		(dialogControl?.current?.prompt ?? Alert.alert)(
 			options?.title ?? '',
 			message,
 			buttons,
-			{ onDismiss: () => resolve(cancelIndex) },
+			{ onDismiss: () => resolve(cancelId) },
 		);
 	});
 };
 export default makeShowMessageBox;
+
+const moveCancelFirst = (buttons: PromptButtonSpec[]) => {
+	const result = [];
+
+	const cancelButton = buttons.find(button => button.style === 'cancel');
+	if (cancelButton) {
+		result.push(cancelButton);
+	}
+
+	for (const button of buttons) {
+		if (button !== cancelButton) {
+			result.push(button);
+		}
+	}
+
+	return result;
+};

@@ -59,6 +59,8 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		'editAlarm',
 		'toggleVisiblePanes',
 		'showNoteProperties',
+		// Always shown — the panel itself surfaces any configuration issue.
+		'toggleAiChat',
 	];
 
 	// `toggleEditorPlugin` shows for plugin editors; we extend it to also

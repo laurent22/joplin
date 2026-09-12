@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHandle, ForwardedRef, useContext } from 'react';
 
-// eslint-disable-next-line no-unused-vars
+
 import { EditorCommand, NoteBodyEditorProps, NoteBodyEditorRef } from '../../../utils/types';
-import { commandAttachFileToBody, getResourcesFromPasteEvent } from '../../../utils/resourceHandling';
+import { commandAttachFileToBody, getResourceFromClipboardImage, getResourcesFromPasteEvent, plainTextLooksLikeAffinityImageData } from '../../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../../utils/types';
 import { CommandValue } from '../../../utils/types';
 import { cursorPositionToTextOffset } from '../utils';
@@ -54,8 +54,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	rootRef.current = editorRoot;
 
 	const webviewRef = useRef(null);
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	const props_onChangeRef = useRef<Function>(null);
+	const props_onChangeRef = useRef<NoteBodyEditorProps['onChange']>(null);
 	props_onChangeRef.current = props.onChange;
 
 	const rootSize = useElementSize(rootRef);
@@ -335,7 +334,9 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 	const editorPasteText = useCallback(async () => {
 		if (editorRef.current) {
-			const modifiedMd = await Note.replaceResourceExternalToInternalLinks(clipboard.readText(), { useAbsolutePaths: true });
+			const pastedText = clipboard.readText();
+			const resourceMd = plainTextLooksLikeAffinityImageData(pastedText) ? await getResourceFromClipboardImage() : null;
+			const modifiedMd = resourceMd || await Note.replaceResourceExternalToInternalLinks(pastedText, { useAbsolutePaths: true });
 			editorRef.current.replaceSelection(modifiedMd);
 		}
 	}, []);
@@ -708,6 +709,14 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		}
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [renderedBody, webviewReady]);
+
+	// Stop media playing in the viewer once it's hidden - https://github.com/laurent22/joplin/issues/15278
+	const viewerVisible = props.visiblePanes.includes('viewer');
+	useEffect(() => {
+		if (!viewerVisible) {
+			webviewRef.current?.stopMediaPlayback();
+		}
+	}, [viewerVisible]);
 
 	const { onSetInitialMarkersRef } = useEditorSearchHandler({
 		setLocalSearchResultCount: props.setLocalSearchResultCount,

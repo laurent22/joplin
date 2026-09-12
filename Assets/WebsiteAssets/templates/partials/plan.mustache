@@ -36,13 +36,32 @@
 		{{#featureLabelsOff}}
 			<p class="unchecked-text"><i class="fas fa-times feature feature-off"></i>{{label}}</p>
 		{{/featureLabelsOff}}
-		
+
+		{{#pricingTable}}
+			<strong translate>Pricing</strong>
+			<table class="table">
+				<thead>
+					<tr><th translate>Users</th><th translate>Price</th></tr>
+				</thead>
+				<tbody>
+					{{#rows}}
+						<tr><td>{{condition}}</td><td>{{priceMonthly}}</td></tr>
+					{{/rows}}
+				</tbody>
+			</table>
+			<p class="pricing-table-billed-annually">{{billedAnnually}}</p>
+		{{/pricingTable}}
+
 		<p class="text-center subscribe-wrapper">
 			<a id="subscribeButton-{{name}}" href="{{cfaUrl}}" class="button-link btn-white subscribeButton cfa-button">{{cfaLabel}}</a>
 
 			{{#learnMoreUrl}}
 				<a id="learnMore-{{name}}" href="{{learnMoreUrl}}" class="button-link btn-white learnMoreButton cfa-button">Learn more</a>
 			{{/learnMoreUrl}}
+
+			{{#cfaDescription}}
+				<p class="cfa-description">{{cfaDescription}}</p>
+			{{/cfaDescription}}
 		</p>
 
 		{{#footnote}}<sub>(*) {{.}}</sub>{{/footnote}}
@@ -58,29 +77,27 @@
 			const buttonId = 'subscribeButton-' + planName;
 			const buttonElement = document.getElementById(buttonId);
 
-			if (stripePricesIds.monthly) {
-				function handleResult() {
-					console.info('Redirected to checkout');
+			function handleResult() {
+				console.info('Redirected to checkout');
+			}
+
+			buttonElement.addEventListener("click", function(evt) {
+				const priceId = stripePricesIds[subscriptionPeriod];
+
+				if (!priceId) {
+					console.error('Invalid period: ' + subscriptionPeriod);
+					return;
 				}
 
-				buttonElement.addEventListener("click", function(evt) {
-					evt.preventDefault();
+				evt.preventDefault();
 
-					const priceId = stripePricesIds[subscriptionPeriod];
-
-					if (!priceId) {
-						console.error('Invalid period: ' + subscriptionPeriod);
-						return;
-					}
-
-					createCheckoutSession(priceId).then(function(data) {
-						stripe.redirectToCheckout({
-							sessionId: data.sessionId
-						})
-						.then(handleResult);
-					});
+				createCheckoutSession(priceId).then(function(data) {
+					stripe.redirectToCheckout({
+						sessionId: data.sessionId
+					})
+					.then(handleResult);
 				});
-			}
+			});
 
 			for (const button of document.querySelectorAll('button.action-toggleIncreaseStorage')) {
 				button.onclick = () => {

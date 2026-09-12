@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Dispatch } from 'redux';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import SearchInput from '../lib/SearchInput/SearchInput';
 import Setting from '@joplin/lib/models/Setting';
@@ -22,8 +23,7 @@ export const Root = styled.div`
 interface Props {
 	inputRef?: React.MutableRefObject<HTMLInputElement | null>;
 	notesParentType: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch?: Function;
+	dispatch?: Dispatch;
 	selectedNoteId: string;
 	isFocused?: boolean;
 	globalQuery?: string;
@@ -35,8 +35,7 @@ function SearchBar(props: Props) {
 	const searchId = useRef(uuid.create());
 
 	useEffect(() => {
-		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-		function search(searchId: string, query: string, dispatch: Function) {
+		function search(searchId: string, query: string, dispatch: Dispatch) {
 			dispatch({
 				type: 'SEARCH_UPDATE',
 				search: {

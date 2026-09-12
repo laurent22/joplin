@@ -21,3 +21,14 @@ export function isJoplinPluginPackage(pack: { keywords?: string[]; name: string 
 	if (stripOffPackageOrg(pack.name).indexOf('joplin-plugin') !== 0) return false;
 	return true;
 }
+
+export const normalizeRepoUrl = (url: string) => {
+	if (!url) return '';
+	const normalized = url
+		.trim()
+		.toLowerCase()
+		.replace(/^(https?:\/\/)?(www\.)?github\.com\//, '')
+		.replace(/\.git$/, '')
+		.replace(/\/$/, '');
+	return normalized;
+};

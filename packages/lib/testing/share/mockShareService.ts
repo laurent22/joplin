@@ -33,7 +33,7 @@ type OnApiExecListener = (
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Needs to interface with old code from before the rule was applied
 	body: any,
 	headers: Record<string, unknown>,
-	options: ExecOptions
+	options: ExecOptions,
 )=> Promise<unknown>;
 
 export type ApiMock = {

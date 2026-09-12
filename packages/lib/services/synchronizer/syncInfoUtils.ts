@@ -11,6 +11,7 @@ import { _ } from '../../locale';
 import JoplinError from '../../JoplinError';
 import { ErrorCode } from '../../errors';
 import fastDeepEqual = require('fast-deep-equal');
+import { createSelector } from 'reselect';
 
 const logger = Logger.create('syncInfoUtils');
 
@@ -43,11 +44,23 @@ export interface SyncInfoValuePublicPrivateKeyPair {
 //
 // `appMinVersion_` should really just be a constant but for testing purposes it can be changed
 // using `setAppMinVersion()`
-let appMinVersion_ = '3.0.0';
+let appMinVersion_ = '3.7.0';
 
 export const setAppMinVersion = (v: string) => {
+	const previous = appMinVersion_;
 	appMinVersion_ = v;
+
+	return {
+		reset: () => {
+			appMinVersion_ = previous;
+		},
+	};
 };
+
+// 2026-07-10: Joplin 3.6 now supports the Joplin 3.7.0 sync format. This allows the 3.6 stable release
+// to sync with clients that have been upgraded to Joplin 3.7.
+const forwardCompatibleAppMinVersion = '3.7.0';
+
 
 export function onRevisionServiceSettingsChanged(key: string, value: unknown) {
 	if (key !== 'revisionService.enabled' && key !== 'revisionService.ttlDays') return;
@@ -96,10 +109,16 @@ export async function migrateLocalSyncInfo(db: JoplinDatabase) {
 	//   most likely not what the user wants.
 	syncInfo.setKeyTimestamp('e2ee', 0);
 	syncInfo.setKeyTimestamp('activeMasterKeyId', 0);
-	syncInfo.revisionServiceEnabled = Setting.value('revisionService.enabled');
-	syncInfo.revisionServiceTtlDays = Setting.value('revisionService.ttlDays');
-	syncInfo.setKeyTimestamp('revisionServiceEnabled', 0);
-	syncInfo.setKeyTimestamp('revisionServiceTtlDays', 0);
+
+	// For revisionService.*: stamp the timestamp only when the local value
+	// has been customised. A default value uploaded with a real timestamp
+	// would overwrite another client's customised value on first sync.
+	const localRevisionEnabled = Setting.value('revisionService.enabled');
+	const localRevisionTtlDays = Setting.value('revisionService.ttlDays');
+	syncInfo.revisionServiceEnabled = localRevisionEnabled;
+	syncInfo.revisionServiceTtlDays = localRevisionTtlDays;
+	syncInfo.setKeyTimestamp('revisionServiceEnabled', localRevisionEnabled === Setting.settingMetadata('revisionService.enabled').value ? 0 : Date.now());
+	syncInfo.setKeyTimestamp('revisionServiceTtlDays', localRevisionTtlDays === Setting.settingMetadata('revisionService.ttlDays').value ? 0 : Date.now());
 
 	await saveLocalSyncInfo(syncInfo);
 }
@@ -175,13 +194,25 @@ const fixSyncInfo = (syncInfo: SyncInfo) => {
 
 export function localSyncInfo(): SyncInfo {
 	const output = new SyncInfo(Setting.value('syncInfoCache'));
-	output.appMinVersion = appMinVersion_;
+	// Avoid resetting appMinVersion when operating in forward-compatibility mode. This avoids data loss if the user
+	// switches sync targets (v3.7.0 sync targets contain properties/data unsupported by most older Joplin versions)
+	if (output.appMinVersion !== forwardCompatibleAppMinVersion || compareVersions(appMinVersion_, forwardCompatibleAppMinVersion) > 0) {
+		output.appMinVersion = appMinVersion_;
+	}
 	return fixSyncInfo(output);
 }
 
 export function localSyncInfoFromState(state: State): SyncInfo {
 	return new SyncInfo(state.settings['syncInfoCache']);
 }
+
+// Creating SyncInfo also recreates nested values such as masterKeys. This selector keeps
+// the result referentially stable while syncInfoCache is unchanged, so React hook dependencies
+// do not restart asynchronous work in response to unrelated Redux updates.
+export const localSyncInfoSelector = createSelector(
+	(state: State) => state.settings['syncInfoCache'],
+	cache => new SyncInfo(cache),
+);
 
 // When deciding which master key should be active we should take into account
 // whether it's been used or not. If it's been used before it should most likely
@@ -261,6 +292,16 @@ export function mergeSyncInfos(s1: SyncInfo, s2: SyncInfo): SyncInfo {
 		}
 	}
 
+	const noteLockKey1 = s1.noteLockKey;
+	const noteLockKey2 = s2.noteLockKey;
+	if (!noteLockKey1) {
+		output.noteLockKey = noteLockKey2;
+	} else if (!noteLockKey2) {
+		output.noteLockKey = noteLockKey1;
+	} else {
+		output.noteLockKey = (noteLockKey1.updated_time || 0) >= (noteLockKey2.updated_time || 0) ? noteLockKey1 : noteLockKey2;
+	}
+
 	// We use >= so that the version from s1 (local) is preferred to the version in s2 (remote).
 	// For example, if s2 has appMinVersion 0.00 and s1 has appMinVersion 0.0.0, we choose the
 	// local version, 0.0.0.
@@ -279,6 +320,7 @@ export class SyncInfo {
 	private e2ee_: SyncInfoValueBoolean;
 	private activeMasterKeyId_: SyncInfoValueString;
 	private masterKeys_: MasterKeyEntity[] = [];
+	private noteLockKey_: MasterKeyEntity = null;
 	private ppk_: SyncInfoValuePublicPrivateKeyPair;
 	private appMinVersion_: string = appMinVersion_;
 	private revisionServiceEnabled_: SyncInfoValueBoolean;
@@ -300,6 +342,7 @@ export class SyncInfo {
 			e2ee: this.e2ee_,
 			activeMasterKeyId: this.activeMasterKeyId_,
 			masterKeys: this.masterKeys,
+			noteLockKey: this.noteLockKey,
 			ppk: this.ppk_,
 			appMinVersion: this.appMinVersion,
 			revisionServiceEnabled: this.revisionServiceEnabled_,
@@ -317,6 +360,11 @@ export class SyncInfo {
 				delete mk.checksum;
 				return mk;
 			});
+		}
+
+		if (filtered.noteLockKey) {
+			delete filtered.noteLockKey.content;
+			delete filtered.noteLockKey.checksum;
 		}
 
 		// Truncate the private key and public key
@@ -344,6 +392,7 @@ export class SyncInfo {
 		this.e2ee_ = 'e2ee' in s ? s.e2ee : { value: false, updatedTime: 0 };
 		this.activeMasterKeyId_ = 'activeMasterKeyId' in s ? s.activeMasterKeyId : { value: '', updatedTime: 0 };
 		this.masterKeys_ = 'masterKeys' in s ? s.masterKeys : [];
+		this.noteLockKey_ = 'noteLockKey' in s ? s.noteLockKey : null;
 		this.ppk_ = 'ppk' in s ? s.ppk : { value: null, updatedTime: 0 };
 		this.appMinVersion_ = s.appMinVersion ? s.appMinVersion : '0.0.0';
 		this.revisionServiceEnabled_ = 'revisionServiceEnabled' in s ? s.revisionServiceEnabled : { value: true, updatedTime: 0 };
@@ -443,6 +492,16 @@ export class SyncInfo {
 		this.masterKeys_ = v;
 	}
 
+	public get noteLockKey(): MasterKeyEntity {
+		return this.noteLockKey_;
+	}
+
+	public set noteLockKey(v: MasterKeyEntity) {
+		if (JSON.stringify(v) === JSON.stringify(this.noteLockKey_)) return;
+
+		this.noteLockKey_ = v;
+	}
+
 	public keyTimestamp(name: string): number {
 		const self = this as unknown as Record<string, { updatedTime: number }>;
 		if (!(`${name}_` in self)) throw new Error(`Invalid name: ${name}`);
@@ -509,6 +568,7 @@ export function setMasterKeyEnabled(mkId: string, enabled = true) {
 export const setMasterKeyHasBeenUsed = (s: SyncInfo, mkId: string) => {
 	const idx = s.masterKeys.findIndex(mk => mk.id === mkId);
 	if (idx < 0) throw new Error(`No such master key: ${mkId}`);
+	if (s.masterKeys[idx].hasBeenUsed) return s;
 
 	s.masterKeys[idx] = {
 		...s.masterKeys[idx],
@@ -545,5 +605,15 @@ export function masterKeyById(id: string) {
 }
 
 export const checkIfCanSync = (s: SyncInfo, appVersion: string) => {
-	if (compareVersions(appVersion, s.appMinVersion) < 0) throw new JoplinError(_('In order to synchronise, please upgrade your application to version %s+', s.appMinVersion), ErrorCode.MustUpgradeApp);
+	const isForwardCompatible = () => {
+		// Forward compatibility: This version of Joplin supports the Joplin 3.7 sync target format
+		if (s.appMinVersion !== forwardCompatibleAppMinVersion) return false;
+		// Older Joplin versions don't support sync targets with locked notes
+		if (s.noteLockKey !== null) return false;
+		return true;
+	};
+
+	if (compareVersions(appVersion, s.appMinVersion) < 0 && !isForwardCompatible()) {
+		throw new JoplinError(_('In order to synchronise, please upgrade your application to version %s+', s.appMinVersion), ErrorCode.MustUpgradeApp);
+	}
 };

@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 
-import * as MarkdownIt from 'markdown-it';
+import MarkdownIt from 'markdown-it';
 import { Link } from './types';
 
 // enable file link URLs in MarkdownIt. Keeps other URL restrictions of

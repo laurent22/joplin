@@ -3,6 +3,7 @@ const utils = require('@joplin/tools/gulp/utils');
 const compilePackageInfo = require('@joplin/tools/compilePackageInfo');
 
 import injectedJsGulpTasks from './tools/buildInjectedJs/gulpTasks';
+import uiTests from './tools/uiTests';
 
 const tasks = {
 	encodeAssets: {
@@ -16,6 +17,7 @@ const tasks = {
 			await compilePackageInfo(`${__dirname}/package.json`, `${__dirname}/packageInfo.js`);
 		},
 	},
+	uiTests: { fn: uiTests },
 
 	...injectedJsGulpTasks,
 	podInstall: {

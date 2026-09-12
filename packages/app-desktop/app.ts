@@ -66,6 +66,10 @@ import OcrDriverBase from '@joplin/lib/services/ocr/OcrDriverBase';
 import PerformanceLogger from '@joplin/lib/PerformanceLogger';
 import Note from '@joplin/lib/models/Note';
 import Resource from '@joplin/lib/models/Resource';
+import AiService from '@joplin/lib/services/ai/AiService';
+import LocalEmbeddingProvider from '@joplin/lib/services/ai/LocalEmbeddingProvider';
+import { installAiStatusBridge, AiStatusStore } from './services/aiStatusBridge';
+import ItemChange from '@joplin/lib/models/ItemChange';
 
 const perfLogger = PerformanceLogger.create();
 
@@ -159,12 +163,29 @@ class Application extends BaseApplication {
 			await AlarmService.updateNoteNotification(action.id, action.type === 'NOTE_DELETE');
 		}
 
+		if (action.type === 'NOTE_DELETE' && store.getState().watchedNoteFiles.includes(action.id)) {
+			await ExternalEditWatcher.instance().stopWatching(action.id);
+		}
+
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'featureFlag.autoUpdaterServiceEnabled' || action.type === 'SETTING_UPDATE_ALL') {
 			if (Setting.value('featureFlag.autoUpdaterServiceEnabled')) this.setupAutoUpdaterService();
 		}
 
 		const result = await super.generalMiddleware(store, next, action);
 		const newState = store.getState();
+
+		if (
+			action.type === 'NOTE_UPDATE_ONE' &&
+			[ItemChange.SOURCE_SYNC, ItemChange.SOURCE_DECRYPTION].includes(action.changeSource) &&
+			!action.note.encryption_applied &&
+			!action.note.is_locked &&
+			action.changedFields.some((field: string) => ['title', 'body'].includes(field))
+		) {
+			const externalEditWatcher = ExternalEditWatcher.instance();
+			if (externalEditWatcher.noteIsWatched(action.note)) {
+				await externalEditWatcher.updateNoteFile(action.note);
+			}
+		}
 
 		if (['NOTE_VISIBLE_PANES_TOGGLE', 'NOTE_VISIBLE_PANES_SET'].indexOf(action.type) >= 0) {
 			Setting.setValue('noteVisiblePanes', newState.noteVisiblePanes);
@@ -504,6 +525,11 @@ class Application extends BaseApplication {
 
 			this.initRedux();
 
+			// BaseApplication.store() is typed against the shared State; the
+			// runtime store carries AppState. The bridge only needs dispatch and
+			// getState, so narrow through unknown.
+			installAiStatusBridge(this.store() as unknown as AiStatusStore);
+
 			initializeCommandService(this.store(), Setting.value('env') === 'dev');
 
 			const keymapService = KeymapService.instance();
@@ -764,6 +790,15 @@ class Application extends BaseApplication {
 			});
 		});
 
+		addTask('app/listen for note lock session events', () => {
+			eventManager.on(EventName.NoteLockSessionChange, (event) => {
+				this.dispatch({
+					type: 'SET_NOTE_LOCK_SESSION_UNLOCKED',
+					value: event.unlocked,
+				});
+			});
+		});
+
 		addTask('app/setupOcrService', () => this.setupOcrService());
 
 		return tasks;
@@ -783,6 +818,16 @@ class Application extends BaseApplication {
 		await this.setupIntegrationTestUtils();
 
 		bridge().setLogFilePath(Logger.globalLogger.logFilePath());
+
+		// Install the local embedding provider before applySettingsSideEffects()
+		// — applyEmbeddingIndexerState() consults AiService for an active
+		// provider, so the indexer will silently sit idle if we wire it up after.
+		// Only install when ONNX is actually available; otherwise embeddings
+		// remain unavailable and the indexer stays off.
+		if (shim.onnxRuntime()) {
+			AiService.instance().setEmbeddingProvider(new LocalEmbeddingProvider());
+		}
+
 		await this.applySettingsSideEffects();
 
 		if (Setting.value('sync.upgradeState') === Setting.SYNC_UPGRADE_STATE_MUST_DO) {

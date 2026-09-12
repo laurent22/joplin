@@ -11,14 +11,18 @@ import { Mutex } from 'async-mutex';
 import { itemIsReadOnlySync, ItemSlice } from '../../models/utils/readOnly';
 import ItemChange from '../../models/ItemChange';
 import BaseItem from '../../models/BaseItem';
+import isNoteLockEnabled from '../../services/noteLock/isNoteLockEnabled';
+import NoteLockNote, { NoteLockNoteEntity } from '../../services/noteLock/NoteLockNote';
+import NoteLockSession from '../../services/noteLock/NoteLockSession';
+import type { DecryptedNoteLockKey } from '../../services/noteLock/NoteLockKey';
 
-interface SharedResource {
+export interface SharedResource {
 	uri: string;
 	mimeType: string;
 	name: string;
 }
 
-interface SharedData {
+export interface SharedData {
 	title: string;
 	text: string;
 	resources: SharedResource[];
@@ -41,11 +45,13 @@ export type AttachedResources = Record<string, AttachedResource>;
 
 export interface SaveNoteOptions {
 	autoTitle?: boolean;
+	editorNoteReloadTimeRequest?: number;
+	getEditorNoteReloadTimeRequest?: ()=> number;
 }
 
 export interface BaseState {
-	note: NoteEntity;
-	lastSavedNote: NoteEntity;
+	note: NoteLockNoteEntity;
+	lastSavedNote: NoteLockNoteEntity;
 	newAndNoTitleChangeNoteId: boolean;
 	mode: string;
 	folder: FolderEntity;
@@ -54,6 +60,10 @@ export interface BaseState {
 	noteResources: AttachedResources;
 	readOnly: boolean;
 	noteLastLoadTime: number;
+	// Captured with a locked note's plaintext so pending saves can re-encrypt even after the
+	// session locks. Optional because only the mobile note screen populates it.
+	noteLockKey?: DecryptedNoteLockKey|null;
+	noteLockUndecryptable?: boolean;
 }
 
 export interface AttachFileAsset {
@@ -83,7 +93,7 @@ type ResourceHandler = (...args: any[])=> void | Promise<void>;
 
 interface Shared {
 	noteExists?: (noteId: string)=> Promise<boolean>;
-	handleNoteDeletedWhileEditing_?: (note: NoteEntity)=> Promise<NoteEntity>;
+	handleNoteDeletedWhileEditing_?: (note: NoteEntity, noteLockKey?: DecryptedNoteLockKey|null)=> Promise<NoteEntity>;
 	saveNoteButton_press?: (comp: BaseNoteScreenComponent, state: BaseState, folderId: string, options: SaveNoteOptions)=> Promise<void>;
 	saveOneProperty?: (comp: BaseNoteScreenComponent, name: string, value: unknown)=> void;
 	noteComponent_change?: (comp: BaseNoteScreenComponent, propName: string, propValue: unknown)=> void;
@@ -97,7 +107,7 @@ interface Shared {
 	installResourceHandling?: (refreshResourceHandler: ResourceHandler)=> void;
 	uninstallResourceHandling?: (refreshResourceHandler: ResourceHandler)=> void;
 
-	reloadNote?: (comp: BaseNoteScreenComponent)=> Promise<NoteEntity>;
+	reloadNote?: (comp: BaseNoteScreenComponent, useDefaultEditorState?: boolean)=> Promise<NoteEntity>;
 }
 
 const shared: Shared = {};
@@ -113,16 +123,19 @@ shared.noteExists = async function(noteId: string) {
 
 // Note has been deleted while user was modifying it. In that case, we
 // just save a new note so that user can keep editing.
-shared.handleNoteDeletedWhileEditing_ = async (note: NoteEntity) => {
+shared.handleNoteDeletedWhileEditing_ = async (note: NoteEntity, noteLockKey: DecryptedNoteLockKey|null = null) => {
 	if (await shared.noteExists(note.id)) return null;
 
 	reg.logger().info('Note has been deleted while it was being edited - recreating it.');
 
 	let newNote = { ...note };
 	delete newNote.id;
-	newNote = await Note.save(newNote);
 
-	return Note.load(newNote.id);
+	// The gated save keeps a locked note's plaintext body out of the database, and the gated
+	// load populates the decrypted-state marker on the recreated note.
+	newNote = await Note.save(newNote, { useNoteLock: true, noteLockKey });
+
+	return Note.load(newNote.id, { useNoteLock: true });
 };
 
 shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, state: BaseState, folderId: string = null, options: SaveNoteOptions = null) {
@@ -133,7 +146,7 @@ shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, stat
 
 	let note = { ...state.note };
 
-	const recreatedNote = await shared.handleNoteDeletedWhileEditing_(note);
+	const recreatedNote = await shared.handleNoteDeletedWhileEditing_(note, comp.state.noteLockKey);
 	if (recreatedNote) note = recreatedNote;
 
 	if (folderId) {
@@ -152,12 +165,43 @@ shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, stat
 		userSideValidation: true,
 		fields: BaseModel.diffObjectsFields(state.lastSavedNote, note),
 		dispatchOptions: { preserveSelection: true },
+		useNoteLock: true,
+		noteLockKey: comp.state.noteLockKey,
 	};
 
 	const hasAutoTitle = state.newAndNoTitleChangeNoteId || (isProvisionalNote && !note.title);
 	if (hasAutoTitle && options.autoTitle) {
 		note.title = Note.defaultTitle(note.body);
 		if (saveOptions.fields && saveOptions.fields.indexOf('title') < 0) saveOptions.fields.push('title');
+	}
+
+	if (isNoteLockEnabled()) {
+		if (comp.state.note?.id === note.id) {
+			// The lock state may change between scheduling and execution (e.g. encryption enabled
+			// from the note menu), so the save uses the latest values.
+			note.is_locked = comp.state.note.is_locked;
+			note.isDecrypted = comp.state.note.isDecrypted;
+		}
+
+		// A gated save cannot persist the lock state or body partially: the encrypted body, its
+		// extracted resource ids and is_locked must always be written together. The lock state is
+		// also compared against lastSavedNote because the field diff above ran before the pickup.
+		if (saveOptions.fields.length && (saveOptions.fields.includes('is_locked') || (note.is_locked ?? 0) !== (state.lastSavedNote.is_locked ?? 0) || (NoteLockNote.isLocked(note) && saveOptions.fields.includes('body')))) {
+			for (const field of ['is_locked', 'body', 'extracted_resource_ids']) {
+				if (!saveOptions.fields.includes(field)) saveOptions.fields.push(field);
+			}
+		}
+	}
+
+	// This check is intentionally immediately before Note.save. The action may
+	// have been queued, or waiting for the save mutex, when the reload was
+	// requested. In that case its note snapshot is stale and must be discarded.
+	if (
+		options.editorNoteReloadTimeRequest !== undefined &&
+		options.getEditorNoteReloadTimeRequest &&
+		options.getEditorNoteReloadTimeRequest() > options.editorNoteReloadTimeRequest
+	) {
+		return releaseMutex();
 	}
 
 	const savedNote = 'fields' in saveOptions && !saveOptions.fields.length ? { ...note } : await Note.save(note, saveOptions);
@@ -171,7 +215,7 @@ shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, stat
 	note = { ...note, ...savedNote };
 
 	if (stateNote.id === note.id) {
-		// But we preserve the current title and body because
+		// But we preserve the current title, body and todo_completed because
 		// the user might have changed them between the time
 		// saveNoteButton_press was called and the note was
 		// saved (it's done asynchronously).
@@ -180,6 +224,9 @@ shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, stat
 		// it from the state because it will be empty there.
 		if (!hasAutoTitle) note.title = stateNote.title;
 		note.body = stateNote.body;
+		note.todo_completed = stateNote.todo_completed;
+		note.is_locked = stateNote.is_locked;
+		note.isDecrypted = stateNote.isDecrypted;
 	}
 
 	const newState: Partial<BaseState> = {
@@ -197,7 +244,9 @@ shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, stat
 		const updateGeoloc = async () => {
 			const geoNote: NoteEntity = await Note.updateGeolocation(note.id);
 
-			const stateNote = state.note;
+			// Read the latest state (not the closure `state`, which was captured
+			// before Note.save and doesn't include the auto-derived title).
+			const stateNote = comp.state.note;
 			if (!stateNote || !geoNote) return;
 			if (stateNote.id !== geoNote.id) return; // Another note has been loaded while geoloc was being retrieved
 
@@ -211,7 +260,7 @@ shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, stat
 			};
 
 			const modNote = { ...stateNote, ...geoInfo };
-			const modLastSavedNote = { ...state.lastSavedNote, ...geoInfo };
+			const modLastSavedNote = { ...comp.state.lastSavedNote, ...geoInfo };
 
 			comp.setState({ note: modNote, lastSavedNote: modLastSavedNote });
 		};
@@ -226,17 +275,33 @@ shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, stat
 shared.saveOneProperty = async function(comp: BaseNoteScreenComponent, name: string, value: unknown) {
 	let note = { ...comp.state.note };
 
-	const recreatedNote = await shared.handleNoteDeletedWhileEditing_(note);
+	const recreatedNote = await shared.handleNoteDeletedWhileEditing_(note, comp.state.noteLockKey);
 	if (recreatedNote) note = recreatedNote;
 
 	const toSave: Record<string, unknown> = { id: note.id };
 	toSave[name] = value;
+
 	const saved = await Note.save(toSave) as Record<string, unknown>;
 	(note as Record<string, unknown>)[name] = saved[name];
 
+	const stateNote = { ...note };
+	if (isNoteLockEnabled() && comp.state.note?.id === note.id) {
+		// The lock state may have changed during the save - keep the latest value in the state
+		// note (but not in lastSavedNote, so the next save still detects the change).
+		stateNote.is_locked = comp.state.note.is_locked;
+		stateNote.isDecrypted = comp.state.note.isDecrypted;
+
+		// An undecryptable note has no editable body, so a stale timestamp here only makes the
+		// screen look modified, and going back would then gate-save the still encrypted body.
+		if (comp.state.noteLockUndecryptable) {
+			stateNote.updated_time = saved.updated_time as number;
+			stateNote.user_updated_time = saved.user_updated_time as number;
+		}
+	}
+
 	comp.setState({
-		lastSavedNote: { ...note },
-		note: note,
+		lastSavedNote: { ...note, ...saved },
+		note: stateNote,
 	});
 };
 
@@ -289,24 +354,67 @@ shared.isModified = function(comp: BaseNoteScreenComponent) {
 	if (!comp.state.note || !comp.state.lastSavedNote) return false;
 	const diff = BaseModel.diffObjects(comp.state.lastSavedNote, comp.state.note);
 	delete diff.type_;
+	// The decrypted-state marker is screen bookkeeping, not a user change, and saves can
+	// stamp it onto only one side of the comparison.
+	if (isNoteLockEnabled()) delete diff.isDecrypted;
 	return !!Object.getOwnPropertyNames(diff).length;
 };
 
-shared.reloadNote = async (comp: BaseNoteScreenComponent) => {
+shared.reloadNote = async (comp: BaseNoteScreenComponent, useDefaultEditorState = false) => {
 	const isProvisionalNote = comp.props.provisionalNoteIds.includes(comp.props.noteId);
 
-	const note = await Note.load(comp.props.noteId);
+	let note = await Note.load(comp.props.noteId);
+	if (note?.encryption_cipher_text) {
+		try {
+			note = await Note.decrypt(note);
+		} catch (error) {
+			reg.logger().info(`Could not decrypt note ${note.id}, note could not be refreshed:`, error.message);
+			// All decryption errors, including masterKeyNotLoaded, intentionally use the non-existent note branch below.
+			// A forced reload must not retain the previously loaded plaintext, as it presents a risk of data loss if the
+			// user is typing during the reload. Aside from certain edge cases, a user cannot directly open a note which
+			// is still encrypted, so normally would not see this.
+			note = null;
+		}
+	}
 
-	const panes = comp.props.noteVisiblePanes;
-	let mode = panes.includes('editor') ? 'edit' : 'view';
+	// The sync E2EE decryption above saves the real row back, so the gated load below reads
+	// note lock ciphertext, never sync ciphertext.
+	let noteLockKey: DecryptedNoteLockKey|null = null;
+	let noteLockBlocked = false;
+	let noteLockUndecryptable = false;
+	if (isNoteLockEnabled() && note && NoteLockNote.isLocked(note)) {
+		if (NoteLockSession.instance().isUnlocked()) {
+			try {
+				note = await Note.load(comp.props.noteId, { useNoteLock: true });
+				noteLockKey = NoteLockSession.instance().decryptedKey();
+			} catch (error) {
+				// A mid-load session lock throws the same way, so only a still-unlocked session
+				// means the note itself was encrypted with a different key.
+				reg.logger().warn('Could not load locked note:', comp.props.noteId, error);
+				noteLockUndecryptable = NoteLockSession.instance().isUnlocked();
+				// The encrypted row is reloaded so note and lastSavedNote match: a diff-based
+				// save cannot write the body, and the screen hides it from the editor.
+				note = await Note.load(comp.props.noteId);
+				noteLockBlocked = true;
+			}
+		} else {
+			noteLockBlocked = true;
+		}
+	}
+	let mode = comp.state.mode;
 
-	// Override the mode if the default state is not last
-	const defaultState = Setting.value('editor.mobile.defaultEditState');
-	if (defaultState === 'view') mode = 'view';
-	if (defaultState === 'edit') mode = 'edit';
+	if (useDefaultEditorState) {
+		const panes = comp.props.noteVisiblePanes;
+		mode = panes.includes('editor') ? 'edit' : 'view';
 
-	// Prevent trashed notes from opening in edit mode.
-	if (note?.deleted_time) {
+		// Override the mode if the default state is not last
+		const defaultState = Setting.value('editor.mobile.defaultEditState');
+		if (defaultState === 'view') mode = 'view';
+		if (defaultState === 'edit') mode = 'edit';
+	}
+
+	// Prevent trashed notes and notes created via sharing from opening in edit mode.
+	if (note?.deleted_time || comp.props.sharedData || noteLockBlocked) {
 		mode = 'view';
 	}
 
@@ -329,8 +437,10 @@ shared.reloadNote = async (comp: BaseNoteScreenComponent) => {
 			isLoading: false,
 			fromShare: !!comp.props.sharedData,
 			noteResources: await shared.attachedResources(note ? note.body : ''),
-			readOnly: itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, note as ItemSlice, Setting.value('sync.userId'), BaseItem.syncShareCache),
+			readOnly: noteLockBlocked || itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, note as ItemSlice, Setting.value('sync.userId'), BaseItem.syncShareCache),
 			noteLastLoadTime: Date.now(),
+			noteLockKey,
+			noteLockUndecryptable,
 		});
 	} else {
 		// Handle the case where a non-existent note is loaded. This can happen briefly after deleting a note.
@@ -344,6 +454,8 @@ shared.reloadNote = async (comp: BaseNoteScreenComponent) => {
 			noteResources: {},
 			readOnly: true,
 			noteLastLoadTime: Date.now(),
+			noteLockKey: null,
+			noteLockUndecryptable: false,
 		});
 	}
 
@@ -351,9 +463,11 @@ shared.reloadNote = async (comp: BaseNoteScreenComponent) => {
 };
 
 shared.initState = async function(comp: BaseNoteScreenComponent) {
-	const note = await shared.reloadNote(comp);
+	const note = await shared.reloadNote(comp, true);
 
-	if (comp.props.sharedData && note) {
+	// Ensure that only empty notes created for shared content are populated with sharedData, because in some cases
+	// existing notes can be overwritten by the shared data. See https://github.com/laurent22/joplin/issues/11479
+	if (comp.props.sharedData && note && note.title.length === 0 && note.body.length === 0) {
 		// Use the note returned by reloadNote directly to avoid a race condition where
 		// comp.state.note is still the initial empty note (Note.new() with parent_id='')
 		// because React hasn't flushed reloadNote's setState yet. Without this, the
@@ -370,7 +484,7 @@ shared.initState = async function(comp: BaseNoteScreenComponent) {
 		}
 		if (fieldsToSave.title !== undefined || fieldsToSave.body !== undefined) {
 			await Note.save(fieldsToSave);
-			comp.setState({ note: updatedNote, lastSavedNote: updatedNote });
+			comp.setState({ note: updatedNote, lastSavedNote: { ...updatedNote } });
 		}
 		if (comp.props.sharedData.resources) {
 			for (let i = 0; i < comp.props.sharedData.resources.length; i++) {

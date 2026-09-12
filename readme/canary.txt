@@ -3,12 +3,12 @@ Hash: SHA512
 
 Joplin Warrant Canary
 
-Statement date: 20 April 2026
-Valid until: 19 June 2026
+Statement date: 20 August 2026
+Valid until: 19 October 2026
 
-This warrant canary is updated every 60 days.
-If this document has not been updated within 75 days of the
-Statement date above, it should be considered expired.
+This warrant canary is updated on the 19th of every other month.
+If this document has not been updated by 3 November 2026,
+it should be considered expired.
 
 As of the Statement date:
 
@@ -31,17 +31,17 @@ To prevent backdating, this statement includes current public events:
 
 Current international events:
 
-1. Iran sends mixed signals on talks after US seizes ship
-2. Carney says Canada’s strong economic ties to US are ‘weakness’ to be corrected
+1. Trump threatens Iran’s trade partners, as military strikes make way for economic pressure
+2. Israel’s Ben-Gvir posts video of gallows site for hanging Palestinians
 
 Canary signing key fingerprint:
 
 F820 F830 6DD0 05A1 02D1  8CD5 946A E9FA 5915 EF53
 -----BEGIN PGP SIGNATURE-----
 
-iKcEARYKAE8WIQT4IPgwbdAFoQLRjNWUaun6WRXvUwUCaeY82xsUgAAAAAAEAA5t
+iKcEARYKAE8WIQT4IPgwbdAFoQLRjNWUaun6WRXvUwUCaob5UhsUgAAAAAAEAA5t
 YW51MiwyLjUrMS4xMiwwLDMVHGNhbmFyeUBqb3BsaW5hcHAub3JnAAoJEJRq6fpZ
-Fe9TaH0BAM24c/9HjyqS+i9cgqIBpsttXlD6lan4x7rcjiohqsvTAPwNju/nww9q
-M6ILELmcKdzgarmL9hTn+YQGki/2xBoFAA==
-=H46T
+Fe9TCCABAI6t8bmnxkj+qalBuhkeUmYqs7a2BHv8Z2EDMPvDe4kwAQCPxAk11+iC
+xfKFHjhRePJgGRrgc3m3rNVWoRE7FFpzCA==
+=juBt
 -----END PGP SIGNATURE-----

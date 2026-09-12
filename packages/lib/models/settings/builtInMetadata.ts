@@ -22,6 +22,16 @@ const showVoiceTypingSettings = (settings: VoiceTypingSettingSlice) => (
 	shim.mobilePlatform() === 'android' && !!settings['buildFlag.voiceTypingEnabled']
 );
 
+const show3rdPartySyncSettings = (Setting: typeof SettingType) => {
+	return !Setting.value('isJoplinCloudWebApp');
+};
+
+const showAiTools = (settings: Record<string, unknown>) => {
+	return !!settings['mcp.enabled'] || !!settings['ai.enabled'];
+};
+
+const addBetaMarker = (text: string) => _('%s (Beta)', text);
+
 export enum CameraDirection {
 	Back,
 	Front,
@@ -130,7 +140,12 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 				return appType !== 'cli' ? null : _('The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).');
 			},
 			options: () => {
-				return SyncTargetRegistry.idAndLabelPlainObject(platform);
+				if (show3rdPartySyncSettings(Setting)) {
+					return SyncTargetRegistry.idAndLabelPlainObject(platform);
+				} else {
+					// Only the Joplin-related sync targets are shown on app.joplincloud.com:
+					return SyncTargetRegistry.idAndLabelPlainObject(platform, ['0', '10']);
+				}
 			},
 			optionsOrder: () => {
 				return SyncTargetRegistry.optionsOrder();
@@ -625,6 +640,366 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Desktop],
 			storage: SettingStorage.Database,
 			label: () => _('OCR: Search in extracted content'),
+		},
+
+		'ai.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop],
+			label: () => addBetaMarker(_('Enable AI features')),
+			description: () => _('When enabled, plugins and built-in features can use AI models to generate or analyse text.'),
+			storage: SettingStorage.File,
+		},
+
+		'mcp.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop],
+			label: () => addBetaMarker(_('Enable MCP server')),
+			description: () => _('Exposes Joplin notes to external AI applications (Claude Desktop, Cursor, etc.) via the Model Context Protocol. Requires the Web Clipper service to be running. Connected AI tools can read your note content; any text they retrieve may be sent to the external LLM provider those tools use.'),
+			storage: SettingStorage.File,
+		},
+
+		'ai.allowRemote': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['ai.enabled'],
+			label: () => _('Allow remote AI providers'),
+			description: () => _('Required to use cloud-hosted AI models, including Joplin Cloud AI. When disabled, only providers on your own device or private network can be used.'),
+			storage: SettingStorage.File,
+		},
+
+		'ai.chat.providerType': {
+			value: 'openai-compatible',
+			type: SettingItemType.String,
+			isEnum: true,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['ai.enabled'],
+			label: () => _('Chat provider'),
+			description: () => {
+				// Inline warning when Joplin Cloud AI is selected but the user is
+				// no longer syncing with Joplin Cloud — the provider call will
+				// fail until they either restore Cloud sync or pick another
+				// provider.
+				if (Setting.value('ai.chat.providerType') === 'joplin-cloud' && Setting.value('sync.target') !== 10) {
+					return _('Joplin Cloud AI requires Joplin Cloud sync. Pick a different provider or restore Joplin Cloud sync.');
+				}
+				return '';
+			},
+			options: () => ({
+				'joplin-cloud': _('Joplin Cloud AI (beta)'),
+				'openai-compatible': _('OpenAI-compatible'),
+				'anthropic': _('Anthropic'),
+			}),
+			storage: SettingStorage.File,
+		},
+
+		// Tracks whether the user has made an explicit chat-provider choice.
+		// On the first false→true transition of `ai.enabled`, AiService writes
+		// the sync-aware default for `ai.chat.providerType` and flips this to
+		// true. After that, sync target changes do not affect the provider.
+		'ai.chat.providerType.configured': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: false,
+			appTypes: [AppType.Desktop],
+			storage: SettingStorage.Database,
+		},
+
+		'ai.chat.baseUrl': {
+			value: '',
+			type: SettingItemType.String,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['ai.enabled'] && settings['ai.chat.providerType'] === 'openai-compatible',
+			label: () => _('Base URL'),
+			description: () => _('The OpenAI-compatible API endpoint. For example, https://api.openai.com/v1 or http://localhost:11434/v1 for Ollama.'),
+			storage: SettingStorage.File,
+		},
+
+		'ai.chat.apiKey': {
+			value: '',
+			type: SettingItemType.String,
+			secure: true,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['ai.enabled'] && (settings['ai.chat.providerType'] === 'openai-compatible' || settings['ai.chat.providerType'] === 'anthropic'),
+			label: () => _('API key'),
+			storage: SettingStorage.Database,
+		},
+
+		'ai.chat.model': {
+			value: '',
+			type: SettingItemType.String,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['ai.enabled'] && (settings['ai.chat.providerType'] === 'openai-compatible' || settings['ai.chat.providerType'] === 'anthropic'),
+			label: () => _('Model'),
+			description: () => _('The model identifier to use, for example gpt-4o-mini or claude-3-5-sonnet-latest.'),
+			storage: SettingStorage.File,
+		},
+
+		// Cumulative token counters for the currently configured provider.
+		// Reset whenever the user changes the active provider in settings —
+		// totals always reflect the provider in use.
+		'ai.usage.inputTokens': {
+			value: 0,
+			type: SettingItemType.Int,
+			public: false,
+			appTypes: [AppType.Desktop],
+			storage: SettingStorage.Database,
+		},
+
+		'ai.usage.outputTokens': {
+			value: 0,
+			type: SettingItemType.Int,
+			public: false,
+			appTypes: [AppType.Desktop],
+			storage: SettingStorage.Database,
+		},
+
+		// Joplin Cloud degradation / budget snapshot. Kept as one JSON blob
+		// because the fields are meaningless individually — always written and
+		// read as a set after a chat() completes. Seeded into the aiStatus
+		// Redux slice at boot so plugin callers hitting the endpoint while the
+		// sidebar and settings screen are both closed still show a fresh
+		// status the next time either is opened.
+		'ai.status': {
+			value: { degraded: false, tokensUsed: 0, tokensBudget: 0, lastToastShownAt: null as number | null },
+			type: SettingItemType.Object,
+			public: false,
+			appTypes: [AppType.Desktop],
+			storage: SettingStorage.Database,
+		},
+
+		'ai.usage.resetButton': {
+			value: null as null,
+			type: SettingItemType.Button,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['ai.enabled'],
+			label: () => _('Reset token usage'),
+			description: () => {
+				const inTokens = Setting.value('ai.usage.inputTokens') as number;
+				const outTokens = Setting.value('ai.usage.outputTokens') as number;
+				if (inTokens === 0 && outTokens === 0) return _('No AI usage recorded yet.');
+				return _('%s input / %s output tokens used.', inTokens.toLocaleString(), outTokens.toLocaleString());
+			},
+		},
+
+		'ai.chat.testButton': {
+			value: null as null,
+			type: SettingItemType.Button,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['ai.enabled'],
+			label: () => _('Test AI configuration'),
+		},
+
+		// First-send disclosure for non-cloud providers. The chat panel shows
+		// an inline banner the first time the user sends a message; clicking
+		// "Don't show again" flips this so the banner stays away.
+		'ai.chat.disclosureAcknowledged': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: false,
+			appTypes: [AppType.Desktop],
+			storage: SettingStorage.Database,
+		},
+
+		// User toggle for the background embedding indexer. On by default —
+		// when AI is enabled, indexing is part of what AI does. The toggle
+		// exists as a kill switch for users who want chat without the
+		// background CPU cost of indexing.
+		'ai.embedding.enabled': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['ai.enabled'],
+			label: () => _('Index notes for AI search'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+
+		// Embedding indexer state. Hidden internal cursors — no UI surface.
+		// `lastProcessedChangeId` is the ItemChange cursor the indexer
+		// resumes from on each maintenance tick. `lastIndexedModelId` lets us
+		// detect when the active embedding model has changed (mismatch →
+		// full re-index, since vectors from different models aren't
+		// comparable).
+		'ai.embedding.lastProcessedChangeId': {
+			value: 0,
+			type: SettingItemType.Int,
+			public: false,
+			appTypes: [AppType.Desktop],
+			storage: SettingStorage.Database,
+		},
+		'ai.embedding.lastIndexedModelId': {
+			value: '',
+			type: SettingItemType.String,
+			public: false,
+			appTypes: [AppType.Desktop],
+			storage: SettingStorage.Database,
+		},
+
+		// Indexer lifecycle: false until the initial full-vault scan finishes;
+		// after that the indexer only follows the ItemChange feed. Reset to
+		// false when the model id changes (triggering a re-scan).
+		'ai.embedding.initialScanDone': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: false,
+			appTypes: [AppType.Desktop],
+			storage: SettingStorage.Database,
+		},
+
+		'ai.tool.edit_current.enabled': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai.tools',
+			appTypes: [AppType.Desktop],
+			show: showAiTools,
+			label: () => _('Allow editing the current note (chat panel only)'),
+			description: () => _('Enables the default edit operations for notes with an open AI chat panel. When disabled, the chat panel can still read the open note. Does not apply to MCP.'),
+			storage: SettingStorage.File,
+		},
+
+		'ai.tool.search_notes.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai.tools',
+			appTypes: [AppType.Desktop],
+			show: showAiTools,
+			label: () => _('Allow searching notes'),
+			storage: SettingStorage.File,
+		},
+
+		'ai.tool.read_note.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai.tools',
+			appTypes: [AppType.Desktop],
+			show: showAiTools,
+			label: () => _('Allow reading notes'),
+			storage: SettingStorage.File,
+		},
+
+		'ai.tool.read_image.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai.tools',
+			appTypes: [AppType.Desktop],
+			show: showAiTools,
+			label: () => _('Allow reading images'),
+			storage: SettingStorage.File,
+		},
+
+		'ai.tool.list_notebooks.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai.tools',
+			appTypes: [AppType.Desktop],
+			show: showAiTools,
+			label: () => _('Allow listing notebooks'),
+			storage: SettingStorage.File,
+		},
+
+		'ai.tool.list_tags.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai.tools',
+			appTypes: [AppType.Desktop],
+			show: showAiTools,
+			label: () => _('Allow listing tags'),
+			storage: SettingStorage.File,
+		},
+
+		'ai.tool.create_note.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai.tools',
+			appTypes: [AppType.Desktop],
+			show: showAiTools,
+			label: () => _('Allow creating notes'),
+			storage: SettingStorage.File,
+		},
+
+		'ai.tool.update_note.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai.tools',
+			appTypes: [AppType.Desktop],
+			show: showAiTools,
+			label: () => _('Allow updating notes'),
+			storage: SettingStorage.File,
+		},
+
+		'ai.tool.delete_note.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai.tools',
+			appTypes: [AppType.Desktop],
+			show: showAiTools,
+			label: () => _('Allow trashing notes'),
+			storage: SettingStorage.File,
+		},
+
+		'ai.tool.manage_tags.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai.tools',
+			appTypes: [AppType.Desktop],
+			show: showAiTools,
+			label: () => _('Allow editing tags on notes'),
+			storage: SettingStorage.File,
+		},
+
+		'ai.tool.create_notebook.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai.tools',
+			appTypes: [AppType.Desktop],
+			show: showAiTools,
+			label: () => _('Allow creating notebooks'),
+			storage: SettingStorage.File,
+		},
+
+		'ai.tool.semantic_search_notes.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai.tools',
+			appTypes: [AppType.Desktop],
+			show: showAiTools,
+			label: () => _('Allow semantic search of notes'),
+			storage: SettingStorage.File,
 		},
 
 		theme: {
@@ -1130,7 +1505,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		'markdown.plugin.emoji': { storage: SettingStorage.File, isGlobal: true, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable markdown emoji')}${wysiwygNo}` },
 		'markdown.plugin.insert': { storage: SettingStorage.File, isGlobal: true, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable ++insert++ syntax')}${wysiwygYes}` },
 		'markdown.plugin.multitable': { storage: SettingStorage.File, isGlobal: true, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable multimarkdown table extension')}${wysiwygNo}` },
-		'markdown.plugin.externalEmbed': { storage: SettingStorage.File, isGlobal: true, value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable external embeds (e.g. YouTube Videos)')}${wysiwygYes}` },
+		'markdown.plugin.externalEmbed': { storage: SettingStorage.File, isGlobal: true, value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Desktop], label: () => `${_('Enable external embeds (e.g. YouTube Videos)')}${wysiwygYes}` },
 
 		// For now, applies only to the Markdown viewer
 		'renderer.fileUrls': {
@@ -1489,7 +1864,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Mobile],
 			isGlobal: true,
 		},
-		noteVisiblePanes: { value: ['editor', 'viewer'], type: SettingItemType.Array, storage: SettingStorage.File, isGlobal: true, public: false, appTypes: [AppType.Desktop] },
+		noteVisiblePanes: { value: ['editor'], type: SettingItemType.Array, storage: SettingStorage.File, isGlobal: true, public: false, appTypes: [AppType.Desktop] },
 		tagHeaderIsExpanded: { value: true, type: SettingItemType.Bool, public: false, appTypes: [AppType.Desktop] },
 		folderHeaderIsExpanded: { value: true, type: SettingItemType.Bool, public: false, appTypes: [AppType.Desktop] },
 		syncReportIsVisible: { value: false, type: SettingItemType.Bool, public: false, appTypes: [AppType.Desktop] },
@@ -1921,6 +2296,35 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Mobile],
 		},
 
+		'featureFlag.noteLock': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: false,
+			storage: SettingStorage.File,
+		},
+
+		'sync.autoMergeConflicts': {
+			value: true,
+			type: SettingItemType.Bool,
+			section: 'sync',
+			public: true,
+			label: () => _('Automatically merge non-conflicting note changes'),
+			description: () => _('When the same note is edited on two devices, changes made to different lines are usually merged automatically. In rare cases, automatic merging may result in duplicated content or formatting changes'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+
+		'noteLock.lockOnNoteSwitch': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			appTypes: [AppType.Desktop, AppType.Mobile],
+			section: 'noteLock',
+			label: () => _('Auto relock when switching notes'),
+			show: (settings) => !!settings['featureFlag.noteLock'],
+			storage: SettingStorage.File,
+		},
+
 		'featureFlag.autoUpdaterServiceEnabled': {
 			value: false,
 			type: SettingItemType.Bool,
@@ -1948,6 +2352,16 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			advanced: true,
 		},
 
+		// Controls the new conflict resolution UI. It is hidden and turned off by
+		// default so the feature can be developed over multiple releases without
+		// affecting users. Make it public and enable it by default once it is ready.
+		'featureFlag.conflictResolution': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: false,
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
 
 		// 'featureFlag.syncAccurateTimestamps': {
 		// 	value: false,
@@ -1985,6 +2399,19 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			description: () => 'Improves the security of plugin WebViews. This may break some plugins.',
 			section: 'note',
 			isGlobal: true,
+		},
+
+		'featureFlag.enableSemanticSearch': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			storage: SettingStorage.File,
+			appTypes: [AppType.Desktop],
+			label: () => 'Include semantic search results in the search panel',
+			description: () => 'Allows using semantic search from the search panel',
+			section: 'general',
+			isGlobal: true,
+			advanced: true,
 		},
 
 		// As of December 2025, the voice typing feature doesn't work well on low-resource devices.

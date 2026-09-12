@@ -1,13 +1,12 @@
 import { AllHtmlEntities as Entities } from 'html-entities';
 const htmlentities = new Entities().encode;
+const decodeEntities = new Entities().decode;
 import { fileUriToPath } from '@joplin/utils/url';
 import * as htmlparser2 from '@joplin/fork-htmlparser2';
 
 // [\s\S] instead of . for multiline matching
 // https://stackoverflow.com/a/16119722/561309
 const imageRegex = /<img([\s\S]*?)src=["']([\s\S]*?)["']([\s\S]*?)>/gi;
-
-const anchorRegex = /<a([\s\S]*?)href=["']([\s\S]*?)["']([\s\S]*?)>/gi;
 
 const selfClosingElements = [
 	'area',
@@ -73,9 +72,19 @@ interface ProcessImageEvent {
 }
 type ProcessImageCallback = (data: ProcessImageEvent)=> ProcessImageResult;
 
+export interface ProcessAnchorTagsEvent {
+	href: string|undefined;
+}
+
+export type ProcessAnchorTagsAction =
+	| { type: 'replaceElement'; html: string }
+	| { type: 'replaceSource'; href: string }
+	| { type: 'setAttributes'; attrs: Record<string, string> };
+
+type ProcessAnchorTagsCallback = (event: ProcessAnchorTagsEvent)=> ProcessAnchorTagsAction | null;
+
 class HtmlUtils {
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public processImageTags(html: string, callback: ProcessImageCallback) {
 		if (!html) return '';
 
@@ -101,36 +110,32 @@ class HtmlUtils {
 		});
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public processAnchorTags(html: string, callback: Function) {
+	public processAnchorTags(html: string, callback: ProcessAnchorTagsCallback) {
 		if (!html) return '';
 
-		interface Action {
-			type: 'replaceElement' | 'replaceSource' | 'setAttributes';
-			href: string;
-			html: string;
-			attrs: Record<string, string>;
-		}
+		return replaceElements(html, (event) => {
+			if (event.name === 'a') {
+				const action = callback({ href: event.attrs['href'] });
 
-		return html.replace(anchorRegex, (_v, before, href, after) => {
-			const action: Action = callback({ href: href });
+				if (!action) return { attrs: event.attrs };
 
-			if (!action) return `<a${before}href="${href}"${after}>`;
+				if (action.type === 'replaceElement') {
+					return { openingTagHtml: action.html };
+				}
 
-			if (action.type === 'replaceElement') {
-				return action.html;
+				if (action.type === 'replaceSource') {
+					return { attrs: { ...event.attrs, href: action.href } };
+				}
+
+				if (action.type === 'setAttributes') {
+					return { attrs: action.attrs };
+				}
+
+				const exhaustivenessCheck: never = action;
+				throw new Error(`Invalid action: ${(exhaustivenessCheck as ProcessAnchorTagsAction).type}`);
+			} else {
+				return { attrs: event.attrs };
 			}
-
-			if (action.type === 'replaceSource') {
-				return `<img${before}href="${action.href}"${after}>`;
-			}
-
-			if (action.type === 'setAttributes') {
-				const attrHtml = attributesHtml(action.attrs);
-				return `<img${before}${attrHtml}${after}>`;
-			}
-
-			throw new Error(`Invalid action: ${action.type}`);
 		});
 	}
 
@@ -338,15 +343,6 @@ class HtmlUtils {
 					}
 				}
 
-				// For some reason, entire parts of HTML notes don't show up in
-				// the viewer when there's an anchor tag without an "href"
-				// attribute. It doesn't always happen and it seems to depend on
-				// what else is in the note but in any case adding the "href"
-				// fixes it. https://github.com/laurent22/joplin/issues/5687
-				if (name === 'a' && !attrs['href']) {
-					attrs['href'] = '#';
-				}
-
 				let attrHtml = attributesHtml(attrs);
 				if (attrHtml) attrHtml = ` ${attrHtml}`;
 				const closingSign = isSelfClosingTag(name) ? '/>' : '>';
@@ -417,6 +413,79 @@ const makeHtmlTag = (name: string, attrs: Record<string, string>) => {
 	if (attrHtml) attrHtml = ` ${attrHtml}`;
 	const closingSign = isSelfClosingTag(name) ? '/>' : '>';
 	return `<${name}${attrHtml}${closingSign}`;
+};
+
+
+interface TagRecord {
+	name: string;
+	attrs: Record<string, string>;
+}
+interface AttrsReplacement {
+	attrs: Record<string, string>;
+	openingTagHtml?: undefined;
+}
+interface OpeningTagReplacement {
+	attrs?: undefined;
+	openingTagHtml: string;
+}
+
+type OnMapTag = (tag: TagRecord)=> OpeningTagReplacement|AttrsReplacement;
+
+const replaceElements = (html: string, tagMapping: OnMapTag) => {
+	const output: string[] = [];
+	type StackEntry = { name: string };
+	const stack: StackEntry[] = [];
+
+	const parser = new htmlparser2.Parser({
+
+		oncomment: (data: string) => {
+			output.push(`<!--${htmlentities(data)}-->`);
+		},
+
+		onopentag: (name: string, attrs: Record<string, string>) => {
+			// Note: "name" and attribute names are always lowercase even
+			// when the input is not. So there is no need to call
+			// "toLowerCase" on them.
+			stack.push({ name });
+
+			for (const key of Object.keys(attrs)) {
+				if (typeof attrs[key] !== 'string') continue;
+				attrs[key] = decodeEntities(attrs[key]);
+			}
+
+			const mapping = tagMapping({ name, attrs });
+			let replacement;
+			if (mapping.openingTagHtml) {
+				replacement = mapping.openingTagHtml;
+			} else {
+				attrs = mapping.attrs;
+
+				let attrHtml = attributesHtml(attrs);
+				if (attrHtml) attrHtml = ` ${attrHtml}`;
+				const closingSign = isSelfClosingTag(name) ? '/>' : '>';
+				replacement = `<${name}${attrHtml}${closingSign}`;
+			}
+
+			output.push(replacement);
+		},
+
+		ontext: (encodedText: string) => {
+			output.push(encodedText);
+		},
+
+		onclosetag: (name: string) => {
+			stack.pop();
+			if (!isSelfClosingTag(name)) {
+				output.push(`</${name}>`);
+			}
+		},
+
+	}, { decodeEntities: false });
+
+	parser.write(html);
+	parser.end();
+
+	return output.join('');
 };
 
 // Will return either the content of the <BODY> tag if it exists, or the whole

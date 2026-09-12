@@ -1,6 +1,6 @@
 {
   "name": "@joplin/app-desktop",
-  "version": "3.7.1",
+  "version": "3.7.18",
   "description": "Joplin for Desktop",
   "main": "main.bundle.js",
   "private": true,
@@ -28,6 +28,7 @@
   "bugs": {
     "url": "https://github.com/laurent22/joplin/issues"
   },
+  "desktopName": "appimagekit-joplin",
   "build": {
     "appId": "net.cozic.joplin-desktop",
     "compression": "normal",
@@ -45,13 +46,18 @@
     ],
     "afterAllArtifactBuild": "./afterAllArtifactBuild.js",
     "asar": true,
-    "asarUnpack": "./node_modules/node-notifier/vendor/**",
+    "asarUnpack": [
+      "./node_modules/node-notifier/vendor/**",
+      "./node_modules/sqlite-vec-*/**"
+    ],
     "win": {
-      "publisherName": [
-        "Joplin"
-      ],
-      "sign": "./sign.js",
-      "rfc3161TimeStampServer": "http://timestamp.digicert.com",
+      "signtoolOptions": {
+        "sign": "./sign.js",
+        "rfc3161TimeStampServer": "http://timestamp.digicert.com",
+        "publisherName": [
+          "Joplin"
+        ]
+      },
       "icon": "../../Assets/ImageSources/Joplin.ico",
       "target": [
         {
@@ -125,11 +131,14 @@
     },
     "linux": {
       "icon": "../../Assets/LinuxIcons",
+      "syncDesktopName": true,
       "category": "Office",
       "desktop": {
-        "Icon": "joplin",
-        "MimeType": "x-scheme-handler/joplin;",
-        "StartupWMClass": "@joplin/app-desktop"
+        "entry": {
+          "Icon": "joplin",
+          "MimeType": "x-scheme-handler/joplin;",
+          "StartupWMClass": "@joplin/app-desktop"
+        }
       },
       "target": [
         "AppImage",
@@ -138,14 +147,17 @@
       "executableName": "joplin",
       "maintainer": "Joplin Team <no-reply@joplinapp.org>",
       "artifactName": "Joplin-${version}.${ext}"
+    },
+    "toolsets": {
+      "appimage": "1.0.3"
     }
   },
   "homepage": "https://github.com/laurent22/joplin#readme",
   "devDependencies": {
     "7zip-bin": "5.2.0",
-    "@axe-core/playwright": "4.11.1",
+    "@axe-core/playwright": "4.11.3",
     "@electron/notarize": "2.5.0",
-    "@electron/rebuild": "3.7.2",
+    "@electron/rebuild": "4.1.0",
     "@fortawesome/fontawesome-free": "5.15.4",
     "@joeattardi/emoji-button": "4.6.4",
     "@joplin/default-plugins": "~3.7",
@@ -154,16 +166,18 @@
     "@joplin/renderer": "~3.7",
     "@joplin/tools": "~3.7",
     "@joplin/utils": "~3.7",
-    "@playwright/test": "1.57.0",
+    "@playwright/test": "1.59.1",
     "@sentry/electron": "4.24.0",
     "@testing-library/dom": "10.4.1",
     "@testing-library/react": "16.3.2",
     "@types/jest": "29.5.14",
+    "@types/markdown-it": "13.0.9",
     "@types/mustache": "4.2.6",
     "@types/node": "18.19.130",
     "@types/react": "19.1.10",
     "@types/react-dom": "19.1.7",
     "@types/react-redux": "7.1.34",
+    "@types/semver": "7.7.1",
     "@types/styled-components": "5.1.36",
     "async-mutex": "0.5.0",
     "axios": "^1.7.7",
@@ -171,11 +185,12 @@
     "color": "3.2.1",
     "compare-versions": "6.1.1",
     "debounce": "1.2.1",
-    "electron": "patch:electron@npm%3A40.9.2#~/.yarn/patches/electron-npm-40.9.2-7b90992bd7.patch",
-    "electron-builder": "24.13.3",
+    "electron": "42.3.0",
+    "electron-builder": "26.15.6",
     "electron-updater": "6.6.8",
     "electron-window-state": "5.0.3",
     "esbuild": "^0.27.0",
+    "execa": "5.1.1",
     "formatcoords": "1.1.3",
     "glob": "11.1.0",
     "gulp": "4.0.2",
@@ -186,10 +201,11 @@
     "jest-environment-jsdom": "29.7.0",
     "js-sha512": "0.9.0",
     "mark.js": "8.11.1",
+    "markdown-it": "13.0.2",
     "md5": "2.3.0",
     "moment": "2.30.1",
     "mustache": "4.2.0",
-    "nan": "2.25.0",
+    "nan": "2.27.0",
     "node-notifier": "10.0.1",
     "node-rsa": "1.1.1",
     "pdfjs-dist": "3.11.174",
@@ -209,19 +225,22 @@
     "styled-components": "5.3.11",
     "styled-system": "5.1.5",
     "taboverride": "4.0.3",
-    "tesseract.js": "6.0.1",
+    "tesseract.js": "7.0.0",
     "tinymce": "6.8.5",
-    "ts-jest": "29.4.6",
+    "ts-jest": "29.4.11",
     "ts-node": "10.9.2",
     "typescript": "5.9.3"
   },
   "dependencies": {
     "@electron/remote": "2.1.3",
+    "@huggingface/transformers": "4.2.0",
     "@joplin/onenote-converter": "~3.7",
     "@xyflow/react": "12.10.2",
-    "fs-extra": "11.3.3",
+    "fs-extra": "11.3.5",
     "keytar": "7.9.0",
     "node-fetch": "2.6.7",
+    "onnxruntime-node": "1.26.0",
+    "sqlite-vec": "0.1.9",
     "sqlite3": "5.1.6"
   }
 }

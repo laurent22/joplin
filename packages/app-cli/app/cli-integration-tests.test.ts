@@ -14,7 +14,7 @@ import { loadKeychainServiceAndSettings } from '@joplin/lib/services/SettingUtil
 import shimInitCli from './utils/shimInitCli';
 
 const baseDir = `${dirname(__dirname)}/tests/cli-integration`;
-const joplinAppPath = `${__dirname}/main.js`;
+const joplinAppPath = `${__dirname}/build/main.js`;
 
 shimInitCli({ nodeSqlite, appVersion: () => require('../package.json').version, keytar: null, sharp: null, React: null, electronBridge: null, pdfJs: null });
 require('@joplin/lib/testing/test-utils');

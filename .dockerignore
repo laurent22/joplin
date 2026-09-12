@@ -17,4 +17,6 @@ packages/server/db-*.sqlite
 packages/server/dist/
 packages/server/logs/
 packages/server/temp/
+packages/server/assets/license/signingKey.private.*.pem
+packages/server/readme/
 packages/transcribe/.env

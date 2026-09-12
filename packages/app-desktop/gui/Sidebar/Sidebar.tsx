@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyledSyncReportText, StyledSyncReport, StyledSynchronizeButton, StyledRoot } from './styles';
 import { ButtonLevel } from '../Button/Button';
 import CommandService from '@joplin/lib/services/CommandService';
-import Synchronizer from '@joplin/lib/Synchronizer';
+import Synchronizer, { type ProgressReport } from '@joplin/lib/Synchronizer';
 import Setting from '@joplin/lib/models/Setting';
 import { _ } from '@joplin/lib/locale';
 import { AppState } from '../../app.reducer';
@@ -18,15 +18,13 @@ interface Props {
 	dispatch: Dispatch;
 	decryptionWorker: StateDecryptionWorker;
 	resourceFetcher: StateResourceFetcher;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- syncReport: any matches the lib reducer shape; tightening requires defining the synchronizer's report type there first
-	syncReport: any;
+	syncReport: ProgressReport;
 	syncStarted: boolean;
 	syncPending: boolean;
 	syncReportIsVisible: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- The generated report does not currently have a type
-const syncCompletedWithoutError = (syncReport: any) => {
+const syncCompletedWithoutError = (syncReport: ProgressReport) => {
 	return syncReport.completedTime && (!syncReport.errors || !syncReport.errors.length);
 };
 
@@ -34,13 +32,15 @@ const SidebarComponent = (props: Props) => {
 	const renderSynchronizeButton = (type: string) => {
 		const label = type === 'sync' ? _('Synchronise') : _('Cancel');
 		const nothingToSync = type === 'sync' && !props.syncPending && syncCompletedWithoutError(props.syncReport);
-		const iconName = nothingToSync ? 'fas fa-check' : 'icon-sync';
+		const syncHasErrors = type === 'sync' && !props.syncPending && !!props.syncReport.errors?.length;
+		const iconName = syncHasErrors ? 'fas fa-exclamation-triangle' : nothingToSync ? 'fas fa-check' : 'icon-sync';
 
 		return (
 			<StyledSynchronizeButton
 				level={ButtonLevel.SidebarSecondary}
-				className={`sidebar-sync-button ${type === 'sync' ? '' : '-syncing'} ${nothingToSync ? '-synced' : ''}`}
+				className={`sidebar-sync-button ${type === 'sync' ? '' : '-syncing'} ${nothingToSync ? '-synced' : ''} ${syncHasErrors ? '-error' : ''}`}
 				iconName={iconName}
+				iconLabel={syncHasErrors ? _('Synchronisation error') : undefined}
 				key="sync_button"
 				title={label}
 				onClick={() => {

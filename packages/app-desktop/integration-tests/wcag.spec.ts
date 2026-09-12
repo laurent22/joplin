@@ -86,16 +86,19 @@ test.describe('wcag', () => {
 		await expect(folder2).toHaveJSProperty('ariaLevel', '3'); // Should be a sub-folder
 
 		await mainScreen.createNewNote('Test');
+		await mainScreen.noteEditor.showMarkdownEditor();
 
 		// Ensure that `:hover` styling is consistent between tests:
 		await mainScreen.noteEditor.noteTitleInput.hover();
 
 		await expectNoViolations(mainWindow);
 
-		// Should not find issues with the Rich Text Editor
-		await mainScreen.noteEditor.toggleEditorsButton.click();
-		await mainScreen.noteEditor.richTextEditor.click();
+		// Should not find issues after showing the note viewer
+		await mainScreen.noteEditor.showNoteViewer();
+		await expectNoViolations(mainWindow);
 
+		// Should not find issues with the Rich Text Editor
+		await mainScreen.noteEditor.showRichTextEditor();
 		await expectNoViolations(mainWindow);
 	});
 
@@ -113,6 +116,24 @@ test.describe('wcag', () => {
 	test('should not detect significant issues in the change app layout screen', async ({ mainWindow, electronApp }) => {
 		const mainScreen = await new MainScreen(mainWindow).setup();
 		await mainScreen.changeLayoutScreen.open(electronApp);
+		await expectNoViolations(mainWindow);
+	});
+
+	test('should not detect significant issues in the AI chat panel', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('test');
+
+		await mainScreen.chatPanel.configure(electronApp);
+		await mainScreen.chatPanel.open(electronApp);
+
+		await mainScreen.chatPanel.sendMessage('/reply-with test');
+		await mainScreen.chatPanel.waitForMessageCount(2);
+
+		await mainScreen.chatPanel.sendMessage(
+			'/tool editor_appendToNote {"text": "test"}\n/reply-with done',
+		);
+		await mainScreen.chatPanel.waitForMessageCount(5);
+
 		await expectNoViolations(mainWindow);
 	});
 });

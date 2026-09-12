@@ -31,6 +31,8 @@ import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import FileApiDriverLocal from '@joplin/lib/file-api-driver-local';
 import * as React from 'react';
 import nodeSqlite = require('sqlite3');
+import sqliteVec = require('sqlite-vec');
+import * as path from 'path';
 import initLib from '@joplin/lib/initLib';
 import PerformanceLogger from '@joplin/lib/PerformanceLogger';
 import * as pdfJs from 'pdfjs-dist';
@@ -87,12 +89,38 @@ const main = async () => {
 
 	pdfJs.GlobalWorkerOptions.workerSrc = `${bridge().electronApp().buildDir()}/pdf.worker.min.js`;
 
+	// onnxruntime-node loads a native binding at require time. Wrap it so a missing or broken
+	// prebuilt degrades to "embeddings unavailable" rather than crashing the whole app at startup.
+	//
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- onnxruntime-node has its own typings; we only need to forward the loaded module to the shim
+	let onnxRuntime: any = null;
+	try {
+		// eslint-disable-next-line @typescript-eslint/no-require-imports -- guarded require avoids a top-level import that would crash on a missing native binding
+		onnxRuntime = require('onnxruntime-node');
+	} catch (error) {
+		// eslint-disable-next-line no-console -- main-html runs before the logger is initialised below
+		console.warn('onnxruntime-node failed to load; AI embeddings will be unavailable:', (error as Error).message);
+	}
+
+	// sqlite-vec's wrapper resolves the native extension path via require.resolve,
+	// which inside a packaged Electron app returns a path inside app.asar — but
+	// dlopen(3) can't read out of asar archives. The per-platform packages are
+	// listed in asarUnpack so the real file lives in app.asar.unpacked/, but the
+	// wrapper doesn't know that. Rewrite the path here so loadExtension() points
+	// at the unpacked copy.
+	const sqliteVecUnpacked = {
+		...sqliteVec,
+		getLoadablePath: () => sqliteVec.getLoadablePath().replace(`${path.sep}app.asar${path.sep}`, `${path.sep}app.asar.unpacked${path.sep}`),
+	};
+
 	shimInit({
 		keytar,
 		React,
 		appVersion,
 		electronBridge: bridge(),
 		nodeSqlite,
+		sqliteVec: sqliteVecUnpacked,
+		onnxRuntime,
 		pdfJs: pdfJs as PdfJs,
 		isAppleSilicon,
 	});

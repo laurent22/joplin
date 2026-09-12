@@ -5,20 +5,17 @@ jobs:
   Main:
     # We always process desktop release tags, because they also publish the release
     if: github.repository == 'laurent22/joplin'
-    runs-on: macos-latest
+    runs-on: macos-15
     steps:
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: olegtarasov/get-tag@v2.1.4
       - uses: actions/setup-node@v6
         with:
           node-version: '24'
           cache: 'yarn'
 
-      - name: Install Yarn
-        run: |
-          # https://yarnpkg.com/getting-started/install
-          corepack enable
+      - uses: ./.github/workflows/shared/install-yarn
 
       - name: Install macOs dependencies
         if: runner.os == 'macOS'
@@ -56,7 +53,8 @@ jobs:
         run: |
           export npm_config_arch=arm64
           export npm_config_target_arch=arm64
-          yarn install
+          source "${GITHUB_WORKSPACE}/.github/scripts/retry.sh"
+          retry yarn install
           cd packages/app-desktop
           npm pkg set 'build.mac.artifactName'='${productName}-${version}-${arch}.${ext}'
 

@@ -9,7 +9,14 @@ export const resourceFilename = (resource: ResourceEntity, encryptedBlob = false
 	let extension = encryptedBlob ? 'crypted' : resource.file_extension;
 	if (!extension) extension = resource.mime ? mime.toFileExtension(resource.mime) : '';
 	extension = extension ? `.${extension}` : '';
-	return resource.id + extension;
+	const filename = resource.id + extension;
+	// Defence in depth: even if a malformed id/extension reaches this point,
+	// the result must be a single filename component (no path separators, no
+	// parent-directory segments). BaseItem.unserialize is the primary check.
+	if (/[/\\]/.test(filename) || filename.split(/[/\\]/).some(p => p === '..')) {
+		throw new Error(`Invalid resource filename: ${JSON.stringify(filename)}`);
+	}
+	return filename;
 };
 
 export const resourceRelativePath = (resource: ResourceEntity, relativeResourceDirPath: string, encryptedBlob = false) => {

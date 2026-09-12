@@ -55,7 +55,7 @@ import SyncTargetJoplinCloud from '../SyncTargetJoplinCloud';
 import KeychainService from '../services/keychain/KeychainService';
 import { loadKeychainServiceAndSettings } from '../services/SettingUtils';
 import { setActiveMasterKeyId, setEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
-import Synchronizer from '../Synchronizer';
+import Synchronizer, { SyncStartOptions } from '../Synchronizer';
 import SyncTargetNone from '../SyncTargetNone';
 import { setRSA } from '../services/e2ee/ppk/ppk';
 const md5 = require('md5');
@@ -528,8 +528,7 @@ function synchronizer(id: number = null) {
 // This is like calling synchronizer.start() but it handles the
 // complexity of passing around the sync context depending on
 // the client.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Synchronizer.start takes any options; tightening here would diverge from lib
-async function synchronizerStart(id: number = null, extraOptions: any = null) {
+async function synchronizerStart(id: number = null, extraOptions: SyncStartOptions = null) {
 	if (id === null) id = currentClient_;
 
 	const contextKey = `sync.${syncTargetId()}.context`;
@@ -1186,9 +1185,47 @@ export const mockFetch = (requestHandler: MockFetchRequestHandler) => {
 	};
 };
 
-export const withWarningSilenced = async <T> (warningRegex: RegExp, task: ()=> Promise<T>): Promise<T> => {
+export const withExtraRootCa = async <T> (caPemData: string, task: ()=> Promise<T>) => {
+	// getCACertificates requires a newer NodeJS version than the current @types/node version.
+	// Dynamically import tls to work around the missing types:
+	const tls = require('node:tls');
+	const trustedCas = tls.getCACertificates();
+	try {
+		tls.setDefaultCACertificates([...trustedCas, caPemData]);
+		await task();
+	} finally {
+		tls.setDefaultCACertificates([...trustedCas]);
+	}
+};
+
+interface WithWarningSilencedOptions {
+	requireWarning: boolean;
+}
+
+export const withWarningSilenced = async <T> (
+	warningRegex: RegExp, task: ()=> Promise<T>, { requireWarning }: WithWarningSilencedOptions = { requireWarning: false },
+): Promise<T> => {
 	type MockSlice = { mockRestore(): void };
 	const mocks: MockSlice[] = [];
+	const warnings: string[] = [];
+
+	const removeMocks = () => {
+		for (const mock of mocks) {
+			mock.mockRestore();
+		}
+	};
+
+	const applyMocks = () => {
+		mockConsoleFunction('warn');
+		mockConsoleFunction('error');
+	};
+
+	// Log an error without recursively calling the mock:
+	const logError = (...args: unknown[]) => {
+		removeMocks();
+		console.error(...args);
+		applyMocks();
+	};
 
 	const mockConsoleFunction = (key: 'warn'|'error') => {
 		const mock = jest.spyOn(console, key);
@@ -1198,23 +1235,24 @@ export const withWarningSilenced = async <T> (warningRegex: RegExp, task: ()=> P
 		// shows how to use .spyOn to hide warnings
 		mock.mockImplementation((message?: unknown, ...args: unknown[]) => {
 			const fullMessage = [message, ...args].join(' ');
+			warnings.push(fullMessage);
 			if (!fullMessage.match(warningRegex)) {
-				// Avoid recursively calling the mock:
-				mock.mockRestore();
-
-				console.error(`Unexpected warning: ${message}\nNote: Further warnings will not be silenced.`, ...args);
+				logError(`Unexpected warning: ${message}`, ...args);
 			}
 		});
 	};
 
 	try {
-		mockConsoleFunction('warn');
-		mockConsoleFunction('error');
-		return await task();
-	} finally {
-		for (const mock of mocks) {
-			mock.mockRestore();
+		applyMocks();
+		const result = await task();
+
+		if (requireWarning) {
+			expect(warnings).toContainEqual(expect.stringMatching(warningRegex));
 		}
+
+		return result;
+	} finally {
+		removeMocks();
 	}
 };
 

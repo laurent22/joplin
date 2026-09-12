@@ -8,4 +8,5 @@ logs/
 tests/temp/
 temp/
 resource/
+assets/license/signingKey.private.prod.pem
 .env

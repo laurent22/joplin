@@ -32,6 +32,8 @@ const defaultEnvValues: EnvVariables = {
 	IS_ADMIN_INSTANCE: true,
 	INSTANCE_NAME: '',
 
+	DEFAULT_ADMIN_PASSWORD: 'admin',
+
 	// Maximum allowed drift between NTP time and server time. A few
 	// milliseconds is normally not an issue unless many clients are modifying
 	// the same note at the exact same time. But past a certain limit, it might
@@ -213,6 +215,8 @@ export interface EnvVariables {
 	JOPLINAPP_BASE_URL: string;
 	TERMS_URL: string;
 	PRIVACY_URL: string;
+
+	DEFAULT_ADMIN_PASSWORD: string;
 
 	DB_CLIENT: string;
 	DB_SLOW_QUERY_LOG_ENABLED: boolean;

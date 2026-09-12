@@ -2,14 +2,13 @@
 // mobile
 
 import { Profile, ProfileConfig } from '@joplin/lib/services/profileConfig/types';
+import { Dispatch } from 'redux';
 import { loadProfileConfig as libLoadProfileConfig, saveProfileConfig as libSaveProfileConfig } from '@joplin/lib/services/profileConfig/index';
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-let dispatch_: Function = null;
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-export const setDispatch = (dispatch: Function) => {
+let dispatch_: Dispatch|null = null;
+export const setDispatch = (dispatch: Dispatch) => {
 	dispatch_ = dispatch;
 };
 

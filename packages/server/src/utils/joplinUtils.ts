@@ -13,6 +13,7 @@ import * as fs from 'fs-extra';
 import { Item, Share, Uuid } from '../services/database/types';
 import ItemModel from '../models/ItemModel';
 import { NoteEntity } from '@joplin/lib/services/database/types';
+import { itemIsInTrash } from '@joplin/lib/services/trash';
 import { formatDateTime } from './time';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from './errors';
 import { MarkupToHtml } from '@joplin/renderer';
@@ -53,6 +54,36 @@ interface ResourceInfo {
 interface LinkedItemInfo {
 	item: NoteEntity;
 	file: File;
+}
+
+interface RenderedFolderTree {
+	rootTitle: string;
+	treeDataJson: string;
+	allowedNoteIds: Set<string>;
+}
+
+interface TreeSourceNode {
+	title: string;
+	key: string;
+	url?: string;
+	folder?: boolean;
+	expanded?: boolean;
+	children?: TreeSourceNode[];
+}
+
+interface RenderedNote {
+	title: string;
+	updatedDateTime: string;
+	bodyHtml: string;
+}
+
+interface RenderItemQuery {
+	resource_id?: string;
+	note_id?: string;
+}
+
+interface RenderNotePageOptions {
+	emptyStateErrorMessage?: string;
 }
 
 type LinkedItemInfos = Record<Uuid, LinkedItemInfo>;
@@ -211,7 +242,14 @@ async function renderResource(userId: string, resourceId: string, item: Item, co
 	};
 }
 
-async function renderNote(share: Share, note: NoteEntity, resourceInfos: ResourceInfos, linkedItemInfos: LinkedItemInfos, banner: BannerInfo): Promise<FileViewerResponse> {
+async function renderNote(
+	share: Share,
+	note: NoteEntity,
+	resourceInfos: ResourceInfos,
+	linkedItemInfos: LinkedItemInfos,
+	bannerInfo: BannerInfo,
+	folderTree: RenderedFolderTree = null,
+): Promise<FileViewerResponse> {
 	const markupToHtml = new MarkupToHtml({
 		ResourceModel: Resource as OptionsResourceModel,
 	});
@@ -229,7 +267,9 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 			if (item.type_ === ModelType.Note) {
 				return `${models_.share().shareUrl(share.owner_id, share.id)}?note_id=${item.id}&t=${item.updated_time}`;
 			} else if (item.type_ === ModelType.Resource) {
-				return `${models_.share().shareUrl(share.owner_id, share.id)}?resource_id=${item.id}&t=${item.updated_time}`;
+				const query: Record<string, string|number> = { resource_id: item.id, t: item.updated_time };
+				if (folderTree) query.note_id = note.id;
+				return models_.share().shareUrl(share.owner_id, share.id, query);
 			} else {
 				// In theory, there can only be links to notes or resources. But
 				// in practice nothing's stopping a plugin for example to create
@@ -250,64 +290,135 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 		checkboxDisabled: true,
 
 		linkRenderingType: 2,
+
+		// KaTeX defaults to strict:'warn' and dumps to console.warn on any
+		// LaTeX-incompatible input (commonly U+00A0 from email/Word pastes).
+		// Shared-note viewers see the same output either way; silence the
+		// server logs.
+		plugins: {
+			katex: { strict: 'ignore' },
+		},
 	};
 
 	try {
 		const result = await markupToHtml.render(note.markup_language, note.body, themeStyle(Setting.THEME_LIGHT), renderOptions);
 
-		const cssStrings = result.cssStrings.slice();
-		cssStrings.push(`
-			.navbar {
-				.navbar-item {
-					.logo-text {
-						color: ${banner.text_color};
-					}
-				}			
-				background-color: ${banner.background_color};
-			}
-		`);
-
-		const bodyHtml = await mustache_.renderView({
-			cssFiles: ['items/note'],
-			jsFiles: ['items/note'],
-			name: 'note',
-			title: `${substrWithEllipsis(note.title, 0, 100)} - ${config().appName}`,
-			titleOverride: true,
-			path: 'index/items/note',
-			content: {
-				note: {
-					...note,
-					bodyHtml: result.html,
-					updatedDateTime: formatDateTime(note.user_updated_time),
-				},
-				logoSrc: banner.logoDataUrl ? banner.logoDataUrl : `${baseUrl_}/images/JoplinLogo.png`,
-				logoTitle: banner.logo_title,
-
-				// We sanitize the URL so that the user can't inject JavaScript with javascript: URLs.
-				// Although we *now* also validate this when the BannerModel is updated, some users may have
-				// old, invalid URLs.
-				logoUrl: sanitizeUserUrl(banner.logo_url),
-				cssStrings: cssStrings.join('\n'),
-				assetsJs: `
-					const joplinNoteViewer = {
-						pluginAssets: ${JSON.stringify(result.pluginAssets)},
-						appBaseUrl: ${JSON.stringify(baseUrl_)},
-					};
-				`,
+		return renderNotePage(
+			note.title,
+			bannerInfo,
+			{
+				title: note.title,
+				bodyHtml: result.html,
+				updatedDateTime: formatDateTime(note.user_updated_time),
 			},
-		}, { prefersDarkEnabled: false });
+			folderTree,
+			result.cssStrings,
+			result.pluginAssets,
+		);
 
-		return {
-			body: bodyHtml,
-			mime: 'text/html',
-			size: Buffer.byteLength(bodyHtml, 'utf-8'),
-			filename: '',
-		};
 	} catch (error) {
 		// Resolves: https://github.com/laurent22/joplin/issues/13059
 		error.message = `Could not render note - please make sure it has been synchronised. Error was: ${error.message}`;
 		throw error;
 	}
+}
+
+async function buildFolderTree(share: Share, folderId: string, activeNoteId = ''): Promise<RenderedFolderTree> {
+	const rootFolderItem = await models_.item().loadByJopId(share.owner_id, folderId, { fields: ['*'], withContent: true });
+	if (!rootFolderItem) throw new ErrorNotFound(`No such folder: ${folderId}`);
+
+	const rootFolder = models_.item().itemToJoplinItem(rootFolderItem);
+	if (itemIsInTrash(rootFolder)) throw new ErrorNotFound(`No such folder: ${folderId}`);
+
+	const allowedNoteIds = new Set<string>();
+
+	const buildNodes = async (parentId: string): Promise<TreeSourceNode[]> => {
+		const children = await models_.item().loadByJopParentId(share.owner_id, parentId, { fields: ['*'], withContent: true });
+		const output: TreeSourceNode[] = [];
+
+		for (const child of children) {
+			const childJopItem = models_.item().itemToJoplinItem(child);
+			if (itemIsInTrash(childJopItem)) continue;
+
+			if (child.jop_type === ModelType.Folder) {
+				output.push({
+					title: childJopItem.title || '',
+					key: childJopItem.id,
+					folder: true,
+					expanded: true,
+					children: await buildNodes(childJopItem.id),
+				});
+			} else if (child.jop_type === ModelType.Note) {
+				allowedNoteIds.add(childJopItem.id);
+				output.push({
+					title: childJopItem.title || '',
+					key: childJopItem.id,
+					url: models_.share().shareUrl(share.owner_id, share.id, { note_id: childJopItem.id, t: childJopItem.updated_time }),
+				});
+			}
+		}
+
+		return output;
+	};
+
+	const source = await buildNodes(rootFolder.id);
+	const activeKey = activeNoteId && allowedNoteIds.has(activeNoteId) ? activeNoteId : '';
+
+	return {
+		rootTitle: rootFolder.title || '',
+		treeDataJson: JSON.stringify({ activeKey, source }),
+		allowedNoteIds,
+	};
+}
+
+
+async function renderNotePage(
+	title: string,
+	banner: BannerInfo,
+	note: RenderedNote = null,
+	folderTree: RenderedFolderTree = null,
+	cssStrings: string[] = [],
+	pluginAssets: unknown[] = [],
+	options: RenderNotePageOptions = {},
+): Promise<FileViewerResponse> {
+
+	const outputCssStrings = cssStrings.slice();
+	const bodyHtml = await mustache_.renderView({
+		cssFiles: folderTree ? ['items/note', 'wunderbaum'] : ['items/note'],
+		jsFiles: folderTree ? ['items/note', 'wunderbaum.umd.min', 'items/folderTree'] : ['items/note'],
+		name: 'note',
+		title: `${substrWithEllipsis(title, 0, 100)} - ${config().appName}`,
+		titleOverride: true,
+		path: 'index/items/note',
+		content: {
+			showFolderTree: !!folderTree,
+			folderTree,
+			note,
+			emptyStateHtml: '',
+			emptyStateErrorMessage: options.emptyStateErrorMessage || '',
+			logoSrc: banner.logoDataUrl ? banner.logoDataUrl : `${baseUrl_}/images/JoplinLogo.png`,
+			logoTitle: banner.logo_title,
+
+			// We sanitize the URL so that the user can't inject JavaScript with javascript: URLs.
+			// Although we *now* also validate this when the BannerModel is updated, some users may have
+			// old, invalid URLs.
+			logoUrl: sanitizeUserUrl(banner.logo_url),
+			cssStrings: outputCssStrings.join('\n'),
+			assetsJs: `
+				const joplinNoteViewer = {
+					pluginAssets: ${JSON.stringify(pluginAssets)},
+					appBaseUrl: ${JSON.stringify(baseUrl_)},
+				};
+			`,
+		},
+	}, { prefersDarkEnabled: false });
+
+	return {
+		body: bodyHtml,
+		mime: 'text/html',
+		size: Buffer.byteLength(bodyHtml, 'utf-8'),
+		filename: '',
+	};
 }
 
 export function itemIsEncrypted(item: Item): boolean {
@@ -346,15 +457,61 @@ const isInTree = (itemTree: TreeItem, jopId: string) => {
 	return false;
 };
 
-interface RenderItemQuery {
-	resource_id?: string;
-	note_id?: string;
-}
-
 // "item" is always the item associated with the share (the "root item"). It may
 // be different from the item that will eventually get rendered - for example
 // for resources or linked notes.
 export async function renderItem(userId: Uuid, item: Item, share: Share, query: RenderItemQuery): Promise<FileViewerResponse> {
+	const bannerInfo = getDefaultBannerInfo();
+
+	if (item.jop_type === ModelType.Folder) {
+		const folderTree = await buildFolderTree(share, item.jop_id, query.note_id || '');
+
+		if (!query.note_id) {
+			if (query.resource_id) {
+				throw new ErrorNotFound(`Resource "${query.resource_id}" does not belong to this share`);
+			}
+
+			return renderNotePage(folderTree.rootTitle, bannerInfo, null, folderTree);
+		}
+
+		if (!folderTree.allowedNoteIds.has(query.note_id)) {
+			if (query.resource_id) throw new ErrorNotFound(`Resource "${query.resource_id}" does not belong to this share`);
+
+			return renderNotePage(
+				folderTree.rootTitle,
+				bannerInfo,
+				null,
+				folderTree,
+				[],
+				[],
+				{
+					emptyStateErrorMessage: `Item "${query.note_id}" does not belong to this share`,
+				},
+			);
+		}
+
+		const noteItem = await models_.item().loadByName(userId, `${query.note_id}.md`, { fields: ['*'], withContent: true });
+		if (!noteItem) throw new ErrorNotFound(`No such note: ${query.note_id}`);
+		const note = models_.item().itemToJoplinItem(noteItem);
+		if (itemIsInTrash(note)) throw new ErrorNotFound(`No such note: ${query.note_id}`);
+
+		const linkedItemInfos = await noteLinkedItemInfos(userId, models_.item(), note.body);
+
+		if (query.resource_id) {
+			const linkedItemInfo = linkedItemInfos[query.resource_id];
+			if (!linkedItemInfo || linkedItemInfo.item.type_ !== ModelType.Resource) {
+				throw new ErrorNotFound(`Resource "${query.resource_id}" does not belong to this share`);
+			}
+
+			const resourceItem = await models_.item().loadByName(userId, resourceBlobPath(query.resource_id), { fields: ['*'], withContent: true });
+			if (!resourceItem) throw new ErrorNotFound(`No such resource: ${query.resource_id}`);
+			return renderResource(userId, query.resource_id, resourceItem, resourceItem.content);
+		}
+
+		const resourceInfos = await getResourceInfos(linkedItemInfos);
+		return renderNote(share, note, resourceInfos, linkedItemInfos, bannerInfo, folderTree);
+	}
+
 	interface FileToRender {
 		item: Item;
 		content: Buffer | null;
@@ -362,6 +519,8 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 	}
 
 	const rootNote: NoteEntity = models_.item().itemToJoplinItem(item);
+	if (itemIsInTrash(rootNote)) throw new ErrorNotFound(`No such note: ${rootNote.id}`);
+
 	const itemTree = await models_.itemResource().itemTree(item.id, rootNote.id);
 
 	let linkedItemInfos: LinkedItemInfos = {};
@@ -403,9 +562,9 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 			jopItemId: query.note_id,
 		};
 
-		linkedItemInfos = await noteLinkedItemInfos(userId, models_.item(), noteItem.content.toString());
-		resourceInfos = await getResourceInfos(linkedItemInfos);
 		itemToRender = models_.item().itemToJoplinItem(noteItem);
+		linkedItemInfos = await noteLinkedItemInfos(userId, models_.item(), itemToRender.body);
+		resourceInfos = await getResourceInfos(linkedItemInfos);
 	} else {
 		// ------------------------------------------------------------------------------------------
 		// Render the root note
@@ -437,7 +596,6 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 	if (itemType === ModelType.Resource) {
 		return renderResource(userId, fileToRender.jopItemId, fileToRender.item, fileToRender.content);
 	} else if (itemType === ModelType.Note) {
-		const bannerInfo = getDefaultBannerInfo();
 		return renderNote(share, itemToRender, resourceInfos, linkedItemInfos, bannerInfo);
 	} else {
 		throw new Error(`Cannot render item with type "${itemType}"`);

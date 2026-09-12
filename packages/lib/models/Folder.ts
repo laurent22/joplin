@@ -7,7 +7,7 @@ import Note from './Note';
 import Database from '../database';
 import BaseItem from './BaseItem';
 import Resource from './Resource';
-import { isRootSharedFolder, StateShare } from '../services/share/reducer';
+import { isRootSharedFolder, ShareType, StateShare } from '../services/share/reducer';
 import Logger from '@joplin/utils/Logger';
 import syncDebugLog from '../services/synchronizer/syncDebugLog';
 import ResourceService from '../services/ResourceService';
@@ -22,6 +22,7 @@ import Setting from './Setting';
 import { itemIsReadOnlySync, ItemSlice } from './utils/readOnly';
 import ItemChange from './ItemChange';
 import { substrWithEllipsis } from '../string-utils';
+import { unique } from '../ArrayUtils';
 
 const logger = Logger.create('models/Folder');
 
@@ -92,6 +93,20 @@ export default class Folder extends BaseItem {
 	public static async noteCount(parentId: string) {
 		const r = await this.db().selectOne('SELECT count(*) as total FROM notes WHERE is_conflict = 0 AND parent_id = ?', [parentId]);
 		return r ? r.total : 0;
+	}
+
+	// Returns a map of folder id → number of indexable notes (excluding trash
+	// and conflicts). Folders with zero notes are omitted from the map.
+	public static async noteCountsByFolderId() {
+		const rows = await this.db().selectAll<{ parent_id: string; total: number }>(
+			`SELECT parent_id, count(*) as total
+			 FROM notes
+			 WHERE is_conflict = 0 AND (deleted_time IS NULL OR deleted_time = 0)
+			 GROUP BY parent_id`,
+		);
+		const counts: Record<string, number> = {};
+		for (const r of rows) counts[r.parent_id] = r.total;
+		return counts;
 	}
 
 	public static markNotesAsConflict(parentId: string) {
@@ -767,6 +782,30 @@ export default class Folder extends BaseItem {
 		await this.updateFolderShareIds(activeShares);
 		await this.updateNoteShareIds();
 		await this.updateResourceShareIds(resourceService);
+
+		// Don't update note publication status here: Doing so can cause conflicts if updateAllShareIds
+		// is called just before sync
+		await this.updateFolderPublishStatus_(activeShares);
+	}
+
+	private static async updateFolderPublishStatus_(activeShares: StateShare[]) {
+		const publishedFolderRootIds = activeShares
+			.filter(share => share.type === ShareType.PublishedFolder && !!share.folder_id)
+			.map(share => share.folder_id);
+		const publishedFolderIds = unique(publishedFolderRootIds.concat(
+			(await Promise.all(
+				publishedFolderRootIds.map(id => this.allChildrenFolders(id)),
+			)).flatMap(folders => folders.map(f => f.id)),
+		));
+
+		const publishedFolderIdSet = new Set(publishedFolderIds);
+
+		if (publishedFolderIds.length) {
+			for (const folder of await this.all({ fields: ['id', 'is_shared'] })) {
+				if (!publishedFolderIdSet.has(folder.id)) continue;
+				await this.updateShareStatus({ ...folder, type_: BaseModel.TYPE_FOLDER }, true);
+			}
+		}
 	}
 
 	// Clear the "share_id" property for the items that are associated with a

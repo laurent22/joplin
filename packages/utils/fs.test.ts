@@ -1,6 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 
 import { mkdirp } from 'fs-extra';
+import { utimes } from 'fs/promises';
 import { FileLocker } from './fs';
 import { msleep, Second } from './time';
 
@@ -43,6 +44,59 @@ describe('fs', () => {
 		expect(await locker3.lock()).toBe(true);
 
 		locker3.unlockSync();
+	});
+
+	it('should not unlock a file owned by another locker', async () => {
+		const dirPath = await createTempDir();
+		const filePath = `${dirPath}/test.lock`;
+		const options = { interval: 10 * Second };
+
+		const locker1 = new FileLocker(filePath, options);
+		const locker2 = new FileLocker(filePath, options);
+		const locker3 = new FileLocker(filePath, options);
+
+		expect(await locker1.lock()).toBe(true);
+		expect(await locker2.lock()).toBe(false);
+
+		locker2.unlockSync();
+
+		expect(await locker3.lock()).toBe(false);
+
+		locker1.unlockSync();
+
+		expect(await locker3.lock()).toBe(true);
+		locker3.unlockSync();
+	});
+
+	it('should not unlock a file taken over by another locker', async () => {
+		const dirPath = await createTempDir();
+		const filePath = `${dirPath}/test.lock`;
+		const options = { interval: 10 * Second };
+
+		const locker1 = new FileLocker(filePath, options);
+		const locker2 = new FileLocker(filePath, options);
+		const locker3 = new FileLocker(filePath, options);
+
+		try {
+			expect(await locker1.lock()).toBe(true);
+			// Simulate a delayed heartbeat without clearing the old owner's timer.
+			const staleTime = new Date(Date.now() - 2 * options.interval);
+			await utimes(filePath, staleTime, staleTime);
+
+			expect(await locker2.lock()).toBe(true);
+			locker1.unlockSync();
+			expect(await locker3.lock()).toBe(false);
+
+			locker2.unlockSync();
+			expect(await locker3.lock()).toBe(true);
+			// Repeated cleanup must also preserve a subsequent owner's lock.
+			locker2.unlockSync();
+			expect(await locker1.lock()).toBe(false);
+		} finally {
+			locker1.unlockSync();
+			locker2.unlockSync();
+			locker3.unlockSync();
+		}
 	});
 
 });

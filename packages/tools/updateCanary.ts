@@ -13,10 +13,40 @@ function formatDate(date: Date): string {
 	return `${day} ${month} ${year}`;
 }
 
+function ordinal(day: number): string {
+	const mod100 = day % 100;
+	if (mod100 >= 11 && mod100 <= 13) return `${day}th`;
+	switch (day % 10) {
+	case 1: return `${day}st`;
+	case 2: return `${day}nd`;
+	case 3: return `${day}rd`;
+	default: return `${day}th`;
+	}
+}
+
 function addDays(date: Date, days: number): Date {
 	const result = new Date(date);
 	result.setUTCDate(result.getUTCDate() + days);
 	return result;
+}
+
+// The canary is on a fixed bi-monthly schedule anchored to the 19th of
+// even-parity months (Feb, Apr, Jun, Aug, Oct, Dec). "Valid until" is the
+// next scheduled slot strictly after today, so observers know when to start
+// worrying regardless of whether the signer was a few days late.
+const scheduleDay = 19;
+const scheduleMonthParity = 1; // 0=Jan, 1=Feb, ... — Feb/Apr/Jun/Aug/Oct/Dec.
+
+function nextScheduledDate(today: Date): Date {
+	const year = today.getUTCFullYear();
+	for (let y = year; y <= year + 1; y++) {
+		for (let m = 0; m < 12; m++) {
+			if (m % 2 !== scheduleMonthParity) continue;
+			const candidate = new Date(Date.UTC(y, m, scheduleDay));
+			if (candidate.getTime() > today.getTime()) return candidate;
+		}
+	}
+	throw new Error('Could not compute next scheduled canary date');
 }
 
 function prompt(rl: ReadlineInterface, question: string): Promise<string> {
@@ -34,15 +64,17 @@ async function promptNonEmpty(rl: ReadlineInterface, question: string): Promise<
 }
 
 function buildCanaryContent(statementDate: Date, headline1: string, headline2: string): string {
-	const validUntil = addDays(statementDate, 60);
+	const validUntil = nextScheduledDate(statementDate);
+	const expiresAt = addDays(validUntil, 15);
+	const dayOfMonth = ordinal(scheduleDay);
 	return `Joplin Warrant Canary
 
 Statement date: ${formatDate(statementDate)}
 Valid until: ${formatDate(validUntil)}
 
-This warrant canary is updated every 60 days.
-If this document has not been updated within 75 days of the
-Statement date above, it should be considered expired.
+This warrant canary is updated on the ${dayOfMonth} of every other month.
+If this document has not been updated by ${formatDate(expiresAt)},
+it should be considered expired.
 
 As of the Statement date:
 

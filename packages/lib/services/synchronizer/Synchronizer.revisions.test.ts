@@ -329,4 +329,25 @@ describe('Synchronizer.revisions', () => {
 		await synchronizerStart();
 		expect(Setting.value('revisionService.enabled')).toBe(true);
 	}));
+
+	it('should not overwrite a customised local ttlDays with another client default', (async () => {
+		// Regression: a client that has never customised revisionService.ttlDays
+		// must not push its default over another client's customised value.
+		const changeSetting = (key: string, value: unknown) => {
+			Setting.setValue(key, value);
+			onRevisionServiceSettingsChanged(key, value);
+		};
+
+		changeSetting('revisionService.ttlDays', 30);
+		await synchronizerStart();
+
+		await switchClient(2);
+		expect(Setting.value('revisionService.ttlDays')).toBe(90);
+		await synchronizerStart();
+		expect(Setting.value('revisionService.ttlDays')).toBe(30);
+
+		await switchClient(1);
+		await synchronizerStart();
+		expect(Setting.value('revisionService.ttlDays')).toBe(30);
+	}));
 });

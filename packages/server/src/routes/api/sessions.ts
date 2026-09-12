@@ -28,7 +28,7 @@ router.post('api/sessions', async (_path: SubPath, ctx: AppContext) => {
 	};
 
 	// we pass null on mfaCode because the user shouldn't be able to make 2FA login over the API
-	const session = await ctx.joplin.models.session().authenticate(fields.email, fields.password, null);
+	const session = await ctx.joplin.models.session().authenticate(fields.email, fields.password, ctx.joplin.services, null);
 
 	await ctx.joplin.models.application().updateOnNewLogin(fields.email, clientInfo);
 

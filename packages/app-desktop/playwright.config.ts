@@ -24,6 +24,7 @@ export default defineConfig({
 	reporter: process.env.CI ? [
 		['dot'], // Give realtime workflow progress in CI
 		['html'],
+		['./integration-tests/util/ignoreFlakyReporter.ts'],
 	] : 'html',
 
 	// The CI machines can sometimes be very slow. Increase per-test timeout in CI.

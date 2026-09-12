@@ -4,7 +4,7 @@ import { execCommand as execCommand2, commandToString } from '@joplin/utils';
 
 import fetch from 'node-fetch';
 import execa = require('execa');
-import * as moment from 'moment';
+import moment from 'moment';
 
 export interface GitHubReleaseAsset {
 	name: string;

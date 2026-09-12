@@ -35,6 +35,8 @@ conflict_original_id:
 master_key_id: 
 user_data: 
 deleted_time: 0
+is_locked: ${note.is_locked || 0}
+extracted_resource_ids: ${note.extracted_resource_ids || ''}
 type_: 1`;
 }
 
@@ -49,6 +51,7 @@ user_updated_time: 2020-11-11T18:44:14.534Z
 encryption_cipher_text:
 encryption_applied: 0
 parent_id: ${folder.parent_id || ''}
+deleted_time: 0
 is_shared: 0
 share_id: ${folder.share_id || ''}
 user_data: 
@@ -81,5 +84,6 @@ encryption_blob_encrypted: 0
 size: ${resource.size}
 share_id: ${resource.share_id || ''}
 is_shared: 0
+is_locked: ${resource.is_locked || 0}
 type_: 4`;
 }

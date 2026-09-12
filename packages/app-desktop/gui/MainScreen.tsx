@@ -1,19 +1,16 @@
 import * as React from 'react';
-import ResizableLayout from './ResizableLayout/ResizableLayout';
+import { Dispatch } from 'redux';
+import ResizableLayout, { RenderItemEvent } from './ResizableLayout/ResizableLayout';
 import findItemByKey from './ResizableLayout/utils/findItemByKey';
 import { MoveButtonClickEvent } from './ResizableLayout/MoveButtons';
 import { move } from './ResizableLayout/utils/movements';
-import { LayoutItem, Size } from './ResizableLayout/utils/types';
-import { EventEmitter } from 'events';
+import { LayoutItem } from './ResizableLayout/utils/types';
 import CommandService from '@joplin/lib/services/CommandService';
 import { PluginHtmlContents, PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
-import Sidebar from './Sidebar/Sidebar';
-import UserWebview from '../services/plugins/UserWebview';
 import UserWebviewDialog from '../services/plugins/UserWebviewDialog';
 import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import { defaultWindowId, StateLastDeletion, stateUtils } from '@joplin/lib/reducer';
 import { _ } from '@joplin/lib/locale';
-import NoteListWrapper from './NoteListWrapper/NoteListWrapper';
 import { AppState } from '../app.reducer';
 import { saveLayout, loadLayout } from './ResizableLayout/utils/persist';
 import Setting from '@joplin/lib/models/Setting';
@@ -30,35 +27,32 @@ import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import { ShareInvitation } from '@joplin/lib/services/share/reducer';
 import removeKeylessItems from './ResizableLayout/utils/removeKeylessItems';
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import { isCallbackUrl, parseCallbackUrl } from '@joplin/lib/callbackUrlUtils';
+import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
+import executeCallbackUrl from './MainScreen/handleCallbackUrl';
 import ElectronAppWrapper from '../ElectronAppWrapper';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import invitationRespond from '@joplin/lib/services/share/invitationRespond';
 import restart from '../services/restart';
 import { connect } from 'react-redux';
-import { NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
-import validateColumns from './NoteListHeader/utils/validateColumns';
 import TrashNotification from './TrashNotification/TrashNotification';
 import UpdateNotification from './UpdateNotification/UpdateNotification';
-import NoteEditor from './NoteEditor/NoteEditor';
 import PluginNotification from './PluginNotification/PluginNotification';
 import { Toast } from '@joplin/lib/services/plugins/api/types';
-import PluginService from '@joplin/lib/services/plugins/PluginService';
-import QuitSyncDialog from './QuitSyncDialog';
 import Logger from '@joplin/utils/Logger';
+import checkForUpdates, { isReleaseVersion } from '../checkForUpdates';
 
 const logger = Logger.create('MainScreen');
 
 import { ipcRenderer } from 'electron';
+import layoutKeyToLabel from '../utils/layout/layoutKeyToLabel';
+import MainLayoutPane from './MainLayoutPane';
 
 interface Props {
 	plugins: PluginStates;
 	pluginHtmlContents: PluginHtmlContents;
-	pluginsLoaded: boolean;
 	hasNotesBeingSaved: boolean;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 	mainLayout: LayoutItem;
 	style: React.CSSProperties & { width?: number; height?: number };
 	layoutMoveMode: boolean;
@@ -70,21 +64,16 @@ interface Props {
 	showNeedUpgradingMasterKeyMessage: boolean;
 	showShouldReencryptMessage: boolean;
 	themeId: number;
-	startupPluginsLoaded: boolean;
 	shareInvitations: ShareInvitation[];
 	isSafeMode: boolean;
 	enableLegacyMarkdownEditor: boolean;
 	needApiAuth: boolean;
 	processingShareInvitationResponse: boolean;
 	isResettingLayout: boolean;
-	listRendererId: string;
 	lastDeletion: StateLastDeletion;
 	lastDeletionNotificationTime: number;
-	selectedFolderId: string;
 	mustUpgradeAppMessage: string;
-	notesSortOrderField: string;
-	notesSortOrderReverse: boolean;
-	notesColumns: NoteListColumns;
+	syncTargetAppMinVersion: string;
 	showInvalidJoplinCloudCredential: boolean;
 	toast: Toast;
 	shouldSwitchToAppleSiliconVersion: boolean;
@@ -101,6 +90,8 @@ interface State {
 	noteContentPropertiesDialogOptions: Record<string, unknown>;
 	shareNoteDialogOptions: Record<string, unknown>;
 	shareFolderDialogOptions: ShareFolderDialogOptions;
+	syncTargetAppMinVersionIsRelease: boolean | null;
+	didSyncTargetAppMinVersionReleaseLoadFail: boolean;
 }
 
 const StyledUserWebviewDialogContainer = styled.div`
@@ -119,20 +110,9 @@ const defaultLayout: LayoutItem = {
 	children: [
 		{ key: 'sideBar', width: 250 },
 		{ key: 'noteList', width: 250 },
-		{ key: 'editor' },
+		{ key: 'editor', flexible: true },
+		{ key: 'chatPanel', width: 340, visible: false },
 	],
-};
-
-const layoutKeyToLabel = (key: string, plugins: PluginStates) => {
-	if (key === 'sideBar') return _('Sidebar');
-	if (key === 'noteList') return _('Note list');
-	if (key === 'editor') return _('Editor');
-
-	const viewInfo = pluginUtils.viewInfoByViewId(plugins, key);
-	if (viewInfo) {
-		return PluginService.instance().safePluginNameById(viewInfo.plugin.id);
-	}
-	return key;
 };
 
 class MainScreenComponent extends React.Component<Props, State> {
@@ -154,6 +134,8 @@ class MainScreenComponent extends React.Component<Props, State> {
 				visible: false,
 				folderId: '',
 			},
+			syncTargetAppMinVersionIsRelease: null,
+			didSyncTargetAppMinVersionReleaseLoadFail: false,
 		};
 
 		this.updateMainLayout(this.buildLayout(props.plugins));
@@ -171,20 +153,23 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 		ipcRenderer.on('asynchronous-message', (_event: import('electron').IpcRendererEvent, message: string, args: { url: string }) => {
 			if (message === 'openCallbackUrl') {
-				this.openCallbackUrl(args.url);
+				void this.openCallbackUrl(args.url);
 			}
 		});
 
 		const initialCallbackUrl = (bridge().electronApp() as ElectronAppWrapper).initialCallbackUrl();
 		if (initialCallbackUrl) {
-			this.openCallbackUrl(initialCallbackUrl);
+			void this.openCallbackUrl(initialCallbackUrl);
 		}
 	}
 
-	private openCallbackUrl(url: string) {
-		if (!isCallbackUrl(url)) throw new Error(`Invalid callback URL: ${url}`);
-		const { command, params } = parseCallbackUrl(url);
-		void CommandService.instance().execute(command.toString(), params.id);
+	private async openCallbackUrl(url: string) {
+		try {
+			if (!isCallbackUrl(url)) throw new Error(`Invalid callback URL: ${url}`);
+			await executeCallbackUrl(url);
+		} catch (error) {
+			logger.error('Error handling callback URL:', error);
+		}
 	}
 
 	private updateLayoutPluginViews(layout: LayoutItem, plugins: PluginStates) {
@@ -200,6 +185,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 				if (!existingItem) {
 					draftLayout.children.push({
 						key: viewId,
+						visible: info.view.opened,
 						context: {
 							pluginId: info.plugin.id,
 						},
@@ -234,10 +220,22 @@ class MainScreenComponent extends React.Component<Props, State> {
 	private buildLayout(plugins: PluginStates): LayoutItem {
 		const rootLayoutSize = this.rootLayoutSize();
 
-		const userLayout = Setting.value('ui.layout');
+		let userLayout = Setting.value('ui.layout');
 		let output = null;
 
 		try {
+			// Migration: stamp the flexible flag on the editor and clear any
+			// stale width before validateLayout's first pass.
+			if (userLayout && Object.keys(userLayout).length) {
+				userLayout = produce(userLayout as LayoutItem, (draft: LayoutItem) => {
+					const editor = findItemByKey(draft, 'editor');
+					if (editor && !editor.flexible) {
+						editor.flexible = true;
+						delete editor.width;
+					}
+				});
+			}
+
 			output = loadLayout(Object.keys(userLayout).length ? userLayout : null, defaultLayout, rootLayoutSize);
 
 			// For unclear reasons, layout items sometimes end up without a key.
@@ -250,6 +248,14 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 			if (!findItemByKey(output, 'sideBar') || !findItemByKey(output, 'noteList') || !findItemByKey(output, 'editor')) {
 				throw new Error('"sideBar", "noteList" and "editor" must be present in the layout');
+			}
+
+			// Migration: existing users have layouts saved before chatPanel
+			// existed. Add it (hidden) so the toggle works.
+			if (!findItemByKey(output, 'chatPanel')) {
+				output = produce(output, (draft: LayoutItem) => {
+					draft.children.push({ key: 'chatPanel', width: 340, visible: false });
+				});
 			}
 		} catch (error) {
 			console.warn('Could not load layout - restoring default layout:', error);
@@ -351,6 +357,13 @@ class MainScreenComponent extends React.Component<Props, State> {
 				value: false,
 			});
 		}
+
+		if (
+			this.props.mustUpgradeAppMessage !== prevProps.mustUpgradeAppMessage ||
+			this.props.syncTargetAppMinVersion !== prevProps.syncTargetAppMinVersion
+		) {
+			void this.loadSyncTargetAppMinVersionIsRelease();
+		}
 	}
 
 	public layoutModeListenerKeyDown(event: KeyboardEvent) {
@@ -361,11 +374,35 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 	public componentDidMount() {
 		window.addEventListener('keydown', this.layoutModeListenerKeyDown);
+		void this.loadSyncTargetAppMinVersionIsRelease();
 	}
 
 	public componentWillUnmount() {
 		window.removeEventListener('resize', this.window_resize);
 		window.removeEventListener('keydown', this.layoutModeListenerKeyDown);
+	}
+
+	private async loadSyncTargetAppMinVersionIsRelease() {
+		const version = this.props.syncTargetAppMinVersion;
+
+		this.setState({
+			syncTargetAppMinVersionIsRelease: null,
+			didSyncTargetAppMinVersionReleaseLoadFail: false,
+		});
+		if (!this.props.mustUpgradeAppMessage || !version) return;
+
+		try {
+			const syncTargetAppMinVersionIsRelease = await isReleaseVersion(version);
+			if (!this.props.mustUpgradeAppMessage || this.props.syncTargetAppMinVersion !== version) return;
+			this.setState({
+				syncTargetAppMinVersionIsRelease,
+				didSyncTargetAppMinVersionReleaseLoadFail: syncTargetAppMinVersionIsRelease === null,
+			});
+		} catch (error) {
+			logger.error(error);
+			if (!this.props.mustUpgradeAppMessage || this.props.syncTargetAppMinVersion !== version) return;
+			this.setState({ didSyncTargetAppMinVersionReleaseLoadFail: true });
+		}
 	}
 
 	public rootLayoutSize() {
@@ -423,8 +460,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		return this.styles_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	private renderNotificationMessage(message: string, callForAction: string = null, callForActionHandler: Function = null, callForAction2: string = null, callForActionHandler2: Function = null) {
+	private renderNotificationMessage(message: string, callForAction: string = null, callForActionHandler: ()=> void = null, callForAction2: string = null, callForActionHandler2: ()=> void = null) {
 		const theme = themeStyle(this.props.themeId);
 		const urlStyle: React.CSSProperties = { color: theme.colorWarnUrl, textDecoration: 'underline' };
 
@@ -441,6 +477,17 @@ class MainScreenComponent extends React.Component<Props, State> {
 				{callForAction2}
 			</a>
 		);
+
+		if (!callForAction2 && message.includes(callForAction)) {
+			const actionIndex = message.indexOf(callForAction);
+			return (
+				<span>
+					{message.substring(0, actionIndex)}
+					{cfa}
+					{message.substring(actionIndex + callForAction.length)}
+				</span>
+			);
+		}
 
 		return (
 			<span>
@@ -494,6 +541,10 @@ class MainScreenComponent extends React.Component<Props, State> {
 		const onDownloadAppleSiliconVersion = () => {
 			// The website should redirect to the correct version
 			shim.openUrl('https://joplinapp.org/download/');
+		};
+
+		const onCheckForUpdates = () => {
+			void checkForUpdates(false, bridge().mainWindow(), { includePreReleases: false });
 		};
 
 		const onRestartAndUpgrade = async () => {
@@ -577,7 +628,41 @@ class MainScreenComponent extends React.Component<Props, State> {
 				onViewEncryptionConfigScreen,
 			);
 		} else if (this.props.mustUpgradeAppMessage) {
-			msg = this.renderNotificationMessage(this.props.mustUpgradeAppMessage);
+			if (!this.props.syncTargetAppMinVersion) {
+				msg = this.renderNotificationMessage(this.props.mustUpgradeAppMessage);
+			} else if (this.state.didSyncTargetAppMinVersionReleaseLoadFail) {
+				msg = this.renderNotificationMessage(
+					_(
+						'In order to synchronise, Please upgrade your application to version %s. Joplin could not check update information.',
+						this.props.syncTargetAppMinVersion,
+					),
+				);
+			} else if (this.state.syncTargetAppMinVersionIsRelease === false && shim.isLinux()) {
+				const callForAction = _('Download it from GitHub Releases');
+				msg = this.renderNotificationMessage(
+					_(
+						'In order to synchronise, Please upgrade your application to version %s: %s or update it using your package manager',
+						this.props.syncTargetAppMinVersion,
+						callForAction,
+					),
+					callForAction,
+					() => shim.openUrl('https://github.com/laurent22/joplin/releases'),
+				);
+			} else if (this.state.syncTargetAppMinVersionIsRelease !== null) {
+				const isTargetPreRelease = this.state.syncTargetAppMinVersionIsRelease === false;
+				const callForAction = isTargetPreRelease ? _('Download it from GitHub Releases') : _('Check for updates');
+				msg = this.renderNotificationMessage(
+					_(
+						'In order to synchronise, Please upgrade your application to version %s: %s',
+						this.props.syncTargetAppMinVersion,
+						callForAction,
+					),
+					callForAction,
+					isTargetPreRelease ? () => shim.openUrl('https://github.com/laurent22/joplin/releases') : onCheckForUpdates,
+				);
+			} else {
+				msg = this.renderNotificationMessage(this.props.mustUpgradeAppMessage);
+			}
 		} else if (this.props.shouldSwitchToAppleSiliconVersion) {
 			msg = this.renderNotificationMessage(
 				_('You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.'),
@@ -634,103 +719,15 @@ class MainScreenComponent extends React.Component<Props, State> {
 		this.updateMainLayout(newLayout);
 	}
 
-	private resizableLayout_renderItem(key: string, event: { eventEmitter: EventEmitter; visible: boolean; size: Size; item: LayoutItem }): React.ReactNode {
-		// Key should never be undefined but somehow it can happen, also not
-		// clear how. For now in this case render nothing so that the app
-		// doesn't crash.
-		// https://discourse.joplinapp.org/t/rearranging-the-pannels-crushed-the-app-and-generated-fatal-error/14373?u=laurent
-		if (!key) {
-			console.error('resizableLayout_renderItem: Trying to render an item using an empty key. Full layout is:', this.props.mainLayout);
-			return null;
-		}
-
-		const eventEmitter = event.eventEmitter;
-
-		// const viewsToRemove:string[] = [];
-
-		const components: Record<string, ()=> React.ReactNode> = {
-			sideBar: () => {
-				return <Sidebar key={key} />;
-			},
-
-			noteList: () => {
-				return <NoteListWrapper
-					key={key}
-					resizableLayoutEventEmitter={eventEmitter}
-					visible={event.visible}
-					size={event.size}
-					themeId={this.props.themeId}
-					listRendererId={this.props.listRendererId}
-					startupPluginsLoaded={this.props.startupPluginsLoaded}
-					notesSortOrderField={this.props.notesSortOrderField}
-					notesSortOrderReverse={this.props.notesSortOrderReverse}
-					columns={this.props.notesColumns}
-					selectedFolderId={this.props.selectedFolderId}
-				/>;
-			},
-
-			editor: () => {
-				return <div className='note-editor-wrapper' role='main' aria-label={_('Note')}>
-					<NoteEditor
-						windowId={defaultWindowId}
-						key={key}
-						startupPluginsLoaded={this.props.startupPluginsLoaded}
-					/>
-				</div>;
-			},
-		};
-
-		if (components[key]) return components[key]();
-
-		const viewsToRemove: string[] = [];
-
-		if (key.indexOf('plugin-view') === 0) {
-			const viewInfo = pluginUtils.viewInfoByViewId(this.props.plugins, event.item.key);
-
-			if (!viewInfo) {
-				// Once all startup plugins have loaded, we know that all the
-				// views are ready so we can remove the orphans ones.
-				//
-				// Before they are loaded, there might be views that don't match
-				// any plugins, but that's only because it hasn't loaded yet.
-				if (this.props.startupPluginsLoaded) {
-					console.warn(`Could not find plugin associated with view: ${event.item.key}`);
-					viewsToRemove.push(event.item.key);
-				}
-			} else {
-				const { view, plugin } = viewInfo;
-				const html = this.props.pluginHtmlContents[plugin.id]?.[view.id] ?? '';
-
-				return <UserWebview
-					key={view.id}
-					viewId={view.id}
-					themeId={this.props.themeId}
-					html={html}
-					scripts={view.scripts}
-					pluginId={plugin.id}
-					borderBottom={true}
-					fitToContent={false}
-				/>;
-			}
-		} else {
-			throw new Error(`Invalid layout component: ${key}`);
-		}
-
-		if (viewsToRemove.length) {
-			window.requestAnimationFrame(() => {
-				let newLayout = this.props.mainLayout;
-				for (const itemKey of viewsToRemove) {
-					newLayout = removeItem(newLayout, itemKey);
-				}
-
-				if (newLayout !== this.props.mainLayout) {
-					console.warn('Removed invalid views:', viewsToRemove);
-					this.updateMainLayout(newLayout);
-				}
-			});
-		}
-
-		return null;
+	private resizableLayout_renderItem(key: string, event: RenderItemEvent): React.ReactNode {
+		return <MainLayoutPane
+			key={key}
+			contentKey={key}
+			event={event}
+			windowId={defaultWindowId}
+			onUpdateLayout={this.updateMainLayout}
+			layout={this.props.mainLayout}
+		/>;
 	}
 
 	public renderPluginDialogs() {
@@ -805,7 +802,6 @@ class MainScreenComponent extends React.Component<Props, State> {
 					themeId={this.props.themeId}
 					toast={this.props.toast}
 				/>
-				<QuitSyncDialog themeId={this.props.themeId} />
 				{messageComp}
 				{layoutComp}
 			</div>
@@ -816,7 +812,6 @@ class MainScreenComponent extends React.Component<Props, State> {
 const mapStateToProps = (state: AppState) => {
 	const syncInfo = localSyncInfoFromState(state);
 	const showNeedUpgradingEnabledMasterKeyMessage = !!EncryptionService.instance().masterKeysThatNeedUpgrading(syncInfo.masterKeys.filter((k) => !!k.enabled)).length;
-	const windowState = stateUtils.windowStateById(state, defaultWindowId);
 
 	return {
 		themeId: state.settings.theme,
@@ -832,21 +827,16 @@ const mapStateToProps = (state: AppState) => {
 		hasNotesBeingSaved: stateUtils.hasNotesBeingSaved(state),
 		layoutMoveMode: state.layoutMoveMode,
 		mainLayout: state.mainLayout,
-		startupPluginsLoaded: state.startupPluginsLoaded,
 		shareInvitations: state.shareService.shareInvitations,
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
 		isSafeMode: state.settings.isSafeMode,
 		enableLegacyMarkdownEditor: state.settings['editor.legacyMarkdown'],
 		needApiAuth: state.needApiAuth,
 		isResettingLayout: state.isResettingLayout,
-		listRendererId: state.settings['notes.listRendererId'],
 		lastDeletion: state.lastDeletion,
 		lastDeletionNotificationTime: state.lastDeletionNotificationTime,
-		selectedFolderId: windowState.selectedFolderId,
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
-		notesSortOrderField: state.settings['notes.sortOrder.field'],
-		notesSortOrderReverse: state.settings['notes.sortOrder.reverse'],
-		notesColumns: validateColumns(state.settings['notes.columns']),
+		syncTargetAppMinVersion: syncInfo.appMinVersion,
 		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
 		toast: state.toast,
 		shouldSwitchToAppleSiliconVersion: shim.isAppleSilicon() && shim.isMac() && process.arch !== 'arm64',

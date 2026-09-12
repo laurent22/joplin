@@ -22,10 +22,12 @@ interface PathToFileMap {
 const pathToFileMap: PathToFileMap = {
 	'css/bulma.min.css': 'node_modules/bulma/css/bulma.min.css',
 	'css/fontawesome/css/all.min.css': 'node_modules/@fortawesome/fontawesome-free/css/all.min.css',
+	'css/wunderbaum.css': 'node_modules/wunderbaum/dist/wunderbaum.css',
 	'js/zxcvbn.js': 'node_modules/zxcvbn/dist/zxcvbn.js',
 	'js/zxcvbn.js.map': 'node_modules/zxcvbn/dist/zxcvbn.js.map',
 	'js/jquery.min.js': 'node_modules/jquery/dist/jquery.min.js',
 	'js/jquery.min.map': 'node_modules/jquery/dist/jquery.min.map',
+	'js/wunderbaum.umd.min.js': 'node_modules/wunderbaum/dist/wunderbaum.umd.min.js',
 
 	// Hard-coded for now but it could be made dynamic later on
 	// 'apps/joplin/css/note.css': 'src/apps/joplin/css/note.css',

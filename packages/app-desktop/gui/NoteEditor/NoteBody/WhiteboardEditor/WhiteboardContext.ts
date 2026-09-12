@@ -3,12 +3,14 @@ import { MarkupLanguage } from '@joplin/renderer';
 import { ResourceInfos } from '../../utils/types';
 import { MarkupToHtmlOptions } from '../../../hooks/useMarkupToHtml';
 import { RenderResult } from '@joplin/renderer/types';
+import { ThemeAppearance } from '@joplin/lib/themes/type';
 
 export interface WhiteboardContextValue {
 	markupToHtml: (markupLanguage: MarkupLanguage, md: string, options?: MarkupToHtmlOptions)=> Promise<RenderResult>;
 	resourceInfos: ResourceInfos;
 	resourceDirectory: string;
 	themeId: number;
+	themeAppearance: ThemeAppearance;
 	onOpenRef: (ref: string)=> void;
 	onUpdateNode: (canvasNodeId: string, patch: Record<string, unknown>)=> void;
 	onPromoteTextNode: (canvasNodeId: string)=> void;

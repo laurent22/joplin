@@ -4,6 +4,7 @@ import BaseService from './BaseService';
 import shim from '../shim';
 import WhenClause from './WhenClause';
 import type { WhenClauseContext, WhenClauseContextOptions } from './commands/stateToWhenClauseContext';
+import { Dispatch } from 'redux';
 
 type LabelFunction = ()=> string;
 type EnabledCondition = string;
@@ -14,8 +15,7 @@ export type MenuItemRole = 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'pasteAn
 export interface CommandContext {
 	// The state may also be of type "AppState" (used by the desktop app), which inherits from "State" (used by all apps)
 	state: State;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Used as a variance escape hatch: desktop runtimes type dispatch more strictly but lib's CommandRuntime is the supertype
-	dispatch: Function;
+	dispatch: Dispatch;
 }
 
 export interface CommandRuntime {
@@ -28,7 +28,9 @@ export interface CommandRuntime {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- State is lib's State for cli but app-desktop runtimes type this as AppState; narrowing here breaks downstream contravariance
 	mapStateToTitle?(state: any): string;
 	// Used to break ties when commands are registered by different components.
-	getPriority?(state: State): number;
+	// `state` should be the main app state. `targetWindowId` should be the window ID
+	// the command should run in, or `null` for any window.
+	getPriority?(state: State, targetWindowId: string|null): number;
 }
 
 export interface CommandDeclaration {
@@ -107,6 +109,11 @@ export interface RegisteredRuntime {
 	deregister: ()=> void;
 }
 
+export interface ExecuteInWindowOptions {
+	windowId: string|null; // null -> active window
+	args: unknown[];
+}
+
 export default class CommandService extends BaseService {
 
 	private static instance_: CommandService;
@@ -120,10 +127,10 @@ export default class CommandService extends BaseService {
 	private commands_: Commands = {};
 	private store_: ReduxStore;
 	private devMode_: boolean;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Concrete state-to-context function is parametrised over per-app state (AppState in desktop/mobile, State in cli); typing too narrowly here breaks derived classes
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Concrete state-to-context function is parametrised over per-app state (AppState in desktop/mobile, State in cli); typing too narrowly here breaks derived classes
 	private stateToWhenClauseContext_: Function;
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- See stateToWhenClauseContext_
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- See stateToWhenClauseContext_
 	public initialize(store: ReduxStore, devMode: boolean, stateToWhenClauseContext: Function) {
 		utils.store = store;
 		this.store_ = store;
@@ -294,19 +301,19 @@ export default class CommandService extends BaseService {
 		return {
 			state: this.store_.getState(),
 			dispatch: (action: unknown) => {
-				this.store_.dispatch(action);
+				return this.store_.dispatch(action);
 			},
 		};
 	}
 
-	private getRuntime(command: Command) {
+	private getRuntime(command: Command, targetWindowId: string|null = null) {
 		if (!Array.isArray(command.runtime)) return command.runtime;
 		if (!command.runtime.length) return null;
 
 		let bestRuntime = null;
 		let bestRuntimeScore = -1;
 		for (const runtime of command.runtime) {
-			const score = runtime.getPriority?.(this.store_.getState()) ?? 0;
+			const score = runtime.getPriority?.(this.store_.getState(), targetWindowId) ?? 0;
 			if (score >= bestRuntimeScore) {
 				bestRuntime = runtime;
 				bestRuntimeScore = score;
@@ -317,16 +324,20 @@ export default class CommandService extends BaseService {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Args/return shape varies per command, see CommandRuntime.execute
 	public async execute(commandName: string, ...args: any[]): Promise<any | void> {
+		return this.executeInWindow(commandName, { windowId: null, args });
+	}
+
+	public async executeInWindow(commandName: string, options: ExecuteInWindowOptions): Promise<unknown | void> {
 		const command = this.commandByName(commandName);
 		// Some commands such as "showModalMessage" can be executed many
 		// times per seconds, so we should only display this message in
 		// debug mode.
-		if (commandName !== 'showModalMessage') this.logger().debug('CommandService::execute:', commandName, args);
+		if (commandName !== 'showModalMessage') this.logger().debug('CommandService::execute:', commandName, options.args);
 
-		const runtime = this.getRuntime(command);
+		const runtime = this.getRuntime(command, options.windowId);
 		if (!runtime) throw new Error(`Cannot execute a command without a runtime: ${commandName}`);
 
-		return runtime.execute(this.createContext(), ...args);
+		return runtime.execute(this.createContext(), ...options.args);
 	}
 
 	public scheduleExecute(commandName: string, args: unknown) {

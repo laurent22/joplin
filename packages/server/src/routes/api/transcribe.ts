@@ -17,6 +17,13 @@ const isHtrSupported = () => {
 	return config().TRANSCRIBE_ENABLED;
 };
 
+const validateJobId = (id: string): string => {
+	if (!/^[a-zA-Z0-9_-]+$/.test(id)) {
+		throw new ErrorBadRequest('Invalid job ID format');
+	}
+	return id;
+};
+
 const parseResponseSafely = async (response: Response) => {
 	const text = await response.text();
 
@@ -34,9 +41,11 @@ router.get('api/transcribe/:id', async (path: SubPath, _ctx: AppContext) => {
 		throw new ErrorNotImplemented('HTR feature is not enabled in this server');
 	}
 
+	const jobId = validateJobId(path.id);
+
 	try {
-		logger.info(`Checking Transcribe for Job: ${path.id}`);
-		const response = await fetch(`${config().TRANSCRIBE_BASE_URL}/transcribe/${path.id}`,
+		logger.info(`Checking Transcribe for Job: ${jobId}`);
+		const response = await fetch(`${config().TRANSCRIBE_BASE_URL}/transcribe/${jobId}`,
 			{
 				headers: {
 					'Authorization': config().TRANSCRIBE_API_KEY,

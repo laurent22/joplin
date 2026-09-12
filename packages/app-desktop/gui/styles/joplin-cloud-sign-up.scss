@@ -1,4 +1,18 @@
 
 .joplin-cloud-sign-up {
 	margin-top: 1em;
+	font-size: var(--joplin-font-size);
+
+	&.-primary {
+		display: flex;
+
+		> button {
+			flex: 1;
+			padding: 10px 10px;
+			height: auto;
+			min-height: auto;
+			max-height: fit-content;
+			font-size: 1em;
+		}
+	}
 }

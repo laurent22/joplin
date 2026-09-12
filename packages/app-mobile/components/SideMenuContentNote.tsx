@@ -82,7 +82,8 @@ const SideMenuContentNoteComponent: React.FC<Props> = props => {
 		return <View style={styles.divider} key={key}/>;
 	};
 
-	const renderSidebarButton = (key: string, title: string, iconName: string, onPressHandler: ()=> void) => {
+	type IconNameProp = React.ComponentProps<typeof Icon>['name'];
+	const renderSidebarButton = (key: string, title: string, iconName: IconNameProp, onPressHandler: ()=> void) => {
 		const content = (
 			<View key={key} style={onPressHandler ? styles.sideButton : styles.sideButtonDisabled}>
 				{!iconName ? null : <Icon name={iconName} style={styles.sidebarIcon} />}

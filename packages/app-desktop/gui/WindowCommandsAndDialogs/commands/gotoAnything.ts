@@ -11,6 +11,7 @@ export enum UiType {
 
 export interface GotoAnythingOptions {
 	mode?: Mode;
+	alwaysShowHelp?: boolean;
 }
 
 export const declaration: CommandDeclaration = {
@@ -45,12 +46,12 @@ export const runtime = (): CommandRuntime => {
 			} else if (uiType === UiType.CommandPalette) {
 				menuItemById('commandPalette').click();
 			} else if (uiType === UiType.ControlledApi) {
-				// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 				return new Promise((resolve: UserDataCallbackResolve, reject: UserDataCallbackReject) => {
 					const menuItem: PluginMenuItem = PluginManager.instance().menuItems().find((i: PluginMenuItem) => i.id === 'controlledApi');
 					const userData: GotoAnythingUserData = {
 						callback: { resolve, reject },
 						mode: options.mode,
+						alwaysShowHelp: options.alwaysShowHelp,
 					};
 					menuItem.userData = userData;
 					menuItem.click();

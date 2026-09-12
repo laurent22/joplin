@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Dispatch } from 'redux';
 import app from '../app';
 import { AppState, AppStateDialog } from '../app.reducer';
 import MainScreen from './MainScreen';
@@ -32,13 +33,13 @@ import SsoLoginScreen from './SsoLoginScreen/SsoLoginScreen';
 import SamlShared from '@joplin/lib/components/shared/SamlShared';
 import PopupNotificationProvider from './PopupNotification/PopupNotificationProvider';
 import { ThemeProvider, StyleSheetManager, createGlobalStyle } from 'styled-components';
+import QuitSyncDialog from './QuitSyncDialog';
 
 interface Props {
 	themeId: number;
 	appState: string;
 	profileConfigCurrentProfileId: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 	zoomFactor: number;
 	needApiAuth: boolean;
 	dialogs: AppStateDialog[];
@@ -178,6 +179,7 @@ class RootComponent extends React.Component<Props, any> {
 						<MenuBar/>
 						<GlobalStyle/>
 						<WindowCommandsAndDialogs windowId={defaultWindowId} />
+						<QuitSyncDialog themeId={this.props.themeId} />
 						<Navigator style={navigatorStyle} screens={screens} className={`profile-${this.props.profileConfigCurrentProfileId}`} />
 						{this.renderSecondaryWindows()}
 						{this.renderModalMessage(this.modalDialogProps())}

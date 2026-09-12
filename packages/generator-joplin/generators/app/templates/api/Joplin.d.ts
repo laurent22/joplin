@@ -12,6 +12,9 @@ import JoplinClipboard from './JoplinClipboard';
 import JoplinWindow from './JoplinWindow';
 import BasePlatformImplementation from '../BasePlatformImplementation';
 import JoplinImaging from './JoplinImaging';
+import JoplinFs from './JoplinFs';
+import JoplinAi from './JoplinAi';
+import type { Store } from 'redux';
 /**
  * This is the main entry point to the Joplin API. You can access various services using the provided accessors.
  *
@@ -28,6 +31,7 @@ export default class Joplin {
     private data_;
     private plugins_;
     private imaging_;
+    private fs_;
     private workspace_;
     private filters_;
     private commands_;
@@ -37,11 +41,13 @@ export default class Joplin {
     private contentScripts_;
     private clipboard_;
     private window_;
+    private ai_;
     private implementation_;
-    constructor(implementation: BasePlatformImplementation, plugin: Plugin, store: any);
+    constructor(implementation: BasePlatformImplementation, plugin: Plugin, store: Store<any>);
     get data(): JoplinData;
     get clipboard(): JoplinClipboard;
     get imaging(): JoplinImaging;
+    get fs(): JoplinFs;
     get window(): JoplinWindow;
     get plugins(): JoplinPlugins;
     get workspace(): JoplinWorkspace;
@@ -57,6 +63,13 @@ export default class Joplin {
     get views(): JoplinViews;
     get interop(): JoplinInterop;
     get settings(): JoplinSettings;
+    /**
+     * Access to AI features: chat completions and semantic search over the
+     * local embeddings index. See {@link JoplinAi}.
+     *
+     * <span class="platform-desktop">desktop</span>
+     */
+    get ai(): JoplinAi;
     /**
      * It is not possible to bundle native packages with a plugin, because they
      * need to work cross-platforms. Instead access to certain useful native
