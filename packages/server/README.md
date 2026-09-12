@@ -152,8 +152,8 @@ MAILER_NOREPLY_EMAIL=noreply@example.com
 
 - **MAILER_ENABLED** — set to `true` to enable sending emails. If it is `false` or if **MAILER_HOST** is not set, the email service is disabled.
 - **MAILER_HOST** and **MAILER_PORT** — the address and port of the SMTP server. Port 465 is typically used for TLS, and 587 for STARTTLS.
-- **MAILER_SECURITY** — how the connection is secured. Can be `tls` (the default), `starttls` or `none`.
-- **MAILER_AUTH_USER** and **MAILER_AUTH_PASSWORD** — credentials to login to the SMTP server. Leave them empty if the server does not require authentication.
+- **MAILER_SECURITY** — how the connection is secured. Valid values are `tls` (the default), `starttls` and `none`. Note that `none` disables encryption, so it should not be used together with **MAILER_AUTH_USER** / **MAILER_AUTH_PASSWORD**, as the credentials would then be sent to the SMTP server unencrypted.
+- **MAILER_AUTH_USER** and **MAILER_AUTH_PASSWORD** — credentials to log in to the SMTP server. Leave them empty if the server does not require authentication.
 - **MAILER_NOREPLY_NAME** and **MAILER_NOREPLY_EMAIL** — the display name and email address used as the sender of all outgoing emails. **MAILER_NOREPLY_EMAIL** must be set for the email service to work.
 
 Restart the server for these variables to take effect.
