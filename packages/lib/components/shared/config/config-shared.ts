@@ -1,4 +1,4 @@
-import Setting, { AppType, SettingMetadataSection, SettingSectionSource, type SettingsRecord } from '../../../models/Setting';
+import Setting, { AppType, SettingItem, SettingMetadataSection, SettingSectionSource, SyncStartupOperation, type SettingsRecord } from '../../../models/Setting';
 import SyncTargetRegistry from '../../../SyncTargetRegistry';
 import { _ } from '../../../locale';
 import { createSelector } from 'reselect';
@@ -10,8 +10,9 @@ import settingValidations from '../../../models/settings/settingValidations';
 import { convertValuesToFunctions } from '../../../ObjectUtils';
 import aiSettingsTransition from '../../../services/ai/aiSettingsTransition';
 import { ChatRole } from '../../../services/ai/types';
-import { hasValidBaseUrl, isJoplinOAuthSyncTarget } from '../../../services/joplinOAuthUtils';
+import { fetchLoginUrl, hasValidBaseUrl, isJoplinOAuthSyncTarget, openLoginScreen } from '../../../services/joplinOAuthUtils';
 import NavService from '../../../services/NavService';
+import shim from '../../../shim';
 
 const logger = Logger.create('config-shared');
 
@@ -45,6 +46,7 @@ interface ConfigScreenComponent {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mirrors React.Component.setState signature (Pick<S, K> etc.); a narrower local type breaks subclass assignment of `this` to ConfigScreenComponent
 	setState(callbackOrNew: any, callback?: ()=> void): void;
+	setSettingValue<Key extends keyof SettingsMap>(key: Key&string, value: SettingsMap[Key]): void;
 }
 
 interface SettingsSavedEvent {
@@ -388,4 +390,58 @@ export const settingsToComponents2 = (
 	}
 
 	return sectionComps;
+};
+
+export const restartMessage = () => _('The application must be restarted for these changes to take effect.');
+
+export const onSettingButtonPress = async (comp: ConfigScreenComponent, metadata: SettingItem) => {
+	const key = metadata.key;
+	const syncCommandMatch = key.match(/^sync\.(\d+)\.(connect|disconnect)$/);
+	const syncCommandId = syncCommandMatch ? Number(syncCommandMatch[1]) : -1;
+
+	if (syncCommandMatch && isJoplinOAuthSyncTarget(syncCommandId)) {
+		if (key.endsWith('connect')) {
+			const loginUrl = await fetchLoginUrl(syncCommandId, comp.state.settings[`sync.${syncCommandId}.path`]);
+			// Older Joplin Server versions don't support fetching the login URL
+			if (!loginUrl && syncCommandId === 9) {
+				comp.setSettingValue(`sync.${syncCommandId}.preferPasswordAuth`, true);
+			} else {
+				await saveSettings(comp);
+				await openLoginScreen(syncCommandId);
+			}
+		} else if (key.endsWith('disconnect')) {
+			comp.setSettingValue(`sync.${syncCommandId}.username`, '');
+			comp.setSettingValue(`sync.${syncCommandId}.password`, '');
+		} else {
+			throw new Error(`Invalid sync command ID: ${key}`);
+		}
+	} else if (key === 'sync.clearLocalSyncStateButton') {
+		if (!await shim.showConfirmationDialog('This cannot be undone. Do you want to continue?')) return;
+		Setting.setValue('sync.startupOperation', SyncStartupOperation.ClearLocalSyncState);
+		await Setting.saveAll();
+		await shim.restartApp();
+	} else if (key === 'sync.clearLocalDataButton') {
+		if (!await shim.showConfirmationDialog('This cannot be undone. Do you want to continue?')) return;
+		Setting.setValue('sync.startupOperation', SyncStartupOperation.ClearLocalData);
+		await Setting.saveAll();
+		await shim.restartApp();
+	} else if (key === 'ocr.clearLanguageDataCacheButton') {
+		if (!await shim.showConfirmationDialog(restartMessage())) return;
+		Setting.setValue('ocr.clearLanguageDataCache', true);
+		await shim.restartApp();
+	} else if (key === 'ai.usage.resetButton') {
+		if (!await shim.showConfirmationDialog(_('Reset AI token usage counters?'))) return;
+		Setting.setValue('ai.usage.inputTokens', 0);
+		Setting.setValue('ai.usage.outputTokens', 0);
+		await Setting.saveAll();
+	} else if (key === 'ai.chat.testButton') {
+		await checkAiConfig(comp);
+	} else {
+		const metadata = Setting.settingMetadata(key);
+		if (metadata.onClick) {
+			await metadata.onClick();
+		} else {
+			throw new Error(`Unhandled key: ${key}`);
+		}
+	}
 };

@@ -4,7 +4,7 @@ import ButtonBar from './ButtonBar';
 import Button, { ButtonLevel } from '../Button/Button';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../services/bridge';
-import Setting, { AppType, SettingMetadataSection, SettingsRecord, SettingValueType, SyncStartupOperation } from '@joplin/lib/models/Setting';
+import Setting, { AppType, SettingMetadataSection, SettingsRecord, SettingValueType } from '@joplin/lib/models/Setting';
 import { AppState } from '../../app.reducer';
 import EncryptionConfigScreen from '../EncryptionConfigScreen/EncryptionConfigScreen';
 import NoteLockSettings from './controls/NoteLockSettings';
@@ -128,46 +128,7 @@ class ConfigScreenComponent extends React.Component<Props, State> {
 	}
 
 	private async handleSettingButton(key: string) {
-		if (key === 'sync.clearLocalSyncStateButton') {
-			if (!await shim.showConfirmationDialog('This cannot be undone. Do you want to continue?')) return;
-			Setting.setValue('sync.startupOperation', SyncStartupOperation.ClearLocalSyncState);
-			await Setting.saveAll();
-			await restart();
-		} else if (key === 'sync.clearLocalDataButton') {
-			if (!await shim.showConfirmationDialog('This cannot be undone. Do you want to continue?')) return;
-			Setting.setValue('sync.startupOperation', SyncStartupOperation.ClearLocalData);
-			await Setting.saveAll();
-			await restart();
-		} else if (key === 'ocr.clearLanguageDataCacheButton') {
-			if (!await shim.showConfirmationDialog(this.restartMessage())) return;
-			Setting.setValue('ocr.clearLanguageDataCache', true);
-			await restart();
-		} else if (key === 'ai.usage.resetButton') {
-			if (!await shim.showConfirmationDialog(_('Reset AI token usage counters?'))) return;
-			Setting.setValue('ai.usage.inputTokens', 0);
-			Setting.setValue('ai.usage.outputTokens', 0);
-			await Setting.saveAll();
-		} else if (key === 'ai.chat.testButton') {
-			await shared.checkAiConfig(this);
-		} else if (key === 'sync.openSyncWizard') {
-			this.props.dispatch({
-				type: 'DIALOG_OPEN',
-				name: 'syncWizard',
-			});
-		} else {
-			const metadata = Setting.settingMetadata(key);
-			if (metadata.onClick) {
-				await metadata.onClick({
-					setSettingValue: (key, value) => {
-						this.onUpdateSettingValue({ key, value });
-					},
-					saveSettings: () => this.onSaveClick(),
-					settings: this.state.settings,
-				});
-			} else {
-				throw new Error(`Unhandled key: ${key}`);
-			}
-		}
+		await shared.onSettingButtonPress(this, Setting.settingMetadata(key));
 	}
 
 	public sectionByName(name: string) {
@@ -404,6 +365,10 @@ class ConfigScreenComponent extends React.Component<Props, State> {
 		shared.updateSettingValue(this, key, value);
 	};
 
+	public setSettingValue<Key extends keyof shared.SettingsMap>(key: Key, value: shared.SettingsMap[Key]) {
+		this.onUpdateSettingValue({ key: key as string, value });
+	}
+
 	private renderSearchHighlightedText = (text: string): React.ReactNode => {
 		return highlightSearchText(text, this.state.searchQuery);
 	};
@@ -424,7 +389,7 @@ class ConfigScreenComponent extends React.Component<Props, State> {
 	}
 
 	private restartMessage() {
-		return _('The application must be restarted for these changes to take effect.');
+		return shared.restartMessage();
 	}
 
 	private async restartApp() {

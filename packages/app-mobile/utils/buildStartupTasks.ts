@@ -98,7 +98,7 @@ import VoiceTyping from '../services/voiceTyping/VoiceTyping';
 import whisper from '../services/voiceTyping/whisper';
 import PerFolderSortOrderService from '@joplin/lib/services/sortOrder/PerFolderSortOrderService';
 import getConflictFolderId from '@joplin/lib/models/utils/getConflictFolderId';
-const { runStartupTests } = require('@joplin/mobile-config');
+const { runStartupTests } = require('@joplin/mobile-config').default;
 
 
 function resourceFetcher_downloadComplete(event: { id: string; encrypted: boolean }) {

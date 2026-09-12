@@ -364,16 +364,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 	}
 
 	private onSettingButtonPress_ = async (key: string) => {
-		const metadata = Setting.settingMetadata(key);
-		if (!metadata.onClick) {
-			throw new Error(`Missing click handler for setting: ${key}`);
-		}
-
-		await metadata.onClick({
-			settings: this.state.settings,
-			saveSettings: this.saveButton_press,
-			setSettingValue: this.onUpdateSetting_,
-		});
+		await shared.onSettingButtonPress(this, Setting.settingMetadata(key));
 	};
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See ConfigScreenState.settings — same reason
@@ -719,7 +710,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		/>;
 	}
 
-	private onUpdateSetting_ = async (key: string, value: unknown): Promise<void> => {
+	public setSettingValue = async <Key extends keyof shared.SettingsMap> (key: Key&string, value: shared.SettingsMap[Key]): Promise<void> => {
 		const handled = await this.handleSetting(key, value);
 		if (!handled) shared.updateSettingValue(this, key, value);
 	};
@@ -754,7 +745,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				settingId={key}
 				value={value}
 				themeId={this.props.themeId}
-				onUpdateSettingValue={this.onUpdateSetting_}
+				onUpdateSettingValue={this.setSettingValue}
 				onSettingButtonClick={this.onSettingButtonPress_}
 				styles={this.styles()}
 			/>
@@ -765,7 +756,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 	private renderFeatureFlags(settings: Record<string, any>, featureFlagKeys: string[]): ReactElement[] {
 		const output: ReactElement[] = [];
 		for (const key of featureFlagKeys) {
-			output.push(this.renderToggle(key, key, settings[key], this.onUpdateSetting_));
+			output.push(this.renderToggle(key, key, settings[key], this.setSettingValue));
 		}
 		return output;
 	}
