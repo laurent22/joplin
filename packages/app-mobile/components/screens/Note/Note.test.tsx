@@ -117,18 +117,18 @@ const openNoteActionsMenu = async () => {
 		cursor = cursor.parent;
 	}
 
-	// Wrap in act(...) -- this tells the test library that component state is intended to update (prevents
-	// warnings).
-	await waitFor(async () => {
+	// act() rather than waitFor(): waitFor rejects if the timer mode changes while it polls, and
+	// draining the fake timers updates the menu drawer's state.
+	await act(async () => {
 		await runWithFakeTimers(async () => {
 			await userEvent.press(actionMenuButton);
 		});
+	});
 
-		// State can update until the menu content is marked as open (part of the
-		// menu transition).
-		await waitFor(async () => {
-			expect(await screen.findByTestId('menu-content-open')).toBeVisible();
-		});
+	// State can update until the menu content is marked as open (part of the
+	// menu transition).
+	await waitFor(async () => {
+		expect(await screen.findByTestId('menu-content-open')).toBeVisible();
 	});
 };
 

@@ -1,20 +1,8 @@
 import { shimInit } from './shim-init-node';
 import shim from './shim';
-import { createTempDir, setupDatabaseAndSynchronizer, supportDir } from './testing/test-utils';
+import { createTempDir, setupDatabaseAndSynchronizer, supportDir, withExtraRootCa } from './testing/test-utils';
 import { copyFile } from 'fs-extra';
-import * as http from 'http';
-import { AddressInfo } from 'net';
-
-const startServer = async (handler: http.RequestListener) => {
-	const server = http.createServer(handler);
-	await new Promise<void>(resolve => server.listen(0, '127.0.0.1', resolve));
-	const port = (server.address() as AddressInfo).port;
-	return { server, url: `http://127.0.0.1:${port}` };
-};
-
-const closeServer = async (server: http.Server) => {
-	await new Promise<void>(resolve => server.close(() => resolve()));
-};
+import createLocalhostServer from './testing/createLocalhostServer';
 
 describe('shim-init-node', () => {
 
@@ -45,30 +33,22 @@ describe('shim-init-node', () => {
 
 	// https://github.com/laurent22/joplin/issues/16486 - the agent used to be bound once from the
 	// initial URL, which made the request fail with ERR_INVALID_PROTOCOL when a redirect switched
-	// between http: and https:. node-fetch calls the agent function for every hop, so passing a
-	// function is what allows the agent to follow the protocol change.
-	test('should pass an agent that resolves per protocol rather than a fixed one', async () => {
-		const server = await startServer((_req, res) => {
+	// between http: and https:.
+	test('should handle redirects from http to https', async () => {
+		await using httpsServer = await createLocalhostServer((_req, res) => {
 			res.writeHead(200);
+			res.end('success!');
+		}, { https: true });
+		await using httpServer = await createLocalhostServer((_req, res) => {
+			res.writeHead(302, { location: `${httpsServer.baseUrl}/` });
 			res.end('done');
-		});
+		}, { https: false });
 
-		// shim.fetch sets `agent` on the options object it is given, so it can be inspected afterwards
-		const options: { agent?: unknown } = {};
-
-		try {
-			const response = await shim.fetch(`${server.url}/`, options);
+		await withExtraRootCa(httpsServer.cert, async () => {
+			const response = await shim.fetch(`${httpServer.baseUrl}`);
 			expect(response.status).toBe(200);
-
-			expect(typeof options.agent).toBe('function');
-
-			const agents = shim.httpAgents();
-			const resolve = options.agent as (url: { protocol: string })=> unknown;
-			expect(resolve({ protocol: 'https:' })).toBe(agents.https);
-			expect(resolve({ protocol: 'http:' })).toBe(agents.http);
-		} finally {
-			await closeServer(server.server);
-		}
+			expect(await response.text()).toBe('success!');
+		});
 	});
 
 	test('should expose an agent per protocol', async () => {
@@ -79,5 +59,4 @@ describe('shim-init-node', () => {
 		expect(shim.httpAgent('http://example.com')).toBe(agents.http);
 		expect(shim.httpAgent('https://example.com')).toBe(agents.https);
 	});
-
 });
