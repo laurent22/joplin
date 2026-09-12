@@ -163,6 +163,7 @@
 		"react-native-reanimated",
 
 		// Cannot upgrade further due to ESM support
+		"nanoid",
 		"node-fetch",
 		"execa",
 		"open",
