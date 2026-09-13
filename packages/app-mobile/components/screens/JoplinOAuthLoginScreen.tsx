@@ -202,12 +202,11 @@ const JoplinOAuthScreenComponent = (props: Props) => {
 					</React.Fragment>
 					: null
 				}
-				<Text style={styles[state.className]}>{state.message()}
-					{state.active === 'ERROR' ? <>
-						<Text style={styles[state.className]}>{state.errorMessage}</Text>
-						{!isValidBaseUrl(props.syncTargetApi) && <Button onPress={openSyncSettings} mode='outlined'>{_('Open settings')}</Button>}
-					</> : null}
-				</Text>
+				<Text style={styles[state.className]}>{state.message()}</Text>
+				{state.active === 'ERROR' ? <>
+					<Text style={styles[state.className]}>{state.errorMessage}</Text>
+					{!isValidBaseUrl(props.syncTargetApi) && <Button onPress={openSyncSettings} mode='outlined'>{_('Open settings')}</Button>}
+				</> : null}
 				{state.active === 'LINK_USED' ? (
 					<Animated.View style={{ transform: [{ rotate: syncIconRotation }] }}>
 						<Icon name='ionicon sync' style={styles.loadingIcon} accessibilityLabel={_('Waiting for authorisation...')}/>
