@@ -60,6 +60,14 @@ describe('AutoUpdaterService', () => {
 		expect(url).toBe('https://github.com/laurent22/joplin/releases/download/v3.1.3/latest.yml');
 	});
 
+	it('should return the correct download URL for Windows arm64', async () => {
+		const release = await service.fetchLatestRelease(true);
+		expect(release).toBeDefined();
+		const url = 'https://github.com/laurent22/joplin/releases/download/v3.1.3/latest-win-arm64.yml';
+		release.assets.push({ name: 'latest-win-arm64.yml', browser_download_url: url });
+		expect(service.getDownloadUrlForPlatform(release, 'win32', 'arm64')).toBe(url);
+	});
+
 	it('should return the correct download URL for Mac x64', async () => {
 		const release = await service.fetchLatestRelease(true);
 		expect(release).toBeDefined();

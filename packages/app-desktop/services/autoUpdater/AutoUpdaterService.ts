@@ -30,9 +30,13 @@ const supportedPlatformAssets: PlatformAssets = {
 		'x64': 'latest-mac.yml',
 		'arm64': 'latest-mac-arm64.yml',
 	},
+	// arm64 has its own file because electron-builder names the metadata
+	// `latest.yml` for every Windows arch, and it's built on a separate runner.
+	// https://github.com/electron-userland/electron-builder/issues/6372
 	'win32': {
 		'x64': 'latest.yml',
 		'ia32': 'latest.yml',
+		'arm64': 'latest-win-arm64.yml',
 	},
 };
 

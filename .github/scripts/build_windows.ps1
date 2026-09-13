@@ -8,6 +8,18 @@ function Install-WindowsDeps {
 	$env:BUILD_SEQUENCIAL = '1'
 	$env:IS_CONTINUOUS_INTEGRATION = '1'
 
+	if ($env:PROCESSOR_ARCHITECTURE -eq 'ARM64') {
+		# sqlite3 has no win32-arm64 prebuilt. node-pre-gyp matches this value
+		# against the package name, so the other deps keep their prebuilts.
+		$env:npm_config_build_from_source = 'sqlite3'
+
+		# node-gyp's Visual Studio detection fails on ARM64 without VSSetup.
+		# https://github.com/nodejs/node-gyp#on-windows
+		if (-not (Get-Module -ListAvailable -Name VSSetup)) {
+			Install-Module VSSetup -Scope CurrentUser -Force
+		}
+	}
+
 	$attempts = 3
 	for ($i = 1; $i -le $attempts; $i++) {
 		yarn install
@@ -20,12 +32,32 @@ function Install-WindowsDeps {
 
 # Install dependencies and run `yarn dist` for the Windows desktop app.
 # Extra args are forwarded to `yarn dist` (e.g. --publish=never).
+#
+# Each runner builds only its own arch: cross compiling arm64 from x64 silently
+# ships x64 .node files, as @electron/rebuild doesn't resolve native modules
+# hoisted to the workspace root.
+# https://github.com/electron-userland/electron-builder/issues/10187
 function Build-WindowsApp {
 	param([string[]]$DistArgs = @())
 
 	Install-WindowsDeps
 
+	if ($env:PROCESSOR_ARCHITECTURE -eq 'ARM64') {
+		# NSIS gets an `-arm64` suffix on its own, but the portable name is fixed
+		# and the update metadata is `latest.yml` for every Windows arch. Both
+		# would clobber the x64 runner's artifacts.
+		# https://github.com/electron-userland/electron-builder/issues/6372
+		$archArgs = @(
+			'--arm64'
+			'-c.portable.artifactName=${productName}Portable-arm64.${ext}'
+			'-c.publish.provider=github'
+			'-c.publish.channel=latest-win-arm64'
+		)
+	} else {
+		$archArgs = @('--x64', '--ia32')
+	}
+
 	cd packages/app-desktop
-	yarn dist @DistArgs
+	yarn dist @archArgs @DistArgs
 	if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 }
