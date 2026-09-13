@@ -210,6 +210,7 @@ const buildEditorTools = ({ note, commands }: EditorToolContext) => {
 				description: 'Get the current, up-to-date content of the note. This returns the full content of the note that\'s currently open in Joplin\'s editor.',
 				inputSchema: {
 					type: 'object',
+					properties: {},
 					required: [],
 					additionalProperties: false,
 				},
