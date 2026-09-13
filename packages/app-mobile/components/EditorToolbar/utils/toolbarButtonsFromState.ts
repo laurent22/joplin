@@ -6,11 +6,17 @@ import stateToWhenClauseContext from '../../../services/commands/stateToWhenClau
 
 const toolbarButtonUtils = new ToolbarButtonUtils(CommandService.instance());
 
+const toolbarButtonOverrides = (state: AppState) => ({
+	synchronize: {
+		enabled: !state.syncStarted,
+	},
+});
+
 const toolbarButtonsFromState = (state: AppState) => {
 	const whenClauseContext = stateToWhenClauseContext(state);
 
 	const commandNames = selectedCommandNamesFromState(state);
-	return toolbarButtonUtils.commandsToToolbarButtons(commandNames, whenClauseContext);
+	return toolbarButtonUtils.commandsToToolbarButtons(commandNames, whenClauseContext, null, toolbarButtonOverrides(state));
 };
 
 export default toolbarButtonsFromState;
