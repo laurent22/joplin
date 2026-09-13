@@ -52,6 +52,8 @@ export const runtime = (): CommandRuntime => {
 					}
 					const noteIsLocked = isNoteLockEnabled() && NoteLockNote.isLocked(note);
 
+					// A locked note converts through a full gated load and save, so the body is
+					// decrypted for the conversion and the converted copy is encrypted again.
 					const sourceNote = noteIsLocked ? await Note.load(note.id, { useNoteLock: true, noteLockKey }) : note;
 					const markdownBody = await convertHtmlToMarkdown().execute(context, sourceNote.body);
 					const backupNote = await Note.duplicate(note.id, {
