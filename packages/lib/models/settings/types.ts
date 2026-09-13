@@ -22,6 +22,7 @@ export enum SettingStorage {
 	File = 2,
 }
 
+
 // This is the definition of a setting item
 export interface SettingItem {
 	value: unknown;
@@ -47,7 +48,7 @@ export interface SettingItem {
 	minimum?: number;
 	maximum?: number;
 	step?: number;
-	onClick?(): void|Promise<void>;
+	onClick?(): void;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partially refactored old code before rule was applied
 	unitLabel?: (value: any)=> string;
 	needRestart?: boolean;
