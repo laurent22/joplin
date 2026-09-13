@@ -14,6 +14,7 @@ import { fetchLoginUrl, hasValidBaseUrl, isJoplinOAuthSyncTarget, openLoginScree
 import NavService from '../../../services/NavService';
 import shim from '../../../shim';
 import SyncTargetJoplinServerBase from '../../../SyncTargetJoplinServerBase';
+import CommandService from '../../../services/CommandService';
 
 const logger = Logger.create('config-shared');
 
@@ -446,6 +447,8 @@ export const onSettingButtonPress = async (comp: ConfigScreenComponent, metadata
 		await Setting.saveAll();
 	} else if (key === 'ai.chat.testButton') {
 		await checkAiConfig(comp);
+	} else if (key === 'sync.openSyncWizard') {
+		void CommandService.instance().execute('openSyncWizard');
 	} else {
 		const metadata = Setting.settingMetadata(key);
 		if (metadata.onClick) {

@@ -183,6 +183,7 @@ packages/app-desktop/commands/openNoteInNewWindow.js
 packages/app-desktop/commands/openPrimaryAppInstance.js
 packages/app-desktop/commands/openProfileDirectory.js
 packages/app-desktop/commands/openSecondaryAppInstance.js
+packages/app-desktop/commands/openSyncWizard.js
 packages/app-desktop/commands/replaceMisspelling.js
 packages/app-desktop/commands/restoreNoteRevision.js
 packages/app-desktop/commands/showProfileEditor.js
