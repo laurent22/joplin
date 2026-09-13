@@ -13,7 +13,7 @@ import { substrWithEllipsis } from '@joplin/lib/string-utils';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
-import { hasValidBaseUrl, isJoplinOAuthSyncTarget } from '@joplin/lib/services/joplinOAuthUtils';
+import { isJoplinOAuthSyncTarget } from '@joplin/lib/services/joplinOAuthUtils';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import { reg } from '@joplin/lib/registry';
 
@@ -128,15 +128,10 @@ const WarningBannerComponent: React.FC<Props> = props => {
 	if (props.showInvalidJoplinOAuthCredential) {
 		const syncTarget = reg.syncTarget(props.syncTargetId);
 		const syncTargetLabel = SyncTargetRegistry.idToLabelOrEmpty(props.syncTargetId);
-		if (isJoplinOAuthSyncTarget(props.syncTargetId) && !hasValidBaseUrl(props.syncTargetId, null)) {
-			warningComps.push(renderWarningBox(
-				'auth', _('Invalid or missing %s URL.', syncTargetLabel), { screen: 'Config', screenProps: { sectionName: 'sync' } },
-			));
-		} else {
-			warningComps.push(renderWarningBox(
-				'auth', _('Your %s credentials are invalid, please log in.', syncTargetLabel), { screen: syncTarget.authRouteName() },
-			));
-		}
+
+		warningComps.push(renderWarningBox(
+			'auth', _('Your %s credentials are invalid, please log in.', syncTargetLabel), { screen: syncTarget.authRouteName() },
+		));
 	}
 
 	const shareInvitation = props.shareInvitations.find(inv => inv.status === ShareUserStatus.Waiting);
