@@ -1,4 +1,4 @@
-import Setting, { AppType, SettingItem, SettingMetadataSection, SettingSectionSource, SyncStartupOperation, type SettingsRecord } from '../../../models/Setting';
+import Setting, { AppType, SettingItem, SettingMetadataSection, SettingSectionSource, SettingValueType, SyncStartupOperation, type SettingsRecord } from '../../../models/Setting';
 import SyncTargetRegistry from '../../../SyncTargetRegistry';
 import { _ } from '../../../locale';
 import { createSelector } from 'reselect';
@@ -47,7 +47,7 @@ interface ConfigScreenComponent {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mirrors React.Component.setState signature (Pick<S, K> etc.); a narrower local type breaks subclass assignment of `this` to ConfigScreenComponent
 	setState(callbackOrNew: any, callback?: ()=> void): void;
-	setSettingValue<Key extends keyof SettingsMap>(key: Key&string, value: SettingsMap[Key]): void;
+	setSettingValue<Key extends string>(key: Key, value: SettingValueType<Key>): void;
 }
 
 interface SettingsSavedEvent {
@@ -412,9 +412,12 @@ export const onSettingButtonPress = async (comp: ConfigScreenComponent, metadata
 				await openLoginScreen(syncCommandId);
 			}
 		} else if (syncCommand === 'disconnect') {
-			comp.setSettingValue(`sync.${syncCommandId}.username`, '');
-			comp.setSettingValue(`sync.${syncCommandId}.password`, '');
-			await saveSettings(comp);
+			const setValuePermanently = <Key extends string> (key: Key, value: SettingValueType<Key>) => {
+				comp.setSettingValue(key, value);
+				Setting.setValue(key, value);
+			};
+			setValuePermanently(`sync.${syncCommandId}.username`, '');
+			setValuePermanently(`sync.${syncCommandId}.password`, '');
 
 			const syncTarget = reg.syncTarget(syncCommandId);
 			await (syncTarget as SyncTargetJoplinServerBase).clearSession();
