@@ -49,7 +49,6 @@ import layoutKeyToLabel from '../utils/layout/layoutKeyToLabel';
 import MainLayoutPane from './MainLayoutPane';
 import { isJoplinOAuthSyncTarget } from '@joplin/lib/services/joplinOAuthUtils';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
-import { reg } from '@joplin/lib/registry';
 import NavService from '@joplin/lib/services/NavService';
 
 interface Props {
@@ -529,7 +528,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 				return;
 			}
 
-			const routeName = reg.syncTarget(syncTarget).authRouteName();
+			const routeName = SyncTargetRegistry.classById(syncTarget).authRouteName();
 			void NavService.go(routeName);
 		};
 

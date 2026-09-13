@@ -73,9 +73,8 @@ export default abstract class SyncTargetJoplinServerBase extends BaseSyncTarget 
 		}
 	}
 
-	public authRouteName() {
-		const syncTargetClass = this.constructor as typeof SyncTargetJoplinServerBase;
-		if (syncTargetClass.requiresPassword()) return null;
+	public static override authRouteName() {
+		if (this.requiresPassword()) return null;
 		return 'JoplinServerLogin';
 	}
 

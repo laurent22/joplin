@@ -37,7 +37,7 @@ export default class SyncTargetJoplinCloud extends SyncTargetJoplinServerBase {
 		return true;
 	}
 
-	public authRouteName() {
+	public static override authRouteName() {
 		return 'JoplinCloudLogin';
 	}
 

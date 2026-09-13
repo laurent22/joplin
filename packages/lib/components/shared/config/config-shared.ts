@@ -93,7 +93,7 @@ export const checkSyncConfig = async (comp: ConfigScreenComponent, settings: Set
 		}
 
 		const syncTarget = reg.syncTarget(syncTargetId);
-		const authRouteName = syncTarget.authRouteName();
+		const authRouteName = SyncTargetClass.authRouteName();
 		const needsWebLogin = !!authRouteName && !await syncTarget.isAuthenticated();
 		if (needsWebLogin) {
 			await NavService.go(authRouteName);

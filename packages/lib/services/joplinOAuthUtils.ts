@@ -152,8 +152,8 @@ export const fetchLoginUrl = async (syncTargetId: number, apiBaseUrl: string) =>
 };
 
 export const openLoginScreen = (syncTargetId: number) => {
-	const target = reg.syncTarget(syncTargetId);
-	return NavService.go(target.authRouteName());
+	const syncTargetClass = SyncTargetRegistry.classById(syncTargetId);
+	return NavService.go(syncTargetClass.authRouteName());
 };
 
 export const openSyncSettings = () => {

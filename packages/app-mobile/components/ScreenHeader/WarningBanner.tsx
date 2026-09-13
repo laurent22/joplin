@@ -15,7 +15,6 @@ import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import { isJoplinOAuthSyncTarget } from '@joplin/lib/services/joplinOAuthUtils';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
-import { reg } from '@joplin/lib/registry';
 
 const logger = Logger.create('WarningBanner');
 
@@ -127,7 +126,7 @@ const WarningBannerComponent: React.FC<Props> = props => {
 		warningComps.push(renderWarningBox('Status', _('Some items cannot be decrypted.')));
 	}
 	if (props.showInvalidJoplinOAuthCredential) {
-		const syncTarget = reg.syncTarget(props.syncTargetId);
+		const syncTarget = SyncTargetRegistry.classById(props.syncTargetId);
 		const syncTargetLabel = SyncTargetRegistry.idToLabelOrEmpty(props.syncTargetId);
 
 		warningComps.push(renderWarningBox(
@@ -156,7 +155,7 @@ const WarningBannerComponent: React.FC<Props> = props => {
 
 const isSyncLoginRoute = (state: AppState) => {
 	const syncTargetId = state.settings['sync.target'];
-	const syncTarget = syncTargetId ? reg.syncTarget(syncTargetId) : null;
+	const syncTarget = syncTargetId ? SyncTargetRegistry.classById(syncTargetId) : null;
 	if (syncTarget) {
 		return state.route?.routeName === syncTarget.authRouteName();
 	}
