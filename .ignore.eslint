@@ -1468,6 +1468,7 @@ packages/lib/errorUtils.js
 packages/lib/errors.js
 packages/lib/eventManager.test.js
 packages/lib/eventManager.js
+packages/lib/file-api-driver-joplinServer.test.js
 packages/lib/file-api-driver-joplinServer.js
 packages/lib/file-api-driver-local.js
 packages/lib/file-api-driver-memory.js
