@@ -1,13 +1,18 @@
 import { readFile } from 'fs-extra';
 import { rootDir, insertContentIntoFile } from '../tool-utils';
 
+// Set to true once a Windows ARM64 build is published in a release. Also in
+// Assets/WebsiteAssets/js/script.js.
+const windowsArm64Enabled = false;
+
 async function getInstallMd() {
 	return readFile(`${rootDir}/readme/install.md`, 'utf8');
 }
 
 async function createDownloadButtonsHtml(readmeMd: string): Promise<Record<string, string>> {
 	const output: Record<string, string> = {};
-	output['windows'] = readmeMd.match(/(<a href=.*?Joplin-Setup-.*?<\/a>)/)[0];
+	output['windows'] = readmeMd.match(/(<a href=.*?Joplin-Setup-[\d.]+\.exe.*?<\/a>)/)[0];
+	if (windowsArm64Enabled) output['windowsArm64'] = readmeMd.match(/(<a href=.*?Joplin-Setup-[\d.]+-arm64\.exe.*?<\/a>)/)[0];
 	output['macOs'] = readmeMd.match(/(<a href=.*?Joplin-.*\.dmg.*?<\/a>)/)[0];
 	output['macOsM1'] = readmeMd.match(/(<a href=.*?Joplin-.*arm64\.DMG.*?<\/a>)/)[0];
 	output['linux'] = readmeMd.match(/(<a href=.*?Joplin-.*\.AppImage.*?<\/a>)/)[0];
@@ -29,10 +34,11 @@ export default async function updateDownloadPage(readmeMd: string = null) {
 
 	const desktopButtonsHtml = [
 		downloadButtonsHtml['windows'],
+		downloadButtonsHtml['windowsArm64'],
 		downloadButtonsHtml['macOs'],
 		downloadButtonsHtml['macOsM1'],
 		downloadButtonsHtml['linux'],
-	];
+	].filter(html => !!html);
 
 	const mobileButtonsHtml = [
 		downloadButtonsHtml['android'],
