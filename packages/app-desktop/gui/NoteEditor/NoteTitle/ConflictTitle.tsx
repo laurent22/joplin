@@ -92,8 +92,8 @@ const ConflictTitle: React.FC<Props> = ({ conflictTitle, disabled, resolvedTitle
 								</button>
 							</div>
 
-							<p><span className='-swatch -incoming'></span>{_('Blue - version from your other device. You can edit it directly.')}</p>
 							<p><span className='-swatch -local'></span>{_('Yellow - your version from this device. Click "Use my version" to keep it.')}</p>
+							<p><span className='-swatch -incoming'></span>{_('Blue - the version which has been synced to your other device(s). You can edit it directly.')}</p>
 							<p>{_('Darker highlights show the words that differ.')}</p>
 
 							{hasTitleConflict ? (
