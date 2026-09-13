@@ -1,27 +1,13 @@
 import * as React from 'react';
-import { useMemo, useCallback, useRef } from 'react';
+import { useMemo, useCallback } from 'react';
 import { TouchableOpacity, StyleSheet, Text, Linking } from 'react-native';
 import { themeStyle } from '../global-style';
 import NavService from '@joplin/lib/services/NavService';
 
-interface UrlTarget {
-	url: string;
-
-	screen?: undefined;
-}
-
-interface ScreenTarget {
-	screen: string;
-	screenProps?: Record<string, unknown>;
-
-	url?: undefined;
-}
-
-export type WarningBoxTarget = UrlTarget|ScreenTarget;
-
 interface Props {
 	themeId: number;
-	target: WarningBoxTarget;
+	targetScreen: string;
+	url?: string;
 	message: string;
 	testID?: string;
 }
@@ -46,20 +32,14 @@ const useStyles = (themeId: number) => {
 const WarningBox: React.FC<Props> = props => {
 	const styles = useStyles(props.themeId);
 
-	const propsRef = useRef(props);
-	propsRef.current = props;
-
 	const onPress = useCallback(() => {
-		const target = propsRef.current.target;
-		if (!target) return;
-
-		const isUrlTarget = (target: WarningBoxTarget): target is UrlTarget => !!target.url;
-		if (isUrlTarget(target)) {
-			void Linking.openURL(target.url);
-		} else {
-			void NavService.go(target.screen, target.screenProps);
+		if (props.url !== undefined) {
+			void Linking.openURL(props.url);
+			return;
 		}
-	}, []);
+
+		void NavService.go(props.targetScreen);
+	}, [props.targetScreen, props.url]);
 
 	return (
 		<TouchableOpacity

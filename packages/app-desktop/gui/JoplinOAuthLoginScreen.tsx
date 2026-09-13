@@ -145,7 +145,7 @@ const useConfirmUrl = (syncTarget: number, apiBaseUrl: string, applicationAuthId
 			setUrl(`${normalizeBaseUrl(baseUrl)}/applications/${applicationAuthId}/confirm`);
 		} catch (error) {
 			logger.warn('Failed to determine API base URL', error);
-			dispatch({ type: 'ERROR', payload: String(error) });
+			dispatch({ type: 'ERROR', payload: error.message });
 		}
 	}, [syncTarget, apiBaseUrl, applicationAuthId]);
 

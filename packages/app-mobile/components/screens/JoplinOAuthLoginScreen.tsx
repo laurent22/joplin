@@ -121,7 +121,7 @@ const JoplinOAuthScreenComponent = (props: Props) => {
 		} catch (error) {
 			dispatch({
 				type: 'ERROR',
-				payload: String(error),
+				payload: error.message,
 			});
 		}
 	};
@@ -134,7 +134,7 @@ const JoplinOAuthScreenComponent = (props: Props) => {
 		} catch (error) {
 			dispatch({
 				type: 'ERROR',
-				payload: String(error),
+				payload: error.message,
 			});
 		}
 	};
@@ -147,7 +147,7 @@ const JoplinOAuthScreenComponent = (props: Props) => {
 		} catch (error) {
 			dispatch({
 				type: 'ERROR',
-				payload: String(error),
+				payload: error.message,
 			});
 		}
 	};
@@ -205,7 +205,7 @@ const JoplinOAuthScreenComponent = (props: Props) => {
 				<Text style={styles[state.className]}>{state.message()}
 					{state.active === 'ERROR' ? <>
 						<Text style={styles[state.className]}>{state.errorMessage}</Text>
-						{!isValidBaseUrl(props.syncTargetApi) && <Button onPress={openSyncSettings}>{_('Open settings')}</Button>}
+						{!isValidBaseUrl(props.syncTargetApi) && <Button onPress={openSyncSettings} mode='outlined'>{_('Open settings')}</Button>}
 					</> : null}
 				</Text>
 				{state.active === 'LINK_USED' ? (

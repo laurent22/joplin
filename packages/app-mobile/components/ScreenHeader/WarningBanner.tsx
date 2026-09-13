@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { connect } from 'react-redux';
 import { Platform } from 'react-native';
 import { AppState } from '../../utils/types';
-import WarningBox, { WarningBoxTarget } from './WarningBox';
+import WarningBox from './WarningBox';
 import { _ } from '@joplin/lib/locale';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
@@ -62,11 +62,12 @@ const WarningBannerComponent: React.FC<Props> = props => {
 		}
 	}, [props.mustUpgradeAppMessage, props.syncTargetAppMinVersion]);
 
-	const renderWarningBox = (key: string, message: string, target: WarningBoxTarget) => {
+	const renderWarningBox = (screen: string, message: string, url?: string) => {
 		return <WarningBox
-			key={key}
+			key={screen}
 			themeId={props.themeId}
-			target={target}
+			targetScreen={screen}
+			url={url}
 			message={message}
 			testID='warning-box'
 		/>;
@@ -85,14 +86,14 @@ const WarningBannerComponent: React.FC<Props> = props => {
 					return renderWarningBox(
 						'UpgradeApp',
 						upgradeMessage(_('Download it from the Joplin Android repository')),
-						{ url: androidPreReleaseUrl },
+						androidPreReleaseUrl,
 					);
 				}
 
 				return renderWarningBox(
 					'UpgradeApp',
 					upgradeMessage(_('Update it from Google Play')),
-					{ url: androidGooglePlayUrl },
+					androidGooglePlayUrl,
 				);
 			}
 
@@ -100,37 +101,37 @@ const WarningBannerComponent: React.FC<Props> = props => {
 				return renderWarningBox(
 					'UpgradeApp',
 					upgradeMessage(_('Update it from the App Store')),
-					{ url: iosAppStoreUrl },
+					iosAppStoreUrl,
 				);
 			}
 
-			return renderWarningBox('UpgradeApp', _('In order to synchronise, Please upgrade your application to version %s', props.syncTargetAppMinVersion), null);
+			return renderWarningBox('UpgradeApp', _('In order to synchronise, Please upgrade your application to version %s', props.syncTargetAppMinVersion));
 		}
 
-		return renderWarningBox('UpgradeApp', props.mustUpgradeAppMessage, null);
+		return renderWarningBox('UpgradeApp', props.mustUpgradeAppMessage);
 	};
 
 	if (props.showMissingMasterKeyMessage) {
-		warningComps.push(renderWarningBox('missing_master_key', _('Press to set the decryption password.'), { screen: 'EncryptionConfig' }));
+		warningComps.push(renderWarningBox('EncryptionConfig', _('Press to set the decryption password.')));
 	}
 	if (props.hasDisabledSyncItems) {
-		warningComps.push(renderWarningBox('disabled_items', _('Some items cannot be synchronised. Press for more info.'), { screen: 'Status' }));
+		warningComps.push(renderWarningBox('Status', _('Some items cannot be synchronised. Press for more info.')));
 	}
 	if (props.shouldUpgradeSyncTarget && props.showShouldUpgradeSyncTargetMessage !== false) {
-		warningComps.push(renderWarningBox('upgrade_sync', _('The sync target needs to be upgraded. Press this banner to proceed.'), { screen: 'UpgradeSyncTarget' }));
+		warningComps.push(renderWarningBox('UpgradeSyncTarget', _('The sync target needs to be upgraded. Press this banner to proceed.')));
 	}
 	if (props.mustUpgradeAppMessage) {
 		warningComps.push(renderMustUpgradeAppMessage());
 	}
 	if (props.hasDisabledEncryptionItems) {
-		warningComps.push(renderWarningBox('cannot_decrypt', _('Some items cannot be decrypted.'), { screen: 'Status' }));
+		warningComps.push(renderWarningBox('Status', _('Some items cannot be decrypted.')));
 	}
 	if (props.showInvalidJoplinOAuthCredential) {
 		const syncTarget = reg.syncTarget(props.syncTargetId);
 		const syncTargetLabel = SyncTargetRegistry.idToLabelOrEmpty(props.syncTargetId);
 
 		warningComps.push(renderWarningBox(
-			'auth', _('Your %s credentials are invalid, please log in.', syncTargetLabel), { screen: syncTarget.authRouteName() },
+			syncTarget.authRouteName(), _('Your %s credentials are invalid, please log in.', syncTargetLabel),
 		));
 	}
 
@@ -143,11 +144,10 @@ const WarningBannerComponent: React.FC<Props> = props => {
 		const sharer = invitation.share.user;
 
 		warningComps.push(renderWarningBox(
-			'share',
+			'ShareManager',
 			_('%s (%s) would like to share a notebook with you.',
 				substrWithEllipsis(sharer?.full_name ?? 'Unknown', 0, 48),
 				substrWithEllipsis(sharer?.email ?? 'Unknown', 0, 52)),
-			{ screen: 'ShareManager' },
 		));
 	}
 
