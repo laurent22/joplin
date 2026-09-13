@@ -349,4 +349,6 @@ collegeboom
 jsdiff
 unmerged
 unspaced
+syncdisabledicon
+syncable
 selfsigned

@@ -7,8 +7,15 @@ import BaseItem from '../../models/BaseItem';
 import Setting from '../../models/Setting';
 import { setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 import { NoteEntity } from '../database/types';
+import ItemChange from '../../models/ItemChange';
 
 describe('Synchronizer.conflicts', () => {
+	const createConflictNote = async (note: Partial<NoteEntity>) => {
+		const originalNote = await Note.save(note);
+		const conflictNote = await Note.createConflictNote(originalNote, ItemChange.SOURCE_SYNC);
+		await Note.delete(originalNote.id, { trackDeleted: false });
+		return conflictNote;
+	};
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
@@ -261,9 +268,9 @@ describe('Synchronizer.conflicts', () => {
 		expect(remainingNote2?.id).toBe(note2.id);
 	}));
 
-	it('should not sync notes with conflicts', (async () => {
+	it('should sync newly created conflict notes', (async () => {
 		const f1 = await Folder.save({ title: 'folder' });
-		await Note.save({ title: 'mynote', parent_id: f1.id, is_conflict: 1 });
+		await createConflictNote({ title: 'mynote', parent_id: f1.id });
 		await synchronizerStart();
 
 		await switchClient(2);
@@ -271,13 +278,55 @@ describe('Synchronizer.conflicts', () => {
 		await synchronizerStart();
 		const notes = await Note.all();
 		const folders = await Folder.all();
-		expect(notes.length).toBe(0);
+		expect(notes).toHaveLength(1);
+		expect(notes[0].is_conflict).toBe(1);
 		expect(folders.length).toBe(1);
 	}));
 
-	it('should not try to delete on remote conflicted notes that have been deleted', (async () => {
+	it('should retain the local version when a synced conflict note has conflicting changes', async () => {
+		const folder = await Folder.save({ title: 'folder' });
+		const conflictNote = await createConflictNote({ title: 'original', parent_id: folder.id });
+		await synchronizerStart();
+
+		await switchClient(2);
+		await synchronizerStart();
+		await sleep(0.1);
+		await Note.save({ id: conflictNote.id, title: 'remote change' });
+		await synchronizerStart();
+
+		await switchClient(1);
+		await sleep(0.1);
+		await Note.save({ id: conflictNote.id, title: 'local change' });
+		await synchronizerStart();
+		expect((await Note.load(conflictNote.id)).title).toBe('local change');
+
+		await switchClient(2);
+		await synchronizerStart();
+		expect((await Note.load(conflictNote.id)).title).toBe('local change');
+	});
+
+	it('should let remote deletion win over a local conflict note update', async () => {
+		const folder = await Folder.save({ title: 'folder' });
+		const conflictNote = await createConflictNote({ title: 'original', parent_id: folder.id });
+		await synchronizerStart();
+
+		await switchClient(2);
+		await synchronizerStart();
+		await Note.delete(conflictNote.id);
+		await synchronizerStart();
+
+		await switchClient(1);
+		await sleep(0.1);
+		await Note.save({ id: conflictNote.id, title: 'local change' });
+		await synchronizerStart();
+
+		expect(await Note.load(conflictNote.id)).toBeUndefined();
+		expect(await Note.conflictedNotes()).toHaveLength(0);
+	});
+
+	it('should delete remotely synced conflict notes', (async () => {
 		const f1 = await Folder.save({ title: 'folder' });
-		const n1 = await Note.save({ title: 'mynote', parent_id: f1.id });
+		const n1 = await createConflictNote({ title: 'mynote', parent_id: f1.id });
 		await synchronizerStart();
 
 		await switchClient(2);
@@ -287,7 +336,13 @@ describe('Synchronizer.conflicts', () => {
 		await Note.delete(n1.id);
 		const deletedItems = await BaseItem.deletedItems(syncTargetId());
 
-		expect(deletedItems.length).toBe(0);
+		expect(deletedItems).toHaveLength(1);
+		expect(deletedItems[0].item_id).toBe(n1.id);
+
+		await synchronizerStart();
+		await switchClient(1);
+		await synchronizerStart();
+		expect(await Note.load(n1.id)).toBeUndefined();
 	}));
 
 	async function ignorableNoteConflictTest(withEncryption: boolean) {
@@ -324,40 +379,25 @@ describe('Synchronizer.conflicts', () => {
 		await Note.save(note2conf);
 		note2conf = await Note.load(note1.id);
 		await synchronizerStart();
+		if (withEncryption) await decryptionWorker().start();
 
-		if (!withEncryption) {
-			// That was previously a common conflict:
-			// - Client 1 mark todo as "done", and sync
-			// - Client 2 doesn't sync, mark todo as "done" todo. Then sync.
-			// In theory it is a conflict because the todo_completed dates are different
-			// but in practice it doesn't matter, we can just take the date when the
-			// todo was marked as "done" the first time.
+		// This is a metadata-only conflict: Both clients marked the same todo as done,
+		// but at slightly different times. Once encrypted remote content is decrypted,
+		// it can be ignored in the same way as an unencrypted conflict.
+		const conflictedNotes = await Note.conflictedNotes();
+		expect(conflictedNotes.length).toBe(0);
 
-			const conflictedNotes = await Note.conflictedNotes();
-			expect(conflictedNotes.length).toBe(0);
-
-			const notes = await Note.all();
-			expect(notes.length).toBe(1);
-			expect(notes[0].id).toBe(note1.id);
-			expect(notes[0].todo_completed).toBe(note2.todo_completed);
-		} else {
-			// If the notes are encrypted however it's not possible to do this kind of
-			// smart conflict resolving since we don't know the content, so in that
-			// case it's handled as a regular conflict.
-
-			const conflictedNotes = await Note.conflictedNotes();
-			expect(conflictedNotes.length).toBe(1);
-
-			const notes = await Note.all();
-			expect(notes.length).toBe(2);
-		}
+		const notes = await Note.all();
+		expect(notes.length).toBe(1);
+		expect(notes[0].id).toBe(note1.id);
+		expect(notes[0].todo_completed).toBe(note2.todo_completed);
 	}
 
 	it('should not consider it is a conflict if neither the title nor body of the note have changed', (async () => {
 		await ignorableNoteConflictTest(false);
 	}));
 
-	it('should always handle conflict if local or remote are encrypted', (async () => {
+	it('should ignore metadata-only conflicts when the remote note is encrypted', (async () => {
 		await ignorableNoteConflictTest(true);
 	}));
 
