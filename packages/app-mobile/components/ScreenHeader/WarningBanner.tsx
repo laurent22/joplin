@@ -129,9 +129,16 @@ const WarningBannerComponent: React.FC<Props> = props => {
 		const syncTarget = SyncTargetRegistry.classById(props.syncTargetId);
 		const syncTargetLabel = SyncTargetRegistry.idToLabelOrEmpty(props.syncTargetId);
 
-		warningComps.push(renderWarningBox(
-			syncTarget.authRouteName(), _('Your %s credentials are invalid, please log in.', syncTargetLabel),
-		));
+		const authRouteName = syncTarget.authRouteName();
+		if (authRouteName) {
+			warningComps.push(renderWarningBox(
+				authRouteName, _('Your %s credentials are invalid, please log in.', syncTargetLabel),
+			));
+		} else {
+			warningComps.push(renderWarningBox(
+				'Config', _('Your %s credentials are invalid, please log in.', syncTargetLabel),
+			));
+		}
 	}
 
 	const shareInvitation = props.shareInvitations.find(inv => inv.status === ShareUserStatus.Waiting);

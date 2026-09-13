@@ -47,7 +47,7 @@ const logger = Logger.create('MainScreen');
 import { ipcRenderer } from 'electron';
 import layoutKeyToLabel from '../utils/layout/layoutKeyToLabel';
 import MainLayoutPane from './MainLayoutPane';
-import { isJoplinOAuthSyncTarget } from '@joplin/lib/services/joplinOAuthUtils';
+import { isJoplinOAuthSyncTarget, openSyncSettings } from '@joplin/lib/services/joplinOAuthUtils';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import NavService from '@joplin/lib/services/NavService';
 
@@ -529,7 +529,11 @@ class MainScreenComponent extends React.Component<Props, State> {
 			}
 
 			const routeName = SyncTargetRegistry.classById(syncTarget).authRouteName();
-			void NavService.go(routeName);
+			if (routeName) {
+				void NavService.go(routeName);
+			} else {
+				void openSyncSettings();
+			}
 		};
 
 		const onDisableSync = () => {
