@@ -83,6 +83,10 @@ export default class JoplinServerApi {
 		return clientInfo;
 	}
 
+	public async clearSession() {
+		this.session_ = null;
+	}
+
 	private async session() {
 		const optionSession = this.options_.session();
 
@@ -114,7 +118,7 @@ export default class JoplinServerApi {
 		}
 	}
 
-	private async sessionId() {
+	public async sessionId() {
 		const session = await this.session();
 		return session ? session.id : '';
 	}

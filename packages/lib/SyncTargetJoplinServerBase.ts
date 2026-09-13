@@ -48,10 +48,19 @@ export default abstract class SyncTargetJoplinServerBase extends BaseSyncTarget 
 		return true;
 	}
 
+	protected async api(): Promise<JoplinServerApi> {
+		const fileApi = await this.fileApi();
+		return fileApi.driver().api();
+	}
+
+	public async clearSession() {
+		const api = await this.api();
+		await api.clearSession();
+	}
+
 	public async isAuthenticated() {
 		try {
-			const fileApi = await this.fileApi();
-			const api = fileApi.driver().api();
+			const api = await this.api();
 			const sessionId = await api.sessionId();
 			return !!sessionId;
 		} catch (error) {

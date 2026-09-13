@@ -13,6 +13,7 @@ import { ChatRole } from '../../../services/ai/types';
 import { fetchLoginUrl, hasValidBaseUrl, isJoplinOAuthSyncTarget, openLoginScreen } from '../../../services/joplinOAuthUtils';
 import NavService from '../../../services/NavService';
 import shim from '../../../shim';
+import SyncTargetJoplinServerBase from '../../../SyncTargetJoplinServerBase';
 
 const logger = Logger.create('config-shared');
 
@@ -413,6 +414,10 @@ export const onSettingButtonPress = async (comp: ConfigScreenComponent, metadata
 		} else if (syncCommand === 'disconnect') {
 			comp.setSettingValue(`sync.${syncCommandId}.username`, '');
 			comp.setSettingValue(`sync.${syncCommandId}.password`, '');
+			await saveSettings(comp);
+
+			const syncTarget = reg.syncTarget(syncCommandId);
+			await (syncTarget as SyncTargetJoplinServerBase).clearSession();
 		} else {
 			throw new Error(`Invalid sync command ID: ${key}`);
 		}
