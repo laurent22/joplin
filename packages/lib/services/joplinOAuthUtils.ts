@@ -132,7 +132,7 @@ export const saveApplicationAuthId = async (applicationAuthId: string, syncTarge
 // Returns null when no login URL can be determined (e.g.)
 export const fetchLoginUrl = async (syncTargetId: number, apiBaseUrl: string) => {
 	if (syncTargetId === SyncTargetRegistry.nameToId('joplinCloud')) return Setting.value('sync.10.website');
-	if (!isHttpOrHttpsUrl(apiBaseUrl)) throw new Error(_('Invalid server base URL. Must start with http:// or https://.'));
+	if (!isHttpOrHttpsUrl(apiBaseUrl)) throw new Error(_('Invalid server URL. Must start with http:// or https://.'));
 
 	const response = await shim.fetch(`${normalizeBaseUrl(apiBaseUrl)}/api/web_login_base_url`);
 	if (response.status === 404) {
