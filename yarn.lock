@@ -59327,6 +59327,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"wasm-pack@patch:wasm-pack@npm%3A0.13.1#~/.yarn/patches/wasm-pack-npm-0.13.1-2a81da84b4.patch":
+  version: 0.13.1
+  resolution: "wasm-pack@patch:wasm-pack@npm%3A0.13.1#~/.yarn/patches/wasm-pack-npm-0.13.1-2a81da84b4.patch::version=0.13.1&hash=fc5819"
+  dependencies:
+    binary-install: "npm:^1.0.1"
+  bin:
+    wasm-pack: run.js
+  checksum: 10/d22393590eb51b9a29eb376ee1af410dab152726ef85c5a1b3bf821428bfa3cba1c83da5fd4be2a8a9a2b527645fec079dc1b730bbad1bc0bebfc793d3fc56bb
+  languageName: node
+  linkType: hard
+
 "watchpack@npm:^2.4.0":
   version: 2.4.0
   resolution: "watchpack@npm:2.4.0"

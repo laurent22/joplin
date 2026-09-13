@@ -146,6 +146,7 @@
     "@react-native-vector-icons/ionicons@npm:12.3.0": "patch:@react-native-vector-icons/ionicons@npm%3A12.3.0#~/.yarn/patches/@react-native-vector-icons-ionicons-npm-12.3.0-9bd4746f3f.patch",
     "@react-native-vector-icons/material-design-icons@npm:12.4.0": "patch:@react-native-vector-icons/material-design-icons@npm%3A12.4.0#~/.yarn/patches/@react-native-vector-icons-material-design-icons-npm-12.4.0-890f7f618b.patch",
     "@react-native-vector-icons/material-icons@npm:12.4.0": "patch:@react-native-vector-icons/material-icons@npm%3A12.4.0#~/.yarn/patches/@react-native-vector-icons-material-icons-npm-12.4.0-94138e627b.patch",
-    "app-builder-lib@npm:26.15.6": "patch:app-builder-lib@npm%3A26.15.6#~/.yarn/patches/app-builder-lib-npm-26.15.6-010811df92.patch"
+    "app-builder-lib@npm:26.15.6": "patch:app-builder-lib@npm%3A26.15.6#~/.yarn/patches/app-builder-lib-npm-26.15.6-010811df92.patch",
+    "wasm-pack@npm:0.13.1": "patch:wasm-pack@npm%3A0.13.1#~/.yarn/patches/wasm-pack-npm-0.13.1-2a81da84b4.patch"
   }
 }
