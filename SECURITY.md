@@ -1,5 +1,8 @@
 # Security Policy
 
+> [!IMPORTANT]
+> Before submitting a report, please read the [Rules for reporting](#rules-for-reporting).
+
 ## Supported Versions
 
 Only the latest version is supported with security updates.
@@ -9,6 +12,24 @@ Only the latest version is supported with security updates.
 Please report vulnerabilities [through private vulnerability reporting](https://github.com/laurent22/joplin/security/advisories/new) **with a proof of concept** that shows the security vulnerability. Please do not contact us without this proof of concept, as we cannot fix anything without this.
 
 For general opinions on what makes an app more or less secure, please use the forum.
+
+## Rules for reporting
+
+Due to the large number of LLM-generated security reports, we have to put a number of rules in place. These reports are often barely reviewed by the person posting them, which makes us waste time on findings that do not hold up.
+
+It appears that a number of "security researchers" are not really that, and are simply trying to score as many CVEs as possible by posting to as many open source projects as possible, to see what sticks.
+
+As a result:
+
+- We only accept up to **2 active reports per person**.
+
+- If you post more, we may block your account and close all your reports.
+
+- **Check your report before submitting it.** In particular, verify that the issue is still present in the latest version, and that you have actually executed the steps your conclusion depends on. If you submit a report that turns out to be bogus, we may permanently block your account.
+
+- **We no longer credit reporters in the changelog.** The bulk of the work is on our side - reviewing the report, reproducing the issue, fixing it, testing it, and releasing a patch. Copying and pasting LLM output is quick.
+
+A report based on an LLM analysis is fine, as long as you have verified it yourself first.
 
 ## Areas outside Joplin's Threat Model
 

@@ -1,5 +1,12 @@
 # Joplin iOS Changelog
 
+## [ios-v13.7.5](https://github.com/laurent22/joplin/releases/tag/ios-v13.7.5) - 2026-09-10T19:10:44Z
+
+- Improved: Remove sync wizard button from config screen (#16458) (#16442 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix WebDAV sync error "Protocol https: not supported" on servers that redirect (#16488) (#16486)
+- Fixed: Fix WebDAV sync failing with 409 errors after 3.7 upgrade (#16471) (#16422)
+- Fixed: Fix keyboard navigation issues related to level-1 headings (#16409) (#16407 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [ios-v13.7.4](https://github.com/laurent22/joplin/releases/tag/ios-v13.7.4) - 2026-09-05T08:34:04Z
 
 - Improved: Implement readonly state for mobile RTE and disable the MDE interactive table editor for readonly notes (#16231 by [@mrjo118](https://github.com/mrjo118))

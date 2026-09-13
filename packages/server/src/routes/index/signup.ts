@@ -2,7 +2,8 @@ import { SubPath, redirect, makeUrl, UrlType } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
-import { bodyFields } from '../../utils/requestUtils';
+import { bodyFields, userIp } from '../../utils/requestUtils';
+import { limiterSignupBruteForce } from '../../utils/request/limiterAccountBruteForce';
 import config from '../../config';
 import defaultView from '../../utils/defaultView';
 import { View } from '../../services/MustacheService';
@@ -38,6 +39,8 @@ router.get('signup', async (_path: SubPath, _ctx: AppContext) => {
 
 router.post('signup', async (_path: SubPath, ctx: AppContext) => {
 	if (!config().signupEnabled) throw new ErrorForbidden('Signup is not enabled');
+
+	await limiterSignupBruteForce(userIp(ctx));
 
 	try {
 		const formUser = await bodyFields<FormUser>(ctx.req);

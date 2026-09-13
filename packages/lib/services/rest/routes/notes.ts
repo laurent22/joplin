@@ -289,7 +289,10 @@ export async function downloadMediaFile(url: string, fetchOptions?: FetchOptions
 		}
 		return newMediaPath ?? mediaPath;
 	} catch (error) {
-		logger.warn(`Cannot download image at ${url}`, error);
+		// Clipped pages regularly contain images that cannot be downloaded - dead tracking
+		// pixels, expired links, etc. There's nothing to be done about it, and the note is
+		// still created without them, so this is not logged as a warning.
+		logger.info(`Cannot download image at ${url}`, error);
 		return '';
 	}
 }

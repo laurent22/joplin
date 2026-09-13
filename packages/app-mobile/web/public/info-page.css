@@ -23,6 +23,14 @@ main {
 	margin-right: auto;
 }
 
+main.-loading > #only-one-copy-message {
+	display: none;
+}
+
+main:not(.-loading) > #loading-message {
+	display: none;
+}
+
 @media screen and (prefers-color-scheme: dark) {
 	:root {
 		--bg-secondary: black;

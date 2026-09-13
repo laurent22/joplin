@@ -49,6 +49,7 @@ export default function() {
 		'toggleNotesSortOrderReverse',
 		'togglePerFolderSortOrder',
 		'toggleSideBar',
+		'toggleAiChat',
 		'toggleVisiblePanes',
 		'toggleEditorPlugin',
 		'toggleTabMovesFocus',

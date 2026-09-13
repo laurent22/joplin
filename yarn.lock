@@ -12545,7 +12545,7 @@ __metadata:
     md5: "npm:2.3.0"
     moment: "npm:2.30.1"
     mustache: "npm:4.2.0"
-    nan: "npm:2.26.0"
+    nan: "npm:2.27.0"
     node-fetch: "npm:2.6.7"
     node-notifier: "npm:10.0.1"
     node-rsa: "npm:1.1.1"
@@ -12675,7 +12675,7 @@ __metadata:
     react-native-rsa-native: "npm:2.0.5"
     react-native-safe-area-context: "npm:5.7.0"
     react-native-securerandom: "npm:1.0.1"
-    react-native-share: "npm:12.2.6"
+    react-native-share: "npm:12.3.1"
     react-native-svg: "npm:15.15.5"
     react-native-url-polyfill: "npm:2.0.0"
     react-native-version-info: "npm:1.1.1"
@@ -12703,7 +12703,7 @@ __metadata:
     url-loader: "npm:4.1.1"
     webpack: "npm:5.97.1"
     webpack-cli: "npm:5.1.4"
-    webpack-dev-server: "npm:5.2.4"
+    webpack-dev-server: "npm:5.2.5"
   languageName: unknown
   linkType: soft
 
@@ -12772,7 +12772,7 @@ __metadata:
     "@types/react": "npm:19.1.10"
     "@types/react-redux": "npm:7.1.34"
     "@types/styled-components": "npm:5.1.32"
-    dompurify: "npm:3.4.8"
+    dompurify: "npm:3.4.10"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
     orderedmap: "npm:2.1.1"
@@ -12795,7 +12795,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/fork-htmlparser2@npm:^4.1.63, @joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2":
+"@joplin/fork-htmlparser2@npm:^4.1.64, @joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2":
   version: 0.0.0-use.local
   resolution: "@joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2"
   dependencies:
@@ -12816,7 +12816,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/fork-sax@npm:^1.2.67, @joplin/fork-sax@workspace:packages/fork-sax":
+"@joplin/fork-sax@npm:^1.2.68, @joplin/fork-sax@workspace:packages/fork-sax":
   version: 0.0.0-use.local
   resolution: "@joplin/fork-sax@workspace:packages/fork-sax"
   dependencies:
@@ -12825,7 +12825,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/fork-uslug@npm:^2.0.0, @joplin/fork-uslug@npm:^2.0.6, @joplin/fork-uslug@workspace:packages/fork-uslug":
+"@joplin/fork-uslug@npm:^2.0.0, @joplin/fork-uslug@npm:^2.0.7, @joplin/fork-uslug@workspace:packages/fork-uslug":
   version: 0.0.0-use.local
   resolution: "@joplin/fork-uslug@workspace:packages/fork-uslug"
   dependencies:
@@ -12837,12 +12837,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/htmlpack@npm:^3.7, @joplin/htmlpack@workspace:packages/htmlpack":
+"@joplin/htmlpack@npm:^3.7.1, @joplin/htmlpack@workspace:packages/htmlpack":
   version: 0.0.0-use.local
   resolution: "@joplin/htmlpack@workspace:packages/htmlpack"
   dependencies:
     "@adobe/css-tools": "npm:4.4.4"
-    "@joplin/fork-htmlparser2": "npm:^4.1.63"
+    "@joplin/fork-htmlparser2": "npm:^4.1.64"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
     datauri: "npm:4.1.0"
@@ -12853,7 +12853,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/lib@npm:~3.7, @joplin/lib@workspace:packages/lib":
+"@joplin/lib@npm:^3.7.1, @joplin/lib@npm:~3.7, @joplin/lib@workspace:packages/lib":
   version: 0.0.0-use.local
   resolution: "@joplin/lib@workspace:packages/lib"
   dependencies:
@@ -12861,15 +12861,15 @@ __metadata:
     "@aws-sdk/client-s3": "npm:3.296.0"
     "@aws-sdk/s3-request-presigner": "npm:3.296.0"
     "@huggingface/transformers": "npm:4.2.0"
-    "@joplin/fork-htmlparser2": "npm:^4.1.63"
-    "@joplin/fork-sax": "npm:^1.2.67"
-    "@joplin/fork-uslug": "npm:^2.0.6"
-    "@joplin/htmlpack": "npm:^3.7"
-    "@joplin/onenote-converter": "npm:^3.7"
-    "@joplin/renderer": "npm:^3.7"
-    "@joplin/turndown": "npm:^4.0.85"
-    "@joplin/turndown-plugin-gfm": "npm:^1.0.67"
-    "@joplin/utils": "npm:^3.7"
+    "@joplin/fork-htmlparser2": "npm:^4.1.64"
+    "@joplin/fork-sax": "npm:^1.2.68"
+    "@joplin/fork-uslug": "npm:^2.0.7"
+    "@joplin/htmlpack": "npm:^3.7.1"
+    "@joplin/onenote-converter": "npm:^3.7.1"
+    "@joplin/renderer": "npm:^3.7.1"
+    "@joplin/turndown": "npm:^4.0.86"
+    "@joplin/turndown-plugin-gfm": "npm:^1.0.68"
+    "@joplin/utils": "npm:^3.7.1"
     "@testing-library/dom": "npm:10.4.1"
     "@testing-library/react": "npm:16.3.2"
     "@types/adm-zip": "npm:0.5.8"
@@ -12899,7 +12899,7 @@ __metadata:
     fast-xml-parser: "npm:3.21.1"
     file-type: "npm:16.5.4"
     follow-redirects: "npm:1.16.0"
-    form-data: "npm:4.0.5"
+    form-data: "npm:4.0.6"
     fs-extra: "npm:11.3.5"
     hpagent: "npm:1.2.0"
     html-entities: "npm:1.4.0"
@@ -12914,7 +12914,7 @@ __metadata:
     md5: "npm:2.3.0"
     md5-file: "npm:5.0.0"
     moment: "npm:2.30.1"
-    multiparty: "npm:4.2.3"
+    multiparty: "npm:4.3.0"
     mustache: "npm:4.2.0"
     nanoid: "npm:5.1.11"
     node-diff3: "npm:3.2.1"
@@ -12932,6 +12932,7 @@ __metadata:
     redux: "npm:4.2.1"
     relative: "npm:3.0.2"
     reselect: "npm:4.1.8"
+    selfsigned: "npm:5.5.0"
     server-destroy: "npm:1.0.1"
     sharp: "npm:0.34.5"
     sprintf-js: "npm:1.1.3"
@@ -12951,7 +12952,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/onenote-converter@npm:^3.7, @joplin/onenote-converter@npm:~3.7, @joplin/onenote-converter@workspace:packages/onenote-converter":
+"@joplin/onenote-converter@npm:^3.7.1, @joplin/onenote-converter@npm:~3.7, @joplin/onenote-converter@workspace:packages/onenote-converter":
   version: 0.0.0-use.local
   resolution: "@joplin/onenote-converter@workspace:packages/onenote-converter"
   dependencies:
@@ -12995,9 +12996,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/plugin-repo-cli@workspace:packages/plugin-repo-cli"
   dependencies:
-    "@joplin/lib": "npm:~3.7"
-    "@joplin/tools": "npm:~3.7"
-    "@joplin/utils": "npm:~3.7"
+    "@joplin/lib": "npm:^3.7.1"
+    "@joplin/tools": "npm:^3.7.1"
+    "@joplin/utils": "npm:^3.7.1"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
     "@types/node": "npm:18.19.130"
@@ -13045,13 +13046,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/renderer@npm:^3.7, @joplin/renderer@npm:~3.7, @joplin/renderer@workspace:packages/renderer":
+"@joplin/renderer@npm:^3.7.1, @joplin/renderer@npm:~3.7, @joplin/renderer@workspace:packages/renderer":
   version: 0.0.0-use.local
   resolution: "@joplin/renderer@workspace:packages/renderer"
   dependencies:
-    "@joplin/fork-htmlparser2": "npm:^4.1.63"
-    "@joplin/fork-uslug": "npm:^2.0.6"
-    "@joplin/utils": "npm:~3.7"
+    "@joplin/fork-htmlparser2": "npm:^4.1.64"
+    "@joplin/fork-uslug": "npm:^2.0.7"
+    "@joplin/utils": "npm:^3.7.1"
     "@types/jest": "npm:29.5.14"
     "@types/json5": "npm:2.2.0"
     "@types/markdown-it": "npm:13.0.9"
@@ -13109,7 +13110,7 @@ __metadata:
     "@types/markdown-it": "npm:13.0.9"
     "@types/mustache": "npm:4.2.6"
     "@types/node": "npm:18.19.130"
-    "@types/nodemailer": "npm:6.4.23"
+    "@types/nodemailer": "npm:6.4.24"
     "@types/qrcode": "npm:1.5.6"
     "@types/uuid": "npm:11.0.0"
     "@types/yargs": "npm:17.0.35"
@@ -13155,15 +13156,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/tools@npm:~3.7, @joplin/tools@workspace:packages/tools":
+"@joplin/tools@npm:^3.7.1, @joplin/tools@npm:~3.7, @joplin/tools@workspace:packages/tools":
   version: 0.0.0-use.local
   resolution: "@joplin/tools@workspace:packages/tools"
   dependencies:
     "@docusaurus/plugin-sitemap": "npm:3.10.1"
-    "@joplin/fork-htmlparser2": "npm:^4.1.63"
-    "@joplin/lib": "npm:~3.7"
-    "@joplin/renderer": "npm:~3.7"
-    "@joplin/utils": "npm:~3.7"
+    "@joplin/fork-htmlparser2": "npm:^4.1.64"
+    "@joplin/lib": "npm:^3.7.1"
+    "@joplin/renderer": "npm:^3.7.1"
+    "@joplin/utils": "npm:^3.7.1"
     "@rmp135/sql-ts": "npm:1.18.1"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
@@ -13233,7 +13234,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/turndown-plugin-gfm@npm:^1.0.67, @joplin/turndown-plugin-gfm@npm:~1.0.62, @joplin/turndown-plugin-gfm@workspace:packages/turndown-plugin-gfm":
+"@joplin/turndown-plugin-gfm@npm:^1.0.68, @joplin/turndown-plugin-gfm@npm:~1.0.62, @joplin/turndown-plugin-gfm@workspace:packages/turndown-plugin-gfm":
   version: 0.0.0-use.local
   resolution: "@joplin/turndown-plugin-gfm@workspace:packages/turndown-plugin-gfm"
   dependencies:
@@ -13245,7 +13246,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/turndown@npm:^4.0.85, @joplin/turndown@npm:~4.0.80, @joplin/turndown@workspace:packages/turndown":
+"@joplin/turndown@npm:^4.0.86, @joplin/turndown@npm:~4.0.80, @joplin/turndown@workspace:packages/turndown":
   version: 0.0.0-use.local
   resolution: "@joplin/turndown@workspace:packages/turndown"
   dependencies:
@@ -13262,11 +13263,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/utils@npm:^3.7, @joplin/utils@npm:~3.7, @joplin/utils@workspace:packages/utils":
+"@joplin/utils@npm:^3.7.1, @joplin/utils@npm:~3.7, @joplin/utils@workspace:packages/utils":
   version: 0.0.0-use.local
   resolution: "@joplin/utils@workspace:packages/utils"
   dependencies:
-    "@joplin/fork-htmlparser2": "npm:^4.1.63"
+    "@joplin/fork-htmlparser2": "npm:^4.1.64"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
     "@types/markdown-it": "npm:13.0.9"
@@ -19223,12 +19224,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/nodemailer@npm:6.4.23":
-  version: 6.4.23
-  resolution: "@types/nodemailer@npm:6.4.23"
+"@types/nodemailer@npm:6.4.24":
+  version: 6.4.24
+  resolution: "@types/nodemailer@npm:6.4.24"
   dependencies:
     "@types/node": "npm:*"
-  checksum: 10/2cd9713e8795d43ba95e489afc1146e3b1b84c3dd3364ba8f19e8414662c35d3dfbde6235fdfbc05108304c46b71dd8dc5e553fed91433be6ab5b0168c4e1f38
+  checksum: 10/659be5cc6b379ba8d772d8117c67e5d401df97b729e22c41feb5f560637f704e1d6e56556055322dd9d24d91999be74197b11a83b90f14147ac5421d4f9ac1af
   languageName: node
   linkType: hard
 
@@ -29317,15 +29318,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dompurify@npm:3.4.8":
-  version: 3.4.8
-  resolution: "dompurify@npm:3.4.8"
+"dompurify@npm:3.4.10":
+  version: 3.4.10
+  resolution: "dompurify@npm:3.4.10"
   dependencies:
     "@types/trusted-types": "npm:^2.0.7"
   dependenciesMeta:
     "@types/trusted-types":
       optional: true
-  checksum: 10/d661322889a8938bfb99ee27853e9e78661949398e803f344865fd94f8378a494efadd329faea0b16e8085efae1bfeed5f5df372909c3a2be3e583686a0a48fa
+  checksum: 10/e051c70e7a0729d8cc04d40d7863dc8977495140857e81dc668fb548b7a43c7f80cfc973e3c9c0a6cd18b8eaa94ea7de9603daa02d38c8b15a9b32cc25a6f440
   languageName: node
   linkType: hard
 
@@ -33142,16 +33143,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"form-data@npm:4.0.5, form-data@npm:^4.0.5":
-  version: 4.0.5
-  resolution: "form-data@npm:4.0.5"
+"form-data@npm:4.0.6":
+  version: 4.0.6
+  resolution: "form-data@npm:4.0.6"
   dependencies:
     asynckit: "npm:^0.4.0"
     combined-stream: "npm:^1.0.8"
     es-set-tostringtag: "npm:^2.1.0"
-    hasown: "npm:^2.0.2"
-    mime-types: "npm:^2.1.12"
-  checksum: 10/52ecd6e927c8c4e215e68a7ad5e0f7c1031397439672fd9741654b4a94722c4182e74cc815b225dcb5be3f4180f36428f67c6dd39eaa98af0dcfdd26c00c19cd
+    hasown: "npm:^2.0.4"
+    mime-types: "npm:^2.1.35"
+  checksum: 10/de6614c8537c92fa5fa3ee7e827758f98f5a9c033f348b7de81855ef36e5cb867e75d9f405d9483ab8d724a4a20d4e79926a299fa8dbba38f530eb659f0884e4
   languageName: node
   linkType: hard
 
@@ -33187,6 +33188,19 @@ __metadata:
     hasown: "npm:^2.0.2"
     mime-types: "npm:^2.1.12"
   checksum: 10/a4b62e21932f48702bc468cc26fb276d186e6b07b557e3dd7cc455872bdbb82db7db066844a64ad3cf40eaf3a753c830538183570462d3649fdfd705601cbcfb
+  languageName: node
+  linkType: hard
+
+"form-data@npm:^4.0.5":
+  version: 4.0.5
+  resolution: "form-data@npm:4.0.5"
+  dependencies:
+    asynckit: "npm:^0.4.0"
+    combined-stream: "npm:^1.0.8"
+    es-set-tostringtag: "npm:^2.1.0"
+    hasown: "npm:^2.0.2"
+    mime-types: "npm:^2.1.12"
+  checksum: 10/52ecd6e927c8c4e215e68a7ad5e0f7c1031397439672fd9741654b4a94722c4182e74cc815b225dcb5be3f4180f36428f67c6dd39eaa98af0dcfdd26c00c19cd
   languageName: node
   linkType: hard
 
@@ -34964,6 +34978,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"hasown@npm:^2.0.4":
+  version: 2.0.4
+  resolution: "hasown@npm:2.0.4"
+  dependencies:
+    function-bind: "npm:^1.1.2"
+  checksum: 10/13823863ae48161068b4c51606a3128451c66f14545a5169d667fe9fca168dcd38c27570c7a299e32ef844b8da3d55def7fe88602f8970d4311fb543ee88001a
+  languageName: node
+  linkType: hard
+
 "hast-to-hyperscript@npm:^9.0.0":
   version: 9.0.1
   resolution: "hast-to-hyperscript@npm:9.0.1"
@@ -35708,7 +35731,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"http-errors@npm:^1.6.3, http-errors@npm:~1.8.0, http-errors@npm:~1.8.1":
+"http-errors@npm:^1.6.3, http-errors@npm:~1.8.0":
   version: 1.8.1
   resolution: "http-errors@npm:1.8.1"
   dependencies:
@@ -42982,7 +43005,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mime-types@npm:^2.1.31, mime-types@npm:~2.1.17, mime-types@npm:~2.1.34":
+"mime-types@npm:^2.1.31, mime-types@npm:^2.1.35, mime-types@npm:~2.1.17, mime-types@npm:~2.1.34":
   version: 2.1.35
   resolution: "mime-types@npm:2.1.35"
   dependencies:
@@ -43708,14 +43731,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"multiparty@npm:4.2.3":
-  version: 4.2.3
-  resolution: "multiparty@npm:4.2.3"
+"multiparty@npm:4.3.0":
+  version: 4.3.0
+  resolution: "multiparty@npm:4.3.0"
   dependencies:
-    http-errors: "npm:~1.8.1"
+    http-errors: "npm:2.0.0"
     safe-buffer: "npm:5.2.1"
     uid-safe: "npm:2.1.5"
-  checksum: 10/918cadc433f4918f9da2528048d12938b3d33ca636d45a2a43f636d0343a7f9e7c270c0b80212d77f5590fd23835ec4ca5a01df11530fa13f7edf62f82a1840a
+  checksum: 10/ec94721af51ad9729c3f356280bd3cd564f984b7ff4e01f9b73c694b656ef731a2dc66f4679ac7d844980702d404dfa56decc22a5e704139a69681ebf5907842
   languageName: node
   linkType: hard
 
@@ -43760,12 +43783,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nan@npm:2.26.0":
-  version: 2.26.0
-  resolution: "nan@npm:2.26.0"
+"nan@npm:2.27.0":
+  version: 2.27.0
+  resolution: "nan@npm:2.27.0"
   dependencies:
     node-gyp: "npm:latest"
-  checksum: 10/e6f8a720f2c30df7df97c7d7535410b379d84c1b7a0776c92dcea82886d1030b43e0404145510cc34de5e5fb120ad9c90ce82d10447f50ba92bba291b7845bf5
+  checksum: 10/bdce0630e417740501394c412bd9f0ed1c287825e3b8f9b7efb95cc3acd3ef69de60479b5f00a2d039b79321e5ce29b672b0b263cfe0e4d8f47c8f810a24a5ee
   languageName: node
   linkType: hard
 
@@ -49950,10 +49973,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-share@npm:12.2.6":
-  version: 12.2.6
-  resolution: "react-native-share@npm:12.2.6"
-  checksum: 10/fdea43120ce6938d8857f4df4ab6171b69ec762ce0d6b4a45de533587c5eab40cb2f84b4837de141720d9b1195d733b412813f00d172fe58628b3ae13c98cfef
+"react-native-share@npm:12.3.1":
+  version: 12.3.1
+  resolution: "react-native-share@npm:12.3.1"
+  checksum: 10/9ddd8048cc31b664df95215bcc4d29e406b63eee9137f41dbe4da3d2e078fffd6d8733bfc9492a7abc1fea51aab5a5058540249f4431a52f24c43fbcd34aa9b6
   languageName: node
   linkType: hard
 
@@ -52606,22 +52629,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"selfsigned@npm:^2.1.1":
-  version: 2.1.1
-  resolution: "selfsigned@npm:2.1.1"
-  dependencies:
-    node-forge: "npm:^1"
-  checksum: 10/6005206e0d005448274aceceaded5195b944f67a42b72d212a6169d2e5f4bdc87c15a3fe45732c544db8c7175702091aaf95403ad6632585294a6ec8cca63638
-  languageName: node
-  linkType: hard
-
-"selfsigned@npm:^5.5.0":
+"selfsigned@npm:5.5.0, selfsigned@npm:^5.5.0":
   version: 5.5.0
   resolution: "selfsigned@npm:5.5.0"
   dependencies:
     "@peculiar/x509": "npm:^1.14.2"
     pkijs: "npm:^3.3.3"
   checksum: 10/fe9be2647507c3ee21dcaf5cab20e1ae4b8b84eac83d2fe4d82f9a3b6c70636f9aaeeba0089e3343dcb13fbb31ef70c2e72c41f2e2dcf38368040b49830c670e
+  languageName: node
+  linkType: hard
+
+"selfsigned@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "selfsigned@npm:2.1.1"
+  dependencies:
+    node-forge: "npm:^1"
+  checksum: 10/6005206e0d005448274aceceaded5195b944f67a42b72d212a6169d2e5f4bdc87c15a3fe45732c544db8c7175702091aaf95403ad6632585294a6ec8cca63638
   languageName: node
   linkType: hard
 
@@ -59569,9 +59592,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-dev-server@npm:5.2.4":
-  version: 5.2.4
-  resolution: "webpack-dev-server@npm:5.2.4"
+"webpack-dev-server@npm:5.2.5":
+  version: 5.2.5
+  resolution: "webpack-dev-server@npm:5.2.5"
   dependencies:
     "@types/bonjour": "npm:^3.5.13"
     "@types/connect-history-api-fallback": "npm:^1.5.4"
@@ -59610,7 +59633,7 @@ __metadata:
       optional: true
   bin:
     webpack-dev-server: bin/webpack-dev-server.js
-  checksum: 10/5e5382f8cc7a73e2957542de0c755769548cbca8e7c6d17ed6b526364f11af35025be74f03827afa6723ccbdcc93730b0a0a59882d332fb3c6694a6d290c41e7
+  checksum: 10/2bd8e03615c32ecac53e783e2be5670ccac051d051ef4ed7fe944df8fd8745b508c8ebc63bfecfdccd23c2200ca4c373b22ea2da76ce4e1c0a6f58d900c11ecb
   languageName: node
   linkType: hard
 
