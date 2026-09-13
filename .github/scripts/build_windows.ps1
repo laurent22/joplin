@@ -13,11 +13,13 @@ function Install-WindowsDeps {
 		# against the package name, so the other deps keep their prebuilts.
 		$env:npm_config_build_from_source = 'sqlite3'
 
-		# node-gyp's Visual Studio detection fails on ARM64 without VSSetup.
-		# https://github.com/nodejs/node-gyp#on-windows
-		if (-not (Get-Module -ListAvailable -Name VSSetup)) {
-			Install-Module VSSetup -Scope CurrentUser -Force
-		}
+		# Deliberately not installing the VSSetup PowerShell module here: with it
+		# present, node-gyp probes Visual Studio via `Get-VSSetupInstance |
+		# ConvertTo-Json`, whose output exceeds the default 1MB child process
+		# buffer on the VS 2026 image. That fails with
+		# ERR_CHILD_PROCESS_STDIO_MAXBUFFER and node-gyp then reports the
+		# install as version "undefined". Without the module it falls through to
+		# its own Find-VisualStudio.cs helper, which prints far less.
 	}
 
 	$attempts = 3
