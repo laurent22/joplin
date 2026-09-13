@@ -3,6 +3,7 @@ import Synchronizer from './Synchronizer';
 import { _ } from './locale';
 import { FileApi } from './file-api';
 import SyncTargetJoplinServerBase, { initFileApi } from './SyncTargetJoplinServerBase';
+import { isJoplinServerAppId } from './models/settings/builtInMetadata';
 
 export interface FileApiOptions {
 	path(): string;
@@ -31,7 +32,8 @@ export default class SyncTargetJoplinServer extends SyncTargetJoplinServerBase {
 	}
 
 	public static requiresPassword() {
-		return !!Setting.value(`sync.${this.id()}.preferPasswordAuth`);
+		const username = Setting.value(`sync.${this.id()}.username`);
+		return !!Setting.value(`sync.${this.id()}.preferPasswordAuth`) && !isJoplinServerAppId(username);
 	}
 
 	public static override supportsShare(): boolean {

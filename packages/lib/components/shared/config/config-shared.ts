@@ -93,10 +93,10 @@ export const checkSyncConfig = async (comp: ConfigScreenComponent, settings: Set
 		}
 
 		const syncTarget = reg.syncTarget(syncTargetId);
-		const isAuthenticated = await syncTarget.isAuthenticated();
-		if (!isAuthenticated) {
-			await NavService.go(syncTarget.authRouteName());
-
+		const authRouteName = syncTarget.authRouteName();
+		const needsWebLogin = !!authRouteName && !await syncTarget.isAuthenticated();
+		if (needsWebLogin) {
+			await NavService.go(authRouteName);
 			return { ok: false, errorMessage: 'Not signed in' };
 		}
 	}
