@@ -237,8 +237,8 @@ describe('routes/notes', () => {
 	test('should fail closed on locked note bodies', async () => {
 		Setting.setValue('featureFlag.noteLock', true);
 		const api = new Api();
-		// A direct save with is_locked keeps the raw body, standing in for ciphertext.
-		const note = await Note.save({ title: 'locked', body: 'ciphertext', is_locked: 1 });
+		// A JLD-prefixed body passes the save path untouched, standing in for real ciphertext.
+		const note = await Note.save({ title: 'locked', body: 'JLD01ciphertext', is_locked: 1 });
 
 		const metadata = await api.route(RequestMethod.GET, `notes/${note.id}`);
 		expect(metadata.id).toBe(note.id);
@@ -254,7 +254,7 @@ describe('routes/notes', () => {
 		expect((await Note.load(note.id)).title).toBe('renamed');
 		await expect(api.route(RequestMethod.PUT, `notes/${note.id}`, null, JSON.stringify({ body: 'overwrite' }))).rejects.toThrow('locked note');
 		await expect(api.route(RequestMethod.PUT, `notes/${note.id}`, null, JSON.stringify({ is_locked: 0 }))).rejects.toThrow('lock state');
-		expect((await Note.load(note.id)).body).toBe('ciphertext');
+		expect((await Note.load(note.id)).body).toBe('JLD01ciphertext');
 	});
 
 	test.each([
@@ -263,7 +263,7 @@ describe('routes/notes', () => {
 	])('should reject a malformed lock state that would $label', async ({ startLocked, value }) => {
 		Setting.setValue('featureFlag.noteLock', true);
 		const api = new Api();
-		const note = await Note.save({ title: 'note', body: 'body', is_locked: startLocked });
+		const note = await Note.save({ title: 'note', body: startLocked ? 'JLD01body' : 'body', is_locked: startLocked });
 
 		await expect(api.route(RequestMethod.PUT, `notes/${note.id}`, null, JSON.stringify({ is_locked: value }))).rejects.toThrow('lock state');
 		expect((await Note.load(note.id)).is_locked).toBe(startLocked);
@@ -274,7 +274,7 @@ describe('routes/notes', () => {
 		const api = new Api();
 		const folder = await Folder.save({ title: 'folder' });
 		const plain = await Note.save({ title: 'plain', body: 'text', parent_id: folder.id });
-		const locked = await Note.save({ title: 'locked', body: 'ciphertext', is_locked: 1, parent_id: folder.id });
+		const locked = await Note.save({ title: 'locked', body: 'JLD01ciphertext', is_locked: 1, parent_id: folder.id });
 		const tag = await Tag.save({ title: 'tag' });
 		await Tag.addNote(tag.id, plain.id);
 		await Tag.addNote(tag.id, locked.id);

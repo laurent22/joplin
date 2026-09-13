@@ -18,7 +18,7 @@ describe('command-set', () => {
 		{ label: 'change a locked note when note lock is disabled', flagEnabled: false, expectedError: null, expectedTitle: 'renamed' },
 	])('should $label', async ({ flagEnabled, expectedError, expectedTitle }) => {
 		Setting.setValue('featureFlag.noteLock', flagEnabled);
-		const note = await Note.save({ title: 'hello', body: 'ciphertext', is_locked: 1, parent_id: '' });
+		const note = await Note.save({ title: 'hello', body: 'JLD01ciphertext', is_locked: 1, parent_id: '' });
 
 		const command = setupCommandForTesting(Command);
 		let error: string|null = null;

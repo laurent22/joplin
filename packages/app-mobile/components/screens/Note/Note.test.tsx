@@ -9,7 +9,7 @@ import NoteLockKey from '@joplin/lib/services/noteLock/NoteLockKey';
 import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
 import NoteLockService from '@joplin/lib/services/noteLock/NoteLockService';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
-import { enableNoteLock } from '@joplin/lib/services/noteLock/setNoteLockState';
+import { enableNoteLock, disableNoteLock } from '@joplin/lib/services/noteLock/setNoteLockState';
 import waitForWithRealTimers from '@joplin/lib/testing/waitFor';
 import Note from '@joplin/lib/models/Note';
 import { AppState } from '../../../utils/types';
@@ -325,6 +325,27 @@ describe('screens/Note/Note', () => {
 
 		await NoteLockSession.instance().unlock('123456');
 		expect((await Note.load(noteId, { useNoteLock: true })).body).toBe('plain body edited');
+
+		unmount();
+		Setting.setValue('featureFlag.noteLock', false);
+	});
+
+	it('should store the plaintext body again when the note lock is removed', async () => {
+		await setupUnlockedNoteLock('123456');
+		const noteId = await openNewNote({ title: 'To unlock', body: 'plain body' });
+		await Note.save({ ...await Note.load(noteId, { useNoteLock: true }), is_locked: 1 }, { useNoteLock: true });
+
+		const { unmount } = render(<WrappedNoteScreen />);
+		await screen.findByDisplayValue('To unlock');
+
+		await act(async () => {
+			await disableNoteLock(noteId);
+		});
+		await act(() => waitForWithRealTimers(async () => {
+			const row = await Note.load(noteId);
+			expect(row.is_locked).toBe(0);
+			expect(row.body).toBe('plain body');
+		}));
 
 		unmount();
 		Setting.setValue('featureFlag.noteLock', false);
