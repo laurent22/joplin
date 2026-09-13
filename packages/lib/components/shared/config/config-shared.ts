@@ -408,8 +408,9 @@ export const onSettingButtonPress = async (comp: ConfigScreenComponent, metadata
 			if (!loginUrl && syncCommandId === 9) {
 				comp.setSettingValue(`sync.${syncCommandId}.preferPasswordAuth`, true);
 			} else {
-				await saveSettings(comp);
-				await openLoginScreen(syncCommandId);
+				if (await saveSettings(comp)) {
+					await openLoginScreen(syncCommandId);
+				}
 			}
 		} else if (syncCommand === 'disconnect') {
 			const setValuePermanently = <Key extends string> (key: Key, value: SettingValueType<Key>) => {
