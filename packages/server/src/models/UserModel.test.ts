@@ -65,6 +65,12 @@ describe('UserModel', () => {
 		error = await checkThrowAsync(async () => await models().user().save({ id: user1.id, full_name: 'long'.repeat(400) }));
 		expect(error instanceof ErrorUnprocessableEntity).toBe(true);
 
+		// a null full name should not crash validation - PayPal checkouts
+		// leave the customer name empty in Stripe
+		expect(
+			await checkThrowAsync(async () => await models().user().save({ id: user1.id, full_name: null })),
+		).toBe(null);
+
 		// should not throw if updating with valid data
 		expect(
 			await checkThrowAsync(async () => await models().user().save({ id: user1.id, full_name: 'Example', email: 'new_email@example.com' })),
