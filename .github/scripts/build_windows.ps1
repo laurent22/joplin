@@ -9,9 +9,11 @@ function Install-WindowsDeps {
 	$env:IS_CONTINUOUS_INTEGRATION = '1'
 
 	if ($env:PROCESSOR_ARCHITECTURE -eq 'ARM64') {
-		# sqlite3 has no win32-arm64 prebuilt. node-pre-gyp matches this value
-		# against the package name, so the other deps keep their prebuilts.
-		$env:npm_config_build_from_source = 'sqlite3'
+		# Deliberately not setting npm_config_build_from_source to force the
+		# sqlite3 source build: sharp treats that variable as a boolean and
+		# would then also build libvips from source, which fails. sqlite3
+		# installs with --fallback-to-build, so it compiles by itself when the
+		# win32-arm64 prebuilt is missing.
 
 		# Deliberately not installing the VSSetup PowerShell module here: with it
 		# present, node-gyp probes Visual Studio via `Get-VSSetupInstance |
