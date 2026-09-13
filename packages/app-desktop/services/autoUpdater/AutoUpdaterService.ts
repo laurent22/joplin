@@ -144,7 +144,10 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 				let assetUrl = this.getDownloadUrlForPlatform(release, shim.platformName(), process.arch);
 				// electron's autoUpdater appends automatically the platform's yml file to the link so we should remove it
 				assetUrl = assetUrl.substring(0, assetUrl.lastIndexOf('/'));
-				autoUpdater.setFeedURL({ provider: 'generic', url: assetUrl });
+				// The file name is rebuilt from the channel, so without this Windows
+				// arm64 would request latest.yml and get the x64 build.
+				const channel = shim.platformName() === 'win32' && process.arch === 'arm64' ? 'latest-win-arm64' : 'latest';
+				autoUpdater.setFeedURL({ provider: 'generic', url: assetUrl, channel });
 				const result = await autoUpdater.checkForUpdates();
 
 				// Wait for the installation to finish. By default, .checkForUpdates runs in the background
