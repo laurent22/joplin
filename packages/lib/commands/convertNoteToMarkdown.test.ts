@@ -2,10 +2,13 @@ import * as convertHtmlToMarkdown from './convertNoteToMarkdown';
 import { defaultState, State } from '../reducer';
 import Note from '../models/Note';
 import { MarkupLanguage } from '@joplin/renderer';
-import { encryptionService, setupDatabaseAndSynchronizer, switchClient } from '../testing/test-utils';
+import { db, encryptionService, setupDatabaseAndSynchronizer, switchClient } from '../testing/test-utils';
 import Folder from '../models/Folder';
 import { NoteEntity } from '../services/database/types';
 import shim from '../shim';
+import SearchEngine from '../services/search/SearchEngine';
+import SearchEngineUtils from '../services/search/SearchEngineUtils';
+import { getTrashFolderId } from '../services/trash';
 import Setting from '../models/Setting';
 import EncryptionService from '../services/e2ee/EncryptionService';
 import NoteLockKey from '../services/noteLock/NoteLockKey';
@@ -22,7 +25,7 @@ describe('convertNoteToMarkdown', () => {
 		shim.showToast = jest.fn();
 	});
 
-	it('should set the original note to be trashed', async () => {
+	it('should keep the original note active and trash an HTML backup', async () => {
 		const folder = await Folder.save({ title: 'test_folder' });
 		const htmlNote = await Note.save({ title: 'test', body: '<p>Hello</p>', parent_id: folder.id, markup_language: MarkupLanguage.Html });
 		state.selectedNoteIds = [htmlNote.id];
@@ -30,12 +33,42 @@ describe('convertNoteToMarkdown', () => {
 		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: jest.fn() });
 
 		const refreshedNote = await Note.load(htmlNote.id);
+		const trashedNotes = await Note.previews(getTrashFolderId());
 
-		expect(htmlNote.deleted_time).toBe(0);
-		expect(refreshedNote.deleted_time).not.toBe(0);
+		expect(refreshedNote.id).toBe(htmlNote.id);
+		expect(refreshedNote.deleted_time).toBe(0);
+		expect(refreshedNote.markup_language).toBe(MarkupLanguage.Markdown);
+		expect(trashedNotes).toHaveLength(1);
+
+		const backupNote = await Note.load(trashedNotes[0].id);
+
+		expect(backupNote.id).not.toBe(htmlNote.id);
+		expect(backupNote.deleted_time).not.toBe(0);
+		expect(backupNote.body).toBe(htmlNote.body);
+		expect(backupNote.markup_language).toBe(MarkupLanguage.Html);
 	});
 
-	it('should recreate a new note that is a clone of the original', async () => {
+	it('should preserve an existing internal link after converting an HTML note', async () => {
+		const folder = await Folder.save({ title: 'test_folder' });
+		const htmlNote = await Note.save({ title: 'Target', body: '<p>Hello</p>', parent_id: folder.id, markup_language: MarkupLanguage.Html });
+		const linkNote = await Note.save({ title: 'Link', body: `[Target](:/${htmlNote.id})`, parent_id: folder.id });
+		state.selectedNoteIds = [htmlNote.id];
+
+		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: jest.fn() });
+
+		const savedLinkNote = await Note.load(linkNote.id);
+		expect(savedLinkNote.body).toBe(linkNote.body);
+
+		const linkedIds = await Note.linkedNoteIds(savedLinkNote.body);
+		expect(linkedIds).toEqual([htmlNote.id]);
+
+		const target = await Note.load(linkedIds[0]);
+		expect(target.deleted_time).toBe(0);
+		expect(target.markup_language).toBe(MarkupLanguage.Markdown);
+		expect(target.body).toBe('Hello');
+	});
+
+	it('should preserve note metadata when converting in place', async () => {
 		const folder = await Folder.save({ title: 'test_folder' });
 		const htmlNoteProperties = {
 			title: 'test',
@@ -111,6 +144,25 @@ describe('convertNoteToMarkdown', () => {
 		expect(shim.showToast).toHaveBeenCalled();
 	});
 
+	it('should cause note to not disappear from search results', async () => {
+		const searchEngine = new SearchEngine();
+		searchEngine.setDb(db());
+
+		const folder = await Folder.save({ title: 'test_folder' });
+		const htmlNote = await Note.save({ title: 'search note', body: '<p>Hello</p>', parent_id: folder.id, markup_language: MarkupLanguage.Html });
+		await searchEngine.syncTables();
+
+		const searchResultsBeforeConversion = await SearchEngineUtils.notesForQuery('search note', true, null, searchEngine);
+		expect(searchResultsBeforeConversion.notes.map(note => note.id)).toEqual([htmlNote.id]);
+
+		state.selectedNoteIds = [htmlNote.id];
+		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: jest.fn() });
+		await searchEngine.syncTables();
+
+		const searchResultsAfterConversion = await SearchEngineUtils.notesForQuery('search note', true, null, searchEngine);
+		expect(searchResultsAfterConversion.notes.map(note => note.id)).toEqual([htmlNote.id]);
+	});
+
 	it.each([
 		{ label: 'not convert a locked note', flagEnabled: true, blocked: true },
 		{ label: 'convert a locked note when note lock is disabled', flagEnabled: false, blocked: false },
@@ -124,8 +176,9 @@ describe('convertNoteToMarkdown', () => {
 		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: jest.fn() });
 
 		expect(shim.showErrorDialog).toHaveBeenCalledTimes(blocked ? 1 : 0);
-		// The original note is only moved to the trash once it has been converted.
-		expect((await Note.load(htmlNote.id)).deleted_time === 0).toBe(blocked);
+		const originalNote = await Note.load(htmlNote.id);
+		expect(originalNote.deleted_time).toBe(0);
+		expect(originalNote.markup_language).toBe(blocked ? MarkupLanguage.Html : MarkupLanguage.Markdown);
 	});
 
 	it('should not convert any of the selected notes when one is locked and the session is locked', async () => {
@@ -171,7 +224,8 @@ describe('convertNoteToMarkdown', () => {
 		expect(converted.body).toContain('Hello');
 		// The stored row keeps a ciphertext body.
 		expect((await Note.load(notes[0].id)).body).not.toContain('Hello');
-		expect((await Note.load(htmlNote.id)).deleted_time).not.toBe(0);
+		expect(converted.id).toBe(htmlNote.id);
+		expect(converted.deleted_time).toBe(0);
 	});
 
 	it('should finish converting the remaining locked notes when the session locks mid-run', async () => {

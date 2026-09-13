@@ -53,35 +53,37 @@ export const runtime = (): CommandRuntime => {
 					const noteIsLocked = isNoteLockEnabled() && NoteLockNote.isLocked(note);
 
 					// A locked note converts through a full gated load and save, so the body is
-					// decrypted for the conversion and the converted copy is encrypted again.
+					// decrypted for the conversion and the converted note is encrypted again.
 					const sourceNote = noteIsLocked ? await Note.load(note.id, { useNoteLock: true, noteLockKey }) : note;
-
 					const markdownBody = await convertHtmlToMarkdown().execute(context, sourceNote.body);
-					const newNote = await Note.duplicate(note.id);
+					const backupNote = await Note.duplicate(note.id, {
+						changes: {
+							user_created_time: note.user_created_time,
+							user_updated_time: note.user_updated_time,
+						},
+					});
 
-					newNote.body = markdownBody;
-					newNote.markup_language = MarkupLanguage.Markdown;
-					newNote.user_created_time = note.user_created_time;
-					newNote.user_updated_time = note.user_updated_time;
-					newNote.updated_time = Date.now();
+					note.body = markdownBody;
+					note.markup_language = MarkupLanguage.Markdown;
+					note.updated_time = Date.now();
 
-					const toSave = noteIsLocked ? { ...newNote, isDecrypted: true } : newNote;
+					const toSave = noteIsLocked ? { ...note, isDecrypted: true } : note;
 					await Note.save(toSave, { autoTimestamp: false, useNoteLock: noteIsLocked, noteLockKey });
-					await Note.delete(note.id, { toTrash: true });
+					await Note.delete(backupNote.id, { toTrash: true });
 					processedCount ++;
 
 					if (isFirst) {
 						context.dispatch({
 							type: 'NOTE_SELECT',
-							id: newNote.id,
+							id: note.id,
 						});
 						isFirst = false;
 					}
 				}
 
 				void shim.showToast(_n(
-					'The note has been converted to Markdown and the original note has been moved to the trash',
-					'The notes have been converted to Markdown and the original notes have been moved to the trash',
+					'The note has been converted to Markdown and an HTML copy has been moved to the trash',
+					'The notes have been converted to Markdown and HTML copies have been moved to the trash',
 					processedCount,
 				), { type: ToastType.Success });
 			} catch (error) {
