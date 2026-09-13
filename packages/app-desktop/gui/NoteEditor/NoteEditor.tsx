@@ -717,12 +717,12 @@ function NoteEditorContent(props: NoteEditorProps) {
 	// show the editor toggle. We can't compute this from the redux note list
 	// because note bodies aren't in the preview fields.
 	useEffect(() => {
-		props.dispatch({ type: 'WHITEBOARD_ACTIVE_NOTE_SET', value: noteHasWhiteboardFence && !props.conflictIsInView });
-	}, [noteHasWhiteboardFence, props.conflictIsInView, props.dispatch]);
+		props.dispatch({ type: 'WHITEBOARD_ACTIVE_NOTE_SET', windowId, value: noteHasWhiteboardFence && !props.conflictIsInView });
+	}, [noteHasWhiteboardFence, props.conflictIsInView, windowId, props.dispatch]);
 
 	useEffect(() => {
-		props.dispatch({ type: 'CONFLICT_ACTIVE_NOTE_SET', value: isConflictNote });
-	}, [isConflictNote, props.dispatch]);
+		props.dispatch({ type: 'CONFLICT_ACTIVE_NOTE_SET', windowId, value: isConflictNote });
+	}, [isConflictNote, windowId, props.dispatch]);
 
 	if (useWhiteboardEditor) {
 		editor = <WhiteboardEditor key={formNote.id} {...editorProps}/>;

@@ -80,6 +80,30 @@ describe('app.reducer', () => {
 		});
 	});
 
+	it.each([
+		['CONFLICT_ACTIVE_NOTE_SET', 'activeNoteIsConflict'],
+		['WHITEBOARD_ACTIVE_NOTE_SET', 'activeNoteIsWhiteboard'],
+	] as const)('%s should only affect the window it was dispatched from', (type, stateKey) => {
+		const state: AppState = {
+			...createAppDefaultState({}),
+			backgroundWindows: {
+				testWindow: {
+					...createAppDefaultWindowState(),
+					windowId: 'testWindow',
+				},
+			},
+		};
+
+		const inBackground = appReducer(state, { type, windowId: 'testWindow', value: true });
+		expect(inBackground.backgroundWindows.testWindow[stateKey]).toBe(true);
+		// The main window must not pick up a secondary window's note
+		expect(inBackground[stateKey]).toBe(false);
+
+		const inMain = appReducer(state, { type, windowId: defaultWindowId, value: true });
+		expect(inMain[stateKey]).toBe(true);
+		expect(inMain.backgroundWindows.testWindow[stateKey]).toBe(false);
+	});
+
 	it('showing a dialog in one window should hide dialogs with the same ID in background windows', () => {
 		const state: AppState = {
 			...createAppDefaultState({}),
