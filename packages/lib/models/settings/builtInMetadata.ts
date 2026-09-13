@@ -424,7 +424,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			show: settings => settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServer'),
 			public: true,
 			label: () => _('Prefer email/password authentication'),
-			description: () => _('By default, Joplin Server uses OAuth to authenticate. Enable this setting to prefer email/password authentication.'),
+			description: () => _('By default, authentication is done by opening the Joplin Server web UI. Enable this setting to prefer email/password authentication.'),
 			advanced: true,
 		},
 		'sync.9.pendingAuthId': { value: '', type: SettingItemType.String, public: false },
