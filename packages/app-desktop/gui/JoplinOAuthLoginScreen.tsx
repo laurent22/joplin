@@ -5,7 +5,7 @@ import { _ } from '@joplin/lib/locale';
 import { clipboard } from 'electron';
 import Button, { ButtonLevel } from './Button/Button';
 import { Dispatch } from 'redux';
-import { reducer, defaultState, generateApplicationConfirmUrl, checkIfLoginWasSuccessful, saveApplicationAuthId, isJoplinOAuthSyncTarget, assertIsJoplinOAuthSyncTarget, Action, fetchLoginUrl, normalizeBaseUrl, generateAppId } from '@joplin/lib/services/joplinOAuthUtils';
+import { reducer, defaultState, generateApplicationConfirmUrl, checkIfLoginWasSuccessful, saveApplicationAuthId, isJoplinOAuthSyncTarget, assertIsJoplinOAuthSyncTarget, Action, fetchLoginUrl, normalizeBaseUrl, generateAppId, isValidBaseUrl, openSyncSettings } from '@joplin/lib/services/joplinOAuthUtils';
 import { AppState } from '../app.reducer';
 import Logger from '@joplin/utils/Logger';
 import { reg } from '@joplin/lib/registry';
@@ -26,15 +26,15 @@ interface Props {
 const JoplinOAuthScreenComponent = (props: Props) => {
 	const isJoplinCloud = props.syncTargetId === SyncTargetRegistry.nameToId('joplinCloud');
 	const syncTargetLabel = SyncTargetRegistry.idToMetadata(props.syncTargetId).label;
-	const joplinCloudApi = normalizeBaseUrl(props.serverApi);
+	const serverApi = normalizeBaseUrl(props.serverApi);
 
 	const applicationAuthId = useMemo(() => generateAppId(), []);
-	const applicationAuthUrl = (applicationAuthId: string) => `${joplinCloudApi}/api/application_auth/${applicationAuthId}`;
+	const applicationAuthUrl = (applicationAuthId: string) => `${serverApi}/api/application_auth/${applicationAuthId}`;
 
 	const [intervalIdentifier, setIntervalIdentifier] = useState(undefined);
 	const [state, dispatch] = useReducer(reducer, defaultState(syncTargetLabel));
 	const { url: confirmUrl } = useConfirmUrl(
-		props.syncTargetId, joplinCloudApi, applicationAuthId, dispatch,
+		props.syncTargetId, serverApi, applicationAuthId, dispatch,
 	);
 
 	const periodicallyCheckForCredentials = () => {
@@ -121,9 +121,10 @@ const JoplinOAuthScreenComponent = (props: Props) => {
 					</>
 				) : null}
 				<p className={state.className}>{state.message()}
-					{state.active === 'ERROR' ? (
+					{state.active === 'ERROR' ? <>
 						<span className={state.className}>{state.errorMessage}</span>
-					) : null}
+						{!isValidBaseUrl(serverApi) && <Button onClick={openSyncSettings} title={_('Open settings')}/>}
+					</> : null}
 				</p>
 				{state.active === 'LINK_USED' ? <div className="loading-animation" /> : null}
 				{state.active !== 'COMPLETED' && isJoplinCloud ? <JoplinCloudSignUpCallToAction source='desktop-login-screen' withLeadIn={true} /> : null}

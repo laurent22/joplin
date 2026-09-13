@@ -119,8 +119,10 @@ export function assertIsJoplinOAuthSyncTarget(id: number): asserts id is JoplinS
 
 export const hasValidBaseUrl = (id: JoplinSyncTargetId, settings: SettingsMap|null) => {
 	const url = settings ? settings[`sync.${id}.path`] : Setting.value(`sync.${id}.path`);
-	return !!url && isHttpOrHttpsUrl(url);
+	return !!url && isValidBaseUrl(url);
 };
+
+export const isValidBaseUrl = (url: string) => isHttpOrHttpsUrl(url);
 
 export const saveApplicationAuthId = async (applicationAuthId: string, syncTarget: JoplinSyncTargetId) => {
 	Setting.setValue(`sync.${syncTarget}.pendingAuthId`, applicationAuthId);
@@ -151,9 +153,15 @@ export const fetchLoginUrl = async (syncTargetId: number, apiBaseUrl: string) =>
 
 export const openLoginScreen = (syncTargetId: number) => {
 	const target = reg.syncTarget(syncTargetId);
-	return NavService.go(target.authRouteName(), {
-		syncTarget: syncTargetId,
-	});
+	return NavService.go(target.authRouteName());
+};
+
+export const openSyncSettings = () => {
+	if (shim.mobilePlatform()) {
+		return NavService.go('Config', { sectionName: 'sync' });
+	} else {
+		return NavService.go('Config', { props: { defaultSection: 'sync' } });
+	}
 };
 
 // We have isWaitingResponse inside the function to avoid any state from lingering

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { _ } from '@joplin/lib/locale';
 import { themeStyle } from '../global-style';
 import { AppState } from '../../utils/types';
-import { generateApplicationConfirmUrl, reducer, checkIfLoginWasSuccessful, saveApplicationAuthId, defaultState, assertIsJoplinOAuthSyncTarget, fetchLoginUrl, normalizeBaseUrl, generateAppId } from '@joplin/lib/services/joplinOAuthUtils';
+import { generateApplicationConfirmUrl, reducer, checkIfLoginWasSuccessful, saveApplicationAuthId, defaultState, assertIsJoplinOAuthSyncTarget, fetchLoginUrl, normalizeBaseUrl, generateAppId, isValidBaseUrl, openSyncSettings } from '@joplin/lib/services/joplinOAuthUtils';
 import { Button } from 'react-native-paper';
 import createRootStyle from '../../utils/createRootStyle';
 import ScreenHeader from '../ScreenHeader';
@@ -203,9 +203,10 @@ const JoplinOAuthScreenComponent = (props: Props) => {
 					: null
 				}
 				<Text style={styles[state.className]}>{state.message()}
-					{state.active === 'ERROR' ? (
+					{state.active === 'ERROR' ? <>
 						<Text style={styles[state.className]}>{state.errorMessage}</Text>
-					) : null}
+						{!isValidBaseUrl(props.syncTargetApi) && <Button onPress={openSyncSettings}>{_('Open settings')}</Button>}
+					</> : null}
 				</Text>
 				{state.active === 'LINK_USED' ? (
 					<Animated.View style={{ transform: [{ rotate: syncIconRotation }] }}>
