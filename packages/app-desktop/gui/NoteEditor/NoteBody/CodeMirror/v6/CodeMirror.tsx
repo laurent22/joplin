@@ -23,6 +23,8 @@ import useScrollHandler from '../utils/useScrollHandler';
 import Logger from '@joplin/utils/Logger';
 import useEditorCommands from './useEditorCommands';
 import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
+import useConflictResolution from './utils/useConflictResolution';
+import { goToConflict } from '@joplin/editor/CodeMirror/extensions/conflictResolutionExtension';
 import useContextMenu from '../utils/useContextMenu';
 import useWebviewIpcMessage from '../utils/useWebviewIpcMessage';
 import Toolbar from '../Toolbar';
@@ -78,7 +80,21 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 	usePluginServiceRegistration(ref);
 
+	const { conflictContent } = useConflictResolution({
+		noteId: props.noteId,
+		inView: props.conflictIsInView,
+		contentMarkupLanguage: props.contentMarkupLanguage,
+		editorRef,
+		reloadCount: props.conflictReloadCount ?? 0,
+	});
+
+	const conflictContentRef = useRef(conflictContent);
+	conflictContentRef.current = conflictContent;
+
 	const codeMirror_change = useCallback((newBody: string) => {
+		// A half-resolved merge must not be saved, so nothing is until Finish
+		if (conflictContentRef.current !== null) return;
+
 		if (newBody !== props.content) {
 			props_onChangeRef.current({ changeId: null, content: newBody });
 		}
@@ -137,7 +153,12 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 	useImperativeHandle(ref, () => {
 		return {
-			content: () => props.content,
+			content: () => (conflictContentRef.current !== null && editorRef.current)
+				? editorRef.current.editor.state.doc.toString()
+				: props.content,
+			goToConflict: (direction: 'previous'|'next') => {
+				if (editorRef.current) goToConflict(editorRef.current.editor, direction);
+			},
 			resetScroll: () => {
 				resetScroll();
 			},
@@ -355,7 +376,8 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	initialCursorLocationRef.current = props.initialCursorLocation.markdown ?? 0;
 
 	useSyncEditorValue({
-		content: props.content,
+		// The editor holds the merge rather than the note body during a conflict
+		content: conflictContent ?? props.content,
 		visiblePanes: props.visiblePanes,
 		onMessage: props.onMessage,
 		editorRef,
@@ -369,6 +391,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		disabled: props.disabled,
 		keyboardMode: props.keyboardMode,
 		tabMovesFocus: props.tabMovesFocus,
+		resolvingConflict: conflictContent !== null,
 	});
 
 	const renderEditor = () => {

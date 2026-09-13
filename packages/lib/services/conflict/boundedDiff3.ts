@@ -50,6 +50,45 @@ export interface DiffOptions {
 export const diffOptions: DiffOptions = { maxEditLength: 5000, timeout: 1000 };
 export const viewerDiffOptions: DiffOptions = { maxEditLength: 10000, timeout: 3000 };
 
+const isTableLine = (line: string) => line.trimStart().startsWith('|');
+
+const splitCells = (line: string) => {
+	const cells: string[] = [];
+	let current = '';
+
+	for (let i = 0; i < line.length; i++) {
+		if (line[i] === '\\' && i + 1 < line.length) {
+			current += line[i] + line[i + 1];
+			i++;
+		} else if (line[i] === '|') {
+			cells.push(current);
+			current = '';
+		} else {
+			current += line[i];
+		}
+	}
+	cells.push(current);
+
+	return cells;
+};
+
+// Used only to decide whether two table lines match, never emitted: editing one
+// cell re-pads every row, which would otherwise make the whole table a conflict
+const normaliseTableLine = (line: string) => {
+	return splitCells(line)
+		.map(cell => (/^\s*:?-+:?\s*$/.test(cell) ? cell.replace(/-+/, '-') : cell).trim())
+		.join('|');
+};
+
+// Table lines are matched on their normalised form so column padding cannot cause
+// a false conflict, while the originals are what the regions carry and what gets
+// written back. Whitespace elsewhere is a real edit and is left alone.
+export const sameLine = (a: string, b: string) => {
+	if (a === b) return true;
+	if (!isTableLine(a) || !isTableLine(b)) return false;
+	return normaliseTableLine(a) === normaliseTableLine(b);
+};
+
 // The duplicate line check and the merge diff the same two pairs, so whichever runs
 // second reuses the result
 export type DiffLines = (base: string[], side: string[])=> ArrayChange[]|undefined;
@@ -63,7 +102,7 @@ export const createDiffLines = (options: DiffOptions = diffOptions): DiffLines =
 		const cached = cache.find(entry => entry.base === base && entry.side === side);
 		if (cached) return cached.changes;
 
-		const changes: ArrayChange[]|undefined = diffArrays(base, side, options);
+		const changes: ArrayChange[]|undefined = diffArrays(base, side, { ...options, comparator: sameLine });
 		cache.push({ base, side, changes });
 		return changes;
 	};

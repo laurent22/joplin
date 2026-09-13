@@ -29,15 +29,19 @@ describe('loadConflictData', () => {
 		Setting.setValue('featureFlag.conflictResolution', true);
 	});
 
-	test('should three-way merge a note that has a base', async () => {
+	test('should compare the two versions the same way whether or not a base is stored', async () => {
 		const note = await createConflictNote('one\ntwo\nthree', 'one\ntwo\nTHREE');
 		await saveState(note.id, { base_body: 'one\ntwo\nthree' });
 
-		const data = await loadConflictData(note.id);
+		const withBase = await loadConflictData(note.id);
 
-		expect(data.status).toBe(ConflictDataStatus.Ok);
-		expect(data.sections.some(s => s.type === 'conflict')).toBe(false);
-		expect(data.sections.some(s => s.type === 'auto-merged')).toBe(true);
+		await saveState(note.id, { base_body: '' });
+		const withoutBase = await loadConflictData(note.id);
+
+		expect(withBase.status).toBe(ConflictDataStatus.Ok);
+		// The viewer only shows the differences, so a stored base changes nothing
+		expect(withBase.sections).toEqual(withoutBase.sections);
+		expect(withBase.sections.some(s => s.type === 'conflict')).toBe(true);
 	});
 
 	test('should report a conflict section when both sides changed the same line', async () => {
@@ -95,7 +99,7 @@ describe('loadConflictData', () => {
 		await Note.save({ id: note.conflict_original_id, body: 'one\nTWO' });
 
 		const after = await loadConflictData(note.id);
-		expect(after.sections.some(s => s.type === 'auto-merged')).toBe(true);
+		expect(after.sections.some(s => s.type === 'conflict')).toBe(true);
 	});
 
 	test('should be unavailable when the feature flag is off', async () => {

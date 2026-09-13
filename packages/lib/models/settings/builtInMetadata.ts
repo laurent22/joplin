@@ -1929,6 +1929,19 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: true,
 		},
 
+		'conflict.plainTextEditor': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			appTypes: [AppType.Desktop],
+			label: () => _('Markdown editor: Show conflicts as plain Markdown'),
+			description: () => _('Turns off Markdown rendering while resolving a conflict.'),
+			section: 'editor',
+			storage: SettingStorage.File,
+			isGlobal: true,
+			show: (settings) => !!settings['featureFlag.conflictResolution'],
+		},
+
 		'editor.inlineRendering': {
 			value: true,
 			type: SettingItemType.Bool,

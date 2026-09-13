@@ -581,6 +581,14 @@ export default class Note extends BaseItem {
 		return this.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 1 AND deleted_time = 0');
 	}
 
+	public static async titlesLike(pattern: string): Promise<string[]> {
+		const rows = await this.db().selectAll<NoteEntity>(
+			'SELECT title FROM notes WHERE title LIKE ? ESCAPE \'\\\' AND deleted_time = 0',
+			[pattern],
+		);
+		return rows.map(row => row.title);
+	}
+
 	public static async conflictedCount() {
 		const r = await this.db().selectOne('SELECT count(*) as total FROM notes WHERE is_conflict = 1 AND deleted_time = 0');
 		return r && r.total ? r.total : 0;

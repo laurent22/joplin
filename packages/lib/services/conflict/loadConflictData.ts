@@ -1,7 +1,6 @@
 import Note from '../../models/Note';
 import ConflictNoteState from '../../models/ConflictNoteState';
-import { autoMerge, MergedSection, twoWayDiff } from './diffNotes';
-import { viewerDiffOptions } from './boundedDiff3';
+import { MergedSection, twoWayDiff } from './diffNotes';
 import isConflictResolutionEnabled from './isConflictResolutionEnabled';
 
 export enum ConflictDataStatus {
@@ -14,6 +13,8 @@ export enum ConflictDataStatus {
 export interface ConflictData {
 	status: ConflictDataStatus;
 	sections: MergedSection[];
+	mergedText: string;
+	remoteUpdatedTime: number;
 	localTitle: string;
 	remoteTitle: string;
 	titleConflict: boolean;
@@ -23,6 +24,8 @@ const unavailable = (): ConflictData => {
 	return {
 		status: ConflictDataStatus.Unavailable,
 		sections: [],
+		mergedText: '',
+		remoteUpdatedTime: 0,
 		localTitle: '',
 		remoteTitle: '',
 		titleConflict: false,
@@ -50,9 +53,10 @@ export default async (noteId: string): Promise<ConflictData> => {
 
 	const localBody = note.body ?? '';
 	const remoteBody = remoteNote.body ?? '';
-	const baseBody = state.base_body ?? '';
 
-	const merged = baseBody ? autoMerge(baseBody, localBody, remoteBody, viewerDiffOptions) : twoWayDiff(localBody, remoteBody);
+	// Always use two-way diff. The viewer only shows differences, so it does not
+	// requires base and all conflicts will appear in same way.
+	const merged = twoWayDiff(localBody, remoteBody);
 
 	const localTitle = note.title ?? '';
 	const remoteTitle = remoteNote.title ?? '';
@@ -60,6 +64,8 @@ export default async (noteId: string): Promise<ConflictData> => {
 	return {
 		status: ConflictDataStatus.Ok,
 		sections: merged.sections,
+		mergedText: merged.mergedText,
+		remoteUpdatedTime: remoteNote.updated_time,
 		localTitle,
 		remoteTitle,
 		titleConflict: localTitle !== remoteTitle,

@@ -70,6 +70,7 @@ export interface NoteEditorProps {
 	pluginHtmlContents: PluginHtmlContents;
 	onTitleChange?: (title: string)=> void;
 	bodyEditor: NoteBodyEditorType;
+	conflictIsInView: boolean;
 	startupPluginsLoaded: boolean;
 	enableHtmlToMarkdownBanner: boolean;
 	showNoteLinkIcon: boolean;
@@ -82,6 +83,7 @@ export interface NoteEditorProps {
 export interface NoteBodyEditorRef {
 	content(): string|Promise<string>;
 	blurEditor?(): void;
+	goToConflict?(direction: 'previous'|'next'): void;
 	resetScroll(): void;
 	scrollTo(options: ScrollOptions): void;
 
@@ -156,6 +158,8 @@ export interface NoteBodyEditorProps {
 	watchedNoteFiles: string[];
 	enableHtmlToMarkdownBanner: boolean;
 	showNoteLinkIcon: boolean;
+	conflictReloadCount?: number;
+	conflictIsInView?: boolean;
 }
 
 export interface NoteBodyEditorPropsAndRef extends NoteBodyEditorProps {
