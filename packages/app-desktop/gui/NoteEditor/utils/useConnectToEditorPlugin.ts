@@ -80,14 +80,14 @@ const useConnectToEditorPlugin = ({
 	const disabledRef = useRef(disabled);
 	disabledRef.current = disabled;
 
-	useQueuedAsyncEffect(async (event) => {
+	useQueuedAsyncEffect(async () => {
 		if (!startupPluginsLoaded || disabled) return;
 		logger.debug('Emitting activation check for views:', loadedViewIdCacheKey);
 
 		await editorPluginHandler.emitActivationCheck({
 			parentWindowId: windowId,
 			noteId: effectiveNoteId,
-			isCancelled: () => event.cancelled || disabledRef.current,
+			isCancelled: () => disabledRef.current,
 		});
 		// It's important to re-run the activation check when the loaded view IDs change.
 		// As such, `loadedViewIds` needs to be in the dependencies list:
