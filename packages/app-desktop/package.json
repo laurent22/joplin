@@ -137,7 +137,7 @@
         "entry": {
           "Icon": "joplin",
           "MimeType": "x-scheme-handler/joplin;",
-          "StartupWMClass": "@joplin/app-desktop"
+          "StartupWMClass": "appimagekit-joplin"
         }
       },
       "target": [
