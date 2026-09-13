@@ -337,7 +337,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		}
 	}, [hasTitleConflict, resolvedTitle, remoteUpdatedTime, originalIsStale, askToReloadConflict, props.dispatch]);
 
-	const shownEditorViewIds = useVisiblePluginEditorViewIds(props.plugins, windowId);
+	const shownEditorViewIds = useVisiblePluginEditorViewIds(props.plugins, windowId, props.conflictIsInView);
 	useConnectToEditorPlugin({
 		startupPluginsLoaded: props.startupPluginsLoaded,
 		setFormNote,
@@ -347,6 +347,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		shownEditorViewIds,
 		activeEditorView: editorView,
 		plugins: props.plugins,
+		disabled: props.conflictIsInView,
 	});
 
 	const {
