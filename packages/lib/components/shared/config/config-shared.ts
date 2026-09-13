@@ -400,7 +400,8 @@ export const onSettingButtonPress = async (comp: ConfigScreenComponent, metadata
 	const syncCommandId = syncCommandMatch ? Number(syncCommandMatch[1]) : -1;
 
 	if (syncCommandMatch && isJoplinOAuthSyncTarget(syncCommandId)) {
-		if (key.endsWith('connect')) {
+		const syncCommand = syncCommandMatch[2];
+		if (syncCommand === 'connect') {
 			const loginUrl = await fetchLoginUrl(syncCommandId, comp.state.settings[`sync.${syncCommandId}.path`]);
 			// Older Joplin Server versions don't support fetching the login URL
 			if (!loginUrl && syncCommandId === 9) {
@@ -409,7 +410,7 @@ export const onSettingButtonPress = async (comp: ConfigScreenComponent, metadata
 				await saveSettings(comp);
 				await openLoginScreen(syncCommandId);
 			}
-		} else if (key.endsWith('disconnect')) {
+		} else if (syncCommand === 'disconnect') {
 			comp.setSettingValue(`sync.${syncCommandId}.username`, '');
 			comp.setSettingValue(`sync.${syncCommandId}.password`, '');
 		} else {
