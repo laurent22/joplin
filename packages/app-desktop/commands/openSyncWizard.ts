@@ -14,5 +14,7 @@ export const runtime = (): CommandRuntime => {
 				name: 'syncWizard',
 			});
 		},
+		// Prevents the user from attempting to open multiple copies of the sync wizard, which would throw
+		enabledCondition: '!modalDialogVisible',
 	};
 };
