@@ -67,9 +67,8 @@ describe('shim-init-node', () => {
 
 	test.each([
 		200,
-		// Should still download the file even for error responses. (The goal here is
-		// to match the behavior of fetchBlob before migrating away from an implementation
-		// based on http.request)
+		// Should still download the file even for error responses.
+		// (Behavior of fetchBlob before migrating to Undici from node-fetch)
 		400,
 	])('fetchBlob should download a file to disk when the server responds with code %d', async (code) => {
 		await using httpServer = await createLocalhostServer((req, res) => {
