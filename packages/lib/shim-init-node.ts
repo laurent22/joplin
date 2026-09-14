@@ -575,9 +575,9 @@ function shimInit(options: ShimInitOptions = null) {
 				dispatcher,
 				signal: abortController.signal,
 			});
-			const response = await fetch(requestOptions);
-
 			try {
+				const response = await fetch(requestOptions);
+
 				const notifyController = async function*(source: AsyncIterable<Buffer>) {
 					let cancelWithError: Error|null = null;
 					const chunkHandler = downloadController.handleChunk({
@@ -611,10 +611,8 @@ function shimInit(options: ShimInitOptions = null) {
 				}
 				return makeResponse(response);
 			} catch (error) {
-				try {
+				if (await fs.exists(filePath)) {
 					await fs.unlink(filePath);
-				} catch (error) {
-					console.warn('fetchBlob: Failed to remove file after error:', filePath);
 				}
 
 				throw mapFetchError(error);
