@@ -505,6 +505,16 @@ function shimInit(options: ShimInitOptions = null) {
 		return new Buffer(data).toString('base64');
 	};
 
+	const mapFetchError = (error: Error & { cause?: unknown }) => {
+		// When error is a TypeError, information about the error failure is in
+		// error.cause:
+		const cause = error.cause;
+		if (error instanceof TypeError && cause instanceof Error) {
+			return cause;
+		}
+		return error;
+	};
+
 	shim.fetch = async function(url, options = {}) {
 		try { // Check if the url is valid
 			new URL(url);
@@ -516,13 +526,7 @@ function shimInit(options: ShimInitOptions = null) {
 			try {
 				return await fetch(url, { ...options, dispatcher: agent });
 			} catch (error) {
-				// When error is a TypeError, information about the error failure is in
-				// error.cause:
-				const cause = error.cause;
-				if (error instanceof TypeError && cause instanceof Error) {
-					throw cause;
-				}
-				throw error;
+				throw mapFetchError(error);
 			}
 		}, options);
 	};
@@ -557,13 +561,13 @@ function shimInit(options: ShimInitOptions = null) {
 			};
 		}
 
-		const agent: Agent = shim.httpAgent(url, options);
-		const dispatcher = agent.compose([
-			interceptors.redirect({ maxRedirections: options.maxRedirects }),
-			interceptors.decompress(),
-		]);
-
 		const doFetchOperation = async () => {
+			const agent: Agent = shim.httpAgent(url, options);
+			const dispatcher = agent.compose([
+				interceptors.redirect({ maxRedirections: options.maxRedirects }),
+				interceptors.decompress(),
+			]);
+
 			const abortController = new AbortController();
 			const requestOptions = new Request(url, {
 				method: method,
@@ -608,7 +612,8 @@ function shimInit(options: ShimInitOptions = null) {
 				return makeResponse(response);
 			} catch (error) {
 				await fs.unlink(filePath);
-				throw error;
+
+				throw mapFetchError(error);
 			}
 		};
 
