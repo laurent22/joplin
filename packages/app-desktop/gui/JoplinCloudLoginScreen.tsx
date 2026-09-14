@@ -28,16 +28,17 @@ const JoplinCloudScreenComponent = (props: Props) => {
 	const applicationAuthUrl = (applicationAuthId: string) => `${props.joplinCloudApi}/api/application_auth/${applicationAuthId}`;
 
 	const [intervalIdentifier, setIntervalIdentifier] = useState(undefined);
-	const [state, dispatch] = useReducer(reducer, defaultState);
+	const [state, dispatch] = useReducer(reducer, defaultState());
 
 	const applicationAuthId = useMemo(() => uuidgen(), []);
+	const syncTargetId = 10 as const;
 
 	const periodicallyCheckForCredentials = () => {
 		if (intervalIdentifier) return;
 
 		const interval = setInterval(async () => {
 			try {
-				const response = await checkIfLoginWasSuccessful(applicationAuthUrl(applicationAuthId));
+				const response = await checkIfLoginWasSuccessful(applicationAuthUrl(applicationAuthId), syncTargetId);
 				if (response && response.success) {
 					dispatch({ type: 'COMPLETED' });
 					clearInterval(interval);
@@ -57,7 +58,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 		if (state.next === 'LINK_USED') {
 			dispatch({ type: 'LINK_USED' });
 		}
-		await saveApplicationAuthId(applicationAuthId);
+		await saveApplicationAuthId(applicationAuthId, syncTargetId);
 		periodicallyCheckForCredentials();
 	};
 

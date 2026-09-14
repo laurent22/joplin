@@ -5,13 +5,13 @@ import shim from '../shim';
 import { _ } from '../locale';
 import eventManager, { EventName } from '../eventManager';
 import { reg } from '../registry';
-import SyncTargetRegistry from '../SyncTargetRegistry';
 import Logger from '@joplin/utils/Logger';
+import NavService from './NavService';
 
 const logger = Logger.create('joplinCloudUtils');
 
 type ActionType = 'LINK_USED' | 'COMPLETED' | 'ERROR';
-type Action = {
+export type Action = {
 	type: ActionType;
 	payload?: string;
 };
@@ -21,41 +21,46 @@ type DefaultState = {
 	message: ()=> string;
 	next: ActionType;
 	active: ActionType | 'INITIAL';
+	syncTargetName: string;
 	errorMessage?: string;
 };
 
-export const defaultState: DefaultState = {
+export const defaultState = (): DefaultState => ({
 	className: 'text',
 	message: ()=> _('Waiting for authorisation...'),
 	next: 'LINK_USED',
 	active: 'INITIAL',
-};
+	syncTargetName: _('Joplin Cloud'),
+});
 
 export const reducer: Reducer<DefaultState, Action> = (state: DefaultState, action: Action) => {
 	switch (action.type) {
 	case 'LINK_USED': {
 		return {
 			className: 'text',
-			message: () => _('If you have already authorised, please wait for the application to sync to Joplin Cloud.'),
+			message: () => _('If you have already authorised, please wait for the application to sync to %s.', state.syncTargetName),
 			next: 'COMPLETED',
 			active: 'LINK_USED',
+			syncTargetName: state.syncTargetName,
 		};
 	}
 	case 'COMPLETED': {
 		return {
 			className: 'bold',
-			message: () => _('You are logged in into Joplin Cloud, you can leave this screen now.'),
+			message: () => _('You are logged in in to %s. You can leave this screen now.', state.syncTargetName),
 			active: 'COMPLETED',
 			next: 'COMPLETED',
+			syncTargetName: state.syncTargetName,
 		};
 	}
 	case 'ERROR': {
 		return {
 			className: 'text',
-			message: () => _('You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:'),
+			message: () => _('You were unable to connect to %s. Please check your credentials and try again. Error:', state.syncTargetName),
 			active: 'ERROR',
 			next: 'COMPLETED',
 			errorMessage: action.payload,
+			syncTargetName: state.syncTargetName,
 		};
 	}
 	default: {
@@ -94,16 +99,27 @@ export const generateApplicationConfirmUrl = async (confirmUrl: string) => {
 	return `${confirmUrl}?${searchParams.toString()}`;
 };
 
-export const saveApplicationAuthId = async (applicationAuthId: string) => {
-	Setting.setValue('sync.10.pendingAuthId', applicationAuthId);
+export type JoplinOAuthSyncTargetId = 10;
+
+export const isJoplinOAuthSyncTarget = (id: number): id is JoplinOAuthSyncTargetId => {
+	return id === 10;
+};
+
+export const saveApplicationAuthId = async (applicationAuthId: string, syncTarget: JoplinOAuthSyncTargetId) => {
+	Setting.setValue(`sync.${syncTarget}.pendingAuthId`, applicationAuthId);
 	await Setting.saveAll();
+};
+
+export const openLoginScreen = (syncTargetId: number) => {
+	const syncTarget = reg.syncTarget(syncTargetId);
+	return NavService.go(syncTarget.authRouteName());
 };
 
 // We have isWaitingResponse inside the function to avoid any state from lingering
 // after an error occurs. E.g.: if the function would throw an error while isWaitingResponse
 // was set to true the next time we call the function the value would still be true.
 // The closure function prevents that.
-export const checkIfLoginWasSuccessful = async (applicationsUrl: string) => {
+export const checkIfLoginWasSuccessful = async (applicationsUrl: string, syncTarget: JoplinOAuthSyncTargetId) => {
 	let isWaitingResponse = false;
 	const performLoginRequest = async () => {
 		if (isWaitingResponse) return undefined;
@@ -111,7 +127,7 @@ export const checkIfLoginWasSuccessful = async (applicationsUrl: string) => {
 
 		const response = await fetch(applicationsUrl, {
 			headers: {
-				'X-JOPLIN-CUSTOM-API-KEY': Setting.value('sync.10.apiKey'),
+				'X-JOPLIN-CUSTOM-API-KEY': syncTarget === 10 ? Setting.value('sync.10.apiKey') : '',
 			},
 		});
 		const jsonBody = await response.json();
@@ -121,10 +137,10 @@ export const checkIfLoginWasSuccessful = async (applicationsUrl: string) => {
 			return undefined;
 		}
 
-		Setting.setValue('sync.10.username', jsonBody.id);
-		Setting.setValue('sync.10.password', jsonBody.password);
-		Setting.setValue('sync.target', SyncTargetRegistry.nameToId('joplinCloud'));
-		Setting.setValue('sync.10.pendingAuthId', '');
+		Setting.setValue(`sync.${syncTarget}.username`, jsonBody.id);
+		Setting.setValue(`sync.${syncTarget}.password`, jsonBody.password);
+		Setting.setValue('sync.target', syncTarget);
+		Setting.setValue(`sync.${syncTarget}.pendingAuthId`, '');
 
 		const fileApi = await reg.syncTarget().fileApi();
 		await fileApi.driver().api().loadSession();
@@ -140,20 +156,23 @@ export const checkIfLoginWasSuccessful = async (applicationsUrl: string) => {
 // pending auth ID is still saved. On startup we check whether the server
 // has already confirmed the authorisation and, if so, save the credentials.
 export const completePendingAuthentication = async () => {
-	const pendingAuthId = Setting.value('sync.10.pendingAuthId');
+	const syncTarget = Setting.value('sync.target');
+	if (!isJoplinOAuthSyncTarget(syncTarget)) return;
+
+	const pendingAuthId = Setting.value(`sync.${syncTarget}.pendingAuthId`);
 	if (!pendingAuthId) return;
 
-	const apiBaseUrl = Setting.value('sync.10.path');
+	const apiBaseUrl = Setting.value(`sync.${syncTarget}.path`);
 	const applicationsUrl = `${apiBaseUrl}/api/application_auth/${pendingAuthId}`;
 
 	try {
-		const result = await checkIfLoginWasSuccessful(applicationsUrl);
+		const result = await checkIfLoginWasSuccessful(applicationsUrl, syncTarget);
 		if (result && result.success) {
 			logger.info('Completed pending Joplin Cloud authentication');
 		}
 	} catch (error) {
 		logger.error('Could not complete pending authentication:', error);
 	} finally {
-		Setting.setValue('sync.10.pendingAuthId', '');
+		Setting.setValue(`sync.${syncTarget}.pendingAuthId`, '');
 	}
 };
