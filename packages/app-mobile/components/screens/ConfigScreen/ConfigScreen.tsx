@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Platform, Linking, View, ScrollView, Text, TouchableOpacity, Alert, PermissionsAndroid, Dimensions, AccessibilityInfo, LayoutChangeEvent } from 'react-native';
-import Setting, { AppType, SettingMetadataSection } from '@joplin/lib/models/Setting';
+import Setting, { AppType, SettingMetadataSection, SettingValueType } from '@joplin/lib/models/Setting';
 import NavService from '@joplin/lib/services/NavService';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import checkPermissions from '../../../utils/checkPermissions';
@@ -710,7 +710,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		/>;
 	}
 
-	public setSettingValue = async <Key extends keyof shared.SettingsMap> (key: Key&string, value: shared.SettingsMap[Key]): Promise<void> => {
+	public setSettingValue = async <Key extends string> (key: Key, value: SettingValueType<Key>): Promise<void> => {
 		const handled = await this.handleSetting(key, value);
 		if (!handled) shared.updateSettingValue(this, key, value);
 	};

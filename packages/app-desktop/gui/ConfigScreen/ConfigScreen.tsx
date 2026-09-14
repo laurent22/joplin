@@ -365,7 +365,7 @@ class ConfigScreenComponent extends React.Component<Props, State> {
 		shared.updateSettingValue(this, key, value);
 	};
 
-	public setSettingValue<Key extends keyof shared.SettingsMap>(key: Key, value: shared.SettingsMap[Key]) {
+	public setSettingValue<Key extends string>(key: Key, value: SettingValueType<Key>) {
 		this.onUpdateSettingValue({ key: key as string, value });
 	}
 
