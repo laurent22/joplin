@@ -11,6 +11,10 @@ async function msleep(ms: number) {
 	});
 }
 
+// Set to true once a Windows ARM64 build is published in a release. The
+// website's client-side copy of this is in Assets/WebsiteAssets/js/script.js.
+export const windowsArm64Enabled = false;
+
 export enum OS {
 	MacOs = 'macos',
 	MacOsM1 = 'macosm1',
@@ -97,7 +101,7 @@ async function main(argv: string[]) {
 
 	const androidUrl = downloadUrl(androidRelease, OS.Android);
 	const winUrl = downloadUrl(release, OS.Windows);
-	const winArm64Url = downloadUrl(release, OS.WindowsArm64);
+	const winArm64Url = windowsArm64Enabled ? downloadUrl(release, OS.WindowsArm64) : null;
 	const winPortableUrl = downloadUrl(release, OS.Windows, true);
 	const macOsUrl = downloadUrl(release, OS.MacOs);
 	const macOsM1Url = downloadUrl(release, OS.MacOsM1);

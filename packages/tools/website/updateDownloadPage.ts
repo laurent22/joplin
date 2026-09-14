@@ -1,9 +1,6 @@
 import { readFile } from 'fs-extra';
 import { rootDir, insertContentIntoFile } from '../tool-utils';
-
-// Set to true once a Windows ARM64 build is published in a release. Also in
-// Assets/WebsiteAssets/js/script.js.
-const windowsArm64Enabled = false;
+import { windowsArm64Enabled } from '../update-readme-download';
 
 async function getInstallMd() {
 	return readFile(`${rootDir}/readme/install.md`, 'utf8');
