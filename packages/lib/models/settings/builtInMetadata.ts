@@ -30,20 +30,26 @@ const showAiTools = (settings: Record<string, unknown>) => {
 	return !!settings['mcp.enabled'] || !!settings['ai.enabled'];
 };
 
-export const isJoplinServerAppId = (username: string) => (
-	// A UUID username implies that Joplin Server is configured to use OAuth
-	!!username.replace(/-/g, '').match(/^[a-zA-Z0-9]{32}$/i)
-);
+export const joplinServerRequiresPassword = (username: string, preferPasswordAuth: boolean) => {
+	const isJoplinServerAppId = (username: string) => (
+		// A UUID username implies that Joplin Server is configured to use OAuth
+		!!username.replace(/-/g, '').match(/^[a-zA-Z0-9]{32}$/i)
+	);
+
+	const isAppIdUsername = isJoplinServerAppId(username);
+	const hasNonUuidEmail = !!username && !isAppIdUsername;
+	return hasNonUuidEmail || (!username && preferPasswordAuth);
+};
 
 export const showJoplinServerUsernamePassword = (settings: Record<string, unknown>) => {
 	const joplinServerId = SyncTargetRegistry.nameToId('joplinServer');
 	const isJoplinServer = settings['sync.target'] === joplinServerId;
 	if (!isJoplinServer) return false;
 
-	const username = (settings[`sync.${joplinServerId}.username`] ?? '') as string;
-	const isAppIdUsername = isJoplinServerAppId(username);
-	const hasNonUuidEmail = !!username && !isAppIdUsername;
-	return hasNonUuidEmail || (!username && !!settings[`sync.${joplinServerId}.preferPasswordAuth`]);
+	return joplinServerRequiresPassword(
+		(settings[`sync.${joplinServerId}.username`] ?? '') as string,
+		!!settings[`sync.${joplinServerId}.preferPasswordAuth`],
+	);
 };
 
 const showJoplinServerConnectDisconnectButtons = (settings: Record<string, unknown>, targetId: number) => {
