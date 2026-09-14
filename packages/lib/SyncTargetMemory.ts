@@ -17,10 +17,6 @@ export default class SyncTargetMemory extends BaseSyncTarget {
 		return 'Memory';
 	}
 
-	public static async checkConfig() {
-		return { ok: true, errorMessage: '' };
-	}
-
 	public async isAuthenticated() {
 		return true;
 	}

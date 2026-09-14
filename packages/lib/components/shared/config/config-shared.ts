@@ -35,7 +35,7 @@ export const defaultScreenState: ConfigScreenState = {
 	searchSectionFilter: null,
 };
 
-export interface ConfigScreenComponent {
+interface ConfigScreenComponent {
 	settingToComponent(settingId: string, setting: unknown): ReactNode;
 	sectionToComponent(sectionName: string, section: SettingMetadataSection, settings: SettingsMap, isSelected: boolean): ReactNode;
 
@@ -86,12 +86,7 @@ export const checkSyncConfig = async (comp: ConfigScreenComponent, settings: Set
 		...Setting.subValues('net', settings, { includeConstants: true }) };
 
 	comp.setState({ checkSyncConfigResult: 'checking' });
-	let result;
-	try {
-		result = await SyncTargetClass.checkConfig(convertValuesToFunctions(options));
-	} catch (error) {
-		result = { ok: false, errorMessage: String(error) };
-	}
+	const result = await SyncTargetClass.checkConfig(convertValuesToFunctions(options));
 	comp.setState({ checkSyncConfigResult: result });
 
 	if (result.ok) {
