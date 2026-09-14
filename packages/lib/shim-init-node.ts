@@ -611,7 +611,11 @@ function shimInit(options: ShimInitOptions = null) {
 				}
 				return makeResponse(response);
 			} catch (error) {
-				await fs.unlink(filePath);
+				try {
+					await fs.unlink(filePath);
+				} catch (error) {
+					console.warn('fetchBlob: Failed to remove file after error:', filePath);
+				}
 
 				throw mapFetchError(error);
 			}
