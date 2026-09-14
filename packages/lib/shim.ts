@@ -296,6 +296,10 @@ const shim = {
 		// Code: ETIMEDOUT
 		if (error.code === 'ETIMEDOUT') return true;
 
+		// Failure to establish a connection
+		// See https://undici.nodejs.org/api/Errors#class-connecttimeouterror
+		if (error.code === 'UND_ERR_CONNECT_TIMEOUT') return true;
+
 		// ECONNREFUSED is generally temporary
 		if (error.code === 'ECONNREFUSED') return true;
 
