@@ -433,12 +433,38 @@ function filterTitleAttribute(title) {
   return title
 }
 
+var linkedAnchorNamesCache = new WeakMap()
+
+function getLinkedAnchorNames(node) {
+  var root = node
+  while (root.parentNode) root = root.parentNode
+
+  var names = linkedAnchorNamesCache.get(root)
+  if (!names) {
+    names = new Set()
+    var links = root.querySelectorAll('a[href^="#"]')
+    for (var i = 0; i < links.length; i++) {
+      var name = links[i].getAttribute('href').substr(1)
+      names.add(name.toLowerCase())
+      try {
+        names.add(decodeURIComponent(name).toLowerCase())
+      } catch (error) {
+        // Malformed percent-encoding - the raw name has already been added
+      }
+    }
+    linkedAnchorNamesCache.set(root, names)
+  }
+  return names
+}
+
 function getNamedAnchorFromLink(node, options) {
   var id = node.getAttribute('id')
   if (!id) id = node.getAttribute('name')
   if (id) id = id.trim();
 
-  if (id && options.anchorNames.indexOf(id.toLowerCase()) >= 0) {
+  // Some pages, such as Wikipedia, set an ID on almost every element, so only keep the
+  // anchors that a link in the document points to.
+  if (id && options.anchorNames.indexOf(id.toLowerCase()) >= 0 && getLinkedAnchorNames(node).has(id.toLowerCase())) {
     return '<a id="' + htmlentities(id) + '"></a>';
   } else {
     return '';

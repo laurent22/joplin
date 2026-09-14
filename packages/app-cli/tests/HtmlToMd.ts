@@ -32,6 +32,11 @@ describe('HtmlToMd', () => {
 				htmlToMdOptions.anchorNames = ['first', 'second', 'fourth'];
 			}
 
+			if (htmlFilename === 'anchor_unlinked_ids.html') {
+				// The clipper sends the ID of every A and SPAN element in the page
+				htmlToMdOptions.anchorNames = ['mwBw', 'mwCg', 'mwCw', 'mwDQ', 'Parity_vectors'];
+			}
+
 			if (htmlFilename.indexOf('image_preserve_size') === 0) {
 				htmlToMdOptions.preserveImageTagsWithSize = true;
 			}
