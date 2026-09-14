@@ -36,14 +36,17 @@ describe('useFormNote', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
+		// Pinned off regardless of the build's default so the fixtures below save raw bodies.
+		Setting.setValue('featureFlag.noteLock', false);
 	});
 
 	// The session and decryption internals are covered by the lib tests; here they are mocked to
 	// test only the hook's gating: ciphertext must never reach the form note.
 	it('should not produce a form note for a locked note while the session is locked, and decrypt it once unlocked', async () => {
-		Setting.setValue('featureFlag.noteLock', true);
-		// A direct save of a new note with is_locked keeps the raw body, standing in for ciphertext.
+		// Saved with the flag off so the raw body stands in for ciphertext; an ungated save with
+		// the flag on would encrypt it.
 		const testNote = await Note.save({ title: 'Locked note', body: 'ciphertext', is_locked: 1 });
+		Setting.setValue('featureFlag.noteLock', true);
 
 		const isUnlockedMock = jest.spyOn(NoteLockSession.instance(), 'isUnlocked').mockReturnValue(false);
 		const decryptedKeyMock = jest.spyOn(NoteLockSession.instance(), 'decryptedKey').mockReturnValue({ id: 'key-id', plainText: 'key' });
@@ -101,8 +104,8 @@ describe('useFormNote', () => {
 	});
 
 	it('should report a decryption failure instead of throwing, without producing a form note', async () => {
-		Setting.setValue('featureFlag.noteLock', true);
 		const testNote = await Note.save({ title: 'Locked note', body: 'ciphertext', is_locked: 1 });
+		Setting.setValue('featureFlag.noteLock', true);
 		// The save's own change event would otherwise reach the hook's listener and reload the note.
 		await ItemChange.waitForAllSaved();
 
@@ -189,6 +192,43 @@ describe('useFormNote', () => {
 		formNote.unmount();
 	});
 
+
+	it('should show a locked note again after sync re-encrypts it and the decryption worker restores it', async () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		const testNote = await Note.save({ title: 'Locked', body: 'JLD01ciphertext', is_locked: 1 });
+		jest.spyOn(NoteLockSession.instance(), 'isUnlocked').mockReturnValue(true);
+		jest.spyOn(NoteLockSession.instance(), 'decryptedKey').mockReturnValue({ id: 'key-id', plainText: 'key' });
+		// Like the real decrypt, a row sync has not decrypted yet has no note lock body and fails.
+		const decryptBodyMock = jest.spyOn(NoteLockNote, 'decryptBody').mockImplementation(async note => {
+			if (note.encryption_applied) throw new Error('Invalid encryption identifier');
+			return { ...note, isDecrypted: true, body: 'secret' };
+		});
+		const onReloadInProgressChange = jest.fn();
+		const props = { ...defaultFormNoteProps, noteId: testNote.id, noteLockSessionUnlocked: true, editorNoteReloadTimeRequest: 0, onReloadInProgressChange };
+
+		try {
+			const formNote = renderHook(hookProps => useFormNote(hookProps), { initialProps: props });
+			await waitFor(() => expect(formNote.result.current.formNote.body).toBe('secret'));
+
+			// Sync overwrites the row with the encrypted item and asks the editor to reload.
+			await act(async () => {
+				await Note.save({ id: testNote.id, encryption_cipher_text: 'cipher_text', encryption_applied: 1, body: '' });
+			});
+			formNote.rerender({ ...props, editorNoteReloadTimeRequest: 1 });
+			await waitFor(() => expect(formNote.result.current.formNote).toMatchObject({ encryption_applied: 1 }));
+
+			// The decryption worker then writes the decrypted item back.
+			await act(async () => {
+				await Note.save({ id: testNote.id, title: 'Locked', body: 'JLD01ciphertext', is_locked: 1, encryption_cipher_text: '', encryption_applied: 0 }, { autoTimestamp: false, changeSource: ItemChange.SOURCE_DECRYPTION });
+			});
+			await waitFor(() => expect(formNote.result.current.formNote).toMatchObject({ encryption_applied: 0, body: 'secret' }), { timeout: 15_000 });
+			await waitFor(() => expect(onReloadInProgressChange).toHaveBeenLastCalledWith(false));
+			formNote.unmount();
+		} finally {
+			decryptBodyMock.mockRestore();
+			Setting.setValue('featureFlag.noteLock', false);
+		}
+	});
 
 	// Lacking is_conflict has previously caused UI issues. See https://github.com/laurent22/joplin/pull/10913
 	// for details.

@@ -71,7 +71,7 @@ const mockUnlockedSession = () => {
 	);
 	jest.spyOn(NoteLockNote, 'decryptBody').mockImplementation(async note => ({
 		...note,
-		isDecrypted: !!note.is_locked,
+		isDecrypted: true,
 		body: note.is_locked ? String(note.body).replace(/^enc\(([\s\S]*)\)$/, '$1') : note.body,
 	}));
 };
@@ -101,15 +101,15 @@ describe('note-screen-shared', () => {
 	});
 
 	it('should not expose a locked note body while the session is locked, and decrypt it while unlocked', async () => {
-		// A direct save of a new note with is_locked keeps the raw body, standing in for ciphertext.
-		const testNote = await Note.save({ title: 'Locked', body: 'ciphertext', is_locked: 1, parent_id: folderId });
+		// A JLD-prefixed body passes the save path untouched, standing in for real ciphertext.
+		const testNote = await Note.save({ title: 'Locked', body: 'JLD01ciphertext', is_locked: 1, parent_id: folderId });
 
 		jest.spyOn(NoteLockSession.instance(), 'isUnlocked').mockReturnValue(false);
 		const lockedComp = makeComp(testNote);
 		await shared.reloadNote(lockedComp);
 		// The encrypted body stays in both state notes, so a diff-based save cannot write it.
-		expect(lockedComp.state.note.body).toBe('ciphertext');
-		expect(lockedComp.state.lastSavedNote.body).toBe('ciphertext');
+		expect(lockedComp.state.note.body).toBe('JLD01ciphertext');
+		expect(lockedComp.state.lastSavedNote.body).toBe('JLD01ciphertext');
 		expect(lockedComp.state.readOnly).toBe(true);
 		expect(lockedComp.state.mode).toBe('view');
 		expect(lockedComp.state.noteLockKey).toBeNull();
@@ -125,7 +125,7 @@ describe('note-screen-shared', () => {
 	});
 
 	it('should report a locked note as undecryptable only when the session is still unlocked', async () => {
-		const testNote = await Note.save({ title: 'Locked', body: 'ciphertext', is_locked: 1, parent_id: folderId });
+		const testNote = await Note.save({ title: 'Locked', body: 'JLD01ciphertext', is_locked: 1, parent_id: folderId });
 
 		jest.spyOn(NoteLockSession.instance(), 'isUnlocked').mockReturnValue(true);
 		jest.spyOn(NoteLockSession.instance(), 'decryptedKey').mockReturnValue({ id: 'key-id', plainText: 'key' });
@@ -134,7 +134,7 @@ describe('note-screen-shared', () => {
 		const undecryptableComp = makeComp(testNote);
 		await shared.reloadNote(undecryptableComp);
 		expect(undecryptableComp.state.noteLockUndecryptable).toBe(true);
-		expect(undecryptableComp.state.note.body).toBe('ciphertext');
+		expect(undecryptableComp.state.note.body).toBe('JLD01ciphertext');
 		expect(undecryptableComp.state.readOnly).toBe(true);
 		expect(undecryptableComp.state.noteLockKey).toBeNull();
 
@@ -148,7 +148,7 @@ describe('note-screen-shared', () => {
 		const racedComp = makeComp(testNote);
 		await shared.reloadNote(racedComp);
 		expect(racedComp.state.noteLockUndecryptable).toBe(false);
-		expect(racedComp.state.note.body).toBe('ciphertext');
+		expect(racedComp.state.note.body).toBe('JLD01ciphertext');
 	});
 
 	it('should persist the encrypted body together with a lock state change', async () => {
@@ -171,9 +171,8 @@ describe('note-screen-shared', () => {
 	});
 
 	it('should keep the decrypted state when a property save recreates a deleted note', async () => {
-		const testNote = await Note.save({ title: 'Locked', body: 'enc(- [ ] task)', is_locked: 1, parent_id: folderId });
-
 		mockUnlockedSession();
+		const testNote = await Note.save({ title: 'Locked', body: '- [ ] task', is_locked: 1, parent_id: folderId });
 
 		const loadedNote = { ...testNote, body: '- [ ] task', isDecrypted: true };
 		const comp = makeComp(loadedNote, { noteLockKey: { id: 'key-id', plainText: 'key' } });
@@ -203,8 +202,8 @@ describe('note-screen-shared', () => {
 	});
 
 	it('should not revert a lock state change that happens while a save is in flight', async () => {
-		// Reloaded so the state note carries all columns, like after reloadNote.
-		const testNote = await Note.load((await Note.save({ title: 'Plain', body: 'plain text', parent_id: folderId })).id);
+		// Reloaded through the gate so the state note carries all columns and the marker, like after reloadNote.
+		const testNote = await Note.load((await Note.save({ title: 'Plain', body: 'plain text', parent_id: folderId })).id, { useNoteLock: true });
 
 		mockUnlockedSession();
 
@@ -283,7 +282,7 @@ describe('note-screen-shared', () => {
 	});
 
 	it('should not report a note as modified once its save has completed', async () => {
-		const testNote = await Note.load((await Note.save({ title: 'Plain', body: 'plain text', parent_id: folderId })).id);
+		const testNote = await Note.load((await Note.save({ title: 'Plain', body: 'plain text', parent_id: folderId })).id, { useNoteLock: true });
 
 		// The save stamps the decrypted-state marker onto only one of the state notes; counting
 		// that as a modification hides a locked note's lock panel, which exposes the ciphertext.
@@ -294,7 +293,7 @@ describe('note-screen-shared', () => {
 	});
 
 	it('should not report an undecryptable note as modified after a property save', async () => {
-		const saved = await Note.save({ title: 'Old key', body: 'enc(secret)', is_locked: 1, parent_id: folderId });
+		const saved = await Note.save({ title: 'Old key', body: 'JLD01secret', is_locked: 1, parent_id: folderId });
 		// Backdated so the property save below is guaranteed to stamp newer timestamps.
 		await Note.save({ id: saved.id, updated_time: 1000, user_updated_time: 1000 }, { autoTimestamp: false });
 		const comp = makeComp(await Note.load(saved.id), { noteLockUndecryptable: true });
@@ -324,6 +323,28 @@ describe('note-screen-shared', () => {
 		expect(savedNote.body).toBe('enc(edited text)');
 	});
 
+	it('should mark an unlocked note as gated on reload so its gated saves pass the marker check', async () => {
+		const testNote = await Note.save({ title: 'Plain', body: 'plain text', parent_id: folderId });
+		const comp = makeComp(testNote);
+
+		await shared.reloadNote(comp);
+		await shared.saveNoteButton_press(comp, { ...comp.state, note: { ...comp.state.note, body: 'edited text' } }, null, null);
+
+		expect((await Note.load(testNote.id)).body).toBe('edited text');
+	});
+
+	it('should keep the plaintext body in the state when a locked note body is saved without the gate', async () => {
+		mockUnlockedSession();
+		const testNote = await Note.save({ title: 'Locked', body: '- [ ] task', is_locked: 1, parent_id: folderId });
+
+		const comp = makeComp(testNote, { note: { ...testNote, body: '- [ ] task', isDecrypted: true } });
+		await shared.saveOneProperty(comp, 'body', '- [x] task');
+
+		expect((await Note.load(testNote.id)).body).toBe('enc(- [x] task)');
+		expect(comp.state.note.body).toBe('- [x] task');
+		expect(comp.state.lastSavedNote.body).toBe('- [x] task');
+	});
+
 	it('should reload an encrypted note after decrypting it', async () => {
 		jest.spyOn(shared, 'attachedResources').mockResolvedValue({});
 		const encryptedNote = { id: 'note-id', encryption_cipher_text: 'cipher text', deleted_time: 0 };
@@ -344,7 +365,7 @@ describe('note-screen-shared', () => {
 		decryption.resolve(decryptedNote);
 		await reloadPromise;
 
-		expect(component.setState).toHaveBeenCalledWith(expect.objectContaining({ note: decryptedNote }));
+		expect(component.setState).toHaveBeenCalledWith(expect.objectContaining({ note: { ...decryptedNote, isDecrypted: true } }));
 	});
 
 	it.each([

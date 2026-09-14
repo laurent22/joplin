@@ -11,7 +11,10 @@ import attachedResources from '@joplin/lib/utils/attachedResources';
 import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/utils/Logger';
 import { resourceFullPath } from '@joplin/lib/models/utils/resourceUtils';
-import { ResourceEntity } from '@joplin/lib/services/database/types';
+import { NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
+import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
+import eventManager, { EventName } from '@joplin/lib/eventManager';
 import { FileCanvasNode } from '@joplin/lib/services/whiteboard/jsoncanvas';
 import { resolveCanvasColor } from '@joplin/lib/services/whiteboard/presetColors';
 import { isInternalRef, RefKind, resolveFileRef } from '@joplin/lib/services/whiteboard/resolveRef';
@@ -29,10 +32,13 @@ const resourceUrlFor = (resource: ResourceEntity | null, resourceDirectory: stri
 	return pathToFileURL(resourceFullPath(resource, resourceDirectory)).href;
 };
 
+type LockedState = 'sessionLocked' | 'undecryptable' | null;
+
 interface ResolvedItem {
 	kind: 'note' | 'resource' | 'unknown';
 	title: string;
 	body?: string;
+	lockedState?: LockedState;
 	userUpdatedTime?: number;
 	deletedTime?: number;
 	resource?: ResourceEntity;
@@ -42,6 +48,16 @@ const useResolvedRef = (file: string): { resolved: ResolvedItem | null; refetch:
 	const [resolved, setResolved] = useState<ResolvedItem | null>(null);
 	const [refetchCount, setRefetchCount] = useState(0);
 	const lastLoadedFileRef = useRef<string | null>(null);
+
+	// Locked cards need to switch between the message and the body when the session changes.
+	useEffect(() => {
+		if (!isNoteLockEnabled()) return () => {};
+		const onSessionChange = () => setRefetchCount(c => c + 1);
+		eventManager.on(EventName.NoteLockSessionChange, onSessionChange);
+		return () => {
+			eventManager.off(EventName.NoteLockSessionChange, onSessionChange);
+		};
+	}, []);
 
 	useEffect(() => {
 		let cancelled = false;
@@ -64,10 +80,28 @@ const useResolvedRef = (file: string): { resolved: ResolvedItem | null; refetch:
 					return;
 				}
 				if (item.type_ === ModelType.Note) {
+					let body = item.body || '';
+					let lockedState: LockedState = null;
+					// A locked note's body only decrypts through the gated load; the card never
+					// shows ciphertext and never prompts to unlock the session itself.
+					if (isNoteLockEnabled() && (item as NoteEntity).is_locked) {
+						body = '';
+						if (!NoteLockSession.instance().isUnlocked()) {
+							lockedState = 'sessionLocked';
+						} else {
+							try {
+								body = (await Note.load(ref.id, { useNoteLock: true })).body || '';
+							} catch {
+								lockedState = 'undecryptable';
+							}
+						}
+					}
+					if (cancelled) return;
 					setResolved({
 						kind: 'note',
 						title: item.title || 'Untitled',
-						body: item.body || '',
+						body,
+						lockedState,
 						userUpdatedTime: item.user_updated_time,
 						deletedTime: item.deleted_time,
 					});
@@ -178,6 +212,17 @@ const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; da
 		}
 
 		if (resolved?.kind === 'note' && !isInTrash) {
+			if (resolved.lockedState) {
+				const message = resolved.lockedState === 'sessionLocked'
+					? _('This linked item cannot be displayed because the note is locked. Unlock the session to view it')
+					: _('This linked item cannot be displayed because the note is locked and could not be unlocked');
+				return (
+					<>
+						<div className="header -note-title" title={resolved.title}>{resolved.title}</div>
+						<div className="body -locked">{message}</div>
+					</>
+				);
+			}
 			return (
 				<>
 					<div className="header -note-title" title={resolved.title}>{resolved.title}</div>

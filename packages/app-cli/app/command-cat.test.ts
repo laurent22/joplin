@@ -14,7 +14,7 @@ describe('command-cat', () => {
 
 	it('should refuse to display a locked note', async () => {
 		Setting.setValue('featureFlag.noteLock', true);
-		const note = await Note.save({ title: 'hello', body: 'ciphertext', is_locked: 1, parent_id: '' });
+		const note = await Note.save({ title: 'hello', body: 'JLD01ciphertext', is_locked: 1, parent_id: '' });
 
 		let output = '';
 		const command = setupCommandForTesting(Command, (text: string) => { output += text; });
