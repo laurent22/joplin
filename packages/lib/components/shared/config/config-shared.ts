@@ -397,6 +397,7 @@ export const onSettingButtonPress = async (comp: ConfigScreenComponent, metadata
 	} else if (key === 'ocr.clearLanguageDataCacheButton') {
 		if (!await shim.showConfirmationDialog(restartMessage())) return;
 		Setting.setValue('ocr.clearLanguageDataCache', true);
+		await Setting.saveAll();
 		await shim.restartApp();
 	} else if (key === 'ai.usage.resetButton') {
 		if (!await shim.showConfirmationDialog(_('Reset AI token usage counters?'))) return;
