@@ -686,10 +686,10 @@ function shimInit(options: ShimInitOptions = null) {
 				};
 			}
 		} else {
-			const agentSettings = {
+			const agentSettings: Agent.Options = {
 				...agentSettingsBase(options),
-				maxSockets: 1,
-			};
+				connections: 1,
+			} satisfies Agent.Options;
 			if (!fastDeepEqual(lastSettings, agentSettings)) {
 				shim.httpAgent_ = {
 					lastSettings: agentSettings,
