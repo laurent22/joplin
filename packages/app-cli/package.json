@@ -38,7 +38,7 @@
   "version": "3.7.1",
   "bin": "./main.js",
   "engines": {
-    "node": ">=10.0.0"
+    "node": ">=22.19.0"
   },
   "dependencies": {
     "@joplin/lib": "~3.7",
