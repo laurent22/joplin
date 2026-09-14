@@ -10,7 +10,7 @@ import settingValidations from '../../../models/settings/settingValidations';
 import { convertValuesToFunctions } from '../../../ObjectUtils';
 import aiSettingsTransition from '../../../services/ai/aiSettingsTransition';
 import { ChatRole } from '../../../services/ai/types';
-import { openLoginScreen } from '../../../services/joplinCloudUtils';
+import { openLoginScreen as openJoplinOAuthLogin } from '../../../services/joplinCloudUtils';
 import shim from '../../../shim';
 import CommandService from '../../../services/CommandService';
 
@@ -383,7 +383,7 @@ export const onSettingButtonPress = async (comp: ConfigScreenComponent, metadata
 	const key = metadata.key;
 
 	if (key === 'sync.10.connect') {
-		await openLoginScreen(10);
+		await openJoplinOAuthLogin();
 	} else if (key === 'sync.clearLocalSyncStateButton') {
 		if (!await shim.showConfirmationDialog('This cannot be undone. Do you want to continue?')) return;
 		Setting.setValue('sync.startupOperation', SyncStartupOperation.ClearLocalSyncState);
