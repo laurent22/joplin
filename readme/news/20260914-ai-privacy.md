@@ -1,3 +1,7 @@
+---
+forum_url: https://discourse.joplinapp.org/t/50955
+---
+
 # Your notes and AI: privacy first
 
 AI can be useful for summarising, rewriting and asking questions about your notes. But your notes are private, so you should always know where your data is going.
