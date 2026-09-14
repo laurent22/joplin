@@ -10,6 +10,7 @@ import setMessageBoxResponse from './util/setMessageBoxResponse';
 import getImageSourceSize from './util/getImageSourceSize';
 import setSettingValue from './util/setSettingValue';
 
+
 test.describe('main', () => {
 	test('app should launch', async ({ mainWindow }) => {
 		// A window should open with the correct title
