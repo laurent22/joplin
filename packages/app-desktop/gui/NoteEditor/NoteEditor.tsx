@@ -1062,7 +1062,8 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		searches: state.searches,
 		selectedSearchId: windowState.selectedSearchId,
 		customCss: state.customViewerCss,
-		noteVisiblePanes: windowState.noteVisiblePanes,
+		// The resolution UI needs only editor
+		noteVisiblePanes: conflictIsInView ? ['editor'] : windowState.noteVisiblePanes,
 		watchedResources: windowState.watchedResources,
 		// For now, only the main window has search UI. Show the same search markers in all
 		// windows:
