@@ -3,12 +3,12 @@ import Note from '../../../models/Note';
 import Revision from '../../../models/Revision';
 import Setting from '../../../models/Setting';
 import BaseModel from '../../../BaseModel';
-import { setupDatabaseAndSynchronizer, switchClient } from '../../../testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, noteLockCipherTextStandIn } from '../../../testing/test-utils';
 import { RevisionEntity } from '../../database/types';
 
 const createNoteAndRevision = async (isLocked: number) => {
 	// A JLD-prefixed body passes the save path untouched, standing in for real ciphertext.
-	const note = await Note.save({ title: 'note', body: isLocked ? 'JLD01body' : 'body', is_locked: isLocked });
+	const note = await Note.save({ title: 'note', body: isLocked ? noteLockCipherTextStandIn('body') : 'body', is_locked: isLocked });
 	const revision = await Revision.save({
 		item_type: BaseModel.TYPE_NOTE,
 		item_id: note.id,

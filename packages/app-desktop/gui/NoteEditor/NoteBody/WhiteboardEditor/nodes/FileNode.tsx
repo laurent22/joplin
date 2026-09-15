@@ -51,7 +51,7 @@ const useResolvedRef = (file: string): { resolved: ResolvedItem | null; refetch:
 
 	// Locked cards need to switch between the message and the body when the session changes.
 	useEffect(() => {
-		if (!isNoteLockEnabled()) return () => {};
+		if (!isNoteLockEnabled()) return undefined;
 		const onSessionChange = () => setRefetchCount(c => c + 1);
 		eventManager.on(EventName.NoteLockSessionChange, onSessionChange);
 		return () => {
@@ -91,7 +91,8 @@ const useResolvedRef = (file: string): { resolved: ResolvedItem | null; refetch:
 						} else {
 							try {
 								body = (await Note.load(ref.id, { useNoteLock: true })).body || '';
-							} catch {
+							} catch (error) {
+								logger.warn(`Could not decrypt linked note ${ref.id}:`, error);
 								lockedState = 'undecryptable';
 							}
 						}

@@ -1,7 +1,7 @@
 import Note from '../../models/Note';
 import Folder from '../../models/Folder';
 import Setting from '../../models/Setting';
-import { setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, noteLockCipherTextStandIn } from '../../testing/test-utils';
 import shared, { BaseNoteScreenComponent, BaseState } from './note-screen-shared';
 import NoteLockNote from '../../services/noteLock/NoteLockNote';
 import NoteLockService, { ScopedNoteLockService } from '../../services/noteLock/NoteLockService';
@@ -102,14 +102,14 @@ describe('note-screen-shared', () => {
 
 	it('should not expose a locked note body while the session is locked, and decrypt it while unlocked', async () => {
 		// A JLD-prefixed body passes the save path untouched, standing in for real ciphertext.
-		const testNote = await Note.save({ title: 'Locked', body: 'JLD01ciphertext', is_locked: 1, parent_id: folderId });
+		const testNote = await Note.save({ title: 'Locked', body: noteLockCipherTextStandIn(), is_locked: 1, parent_id: folderId });
 
 		jest.spyOn(NoteLockSession.instance(), 'isUnlocked').mockReturnValue(false);
 		const lockedComp = makeComp(testNote);
 		await shared.reloadNote(lockedComp);
 		// The encrypted body stays in both state notes, so a diff-based save cannot write it.
-		expect(lockedComp.state.note.body).toBe('JLD01ciphertext');
-		expect(lockedComp.state.lastSavedNote.body).toBe('JLD01ciphertext');
+		expect(lockedComp.state.note.body).toBe(noteLockCipherTextStandIn());
+		expect(lockedComp.state.lastSavedNote.body).toBe(noteLockCipherTextStandIn());
 		expect(lockedComp.state.readOnly).toBe(true);
 		expect(lockedComp.state.mode).toBe('view');
 		expect(lockedComp.state.noteLockKey).toBeNull();
@@ -125,7 +125,7 @@ describe('note-screen-shared', () => {
 	});
 
 	it('should report a locked note as undecryptable only when the session is still unlocked', async () => {
-		const testNote = await Note.save({ title: 'Locked', body: 'JLD01ciphertext', is_locked: 1, parent_id: folderId });
+		const testNote = await Note.save({ title: 'Locked', body: noteLockCipherTextStandIn(), is_locked: 1, parent_id: folderId });
 
 		jest.spyOn(NoteLockSession.instance(), 'isUnlocked').mockReturnValue(true);
 		jest.spyOn(NoteLockSession.instance(), 'decryptedKey').mockReturnValue({ id: 'key-id', plainText: 'key' });
@@ -134,7 +134,7 @@ describe('note-screen-shared', () => {
 		const undecryptableComp = makeComp(testNote);
 		await shared.reloadNote(undecryptableComp);
 		expect(undecryptableComp.state.noteLockUndecryptable).toBe(true);
-		expect(undecryptableComp.state.note.body).toBe('JLD01ciphertext');
+		expect(undecryptableComp.state.note.body).toBe(noteLockCipherTextStandIn());
 		expect(undecryptableComp.state.readOnly).toBe(true);
 		expect(undecryptableComp.state.noteLockKey).toBeNull();
 
@@ -148,7 +148,7 @@ describe('note-screen-shared', () => {
 		const racedComp = makeComp(testNote);
 		await shared.reloadNote(racedComp);
 		expect(racedComp.state.noteLockUndecryptable).toBe(false);
-		expect(racedComp.state.note.body).toBe('JLD01ciphertext');
+		expect(racedComp.state.note.body).toBe(noteLockCipherTextStandIn());
 	});
 
 	it('should persist the encrypted body together with a lock state change', async () => {
@@ -293,7 +293,7 @@ describe('note-screen-shared', () => {
 	});
 
 	it('should not report an undecryptable note as modified after a property save', async () => {
-		const saved = await Note.save({ title: 'Old key', body: 'JLD01secret', is_locked: 1, parent_id: folderId });
+		const saved = await Note.save({ title: 'Old key', body: noteLockCipherTextStandIn('secret'), is_locked: 1, parent_id: folderId });
 		// Backdated so the property save below is guaranteed to stamp newer timestamps.
 		await Note.save({ id: saved.id, updated_time: 1000, user_updated_time: 1000 }, { autoTimestamp: false });
 		const comp = makeComp(await Note.load(saved.id), { noteLockUndecryptable: true });

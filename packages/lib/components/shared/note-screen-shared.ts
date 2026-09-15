@@ -182,15 +182,6 @@ shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, stat
 			note.is_locked = comp.state.note.is_locked;
 			note.isDecrypted = comp.state.note.isDecrypted;
 		}
-
-		// A gated save cannot persist the lock state or body partially: the encrypted body, its
-		// extracted resource ids and is_locked must always be written together. The lock state is
-		// also compared against lastSavedNote because the field diff above ran before the pickup.
-		if (saveOptions.fields.length && (saveOptions.fields.includes('is_locked') || (note.is_locked ?? 0) !== (state.lastSavedNote.is_locked ?? 0) || (NoteLockNote.isLocked(note) && saveOptions.fields.includes('body')))) {
-			for (const field of ['is_locked', 'body', 'extracted_resource_ids']) {
-				if (!saveOptions.fields.includes(field)) saveOptions.fields.push(field);
-			}
-		}
 	}
 
 	// This check is intentionally immediately before Note.save. The action may

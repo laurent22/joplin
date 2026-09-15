@@ -1,6 +1,6 @@
 import Note from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
-import { setupDatabaseAndSynchronizer, supportDir, switchClient } from '@joplin/lib/testing/test-utils';
+import { setupDatabaseAndSynchronizer, supportDir, switchClient, noteLockCipherTextStandIn } from '@joplin/lib/testing/test-utils';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import useFormNote, { HookDependencies } from './useFormNote';
 import shim from '@joplin/lib/shim';
@@ -193,7 +193,7 @@ describe('useFormNote', () => {
 
 	it('should show a locked note again after sync re-encrypts it and the decryption worker restores it', async () => {
 		Setting.setValue('featureFlag.noteLock', true);
-		const testNote = await Note.save({ title: 'Locked', body: 'JLD01ciphertext', is_locked: 1 });
+		const testNote = await Note.save({ title: 'Locked', body: noteLockCipherTextStandIn(), is_locked: 1 });
 		jest.spyOn(NoteLockSession.instance(), 'isUnlocked').mockReturnValue(true);
 		jest.spyOn(NoteLockSession.instance(), 'decryptedKey').mockReturnValue({ id: 'key-id', plainText: 'key' });
 		// Like the real decrypt, a row sync has not decrypted yet has no note lock body and fails.
@@ -217,7 +217,7 @@ describe('useFormNote', () => {
 
 			// The decryption worker then writes the decrypted item back.
 			await act(async () => {
-				await Note.save({ id: testNote.id, title: 'Locked', body: 'JLD01ciphertext', is_locked: 1, encryption_cipher_text: '', encryption_applied: 0 }, { autoTimestamp: false, changeSource: ItemChange.SOURCE_DECRYPTION });
+				await Note.save({ id: testNote.id, title: 'Locked', body: noteLockCipherTextStandIn(), is_locked: 1, encryption_cipher_text: '', encryption_applied: 0 }, { autoTimestamp: false, changeSource: ItemChange.SOURCE_DECRYPTION });
 			});
 			await waitFor(() => expect(formNote.result.current.formNote).toMatchObject({ encryption_applied: 0, body: 'secret' }), { timeout: 15_000 });
 			await waitFor(() => expect(onReloadInProgressChange).toHaveBeenLastCalledWith(false));

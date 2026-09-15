@@ -42,7 +42,7 @@ import SyncTargetDropbox from '../SyncTargetDropbox';
 const SyncTargetAmazonS3 = require('../SyncTargetAmazonS3.js');
 import SyncTargetWebDAV from '../SyncTargetWebDAV';
 import SyncTargetJoplinServer from '../SyncTargetJoplinServer';
-import EncryptionService from '../services/e2ee/EncryptionService';
+import EncryptionService, { EncryptionMethod } from '../services/e2ee/EncryptionService';
 import DecryptionWorker from '../services/DecryptionWorker';
 import RevisionService from '../services/RevisionService';
 import ResourceFetcher from '../services/ResourceFetcher';
@@ -1114,6 +1114,9 @@ export const newOcrService = () => {
 	const driver = new OcrDriverTesseract({ createWorker }, { workerPath: null, corePath: null, languageDataPath: null });
 	return new OcrService([driver]);
 };
+
+// A body the note lock header check accepts, for locked fixtures that are never unlocked.
+export const noteLockCipherTextStandIn = (payload = 'ciphertext') => `${encryptionService().encodeHeader_({ encryptionMethod: EncryptionMethod.StringV1, masterKeyId: '0'.repeat(32) }, true)}${payload}`;
 
 export const mockMobilePlatform = (platform: MobilePlatform) => {
 	const originalMobilePlatform = shim.mobilePlatform;

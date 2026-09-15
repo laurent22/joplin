@@ -4,7 +4,7 @@ import Note from '../../models/Note';
 import Setting from '../../models/Setting';
 import BaseItem from '../../models/BaseItem';
 import MasterKey from '../../models/MasterKey';
-import EncryptionService, { EncryptionMethod } from './EncryptionService';
+import EncryptionService, { EncryptionMethod, isValidNoteLockHeader } from './EncryptionService';
 import { setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 
 let service: EncryptionService = null;
@@ -363,6 +363,14 @@ describe('EncryptionService', () => {
 		const plainText = await service.decryptString(cipherText);
 		expect(plainText).toBe('🐶🐶🐶'.substr(0, 5));
 	}));
+
+	it('should only treat a complete note lock header as ciphertext', () => {
+		const header = service.encodeHeader_({ encryptionMethod: EncryptionMethod.StringV1, masterKeyId: '0123456789abcdef0123456789abcdef' }, true);
+		expect(isValidNoteLockHeader(`${header}{"payload":1}`)).toBe(true);
+		for (const text of ['JLD01 my shopping list', 'JLD99abc', header.replace('JLD', 'JED'), header.slice(0, -1), '']) {
+			expect(isValidNoteLockHeader(text)).toBe(false);
+		}
+	});
 
 	it('should check if a master key is loaded', (async () => {
 		let masterKey = await service.generateMasterKey('123456');

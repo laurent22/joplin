@@ -374,6 +374,11 @@ describe('models/Note', () => {
 		await expect(Note.save({ id: note.id, body: 'plain while locked' })).rejects.toThrow('Note lock session is locked');
 		await NoteLockSession.instance().unlock('123456');
 		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe(partialBody);
+
+		// Only a complete header marks ciphertext, so a body that merely starts like one is still encrypted.
+		await Note.save({ id: note.id, body: 'JLD01 shopping list' });
+		expect((await Note.load(note.id)).body).not.toBe('JLD01 shopping list');
+		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe('JLD01 shopping list');
 	});
 
 	it('should treat a locked note as a normal note while the feature is disabled', async () => {

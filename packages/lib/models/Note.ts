@@ -29,7 +29,7 @@ import { MarkupToHtml } from '@joplin/renderer';
 import { ALL_NOTES_FILTER_ID } from '../reserved-ids';
 import NoteLockNote from '../services/noteLock/NoteLockNote';
 import isNoteLockEnabled from '../services/noteLock/isNoteLockEnabled';
-import { isValidHeaderIdentifier } from '../services/e2ee/EncryptionService';
+import { isValidNoteLockHeader } from '../services/e2ee/EncryptionService';
 import { ShareType, StateShare } from '../services/share/reducer';
 
 export interface PreviewsOrder {
@@ -904,7 +904,7 @@ export default class Note extends BaseItem {
 		// gate on a new feature encrypts instead of leaking plaintext. Ciphertext bodies pass
 		// through untouched, the same way data saved via sync does, and so does a row that sync
 		// still holds encrypted, since its empty body is not a note lock body yet.
-		if (isNoteLockEnabled() && (options?.useNoteLock || ('body' in o && !o.encryption_applied && !isValidHeaderIdentifier((o.body ?? '').substring(0, 5), false, true)))) {
+		if (isNoteLockEnabled() && (options?.useNoteLock || ('body' in o && !o.encryption_applied && !isValidNoteLockHeader(o.body)))) {
 			if (o.is_locked === undefined && !isNew && oldNote) o.is_locked = oldNote.is_locked;
 			// Callers use the returned note to update UI state, so it must carry the plaintext
 			// body even though the encrypted one is what gets persisted.
@@ -912,6 +912,7 @@ export default class Note extends BaseItem {
 			await NoteLockNote.prepareForSave(o, this.linkedItemIds, this.serializeExtractedResourceIds, isNew, !!options?.useNoteLock, options?.noteLockKey);
 			// The lock state, body and resource ids must land in the row together to keep it consistent.
 			if (options && Array.isArray(options.fields)) {
+				options.fields = options.fields.slice();
 				for (const field of ['is_locked', 'body', 'extracted_resource_ids']) {
 					if (!options.fields.includes(field)) options.fields.push(field);
 				}

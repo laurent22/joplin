@@ -1,6 +1,6 @@
 import Note from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
-import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, noteLockCipherTextStandIn } from '@joplin/lib/testing/test-utils';
 import { setupCommandForTesting, setupApplication } from './utils/testUtils';
 const Command = require('./command-set');
 
@@ -18,7 +18,7 @@ describe('command-set', () => {
 		{ label: 'change a locked note when note lock is disabled', flagEnabled: false, expectedError: null, expectedTitle: 'renamed' },
 	])('should $label', async ({ flagEnabled, expectedError, expectedTitle }) => {
 		Setting.setValue('featureFlag.noteLock', flagEnabled);
-		const note = await Note.save({ title: 'hello', body: 'JLD01ciphertext', is_locked: 1, parent_id: '' });
+		const note = await Note.save({ title: 'hello', body: noteLockCipherTextStandIn(), is_locked: 1, parent_id: '' });
 
 		const command = setupCommandForTesting(Command);
 		let error: string|null = null;
