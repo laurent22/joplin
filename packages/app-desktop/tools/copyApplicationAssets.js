@@ -74,10 +74,6 @@ async function main() {
 			dest: `${buildLibDir}/tinymce/langs`,
 		},
 		{
-			src: `${buildDir}/images`,
-			dest: `${buildLibDir}/images`,
-		},
-		{
 			src: `${nodeModulesDir}/tesseract.js-core`,
 			dest: `${buildDir}/tesseract.js-core`,
 		},

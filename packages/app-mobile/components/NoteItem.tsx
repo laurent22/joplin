@@ -18,7 +18,6 @@ import NoteLockNote from '@joplin/lib/services/noteLock/NoteLockNote';
 import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
 import { DialogContext } from './DialogManager';
 import Icon from './Icon';
-import isSyncDisabledConflict from '@joplin/lib/services/noteList/isSyncDisabledConflict';
 
 interface Props {
 	dispatch: Dispatch;
@@ -86,11 +85,6 @@ const useStyles = (themeId: number, showTopBorder: boolean) => {
 				alignItems: 'center',
 			},
 			lockIcon: {
-				color: theme.colorFaded,
-				fontSize: theme.fontSize,
-				marginRight: 8,
-			},
-			syncDisabledIcon: {
 				color: theme.colorFaded,
 				fontSize: theme.fontSize,
 				marginRight: 8,
@@ -197,8 +191,6 @@ const NoteItemComponent: React.FC<Props> = memo(props => {
 	const listItemTextStyle = isTodo ? styles.listItemTextWithCheckbox : styles.listItemText;
 	const opacityStyle = isTodo && checkboxChecked ? styles.checkedOpacityStyle : styles.uncheckedOpacityStyle;
 	const isSelected = props.noteSelectionEnabled && props.selectedNoteIds.includes(note.id);
-	const showSyncDisabledIcon = isSyncDisabledConflict(note);
-	const showLockIcon = isNoteLockEnabled() && !!note.is_locked;
 
 	const selectionWrapperStyle = isSelected ? styles.selectionWrapperSelected : styles.selectionWrapper;
 
@@ -238,10 +230,9 @@ const NoteItemComponent: React.FC<Props> = memo(props => {
 				onPress={onPress}
 				beforePressable={todoCheckbox}
 			>
-				{showSyncDisabledIcon || showLockIcon ? (
+				{isNoteLockEnabled() ? (
 					<View style={styles.titleRow}>
-						{showSyncDisabledIcon && <Icon name='ionicon cloud-offline-outline' style={styles.syncDisabledIcon} accessibilityLabel={_('Local only')} />}
-						{showLockIcon && <Icon name='fas fa-lock' style={styles.lockIcon} accessibilityLabel={_('Locked')} />}
+						{!!note.is_locked && <Icon name='fas fa-lock' style={styles.lockIcon} accessibilityLabel={_('Locked')} />}
 						{titleElement}
 					</View>
 				) : titleElement}

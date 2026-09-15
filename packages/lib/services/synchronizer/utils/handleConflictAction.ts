@@ -58,17 +58,13 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 		// so in this case we just take the remote content.
 		// ------------------------------------------------------------------------------
 
-		// The remote note is only decrypted after it's saved, so decrypt it in memory here
-		let decryptedRemoteNote: NoteEntity | null = null;
 		let mustHandleConflict = true;
-		if ((local as NoteEntity).is_conflict) {
-			mustHandleConflict = false;
-		} else if (!itemIsReadOnly && remoteContent) {
-			decryptedRemoteNote = await decryptNoteInMemory(remoteContent as NoteEntity);
-			mustHandleConflict = Note.mustHandleConflict(local, decryptedRemoteNote ?? remoteContent);
-		} else if (remoteContent) {
-			decryptedRemoteNote = await decryptNoteInMemory(remoteContent as NoteEntity);
+		if (!itemIsReadOnly && remoteContent) {
+			mustHandleConflict = Note.mustHandleConflict(local, remoteContent);
 		}
+
+		// The remote note is only decrypted after it's saved, so decrypt it in memory here
+		const decryptedRemoteNote = mustHandleConflict && remoteContent ? await decryptNoteInMemory(remoteContent as NoteEntity) : null;
 
 		// Skipped for content that can't be merged safely: read-only items (the local change
 		// can't be pushed), still encrypted local notes and the locked notes
@@ -151,9 +147,7 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 				} as NoteEntity;
 			}
 
-			// If the remote no longer exists, the local note will be permanently deleted
-			// further down, so the conflict note must not refer back to it as its original.
-			const conflictNote = await Note.createConflictNote(local, ItemChange.SOURCE_SYNC, remoteExists);
+			const conflictNote = await Note.createConflictNote(local, ItemChange.SOURCE_SYNC);
 			createdConflictNoteId = conflictNote.id;
 
 			// Read the base before the rebuild below. The remote version is the original
