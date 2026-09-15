@@ -11,6 +11,7 @@ import { _ } from '../../locale';
 import JoplinError from '../../JoplinError';
 import { ErrorCode } from '../../errors';
 import fastDeepEqual = require('fast-deep-equal');
+import { createSelector } from 'reselect';
 
 const logger = Logger.create('syncInfoUtils');
 
@@ -46,8 +47,20 @@ export interface SyncInfoValuePublicPrivateKeyPair {
 let appMinVersion_ = '3.7.0';
 
 export const setAppMinVersion = (v: string) => {
+	const previous = appMinVersion_;
 	appMinVersion_ = v;
+
+	return {
+		reset: () => {
+			appMinVersion_ = previous;
+		},
+	};
 };
+
+// 2026-07-10: Joplin 3.6 now supports the Joplin 3.7.0 sync format. This allows the 3.6 stable release
+// to sync with clients that have been upgraded to Joplin 3.7.
+const forwardCompatibleAppMinVersion = '3.7.0';
+
 
 export function onRevisionServiceSettingsChanged(key: string, value: unknown) {
 	if (key !== 'revisionService.enabled' && key !== 'revisionService.ttlDays') return;
@@ -181,13 +194,25 @@ const fixSyncInfo = (syncInfo: SyncInfo) => {
 
 export function localSyncInfo(): SyncInfo {
 	const output = new SyncInfo(Setting.value('syncInfoCache'));
-	output.appMinVersion = appMinVersion_;
+	// Avoid resetting appMinVersion when operating in forward-compatibility mode. This avoids data loss if the user
+	// switches sync targets (v3.7.0 sync targets contain properties/data unsupported by most older Joplin versions)
+	if (output.appMinVersion !== forwardCompatibleAppMinVersion || compareVersions(appMinVersion_, forwardCompatibleAppMinVersion) > 0) {
+		output.appMinVersion = appMinVersion_;
+	}
 	return fixSyncInfo(output);
 }
 
 export function localSyncInfoFromState(state: State): SyncInfo {
 	return new SyncInfo(state.settings['syncInfoCache']);
 }
+
+// Creating SyncInfo also recreates nested values such as masterKeys. This selector keeps
+// the result referentially stable while syncInfoCache is unchanged, so React hook dependencies
+// do not restart asynchronous work in response to unrelated Redux updates.
+export const localSyncInfoSelector = createSelector(
+	(state: State) => state.settings['syncInfoCache'],
+	cache => new SyncInfo(cache),
+);
 
 // When deciding which master key should be active we should take into account
 // whether it's been used or not. If it's been used before it should most likely
@@ -543,6 +568,7 @@ export function setMasterKeyEnabled(mkId: string, enabled = true) {
 export const setMasterKeyHasBeenUsed = (s: SyncInfo, mkId: string) => {
 	const idx = s.masterKeys.findIndex(mk => mk.id === mkId);
 	if (idx < 0) throw new Error(`No such master key: ${mkId}`);
+	if (s.masterKeys[idx].hasBeenUsed) return s;
 
 	s.masterKeys[idx] = {
 		...s.masterKeys[idx],
@@ -579,5 +605,15 @@ export function masterKeyById(id: string) {
 }
 
 export const checkIfCanSync = (s: SyncInfo, appVersion: string) => {
-	if (compareVersions(appVersion, s.appMinVersion) < 0) throw new JoplinError(_('In order to synchronise, please upgrade your application to version %s+', s.appMinVersion), ErrorCode.MustUpgradeApp);
+	const isForwardCompatible = () => {
+		// Forward compatibility: This version of Joplin supports the Joplin 3.7 sync target format
+		if (s.appMinVersion !== forwardCompatibleAppMinVersion) return false;
+		// Older Joplin versions don't support sync targets with locked notes
+		if (s.noteLockKey !== null) return false;
+		return true;
+	};
+
+	if (compareVersions(appVersion, s.appMinVersion) < 0 && !isForwardCompatible()) {
+		throw new JoplinError(_('In order to synchronise, please upgrade your application to version %s+', s.appMinVersion), ErrorCode.MustUpgradeApp);
+	}
 };

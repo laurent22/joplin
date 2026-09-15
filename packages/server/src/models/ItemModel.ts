@@ -588,6 +588,12 @@ export default class ItemModel extends BaseModel<Item> {
 		item.encryption_applied = itemRow.jop_encryption_applied;
 		item.updated_time = itemRow.jop_updated_time;
 
+		// Old notes and folders have no deleted_time in their content, so
+		// default it to 0 here
+		if ((item.type_ === ModelType.Note || item.type_ === ModelType.Folder) && item.deleted_time === undefined) {
+			item.deleted_time = 0;
+		}
+
 		return item;
 	}
 
@@ -1157,7 +1163,7 @@ export default class ItemModel extends BaseModel<Item> {
 		if (!userId) throw new Error('userId is required');
 
 		item = { ... item };
-		const isNew = await this.isNew(item, options);
+		let isNew = await this.isNew(item, options);
 
 		let previousItem: ChangePreviousItem = null;
 		let previousName: string|null = null;
@@ -1180,12 +1186,31 @@ export default class ItemModel extends BaseModel<Item> {
 		}
 
 		return this.withTransaction(async () => {
+			// Savepoint needed because on Postgres a failed statement aborts the whole
+			// transaction, and we recover from the unique constraint error below.
+			const savePoint = await this.setSavePoint();
+
 			try {
 				item = await super.save(item, options);
+				await this.releaseSavePoint(savePoint);
 			} catch (error) {
+				await this.rollbackSavePoint(savePoint);
+
 				if (isUniqueConstraintError(error)) {
-					modelLogger.error(`Unique constraint error on item: ${JSON.stringify({ id: item.id, name: item.name, jop_id: item.jop_id, owner_id: item.owner_id })}`, error);
-					throw new ErrorConflict(`This item is already present and cannot be added again: ${item.name}`);
+					// The item was created by a concurrent request - typically a client
+					// retrying an upload that is still being processed. Save it as an update
+					// so that the retry is not treated as an error.
+					const existingItem = await this.loadByName(item.owner_id || userId, item.name, { fields: ['id'] });
+
+					if (!existingItem) {
+						modelLogger.error(`Unique constraint error on item, but the item could not be found: ${JSON.stringify({ id: item.id, name: item.name, jop_id: item.jop_id, owner_id: item.owner_id })}`, error);
+						throw new ErrorConflict(`This item is already present and cannot be added again: ${item.name}`);
+					}
+
+					modelLogger.info(`Item was created by a concurrent request - updating it instead: ${JSON.stringify({ name: item.name, jop_id: item.jop_id, owner_id: item.owner_id })}`);
+
+					isNew = false;
+					item = await super.save({ ...item, id: existingItem.id }, { ...options, isNew: false });
 				} else {
 					throw error;
 				}

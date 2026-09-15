@@ -30,8 +30,8 @@ const isValidEditOp = (operation: string): operation is EditOp['op'] => {
 
 // Tools that interact with the editor
 export const isEditorToolCall = (toolId: string) => {
-	if (!toolId.startsWith('editor.')) return false;
-	toolId = toolId.replace(/^editor\./, '');
+	if (!toolId.startsWith('editor_')) return false;
+	toolId = toolId.replace(/^editor_/, '');
 	return isValidEditOp(toolId) || toolId === 'readNoteBody';
 };
 
@@ -74,7 +74,7 @@ const buildEditorTools = ({ note, commands }: EditorToolContext) => {
 	const result: ToolDefinition[] = [];
 	const addSelectionOperations = () => {
 		result.push(buildTool({
-			id: 'editor.replaceSelection',
+			id: 'editor_replaceSelection',
 			userDescription: (_input: ToolInput, output: string) => output,
 			description: 'Replaces the text currently selected by the user.',
 			inputSchema: {
@@ -83,7 +83,6 @@ const buildEditorTools = ({ note, commands }: EditorToolContext) => {
 					text: { type: 'string' },
 				},
 				required: ['text'],
-				additionalProperties: false,
 			},
 			handler: async (args: ToolInput) => {
 				if (!hasOwnProperty(args, 'text') || typeof args.text !== 'string') {
@@ -103,7 +102,7 @@ const buildEditorTools = ({ note, commands }: EditorToolContext) => {
 
 	const addEditOperations = () => {
 		const buildEditTool = (id: EditOp['op']) => ({
-			id: `editor.${id}`,
+			id: `editor_${id}`,
 			userDescription: (args: ToolInput) => (
 				describeEditOperation(toolCallToEditOperation(id, args))
 			),
@@ -135,7 +134,6 @@ const buildEditorTools = ({ note, commands }: EditorToolContext) => {
 						text: { type: 'string' },
 					},
 					required: ['text'],
-					additionalProperties: false,
 				},
 			},
 		);
@@ -147,7 +145,6 @@ const buildEditorTools = ({ note, commands }: EditorToolContext) => {
 				text: { type: 'string', description: textDescription },
 			},
 			required: ['anchor', 'text'],
-			additionalProperties: false,
 		});
 		result.push(
 			{
@@ -206,7 +203,7 @@ const buildEditorTools = ({ note, commands }: EditorToolContext) => {
 	const addReadOperation = () => {
 		result.push(
 			{
-				id: 'editor.readNoteBody',
+				id: 'editor_readNoteBody',
 				// Always enabled in the editor context:
 				enabled: true,
 				userDescription: () => _('Read note'),

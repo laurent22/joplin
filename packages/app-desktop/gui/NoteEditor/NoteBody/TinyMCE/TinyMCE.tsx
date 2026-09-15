@@ -33,7 +33,8 @@ import { DropHandler } from '../../utils/useDropHandler';
 import Logger from '@joplin/utils/Logger';
 import useWebViewApi from './utils/useWebViewApi';
 import useLinkTooltips from './utils/useLinkTooltips';
-import { focus } from '@joplin/lib/utils/focusHandler';
+import { blur, focus } from '@joplin/lib/utils/focusHandler';
+import useHighlightedSearchTerms from './utils/useHighlightedSearchTerms';
 const md5 = require('md5');
 import { clipboard } from 'electron';
 const supportedLocales = require('./supportedLocales');
@@ -185,6 +186,9 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 			content: async () => {
 				if (!editorRef.current) return '';
 				return prop_htmlToMarkdownRef.current(props.contentMarkupLanguage, editorRef.current.getContent(), props.contentOriginalCss);
+			},
+			blurEditor: () => {
+				if (editor) blur('TinyMCE::reload', editor.getBody());
 			},
 			resetScroll: () => {
 				if (editor) editor.getWin().scrollTo(0, 0);
@@ -1126,7 +1130,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 				if (!hasOneNoteInkContentStyle && new DOMParser().parseFromString(result.html, 'text/html').querySelector('.ink-text, .ink-space, .container-outline')) {
 					const styleElement = editor.getDoc().createElement('style');
 					styleElement.id = oneNoteInkContentStyleId;
-					styleElement.textContent = '.ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; } .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; font-weight: normal; }';
+					styleElement.textContent = '.ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; } .container-outline p:has(> .ink-text, > .ink-space) { font-family: Calibri, sans-serif; font-size: 6pt; font-weight: normal; }';
 					editor.getDoc().head.appendChild(styleElement);
 				}
 				const htmlAndCss = [
@@ -1199,6 +1203,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		};
 	}, [editor, onEditorContentClick]);
 
+	useHighlightedSearchTerms(editor, props.searchMarkers.keywords, props.themeId);
+
 	// This is to handle dropping notes on the editor. In this case, we add an
 	// overlay over the editor, which makes it a valid drop target. This in
 	// turn makes NoteEditor get the drop event and dispatch it.
@@ -1243,6 +1249,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 	// https://github.com/facebook/react/issues/14010#issuecomment-433788147
 	const props_onChangeRef = useRef<NoteBodyEditorProps['onChange']>(null);
 	props_onChangeRef.current = props.onChange;
+	const editorNoteReloadTimeRequestRef = useRef(props.editorNoteReloadTimeRequest);
+	editorNoteReloadTimeRequestRef.current = props.editorNoteReloadTimeRequest;
 
 	const prop_htmlToMarkdownRef = useRef<HtmlToMarkdownHandler>(null);
 	prop_htmlToMarkdownRef.current = props.htmlToMarkdown;
@@ -1255,12 +1263,14 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		if (!info) return;
 
 		nextOnChangeEventInfo.current = null;
+		if (info.editorNoteReloadTimeRequest !== editorNoteReloadTimeRequestRef.current) return;
 
 		resetLinkTooltips();
 		const contentMd = await prop_htmlToMarkdownRef.current(info.contentMarkupLanguage, info.editor.getContent(), info.contentOriginalCss);
 
 		lastOnChangeEventInfo.current.content = contentMd;
 		lastOnChangeEventInfo.current.resourceInfos = await attachedResources(contentMd);
+		if (info.editorNoteReloadTimeRequest !== editorNoteReloadTimeRequestRef.current) return;
 
 		props_onChangeRef.current({
 			changeId: info.changeId,
@@ -1301,6 +1311,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 				editor: editor,
 				contentMarkupLanguage: props.contentMarkupLanguage,
 				contentOriginalCss: props.contentOriginalCss,
+				editorNoteReloadTimeRequest: editorNoteReloadTimeRequestRef.current,
 			};
 
 			onChangeHandlerTimeoutRef.current = shim.setTimeout(async () => {
@@ -1547,6 +1558,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		editor.on(TinyMceEditorEvents.JoplinChange, onChangeHandler);
 		editor.on(TinyMceEditorEvents.Undo, onChangeHandler);
 		editor.on(TinyMceEditorEvents.Redo, onChangeHandler);
+		editor.on(TinyMceEditorEvents.FormatApply, onChangeHandler);
+		editor.on(TinyMceEditorEvents.FormatRemove, onChangeHandler);
 		editor.on(TinyMceEditorEvents.ExecCommand, onExecCommand);
 		editor.on(TinyMceEditorEvents.SetAttrib, onSetAttrib);
 		editor.on('TableModified', onTableModified);
@@ -1564,6 +1577,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 				editor.off(TinyMceEditorEvents.JoplinChange, onChangeHandler);
 				editor.off(TinyMceEditorEvents.Undo, onChangeHandler);
 				editor.off(TinyMceEditorEvents.Redo, onChangeHandler);
+				editor.off(TinyMceEditorEvents.FormatApply, onChangeHandler);
+				editor.off(TinyMceEditorEvents.FormatRemove, onChangeHandler);
 				editor.off(TinyMceEditorEvents.ExecCommand, onExecCommand);
 				editor.off(TinyMceEditorEvents.SetAttrib, onSetAttrib);
 				editor.off('TableModified', onTableModified);

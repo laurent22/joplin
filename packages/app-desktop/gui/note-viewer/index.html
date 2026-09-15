@@ -430,6 +430,26 @@
 			}
 		};
 
+		// https://github.com/laurent22/joplin/issues/15278
+		// Embedded players (e.g. YouTube) are cross-origin iframes that can't be
+		// paused from here, so reassigning the src reloads them, which stops playback.
+		function stopMediaPlayback() {
+			for (const element of contentElement.querySelectorAll('video, audio')) {
+				if (!element.paused) element.pause();
+			}
+
+			// Exclude .media-pdf: it's the interactive PDF viewer, not a media
+			// player, and reloading it would reset the current page and scroll.
+			for (const iframe of contentElement.querySelectorAll('iframe:not(.media-pdf)')) {
+				const src = iframe.getAttribute('src');
+				if (src) iframe.setAttribute('src', src);
+			}
+		}
+
+		ipc.stopMediaPlayback = () => {
+			stopMediaPlayback();
+		};
+
 		ipc.setHtml = (event) => {
 			const html = event.html;
 
@@ -438,6 +458,8 @@
 			updateBodyHeight();
 
 			alreadyAllImagesLoaded = false;
+
+			stopMediaPlayback();
 
 			contentElement.innerHTML = html;
 

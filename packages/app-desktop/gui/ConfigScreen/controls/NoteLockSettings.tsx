@@ -124,6 +124,10 @@ const NoteLockSettings: React.FC<Props> = props => {
 
 	const resetPasswordTitle = `⚠️ ${_('Reset password')} ⚠️`;
 	const actionButtonTitle = mode === ActionMode.Reset ? resetPasswordTitle : _('Save');
+	// The sync advice only applies to a first setup, where there may be nothing to lose yet.
+	const passwordReminder = mode === ActionMode.Create ?
+		_('Please make sure you remember your password. It cannot be recovered if lost, and any locked notes will become inaccessible. If you have already set up the note lock password on another device, there is no need to set it again, as the information required to access your locked notes is updated when you set up sync.') :
+		_('Please make sure you remember your password. It cannot be recovered if lost, and any locked notes will become inaccessible.');
 
 	const getSectionTitle = () => {
 		if (mode === ActionMode.Reset) return resetPasswordTitle;
@@ -197,7 +201,7 @@ const NoteLockSettings: React.FC<Props> = props => {
 						/>
 					)}
 				</div>
-				<p className='reminder'><strong>{_('Please make sure you remember your password. It cannot be recovered if lost, and any data encrypted with it will become inaccessible.')}</strong></p>
+				<p className='reminder'><strong>{passwordReminder}</strong></p>
 			</div>
 		);
 	};
@@ -208,7 +212,7 @@ const NoteLockSettings: React.FC<Props> = props => {
 		return (
 			<div className='section'>
 				<h2>{_('Key upgrade')}</h2>
-				<p>{_('The note lock key uses an out-dated encryption algorithm and it is recommended to upgrade it. The upgraded key will still be able to decrypt and encrypt your data as usual.')}</p>
+				<p>{_('For better security, your note lock protection can be upgraded to a newer method. Enter your password to upgrade it. Your notes will keep locking and unlocking as usual.')}</p>
 				<div className='form'>
 					<LabelledPasswordInput
 						labelText={_('Password')}

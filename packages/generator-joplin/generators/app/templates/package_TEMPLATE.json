@@ -5,7 +5,8 @@
     "dist": "webpack --env joplin-plugin-config=buildMain && webpack --env joplin-plugin-config=buildExtraScripts && webpack --env joplin-plugin-config=createArchive",
     "prepare": "npm run dist",
     "updateVersion": "webpack --env joplin-plugin-config=updateVersion",
-    "update": "npm install -g generator-joplin && yo joplin --node-package-manager npm --update --force"
+    "update": "npm install -g generator-joplin && yo joplin --node-package-manager npm --update --force",
+    "submit": "tsc --project script/publish/tsconfig.json && node ./script/publish/dist/index.js"
   },
   "license": "MIT",
   "keywords": [
@@ -15,6 +16,7 @@
     "publish"
   ],
   "devDependencies": {
+    "@octokit/auth-oauth-device": "^6.1.0",
     "@types/node": "^18.7.13",
     "chalk": "^4.1.0",
     "copy-webpack-plugin": "^11.0.0",

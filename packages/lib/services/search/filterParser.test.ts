@@ -6,7 +6,7 @@ const makeTerm = (name: string, value: string, negated: boolean, quoted = false,
 	return { name, value, negated };
 };
 
-describe('filterParser should be correct filter for keyword', () => {
+describe('filterParser', () => {
 	it('title', () => {
 		const searchString = 'title: something';
 		expect(filterParser(searchString)).toContainEqual(makeTerm('title', 'something', false));

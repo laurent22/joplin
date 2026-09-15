@@ -69,6 +69,7 @@ import Resource from '@joplin/lib/models/Resource';
 import AiService from '@joplin/lib/services/ai/AiService';
 import LocalEmbeddingProvider from '@joplin/lib/services/ai/LocalEmbeddingProvider';
 import { installAiStatusBridge, AiStatusStore } from './services/aiStatusBridge';
+import ItemChange from '@joplin/lib/models/ItemChange';
 
 const perfLogger = PerformanceLogger.create();
 
@@ -162,12 +163,29 @@ class Application extends BaseApplication {
 			await AlarmService.updateNoteNotification(action.id, action.type === 'NOTE_DELETE');
 		}
 
+		if (action.type === 'NOTE_DELETE' && store.getState().watchedNoteFiles.includes(action.id)) {
+			await ExternalEditWatcher.instance().stopWatching(action.id);
+		}
+
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'featureFlag.autoUpdaterServiceEnabled' || action.type === 'SETTING_UPDATE_ALL') {
 			if (Setting.value('featureFlag.autoUpdaterServiceEnabled')) this.setupAutoUpdaterService();
 		}
 
 		const result = await super.generalMiddleware(store, next, action);
 		const newState = store.getState();
+
+		if (
+			action.type === 'NOTE_UPDATE_ONE' &&
+			[ItemChange.SOURCE_SYNC, ItemChange.SOURCE_DECRYPTION].includes(action.changeSource) &&
+			!action.note.encryption_applied &&
+			!action.note.is_locked &&
+			action.changedFields.some((field: string) => ['title', 'body'].includes(field))
+		) {
+			const externalEditWatcher = ExternalEditWatcher.instance();
+			if (externalEditWatcher.noteIsWatched(action.note)) {
+				await externalEditWatcher.updateNoteFile(action.note);
+			}
+		}
 
 		if (['NOTE_VISIBLE_PANES_TOGGLE', 'NOTE_VISIBLE_PANES_SET'].indexOf(action.type) >= 0) {
 			Setting.setValue('noteVisiblePanes', newState.noteVisiblePanes);

@@ -61,6 +61,7 @@ const syncOptions = (noteId: string, localUpdatedTime: number, contextTimestamp:
 	const metadata = {
 		item_id: noteId,
 		updated_time: localUpdatedTime,
+		sync_time: localUpdatedTime,
 	};
 
 	if (noteId) {

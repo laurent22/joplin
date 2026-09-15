@@ -34,43 +34,35 @@ const LayoutItemContainer: React.FC<Props> = ({
 	const canResizeBottom = parentDir === LayoutItemDirection.Column && !isLastChild;
 
 	const className = `resizableLayoutItem rli-${item.key}`;
-	if (canResizeRight || canResizeBottom) {
-		const enable = {
-			top: false,
-			right: canResizeRight,
-			bottom: canResizeBottom,
-			left: false,
-			topRight: false,
-			bottomRight: false,
-			bottomLeft: false,
-			topLeft: false,
-		};
+	const enable = {
+		top: false,
+		right: canResizeRight,
+		bottom: canResizeBottom,
+		left: false,
+		topRight: false,
+		bottomRight: false,
+		bottomLeft: false,
+		topLeft: false,
+	};
 
-		return (
-			<Resizable
-				key={item.key}
-				className={className}
-				style={style}
-				size={size}
-				onResizeStart={onResizeStart}
-				onResize={onResize}
-				onResizeStop={onResizeStop}
-				enable={enable}
-				minWidth={'minWidth' in item ? item.minWidth : itemMinWidth}
-				minHeight={'minHeight' in item ? item.minHeight : itemMinHeight}
-				maxWidth={resizedItemMaxSize?.width}
-				maxHeight={resizedItemMaxSize?.height}
-			>
-				{children}
-			</Resizable>
-		);
-	} else {
-		return (
-			<div key={item.key} className={className} style={{ ...style, ...size }}>
-				{children}
-			</div>
-		);
-	}
+	return (
+		<Resizable
+			key={item.key}
+			className={className}
+			style={style}
+			size={size}
+			onResizeStart={onResizeStart}
+			onResize={onResize}
+			onResizeStop={onResizeStop}
+			enable={enable}
+			minWidth={'minWidth' in item ? item.minWidth : itemMinWidth}
+			minHeight={'minHeight' in item ? item.minHeight : itemMinHeight}
+			maxWidth={resizedItemMaxSize?.width}
+			maxHeight={resizedItemMaxSize?.height}
+		>
+			{children}
+		</Resizable>
+	);
 };
 
 export default LayoutItemContainer;

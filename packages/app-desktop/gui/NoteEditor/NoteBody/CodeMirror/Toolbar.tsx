@@ -67,6 +67,7 @@ const mapStateToProps = (state: AppState, connectProps: ConnectProps) => {
 		'textCheckbox',
 		'textHeading',
 		'textHorizontalRule',
+		'textBlockQuote',
 		'editor.textTable',
 		'insertDateTime',
 		'toggleEditors',

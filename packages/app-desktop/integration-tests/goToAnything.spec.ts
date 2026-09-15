@@ -37,9 +37,11 @@ test.describe('goToAnything', () => {
 		const mainScreen = await new MainScreen(mainWindow).setup();
 		await mainScreen.createNewNote('');
 
+		const markdownEditor = await mainScreen.noteEditor.showMarkdownEditor();
+
 		const initialFocusLocators: [Locator, boolean][] = [
 			[mainScreen.noteEditor.noteTitleInput, true],
-			[mainScreen.noteEditor.codeMirrorEditor, false],
+			[markdownEditor.container, false],
 		];
 
 		// Focus and start to fill the editor
@@ -111,7 +113,7 @@ test.describe('goToAnything', () => {
 			await goToAnything.expectToBeClosed();
 
 			// Should have added the link
-			await expect(mainScreen.noteEditor.codeMirrorEditor).toContainText('[Target note]');
+			await mainScreen.noteEditor.expectToHaveText(/\[Target note\]/);
 		});
 	}
 });

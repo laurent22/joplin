@@ -8,6 +8,7 @@ _releases/
 **/node_modules/
 **/abcjs-basic-min.js
 packages/generator-joplin/generators/app/templates/api/
+packages/generator-joplin/generators/app/templates/script/publish/dist/
 Assets/
 docs/
 highlight.pack.js
@@ -82,6 +83,7 @@ packages/lib/welcomeAssets.js
 packages/editor/*/vendor/
 packages/plugins/**/api
 packages/plugins/**/dist
+packages/plugin-repo-cli/dist/
 packages/server/dist/
 packages/utils/dist/
 packages/transcribe/dist/
@@ -109,6 +111,7 @@ packages/app-cli/app/cli-utils.js
 packages/app-cli/app/command-apidoc.js
 packages/app-cli/app/command-attach.js
 packages/app-cli/app/command-batch.js
+packages/app-cli/app/command-cat.test.js
 packages/app-cli/app/command-cat.js
 packages/app-cli/app/command-clear.js
 packages/app-cli/app/command-config.js
@@ -117,6 +120,7 @@ packages/app-cli/app/command-done.test.js
 packages/app-cli/app/command-done.js
 packages/app-cli/app/command-dump.js
 packages/app-cli/app/command-e2ee.js
+packages/app-cli/app/command-edit.test.js
 packages/app-cli/app/command-edit.js
 packages/app-cli/app/command-exit.js
 packages/app-cli/app/command-export-sync-status.js
@@ -141,6 +145,7 @@ packages/app-cli/app/command-rmnote.test.js
 packages/app-cli/app/command-rmnote.js
 packages/app-cli/app/command-search.js
 packages/app-cli/app/command-server.js
+packages/app-cli/app/command-set.test.js
 packages/app-cli/app/command-set.js
 packages/app-cli/app/command-settingschema.js
 packages/app-cli/app/command-share.test.js
@@ -185,6 +190,7 @@ packages/app-desktop/ElectronAppWrapper.js
 packages/app-desktop/InteropServiceHelper.js
 packages/app-desktop/app.reducer.test.js
 packages/app-desktop/app.reducer.js
+packages/app-desktop/app.test.js
 packages/app-desktop/app.js
 packages/app-desktop/bridge.js
 packages/app-desktop/checkForUpdates.js
@@ -273,6 +279,7 @@ packages/app-desktop/gui/KeymapConfig/utils/useCommandStatus.js
 packages/app-desktop/gui/KeymapConfig/utils/useKeymap.js
 packages/app-desktop/gui/MainLayoutPane.js
 packages/app-desktop/gui/MainScreen.js
+packages/app-desktop/gui/MainScreen/handleCallbackUrl.test.js
 packages/app-desktop/gui/MainScreen/handleCallbackUrl.js
 packages/app-desktop/gui/MasterPasswordDialog/Dialog.js
 packages/app-desktop/gui/MenuBar.js
@@ -326,6 +333,7 @@ packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useContextMenu.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useCursorPositioning.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useEditDialog.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useEditDialogEventListeners.js
+packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useHighlightedSearchTerms.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useKeyboardRefocusHandler.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useScroll.js
@@ -342,6 +350,8 @@ packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/GroupNode.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/LinkNode.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/TextNode.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/handlePositions.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/stripUnsafeStyles.test.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/stripUnsafeStyles.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/useCardWheel.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/useCheckboxToggle.test.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/useCheckboxToggle.js
@@ -565,6 +575,7 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameTag.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/resetLayout.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/restoreFolder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/restoreNote.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/commands/revealInNotebook.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/revealResourceFile.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/search.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/setTags.js
@@ -619,19 +630,25 @@ packages/app-desktop/gui/utils/convertToScreenCoordinates.js
 packages/app-desktop/gui/utils/dragAndDrop.js
 packages/app-desktop/gui/utils/loadScript.js
 packages/app-desktop/gulpfile.js
+packages/app-desktop/integration-tests/chatPanel.spec.js
 packages/app-desktop/integration-tests/goToAnything.spec.js
 packages/app-desktop/integration-tests/main.spec.js
 packages/app-desktop/integration-tests/markdownEditor.spec.js
 packages/app-desktop/integration-tests/models/ChangeAppLayoutScreen.js
 packages/app-desktop/integration-tests/models/ChatPanel.js
-packages/app-desktop/integration-tests/models/EditorCodeDialog.js
 packages/app-desktop/integration-tests/models/GoToAnything.js
 packages/app-desktop/integration-tests/models/MainScreen.js
-packages/app-desktop/integration-tests/models/NoteEditorScreen.js
+packages/app-desktop/integration-tests/models/NoteEditor/BaseEditor.js
+packages/app-desktop/integration-tests/models/NoteEditor/EditorCodeDialog.js
+packages/app-desktop/integration-tests/models/NoteEditor/MarkdownEditor.js
+packages/app-desktop/integration-tests/models/NoteEditor/NoteEditorScreen.js
+packages/app-desktop/integration-tests/models/NoteEditor/NoteViewer.js
+packages/app-desktop/integration-tests/models/NoteEditor/RichTextEditor.js
 packages/app-desktop/integration-tests/models/NoteList.js
 packages/app-desktop/integration-tests/models/SettingsScreen.js
 packages/app-desktop/integration-tests/models/Sidebar.js
 packages/app-desktop/integration-tests/multiWindow.spec.js
+packages/app-desktop/integration-tests/networking.spec.js
 packages/app-desktop/integration-tests/noteList.spec.js
 packages/app-desktop/integration-tests/pluginApi.spec.js
 packages/app-desktop/integration-tests/resizableLayout.spec.js
@@ -826,6 +843,11 @@ packages/app-mobile/components/ScreenHeader/index.js
 packages/app-mobile/components/SearchInput.js
 packages/app-mobile/components/SelectDateTimeDialog.js
 packages/app-mobile/components/SideMenu.js
+packages/app-mobile/components/SideMenuContent/BottomPanelActions.js
+packages/app-mobile/components/SideMenuContent/FolderItem.js
+packages/app-mobile/components/SideMenuContent/SideMenuContent.js
+packages/app-mobile/components/SideMenuContent/SideMenuItem.js
+packages/app-mobile/components/SideMenuContent/SidebarIcon.js
 packages/app-mobile/components/SideMenuContentNote.js
 packages/app-mobile/components/SyncWizard/JoplinCloudIcon.js
 packages/app-mobile/components/SyncWizard/SyncWizard.js
@@ -935,6 +957,7 @@ packages/app-mobile/components/screens/JoplinCloudLoginScreen.js
 packages/app-mobile/components/screens/LogScreen.js
 packages/app-mobile/components/screens/Note/Note.test.js
 packages/app-mobile/components/screens/Note/Note.js
+packages/app-mobile/components/screens/Note/NoteLockPanel.js
 packages/app-mobile/components/screens/Note/commands/attachFile.js
 packages/app-mobile/components/screens/Note/commands/hideKeyboard.js
 packages/app-mobile/components/screens/Note/commands/index.js
@@ -970,7 +993,6 @@ packages/app-mobile/components/screens/resourceScreenUtils.test.js
 packages/app-mobile/components/screens/resourceScreenUtils.js
 packages/app-mobile/components/screens/status.js
 packages/app-mobile/components/screens/tags.js
-packages/app-mobile/components/side-menu-content.js
 packages/app-mobile/components/testing/TestProviderStack.js
 packages/app-mobile/components/voiceTyping/AudioRecordingBanner.js
 packages/app-mobile/components/voiceTyping/RecordingControls.js
@@ -1052,6 +1074,7 @@ packages/app-mobile/utils/database-driver-react-native.web.js
 packages/app-mobile/utils/debounce.js
 packages/app-mobile/utils/focusView.js
 packages/app-mobile/utils/fs-driver/constants.js
+packages/app-mobile/utils/fs-driver/fs-driver-rn.test.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.web.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.web.worker.js
@@ -1147,8 +1170,6 @@ packages/editor/CodeMirror/extensions/links/ctrlClickLinksExtension.js
 packages/editor/CodeMirror/extensions/links/followLinkTooltipExtension.test.js
 packages/editor/CodeMirror/extensions/links/followLinkTooltipExtension.js
 packages/editor/CodeMirror/extensions/links/referenceLinksStateField.js
-packages/editor/CodeMirror/extensions/links/utils/findLineMatchingLink.test.js
-packages/editor/CodeMirror/extensions/links/utils/findLineMatchingLink.js
 packages/editor/CodeMirror/extensions/links/utils/getUrlAtPosition.js
 packages/editor/CodeMirror/extensions/links/utils/openLink.js
 packages/editor/CodeMirror/extensions/markdownDecorationExtension.test.js
@@ -1179,6 +1200,7 @@ packages/editor/CodeMirror/extensions/rendering/replaceLinks.test.js
 packages/editor/CodeMirror/extensions/rendering/replaceLinks.js
 packages/editor/CodeMirror/extensions/rendering/types.js
 packages/editor/CodeMirror/extensions/rendering/utils/makeBlockReplaceExtension.js
+packages/editor/CodeMirror/extensions/rendering/utils/makeHideReplaceExtension.js
 packages/editor/CodeMirror/extensions/rendering/utils/makeInlineReplaceExtension.test.js
 packages/editor/CodeMirror/extensions/rendering/utils/makeInlineReplaceExtension.js
 packages/editor/CodeMirror/extensions/rendering/utils/nodeIntersectsSelection.js
@@ -1191,6 +1213,7 @@ packages/editor/CodeMirror/pluginApi/PluginLoader.js
 packages/editor/CodeMirror/pluginApi/codeMirrorRequire.js
 packages/editor/CodeMirror/pluginApi/customEditorCompletion.test.js
 packages/editor/CodeMirror/pluginApi/customEditorCompletion.js
+packages/editor/CodeMirror/testing/backspaceOnce.js
 packages/editor/CodeMirror/testing/createEditorControl.js
 packages/editor/CodeMirror/testing/createTestEditor.js
 packages/editor/CodeMirror/testing/findNodesWithName.js
@@ -1198,7 +1221,12 @@ packages/editor/CodeMirror/testing/forceFullParse.js
 packages/editor/CodeMirror/testing/loadLanguages.js
 packages/editor/CodeMirror/testing/pressReleaseKey.js
 packages/editor/CodeMirror/testing/typeText.js
+packages/editor/CodeMirror/testing/visibleEditorText.js
 packages/editor/CodeMirror/theme.js
+packages/editor/CodeMirror/utils/clampSelectionToDocument.test.js
+packages/editor/CodeMirror/utils/clampSelectionToDocument.js
+packages/editor/CodeMirror/utils/findPositionMatchingLink.test.js
+packages/editor/CodeMirror/utils/findPositionMatchingLink.js
 packages/editor/CodeMirror/utils/formatting/RegionSpec.js
 packages/editor/CodeMirror/utils/formatting/computeSelectionFormatting.test.js
 packages/editor/CodeMirror/utils/formatting/computeSelectionFormatting.js
@@ -1327,9 +1355,6 @@ packages/generator-joplin/generators/app/templates/api/index.js
 packages/generator-joplin/generators/app/templates/api/noteListType.js
 packages/generator-joplin/generators/app/templates/api/types.js
 packages/generator-joplin/generators/app/templates/api_index.js
-packages/generator-joplin/generators/app/templates/script/publish/steps/verifyBuild.js
-packages/generator-joplin/generators/app/templates/script/publish/steps/verifyGitState.js
-packages/generator-joplin/generators/app/templates/script/publish/utils/logger.js
 packages/generator-joplin/generators/app/templates/src/index.js
 packages/generator-joplin/tools/updateCategories.js
 packages/htmlpack/index.test.js
@@ -1347,6 +1372,7 @@ packages/lib/BaseModel.test.js
 packages/lib/BaseModel.js
 packages/lib/BaseSyncTarget.js
 packages/lib/Cache.js
+packages/lib/ClipperServer.test.js
 packages/lib/ClipperServer.js
 packages/lib/CssUtils.js
 packages/lib/EventDispatcher.test.js
@@ -1378,6 +1404,7 @@ packages/lib/SyncTargetWebDAV.js
 packages/lib/Synchronizer.js
 packages/lib/TaskQueue.test.js
 packages/lib/TaskQueue.js
+packages/lib/WebDavApi.test.js
 packages/lib/WebDavApi.js
 packages/lib/WelcomeUtils.test.js
 packages/lib/WelcomeUtils.js
@@ -1417,6 +1444,7 @@ packages/lib/components/shared/SamlShared.js
 packages/lib/components/shared/ShareNoteDialog/onUnshareNoteClick.js
 packages/lib/components/shared/ShareNoteDialog/types.js
 packages/lib/components/shared/ShareNoteDialog/useEncryptionWarningMessage.js
+packages/lib/components/shared/ShareNoteDialog/useIsPublished.js
 packages/lib/components/shared/ShareNoteDialog/useOnShareLinkClick.js
 packages/lib/components/shared/ShareNoteDialog/useShareStatusMessage.js
 packages/lib/components/shared/SsoScreenShared.js
@@ -1431,6 +1459,7 @@ packages/lib/components/shared/config/plugins/useOnInstallHandler.js
 packages/lib/components/shared/config/shouldShowMissingPasswordWarning.test.js
 packages/lib/components/shared/config/shouldShowMissingPasswordWarning.js
 packages/lib/components/shared/dropbox-login-shared.js
+packages/lib/components/shared/note-screen-shared.test.js
 packages/lib/components/shared/note-screen-shared.js
 packages/lib/components/shared/reduxSharedMiddleware.js
 packages/lib/components/shared/side-menu-shared.test.js
@@ -1506,6 +1535,7 @@ packages/lib/models/Alarm.js
 packages/lib/models/BaseItem.test.js
 packages/lib/models/BaseItem.js
 packages/lib/models/ConflictNoteState.js
+packages/lib/models/Folder.publishing.test.js
 packages/lib/models/Folder.sharing.test.js
 packages/lib/models/Folder.test.js
 packages/lib/models/Folder.js
@@ -1671,7 +1701,19 @@ packages/lib/services/commands/isEditorCommand.js
 packages/lib/services/commands/propsHaveChanged.js
 packages/lib/services/commands/stateToWhenClauseContext.test.js
 packages/lib/services/commands/stateToWhenClauseContext.js
+packages/lib/services/conflict/autoMergeNote.test.js
+packages/lib/services/conflict/autoMergeNote.js
+packages/lib/services/conflict/boundedDiff3.test.js
+packages/lib/services/conflict/boundedDiff3.js
+packages/lib/services/conflict/decryptNoteInMemory.js
+packages/lib/services/conflict/diffNotes.test.js
+packages/lib/services/conflict/diffNotes.js
+packages/lib/services/conflict/isAutoMergeEnabled.js
 packages/lib/services/conflict/isConflictResolutionEnabled.js
+packages/lib/services/conflict/loadConflictData.test.js
+packages/lib/services/conflict/loadConflictData.js
+packages/lib/services/conflict/wordDiff.test.js
+packages/lib/services/conflict/wordDiff.js
 packages/lib/services/contextkey/contextkey.js
 packages/lib/services/database/addMigrationFile.js
 packages/lib/services/database/isSqliteSyntaxError.js
@@ -1731,6 +1773,8 @@ packages/lib/services/interop/InteropService_Importer_Md.test.js
 packages/lib/services/interop/InteropService_Importer_Md.js
 packages/lib/services/interop/InteropService_Importer_Md_frontmatter.test.js
 packages/lib/services/interop/InteropService_Importer_Md_frontmatter.js
+packages/lib/services/interop/InteropService_Importer_Obsidian.test.js
+packages/lib/services/interop/InteropService_Importer_Obsidian.js
 packages/lib/services/interop/InteropService_Importer_OneNote.postprocessHtml.test.js
 packages/lib/services/interop/InteropService_Importer_OneNote.test.js
 packages/lib/services/interop/InteropService_Importer_OneNote.js
@@ -1870,11 +1914,13 @@ packages/lib/services/rest/routes/events.js
 packages/lib/services/rest/routes/folders.test.js
 packages/lib/services/rest/routes/folders.js
 packages/lib/services/rest/routes/master_keys.js
+packages/lib/services/rest/routes/mcp.test.js
 packages/lib/services/rest/routes/mcp.js
 packages/lib/services/rest/routes/notes.test.js
 packages/lib/services/rest/routes/notes.js
 packages/lib/services/rest/routes/ping.js
 packages/lib/services/rest/routes/resources.js
+packages/lib/services/rest/routes/revisions.test.js
 packages/lib/services/rest/routes/revisions.js
 packages/lib/services/rest/routes/search.js
 packages/lib/services/rest/routes/tags.js
@@ -1918,6 +1964,7 @@ packages/lib/services/synchronizer/ItemUploader.test.js
 packages/lib/services/synchronizer/ItemUploader.js
 packages/lib/services/synchronizer/LockHandler.js
 packages/lib/services/synchronizer/MigrationHandler.js
+packages/lib/services/synchronizer/Synchronizer.autoMerge.test.js
 packages/lib/services/synchronizer/Synchronizer.baseFields.test.js
 packages/lib/services/synchronizer/Synchronizer.basics.test.js
 packages/lib/services/synchronizer/Synchronizer.conflicts.test.js
@@ -1970,6 +2017,7 @@ packages/lib/shim.js
 packages/lib/string-utils.test.js
 packages/lib/string-utils.js
 packages/lib/testing/ai/semanticSearch.js
+packages/lib/testing/createLocalhostServer.js
 packages/lib/testing/dom-test-environment.js
 packages/lib/testing/plugins/createTestPlugin.js
 packages/lib/testing/share/makeMockShareInvitation.js
@@ -2125,6 +2173,7 @@ packages/tools/checkIgnoredFiles.js
 packages/tools/checkLibPaths.test.js
 packages/tools/checkLibPaths.js
 packages/tools/convertThemesToCss.js
+packages/tools/eslint-rules/describeFilename.test.js
 packages/tools/fuzzer/ActionRunner.js
 packages/tools/fuzzer/Fuzzer.js
 packages/tools/fuzzer/cli.js
@@ -2202,8 +2251,8 @@ packages/tools/updateMarkdownDoc.js
 packages/tools/utils/discourse.test.js
 packages/tools/utils/discourse.js
 packages/tools/utils/loadSponsors.js
+packages/tools/utils/parsePluralLocalizationForm.test.js
 packages/tools/utils/parsePluralLocalizationForm.js
-packages/tools/utils/parsePlurallLocalizationForm.test.js
 packages/tools/utils/translation.js
 packages/tools/validateFilenames.js
 packages/tools/website/build.js

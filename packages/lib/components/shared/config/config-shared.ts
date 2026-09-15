@@ -124,6 +124,7 @@ export const checkAiConfig = async (comp: ConfigScreenComponent) => {
 	try {
 		const { default: AiService } = await import('../../../services/ai/AiService');
 		const result = await AiService.instance().chat([
+			{ role: ChatRole.System, content: 'Keep replies brief, but non-empty.' },
 			{ role: ChatRole.User, content: 'Reply with the single word OK.' },
 		], { maxTokens: 20 });
 		const text = (result.text || '').trim();

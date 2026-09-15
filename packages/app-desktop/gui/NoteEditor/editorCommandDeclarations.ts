@@ -108,6 +108,11 @@ const declarations: CommandDeclaration[] = [
 		iconName: 'icon-to-do-list',
 	},
 	{
+		name: 'textBlockQuote',
+		label: () => _('Blockquote'),
+		iconName: 'icon-quote',
+	},
+	{
 		name: 'textHeading',
 		label: () => _('Heading'),
 		iconName: 'icon-heading',

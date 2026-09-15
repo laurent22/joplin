@@ -2,6 +2,15 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"\"%s\"에 \"%s\" 필수 속성이 없습니다."
 	],
+	"%d card": [
+		""
+	],
+	"%d edit(s) applied, %d could not be placed automatically.": [
+		""
+	],
+	"%d edit(s) applied.": [
+		""
+	],
 	"%d GB": [
 		"%d GB"
 	],
@@ -15,6 +24,9 @@
 		"노트 또는 첨부 파일당 %d MB"
 	],
 	"%d photo(s) taken": [
+		""
+	],
+	"%d sections found": [
 		""
 	],
 	"%s": [
@@ -31,6 +43,9 @@
 	],
 	"%s (%s): %s": [
 		"%s (%s): %s"
+	],
+	"%s (Beta)": [
+		""
 	],
 	"%s (pre-release)": [
 		"%s (사전 출시)"
@@ -50,11 +65,20 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s added to toolbar": [
+		""
+	],
 	"%s cannot be less than %s": [
+		""
+	],
+	"%s input / %s output tokens used.": [
 		""
 	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s 는 많은 작은 파일을 동기화하는 데 최적화되어 있지 않으므로 초기 동기화 속도가 느려집니다."
+	],
+	"%s moved up": [
+		""
 	],
 	"%s must be a valid whole number": [
 		""
@@ -98,6 +122,12 @@
 	"(%s)": [
 		"(%s)"
 	],
+	"(empty — double-click to edit)": [
+		""
+	],
+	"(empty)": [
+		""
+	],
 	"(In plugin: %s)": [
 		"(플러그: %s)"
 	],
@@ -116,6 +146,12 @@
 	"(You may disable this prompt in the options)": [
 		"(옵션에서 이 프롬프트를 비활성화할 수 있습니다)"
 	],
+	"+ Group": [
+		""
+	],
+	"+ Text": [
+		""
+	],
 	"- Camera: to allow taking a picture and attaching it to a note.": [
 		"- 카메라: 사진을 찍고 노트에 첨부하기 위해 필요합니다."
 	],
@@ -124,6 +160,9 @@
 	],
 	"- Storage: to allow attaching files to notes and to enable filesystem synchronisation.": [
 		"- 저장소: 노트에 파일을 첨부하고 파일시스템 동기화를 활성화하기 위해 필요합니다."
+	],
+	"14-day free trial. Cancel anytime during the trial and you won't be charged.": [
+		""
 	],
 	"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign or remove [tag] from [note], to list notes associated with [tag], or to list tags associated with [note]. The command `tag list` can be used to list all the tags (use -l for long option).": [
 		"[노트]로부터 [태그]를 지우거나 지정할 때, 아니면 [태그]와 관련된 노트의 목록을 확인할 때 <tag-command>로 \"add\", \"remove\", \"list\" 또는 \"notetags\" 를 사용하실 수 있습니다. 또한 `tag list` 명령어로 모든 태그의 목록을 확인할 수 있습니다 (긴 태그인 옵션 -l 을 사용하실수 있습니다)."
@@ -135,6 +174,9 @@
 		""
 	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+		""
+	],
+	"A system-wide keyboard shortcut that toggles the Joplin window. Works even when Joplin is not focused. Example: CommandOrControl+Shift+J. Leave empty to disable.": [
 		""
 	],
 	"A3": [
@@ -173,6 +215,15 @@
 	"Access denied: Please re-enter your password and/or username": [
 		"접근 거부: 아이디 또는 비밀번호를 다시 입력해주세요"
 	],
+	"Access your notes from any web browser at %s.": [
+		""
+	],
+	"Accessible": [
+		""
+	],
+	"Accessible mode saves additional information, enabling creation of accessible PDFs. It increases database size by approximately 10-20 KB per page.": [
+		""
+	],
 	"Account": [
 		"계정"
 	],
@@ -188,6 +239,9 @@
 	"Actual Size": [
 		"실제 크기"
 	],
+	"Add a text card": [
+		""
+	],
 	"Add body": [
 		"내용 추가"
 	],
@@ -196,6 +250,9 @@
 	],
 	"Add new": [
 		"새로 추가"
+	],
+	"Add note to whiteboard...": [
+		""
 	],
 	"Add or remove tags:": [
 		"태그 추가 및 제거:"
@@ -208,6 +265,9 @@
 	],
 	"Add to dictionary": [
 		"사전에 추가"
+	],
+	"Added %d word": [
+		""
 	],
 	"Added tag: %s": [
 		""
@@ -227,6 +287,21 @@
 	"Advanced tools": [
 		"고급 도구"
 	],
+	"AI": [
+		""
+	],
+	"AI Chat": [
+		""
+	],
+	"AI features are disabled. Enable them in Settings → AI.": [
+		""
+	],
+	"AI is running in reduced-quality mode — monthly allowance exceeded. Credits replenish on a rolling 30-day basis, or you can": [
+		""
+	],
+	"AI usage has exceeded your monthly allowance — responses are using a reduced-quality model. Credits replenish on a rolling 30-day basis. Buy more at %s.": [
+		""
+	],
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
 		"노트, 노트북, 태그를 포함한 모든 데이터는 영구적으로 삭제됩니다."
 	],
@@ -236,13 +311,37 @@
 	"All notes": [
 		"모든 노트"
 	],
+	"All notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"All potential ports are in use - please report the issue at %s": [
 		"모든 포트들이 사용 중입니다 - %s에 문제를 공유해주시면 감사하겠습니다"
 	],
 	"All shared folders:": [
 		""
 	],
+	"Allow editing tags on notes": [
+		""
+	],
+	"Allow editing the current note (chat panel only)": [
+		""
+	],
+	"Allow listing tags": [
+		""
+	],
+	"Allow reading images": [
+		""
+	],
+	"Allow remote AI providers": [
+		""
+	],
+	"Allow semantic search of notes": [
+		""
+	],
 	"Allows debugging mobile plugins. See %s for details.": [
+		""
+	],
+	"Already have an account? Log in": [
 		""
 	],
 	"Also displays unset and hidden config variables.": [
@@ -272,9 +371,6 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"자동 저장된 그림을 찾았습니다. 노트에 사본을 첨부하시겠습니까?"
 	],
-	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
-		""
-	],
 	"An error occurred: %s": [
 		"오류가 발생했습니다: %s"
 	],
@@ -284,8 +380,14 @@
 	"Android API level: %d": [
 		""
 	],
+	"Anthropic": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		"이 주소로 전송된 모든 이메일은 노트로 변환되어 당신의 컬렉션에 추가됩니다. 메모는 Inbox 노트북에 저장됩니다"
+	],
+	"API key": [
+		""
 	],
 	"Appearance": [
 		"보기"
@@ -307,6 +409,15 @@
 	],
 	"Aritim Dark": [
 		"Aritim Dark"
+	],
+	"Arrow at target": [
+		""
+	],
+	"Ask about this note, or request a change…": [
+		""
+	],
+	"Ask about this note, or request changes. Select text in the editor first to scope the request to that selection.": [
+		""
 	],
 	"Associated tags:": [
 		""
@@ -344,6 +455,9 @@
 	"Attachments that could not be downloaded": [
 		"첨부 파일을 내려받을 수 없습니다: %s"
 	],
+	"Attention: After resetting your password it will no longer be possible to decrypt any data encrypted with your current password. All encrypted shared notebooks will also be unshared, so please ask the notebook owner to share it again with you.": [
+		""
+	],
 	"Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s": [
 		"주의: 이 위치를 변경하시려면, 동기화 전에 모든 내용들을 복사하였는지 확인해주세요. 변경 중에 모든 파일이 삭제 됩니다! 자세한 정보는 FAQ를 참조해주세요: %s"
 	],
@@ -358,6 +472,9 @@
 	],
 	"Auto": [
 		"자동"
+	],
+	"Auto lock when switching note": [
+		""
 	],
 	"Auto-add disabled accounts for deletion": [
 		"삭제를 위해 비활성화된 계정을 자동으로 추가"
@@ -383,10 +500,19 @@
 	"Back": [
 		"뒤로 가기"
 	],
+	"Back to %s": [
+		""
+	],
+	"Base URL": [
+		""
+	],
 	"Basic": [
 		"기초"
 	],
 	"Beta": [
+		""
+	],
+	"Billed annually (%s per user per year respectively).": [
 		""
 	],
 	"Block code": [
@@ -406,6 +532,9 @@
 	],
 	"Bulleted List": [
 		"글머리 기호 목록"
+	],
+	"buy more credits": [
+		""
 	],
 	"by %s": [
 		""
@@ -442,6 +571,9 @@
 	],
 	"Cannot access %s": [
 		"%s에 접근할 수 없음"
+	],
+	"Cannot change a locked note while the session is locked": [
+		""
 	],
 	"Cannot change encrypted item": [
 		"암호화된 항목을 변경할 수 없습니다"
@@ -488,6 +620,9 @@
 	"Case sensitive": [
 		"대소문자 구분"
 	],
+	"Certain Markdown formatting is now rendered in the editor by default. For example, **bold** will appear as actual bold text. You can change this behaviour in the \"Editor\" section of Settings.": [
+		""
+	],
 	"Change application layout": [
 		"애플리케이션 레이아웃 변경"
 	],
@@ -502,6 +637,9 @@
 	],
 	"Characters excluding spaces": [
 		"공백을 제외한 문자"
+	],
+	"Chat provider": [
+		""
 	],
 	"Check elements to display in the toolbar": [
 		""
@@ -536,10 +674,16 @@
 	"Clear alarm": [
 		"알람 취소"
 	],
+	"Clears the console output.": [
+		""
+	],
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"\"%s\"를 클릭해서 노트를 복구하세요. 노트는 \"%s\" 이름을 가진 노트북에 복사됩니다. 노트의 현재 버전이 이동 혹은 수정되지는 않습니다."
 	],
 	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
+	"Click the eye icon in the toolbar to switch to the Markdown editor and fix the JSON manually.": [
 		""
 	],
 	"Click to add tags...": [
@@ -638,6 +782,12 @@
 	"Configures the size of scrollbars used in the app.": [
 		""
 	],
+	"Confirm": [
+		"확인"
+	],
+	"Confirm credentials": [
+		""
+	],
 	"Confirm password cannot be empty": [
 		"비밀번호 확인칸은 비어져 있으면 안됩니다"
 	],
@@ -670,6 +820,9 @@
 	],
 	"Continue": [
 		"계속"
+	],
+	"Convert this card into a Joplin note": [
+		""
 	],
 	"Convert to note": [
 		"노트로 변환"
@@ -751,6 +904,9 @@
 	],
 	"Create a notebook": [
 		"새 노트북을 만듭니다"
+	],
+	"Create accessible document": [
+		""
 	],
 	"Create new profile...": [
 		"새 프로파일을 만듭니다..."
@@ -866,6 +1022,9 @@
 	"Default title to use for documents created by the scanner.": [
 		""
 	],
+	"Default view / edit state": [
+		""
+	],
 	"Default: %s": [
 		"기본값:  %s"
 	],
@@ -901,9 +1060,6 @@
 	],
 	"Delete selected notes": [
 		"선택된 노트 삭제"
-	],
-	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
-		""
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"인박스 노트북을 삭제하시겠습니까?\n\n인박스 노트북을 삭제하면 최근에 해당 노트북으로 전송된 모든 이메일이 손실될 수 있습니다."
@@ -1019,13 +1175,16 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"비밀번호는 데이터를 복호화할 수 있는 *유일한* 수단이므로 절대로 비밀번호를 잃어버리지 마세요.암호화를 사용하려면 아래에 비밀번호를 넣어주세요."
 	],
-	"Do you find the Joplin web app useful?": [
-		""
-	],
 	"Document scanner: Title template": [
 		""
 	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't have an account yet?": [
+		""
+	],
+	"Don't show again": [
 		""
 	],
 	"Don't show this message again": [
@@ -1037,11 +1196,20 @@
 	"Done": [
 		"완료"
 	],
+	"Double tap to open this attachment. Long press to expand or collapse details.": [
+		""
+	],
 	"Download": [
 		"다운로드"
 	],
 	"Download and install the relevant extension for your browser:": [
 		"브라우저에 맞는 확장 기능을 내려받아 설치하세요:"
+	],
+	"Download it from GitHub Releases": [
+		""
+	],
+	"Download it from the Joplin Android repository": [
+		""
 	],
 	"Downloaded": [
 		"다운로드 완료"
@@ -1063,6 +1231,9 @@
 	],
 	"Dracula": [
 		"Dracula"
+	],
+	"Drag to move group": [
+		""
 	],
 	"Draw picture": [
 		"그림 그리기"
@@ -1157,6 +1328,9 @@
 	"Emails": [
 		"전자우편"
 	],
+	"Embedding index": [
+		""
+	],
 	"emphasised text": [
 		"강조"
 	],
@@ -1190,6 +1364,9 @@
 	"Enable encryption": [
 		"암호화 사용"
 	],
+	"Enable external embeds (e.g. YouTube Videos)": [
+		""
+	],
 	"Enable file:// URLs for images and videos": [
 		""
 	],
@@ -1216,9 +1393,6 @@
 	],
 	"Enable note history": [
 		"노트 변경 이력 활성화"
-	],
-	"Enable optical character recognition (OCR)": [
-		"문자 인식(OCR) 활성화"
 	],
 	"Enable or disable plugins": [
 		"플러그인 활성화/비활성화"
@@ -1259,6 +1433,9 @@
 	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
 		""
 	],
+	"Enables the default edit operations for notes with an open AI chat panel. When disabled, the chat panel can still read the open note. Does not apply to MCP.": [
+		""
+	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"암호화를 활성화하면 *모든* 노트와 첨부들이 다시 동기화되고 동기화 대상으로 암호화되어 전송됩니다."
 	],
@@ -1267,6 +1444,9 @@
 	],
 	"Encrypted items cannot be modified": [
 		"암호화된 항목은 변경될 수 없습니다"
+	],
+	"Encrypting a note requires a note lock password, which has not yet been set. Set it up now?": [
+		""
 	],
 	"Encryption": [
 		"암호화"
@@ -1279,6 +1459,9 @@
 	],
 	"Encryption keys": [
 		"암호화 키"
+	],
+	"Encryption was setup previously, but all keys have been disabled. To continue, please use the desktop app to enable a key.": [
+		""
 	],
 	"Encryption:": [
 		"암호화:"
@@ -1298,6 +1481,9 @@
 	"Enter password": [
 		"비밀번호 입력"
 	],
+	"Enter the note lock password to unlock encrypted notes for this session.": [
+		""
+	],
 	"Enum": [
 		"열거"
 	],
@@ -1309,6 +1495,9 @@
 	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"오류. URL, 사용자 이름, 비밀번호를 확인해주세요. 또한 동기화 장소가 접근 가능한지 확인해주세요. 보고된 오류는 다음과 같습니다:"
+	],
+	"Error. The AI provider test failed:": [
+		""
 	],
 	"Error: %s": [
 		"오류: %s"
@@ -1370,6 +1559,9 @@
 	"Exports only the given notebook.": [
 		"특정 노트북을 내보냅니다."
 	],
+	"Exposes Joplin notes to external AI applications (Claude Desktop, Cursor, etc.) via the Model Context Protocol. Requires the Web Clipper service to be running. Connected AI tools can read your note content; any text they retrieve may be sent to the external LLM provider those tools use.": [
+		""
+	],
 	"Fail-safe": [
 		"안전 장치"
 	],
@@ -1382,14 +1574,14 @@
 	"Failed to connect to your account. Please try again.": [
 		""
 	],
+	"Failed to create accessible document: %s": [
+		""
+	],
 	"Fatal error:": [
 		"치명적인 오류:"
 	],
 	"Feature flags": [
 		"기능 플래그"
-	],
-	"Feedback": [
-		""
 	],
 	"Fetched items: %d/%d.": [
 		"가져온 항목: %d/%d."
@@ -1406,6 +1598,9 @@
 	"Filter": [
 		"필터"
 	],
+	"Filtered by section [%s]": [
+		""
+	],
 	"Find: ": [
 		"찾기: "
 	],
@@ -1420,6 +1615,9 @@
 	],
 	"Fixing search index...": [
 		"검색 색인을 수정하는 중..."
+	],
+	"Flip": [
+		""
 	],
 	"Focus": [
 		"강조"
@@ -1478,9 +1676,6 @@
 	"Generating link...": [
 		"링크를 만드는 중..."
 	],
-	"Geolocation, spellcheck, editor toolbar, image resize": [
-		"지리적 위치, 맞춤법 검사, 편집기 도구 모음, 이미지 크기 조정"
-	],
 	"Get a quote": [
 		""
 	],
@@ -1493,6 +1688,9 @@
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"설정값을 가져오거나 지정합니다. 만약 [value] 가 제공되지 않았다면, [name]의 값을 표시할 것입니다. [name] 과 [value] 모두 제공되지 않았다면, 현재 설정을 표시할 것입니다."
 	],
+	"Global shortcut to show/hide Joplin": [
+		""
+	],
 	"Glossary:": [
 		""
 	],
@@ -1502,17 +1700,26 @@
 	"Go back": [
 		""
 	],
+	"Go to end of note": [
+		""
+	],
 	"Go to line": [
 		""
 	],
 	"Go to source URL": [
 		"소스 URL로 이동"
 	],
+	"Go to start of note": [
+		""
+	],
 	"Goto Anything...": [
 		"가고자 하는 곳으로 이동..."
 	],
 	"Grant authorisation": [
 		"허가된 권한"
+	],
+	"Group": [
+		""
 	],
 	"Have you authorised the application login in the above URL?": [
 		"위 URL에서 애플리케이션 로그인을 승인하셨나요?"
@@ -1583,6 +1790,9 @@
 	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
 		""
 	],
+	"If enabled, opening an HTML note displays a prompt to convert the note to Markdown.": [
+		""
+	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"이미 승인하셨다면, 애플리케이션이 Joplin Cloud에 동기화될 때까지 기다려주세요Joplin Cloud."
 	],
@@ -1598,7 +1808,10 @@
 	"Import": [
 		"가져오기"
 	],
-	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
+	"Import a note from a text file (%s). The note will be imported into notebook '%s'.": [
+		""
+	],
+	"Import failed. Make sure a %s file was selected.\nDetails: %s": [
 		""
 	],
 	"Import from JEX": [
@@ -1652,6 +1865,15 @@
 	"Indent more": [
 		"들여쓰기 추가"
 	],
+	"Index notes for AI search": [
+		""
+	],
+	"Indexer:": [
+		""
+	],
+	"Indexing…": [
+		""
+	],
 	"Info": [
 		""
 	],
@@ -1664,8 +1886,17 @@
 	"Insert": [
 		"삽입"
 	],
+	"Insert column right": [
+		""
+	],
 	"Insert Hyperlink": [
 		"하이퍼링크 삽입"
+	],
+	"Insert row above": [
+		""
+	],
+	"Insert row below": [
+		""
 	],
 	"Insert time": [
 		"시간 삽입하기"
@@ -1703,11 +1934,17 @@
 	"Invalid password": [
 		"유효하지 않은 비밀번호"
 	],
+	"Invalid password. Please try again. If you have forgotten your password you will need to reset it.": [
+		""
+	],
 	"Italic": [
 		"기울임"
 	],
 	"Item \"%s\" could not be downloaded: %s": [
 		"\"%s\" 항목을 내려받을 수 없습니다: %s"
+	],
+	"Item upload will be disabled in %s.": [
+		""
 	],
 	"Items": [
 		"항목"
@@ -1723,6 +1960,9 @@
 	],
 	"Joplin Cloud": [
 		"Joplin 클라우드"
+	],
+	"Joplin Cloud AI requires Joplin Cloud sync. Pick a different provider or restore Joplin Cloud sync.": [
+		""
 	],
 	"Joplin Cloud Login": [
 		"Joplin 클라우드 로그인"
@@ -1741,6 +1981,9 @@
 	],
 	"Joplin Forum": [
 		"Joplin 포럼"
+	],
+	"Joplin needs your permission to access your %s account and to synchronise data with it.": [
+		""
 	],
 	"Joplin Server": [
 		"Joplin 서버"
@@ -1871,6 +2114,12 @@
 	"Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at \"%s\" and resume the operation.": [
 		"잠금 파일이 잠겨있습니다. 동기화가 시작되지 않는다면 \"%s\"에서 잠금 파일을 삭제하고 작업을 재개하실 수 있습니다."
 	],
+	"Locked notes are encrypted on this device and can only be read after entering your note lock password. The password is required again after locking or restarting Joplin.": [
+		""
+	],
+	"Locked notes cannot be opened in an external editor": [
+		""
+	],
 	"Log": [
 		"로그"
 	],
@@ -1903,6 +2152,9 @@
 	],
 	"Manage profiles": [
 		"프로필 관리"
+	],
+	"Manage this server's license from the [admin dashboard](%s).": [
+		""
 	],
 	"Manage your plugins": [
 		"플러그인 관리"
@@ -1961,6 +2213,9 @@
 	"Max Total Size": [
 		"최대 총 크기"
 	],
+	"MCP requires the Web Clipper service. Enable it in Settings → Web Clipper.": [
+		""
+	],
 	"Media player, math, diagrams, table of contents": [
 		"미디어 플레이어, 수학, 도표, 목차"
 	],
@@ -1985,6 +2240,12 @@
 	"Mobile data - auto-sync disabled": [
 		"모바일 데이터 - 자동 동기화 비활성화"
 	],
+	"Model": [
+		""
+	],
+	"Model:": [
+		""
+	],
 	"More info": [
 		"더 많은 정보"
 	],
@@ -1995,6 +2256,12 @@
 		"\"%s\"에 대한 하나 이상의 항목이 일치합니다. 검색 범위를 한번 좁혀보세요."
 	],
 	"Most plugins have source code available for review on the plugin website.": [
+		""
+	],
+	"Move column left": [
+		""
+	],
+	"Move column right": [
 		""
 	],
 	"Move left": [
@@ -2045,6 +2312,9 @@
 	"New sub-notebook": [
 		"새 하위 노트북"
 	],
+	"New text card": [
+		""
+	],
 	"New to-do": [
 		"새 목록"
 	],
@@ -2077,6 +2347,18 @@
 	],
 	"No active notebook.": [
 		"활성화된 노트북이 없습니다."
+	],
+	"No AI usage recorded yet.": [
+		""
+	],
+	"No arrow": [
+		""
+	],
+	"No colour": [
+		""
+	],
+	"No embedding model is installed. It is downloaded automatically on first use — check Settings → AI for progress.": [
+		""
 	],
 	"No new invitations": [
 		""
@@ -2111,8 +2393,14 @@
 	"No URL for SAML authentication set.": [
 		""
 	],
+	"No valid notebook is available. Please create or select a notebook and try again.": [
+		""
+	],
 	"Nord": [
 		"노드"
+	],
+	"Normal": [
+		""
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"%s과 인증되지 않았습니다. 증명서를 제공해주세요."
@@ -2129,7 +2417,7 @@
 	"Not now": [
 		"지금은 아닙니다"
 	],
-	"Not useful": [
+	"Not Used": [
 		""
 	],
 	"note": [
@@ -2162,6 +2450,9 @@
 	"Note History": [
 		"노트 역사"
 	],
+	"Note indexing is turned off in Settings → AI.": [
+		""
+	],
 	"Note is not a to-do: \"%s\"": [
 		"노트는 목록 항목이 아닙니다: \"%s\""
 	],
@@ -2173,6 +2464,9 @@
 	],
 	"Note list style": [
 		"노트 목록 스타일"
+	],
+	"Note lock password, auto lock": [
+		""
 	],
 	"Note properties": [
 		"노트 속성"
@@ -2216,7 +2510,19 @@
 	"Numbered List": [
 		"번호 매기기 목록"
 	],
+	"Obsidian Vault": [
+		""
+	],
+	"OCR is not complete. Please wait for OCR to finish before creating an accessible document.": [
+		""
+	],
+	"OCR needs to run to generate an accessible document. This may take a moment. Would you like to continue?": [
+		""
+	],
 	"OCR: Clear cache and re-download language data files": [
+		""
+	],
+	"OCR: PDF processing mode": [
 		""
 	],
 	"OK": [
@@ -2245,6 +2551,9 @@
 	],
 	"OneDrive Login": [
 		"OneDrive 로그인"
+	],
+	"Only do this if you've forgotten your current password. A new password will be created, and any notes locked with the old one will become permanently unreadable.": [
+		""
 	],
 	"Only one note can be printed at a time.": [
 		"한 번에 하나의 노트만 출력할 수 있습니다."
@@ -2278,6 +2587,9 @@
 	],
 	"Open...": [
 		"열기..."
+	],
+	"OpenAI-compatible": [
+		""
 	],
 	"Opening section %s": [
 		"섹션 %s 열기"
@@ -2354,8 +2666,14 @@
 	"Please confirm that you would like to re-encrypt your complete database.": [
 		"전체 데이터베이스를 다시 암호화 할것입니다."
 	],
+	"Please disable users from the [admin dashboard](%s) to bring this server under the limit.": [
+		""
+	],
 	"Please enter your password in the master key list below before upgrading the key.": [
 		"키를 업그레이드하기 전에 마스터 키 목록에 있는 비밀번호를 입력하십시오."
+	],
+	"Please make sure you remember your password. It cannot be recovered if lost, and any data encrypted with it will become inaccessible.": [
+		""
 	],
 	"Please note that if it is a large notebook, it may take a few minutes for all the notes to show up on the recipient's device.": [
 		"큰 노트북의 경우 모든 노트가 전송되기까지 몇 분 정도 걸릴 수 있습니다."
@@ -2383,6 +2701,9 @@
 	],
 	"Please specify the notebook where the notes should be imported to.": [
 		"노트를 가져와서 저장할 노트북을 지정해주세요."
+	],
+	"Please update the license key from the [admin dashboard](%s).": [
+		""
 	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"모든 첨부 파일들을 내려받아서 복호화할 때까지 기다려주세요. %s를 통해 이 노트를 편집하도록 전환할 수 있습니다."
@@ -2471,6 +2792,9 @@
 	"Pro": [
 		"프로"
 	],
+	"Pro 100 GB": [
+		""
+	],
 	"Process failed payment subscriptions": [
 		"구독 결제 처리 실패"
 	],
@@ -2531,6 +2855,9 @@
 	"Quit": [
 		"종료"
 	],
+	"Quit anyway": [
+		""
+	],
 	"Re-download model": [
 		""
 	],
@@ -2543,11 +2870,17 @@
 	"Re-upload local data to sync target": [
 		"로컬 데이터를 동기화 대상에 다시 업로드"
 	],
+	"Read all tags": [
+		""
+	],
 	"Read more about it": [
 		"더 자세히 알아보기"
 	],
 	"Read time: %s min": [
 		"읽기 시간: %s 분"
+	],
+	"Reading this note requires the note lock password, which has not been set up on this device yet.": [
+		""
 	],
 	"Recipient has accepted the invitation": [
 		"공유 수신자가 초대를 승락하였습니다"
@@ -2633,6 +2966,15 @@
 	"Report fraudulent plugin": [
 		""
 	],
+	"Required to use cloud-hosted AI models, including Joplin Cloud AI. When disabled, only on-device providers can be used.": [
+		""
+	],
+	"Reset": [
+		""
+	],
+	"Reset AI token usage counters?": [
+		""
+	],
 	"Reset application layout": [
 		"애플리케이션 레이아웃 재설정"
 	],
@@ -2697,6 +3039,9 @@
 		""
 	],
 	"Rich Text editor. Press Escape then Tab to escape focus.": [
+		""
+	],
+	"Run OCR": [
 		""
 	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
@@ -2807,6 +3152,12 @@
 	"Self-hosted": [
 		""
 	],
+	"Self-hosted instances of the Joplin web app cannot sync with Joplin Cloud. Open the official web app?": [
+		""
+	],
+	"Send": [
+		""
+	],
 	"Send bug report": [
 		"버그 리포트 보내기"
 	],
@@ -2873,6 +3224,9 @@
 	"Show all": [
 		"모두 표시"
 	],
+	"Show checkbox completion chart in note list": [
+		""
+	],
 	"Show completed to-dos": [
 		"완료된 목록을 표시"
 	],
@@ -2881,6 +3235,9 @@
 	],
 	"Show disabled keys": [
 		"비활성화된 키 보기"
+	],
+	"Show Joplin icon for note links": [
+		""
 	],
 	"Show note counts": [
 		"노트 수 보이기"
@@ -2893,6 +3250,9 @@
 	],
 	"Show/hide the sidebar": [
 		"사이드바 보이기/숨기기"
+	],
+	"Showing all matching settings": [
+		""
 	],
 	"Shrink large images before adding them to notes.": [
 		"큰 이미지를 노트에 추가하기 전에 축소하세요."
@@ -2908,6 +3268,9 @@
 	],
 	"Size": [
 		"크기"
+	],
+	"Size (smallest first)": [
+		""
 	],
 	"Skip this version": [
 		"이 버전 건너뛰기"
@@ -2945,10 +3308,16 @@
 	"Some items could not be synchronised. Please try to synchronise them first.": [
 		"일부 항목들을 동기화할 수 없습니다. 먼저 동기화를 시도해 보세요."
 	],
+	"Something went wrong.": [
+		""
+	],
 	"Sort \"%s\" in ascending order": [
 		""
 	],
 	"Sort \"%s\" in descending order": [
+		""
+	],
+	"Sort by size": [
 		""
 	],
 	"Sort notebooks by": [
@@ -2989,6 +3358,9 @@
 	],
 	"Start application minimised in the tray icon": [
 		"Joplin을 최소화된 상태로 트레이 아이콘에서 시작"
+	],
+	"Start free trial": [
+		""
 	],
 	"Start recording": [
 		""
@@ -3056,6 +3428,9 @@
 	"Success! Synchronisation configuration appears to be correct.": [
 		"성공! 동기화 설정이 올바릅니다."
 	],
+	"Success! The AI provider responded:": [
+		""
+	],
 	"Superscript": [
 		"윗첨자"
 	],
@@ -3064,6 +3439,9 @@
 	],
 	"Swap line up": [
 		"윗줄과 위치 바꾸기"
+	],
+	"Swap source and target": [
+		""
 	],
 	"Switch between note and to-do type": [
 		"노트 또는 목록 형식으로 전환합니다"
@@ -3085,9 +3463,6 @@
 	],
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"[notebook]으로 전환 - 앞으로의 모든 작업은 이 노트북 안에서만 해당됩니다."
-	],
-	"Sync": [
-		""
 	],
 	"Sync as many devices as you want": [
 		"원하는 만큼 많은 장치를 동기화하세요"
@@ -3112,6 +3487,9 @@
 	],
 	"Sync your notes": [
 		"노트 동기화"
+	],
+	"Sync your notes with Joplin Cloud to access them on all your devices. Other sync options are also available.": [
+		""
 	],
 	"Sync, encryption, proxy": [
 		"동기화, 암호화, 프록시"
@@ -3143,6 +3521,9 @@
 	"Synchronises with remote storage.": [
 		"원격 저장소와 동기화 합니다."
 	],
+	"Synchronising remaining changes, please wait...": [
+		""
+	],
 	"Synchronising...": [
 		"동기화 중..."
 	],
@@ -3163,6 +3544,9 @@
 	],
 	"Tags": [
 		"태그"
+	],
+	"Tags cannot be changed for locked notes while the session is locked": [
+		""
 	],
 	"Take photo": [
 		"사진 찍기"
@@ -3185,11 +3569,11 @@
 	"Text editor command": [
 		"텍스트 편집기 명령어"
 	],
-	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
-		""
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"활성 프로필은 삭제할 수 없습니다. 다른 프로필로 전환하고 다시 시도하세요."
+	],
+	"The API key is missing. Set it in Settings → AI.": [
+		""
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
 		"애플리케이션이 곧 종료됩니다. 프로세스를 완료하려면 다시 실행해주세요."
@@ -3221,9 +3605,6 @@
 	"The default encryption method has been changed, you should re-encrypt your data.": [
 		"기본 암호 방법이 변경되었습니다. 데이터를 다시 암호화해야 합니다."
 	],
-	"The default profile cannot be deleted": [
-		"기본 프로필은 삭제할 수 없습니다"
-	],
 	"The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.": [
 		"노트를 여는데 사용할 텍스트 편집기 명령어(인자를 포함할 수 있습니다)를 지정합니다. 주어진 명령어가 없을 시 기본 편집기를 자동으로 찾을 것입니다."
 	],
@@ -3251,14 +3632,38 @@
 	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
 		""
 	],
+	"The license for this server failed to refresh.": [
+		""
+	],
+	"The license key for this Joplin Server Business instance has expired and needs to be renewed.": [
+		""
+	],
+	"The license key for this Joplin Server Business instance has expired or is invalid. Uploading items has been disabled until the license is renewed.": [
+		""
+	],
 	"The master key has been upgraded successfully!": [
 		"마스터 키가 성공적으로 업그레이드되었습니다!"
 	],
 	"The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
 		"이 ID와 연관된 마스터 키는 일부 항목을 암호화하는데에 사용되었으나, 현재 애플리케이션이 해당 키에 접근할 수 없습니다. 이는 추후에 동기화를 통해 내려받을 가능성이 있습니다."
 	],
+	"The MCP server is disabled. Enable it in Settings → MCP.": [
+		""
+	],
+	"The model identifier to use, for example gpt-4o-mini or claude-3-5-sonnet-latest.": [
+		""
+	],
+	"The model name is missing. Set it in Settings → AI.": [
+		""
+	],
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"노트 \"%s\"가 노트북 \"%s\"에 성공적으로 복구되었습니다."
+	],
+	"The note changed while the request was running; edits were not applied. Try again.": [
+		""
+	],
+	"The note lock state cannot be changed from the command line": [
+		""
 	],
 	"The note was successfully moved to the trash.": [
 		"노트가 성공적으로 휴지통으로 이동하였습니다."
@@ -3272,8 +3677,17 @@
 	"The notes have been imported: %s": [
 		"노트를 가져왔습니다: %s"
 	],
+	"The OpenAI-compatible API endpoint. For example, https://api.openai.com/v1 or http://localhost:11434/v1 for Ollama.": [
+		""
+	],
+	"The OpenAI-compatible provider needs a base URL. Set it in Settings → AI.": [
+		""
+	],
 	"The possible commands are:": [
 		"가능한 명령어는 다음과 같습니다:"
+	],
+	"The provider returned an empty response. Check that the base URL ends with /v1 and that a model is loaded.": [
+		""
 	],
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"수신자를 목록에서 제거할 수 없습니다. 다시 시도해주세요.\n\n발생한 오류: \"%s\""
@@ -3313,9 +3727,6 @@
 	],
 	"Theme": [
 		"테마"
-	],
-	"Themes, editor font": [
-		"테마, 편집기 글꼴"
 	],
 	"There are currently no notes. Create one by clicking on the (+) button.": [
 		"노트가 없습니다. (+) 버튼을 클릭하여 새로 만드세요."
@@ -3359,6 +3770,9 @@
 	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
 		""
 	],
+	"This feature is only available for PDF files.": [
+		""
+	],
 	"This feature is only available on Joplin Cloud and Joplin Server.": [
 		""
 	],
@@ -3367,6 +3781,12 @@
 	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"노트에 링크된 첨부 파일을 보여주는 고급 도구입니다. 여기에서 보여지는 항목을 삭제할 경우, 나중에 복원할 수 없으므로 주의하시기 바랍니다."
+	],
+	"This Joplin Server Business instance is only licensed for %d user.": [
+		""
+	],
+	"This note could not be decrypted. If it was encrypted prior to a password reset, the contents are no longer recoverable.": [
+		""
 	],
 	"This note could not be deleted: %s": [
 		"다음 노트를 삭제할 수 없습니다: %s"
@@ -3389,14 +3809,32 @@
 	"This note has no history": [
 		"이 노트의 변경 내역이 없습니다"
 	],
+	"This note is currently being saved. Please try again in a moment.": [
+		""
+	],
+	"This note is encrypted and cannot be used with AI Chat.": [
+		""
+	],
+	"This note is encrypted. Enter the note lock password to unlock encrypted notes for this session.": [
+		""
+	],
 	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
+	],
+	"This notebook contains Windows-specific files. For maximum compatibility, consider importing the notebook from Windows.": [
 		""
 	],
 	"This plugin doesn't support %s.": [
 		""
 	],
+	"This provider sends data off your device. Turn on \"Allow remote AI providers\" in Settings → AI.": [
+		""
+	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"서식 있는 텍스트 편집기에는 몇가지의 제약 사항들이 있으며, 사용하기 전에 이러한 제약 사항들을 미리 알고 있는 것이 좋습니다."
+	],
+	"This section opens in its own screen and is matched by section title.": [
+		""
 	],
 	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
 		"이 서비스는 브라우저 확장 기능이 Joplin과 연결하도록 해줍니다. 서비스를 활성화시 방화벽에서 Joplin에게 특정 포트 접근을 허가할 것인지 물어볼 수 있습니다."
@@ -3424,6 +3862,9 @@
 	],
 	"Title": [
 		"제목"
+	],
+	"To access your recovery codes please enter an authentication code or your password.": [
+		""
 	],
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
 		"Joplin을 Dropbox와 동기화하려면 다음 절차를 따라주세요:"
@@ -3460,9 +3901,6 @@
 	],
 	"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`": [
 		"항목들을 다시 복호화하라면 `e2ee decrypt --retry-failed-items`를 실행합니다"
-	],
-	"To switch the profile, the app is going to close and you will need to restart it.": [
-		"프로필을 전환하려면 앱이 닫히고 앱을 다시 시작해야 합니다."
 	],
 	"To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions": [
 		"앱이 정상적으로 작동하기 위해서는 다음 권한이 있어야 합니다. '설정 > 애플리케이션 > Joplin > 권한'에서 허가해주세요"
@@ -3509,11 +3947,17 @@
 	"Toggle sort order field": [
 		"정렬 순서 항목 전환"
 	],
+	"Toggle whiteboard / Markdown view": [
+		""
+	],
 	"Token has been copied to the clipboard!": [
 		"토큰이 클립보드로 복사되었습니다!"
 	],
 	"Tools": [
 		"도구"
+	],
+	"Tools and services to expose to AI. AI agents can use these tools either via the note chat panel or Joplin's MCP server (if enabled).": [
+		""
 	],
 	"Total Size": [
 		"총 크기"
@@ -3526,9 +3970,6 @@
 	],
 	"Try again": [
 		"다시 시도"
-	],
-	"Try it now": [
-		"지금 시도하기"
 	],
 	"TYPE": [
 		""
@@ -3545,11 +3986,20 @@
 	"Type: %s.": [
 		"형태: %s."
 	],
+	"Typography, spellcheck, layout": [
+		""
+	],
+	"Unable to access the recording file.": [
+		""
+	],
 	"Unable to edit resource of type %s": [
 		"유형 %s 의 리소스를 편집할 수 없습니다"
 	],
 	"Unable to share log data. Reason: %s": [
 		"로그 데이터를 공유할 수 없습니다. 이유: %s"
+	],
+	"Unavailable on this platform": [
+		""
 	],
 	"Unchecked": [
 		""
@@ -3572,11 +4022,17 @@
 	"Unknown item type downloaded - please upgrade Joplin to the latest version": [
 		"알 수 없는 항목 유형을 내려받았습니다 - Joplin을 최신 버전으로 업그레이드 해주세요"
 	],
+	"Unlock": [
+		""
+	],
 	"Unordered list": [
 		"정렬되지 않은 목록"
 	],
 	"Unpublish note": [
 		"노트 발행 취소"
+	],
+	"Unpublishes a note from Joplin Server or Joplin Cloud": [
+		""
 	],
 	"Unshare": [
 		"공유 해제"
@@ -3593,11 +4049,20 @@
 	"Unsupported link or message: %s": [
 		"지원하지 않는 링크 또는 메시지: %s"
 	],
+	"Unsupported public key format. Please check that Joplin is updated to the latest version and try again.": [
+		""
+	],
 	"Untitled": [
 		"제목 없음"
 	],
+	"Untitled whiteboard": [
+		""
+	],
 	"Update": [
 		"업데이트"
+	],
+	"Update it from Google Play": [
+		""
 	],
 	"Update profile": [
 		"프로파일 업데이트"
@@ -3635,6 +4100,9 @@
 	"Upgrade the sync target to the latest version.": [
 		"동기화 대상을 최신 버전으로 업그레이드합니다."
 	],
+	"Upgrade to 100 GB": [
+		""
+	],
 	"URL": [
 		"URL"
 	],
@@ -3662,14 +4130,14 @@
 	"Use your biometrics to secure access to your application. You can always set it up later in Settings.": [
 		"생체 인식을 사용하여 애플리케이션에 대한 액세스를 보호하세요. 나중에 설정에서 언제든지 설정할 수 있습니다."
 	],
+	"Used": [
+		""
+	],
 	"Used for most text in the markdown editor. If not found, a generic proportional (variable width) font is used.": [
 		"마크다운 편집기에서 대부분의 텍스트에 사용할 글꼴입니다. 찾지 못한 경우 일반적으로 균형잡힌 (가변폭) 글꼴이 사용됩니다."
 	],
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"텍스트를 읽기 쉽게 폭이 변경될 글꼴을 선택합니다 (표, 체크박스, 코드 등). 글꼴을 찾지 못할 경우, 기본 모노스페이스 (폭이 변경된) 글꼴이 사용됩니다."
-	],
-	"Useful": [
-		""
 	],
 	"User deletions": [
 		"사용자 삭제"
@@ -3679,6 +4147,12 @@
 	],
 	"Valid": [
 		"유효함"
+	],
+	"Vector search is not available on this platform": [
+		""
+	],
+	"Vector search is unavailable on this platform (sqlite-vec extension not loaded).": [
+		""
 	],
 	"Verify your identity": [
 		"본인 확인"
@@ -3758,7 +4232,13 @@
 	"When creating a new to-do:": [
 		"새 목록을 만들 때:"
 	],
+	"When enabled, plugins and built-in features can use AI models to generate or analyse text.": [
+		""
+	],
 	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		""
+	],
+	"When enabled, tables are rendered as an interactive widget in the editor. Disable this if you prefer to edit tables as raw Markdown.": [
 		""
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
@@ -3803,11 +4283,17 @@
 	"You do not have any installed plugin.": [
 		"설치된 플러그인이 없습니다."
 	],
+	"You have unsaved tag changes. Discard them?": [
+		""
+	],
 	"You may also type `status` for more information.": [
 		"자세한 내용을 확인하기 위해 status를 입력할 수도 있습니다."
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"아래 도구를 사용하여 데이터를 다시 암호화할 수 있습니다. 일부 노트가 오래된 암호화 방법으로 암호화된 것을 알고 있는 경우가 이에 해당합니다."
+	],
+	"You switched notes while the request was running; edits were not applied. Try again.": [
+		""
 	],
 	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
 		"Joplin 클라우드에 연결할 수 없습니다. 자격을 확인하고 다시 시도해주세요.오류:"
@@ -3824,6 +4310,12 @@
 	"Your Joplin Cloud credentials are invalid, please login.": [
 		""
 	],
+	"Your master password is used to protect sensitive information. In particular, it is used to encrypt your notes when end-to-end encryption (E2EE) is enabled, or to share and encrypt notes with someone who has E2EE enabled.": [
+		""
+	],
+	"Your note will be sent to the configured AI provider (%s).": [
+		""
+	],
 	"Your password is needed to decrypt some of your data.": [
 		"일부 데이터를 복호화하라면 암호가 필요합니다."
 	],
@@ -3838,5 +4330,8 @@
 	],
 	"Zoom Out": [
 		"축소"
+	],
+	"— now viewing: %s —": [
+		""
 	]
 }

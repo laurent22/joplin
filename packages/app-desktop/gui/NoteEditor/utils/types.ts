@@ -76,10 +76,12 @@ export interface NoteEditorProps {
 	whiteboardForceMarkdown: Record<string, boolean>;
 	noteLockSessionUnlocked: boolean;
 	hasNoteLockKey: boolean;
+	editorNoteReloadTimeRequest: number;
 }
 
 export interface NoteBodyEditorRef {
 	content(): string|Promise<string>;
+	blurEditor?(): void;
 	resetScroll(): void;
 	scrollTo(options: ScrollOptions): void;
 
@@ -116,6 +118,7 @@ export interface NoteBodyEditorProps {
 	contentKey: string;
 	contentMarkupLanguage: number;
 	contentOriginalCss: string;
+	editorNoteReloadTimeRequest: number;
 	initialCursorLocation: EditorCursorLocations;
 	onChange(event: OnChangeEvent): void;
 	onWillChange(event: { changeId: number }): void;

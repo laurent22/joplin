@@ -119,7 +119,7 @@ describe('noteChat', () => {
 		const allowedSchemaOperations = editSchemaItems.map(item => item.id).sort();
 		expect(
 			allowedSchemaOperations.filter(id => isEditorToolCall(id)),
-		).toEqual([...expectedOperations].map(o => `editor.${o}`).sort());
+		).toEqual([...expectedOperations].map(o => `editor_${o}`).sort());
 	});
 
 	test('estimateTokens approximates char/4', () => {
@@ -130,7 +130,7 @@ describe('noteChat', () => {
 	test('toolDefinitions advertises replaceFencedBlock with structured-block guidance', () => {
 		const { context, commands } = makeTestContext({ title: 'n', body: '```abc\n```', selection: null });
 		const tools = new ToolIndex({ note: context, commands }).getTools();
-		const toolDefinition = tools.find(tool => tool.id === 'editor.replaceFencedBlock');
+		const toolDefinition = tools.find(tool => tool.id === 'editor_replaceFencedBlock');
 		expect(toolDefinition).toBeTruthy();
 		expect(toolDefinition.description).toContain('jsoncanvas');
 		// Guidance to use the op for structured blocks, appendToNote for creation.
@@ -149,7 +149,7 @@ describe('noteChat', () => {
 					role: ChatRole.Assistant,
 					content: 'Testing...'.repeat(5),
 					toolCalls: [{
-						toolName: 'editor.replaceSelection',
+						toolName: 'editor_replaceSelection',
 						callId: 'call-1',
 						arguments: { text: 'Testing... '.repeat(50) },
 						parseError: null,
@@ -161,8 +161,8 @@ describe('noteChat', () => {
 
 	test('runTools should describe successful edit operations', async () => {
 		const toolCalls: ChatToolCall[] = [
-			{ toolName: 'editor.appendToNote', callId: 'call-1', arguments: { text: 'Test.' }, parseError: null },
-			{ toolName: 'editor.replaceRange', callId: 'call-2', arguments: { anchor: 'Body', text: 'Updated' }, parseError: null },
+			{ toolName: 'editor_appendToNote', callId: 'call-1', arguments: { text: 'Test.' }, parseError: null },
+			{ toolName: 'editor_replaceRange', callId: 'call-2', arguments: { anchor: 'Body', text: 'Updated' }, parseError: null },
 		];
 
 		const { onContext, commands } = makeTestContext({});
@@ -179,14 +179,14 @@ describe('noteChat', () => {
 		expect(result).toMatchObject([
 			{
 				role: ChatRole.Tool,
-				toolName: 'editor.appendToNote',
+				toolName: 'editor_appendToNote',
 				toolCallId: 'call-1',
 				isError: false,
 				userDescription: 'Added 1 word',
 			},
 			{
 				role: ChatRole.Tool,
-				toolName: 'editor.replaceRange',
+				toolName: 'editor_replaceRange',
 				toolCallId: 'call-2',
 				isError: false,
 				userDescription: 'Removed 1 word\nAdded 1 word',
@@ -199,14 +199,14 @@ describe('noteChat', () => {
 		const failingAndSucceedingToolCall = (repeat: number) => [
 			`/repeat ${repeat}`,
 			// one failing tool
-			`/tool editor.replaceRange ${JSON.stringify({ anchor: 'does not exist', text: 'replaced' })}`,
+			`/tool editor_replaceRange ${JSON.stringify({ anchor: 'does not exist', text: 'replaced' })}`,
 			// and one tool call that should succeed
-			'/tool editor.appendToNote { "text": "test" }',
+			'/tool editor_appendToNote { "text": "test" }',
 		].join('\n');
 
 		const userMessage = failingAndSucceedingToolCall(32);
 		const result = await withWarningSilenced(
-			/call editor.replaceRange failed/,
+			/call editor_replaceRange failed/,
 			() => runNoteChat(
 				onContext,
 				[],
@@ -221,8 +221,8 @@ describe('noteChat', () => {
 		for (let i = 0; i < 5; i++) {
 			failedAttempts.push(
 				{ role: ChatRole.Assistant },
-				{ role: ChatRole.Tool, isError: true, toolName: 'editor.replaceRange' },
-				{ role: ChatRole.Tool, isError: false, toolName: 'editor.appendToNote' },
+				{ role: ChatRole.Tool, isError: true, toolName: 'editor_replaceRange' },
+				{ role: ChatRole.Tool, isError: false, toolName: 'editor_appendToNote' },
 			);
 		}
 
@@ -236,7 +236,7 @@ describe('noteChat', () => {
 
 			...failedAttempts,
 
-			{ role: ChatRole.Assistant, content: 'tool not found: editor.replaceRange\ntool not found: editor.appendToNote' },
+			{ role: ChatRole.Assistant, content: 'tool not found: editor_replaceRange\ntool not found: editor_appendToNote' },
 		]);
 	});
 
@@ -255,8 +255,8 @@ describe('noteChat', () => {
 		expect(result).toMatchObject([
 			{ role: ChatRole.System },
 			{ role: ChatRole.User, content: 'test' },
-			{ role: ChatRole.Assistant, content: '', toolCalls: [{ toolName: 'editor.readNoteBody' }] },
-			{ role: ChatRole.Tool, content: 'Body', toolName: 'editor.readNoteBody' },
+			{ role: ChatRole.Assistant, content: '', toolCalls: [{ toolName: 'editor_readNoteBody' }] },
+			{ role: ChatRole.Tool, content: 'Body', toolName: 'editor_readNoteBody' },
 			{ role: ChatRole.Assistant, content: '' },
 		]);
 	});

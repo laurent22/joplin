@@ -3,6 +3,16 @@ import { ErrorBadRequest, ErrorForbidden, ErrorMethodNotAllowed } from '../utils
 import Setting from '../../../models/Setting';
 import McpServer from '../../mcp/McpServer';
 import { JsonRpcRequest, JsonRpcResponse } from '../../mcp/types';
+import ApiResponse from '../ApiResponse';
+
+// The MCP spec requires notifications to be acknowledged with an empty 202.
+// Strict clients such as Codex close the transport if they get a 200 instead.
+const acceptedResponse = () => {
+	const response = new ApiResponse();
+	response.status = 202;
+	response.body = '';
+	return response;
+};
 
 // Single-endpoint JSON-RPC transport. v1 only handles client-initiated
 // requests so plain POST/response is enough; streamable HTTP can come later
@@ -33,12 +43,12 @@ export default async function(request: Request) {
 			const r = await server.handleRequest(item as JsonRpcRequest);
 			if (r) responses.push(r);
 		}
-		if (!responses.length) return '';
+		if (!responses.length) return acceptedResponse();
 		return responses;
 	}
 
 	const response = await server.handleRequest(payload as JsonRpcRequest);
 	// Notifications get no body per JSON-RPC spec.
-	if (!response) return '';
+	if (!response) return acceptedResponse();
 	return response;
 }

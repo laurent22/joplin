@@ -23,6 +23,12 @@ export default class ChatPanel {
 		await this.container.waitFor();
 	}
 
+	public async close(electronApp: ElectronApplication) {
+		await this.container.waitFor();
+		await this.mainScreen_.goToAnything.runCommand(electronApp, 'toggleAiChat');
+		await expect(this.container).not.toBeVisible();
+	}
+
 	public async sendMessage(message: string) {
 		await this.textInput.fill(message);
 		await this.textInput.press('Enter');

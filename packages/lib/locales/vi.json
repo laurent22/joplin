@@ -2,6 +2,18 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"“%s” đang thiếu thuộc tính bắt buộc “%s”."
 	],
+	"%d card": [
+		""
+	],
+	"%d connection": [
+		""
+	],
+	"%d edit(s) applied, %d could not be placed automatically.": [
+		""
+	],
+	"%d edit(s) applied.": [
+		""
+	],
 	"%d GB": [
 		""
 	],
@@ -12,6 +24,9 @@
 		""
 	],
 	"%d photo(s) taken": [
+		""
+	],
+	"%d sections found": [
 		""
 	],
 	"%s %s (%s, %s)": [
@@ -25,6 +40,9 @@
 	],
 	"%s (%s): %s": [
 		"%s (%s): %s"
+	],
+	"%s (Beta)": [
+		""
 	],
 	"%s (pre-release)": [
 		"%s (chưa xuất bản)"
@@ -44,10 +62,19 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s added to toolbar": [
+		""
+	],
 	"%s cannot be less than %s": [
 		""
 	],
+	"%s input / %s output tokens used.": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
+	"%s moved up": [
 		""
 	],
 	"%s must be a valid whole number": [
@@ -89,6 +116,12 @@
 	"(%s)": [
 		"(%s)"
 	],
+	"(empty — double-click to edit)": [
+		""
+	],
+	"(empty)": [
+		""
+	],
 	"(In plugin: %s)": [
 		""
 	],
@@ -107,6 +140,12 @@
 	"(You may disable this prompt in the options)": [
 		""
 	],
+	"+ Group": [
+		""
+	],
+	"+ Text": [
+		""
+	],
 	"- Camera: to allow taking a picture and attaching it to a note.": [
 		"- Camera: cho phép chụp ảnh và đính kèm vào note."
 	],
@@ -115,6 +154,9 @@
 	],
 	"- Storage: to allow attaching files to notes and to enable filesystem synchronisation.": [
 		"- Lưu trữ: để cho phép đính kèm files tới notes và cho phép đồng bộ hóa tệp tin hệ thống."
+	],
+	"14-day free trial. Cancel anytime during the trial and you won't be charged.": [
+		""
 	],
 	"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign or remove [tag] from [note], to list notes associated with [tag], or to list tags associated with [note]. The command `tag list` can be used to list all the tags (use -l for long option).": [
 		"<tag-command> có thể là \"add\", \"remove\", \"list\", hoặc \"notetags\" để gắn hoặc gõ bỏ [tag] khỏi [note], để liệt kê note được gắn với [tag], hoặc để liệt kê tag gắn với [note]. Câu lệnh `tag list` có thể sử dụng để liệt kê tất cả tags (sử dụng -l để liệt kê chi tiết)."
@@ -129,6 +171,9 @@
 		""
 	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+		""
+	],
+	"A system-wide keyboard shortcut that toggles the Joplin window. Works even when Joplin is not focused. Example: CommandOrControl+Shift+J. Leave empty to disable.": [
 		""
 	],
 	"A3": [
@@ -167,6 +212,15 @@
 	"Access denied: Please re-enter your password and/or username": [
 		""
 	],
+	"Access your notes from any web browser at %s.": [
+		""
+	],
+	"Accessible": [
+		""
+	],
+	"Accessible mode saves additional information, enabling creation of accessible PDFs. It increases database size by approximately 10-20 KB per page.": [
+		""
+	],
 	"Account": [
 		""
 	],
@@ -182,10 +236,16 @@
 	"Actual Size": [
 		"Kích thước chuẩn"
 	],
+	"Add a text card": [
+		""
+	],
 	"Add body": [
 		"Điền phần thân"
 	],
 	"Add column": [
+		""
+	],
+	"Add note to whiteboard...": [
 		""
 	],
 	"Add or remove tags:": [
@@ -199,6 +259,9 @@
 	],
 	"Add to dictionary": [
 		"Thêm vào từ điển"
+	],
+	"Added %d word": [
+		""
 	],
 	"Added tag: %s": [
 		""
@@ -218,6 +281,21 @@
 	"Advanced tools": [
 		"Chức năng nâng cao"
 	],
+	"AI": [
+		""
+	],
+	"AI Chat": [
+		""
+	],
+	"AI features are disabled. Enable them in Settings → AI.": [
+		""
+	],
+	"AI is running in reduced-quality mode — monthly allowance exceeded. Credits replenish on a rolling 30-day basis, or you can": [
+		""
+	],
+	"AI usage has exceeded your monthly allowance — responses are using a reduced-quality model. Credits replenish on a rolling 30-day basis. Buy more at %s.": [
+		""
+	],
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
 		""
 	],
@@ -227,13 +305,37 @@
 	"All notes": [
 		"Tất cả các notes"
 	],
+	"All notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"All potential ports are in use - please report the issue at %s": [
 		"Tất cả các cổng tiềm năng đang được sử dụng - vui lòng báo cáo sự cố tại% s"
 	],
 	"All shared folders:": [
 		""
 	],
+	"Allow editing tags on notes": [
+		""
+	],
+	"Allow editing the current note (chat panel only)": [
+		""
+	],
+	"Allow listing tags": [
+		""
+	],
+	"Allow reading images": [
+		""
+	],
+	"Allow remote AI providers": [
+		""
+	],
+	"Allow semantic search of notes": [
+		""
+	],
 	"Allows debugging mobile plugins. See %s for details.": [
+		""
+	],
+	"Already have an account? Log in": [
 		""
 	],
 	"Also displays unset and hidden config variables.": [
@@ -254,9 +356,6 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		""
 	],
-	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
-		""
-	],
 	"An error occurred: %s": [
 		""
 	],
@@ -266,7 +365,13 @@
 	"Android API level: %d": [
 		""
 	],
+	"Anthropic": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
+		""
+	],
+	"API key": [
 		""
 	],
 	"Appearance": [
@@ -289,6 +394,15 @@
 	],
 	"Aritim Dark": [
 		"Aritim Dark"
+	],
+	"Arrow at target": [
+		""
+	],
+	"Ask about this note, or request a change…": [
+		""
+	],
+	"Ask about this note, or request changes. Select text in the editor first to scope the request to that selection.": [
+		""
 	],
 	"Associated tags:": [
 		""
@@ -323,6 +437,9 @@
 	"Attachments that could not be downloaded": [
 		"Không thể tải về được những đính kèm"
 	],
+	"Attention: After resetting your password it will no longer be possible to decrypt any data encrypted with your current password. All encrypted shared notebooks will also be unshared, so please ask the notebook owner to share it again with you.": [
+		""
+	],
 	"Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s": [
 		"Lưu ý: Nếu bạn thay đổi vị trí này, hay chắc chắn rang bạn đã sao chép tất cả nội dung của mình trước khi đồng bộ, nếu không tất cả các files sẽ bị xóa! Xem chi tiết tại FAQ: %s"
 	],
@@ -334,6 +451,9 @@
 	],
 	"Auto": [
 		"Auto"
+	],
+	"Auto lock when switching note": [
+		""
 	],
 	"Auto-add disabled accounts for deletion": [
 		""
@@ -356,10 +476,22 @@
 	"Back": [
 		"Quay lại"
 	],
+	"Back to %s": [
+		""
+	],
+	"Base URL": [
+		""
+	],
 	"Basic": [
 		""
 	],
 	"Beta": [
+		""
+	],
+	"Bidirectional": [
+		""
+	],
+	"Billed annually (%s per user per year respectively).": [
 		""
 	],
 	"Block code": [
@@ -379,6 +511,9 @@
 	],
 	"Bulleted List": [
 		"Danh sách"
+	],
+	"buy more credits": [
+		""
 	],
 	"by %s": [
 		""
@@ -412,6 +547,9 @@
 	],
 	"Cannot access %s": [
 		"Không thể truy cập %s"
+	],
+	"Cannot change a locked note while the session is locked": [
+		""
 	],
 	"Cannot change encrypted item": [
 		"Không thể thay đổi những mục đã được mã hóa"
@@ -449,6 +587,9 @@
 	"Case sensitive": [
 		""
 	],
+	"Certain Markdown formatting is now rendered in the editor by default. For example, **bold** will appear as actual bold text. You can change this behaviour in the \"Editor\" section of Settings.": [
+		""
+	],
 	"Change application layout": [
 		"Thay đổi giao diện ứng dụng"
 	],
@@ -463,6 +604,9 @@
 	],
 	"Characters excluding spaces": [
 		"Số chữ ngoại trừ dấu cách"
+	],
+	"Chat provider": [
+		""
 	],
 	"Check elements to display in the toolbar": [
 		""
@@ -497,10 +641,16 @@
 	"Clear alarm": [
 		"Bỏ báo động"
 	],
+	"Clears the console output.": [
+		""
+	],
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"Ấn \"%s\" để hồi phục note. Thao tác này sẽ sao chép notebook có tên \"%s\". Phiên bản hiện tại của note sẽ không bị mất đi hay thay đổi."
 	],
 	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
+	"Click the eye icon in the toolbar to switch to the Markdown editor and fix the JSON manually.": [
 		""
 	],
 	"Click to add tags...": [
@@ -587,6 +737,12 @@
 	"Configures the size of scrollbars used in the app.": [
 		""
 	],
+	"Confirm": [
+		"Xác nhận"
+	],
+	"Confirm credentials": [
+		""
+	],
 	"Confirm password cannot be empty": [
 		"Xác nhận không thể để trống mật khẩu"
 	],
@@ -609,6 +765,12 @@
 		""
 	],
 	"Continue": [
+		""
+	],
+	"Continue?": [
+		""
+	],
+	"Convert this card into a Joplin note": [
 		""
 	],
 	"Convert to note": [
@@ -661,6 +823,9 @@
 	],
 	"Create a notebook": [
 		"Tạo một notebook"
+	],
+	"Create accessible document": [
+		""
 	],
 	"Created": [
 		"Đã được tạo"
@@ -761,6 +926,9 @@
 	"Default title to use for documents created by the scanner.": [
 		""
 	],
+	"Default view / edit state": [
+		""
+	],
 	"Default: %s": [
 		"Mặc định: %s"
 	],
@@ -778,9 +946,6 @@
 	],
 	"Delete plugin \"%s\"?": [
 		"Xoá phần mở rộng “%s”?"
-	],
-	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
-		""
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
@@ -884,13 +1049,16 @@
 	"Do not ask for confirmation.": [
 		"Không cần xác nhận."
 	],
-	"Do you find the Joplin web app useful?": [
-		""
-	],
 	"Document scanner: Title template": [
 		""
 	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't have an account yet?": [
+		""
+	],
+	"Don't show again": [
 		""
 	],
 	"Don't show this message again": [
@@ -899,11 +1067,20 @@
 	"Done": [
 		""
 	],
+	"Double tap to open this attachment. Long press to expand or collapse details.": [
+		""
+	],
 	"Download": [
 		"Tải xuống"
 	],
 	"Download and install the relevant extension for your browser:": [
 		"Tải về và cài đặt tiện ích liên quan tới trình duyệt web của bạn:"
+	],
+	"Download it from GitHub Releases": [
+		""
+	],
+	"Download it from the Joplin Android repository": [
+		""
 	],
 	"Downloaded": [
 		"Đã tải"
@@ -922,6 +1099,9 @@
 	],
 	"Dracula": [
 		"Dracul"
+	],
+	"Drag to move group": [
+		""
 	],
 	"Draw picture": [
 		""
@@ -998,6 +1178,9 @@
 	"Emails": [
 		""
 	],
+	"Embedding index": [
+		""
+	],
 	"emphasised text": [
 		"chữ nhấn mạnh"
 	],
@@ -1031,6 +1214,9 @@
 	"Enable encryption": [
 		"Bật chức năng mã hóa"
 	],
+	"Enable external embeds (e.g. YouTube Videos)": [
+		""
+	],
 	"Enable file:// URLs for images and videos": [
 		""
 	],
@@ -1057,9 +1243,6 @@
 	],
 	"Enable note history": [
 		"Bật lịch sử note"
-	],
-	"Enable optical character recognition (OCR)": [
-		""
 	],
 	"Enable PDF viewer": [
 		"Bật trình xem PDF"
@@ -1094,11 +1277,17 @@
 	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
 		""
 	],
+	"Enables the default edit operations for notes with an open AI chat panel. When disabled, the chat panel can still read the open note. Does not apply to MCP.": [
+		""
+	],
 	"Encrypted": [
 		"Đã mã hóa"
 	],
 	"Encrypted items cannot be modified": [
 		"Các mục đã mã hóa không thể chỉnh sửa"
+	],
+	"Encrypting a note requires a note lock password, which has not yet been set. Set it up now?": [
+		""
 	],
 	"Encryption": [
 		"Mã hóa"
@@ -1108,6 +1297,9 @@
 	],
 	"Encryption is: %s": [
 		"Mã hóa là: %s"
+	],
+	"Encryption was setup previously, but all keys have been disabled. To continue, please use the desktop app to enable a key.": [
+		""
 	],
 	"Ends voice typing": [
 		""
@@ -1120,6 +1312,9 @@
 	],
 	"Enter notebook title": [
 		"Điền tiêu đề notebook"
+	],
+	"Enter the note lock password to unlock encrypted notes for this session.": [
+		""
 	],
 	"Entering selection mode": [
 		""
@@ -1138,6 +1333,9 @@
 	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"Lỗi. Vui lòng kiểm tra URL, tên sử dụng, mật khẩu, v.v... đã đúng và điểm đồng bộ hóa có thể truy cập được. Lỗi là:"
+	],
+	"Error. The AI provider test failed:": [
+		""
 	],
 	"Error: %s": [
 		"Lỗi: %s"
@@ -1193,6 +1391,9 @@
 	"Exports only the given notebook.": [
 		"Chỉ xuất số ghi chú được chọn."
 	],
+	"Exposes Joplin notes to external AI applications (Claude Desktop, Cursor, etc.) via the Model Context Protocol. Requires the Web Clipper service to be running. Connected AI tools can read your note content; any text they retrieve may be sent to the external LLM provider those tools use.": [
+		""
+	],
 	"Fail-safe": [
 		"Fail-safe"
 	],
@@ -1205,14 +1406,14 @@
 	"Failed to connect to your account. Please try again.": [
 		""
 	],
+	"Failed to create accessible document: %s": [
+		""
+	],
 	"Fatal error:": [
 		"Lỗi nghiêm trọng:"
 	],
 	"Feature flags": [
 		"Cờ nổi bật"
-	],
-	"Feedback": [
-		""
 	],
 	"Fetched items: %d/%d.": [
 		"Số mục đã được lấy: %d/%d."
@@ -1226,6 +1427,9 @@
 	"File system": [
 		"Tập tin hệ thống"
 	],
+	"Filtered by section [%s]": [
+		""
+	],
 	"Finishes recording": [
 		""
 	],
@@ -1237,6 +1441,9 @@
 	],
 	"Fixing search index...": [
 		"Sửa index tìm kiếm..."
+	],
+	"Flip": [
+		""
 	],
 	"Focus": [
 		"Đặt con trỏ tới"
@@ -1289,7 +1496,7 @@
 	"Generating link...": [
 		"Đang tạo đường dẫn..."
 	],
-	"Geolocation, spellcheck, editor toolbar, image resize": [
+	"Geolocation, image resize": [
 		""
 	],
 	"Get a quote": [
@@ -1304,6 +1511,9 @@
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Lấy hoặc cài đặt cấu hình. Nếu [cấu hình] không được cung cấp, cấu hình của [tên] sẽ được hiển thị. Nếu cả [tên] và [cấu hình] đều không được cung cấp, danh cách các cấu hình hiện tại sẽ được hiển thị."
 	],
+	"Global shortcut to show/hide Joplin": [
+		""
+	],
 	"Glossary:": [
 		""
 	],
@@ -1313,17 +1523,26 @@
 	"Go back": [
 		""
 	],
+	"Go to end of note": [
+		""
+	],
 	"Go to line": [
 		""
 	],
 	"Go to source URL": [
 		"Đi tới URL nguồn"
 	],
+	"Go to start of note": [
+		""
+	],
 	"Goto Anything...": [
 		"Đi tới bất kỳ điểm nào..."
 	],
 	"Grant authorisation": [
 		"Cung cấp uỷ quyền"
+	],
+	"Group": [
+		""
 	],
 	"Have you authorised the application login in the above URL?": [
 		""
@@ -1388,6 +1607,9 @@
 	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
 		""
 	],
+	"If enabled, opening an HTML note displays a prompt to convert the note to Markdown.": [
+		""
+	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		""
 	],
@@ -1403,7 +1625,10 @@
 	"Import": [
 		"Xuất"
 	],
-	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
+	"Import a note from a text file (%s). The note will be imported into notebook '%s'.": [
+		""
+	],
+	"Import failed. Make sure a %s file was selected.\nDetails: %s": [
 		""
 	],
 	"Import from JEX": [
@@ -1433,7 +1658,19 @@
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Để làm được điều đó, toàn bộ dữ liệu sẽ phải được mã hoá và đồng bộ, tốt nhất là để nó chạy quay đêm.\n\nĐể bắt đầu, hãy làm theo hướng dẫn dưới đây:\n\n1. Đồng bộ hoá tất cả thiết bị của bạn.\n2. Ấn vào “%s”.\n3. Đợi đến khi chạy xong. Trong khi chạy, không thay đổi bất kỳ ghi chú nào trên các thiết bị để tránh xung đột.\n4. Khi đồng bộ đã hoàn tất trên thiết bị này, đồng tất cả thiết bị còn lại và đợi đến khi hoàn tất.\n\nQuan trọng: bạn chỉ cần thực hiện quá trình này một lần trên một thiết bị."
 	],
+	"In order to synchronise, Please upgrade your application to version %s": [
+		""
+	],
 	"In order to synchronise, please upgrade your application to version %s+": [
+		""
+	],
+	"In order to synchronise, Please upgrade your application to version %s. Joplin could not check update information.": [
+		""
+	],
+	"In order to synchronise, Please upgrade your application to version %s: %s": [
+		""
+	],
+	"In order to synchronise, Please upgrade your application to version %s: %s or update it using your package manager": [
 		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
@@ -1460,6 +1697,15 @@
 	"Indent more": [
 		"Bớt thụt dòng"
 	],
+	"Index notes for AI search": [
+		""
+	],
+	"Indexer:": [
+		""
+	],
+	"Indexing…": [
+		""
+	],
 	"Info": [
 		""
 	],
@@ -1472,8 +1718,17 @@
 	"Insert": [
 		"Thêm"
 	],
+	"Insert column right": [
+		""
+	],
 	"Insert Hyperlink": [
 		"Chèn Liên kết"
+	],
+	"Insert row above": [
+		""
+	],
+	"Insert row below": [
+		""
 	],
 	"Install": [
 		"Cài đặt"
@@ -1505,11 +1760,17 @@
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"Giá trị lựa chọn lỗi: \"%s\". Các giá trị có thể sử dụng là: %s."
 	],
+	"Invalid password. Please try again. If you have forgotten your password you will need to reset it.": [
+		""
+	],
 	"Italic": [
 		"In nghiêng"
 	],
 	"Item \"%s\" could not be downloaded: %s": [
 		"Mục \"%s\" không thể tải về: %s"
+	],
+	"Item upload will be disabled in %s.": [
+		""
 	],
 	"Items": [
 		""
@@ -1529,6 +1790,9 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
+	"Joplin Cloud AI requires Joplin Cloud sync. Pick a different provider or restore Joplin Cloud sync.": [
+		""
+	],
 	"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. What would you like to do?": [
 		""
 	],
@@ -1543,6 +1807,9 @@
 	],
 	"Joplin Forum": [
 		"Diễn đàn Joplin"
+	],
+	"Joplin needs your permission to access your %s account and to synchronise data with it.": [
+		""
 	],
 	"Joplin Server": [
 		"Máy chủ của Joplin"
@@ -1646,6 +1913,12 @@
 	"Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at \"%s\" and resume the operation.": [
 		"Tập tin bị khóa hiện đang dừng hoạt động. Nếu không có quy trình đồng bộ nào đang hoạt đông, bạn có thể xóa file bị khóa tại \"%s\" và tiếp tục sử dung."
 	],
+	"Locked notes are encrypted on this device and can only be read after entering your note lock password. The password is required again after locking or restarting Joplin.": [
+		""
+	],
+	"Locked notes cannot be opened in an external editor": [
+		""
+	],
 	"Log": [
 		"Nhật ký"
 	],
@@ -1666,6 +1939,9 @@
 	],
 	"Make a donation": [
 		"Quyên góp"
+	],
+	"Manage this server's license from the [admin dashboard](%s).": [
+		""
 	],
 	"Manage your plugins": [
 		"Quản lý các phần mở rộng"
@@ -1709,6 +1985,9 @@
 	"Max Item Size": [
 		""
 	],
+	"MCP requires the Web Clipper service. Enable it in Settings → Web Clipper.": [
+		""
+	],
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
@@ -1727,6 +2006,12 @@
 	"Mobile data - auto-sync disabled": [
 		"Dữ liệu di động - tự động đồng bộ đã tắt"
 	],
+	"Model": [
+		""
+	],
+	"Model:": [
+		""
+	],
 	"More info": [
 		"Thêm thông tin"
 	],
@@ -1737,6 +2022,12 @@
 		"Nhiều hơn một mục được tìm thấy với \"%s\". Hãy truy vấn cụ thể hơn nữa."
 	],
 	"Most plugins have source code available for review on the plugin website.": [
+		""
+	],
+	"Move column left": [
+		""
+	],
+	"Move column right": [
 		""
 	],
 	"Move left": [
@@ -1781,6 +2072,9 @@
 	"New sub-notebook": [
 		"Số ghi chú con mới"
 	],
+	"New text card": [
+		""
+	],
 	"New to-do": [
 		"To-do mới"
 	],
@@ -1813,6 +2107,18 @@
 	],
 	"No active notebook.": [
 		"Không có ghi chú nào đang được sử dụng."
+	],
+	"No AI usage recorded yet.": [
+		""
+	],
+	"No arrow": [
+		""
+	],
+	"No colour": [
+		""
+	],
+	"No embedding model is installed. It is downloaded automatically on first use — check Settings → AI for progress.": [
+		""
 	],
 	"No new invitations": [
 		""
@@ -1847,11 +2153,17 @@
 	"No URL for SAML authentication set.": [
 		""
 	],
+	"No valid notebook is available. Please create or select a notebook and try again.": [
+		""
+	],
 	"None": [
 		""
 	],
 	"Nord": [
 		"Nord"
+	],
+	"Normal": [
+		""
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Chưa được ủy quyền với %s. Vui lòng cung cấp thông tin chưa được cung cấp."
@@ -1865,7 +2177,10 @@
 	"Not generated": [
 		""
 	],
-	"Not useful": [
+	"Not set": [
+		""
+	],
+	"Not Used": [
 		""
 	],
 	"note": [
@@ -1895,6 +2210,9 @@
 	"Note History": [
 		"Lịch sử của note"
 	],
+	"Note indexing is turned off in Settings → AI.": [
+		""
+	],
 	"Note is not a to-do: \"%s\"": [
 		"Ghi chú này không phải là to-do: \"%s\""
 	],
@@ -1903,6 +2221,9 @@
 	],
 	"Note list growth factor": [
 		"Yếu tố tăng trưởng danh sách ghi chú"
+	],
+	"Note lock password, auto lock": [
+		""
 	],
 	"Note properties": [
 		"Đặc tính của ghi chú"
@@ -1940,7 +2261,22 @@
 	"Numbered List": [
 		"Danh sách theo thứ tự"
 	],
+	"Obsidian Vault": [
+		""
+	],
+	"OCR is not complete. Please wait for OCR to finish before creating an accessible document.": [
+		""
+	],
+	"OCR needs to run to generate an accessible document. This may take a moment. Would you like to continue?": [
+		""
+	],
 	"OCR: Clear cache and re-download language data files": [
+		""
+	],
+	"OCR: Enable optical character recognition": [
+		""
+	],
+	"OCR: PDF processing mode": [
 		""
 	],
 	"OK": [
@@ -1969,6 +2305,9 @@
 	],
 	"OneDrive Login": [
 		"Đăng nhập OneDrive"
+	],
+	"Only do this if you've forgotten your current password. A new password will be created, and any notes locked with the old one will become permanently unreadable.": [
+		""
 	],
 	"Only one note can be printed at a time.": [
 		"Chỉ một ghi chú có thể được tải về tại một thời điểm."
@@ -1999,6 +2338,9 @@
 	],
 	"Open...": [
 		"Mở..."
+	],
+	"OpenAI-compatible": [
+		""
 	],
 	"Opening section %s": [
 		""
@@ -2066,8 +2408,14 @@
 	"Please confirm that you would like to re-encrypt your complete database.": [
 		"Vui lòng xác nhận rằng bạn muốn tái mã hoá toàn bộ dữ liệu."
 	],
+	"Please disable users from the [admin dashboard](%s) to bring this server under the limit.": [
+		""
+	],
 	"Please enter your password in the master key list below before upgrading the key.": [
 		"Vui lòng nhập mật khẩu trong danh sách khoá chính dưới đây trước khi nâng cấp khoá."
+	],
+	"Please make sure you remember your password. It cannot be recovered if lost, and any data encrypted with it will become inaccessible.": [
+		""
 	],
 	"Please note that if it is a large notebook, it may take a few minutes for all the notes to show up on the recipient's device.": [
 		""
@@ -2095,6 +2443,9 @@
 	],
 	"Please specify the notebook where the notes should be imported to.": [
 		"Vui lòng chỉ định notebook mà các notes sẽ được import tới."
+	],
+	"Please update the license key from the [admin dashboard](%s).": [
+		""
 	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"Vui lòng chờ cho tất cả tệp đính kèm được tải về và giải mã. Bạn cũng có thể chuyển qua %s để chỉnh sửa ghi chú."
@@ -2180,6 +2531,9 @@
 	"Pro": [
 		""
 	],
+	"Pro 100 GB": [
+		""
+	],
 	"Process failed payment subscriptions": [
 		""
 	],
@@ -2228,6 +2582,9 @@
 	"Quit": [
 		"Thoát"
 	],
+	"Quit anyway": [
+		""
+	],
 	"Re-download model": [
 		""
 	],
@@ -2240,11 +2597,17 @@
 	"Re-upload local data to sync target": [
 		"Tải lên lại dữ liệu cục bộ để đồng bộ hóa mục tiêu"
 	],
+	"Read all tags": [
+		""
+	],
 	"Read more about it": [
 		"Xem thêm"
 	],
 	"Read time: %s min": [
 		"Thời gian đọc: %s phút"
+	],
+	"Reading this note requires the note lock password, which has not been set up on this device yet.": [
+		""
 	],
 	"Recipient has accepted the invitation": [
 		"Người nhận đã chấp nhận lời mời"
@@ -2324,6 +2687,15 @@
 	"Report fraudulent plugin": [
 		""
 	],
+	"Required to use cloud-hosted AI models, including Joplin Cloud AI. When disabled, only on-device providers can be used.": [
+		""
+	],
+	"Reset": [
+		""
+	],
+	"Reset AI token usage counters?": [
+		""
+	],
 	"Resize large images:": [
 		""
 	],
@@ -2367,6 +2739,9 @@
 		""
 	],
 	"Rich Text editor. Press Escape then Tab to escape focus.": [
+		""
+	],
+	"Run OCR": [
 		""
 	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
@@ -2438,6 +2813,12 @@
 	"Self-hosted": [
 		""
 	],
+	"Self-hosted instances of the Joplin web app cannot sync with Joplin Cloud. Open the official web app?": [
+		""
+	],
+	"Send": [
+		""
+	],
 	"Server is already running on port %d": [
 		"Server đang hoạt động trên port %d"
 	],
@@ -2495,8 +2876,14 @@
 	"Show all": [
 		"Hiển thị tất cả"
 	],
+	"Show checkbox completion chart in note list": [
+		""
+	],
 	"Show completed to-dos": [
 		"Hiển thị to-dos đã hoàn thành"
+	],
+	"Show Joplin icon for note links": [
+		""
 	],
 	"Show note counts": [
 		"Hiển thị số lượng note"
@@ -2505,6 +2892,9 @@
 		"Hiển thị biểu tượng ở tray"
 	],
 	"Show/hide the sidebar": [
+		""
+	],
+	"Showing all matching settings": [
 		""
 	],
 	"Shrink large images before adding them to notes.": [
@@ -2521,6 +2911,12 @@
 	],
 	"Size": [
 		"Kích thước"
+	],
+	"Size (largest first)": [
+		""
+	],
+	"Size (smallest first)": [
+		""
 	],
 	"Skip this version": [
 		"Bỏ qua phiên bản này"
@@ -2555,10 +2951,16 @@
 	"Some items cannot be synchronised. Press for more info.": [
 		"Một số mục không thể đồng bộ hóa. Ấn để xem them chi tiết."
 	],
+	"Something went wrong.": [
+		""
+	],
 	"Sort \"%s\" in ascending order": [
 		""
 	],
 	"Sort \"%s\" in descending order": [
+		""
+	],
+	"Sort by size": [
 		""
 	],
 	"Sort notebooks by": [
@@ -2596,6 +2998,9 @@
 	],
 	"Start application minimised in the tray icon": [
 		"Chạy chương trình trong nền, hiển thị icon trong tray khi máy khởi động"
+	],
+	"Start free trial": [
+		""
 	],
 	"Start recording": [
 		""
@@ -2663,6 +3068,9 @@
 	"Success! Synchronisation configuration appears to be correct.": [
 		"Thành công! Cấu hình mã hóa đã đúng."
 	],
+	"Success! The AI provider responded:": [
+		""
+	],
 	"Superscript": [
 		"Chỉ số trên"
 	],
@@ -2671,6 +3079,9 @@
 	],
 	"Swap line up": [
 		"Tráo dòng lên"
+	],
+	"Swap source and target": [
+		""
 	],
 	"Switch between note and to-do type": [
 		"Chuyển đổi giữa dạng note và to-do"
@@ -2686,9 +3097,6 @@
 	],
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Chuyển tới [notebook] - tất cả những hoạt động tiếp theo sẽ được hoàn thành ở trên notebook này."
-	],
-	"Sync": [
-		""
 	],
 	"Sync as many devices as you want": [
 		""
@@ -2710,6 +3118,9 @@
 	],
 	"Sync Version: %s": [
 		"Phiên bản đồng bộ hóa: %s"
+	],
+	"Sync your notes with Joplin Cloud to access them on all your devices. Other sync options are also available.": [
+		""
 	],
 	"Synchronisation": [
 		"Đồng bộ hóa"
@@ -2738,6 +3149,9 @@
 	"Synchronises with remote storage.": [
 		"Đồng bộ hóa với hệ thống lưu trữ từ xa."
 	],
+	"Synchronising remaining changes, please wait...": [
+		""
+	],
 	"Synchronising...": [
 		"Đang đồng bộ hóa..."
 	],
@@ -2759,6 +3173,9 @@
 	"Tags": [
 		"Nhãn"
 	],
+	"Tags cannot be changed for locked notes while the session is locked": [
+		""
+	],
 	"Take photo": [
 		"Chụp ảnh"
 	],
@@ -2774,10 +3191,10 @@
 	"Text editor command": [
 		"Câu lệnh trình duyệt chỉnh sửa văn bản"
 	],
-	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		""
 	],
-	"The active profile cannot be deleted. Switch to a different profile and try again.": [
+	"The API key is missing. Set it in Settings → AI.": [
 		""
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
@@ -2810,7 +3227,7 @@
 	"The default encryption method has been changed, you should re-encrypt your data.": [
 		"Phương thức mã hoá mặc định đã được thay đổi, dữ liệu của bạn nên được tái mã hoá."
 	],
-	"The default profile cannot be deleted": [
+	"The default profile has been reset.": [
 		""
 	],
 	"The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.": [
@@ -2831,14 +3248,38 @@
 	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
 		""
 	],
+	"The license for this server failed to refresh.": [
+		""
+	],
+	"The license key for this Joplin Server Business instance has expired and needs to be renewed.": [
+		""
+	],
+	"The license key for this Joplin Server Business instance has expired or is invalid. Uploading items has been disabled until the license is renewed.": [
+		""
+	],
 	"The master key has been upgraded successfully!": [
 		"Khoá chính đã được nâng cấp thành công!"
 	],
 	"The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
 		"Master keys của những IDs được sử dụng để mã hóa một số mục của bạn, nhưng ứng dụng hiện tại không thể truy cập được chúng. Những master keys này có thể sẽ được tải về trong quá trình đồng bộ hóa."
 	],
+	"The MCP server is disabled. Enable it in Settings → MCP.": [
+		""
+	],
+	"The model identifier to use, for example gpt-4o-mini or claude-3-5-sonnet-latest.": [
+		""
+	],
+	"The model name is missing. Set it in Settings → AI.": [
+		""
+	],
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"Note \"%s\" đã được hồi phục tại notebook \"%s\"."
+	],
+	"The note changed while the request was running; edits were not applied. Try again.": [
+		""
+	],
+	"The note lock state cannot be changed from the command line": [
+		""
 	],
 	"The notebook could not be saved: %s": [
 		"Không thể lưu lại notebook: %s"
@@ -2846,8 +3287,17 @@
 	"The notes have been imported: %s": [
 		"Những notes đã được import: %s"
 	],
+	"The OpenAI-compatible API endpoint. For example, https://api.openai.com/v1 or http://localhost:11434/v1 for Ollama.": [
+		""
+	],
+	"The OpenAI-compatible provider needs a base URL. Set it in Settings → AI.": [
+		""
+	],
 	"The possible commands are:": [
 		"Những câu lệnh phụ hợp có thể là:"
+	],
+	"The provider returned an empty response. Check that the base URL ends with /v1 and that a model is loaded.": [
+		""
 	],
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		""
@@ -2924,6 +3374,9 @@
 	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
 		""
 	],
+	"This feature is only available for PDF files.": [
+		""
+	],
 	"This feature is only available on Joplin Cloud and Joplin Server.": [
 		""
 	],
@@ -2932,6 +3385,12 @@
 	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Đây là một công cụ nâng cao để hiển thị các tệp đính kèm được liên kết đến ghi chú của bạn. Hãy cẩn thận khi xoá một trong số chúng vì hành động này không thể khôi phục sau khi thực hiện."
+	],
+	"This Joplin Server Business instance is only licensed for %d user.": [
+		""
+	],
+	"This note could not be decrypted. If it was encrypted prior to a password reset, the contents are no longer recoverable.": [
+		""
 	],
 	"This note does not have geolocation information.": [
 		"Note này không có thông tin vị trí."
@@ -2945,14 +3404,32 @@
 	"This note has no history": [
 		"Note này không có lịch sử"
 	],
+	"This note is currently being saved. Please try again in a moment.": [
+		""
+	],
+	"This note is encrypted and cannot be used with AI Chat.": [
+		""
+	],
+	"This note is encrypted. Enter the note lock password to unlock encrypted notes for this session.": [
+		""
+	],
 	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
+	],
+	"This notebook contains Windows-specific files. For maximum compatibility, consider importing the notebook from Windows.": [
 		""
 	],
 	"This plugin doesn't support %s.": [
 		""
 	],
+	"This provider sends data off your device. Turn on \"Allow remote AI providers\" in Settings → AI.": [
+		""
+	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"Trình soạn thảo văn bản Rich Text này có nhiều giới hạn, bạn nên cân nhắc trước khi sử dụng nó."
+	],
+	"This section opens in its own screen and is matched by section title.": [
+		""
 	],
 	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
 		"Dịch vụ này cho phép tiện ích mở rộng của trình duyệt web trao đổi với Joplin. Khi bật nó, tường lửa của bạn có thể hỏi bạn cho phép Joplin sử dụng một port nào đó."
@@ -2977,6 +3454,9 @@
 	],
 	"Title": [
 		"Tiêu đề"
+	],
+	"To access your recovery codes please enter an authentication code or your password.": [
+		""
 	],
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
 		"Để cho phép Joplin đồng bộ với Dropbox, vui lòng làm theo những bước dưới đây:"
@@ -3008,7 +3488,7 @@
 	"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`": [
 		"Để thử giải mã lại các mục này. Chạy `e2ee decrypt —retry-failed-items`"
 	],
-	"To switch the profile, the app is going to close and you will need to restart it.": [
+	"To switch the profile, the app is going to restart.": [
 		""
 	],
 	"To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions": [
@@ -3041,11 +3521,17 @@
 	"Toggle sidebar": [
 		"Ẩn/hiện thanh bên"
 	],
+	"Toggle whiteboard / Markdown view": [
+		""
+	],
 	"Token has been copied to the clipboard!": [
 		"Dữ liệu đã được sao chép!"
 	],
 	"Tools": [
 		"Công cụ"
+	],
+	"Tools and services to expose to AI. AI agents can use these tools either via the note chat panel or Joplin's MCP server (if enabled).": [
+		""
 	],
 	"Total: %d/%d": [
 		"Tổng cộng: %d/%d"
@@ -3071,6 +3557,12 @@
 	"Type: %s.": [
 		"Dạng: %s."
 	],
+	"Typography, spellcheck, layout": [
+		""
+	],
+	"Unable to access the recording file.": [
+		""
+	],
 	"Unable to edit resource of type %s": [
 		""
 	],
@@ -3078,6 +3570,9 @@
 		""
 	],
 	"Unable to share note data. Reason: %s": [
+		""
+	],
+	"Unavailable on this platform": [
 		""
 	],
 	"Unchecked": [
@@ -3101,8 +3596,14 @@
 	"Unknown item type downloaded - please upgrade Joplin to the latest version": [
 		"Không xác định phân loại mục đã tải - vui lòng nâng cấp Joplin lên bản mới nhất"
 	],
+	"Unlock": [
+		""
+	],
 	"Unpublish note": [
 		"Ngưng công khai ghi chú"
+	],
+	"Unpublishes a note from Joplin Server or Joplin Cloud": [
+		""
 	],
 	"Unshare": [
 		"Ngưng chia sẻ"
@@ -3119,11 +3620,20 @@
 	"Unsupported link or message: %s": [
 		"Đường dẫn hoặc tin nhắn không được hỗ trợ: %s"
 	],
+	"Unsupported public key format. Please check that Joplin is updated to the latest version and try again.": [
+		""
+	],
 	"Untitled": [
 		"Chưa có tên"
 	],
+	"Untitled whiteboard": [
+		""
+	],
 	"Update": [
 		"Cập nhật"
+	],
+	"Update it from Google Play": [
+		""
 	],
 	"Updated": [
 		"Đã cập nhật"
@@ -3152,6 +3662,9 @@
 	"Upgrade the sync target to the latest version.": [
 		"Nâng cấp mục tiêu đồng bộ hóa lên phiên bản mới nhất."
 	],
+	"Upgrade to 100 GB": [
+		""
+	],
 	"URL": [
 		"URL"
 	],
@@ -3179,19 +3692,25 @@
 	"Use your biometrics to secure access to your application. You can always set it up later in Settings.": [
 		""
 	],
+	"Used": [
+		""
+	],
 	"Used for most text in the markdown editor. If not found, a generic proportional (variable width) font is used.": [
 		"Được sử dụng cho hầu hết văn bản trong trình soạn thảo Markdown. Nếu không tìm thấy, phông chữ tỷ lệ chung (chiều rộng thay đổi) được sử dụng."
 	],
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"Được sử dụng khi cần phông chữ có độ rộng cố định để bố cục văn bản dễ đọc (ví dụ: bảng, hộp kiểm, mã). Nếu không tìm thấy, phông chữ monospace (chiều rộng cố định) chung sẽ được sử dụng."
 	],
-	"Useful": [
-		""
-	],
 	"User deletions": [
 		""
 	],
 	"Users": [
+		""
+	],
+	"Vector search is not available on this platform": [
+		""
+	],
+	"Vector search is unavailable on this platform (sqlite-vec extension not loaded).": [
 		""
 	],
 	"Verify your identity": [
@@ -3272,7 +3791,13 @@
 	"When creating a new to-do:": [
 		"Khi tạo một to-do mới:"
 	],
+	"When enabled, plugins and built-in features can use AI models to generate or analyse text.": [
+		""
+	],
 	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		""
+	],
+	"When enabled, tables are rendered as an interactive widget in the editor. Disable this if you prefer to edit tables as raw Markdown.": [
 		""
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
@@ -3311,17 +3836,26 @@
 	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		""
 	],
+	"You can synchronise your notes using Joplin Cloud, which also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
+		""
+	],
 	"You currently have no notebooks.": [
 		"Bạn hiện tai không có notebook nào."
 	],
 	"You do not have any installed plugin.": [
 		"Bạn chưa cài đặt phần mở rộng nào."
 	],
+	"You have unsaved tag changes. Discard them?": [
+		""
+	],
 	"You may also type `status` for more information.": [
 		"Bạn cũng có thể gõ `status` để xem thêm thông tin."
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"Bạn có thể sử dụng công cụ dưới đây để tái mã hoá dữ liệu, ví dụ như trong trường hợp bạn thấy một số ghi chú được mã hoá bằng một phương thức đã lỗi thời."
+	],
+	"You switched notes while the request was running; edits were not applied. Try again.": [
+		""
 	],
 	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
 		""
@@ -3338,6 +3872,12 @@
 	"Your Joplin Cloud credentials are invalid, please login.": [
 		""
 	],
+	"Your master password is used to protect sensitive information. In particular, it is used to encrypt your notes when end-to-end encryption (E2EE) is enabled, or to share and encrypt notes with someone who has E2EE enabled.": [
+		""
+	],
+	"Your note will be sent to the configured AI provider (%s).": [
+		""
+	],
 	"Your password is needed to decrypt some of your data.": [
 		""
 	],
@@ -3352,5 +3892,8 @@
 	],
 	"Zoom Out": [
 		"Thu nhỏ"
+	],
+	"— now viewing: %s —": [
+		""
 	]
 }

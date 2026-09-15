@@ -1,6 +1,6 @@
 import Note from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
-import { setupDatabaseAndSynchronizer, supportDir, switchClient } from '@joplin/lib/testing/test-utils';
+import { setupDatabaseAndSynchronizer, supportDir, switchClient, withWarningSilenced } from '@joplin/lib/testing/test-utils';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import useFormNote, { HookDependencies } from './useFormNote';
 import shim from '@joplin/lib/shim';
@@ -22,6 +22,14 @@ const defaultFormNoteProps: HookDependencies = {
 	builtInEditorVisible: false,
 	noteLockSessionUnlocked: false,
 	onDecryptFailedChange: () => {},
+};
+
+const deferred = <T>() => {
+	let resolve: (value: T)=> void;
+	const promise = new Promise<T>(resolvePromise => {
+		resolve = resolvePromise;
+	});
+	return { promise, resolve: resolve! };
 };
 
 describe('useFormNote', () => {
@@ -106,9 +114,11 @@ describe('useFormNote', () => {
 			const render = renderHook(props => useFormNote(props), {
 				initialProps: { ...defaultFormNoteProps, noteId: testNote.id, noteLockSessionUnlocked: true, onDecryptFailedChange },
 			});
-			await waitFor(() => {
-				expect(render.result.current.decryptFailed).toBe(true);
-			});
+			await withWarningSilenced(/Could not decrypt locked note/, async () => {
+				await waitFor(() => {
+					expect(render.result.current.decryptFailed).toBe(true);
+				});
+			}, { requireWarning: true });
 			expect(render.result.current.formNote).toMatchObject({
 				id: '',
 				body: '',
@@ -214,10 +224,12 @@ describe('useFormNote', () => {
 
 	it('should reload the note when it is changed outside of the editor', async () => {
 		const note = await Note.save({ title: 'Test Note!', body: '...' });
+		const onReloadInProgressChange = jest.fn();
 
 		const props = {
 			...defaultFormNoteProps,
 			noteId: note.id,
+			onReloadInProgressChange,
 		};
 
 		const formNote = renderHook(props => useFormNote(props), {
@@ -236,7 +248,56 @@ describe('useFormNote', () => {
 		await waitFor(() => {
 			expect(formNote.result.current.formNote.title).toBe('Modified');
 		});
+		expect(onReloadInProgressChange).not.toHaveBeenCalled();
 
+		formNote.unmount();
+	});
+
+	it('should force a reload when editorNoteReloadTimeRequest changes', async () => {
+		const note = await Note.save({ title: 'Original', body: '...' });
+		const onReloadInProgressChange = jest.fn();
+		const props = { ...defaultFormNoteProps, noteId: note.id, editorNoteReloadTimeRequest: 0, onReloadInProgressChange };
+		const formNote = renderHook(hookProps => useFormNote(hookProps), { initialProps: props });
+		await waitFor(() => expect(formNote.result.current.formNote.title).toBe('Original'));
+
+		act(() => {
+			formNote.result.current.setFormNote(previous => ({ ...previous, title: 'Unsaved local title', hasChanged: true }));
+		});
+		await Note.save({ id: note.id, title: 'Remote title' }, { changeId: 'test-editor' });
+		formNote.rerender({ ...props, editorNoteReloadTimeRequest: 1 });
+
+		await waitFor(() => expect(onReloadInProgressChange).toHaveBeenCalledWith(true));
+		await waitFor(() => expect(formNote.result.current.formNote.title).toBe('Remote title'));
+		await waitFor(() => expect(onReloadInProgressChange).toHaveBeenLastCalledWith(false));
+		formNote.unmount();
+	});
+
+	it('should clear reloadInProgress after overlapping reload requests', async () => {
+		const note = await Note.save({ title: 'Original', body: '...' });
+		const onReloadInProgressChange = jest.fn();
+		const props = { ...defaultFormNoteProps, noteId: note.id, editorNoteReloadTimeRequest: 0, onReloadInProgressChange };
+		const formNote = renderHook(hookProps => useFormNote(hookProps), { initialProps: props });
+		await waitFor(() => expect(formNote.result.current.formNote.title).toBe('Original'));
+
+		const firstLoad = deferred<typeof note>();
+		const lastLoad = deferred<typeof note>();
+		const loadMock = jest.spyOn(Note, 'load')
+			.mockImplementationOnce(() => firstLoad.promise)
+			.mockImplementationOnce(() => lastLoad.promise);
+
+		formNote.rerender({ ...props, editorNoteReloadTimeRequest: 1 });
+		await waitFor(() => expect(loadMock).toHaveBeenCalledTimes(1));
+		formNote.rerender({ ...props, editorNoteReloadTimeRequest: 2 });
+
+		firstLoad.resolve({ ...note, title: 'First reload' });
+		await waitFor(() => expect(loadMock).toHaveBeenCalledTimes(2));
+		expect(onReloadInProgressChange).toHaveBeenLastCalledWith(true);
+
+		lastLoad.resolve({ ...note, title: 'Last reload' });
+		await waitFor(() => expect(formNote.result.current.formNote.title).toBe('Last reload'));
+		await waitFor(() => expect(onReloadInProgressChange).toHaveBeenLastCalledWith(false));
+
+		loadMock.mockRestore();
 		formNote.unmount();
 	});
 

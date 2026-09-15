@@ -20,6 +20,7 @@ import { LoadOptions, SaveOptions } from './utils/types';
 import ActionLogger from '../utils/ActionLogger';
 import { getDisplayParentId, getTrashFolderId } from '../services/trash';
 import { getCollator } from './utils/getCollator';
+import isItemId from './utils/isItemId';
 const urlUtils = require('../urlUtils.js');
 import { hasWhiteboardFence, parseWhiteboard } from '../services/whiteboard/parse';
 import { resolveFileRef, RefKind } from '../services/whiteboard/resolveRef';
@@ -28,7 +29,7 @@ import { MarkupToHtml } from '@joplin/renderer';
 import { ALL_NOTES_FILTER_ID } from '../reserved-ids';
 import NoteLockNote from '../services/noteLock/NoteLockNote';
 import isNoteLockEnabled from '../services/noteLock/isNoteLockEnabled';
-import isItemId from './utils/isItemId';
+import { ShareType, StateShare } from '../services/share/reducer';
 
 export interface PreviewsOrder {
 	by: string;
@@ -599,6 +600,38 @@ export default class Note extends BaseItem {
 		return this.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0');
 	}
 
+	public static async updatePublishedNotes(activeShares: StateShare[]) {
+		const directlyPublishedNoteIds = activeShares
+			.filter(share => share.type === ShareType.Note && !!share.note_id)
+			.map(share => share.note_id);
+
+		const loadUnpublishedWithDirectShare = async (): Promise<NoteEntity[]> => {
+			if (directlyPublishedNoteIds.length === 0) return [];
+
+			return await this.db().selectAll(`
+				SELECT id, parent_id, is_shared
+				FROM notes
+				WHERE is_shared = 0 AND id IN (${this.escapeIdsForSql(directlyPublishedNoteIds)})
+			`);
+		};
+		const unpublishedNotesInPublishedFolders: NoteEntity[] = await this.db().selectAll(`
+			SELECT notes.id, notes.parent_id, notes.is_shared
+			FROM notes
+			JOIN folders ON notes.parent_id = folders.id
+			WHERE notes.is_shared = 0 AND folders.is_shared = 1
+				AND notes.is_conflict = 0
+				AND notes.deleted_time = 0
+		`);
+
+		const notesToPublish = unpublishedNotesInPublishedFolders.concat(await loadUnpublishedWithDirectShare());
+		for (const note of notesToPublish) {
+			await this.updateShareStatus(
+				{ ...note, type_: BaseModel.TYPE_NOTE },
+				true,
+			);
+		}
+	}
+
 	public static async updateGeolocation(noteId: string): Promise<NoteEntity | null> {
 		if (!Setting.value('trackLocation')) return null;
 		if (!Note.updateGeolocationEnabled_) return null;
@@ -809,7 +842,7 @@ export default class Note extends BaseItem {
 
 	public static async load(id: string, options: LoadOptions = null): Promise<NoteEntity> {
 		const note = await super.load(id, options);
-		if (isNoteLockEnabled() && !!options?.useNoteLock) return NoteLockNote.decryptBody(note);
+		if (isNoteLockEnabled() && !!options?.useNoteLock) return NoteLockNote.decryptBody(note, options.noteLockKey);
 		return note;
 	}
 
@@ -1265,15 +1298,6 @@ export default class Note extends BaseItem {
 		conflictNote.is_conflict = 1;
 		conflictNote.conflict_original_id = sourceNote.id;
 		return await Note.save(conflictNote, { autoTimestamp: false, changeSource: changeSource });
-	}
-
-	// Records the note content that was just pushed to the server. This becomes the
-	// "base" version - the common ancestor used to detect what changed on each side
-	// when a conflict later occurs. A clean upload also means there's no active
-	// conflict, so we clear any previously recorded conflict note id.
-	public static async saveSyncBaseContent(syncTarget: number, noteId: string, body: string, title: string) {
-		const sql = 'UPDATE sync_items SET base_body = ?, base_title = ?, base_conflict_note_id = ? WHERE item_id = ? AND item_type = ? AND sync_target = ?';
-		await this.db().exec(sql, [body, title, '', noteId, this.TYPE_NOTE, syncTarget]);
 	}
 
 	public static async setBaseConflictNoteId(syncTarget: number, noteId: string, conflictNoteId: string) {

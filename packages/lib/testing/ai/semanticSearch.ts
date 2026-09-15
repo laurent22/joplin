@@ -7,6 +7,7 @@ import SearchEngine from '../../services/search/SearchEngine';
 export const setUpSemanticSearch = async () => {
 	AiService.instance().setEmbeddingProvider(new TestEmbeddingProvider());
 	Setting.setValue('featureFlag.enableSemanticSearch', true);
+	Setting.setValue('ai.enabled', true);
 };
 
 export const tearDownSemanticSearch = async () => {

@@ -40,7 +40,7 @@ const updateDecorations = (state: EditorState, extensionSpec: ReplacementExtensi
 					let rangeTo = nodeLineTo.to;
 					let skip = false;
 					if (extensionSpec.getDecorationRange) {
-						const range = extensionSpec.getDecorationRange(node, state);
+						const range = extensionSpec.getDecorationRange(node, state, parentTagCounts);
 						if (range) {
 							rangeFrom = range[0];
 							rangeTo = range.length === 1 ? range[0] : range[1];

@@ -25,7 +25,7 @@ module.exports = async ({ github, context, core }) => {
 	// the changelog generator. Non-product prefixes (Tools, Chore, CI, Doc,
 	// Plugin Repo) are administrative categories for changes that do not
 	// ship to users and so do not appear in the changelog.
-	const prefix = '(Desktop|Mobile|Android|iOS|Windows|Linux|macOS|Cli|Clipper|Server|Transcribe|Plugins|Api|Cloud|Tools|Chore|CI|Doc)';
+	const prefix = '(Desktop|Mobile|Android|iOS|Web|Windows|Linux|macOS|Cli|Clipper|Server|Transcribe|Plugins|Api|Cloud|Tools|Chore|CI|Doc)';
 	const prefixList = `${prefix}(,\\s*${prefix})*`;
 	const strictRegex = new RegExp(`^${prefixList}: (Fixes|Resolves) #[0-9]+: .+`);
 	const softRegex = new RegExp(`^${prefixList}: ((Fixes|Resolves) #[0-9]+: )?.+`);

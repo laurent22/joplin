@@ -672,7 +672,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Desktop],
 			show: (settings) => !!settings['ai.enabled'],
 			label: () => _('Allow remote AI providers'),
-			description: () => _('Required to use cloud-hosted AI models, including Joplin Cloud AI. When disabled, only on-device providers can be used.'),
+			description: () => _('Required to use cloud-hosted AI models, including Joplin Cloud AI. When disabled, only providers on your own device or private network can be used.'),
 			storage: SettingStorage.File,
 		},
 
@@ -1864,7 +1864,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Mobile],
 			isGlobal: true,
 		},
-		noteVisiblePanes: { value: ['editor', 'viewer'], type: SettingItemType.Array, storage: SettingStorage.File, isGlobal: true, public: false, appTypes: [AppType.Desktop] },
+		noteVisiblePanes: { value: ['editor'], type: SettingItemType.Array, storage: SettingStorage.File, isGlobal: true, public: false, appTypes: [AppType.Desktop] },
 		tagHeaderIsExpanded: { value: true, type: SettingItemType.Bool, public: false, appTypes: [AppType.Desktop] },
 		folderHeaderIsExpanded: { value: true, type: SettingItemType.Bool, public: false, appTypes: [AppType.Desktop] },
 		syncReportIsVisible: { value: false, type: SettingItemType.Bool, public: false, appTypes: [AppType.Desktop] },
@@ -2303,13 +2303,24 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 		},
 
+		'sync.autoMergeConflicts': {
+			value: true,
+			type: SettingItemType.Bool,
+			section: 'sync',
+			public: true,
+			label: () => _('Automatically merge non-conflicting note changes'),
+			description: () => _('When the same note is edited on two devices, changes made to different lines are usually merged automatically. In rare cases, automatic merging may result in duplicated content or formatting changes'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+
 		'noteLock.lockOnNoteSwitch': {
 			value: false,
 			type: SettingItemType.Bool,
 			public: true,
 			appTypes: [AppType.Desktop, AppType.Mobile],
 			section: 'noteLock',
-			label: () => _('Auto lock when switching note'),
+			label: () => _('Auto relock when switching notes'),
 			show: (settings) => !!settings['featureFlag.noteLock'],
 			storage: SettingStorage.File,
 		},

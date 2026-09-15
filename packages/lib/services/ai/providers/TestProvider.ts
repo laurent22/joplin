@@ -7,13 +7,15 @@ const parseUserCommand = (message: ChatStandardMessage, availableTools: ToolSpec
 	const reply = [];
 	let repeat = 0;
 	for (const line of message.content.split('\n')) {
-		const command = line.match(/^\/(tool|describe-tool|reply-with|repeat) (.*)$/);
-		if (!command) continue;
+		const commandMatch = line.match(/^\/(tool|describe-tool|list-tools|reply-with|repeat)( .*)?$/);
+		if (!commandMatch) continue;
+		const command = commandMatch[1];
+		const argument = (commandMatch[2] ?? '').replace(/^ /, '');
 
-		const isToolCall = command[1] === 'tool';
-		const isDescribeToolRequest = command[1] === 'describe-tool';
+		const isToolCall = command === 'tool';
+		const isDescribeToolRequest = command === 'describe-tool';
 		if (isToolCall || isDescribeToolRequest) {
-			const args = command[2].split(' ');
+			const args = argument.split(' ');
 			const toolName = args[0];
 			const tool = availableTools.find(t => t.id === toolName);
 			if (!tool) {
@@ -28,10 +30,12 @@ const parseUserCommand = (message: ChatStandardMessage, availableTools: ToolSpec
 					parseError: null,
 				});
 			}
-		} else if (command[1] === 'reply-with') {
-			reply.push(command[2]);
-		} else if (command[1] === 'repeat') {
-			repeat = Number(command[2]);
+		} else if (command === 'list-tools') {
+			reply.push(JSON.stringify(availableTools));
+		} else if (command === 'reply-with') {
+			reply.push(argument);
+		} else if (command === 'repeat') {
+			repeat = Number(argument);
 		}
 	}
 

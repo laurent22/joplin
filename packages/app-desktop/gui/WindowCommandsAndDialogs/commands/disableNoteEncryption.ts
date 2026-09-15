@@ -6,7 +6,7 @@ import bridge from '../../../services/bridge';
 
 export const declaration: CommandDeclaration = {
 	name: 'disableNoteEncryption',
-	label: () => _('Disable encryption'),
+	label: () => _('Remove note lock'),
 };
 
 export const runtime = (): CommandRuntime => {

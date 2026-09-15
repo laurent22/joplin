@@ -5,6 +5,8 @@ import replaceBulletLists from '../replaceBulletLists';
 import replaceFormatCharacters from '../replaceFormatCharacters';
 import replaceInlineHtml from '../replaceInlineHtml';
 import replaceLinks from '../replaceLinks';
+import visibleEditorText from '../../../testing/visibleEditorText';
+import backspaceOnce from '../../../testing/backspaceOnce';
 
 jest.retryTimes(2);
 
@@ -14,8 +16,6 @@ interface TestCase {
 	renderedText: string;
 	selectionFrom: number;
 	selectionTo: number;
-	expectedSelectionFrom: number;
-	expectedSelectionTo: number;
 	expectedSyntaxTreeTags: string[];
 	extensions: Extension[];
 }
@@ -27,8 +27,6 @@ const testCases: TestCase[] = [
 		renderedText: 'bold',
 		selectionFrom: 2,
 		selectionTo: 6,
-		expectedSelectionFrom: 0,
-		expectedSelectionTo: 8,
 		expectedSyntaxTreeTags: ['StrongEmphasis'],
 		extensions: [replaceFormatCharacters],
 	},
@@ -38,8 +36,6 @@ const testCases: TestCase[] = [
 		renderedText: 'bold italic',
 		selectionFrom: 3,
 		selectionTo: 14,
-		expectedSelectionFrom: 0,
-		expectedSelectionTo: 17,
 		expectedSyntaxTreeTags: ['Emphasis', 'StrongEmphasis'],
 		extensions: [replaceFormatCharacters],
 	},
@@ -49,8 +45,6 @@ const testCases: TestCase[] = [
 		renderedText: 'Heading',
 		selectionFrom: 2,
 		selectionTo: 9,
-		expectedSelectionFrom: 0,
-		expectedSelectionTo: 9,
 		expectedSyntaxTreeTags: ['ATXHeading1'],
 		extensions: [replaceFormatCharacters],
 	},
@@ -60,8 +54,6 @@ const testCases: TestCase[] = [
 		renderedText: ' Blockquote',
 		selectionFrom: 2,
 		selectionTo: 12,
-		expectedSelectionFrom: 0,
-		expectedSelectionTo: 12,
 		expectedSyntaxTreeTags: ['Blockquote'],
 		extensions: [replaceFormatCharacters],
 	},
@@ -71,8 +63,6 @@ const testCases: TestCase[] = [
 		renderedText: 'Joplin website',
 		selectionFrom: 1,
 		selectionTo: 15,
-		expectedSelectionFrom: 0,
-		expectedSelectionTo: 39,
 		expectedSyntaxTreeTags: ['Link'],
 		extensions: [replaceLinks],
 	},
@@ -82,8 +72,6 @@ const testCases: TestCase[] = [
 		renderedText: 'Joplin website',
 		selectionFrom: 3,
 		selectionTo: 17,
-		expectedSelectionFrom: 0,
-		expectedSelectionTo: 43,
 		expectedSyntaxTreeTags: ['Link', 'StrongEmphasis'],
 		extensions: [replaceFormatCharacters, replaceLinks],
 	},
@@ -93,8 +81,6 @@ const testCases: TestCase[] = [
 		renderedText: 'red text',
 		selectionFrom: 25,
 		selectionTo: 33,
-		expectedSelectionFrom: 0,
-		expectedSelectionTo: 40,
 		expectedSyntaxTreeTags: ['HTMLTag'],
 		extensions: [replaceInlineHtml],
 	},
@@ -104,8 +90,6 @@ const testCases: TestCase[] = [
 		renderedText: '*literal asterisk*',
 		selectionFrom: 1,
 		selectionTo: 20,
-		expectedSelectionFrom: 0,
-		expectedSelectionTo: 20,
 		expectedSyntaxTreeTags: ['Escape'],
 		extensions: [replaceBackslashEscapes],
 	},
@@ -115,8 +99,6 @@ const testCases: TestCase[] = [
 		renderedText: '- item',
 		selectionFrom: 2,
 		selectionTo: 6,
-		expectedSelectionFrom: 0,
-		expectedSelectionTo: 6,
 		expectedSyntaxTreeTags: ['BulletList'],
 		extensions: [replaceBulletLists],
 	},
@@ -126,8 +108,6 @@ const testCases: TestCase[] = [
 		renderedText: '- item',
 		selectionFrom: 1,
 		selectionTo: 6,
-		expectedSelectionFrom: 0,
-		expectedSelectionTo: 6,
 		expectedSyntaxTreeTags: ['BulletList'],
 		extensions: [replaceBulletLists],
 	},
@@ -138,51 +118,11 @@ const directedTestCases = testCases.flatMap(testCase => [
 		...testCase,
 		direction: 'forward',
 		selection: EditorSelection.range(testCase.selectionFrom, testCase.selectionTo),
-		expectedSelection: {
-			anchor: testCase.expectedSelectionFrom,
-			head: testCase.expectedSelectionTo,
-		},
 	},
 	{
 		...testCase,
 		direction: 'backward',
 		selection: EditorSelection.range(testCase.selectionTo, testCase.selectionFrom),
-		expectedSelection: {
-			anchor: testCase.expectedSelectionTo,
-			head: testCase.expectedSelectionFrom,
-		},
-	},
-]);
-
-const fullyCoveredSelectionTestCases = [
-	{
-		label: 'hidden Markdown',
-		markdown: '**bold**\n',
-		selectionFrom: 0,
-		selectionTo: 2,
-		expectedSyntaxTreeTags: ['StrongEmphasis'],
-		extensions: [replaceFormatCharacters],
-	},
-	{
-		label: 'widget',
-		markdown: '- item\n',
-		selectionFrom: 0,
-		selectionTo: 1,
-		expectedSyntaxTreeTags: ['BulletList'],
-		extensions: [replaceBulletLists],
-	},
-].flatMap(testCase => [
-	{
-		...testCase,
-		direction: 'forward',
-		selection: EditorSelection.range(testCase.selectionFrom, testCase.selectionTo),
-		expectedCursor: testCase.selectionTo,
-	},
-	{
-		...testCase,
-		direction: 'backward',
-		selection: EditorSelection.range(testCase.selectionTo, testCase.selectionFrom),
-		expectedCursor: testCase.selectionFrom,
 	},
 ]);
 
@@ -202,8 +142,12 @@ const expectTextContentToBe = (actual: string, expected: string) => {
 };
 
 describe('makeInlineReplaceExtension', () => {
+	beforeAll(() => {
+		jest.useFakeTimers({ advanceTimers: true });
+	});
+
 	it.each(directedTestCases)('should include Markdown syntax for $label in a $direction mouse selection', async ({
-		markdown, renderedText, selection, expectedSelection, expectedSyntaxTreeTags, extensions,
+		markdown, renderedText, selection, expectedSyntaxTreeTags, extensions,
 	}) => {
 		const editor = await createTestEditor(
 			markdown,
@@ -215,41 +159,53 @@ describe('makeInlineReplaceExtension', () => {
 		try {
 			editor.dom.dispatchEvent(new MouseEvent('mousedown', { button: 0 }));
 			editor.dispatch({ selection, userEvent: 'select.pointer' });
+			jest.runAllTimers();
 
-			expect(editor.state.selection.main).toMatchObject({
+			const expectedSelection = {
 				anchor: selection.anchor,
 				head: selection.head,
-			});
-			expectTextContentToBe(editor.contentDOM.textContent, renderedText);
+			};
+			expect(editor.state.selection.main).toMatchObject(expectedSelection);
+			expectTextContentToBe(visibleEditorText(editor), renderedText);
 
 			editor.dom.ownerDocument.dispatchEvent(new MouseEvent('mouseup', { button: 0 }));
+			await jest.runAllTimersAsync();
 
 			expect(editor.state.selection.main).toMatchObject(expectedSelection);
-			expectTextContentToBe(editor.contentDOM.textContent, markdown.trimEnd());
+			expectTextContentToBe(visibleEditorText(editor), markdown.trimEnd());
 		} finally {
 			editor.destroy();
 		}
 	});
 
-	it.each(fullyCoveredSelectionTestCases)('should turn a $direction $label selection into a cursor', async ({
-		markdown, selection, expectedCursor, expectedSyntaxTreeTags, extensions,
-	}) => {
+	it('should update markdown decorations when the mouse is down and the document changes', async () => {
+		const markdown = '**test**...';
+		const initialSelection = EditorSelection.cursor(markdown.length);
 		const editor = await createTestEditor(
-			markdown,
-			EditorSelection.cursor(markdown.length),
-			expectedSyntaxTreeTags,
-			extensions,
+			'**test**...',
+			initialSelection,
+			['StrongEmphasis'],
+			[replaceFormatCharacters],
 		);
 
 		try {
 			editor.dom.dispatchEvent(new MouseEvent('mousedown', { button: 0 }));
-			editor.dispatch({ selection, userEvent: 'select.pointer' });
-			editor.dom.ownerDocument.dispatchEvent(new MouseEvent('mouseup', { button: 0 }));
+			editor.dispatch({ selection: initialSelection, userEvent: 'select.pointer' });
+			jest.runAllTimers();
 
-			expect(editor.state.selection.main).toMatchObject({
-				anchor: expectedCursor,
-				head: expectedCursor,
-			});
+			expectTextContentToBe(visibleEditorText(editor), 'test...');
+
+			backspaceOnce(editor);
+			expectTextContentToBe(visibleEditorText(editor), 'test..');
+			backspaceOnce(editor);
+			expectTextContentToBe(visibleEditorText(editor), 'test.');
+			backspaceOnce(editor);
+			expectTextContentToBe(visibleEditorText(editor), '**test**');
+
+			editor.dom.ownerDocument.dispatchEvent(new MouseEvent('mouseup', { button: 0 }));
+			await jest.runAllTimersAsync();
+
+			expectTextContentToBe(visibleEditorText(editor), '**test**');
 		} finally {
 			editor.destroy();
 		}

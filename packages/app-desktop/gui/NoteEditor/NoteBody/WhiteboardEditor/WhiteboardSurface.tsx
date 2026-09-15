@@ -28,6 +28,10 @@ import { Canvas, CanvasColor, CanvasEdge, CanvasNode } from '@joplin/lib/service
 import { presetColors, resolveCanvasColor } from '@joplin/lib/services/whiteboard/presetColors';
 import { useWhiteboardContext } from './WhiteboardContext';
 import shim from '@joplin/lib/shim';
+import CommandService from '@joplin/lib/services/CommandService';
+import { ModelType } from '@joplin/lib/BaseModel';
+import { Mode } from '../../../../plugins/GotoAnything';
+import { GotoAnythingOptions, UiType } from '../../../WindowCommandsAndDialogs/commands/gotoAnything';
 import Logger from '@joplin/utils/Logger';
 import { webUtils } from 'electron';
 import { canvasNodeToFlowNode, canvasToFlow, flowToCanvas, WhiteboardFlowEdge, WhiteboardFlowNode } from './canvasFlow';
@@ -229,6 +233,39 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 		}));
 	}, [flowNodes]);
 
+	const addFileCard = useCallback((itemId: string, at: { x: number; y: number }, index = 0) => {
+		const offset = index * 24;
+		addCanvasNode({
+			id: generateId(),
+			type: 'file',
+			x: at.x - 120 + offset,
+			y: at.y - 60 + offset,
+			width: 240,
+			height: 160,
+			file: `:/${itemId}`,
+		});
+	}, [addCanvasNode]);
+
+	const onPaneDoubleClick = useCallback(async (event: React.MouseEvent) => {
+		// The <Background> svg covers the pane, so it's the event target on an
+		// empty-space click.
+		const target = event.target as Element;
+		if (!target?.closest) return;
+		const onEmptySpace = target.classList.contains('react-flow__pane')
+			|| !!target.closest('.react-flow__background');
+		if (!onEmptySpace) return;
+
+		const at = rf.screenToFlowPosition({ x: event.clientX, y: event.clientY });
+		const options: GotoAnythingOptions = { mode: Mode.TitleOnly };
+		const result = await CommandService.instance().execute('gotoAnything', UiType.ControlledApi, options);
+		if (!result) return;
+		if (result.type !== ModelType.Note) {
+			logger.warn('Selected item is not a note:', result);
+			return;
+		}
+		addFileCard(result.item.id, at);
+	}, [rf, addFileCard]);
+
 	const onAddText = useCallback(() => {
 		const { x: cx, y: cy } = viewportCentre();
 		addCanvasNode({
@@ -396,16 +433,7 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 		};
 
 		const placeCardForResource = (resourceId: string, index: number) => {
-			const offset = index * 24;
-			addCanvasNode({
-				id: generateId(),
-				type: 'file',
-				x: drop.x - 120 + offset,
-				y: drop.y - 60 + offset,
-				width: 240,
-				height: 160,
-				file: `:/${resourceId}`,
-			});
+			addFileCard(resourceId, drop, index);
 		};
 
 		const internalIds = [
@@ -428,7 +456,7 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 				}
 			}));
 		}
-	}, [rf, addCanvasNode]);
+	}, [rf, addFileCard]);
 
 	return (
 		<div
@@ -436,6 +464,7 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 			className="whiteboard-surface"
 			onDragOver={onDragOver}
 			onDrop={onDrop}
+			onDoubleClick={onPaneDoubleClick}
 		>
 			<ReactFlow
 				nodes={flowNodes as unknown as Node[]}
@@ -460,6 +489,7 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 				panOnDrag
 				zoomOnPinch
 				zoomOnScroll={false}
+				zoomOnDoubleClick={false}
 				fitView={flowNodes.length > 0}
 				elevateNodesOnSelect={false}
 				proOptions={{ hideAttribution: true }}

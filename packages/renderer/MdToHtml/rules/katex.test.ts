@@ -18,7 +18,7 @@ const createMarkdownIt = (strict?: unknown) => {
 	return md;
 };
 
-describe('katex rule', () => {
+describe('katex', () => {
 
 	let warnSpy: jest.SpiedFunction<typeof console.warn>;
 

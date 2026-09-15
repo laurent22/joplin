@@ -552,7 +552,14 @@ function shimInit(options: ShimInitOptions = null) {
 			throw new Error(`Not a valid URL: ${url}`);
 		}
 		const resolvedProxyUrl = resolveProxyUrl(proxySettings.proxyUrl);
-		options.agent = (resolvedProxyUrl && proxySettings.proxyEnabled) ? shim.proxyAgent(url, resolvedProxyUrl) : shim.httpAgent(url);
+		if (resolvedProxyUrl && proxySettings.proxyEnabled) {
+			options.agent = shim.proxyAgent(url, resolvedProxyUrl);
+		} else {
+			// node-fetch calls this for every request, including each redirect hop, so the agent
+			// always matches the protocol actually being used.
+			const agents = shim.httpAgents();
+			options.agent = (parsedUrl: URL) => parsedUrl.protocol === 'https:' ? agents.https : agents.http;
+		}
 		return shim.fetchWithRetry(() => {
 			return nodeFetch(url, options);
 		}, options);
@@ -606,7 +613,13 @@ function shimInit(options: ShimInitOptions = null) {
 		};
 
 		const resolvedProxyUrl = resolveProxyUrl(proxySettings.proxyUrl);
-		requestOptions.agent = (resolvedProxyUrl && proxySettings.proxyEnabled) ? shim.proxyAgent(url.href, resolvedProxyUrl) : shim.httpAgent(url.href);
+		if (resolvedProxyUrl && proxySettings.proxyEnabled) {
+			requestOptions.agent = shim.proxyAgent(url.href, resolvedProxyUrl);
+		} else {
+			// follow-redirects re-picks from this map on each hop, so a redirect that switches
+			// protocol gets the matching agent.
+			requestOptions.agents = shim.httpAgents();
+		}
 
 		const doFetchOperation = async () => {
 			return new Promise((resolve, reject) => {
@@ -728,7 +741,7 @@ function shimInit(options: ShimInitOptions = null) {
 		tlsEcdhCurve = 'auto';
 	}
 
-	shim.httpAgent = url => {
+	shim.httpAgents = () => {
 		if (!shim.httpAgent_) {
 			const AgentSettings = {
 				keepAlive: true,
@@ -741,7 +754,12 @@ function shimInit(options: ShimInitOptions = null) {
 				https: new https.Agent(AgentSettings),
 			};
 		}
-		return url.startsWith('https') ? shim.httpAgent_.https : shim.httpAgent_.http;
+		return shim.httpAgent_;
+	};
+
+	shim.httpAgent = url => {
+		const agents = shim.httpAgents();
+		return url.startsWith('https') ? agents.https : agents.http;
 	};
 
 	shim.proxyAgent = (serverUrl: string, proxyUrl: string) => {

@@ -119,6 +119,7 @@ export interface WindowState {
 	backwardHistoryNotes: NoteEntity[];
 	forwardHistoryNotes: NoteEntity[];
 	lastSelectedNotesIds: StateLastSelectedNotesIds;
+	windowEditorNoteReloadTimeRequest: number;
 }
 
 export const defaultWindowId = 'default';
@@ -147,6 +148,7 @@ export const defaultWindowState: WindowState = {
 		Tag: {},
 		Search: {},
 	},
+	windowEditorNoteReloadTimeRequest: 0,
 };
 
 export interface EditorNoteStatuses {
@@ -199,7 +201,6 @@ export interface State extends WindowState {
 	mustAuthenticate: boolean;
 	toast: Toast | null;
 	editorNoteReloadTimeRequest: number;
-
 	allowSelectionInOtherFolders: boolean;
 	noteHtmlToMarkdownDone: string;
 
@@ -273,8 +274,8 @@ export const defaultState: State = {
 	lastDeletionNotificationTime: 0,
 	mustUpgradeAppMessage: '',
 	mustAuthenticate: false,
-	allowSelectionInOtherFolders: false,
 	editorNoteReloadTimeRequest: 0,
+	allowSelectionInOtherFolders: false,
 	noteHtmlToMarkdownDone: '',
 
 	pluginService: pluginServiceDefaultState,
@@ -1181,8 +1182,9 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 					const isViewingAllNotes = (windowDraft.notesParentType === 'SmartFilter' && windowDraft.selectedSmartFilterId === ALL_NOTES_FILTER_ID);
 					const isViewingConflictFolder = windowDraft.notesParentType === 'Folder' && windowDraft.selectedFolderId === Folder.conflictFolderId();
 
-					const noteIsInFolder = function(note: NoteEntity, folderId: string) {
-						if (note.is_conflict && isViewingConflictFolder) return true;
+					const noteIsInCurrentView = function(note: NoteEntity, folderId: string) {
+						if (note.is_conflict) return isViewingConflictFolder;
+						if (isViewingAllNotes) return true;
 						const noteDisplayParentId = getDisplayParentId(note, draft.folders.find(f => f.id === note.parent_id));
 						return folderId === noteDisplayParentId;
 					};
@@ -1201,7 +1203,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 								newNotes.splice(i, 1);
 								noteFolderHasChanged = true;
 								movedNotePreviousIndex = i;
-							} else if (isViewingAllNotes || noteIsInFolder(modNote, previousDisplayParentId)) {
+							} else if (noteIsInCurrentView(modNote, previousDisplayParentId)) {
 								// Note is still in the same folder
 								// Merge the properties that have changed (in modNote) into
 								// the object we already have.
@@ -1225,7 +1227,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 					// Note was not found - if the current folder is the same as the note folder,
 					// add it to it.
 					if (!found) {
-						if (isViewingAllNotes || noteIsInFolder(modNote, windowDraft.selectedFolderId)) {
+						if (noteIsInCurrentView(modNote, windowDraft.selectedFolderId)) {
 							newNotes.push(modNote);
 						}
 					}
@@ -1619,8 +1621,21 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'EDITOR_NOTE_NEEDS_RELOAD':
 			{
-				if (!action.noteId || (draft.selectedNoteIds.length && draft.selectedNoteIds[0] === action.noteId)) {
-					draft.editorNoteReloadTimeRequest = Date.now();
+				const nextReloadRequest = (previous: number) => Math.max(Date.now(), previous + 1);
+
+				// Mobile uses the root field and supports reload requests without a note ID.
+				if (!action.noteId || stateUtils.selectedNoteId(draft) === action.noteId) {
+					draft.editorNoteReloadTimeRequest = nextReloadRequest(draft.editorNoteReloadTimeRequest);
+				}
+
+				// Desktop reload requests must identify the note so that only windows
+				// displaying that note are invalidated.
+				if (action.noteId) {
+					for (const windowState of stateUtils.allWindowStates(draft)) {
+						if (stateUtils.selectedNoteId(windowState) === action.noteId) {
+							windowState.windowEditorNoteReloadTimeRequest = nextReloadRequest(windowState.windowEditorNoteReloadTimeRequest);
+						}
+					}
 				}
 			}
 			break;

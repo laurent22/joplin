@@ -194,13 +194,15 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 	const apiBaseUrl = env.API_BASE_URL ? env.API_BASE_URL : baseUrl;
 	const supportEmail = env.SUPPORT_EMAIL;
 	const dbConfig = databaseConfigFromEnv(runningInDocker_, env, false);
+	const isJoplinServerBusiness = false;
 
 	config_ = {
 		...env,
-		appVersion: determineAppVersion(false),
+		appVersion: determineAppVersion(isJoplinServerBusiness),
 		joplinServerVersion: packageJson.version,
 		appName,
 		isJoplinCloud: apiBaseUrl.includes('.joplincloud.com') || apiBaseUrl.includes('.joplincloud.local'),
+		isJoplinServerBusiness,
 		defaultAdminPassword: env.DEFAULT_ADMIN_PASSWORD || 'admin',
 		env: envType,
 		rootDir: rootDir,

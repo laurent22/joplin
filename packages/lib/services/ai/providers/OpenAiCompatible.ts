@@ -52,7 +52,6 @@ const convertTool = (tool: ToolSpec) => {
 			name: tool.id,
 			description: tool.description,
 			parameters: tool.inputSchema,
-			strict: true,
 		},
 	};
 };
@@ -89,7 +88,7 @@ const convertMessage = (message: ChatMessage) => {
 		return [{
 			role: message.role,
 			content: message.content,
-			...(message.toolCalls ? {
+			...(message.toolCalls?.length ? {
 				tool_calls: message.toolCalls.map(call => {
 					return {
 						id: call.callId,
@@ -169,6 +168,14 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 		if (response.status === 400 && 'max_tokens' in body && /max_completion_tokens/i.test(errorMessage())) {
 			body.max_completion_tokens = body.max_tokens;
 			delete body.max_tokens;
+			({ response, json } = await doFetch());
+		}
+
+		// Reasoning models apply a reasoning_effort default server-side, which OpenAI then rejects
+		// alongside tools on /chat/completions. Opt out of the default to keep tools working.
+		if (response.status === 400 && 'tools' in body && /reasoning_effort/i.test(errorMessage())) {
+			logger.warn(`Model ${this.model_} rejected function tools with reasoning; retrying with reasoning disabled.`);
+			body.reasoning_effort = 'none';
 			({ response, json } = await doFetch());
 		}
 

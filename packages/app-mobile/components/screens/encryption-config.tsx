@@ -9,7 +9,7 @@ import time from '@joplin/lib/time';
 import { decryptedStatText, enableEncryptionConfirmationMessages, onSavePasswordClick, useInputMasterPassword, useInputPasswords, usePasswordChecker, useStats } from '@joplin/lib/components/EncryptionConfigScreen/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import { State } from '@joplin/lib/reducer';
-import { masterKeyEnabled, SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import { localSyncInfoSelector, masterKeyEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { getDefaultMasterKey, setupAndDisableEncryption, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
 import { useMemo, useState } from 'react';
 import { Divider, List } from 'react-native-paper';
@@ -397,7 +397,7 @@ const EncryptionConfigScreen = (props: Props) => {
 };
 
 export default connect((state: State) => {
-	const syncInfo = new SyncInfo(state.settings['syncInfoCache']);
+	const syncInfo = localSyncInfoSelector(state);
 
 	return {
 		themeId: state.settings.theme,

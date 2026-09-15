@@ -40,7 +40,7 @@ enum PlanHostingType {
 
 export interface PlanTieredPricingTableRow {
 	condition: string;
-	priceYearly: string;
+	priceMonthly: string;
 }
 
 export interface Plan {
@@ -48,7 +48,7 @@ export interface Plan {
 	title: string;
 	priceMonthly?: StripePublicConfigPrice;
 	priceYearly?: StripePublicConfigPrice;
-	pricingTable?: { rows: PlanTieredPricingTableRow[] };
+	pricingTable?: { rows: PlanTieredPricingTableRow[]; billedAnnually: string };
 	featured: boolean;
 	iconName: string;
 	featuresOn: FeatureId[];
@@ -56,6 +56,7 @@ export interface Plan {
 	featureLabelsOn: FeatureRow[];
 	featureLabelsOff: FeatureRow[];
 	cfaLabel: string;
+	cfaDescription?: string;
 	cfaUrl: string;
 	footnote: string;
 	learnMoreUrl?: string;
@@ -577,24 +578,32 @@ export const createFeatureTableMd = () => {
 const getTieredPricingTable = (price: StripePublicConfigPrice) => {
 	if (!isTieredPrice(price)) throw new Error(`Not a tiered price: ${price.id}`);
 
+	const formatUserCount = (count: number) => {
+		if (count === Number.POSITIVE_INFINITY) {
+			return '∞';
+		}
+		return String(count);
+	};
+
 	const rows: PlanTieredPricingTableRow[] = [];
 	for (const amount of price.amounts) {
-		const formatUserCount = (count: number) => {
-			if (count === Number.POSITIVE_INFINITY) {
-				return '∞';
-			}
-			return String(count);
-		};
+		// The tiered amounts are yearly per-user prices, so derive the monthly
+		// price shown in the table by dividing by 12.
+		const monthlyAmount = formatPrice(Math.round(Number(amount.amount) / 12 * 100) / 100, price.currency);
 		rows.push({
 			condition: `${
 				formatUserCount(amount.userRange.min)
 			}—${
 				formatUserCount(amount.userRange.max)
 			} users`,
-			priceYearly: `${amount.formattedAmount} / user / year`,
+			priceMonthly: `${monthlyAmount} / user / month`,
 		});
 	}
-	return rows;
+
+	const yearlyAmounts = price.amounts.map(amount => amount.formattedAmount).join(' / ');
+	const billedAnnually = _('Billed annually (%s per user per year respectively).', yearlyAmounts);
+
+	return { rows, billedAnnually };
 };
 
 export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Plan> {
@@ -617,7 +626,7 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			featuresOff: getFeatureIdsByPlan(PlanName.Basic, false),
 			featureLabelsOn: getFeatureLabelsByPlan(PlanName.Basic, true),
 			featureLabelsOff: getFeatureLabelsByPlan(PlanName.Basic, false),
-			cfaLabel: _('Try it now'),
+			cfaLabel: _('Start free trial'),
 			cfaUrl: '',
 			footnote: '',
 			hostingType: PlanHostingType.Managed,
@@ -640,7 +649,7 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			featuresOff: getFeatureIdsByPlan(PlanName.Pro, false),
 			featureLabelsOn: getFeatureLabelsByPlan(PlanName.Pro, true),
 			featureLabelsOff: getFeatureLabelsByPlan(PlanName.Pro, false),
-			cfaLabel: _('Try it now'),
+			cfaLabel: _('Start free trial'),
 			cfaUrl: '',
 			footnote: '',
 			hostingType: PlanHostingType.Managed,
@@ -663,7 +672,7 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			featuresOff: getFeatureIdsByPlan(PlanName.Pro100Gb, false),
 			featureLabelsOn: getFeatureLabelsByPlan(PlanName.Pro100Gb, true),
 			featureLabelsOff: getFeatureLabelsByPlan(PlanName.Pro100Gb, false),
-			cfaLabel: _('Try it now'),
+			cfaLabel: _('Start free trial'),
 			cfaUrl: '',
 			footnote: '',
 			hostingType: PlanHostingType.Managed,
@@ -686,7 +695,7 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			featuresOff: getFeatureIdsByPlan(PlanName.Teams, false),
 			featureLabelsOn: getFeatureLabelsByPlan(PlanName.Teams, true),
 			featureLabelsOff: getFeatureLabelsByPlan(PlanName.Teams, false),
-			cfaLabel: _('Try it now'),
+			cfaLabel: _('Start free trial'),
 			cfaUrl: '',
 			footnote: _('Per user. Minimum of 2 users.'),
 			hostingType: PlanHostingType.Managed,
@@ -704,13 +713,11 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			featureLabelsOn: getFeatureLabelsByPlan(PlanName.JoplinServerBusiness, true),
 			featureLabelsOff: [],
 			...(selfServiceSelfHostingEnabled ? {
-				pricingTable: {
-					rows: getTieredPricingTable(findPrice(stripeConfig, {
-						accountType: 5,
-						period: PricePeriod.Yearly,
-					})),
-				},
-				cfaLabel: _('Try it now'),
+				pricingTable: getTieredPricingTable(findPrice(stripeConfig, {
+					accountType: 5,
+					period: PricePeriod.Yearly,
+				})),
+				cfaLabel: _('Start free trial'),
 				cfaUrl: '',
 				priceYearly: findPrice(stripeConfig, {
 					accountType: 5,
@@ -722,6 +729,7 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			}),
 			footnote: '',
 			learnMoreUrl: 'https://joplinapp.org/help/apps/joplin_server_business',
+			cfaDescription: _('14-day free trial. Cancel anytime during the trial and you won\'t be charged.'),
 			hostingType: PlanHostingType.Self,
 		},
 	};

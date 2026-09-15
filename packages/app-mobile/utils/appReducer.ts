@@ -4,6 +4,7 @@ import appDefaultState, { DEFAULT_ROUTE } from './appDefaultState';
 import fastDeepEqual = require('fast-deep-equal');
 import Logger from '@joplin/utils/Logger';
 import { TagsWithNoteCountEntity } from '@joplin/lib/services/database/types';
+import getConflictFolderId from '@joplin/lib/models/utils/getConflictFolderId';
 
 const logger = Logger.create('appReducer');
 
@@ -186,6 +187,32 @@ const appReducer = (state = appDefaultState, action: any) => {
 						isDeleted: true,
 					},
 				};
+			}
+			break;
+
+		case 'FOLDER_UPDATE_ALL':
+
+			{
+				const conflictFolderId = getConflictFolderId();
+				const conflictFolderRemoved = state.folders.some(folder => folder.id === conflictFolderId) &&
+					!action.items.some((folder: { id: string }) => folder.id === conflictFolderId);
+
+				if (conflictFolderRemoved) {
+					let newNavHistory = navHistory.filter(route => !(route.routeName === 'Notes' && route.folderId === conflictFolderId));
+					newNavHistory = removeAdjacentFolderDuplicates(newNavHistory);
+					removeLatestFolderIfSelected(newNavHistory, state.route);
+					navHistory.splice(0, navHistory.length, ...newNavHistory);
+
+					if (state.route.routeName === 'Notes' && state.route.folderId === conflictFolderId) {
+						newState = {
+							...state,
+							route: {
+								...state.route,
+								isDeleted: true,
+							},
+						};
+					}
+				}
 			}
 			break;
 

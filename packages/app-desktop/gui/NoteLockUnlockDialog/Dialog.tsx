@@ -63,9 +63,9 @@ export default function(props: Props) {
 	return (
 		<Dialog onCancel={onClose} className="note-lock-unlock-dialog">
 			<div className="dialog-root">
-				<DialogTitle title={_('Unlock encrypted notes')}/>
+				<DialogTitle title={_('Unlock notes')}/>
 				<div className="dialog-content">
-					<p>{_('Enter the note lock password to unlock encrypted notes for this session.')}</p>
+					<p>{_('Enter your password to unlock your notes for this session.')}</p>
 					<LabelledPasswordInput
 						labelText={_('Note lock password')}
 						value={password}

@@ -41,6 +41,7 @@ const addFormattingClasses = [
 			}
 			return null;
 		},
+		mergeNeighbors: true,
 	}),
 ];
 
