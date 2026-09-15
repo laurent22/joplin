@@ -21,6 +21,12 @@ describe('prepareLines', () => {
 		expect(prepared[4].comparisonText).toBe(prepared[4].text);
 	});
 
+	test('should reject a delimiter row whose last cell is not a delimiter', () => {
+		const prepared = prepareLines(['| h | i |', '| --- | not-a-delimiter', '| a | b |']);
+
+		expect(prepared.every(line => !line.isTableRow)).toBe(true);
+	});
+
 	test('should not treat pipe text without a delimiter row as a table', () => {
 		const prepared = prepareLines(['| a | b |', '| c | d |']);
 

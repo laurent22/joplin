@@ -34,9 +34,13 @@ const normaliseTableLine = (line: string) => {
 
 const looksLikeRow = (line: string) => line.trimStart().startsWith('|');
 
+const hasTrailingOuterPipe = (line: string) => /(^|[^\\])(?:\\\\)*\|[ \t]*$/.test(line);
+
 const isDelimiterRow = (line: string) => {
 	if (!looksLikeRow(line)) return false;
-	const cells = splitCells(line).slice(1, -1);
+	const cells = splitCells(line);
+	cells.shift();
+	if (hasTrailingOuterPipe(line)) cells.pop();
 	return cells.length > 0 && cells.every(cell => /^\s*:?-+:?\s*$/.test(cell.trim()));
 };
 
