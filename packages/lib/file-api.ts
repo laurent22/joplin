@@ -527,12 +527,17 @@ async function basicDelta(path: string, getDirStatFn: (path: string)=> ItemStat[
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mixed array of ItemStat (sync items) and { path; isDeleted } (deleted items) returned to the sync engine
 	let output: any[] = [];
 
+	// When the ignored count is non-zero, this means valid sync items were removed from the target at some point and are now excluded from the sync,
+	// either due to manual sync target modification, restoration of a backup to the sync target, or a temporary blip where the sync target provider
+	// reported incorrect information for a stat listing, e.g. https://discourse.joplinapp.org/t/sync-randomly-deleted-all-notes-on-just-one-device/50593
 	const updateReport = {
 		timestamp: context.timestamp,
 		older: 0,
 		newer: 0,
 		equal: 0,
+		ignored: 0,
 	};
+	const itemIdSet = new Set(itemIds);
 
 	let remoteItemMetadata: Map<string, RemoteItemMetadata>;
 
@@ -586,14 +591,22 @@ async function basicDelta(path: string, getDirStatFn: (path: string)=> ItemStat[
 			output.push(stat);
 		} else {
 			if (stat.updated_time < context.timestamp) {
-				updateReport.older++;
+				if (itemIdSet.has(itemId)) {
+					updateReport.older++;
+				} else {
+					updateReport.ignored++;
+				}
 				continue;
 			}
 
 			// Special case for items that exactly match the timestamp
 			if (stat.updated_time === context.timestamp) {
 				if (context.filesAtTimestamp.indexOf(stat.path) >= 0) {
-					updateReport.equal++;
+					if (itemIdSet.has(itemId)) {
+						updateReport.equal++;
+					} else {
+						updateReport.ignored++;
+					}
 					continue;
 				}
 			}
