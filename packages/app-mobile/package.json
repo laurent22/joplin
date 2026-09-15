@@ -78,7 +78,7 @@
     "react-native-quick-base64": "2.2.2",
     "react-native-quick-crypto": "1.1.4",
     "react-native-rsa-native": "2.0.5",
-    "react-native-safe-area-context": "5.7.0",
+    "react-native-safe-area-context": "5.8.0",
     "react-native-securerandom": "1.0.1",
     "react-native-share": "12.3.1",
     "react-native-svg": "15.15.5",
