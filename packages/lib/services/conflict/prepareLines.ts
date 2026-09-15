@@ -4,7 +4,7 @@ export interface PreparedLine {
 	comparisonText: string;
 }
 
-const fenceStart = /^\s{0,3}(```|~~~)/;
+const fenceMarker = /^\s{0,3}((`{3,})|(~{3,}))/;
 
 const splitCells = (line: string) => {
 	const cells: string[] = [];
@@ -45,15 +45,22 @@ const isDelimiterRow = (line: string) => {
 };
 
 export default (lines: string[]): PreparedLine[] => {
-	const isTableRow = new Array<boolean>(lines.length).fill(false);
-	let inFence = false;
+	const isTableRow = new Array<boolean>(lines.length).fill(false);	let fence: { char: string; length: number }|null = null;
 
 	for (let i = 0; i < lines.length; i++) {
-		if (fenceStart.test(lines[i])) {
-			inFence = !inFence;
-			continue;
+		const marker = fenceMarker.exec(lines[i]);
+		if (marker) {
+			const run = marker[1];
+			if (!fence) {
+				fence = { char: run[0], length: run.length };
+				continue;
+			}
+			if (run[0] === fence.char && run.length >= fence.length) {
+				fence = null;
+				continue;
+			}
 		}
-		if (inFence || !isDelimiterRow(lines[i])) continue;
+		if (fence || !isDelimiterRow(lines[i])) continue;
 
 		// The header above and every unbroken row below belong to the same table
 		isTableRow[i] = true;

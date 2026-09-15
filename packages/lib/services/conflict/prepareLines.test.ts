@@ -21,6 +21,19 @@ describe('prepareLines', () => {
 		expect(prepared[4].comparisonText).toBe(prepared[4].text);
 	});
 
+	test.each([
+		['a shorter fence inside a longer one', ['````', '```js', '| --- | --- |', '| a | b |', '````']],
+		['a different fence character', ['```', '~~~', '| --- | --- |', '| a | b |', '```']],
+	])('should not end a code block at %s', (_label, lines) => {
+		expect(prepareLines(lines).every(line => !line.isTableRow)).toBe(true);
+	});
+
+	test('should end a code block at a longer closing fence', () => {
+		const prepared = prepareLines(['```', 'code', '`````', '| h | i |', '| - | - |']);
+
+		expect(prepared.slice(3).every(line => line.isTableRow)).toBe(true);
+	});
+
 	test('should reject a delimiter row whose last cell is not a delimiter', () => {
 		const prepared = prepareLines(['| h | i |', '| --- | not-a-delimiter', '| a | b |']);
 
