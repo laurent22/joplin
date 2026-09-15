@@ -393,7 +393,6 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		keyboardMode: props.keyboardMode,
 		tabMovesFocus: props.tabMovesFocus,
 		resolvingConflict: conflictContent !== null,
-		conflictHasCodeBlock: !!conflictContent && /^\s{0,3}(```|~~~)/m.test(conflictContent),
 	});
 
 	const renderEditor = () => {
