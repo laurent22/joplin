@@ -612,7 +612,11 @@ function shimInit(options: ShimInitOptions = null) {
 				return makeResponse(response);
 			} catch (error) {
 				if (await fs.exists(filePath)) {
-					await fs.unlink(filePath);
+					try {
+						await fs.unlink(filePath);
+					} catch {
+						// Ignore. Report the original error
+					}
 				}
 
 				throw mapFetchError(error);
