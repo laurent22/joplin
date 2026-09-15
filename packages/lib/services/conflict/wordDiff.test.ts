@@ -163,4 +163,16 @@ describe('wordDiff', () => {
 		expect(highlightedText(diff.local)).toEqual(['test']);
 		expect(highlightedText(diff.remote)).toEqual(['demo']);
 	});
+
+	test('should handle a long single line without scanning back from each character', () => {
+		const local = `| ${'a'.repeat(40000)} | b |`;
+		const remote = `| ${'a'.repeat(40000)} | c |`;
+
+		const startTime = Date.now();
+		const diff = wordDiff(local, remote);
+
+		expect(Date.now() - startTime).toBeLessThan(500);
+		expect(diff.local.map(segment => segment.text).join('')).toBe(local);
+		expect(diff.remote.map(segment => segment.text).join('')).toBe(remote);
+	});
 });

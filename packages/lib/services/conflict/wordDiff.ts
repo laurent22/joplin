@@ -133,6 +133,16 @@ const clearTablePadding = (side: WordDiffSegment[], text: string) => {
 	let cachedLineStart = -1;
 	let cachedRanges: [number, number][] = [];
 
+	let scannedLineStart = 0;
+	let nextNewline = text.indexOf('\n');
+	const lineStartAt = (at: number) => {
+		while (nextNewline !== -1 && nextNewline < at) {
+			scannedLineStart = nextNewline + 1;
+			nextNewline = text.indexOf('\n', scannedLineStart);
+		}
+		return scannedLineStart;
+	};
+
 	const push = (value: string, highlighted: boolean) => {
 		if (value === '') return;
 		const last = result[result.length - 1];
@@ -157,7 +167,7 @@ const clearTablePadding = (side: WordDiffSegment[], text: string) => {
 			let isPadding = false;
 			if (i < segment.text.length) {
 				const at = position + i;
-				const lineStart = text.lastIndexOf('\n', at - 1) + 1;
+				const lineStart = lineStartAt(at);
 				if (lineStart !== cachedLineStart) {
 					const lineEnd = text.indexOf('\n', lineStart);
 					cachedRanges = paddingRanges(text.slice(lineStart, lineEnd === -1 ? text.length : lineEnd));
