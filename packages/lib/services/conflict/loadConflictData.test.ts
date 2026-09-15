@@ -1,7 +1,8 @@
-import { setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv } from '../../testing/test-utils';
 import Note from '../../models/Note';
 import Setting from '../../models/Setting';
 import ConflictNoteState from '../../models/ConflictNoteState';
+import BaseItem from '../../models/BaseItem';
 import loadConflictData, { ConflictDataStatus } from './loadConflictData';
 import { ConflictNoteStateEntity } from '../database/types';
 
@@ -27,17 +28,22 @@ describe('loadConflictData', () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 		Setting.setValue('featureFlag.conflictResolution', true);
+		BaseItem.syncShareCache = null;
 	});
 
-	test('should three-way merge a note that has a base', async () => {
+	test('should compare the two versions the same way whether or not a base is stored', async () => {
 		const note = await createConflictNote('one\ntwo\nthree', 'one\ntwo\nTHREE');
 		await saveState(note.id, { base_body: 'one\ntwo\nthree' });
 
-		const data = await loadConflictData(note.id);
+		const withBase = await loadConflictData(note.id);
 
-		expect(data.status).toBe(ConflictDataStatus.Ok);
-		expect(data.sections.some(s => s.type === 'conflict')).toBe(false);
-		expect(data.sections.some(s => s.type === 'auto-merged')).toBe(true);
+		await saveState(note.id, { base_body: '' });
+		const withoutBase = await loadConflictData(note.id);
+
+		expect(withBase.status).toBe(ConflictDataStatus.Ok);
+		// The viewer only shows the differences, so a stored base changes nothing
+		expect(withBase.sections).toEqual(withoutBase.sections);
+		expect(withBase.sections.some(s => s.type === 'conflict')).toBe(true);
 	});
 
 	test('should report a conflict section when both sides changed the same line', async () => {
@@ -95,7 +101,7 @@ describe('loadConflictData', () => {
 		await Note.save({ id: note.conflict_original_id, body: 'one\nTWO' });
 
 		const after = await loadConflictData(note.id);
-		expect(after.sections.some(s => s.type === 'auto-merged')).toBe(true);
+		expect(after.sections.some(s => s.type === 'conflict')).toBe(true);
 	});
 
 	test('should be unavailable when the feature flag is off', async () => {
@@ -109,13 +115,45 @@ describe('loadConflictData', () => {
 		expect(data.sections).toEqual([]);
 	});
 
-	test('should be unavailable when there is no state row', async () => {
-		const note = await createConflictNote('body');
+	test('should be available for a conflict that arrived through sync', async () => {
+		const note = await createConflictNote('mine', 'theirs');
 
 		const data = await loadConflictData(note.id);
 
-		expect(data.status).toBe(ConflictDataStatus.Unavailable);
-		expect(data.sections).toEqual([]);
+		expect(data.status).toBe(ConflictDataStatus.Ok);
+		expect(data.remoteUpdatedTime).toBeGreaterThan(0);
+		expect(data.sections.some(section => section.type === 'conflict')).toBe(true);
+	});
+
+	test('should be unavailable when the original is in the trash', async () => {
+		const note = await createConflictNote('mine', 'theirs');
+		await saveState(note.id, {});
+
+		expect((await loadConflictData(note.id)).status).toBe(ConflictDataStatus.Ok);
+
+		await Note.delete(note.conflict_original_id, { toTrash: true });
+
+		expect((await loadConflictData(note.id)).status).toBe(ConflictDataStatus.Unavailable);
+	});
+
+	test('should be unavailable when the original is a read-only share', async () => {
+		const original = await Note.save({ title: 'Title', body: 'theirs', share_id: 'share1' }, { disableReadOnlyCheck: true });
+		const note = await Note.save({ title: 'Title', body: 'mine', is_conflict: 1, conflict_original_id: original.id });
+		await saveState(note.id, {});
+
+		expect((await loadConflictData(note.id)).status).toBe(ConflictDataStatus.Ok);
+
+		simulateReadOnlyShareEnv('share1');
+
+		expect((await loadConflictData(note.id)).status).toBe(ConflictDataStatus.Unavailable);
+	});
+
+	test('should still be available when the note is not shared', async () => {
+		const note = await createConflictNote('mine', 'theirs');
+		await saveState(note.id, {});
+		simulateReadOnlyShareEnv('share1');
+
+		expect((await loadConflictData(note.id)).status).toBe(ConflictDataStatus.Ok);
 	});
 
 	test('should be unavailable when the note does not exist', async () => {
