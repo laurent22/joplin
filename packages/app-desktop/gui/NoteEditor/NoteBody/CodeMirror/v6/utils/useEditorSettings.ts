@@ -15,6 +15,7 @@ interface EditorSettingsProps {
 	baseTheme: EditorTheme;
 	// True while the conflict resolution UI is showing both versions
 	resolvingConflict: boolean;
+	conflictHasCodeBlock: boolean;
 }
 
 const useEditorSettings = (props: EditorSettingsProps) => {
@@ -45,7 +46,8 @@ const useEditorSettings = (props: EditorSettingsProps) => {
 			keyboardMode = EditorKeymap.Emacs;
 		}
 
-		const plainText = props.resolvingConflict && settings.conflictPlainText;
+		const plainText = props.resolvingConflict
+			&& (settings.conflictPlainText || props.conflictHasCodeBlock);
 
 		return {
 			language: isHTMLNote ? EditorLanguageType.Html : EditorLanguageType.Markdown,
@@ -78,7 +80,7 @@ const useEditorSettings = (props: EditorSettingsProps) => {
 		};
 	}, [
 		props.contentMarkupLanguage, props.disabled, props.keyboardMode, props.baseTheme,
-		props.tabMovesFocus, props.resolvingConflict, settings,
+		props.tabMovesFocus, props.resolvingConflict, props.conflictHasCodeBlock, settings,
 	]);
 };
 
