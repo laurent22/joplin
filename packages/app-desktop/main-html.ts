@@ -37,7 +37,10 @@ import initLib from '@joplin/lib/initLib';
 import PerformanceLogger from '@joplin/lib/PerformanceLogger';
 import * as pdfJs from 'pdfjs-dist';
 import { isAppleSilicon } from 'is-apple-silicon';
+import initializeNetworkConnectionAttemptTimeout from './utils/initializeNetworkConnectionAttemptTimeout';
 require('@sentry/electron/renderer');
+
+initializeNetworkConnectionAttemptTimeout();
 
 // Allows components to use React as a global
 window.React = React;

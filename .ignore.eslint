@@ -724,6 +724,7 @@ packages/app-desktop/utils/customProtocols/registerCustomProtocols.js
 packages/app-desktop/utils/getAssetPath.js
 packages/app-desktop/utils/initReact.js
 packages/app-desktop/utils/initializeCommandService.js
+packages/app-desktop/utils/initializeNetworkConnectionAttemptTimeout.js
 packages/app-desktop/utils/isSafeToOpen.test.js
 packages/app-desktop/utils/isSafeToOpen.js
 packages/app-desktop/utils/layout/layoutKeyToLabel.js
