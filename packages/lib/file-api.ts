@@ -537,7 +537,6 @@ async function basicDelta(path: string, getDirStatFn: (path: string)=> ItemStat[
 		equal: 0,
 		ignored: 0,
 	};
-	const itemIdSet = new Set(itemIds);
 
 	let remoteItemMetadata: Map<string, RemoteItemMetadata>;
 
@@ -591,7 +590,7 @@ async function basicDelta(path: string, getDirStatFn: (path: string)=> ItemStat[
 			output.push(stat);
 		} else {
 			if (stat.updated_time < context.timestamp) {
-				if (itemIdSet.has(itemId)) {
+				if (itemIds.includes(itemId)) {
 					updateReport.older++;
 				} else {
 					updateReport.ignored++;
@@ -602,7 +601,7 @@ async function basicDelta(path: string, getDirStatFn: (path: string)=> ItemStat[
 			// Special case for items that exactly match the timestamp
 			if (stat.updated_time === context.timestamp) {
 				if (context.filesAtTimestamp.indexOf(stat.path) >= 0) {
-					if (itemIdSet.has(itemId)) {
+					if (itemIds.includes(itemId)) {
 						updateReport.equal++;
 					} else {
 						updateReport.ignored++;
