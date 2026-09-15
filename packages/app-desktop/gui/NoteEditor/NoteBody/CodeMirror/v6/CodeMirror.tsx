@@ -147,6 +147,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 		editorCopyText, editorCutText, editorPaste,
 		editorContent: props.content,
+		resolvingConflict: conflictContent !== null,
 		visiblePanes: props.visiblePanes,
 		contentMarkupLanguage: props.contentMarkupLanguage,
 	});
