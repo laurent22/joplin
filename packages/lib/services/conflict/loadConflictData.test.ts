@@ -115,13 +115,14 @@ describe('loadConflictData', () => {
 		expect(data.sections).toEqual([]);
 	});
 
-	test('should be unavailable when there is no state row', async () => {
-		const note = await createConflictNote('body');
+	test('should be available for a conflict that arrived through sync', async () => {
+		const note = await createConflictNote('mine', 'theirs');
 
 		const data = await loadConflictData(note.id);
 
-		expect(data.status).toBe(ConflictDataStatus.Unavailable);
-		expect(data.sections).toEqual([]);
+		expect(data.status).toBe(ConflictDataStatus.Ok);
+		expect(data.remoteUpdatedTime).toBeGreaterThan(0);
+		expect(data.sections.some(section => section.type === 'conflict')).toBe(true);
 	});
 
 	test('should be unavailable when the original is in the trash', async () => {

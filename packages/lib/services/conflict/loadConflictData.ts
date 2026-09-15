@@ -1,12 +1,9 @@
 import Note from '../../models/Note';
-import ConflictNoteState from '../../models/ConflictNoteState';
 import { MergedSection, twoWayDiff } from './diffNotes';
 import conflictIsResolvable from './conflictIsResolvable';
 
 export enum ConflictDataStatus {
 	Ok = 'ok',
-	// No three-way data for this note (no state row, or it is still encrypted or
-	// locked), so show the read-only conflict view
 	Unavailable = 'unavailable',
 }
 
@@ -38,9 +35,6 @@ export default async (noteId: string): Promise<ConflictData> => {
 
 	const { resolvable, original: remoteNote } = await conflictIsResolvable(note);
 	if (!resolvable) return unavailable();
-
-	const state = await ConflictNoteState.byNoteId(noteId);
-	if (!state) return unavailable();
 
 	const localBody = note.body ?? '';
 	const remoteBody = remoteNote.body ?? '';
