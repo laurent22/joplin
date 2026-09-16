@@ -6,6 +6,7 @@ import replaceFormatCharacters from '../replaceFormatCharacters';
 import replaceInlineHtml from '../replaceInlineHtml';
 import replaceLinks from '../replaceLinks';
 import visibleEditorText from '../../../testing/visibleEditorText';
+import backspaceOnce from '../../../testing/backspaceOnce';
 
 jest.retryTimes(2);
 
@@ -172,6 +173,39 @@ describe('makeInlineReplaceExtension', () => {
 
 			expect(editor.state.selection.main).toMatchObject(expectedSelection);
 			expectTextContentToBe(visibleEditorText(editor), markdown.trimEnd());
+		} finally {
+			editor.destroy();
+		}
+	});
+
+	it('should update markdown decorations when the mouse is down and the document changes', async () => {
+		const markdown = '**test**...';
+		const initialSelection = EditorSelection.cursor(markdown.length);
+		const editor = await createTestEditor(
+			'**test**...',
+			initialSelection,
+			['StrongEmphasis'],
+			[replaceFormatCharacters],
+		);
+
+		try {
+			editor.dom.dispatchEvent(new MouseEvent('mousedown', { button: 0 }));
+			editor.dispatch({ selection: initialSelection, userEvent: 'select.pointer' });
+			jest.runAllTimers();
+
+			expectTextContentToBe(visibleEditorText(editor), 'test...');
+
+			backspaceOnce(editor);
+			expectTextContentToBe(visibleEditorText(editor), 'test..');
+			backspaceOnce(editor);
+			expectTextContentToBe(visibleEditorText(editor), 'test.');
+			backspaceOnce(editor);
+			expectTextContentToBe(visibleEditorText(editor), '**test**');
+
+			editor.dom.ownerDocument.dispatchEvent(new MouseEvent('mouseup', { button: 0 }));
+			await jest.runAllTimersAsync();
+
+			expectTextContentToBe(visibleEditorText(editor), '**test**');
 		} finally {
 			editor.destroy();
 		}

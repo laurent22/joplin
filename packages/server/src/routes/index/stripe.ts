@@ -306,7 +306,8 @@ export const postHandlers: PostHandlers = {
 				await handleSubscriptionCreated(
 					stripe,
 					models,
-					customer.name,
+					// PayPal checkouts leave the customer name empty in Stripe
+					customer.name || '',
 					customer.email,
 					accountType,
 					stripeUserId,
