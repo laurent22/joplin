@@ -136,6 +136,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 
 	// The resolution UI needs the Markdown editor, so it replaces plugin editors and whiteboards
 	const conflictRestrictsEditor = props.conflictIsInView && (!conflictChecked || noteHasConflict);
+	const conflictBlocksPlugins = props.conflictIsInView && conflictChecked && noteHasConflict;
 	const { editorPlugin, editorView } = usePluginEditorView(props.plugins, conflictRestrictsEditor);
 	const builtInEditorVisible = !editorPlugin;
 	const windowId = useContext(WindowIdContext);
@@ -345,7 +346,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		shownEditorViewIds,
 		activeEditorView: editorView,
 		plugins: props.plugins,
-		disabled: conflictRestrictsEditor,
+		disabled: conflictBlocksPlugins,
 	});
 
 	const {
