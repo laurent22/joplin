@@ -132,8 +132,11 @@ function NoteEditorContent(props: NoteEditorProps) {
 	}, []);
 
 	const effectiveNoteId = useEffectiveNoteId(props);
-	// The resolution UI needs the Markdown editor, so plugin editors and whiteboards cannot resolve conflicts
-	const { editorPlugin, editorView } = usePluginEditorView(props.plugins, props.conflictIsInView);
+	const { conflictTitle, resolvedTitle, setResolvedTitle, hasTitleConflict, isConflictNote: noteHasConflict, conflictChecked, remoteUpdatedTime, originalIsStale, staleReason, reloadConflict } = useConflictTitle(effectiveNoteId);
+
+	// The resolution UI needs the Markdown editor, so it replaces plugin editors and whiteboards
+	const conflictRestrictsEditor = props.conflictIsInView && (!conflictChecked || noteHasConflict);
+	const { editorPlugin, editorView } = usePluginEditorView(props.plugins, conflictRestrictsEditor);
 	const builtInEditorVisible = !editorPlugin;
 	const windowId = useContext(WindowIdContext);
 	const onDecryptFailedChange = useCallback((value: boolean) => {
@@ -215,8 +218,6 @@ function NoteEditorContent(props: NoteEditorProps) {
 	}, [props.noteLockSessionUnlocked, saveNoteIfWillChange]);
 
 	const formNoteFolder = useFolder({ folderId: formNote.parent_id });
-
-	const { conflictTitle, resolvedTitle, setResolvedTitle, hasTitleConflict, isConflictNote: noteHasConflict, remoteUpdatedTime, originalIsStale, staleReason, reloadConflict } = useConflictTitle(formNote.id);
 
 	// The markdown editor draws the resolution, so the rest of UI waits for it
 	const isConflictNote = noteHasConflict
@@ -336,7 +337,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		}
 	}, [hasTitleConflict, resolvedTitle, remoteUpdatedTime, originalIsStale, askToReloadConflict, props.dispatch]);
 
-	const shownEditorViewIds = useVisiblePluginEditorViewIds(props.plugins, windowId, props.conflictIsInView);
+	const shownEditorViewIds = useVisiblePluginEditorViewIds(props.plugins, windowId, conflictRestrictsEditor);
 	useConnectToEditorPlugin({
 		startupPluginsLoaded: props.startupPluginsLoaded,
 		setFormNote,
@@ -346,7 +347,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		shownEditorViewIds,
 		activeEditorView: editorView,
 		plugins: props.plugins,
-		disabled: props.conflictIsInView,
+		disabled: conflictRestrictsEditor,
 	});
 
 	const {
@@ -709,15 +710,15 @@ function NoteEditorContent(props: NoteEditorProps) {
 
 	const useWhiteboardEditor = builtInEditorVisible
 		&& noteHasWhiteboardFence
-		&& !props.conflictIsInView
+		&& !conflictRestrictsEditor
 		&& !props.whiteboardForceMarkdown?.[formNote.id];
 
 	// Mirror "active note is a whiteboard" to redux so the NoteToolbar can
 	// show the editor toggle. We can't compute this from the redux note list
 	// because note bodies aren't in the preview fields.
 	useEffect(() => {
-		props.dispatch({ type: 'WHITEBOARD_ACTIVE_NOTE_SET', value: noteHasWhiteboardFence && !props.conflictIsInView, windowId });
-	}, [noteHasWhiteboardFence, props.conflictIsInView, windowId, props.dispatch]);
+		props.dispatch({ type: 'WHITEBOARD_ACTIVE_NOTE_SET', value: noteHasWhiteboardFence && !conflictRestrictsEditor, windowId });
+	}, [noteHasWhiteboardFence, conflictRestrictsEditor, windowId, props.dispatch]);
 
 	useEffect(() => {
 		props.dispatch({ type: 'CONFLICT_ACTIVE_NOTE_SET', value: isConflictNote, windowId });

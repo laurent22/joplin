@@ -135,6 +135,7 @@ const useConflictTitle = (noteId: string) => {
 		setResolvedTitle,
 		hasTitleConflict: !!active,
 		isConflictNote: loaded && isConflict,
+		conflictChecked: loaded,
 		remoteUpdatedTime,
 		originalIsStale: loaded && isConflict && originalIsStale,
 		staleReason,
