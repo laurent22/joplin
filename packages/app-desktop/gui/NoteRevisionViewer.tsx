@@ -73,15 +73,15 @@ const useNoteContent = (
 	});
 
 	useAsyncEffect(async (event) => {
+		// Cleared before the load so a switch never keeps the previous revision's failure or restore target.
+		setRestoreNote(null);
+		setDecryptFailed(false);
 		if (!revisions.length || !currentRevId) {
 			setNote(null);
-			setRestoreNote(null);
-			setDecryptFailed(false);
 		} else {
 			const revIndex = BaseModel.modelIndexById(revisions, currentRevId);
 			const note = await RevisionService.instance().revisionNote(revisions, revIndex);
 			if (!note || event.cancelled) return;
-			setRestoreNote(note);
 			if (isNoteLockEnabled() && revisions[revIndex].is_locked) {
 				// A revision is a JSON diff object, so a gated load is not possible: the diffs are
 				// merged first and the resulting body is decrypted manually here.
@@ -99,9 +99,9 @@ const useNoteContent = (
 				setDecryptFailed(failed);
 				setNote({ ...note, body: displayBody });
 			} else {
-				setDecryptFailed(false);
 				setNote(note);
 			}
+			setRestoreNote(note);
 		}
 	}, [revisions, currentRevId, themeId, customCss, viewerRef, canDecrypt]);
 
@@ -240,7 +240,7 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 			<select disabled={!revisions.length} value={currentRevId} className='revisions' style={theme.dropdownList} onChange={revisionList_onChange} ref={revisionListRef}>
 				{revisionListItems}
 			</select>
-			<button disabled={!revisions.length || restoring || showLockPanel} onClick={importButton_onClick} className='restore'style={{ ...theme.buttonStyle, marginLeft: 10, height: theme.inputStyle.height }}>
+			<button disabled={!restoreNote || restoring || showLockPanel} onClick={importButton_onClick} className='restore'style={{ ...theme.buttonStyle, marginLeft: 10, height: theme.inputStyle.height }}>
 				{restoreButtonTitle}
 			</button>
 			<button disabled={!revisions.length || deleting} onClick={deleteHistoryButton_onClick} className='deleteHistory'style={{ ...theme.buttonStyle, marginLeft: 10, height: theme.inputStyle.height }}>
@@ -263,7 +263,7 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 		<div className='revision-viewer-root'>
 			{titleInput}
 			{showLockPanel ? <NoteLockPanel
-				noteTitle={restoreNote?.title ?? ''}
+				noteTitle={note?.title ?? ''}
 				hasNoteLockKey={hasNoteLockKey}
 				dispatch={dispatch}
 				undecryptable={decryptFailed && noteLockSessionUnlocked}

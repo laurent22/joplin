@@ -101,7 +101,8 @@ export default class RevisionService extends BaseService {
 				output.title_diff = Revision.createTextPatch('', noteTitle);
 				output.body_diff = Revision.createTextPatch('', noteBody);
 				output.metadata_diff = Revision.createObjectPatch({}, noteMd);
-			} else if (!parentRev || (!!parentRev.is_locked && !note.is_locked)) {
+			} else if (!parentRev || !!parentRev.is_locked !== !!note.is_locked) {
+				// A chain never crosses a lock state change, so clearing plaintext history cannot orphan a locked revision.
 				output.title_diff = Revision.createTextPatch('', noteTitle);
 				output.body_diff = Revision.createTextPatch('', noteBody);
 				output.metadata_diff = Revision.createObjectPatch({}, noteMd);

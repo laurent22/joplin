@@ -2,6 +2,7 @@ import { revisionService, setupDatabaseAndSynchronizer, switchClient, encryption
 import Setting from '../models/Setting';
 import Note from '../models/Note';
 import Revision from '../models/Revision';
+import ItemChange from '../models/ItemChange';
 import BaseModel from '../BaseModel';
 import EncryptionService from './e2ee/EncryptionService';
 import NoteLockKey from './noteLock/NoteLockKey';
@@ -120,6 +121,30 @@ describe('RevisionService.noteLock', () => {
 		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, note.id);
 		expect(revisions.length).toBe(2);
 		expect(revisions[1].is_locked).toBe(1);
+	});
+
+	it('should not chain a locked revision onto plaintext history while the feature flag is off', async () => {
+		await setUpUnlockedSession();
+		const note = await Note.save({ title: 'note', body: 'secret v1' });
+		await Note.save({ id: note.id, body: 'secret v2' });
+		await revisionService().collectRevisions();
+		const cipherText = await NoteLockService.instance().encryptString('secret v2');
+
+		// The lock arrives through sync with the flag off, which leaves the plaintext history in place.
+		Setting.setValue('featureFlag.noteLock', false);
+		await Note.save({ id: note.id, body: cipherText, is_locked: 1, extracted_resource_ids: '' }, { changeSource: ItemChange.SOURCE_SYNC });
+		await Note.save({ id: note.id, title: 'renamed' });
+		await revisionService().collectRevisions();
+
+		// A later lock transition with the flag on deletes that history, so the locked revision must not depend on it.
+		Setting.setValue('featureFlag.noteLock', true);
+		await revisionService().deleteUnencryptedHistoryForNote(note.id, { sourceDescription: 'test' });
+		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, note.id);
+		expect(revisions.length).toBe(1);
+		expect(revisions[0].parent_id).toBe('');
+		const revNote = await revisionService().revisionNote(revisions, 0);
+		expect(revNote.title).toBe('renamed');
+		expect(revNote.body).toBe(cipherText);
 	});
 
 	it('should restore an encrypted revision as a locked note', async () => {

@@ -69,15 +69,18 @@ const useRevisionNote = (revisions: RevisionEntity[], revisionId: string, canDec
 	const [resources, setResources] = useState<AttachedResources>({});
 
 	useAsyncEffect(async event => {
+		// Cleared before the load so a switch never keeps the previous revision's failure or restore target.
+		setRestoreNote(null);
+		setDecryptFailed(false);
 		const revisionIndex = BaseModel.modelIndexById(revisions, revisionId);
 		if (revisionIndex === -1) {
 			setNote(null);
-			setRestoreNote(null);
+			setResources({});
 			return;
 		}
 		let note = await RevisionService.instance().revisionNote(revisions, revisionIndex);
 		if (event.cancelled) return;
-		setRestoreNote(note);
+		const encryptedNote = note;
 		if (isNoteLockEnabled() && revisions[revisionIndex].is_locked) {
 			// Revisions are merged before decryption, so a gated load is not possible.
 			// Keep this in sync with app-desktop/gui/NoteRevisionViewer.tsx.
@@ -94,10 +97,9 @@ const useRevisionNote = (revisions: RevisionEntity[], revisionId: string, canDec
 			}
 			setDecryptFailed(failed);
 			note = { ...note, body: displayBody };
-		} else {
-			setDecryptFailed(false);
 		}
 		setNote(note);
+		setRestoreNote(encryptedNote);
 
 		const resources = await attachedResources(note?.body ?? '');
 		if (event.cancelled) return;
@@ -255,7 +257,7 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 	const restoreButton = (
 		<PrimaryButton
 			onPress={onRestore}
-			disabled={restoring || !note || showLockPanel}
+			disabled={restoring || !restoreNote || showLockPanel}
 		>{restoreButtonTitle}</PrimaryButton>
 	);
 
