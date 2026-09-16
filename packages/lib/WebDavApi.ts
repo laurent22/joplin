@@ -392,8 +392,12 @@ class WebDavApi {
 			response = await shim.fetch(url, fetchOptions);
 			// These are known error codes used for servers which reject when the If-None-Match header is sent. As these
 			// particular error codes are terminal, there should not be a risk of an intermittent failure selecting the
-			// wrong mode for the lifetime of the app
-			const terminalRejectionCodes = [400, 405];
+			// wrong mode for the lifetime of the app.
+			//
+			// 405 is excluded for MKCOL because per RFC 4918 that is the normal response when the collection already
+			// exists, and has nothing to do with If-None-Match. Treating it as a rejection made the retry succeed for
+			// the wrong reason and permanently disabled the header, which broke sync on servers that need it.
+			const terminalRejectionCodes = fetchOptions.method === 'MKCOL' ? [400] : [400, 405];
 			if (response.ok) {
 				this.excludeIfNoneMatch = ExcludeIfNoneMatch.No;
 			} else if (terminalRejectionCodes.includes(response.status)) {
@@ -404,7 +408,7 @@ class WebDavApi {
 				if (responseAlt.ok) {
 					this.excludeIfNoneMatch = ExcludeIfNoneMatch.Yes;
 					return responseAlt;
-				} else if (terminalRejectionCodes.includes(response.status)) {
+				} else if (terminalRejectionCodes.includes(responseAlt.status)) {
 					this.excludeIfNoneMatch = ExcludeIfNoneMatch.No;
 				}
 			}
@@ -478,8 +482,6 @@ class WebDavApi {
 			fetchOptions.credentials = 'omit';
 		}
 		const url = `${this.baseUrl()}/${ltrimSlashes(path)}`;
-
-		if (shim.httpAgent(url)) fetchOptions.agent = shim.httpAgent(url);
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- shim.fetch/uploadBlob/fetchBlob return slightly different response shapes (node-fetch vs blob); narrowing forces per-branch typing
 		let response: any = null;

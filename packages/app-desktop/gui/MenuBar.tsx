@@ -532,6 +532,7 @@ function useMenu(props: Props) {
 			// the following menu items will be available for all OS under Tools
 			const toolsItemsAll = [
 				menuItemDic.newWhiteboard,
+				menuItemDic.addNoteToWhiteboard,
 				separator(),
 				{
 					label: _('Note attachments...'),
@@ -754,6 +755,7 @@ function useMenu(props: Props) {
 						menuItemDic.toggleSideBar,
 						shim.isMac() ? noItem : menuItemDic.toggleMenuBar,
 						menuItemDic.toggleNoteList,
+						menuItemDic.toggleAiChat,
 						menuItemDic.toggleVisiblePanes,
 						menuItemDic.toggleEditorPlugin,
 						menuItemDic.toggleEditors,
