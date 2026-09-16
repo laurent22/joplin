@@ -12909,7 +12909,7 @@ __metadata:
     moment: "npm:2.30.1"
     multiparty: "npm:4.3.0"
     mustache: "npm:4.2.0"
-    nanoid: "npm:5.1.11"
+    nanoid: "npm:5.1.14"
     node-diff3: "npm:3.2.1"
     node-fetch: "npm:2.6.7"
     node-notifier: "npm:10.0.1"
