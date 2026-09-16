@@ -219,9 +219,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 
 	const formNoteFolder = useFolder({ folderId: formNote.parent_id });
 
-	// The markdown editor draws the resolution, so the rest of UI waits for it
-	const isConflictNote = noteHasConflict
-		&& props.conflictIsInView
+	const isConflictNote = conflictRestrictsEditor
 		&& props.bodyEditor === NoteBodyEditorType.CodeMirror6;
 
 	const onConflictReload = useCallback(() => {
