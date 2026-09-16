@@ -66,7 +66,9 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 	// `toggleEditorPlugin` shows for plugin editors; we extend it to also
 	// toggle the core whiteboard editor on whiteboard notes (see the command's
 	// runtime). The button is the same eye icon either way.
-	if (editorPlugin || windowState.activeNoteIsWhiteboard) commands.push('toggleEditorPlugin');
+	const editorToggleApplies = !windowState.activeNoteIsConflict
+		&& (!!editorPlugin || windowState.activeNoteIsWhiteboard);
+	if (editorToggleApplies) commands.push('toggleEditorPlugin');
 
 	return {
 		toolbarButtonInfos: toolbarButtonUtils.commandsToToolbarButtons(commands
