@@ -20,6 +20,7 @@ const renderer: ListRenderer = {
 		'note.is_locked',
 		'note.is_published',
 		'note.is_shared',
+		'note.share_id',
 		'note.isWatched',
 	],
 

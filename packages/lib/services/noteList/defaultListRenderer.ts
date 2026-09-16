@@ -21,7 +21,7 @@ interface Props {
 		is_locked: number;
 		is_conflict: number;
 		conflict_original_id: string;
-		is_shared: number;
+		share_id: string;
 		checkboxes: CheckboxStats | null;
 	};
 	item: {
@@ -55,6 +55,7 @@ const renderer: ListRenderer = {
 		'note.is_locked',
 		'note.is_published',
 		'note.is_shared',
+		'note.share_id',
 		'note.conflict_original_id',
 		'note.is_todo',
 		'note.isWatched',
