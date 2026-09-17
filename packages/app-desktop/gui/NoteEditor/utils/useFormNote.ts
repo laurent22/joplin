@@ -258,6 +258,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 			body: n.body,
 			is_todo: n.is_todo,
 			parent_id: n.parent_id,
+			share_id: n.share_id,
 			deleted_time: n.deleted_time,
 			is_conflict: n.is_conflict,
 			bodyWillChangeId: 0,

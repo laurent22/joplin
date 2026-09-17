@@ -84,7 +84,7 @@ let editorIdCounter = 0;
 function NoteEditorContent(props: NoteEditorProps) {
 	const [showRevisions, setShowRevisions] = useState(false);
 	const [titleHasBeenManuallyChanged, setTitleHasBeenManuallyChanged] = useState(false);
-	const [isReadOnly, setIsReadOnly] = useState<boolean>(false);
+	const [isReadOnlyItem, setIsReadOnlyItem] = useState<boolean>(false);
 	const [reloadInProgress, setReloadInProgress] = useState(false);
 
 	const editorRef = useRef<NoteBodyEditorRef|null>(null);
@@ -375,8 +375,9 @@ function NoteEditorContent(props: NoteEditorProps) {
 		return parseShareCache(props.shareCacheSetting);
 	}, [props.shareCacheSetting]);
 
-	const noteMetadata = effectiveNoteId ? props.notes.find(n => n.id === effectiveNoteId) : null;
-	const lockedInShare = noteIsLockedInShare(noteMetadata);
+	// The list row covers a form whose refresh was skipped for unsaved edits, the form covers a window whose list no longer holds the note.
+	const lockedInShare = noteIsLockedInShare(formNote) || noteIsLockedInShare(props.notes.find(n => n.id === formNote.id));
+	const isReadOnly = isReadOnlyItem || lockedInShare;
 
 	useAsyncEffect(async event => {
 		if (!formNote.id) return;
@@ -384,7 +385,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		try {
 			const result = await itemIsReadOnly(BaseItem, ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, formNote.id, props.syncUserId, shareCache);
 			if (event.cancelled) return;
-			setIsReadOnly(result || lockedInShare);
+			setIsReadOnlyItem(result);
 		} catch (error) {
 			if (error.code === ErrorCode.NotFound) {
 				// Can happen if the note has been deleted but a render is
@@ -393,7 +394,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 				throw error;
 			}
 		}
-	}, [formNote.id, props.syncUserId, shareCache, lockedInShare]);
+	}, [formNote.id, props.syncUserId, shareCache]);
 
 	const onBodyWillChange = useCallback((event: { changeId: number }) => {
 		handleProvisionalFlag();
@@ -757,7 +758,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 	// A locked note has no form note while the session is locked (see loadNoteForForm), so the
 	// panel is driven by the note metadata. A loaded form note stays mounted on lock only if it
 	// has unsaved changes, so they are not thrown away.
-	const lockedNoteMetadata = isNoteLockEnabled() ? noteMetadata : null;
+	const lockedNoteMetadata = isNoteLockEnabled() && effectiveNoteId ? props.notes.find(n => n.id === effectiveNoteId) : null;
 	if (lockedNoteMetadata?.is_locked) {
 		// The session is unlocked but the note content failed to decrypt (e.g. it was encrypted
 		// prior to a password reset) - locking the session again shows the regular unlock panel.
