@@ -81,7 +81,7 @@ describe('app.reducer', () => {
 	});
 
 	it.each([
-		['CONFLICT_ACTIVE_NOTE_SET', 'activeNoteIsConflict'],
+		['CONFLICT_UI_ACTIVE_NOTE_SET', 'activeNoteIsConflict'],
 		['WHITEBOARD_ACTIVE_NOTE_SET', 'activeNoteIsWhiteboard'],
 	] as const)('%s should only affect the window it was dispatched from', (type, stateKey) => {
 		const state: AppState = {

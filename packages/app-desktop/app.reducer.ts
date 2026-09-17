@@ -306,7 +306,7 @@ export default function(state: AppState, action: any) {
 			);
 			break;
 
-		case 'CONFLICT_ACTIVE_NOTE_SET':
+		case 'CONFLICT_UI_ACTIVE_NOTE_SET':
 			newState = withWindowStateUpdated(
 				state, action.windowId, 'activeNoteIsConflict', () => !!action.value,
 			);

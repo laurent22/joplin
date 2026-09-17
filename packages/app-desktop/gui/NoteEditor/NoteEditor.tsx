@@ -720,7 +720,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 	}, [noteHasWhiteboardFence, conflictRestrictsEditor, windowId, props.dispatch]);
 
 	useEffect(() => {
-		props.dispatch({ type: 'CONFLICT_ACTIVE_NOTE_SET', value: conflictBlocksPlugins, windowId });
+		props.dispatch({ type: 'CONFLICT_UI_ACTIVE_NOTE_SET', value: conflictBlocksPlugins, windowId });
 	}, [conflictBlocksPlugins, windowId, props.dispatch]);
 
 	if (useWhiteboardEditor) {
