@@ -15,6 +15,9 @@ export const runtime = (): CommandRuntime => {
 			const folder = await Folder.load(note.parent_id);
 			if (!folder) throw new Error(`Note parent notebook does not exist: ${JSON.stringify(note)}`);
 
+			// Sort before selecting so the note list scrolls to the note's final position.
+			context.dispatch({ type: 'NOTE_SORT' });
+
 			context.dispatch({
 				type: 'FOLDER_AND_NOTE_SELECT',
 				folderId: folder.id,

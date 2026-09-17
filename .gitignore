@@ -540,6 +540,7 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newWhiteboard.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openFolder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openFolderDialog.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openItem.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openNote.test.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openNote.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openPdfViewer.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openTag.js
