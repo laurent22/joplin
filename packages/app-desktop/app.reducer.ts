@@ -80,7 +80,7 @@ export interface AppWindowState extends WindowState {
 	// In window state so the conversation survives panel hide/show (the
 	// layout container can swap component types and unmount the panel).
 	aiChatMessages: AiChatMessage[];
-	aiChatConversationId: string;
+	aiChatConversationId: string|null;
 	// Layout for secondary windows
 	secondaryWindowLayout: LayoutItem|null;
 }

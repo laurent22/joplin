@@ -12,7 +12,7 @@ export interface Conversation {
 
 interface Props {
 	conversations: Conversation[];
-	currentConversationId?: string;
+	currentConversationId?: string|null;
 	onToggle: (event: React.SyntheticEvent<HTMLDetailsElement>)=> void;
 	onOpen: (conversationId: string)=> void;
 	onRename: (conversation: Conversation)=> void;

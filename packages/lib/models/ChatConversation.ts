@@ -73,7 +73,7 @@ export default class ChatConversation extends BaseModel {
 		}));
 	}
 
-	public static async archive(conversationId: string, messages: ChatHistoryMessage[]) {
+	public static async archive(conversationId: string|null, messages: ChatHistoryMessage[]) {
 		if (!messages.length) return;
 		const id = conversationId || uuid.create();
 		const now = Date.now();
