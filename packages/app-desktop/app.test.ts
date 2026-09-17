@@ -40,6 +40,7 @@ describe('app', () => {
 		['trashed', { deleted_time: 1, is_conflict: 0 }, false],
 		['conflict', { deleted_time: 0, is_conflict: 1 }, false],
 	])('should determine whether to preserve a %s note when selecting all notes', (_noteType, noteProperties, expected) => {
+		watcher.initialize(jest.fn(), jest.fn());
 		const note = { id: 'note-id', ...noteProperties } as NoteEntity;
 		const state = { ...defaultState, notes: [note], selectedNoteIds: [note.id] };
 
