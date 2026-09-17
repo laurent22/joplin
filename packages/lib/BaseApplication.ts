@@ -98,7 +98,7 @@ export const shouldPreserveSelectedNoteOnSmartFilterSelect = (state: State, smar
 	if (smartFilterId !== ALL_NOTES_FILTER_ID) return true;
 
 	const selectedNote = stateUtils.selectedNote(state);
-	return !selectedNote?.deleted_time && !selectedNote?.is_conflict;
+	return !!selectedNote && !selectedNote.deleted_time && !selectedNote.is_conflict;
 };
 
 export default class BaseApplication {
