@@ -551,7 +551,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			flex: 0,
 			flexDirection: 'row',
 			flexBasis: 'auto',
-			paddingLeft: theme.marginLeft,
+			marginLeft: theme.marginLeft,
+			marginRight: theme.marginRight,
 			borderBottomColor: theme.dividerColor,
 			borderBottomWidth: 1,
 			maxHeight: '40%',
@@ -567,8 +568,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			color: theme.color,
 			fontWeight: 'bold',
 			fontSize: theme.fontSize,
-			paddingTop: theme.itemMarginTop, // Added for iOS (Not needed for Android??)
-			paddingBottom: theme.itemMarginBottom, // Added for iOS (Not needed for Android??)
+			paddingTop: theme.marginTop,
+			paddingBottom: theme.marginBottom,
 		};
 
 		this.styles_[cacheKey] = StyleSheet.create(styles);
