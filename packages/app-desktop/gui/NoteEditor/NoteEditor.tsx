@@ -720,8 +720,8 @@ function NoteEditorContent(props: NoteEditorProps) {
 	}, [noteHasWhiteboardFence, conflictRestrictsEditor, windowId, props.dispatch]);
 
 	useEffect(() => {
-		props.dispatch({ type: 'CONFLICT_ACTIVE_NOTE_SET', value: isConflictNote, windowId });
-	}, [isConflictNote, windowId, props.dispatch]);
+		props.dispatch({ type: 'CONFLICT_ACTIVE_NOTE_SET', value: conflictBlocksPlugins, windowId });
+	}, [conflictBlocksPlugins, windowId, props.dispatch]);
 
 	if (useWhiteboardEditor) {
 		editor = <WhiteboardEditor key={formNote.id} {...editorProps}/>;
@@ -1036,8 +1036,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 	let bodyEditor = windowState.editorCodeView ? NoteBodyEditorType.CodeMirror6 : NoteBodyEditorType.TinyMce;
 	if (state.settings.isSafeMode) {
 		bodyEditor = NoteBodyEditorType.PlainText;
-	} else if (noteIsConflict) {
-		// The merge extension is only built for CodeMirror 6
+	} else if (conflictIsInView && windowState.activeNoteIsConflict) {
 		bodyEditor = NoteBodyEditorType.CodeMirror6;
 	} else if (windowState.editorCodeView && state.settings['editor.legacyMarkdown']) {
 		bodyEditor = NoteBodyEditorType.CodeMirror5;
@@ -1062,8 +1061,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		searches: state.searches,
 		selectedSearchId: windowState.selectedSearchId,
 		customCss: state.customViewerCss,
-		// The resolution UI needs only editor
-		noteVisiblePanes: conflictIsInView ? ['editor'] : windowState.noteVisiblePanes,
+		noteVisiblePanes: conflictIsInView && windowState.activeNoteIsConflict ? ['editor'] : windowState.noteVisiblePanes,
 		watchedResources: windowState.watchedResources,
 		// For now, only the main window has search UI. Show the same search markers in all
 		// windows:
