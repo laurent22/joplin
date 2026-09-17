@@ -16,11 +16,12 @@ import AiDegradedNotice from '../AiDegradedNotice';
 import { ChatMessage, ChatRole, ChatToolMessage } from '@joplin/lib/services/ai/types';
 import JoplinError from '@joplin/lib/JoplinError';
 import eventManager, { EventName, ItemChangeEvent } from '@joplin/lib/eventManager';
-import { formatMsToRelativeTime, Second } from '@joplin/utils/time';
+import { Second } from '@joplin/utils/time';
 import ChatMessageItem from './ChatMessageItem';
 import NavService from '@joplin/lib/services/NavService';
 import ChatConversation from '@joplin/lib/models/ChatConversation';
 import dialogs from '../dialogs';
+import ChatHistory, { Conversation } from './ChatHistory';
 
 const logger = Logger.create('ChatPanel');
 
@@ -36,13 +37,6 @@ interface Props {
 	conversationId?: string;
 	aiDegraded: boolean;
 	dispatch: Dispatch;
-}
-
-interface Conversation {
-	id: string;
-	title: string;
-	updated_time: number;
-	messageTexts: string[];
 }
 
 const disclosureSetting = 'ai.chat.disclosureAcknowledged';
@@ -115,11 +109,7 @@ const useHasFocus = () => {
 const ChatPanel: React.FC<Props> = (props) => {
 	const { dispatch, messages } = props;
 	const [input, setInput] = useState('');
-	const [conversationSearch, setConversationSearch] = useState('');
 	const [conversations, setConversations] = useState<Conversation[]>([]);
-	const searchQuery = conversationSearch.trim().toLowerCase();
-	const filteredConversations = conversations.filter(conversation => conversation.title.toLowerCase().includes(searchQuery)
-		|| conversation.messageTexts.some(text => text.toLowerCase().includes(searchQuery)));
 	const handleHistoryToggle = useCallback(async (event: React.SyntheticEvent<HTMLDetailsElement>) => {
 		if (!event.currentTarget.open) return;
 		try {
@@ -518,33 +508,14 @@ const ChatPanel: React.FC<Props> = (props) => {
 				<h1 className='title' id={headerId}>{_('AI Chat')}</h1>
 				{renderHeaderActions()}
 			</div>
-			<details className='chat-switcher' onToggle={handleHistoryToggle}>
-				<summary onClick={event => event.stopPropagation()}>{_('Chat history')}</summary>
-				<input
-					type='search'
-					aria-label={_('Search conversations')}
-					placeholder={_('Search conversations')}
-					value={conversationSearch}
-					onChange={event => setConversationSearch(event.target.value)}
-				/>
-				<ul className='conversations' aria-label={_('Conversations')}>
-					{filteredConversations.map(conversation => <li
-						key={conversation.id}
-						className='conversation'
-						aria-current={conversation.id === props.conversationId ? 'true' : undefined}
-					>
-						<button type='button' onClick={() => handleOpenConversation(conversation.id)}>
-							<span className='title'>{conversation.title || _('(untitled)')}</span>
-							<span className='timestamp'>{formatMsToRelativeTime(conversation.updated_time)}</span>
-						</button>
-						<details className='conversation-menu' onToggle={event => event.stopPropagation()}>
-							<summary onClick={event => event.stopPropagation()} aria-label={_('Actions for %s', conversation.title || _('(untitled)'))}>{_('Actions')}</summary>
-							<button type='button' onClick={() => handleRenameConversation(conversation)}>{_('Rename')}</button>
-							<button type='button' onClick={() => handleDeleteConversation(conversation.id)}>{_('Delete')}</button>
-						</details>
-					</li>)}
-				</ul>
-			</details>
+			<ChatHistory
+				conversations={conversations}
+				currentConversationId={props.conversationId}
+				onToggle={handleHistoryToggle}
+				onOpen={handleOpenConversation}
+				onRename={handleRenameConversation}
+				onDelete={handleDeleteConversation}
+			/>
 			{content}
 		</div>
 	);

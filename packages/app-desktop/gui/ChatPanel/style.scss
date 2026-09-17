@@ -1,3 +1,5 @@
+@use './ChatHistory.scss';
+
 .chat-panel {
 	display: flex;
 	flex-direction: column;
@@ -40,76 +42,9 @@
 	}
 }
 
-.chat-panel > .chat-switcher {
+.chat-panel > .history {
 	padding: 6px 10px;
 	border-bottom: 1px solid var(--joplin-divider-color);
-
-	> summary {
-		cursor: pointer;
-	}
-
-	> input {
-		display: block;
-		width: 100%;
-		box-sizing: border-box;
-		margin-top: 6px;
-		padding: 6px;
-		font: inherit;
-		color: var(--joplin-color);
-		background-color: var(--joplin-background-color);
-		border: 1px solid var(--joplin-divider-color);
-		border-radius: 4px;
-	}
-
-	> .conversations {
-		list-style: none;
-		margin: 6px 0 0;
-		padding: 0;
-		max-height: 200px;
-		overflow-y: auto;
-
-		> .conversation {
-			display: flex;
-
-			&[aria-current='true'] {
-				background-color: var(--joplin-selected-color);
-			}
-
-			> button, > .conversation-menu > button {
-				display: flex;
-				width: 100%;
-				padding: 6px;
-				gap: 8px;
-				text-align: left;
-				font: inherit;
-				color: inherit;
-				background: none;
-				border: none;
-				cursor: pointer;
-			}
-
-			> button > .title {
-				flex: 1;
-				min-width: 0;
-				overflow-wrap: anywhere;
-			}
-
-			> .conversation-menu {
-				flex-shrink: 0;
-
-				> summary {
-					padding: 6px;
-					cursor: pointer;
-				}
-			}
-
-			> button > .timestamp {
-				flex-shrink: 0;
-				text-align: right;
-				color: var(--joplin-color-faded);
-			}
-		}
-	}
 }
 
 .chat-panel > .degraded-status {
