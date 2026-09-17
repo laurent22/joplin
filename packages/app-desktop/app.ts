@@ -114,7 +114,11 @@ class Application extends BaseApplication {
 			conversations.set(id, messages);
 		}
 		for (const [id, messages] of conversations) {
-			await ChatConversation.archive(id, [...messages.values()]);
+			try {
+				await ChatConversation.archive(id, [...messages.values()]);
+			} catch (error) {
+				this.logger().error(`Could not save chat history for conversation ${id}:`, error);
+			}
 		}
 	}
 

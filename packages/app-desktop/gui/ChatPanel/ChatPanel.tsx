@@ -35,7 +35,7 @@ interface Props {
 	noteTitle: string;
 	noteIsEncrypted: boolean;
 	messages: AiChatMessage[];
-	conversationId?: string;
+	conversationId?: string|null;
 	aiDegraded: boolean;
 	showToolbarButton: boolean;
 	dispatch: Dispatch;
@@ -136,8 +136,6 @@ const ChatPanel: React.FC<Props> = (props) => {
 	// Lets async work detect note switches without re-running its closure.
 	const noteIdRef = useRef(props.noteId);
 	noteIdRef.current = props.noteId;
-	const noteTitleRef = useRef(props.noteTitle);
-	noteTitleRef.current = props.noteId ? props.noteTitle : '';
 	const messagesEndRef = useRef<HTMLDivElement>(null);
 
 	const { hasFocus, onFocus, onBlur } = useHasFocus();
@@ -147,8 +145,8 @@ const ChatPanel: React.FC<Props> = (props) => {
 	const windowId = useContext(WindowIdContext);
 
 	const appendMessage = useCallback((message: Omit<AiChatMessage, 'noteId' | 'noteTitle'>) => {
-		dispatch({ type: 'AI_CHAT_APPEND', windowId, message: { ...message, noteId: noteIdRef.current ?? '', noteTitle: noteTitleRef.current } });
-	}, [dispatch, windowId]);
+		dispatch({ type: 'AI_CHAT_APPEND', windowId, message: { ...message, noteId: props.noteId ?? '', noteTitle: props.noteId ? props.noteTitle : '' } });
+	}, [dispatch, windowId, props.noteId, props.noteTitle]);
 
 	const addToolResult = useCallback((result: ChatToolMessage) => {
 		dispatch({ type: 'AI_CHAT_ADD_TOOL_RESULT', windowId, toolCall: result });
