@@ -1,5 +1,4 @@
-import BaseModel from '../BaseModel';
-import Database from '../database';
+import BaseModel, { ModelType } from '../BaseModel';
 import uuid from '../uuid';
 import { ChatMessage } from '../services/ai/types';
 
@@ -25,6 +24,14 @@ export default class ChatConversation extends BaseModel {
 		return 'chat_conversations';
 	}
 
+	public static modelType() {
+		return ModelType.ChatConversation;
+	}
+
+	public static useUuid() {
+		return true;
+	}
+
 	public static async history(): Promise<Conversation[]> {
 		const rows = await this.db().selectAll<Omit<Conversation, 'messageTexts'>>('SELECT id, title, updated_time FROM chat_conversations ORDER BY updated_time DESC');
 		const savedMessages = await this.db().selectAll<{ conversation_id: string; text: string }>('SELECT conversation_id, text FROM chat_messages');
@@ -36,14 +43,12 @@ export default class ChatConversation extends BaseModel {
 	}
 
 	public static async createConversation() {
-		const id = uuid.create();
-		const now = Date.now();
-		await this.db().exec(Database.insertQuery(this.tableName(), { id, created_time: now, updated_time: now }));
-		return id;
+		const conversation = await this.save({});
+		return conversation.id;
 	}
 
 	public static async renameConversation(id: string, title: string) {
-		await this.db().exec(Database.updateQuery(this.tableName(), { title }, { id }));
+		await this.save({ id, title }, { autoTimestamp: false });
 	}
 
 	public static async deleteConversation(id: string) {
@@ -54,7 +59,7 @@ export default class ChatConversation extends BaseModel {
 	}
 
 	public static async messages(conversationId: string): Promise<ChatHistoryMessage[]> {
-		const conversation = await this.db().selectOne('SELECT id FROM chat_conversations WHERE id = ?', [conversationId]);
+		const conversation = await this.load(conversationId, { fields: ['id'] });
 		if (!conversation) throw new Error(`No such chat conversation: ${conversationId}`);
 		const rows = await this.db().selectAll('SELECT * FROM chat_messages WHERE conversation_id = ? ORDER BY position', [conversationId]);
 		return rows.map(row => ({
