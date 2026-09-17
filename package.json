@@ -10,7 +10,7 @@
   },
   "engines": {
     "node": ">=22.12",
-    "yarn": "4.12.0"
+    "yarn": "4.14.1"
   },
   "scripts": {
     "buildApiDoc": "yarn workspace joplin start apidoc ../../readme/api/references/rest_api.md",
@@ -77,8 +77,8 @@
     "@seiyab/eslint-plugin-react-hooks": "4.5.1-beta.0",
     "@stylistic/eslint-plugin": "5.10.0",
     "@types/jest": "29.5.14",
-    "@typescript-eslint/eslint-plugin": "8.60.0",
-    "@typescript-eslint/parser": "8.60.0",
+    "@typescript-eslint/eslint-plugin": "8.60.1",
+    "@typescript-eslint/parser": "8.60.1",
     "cspell": "5.21.2",
     "eslint": "9.39.4",
     "eslint-interactive": "14.0.0",
@@ -102,7 +102,7 @@
     "@types/fs-extra": "11.0.4",
     "eslint-plugin-github": "4.10.2",
     "http-server": "14.1.1",
-    "node-gyp": "11.5.0",
+    "node-gyp": "12.4.0",
     "nodemon": "3.1.14"
   },
   "packageManager": "yarn@4.16.0",
@@ -112,9 +112,9 @@
     "@codemirror/language": "6.12.3",
     "@codemirror/lint": "6.9.5",
     "@codemirror/autocomplete": "6.20.1",
-    "onnxruntime-node": "1.24.3",
+    "onnxruntime-node": "1.26.0",
     "eslint": "patch:eslint@9.39.4#./.yarn/patches/eslint-npm-9.39.4-81a84865c0.patch",
-    "yauzl": "3.3.1",
+    "yauzl": "3.3.2",
     "react-native-camera@4.2.1": "patch:react-native-camera@npm%3A4.2.1#./.yarn/patches/react-native-camera-npm-4.2.1-24b2600a7e.patch",
     "app-builder-lib@24.4.0": "patch:app-builder-lib@npm%3A24.4.0#./.yarn/patches/app-builder-lib-npm-24.4.0-05322ff057.patch",
     "nanoid": "patch:nanoid@npm%3A3.3.7#./.yarn/patches/nanoid-npm-3.3.7-98824ba130.patch",
@@ -130,7 +130,11 @@
     "pdfjs-dist@3.11.174": "patch:pdfjs-dist@npm%3A3.11.174#./.yarn/patches/pdfjs-dist-npm-3.11.174-67f2fee6d6.patch",
     "canvas@npm:^2.11.2": "link:./.yarn/joplin-empty-package/",
     "@huggingface/transformers/sharp": "link:./.yarn/joplin-empty-package/",
-    "node-gyp@npm:^9.0.0": "11.2.0",
+    "node-gyp@npm:^9.0.0": "12.4.0",
+    "node-gyp@npm:11.2.0": "12.4.0",
+    "node-gyp@npm:11.5.0": "12.4.0",
+    "node-gyp@npm:latest": "12.4.0",
+    "node-gyp@npm:8.x": "12.4.0",
     "node-forge@npm:^1": "1.3.2",
     "node-forge@npm:^1.3.0": "1.3.2",
     "moment@npm:^2.8.4": "2.30.1",
@@ -146,6 +150,7 @@
     "@react-native-vector-icons/ionicons@npm:12.3.0": "patch:@react-native-vector-icons/ionicons@npm%3A12.3.0#~/.yarn/patches/@react-native-vector-icons-ionicons-npm-12.3.0-9bd4746f3f.patch",
     "@react-native-vector-icons/material-design-icons@npm:12.4.0": "patch:@react-native-vector-icons/material-design-icons@npm%3A12.4.0#~/.yarn/patches/@react-native-vector-icons-material-design-icons-npm-12.4.0-890f7f618b.patch",
     "@react-native-vector-icons/material-icons@npm:12.4.0": "patch:@react-native-vector-icons/material-icons@npm%3A12.4.0#~/.yarn/patches/@react-native-vector-icons-material-icons-npm-12.4.0-94138e627b.patch",
-    "app-builder-lib@npm:26.15.6": "patch:app-builder-lib@npm%3A26.15.6#~/.yarn/patches/app-builder-lib-npm-26.15.6-010811df92.patch"
+    "app-builder-lib@npm:26.15.6": "patch:app-builder-lib@npm%3A26.15.6#~/.yarn/patches/app-builder-lib-npm-26.15.6-010811df92.patch",
+    "wasm-pack@npm:0.13.1": "patch:wasm-pack@npm%3A0.13.1#~/.yarn/patches/wasm-pack-npm-0.13.1-2a81da84b4.patch"
   }
 }

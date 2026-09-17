@@ -345,6 +345,8 @@ wikilink
 wikilinks
 cssclasses
 mergeable
-jsdiff
-unspaced
 collegeboom
+jsdiff
+unmerged
+unspaced
+selfsigned

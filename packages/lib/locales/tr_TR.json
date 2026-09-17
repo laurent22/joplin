@@ -2,9 +2,19 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"“%s”, işlemler için gerekli olan “%s” özelliğini barındırmıyor."
 	],
+	"%d card": [
+		"",
+		""
+	],
 	"%d day": [
 		"%d gün",
 		"%d gün"
+	],
+	"%d edit(s) applied, %d could not be placed automatically.": [
+		""
+	],
+	"%d edit(s) applied.": [
+		""
 	],
 	"%d GB": [
 		"%d GB"
@@ -36,6 +46,9 @@
 	],
 	"%d photo(s) taken": [
 		"%d fotoğraf çekildi"
+	],
+	"%d sections found": [
+		""
 	],
 	"%s": [
 		"%s"
@@ -70,6 +83,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s added to toolbar": [
+		""
+	],
 	"%s cannot be greater than %s": [
 		"%s, %s değerinden büyük olamaz"
 	],
@@ -79,8 +95,14 @@
 	"%s from %s": [
 		"%s , şundan: %s"
 	],
+	"%s input / %s output tokens used.": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s pek çok dosyanın senkronu için optimize bir değil, bu sebeple ilk senkronizasyon zaman alabilir."
+	],
+	"%s moved up": [
+		""
 	],
 	"%s must be a valid whole number": [
 		"%s geçerli bir tamsayı olmalıdır"
@@ -131,6 +153,12 @@
 	"(%s)": [
 		"(%s)"
 	],
+	"(empty — double-click to edit)": [
+		""
+	],
+	"(empty)": [
+		""
+	],
 	"(In plugin: %s)": [
 		"(Şu eklentide: %s)"
 	],
@@ -149,6 +177,9 @@
 	"(You may disable this prompt in the options)": [
 		"(Ayarlardan bu istemi kapatabilirsiniz)"
 	],
+	"+ Group": [
+		""
+	],
 	"- Camera: to allow taking a picture and attaching it to a note.": [
 		"- Kamera: fotoğraf çekimi ve fotoğrafın nota eklenebilmesi için."
 	],
@@ -157,6 +188,9 @@
 	],
 	"- Storage: to allow attaching files to notes and to enable filesystem synchronisation.": [
 		"- Depolama: notlara dosya eklenmesine ve dosya sistemi senkronizasyonunun etkinleştirilmesine izin vermek için."
+	],
+	"14-day free trial. Cancel anytime during the trial and you won't be charged.": [
+		""
 	],
 	"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign or remove [tag] from [note], to list notes associated with [tag], or to list tags associated with [note]. The command `tag list` can be used to list all the tags (use -l for long option).": [
 		"<tag-command> [note] öğesine [tag] koymak yada silmek için “add”, “remove”, “list”, veya “notetags” kullanabilirsiniz, [tag] ile iliştirilmiş notları listeler veya [note] ile iliştirilmiş etiketleri listeler. `tag list` komutu ile tüm kullanılabilinir etiketleri listeleyebilirsiniz. (-l kullanarak uzun versiyona ulaşabilirsiniz)."
@@ -176,6 +210,9 @@
 	"A new update (%s) is available": [
 		"Yeni bir güncelleme (%s) mevcut"
 	],
+	"A system-wide keyboard shortcut that toggles the Joplin window. Works even when Joplin is not focused. Example: CommandOrControl+Shift+J. Leave empty to disable.": [
+		""
+	],
 	"A3": [
 		"A3"
 	],
@@ -186,7 +223,7 @@
 		"A5"
 	],
 	"ABC musical notation: Options": [
-		""
+		"ABC müzik notasyonu: Seçenekler"
 	],
 	"About": [
 		"Hakkında"
@@ -221,6 +258,15 @@
 	"Access denied: Please re-enter your password and/or username": [
 		"Erişim reddedildi: Lütfen parolanızı ve/veya kullanıcı adınızı yeniden girin"
 	],
+	"Access your notes from any web browser at %s.": [
+		""
+	],
+	"Accessible": [
+		""
+	],
+	"Accessible mode saves additional information, enabling creation of accessible PDFs. It increases database size by approximately 10-20 KB per page.": [
+		""
+	],
 	"Account": [
 		"Hesap"
 	],
@@ -242,20 +288,29 @@
 	"Actual Size": [
 		"Asıl Boyut"
 	],
+	"Add a text card": [
+		""
+	],
 	"Add body": [
 		"Gövde Ekle"
 	],
 	"Add column": [
-		""
+		"Sütun ekle"
 	],
 	"Add new": [
 		"Yeni bir şey ekle"
+	],
+	"Add note to whiteboard...": [
+		""
 	],
 	"Add or remove tags:": [
 		"Etiket ekle veya kaldır:"
 	],
 	"Add recipient:": [
 		"Alıcı ekle:"
+	],
+	"Add row": [
+		"Satır ekle"
 	],
 	"Add tags:": [
 		"Etiket ekle:"
@@ -269,11 +324,12 @@
 	"Add to note": [
 		"Nota ekle"
 	],
+	"Added %d word": [
+		"",
+		""
+	],
 	"Added new: %s": [
 		"Yeni bir %s eklendi"
-	],
-	"Added tag: %s": [
-		"Etiket eklendi: %s"
 	],
 	"Adds tag": [
 		"Etiket ekler"
@@ -293,6 +349,21 @@
 	"Advanced tools": [
 		"Gelişmiş araçlar"
 	],
+	"AI": [
+		""
+	],
+	"AI Chat": [
+		""
+	],
+	"AI features are disabled. Enable them in Settings → AI.": [
+		""
+	],
+	"AI is running in reduced-quality mode — monthly allowance exceeded. Credits replenish on a rolling 30-day basis, or you can": [
+		""
+	],
+	"AI usage has exceeded your monthly allowance — responses are using a reduced-quality model. Credits replenish on a rolling 30-day basis. Buy more at %s.": [
+		""
+	],
 	"all": [
 		"tümü"
 	],
@@ -311,8 +382,29 @@
 	"All shared folders:": [
 		"Tüm paylaşılan klasörler:"
 	],
+	"Allow editing tags on notes": [
+		""
+	],
+	"Allow editing the current note (chat panel only)": [
+		""
+	],
+	"Allow listing tags": [
+		""
+	],
+	"Allow reading images": [
+		""
+	],
+	"Allow remote AI providers": [
+		""
+	],
+	"Allow semantic search of notes": [
+		""
+	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		"Mobil eklentilerde hata ayıklamayı etkinleştir. Detaylar için %s ."
+	],
+	"Already have an account? Log in": [
+		""
 	],
 	"Also displays unset and hidden config variables.": [
 		"Ayrıca ayarlanmamış ve gizlenmiş yapılandırma değişkenlerini de görüntüler."
@@ -344,9 +436,6 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"Otomatik kaydedilmiş bir çizim bulundu. Not'a bunun kopyasını iliştirmek ister misiniz?"
 	],
-	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
-		"Cevap gönderilirken bir hata oluştu. Bu durum uygulama çevrimdışıyken, veya sunucuya bağlanılamadığı zamanlarda olabilir\nHata: %s"
-	],
 	"An error occurred: %s": [
 		"Bir hata oluştu: %s"
 	],
@@ -356,8 +445,14 @@
 	"Android API level: %d": [
 		"Android API Level'ı: %d"
 	],
+	"Anthropic": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		"Bu adrese gönderilen her e-posta bir nota dönüştürülecek ve koleksiyonunuza eklenecektir. Not Gelen Kutusu not defterine kaydedilecektir"
+	],
+	"API key": [
+		""
 	],
 	"Appearance": [
 		"Görünüm"
@@ -385,6 +480,15 @@
 	],
 	"Aritim Dark": [
 		"Aritim Dark"
+	],
+	"Arrow at target": [
+		""
+	],
+	"Ask about this note, or request a change…": [
+		""
+	],
+	"Ask about this note, or request changes. Select text in the editor first to scope the request to that selection.": [
+		""
 	],
 	"Associated tags:": [
 		"Tanımlı etiketler:"
@@ -425,6 +529,9 @@
 	"Attachments that could not be downloaded": [
 		"Eklenti dosyası indirilemedi"
 	],
+	"Attention: After resetting your password it will no longer be possible to decrypt any data encrypted with your current password. All encrypted shared notebooks will also be unshared, so please ask the notebook owner to share it again with you.": [
+		""
+	],
 	"Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s": [
 		"Dikkat: Bu konumu değiştirirseniz, senkronize etmeden önce tüm içeriğinizi kopyaladığınızdan emin olun, aksi takdirde tüm dosyalar kaldırılır! Daha fazla bilgi için SSS bölümüne bakın: %s"
 	],
@@ -439,6 +546,9 @@
 	],
 	"Auto": [
 		"Otomatik"
+	],
+	"Auto lock when switching note": [
+		""
 	],
 	"Auto-add disabled accounts for deletion": [
 		"Silmek için devre dışı bırakılmış hesapları otomatik olarak ekle"
@@ -464,14 +574,23 @@
 	"Back": [
 		"Geri"
 	],
+	"Back to %s": [
+		""
+	],
+	"Base URL": [
+		""
+	],
 	"Basic": [
 		"Temel"
 	],
 	"Beta": [
 		"Beta"
 	],
-	"Block code": [
+	"Billed annually (%s per user per year respectively).": [
 		""
+	],
+	"Block code": [
+		"Blok kod"
 	],
 	"Bold": [
 		"Kalın"
@@ -487,6 +606,9 @@
 	],
 	"Bulleted List": [
 		"Maddeli liste"
+	],
+	"buy more credits": [
+		""
 	],
 	"by %s": [
 		"%s tarafından"
@@ -524,8 +646,14 @@
 	"Cannot access %s": [
 		"%s erişilemiyor"
 	],
+	"Cannot change a locked note while the session is locked": [
+		""
+	],
 	"Cannot change encrypted item": [
 		"Şifrelenmiş öğe değiştirilemiyor"
+	],
+	"Cannot convert read-only item: \"%s\"": [
+		"Salt okunur öğe dönüştürülemiyor: “%s”"
 	],
 	"Cannot copy note to \"%s\" notebook": [
 		"Not, \"%s\" not defterine kopyalanamadı"
@@ -569,6 +697,9 @@
 	"Case sensitive": [
 		"Büyük küçük harf duyarlı"
 	],
+	"Certain Markdown formatting is now rendered in the editor by default. For example, **bold** will appear as actual bold text. You can change this behaviour in the \"Editor\" section of Settings.": [
+		""
+	],
 	"Change application layout": [
 		"Ugulama görünümünü değiştir"
 	],
@@ -586,6 +717,9 @@
 	],
 	"Characters excluding spaces": [
 		"Karakter (boşluklar hariç)"
+	],
+	"Chat provider": [
+		""
 	],
 	"Check": [
 		"Onayla"
@@ -612,7 +746,7 @@
 		"Kontrol ediliyor... Lütfen bekleyin."
 	],
 	"Chinese/Japanese/Korean characters": [
-		""
+		"Çince/Japonca/Korece karakterler"
 	],
 	"Choose an option": [
 		"Bir seçim yap"
@@ -629,11 +763,17 @@
 	"Clear search": [
 		"Aramayı temizle"
 	],
+	"Clears the console output.": [
+		""
+	],
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"Notu geri yükleme için şuna tıklayın: \"%s\". %s isimli not defterine kopyalanacak. Notun güncel versiyonunun yeri değiştirilmeyecek ya da üzerinde değişiklik yapılmayacak."
 	],
 	"Click \"start\" to attach a new voice memo to the note.": [
 		"Notla yeni bir sesli not eklemek için 'başlat'a tıklayın."
+	],
+	"Click the eye icon in the toolbar to switch to the Markdown editor and fix the JSON manually.": [
+		""
 	],
 	"Click to add tags...": [
 		"Etiket eklemek için tıklayın..."
@@ -708,7 +848,7 @@
 		"Komut"
 	],
 	"COMMAND": [
-		""
+		"KOMUT"
 	],
 	"Command palette": [
 		"Komut paleti"
@@ -749,8 +889,17 @@
 	"Configuration": [
 		"Yapılandırma"
 	],
+	"Configured keyboard shortcuts:": [
+		"Ayarlanmış klavye Kısayolları:"
+	],
 	"Configures the size of scrollbars used in the app.": [
 		"Uygulamada kullanılan kaydırma çubuklarının boyutunu yapılandırır."
+	],
+	"Confirm": [
+		"Onayla"
+	],
+	"Confirm credentials": [
+		""
 	],
 	"Confirm password cannot be empty": [
 		"Şifre boş olamaz"
@@ -797,6 +946,12 @@
 	],
 	"Convert it": [
 		"Dönüştür"
+	],
+	"Convert this card into a Joplin note": [
+		""
+	],
+	"Convert to Markdown": [
+		"Markdown'a dönüştür"
 	],
 	"Convert to note": [
 		"Nota çevir"
@@ -853,6 +1008,9 @@
 	"Could not connect to plugin repository.": [
 		"Eklenti sunucusuna bağlanılamadı."
 	],
+	"Could not convert notes to Markdown: %s": [
+		"Notlar Markdown'a dönüştürülemedi: %s"
+	],
 	"Could not export notes: %s": [
 		"Notlar dışarı aktarılamadı: %s"
 	],
@@ -882,6 +1040,9 @@
 	],
 	"Create a notebook": [
 		"Yeni bir not defteri oluşturur"
+	],
+	"Create accessible document": [
+		""
 	],
 	"Create new notebook": [
 		"Yeni bir not defteri oluştur"
@@ -1018,6 +1179,9 @@
 	"Default title to use for documents created by the scanner.": [
 		"Tarayıcı tarafından oluşturulan belgeler için kullanılacak varsayılan başlık."
 	],
+	"Default view / edit state": [
+		""
+	],
 	"Default: %s": [
 		"Varsayılan: %s"
 	],
@@ -1026,6 +1190,9 @@
 	],
 	"Delete attachment \"%s\"?": [
 		"\"%s\" eki silinsin mi?"
+	],
+	"Delete column": [
+		"Sütunu sil"
 	],
 	"Delete expired sessions": [
 		"Süresi geçmiş oturumları sil"
@@ -1054,11 +1221,14 @@
 	"Delete profile \"%s\"": [
 		"\"%s\" profilini sil"
 	],
+	"Delete profile \"%s\"?\n\nAll data, including notes, notebooks and tags will be permanently deleted.": [
+		"“%s” profili silinsin mi?\n\nNotlar, not defterleri ve etiketler dâhil tüm veriler kalıcı olarak silinecektir."
+	],
+	"Delete row": [
+		"Satırı sil"
+	],
 	"Delete selected notes": [
 		"Seçili notları sil"
-	],
-	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
-		""
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Gelen Kutusu not defteri silinsin mi?\n\nGelen kutusu not defterini silerseniz, yakın zamanda gönderilen tüm e-postalar kaybolabilir."
@@ -1166,7 +1336,7 @@
 		"Notla ilgili tüm bilgileri görüntüler."
 	],
 	"Displays the configured keyboard shortcuts.": [
-		""
+		"Yapılandırılmış klavye kısayollarını görüntüler."
 	],
 	"Displays the given note.": [
 		"Verilen notu görüntüler."
@@ -1192,14 +1362,14 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Şifrenizi kaybetmeyin, verilerinizin şifresini çözmenin \"*tek yolu* bu şifreyi girmek olacaktır. Şifrelemeyi etkinleştirmek için lütfen parolanızı aşağıya girin."
 	],
-	"Do you find the Joplin web app useful?": [
-		"Joplin web uygulamasını faydalı buldunuz mu?"
-	],
 	"Document scanner: Title template": [
 		"Belge tarayıcı: Başlık şablonu"
 	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
 		"Paylaşım alıcısının paylaşılan not defterine yazmasına izin verme. Yalnızca `ekle` alt komutu için geçerlidir."
+	],
+	"Don't have an account yet?": [
+		""
 	],
 	"Don't show this message again": [
 		"Bu mesajı bir daha görüntüleme"
@@ -1210,11 +1380,20 @@
 	"Done": [
 		"Tamam"
 	],
+	"Double tap to open this attachment. Long press to expand or collapse details.": [
+		""
+	],
 	"Download": [
 		"İndirme"
 	],
 	"Download and install the relevant extension for your browser:": [
 		"Tarayıcınız için uygun uzantıyı indirin ve yükleyin:"
+	],
+	"Download it from GitHub Releases": [
+		""
+	],
+	"Download it from the Joplin Android repository": [
+		""
 	],
 	"Download it now": [
 		"Şimdi indir"
@@ -1239,6 +1418,9 @@
 	],
 	"Dracula": [
 		"Dracula"
+	],
+	"Drag to move group": [
+		""
 	],
 	"Draw picture": [
 		"Çizim yap"
@@ -1300,6 +1482,9 @@
 	"Edit profile configuration...": [
 		"Profil ayarlarını düzenle…"
 	],
+	"Edit tag": [
+		"Etiketi düzenle"
+	],
 	"Editor": [
 		"Düzenleyici"
 	],
@@ -1345,6 +1530,9 @@
 	"Emails": [
 		"E-posta"
 	],
+	"Embedding index": [
+		""
+	],
 	"emphasised text": [
 		"vurgulanan metin"
 	],
@@ -1366,6 +1554,9 @@
 	"Enable abbreviation syntax": [
 		"Kısaltma söz dizimini etkinleştir"
 	],
+	"Enable ABC musical notation support": [
+		"ABC müzik notasyon desteğini etkinleştir"
+	],
 	"Enable audio player": [
 		"Ses / Müzik oynatıcıyı aktifleştir"
 	],
@@ -1377,6 +1568,9 @@
 	],
 	"Enable encryption": [
 		"Şifrelemeyi etkinleştir"
+	],
+	"Enable external embeds (e.g. YouTube Videos)": [
+		""
 	],
 	"Enable file:// URLs for images and videos": [
 		"Resim ve videolar için file:// URL şemasını etkinleştir"
@@ -1410,9 +1604,6 @@
 	],
 	"Enable note history": [
 		"Not tarihçesini etkinleştir"
-	],
-	"Enable optical character recognition (OCR)": [
-		"Optik karakter tanıma (OCR)'ı etkinleştir"
 	],
 	"Enable or disable plugins": [
 		"Eklentileri aktifleştir veya pasifleştir"
@@ -1459,6 +1650,9 @@
 	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
 		"Zengin Metin Düzenleyici'de Markdown biçim kalıplarının dönüştürülmesini etkinleştirir. Örneğin, bu özellik etkinleştirildiğinde **kalın** yazmak kalın metne dönüştürülür."
 	],
+	"Enables the default edit operations for notes with an open AI chat panel. When disabled, the chat panel can still read the open note. Does not apply to MCP.": [
+		""
+	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"Şifrelemeyi devre devreye alırsanız *tüm* notlarınızın ve eklerinizin yeniden senkronize edileceği ve senkronizasyon hedefine şifrelenmemiş olarak gönderileceği anlamına gelir."
 	],
@@ -1467,6 +1661,9 @@
 	],
 	"Encrypted items cannot be modified": [
 		"Şifrelenmiş öğeler değiştirilemez"
+	],
+	"Encrypting a note requires a note lock password, which has not yet been set. Set it up now?": [
+		""
 	],
 	"Encryption": [
 		"Şifreleme"
@@ -1479,6 +1676,9 @@
 	],
 	"Encryption keys": [
 		"Şifreleme anahtarları"
+	],
+	"Encryption was setup previously, but all keys have been disabled. To continue, please use the desktop app to enable a key.": [
+		""
 	],
 	"Encryption:": [
 		"Şifreleme:"
@@ -1507,6 +1707,9 @@
 	"Enter the code:": [
 		"Kodu girin:"
 	],
+	"Enter the note lock password to unlock encrypted notes for this session.": [
+		""
+	],
 	"Entering selection mode": [
 		"Seçim modu açılıyor"
 	],
@@ -1524,6 +1727,9 @@
 	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"Hata. Lütfen URL, kullanıcı adı, şifre vb .'nin doğru olduğunu ve senkronizasyon hedefinin erişilebilir olduğunu kontrol edin. Raporlanan hata:"
+	],
+	"Error. The AI provider test failed:": [
+		""
 	],
 	"Error: %s": [
 		"Hata: %s"
@@ -1600,6 +1806,9 @@
 	"Exports only the given notebook.": [
 		"Yalnızca seçilen not defterini dışa aktarır."
 	],
+	"Exposes Joplin notes to external AI applications (Claude Desktop, Cursor, etc.) via the Model Context Protocol. Requires the Web Clipper service to be running. Connected AI tools can read your note content; any text they retrieve may be sent to the external LLM provider those tools use.": [
+		""
+	],
 	"Fail-safe": [
 		"Tedbir Modu"
 	],
@@ -1612,14 +1821,14 @@
 	"Failed to connect to your account. Please try again.": [
 		"Hesabınıza bağlanılamadı. Lütfen tekrar deneyin."
 	],
+	"Failed to create accessible document: %s": [
+		""
+	],
 	"Fatal error:": [
 		"Büyük hata:"
 	],
 	"Feature flags": [
 		"Özellik bilgileri"
-	],
-	"Feedback": [
-		"Geribildirim"
 	],
 	"Fetched items: %d/%d.": [
 		"Alınan öğeler: %d/%d."
@@ -1635,6 +1844,9 @@
 	],
 	"Filter": [
 		"Filtrele"
+	],
+	"Filtered by section [%s]": [
+		""
 	],
 	"Find": [
 		"Ara"
@@ -1653,6 +1865,9 @@
 	],
 	"Fixing search index...": [
 		"Arama indeksi düzeltiliyor..."
+	],
+	"Flip": [
+		""
 	],
 	"Focus": [
 		"Odaklan"
@@ -1712,9 +1927,6 @@
 		"Bağlantı oluşturuluyor...",
 		"Bağlantılar oluşturuluyor..."
 	],
-	"Geolocation, spellcheck, editor toolbar, image resize": [
-		"Yerel konum, dil doğrulaması, düzenleyici araç çubuğu, resim yeniden boyutlandır"
-	],
 	"Get a quote": [
 		"Teklif Al"
 	],
@@ -1727,6 +1939,9 @@
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Ayar değeri alınır veya ayarlanır. Eğer [değer] sağlanmamışsa, [isim] kısmı gözükecektir. Eğer [isim] ve [değer] bilgilerinin ikisi de mevcut değilse, mevcut olan yapılandırmayı listeleyecek."
 	],
+	"Global shortcut to show/hide Joplin": [
+		""
+	],
 	"Glossary:": [
 		"Sözlük:"
 	],
@@ -1735,6 +1950,9 @@
 	],
 	"Go back": [
 		"Geri dön"
+	],
+	"Go to end of note": [
+		""
 	],
 	"Go to Joplin Cloud profile": [
 		"Joplin Cloud profiline git"
@@ -1745,11 +1963,17 @@
 	"Go to source URL": [
 		"URL kaynağına git"
 	],
+	"Go to start of note": [
+		""
+	],
 	"Goto Anything...": [
 		"Şuraya Git..."
 	],
 	"Grant authorisation": [
 		"Yetkilendirme ver"
+	],
+	"Group": [
+		""
 	],
 	"Have you authorised the application login in the above URL?": [
 		"Uygulamanın giriş yapması için yukarıdaki URL'i kullanıp izin verdiniz mi?"
@@ -1826,6 +2050,9 @@
 	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
 		"Bir resim eki kendi satırındaysa ve ardından boş bir satır geliyorsa, Markdown kaynağının hemen altında görüntülenecektir."
 	],
+	"If enabled, opening an HTML note displays a prompt to convert the note to Markdown.": [
+		""
+	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"Eğer hali hazırda giriş yaptıysanız, lütfen uygulamanın Joplin Cloud ile senkronizasyonu için kısa bir süre bekleyin."
 	],
@@ -1844,11 +2071,11 @@
 	"Import": [
 		"İçe aktar"
 	],
+	"Import a note from a text file (%s). The note will be imported into notebook '%s'.": [
+		""
+	],
 	"Import and Export": [
 		"İçeri ve Dışarı Aktar"
-	],
-	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
-		"İçe aktarım başarısız. JEX dosyası seçtiğinizden emin olun.\nDetaylar: %s"
 	],
 	"Import from JEX": [
 		"JEX dosyasından içe aktar"
@@ -1858,6 +2085,9 @@
 	],
 	"Import or export your data": [
 		"Verini içeri veya dışarı aktar"
+	],
+	"Import...": [
+		"İçe aktar…"
 	],
 	"Imported successfully!": [
 		"Başarıyla içe aktarıldı!"
@@ -1919,6 +2149,15 @@
 	"Indent more": [
 		"Daha çok girintile"
 	],
+	"Index notes for AI search": [
+		""
+	],
+	"Indexer:": [
+		""
+	],
+	"Indexing…": [
+		""
+	],
 	"Info": [
 		"Bilgi"
 	],
@@ -1931,8 +2170,17 @@
 	"Insert": [
 		"Gir"
 	],
+	"Insert column right": [
+		""
+	],
 	"Insert Hyperlink": [
 		"Köprü Link ekle"
+	],
+	"Insert row above": [
+		""
+	],
+	"Insert row below": [
+		""
 	],
 	"Insert time": [
 		"Zaman ekle"
@@ -1973,6 +2221,9 @@
 	"Invalid password": [
 		"Hatalı parola"
 	],
+	"Invalid password. Please try again. If you have forgotten your password you will need to reset it.": [
+		""
+	],
 	"iOS version: %s": [
 		"iOS sürümü: %s"
 	],
@@ -1981,6 +2232,9 @@
 	],
 	"Item \"%s\" could not be downloaded: %s": [
 		"\"%s\" öğesi indirilemedi: %s"
+	],
+	"Item upload will be disabled in %s.": [
+		""
 	],
 	"Items": [
 		"Öğeler"
@@ -2002,6 +2256,9 @@
 	],
 	"Joplin Cloud": [
 		"Joplin Cloud"
+	],
+	"Joplin Cloud AI requires Joplin Cloud sync. Pick a different provider or restore Joplin Cloud sync.": [
+		""
 	],
 	"Joplin Cloud Login": [
 		"Joplin Cloud Giriş"
@@ -2029,6 +2286,9 @@
 	],
 	"Joplin Mobile": [
 		"Joplin Mobil"
+	],
+	"Joplin needs your permission to access your %s account and to synchronise data with it.": [
+		""
 	],
 	"Joplin Server": [
 		"Joplin Sunucusu"
@@ -2070,7 +2330,7 @@
 		"Not tarihçesini şu kadar süre tut"
 	],
 	"Keep notes in the trash for": [
-		"Çöp kutusunda notları şu kadar süre tut: "
+		"Çöp kutusunda notları şu kadar süre tut:"
 	],
 	"Keyboard Mode": [
 		"Klavye modu"
@@ -2085,7 +2345,7 @@
 		"Keychain Desteği: %s"
 	],
 	"KEYS": [
-		""
+		"TUŞLAR"
 	],
 	"Keys that need upgrading": [
 		"Güncellenmesi gereken anahtarlar"
@@ -2185,6 +2445,12 @@
 	"Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at \"%s\" and resume the operation.": [
 		"Kilit dosyası zaten tutuluyor. Senkronizasyon yapılmadığını biliyorsanız, kilit dosyasını \"%s\" konumunda silebilir ve işleme devam edebilirsiniz."
 	],
+	"Locked notes are encrypted on this device and can only be read after entering your note lock password. The password is required again after locking or restarting Joplin.": [
+		""
+	],
+	"Locked notes cannot be opened in an external editor": [
+		""
+	],
 	"Log": [
 		"Log"
 	],
@@ -2227,6 +2493,9 @@
 	"Manage shared notebooks": [
 		"Paylaşılan not defterlerini yönet"
 	],
+	"Manage this server's license from the [admin dashboard](%s).": [
+		""
+	],
 	"Manage toolbar options": [
 		"Araç çubuğu seçeneklerini yönet"
 	],
@@ -2234,7 +2503,7 @@
 		"Eklentileri yönet"
 	],
 	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
-		""
+		"Profillerini yönet. Profilleri yeniden adlandırabilir veya silebilirsin. O an kullanılan aktif profil silinemez."
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Uçtan Uca Şifreleme ayarını yönetir. Komutlar: `enable`, `disable`, `decrypt`, `status`, `decrypt-file` ve `target-status`."
@@ -2296,6 +2565,9 @@
 	"Max Total Size": [
 		"Maks. Toplam Boyut"
 	],
+	"MCP requires the Web Clipper service. Enable it in Settings → Web Clipper.": [
+		""
+	],
 	"Media player, math, diagrams, table of contents": [
 		"Medya oynatıcı, matematik, diyagramlar, içindekiler"
 	],
@@ -2326,6 +2598,12 @@
 	"Mobile data - auto-sync disabled": [
 		"Mobil veri - otomatik senkronizasyon devre dışı"
 	],
+	"Model": [
+		""
+	],
+	"Model:": [
+		""
+	],
 	"More info": [
 		"Daha fazla bilgi"
 	],
@@ -2341,6 +2619,9 @@
 	"Move %d note to notebook \"%s\"?": [
 		"%d not \"%s\" not defterine taşınsın mı?",
 		"%d not \"%s\" not defterine taşınsın mı?"
+	],
+	"Move %d notebooks to the trash?\n\nAll notes and sub-notebooks within these notebooks will also be moved to the trash.": [
+		"“%s” not defteri çöp kutusuna taşınsın mı?\n\nNot defteri içersindeki tüm not ve alt not defterleri de çöp kutusuna taşınacak."
 	],
 	"Move down": [
 		"Aşağı taşı"
@@ -2414,6 +2695,9 @@
 	"New sub-notebook": [
 		"Yeni alt not defteri"
 	],
+	"New text card": [
+		""
+	],
 	"New to-do": [
 		"Yeni yapılacak"
 	],
@@ -2449,6 +2733,18 @@
 	],
 	"No active notebook.": [
 		"Aktif not defteri yok."
+	],
+	"No AI usage recorded yet.": [
+		""
+	],
+	"No arrow": [
+		""
+	],
+	"No colour": [
+		""
+	],
+	"No embedding model is installed. It is downloaded automatically on first use — check Settings → AI for progress.": [
+		""
 	],
 	"No new invitations": [
 		"Yeni davetiye bulunamadı"
@@ -2493,6 +2789,9 @@
 		"Güncelleme bulunamadı"
 	],
 	"No URL for SAML authentication set.": [
+		"URL veya SAML doğrulaması ayarlanmamış."
+	],
+	"No valid notebook is available. Please create or select a notebook and try again.": [
 		""
 	],
 	"None": [
@@ -2500,6 +2799,9 @@
 	],
 	"Nord": [
 		"Nord"
+	],
+	"Normal": [
+		""
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"%s ile doğrulama sağlanamadı. Lütfen eksik olan tüm bilgileri girin."
@@ -2515,9 +2817,6 @@
 	],
 	"Not now": [
 		"Şimdi değil"
-	],
-	"Not useful": [
-		"Kullanışsız"
 	],
 	"note": [
 		"not"
@@ -2555,6 +2854,9 @@
 	"Note history has been deleted.": [
 		"Not geçmişi silindi."
 	],
+	"Note indexing is turned off in Settings → AI.": [
+		""
+	],
 	"Note is not a to-do: \"%s\"": [
 		"Bu not yapılacaklar listesi değildir: “%s”"
 	],
@@ -2566,6 +2868,9 @@
 	],
 	"Note list style": [
 		"Not listeleme biçimi"
+	],
+	"Note lock password, auto lock": [
+		""
 	],
 	"Note not published: %s": [
 		"Not paylaşılamadı: %s"
@@ -2624,11 +2929,23 @@
 	"Numbered List": [
 		"Numaralı liste"
 	],
+	"Obsidian Vault": [
+		""
+	],
+	"OCR is not complete. Please wait for OCR to finish before creating an accessible document.": [
+		""
+	],
+	"OCR needs to run to generate an accessible document. This may take a moment. Would you like to continue?": [
+		""
+	],
 	"OCR: Clear cache and re-download language data files": [
 		"OCR: Önbelleği temizleyip dil veri dosyalarını yeniden indir"
 	],
 	"OCR: Language data URL or path": [
 		"OCR: Dil verisi URL ya da yolu"
+	],
+	"OCR: PDF processing mode": [
+		""
 	],
 	"OCR: Search in extracted content": [
 		"OCR: Ayıklanmış içerikte ara"
@@ -2662,6 +2979,9 @@
 	],
 	"OneNote Notebook": [
 		"OneNote Not Defteri"
+	],
+	"Only do this if you've forgotten your current password. A new password will be created, and any notes locked with the old one will become permanently unreadable.": [
+		""
 	],
 	"Only one note can be printed at a time.": [
 		"Bir seferde yalnızca bir not yazdırılabilir."
@@ -2706,7 +3026,7 @@
 		"Senkronizasyon Sihirbazını Aç…"
 	],
 	"Open-source licences": [
-		""
+		"Açık kaynaklı lisanslar"
 	],
 	"Open...": [
 		"Aç..."
@@ -2730,7 +3050,7 @@
 		"Seçenekler"
 	],
 	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
-		""
+		"ABC kodu her işlendiğinde kullanılacak seçenekler. Bir JSON5 nesnesi olmalıdır. Seçeneklerin tam listesi şu adreste mevcuttur: %s"
 	],
 	"Ordered list": [
 		"Dizilmiş liste"
@@ -2808,8 +3128,14 @@
 	"Please confirm that you would like to re-encrypt your complete database.": [
 		"Lütfen tüm veritabanınızı yeniden şifrelemek istediğinizi doğrulayın."
 	],
+	"Please disable users from the [admin dashboard](%s) to bring this server under the limit.": [
+		""
+	],
 	"Please enter your password in the master key list below before upgrading the key.": [
 		"Anahtarı güncellemek için lütfen ana şifreleme anahtarının parolasını girin."
+	],
+	"Please make sure you remember your password. It cannot be recovered if lost, and any data encrypted with it will become inaccessible.": [
+		""
 	],
 	"Please note that if it is a large notebook, it may take a few minutes for all the notes to show up on the recipient's device.": [
 		"Not defterleri büyük olabilir, ve de bu sebeple alıcı tarafın cihazında tüm notların gözükmesi birkaç dakikayı bulabilir. Bunu lütfen dikkate alın."
@@ -2837,6 +3163,9 @@
 	],
 	"Please specify the notebook where the notes should be imported to.": [
 		"Lütfen notların alınacağı not defterini belirtin."
+	],
+	"Please update the license key from the [admin dashboard](%s).": [
+		""
 	],
 	"Please upgrade Joplin to version %s or later to use this plugin.": [
 		"Bu eklentiyi kullanmak için lütfen Joplin’i %s veya daha yeni sürüme güncelleyin."
@@ -2940,6 +3269,9 @@
 	"Pro": [
 		"Pro"
 	],
+	"Pro 100 GB": [
+		""
+	],
 	"Process failed payment subscriptions": [
 		"Ödeme hatası almış abonelikleri işle"
 	],
@@ -2960,6 +3292,9 @@
 	],
 	"Profile name": [
 		"Profil adı"
+	],
+	"Profile name cannot be empty": [
+		"Profil adı boş olamaz"
 	],
 	"Profile name:": [
 		"Profil adı:"
@@ -3015,6 +3350,9 @@
 	"Quit": [
 		"Çıkış"
 	],
+	"Quit anyway": [
+		""
+	],
 	"Re-download model": [
 		"Modeli yeniden indir"
 	],
@@ -3030,6 +3368,9 @@
 	"Re-upload local data to sync target": [
 		"Yerel veriyi senkronizasyon sunucusuna yeniden yükle"
 	],
+	"Read all tags": [
+		""
+	],
 	"Read more": [
 		"Daha fazla oku"
 	],
@@ -3041,6 +3382,9 @@
 	],
 	"Reading commands from standard input is only available in CLI mode.": [
 		"Standart girdiden komut okuma yalnızca CLI modunda mevcuttur."
+	],
+	"Reading this note requires the note lock password, which has not been set up on this device yet.": [
+		""
 	],
 	"Recipient has accepted the invitation": [
 		"Alıcı davetiyeyi Kabul etti"
@@ -3093,6 +3437,9 @@
 	"Remove": [
 		"Sil"
 	],
+	"Remove %d tags from all notes? This cannot be undone.": [
+		"Tüm notlardan %d etiket kaldırılsın mı? Bu işlem geri alınamaz."
+	],
 	"Remove %s": [
 		"%s kaldır"
 	],
@@ -3107,9 +3454,6 @@
 	],
 	"Removed %s from share.": [
 		"“%s” paylaşımdan kaldırıldı."
-	],
-	"Removed tag: %s": [
-		"Etiket kaldırıldı: %s"
 	],
 	"Rename": [
 		"Yeniden adlandır"
@@ -3167,6 +3511,15 @@
 	],
 	"Reports": [
 		"Raporlar"
+	],
+	"Required to use cloud-hosted AI models, including Joplin Cloud AI. When disabled, only on-device providers can be used.": [
+		""
+	],
+	"Reset": [
+		""
+	],
+	"Reset AI token usage counters?": [
+		""
 	],
 	"Reset application layout": [
 		"Ugulama görünümünü sıfırla"
@@ -3239,6 +3592,9 @@
 	],
 	"Rich Text editor. Press Escape then Tab to escape focus.": [
 		"Zengin metin editörü. Önce Escape, sonra da Tab'a basarak fokustan çıkabilirsiniz."
+	],
+	"Run OCR": [
+		""
 	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
 		"Metin dosyasındaki komutları çalıştırır. Her bir komut ayrı satırda olmalıdır."
@@ -3364,7 +3720,7 @@
 		"Ana not defterini seç"
 	],
 	"Select the type of file to be imported:": [
-		""
+		"İçe aktarılacak dosya türünü seçin:"
 	],
 	"Selected: %s": [
 		"Seçili: %s"
@@ -3377,6 +3733,12 @@
 	],
 	"Self-hosted": [
 		"Kendi barındırılan (self-hosted)"
+	],
+	"Self-hosted instances of the Joplin web app cannot sync with Joplin Cloud. Open the official web app?": [
+		""
+	],
+	"Send": [
+		""
 	],
 	"Send bug report": [
 		"Hata raporu gönder"
@@ -3453,6 +3815,9 @@
 	"Show all": [
 		"Tümünü göster"
 	],
+	"Show checkbox completion chart in note list": [
+		""
+	],
 	"Show completed to-dos": [
 		"Tamamlanan yapılacaklar listesini göster"
 	],
@@ -3461,6 +3826,9 @@
 	],
 	"Show disabled keys": [
 		"İnaktif anahtarları görüntüle"
+	],
+	"Show Joplin icon for note links": [
+		""
 	],
 	"Show monospace fonts only.": [
 		"Sadece monospace (sabit genişlikteki) yazı tiplerini göster."
@@ -3483,6 +3851,9 @@
 	"Show/hide the sidebar": [
 		"Kenar çubuğunu göster/gizle"
 	],
+	"Showing all matching settings": [
+		""
+	],
 	"Shows notes for tag": [
 		"Etiketle ilişkilendirilmiş notları görüntüle"
 	],
@@ -3503,6 +3874,9 @@
 	],
 	"Size": [
 		"Boyut"
+	],
+	"Size (smallest first)": [
+		""
 	],
 	"Skip this version": [
 		"Bu sürümü pas geç"
@@ -3540,6 +3914,9 @@
 	"Some items could not be synchronised. Please try to synchronise them first.": [
 		"Bazı öğeler senkronize edilemiyor. Lütfen ilk olarak bunları senkronize etmeyi deneyin."
 	],
+	"Something went wrong.": [
+		""
+	],
 	"Sort \"%s\" in ascending order": [
 		"\"%s\" verisini artan biçimde sırala"
 	],
@@ -3571,7 +3948,7 @@
 		"Kaynak: "
 	],
 	"SPACE": [
-		""
+		"ALAN"
 	],
 	"Spacer": [
 		"Ara boşluk"
@@ -3657,6 +4034,9 @@
 	"Success! Synchronisation configuration appears to be correct.": [
 		"Başarılı! Senkronizasyon yapılandırması doğru görünüyor."
 	],
+	"Success! The AI provider responded:": [
+		""
+	],
 	"Suggestions": [
 		"Öneriler"
 	],
@@ -3668,6 +4048,9 @@
 	],
 	"Swap line up": [
 		"Satırı yukarıdaki ile değiştir"
+	],
+	"Swap source and target": [
+		""
 	],
 	"Switch between note and to-do type": [
 		"Not ve yapılacaklar tipi arasında değişim yap"
@@ -3702,9 +4085,6 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"[notebook] not defterine geçer - daha sonraki tüm işlemler bu not defterinde gerçekleşecektir."
 	],
-	"Sync": [
-		"Senkronizasyon"
-	],
 	"Sync as many devices as you want": [
 		"İstediğin kadar cihazı senkronize et"
 	],
@@ -3728,6 +4108,9 @@
 	],
 	"Sync your notes": [
 		"Notları senkron et"
+	],
+	"Sync your notes with Joplin Cloud to access them on all your devices. Other sync options are also available.": [
+		""
 	],
 	"Sync, encryption, proxy": [
 		"Senkronizasyon, şifreleme, proxy"
@@ -3759,6 +4142,9 @@
 	"Synchronises with remote storage.": [
 		"Uzak depolama ile senkronize eder."
 	],
+	"Synchronising remaining changes, please wait...": [
+		""
+	],
 	"Synchronising...": [
 		"Senkronize Ediliyor..."
 	],
@@ -3771,8 +4157,14 @@
 	"Tab moves focus": [
 		"Tab odak hareket ettirir"
 	],
+	"Table": [
+		"Tablo"
+	],
 	"Tabloid": [
 		"Tablo"
+	],
+	"Tag: %s": [
+		"Etiket: %s"
 	],
 	"Tagged: %d.": [
 		"Etiket: %d."
@@ -3780,11 +4172,11 @@
 	"Tags": [
 		"Etiketler"
 	],
+	"Tags cannot be changed for locked notes while the session is locked": [
+		""
+	],
 	"Take photo": [
 		"Fotoğraf çek"
-	],
-	"Take survey": [
-		"Ankete katıl"
 	],
 	"Task \"%s\" failed with error: %s": [
 		"\"%s\" görevi başarısız. Hata mesajı: %s"
@@ -3804,11 +4196,11 @@
 	"Text editor command": [
 		"Metin editörü komutu"
 	],
-	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
-		"Geribildirim için teşekkür ederiz!\nKısa bir anketimiz var, bunu doldurmaya vaktiniz var mı?"
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Profil aktifken silinemez. Bir başka profile geçip yeniden deneyin."
+	],
+	"The API key is missing. Set it in Settings → AI.": [
+		""
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
 		"Uygulama şimdi kapanacak. İşlemi tamamlamak için lütfen uygulamayı kapandıktan sonar yeniden çalıştırın."
@@ -3840,9 +4232,6 @@
 	"The default encryption method has been changed, you should re-encrypt your data.": [
 		"Varsayılan şifreleme yolu daha güvenli bir yola güncellendi, bu sebeple tüm verinizi yeniden şifrelemelisiniz."
 	],
-	"The default profile cannot be deleted": [
-		"Varsayılan profil silinemez"
-	],
 	"The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.": [
 		"Editör komutu (argüman içerebilir) not açmak için kullanılacaktır. Eğer sağlanmadıysa, varsayılan düzenleyiciyi otomatik olarak algılamaya çalışır."
 	],
@@ -3871,14 +4260,42 @@
 	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
 		"Eski Markdown düzenleyici bir eklentiyle uyumsuzluk nedeniyle çökmüş gibi görünüyor. Yeni düzenleyiciyi kullanmanızı öneririz."
 	],
+	"The license for this server failed to refresh.": [
+		""
+	],
+	"The license key for this Joplin Server Business instance has expired and needs to be renewed.": [
+		""
+	],
+	"The license key for this Joplin Server Business instance has expired or is invalid. Uploading items has been disabled until the license is renewed.": [
+		""
+	],
 	"The master key has been upgraded successfully!": [
 		"Ana anahtar başarıyla güncellendi!"
 	],
 	"The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
 		"Bu kimlikleri olan ana anahtarlar öğelerinizden bazılarını şifrelemek için kullanılır, ancak uygulama şu anda bunlara erişemez. Büyük olasılıkla senkronizasyon yoluyla indirilmeleri sağlanacaktır."
 	],
+	"The MCP server is disabled. Enable it in Settings → MCP.": [
+		""
+	],
+	"The model identifier to use, for example gpt-4o-mini or claude-3-5-sonnet-latest.": [
+		""
+	],
+	"The model name is missing. Set it in Settings → AI.": [
+		""
+	],
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"“%s” notu başarılı bir şekilde “%s” not defterine geri yüklendi."
+	],
+	"The note changed while the request was running; edits were not applied. Try again.": [
+		""
+	],
+	"The note has been converted to Markdown and the original note has been moved to the trash": [
+		"Not Markdown'a dönüştürüldü ve orijinal not çöp kutusuna taşındı",
+		"Notlar Markdown'a dönüştürüldü ve orijinal notlar çöp kutusuna taşındı"
+	],
+	"The note lock state cannot be changed from the command line": [
+		""
 	],
 	"The note was successfully moved to the trash.": [
 		"Not başarıyla çöp kutusuna taşındı.",
@@ -3893,8 +4310,17 @@
 	"The notes have been imported: %s": [
 		"Notlar içe aktarıldı: %s"
 	],
+	"The OpenAI-compatible API endpoint. For example, https://api.openai.com/v1 or http://localhost:11434/v1 for Ollama.": [
+		""
+	],
+	"The OpenAI-compatible provider needs a base URL. Set it in Settings → AI.": [
+		""
+	],
 	"The possible commands are:": [
 		"Kullanılabilir komutlar:"
+	],
+	"The provider returned an empty response. Check that the base URL ends with /v1 and that a model is loaded.": [
+		""
 	],
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"Alıcı listeden çıkarılamadı. Lütfen yeniden deneyin.\n\nHata mesajı: \"%s\""
@@ -3937,9 +4363,6 @@
 	],
 	"Theme": [
 		"Tema"
-	],
-	"Themes, editor font": [
-		"Temalar, editör yazı tipi"
 	],
 	"There are currently no notes. Create one by clicking on the (+) button.": [
 		"Şu anda not yok. (+) butonuna tıklayarak bir tane oluşturun."
@@ -3995,6 +4418,13 @@
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Bu gelişmiş araç notlarınıza iliştirdiğiniz ek dosyaları görmenizi sağlar. Lütfen bu aracı kullanırken dikkatli olun, çünkü bu dosyalar silinirse sonrasında geri döndürülemez."
 	],
+	"This Joplin Server Business instance is only licensed for %d user.": [
+		"",
+		""
+	],
+	"This note could not be decrypted. If it was encrypted prior to a password reset, the contents are no longer recoverable.": [
+		""
+	],
 	"This note could not be deleted: %s": [
 		"Bu dosya silinemedi: %s",
 		"Bu dosyalar silinemedi: %s"
@@ -4019,14 +4449,32 @@
 	"This note has no history": [
 		"Bu notun hiç değişiklik geçmişi yok"
 	],
+	"This note is currently being saved. Please try again in a moment.": [
+		""
+	],
+	"This note is encrypted and cannot be used with AI Chat.": [
+		""
+	],
+	"This note is encrypted. Enter the note lock password to unlock encrypted notes for this session.": [
+		""
+	],
 	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
 		"Bu not HTML formatında. Daha kolay düzenlemek için Markdown'a dönüştürün."
+	],
+	"This notebook contains Windows-specific files. For maximum compatibility, consider importing the notebook from Windows.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		"Bu eklenti %s desteklemiyor."
 	],
+	"This provider sends data off your device. Turn on \"Allow remote AI providers\" in Settings → AI.": [
+		""
+	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"Zengin metin editöründe bazı kısıtlamalar mevcuttur, ve de kullanmadan önce bunun bilincinde olmanızı öneririz."
+	],
+	"This section opens in its own screen and is matched by section title.": [
+		""
 	],
 	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
 		"Bu hizmet, tarayıcı uzantısının Joplin ile iletişim kurmasını sağlar. Etkinleştirme anında güvenlik duvarınız Joplin’e belirli bir bağlantı portunu dinlemek için izin vermenizi isteyebilir."
@@ -4054,6 +4502,9 @@
 	],
 	"Title": [
 		"Başlık"
+	],
+	"To access your recovery codes please enter an authentication code or your password.": [
+		""
 	],
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
 		"Joplin'in Dropbox ile senkronize edilmesine izin vermek için lütfen aşağıdaki adımları izleyin:"
@@ -4093,9 +4544,6 @@
 	],
 	"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`": [
 		"Bu notların şifesini çözmeyi yeniden denemek için şu kodu çalıştırın: `e2ee decrypt —retry-failed-items`"
-	],
-	"To switch the profile, the app is going to close and you will need to restart it.": [
-		"Profil değiştirmek için uygulama kapanacak, ve de yeniden başlatmanız gerekecek."
 	],
 	"To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions": [
 		"Düzgün çalışması için uygulamanın aşağıdaki izinlere ihtiyacı var. Lütfen bunları telefon ayarlarınızda, Uygulamalar> Joplin> İzinler’de etkinleştirin"
@@ -4157,6 +4605,9 @@
 	"Toggle sort order field": [
 		"Sıralama alanine aç / kapat"
 	],
+	"Toggle whiteboard / Markdown view": [
+		""
+	],
 	"Token has been copied to the clipboard!": [
 		"Anahtar panoya kopyalandı!"
 	],
@@ -4165,6 +4616,9 @@
 	],
 	"Tools": [
 		"Araçlar"
+	],
+	"Tools and services to expose to AI. AI agents can use these tools either via the note chat panel or Joplin's MCP server (if enabled).": [
+		""
 	],
 	"Total Size": [
 		"Toplam Boyut"
@@ -4178,11 +4632,8 @@
 	"Try again": [
 		"Yeniden dene"
 	],
-	"Try it now": [
-		"Şimdi dene"
-	],
 	"TYPE": [
-		""
+		"TİP"
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"`help [command]` yazarak komutlar hakkında daha fazla bilgiye ulaşabilirsiniz; yada `help all` yazarak tam kullanım bilgisine ulaşabilirsiniz."
@@ -4199,6 +4650,12 @@
 	"Type: %s.": [
 		"Tip: %s."
 	],
+	"Typography, spellcheck, layout": [
+		""
+	],
+	"Unable to access the recording file.": [
+		""
+	],
 	"Unable to edit resource of type %s": [
 		"Kaynak tipi %s düzenlenemedi"
 	],
@@ -4207,6 +4664,9 @@
 	],
 	"Unable to share note data. Reason: %s": [
 		"Not verisi paylaşılamadı. Sebep: %s"
+	],
+	"Unavailable on this platform": [
+		""
 	],
 	"Unchecked": [
 		"İşaretlenmemiş"
@@ -4234,6 +4694,9 @@
 	],
 	"Unknown platform": [
 		"Bilinmeyen platform"
+	],
+	"Unlock": [
+		""
 	],
 	"Unordered list": [
 		"Dizilmemiş liste"
@@ -4265,14 +4728,23 @@
 	"Unsupported link or message: %s.\nError: %s": [
 		"Desteklenmeyen bağlantı veya mesaj: %s\nHata: %s"
 	],
+	"Unsupported public key format. Please check that Joplin is updated to the latest version and try again.": [
+		""
+	],
 	"Untitled": [
 		"Başlıksız"
+	],
+	"Untitled whiteboard": [
+		""
 	],
 	"Update": [
 		"Güncelle"
 	],
 	"Update available": [
 		"Güncelleme mevcut"
+	],
+	"Update it from Google Play": [
+		""
 	],
 	"Update later": [
 		"Daha sonra güncelle"
@@ -4313,6 +4785,9 @@
 	"Upgrade the sync target to the latest version.": [
 		"Senkronizasyon hedefini en son sürüme yükseltin."
 	],
+	"Upgrade to 100 GB": [
+		""
+	],
 	"Upload photo": [
 		"Fotoğraf yükle"
 	],
@@ -4346,14 +4821,14 @@
 	"Use your biometrics to secure access to your application. You can always set it up later in Settings.": [
 		"Biyometriğinizi kullanarak uygulamaya güvenli bir biçimde giriş yapabilirsiniz. Bu ayarı dilediğiniz zaman Ayarlar kısmından sonra da aktifleştirebilirsiniz."
 	],
+	"Used": [
+		""
+	],
 	"Used for most text in the markdown editor. If not found, a generic proportional (variable width) font is used.": [
 		"Markdown metin düzenleyicilerde pek çok metinde kullanılır. Bu değer bulunamazsa, genişliği karakterlerce değişebilen jenerik bir font kullanılacak."
 	],
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"Sabit bir metin uzunluğu gerektiren yerlerde (örn: tablolar, doğrulama kutucukları, kod vs.) kullanılır. Eğer bulunamazsa jenerik ve monospace olan bir font kullanılacak."
-	],
-	"Useful": [
-		"Kullanuşlı"
 	],
 	"User deletions": [
 		"Kullancı silmeleri"
@@ -4363,6 +4838,12 @@
 	],
 	"Valid": [
 		"Geçerli"
+	],
+	"Vector search is not available on this platform": [
+		""
+	],
+	"Vector search is unavailable on this platform (sqlite-vec extension not loaded).": [
+		""
 	],
 	"Verify your identity": [
 		"Kimliğini doğrula"
@@ -4460,8 +4941,14 @@
 	"When creating a new to-do:": [
 		"Yeni bir yapılacak oluşturulurken:"
 	],
+	"When enabled, plugins and built-in features can use AI models to generate or analyse text.": [
+		""
+	],
 	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
 		"Etkinleştirildiğinde, nottaki resimlerin sunucu tabanlı daha yüksek kaliteli transkripsiyon servisi ile çözümlenmesini ister. Masaüstü uygulamasının bir kopyasıyla senkronizasyon gerektirir."
+	],
+	"When enabled, tables are rendered as an interactive widget in the editor. Disable this if you prefer to edit tables as raw Markdown.": [
+		""
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"Eğer bu özellik aktifleştirilirse, uygulama iliştirilen ek dosyaları tarayarak içindeki metinleri ayıklayacak. Bu sayede bu metinler üzerinden de arama yapabileceksiniz."
@@ -4505,11 +4992,17 @@
 	"You do not have any installed plugin.": [
 		"Herhangi bir yüklü eklentiniz bulunmamakta."
 	],
+	"You have unsaved tag changes. Discard them?": [
+		""
+	],
 	"You may also type `status` for more information.": [
 		"Daha fazla bilgi için `durum` yazabilirsiniz."
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"Bu aracı kullanarak verinizi yeniden şifreleyebilirsiniz. Bu metodu örneğin bazı notlarınızın eski bir şifreleme metoduyla şifrelendiği zamanlarda kullanabilirsiniz."
+	],
+	"You switched notes while the request was running; edits were not applied. Try again.": [
+		""
 	],
 	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
 		"Joplin Cloud'a bağlanılamadı. Lütfen giriş bilgilerinizi control ederek yeniden deneyin. Hata Mesajı:"
@@ -4526,6 +5019,12 @@
 	"Your Joplin Cloud credentials are invalid, please login.": [
 		"Joplin Cloud giriş bilgileriniz geçersiz, lütfen giriş yapın."
 	],
+	"Your master password is used to protect sensitive information. In particular, it is used to encrypt your notes when end-to-end encryption (E2EE) is enabled, or to share and encrypt notes with someone who has E2EE enabled.": [
+		""
+	],
+	"Your note will be sent to the configured AI provider (%s).": [
+		""
+	],
 	"Your password is needed to decrypt some of your data.": [
 		"Verilerinizin bir kısmının şifrelemesinin çözülmesi için parolanız gerekmektedir."
 	],
@@ -4540,5 +5039,8 @@
 	],
 	"Zoom Out": [
 		"Uzaklaştır"
+	],
+	"— now viewing: %s —": [
+		""
 	]
 }

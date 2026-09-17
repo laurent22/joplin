@@ -4,7 +4,7 @@ import { undo, redo, selectAll, indentSelection, cursorDocStart, cursorDocEnd, c
 import {
 	decreaseIndent, increaseIndent,
 	insertHorizontalRule,
-	toggleBolded, toggleCode,
+	toggleBlockQuote, toggleBolded, toggleCode,
 	toggleHeaderLevel, toggleItalicized,
 	toggleList, toggleMath,
 } from './markdownCommands';
@@ -40,6 +40,7 @@ const editorCommands: Record<EditorCommandType, EditorCommandFunction> = {
 	[EditorCommandType.ToggleNumberedList]: toggleList(ListType.OrderedList),
 	[EditorCommandType.ToggleBulletedList]: toggleList(ListType.UnorderedList),
 	[EditorCommandType.ToggleCheckList]: toggleList(ListType.CheckList),
+	[EditorCommandType.ToggleBlockQuote]: toggleBlockQuote,
 	[EditorCommandType.ToggleHeading]: toggleHeaderLevel(2),
 	[EditorCommandType.ToggleHeading1]: toggleHeaderLevel(1),
 	[EditorCommandType.ToggleHeading2]: toggleHeaderLevel(2),
@@ -132,4 +133,3 @@ const editorCommands: Record<EditorCommandType, EditorCommandFunction> = {
 	[EditorCommandType.TableDeleteColumn]: tableDeleteColumn,
 };
 export default editorCommands;
-

@@ -2,10 +2,21 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"\"%s\" chýba požadovaná vlastnosť \"%s\"."
 	],
+	"%d card": [
+		"",
+		"",
+		""
+	],
 	"%d day": [
 		"%d deň",
 		"%d dni",
 		"%d dní"
+	],
+	"%d edit(s) applied, %d could not be placed automatically.": [
+		""
+	],
+	"%d edit(s) applied.": [
+		""
 	],
 	"%d GB": [
 		"%d GB"
@@ -42,6 +53,9 @@
 	"%d photo(s) taken": [
 		"%d nasnímaných fotografií"
 	],
+	"%d sections found": [
+		""
+	],
 	"%s": [
 		"%s"
 	],
@@ -52,7 +66,7 @@
 		"%s (%s) sa nepodarilo nahrať: %s"
 	],
 	"%s (%s) would like to share a notebook with you.": [
-		"%s (%s) by s vami rád zdieľal zápisník."
+		"%s (%s) by s vami rád(a) zdieľal(a) zápisník."
 	],
 	"%s (%s): %s": [
 		"%s (%s): %s"
@@ -75,6 +89,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s added to toolbar": [
+		""
+	],
 	"%s cannot be greater than %s": [
 		"%s nemôže byť väčšie ako %s"
 	],
@@ -84,8 +101,14 @@
 	"%s from %s": [
 		"%s z %s"
 	],
+	"%s input / %s output tokens used.": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s nie je optimalizovaný na synchronizáciu mnohých malých súborov, takže počiatočná synchronizácia bude pomalá."
+	],
+	"%s moved up": [
+		""
 	],
 	"%s must be a valid whole number": [
 		"%s musí byť platné celé číslo"
@@ -137,6 +160,12 @@
 	"(%s)": [
 		"(%s)"
 	],
+	"(empty — double-click to edit)": [
+		""
+	],
+	"(empty)": [
+		""
+	],
 	"(In plugin: %s)": [
 		"(V doplnku: %s)"
 	],
@@ -155,6 +184,9 @@
 	"(You may disable this prompt in the options)": [
 		"(Túto výzvu môžete vypnúť v možnostiach)"
 	],
+	"+ Group": [
+		""
+	],
 	"- Camera: to allow taking a picture and attaching it to a note.": [
 		"- Kamera: umožňuje zhotoviť obrázok a pripojiť ho k poznámke."
 	],
@@ -162,7 +194,10 @@
 		"- Umiestnenie: umožňuje pripojiť informácie o geografickej polohe k poznámke."
 	],
 	"- Storage: to allow attaching files to notes and to enable filesystem synchronisation.": [
-		"- Úložisko: umožňuje pripájanie súborov k poznámkam a umožňuje synchronizáciu súborového systému."
+		"- Úložisko: umožňuje pripájanie súborov k poznámkam a synchronizáciu súborového systému."
+	],
+	"14-day free trial. Cancel anytime during the trial and you won't be charged.": [
+		""
 	],
 	"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign or remove [tag] from [note], to list notes associated with [tag], or to list tags associated with [note]. The command `tag list` can be used to list all the tags (use -l for long option).": [
 		"<tag-command> môže byť „add“, „remove“, „list“ alebo „notetags“ na priradenie alebo odstránenie [tag] z [note], na zoznam poznámok spojených s [tag] alebo na zoznam tagov spojených s [note]. Príkaz `tag list` možno použiť na vypísanie všetkých značiek (pre dlhú voľbu použite -l)."
@@ -182,6 +217,9 @@
 	"A new update (%s) is available": [
 		"Nová aktualizácia (%s) je k dispozícii"
 	],
+	"A system-wide keyboard shortcut that toggles the Joplin window. Works even when Joplin is not focused. Example: CommandOrControl+Shift+J. Leave empty to disable.": [
+		""
+	],
 	"A3": [
 		"A3"
 	],
@@ -192,7 +230,7 @@
 		"A5"
 	],
 	"ABC musical notation: Options": [
-		""
+		"ABC notový zápis: Možnosti"
 	],
 	"About": [
 		"O aplikácii"
@@ -227,6 +265,15 @@
 	"Access denied: Please re-enter your password and/or username": [
 		"Prístup odmietnutý: Zadajte znova svoje heslo a/alebo používateľské meno"
 	],
+	"Access your notes from any web browser at %s.": [
+		""
+	],
+	"Accessible": [
+		""
+	],
+	"Accessible mode saves additional information, enabling creation of accessible PDFs. It increases database size by approximately 10-20 KB per page.": [
+		""
+	],
 	"Account": [
 		"Účet"
 	],
@@ -248,6 +295,9 @@
 	"Actual Size": [
 		"Skutočná veľkosť"
 	],
+	"Add a text card": [
+		""
+	],
 	"Add body": [
 		"Pridať telo"
 	],
@@ -256,6 +306,9 @@
 	],
 	"Add new": [
 		"Pridať novú"
+	],
+	"Add note to whiteboard...": [
+		""
 	],
 	"Add or remove tags:": [
 		"Pridať alebo odstrániť štítky:"
@@ -278,11 +331,13 @@
 	"Add to note": [
 		"Pridať k poznámke"
 	],
+	"Added %d word": [
+		"",
+		"",
+		""
+	],
 	"Added new: %s": [
 		"Pridaný nový: %s"
-	],
-	"Added tag: %s": [
-		"Pridaný štítok: %s"
 	],
 	"Adds tag": [
 		"Pridá štítok"
@@ -302,6 +357,21 @@
 	"Advanced tools": [
 		"Pokročilé nástroje"
 	],
+	"AI": [
+		""
+	],
+	"AI Chat": [
+		""
+	],
+	"AI features are disabled. Enable them in Settings → AI.": [
+		""
+	],
+	"AI is running in reduced-quality mode — monthly allowance exceeded. Credits replenish on a rolling 30-day basis, or you can": [
+		""
+	],
+	"AI usage has exceeded your monthly allowance — responses are using a reduced-quality model. Credits replenish on a rolling 30-day basis. Buy more at %s.": [
+		""
+	],
 	"all": [
 		"všetky"
 	],
@@ -320,8 +390,29 @@
 	"All shared folders:": [
 		"Všetky zdieľané priečinky:"
 	],
+	"Allow editing tags on notes": [
+		""
+	],
+	"Allow editing the current note (chat panel only)": [
+		""
+	],
+	"Allow listing tags": [
+		""
+	],
+	"Allow reading images": [
+		""
+	],
+	"Allow remote AI providers": [
+		""
+	],
+	"Allow semantic search of notes": [
+		""
+	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		"Umožňuje ladenie mobilných doplnkov. Podrobnosti nájdete v časti %s."
+	],
+	"Already have an account? Log in": [
+		""
 	],
 	"Also displays unset and hidden config variables.": [
 		"Tiež zobrazuje nenastavené a skryté konfiguračné premenné."
@@ -353,9 +444,6 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"Bol nájdený automaticky uložený náčrt. Pripojiť jeho kópiu k poznámke?"
 	],
-	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
-		"Pri odosielaní odpovede došlo k chybe. K tejto chybe môže dôjsť, ak je aplikácia offline alebo sa nemôže pripojiť k serveru.\nChyba: %s"
-	],
 	"An error occurred: %s": [
 		"Vyskytla sa chyba: %s"
 	],
@@ -365,8 +453,14 @@
 	"Android API level: %d": [
 		"Úroveň Android API: %d"
 	],
+	"Anthropic": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		"Každý e-mail odoslaný na túto adresu sa premení na poznámku a pridá sa do vašej zbierky. Poznámka sa uloží do zápisníka Doručená pošta"
+	],
+	"API key": [
+		""
 	],
 	"Appearance": [
 		"Vzhľad"
@@ -394,6 +488,15 @@
 	],
 	"Aritim Dark": [
 		"Aritim Dark"
+	],
+	"Arrow at target": [
+		""
+	],
+	"Ask about this note, or request a change…": [
+		""
+	],
+	"Ask about this note, or request changes. Select text in the editor first to scope the request to that selection.": [
+		""
 	],
 	"Associated tags:": [
 		"Priradené štítky:"
@@ -434,6 +537,9 @@
 	"Attachments that could not be downloaded": [
 		"Prílohy, ktoré nebolo možné stiahnuť"
 	],
+	"Attention: After resetting your password it will no longer be possible to decrypt any data encrypted with your current password. All encrypted shared notebooks will also be unshared, so please ask the notebook owner to share it again with you.": [
+		""
+	],
 	"Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s": [
 		"Pozor: Ak toto umiestnenie zmeníte, pred synchronizáciou doň skopírujte všetok obsah, inak budú všetky súbory odstránené! Viac informácií nájdete v častých otázkach: %s"
 	],
@@ -448,6 +554,9 @@
 	],
 	"Auto": [
 		"Automaticky"
+	],
+	"Auto lock when switching note": [
+		""
 	],
 	"Auto-add disabled accounts for deletion": [
 		"Automaticky pridávať zakázané účty na vymazanie"
@@ -465,7 +574,7 @@
 		"Automaticky kontrolovať aktualizácie"
 	],
 	"Automatically delete notes in the trash after a number of days": [
-		"Automatické odstraňovanie poznámok v koši po určitom počte dní"
+		"Automaticky odstraňovať poznámky v koši po určitom počte dní"
 	],
 	"Automatically switch theme to match system theme": [
 		"Automaticky prepínať tému tak, aby zodpovedala systémovej téme"
@@ -473,14 +582,23 @@
 	"Back": [
 		"Späť"
 	],
+	"Back to %s": [
+		""
+	],
+	"Base URL": [
+		""
+	],
 	"Basic": [
 		"Základné"
 	],
 	"Beta": [
 		"Beta"
 	],
-	"Block code": [
+	"Billed annually (%s per user per year respectively).": [
 		""
+	],
+	"Block code": [
+		"Blok kódu"
 	],
 	"Bold": [
 		"Tučné"
@@ -496,6 +614,9 @@
 	],
 	"Bulleted List": [
 		"Zoznam s odrážkami"
+	],
+	"buy more credits": [
+		""
 	],
 	"by %s": [
 		"od %s"
@@ -533,8 +654,14 @@
 	"Cannot access %s": [
 		"Nedá sa získať prístup k %s"
 	],
+	"Cannot change a locked note while the session is locked": [
+		""
+	],
 	"Cannot change encrypted item": [
 		"Nedá sa zmeniť zašifrovaná položka"
+	],
+	"Cannot convert read-only item: \"%s\"": [
+		"Nie je možné previesť položku len na čítanie: „%s“"
 	],
 	"Cannot copy note to \"%s\" notebook": [
 		"Nie je možné skopírovať poznámku do zápisníka „%s“"
@@ -578,6 +705,9 @@
 	"Case sensitive": [
 		"Rozlišujú sa malé a veľké písmená"
 	],
+	"Certain Markdown formatting is now rendered in the editor by default. For example, **bold** will appear as actual bold text. You can change this behaviour in the \"Editor\" section of Settings.": [
+		""
+	],
 	"Change application layout": [
 		"Zmeniť rozloženie aplikácie"
 	],
@@ -595,6 +725,9 @@
 	],
 	"Characters excluding spaces": [
 		"Znaky bez medzier"
+	],
+	"Chat provider": [
+		""
 	],
 	"Check": [
 		"Označiť"
@@ -621,7 +754,7 @@
 		"Prebieha kontrola... Čakajte prosím."
 	],
 	"Chinese/Japanese/Korean characters": [
-		""
+		"Čínske/japonské/kórejské znaky"
 	],
 	"Choose an option": [
 		"Vyberte možnosť"
@@ -638,11 +771,17 @@
 	"Clear search": [
 		"Vyčistiť vyhľadávanie"
 	],
+	"Clears the console output.": [
+		""
+	],
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"Kliknutím na „%s“ obnovíte poznámku. Bude skopírovaná do zápisníka s názvom „%s“. Aktuálna verzia poznámky nebude nahradená ani upravená."
 	],
 	"Click \"start\" to attach a new voice memo to the note.": [
 		"Kliknutím na tlačidlo „Spustiť“ pripojíte k poznámke novú hlasovú poznámku."
+	],
+	"Click the eye icon in the toolbar to switch to the Markdown editor and fix the JSON manually.": [
+		""
 	],
 	"Click to add tags...": [
 		"Kliknutím pridáte štítky..."
@@ -717,7 +856,7 @@
 		"Príkaz"
 	],
 	"COMMAND": [
-		""
+		"PRÍKAZ"
 	],
 	"Command palette": [
 		"Paleta príkazov"
@@ -758,8 +897,14 @@
 	"Configuration": [
 		"Nastavenie"
 	],
+	"Configured keyboard shortcuts:": [
+		"Nastavené klávesové skratky:"
+	],
 	"Configures the size of scrollbars used in the app.": [
 		"Nastavuje veľkosť posuvníkov používaných v aplikácii."
+	],
+	"Confirm credentials": [
+		""
 	],
 	"Confirm password cannot be empty": [
 		"Potvrdenie hesla nemôže byť prázdne"
@@ -807,6 +952,12 @@
 	],
 	"Convert it": [
 		"Previesť ju"
+	],
+	"Convert this card into a Joplin note": [
+		""
+	],
+	"Convert to Markdown": [
+		"Previesť na Markdown"
 	],
 	"Convert to note": [
 		"Premeniť na poznámku"
@@ -864,6 +1015,9 @@
 	"Could not connect to plugin repository.": [
 		"Nepodarilo sa pripojiť k úložisku doplnkov."
 	],
+	"Could not convert notes to Markdown: %s": [
+		"Poznámky sa nepodarilo previesť do formátu Markdown: %s"
+	],
 	"Could not export notes: %s": [
 		"Nepodarilo sa exportovať poznámky: %s"
 	],
@@ -893,6 +1047,9 @@
 	],
 	"Create a notebook": [
 		"Vytvoriť zápisník"
+	],
+	"Create accessible document": [
+		""
 	],
 	"Create new notebook": [
 		"Vytvoriť nový zápisník"
@@ -1029,6 +1186,9 @@
 	"Default title to use for documents created by the scanner.": [
 		"Predvolený názov, ktorý sa používa pre dokumenty vytvorené skenerom."
 	],
+	"Default view / edit state": [
+		""
+	],
 	"Default: %s": [
 		"Predvolené: %s"
 	],
@@ -1068,14 +1228,14 @@
 	"Delete profile \"%s\"": [
 		"Vymazať profil \"%s\""
 	],
+	"Delete profile \"%s\"?\n\nAll data, including notes, notebooks and tags will be permanently deleted.": [
+		"Odstrániť profil „%s“?\n\nVšetky údaje vrátane poznámok, zápisníkov a štítkov budú natrvalo vymazané."
+	],
 	"Delete row": [
 		"Vymazať riadok"
 	],
 	"Delete selected notes": [
 		"Vymazať vybrané poznámky"
-	],
-	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
-		""
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Vymazať zápisník Doručená pošta?\n\nAk vymažete zápisník doručenej pošty, všetky e-maily, ktoré doň boli nedávno odoslané, sa môžu stratiť."
@@ -1183,7 +1343,7 @@
 		"Zobrazí úplné informácie o poznámke."
 	],
 	"Displays the configured keyboard shortcuts.": [
-		""
+		"Zobrazí nastavené klávesové skratky."
 	],
 	"Displays the given note.": [
 		"Zobrazí danú poznámku."
@@ -1209,14 +1369,14 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Nestraťte heslo, pretože z bezpečnostných dôvodov je to *jediný* spôsob, ako dešifrovať údaje! Ak chcete zapnúť šifrovanie, zadajte heslo nižšie."
 	],
-	"Do you find the Joplin web app useful?": [
-		"Považujete webovú aplikáciu Joplin za užitočnú?"
-	],
 	"Document scanner: Title template": [
 		"Skener dokumentov: Šablóna názvu"
 	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
 		"Nepovoľte príjemcovi zdieľania zapisovať do zdieľaného zápisníka. Platí len pre príkaz `add`."
+	],
+	"Don't have an account yet?": [
+		""
 	],
 	"Don't show this message again": [
 		"Túto správu už nezobrazovať"
@@ -1227,11 +1387,20 @@
 	"Done": [
 		"Hotovo"
 	],
+	"Double tap to open this attachment. Long press to expand or collapse details.": [
+		""
+	],
 	"Download": [
 		"Stiahnuť"
 	],
 	"Download and install the relevant extension for your browser:": [
 		"Stiahnite a nainštalujte príslušné rozšírenie pre váš prehliadač:"
+	],
+	"Download it from GitHub Releases": [
+		""
+	],
+	"Download it from the Joplin Android repository": [
+		""
 	],
 	"Download it now": [
 		"Stiahnite si ju teraz"
@@ -1256,6 +1425,9 @@
 	],
 	"Dracula": [
 		"Drakula"
+	],
+	"Drag to move group": [
+		""
 	],
 	"Draw picture": [
 		"Nakreslite obrázok"
@@ -1317,6 +1489,9 @@
 	"Edit profile configuration...": [
 		"Upraviť konfiguráciu profilu..."
 	],
+	"Edit tag": [
+		"Upraviť štítok"
+	],
 	"Editor": [
 		"Editor"
 	],
@@ -1362,6 +1537,9 @@
 	"Emails": [
 		"E-maily"
 	],
+	"Embedding index": [
+		""
+	],
 	"emphasised text": [
 		"zvýraznený text"
 	],
@@ -1383,6 +1561,9 @@
 	"Enable abbreviation syntax": [
 		"Povoliť syntax skratiek"
 	],
+	"Enable ABC musical notation support": [
+		"Povoliť podporu hudobnej notácie ABC"
+	],
 	"Enable audio player": [
 		"Povoliť prehrávač zvuku"
 	],
@@ -1394,6 +1575,9 @@
 	],
 	"Enable encryption": [
 		"Povoliť šifrovanie"
+	],
+	"Enable external embeds (e.g. YouTube Videos)": [
+		""
 	],
 	"Enable file:// URLs for images and videos": [
 		"Povoliť URL adresy typu file:// pre obrázky a videá"
@@ -1427,9 +1611,6 @@
 	],
 	"Enable note history": [
 		"Povoliť históriu poznámok"
-	],
-	"Enable optical character recognition (OCR)": [
-		"Povoliť optické rozpoznávanie znakov (OCR)"
 	],
 	"Enable or disable plugins": [
 		"Povoliť alebo zakázať doplnky"
@@ -1476,6 +1657,9 @@
 	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
 		"Umožňuje nahradiť vzor Markdown v rozšírenom textovom editore. Ak je táto funkcia zapnutá, zadaním napríklad **bold** sa vytvorí tučný text."
 	],
+	"Enables the default edit operations for notes with an open AI chat panel. When disabled, the chat panel can still read the open note. Does not apply to MCP.": [
+		""
+	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"Zapnutie šifrovania znamená, že *všetky* vaše poznámky a prílohy budú opätovne synchronizované a odoslané zašifrované do cieľa synchronizácie."
 	],
@@ -1484,6 +1668,9 @@
 	],
 	"Encrypted items cannot be modified": [
 		"Zašifrované položky nie je možné upraviť"
+	],
+	"Encrypting a note requires a note lock password, which has not yet been set. Set it up now?": [
+		""
 	],
 	"Encryption": [
 		"Šifrovanie"
@@ -1496,6 +1683,9 @@
 	],
 	"Encryption keys": [
 		"Šifrovacie kľúče"
+	],
+	"Encryption was setup previously, but all keys have been disabled. To continue, please use the desktop app to enable a key.": [
+		""
 	],
 	"Encryption:": [
 		"Šifrovanie:"
@@ -1524,6 +1714,9 @@
 	"Enter the code:": [
 		"Zadajte kód:"
 	],
+	"Enter the note lock password to unlock encrypted notes for this session.": [
+		""
+	],
 	"Entering selection mode": [
 		"Vstup do režimu výberu"
 	],
@@ -1541,6 +1734,9 @@
 	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:"
+	],
+	"Error. The AI provider test failed:": [
+		""
 	],
 	"Error: %s": [
 		"Chyba: %s"
@@ -1617,6 +1813,9 @@
 	"Exports only the given notebook.": [
 		"Exportuje iba daný zápisník."
 	],
+	"Exposes Joplin notes to external AI applications (Claude Desktop, Cursor, etc.) via the Model Context Protocol. Requires the Web Clipper service to be running. Connected AI tools can read your note content; any text they retrieve may be sent to the external LLM provider those tools use.": [
+		""
+	],
 	"Fail-safe": [
 		"Poistka proti zlyhaniu"
 	],
@@ -1629,14 +1828,14 @@
 	"Failed to connect to your account. Please try again.": [
 		"Nepodarilo sa pripojiť k vášmu účtu. Skúste to prosím znova."
 	],
+	"Failed to create accessible document: %s": [
+		""
+	],
 	"Fatal error:": [
 		"Závažná chyba:"
 	],
 	"Feature flags": [
 		"Príznaky funkcií"
-	],
-	"Feedback": [
-		"Spätná väzba"
 	],
 	"Fetched items: %d/%d.": [
 		"Načítané položky: %d/%d."
@@ -1652,6 +1851,9 @@
 	],
 	"Filter": [
 		"Filter"
+	],
+	"Filtered by section [%s]": [
+		""
 	],
 	"Find": [
 		"Nájsť"
@@ -1670,6 +1872,9 @@
 	],
 	"Fixing search index...": [
 		"Oprava indexu vyhľadávania..."
+	],
+	"Flip": [
+		""
 	],
 	"Focus": [
 		"Prejsť na"
@@ -1730,9 +1935,6 @@
 		"Generovanie odkazov...",
 		"Generovanie odkazov..."
 	],
-	"Geolocation, spellcheck, editor toolbar, image resize": [
-		"Geografická poloha, kontrola pravopisu, panel s nástrojmi editora, zmena veľkosti obrázka"
-	],
 	"Get a quote": [
 		"Získať cenovú ponuku"
 	],
@@ -1745,6 +1947,9 @@
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Získa alebo nastaví konfiguračnú hodnotu. Ak nie je zadaná hodnota [value], zobrazí sa hodnota [name]. Ak nie je zadaný ani [name], ani [value], vypíše aktuálnu konfiguráciu."
 	],
+	"Global shortcut to show/hide Joplin": [
+		""
+	],
 	"Glossary:": [
 		"Slovník:"
 	],
@@ -1753,6 +1958,9 @@
 	],
 	"Go back": [
 		"Ísť späť"
+	],
+	"Go to end of note": [
+		""
 	],
 	"Go to Joplin Cloud profile": [
 		"Prejdite na profil Joplin Cloud"
@@ -1763,11 +1971,17 @@
 	"Go to source URL": [
 		"Prejsť na zdrojovú URL"
 	],
+	"Go to start of note": [
+		""
+	],
 	"Goto Anything...": [
 		"Prejsť na čokoľvek..."
 	],
 	"Grant authorisation": [
 		"Udeliť povolenie"
+	],
+	"Group": [
+		""
 	],
 	"Have you authorised the application login in the above URL?": [
 		"Povolili ste prihlásenie aplikácie vo vyššie uvedenej URL adrese?"
@@ -1818,7 +2032,7 @@
 		"Domov"
 	],
 	"Horizontal Rule": [
-		"Horizontálne pravidlo"
+		"Vodorovná čiara"
 	],
 	"HTML Directory": [
 		"HTML priečinok"
@@ -1844,6 +2058,9 @@
 	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
 		"Ak je príloha obrázku na samostatnom riadku a za ňou nasleduje prázdny riadok, bude zobrazená tesne pod zdrojom Markdown."
 	],
+	"If enabled, opening an HTML note displays a prompt to convert the note to Markdown.": [
+		""
+	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"Ak ste už overili, počkajte, kým sa aplikácia zosynchronizuje s Joplin Cloud."
 	],
@@ -1862,11 +2079,11 @@
 	"Import": [
 		"Importovať"
 	],
+	"Import a note from a text file (%s). The note will be imported into notebook '%s'.": [
+		""
+	],
 	"Import and Export": [
 		"Import a export"
-	],
-	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
-		"Import sa nepodaril. Skontrolujte, či bol vybraný súbor JEX.\nPodrobnosti: %s"
 	],
 	"Import from JEX": [
 		"Importovať z JEX"
@@ -1875,7 +2092,10 @@
 		"Importovať poznámky zo súboru JEX (Joplin Export)."
 	],
 	"Import or export your data": [
-		"Importujte alebo exportujte svoje údaje"
+		"Importujte alebo exportujte vaše údaje"
+	],
+	"Import...": [
+		"Importovať..."
 	],
 	"Imported successfully!": [
 		"Úspešne importované!"
@@ -1937,6 +2157,15 @@
 	"Indent more": [
 		"Odsadiť viac"
 	],
+	"Index notes for AI search": [
+		""
+	],
+	"Indexer:": [
+		""
+	],
+	"Indexing…": [
+		""
+	],
 	"Info": [
 		"Informácie"
 	],
@@ -1949,8 +2178,17 @@
 	"Insert": [
 		"Vložiť"
 	],
+	"Insert column right": [
+		""
+	],
 	"Insert Hyperlink": [
 		"Vložiť hypertextový odkaz"
+	],
+	"Insert row above": [
+		""
+	],
+	"Insert row below": [
+		""
 	],
 	"Insert time": [
 		"Vložiť čas"
@@ -1991,6 +2229,9 @@
 	"Invalid password": [
 		"Neplatné heslo"
 	],
+	"Invalid password. Please try again. If you have forgotten your password you will need to reset it.": [
+		""
+	],
 	"iOS version: %s": [
 		"iOS verzia: %s"
 	],
@@ -1999,6 +2240,9 @@
 	],
 	"Item \"%s\" could not be downloaded: %s": [
 		"Položku \"%s\" nebolo možné stiahnuť: %s"
+	],
+	"Item upload will be disabled in %s.": [
+		""
 	],
 	"Items": [
 		"Položky"
@@ -2020,6 +2264,9 @@
 	],
 	"Joplin Cloud": [
 		"Joplin Cloud"
+	],
+	"Joplin Cloud AI requires Joplin Cloud sync. Pick a different provider or restore Joplin Cloud sync.": [
+		""
 	],
 	"Joplin Cloud Login": [
 		"Prihlásenie do Joplin Cloud"
@@ -2047,6 +2294,9 @@
 	],
 	"Joplin Mobile": [
 		"Joplin Mobil"
+	],
+	"Joplin needs your permission to access your %s account and to synchronise data with it.": [
+		""
 	],
 	"Joplin Server": [
 		"Joplin Server"
@@ -2103,10 +2353,10 @@
 		"Podporovaný zväzok kľúčov: %s"
 	],
 	"KEYS": [
-		""
+		"KĽÚČE"
 	],
 	"Keys that need upgrading": [
-		"Kľúče, ktoré si vyžadujú aktualizáciu"
+		"Kľúče, ktoré je potrebné aktualizovať"
 	],
 	"Label": [
 		"Označenie"
@@ -2205,6 +2455,12 @@
 	"Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at \"%s\" and resume the operation.": [
 		"Súbor zámku sa už uchováva. Ak viete, že žiadna synchronizácia neprebieha, môžete odstrániť súbor zámku na „%s“ a pokračovať v operácii."
 	],
+	"Locked notes are encrypted on this device and can only be read after entering your note lock password. The password is required again after locking or restarting Joplin.": [
+		""
+	],
+	"Locked notes cannot be opened in an external editor": [
+		""
+	],
 	"Log": [
 		"Záznam"
 	],
@@ -2247,14 +2503,17 @@
 	"Manage shared notebooks": [
 		"Spravovať zdieľané zápisníky"
 	],
+	"Manage this server's license from the [admin dashboard](%s).": [
+		""
+	],
 	"Manage toolbar options": [
 		"Spravovať možnosti panela nástrojov"
 	],
 	"Manage your plugins": [
-		"Spravovať svoje doplnky"
+		"Spravujte svoje doplnky"
 	],
 	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
-		""
+		"Spravujte svoje profily. Profily môžete premenovať alebo odstrániť. Aktívny profil nie je možné odstrániť."
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Spravuje konfiguráciu E2EE. Príkazy sú `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, a `target-status`."
@@ -2278,7 +2537,7 @@
 		"Editor Markdown: Vykresliť obrázky"
 	],
 	"Markdown editor: Render markup in editor": [
-		"Markdown editor: Vykresliť značky v editore"
+		"Editor Markdown: Vykresliť značky v editore"
 	],
 	"Marks a to-do as done.": [
 		"Označí úlohu ako hotovú."
@@ -2316,6 +2575,9 @@
 	"Max Total Size": [
 		"Maximálna celková veľkosť"
 	],
+	"MCP requires the Web Clipper service. Enable it in Settings → Web Clipper.": [
+		""
+	],
 	"Media player, math, diagrams, table of contents": [
 		"Prehrávač médií, matematika, diagramy, obsah"
 	],
@@ -2346,6 +2608,12 @@
 	"Mobile data - auto-sync disabled": [
 		"Mobilné dáta – automatická synchronizácia je vypnutá"
 	],
+	"Model": [
+		""
+	],
+	"Model:": [
+		""
+	],
 	"More info": [
 		"Viac informácií"
 	],
@@ -2362,6 +2630,9 @@
 		"Presunúť %d poznámku do zápisníka „%s“?",
 		"Presunúť %d poznámky do zápisníka „%s“?",
 		"Presunúť %d poznámok do zápisníka „%s“?"
+	],
+	"Move %d notebooks to the trash?\n\nAll notes and sub-notebooks within these notebooks will also be moved to the trash.": [
+		"Presunúť %d zápisníkov do koša?\n\nDo koša sa presunú aj všetky poznámky a podradené zápisníky v týchto zápisníkoch."
 	],
 	"Move down": [
 		"Presunúť nadol"
@@ -2435,6 +2706,9 @@
 	"New sub-notebook": [
 		"Nový pod-zápisník"
 	],
+	"New text card": [
+		""
+	],
 	"New to-do": [
 		"Nová úloha"
 	],
@@ -2470,6 +2744,18 @@
 	],
 	"No active notebook.": [
 		"Žiadny aktívny zápisník."
+	],
+	"No AI usage recorded yet.": [
+		""
+	],
+	"No arrow": [
+		""
+	],
+	"No colour": [
+		""
+	],
+	"No embedding model is installed. It is downloaded automatically on first use — check Settings → AI for progress.": [
+		""
 	],
 	"No new invitations": [
 		"Žiadne nové pozvánky"
@@ -2514,6 +2800,9 @@
 		"Nie sú k dispozícii žiadne aktualizácie"
 	],
 	"No URL for SAML authentication set.": [
+		"Nie je nastavená žiadna URL adresa pre overenie SAML."
+	],
+	"No valid notebook is available. Please create or select a notebook and try again.": [
 		""
 	],
 	"None": [
@@ -2521,6 +2810,9 @@
 	],
 	"Nord": [
 		"Nord"
+	],
+	"Normal": [
+		""
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Nie je overené pomocou %s. Uveďte všetky chýbajúce poverenia."
@@ -2536,9 +2828,6 @@
 	],
 	"Not now": [
 		"Teraz nie"
-	],
-	"Not useful": [
-		"Nie je užitočné"
 	],
 	"note": [
 		"pozn"
@@ -2576,6 +2865,9 @@
 	"Note history has been deleted.": [
 		"História poznámky bola vymazaná."
 	],
+	"Note indexing is turned off in Settings → AI.": [
+		""
+	],
 	"Note is not a to-do: \"%s\"": [
 		"Poznámka nie je úlohou: \"%s\""
 	],
@@ -2587,6 +2879,9 @@
 	],
 	"Note list style": [
 		"Štýl zoznamu poznámok"
+	],
+	"Note lock password, auto lock": [
+		""
 	],
 	"Note not published: %s": [
 		"Poznámka neuverejnená: %s"
@@ -2645,11 +2940,26 @@
 	"Numbered List": [
 		"Číslovaný zoznam"
 	],
+	"Obsidian Vault": [
+		""
+	],
+	"OCR has been queued. Please wait for it to complete and then try again.": [
+		""
+	],
+	"OCR is not complete. Please wait for OCR to finish before creating an accessible document.": [
+		""
+	],
+	"OCR needs to run to generate an accessible document. This may take a moment. Would you like to continue?": [
+		""
+	],
 	"OCR: Clear cache and re-download language data files": [
 		"OCR: Vymazať vyrovnávaciu pamäť a znovu stiahnuť súbory s jazykovými údajmi"
 	],
 	"OCR: Language data URL or path": [
 		"OCR: URL k údajom jazyka alebo cesta"
+	],
+	"OCR: PDF processing mode": [
+		""
 	],
 	"OCR: Search in extracted content": [
 		"OCR: Vyhľadať v extrahovanom obsahu"
@@ -2683,6 +2993,9 @@
 	],
 	"OneNote Notebook": [
 		"OneNote zápisník"
+	],
+	"Only do this if you've forgotten your current password. A new password will be created, and any notes locked with the old one will become permanently unreadable.": [
+		""
 	],
 	"Only one note can be printed at a time.": [
 		"Súčasne je možné vytlačiť len jednu poznámku."
@@ -2727,7 +3040,7 @@
 		"Otvoriť Sprievodcu synchronizáciou..."
 	],
 	"Open-source licences": [
-		""
+		"Licencie s otvoreným zdrojovým kódom"
 	],
 	"Open...": [
 		"Otvoriť..."
@@ -2751,7 +3064,7 @@
 		"Možnosti"
 	],
 	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
-		""
+		"Možnosti, ktoré by sa mali používať pri renderovaní kódu ABC. Musí to byť objekt JSON5. Úplný zoznam možností je k dispozícii na: %s"
 	],
 	"Ordered list": [
 		"Usporiadaný zoznam"
@@ -2830,8 +3143,14 @@
 	"Please confirm that you would like to re-encrypt your complete database.": [
 		"Potvrďte prosím, že chcete znova zašifrovať vašu kompletnú databázu."
 	],
+	"Please disable users from the [admin dashboard](%s) to bring this server under the limit.": [
+		""
+	],
 	"Please enter your password in the master key list below before upgrading the key.": [
 		"Pred aktualizáciou kľúča zadajte svoje heslo do nižšie uvedeného zoznamu hlavných kľúčov."
+	],
+	"Please make sure you remember your password. It cannot be recovered if lost, and any data encrypted with it will become inaccessible.": [
+		""
 	],
 	"Please note that if it is a large notebook, it may take a few minutes for all the notes to show up on the recipient's device.": [
 		"Upozorňujeme, že ak ide o veľký zápisník, môže trvať niekoľko minút, kým sa všetky poznámky zobrazia na zariadení príjemcu."
@@ -2859,6 +3178,9 @@
 	],
 	"Please specify the notebook where the notes should be imported to.": [
 		"Uveďte prosím zápisník, do ktorého sa majú poznámky importovať."
+	],
+	"Please update the license key from the [admin dashboard](%s).": [
+		""
 	],
 	"Please upgrade Joplin to version %s or later to use this plugin.": [
 		"Ak chcete používať tento doplnok, aktualizujte prosím Joplin na verziu %s alebo novšiu."
@@ -2962,6 +3284,9 @@
 	"Pro": [
 		"Pro"
 	],
+	"Pro 100 GB": [
+		""
+	],
 	"Process failed payment subscriptions": [
 		"Spracovať neúspešné odbery platieb"
 	],
@@ -2982,6 +3307,9 @@
 	],
 	"Profile name": [
 		"Názov profilu"
+	],
+	"Profile name cannot be empty": [
+		"Názov profilu nemôže byť prázdny"
 	],
 	"Profile name:": [
 		"Názov profilu:"
@@ -3037,6 +3365,9 @@
 	"Quit": [
 		"Ukončiť"
 	],
+	"Quit anyway": [
+		""
+	],
 	"Re-download model": [
 		"Opätovne stiahnuť model"
 	],
@@ -3052,6 +3383,9 @@
 	"Re-upload local data to sync target": [
 		"Opätovné odoslanie lokálnych údajov do cieľa synchronizácie"
 	],
+	"Read all tags": [
+		""
+	],
 	"Read more": [
 		"Prečítajte si viac"
 	],
@@ -3063,6 +3397,9 @@
 	],
 	"Reading commands from standard input is only available in CLI mode.": [
 		"Čítanie príkazov zo štandardného vstupu je k dispozícii iba v režime CLI."
+	],
+	"Reading this note requires the note lock password, which has not been set up on this device yet.": [
+		""
 	],
 	"Recipient has accepted the invitation": [
 		"Príjemca prijal pozvanie"
@@ -3115,6 +3452,9 @@
 	"Remove": [
 		"Odstrániť"
 	],
+	"Remove %d tags from all notes? This cannot be undone.": [
+		"Odstrániť %d štítkov zo všetkých poznámok? Táto akcia sa nedá vrátiť späť."
+	],
 	"Remove %s": [
 		"Odstrániť %s"
 	],
@@ -3129,9 +3469,6 @@
 	],
 	"Removed %s from share.": [
 		"Odstránené %s zo zdieľania."
-	],
-	"Removed tag: %s": [
-		"Odstránené štítky: %s"
 	],
 	"Rename": [
 		"Premenovať"
@@ -3189,6 +3526,15 @@
 	],
 	"Reports": [
 		"Hlásenia"
+	],
+	"Required to use cloud-hosted AI models, including Joplin Cloud AI. When disabled, only on-device providers can be used.": [
+		""
+	],
+	"Reset": [
+		""
+	],
+	"Reset AI token usage counters?": [
+		""
 	],
 	"Reset application layout": [
 		"Obnoviť rozloženie aplikácie"
@@ -3261,6 +3607,9 @@
 	],
 	"Rich Text editor. Press Escape then Tab to escape focus.": [
 		"Rozšírený textový editor. Stlačením tlačidla Escape a potom Tab sa vrátite z vybratého okna."
+	],
+	"Run OCR": [
+		""
 	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
 		"Spustí príkazy obsiahnuté v textovom súbore. Na každom riadku by mal byť jeden príkaz."
@@ -3386,7 +3735,7 @@
 		"Vybrať nadradený zápisník"
 	],
 	"Select the type of file to be imported:": [
-		""
+		"Vyberte typ súboru, ktorý chcete importovať:"
 	],
 	"Selected: %s": [
 		"Vybraný: %s"
@@ -3399,6 +3748,12 @@
 	],
 	"Self-hosted": [
 		"Vlastný hosting"
+	],
+	"Self-hosted instances of the Joplin web app cannot sync with Joplin Cloud. Open the official web app?": [
+		""
+	],
+	"Send": [
+		""
 	],
 	"Send bug report": [
 		"Odoslať hlásenie o chybe"
@@ -3475,6 +3830,9 @@
 	"Show all": [
 		"Zobraziť všetko"
 	],
+	"Show checkbox completion chart in note list": [
+		""
+	],
 	"Show completed to-dos": [
 		"Zobraziť dokončené úlohy"
 	],
@@ -3483,6 +3841,9 @@
 	],
 	"Show disabled keys": [
 		"Zobraziť nepovolené kľúče"
+	],
+	"Show Joplin icon for note links": [
+		""
 	],
 	"Show monospace fonts only.": [
 		"Zobraziť iba neproporčné písma."
@@ -3505,6 +3866,9 @@
 	"Show/hide the sidebar": [
 		"Zobraziť/skryť bočný panel"
 	],
+	"Showing all matching settings": [
+		""
+	],
 	"Shows notes for tag": [
 		"Zobrazí poznámky označené štítkom"
 	],
@@ -3525,6 +3889,9 @@
 	],
 	"Size": [
 		"Veľkosť"
+	],
+	"Size (smallest first)": [
+		""
 	],
 	"Skip this version": [
 		"Preskočiť túto verziu"
@@ -3562,6 +3929,9 @@
 	"Some items could not be synchronised. Please try to synchronise them first.": [
 		"Niektoré položky nebolo možné synchronizovať. Skúste ich prosím najprv synchronizovať."
 	],
+	"Something went wrong.": [
+		""
+	],
 	"Sort \"%s\" in ascending order": [
 		"Zoradiť „%s“ vzostupne"
 	],
@@ -3593,7 +3963,7 @@
 		"Zdroj: "
 	],
 	"SPACE": [
-		""
+		"MEDZERA"
 	],
 	"Spacer": [
 		"Oddelovač"
@@ -3679,6 +4049,9 @@
 	"Success! Synchronisation configuration appears to be correct.": [
 		"Hotovo! Zdá sa, že konfigurácia synchronizácie je správna."
 	],
+	"Success! The AI provider responded:": [
+		""
+	],
 	"Suggestions": [
 		"Návrhy"
 	],
@@ -3690,6 +4063,9 @@
 	],
 	"Swap line up": [
 		"Vymeniť riadok hore"
+	],
+	"Swap source and target": [
+		""
 	],
 	"Switch between note and to-do type": [
 		"Prepnúť medzi typom poznámky a úlohy"
@@ -3724,9 +4100,6 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Prepne na [zápisník] – všetky ďalšie operácie budú prebiehať v tomto zápisníku."
 	],
-	"Sync": [
-		"Synchronizovať"
-	],
 	"Sync as many devices as you want": [
 		"Synchronizujte toľko zariadení, koľko len chcete"
 	],
@@ -3750,6 +4123,9 @@
 	],
 	"Sync your notes": [
 		"Synchronizujte svoje poznámky"
+	],
+	"Sync your notes with Joplin Cloud to access them on all your devices. Other sync options are also available.": [
+		""
 	],
 	"Sync, encryption, proxy": [
 		"Synchronizácia, šifrovanie, proxy"
@@ -3781,6 +4157,9 @@
 	"Synchronises with remote storage.": [
 		"Synchronizuje sa so vzdialeným úložiskom."
 	],
+	"Synchronising remaining changes, please wait...": [
+		""
+	],
 	"Synchronising...": [
 		"Synchronizuje sa..."
 	],
@@ -3793,8 +4172,14 @@
 	"Tab moves focus": [
 		"Tab presunie výber"
 	],
+	"Table": [
+		"Tabuľka"
+	],
 	"Tabloid": [
 		"Tabloid"
+	],
+	"Tag: %s": [
+		"Štítok: %s"
 	],
 	"Tagged: %d.": [
 		"Označené štítkom: %d."
@@ -3802,11 +4187,11 @@
 	"Tags": [
 		"Štítky"
 	],
+	"Tags cannot be changed for locked notes while the session is locked": [
+		""
+	],
 	"Take photo": [
 		"Odfotiť"
-	],
-	"Take survey": [
-		"Zúčastniť sa prieskumu"
 	],
 	"Task \"%s\" failed with error: %s": [
 		"Úloha \"%s\" zlyhala s chybou: %s"
@@ -3826,11 +4211,11 @@
 	"Text editor command": [
 		"Príkaz textového editora"
 	],
-	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
-		"Ďakujeme za spätnú väzbu!\nMáte čas vyplniť krátky dotazník?"
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Aktívny profil nie je možné odstrániť. Prepnite na iný profil a skúste to znova."
+	],
+	"The API key is missing. Set it in Settings → AI.": [
+		""
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
 		"Aplikácia sa teraz zatvorí. Na dokončenie procesu ju znovu spustite."
@@ -3862,9 +4247,6 @@
 	"The default encryption method has been changed, you should re-encrypt your data.": [
 		"Predvolená metóda šifrovania bola zmenená, mali by ste znova zašifrovať svoje údaje."
 	],
-	"The default profile cannot be deleted": [
-		"Predvolený profil nie je možné odstrániť"
-	],
 	"The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.": [
 		"Príkaz editora (môže obsahovať argumenty), ktorý sa použije na otvorenie poznámky. Príkaz editora (môže obsahovať argumenty), ktorý sa použije na otvorenie poznámky. Ak nie je zadaný žiadny, pokúsi sa automaticky určiť predvolený editor."
 	],
@@ -3894,14 +4276,43 @@
 	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
 		"Zdá sa, že starší editor Markdown zlyhal kvôli nekompatibilite s doplnkom. Odporúčame používať nový editor."
 	],
+	"The license for this server failed to refresh.": [
+		""
+	],
+	"The license key for this Joplin Server Business instance has expired and needs to be renewed.": [
+		""
+	],
+	"The license key for this Joplin Server Business instance has expired or is invalid. Uploading items has been disabled until the license is renewed.": [
+		""
+	],
 	"The master key has been upgraded successfully!": [
 		"Hlavný kľúč bol úspešne aktualizovaný!"
 	],
 	"The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
 		"Hlavné kľúče s týmito identifikátormi sa používajú na šifrovanie niektorých vašich položiek, avšak aplikácia k nim v súčasnosti nemá prístup. Je pravdepodobné, že sa nakoniec stiahnu prostredníctvom synchronizácie."
 	],
+	"The MCP server is disabled. Enable it in Settings → MCP.": [
+		""
+	],
+	"The model identifier to use, for example gpt-4o-mini or claude-3-5-sonnet-latest.": [
+		""
+	],
+	"The model name is missing. Set it in Settings → AI.": [
+		""
+	],
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"Poznámka \"%s\" bola úspešne obnovená do zápisníka \"%s\"."
+	],
+	"The note changed while the request was running; edits were not applied. Try again.": [
+		""
+	],
+	"The note has been converted to Markdown and the original note has been moved to the trash": [
+		"Poznámka bola prevedená do formátu Markdown a pôvodná poznámka bola presunutá do koša",
+		"Poznámky boli prevedené do formátu Markdown a pôvodné poznámky boli presunuté do koša",
+		"Poznámky boli prevedené do formátu Markdown a pôvodné poznámky boli presunuté do koša"
+	],
+	"The note lock state cannot be changed from the command line": [
+		""
 	],
 	"The note was successfully moved to the trash.": [
 		"Poznámka bola úspešne presunutá do koša.",
@@ -3917,8 +4328,17 @@
 	"The notes have been imported: %s": [
 		"Poznámky boli importované: %s"
 	],
+	"The OpenAI-compatible API endpoint. For example, https://api.openai.com/v1 or http://localhost:11434/v1 for Ollama.": [
+		""
+	],
+	"The OpenAI-compatible provider needs a base URL. Set it in Settings → AI.": [
+		""
+	],
 	"The possible commands are:": [
 		"Možné príkazy sú:"
+	],
+	"The provider returned an empty response. Check that the base URL ends with /v1 and that a model is loaded.": [
+		""
 	],
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"Príjemcu nebolo možné odstrániť zo zoznamu. Skúste to prosím znova.\n\nChyba bola: „%s“"
@@ -3961,9 +4381,6 @@
 	],
 	"Theme": [
 		"Téma"
-	],
-	"Themes, editor font": [
-		"Témy, písmo editora"
 	],
 	"There are currently no notes. Create one by clicking on the (+) button.": [
 		"V súčasnosti nie sú k dispozícii žiadne poznámky. Vytvorte ju kliknutím na tlačidlo (+)."
@@ -4019,6 +4436,14 @@
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Toto je pokročilý nástroj na zobrazenie príloh, ktoré sú prepojené s vašimi poznámkami.Pri odstraňovaní niektorej z nich buďte opatrní, pretože ich potom nemožno obnoviť."
 	],
+	"This Joplin Server Business instance is only licensed for %d user.": [
+		"",
+		"",
+		""
+	],
+	"This note could not be decrypted. If it was encrypted prior to a password reset, the contents are no longer recoverable.": [
+		""
+	],
 	"This note could not be deleted: %s": [
 		"Túto poznámku nebolo možné vymazať: %s",
 		"Tieto poznámky nebolo možné vymazať: %s",
@@ -4046,14 +4471,32 @@
 	"This note has no history": [
 		"Táto poznámka nemá históriu"
 	],
+	"This note is currently being saved. Please try again in a moment.": [
+		""
+	],
+	"This note is encrypted and cannot be used with AI Chat.": [
+		""
+	],
+	"This note is encrypted. Enter the note lock password to unlock encrypted notes for this session.": [
+		""
+	],
 	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
 		"Táto poznámka je vo formáte HTML. Prekonvertujte ju do formátu Markdown, aby ste ju mohli ľahšie upravovať."
+	],
+	"This notebook contains Windows-specific files. For maximum compatibility, consider importing the notebook from Windows.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		"Tento doplnok nepodporuje %s."
 	],
+	"This provider sends data off your device. Turn on \"Allow remote AI providers\" in Settings → AI.": [
+		""
+	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"Tento editor rozšíreného textu má niekoľko obmedzení a pred jeho použitím sa odporúča, aby ste si ich uvedomili."
+	],
+	"This section opens in its own screen and is matched by section title.": [
+		""
 	],
 	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
 		"Táto služba umožňuje rozšíreniu prehliadača komunikovať so systémom Joplin. Pri jej zapnutí vás firewall môže požiadať o povolenie počúvať konkrétny port pre Joplin."
@@ -4081,6 +4524,9 @@
 	],
 	"Title": [
 		"Názov"
+	],
+	"To access your recovery codes please enter an authentication code or your password.": [
+		""
 	],
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
 		"Ak chcete povoliť Joplin synchronizáciu s Dropboxom, postupujte podľa nasledujúcich krokov:"
@@ -4120,9 +4566,6 @@
 	],
 	"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`": [
 		"Ak chcete opakovať dešifrovanie týchto položiek. Spustite `e2ee decrypt --retry-failed-items`"
-	],
-	"To switch the profile, the app is going to close and you will need to restart it.": [
-		"Ak chcete prepnúť profil, aplikácia sa zatvorí a budete ju musieť reštartovať."
 	],
 	"To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions": [
 		"Aby aplikácia správne fungovala, potrebuje nasledujúce povolenia. Povoľte ich v nastaveniach telefónu v časti Aplikácie > Joplin > Oprávnenia"
@@ -4184,6 +4627,9 @@
 	"Toggle sort order field": [
 		"Prepnúť pole poradia zoradenia"
 	],
+	"Toggle whiteboard / Markdown view": [
+		""
+	],
 	"Token has been copied to the clipboard!": [
 		"Token bol skopírovaný do schránky!"
 	],
@@ -4192,6 +4638,9 @@
 	],
 	"Tools": [
 		"Nástroje"
+	],
+	"Tools and services to expose to AI. AI agents can use these tools either via the note chat panel or Joplin's MCP server (if enabled).": [
+		""
 	],
 	"Total Size": [
 		"Celková veľkosť"
@@ -4205,11 +4654,8 @@
 	"Try again": [
 		"Skúsiť znova"
 	],
-	"Try it now": [
-		"Skúste to teraz"
-	],
 	"TYPE": [
-		""
+		"TYP"
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Ak chcete získať ďalšie informácie o príkaze, zadajte `help [command]` alebo `help all` pre úplné informácie o použití."
@@ -4226,6 +4672,12 @@
 	"Type: %s.": [
 		"Typ: %s."
 	],
+	"Typography, spellcheck, layout": [
+		""
+	],
+	"Unable to access the recording file.": [
+		""
+	],
 	"Unable to edit resource of type %s": [
 		"Nie je možné upraviť zdroj typu %s"
 	],
@@ -4234,6 +4686,9 @@
 	],
 	"Unable to share note data. Reason: %s": [
 		"Nie je možné zdieľať údaje poznámky. Dôvod: %s"
+	],
+	"Unavailable on this platform": [
+		""
 	],
 	"Unchecked": [
 		"Neoznačené"
@@ -4261,6 +4716,9 @@
 	],
 	"Unknown platform": [
 		"Neznáma platforma"
+	],
+	"Unlock": [
+		""
 	],
 	"Unordered list": [
 		"Neusporiadaný zoznam."
@@ -4292,14 +4750,26 @@
 	"Unsupported link or message: %s.\nError: %s": [
 		"Nepodporovaný odkaz alebo správa: %s.\nChyba: %s"
 	],
+	"Unsupported public key format. Please check that Joplin is updated to the latest version and try again.": [
+		""
+	],
 	"Untitled": [
 		"Nepomenované"
+	],
+	"Untitled whiteboard": [
+		""
 	],
 	"Update": [
 		"Aktualizovať"
 	],
 	"Update available": [
 		"Aktualizácia je k dispozícii"
+	],
+	"Update it from Google Play": [
+		""
+	],
+	"Update it from the App Store": [
+		""
 	],
 	"Update later": [
 		"Aktualizovať neskôr"
@@ -4340,6 +4810,9 @@
 	"Upgrade the sync target to the latest version.": [
 		"Aktualizujte cieľ synchronizácie na najnovšiu verziu."
 	],
+	"Upgrade to 100 GB": [
+		""
+	],
 	"Upload photo": [
 		"Nahrať fotografiu"
 	],
@@ -4373,14 +4846,14 @@
 	"Use your biometrics to secure access to your application. You can always set it up later in Settings.": [
 		"Na zabezpečenie prístupu do aplikácie použite svoje biometrické údaje. Vždy to môžete nastaviť neskôr v nastaveniach."
 	],
+	"Used": [
+		""
+	],
 	"Used for most text in the markdown editor. If not found, a generic proportional (variable width) font is used.": [
 		"Používa sa pre väčšinu textu v editore markdown. Ak sa nenájde, použije sa všeobecné proporcionálne písmo (s premenlivou šírkou)."
 	],
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"Používa sa v prípadoch, keď je na čitateľné rozvrhnutie textu potrebná pevná šírka písma (napr. tabuľky, označovacie políčka, kód). Ak sa nenájde, použije sa všeobecné monospace písmo (s pevnou šírkou)."
-	],
-	"Useful": [
-		"Užitočné"
 	],
 	"User deletions": [
 		"Vymazania používateľa"
@@ -4390,6 +4863,12 @@
 	],
 	"Valid": [
 		"Platné"
+	],
+	"Vector search is not available on this platform": [
+		""
+	],
+	"Vector search is unavailable on this platform (sqlite-vec extension not loaded).": [
+		""
 	],
 	"Verify your identity": [
 		"Overte svoju totožnosť"
@@ -4487,8 +4966,14 @@
 	"When creating a new to-do:": [
 		"Pri vytváraní novej úlohy:"
 	],
+	"When enabled, plugins and built-in features can use AI models to generate or analyse text.": [
+		""
+	],
 	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
 		"Ak je táto funkcia povolená, požiada o prepis obrázkov v poznámke pomocou kvalitnejšej služby prepisovania na serveri. Vyžaduje synchronizáciu s kópiou aplikácie pre počítače."
+	],
+	"When enabled, tables are rendered as an interactive widget in the editor. Disable this if you prefer to edit tables as raw Markdown.": [
+		""
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"Ak je táto funkcia zapnutá, aplikácia bude skenovať prílohy a extrahovať z nich text. To vám umožní vyhľadávať text v týchto prílohách."
@@ -4532,11 +5017,17 @@
 	"You do not have any installed plugin.": [
 		"Nemáte nainštalovaný žiadny doplnok."
 	],
+	"You have unsaved tag changes. Discard them?": [
+		""
+	],
 	"You may also type `status` for more information.": [
 		"Môžete tiež napísať `stav` pre viac informácií."
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"Nižšie uvedený nástroj môžete použiť na opätovné zašifrovanie údajov, napríklad ak viete, že niektoré z vašich poznámok sú zašifrované zastaranou metódou šifrovania."
+	],
+	"You switched notes while the request was running; edits were not applied. Try again.": [
+		""
 	],
 	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
 		"Nepodarilo sa vám pripojiť k službe Joplin Cloud. Skontrolujte svoje poverenia a skúste to znova. Chyba:"
@@ -4553,6 +5044,12 @@
 	"Your Joplin Cloud credentials are invalid, please login.": [
 		"Vaše poverenia Joplin Cloud sú neplatné, prihláste sa prosím."
 	],
+	"Your master password is used to protect sensitive information. In particular, it is used to encrypt your notes when end-to-end encryption (E2EE) is enabled, or to share and encrypt notes with someone who has E2EE enabled.": [
+		""
+	],
+	"Your note will be sent to the configured AI provider (%s).": [
+		""
+	],
 	"Your password is needed to decrypt some of your data.": [
 		"Na dešifrovanie niektorých údajov je potrebné vaše heslo."
 	],
@@ -4567,5 +5064,8 @@
 	],
 	"Zoom Out": [
 		"Oddialiť"
+	],
+	"— now viewing: %s —": [
+		""
 	]
 }

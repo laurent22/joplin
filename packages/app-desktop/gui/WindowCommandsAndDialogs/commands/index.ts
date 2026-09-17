@@ -33,6 +33,7 @@ import * as renameTag from './renameTag';
 import * as resetLayout from './resetLayout';
 import * as restoreFolder from './restoreFolder';
 import * as restoreNote from './restoreNote';
+import * as revealInNotebook from './revealInNotebook';
 import * as revealResourceFile from './revealResourceFile';
 import * as search from './search';
 import * as setTags from './setTags';
@@ -92,6 +93,7 @@ const index: any[] = [
 	resetLayout,
 	restoreFolder,
 	restoreNote,
+	revealInNotebook,
 	revealResourceFile,
 	search,
 	setTags,

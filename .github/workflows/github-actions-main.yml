@@ -10,7 +10,12 @@ jobs:
       matrix:
         # Do not use unbuntu-latest because it causes `The operation was canceled` failures:
         # https://github.com/actions/runner-images/issues/6709
-        os: [macos-15-intel, ubuntu-22.04, windows-2025, ubuntu-22.04-arm]
+        #
+        # windows-11-vs2026-arm is pinned because windows-11-arm migrates to
+        # Visual Studio 2026 in late September 2026, and that job compiles
+        # sqlite3 from source.
+        # https://github.com/actions/runner-images/issues/14602
+        os: [macos-15-intel, ubuntu-22.04, windows-2025, ubuntu-22.04-arm, windows-11-vs2026-arm]
     steps:
       - uses: actions/checkout@v6
 

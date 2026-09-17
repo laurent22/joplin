@@ -2,8 +2,17 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"“%s” 缺少必须的属性 “%s”。"
 	],
+	"%d card": [
+		""
+	],
 	"%d day": [
 		"%d 天"
+	],
+	"%d edit(s) applied, %d could not be placed automatically.": [
+		""
+	],
+	"%d edit(s) applied.": [
+		""
 	],
 	"%d GB": [
 		"%d GB"
@@ -31,6 +40,9 @@
 	],
 	"%d photo(s) taken": [
 		"已拍摄 %d 张照片"
+	],
+	"%d sections found": [
+		""
 	],
 	"%s": [
 		"%s"
@@ -65,6 +77,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s added to toolbar": [
+		""
+	],
 	"%s cannot be greater than %s": [
 		"%s 无法比 %s 更大"
 	],
@@ -74,8 +89,14 @@
 	"%s from %s": [
 		"%s 自 %s"
 	],
+	"%s input / %s output tokens used.": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s 未针对同步许多小文件进行优化，因此您的首次同步将会很慢。"
+	],
+	"%s moved up": [
+		""
 	],
 	"%s must be a valid whole number": [
 		"%s 必须是一个有效整数"
@@ -125,6 +146,12 @@
 	"(%s)": [
 		"(%s)"
 	],
+	"(empty — double-click to edit)": [
+		""
+	],
+	"(empty)": [
+		""
+	],
 	"(In plugin: %s)": [
 		"(在插件 %s 中)"
 	],
@@ -143,6 +170,9 @@
 	"(You may disable this prompt in the options)": [
 		"（您可以在选项中禁用此提示）"
 	],
+	"+ Group": [
+		""
+	],
 	"- Camera: to allow taking a picture and attaching it to a note.": [
 		"- 相机权限：允许拍照并将照片添加到一条笔记中。"
 	],
@@ -151,6 +181,9 @@
 	],
 	"- Storage: to allow attaching files to notes and to enable filesystem synchronisation.": [
 		"- 存储权限：允许将文件添加到笔记中并启用文件系统同步。"
+	],
+	"14-day free trial. Cancel anytime during the trial and you won't be charged.": [
+		""
 	],
 	"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign or remove [tag] from [note], to list notes associated with [tag], or to list tags associated with [note]. The command `tag list` can be used to list all the tags (use -l for long option).": [
 		"<tag-command> 可以是 “add” 、“remove” 、“list” 或者 “notetags” ，分别用于从 [note] 中赋值或删除 [tag]，列出与 [tag] 相关的笔记，列出与 [note] 相关的标签。命令 `tag list` 可列出所有的标签（为过长选项使用 -l 参数）。"
@@ -170,6 +203,9 @@
 	"A new update (%s) is available": [
 		"发现新更新（%s）可用"
 	],
+	"A system-wide keyboard shortcut that toggles the Joplin window. Works even when Joplin is not focused. Example: CommandOrControl+Shift+J. Leave empty to disable.": [
+		""
+	],
 	"A3": [
 		"A3"
 	],
@@ -180,7 +216,7 @@
 		"A5"
 	],
 	"ABC musical notation: Options": [
-		""
+		"ABC 记谱法：选项"
 	],
 	"About": [
 		"关于"
@@ -215,6 +251,15 @@
 	"Access denied: Please re-enter your password and/or username": [
 		"拒绝访问：请重新输入密码和/或用户名"
 	],
+	"Access your notes from any web browser at %s.": [
+		""
+	],
+	"Accessible": [
+		""
+	],
+	"Accessible mode saves additional information, enabling creation of accessible PDFs. It increases database size by approximately 10-20 KB per page.": [
+		""
+	],
 	"Account": [
 		"账号"
 	],
@@ -236,20 +281,29 @@
 	"Actual Size": [
 		"实际大小"
 	],
+	"Add a text card": [
+		""
+	],
 	"Add body": [
 		"添加内容"
 	],
 	"Add column": [
-		""
+		"添加列"
 	],
 	"Add new": [
 		"新增"
+	],
+	"Add note to whiteboard...": [
+		""
 	],
 	"Add or remove tags:": [
 		"添加或删除标签："
 	],
 	"Add recipient:": [
 		"添加受邀人："
+	],
+	"Add row": [
+		"添加行"
 	],
 	"Add tags:": [
 		"新建标签："
@@ -263,11 +317,11 @@
 	"Add to note": [
 		"添加到笔记"
 	],
+	"Added %d word": [
+		""
+	],
 	"Added new: %s": [
 		"已新建标签 %s"
-	],
-	"Added tag: %s": [
-		"已将标签 %s 添加到笔记"
 	],
 	"Adds tag": [
 		"添加标签"
@@ -287,6 +341,21 @@
 	"Advanced tools": [
 		"高级工具"
 	],
+	"AI": [
+		""
+	],
+	"AI Chat": [
+		""
+	],
+	"AI features are disabled. Enable them in Settings → AI.": [
+		""
+	],
+	"AI is running in reduced-quality mode — monthly allowance exceeded. Credits replenish on a rolling 30-day basis, or you can": [
+		""
+	],
+	"AI usage has exceeded your monthly allowance — responses are using a reduced-quality model. Credits replenish on a rolling 30-day basis. Buy more at %s.": [
+		""
+	],
 	"all": [
 		"全部"
 	],
@@ -305,8 +374,29 @@
 	"All shared folders:": [
 		"所有共享的文件夹："
 	],
+	"Allow editing tags on notes": [
+		""
+	],
+	"Allow editing the current note (chat panel only)": [
+		""
+	],
+	"Allow listing tags": [
+		""
+	],
+	"Allow reading images": [
+		""
+	],
+	"Allow remote AI providers": [
+		""
+	],
+	"Allow semantic search of notes": [
+		""
+	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		"允许调试移动插件。详见 %s。"
+	],
+	"Already have an account? Log in": [
+		""
 	],
 	"Also displays unset and hidden config variables.": [
 		"同时显示未设置的与隐藏的配置变量。"
@@ -338,9 +428,6 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"发现一张自动保存的绘图。是否将其添加到笔记中？"
 	],
-	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
-		""
-	],
 	"An error occurred: %s": [
 		"出现异常: %s"
 	],
@@ -350,8 +437,14 @@
 	"Android API level: %d": [
 		"安卓应用程序接口（API）级别： %d"
 	],
+	"Anthropic": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		"任何发送到此地址的电子邮件都将被转换为笔记并添加到您的收藏中。该笔记将保存到收件箱笔记本中"
+	],
+	"API key": [
+		""
 	],
 	"Appearance": [
 		"外观"
@@ -379,6 +472,15 @@
 	],
 	"Aritim Dark": [
 		"Aritim 暗色"
+	],
+	"Arrow at target": [
+		""
+	],
+	"Ask about this note, or request a change…": [
+		""
+	],
+	"Ask about this note, or request changes. Select text in the editor first to scope the request to that selection.": [
+		""
 	],
 	"Associated tags:": [
 		"关联标签："
@@ -419,6 +521,9 @@
 	"Attachments that could not be downloaded": [
 		"无法下载的附件"
 	],
+	"Attention: After resetting your password it will no longer be possible to decrypt any data encrypted with your current password. All encrypted shared notebooks will also be unshared, so please ask the notebook owner to share it again with you.": [
+		""
+	],
 	"Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s": [
 		"注意：如果您更改该位置，请确保在同步之前将所有内容复制到该位置，否则将删除所有文件！更多详情，请参阅常见问题解答（FAQ）: %s"
 	],
@@ -433,6 +538,9 @@
 	],
 	"Auto": [
 		"自动"
+	],
+	"Auto lock when switching note": [
+		""
 	],
 	"Auto-add disabled accounts for deletion": [
 		"自动添加已禁用的账户以便删除"
@@ -458,14 +566,23 @@
 	"Back": [
 		"返回"
 	],
+	"Back to %s": [
+		""
+	],
+	"Base URL": [
+		""
+	],
 	"Basic": [
 		"Basic"
 	],
 	"Beta": [
 		"Beta"
 	],
-	"Block code": [
+	"Billed annually (%s per user per year respectively).": [
 		""
+	],
+	"Block code": [
+		"代码块"
 	],
 	"Bold": [
 		"加粗"
@@ -481,6 +598,9 @@
 	],
 	"Bulleted List": [
 		"无序列表"
+	],
+	"buy more credits": [
+		""
 	],
 	"by %s": [
 		"由 %s"
@@ -518,8 +638,14 @@
 	"Cannot access %s": [
 		"无法访问 %s"
 	],
+	"Cannot change a locked note while the session is locked": [
+		""
+	],
 	"Cannot change encrypted item": [
 		"无法更改已加密条目"
+	],
+	"Cannot convert read-only item: \"%s\"": [
+		"无法转换只读条目：“%s”"
 	],
 	"Cannot copy note to \"%s\" notebook": [
 		"无法复制笔记到笔记本 “%s”"
@@ -563,6 +689,9 @@
 	"Case sensitive": [
 		"大小写敏感"
 	],
+	"Certain Markdown formatting is now rendered in the editor by default. For example, **bold** will appear as actual bold text. You can change this behaviour in the \"Editor\" section of Settings.": [
+		""
+	],
 	"Change application layout": [
 		"更改应用布局"
 	],
@@ -580,6 +709,9 @@
 	],
 	"Characters excluding spaces": [
 		"字符数（除空格）"
+	],
+	"Chat provider": [
+		""
 	],
 	"Check": [
 		"勾选"
@@ -606,7 +738,7 @@
 		"正在检查……请稍候。"
 	],
 	"Chinese/Japanese/Korean characters": [
-		""
+		"中文/日语/韩语字符数"
 	],
 	"Choose an option": [
 		"选择一个选项"
@@ -623,11 +755,17 @@
 	"Clear search": [
 		"清除搜索"
 	],
+	"Clears the console output.": [
+		""
+	],
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"单击 “%s” 以恢复笔记。它将会被复制到名为 “%s” 的笔记本中。笔记的当前版本不会被替换或修改。"
 	],
 	"Click \"start\" to attach a new voice memo to the note.": [
 		"单击“开始”以附加一条新的语音记忆到笔记中。"
+	],
+	"Click the eye icon in the toolbar to switch to the Markdown editor and fix the JSON manually.": [
+		""
 	],
 	"Click to add tags...": [
 		"单击以添加标签……"
@@ -682,6 +820,9 @@
 	],
 	"Collapse all notebooks": [
 		"折叠所有笔记本"
+	],
+	"Collapse title": [
+		"折叠标题"
 	],
 	"Collapsed": [
 		"已折叠"
@@ -743,6 +884,9 @@
 	"Configures the size of scrollbars used in the app.": [
 		"配置在应用中使用的滚动条尺寸。"
 	],
+	"Confirm credentials": [
+		""
+	],
 	"Confirm password cannot be empty": [
 		"确认密码不可为空"
 	],
@@ -787,6 +931,9 @@
 	],
 	"Convert it": [
 		"转换"
+	],
+	"Convert this card into a Joplin note": [
+		""
 	],
 	"Convert to note": [
 		"转换为笔记"
@@ -867,10 +1014,13 @@
 		"创建"
 	],
 	"Create a new notebook under a parent notebook.": [
-		"在父笔记本下创建新笔记本。"
+		"在该笔记本下创建新笔记本。"
 	],
 	"Create a notebook": [
 		"新建一个笔记本"
+	],
+	"Create accessible document": [
+		""
 	],
 	"Create new notebook": [
 		"新建一个笔记本"
@@ -1007,6 +1157,9 @@
 	"Default title to use for documents created by the scanner.": [
 		"扫描器创建的文档默认标题。"
 	],
+	"Default view / edit state": [
+		""
+	],
 	"Default: %s": [
 		"默认值：%s"
 	],
@@ -1015,6 +1168,9 @@
 	],
 	"Delete attachment \"%s\"?": [
 		"是否删除附件 “%s”？"
+	],
+	"Delete column": [
+		"删除列"
 	],
 	"Delete expired sessions": [
 		"删除过期的会话"
@@ -1043,11 +1199,14 @@
 	"Delete profile \"%s\"": [
 		"删除配置档案 “%s”"
 	],
+	"Delete profile \"%s\"?\n\nAll data, including notes, notebooks and tags will be permanently deleted.": [
+		"是否删除配置档案“%s”？\n\n包含笔记、笔记本和标签在内的所有数据将会被永久删除。"
+	],
+	"Delete row": [
+		"删除行"
+	],
 	"Delete selected notes": [
 		"删除选中的笔记"
-	],
-	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
-		""
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"是否删除收件箱笔记本？\n\n如果删除收件箱笔记本，最近发送到其中的任何电子邮件都可能会丢失。"
@@ -1155,7 +1314,7 @@
 		"显示关于笔记的完整信息。"
 	],
 	"Displays the configured keyboard shortcuts.": [
-		""
+		"显示已配置的键盘快捷键。"
 	],
 	"Displays the given note.": [
 		"显示选定笔记。"
@@ -1181,14 +1340,14 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"请妥善保管密码，因为出于安全考虑，这将是解密数据的 *唯一* 方式！要启用加密功能，请在下面输入密码。"
 	],
-	"Do you find the Joplin web app useful?": [
-		""
-	],
 	"Document scanner: Title template": [
 		"文档扫描器：标题模板"
 	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
 		"不允许共享接收方向共享笔记本写入。仅适用于 `add` 子命令。"
+	],
+	"Don't have an account yet?": [
+		""
 	],
 	"Don't show this message again": [
 		"不再显示此消息"
@@ -1199,11 +1358,20 @@
 	"Done": [
 		"完成"
 	],
+	"Double tap to open this attachment. Long press to expand or collapse details.": [
+		""
+	],
 	"Download": [
 		"下载"
 	],
 	"Download and install the relevant extension for your browser:": [
 		"为您的浏览器下载并安装相关的扩展插件："
+	],
+	"Download it from GitHub Releases": [
+		""
+	],
+	"Download it from the Joplin Android repository": [
+		""
 	],
 	"Download it now": [
 		"立即下载"
@@ -1228,6 +1396,9 @@
 	],
 	"Dracula": [
 		"Dracula"
+	],
+	"Drag to move group": [
+		""
 	],
 	"Draw picture": [
 		"添加绘图"
@@ -1289,6 +1460,9 @@
 	"Edit profile configuration...": [
 		"编辑配置档案内的配置……"
 	],
+	"Edit tag": [
+		"编辑标签"
+	],
 	"Editor": [
 		"编辑器"
 	],
@@ -1334,6 +1508,9 @@
 	"Emails": [
 		"邮箱"
 	],
+	"Embedding index": [
+		""
+	],
 	"emphasised text": [
 		"强调文本"
 	],
@@ -1355,6 +1532,9 @@
 	"Enable abbreviation syntax": [
 		"启用缩写语法"
 	],
+	"Enable ABC musical notation support": [
+		"启用 ABC 记谱法支持"
+	],
 	"Enable audio player": [
 		"启用音频播放器"
 	],
@@ -1366,6 +1546,9 @@
 	],
 	"Enable encryption": [
 		"启用加密"
+	],
+	"Enable external embeds (e.g. YouTube Videos)": [
+		""
 	],
 	"Enable file:// URLs for images and videos": [
 		"启用基于 file:// 协议的图片和视频 URL"
@@ -1399,9 +1582,6 @@
 	],
 	"Enable note history": [
 		"启用笔记历史"
-	],
-	"Enable optical character recognition (OCR)": [
-		"启用光学字符识别 (OCR)"
 	],
 	"Enable or disable plugins": [
 		"启用或禁用插件"
@@ -1448,6 +1628,9 @@
 	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
 		"在富文本编辑器中启用 Markdown 模式替换。例如，当启用时，键入 **粗体** 创建粗体文本。"
 	],
+	"Enables the default edit operations for notes with an open AI chat panel. When disabled, the chat panel can still read the open note. Does not apply to MCP.": [
+		""
+	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"启用加密意味着您的 *所有* 笔记与附件都将被重新同步，并被加密发送到同步目标。"
 	],
@@ -1456,6 +1639,9 @@
 	],
 	"Encrypted items cannot be modified": [
 		"无法修改已加密的条目"
+	],
+	"Encrypting a note requires a note lock password, which has not yet been set. Set it up now?": [
+		""
 	],
 	"Encryption": [
 		"加密"
@@ -1468,6 +1654,9 @@
 	],
 	"Encryption keys": [
 		"加密密钥（Encryption keys）"
+	],
+	"Encryption was setup previously, but all keys have been disabled. To continue, please use the desktop app to enable a key.": [
+		""
 	],
 	"Encryption:": [
 		"加密："
@@ -1496,6 +1685,9 @@
 	"Enter the code:": [
 		"在此输入代码："
 	],
+	"Enter the note lock password to unlock encrypted notes for this session.": [
+		""
+	],
 	"Entering selection mode": [
 		"进入选择模式"
 	],
@@ -1513,6 +1705,9 @@
 	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"发生错误。请检查 URL、用户名、密码等是否正确以及同步目标是否可访问。报告的错误为："
+	],
+	"Error. The AI provider test failed:": [
+		""
 	],
 	"Error: %s": [
 		"发生错误：%s"
@@ -1540,6 +1735,9 @@
 	],
 	"Expand all notebooks": [
 		"展开所有笔记本"
+	],
+	"Expand title": [
+		"展开标题"
 	],
 	"Expanded": [
 		"已展开"
@@ -1586,6 +1784,9 @@
 	"Exports only the given notebook.": [
 		"仅导出给定笔记本。"
 	],
+	"Exposes Joplin notes to external AI applications (Claude Desktop, Cursor, etc.) via the Model Context Protocol. Requires the Web Clipper service to be running. Connected AI tools can read your note content; any text they retrieve may be sent to the external LLM provider those tools use.": [
+		""
+	],
 	"Fail-safe": [
 		"故障保护"
 	],
@@ -1598,14 +1799,14 @@
 	"Failed to connect to your account. Please try again.": [
 		"无法连接到您的账户。请重试。"
 	],
+	"Failed to create accessible document: %s": [
+		""
+	],
 	"Fatal error:": [
 		"致命错误："
 	],
 	"Feature flags": [
 		"特性标志"
-	],
-	"Feedback": [
-		""
 	],
 	"Fetched items: %d/%d.": [
 		"已获取条目：%d/%d。"
@@ -1621,6 +1822,9 @@
 	],
 	"Filter": [
 		"筛选"
+	],
+	"Filtered by section [%s]": [
+		""
 	],
 	"Find": [
 		"查找"
@@ -1639,6 +1843,9 @@
 	],
 	"Fixing search index...": [
 		"正在修复搜索索引……"
+	],
+	"Flip": [
+		""
 	],
 	"Focus": [
 		"聚焦于"
@@ -1697,11 +1904,8 @@
 	"Generating link...": [
 		"生成链接中……"
 	],
-	"Geolocation, spellcheck, editor toolbar, image resize": [
-		"地理位置、拼写检查、编辑器工具栏、图像缩放"
-	],
 	"Get a quote": [
-		""
+		"获取报价"
 	],
 	"Get it now:": [
 		"立即获取："
@@ -1712,6 +1916,9 @@
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"读取或设置配置数值。如果 [value] 值没有提供，它将显示 [name] 值。若 [name] 与 [value] 值均未提供，它将列出当前配置。"
 	],
+	"Global shortcut to show/hide Joplin": [
+		""
+	],
 	"Glossary:": [
 		"术语表："
 	],
@@ -1720,6 +1927,9 @@
 	],
 	"Go back": [
 		"返回"
+	],
+	"Go to end of note": [
+		""
 	],
 	"Go to Joplin Cloud profile": [
 		"跳转到 Joplin 云简介"
@@ -1730,11 +1940,17 @@
 	"Go to source URL": [
 		"跳转到源 URL"
 	],
+	"Go to start of note": [
+		""
+	],
 	"Goto Anything...": [
 		"跳转到任意内容……"
 	],
 	"Grant authorisation": [
 		"批准授权"
+	],
+	"Group": [
+		""
 	],
 	"Have you authorised the application login in the above URL?": [
 		"您是否已授权应用程序在上述 URL 中登录？"
@@ -1811,6 +2027,9 @@
 	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
 		"如果图像附件单独占一行，且后面紧跟一个空行，它会被渲染在其 Markdown 源文本的正下方。"
 	],
+	"If enabled, opening an HTML note displays a prompt to convert the note to Markdown.": [
+		""
+	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"如果您已授权，请等待应用程序同步到 Joplin 云。"
 	],
@@ -1829,11 +2048,11 @@
 	"Import": [
 		"导入"
 	],
+	"Import a note from a text file (%s). The note will be imported into notebook '%s'.": [
+		""
+	],
 	"Import and Export": [
 		"导入和导出"
-	],
-	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
-		"导入失败。确保选择了 JEX 文件。\n详细信息：%s"
 	],
 	"Import from JEX": [
 		"从 JEX 导入"
@@ -1904,6 +2123,15 @@
 	"Indent more": [
 		"增加缩进"
 	],
+	"Index notes for AI search": [
+		""
+	],
+	"Indexer:": [
+		""
+	],
+	"Indexing…": [
+		""
+	],
 	"Info": [
 		"信息"
 	],
@@ -1916,8 +2144,17 @@
 	"Insert": [
 		"插入"
 	],
+	"Insert column right": [
+		""
+	],
 	"Insert Hyperlink": [
 		"插入超链接"
+	],
+	"Insert row above": [
+		""
+	],
+	"Insert row below": [
+		""
 	],
 	"Insert time": [
 		"插入时间"
@@ -1958,6 +2195,9 @@
 	"Invalid password": [
 		"无效密码"
 	],
+	"Invalid password. Please try again. If you have forgotten your password you will need to reset it.": [
+		""
+	],
 	"iOS version: %s": [
 		"iOS 版本：%s"
 	],
@@ -1966,6 +2206,9 @@
 	],
 	"Item \"%s\" could not be downloaded: %s": [
 		"条目 “%s” 无法下载：%s"
+	],
+	"Item upload will be disabled in %s.": [
+		""
 	],
 	"Items": [
 		"条目"
@@ -1987,6 +2230,9 @@
 	],
 	"Joplin Cloud": [
 		"Joplin 云"
+	],
+	"Joplin Cloud AI requires Joplin Cloud sync. Pick a different provider or restore Joplin Cloud sync.": [
+		""
 	],
 	"Joplin Cloud Login": [
 		"Joplin 云登录"
@@ -2014,6 +2260,9 @@
 	],
 	"Joplin Mobile": [
 		"Joplin 移动端"
+	],
+	"Joplin needs your permission to access your %s account and to synchronise data with it.": [
+		""
 	],
 	"Joplin Server": [
 		"Joplin 服务器"
@@ -2165,6 +2414,12 @@
 	"Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at \"%s\" and resume the operation.": [
 		"锁文件已被占用。如果您确认当前未在进行任何同步，可在删除锁文件 “%s” 后继续上一步操作。"
 	],
+	"Locked notes are encrypted on this device and can only be read after entering your note lock password. The password is required again after locking or restarting Joplin.": [
+		""
+	],
+	"Locked notes cannot be opened in an external editor": [
+		""
+	],
 	"Log": [
 		"日志"
 	],
@@ -2207,6 +2462,9 @@
 	"Manage shared notebooks": [
 		"管理共享笔记本"
 	],
+	"Manage this server's license from the [admin dashboard](%s).": [
+		""
+	],
 	"Manage toolbar options": [
 		"管理工具栏选项"
 	],
@@ -2214,7 +2472,7 @@
 		"管理您的插件"
 	],
 	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
-		""
+		"管理您的配置档案。您可以重命名或删除配置档案。正在使用的配置档案无法删除。"
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"管理 E2EE 配置。命令为：`enable`、`disable`、`decrypt`、`status`、`decrypt-file` 和 `target-status`。"
@@ -2273,6 +2531,9 @@
 	"Max Total Size": [
 		"最大总大小"
 	],
+	"MCP requires the Web Clipper service. Enable it in Settings → Web Clipper.": [
+		""
+	],
 	"Media player, math, diagrams, table of contents": [
 		"媒体播放器、数学公式、流程图、目录"
 	],
@@ -2303,6 +2564,12 @@
 	"Mobile data - auto-sync disabled": [
 		"移动数据 - 已禁用自动同步"
 	],
+	"Model": [
+		""
+	],
+	"Model:": [
+		""
+	],
 	"More info": [
 		"更多信息"
 	],
@@ -2317,6 +2584,9 @@
 	],
 	"Move %d note to notebook \"%s\"?": [
 		"是否移动 %d 条笔记到笔记本 “%s”？"
+	],
+	"Move %d notebooks to the trash?\n\nAll notes and sub-notebooks within these notebooks will also be moved to the trash.": [
+		"是否将 %d 个笔记本移到回收站？\n\n这些笔记本内的所有笔记和子笔记本也将被移到回收站。"
 	],
 	"Move down": [
 		"向下移动"
@@ -2390,6 +2660,9 @@
 	"New sub-notebook": [
 		"新建子笔记本"
 	],
+	"New text card": [
+		""
+	],
 	"New to-do": [
 		"新建待办"
 	],
@@ -2425,6 +2698,18 @@
 	],
 	"No active notebook.": [
 		"无活动的笔记本。"
+	],
+	"No AI usage recorded yet.": [
+		""
+	],
+	"No arrow": [
+		""
+	],
+	"No colour": [
+		""
+	],
+	"No embedding model is installed. It is downloaded automatically on first use — check Settings → AI for progress.": [
+		""
 	],
 	"No new invitations": [
 		"没有新的邀请"
@@ -2471,11 +2756,17 @@
 	"No URL for SAML authentication set.": [
 		""
 	],
+	"No valid notebook is available. Please create or select a notebook and try again.": [
+		""
+	],
 	"None": [
 		"无"
 	],
 	"Nord": [
 		"Nord"
+	],
+	"Normal": [
+		""
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"%s 未授权。请提供任何缺少的凭据。"
@@ -2491,9 +2782,6 @@
 	],
 	"Not now": [
 		"不是现在"
-	],
-	"Not useful": [
-		""
 	],
 	"note": [
 		"笔记"
@@ -2531,6 +2819,9 @@
 	"Note history has been deleted.": [
 		"笔记历史已被删除。"
 	],
+	"Note indexing is turned off in Settings → AI.": [
+		""
+	],
 	"Note is not a to-do: \"%s\"": [
 		"笔记不是一个待办：“%s”"
 	],
@@ -2542,6 +2833,12 @@
 	],
 	"Note list style": [
 		"笔记列表样式"
+	],
+	"Note lock password, auto lock": [
+		""
+	],
+	"Note not published: %s": [
+		"笔记 %s 未发布"
 	],
 	"Note preview": [
 		"笔记预览"
@@ -2597,11 +2894,26 @@
 	"Numbered List": [
 		"有序列表"
 	],
+	"Obsidian Vault": [
+		""
+	],
+	"OCR has been queued. Please wait for it to complete and then try again.": [
+		""
+	],
+	"OCR is not complete. Please wait for OCR to finish before creating an accessible document.": [
+		""
+	],
+	"OCR needs to run to generate an accessible document. This may take a moment. Would you like to continue?": [
+		""
+	],
 	"OCR: Clear cache and re-download language data files": [
 		"OCR：清除缓存并重新下载语言数据文件"
 	],
 	"OCR: Language data URL or path": [
 		"OCR：语言数据 URL 或路径"
+	],
+	"OCR: PDF processing mode": [
+		""
 	],
 	"OCR: Search in extracted content": [
 		"OCR：在提取的内容中搜索"
@@ -2635,6 +2947,9 @@
 	],
 	"OneNote Notebook": [
 		"OneNote 笔记本"
+	],
+	"Only do this if you've forgotten your current password. A new password will be created, and any notes locked with the old one will become permanently unreadable.": [
+		""
 	],
 	"Only one note can be printed at a time.": [
 		"一次只能打印一个笔记。"
@@ -2709,7 +3024,7 @@
 		"有序列表"
 	],
 	"Other": [
-		""
+		"其它"
 	],
 	"Other applications...": [
 		"其他应用……"
@@ -2780,8 +3095,14 @@
 	"Please confirm that you would like to re-encrypt your complete database.": [
 		"请确认您要重新加密整个数据库。"
 	],
+	"Please disable users from the [admin dashboard](%s) to bring this server under the limit.": [
+		""
+	],
 	"Please enter your password in the master key list below before upgrading the key.": [
 		"在升级密钥之前，请在下面的主密钥列表中输入您的密码。"
+	],
+	"Please make sure you remember your password. It cannot be recovered if lost, and any data encrypted with it will become inaccessible.": [
+		""
 	],
 	"Please note that if it is a large notebook, it may take a few minutes for all the notes to show up on the recipient's device.": [
 		"请注意，如果是大型笔记本，可能需要几分钟时间才能在受邀人的设备上显示出所有的笔记。"
@@ -2809,6 +3130,9 @@
 	],
 	"Please specify the notebook where the notes should be imported to.": [
 		"请指定导入笔记的目标笔记本。"
+	],
+	"Please update the license key from the [admin dashboard](%s).": [
+		""
 	],
 	"Please upgrade Joplin to version %s or later to use this plugin.": [
 		"请升级 Joplin 到 %s 或更新的版本以使用此插件。"
@@ -2912,6 +3236,9 @@
 	"Pro": [
 		"Pro"
 	],
+	"Pro 100 GB": [
+		""
+	],
 	"Process failed payment subscriptions": [
 		"处理失败的付费订阅"
 	],
@@ -2932,6 +3259,9 @@
 	],
 	"Profile name": [
 		"配置档案名称"
+	],
+	"Profile name cannot be empty": [
+		"配置档案名称不可为空"
 	],
 	"Profile name:": [
 		"配置档案名称："
@@ -2960,6 +3290,9 @@
 	"Publish Note": [
 		"发布笔记"
 	],
+	"Publish note \"%s\" (in notebook \"%s\")?": [
+		"是否发布“%2$s”中的笔记“%1$s”？"
+	],
 	"Publish note...": [
 		"发布笔记……"
 	],
@@ -2972,14 +3305,20 @@
 	"Publish/unpublish": [
 		"发布 / 取消发布"
 	],
+	"Published at URL: %s": [
+		"笔记已发布于：%s"
+	],
 	"Publishes a note to Joplin Server or Joplin Cloud": [
-		""
+		"将笔记发布到 Joplin 服务器或 Joplin 云"
 	],
 	"QR Code": [
 		"二维码"
 	],
 	"Quit": [
 		"退出"
+	],
+	"Quit anyway": [
+		""
 	],
 	"Re-download model": [
 		"重新下载模型"
@@ -2996,6 +3335,9 @@
 	"Re-upload local data to sync target": [
 		"重新上传本地数据到同步目标"
 	],
+	"Read all tags": [
+		""
+	],
 	"Read more": [
 		"阅读更多"
 	],
@@ -3007,6 +3349,9 @@
 	],
 	"Reading commands from standard input is only available in CLI mode.": [
 		"仅在 CLI 模式下支持从标准输入读取命令。"
+	],
+	"Reading this note requires the note lock password, which has not been set up on this device yet.": [
+		""
 	],
 	"Recipient has accepted the invitation": [
 		"受邀人已接受邀请"
@@ -3056,6 +3401,9 @@
 	"Remove": [
 		"删除"
 	],
+	"Remove %d tags from all notes? This cannot be undone.": [
+		"从所有笔记中删除 %d 个标签？此操作无法撤销。"
+	],
 	"Remove %s": [
 		"删除 %s"
 	],
@@ -3070,9 +3418,6 @@
 	],
 	"Removed %s from share.": [
 		"从共享中删除 %s。"
-	],
-	"Removed tag: %s": [
-		"删除标签：%s"
 	],
 	"Rename": [
 		"重命名"
@@ -3130,6 +3475,15 @@
 	],
 	"Reports": [
 		"报告"
+	],
+	"Required to use cloud-hosted AI models, including Joplin Cloud AI. When disabled, only on-device providers can be used.": [
+		""
+	],
+	"Reset": [
+		""
+	],
+	"Reset AI token usage counters?": [
+		""
 	],
 	"Reset application layout": [
 		"重置应用布局"
@@ -3203,6 +3557,9 @@
 	"Rich Text editor. Press Escape then Tab to escape focus.": [
 		"富文本编辑器。按 ESC 键后再按 Tab 键以退出焦点。"
 	],
+	"Run OCR": [
+		""
+	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
 		"执行文本文件中包含的命令。每个命令占一行。"
 	],
@@ -3247,6 +3604,9 @@
 	],
 	"Save geo-location with notes": [
 		"保存地理位置信息到笔记中"
+	],
+	"Save geolocation?": [
+		"保存地理位置信息？"
 	],
 	"Scan notebook": [
 		"扫描笔记本"
@@ -3318,13 +3678,13 @@
 		"选择笔记本"
 	],
 	"Select one of the other supported sync targets.": [
-		""
+		"选择另外一种支持的同步目标。"
 	],
 	"Select parent notebook": [
-		"选择父笔记本"
+		"选择所属笔记本"
 	],
 	"Select the type of file to be imported:": [
-		""
+		"选择导入文件的类型："
 	],
 	"Selected: %s": [
 		"已选择：%s"
@@ -3337,6 +3697,12 @@
 	],
 	"Self-hosted": [
 		"自托管"
+	],
+	"Self-hosted instances of the Joplin web app cannot sync with Joplin Cloud. Open the official web app?": [
+		""
+	],
+	"Send": [
+		""
 	],
 	"Send bug report": [
 		"发送错误报告"
@@ -3413,6 +3779,9 @@
 	"Show all": [
 		"显示全部"
 	],
+	"Show checkbox completion chart in note list": [
+		""
+	],
 	"Show completed to-dos": [
 		"显示已完成待办"
 	],
@@ -3421,6 +3790,9 @@
 	],
 	"Show disabled keys": [
 		"显示禁用的密钥"
+	],
+	"Show Joplin icon for note links": [
+		""
 	],
 	"Show monospace fonts only.": [
 		"只显示等宽字体。"
@@ -3443,6 +3815,9 @@
 	"Show/hide the sidebar": [
 		"显示/隐藏边栏"
 	],
+	"Showing all matching settings": [
+		""
+	],
 	"Shows notes for tag": [
 		"显示笔记标签"
 	],
@@ -3463,6 +3838,9 @@
 	],
 	"Size": [
 		"大小"
+	],
+	"Size (smallest first)": [
+		""
 	],
 	"Skip this version": [
 		"跳过该版本"
@@ -3499,6 +3877,9 @@
 	],
 	"Some items could not be synchronised. Please try to synchronise them first.": [
 		"某些条目无法被同步。请先尝试同步它们。"
+	],
+	"Something went wrong.": [
+		""
 	],
 	"Sort \"%s\" in ascending order": [
 		"将“%s”按升序排序"
@@ -3617,6 +3998,9 @@
 	"Success! Synchronisation configuration appears to be correct.": [
 		"成功！同步配置看起来没问题。"
 	],
+	"Success! The AI provider responded:": [
+		""
+	],
 	"Suggestions": [
 		"建议"
 	],
@@ -3628,6 +4012,9 @@
 	],
 	"Swap line up": [
 		"向上交换行"
+	],
+	"Swap source and target": [
+		""
 	],
 	"Switch between note and to-do type": [
 		"在笔记和待办类型之间切换"
@@ -3662,9 +4049,6 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"切换到 [notebook] - 所有进一步操作将在该笔记本中进行。"
 	],
-	"Sync": [
-		""
-	],
 	"Sync as many devices as you want": [
 		"尽可能多地同步您想要的设备"
 	],
@@ -3688,6 +4072,9 @@
 	],
 	"Sync your notes": [
 		"同步笔记"
+	],
+	"Sync your notes with Joplin Cloud to access them on all your devices. Other sync options are also available.": [
+		""
 	],
 	"Sync, encryption, proxy": [
 		"同步、加密、代理"
@@ -3719,6 +4106,9 @@
 	"Synchronises with remote storage.": [
 		"与远程存储同步。"
 	],
+	"Synchronising remaining changes, please wait...": [
+		""
+	],
 	"Synchronising...": [
 		"正在同步……"
 	],
@@ -3731,14 +4121,23 @@
 	"Tab moves focus": [
 		"Tab 移动焦点"
 	],
+	"Table": [
+		"表格"
+	],
 	"Tabloid": [
 		"文摘（Tabloid）"
+	],
+	"Tag: %s": [
+		"标签：%s"
 	],
 	"Tagged: %d.": [
 		"已加标签：%d 条。"
 	],
 	"Tags": [
 		"标签"
+	],
+	"Tags cannot be changed for locked notes while the session is locked": [
+		""
 	],
 	"Take photo": [
 		"拍照"
@@ -3761,11 +4160,11 @@
 	"Text editor command": [
 		"文本编辑器命令"
 	],
-	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
-		""
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"无法删除正在使用的配置档案。请切换到另一配置档案后再次尝试。"
+	],
+	"The API key is missing. Set it in Settings → AI.": [
+		""
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
 		"应用将要关闭。请重新启动它以完成此过程。"
@@ -3797,9 +4196,6 @@
 	"The default encryption method has been changed, you should re-encrypt your data.": [
 		"默认的加密方式已变更，您应当重新加密数据。"
 	],
-	"The default profile cannot be deleted": [
-		"无法删除默认配置档案"
-	],
 	"The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.": [
 		"该文本编辑器命令（可包含参数）将会被用于打开笔记。若未提供，它将尝试自动检测默认编辑器。"
 	],
@@ -3827,14 +4223,38 @@
 	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
 		"旧版 Markdown 编辑器似乎因与某个插件不兼容而崩溃。建议使用新编辑器。"
 	],
+	"The license for this server failed to refresh.": [
+		""
+	],
+	"The license key for this Joplin Server Business instance has expired and needs to be renewed.": [
+		""
+	],
+	"The license key for this Joplin Server Business instance has expired or is invalid. Uploading items has been disabled until the license is renewed.": [
+		""
+	],
 	"The master key has been upgraded successfully!": [
 		"主密钥已成功升级！"
 	],
 	"The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
 		"具有这些 ID 的主密钥已用于加密某些条目，但应用程序目前无法访问它们。它们可能最终会通过同步获取。"
 	],
+	"The MCP server is disabled. Enable it in Settings → MCP.": [
+		""
+	],
+	"The model identifier to use, for example gpt-4o-mini or claude-3-5-sonnet-latest.": [
+		""
+	],
+	"The model name is missing. Set it in Settings → AI.": [
+		""
+	],
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"笔记“%s”已成功恢复到笔记本“%s”中。"
+	],
+	"The note changed while the request was running; edits were not applied. Try again.": [
+		""
+	],
+	"The note lock state cannot be changed from the command line": [
+		""
 	],
 	"The note was successfully moved to the trash.": [
 		"已成功将笔记移到回收站中。"
@@ -3848,8 +4268,17 @@
 	"The notes have been imported: %s": [
 		"以下笔记已被导入：%s"
 	],
+	"The OpenAI-compatible API endpoint. For example, https://api.openai.com/v1 or http://localhost:11434/v1 for Ollama.": [
+		""
+	],
+	"The OpenAI-compatible provider needs a base URL. Set it in Settings → AI.": [
+		""
+	],
 	"The possible commands are:": [
 		"可用的命令有："
+	],
+	"The provider returned an empty response. Check that the base URL ends with /v1 and that a model is loaded.": [
+		""
 	],
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"无法从列表中删除受邀人。请重试。\n\n错误为：“%s”"
@@ -3892,9 +4321,6 @@
 	],
 	"Theme": [
 		"主题"
-	],
-	"Themes, editor font": [
-		"主题、编辑器字体"
 	],
 	"There are currently no notes. Create one by clicking on the (+) button.": [
 		"当前没有任何笔记。点击 (+) 按钮创建一个。"
@@ -3950,6 +4376,12 @@
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"这是用于展示已链接到笔记的附件的高级工具。需要小心，删除后无法恢复。"
 	],
+	"This Joplin Server Business instance is only licensed for %d user.": [
+		""
+	],
+	"This note could not be decrypted. If it was encrypted prior to a password reset, the contents are no longer recoverable.": [
+		""
+	],
 	"This note could not be deleted: %s": [
 		"无法删除此笔记：%s"
 	],
@@ -3971,14 +4403,32 @@
 	"This note has no history": [
 		"该笔记没有历史记录"
 	],
+	"This note is currently being saved. Please try again in a moment.": [
+		""
+	],
+	"This note is encrypted and cannot be used with AI Chat.": [
+		""
+	],
+	"This note is encrypted. Enter the note lock password to unlock encrypted notes for this session.": [
+		""
+	],
 	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
 		"该笔记为 HTML 格式。将其转换为 Markdown 以便更轻松地编辑。"
+	],
+	"This notebook contains Windows-specific files. For maximum compatibility, consider importing the notebook from Windows.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		"该插件不支持 %s。"
 	],
+	"This provider sends data off your device. Turn on \"Allow remote AI providers\" in Settings → AI.": [
+		""
+	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"此富文本编辑器有许多限制，建议在使用之前留意。"
+	],
+	"This section opens in its own screen and is matched by section title.": [
+		""
 	],
 	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
 		"该服务允许浏览器扩展插件与 Joplin 通信。当启用它时，您的防火墙可能会询问您来授权 Joplin 监听一个特定的端口。"
@@ -4006,6 +4456,9 @@
 	],
 	"Title": [
 		"标题"
+	],
+	"To access your recovery codes please enter an authentication code or your password.": [
+		""
 	],
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
 		"要让 Joplin 与 Dropbox 同步，请按下列步骤操作："
@@ -4045,9 +4498,6 @@
 	],
 	"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`": [
 		"运行 `e2ee decrypt --retry-failed-items` 来尝试再次解密这些条目"
-	],
-	"To switch the profile, the app is going to close and you will need to restart it.": [
-		"切换配置档案后，应用程序将会自动关闭，您需要重新启动它。"
 	],
 	"To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions": [
 		"本应用程序需要下列权限才能正常运作。请在您的手机设置（应用 > Joplin > 权限）中启用它们"
@@ -4109,6 +4559,9 @@
 	"Toggle sort order field": [
 		"切换排序字段"
 	],
+	"Toggle whiteboard / Markdown view": [
+		""
+	],
 	"Token has been copied to the clipboard!": [
 		"令牌已复制到剪贴板！"
 	],
@@ -4117,6 +4570,9 @@
 	],
 	"Tools": [
 		"工具"
+	],
+	"Tools and services to expose to AI. AI agents can use these tools either via the note chat panel or Joplin's MCP server (if enabled).": [
+		""
 	],
 	"Total Size": [
 		"总大小"
@@ -4129,9 +4585,6 @@
 	],
 	"Try again": [
 		"重试"
-	],
-	"Try it now": [
-		"现在就试试吧"
 	],
 	"TYPE": [
 		""
@@ -4151,11 +4604,23 @@
 	"Type: %s.": [
 		"类型：%s。"
 	],
+	"Typography, spellcheck, layout": [
+		""
+	],
+	"Unable to access the recording file.": [
+		""
+	],
 	"Unable to edit resource of type %s": [
 		"无法编辑类型为 %s 的资源"
 	],
 	"Unable to share log data. Reason: %s": [
 		"无法分享日志数据，原因: %s"
+	],
+	"Unable to share note data. Reason: %s": [
+		"无法分享笔记数据，原因: %s"
+	],
+	"Unavailable on this platform": [
+		""
 	],
 	"Unchecked": [
 		"已取消勾选"
@@ -4183,6 +4648,9 @@
 	],
 	"Unknown platform": [
 		"未知平台"
+	],
+	"Unlock": [
+		""
 	],
 	"Unordered list": [
 		"无序列表"
@@ -4214,14 +4682,26 @@
 	"Unsupported link or message: %s.\nError: %s": [
 		"不支持的链接或信息：%s.\n错误：%s"
 	],
+	"Unsupported public key format. Please check that Joplin is updated to the latest version and try again.": [
+		""
+	],
 	"Untitled": [
 		"无标题"
+	],
+	"Untitled whiteboard": [
+		""
 	],
 	"Update": [
 		"更新"
 	],
 	"Update available": [
 		"有更新可用"
+	],
+	"Update it from Google Play": [
+		""
+	],
+	"Update it from the App Store": [
+		""
 	],
 	"Update later": [
 		"稍后更新"
@@ -4262,6 +4742,9 @@
 	"Upgrade the sync target to the latest version.": [
 		"升级同步目标到最新版本。"
 	],
+	"Upgrade to 100 GB": [
+		""
+	],
 	"Upload photo": [
 		"上传图片"
 	],
@@ -4295,14 +4778,14 @@
 	"Use your biometrics to secure access to your application. You can always set it up later in Settings.": [
 		"使用您的生物特征来确保对应用程序的访问安全。您可以稍后在“设置”中进行设置。"
 	],
+	"Used": [
+		""
+	],
 	"Used for most text in the markdown editor. If not found, a generic proportional (variable width) font is used.": [
 		"用于 Markdown 编辑器中的大多数文本。如果没找到，会使用默认非等宽字体。"
 	],
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"用于需要固定宽度的字体来清晰地布局文本的场景（例如表格、多选框和代码块）。如果没有找到，会使用默认等宽字体。"
-	],
-	"Useful": [
-		""
 	],
 	"User deletions": [
 		"用户删除"
@@ -4312,6 +4795,12 @@
 	],
 	"Valid": [
 		"有效"
+	],
+	"Vector search is not available on this platform": [
+		""
+	],
+	"Vector search is unavailable on this platform (sqlite-vec extension not loaded).": [
+		""
 	],
 	"Verify your identity": [
 		"验证您的身份"
@@ -4409,7 +4898,13 @@
 	"When creating a new to-do:": [
 		"当新建待办时："
 	],
+	"When enabled, plugins and built-in features can use AI models to generate or analyse text.": [
+		""
+	],
 	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		""
+	],
+	"When enabled, tables are rendered as an interactive widget in the editor. Disable this if you prefer to edit tables as raw Markdown.": [
 		""
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
@@ -4454,11 +4949,17 @@
 	"You do not have any installed plugin.": [
 		"您尚未安装任何插件。"
 	],
+	"You have unsaved tag changes. Discard them?": [
+		""
+	],
 	"You may also type `status` for more information.": [
 		"键入 `status` 可获取更多信息。"
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"您可以使用下面的工具重新加密您的数据，例如当您知道某些笔记使用了过时的加密方法时，可使用该项目。"
+	],
+	"You switched notes while the request was running; edits were not applied. Try again.": [
+		""
 	],
 	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
 		"无法连接到 Joplin 云。请检查您的凭据，然后重试。错误："
@@ -4475,6 +4976,12 @@
 	"Your Joplin Cloud credentials are invalid, please login.": [
 		"您的 Joplin 云认证无效，请登录。"
 	],
+	"Your master password is used to protect sensitive information. In particular, it is used to encrypt your notes when end-to-end encryption (E2EE) is enabled, or to share and encrypt notes with someone who has E2EE enabled.": [
+		""
+	],
+	"Your note will be sent to the configured AI provider (%s).": [
+		""
+	],
 	"Your password is needed to decrypt some of your data.": [
 		"要解密您的某些数据，需要使用您的密码。"
 	],
@@ -4489,5 +4996,8 @@
 	],
 	"Zoom Out": [
 		"缩小"
+	],
+	"— now viewing: %s —": [
+		""
 	]
 }

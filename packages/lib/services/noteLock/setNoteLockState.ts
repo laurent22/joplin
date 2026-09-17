@@ -14,10 +14,10 @@ import NoteLockSession from './NoteLockSession';
 const checkCanChangeLockState = (note: NoteEntity, noteId: string) => {
 	if (!isNoteLockEnabled()) throw new Error('Note lock is not enabled');
 	if (!note) throw new Error(`No such note: ${noteId}`);
-	if (note.deleted_time) throw new Error('Cannot change encryption of a deleted note');
-	if (note.is_conflict) throw new Error('Cannot change encryption of a conflict note');
-	if (itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, note as ItemSlice, Setting.value('sync.userId'), BaseItem.syncShareCache)) throw new Error('Cannot change encryption of a read-only note');
-	if (!NoteLockSession.instance().isUnlocked()) throw new Error('Cannot change encryption while the note lock session is locked');
+	if (note.deleted_time) throw new Error('Cannot change the note lock of a deleted note');
+	if (note.is_conflict) throw new Error('Cannot change the note lock of a conflict note');
+	if (itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, note as ItemSlice, Setting.value('sync.userId'), BaseItem.syncShareCache)) throw new Error('Cannot change the note lock of a read-only note');
+	if (!NoteLockSession.instance().isUnlocked()) throw new Error('Cannot change the note lock while the session is locked');
 };
 
 const validationFields = ['id', 'is_locked', 'deleted_time', 'is_conflict', 'share_id'];

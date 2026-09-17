@@ -10,8 +10,9 @@ export interface WordDiff {
 	remote: WordDiffSegment[];
 }
 
-// Prevents very large texts from blocking the UI.
-const diffTimeoutMs = 1000;
+// Prevents very large texts from blocking the UI. The limit is higher than the
+// merge limit, since a short wait is better than no word diff at all
+const diffTimeoutMs = 3000;
 
 // jsdiff only treats Latin text as words, so scripts like Cyrillic, Greek,
 // and Arabic are split character by character. CJK is kept this way on

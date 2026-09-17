@@ -21,6 +21,7 @@ export enum EditorCommandType {
 	ToggleNumberedList = 'textNumberedList',
 	ToggleBulletedList = 'textBulletedList',
 	ToggleCheckList = 'textCheckbox',
+	ToggleBlockQuote = 'textBlockQuote',
 
 	ToggleHeading = 'textHeading',
 	ToggleHeading1 = 'textHeading1',

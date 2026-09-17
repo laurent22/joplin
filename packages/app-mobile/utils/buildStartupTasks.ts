@@ -1,5 +1,6 @@
 import PluginAssetsLoader from '../PluginAssetsLoader';
 import AlarmService from '@joplin/lib/services/AlarmService';
+import eventManager, { EventName, NoteLockSessionChangeEvent } from '@joplin/lib/eventManager';
 import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
 import BaseModel from '@joplin/lib/BaseModel';
 import BaseService from '@joplin/lib/services/BaseService';
@@ -51,6 +52,8 @@ import SyncTargetNone from '@joplin/lib/SyncTargetNone';
 
 const logger = Logger.create('buildStartupTasks');
 
+let noteLockSessionChangeListener_: ((event: NoteLockSessionChangeEvent)=> void)|null = null;
+
 SyncTargetRegistry.addClass(SyncTargetNone);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
 SyncTargetRegistry.addClass(SyncTargetNextcloud);
@@ -95,7 +98,7 @@ import VoiceTyping from '../services/voiceTyping/VoiceTyping';
 import whisper from '../services/voiceTyping/whisper';
 import PerFolderSortOrderService from '@joplin/lib/services/sortOrder/PerFolderSortOrderService';
 import getConflictFolderId from '@joplin/lib/models/utils/getConflictFolderId';
-const { runStartupTests } = require('@joplin/mobile-config');
+const mobileConfig = require('@joplin/mobile-config').default;
 
 
 function resourceFetcher_downloadComplete(event: { id: string; encrypted: boolean }) {
@@ -348,6 +351,18 @@ const buildStartupTasks = (
 		await loadMasterKeysFromSettings(EncryptionService.instance());
 		DecryptionWorker.instance().on('resourceMetadataButNotBlobDecrypted', decryptionWorker_resourceMetadataButNotBlobDecrypted);
 	});
+	addTask('buildStartupTasks/listen for note lock session events', async () => {
+		// Startup can run again (e.g. on profile switch) while eventManager survives it, so the
+		// previous run's listener is dropped to keep the dispatch single-fire.
+		if (noteLockSessionChangeListener_) eventManager.off(EventName.NoteLockSessionChange, noteLockSessionChangeListener_);
+		noteLockSessionChangeListener_ = (event) => {
+			dispatch({
+				type: 'SET_NOTE_LOCK_SESSION_UNLOCKED',
+				value: event.unlocked,
+			});
+		};
+		eventManager.on(EventName.NoteLockSessionChange, noteLockSessionChangeListener_);
+	});
 	addTask('buildStartupTasks/set up sharing', async () => {
 		await ShareService.instance().initialize(store, EncryptionService.instance());
 	});
@@ -511,7 +526,7 @@ const buildStartupTasks = (
 		// call will throw an error, alerting us of the issue. Otherwise it will
 		// just print some messages in the console.
 		// ----------------------------------------------------------------------------
-		if (runStartupTests) {
+		if (mobileConfig.runStartupTests()) {
 			await runRsaIntegrationTests();
 			await runCryptoIntegrationTests();
 			await runOnDeviceFsDriverTests();

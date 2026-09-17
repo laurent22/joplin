@@ -3,7 +3,7 @@ import * as React from 'react';
 import { View, Text, StyleSheet, Linking, Animated, Easing } from 'react-native';
 import { connect } from 'react-redux';
 import { _ } from '@joplin/lib/locale';
-const { themeStyle } = require('../global-style.js');
+import { themeStyle } from '../global-style';
 import { AppState } from '../../utils/types';
 import { generateApplicationConfirmUrl, reducer, checkIfLoginWasSuccessful, saveApplicationAuthId, defaultState } from '@joplin/lib/services/joplinCloudUtils';
 import { uuidgen } from '@joplin/lib/uuid';
@@ -62,6 +62,7 @@ const useStyle = (themeId: number) => {
 				fontWeight: 'bold',
 			},
 			loadingIcon: {
+				color: theme.color,
 				marginVertical: theme.fontSize * 1.2,
 				fontSize: 38,
 				textAlign: 'center',

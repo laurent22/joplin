@@ -1,5 +1,40 @@
 # Joplin Server Changelog
 
+## [server-v3.7.2](https://github.com/laurent22/joplin/releases/tag/server-v3.7.2) - 2026-09-07T16:29:45Z
+
+- New: Add OrphanTrace logging to investigate orphaned items bug (#15709)
+- Improved: Allow configuring the default admin password with an environment variable (#15655 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Allow searching emails by full name or email (8d90057)
+- Improved: Display JSB banner on larger Joplin Server instances (#16255)
+- Improved: Don't include dev dependencies in the built image (#15472) (#15432 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Enforce session and CSRF checks on the application authorisation POST (#16270)
+- Improved: Give focus to MFA field when it is displayed (380401c)
+- Improved: Harden user-content responses against XSS via uploaded resources (#15787)
+- Improved: Hardening: Disable the `__proto__` property (#15765 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Improve UUID generation logic (#15656 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Improve `items/` route validation logic (#15657 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Improve logging for shared notebook maintenance (#16400)
+- Improved: Make LDAP login logic safer (#15707 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Prevent SAML login from accessing existing local password accounts (#15647)
+- Improved: Prevent pending share recipients from writing items into shared folders before accepting the invitation (dff533c)
+- Improved: Publishing an old note may display an error "Missing property deleted_time" (#16175) (#16132 by [@Rygaa](https://github.com/Rygaa))
+- Improved: Record which app screen a Joplin Cloud sign-up started from (b5ed2c9)
+- Improved: Reject items with a null byte in any field (#15489)
+- Improved: Scope password-reset tokens to their intended purpose (#16274)
+- Improved: Silence Katex warnings (#15839)
+- Improved: Speed up batch deletes by using whereIn instead of OR chains (#15705)
+- Improved: Upgrade samlify to v2.13.1 (#15658 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Validate transcribe job ID to prevent path traversal in proxy endpoint (d97a509)
+- Fixed: Allow SVG resources to be served inline (#15814) (#15802)
+- Fixed: Auto-unlock database after failed server migration (#15509) (#15507)
+- Fixed: Fix "password has not been changed" warning not shown in some cases where it should be (#15747 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix Fountain rendering issue (#15659 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix LDAP user auto-creation (#15847) (#15725 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix SQLite database getting permanently locked (#16244) (#15226 by [@ivan](https://github.com/ivan))
+- Fixed: Fix orphaned items task timing out on large databases (#15704)
+- Fixed: Fixed LDAP connection leak when login exits early (#15855) (#15857 by [@tillo](https://github.com/tillo))
+- Fixed: Fixed published notes reusing disabled owner shares (#15454) (#15373 by [@Rygaa](https://github.com/Rygaa))
+
 ## [server-v3.7.1](https://github.com/laurent22/joplin/releases/tag/server-v3.7.1) - 2026-05-18T10:41:28Z
 
 - New: Add rate limiter on SAML auth code endpoint (#15433)
