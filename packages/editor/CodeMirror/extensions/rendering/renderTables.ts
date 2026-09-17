@@ -18,7 +18,7 @@ import {
 	swapRows, swapColumns,
 	Table,
 } from '../../utils/markdown/tableUtils';
-import { getCellContentPosition } from '../../editorCommands/tableCommands';
+import { CellLocation, getCellAtPosition, getCellContentPosition } from '../../editorCommands/tableCommands';
 import { RenderedContentContext } from './types';
 import { editorSettingsFacet } from '../editorSettingsExtension';
 
@@ -156,7 +156,7 @@ class TableWidget extends WidgetType {
 	// `userEvent` lets the caller tag the dispatch so CM's history can
 	// group adjacent typing-style transactions into one undo step (the
 	// live-sync flush uses 'input.type' for this reason).
-	private apply(view: EditorView, newTable: Table | null, userEvent?: string) {
+	private apply(view: EditorView, newTable: Table | null, userEvent?: string, cell?: CellLocation) {
 		if (!newTable) return;
 		this.saveAndRestoreScroll(view);
 		const newText = serializeTable(newTable);
@@ -164,8 +164,16 @@ class TableWidget extends WidgetType {
 		const afterTable = this.to < doc.length ? doc.sliceString(this.to, Math.min(this.to + 2, doc.length)) : '';
 		const needsBlankLine = !afterTable.startsWith('\n\n');
 		const insert = needsBlankLine ? `${newText}\n` : newText;
+		const changes = view.state.changes({ from: this.from, to: this.to, insert });
+		const cellPos = cell ? getCellContentPosition(view.state, {
+			from: this.from, to: this.from + newText.length, text: newText,
+		}, cell.row, cell.col) : null;
 		view.dispatch({
-			changes: { from: this.from, to: this.to, insert },
+			changes,
+			// Record the edited cell in history before the asynchronous DOM refocus.
+			selection: cellPos !== null ? { anchor: cellPos } : undefined,
+			// Replacing the block invalidates its measured height until the next layout.
+			effects: view.scrollSnapshot().map(changes),
 			userEvent,
 		});
 	}
@@ -288,7 +296,7 @@ class TableWidget extends WidgetType {
 					// The serialize/parse round-trip strips edge whitespace, so
 					// keep the raw value to re-inject after the rebuild (#15918).
 					const rawValue = textDiv.textContent || '';
-					this.apply(view, table, 'input.type');
+					this.apply(view, table, 'input.type', { row: r, col: c });
 					// Rebuild discards this DOM — locate the same cell in the
 					// new widget and restore focus + caret.
 					requestAnimationFrame(() => {
@@ -297,7 +305,7 @@ class TableWidget extends WidgetType {
 						const idx = r * numCols + c;
 						const target = cells && idx < cells.length ? cells[idx] as HTMLElement : null;
 						if (!target) return;
-						focus('TableWidget', target);
+						focus('TableWidget', target, { preventScroll: true });
 						// Restore the raw value onfocus trimmed.
 						if (target.textContent !== rawValue) target.textContent = rawValue;
 						// Caret restoration: put it `offset` characters into
@@ -635,7 +643,7 @@ class TableWidget extends WidgetType {
 					// next frame, in which case the entry is gone.
 					if (!lastFocusedCellByFrom.has(this.from)) return;
 					if (!targetText.isConnected) return;
-					focus('TableWidget', targetText);
+					focus('TableWidget', targetText, { preventScroll: true });
 				});
 			} else {
 				// Coordinates no longer fit (row/column was removed) — drop the
@@ -862,6 +870,14 @@ class TableWidget extends WidgetType {
 		});
 
 		return container;
+	}
+
+	public coordsAt(dom: HTMLElement, pos: number) {
+		const cell = getCellAtPosition({ from: 0, to: this.tableText.length, text: this.tableText }, pos);
+		if (!cell) return null;
+		const table = dom.querySelector('table');
+		const text = table?.rows[cell.row]?.cells[cell.col]?.querySelector('.cm-tw-text');
+		return text?.getBoundingClientRect() ?? null;
 	}
 
 	public ignoreEvent() { return true; }

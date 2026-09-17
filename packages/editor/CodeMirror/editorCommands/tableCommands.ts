@@ -71,10 +71,9 @@ export const getTableRangeAtCursor = (state: EditorState): TableRange | null => 
 	};
 };
 
-// Determine which cell (row, col) the cursor is in within a table.
+// Determine which cell (row, col) a document position is in within a table.
 // Row 0 = header row, row 1+ = body rows (skipping the delimiter row).
-export const getCellAtCursor = (state: EditorState, tableRange: TableRange): CellLocation | null => {
-	const pos = state.selection.main.head;
+export const getCellAtPosition = (tableRange: TableRange, pos: number): CellLocation | null => {
 	const tableText = tableRange.text;
 	const lines = tableText.split('\n');
 
@@ -134,6 +133,10 @@ export const getCellAtCursor = (state: EditorState, tableRange: TableRange): Cel
 	}
 
 	return null;
+};
+
+export const getCellAtCursor = (state: EditorState, tableRange: TableRange): CellLocation | null => {
+	return getCellAtPosition(tableRange, state.selection.main.head);
 };
 
 // Find the document offset for the content of a specific cell.

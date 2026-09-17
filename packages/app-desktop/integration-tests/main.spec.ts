@@ -49,6 +49,47 @@ test.describe('main', () => {
 		await expect(viewer.content.locator('h1')).toHaveText('Test note!');
 	});
 
+	test('editing a long table should keep the viewport at the active cell', async ({ mainWindow, electronApp }) => {
+		await setSettingValue(electronApp, mainWindow, 'editor.tableEditing', true);
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		const noteEditor = await mainScreen.createNewNote('Long table');
+		const editor = await noteEditor.showMarkdownEditor();
+		await editor.focusContent();
+		await mainWindow.keyboard.insertText([
+			'Before the table', '',
+			'| Header | Value |', '| --- | --- |',
+			...Array.from({ length: 60 }, (_, index) => `| Row ${index + 1} | Value ${index + 1} |`),
+			'', 'After the table',
+		].join('\n'));
+
+		const cells = editor.container.locator('.cm-tw-text');
+		await expect(cells).toHaveCount(122);
+		const cell = cells.nth(80);
+		await cell.scrollIntoViewIfNeeded();
+		await cell.click();
+
+		const expectStableScroll = async () => {
+			const movement = await editor.container.locator('.cm-scroller').evaluate(async (scroller) => {
+				const initialScrollTop = scroller.scrollTop;
+				let maxMovement = 0;
+				const start = performance.now();
+				// Observe several live-sync intervals, including any transient jumps.
+				while (performance.now() - start < 2000) {
+					await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+					maxMovement = Math.max(maxMovement, Math.abs(scroller.scrollTop - initialScrollTop));
+				}
+				return maxMovement;
+			});
+			await expect(cell).toBeFocused();
+			expect(movement).toBeLessThanOrEqual(1);
+		};
+
+		await expectStableScroll();
+		await mainWindow.keyboard.insertText(' edited');
+		await expectStableScroll();
+		await expect(cell).toContainText('edited');
+	});
+
 	test('mermaid and KaTeX should render', async ({ mainWindow }) => {
 		const mainScreen = await new MainScreen(mainWindow).setup();
 		const editor = await mainScreen.createNewNote('🚧 Test 🚧');
@@ -244,4 +285,3 @@ test.describe('main', () => {
 		await expect(importedNote).toBeVisible({ timeout: 60_000 });
 	});
 });
-

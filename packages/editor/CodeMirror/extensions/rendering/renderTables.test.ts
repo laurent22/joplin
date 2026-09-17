@@ -1,10 +1,11 @@
-import { EditorSelection, EditorState } from '@codemirror/state';
+import { EditorSelection, EditorState, Extension } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
+import { history, redo, undo } from '@codemirror/commands';
 import createTestEditor from '../../testing/createTestEditor';
 import renderTables, { renderInlineMarkdown } from './renderTables';
 import { RenderedContentContext } from './types';
 
-const createEditor = async (initialMarkdown: string, context?: Partial<RenderedContentContext>, readOnly = false) => {
+const createEditor = async (initialMarkdown: string, context?: Partial<RenderedContentContext>, readOnly = false, extraExtensions: Extension[] = []) => {
 	const fullContext: RenderedContentContext = {
 		resolveImageSrc: async () => '',
 		openLink: () => {},
@@ -14,7 +15,7 @@ const createEditor = async (initialMarkdown: string, context?: Partial<RenderedC
 		initialMarkdown,
 		EditorSelection.cursor(0),
 		['TableHeader'],
-		[EditorState.readOnly.of(readOnly), renderTables(fullContext)],
+		[EditorState.readOnly.of(readOnly), renderTables(fullContext), extraExtensions],
 	);
 };
 
@@ -171,6 +172,62 @@ describe('renderTables', () => {
 
 		anchor.dispatchEvent(new MouseEvent('mousemove', { bubbles: true }));
 		expect(container.classList.contains('cm-tw-mod-link')).toBe(false);
+	});
+
+	test.each([
+		{ row: 0, col: 0, content: 'Header' },
+		{ row: 20, col: 0, content: 'Row 20' },
+		{ row: 40, col: 1, content: 'Value 40' },
+	])('document coordinates should point to cell ($row, $col)', async ({ row, col, content }) => {
+		const markdown = [
+			'Before', '', '| Header | Value |', '| --- | --- |',
+			...Array.from({ length: 60 }, (_, index) => `| Row ${index + 1} | Value ${index + 1} |`),
+			'', 'After',
+		].join('\n');
+		const editor = await createEditor(markdown);
+		try {
+			const cell = findCellTextDivs(editor)[row * 2 + col];
+			const rect = {
+				x: 50, y: 300, left: 50, top: 300, right: 150, bottom: 330,
+				width: 100, height: 30, toJSON: () => ({}),
+			};
+			jest.spyOn(cell, 'getBoundingClientRect').mockReturnValue(rect);
+			const coords = editor.coordsAtPos(markdown.indexOf(content) + 1);
+			expect(coords?.top).toBe(rect.top);
+			expect(coords?.bottom).toBe(rect.bottom);
+		} finally {
+			editor.destroy();
+		}
+	});
+
+	test('undo and redo should keep the document selection in the edited cell', async () => {
+		jest.useFakeTimers();
+		let editor: EditorView | null = null;
+		try {
+			editor = await createEditor('| Head | Other |\n| ---- | ----- |\n| A    | B     |', undefined, false, [history()]);
+			document.body.appendChild(editor.dom);
+			const cell = findCellTextDivs(editor)[3];
+			focusCell(cell);
+			cell.textContent = 'Changed';
+			cell.dispatchEvent(new Event('input'));
+			await jest.advanceTimersByTimeAsync(600);
+
+			const editedPosition = editor.state.doc.toString().indexOf('Changed');
+			expect(editor.state.selection.main.head).toBe(editedPosition);
+			focusCell(findCellTextDivs(editor)[3]);
+			expect(undo(editor)).toBe(true);
+			// Inspect the history selection before DOM focus can overwrite it.
+			expect(editor.state.selection.main.head).toBe(editor.state.doc.toString().indexOf('B'));
+			expect(redo(editor)).toBe(true);
+			expect(editor.state.selection.main.head).toBe(editedPosition);
+			await jest.advanceTimersByTimeAsync(600);
+			expect(findCellTextDivs(editor)[3].textContent).toBe('Changed');
+		} finally {
+			editor?.destroy();
+			editor?.dom.remove();
+			await jest.advanceTimersByTimeAsync(100);
+			jest.useRealTimers();
+		}
 	});
 
 	test('typing a trailing space in a cell should keep it visible after live-sync', async () => {
