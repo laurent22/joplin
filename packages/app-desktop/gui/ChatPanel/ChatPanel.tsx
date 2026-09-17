@@ -16,9 +16,14 @@ import AiDegradedNotice from '../AiDegradedNotice';
 import { ChatMessage, ChatRole, ChatToolMessage } from '@joplin/lib/services/ai/types';
 import JoplinError from '@joplin/lib/JoplinError';
 import eventManager, { EventName, ItemChangeEvent } from '@joplin/lib/eventManager';
-import { Second } from '@joplin/utils/time';
+import { formatMsToRelativeTime, Second } from '@joplin/utils/time';
 import ChatMessageItem from './ChatMessageItem';
 import NavService from '@joplin/lib/services/NavService';
+import archiveConversation from './archiveConversation';
+import BaseModel from '@joplin/lib/BaseModel';
+import Database from '@joplin/lib/database';
+import uuid from '@joplin/lib/uuid';
+import dialogs from '../dialogs';
 
 const logger = Logger.create('ChatPanel');
 
@@ -31,8 +36,15 @@ interface Props {
 	noteTitle: string;
 	noteIsEncrypted: boolean;
 	messages: AiChatMessage[];
+	conversationId?: string;
 	aiDegraded: boolean;
 	dispatch: Dispatch;
+}
+
+interface Conversation {
+	id: string;
+	title: string;
+	updated_time: number;
 }
 
 const disclosureSetting = 'ai.chat.disclosureAcknowledged';
@@ -105,7 +117,21 @@ const useHasFocus = () => {
 const ChatPanel: React.FC<Props> = (props) => {
 	const { dispatch, messages } = props;
 	const [input, setInput] = useState('');
+	const [conversationSearch, setConversationSearch] = useState('');
+	const [conversations, setConversations] = useState<Conversation[]>([]);
+	const searchQuery = conversationSearch.trim().toLowerCase();
+	const filteredConversations = conversations.filter(conversation => conversation.title.toLowerCase().includes(searchQuery));
+	const handleHistoryToggle = useCallback(async (event: React.SyntheticEvent<HTMLDetailsElement>) => {
+		if (!event.currentTarget.open) return;
+		try {
+			const rows = await BaseModel.db().selectAll<Conversation>('SELECT id, title, updated_time FROM chat_conversations ORDER BY updated_time DESC');
+			setConversations(rows);
+		} catch (error) {
+			logger.error('Could not load chat conversations', error);
+		}
+	}, []);
 	const [sending, setSending] = useState(false);
+	const archivingRef = useRef(false);
 	const [disclosureShown, setDisclosureShown] = useState<boolean>(() => {
 		try {
 			return !!Setting.value(disclosureSetting);
@@ -120,6 +146,8 @@ const ChatPanel: React.FC<Props> = (props) => {
 	// Lets async work detect note switches without re-running its closure.
 	const noteIdRef = useRef(props.noteId);
 	noteIdRef.current = props.noteId;
+	const noteTitleRef = useRef(props.noteTitle);
+	noteTitleRef.current = props.noteId ? props.noteTitle : '';
 	const messagesEndRef = useRef<HTMLDivElement>(null);
 
 	const { hasFocus, onFocus, onBlur } = useHasFocus();
@@ -128,8 +156,8 @@ const ChatPanel: React.FC<Props> = (props) => {
 
 	const windowId = useContext(WindowIdContext);
 
-	const appendMessage = useCallback((message: AiChatMessage) => {
-		dispatch({ type: 'AI_CHAT_APPEND', windowId, message });
+	const appendMessage = useCallback((message: Omit<AiChatMessage, 'noteId' | 'noteTitle'>) => {
+		dispatch({ type: 'AI_CHAT_APPEND', windowId, message: { ...message, noteId: noteIdRef.current ?? '', noteTitle: noteTitleRef.current } });
 	}, [dispatch, windowId]);
 
 	const addToolResult = useCallback((result: ChatToolMessage) => {
@@ -201,6 +229,7 @@ const ChatPanel: React.FC<Props> = (props) => {
 
 		try {
 			const note = await Note.load(props.noteId);
+			if (abortController.signal.aborted) return;
 			if (!note) throw new Error(`Note not found: ${props.noteId}`);
 
 			const getContext = async () => {
@@ -316,15 +345,77 @@ const ChatPanel: React.FC<Props> = (props) => {
 		setDisclosureShown(true);
 	}, []);
 
-	const handleReset = useCallback(() => {
+	const handleNewChat = useCallback(async () => {
+		if (archivingRef.current) return;
+		archivingRef.current = true;
 		cancelRequest();
+		try {
+			await archiveConversation(props.conversationId, messages);
+			const conversationId = uuid.create();
+			const now = Date.now();
+			await BaseModel.db().exec(Database.insertQuery('chat_conversations', {
+				id: conversationId,
+				created_time: now,
+				updated_time: now,
+			}));
+			dispatch({ type: 'AI_CHAT_OPEN', windowId, conversationId, messages: [] });
+		} catch (error) {
+			logger.error('Could not start new conversation:', error);
+		} finally {
+			archivingRef.current = false;
+		}
+	}, [dispatch, windowId, cancelRequest, props.conversationId, messages]);
 
-		dispatch({ type: 'AI_CHAT_RESET', windowId: windowId });
-	}, [dispatch, windowId, cancelRequest]);
+	const handleOpenConversation = useCallback(async (conversationId: string) => {
+		if (conversationId === props.conversationId || archivingRef.current) return;
+		archivingRef.current = true;
+		cancelRequest();
+		try {
+			await archiveConversation(props.conversationId, messages);
+			await CommandService.instance().executeInWindow('openAiChatConversation', { windowId, args: [conversationId] });
+		} catch (error) {
+			logger.error('Could not open chat conversation:', error);
+		} finally {
+			archivingRef.current = false;
+		}
+	}, [windowId, cancelRequest, props.conversationId, messages]);
 
 	const handleClose = useCallback(() => {
 		void CommandService.instance().executeInWindow('toggleAiChat', { windowId: windowId, args: [] });
 	}, [windowId]);
+
+	const handleDeleteConversation = useCallback(async (conversationId: string) => {
+		if (archivingRef.current) return;
+		archivingRef.current = true;
+		if (conversationId === props.conversationId) cancelRequest();
+		try {
+			await BaseModel.db().transactionExecBatch([
+				{ sql: 'DELETE FROM chat_messages WHERE conversation_id = ?', params: [conversationId] },
+				{ sql: 'DELETE FROM chat_conversations WHERE id = ?', params: [conversationId] },
+			]);
+			setConversations(current => current.filter(item => item.id !== conversationId));
+			dispatch({ type: 'AI_CHAT_DELETE', conversationId });
+		} catch (error) {
+			logger.error('Could not delete chat conversation:', error);
+			await dialogs.alert(_('Could not delete conversation.'));
+		} finally {
+			archivingRef.current = false;
+		}
+	}, [dispatch, cancelRequest, props.conversationId]);
+
+	const handleRenameConversation = useCallback(async (conversation: { id: string; title: string }) => {
+		const answer = await dialogs.prompt(_('Conversation title:'), _('Rename conversation'), conversation.title);
+		if (answer === null) return;
+		const title = answer.trim();
+		if (!title || title === conversation.title) return;
+		try {
+			await BaseModel.db().exec(Database.updateQuery('chat_conversations', { title }, { id: conversation.id }));
+			setConversations(current => current.map(item => item.id === conversation.id ? { ...item, title } : item));
+		} catch (error) {
+			logger.error('Could not rename chat conversation:', error);
+			await dialogs.alert(_('Could not rename conversation.'));
+		}
+	}, []);
 
 	const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLTextAreaElement>) => {
 		// Don't send while an IME composition is in flight — Enter commits
@@ -413,7 +504,7 @@ const ChatPanel: React.FC<Props> = (props) => {
 
 	const renderHeaderActions = () => {
 		if (showingMessages) {
-			return <button type='button' className='reset' onClick={handleReset}>{_('Reset')}</button>;
+			return <button type='button' className='reset' onClick={handleNewChat}>{_('New chat')}</button>;
 		}
 
 		const closeLabel = _('Close');
@@ -438,6 +529,33 @@ const ChatPanel: React.FC<Props> = (props) => {
 				<h1 className='title' id={headerId}>{_('AI Chat')}</h1>
 				{renderHeaderActions()}
 			</div>
+			<details className='chat-switcher' onToggle={handleHistoryToggle}>
+				<summary onClick={event => event.stopPropagation()}>{_('Chat history')}</summary>
+				<input
+					type='search'
+					aria-label={_('Search conversations')}
+					placeholder={_('Search conversations')}
+					value={conversationSearch}
+					onChange={event => setConversationSearch(event.target.value)}
+				/>
+				<ul className='conversations' aria-label={_('Conversations')}>
+					{filteredConversations.map(conversation => <li
+						key={conversation.id}
+						className='conversation'
+						aria-current={conversation.id === props.conversationId ? 'true' : undefined}
+					>
+						<button type='button' onClick={() => handleOpenConversation(conversation.id)}>
+							<span className='title'>{conversation.title || _('(untitled)')}</span>
+							<span className='timestamp'>{formatMsToRelativeTime(conversation.updated_time)}</span>
+						</button>
+						<details className='conversation-menu' onToggle={event => event.stopPropagation()}>
+							<summary onClick={event => event.stopPropagation()} aria-label={_('Actions for %s', conversation.title || _('(untitled)'))}>{_('Actions')}</summary>
+							<button type='button' onClick={() => handleRenameConversation(conversation)}>{_('Rename')}</button>
+							<button type='button' onClick={() => handleDeleteConversation(conversation.id)}>{_('Delete')}</button>
+						</details>
+					</li>)}
+				</ul>
+			</details>
 			{content}
 		</div>
 	);
@@ -461,8 +579,11 @@ const mapStateToProps = (state: AppState, ownProps: OwnProps) => {
 		noteTitle: note?.title || '',
 		noteIsEncrypted: !!note?.encryption_applied,
 		messages: windowState.aiChatMessages || [],
+		conversationId: windowState.aiChatConversationId,
 		aiDegraded: !!state.aiStatus?.degraded,
 	};
 };
 
-export default connect(mapStateToProps)(ChatPanel);
+const ConversationPanel: React.FC<Props> = props => <ChatPanel key={props.conversationId} {...props} />;
+
+export default connect(mapStateToProps)(ConversationPanel);
