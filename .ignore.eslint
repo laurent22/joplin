@@ -227,7 +227,6 @@ packages/app-desktop/gui/ChatPanel/ChatMessageItem.js
 packages/app-desktop/gui/ChatPanel/ChatPanel.test.js
 packages/app-desktop/gui/ChatPanel/ChatPanel.js
 packages/app-desktop/gui/ChatPanel/archiveConversation.test.js
-packages/app-desktop/gui/ChatPanel/archiveConversation.js
 packages/app-desktop/gui/ClipperConfigScreen.js
 packages/app-desktop/gui/ConfigScreen/ButtonBar.js
 packages/app-desktop/gui/ConfigScreen/ConfigScreen.js
@@ -1537,6 +1536,7 @@ packages/lib/mimeUtils.test.js
 packages/lib/models/Alarm.js
 packages/lib/models/BaseItem.test.js
 packages/lib/models/BaseItem.js
+packages/lib/models/ChatConversation.js
 packages/lib/models/ConflictNoteState.js
 packages/lib/models/Folder.publishing.test.js
 packages/lib/models/Folder.sharing.test.js
@@ -1656,7 +1656,6 @@ packages/lib/services/ai/SearchService.js
 packages/lib/services/ai/SqliteVec.test.js
 packages/lib/services/ai/aiSettingsTransition.test.js
 packages/lib/services/ai/aiSettingsTransition.js
-packages/lib/services/ai/appendChatMessages.js
 packages/lib/services/ai/availability.test.js
 packages/lib/services/ai/availability.js
 packages/lib/services/ai/chunker.test.js
