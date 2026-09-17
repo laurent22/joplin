@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { act, fireEvent, render, waitFor, within } from '@testing-library/react';
-import BaseModel from '@joplin/lib/BaseModel';
+import ChatConversation from '@joplin/lib/models/ChatConversation';
 import Note from '@joplin/lib/models/Note';
 import CommandService from '@joplin/lib/services/CommandService';
 import { runNoteChat } from '@joplin/lib/services/ai/noteChat';
@@ -31,19 +31,20 @@ const openHistory = async (view: ReturnType<typeof render>) => {
 };
 
 const saveConversation = async (id: string, title: string, updatedTime = 1) => {
-	await BaseModel.db().exec('INSERT INTO chat_conversations (id, title, created_time, updated_time) VALUES (?, ?, 1, ?)', [id, title, updatedTime]);
+	await ChatConversation.save({ id, title, created_time: 1, updated_time: updatedTime }, { isNew: true, autoTimestamp: false });
 };
 
 const saveMessage = async (conversationId: string, text: string) => {
-	await BaseModel.db().exec('INSERT INTO chat_messages (id, conversation_id, role, text, position, created_time) VALUES (?, ?, ?, ?, 0, 1)', [conversationId, conversationId, 'user', text]);
+	await ChatConversation.archive(conversationId, [{ id: conversationId, role: 'user', text, raw: [], noteId: '', noteTitle: '' }]);
 };
 
 describe('ChatPanel', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		await BaseModel.db().exec('DELETE FROM chat_messages');
-		await BaseModel.db().exec('DELETE FROM chat_conversations');
+		for (const conversation of await ChatConversation.history()) {
+			await ChatConversation.deleteConversation(conversation.id);
+		}
 		Element.prototype.scrollIntoView = jest.fn();
 		jest.mocked(runNoteChat).mockReset();
 	});
@@ -80,7 +81,7 @@ describe('ChatPanel', () => {
 		fireEvent.click(within(row).getByText('Actions'));
 		await act(async () => { fireEvent.click(within(row).getByRole('button', { name: 'Rename' })); });
 		expect(await view.findByText('New title')).toBeTruthy();
-		expect(await BaseModel.db().selectOne('SELECT title FROM chat_conversations WHERE id = ?', ['chat-1'])).toEqual({ title: 'New title' });
+		expect(await ChatConversation.load('chat-1')).toMatchObject({ title: 'New title' });
 	});
 
 	it('should delete the selected conversation and its messages', async () => {
@@ -96,8 +97,10 @@ describe('ChatPanel', () => {
 		await act(async () => { fireEvent.click(within(row).getByRole('button', { name: 'Delete' })); });
 		await waitFor(() => expect(view.queryByText('Delete this chat')).toBeNull());
 		expect(view.getByText('Keep this chat')).toBeTruthy();
-		expect(await BaseModel.db().selectAll('SELECT id FROM chat_conversations')).toEqual([{ id: 'keep-chat' }]);
-		expect(await BaseModel.db().selectAll('SELECT text FROM chat_messages')).toEqual([{ text: 'Keep this message' }]);
+		expect((await ChatConversation.history()).map(conversation => conversation.id)).toEqual(['keep-chat']);
+		expect(await ChatConversation.messages('keep-chat')).toMatchObject([{ text: 'Keep this message' }]);
+		await saveConversation('delete-chat', 'Recreated chat');
+		expect(await ChatConversation.messages('delete-chat')).toEqual([]);
 		expect(dispatch).toHaveBeenCalledWith({ type: 'AI_CHAT_DELETE', conversationId: 'delete-chat' });
 	});
 
@@ -106,8 +109,8 @@ describe('ChatPanel', () => {
 		const view = renderPanel({ conversationId: 'chat-1', messages: [message], dispatch });
 		await act(async () => { fireEvent.click(view.getByRole('button', { name: 'New chat' })); });
 		await waitFor(() => expect(dispatch).toHaveBeenCalled());
-		expect(await BaseModel.db().selectOne('SELECT title FROM chat_conversations WHERE id = ?', ['chat-1'])).toEqual({ title: 'Question' });
-		expect(await BaseModel.db().selectAll('SELECT text FROM chat_messages WHERE conversation_id = ?', ['chat-1'])).toEqual([{ text: 'Question' }]);
+		expect(await ChatConversation.load('chat-1')).toMatchObject({ title: 'Question' });
+		expect(await ChatConversation.messages('chat-1')).toMatchObject([{ text: 'Question' }]);
 		const action = dispatch.mock.calls[0][0];
 		expect(action).toEqual({ type: 'AI_CHAT_OPEN', windowId: 'second', conversationId: expect.any(String), messages: [] });
 		expect(action.conversationId).not.toBe('chat-1');
@@ -130,7 +133,7 @@ describe('ChatPanel', () => {
 		await openHistory(view);
 		fireEvent.click(await view.findByRole('button', { name: /Saved chat/ }));
 		await waitFor(() => expect(execute).toHaveBeenCalledWith('openAiChatConversation', { windowId: 'second', args: ['chat-2'] }));
-		expect(await BaseModel.db().selectAll('SELECT text FROM chat_messages WHERE conversation_id = ?', ['chat-1'])).toEqual([{ text: 'Question' }]);
+		expect(await ChatConversation.messages('chat-1')).toMatchObject([{ text: 'Question' }]);
 	});
 
 	it('should capture the active note ID and title on the question and reply', async () => {
