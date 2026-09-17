@@ -2,7 +2,7 @@ import BaseModel from '@joplin/lib/BaseModel';
 import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
-import archiveConversation from './archiveConversation';
+import ChatConversation from '@joplin/lib/models/ChatConversation';
 
 describe('archiveConversation', () => {
 	beforeEach(async () => {
@@ -15,7 +15,7 @@ describe('archiveConversation', () => {
 	it('should keep saved note snapshots and separator text after the note is deleted', async () => {
 		const folder = await Folder.save({ title: 'Notebook' });
 		const note = await Note.save({ title: 'Original title', parent_id: folder.id });
-		await archiveConversation('chat-1', [{ id: 'separator', role: 'separator', text: 'Note: Original title', raw: [], noteId: note.id, noteTitle: note.title }]);
+		await ChatConversation.archive('chat-1', [{ id: 'separator', role: 'separator', text: 'Note: Original title', raw: [], noteId: note.id, noteTitle: note.title }]);
 		await Note.delete(note.id, { toTrash: false });
 		expect(await BaseModel.db().selectOne('SELECT id FROM chat_conversations')).toEqual({ id: 'chat-1' });
 		expect(await BaseModel.db().selectOne('SELECT text, note_id, note_title FROM chat_messages')).toEqual({

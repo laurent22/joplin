@@ -70,7 +70,7 @@ import AiService from '@joplin/lib/services/ai/AiService';
 import LocalEmbeddingProvider from '@joplin/lib/services/ai/LocalEmbeddingProvider';
 import { installAiStatusBridge, AiStatusStore } from './services/aiStatusBridge';
 import ItemChange from '@joplin/lib/models/ItemChange';
-import archiveConversation from './gui/ChatPanel/archiveConversation';
+import ChatConversation from '@joplin/lib/models/ChatConversation';
 import uuid from '@joplin/lib/uuid';
 
 const perfLogger = PerformanceLogger.create();
@@ -114,7 +114,7 @@ class Application extends BaseApplication {
 			conversations.set(id, messages);
 		}
 		for (const [id, messages] of conversations) {
-			await archiveConversation(id, [...messages.values()]);
+			await ChatConversation.archive(id, [...messages.values()]);
 		}
 	}
 

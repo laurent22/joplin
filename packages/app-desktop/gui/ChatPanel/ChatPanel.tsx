@@ -19,10 +19,7 @@ import eventManager, { EventName, ItemChangeEvent } from '@joplin/lib/eventManag
 import { formatMsToRelativeTime, Second } from '@joplin/utils/time';
 import ChatMessageItem from './ChatMessageItem';
 import NavService from '@joplin/lib/services/NavService';
-import archiveConversation from './archiveConversation';
-import BaseModel from '@joplin/lib/BaseModel';
-import Database from '@joplin/lib/database';
-import uuid from '@joplin/lib/uuid';
+import ChatConversation from '@joplin/lib/models/ChatConversation';
 import dialogs from '../dialogs';
 import Button, { ButtonLevel } from '../Button/Button';
 
@@ -47,6 +44,7 @@ interface Conversation {
 	id: string;
 	title: string;
 	updated_time: number;
+	messageTexts: string[];
 }
 
 const disclosureSetting = 'ai.chat.disclosureAcknowledged';
@@ -122,12 +120,12 @@ const ChatPanel: React.FC<Props> = (props) => {
 	const [conversationSearch, setConversationSearch] = useState('');
 	const [conversations, setConversations] = useState<Conversation[]>([]);
 	const searchQuery = conversationSearch.trim().toLowerCase();
-	const filteredConversations = conversations.filter(conversation => conversation.title.toLowerCase().includes(searchQuery));
+	const filteredConversations = conversations.filter(conversation => conversation.title.toLowerCase().includes(searchQuery)
+		|| conversation.messageTexts.some(text => text.toLowerCase().includes(searchQuery)));
 	const handleHistoryToggle = useCallback(async (event: React.SyntheticEvent<HTMLDetailsElement>) => {
 		if (!event.currentTarget.open) return;
 		try {
-			const rows = await BaseModel.db().selectAll<Conversation>('SELECT id, title, updated_time FROM chat_conversations ORDER BY updated_time DESC');
-			setConversations(rows);
+			setConversations(await ChatConversation.history());
 		} catch (error) {
 			logger.error('Could not load chat conversations', error);
 		}
@@ -352,14 +350,8 @@ const ChatPanel: React.FC<Props> = (props) => {
 		archivingRef.current = true;
 		cancelRequest();
 		try {
-			await archiveConversation(props.conversationId, messages);
-			const conversationId = uuid.create();
-			const now = Date.now();
-			await BaseModel.db().exec(Database.insertQuery('chat_conversations', {
-				id: conversationId,
-				created_time: now,
-				updated_time: now,
-			}));
+			await ChatConversation.archive(props.conversationId, messages);
+			const conversationId = await ChatConversation.createConversation();
 			dispatch({ type: 'AI_CHAT_OPEN', windowId, conversationId, messages: [] });
 		} catch (error) {
 			logger.error('Could not start new conversation:', error);
@@ -373,7 +365,7 @@ const ChatPanel: React.FC<Props> = (props) => {
 		archivingRef.current = true;
 		cancelRequest();
 		try {
-			await archiveConversation(props.conversationId, messages);
+			await ChatConversation.archive(props.conversationId, messages);
 			await CommandService.instance().executeInWindow('openAiChatConversation', { windowId, args: [conversationId] });
 		} catch (error) {
 			logger.error('Could not open chat conversation:', error);
@@ -391,10 +383,7 @@ const ChatPanel: React.FC<Props> = (props) => {
 		archivingRef.current = true;
 		if (conversationId === props.conversationId) cancelRequest();
 		try {
-			await BaseModel.db().transactionExecBatch([
-				{ sql: 'DELETE FROM chat_messages WHERE conversation_id = ?', params: [conversationId] },
-				{ sql: 'DELETE FROM chat_conversations WHERE id = ?', params: [conversationId] },
-			]);
+			await ChatConversation.deleteConversation(conversationId);
 			setConversations(current => current.filter(item => item.id !== conversationId));
 			dispatch({ type: 'AI_CHAT_DELETE', conversationId });
 		} catch (error) {
@@ -411,7 +400,7 @@ const ChatPanel: React.FC<Props> = (props) => {
 		const title = answer.trim();
 		if (!title || title === conversation.title) return;
 		try {
-			await BaseModel.db().exec(Database.updateQuery('chat_conversations', { title }, { id: conversation.id }));
+			await ChatConversation.renameConversation(conversation.id, title);
 			setConversations(current => current.map(item => item.id === conversation.id ? { ...item, title } : item));
 		} catch (error) {
 			logger.error('Could not rename chat conversation:', error);

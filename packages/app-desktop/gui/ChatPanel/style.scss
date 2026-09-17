@@ -101,11 +101,6 @@
 					padding: 6px;
 					cursor: pointer;
 				}
-
-				> button:disabled {
-					color: var(--joplin-color-faded);
-					cursor: not-allowed;
-				}
 			}
 
 			> button > .timestamp {
