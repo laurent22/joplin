@@ -4,6 +4,23 @@ import appReducer, { createAppDefaultState } from './app.reducer';
 import { defaultWindowId } from '@joplin/lib/reducer';
 
 describe('app.reducer', () => {
+	it('should clear a deleted conversation from matching windows and keep other conversations', () => {
+		const messages: AiChatMessage[] = [{ id: 'question', role: 'user', text: 'Question', raw: [], noteId: '', noteTitle: '' }];
+		const state = createAppDefaultState({});
+		state.aiChatConversationId = 'deleted';
+		state.aiChatMessages = messages;
+		state.backgroundWindows = {
+			second: { ...createAppDefaultWindowState(), windowId: 'second', aiChatConversationId: 'deleted', aiChatMessages: messages },
+			third: { ...createAppDefaultWindowState(), windowId: 'third', aiChatConversationId: 'other', aiChatMessages: messages },
+		};
+		const result = appReducer(state, { type: 'AI_CHAT_DELETE', conversationId: 'deleted' });
+		expect(result.aiChatConversationId).toBeNull();
+		expect(result.aiChatMessages).toEqual([]);
+		expect(result.backgroundWindows.second.aiChatConversationId).toBeNull();
+		expect(result.backgroundWindows.second.aiChatMessages).toEqual([]);
+		expect(result.backgroundWindows.third.aiChatConversationId).toBe('other');
+		expect(result.backgroundWindows.third.aiChatMessages).toEqual(messages);
+	});
 
 	it('should handle DIALOG_OPEN', async () => {
 		const state: AppState = createAppDefaultState({});
@@ -112,6 +129,8 @@ describe('app.reducer', () => {
 		let idCounter = 0;
 		const buildMessage = (role: ChatRole.User | ChatRole.Assistant, content: string, toolCalls: ChatToolCall[]) => ({
 			id: `id-${idCounter++}`,
+			noteId: 'note-a',
+			noteTitle: 'A',
 			role,
 			text: content,
 			raw: [
