@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useMemo, useCallback, useRef } from 'react';
-import { TouchableOpacity, StyleSheet, Text, Linking } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, Linking, View } from 'react-native';
 import { themeStyle } from '../global-style';
 import NavService from '@joplin/lib/services/NavService';
 
@@ -61,17 +61,30 @@ const WarningBox: React.FC<Props> = props => {
 		}
 	}, []);
 
-	return (
-		<TouchableOpacity
-			style={styles.container}
-			onPress={onPress}
-			activeOpacity={0.8}
-			accessibilityRole='button'
-			testID={props.testID}
-		>
-			<Text style={styles.text}>{props.message}</Text>
-		</TouchableOpacity>
-	);
+	const hasTarget = !!propsRef.current.target;
+	const bannerContent = <Text style={styles.text}>{props.message}</Text>;
+	if (hasTarget) {
+		return (
+			<TouchableOpacity
+				style={styles.container}
+				onPress={onPress}
+				activeOpacity={0.8}
+				accessibilityRole={'button'}
+				testID={props.testID}
+			>
+				{bannerContent}
+			</TouchableOpacity>
+		);
+	} else {
+		return (
+			<View
+				style={styles.container}
+				testID={props.testID}
+			>
+				{bannerContent}
+			</View>
+		);
+	}
 };
 
 export default WarningBox;
