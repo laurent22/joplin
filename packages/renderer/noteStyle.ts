@@ -217,8 +217,10 @@ export default function(theme: RendererTheme, options: Options = null) {
 			color: ${theme.urlColor};
 		}
 		ul, ol {
-			padding-left: 0;
-			margin-left: ${theme.listTabSize};
+			padding-inline-start: 0;
+			padding-inline-end: 0;
+			margin-inline-start: ${theme.listTabSize || '22px'};
+			margin-inline-end: ${theme.listTabSize || '22px'};
 		}
 		li {
 			margin-bottom: .4em;

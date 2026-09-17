@@ -55,6 +55,7 @@ const rules: RendererRules = {
 	externalEmbed: require('./MdToHtml/rules/externalEmbed').default,
 	source_map: require('./MdToHtml/rules/source_map').default,
 	tableHorizontallyScrollable: require('./MdToHtml/rules/tableHorizontallyScrollable').default,
+	rtlLists: require('./MdToHtml/rules/rtlLists').default,
 };
 
 const uslug = require('@joplin/fork-uslug');

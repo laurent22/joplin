@@ -25,8 +25,8 @@ function pluginAssets(theme: RendererTheme) {
 				}
 
 				li.md-checkbox input[type=checkbox] {
-					margin-left: -1.71em;
-					margin-right: 0.7em;
+					margin-inline-start: -1.71em;
+					margin-inline-end: 0.7em;
 					position: relative;
 					top: 1px;
 				}
@@ -47,7 +47,7 @@ function pluginAssets(theme: RendererTheme) {
 					cursor: pointer;
 					width: 1em;
 					height: 1em;
-					margin-left: -1.3em;
+					margin-inline-start: -1.3em;
 					position: absolute;
 					color: ${theme.color};
 				}
