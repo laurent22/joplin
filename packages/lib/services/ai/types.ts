@@ -76,7 +76,8 @@ export interface ChatResult {
 	// 'length' means the output budget ran out, which is how a reasoning model
 	// with a low maxTokens returns empty text. Undefined if unreported.
 	finishReason?: ChatFinishReason;
-	// Set when the provider exposes the reasoning trace separately from the content.
+	// Model reasoning, from a dedicated provider field or extracted from inline
+	// markers. Kept separate so it doesn't pollute the assistant reply.
 	reasoningText?: string;
 	// Joplin Cloud degradation / budget signals. Populated only by the
 	// joplin-cloud provider; other providers leave them undefined. Consumed

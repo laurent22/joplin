@@ -5,6 +5,7 @@ import { rtrimSlashes } from '@joplin/utils/path';
 import { ChatFinishReason, ChatMessage, ChatOptions, ChatResult, ChatToolCall, ProviderClassification } from '../types';
 import ChatProviderBase from './ChatProviderBase';
 import { ToolSpec } from '../tools/types';
+import extractReasoning from '../utils/extractReasoning';
 
 const logger = Logger.create('OpenAiCompatibleProvider');
 
@@ -25,10 +26,10 @@ interface OpenAiToolCall {
 
 interface OpenAiMessage {
 	content?: string;
-	tool_calls?: OpenAiToolCall[];
-	// Non-standard, but emitted by LM Studio, Ollama and DeepSeek-style APIs.
+	// Non-standard: `reasoning_content` (DeepSeek, vLLM), `reasoning` (OpenRouter).
 	reasoning_content?: string;
 	reasoning?: string;
+	tool_calls?: OpenAiToolCall[];
 }
 
 interface OpenAiChoice {
@@ -218,8 +219,8 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 
 		const choice = json.choices?.[0];
 		const responseMessage = choice?.message;
-		const content = responseMessage?.content ?? '';
-		const reasoningText = responseMessage?.reasoning_content ?? responseMessage?.reasoning;
+		const { text: content, reasoning: inlineReasoning } = extractReasoning(responseMessage?.content ?? '');
+		const reasoningText = responseMessage?.reasoning_content ?? responseMessage?.reasoning ?? (inlineReasoning || undefined);
 		// Some "OpenAI-compatible" providers (notably older Ollama versions)
 		// omit `usage` entirely. Default to zeros rather than throw.
 		const inputTokens = json.usage?.prompt_tokens ?? 0;

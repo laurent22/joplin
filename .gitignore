@@ -1657,6 +1657,8 @@ packages/lib/services/ai/tools/utils/buildTool.js
 packages/lib/services/ai/tools/utils/serializeToolOutput.js
 packages/lib/services/ai/tools/utils/settings.js
 packages/lib/services/ai/types.js
+packages/lib/services/ai/utils/extractReasoning.test.js
+packages/lib/services/ai/utils/extractReasoning.js
 packages/lib/services/ai/utils/findFencedBlock.js
 packages/lib/services/commands/MenuUtils.js
 packages/lib/services/commands/ToolbarButtonUtils.test.js
