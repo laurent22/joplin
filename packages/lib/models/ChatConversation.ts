@@ -16,7 +16,6 @@ interface Conversation {
 	id: string;
 	title: string;
 	updated_time: number;
-	messageTexts: string[];
 }
 
 export default class ChatConversation extends BaseModel {
@@ -32,14 +31,22 @@ export default class ChatConversation extends BaseModel {
 		return true;
 	}
 
-	public static async history(): Promise<Conversation[]> {
-		const rows = await this.db().selectAll<Omit<Conversation, 'messageTexts'>>('SELECT id, title, updated_time FROM chat_conversations ORDER BY updated_time DESC');
-		const savedMessages = await this.db().selectAll<{ conversation_id: string; text: string }>('SELECT conversation_id, text FROM chat_messages');
-		const conversationsById = new Map<string, Conversation>(rows.map(row => [row.id, { ...row, messageTexts: [] as string[] }]));
-		for (const message of savedMessages) {
-			conversationsById.get(message.conversation_id)?.messageTexts.push(message.text);
+	public static async history(search = ''): Promise<Conversation[]> {
+		const searchQuery = search.trim().toLowerCase();
+		if (!searchQuery) {
+			return this.db().selectAll<Conversation>('SELECT id, title, updated_time FROM chat_conversations ORDER BY updated_time DESC');
 		}
-		return [...conversationsById.values()];
+
+		return this.db().selectAll<Conversation>(`
+			SELECT id, title, updated_time FROM chat_conversations
+			WHERE instr(LOWER(title), ?) > 0
+			OR EXISTS (
+				SELECT 1 FROM chat_messages
+				WHERE chat_messages.conversation_id = chat_conversations.id
+				AND instr(LOWER(chat_messages.text), ?) > 0
+			)
+			ORDER BY updated_time DESC
+		`, [searchQuery, searchQuery]);
 	}
 
 	public static async createConversation() {

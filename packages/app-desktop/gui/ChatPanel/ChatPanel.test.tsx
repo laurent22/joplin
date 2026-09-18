@@ -62,7 +62,7 @@ describe('ChatPanel', () => {
 		await view.findByText('Shopping list');
 		const search = view.getByRole('searchbox', { name: 'Search conversations' });
 		fireEvent.change(search, { target: { value: 'Shopping' } });
-		expect(view.getAllByRole('listitem')).toHaveLength(1);
+		await waitFor(() => expect(view.getAllByRole('listitem')).toHaveLength(1));
 		expect(view.getByText('Shopping list')).toBeTruthy();
 		fireEvent.change(search, { target: { value: 'Paris' } });
 		expect(await view.findByText('Travel plans')).toBeTruthy();
