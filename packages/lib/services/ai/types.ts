@@ -71,6 +71,9 @@ export interface ChatResult {
 	text: string;
 	toolCalls: ChatToolCall[];
 	usage: ChatUsage;
+	// Model reasoning, from a dedicated provider field or extracted from inline
+	// markers. Kept separate so it doesn't pollute the assistant reply.
+	reasoning?: string;
 	// Joplin Cloud degradation / budget signals. Populated only by the
 	// joplin-cloud provider; other providers leave them undefined. Consumed
 	// internally to drive the aiStatus Redux slice — plugins receive only
