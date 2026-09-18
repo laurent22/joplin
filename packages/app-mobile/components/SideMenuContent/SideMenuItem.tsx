@@ -15,6 +15,7 @@ export enum ToggleState {
 type Props = {
 	icon: React.ReactNode|null;
 	text: string;
+	textSuffix?: React.ReactNode;
 	textStyle?: StyleProp<TextStyle>;
 	touchableProps: Partial<TouchableRippleProps>;
 	themeId: number;
@@ -27,7 +28,7 @@ type Props = {
 );
 
 const SideMenuItem: React.FC<Props> = ({
-	icon, text, textStyle, touchableProps, toggleState, themeId, onToggle, selected, depth,
+	icon, text, textSuffix, textStyle, touchableProps, toggleState, themeId, onToggle, selected, depth,
 }) => {
 	const styles = useStyles({ themeId, depth, selected, hasIcon: !!icon });
 
@@ -78,6 +79,7 @@ const SideMenuItem: React.FC<Props> = ({
 					>
 						{text}
 					</Text>
+					{textSuffix}
 				</View>
 			</TouchableRipple>
 			{toggleButton}

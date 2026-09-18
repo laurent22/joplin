@@ -310,6 +310,8 @@ const SideMenuContentComponent = (props: Props) => {
 			selected={selected}
 			folder={folder}
 			alwaysShowFolderIcons={alwaysShowFolderIcons}
+			isShared={!!folder.share_id}
+			isRootSharedFolder={!!folder.share_id && !folder.parent_id}
 			onPress={folder_press}
 			onLongPress={folder_longPress}
 			onTogglePress={folder_togglePress}

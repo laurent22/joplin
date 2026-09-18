@@ -9,6 +9,7 @@ import { _ } from '@joplin/lib/locale';
 import useOnLongPressProps from '../../utils/hooks/useOnLongPressProps';
 import SideMenuItem, { ToggleState } from './SideMenuItem';
 import SidebarIcon from './SidebarIcon';
+import Icon from '../Icon';
 
 type FolderEventHandler = (folder: FolderEntity)=> void;
 interface FolderItemProps {
@@ -19,6 +20,8 @@ interface FolderItemProps {
 	selected: boolean;
 	depth: number;
 	alwaysShowFolderIcons: boolean;
+	isShared: boolean;
+	isRootSharedFolder: boolean;
 
 	onPress: FolderEventHandler;
 	onTogglePress: FolderEventHandler;
@@ -32,6 +35,9 @@ const FolderItem: React.FC<FolderItemProps> = props => {
 		return StyleSheet.create({
 			text: {
 				color: theme.color,
+			},
+			sharedText: {
+				color: theme.colorWarn2,
 			},
 			conflictFolderButtonText: {
 				color: theme.colorError,
@@ -47,6 +53,11 @@ const FolderItem: React.FC<FolderItemProps> = props => {
 
 			icon: {
 				color: theme.color,
+			},
+			shareIcon: {
+				color: theme.colorWarn2,
+				fontSize: 14,
+				marginLeft: 4,
 			},
 		});
 	}, [props.themeId]);
@@ -93,6 +104,9 @@ const FolderItem: React.FC<FolderItemProps> = props => {
 	const isConflictFolder = props.folder.id === Folder.conflictFolderId();
 	const textStyle = useMemo(() => {
 		const result = [styles.text];
+		if (props.isShared) {
+			result.push(styles.sharedText);
+		}
 		if (isConflictFolder) {
 			result.push(styles.conflictFolderButtonText);
 			if (props.selected) {
@@ -100,19 +114,25 @@ const FolderItem: React.FC<FolderItemProps> = props => {
 			}
 		}
 		return result;
-	}, [styles, props.selected, isConflictFolder]);
+	}, [styles, props.selected, isConflictFolder, props.isShared]);
 	let toggleState = ToggleState.Hidden;
 	if (props.hasChildren) {
 		toggleState = collapsed ? ToggleState.Collapsed : ToggleState.Expanded;
 	}
 
 	const currentProp = { 'aria-current': props.selected };
+
+	const shareIcon = props.isRootSharedFolder ? (
+		<Icon name='fas share-alt' style={styles.shareIcon} accessibilityLabel={null} />
+	) : null;
+
 	return (
 		<SideMenuItem
 			icon={
 				folderIcon && <SidebarIcon icon={folderIcon} style={textStyle} />
 			}
 			text={folderTitle}
+			textSuffix={shareIcon}
 			textStyle={textStyle}
 			selected={props.selected}
 			depth={props.depth}

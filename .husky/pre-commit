@@ -1,1 +1,1 @@
-corepack yarn lint-staged
+npx lint-staged
