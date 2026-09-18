@@ -566,6 +566,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			marginRight: theme.marginRight,
 			borderBottomColor: theme.dividerColor,
 			borderBottomWidth: 1,
+			// Prevents the divider from covering the title focus indicator on web:
+			zIndex: -1,
 		};
 
 		styles.titleTextInput = {
