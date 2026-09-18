@@ -1,4 +1,5 @@
-import boundedDiff3MergeRegions, { ArrayChange, createDiffLines, DiffLines, diffOptions, DiffOptions, Region, sameLine, viewerDiffOptions } from './boundedDiff3';
+import boundedDiff3MergeRegions, { ArrayChange, createDiffLines, DiffLines, diffOptions, DiffOptions, Region } from './boundedDiff3';
+import { createViewerDiffLines, viewerLineOptions, ViewerDiffOptions } from './prepareViewerLines';
 
 export type MergedSectionType = 'unchanged' | 'auto-merged' | 'conflict';
 
@@ -41,12 +42,12 @@ const touchesDuplicateRun = (base: string[], side: string[], diffLines: DiffLine
 		const to = Math.min(base.length - 2, lastLine);
 
 		for (let i = from; i <= to; i++) {
-			if (sameLine(base[i], base[i + 1])) return true;
+			if (base[i] === base[i + 1]) return true;
 		}
 
 		// An insertion past the last line still sits against the final pair
 		if (changedLength === 0 && changedStart > to && base.length >= 2) {
-			return sameLine(base[base.length - 2], base[base.length - 1]);
+			return base[base.length - 2] === base[base.length - 1];
 		}
 
 		return false;
@@ -127,16 +128,16 @@ const joinAcrossBlankLines = (changes: ArrayChange[]): ArrayChange[] => {
 };
 
 const bothSidesChanged = (base: string[], local: string[], remote: string[]): boolean => {
-	const same = (a: string[], b: string[]) => a.length === b.length && a.every((line, i) => sameLine(line, b[i]));
+	const same = (a: string[], b: string[]) => a.length === b.length && a.every((line, i) => line === b[i]);
 	return !same(base, local) && !same(base, remote) && !same(local, remote);
 };
 
 // Used by the conflict UI when a note has no base
 // Without an ancestor every difference is a conflict
-export const twoWayDiff = (localRaw: string, remoteRaw: string, options: DiffOptions = viewerDiffOptions): AutoMergeResult => {
+export const twoWayDiff = (localRaw: string, remoteRaw: string, options: ViewerDiffOptions = viewerLineOptions): AutoMergeResult => {
 	const localLines = splitLines(localRaw);
 	const remoteLines = splitLines(remoteRaw);
-	const rawChanges = createDiffLines(options)(localLines, remoteLines);
+	const rawChanges = createViewerDiffLines(options)(localLines, remoteLines);
 	const changes = rawChanges && joinAcrossBlankLines(rawChanges);
 
 	// Too different to compare without blocking app, so the whole note will be a conflict

@@ -311,15 +311,4 @@ describe('diffNotes', () => {
 		expect(autoMerge(base, local, remote)).toEqual(autoMerge(base, local, remote));
 	});
 
-	test('should not treat a pipe line in a code block as a table row', () => {
-		const base = '```\n| a | b |\n| c | d |\n```';
-		const local = '```\n|  a  |  b  |\n| c | d |\n```';
-		const remote = '```\n| a | b |\n| c | D |\n```';
-
-		const result = autoMerge(base, local, remote);
-
-		expect(result.sections.some(s => s.type === 'conflict')).toBe(true);
-		expect(result.mergedText).toContain('|  a  |  b  |');
-	});
-
 });

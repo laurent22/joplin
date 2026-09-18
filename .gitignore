@@ -1700,8 +1700,8 @@ packages/lib/services/conflict/keepConflictCopy.test.js
 packages/lib/services/conflict/keepConflictCopy.js
 packages/lib/services/conflict/loadConflictData.test.js
 packages/lib/services/conflict/loadConflictData.js
-packages/lib/services/conflict/prepareLines.test.js
-packages/lib/services/conflict/prepareLines.js
+packages/lib/services/conflict/prepareViewerLines.test.js
+packages/lib/services/conflict/prepareViewerLines.js
 packages/lib/services/conflict/wordDiff.test.js
 packages/lib/services/conflict/wordDiff.js
 packages/lib/services/contextkey/contextkey.js

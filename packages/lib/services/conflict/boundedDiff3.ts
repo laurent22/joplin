@@ -2,7 +2,6 @@
 // unchanged; only the hunks come from a bounded Myers diff rather than its LCS, which
 // blocks the UI for seconds on a long note.
 const { diffArrays } = require('diff');
-import prepareLines, { PreparedLine } from './prepareLines';
 
 interface StableRegion {
 	stable: true;
@@ -34,13 +33,6 @@ export interface ArrayChange {
 	value: string[];
 }
 
-interface PreparedChange {
-	added?: boolean;
-	removed?: boolean;
-	count: number;
-	value: PreparedLine[];
-}
-
 interface Hunk {
 	ab: 'a' | 'b';
 	oStart: number;
@@ -53,56 +45,10 @@ interface Hunk {
 export interface DiffOptions {
 	maxEditLength: number;
 	timeout: number;
-	ignoreTrailingWhitespace?: boolean;
 }
 
 export const diffOptions: DiffOptions = { maxEditLength: 5000, timeout: 1000 };
-export const viewerDiffOptions: DiffOptions = { maxEditLength: 10000, timeout: 3000, ignoreTrailingWhitespace: true };
-
-const isTableLine = (line: string) => line.trimStart().startsWith('|');
-
-const splitCells = (line: string) => {
-	const cells: string[] = [];
-	let current = '';
-
-	for (let i = 0; i < line.length; i++) {
-		if (line[i] === '\\' && i + 1 < line.length) {
-			current += line[i] + line[i + 1];
-			i++;
-		} else if (line[i] === '|') {
-			cells.push(current);
-			current = '';
-		} else {
-			current += line[i];
-		}
-	}
-	cells.push(current);
-
-	return cells;
-};
-
-const trimEnd = (line: string) => line.replace(/[ \t]+$/, '');
-
-// Used only to decide whether two table lines match, never emitted: editing one
-// cell re-pads every row, which would otherwise make the whole table a conflict
-const normaliseTableLine = (line: string) => {
-	return splitCells(line)
-		.map(cell => (/^\s*:?-+:?\s*$/.test(cell) ? cell.replace(/-+/, '-') : cell).trim())
-		.join('|');
-};
-
-// Table rows ignore column padding
-const samePreparedLine = (a: PreparedLine, b: PreparedLine, ignoreTrailingWhitespace: boolean) => {
-	if (a.text === b.text) return true;
-	if (a.isTableRow && b.isTableRow) return a.comparisonText === b.comparisonText;
-	return ignoreTrailingWhitespace && trimEnd(a.text) === trimEnd(b.text);
-};
-
-export const sameLine = (a: string, b: string, ignoreTrailingWhitespace = false) => {
-	if (a === b) return true;
-	if (isTableLine(a) && isTableLine(b)) return normaliseTableLine(a) === normaliseTableLine(b);
-	return ignoreTrailingWhitespace && trimEnd(a) === trimEnd(b);
-};
+export const viewerDiffOptions: DiffOptions = { maxEditLength: 10000, timeout: 3000 };
 
 // The duplicate line check and the merge diff the same two pairs, so whichever runs
 // second reuses the result
@@ -117,17 +63,7 @@ export const createDiffLines = (options: DiffOptions = diffOptions): DiffLines =
 		const cached = cache.find(entry => entry.base === base && entry.side === side);
 		if (cached) return cached.changes;
 
-		// Diffing the prepared lines rather than the raw text
-		const comparator = (a: PreparedLine, b: PreparedLine) => {
-			return samePreparedLine(a, b, options.ignoreTrailingWhitespace);
-		};
-		const prepared: PreparedChange[]|undefined = diffArrays(
-			prepareLines(base), prepareLines(side), { ...options, comparator },
-		);
-		const changes = prepared?.map(change => ({
-			...change,
-			value: change.value.map((line: PreparedLine) => line.text),
-		}));
+		const changes: ArrayChange[]|undefined = diffArrays(base, side, options);
 		cache.push({ base, side, changes });
 		return changes;
 	};
