@@ -554,6 +554,9 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			paddingLeft: theme.marginLeft,
 			paddingRight: theme.marginRight,
 			maxHeight: '40%',
+
+			// Prevents the title/content divider overlaying the title's focus indicator on web:
+			zIndex: 1,
 		};
 
 		styles.titleContainerTodo = { ...styles.titleContainer };
@@ -566,8 +569,6 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			marginRight: theme.marginRight,
 			borderBottomColor: theme.dividerColor,
 			borderBottomWidth: 1,
-			// Prevents the divider from covering the title focus indicator on web:
-			zIndex: -1,
 		};
 
 		styles.titleTextInput = {
