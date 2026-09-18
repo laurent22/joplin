@@ -1,6 +1,6 @@
 # Conflict resolution UI
 
-When two devices edit the same note, Joplin creates a conflict note and overwrites the original with the remote version. Previously, users had to compare both notes manually.The conflict resolution UI shows both versions together, highlights the differences, and saves the resolved result back to the original note.
+When two devices edit the same note, if automatic resolution is enabled then sync merges the changes automatically where they don't overlap. If a real conflict remains, Joplin creates a conflict note for the local version and saves the remote version over the original, with the merged changes already applied to both. The conflict resolution UI shows both versions together, highlights the differences, and saves the resolved result back to the original note.
 
 The feature is behind the `featureFlag.conflictResolution` setting, read through `isConflictResolutionEnabled()`. It is desktop-only and Markdown-only; the rich text editor is not supported.
 
@@ -47,7 +47,7 @@ Only the comparison uses `comparisonText`. The original `line.text` is used when
 
 `twoWayDiff` returns `MergedSection` objects, each unchanged or conflict. A conflict carries `localText`, `remoteText` and their line counts. A removal followed by an addition becomes one conflict, so a replaced block is a single change.
 
-If the diff exceeds `maxEditLength: 10000` or a 3 second timeout (from `viewerDiffOptions`), the whole note becomes one conflict section holding the two raw bodies rather than blocking the UI.
+If the diff exceeds `maxEditLength: 10000` or a 3-second timeout (from `viewerDiffOptions`), the whole note becomes one conflict section holding the two raw bodies rather than blocking the UI.
 
 `loadConflictData` also checks for a title conflict and returns the original note’s `updated_time` as `remoteUpdatedTime` to detect changes during resolution. If the conflict cannot be resolved, it returns `Unavailable`
 
@@ -79,7 +79,7 @@ While resolving, `codeMirror_change` keeps edits only in the editor instead of s
 * a block widget above it showing the local text in yellow with a Use my version button, unless the region is `addedByThem`,  
 * word-level highlights from `wordDiff()`, computed against the current document text so they follow the user's edits.
 
-`wordDiff.ts` uses a Unicode-aware regex so languages like Cyrillic, Greek, and Arabic are treated as words instead of individual characters. CJK text is kept char-by-char for better diffs.If more than 70% of a line has changed, the whole line is highlighted instead of individual words. For tables, column padding is ignored so realigning columns is not shown as a change.The widget handles copying so the local version is copied instead of the remote text.
+`wordDiff.ts` uses a Unicode-aware regex so languages like Cyrillic, Greek, and Arabic are treated as words instead of individual characters. CJK text is kept char-by-char for better diffs.If more than 70% of a line has changed, the whole line is highlighted instead of individual words. For tables, column padding is ignored so realigning columns is not shown as a change. The widget handles copying so the local version is copied instead of the remote text.
 
 **Resolving**
 
@@ -95,8 +95,7 @@ Resolutions are undoable: invertedEffects maps resolveConflict back to restoreCo
 
 ### Finish, Keep both versions, titles
 
-`finishConflictResolution.ts` saves the resolved title and body to the original note, keeping its ID and sync data, then permanently deletes the local conflict note. Deletion happens only after the save succeeds. It returns CannotWrite if the original cannot be edited or if the original changes during resolution, the user is asked to reload it instead of overwriting it. Reloading runs the diff again with the latest original and discards any unsaved resolution changes.
-
+`finishConflictResolution.ts` saves the resolved title and body to the original note, keeping its ID and sync data, then permanently deletes the local conflict note. Deletion happens only after the save succeeds. It returns `CannotWrite` when the original cannot be edited: encrypted, locked, trashed, or the save itself failed and `OriginalChanged` when the original changed during resolution. In that case  the user is asked to reload it instead of overwriting it, which runs the diff again against the latest original and discards any unsaved resolution changes.
 `NoteEditor.tsx` prevents duplicate finishes, waits for pending saves, and gets the final body directly from the editor.
 
 `keepConflictCopy.ts` removes the conflict status, moves the note to the original's folder, and renames it `Title (conflicted copy)`, then `Title (conflicted copy 2)`, etc. It always uses the next available number, so names are not reused. Special characters like `%`, `_`, and `\` are escaped for the `LIKE` query.

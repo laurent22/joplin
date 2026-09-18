@@ -2,7 +2,7 @@
 
 When the same note is edited on two devices before either of them syncs, Joplin creates a conflict note which requires manual resolution. The local version is copied to the Conflicts notebook and the remote version overwrites the local note.
 
-Auto-merge avoids this when the changes don't overlap. It uses a three-way merge to combine the edits automatically, and only creates a conflict note if the merge fails.The merge only runs on the client that detects conflict, which is the client that syncs second. The other devices simply receive the merged note with their next sync.
+Auto-merge avoids this when the changes don't overlap. It uses a three-way merge to combine the edits automatically, and only creates a conflict note if the merge fails. The merge only runs on the client that detects conflict, which is the client that syncs second. The other devices simply receive the merged note with their next sync.
 
 ### The three versions
 
@@ -42,7 +42,7 @@ For an unstable region:
 
 Those sections are then turned into two versions of the note that are identical except where a real conflict remains: resolvedLocal keeps the user's side, resolvedCurrent keeps the incoming side. fullyMerged is true only when no conflict is left and the title did not conflict. Titles follow the same rule \- merged if only one side changed it, a conflict if both changed it differently.
 
-Merging is line based. Two edits to different words on the same line conflict, and so do edits on adjacent lines, since they fall in the same region. Word-level merging was implemented and then dropped during review: it produced silent duplication when the same change was made slightly differently on each device. Word diffing is still used for highlighting in the conflict resolution UI, but not for automatic merge.
+Merging is line-based. Two edits to different words on the same line conflict, and so do edits on adjacent lines, since they fall in the same region. Word-level merging was implemented and then dropped during review: it produced silent duplication when the same change was made slightly differently on each device. Word diffing is still used for highlighting in the conflict resolution UI, but not for automatic merge.
 
 **When it falls back to a conflict note**
 
@@ -67,13 +67,13 @@ Two guards exist to avoid bad merges and blocked syncs. Both turn the whole note
 
 When the base contains consecutive identical lines, a line diff cannot tell which copy was edited and may apply both edits, silently duplicating content. To avoid this, the merge is skipped if a changed region is on or next to repeated lines. Duplicate lines far from both edits do not prevent a merge. Blank lines count as duplicates. The guard only applies when both sides actually changed the note.
 
-Diffing is bounded, because an unbounded diff blocked the app for minutes on large notes. The merge runs during sync so it uses tighter bounds (maxEditLength: 5000, timeout: 1000\) than the conflict viewer (10000, 3000). Exceeding them falls back to a conflict. Before running the diff, equality checks already handles simple cases such as when both sides are the same or only one side has changed.
+Diffing is bounded because an unbounded diff blocked the app for minutes on large notes. The merge runs during sync so it uses tighter bounds (maxEditLength: 5000, timeout: 1000\) than the conflict viewer (10000, 3000). Exceeding them falls back to a conflict. Before running the diff, equality checks already handle simple cases such as when both sides are the same or only one side has changed.
 
 ### E2EE
 
 The remote note arrives encrypted, so it is decrypted into memory for the merge. Nothing is saved during this process. The local note is not decrypted \- it should already have been decrypted by a normal sync.
 
-When a conflict note is created for an encrypted remote note, the decrypted content is copied to the remote note and the encrypted data is cleared. This prevents decryption process from later overwriting the merged result. The resolution UI reads the remote version from the original note, so it’s readable there. .
+When a conflict note is created for an encrypted remote note, the decrypted content is copied to the remote note and the encrypted data is cleared. This prevents decryption process from later overwriting the merged result. The resolution UI reads the remote version from the original note, so it’s readable there.
 
 This check is handled within the decryption process itself because decryption uses extra memory during sync. This ensures users can disable the setting to avoid the additional memory usage if sync has memory issues.
 
@@ -100,9 +100,5 @@ This check is handled within the decryption process itself because decryption us
 `packages/lib/models/BaseItem.ts`: `updateSyncTimeQueries()` rebuilds the `sync_items` row and keeps the existing base when no new base is provided. `saveSyncBaseContent()` directly saves the base and is called by `decrypt()` when a downloaded encrypted note becomes readable.
 
 `packages/lib/models/Note.ts`: syncBaseContent() reads the base for a note; setBaseConflictNoteId() links the original note to its conflict note.
-
-`packages/lib/models/ConflictNoteState.ts`: The conflict\_note\_states table, keyed by conflict note id. Holds the base the conflict was computed against, plus the remote note's updated\_time so the resolution UI can detect the original note changing. Rows are deleted along with their conflict note, from BaseItem.batchDelete().
-
-`packages/lib/models/ConflictNoteState.ts`: Manages the `conflict_note_states` table, keyed by conflict note ID. It stores the base used for the conflict and the remote note’s `updated_time`, allowing the UI to detect original note changes. Rows are cleaned up by BaseItem.batchDelete(), but only for notes with is\_conflict \= 1 and only on permanent deletion and not when moved to trash.`save()` replaces the existing row when the same conflict note is saved again. A new conflict creates a new conflict note and a new row.
 
 `wordDiff.ts` and `loadConflictData.ts` are part of the conflict resolution UI, not the auto-merge logic. `loadConflictData.ts` uses `diffNotes.ts` to recalculate sections when a conflict is opened.
