@@ -10,6 +10,7 @@ import { getIsMFAEnabled, getMaxItemSize, getMaxTotalItemSize } from './utils/us
 import zxcvbn from 'zxcvbn';
 import { confirmUrl, resetPasswordUrl } from '../utils/urlUtils';
 import { checkRepeatPassword, CheckRepeatPasswordInput } from '../routes/index/users';
+import { TokenPurpose } from './TokenModel';
 import accountConfirmationTemplate from '../views/emails/accountConfirmationTemplate';
 import resetPasswordTemplate from '../views/emails/resetPasswordTemplate';
 import { betaStartSubUrl, betaUserDateRange, betaUserTrialPeriodDays, isBetaUser, stripeConfig } from '../utils/stripe';
@@ -465,11 +466,11 @@ export default class UserModel extends BaseModel<User> {
 			if (!user.password && !user.must_set_password) throw new ErrorUnprocessableEntity('password must be set');
 		} else {
 			if ('email' in user && !user.email) throw new ErrorUnprocessableEntity('email must be set');
-			if ('email' in user && !user.email.includes('@')) throw new ErrorUnprocessableEntity(`Should include @ in email address, email: ${user.email}`);
+			if (user.email && !user.email.includes('@')) throw new ErrorUnprocessableEntity(`Should include @ in email address, email: ${user.email}`);
 			if ('password' in user && !user.password) throw new ErrorUnprocessableEntity('password must be set');
 		}
 
-		if ('email' in user) {
+		if (user.email) {
 			const existingUser = await this.loadByEmail(user.email);
 			if (existingUser && existingUser.id !== user.id) throw new ErrorUnprocessableEntity(`there is already a user with this email: ${user.email}`);
 			// See https://www.rfc-editor.org/errata_search.php?rfc=3696&eid=1690 (found via https://stackoverflow.com/a/574698)
@@ -477,7 +478,7 @@ export default class UserModel extends BaseModel<User> {
 			validateEmail(user.email);
 		}
 
-		if ('full_name' in user && user.full_name.length > 256) throw new ErrorUnprocessableEntity('Full name must be at most 256 characters');
+		if (user.full_name && user.full_name.length > 256) throw new ErrorUnprocessableEntity('Full name must be at most 256 characters');
 
 		return super.validate(user, options);
 	}
@@ -586,7 +587,7 @@ export default class UserModel extends BaseModel<User> {
 	}
 
 	public async generateLinkForPasswordReset(userId: Uuid) {
-		const validationToken = await this.models().token().generate(userId);
+		const validationToken = await this.models().token().generate(userId, TokenPurpose.PasswordReset);
 		return resetPasswordUrl(validationToken);
 	}
 
@@ -604,7 +605,7 @@ export default class UserModel extends BaseModel<User> {
 
 	public async resetPassword(token: string, fields: CheckRepeatPasswordInput) {
 		checkRepeatPassword(fields, true);
-		const user = await this.models().token().userFromToken(token);
+		const user = await this.models().token().userFromToken(token, TokenPurpose.PasswordReset);
 
 		await this.withTransaction(async () => {
 			await this.models().user().save({ id: user.id, password: fields.password });
@@ -811,6 +812,10 @@ export default class UserModel extends BaseModel<User> {
 	private formatValues(user: User): User {
 		const output: User = { ...user };
 		if ('email' in output) output.email = (`${user.email}`).trim().toLowerCase();
+		// The column is NOT NULL with a default of "", but callers may pass an
+		// explicit null - in particular PayPal checkouts, which leave the
+		// customer name empty in Stripe.
+		if ('full_name' in output && !output.full_name) output.full_name = '';
 		return output;
 	}
 
@@ -948,5 +953,13 @@ export default class UserModel extends BaseModel<User> {
 		}
 
 		return count;
+	}
+
+	public async enabledNonAdminUserCount() {
+		const result = await this.db('users')
+			.where('enabled', '=', 1)
+			.where('is_admin', '=', 0)
+			.count('*', { as: 'count' });
+		return Number(result[0].count);
 	}
 }

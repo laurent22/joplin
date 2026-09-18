@@ -16,6 +16,8 @@ import { RefObject, SetStateAction } from 'react';
 import * as React from 'react';
 import { ResourceEntity, ResourceLocalStateEntity } from '@joplin/lib/services/database/types';
 import { EditorCursorLocations } from '@joplin/lib/services/NotePositionService';
+import type { DecryptedNoteLockKey } from '@joplin/lib/services/noteLock/NoteLockKey';
+import { HighlightedWord, SearchEntry } from '@joplin/lib/reducer';
 
 export interface AllAssetsOptions {
 	contentMaxWidthTarget?: string;
@@ -47,13 +49,12 @@ export interface NoteEditorProps {
 	notesParentType: string;
 	selectedNoteTags: TagEntity[];
 	selectedNoteHash: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- searches: any[] is the shape in lib's reducer; tightening requires updating the reducer first
-	searches: any[];
+	searches: SearchEntry[];
 	selectedSearchId: string;
 	customCss: string;
 	noteVisiblePanes: string[];
 	watchedResources: Record<string, unknown>;
-	highlightedWords: string[];
+	highlightedWords: HighlightedWord[];
 	tabMovesFocus: boolean;
 	plugins: PluginStates;
 	toolbarButtonInfos: ToolbarItem[];
@@ -73,10 +74,14 @@ export interface NoteEditorProps {
 	enableHtmlToMarkdownBanner: boolean;
 	showNoteLinkIcon: boolean;
 	whiteboardForceMarkdown: Record<string, boolean>;
+	noteLockSessionUnlocked: boolean;
+	hasNoteLockKey: boolean;
+	editorNoteReloadTimeRequest: number;
 }
 
 export interface NoteBodyEditorRef {
 	content(): string|Promise<string>;
+	blurEditor?(): void;
 	resetScroll(): void;
 	scrollTo(options: ScrollOptions): void;
 
@@ -113,6 +118,7 @@ export interface NoteBodyEditorProps {
 	contentKey: string;
 	contentMarkupLanguage: number;
 	contentOriginalCss: string;
+	editorNoteReloadTimeRequest: number;
 	initialCursorLocation: EditorCursorLocations;
 	onChange(event: OnChangeEvent): void;
 	onWillChange(event: { changeId: number }): void;
@@ -168,6 +174,12 @@ export interface FormNote {
 	markup_language: number;
 	user_updated_time: number;
 	encryption_applied: number;
+	is_locked: number;
+	// The key captured when the locked note was decrypted; pending saves encrypt with it so they
+	// can complete even if the session locks before they run.
+	noteLockKey: DecryptedNoteLockKey|null;
+	// Proof for gated saves that the body is plaintext.
+	isDecrypted: boolean;
 	deleted_time: number;
 
 	hasChanged: boolean;
@@ -220,6 +232,9 @@ export function defaultFormNote(): FormNote {
 		hasChanged: false,
 		user_updated_time: 0,
 		encryption_applied: 0,
+		is_locked: 0,
+		noteLockKey: null,
+		isDecrypted: false,
 	};
 }
 

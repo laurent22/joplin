@@ -46,13 +46,35 @@ export default class NoteLockKey {
 
 	public async create(password: string) {
 		if (this.load()) throw new Error('Note lock key already exists');
-		return this.save(await this.encryptionService_.generateMasterKey(password));
+		const key = await this.encryptionService_.generateMasterKey(password);
+		// A key may have arrived through sync while the new one was being generated - keep it,
+		// since notes may already be locked with it on another device.
+		if (this.load()) throw new Error('Note lock key already exists');
+		return this.save(key);
 	}
 
 	// Rotate through NoteLockSession.reset() rather than calling this directly, so the session locks
 	// and drops the old key as part of the rotation.
 	public async reset(password: string) {
 		return this.save(await this.encryptionService_.generateMasterKey(password));
+	}
+
+	public async changePassword(currentPassword: string, newPassword: string) {
+		const key = this.load();
+		if (!key) throw new Error('Note lock key has not been created');
+		return this.save(await this.encryptionService_.reencryptMasterKey(key, currentPassword, newPassword));
+	}
+
+	public needsUpgrade() {
+		const key = this.load();
+		return !!key && !!this.encryptionService_.masterKeysThatNeedUpgrading([key]).length;
+	}
+
+	public async upgrade(password: string) {
+		const key = this.load();
+		if (!key) throw new Error('Note lock key has not been created');
+		if (!this.needsUpgrade()) return key;
+		return this.changePassword(password, password);
 	}
 
 	public async decrypt(password: string): Promise<DecryptedNoteLockKey> {

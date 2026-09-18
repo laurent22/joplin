@@ -11,6 +11,7 @@ import { WhiteboardNodeData } from '../canvasFlow';
 import useCheckboxToggle from '../useCheckboxToggle';
 import handlePositions from './handlePositions';
 import useCardWheel from './useCardWheel';
+import stripUnsafeStyles from './stripUnsafeStyles';
 
 const useRenderedMarkdown = (md: string, ctx: WhiteboardContextValue) => {
 	const [html, setHtml] = useState<string>('');
@@ -26,7 +27,7 @@ const useRenderedMarkdown = (md: string, ctx: WhiteboardContextValue) => {
 				const result = await ctx.markupToHtml(MarkupLanguage.Markdown, md, {
 					resourceInfos: ctx.resourceInfos,
 				});
-				if (!cancelled) setHtml(result?.html ?? '');
+				if (!cancelled) setHtml(stripUnsafeStyles(result?.html ?? ''));
 			} catch {
 				if (!cancelled) setHtml('');
 			}

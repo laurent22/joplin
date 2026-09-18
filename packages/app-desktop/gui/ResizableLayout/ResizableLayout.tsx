@@ -2,10 +2,11 @@ import * as React from 'react';
 import { useRef, useState, useEffect, useCallback } from 'react';
 import useWindowResizeEvent from './utils/useWindowResizeEvent';
 import setLayoutItemProps from './utils/setLayoutItemProps';
-import useLayoutItemSizes, { LayoutItemSizes, itemSize, calculateMaxSizeAvailableForItem, itemMinWidth, itemMinHeight } from './utils/useLayoutItemSizes';
+import useLayoutItemSizes, { EdgeFlags, LayoutItemSizes, itemSize, calculateMaxSizeAvailableForItem } from './utils/useLayoutItemSizes';
 import validateLayout from './utils/validateLayout';
 import { Size, LayoutItem } from './utils/types';
 import { canMove, MoveDirection } from './utils/movements';
+import { buildResizeSnapshot, computeEdges, isItemVisibleInRender, lastVisibleChildIndex, planResize, ResizeStartSnapshot } from './utils/resizeLogic';
 import MoveButtons, { MoveButtonClickEvent } from './MoveButtons';
 import { StyledWrapperRoot, StyledMoveOverlay, MoveModeRootMessage } from './utils/style';
 import type { ResizeCallback, ResizeStartCallback } from 're-resizable';
@@ -17,18 +18,8 @@ interface OnResizeEvent {
 	layout: LayoutItem;
 }
 
-interface ResizedItem {
-	key: string;
-	initialWidth: number;
-	initialHeight: number;
+interface ResizedItem extends ResizeStartSnapshot {
 	maxSize: Size;
-	// A divider drag updates the dragged item and its next visible sibling,
-	// so the delta stays between the two panels on either side of it.
-	nextSiblingKey: string | null;
-	nextSiblingInitialWidth: number;
-	nextSiblingInitialHeight: number;
-	itemAbsorbsAlongAxis: { width: boolean; height: boolean };
-	nextAbsorbsAlongAxis: { width: boolean; height: boolean };
 }
 
 export interface RenderItemEvent {
@@ -50,11 +41,7 @@ interface Props {
 	moveModeMessage: string;
 }
 
-function itemVisible(item: LayoutItem, moveMode: boolean) {
-	if (moveMode) return true;
-	if (item.children && !item.children.length) return false;
-	return item.visible !== false;
-}
+const itemVisible = isItemVisibleInRender;
 
 function ResizableLayout(props: Props) {
 	const eventEmitter = useRef(new EventEmitter());
@@ -95,64 +82,22 @@ function ResizableLayout(props: Props) {
 	}
 
 	function renderLayoutItem(
-		item: LayoutItem, parent: LayoutItem | null, sizes: LayoutItemSizes, isVisible: boolean, isLastChild: boolean, onlyMoveControls: boolean,
+		item: LayoutItem, parent: LayoutItem | null, sizes: LayoutItemSizes, isVisible: boolean, isLastChild: boolean, onlyMoveControls: boolean, parentEdges: EdgeFlags = { ownRight: false, ownBottom: false, parentRight: false, parentBottom: false },
 	): React.ReactNode {
-		const onResizeStart: ResizeStartCallback = () => {
-			let nextSiblingKey: string | null = null;
-			const nextAbsorbsAlongAxis = { width: false, height: false };
-			if (parent) {
-				const siblings = parent.children;
-				const idx = siblings.findIndex(c => c.key === item.key);
-				for (let i = idx + 1; i < siblings.length; i++) {
-					if (siblings[i].visible !== false) {
-						nextSiblingKey = siblings[i].key;
-						nextAbsorbsAlongAxis.width = !('width' in siblings[i]);
-						nextAbsorbsAlongAxis.height = !('height' in siblings[i]);
-						break;
-					}
-				}
-			}
+		const edges = computeEdges(parent, isLastChild, parentEdges);
 
+		const onResizeStart: ResizeStartCallback = () => {
 			setResizedItem({
-				key: item.key,
-				initialWidth: sizes[item.key].width,
-				initialHeight: sizes[item.key].height,
+				...buildResizeSnapshot(item, parent, props.moveMode, sizes),
 				maxSize: calculateMaxSizeAvailableForItem(item, parent, sizes),
-				nextSiblingKey,
-				nextSiblingInitialWidth: nextSiblingKey ? sizes[nextSiblingKey].width : 0,
-				nextSiblingInitialHeight: nextSiblingKey ? sizes[nextSiblingKey].height : 0,
-				itemAbsorbsAlongAxis: {
-					width: !('width' in item),
-					height: !('height' in item),
-				},
-				nextAbsorbsAlongAxis,
 			});
 		};
 
 		const onResize: ResizeCallback = (_event, direction, _refToElement, delta) => {
-			// The absorber (width/height-less side) is skipped so the layout
-			// system keeps it flexible.
-			const isHorizontal = direction !== 'bottom';
-			const minSize = isHorizontal ? itemMinWidth : itemMinHeight;
-			const rawDelta = isHorizontal ? delta.width : delta.height;
-
-			const itemIsAbsorber = isHorizontal ? resizedItem.itemAbsorbsAlongAxis.width : resizedItem.itemAbsorbsAlongAxis.height;
-			const nextIsAbsorber = isHorizontal ? resizedItem.nextAbsorbsAlongAxis.width : resizedItem.nextAbsorbsAlongAxis.height;
-
 			let newLayout = props.layout;
-
-			if (!itemIsAbsorber) {
-				const initial = isHorizontal ? resizedItem.initialWidth : resizedItem.initialHeight;
-				const newSize = Math.max(minSize, initial + rawDelta);
-				newLayout = setLayoutItemProps(newLayout, resizedItem.key, isHorizontal ? { width: newSize } : { height: newSize });
+			for (const update of planResize(resizedItem, direction, delta)) {
+				newLayout = setLayoutItemProps(newLayout, update.key, update.props);
 			}
-
-			if (!nextIsAbsorber && resizedItem.nextSiblingKey) {
-				const initial = isHorizontal ? resizedItem.nextSiblingInitialWidth : resizedItem.nextSiblingInitialHeight;
-				const newSize = Math.max(minSize, initial - rawDelta);
-				newLayout = setLayoutItemProps(newLayout, resizedItem.nextSiblingKey, isHorizontal ? { width: newSize } : { height: newSize });
-			}
-
 			props.onResize({ layout: newLayout });
 			eventEmitter.current.emit('resize');
 		};
@@ -165,10 +110,10 @@ function ResizableLayout(props: Props) {
 		const resizedItemMaxSize = resizedItem && item.key === resizedItem.key ? resizedItem.maxSize : null;
 		const visible = itemVisible(item, props.moveMode);
 		const itemContainerProps = {
-			key: item.key, item, parent, sizes, resizedItemMaxSize, onResizeStart, onResizeStop, onResize, isLastChild, visible,
+			key: item.key, item, parent, sizes, resizedItemMaxSize, onResizeStart, onResizeStop, onResize, isLastChild, visible, edges,
 		};
 		if (!item.children) {
-			const size = itemSize(item, parent, sizes, false);
+			const size = itemSize(item, parent, sizes, false, edges);
 
 			const comp = props.renderItem(item.key, {
 				item: item,
@@ -182,11 +127,12 @@ function ResizableLayout(props: Props) {
 				{wrapper}
 			</LayoutItemContainer>;
 		} else {
+			const lastVisibleIdx = lastVisibleChildIndex(item, props.moveMode);
 			const childrenComponents = [];
 			for (let i = 0; i < item.children.length; i++) {
 				const child = item.children[i];
 				childrenComponents.push(
-					renderLayoutItem(child, item, sizes, isVisible && itemVisible(child, props.moveMode), i === item.children.length - 1, onlyMoveControls),
+					renderLayoutItem(child, item, sizes, isVisible && itemVisible(child, props.moveMode), i === lastVisibleIdx, onlyMoveControls, edges),
 				);
 			}
 

@@ -66,4 +66,26 @@ describe('handleConflictAction', () => {
 		expect(notes.length).toBe(1);
 	});
 
+	test('editor reload event is emitted for note conflict', async () => {
+		const local = await Note.save({ title: 'Test', body: 'body' });
+		const remoteContent = { ...local, title: 'TestRemote' };
+
+		const dispatch = jest.fn();
+
+		await handleConflictAction(
+			SyncAction.NoteConflict,
+			Note,
+			true,
+			remoteContent,
+			local,
+			1,
+			false,
+			dispatch,
+		);
+
+		expect(dispatch).toHaveBeenCalledWith({
+			type: 'EDITOR_NOTE_NEEDS_RELOAD',
+			noteId: local.id,
+		});
+	});
 });

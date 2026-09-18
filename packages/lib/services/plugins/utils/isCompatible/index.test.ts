@@ -1,7 +1,7 @@
 import { AppType } from '../../../../models/Setting';
 import isCompatible from '../isCompatible';
 
-describe('isCompatible', () => {
+describe('isCompatible/index', () => {
 	test.each([
 		// Should support the case where no platform is provided
 		{

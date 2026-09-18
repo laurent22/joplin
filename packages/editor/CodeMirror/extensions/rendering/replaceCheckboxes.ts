@@ -38,7 +38,12 @@ class CheckboxWidget extends WidgetType {
 		container.appendChild(checkbox);
 
 		checkbox.oninput = () => {
-			toggleCheckboxAt(view.posAtDOM(container))(view);
+			const checkboxPosition = view.posAtDOM(container);
+			view.dispatch({
+				selection: { anchor: view.state.doc.lineAt(checkboxPosition).from },
+				userEvent: 'select.checkbox',
+			});
+			toggleCheckboxAt(checkboxPosition)(view);
 		};
 
 		this.applyContainerClasses(container);
@@ -110,6 +115,7 @@ const replaceCheckboxes = [
 				const rangeFrom = listMarker ? listMarker.from : node.from;
 				const rangeTo = node.to;
 
+				if (selection.empty && selection.from === rangeFrom) return false;
 				const rangeContains = (point: number) => point >= rangeFrom && point <= rangeTo;
 				const selectionContains = (point: number) => point >= selection.from && point <= selection.to;
 

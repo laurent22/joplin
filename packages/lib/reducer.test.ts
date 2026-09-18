@@ -4,7 +4,9 @@ import { BaseItemEntity, FolderEntity, NoteEntity, TagEntity } from './services/
 import Note from './models/Note';
 import BaseModel from './BaseModel';
 import Folder from './models/Folder';
-// const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
+import ItemChange from './models/ItemChange';
+import getConflictFolderId from './models/utils/getConflictFolderId';
+import { ALL_NOTES_FILTER_ID } from './reserved-ids';
 
 function initTestState(folders: FolderEntity[], selectedFolderIndex: number, notes: NoteEntity[], selectedNoteIndexes: number[], tags: TagEntity[] = null, selectedTagIndex: number = null) {
 	let state = defaultState;
@@ -983,5 +985,161 @@ describe('reducer', () => {
 		// background window should still be on notes[2], not have jumped to whatever
 		// the primary window selected next
 		expect(state.backgroundWindows[secondaryWindowId].selectedNoteIds).toEqual([notes[2].id]);
+	});
+
+	it.each([
+		['sync moving an unselected note should not change the selection', 1, 0],
+		['sync moving the selected note should select the next note', 0, 1],
+	])('%s', async (_, movedNoteIndex, expectedSelectedNoteIndex) => {
+		const folders = await createNTestFolders(2);
+		const notes = await createNTestNotes(3, folders[0]);
+
+		// Select note[0]
+		let state = initTestState(folders, 0, notes, [0]);
+		state = goToNote(notes, [0], state);
+
+		const movedNote = {
+			...notes[movedNoteIndex],
+			parent_id: folders[1].id,
+		};
+
+		state = reducer(state, {
+			type: 'NOTE_UPDATE_ONE',
+			note: movedNote,
+			changeSource: ItemChange.SOURCE_SYNC,
+		});
+
+		// Moved note should either remain selected or change
+		expect(state.selectedNoteIds).toEqual([notes[expectedSelectedNoteIndex].id]);
+
+		// Moved note should no longer be visible
+		expect(state.notes.every(n => n.id !== notes[movedNoteIndex].id)).toBe(true);
+	});
+
+	test('conflict notes should only be added to the Conflicts note list', async () => {
+		const folders = await createNTestFolders(1);
+		const notes = await createNTestNotes(1, folders[0]);
+		const conflictNote = {
+			...notes[0],
+			id: '12345678901234567890123456789012',
+			is_conflict: 1,
+		};
+
+		let folderState = initTestState(folders, 0, notes, [0]);
+		folderState = reducer(folderState, { type: 'NOTE_UPDATE_ONE', note: conflictNote });
+		expect(folderState.notes.map(note => note.id)).toEqual([notes[0].id]);
+
+		let allNotesState = initTestState(folders, null, notes, [0]);
+		allNotesState = reducer(allNotesState, { type: 'SMART_FILTER_SELECT', id: ALL_NOTES_FILTER_ID });
+		allNotesState = reducer(allNotesState, { type: 'NOTE_UPDATE_ONE', note: conflictNote });
+		expect(allNotesState.notes.map(note => note.id)).toEqual([notes[0].id]);
+
+		let conflictState = initTestState(folders, null, [], []);
+		conflictState = reducer(conflictState, { type: 'FOLDER_SELECT', id: getConflictFolderId() });
+		conflictState = reducer(conflictState, { type: 'NOTE_UPDATE_ONE', note: conflictNote });
+		expect(conflictState.notes.map(note => note.id)).toEqual([conflictNote.id]);
+	});
+
+	test('sync moving the selected note in a background window should not change its selection', async () => {
+		const folders = await createNTestFolders(2);
+		const notes = await createNTestNotes(3, folders[0]);
+
+		// Primary window selects note[0]
+		let state = initTestState(folders, 0, notes, [0]);
+
+		// Background window selects note[2]
+		const secondaryWindowId = 'window1';
+		state = createBackgroundWindow(state, secondaryWindowId, notes[2], notes);
+
+		expect(state.backgroundWindows[secondaryWindowId].selectedNoteIds).toEqual([notes[2].id]);
+
+		const movedNote = {
+			...notes[2],
+			parent_id: folders[1].id,
+		};
+
+		state = reducer(state, {
+			type: 'NOTE_UPDATE_ONE',
+			note: movedNote,
+			changeSource: ItemChange.SOURCE_SYNC,
+		});
+
+		// The moved note should no longer be in the background window's list
+		expect(
+			state.backgroundWindows[secondaryWindowId].notes.every(n => n.id !== notes[2].id),
+		).toBe(true);
+
+		// The background window should continue rendering the moved note
+		expect(state.backgroundWindows[secondaryWindowId].selectedNoteIds).toEqual([notes[2].id]);
+
+		// The primary window should be unaffected
+		expect(state.selectedNoteIds).toEqual([notes[0].id]);
+	});
+
+	it.each([
+		['without a noteId', undefined, true],
+		['for the selected note', 0, true],
+		['for a different note', 1, false],
+	])('should request an editor reload %s', async (_, noteIndex, shouldReload) => {
+		jest.useFakeTimers();
+		const folders = await createNTestFolders(1);
+		const notes = await createNTestNotes(2, folders[0]);
+
+		let state = initTestState(folders, 0, notes, [0]);
+
+		const previousReloadTime = state.editorNoteReloadTimeRequest;
+		const previousWindowReloadTime = state.windowEditorNoteReloadTimeRequest;
+		const now = Date.now();
+
+		state = reducer(state, {
+			type: 'EDITOR_NOTE_NEEDS_RELOAD',
+			noteId: noteIndex === undefined ? undefined : notes[noteIndex].id,
+		});
+
+		expect(state.editorNoteReloadTimeRequest).toBe(
+			shouldReload ? now : previousReloadTime,
+		);
+		expect(state.windowEditorNoteReloadTimeRequest).toBe(
+			noteIndex === 0 ? now : previousWindowReloadTime,
+		);
+
+		jest.useRealTimers();
+	});
+
+	it('should request reload only in windows displaying the specified note', async () => {
+		jest.useFakeTimers();
+		const folders = await createNTestFolders(1);
+		const notes = await createNTestNotes(2, folders[0]);
+		let state = initTestState(folders, 0, notes, [0]);
+		state = createBackgroundWindow(state, 'secondary', notes[1], notes);
+		const previousPrimaryReloadTime = state.windowEditorNoteReloadTimeRequest;
+		const now = Date.now();
+
+		state = reducer(state, {
+			type: 'EDITOR_NOTE_NEEDS_RELOAD',
+			noteId: notes[1].id,
+		});
+
+		expect(state.windowEditorNoteReloadTimeRequest).toBe(previousPrimaryReloadTime);
+		expect(state.backgroundWindows.secondary.windowEditorNoteReloadTimeRequest).toBe(now);
+		jest.useRealTimers();
+	});
+
+	it('should generate unique reload tokens within the same millisecond', async () => {
+		jest.useFakeTimers();
+		const folders = await createNTestFolders(1);
+		const notes = await createNTestNotes(1, folders[0]);
+		let state = initTestState(folders, 0, notes, [0]);
+		const now = Date.now();
+
+		state = reducer(state, { type: 'EDITOR_NOTE_NEEDS_RELOAD', noteId: notes[0].id });
+		expect(state.editorNoteReloadTimeRequest).toBe(now);
+		expect(state.windowEditorNoteReloadTimeRequest).toBe(now);
+
+		state = reducer(state, { type: 'EDITOR_NOTE_NEEDS_RELOAD', noteId: notes[0].id });
+		expect(state.editorNoteReloadTimeRequest).toBe(now + 1);
+		expect(state.windowEditorNoteReloadTimeRequest).toBe(now + 1);
+
+		jest.useRealTimers();
 	});
 });

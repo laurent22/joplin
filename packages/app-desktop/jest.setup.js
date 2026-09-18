@@ -27,7 +27,9 @@ jest.mock('@electron/remote', () => {
 const { afterEachCleanUp, afterAllCleanUp } = require('@joplin/lib/testing/test-utils.js');
 const React = require('react');
 
-shimInit({ nodeSqlite: sqlite3, React });
+const sqliteVec = require('sqlite-vec');
+
+shimInit({ nodeSqlite: sqlite3, React, sqliteVec });
 
 afterEach(async () => {
 	await afterEachCleanUp();

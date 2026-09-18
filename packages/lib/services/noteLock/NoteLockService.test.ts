@@ -1,6 +1,6 @@
 import Setting from '../../models/Setting';
 import { afterAllCleanUp, encryptionService, fileContentEqual, setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../testing/test-utils';
-import EncryptionService from '../e2ee/EncryptionService';
+import EncryptionService, { EncryptionMethod } from '../e2ee/EncryptionService';
 import { localSyncInfo, saveLocalSyncInfo } from '../synchronizer/syncInfoUtils';
 import NoteLockKey from './NoteLockKey';
 import NoteLockSession from './NoteLockSession';
@@ -59,6 +59,46 @@ describe('NoteLockService', () => {
 	it('should refuse to run a held operation while the session is locked', async () => {
 		await NoteLockKey.instance().create('123456');
 		await expect(NoteLockService.withDecryptedKey(async () => {})).rejects.toThrow('Note lock session is locked');
+	});
+
+	it('should change the note lock password without rotating the key', async () => {
+		const noteLockKey = NoteLockKey.instance();
+		const session = NoteLockSession.instance();
+		const service = NoteLockService.instance();
+		const firstKey = await noteLockKey.create('123456');
+		await session.unlock('123456');
+		const cipherText = await service.encryptString('some secret');
+
+		const changedKey = await noteLockKey.changePassword('123456', '654321');
+		expect(changedKey.id).toBe(firstKey.id);
+		expect(changedKey.content).not.toBe(firstKey.content);
+		// Same key id and decrypted content, so an already-unlocked session keeps working.
+		expect(session.isUnlocked()).toBe(true);
+		expect(await service.decryptString(cipherText)).toBe('some secret');
+
+		session.lock();
+		await expect(session.unlock('123456')).rejects.toThrow();
+		await session.unlock('654321');
+		expect(await service.decryptString(cipherText)).toBe('some secret');
+	});
+
+	it('should upgrade the note lock key without rotating it', async () => {
+		const noteLockKey = NoteLockKey.instance();
+		const session = NoteLockSession.instance();
+		const service = NoteLockService.instance();
+		const oldKey = noteLockKey.save(await EncryptionService.instance().generateMasterKey('123456', {
+			encryptionMethod: EncryptionMethod.SJCL2,
+		}));
+		await session.unlock('123456');
+		const cipherText = await service.encryptString('some secret');
+
+		expect(noteLockKey.needsUpgrade()).toBe(true);
+		const upgradedKey = await noteLockKey.upgrade('123456');
+
+		expect(upgradedKey.id).toBe(oldKey.id);
+		expect(upgradedKey.content).not.toBe(oldKey.content);
+		expect(noteLockKey.needsUpgrade()).toBe(false);
+		expect(await service.decryptString(cipherText)).toBe('some secret');
 	});
 
 	it('should keep a held operation working after the session locks, refuse the session-backed service, and revoke the scoped service afterwards', async () => {
@@ -153,5 +193,24 @@ describe('NoteLockService', () => {
 		})).rejects.toThrow('boom');
 
 		await expect(escaped.decryptString('does not matter')).rejects.toThrow('Note lock operation key is no longer available');
+	});
+
+	it('should not overwrite a key that arrives through sync while create is generating', async () => {
+		const encryptionServiceInstance = EncryptionService.instance();
+		const realGenerate = encryptionServiceInstance.generateMasterKey.bind(encryptionServiceInstance);
+		const spy = jest.spyOn(encryptionServiceInstance, 'generateMasterKey').mockImplementation(async (password: string) => {
+			const generated = await realGenerate(password);
+			const syncInfo = localSyncInfo();
+			syncInfo.noteLockKey = { id: 'synced-key' };
+			saveLocalSyncInfo(syncInfo);
+			return generated;
+		});
+
+		try {
+			await expect(NoteLockKey.instance().create('123456')).rejects.toThrow('Note lock key already exists');
+			expect(NoteLockKey.instance().load().id).toBe('synced-key');
+		} finally {
+			spy.mockRestore();
+		}
 	});
 });

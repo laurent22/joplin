@@ -32,6 +32,7 @@ router.post('api/shares', async (_path: SubPath, ctx: AppContext) => {
 	const shareInput: ShareApiInput = shareModel.fromApiInput(fields) as ShareApiInput;
 	if (fields.folder_id) shareInput.folder_id = fields.folder_id;
 	if (fields.note_id) shareInput.note_id = fields.note_id;
+	if ('type' in fields) shareInput.type = Number(fields.type) as ShareType;
 	const masterKeyId = fields.master_key_id || '';
 
 	// - The API end point should only expose two ways of sharing:
@@ -40,6 +41,10 @@ router.post('api/shares', async (_path: SubPath, ctx: AppContext) => {
 	// - Additionally, the App method is available, but not exposed via the API.
 
 	if (shareInput.folder_id) {
+		if (shareInput.type === ShareType.PublishedFolder) {
+			return ctx.joplin.models.share().sharePublishedFolder(ctx.joplin.owner, shareInput.folder_id);
+		}
+
 		return ctx.joplin.models.share().shareFolder(ctx.joplin.owner, shareInput.folder_id, masterKeyId);
 	} else if (shareInput.note_id) {
 		return ctx.joplin.models.share().shareNote(ctx.joplin.owner, shareInput.note_id, masterKeyId, fields.recursive === 1);
@@ -105,7 +110,7 @@ router.get('api/shares/:id', async (path: SubPath, ctx: AppContext) => {
 	const shareModel = ctx.joplin.models.share();
 	const share = await shareModel.load(path.id);
 
-	if (share && share.type === ShareType.Note) {
+	if (share && (share.type === ShareType.Note || share.type === ShareType.PublishedFolder)) {
 		// No authentication is necessary - anyone who knows the share ID is allowed
 		// to access the file. It is essentially public.
 		return shareModel.toApiOutput(share);

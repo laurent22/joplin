@@ -13,6 +13,28 @@ describe('callbackUrlUtils', () => {
 		expect(callbackUrlUtils.isCallbackUrl('joplin://x-callback-url/invalidCommand?a=b')).toBe(false);
 	});
 
+	it('should identify getCurrentNote and createNote callback urls', () => {
+		expect(callbackUrlUtils.isCallbackUrl('joplin://x-callback-url/getCurrentNote?x-success=hook://a')).toBe(true);
+		expect(callbackUrlUtils.isCallbackUrl('joplin://x-callback-url/createNote?title=Hello&x-success=hook://a')).toBe(true);
+	});
+
+	// The trailing "?" pins the command name so a prefix can't bypass validation. See 69826610a.
+	it('should reject callback urls whose command name is only a prefix match', () => {
+		expect(callbackUrlUtils.isCallbackUrl('joplin://x-callback-url/getCurrentNoteEvil?x-success=hook://a')).toBe(false);
+		expect(callbackUrlUtils.isCallbackUrl('joplin://x-callback-url/createNoteEvil?title=x')).toBe(false);
+		expect(callbackUrlUtils.isCallbackUrl('joplin://x-callback-url/openNoteEvil?id=x')).toBe(false);
+	});
+
+	it('should parse getCurrentNote and createNote callback urls', () => {
+		const getCurrent = callbackUrlUtils.parseCallbackUrl('joplin://x-callback-url/getCurrentNote?x-success=hook://a');
+		expect(getCurrent.command).toBe(callbackUrlUtils.CallbackUrlCommand.GetCurrentNote);
+		expect(getCurrent.params).toStrictEqual({ 'x-success': 'hook://a' });
+
+		const create = callbackUrlUtils.parseCallbackUrl('joplin://x-callback-url/createNote?title=Hello&x-success=hook://a');
+		expect(create.command).toBe(callbackUrlUtils.CallbackUrlCommand.CreateNote);
+		expect(create.params).toStrictEqual({ title: 'Hello', 'x-success': 'hook://a' });
+	});
+
 	it('should build valid note callback urls', () => {
 		const noteUrl = callbackUrlUtils.getNoteCallbackUrl('123456');
 		expect(callbackUrlUtils.isCallbackUrl(noteUrl)).toBe(true);

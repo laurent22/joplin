@@ -5,7 +5,7 @@ import shim from './shim';
 import MigrationHandler from './services/synchronizer/MigrationHandler';
 import eventManager, { EventName } from './eventManager';
 import { _ } from './locale';
-import BaseItem from './models/BaseItem';
+import BaseItem, { RemoteItemMetadata } from './models/BaseItem';
 import Folder from './models/Folder';
 import Note from './models/Note';
 import Resource from './models/Resource';
@@ -367,12 +367,7 @@ export default class Synchronizer {
 		const password = getMasterPassword(false);
 		if (!password) return localInfo;
 
-		try {
-			localInfo.ppk = await generateKeyPair(this.encryptionService(), password);
-		} catch (error) {
-			// TODO: Remove after RSA encryption is supported on all platforms.
-			logger.error('Failed to generate RSA key pair', error);
-		}
+		localInfo.ppk = await generateKeyPair(this.encryptionService(), password);
 		return localInfo;
 	}
 
@@ -623,7 +618,7 @@ export default class Synchronizer {
 				while (true) {
 					if (this.cancelling()) break;
 
-					const result = await BaseItem.itemsThatNeedSync(syncTargetId);
+					const result = await BaseItem.itemsThatNeedSync(syncTargetId, 100, () => this.cancelling());
 					const locals = result.items;
 
 					await itemUploader.preUploadItems(result.items.filter(it => result.neverSyncedItemIds.includes(it.id)));
@@ -853,12 +848,14 @@ export default class Synchronizer {
 								// uploading. So we can leave it unspecified and then on the next run of the delta step, it will
 								// get set there
 
-								await ItemClass.saveSyncTime(syncTargetId, local, local.updated_time);
+								// A clean upload leaves no pending conflict, so the link is cleared too
+								const uploadedBase = local.type_ === BaseModel.TYPE_NOTE ? {
+									base_body: (local as NoteEntity).body ?? '',
+									base_title: (local as NoteEntity).title ?? '',
+									base_conflict_note_id: '',
+								} : null;
 
-								if (local.type_ === BaseModel.TYPE_NOTE) {
-									const note = local as NoteEntity;
-									await Note.saveSyncBaseContent(syncTargetId, note.id, note.body, note.title);
-								}
+								await ItemClass.saveSyncTime(syncTargetId, local, local.updated_time, 0, uploadedBase);
 							}
 						}
 
@@ -903,6 +900,7 @@ export default class Synchronizer {
 				while (true) {
 					if (this.cancelling() || hasCancelled) break;
 
+					let localItemMetadata: Map<string, RemoteItemMetadata> = null;
 					const listResult: PaginatedList = await this.apiCall('delta', '', {
 						context: context,
 
@@ -917,7 +915,8 @@ export default class Synchronizer {
 
 						// This is only used by the basic delta
 						allItemMetadataHandler: async () => {
-							return BaseItem.remoteItemMetadata(syncTargetId);
+							localItemMetadata = await BaseItem.remoteItemMetadata(syncTargetId);
+							return localItemMetadata;
 						},
 
 						wipeOutFailSafe: Setting.value('sync.wipeOutFailSafe'),
@@ -1017,14 +1016,18 @@ export default class Synchronizer {
 										// Nothing to do, and no need to fetch the content
 									} else {
 										content = await loadContent();
-										if (content && content.updated_time > local.updated_time) {
+										// Load the latest updated_time, otherwise a change made during a long delta step could overwrite the local version without making a conflict
+										const latestLocalState = await ItemClass.load(remoteId, { fields: ['updated_time'] });
+										const localUpdatedTime = latestLocalState ? latestLocalState.updated_time : local.updated_time;
+										if (content && content.updated_time > localUpdatedTime) {
 											action = SyncAction.UpdateLocal;
 											reason = 'remote is more recent than local';
 										} else if (enableEnhancedBasicDeltaAlgorithm()) {
 											// When the enhanced basic delta algorithm is first used, all items are rescanned and we need to persist the remoteItemUpdatedTime
 											// to set up the initial synced state. This also catches the case if content.updated_time < local.updated_time due to manual manipulation
 											// of the md files, to prevent these items being continually fetched on every sync
-											await ItemClass.saveSyncTime(syncTargetId, local, local.updated_time, remote.updated_time);
+											const syncTime = localItemMetadata.get(local.id)?.sync_time ?? 0;
+											await ItemClass.saveSyncTime(syncTargetId, local, syncTime, remote.updated_time);
 										}
 									}
 								}
@@ -1061,10 +1064,20 @@ export default class Synchronizer {
 							if (!content.user_updated_time) content.user_updated_time = content.updated_time;
 							if (!content.user_created_time) content.user_created_time = content.created_time;
 
+							// The downloaded version becomes the base, so both sides share an ancestor. An
+							// encrypted note carries no title or body, so the base is left empty until the
+							// decryption worker records it
+							const isNote = content.type_ === BaseModel.TYPE_NOTE;
+							const baseVersion = isNote ? {
+								base_body: (content as NoteEntity).body ?? '',
+								base_title: (content as NoteEntity).title ?? '',
+								base_conflict_note_id: '',
+							} : null;
+
 							// eslint-disable-next-line @typescript-eslint/no-explicit-any -- BaseItem.save options bag with route-specific keys (isNew, oldItem) added below
 							const options: any = {
 								autoTimestamp: false,
-								nextQueries: BaseItem.updateSyncTimeQueries(syncTargetId, content, BaseItem.remoteItemSyncTime(content.updated_time), remote.updated_time),
+								nextQueries: BaseItem.updateSyncTimeQueries(syncTargetId, content, BaseItem.remoteItemSyncTime(content.updated_time), baseVersion, remote.updated_time),
 								changeSource: ItemChange.SOURCE_SYNC,
 							};
 							if (action === SyncAction.CreateLocal) options.isNew = true;
@@ -1104,6 +1117,14 @@ export default class Synchronizer {
 								// Ensure that the item can be found if another create/update event is received for the same item:
 								if (!local) {
 									locals.push(saved);
+								}
+
+								if (action === SyncAction.UpdateLocal && content.type_ === BaseModel.TYPE_NOTE && content.id) {
+									// Force the viewer / editor to reload on mobile, if a note is updated and it is currently open
+									this.dispatch({
+										type: 'EDITOR_NOTE_NEEDS_RELOAD',
+										noteId: content.id,
+									});
 								}
 							}
 
@@ -1240,6 +1261,17 @@ export default class Synchronizer {
 			}
 		}
 
+		try {
+			// Update published/unpublished status after the main sync to avoid conflicts.
+			// See https://github.com/laurent22/joplin/issues/16167.
+			if (!hasCaughtError && !this.cancelling()) {
+				await Note.updatePublishedNotes(this.shareService_ ? this.shareService_.shares : []);
+			}
+		} catch (error) {
+			logger.error('Failed to save note publication status', error);
+			this.progressReport_.errors.push(error);
+		}
+
 		if (syncLock) {
 			this.lockHandler().stopAutoLockRefresh(syncLock);
 			await this.lockHandler().releaseLock(LockType.Sync, this.lockClientType(), this.clientId_);
@@ -1283,7 +1315,7 @@ export default class Synchronizer {
 		// that the user will close or minimise the app when there are un-synced changes, because the sync is reported as completed.
 		// IMPORTANT: This must be the very last step in the sync, to avoid any window to allow an un-synced change to get missed
 		if (!hasErrors && !hasCaughtError && !cancelledBeforeClearedState && !this.cancelling()) {
-			const result = await BaseItem.itemsThatNeedSync(syncTargetId);
+			const result = await BaseItem.itemsThatNeedSync(syncTargetId, 100, () => this.cancelling());
 
 			if (result.items.length > 0) {
 				logger.info('There are more outgoing changes to sync, schedule the sync again');

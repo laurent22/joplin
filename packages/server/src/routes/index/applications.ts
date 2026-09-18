@@ -1,7 +1,7 @@
 
 import { SubPath, redirect } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
-import { RouteType } from '../../utils/types';
+import { HttpMethod, RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import defaultView from '../../utils/defaultView';
 import { formParse, userIp } from '../../utils/requestUtils';
@@ -16,7 +16,10 @@ import { ErrorForbidden } from '../../utils/errors';
 
 const router: Router = new Router(RouteType.Web);
 
-router.publicSchemas.push('applications/:id/confirm');
+// Only the GET consent page is public. The authorising POST must keep the CSRF
+// check, else a cross-site request could authorise an application for a
+// logged-in user.
+router.publicSchemasByMethod[HttpMethod.GET] = ['applications/:id/confirm'];
 
 function makeView(error: Error = null, applicationAuthId: string, csrfTag: string) {
 	const view = defaultView('applications/confirm', 'Confirm application authorisation');

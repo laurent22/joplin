@@ -20,6 +20,7 @@ import { LoadOptions, SaveOptions } from './utils/types';
 import ActionLogger from '../utils/ActionLogger';
 import { getDisplayParentId, getTrashFolderId } from '../services/trash';
 import { getCollator } from './utils/getCollator';
+import isItemId from './utils/isItemId';
 const urlUtils = require('../urlUtils.js');
 import { hasWhiteboardFence, parseWhiteboard } from '../services/whiteboard/parse';
 import { resolveFileRef, RefKind } from '../services/whiteboard/resolveRef';
@@ -28,7 +29,7 @@ import { MarkupToHtml } from '@joplin/renderer';
 import { ALL_NOTES_FILTER_ID } from '../reserved-ids';
 import NoteLockNote from '../services/noteLock/NoteLockNote';
 import isNoteLockEnabled from '../services/noteLock/isNoteLockEnabled';
-import isItemId from './utils/isItemId';
+import { ShareType, StateShare } from '../services/share/reducer';
 
 export interface PreviewsOrder {
 	by: string;
@@ -53,6 +54,12 @@ export interface PreviewsOptions {
 	itemTypes?: string[];
 	limit?: number;
 	titlePattern?: string;
+}
+
+interface ByTitleAndParentOptions {
+	title: string;
+	whereParentIn: string[];
+	fields: string[];
 }
 
 export default class Note extends BaseItem {
@@ -593,6 +600,38 @@ export default class Note extends BaseItem {
 		return this.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0');
 	}
 
+	public static async updatePublishedNotes(activeShares: StateShare[]) {
+		const directlyPublishedNoteIds = activeShares
+			.filter(share => share.type === ShareType.Note && !!share.note_id)
+			.map(share => share.note_id);
+
+		const loadUnpublishedWithDirectShare = async (): Promise<NoteEntity[]> => {
+			if (directlyPublishedNoteIds.length === 0) return [];
+
+			return await this.db().selectAll(`
+				SELECT id, parent_id, is_shared
+				FROM notes
+				WHERE is_shared = 0 AND id IN (${this.escapeIdsForSql(directlyPublishedNoteIds)})
+			`);
+		};
+		const unpublishedNotesInPublishedFolders: NoteEntity[] = await this.db().selectAll(`
+			SELECT notes.id, notes.parent_id, notes.is_shared
+			FROM notes
+			JOIN folders ON notes.parent_id = folders.id
+			WHERE notes.is_shared = 0 AND folders.is_shared = 1
+				AND notes.is_conflict = 0
+				AND notes.deleted_time = 0
+		`);
+
+		const notesToPublish = unpublishedNotesInPublishedFolders.concat(await loadUnpublishedWithDirectShare());
+		for (const note of notesToPublish) {
+			await this.updateShareStatus(
+				{ ...note, type_: BaseModel.TYPE_NOTE },
+				true,
+			);
+		}
+	}
+
 	public static async updateGeolocation(noteId: string): Promise<NoteEntity | null> {
 		if (!Setting.value('trackLocation')) return null;
 		if (!Note.updateGeolocationEnabled_) return null;
@@ -803,7 +842,7 @@ export default class Note extends BaseItem {
 
 	public static async load(id: string, options: LoadOptions = null): Promise<NoteEntity> {
 		const note = await super.load(id, options);
-		if (isNoteLockEnabled() && !!options?.useNoteLock) return NoteLockNote.decryptBody(note);
+		if (isNoteLockEnabled() && !!options?.useNoteLock) return NoteLockNote.decryptBody(note, options.noteLockKey);
 		return note;
 	}
 
@@ -848,9 +887,15 @@ export default class Note extends BaseItem {
 		// we should set beforeNoteJson to the current contents in the database, or the last value which was stored
 		// in the item_changes table
 		const oldNote = !isNew && o.id ? await Note.load(o.id) : null;
+		let plainTextBodyToReturn: string = null;
 		if (isNoteLockEnabled() && !!options?.useNoteLock) {
-			await NoteLockNote.prepareForSave(o, this.linkedItemIds, this.serializeExtractedResourceIds, isNew);
+			// Callers use the returned note to update UI state, so it must carry the plaintext
+			// body even though the encrypted one is what gets persisted.
+			if (NoteLockNote.isLocked(o) && 'body' in o) plainTextBodyToReturn = o.body;
+			await NoteLockNote.prepareForSave(o, this.linkedItemIds, this.serializeExtractedResourceIds, isNew, options.noteLockKey);
 		}
+		// Cleared for ungated saves too, in case a gated load is fed to an ungated save.
+		delete (o as Record<string, unknown>).isDecrypted;
 
 		syncDebugLog.info('Save Note: P:', oldNote);
 
@@ -859,7 +904,10 @@ export default class Note extends BaseItem {
 		// has just been downloaded from the sync target and save is invoked when the note has not yet been decrypted
 		if (oldNote && !oldNote.encryption_applied) {
 			const changedSinceCollection = this.revisionService().changedSinceCollection(o.id);
-			if (isNoteLockEnabled() && NoteLockNote.isLocked(o)) {
+			// If the note is transitioning from is_locked 0 > 1, clear the beforeNoteJson to avoid creating
+			// an unencrypted revision. After the transition has taken place, it is fine to populate it,
+			// because the oldNote is an ungated full load which will include the data encrypted when locked
+			if (isNoteLockEnabled() && NoteLockNote.isLocked(o) && !NoteLockNote.isLocked(oldNote)) {
 				beforeNoteJson = null;
 			} else if (changedSinceCollection) {
 				beforeNoteJson = await ItemChange.oldNoteContent(o.id);
@@ -915,6 +963,7 @@ export default class Note extends BaseItem {
 				ignoreProvisionalFlag: ignoreProvisionalFlag,
 				changedFields: changedFields,
 				changeId: options?.changeId,
+				changeSource,
 				...options?.dispatchOptions,
 			});
 		}
@@ -924,6 +973,15 @@ export default class Note extends BaseItem {
 				type: 'EVENT_NOTE_ALARM_FIELD_CHANGE',
 				id: savedNote.id,
 			});
+		}
+
+		if (isNoteLockEnabled() && !!options?.useNoteLock) {
+			const gatedResult = {
+				...savedNote,
+				body: plainTextBodyToReturn !== null ? plainTextBodyToReturn : savedNote.body,
+				isDecrypted: NoteLockNote.isLocked(o),
+			};
+			savedNote = gatedResult;
 		}
 
 		return savedNote;
@@ -1242,15 +1300,6 @@ export default class Note extends BaseItem {
 		return await Note.save(conflictNote, { autoTimestamp: false, changeSource: changeSource });
 	}
 
-	// Records the note content that was just pushed to the server. This becomes the
-	// "base" version - the common ancestor used to detect what changed on each side
-	// when a conflict later occurs. A clean upload also means there's no active
-	// conflict, so we clear any previously recorded conflict note id.
-	public static async saveSyncBaseContent(syncTarget: number, noteId: string, body: string, title: string) {
-		const sql = 'UPDATE sync_items SET base_body = ?, base_title = ?, base_conflict_note_id = ? WHERE item_id = ? AND item_type = ? AND sync_target = ?';
-		await this.db().exec(sql, [body, title, '', noteId, this.TYPE_NOTE, syncTarget]);
-	}
-
 	public static async setBaseConflictNoteId(syncTarget: number, noteId: string, conflictNoteId: string) {
 		const sql = 'UPDATE sync_items SET base_conflict_note_id = ? WHERE item_id = ? AND item_type = ? AND sync_target = ?';
 		await this.db().exec(sql, [conflictNoteId, noteId, this.TYPE_NOTE, syncTarget]);
@@ -1269,5 +1318,19 @@ export default class Note extends BaseItem {
 			const folder = await this.modelSelectOne('SELECT MIN(`order`) as `order` FROM notes WHERE parent_id = ?', [folderId]);
 			return Number(folder.order ?? 0) - this.defaultIntevalBetweenNotes;
 		}
+	}
+
+	public static async allByTitleAndParent({ title, whereParentIn: parentIds, fields }: ByTitleAndParentOptions) {
+		// Avoids invalid SQL when parentIds is empty:
+		if (parentIds.length === 0) return [];
+
+		const sql = `
+			SELECT ${this.db().escapeFieldsToString(fields)}
+			FROM \`${this.tableName()}\`
+			WHERE
+				\`title\` = ?
+				AND \`parent_id\` IN (${this.escapeIdsForSql(parentIds)})
+		`;
+		return this.modelSelectAll<NoteEntity>(sql, [title]);
 	}
 }

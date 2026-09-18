@@ -13,6 +13,7 @@ import versionInfo, { PackageInfo } from '@joplin/lib/versionInfo';
 import { ImportModule } from '@joplin/lib/services/interop/Module';
 import InteropServiceHelper from '../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
 import { isContextMenuItemLocation, MenuItem, MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
 import menuCommandNames from './menuCommandNames';
@@ -531,6 +532,7 @@ function useMenu(props: Props) {
 			// the following menu items will be available for all OS under Tools
 			const toolsItemsAll = [
 				menuItemDic.newWhiteboard,
+				menuItemDic.addNoteToWhiteboard,
 				separator(),
 				{
 					label: _('Note attachments...'),
@@ -753,6 +755,7 @@ function useMenu(props: Props) {
 						menuItemDic.toggleSideBar,
 						shim.isMac() ? noItem : menuItemDic.toggleMenuBar,
 						menuItemDic.toggleNoteList,
+						menuItemDic.toggleAiChat,
 						menuItemDic.toggleVisiblePanes,
 						menuItemDic.toggleEditorPlugin,
 						menuItemDic.toggleEditors,
@@ -867,9 +870,16 @@ function useMenu(props: Props) {
 						menuItemDic.setTags,
 						menuItemDic.showShareNoteDialog,
 						menuItemDic.convertNoteToMarkdown,
+						...(isNoteLockEnabled() ? [
+							separator(),
+							menuItemDic.enableNoteEncryption,
+							menuItemDic.disableNoteEncryption,
+							menuItemDic.lockEncryptedNotes,
+						] : []),
 						separator(),
 						menuItemDic.showNoteProperties,
 						menuItemDic.showNoteContentProperties,
+						menuItemDic.revealInNotebook,
 						separator(),
 						menuItemDic.permanentlyDeleteNote,
 					],

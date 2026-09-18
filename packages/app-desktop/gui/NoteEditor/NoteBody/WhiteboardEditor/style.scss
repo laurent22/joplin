@@ -428,11 +428,7 @@ $hover-bg: rgba(127, 127, 127, 0.12);
 	h2 { font-size: 15px; margin: 4px 0; }
 	h3 { font-size: 14px; margin: 3px 0; }
 	h4, h5, h6 { font-size: 13px; margin: 3px 0; }
-	// Cards are informal — preserve typed newlines and tabs inside a
-	// paragraph rather than collapsing them per standard markdown rules, so
-	// what the user typed is what they see. Paragraph breaks (blank lines
-	// in the source) still work via <p> boundaries.
-	p { margin: 8px 0; white-space: pre-wrap; tab-size: 4; }
+	p { margin: 8px 0; }
 	// Drop the top margin on whatever comes first so a leading heading /
 	// paragraph / list sits flush against the card's own 8px padding
 	// instead of stacking margins on top of it. The renderer wraps its

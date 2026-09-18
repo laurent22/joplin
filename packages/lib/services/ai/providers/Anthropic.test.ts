@@ -9,8 +9,8 @@ describe('ai/providers/Anthropic', () => {
 				role: ChatRole.Assistant,
 				content: 'okay',
 				toolCalls: [
-					{ toolName: 'replaceRange', callId: 'call-1', arguments: { text: 'test', anchor: 'original' } },
-					{ toolName: 'replaceRange', callId: 'call-2', arguments: { text: 'test-2', anchor: 'other' } },
+					{ toolName: 'replaceRange', callId: 'call-1', arguments: { text: 'test', anchor: 'original' }, parseError: null },
+					{ toolName: 'replaceRange', callId: 'call-2', arguments: { text: 'test-2', anchor: 'other' }, parseError: null },
 				],
 			},
 			{
@@ -20,6 +20,7 @@ describe('ai/providers/Anthropic', () => {
 				toolCallId: 'call-1',
 				toolName: 'replaceRange',
 				isError: false,
+				isEdit: true,
 			},
 			{
 				role: ChatRole.Tool,
@@ -28,6 +29,7 @@ describe('ai/providers/Anthropic', () => {
 				toolCallId: 'call-2',
 				toolName: 'replaceRange',
 				isError: true,
+				isEdit: true,
 			},
 			{
 				role: ChatRole.User,

@@ -1,11 +1,12 @@
 import { ImportExportResult, ImportOptions } from './types';
-import importEnex from '../../import-enex';
+import importEnex, { restoreEnexNoteLinks } from '../../import-enex';
 import InteropService_Importer_Base from './InteropService_Importer_Base';
 import Folder from '../../models/Folder';
 import { FolderEntity } from '../database/types';
 import { fileExtension, rtrimSlashes } from '../../path-utils';
 import shim from '../../shim';
 import { filename } from '../../path-utils';
+import Note from '../../models/Note';
 
 const doImportEnex = async (destFolder: FolderEntity, sourcePath: string, options: ImportOptions) => {
 	if (!destFolder) {
@@ -13,27 +14,55 @@ const doImportEnex = async (destFolder: FolderEntity, sourcePath: string, option
 		destFolder = await Folder.save({ title: folderTitle });
 	}
 
-	await importEnex(destFolder.id, sourcePath, options);
+	return await importEnex(destFolder.id, sourcePath, options);
+};
+
+const restoreCrossFolderLinks = async (noteIds: string[], importedFolderIds: string[], importOptions: ImportOptions) => {
+	const readNotes = async function*() {
+		for (const id of noteIds) {
+			const note = await Note.load(id, { fields: ['id', 'body'] });
+			yield { id: note.id, body: note.body };
+		}
+	};
+	const titleToIds = async (title: string) => {
+		const notes = await Note.allByTitleAndParent({ title, whereParentIn: importedFolderIds, fields: ['id'] });
+		return notes.map(n => n.id);
+	};
+
+	await restoreEnexNoteLinks(
+		readNotes(),
+		titleToIds,
+		importOptions,
+	);
 };
 
 export const enexImporterExec = async (result: ImportExportResult, destinationFolder: FolderEntity, sourcePath: string, fileExtensions: string[], options: ImportOptions) => {
 	sourcePath = rtrimSlashes(sourcePath);
 
+
 	if (await shim.fsDriver().isDirectory(sourcePath)) {
+		const notesWithUnresolvedLinks = [];
+		const importedFolderIds = new Set<string>();
+
 		const stats = await shim.fsDriver().readDirStats(sourcePath);
 		for (const stat of stats) {
 			const fullPath = `${sourcePath}/${stat.path}`;
 			if (!fileExtensions.includes(fileExtension(fullPath).toLowerCase())) continue;
 
 			try {
-				await doImportEnex(null, fullPath, options);
+				const importResult = await doImportEnex(null, fullPath, options);
+				notesWithUnresolvedLinks.push(...importResult.noteIdsWithUnresolvedLinks);
+				importedFolderIds.add(importResult.parentFolderId);
 			} catch (error) {
 				result.warnings.push(`When importing "${fullPath}": ${error.message}`);
 			}
 		}
+
+		await restoreCrossFolderLinks(notesWithUnresolvedLinks, [...importedFolderIds], options);
 	} else {
 		await doImportEnex(destinationFolder, sourcePath, options);
 	}
+
 
 	return result;
 };

@@ -20,7 +20,7 @@ function loadFile(filePath: string) {
 	});
 }
 
-describe('pdfData', () => {
+describe('pdfSource', () => {
 
 	test('should have correct page count', async () => {
 		const file = await loadFile(pdfFilePath1);

@@ -51,6 +51,7 @@ user_updated_time: 2020-11-11T18:44:14.534Z
 encryption_cipher_text:
 encryption_applied: 0
 parent_id: ${folder.parent_id || ''}
+deleted_time: 0
 is_shared: 0
 share_id: ${folder.share_id || ''}
 user_data: 

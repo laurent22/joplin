@@ -12,7 +12,7 @@ const moveCursorToEnd = (editor: EditorView) => {
 	selectDocumentEnd(editor.state, editor.dispatch, editor);
 };
 
-describe('ProseMirror/commands', () => {
+describe('commands', () => {
 	test('textBold should toggle bold formatting', () => {
 		const editor = createTestEditor({ html: '<p>Test</p>' });
 

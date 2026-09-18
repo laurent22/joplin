@@ -202,7 +202,7 @@ export const usePasswordChecker = (masterKeys: MasterKeyEntity[], activeMasterKe
 		});
 
 		setMasterPasswordStatus(await getMasterPasswordStatus(masterPassword));
-	}, [masterKeys, masterPassword]);
+	}, [masterKeys, masterPassword, passwords]);
 
 	return { passwordChecks, masterPasswordKeys, masterPasswordStatus };
 };

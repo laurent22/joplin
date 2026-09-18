@@ -4,21 +4,31 @@
 import { EditorView, Decoration, DecorationSet, WidgetType } from '@codemirror/view';
 import { ViewPlugin, ViewUpdate } from '@codemirror/view';
 import { syntaxTree } from '@codemirror/language';
-import { Range, StateEffect } from '@codemirror/state';
+import { EditorSelection, EditorState, Range, StateEffect } from '@codemirror/state';
 import { SyntaxNodeRef } from '@lezer/common';
 import { ReplacementExtension } from '../types';
 import nodeIntersectsSelection from './nodeIntersectsSelection';
+import clampSelectionToDocument from '../../../utils/clampSelectionToDocument';
 
 const updateInlineDecorationsEffect = StateEffect.define();
 
+interface MouseSelectionState {
+	initialSelection: EditorSelection;
+}
+
+interface VisibleRange {
+	from: number;
+	to: number;
+}
+
 export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) => ViewPlugin.fromClass(class {
-	public decorations: DecorationSet;
-	private mouseSelectionInProgress = false;
+	public decorations: DecorationSet = Decoration.set([]);
+	private mouseSelectionBefore_: MouseSelectionState|null = null;
 
 	public constructor(private view: EditorView) {
 		view.dom.addEventListener('mousedown', this.onMouseDown, true);
 		view.dom.ownerDocument.addEventListener('mouseup', this.onMouseUp);
-		this.updateDecorations(view);
+		this.updateDecorations(view.state, view.visibleRanges);
 	}
 
 	public destroy() {
@@ -28,64 +38,37 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 
 	private onMouseDown = (event: MouseEvent) => {
 		if (event.button === 0) {
-			this.mouseSelectionInProgress = true;
+			this.mouseSelectionBefore_ = { initialSelection: this.view.state.selection };
 		}
 	};
 
 	private onMouseUp = () => {
-		if (this.mouseSelectionInProgress) {
-			const selection = this.view.state.selection.main;
-			let coveredTo = selection.from;
-			this.decorations.between(selection.from, selection.to, (from, to, decoration) => {
-				if (!Object.keys(decoration.spec).length && from <= coveredTo) {
-					coveredTo = Math.max(coveredTo, to);
-				}
-			});
-
-			const hasHiddenDecoration = (from: number, to: number) => {
-				let found = false;
-				this.decorations.between(from, to, (_from, _to, decoration) => {
-					if (!Object.keys(decoration.spec).length) {
-						found = true;
-						return false;
-					}
-					return undefined;
+		if (this.mouseSelectionBefore_) {
+			// To prevent unnecessary scroll on iOS, decoration changes need to
+			// happen *after* the gesture ends.
+			requestAnimationFrame(() => {
+				this.mouseSelectionBefore_ = null;
+				this.view.dispatch({
+					effects: updateInlineDecorationsEffect.of(null),
 				});
-				return found;
-			};
-
-			let selectionUpdate = !selection.empty && coveredTo >= selection.to ? { anchor: selection.head } : undefined;
-			const line = this.view.state.doc.lineAt(selection.from);
-			syntaxTree(this.view.state).iterate({
-				from: line.from,
-				to: line.to,
-				enter: node => {
-					if (selectionUpdate || node.name !== 'Link') return;
-					const closingBracket = node.node.getChildren('LinkMark').find(mark => (
-						this.view.state.sliceDoc(mark.from, mark.to) === ']'
-					));
-					if (closingBracket && selection.from >= closingBracket.from && selection.to <= node.to && hasHiddenDecoration(closingBracket.from, node.to)) {
-						selectionUpdate = { anchor: node.to };
-					}
-				},
-			});
-
-			this.mouseSelectionInProgress = false;
-			this.view.dispatch({
-				selection: selectionUpdate,
-				effects: updateInlineDecorationsEffect.of(null),
 			});
 		}
 	};
 
-	private updateDecorations(view: EditorView) {
-		const doc = view.state.doc;
-		const cursorLine = doc.lineAt(view.state.selection.main.anchor);
-		const selection = view.state.selection;
+	private updateDecorations(state: EditorState, visibleRanges: readonly VisibleRange[]) {
+		const doc = state.doc;
+		let selection = state.selection;
+		if (this.mouseSelectionBefore_?.initialSelection) {
+			selection = clampSelectionToDocument(this.mouseSelectionBefore_.initialSelection, doc);
+		}
+		if (this.mouseSelectionBefore_) {
+			state = state.update({ selection }).state;
+		}
+		const cursorLine = doc.lineAt(selection.main.anchor);
 
 		const parentTagCounts = new Map<string, number>();
 		const decorateNode = (node: SyntaxNodeRef) => {
-			const widgetOrDecoration = extensionSpec.createDecoration(node, view.state, parentTagCounts);
+			const widgetOrDecoration = extensionSpec.createDecoration(node, state, parentTagCounts);
 			let decoration;
 			if (widgetOrDecoration instanceof WidgetType) {
 				decoration = Decoration.replace({
@@ -96,7 +79,7 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 			}
 
 			if (decoration) {
-				const range = extensionSpec.getDecorationRange?.(node, view.state) ?? [node.from, node.to];
+				const range = extensionSpec.getDecorationRange?.(node, state, parentTagCounts) ?? [node.from, node.to];
 				const rangeLineFrom = doc.lineAt(range[0]);
 				const rangeLineTo = range.length === 2 ? doc.lineAt(range[1]) : rangeLineFrom;
 
@@ -111,15 +94,15 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 			}
 		};
 
-		const widgets: Range<Decoration>[] = [];
-		for (const { from, to } of view.visibleRanges) {
+		let widgets: Range<Decoration>[] = [];
+		for (const { from, to } of visibleRanges) {
 			parentTagCounts.clear();
-			syntaxTree(view.state).iterate({
+			syntaxTree(state).iterate({
 				from, to,
 				enter: node => {
 					parentTagCounts.set(node.name, (parentTagCounts.get(node.name) ?? 0) + 1);
 
-					const strategy = extensionSpec.getRevealStrategy?.(node, view.state) ?? 'line';
+					const strategy = extensionSpec.getRevealStrategy?.(node, state, parentTagCounts) ?? 'line';
 
 					let isSelected = false;
 					if (typeof strategy === 'boolean') {
@@ -149,6 +132,34 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 			});
 		}
 		this.decorations = Decoration.set(widgets, true);
+
+		if (extensionSpec.mergeNeighbors && widgets.length > 0) {
+			const originalLength = widgets.length;
+			widgets = [];
+
+			const iter = this.decorations.iter();
+			let previous = iter.value;
+			let previousFrom = iter.from;
+			let previousTo = iter.to;
+			widgets.push(iter.value.range(iter.from, iter.to));
+
+			for (iter.next(); iter.value; iter.next()) {
+				let from = iter.from;
+				if (previousTo === iter.from && previous.eq(iter.value)) {
+					from = previousFrom;
+					widgets.pop();
+				}
+				widgets.push(iter.value.range(from, iter.to));
+
+				previous = iter.value;
+				previousTo = iter.to;
+				previousFrom = from;
+			}
+
+			if (widgets.length < originalLength) {
+				this.decorations = Decoration.set(widgets, true);
+			}
+		}
 	}
 
 	public update(update: ViewUpdate) {
@@ -156,12 +167,15 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 			transaction.effects.some(effect => effect.is(updateInlineDecorationsEffect))
 			|| extensionSpec.shouldFullReRender?.(transaction)
 		));
-		if (this.mouseSelectionInProgress && !update.docChanged && (update.selectionSet || forceUpdate)) {
-			return;
+
+		// Document changes move the selection, so the original selection may no longer
+		// be valid:
+		if (update.docChanged) {
+			this.mouseSelectionBefore_ = null;
 		}
 
 		if (update.docChanged || update.viewportChanged || update.selectionSet || forceUpdate) {
-			this.updateDecorations(update.view);
+			this.updateDecorations(update.state, update.view.visibleRanges);
 		}
 	}
 }, {

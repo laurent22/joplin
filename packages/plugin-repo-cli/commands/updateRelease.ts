@@ -9,11 +9,12 @@ const fetch = require('node-fetch').default;
 
 const ghReleaseAssets = require('gh-release-assets');
 
-const apiBaseUrl = 'https://api.github.com/repos/joplin/plugins';
+const repoFullName = process.env.GITHUB_REPOSITORY || 'joplin/plugins';
+const apiBaseUrl = `https://api.github.com/repos/${repoFullName}`;
 
 interface Args {
 	pluginRepoDir: string;
-	dryRun: boolean;
+	dryRun?: boolean;
 }
 
 interface PluginInfo {

@@ -69,6 +69,9 @@ describe('Synchronizer.basics', () => {
 
 		await switchClient(2);
 
+		const dispatchC2 = jest.fn();
+		synchronizer(2).dispatch = dispatchC2;
+
 		await synchronizerStart();
 
 		await sleep(0.1);
@@ -80,9 +83,22 @@ describe('Synchronizer.basics', () => {
 
 		await synchronizerStart();
 
+		expect(dispatchC2).not.toHaveBeenCalledWith({
+			type: 'EDITOR_NOTE_NEEDS_RELOAD',
+			noteId: note1.id,
+		});
+
 		await switchClient(1);
 
+		const dispatchC1 = jest.fn();
+		synchronizer(1).dispatch = dispatchC1;
+
 		await synchronizerStart();
+
+		expect(dispatchC1).toHaveBeenCalledWith({
+			type: 'EDITOR_NOTE_NEEDS_RELOAD',
+			noteId: note1.id,
+		});
 
 		const all = await allNotesFolders();
 

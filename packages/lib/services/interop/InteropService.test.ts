@@ -87,7 +87,7 @@ function memoryExportModule() {
 const oneNoteSimpleXpsPath = () => `${supportDir}/onenote/simple-xps.one`;
 const skipByDefault = process.env.IS_CONTINUOUS_INTEGRATION ? it : it.skip;
 
-describe('services_InteropService', () => {
+describe('InteropService', () => {
 
 	const setupOneNoteDomParser = () => {
 		const jsdom = new JSDOM('<div></div>');

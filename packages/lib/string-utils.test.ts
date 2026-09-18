@@ -70,4 +70,12 @@ describe('string-utils', () => {
 		expect(splitCommandBatch(batch)).toEqual(expected);
 	}));
 
+	test.each([
+		['### Test', ['Test']],
+		['[test](http://example.com)... *test*', ['test', '...', 'test']],
+		['- this\n- is a\n\t- list', ['this', 'is a', 'list']],
+		['```js\ncode\n```', ['code']],
+	])('should roughly split by Markdown formatting (input: %j)', (input, expected) => {
+		expect(StringUtils.splitByMarkdownFormattingApproximate(input)).toEqual(expected);
+	});
 });

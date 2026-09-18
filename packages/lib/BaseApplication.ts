@@ -73,8 +73,10 @@ import getAppName from './getAppName';
 import PerformanceLogger from './PerformanceLogger';
 import Synchronizer from './Synchronizer';
 import NoteLockKey from './services/noteLock/NoteLockKey';
+import isNoteLockEnabled from './services/noteLock/isNoteLockEnabled';
 import NoteLockSession from './services/noteLock/NoteLockSession';
 import NoteLockService from './services/noteLock/NoteLockService';
+import { BuiltInMetadataKeys } from './models/settings/builtInMetadata';
 
 const appLogger: LoggerWrapper = Logger.create('App');
 const perfLogger = PerformanceLogger.create();
@@ -372,7 +374,8 @@ export default class BaseApplication {
 	}
 
 	protected async applySettingsSideEffects(action: { type?: string; key?: string; keys?: string[] } = null) {
-		const sideEffects: Record<string, ()=> Promise<void>> = {
+		type SideEffects = Partial<Record<BuiltInMetadataKeys, ()=> Promise<void>>>;
+		const sideEffects: SideEffects = {
 			'dateFormat': async () => {
 				time.setLocale(Setting.value('locale'));
 				setTimeLocale(Setting.value('locale'));
@@ -409,6 +412,10 @@ export default class BaseApplication {
 			//   to do.
 			'syncInfoCache': async () => {
 				appLogger.info('"syncInfoCache" was changed - setting up encryption related code');
+
+				// The note lock session only detects a synced key change lazily; polling here locks
+				// it (and notifies the UI) as soon as the change arrives.
+				if (isNoteLockEnabled()) NoteLockSession.instance().isUnlocked();
 
 				await loadMasterKeysFromSettings(EncryptionService.instance());
 				const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
@@ -451,18 +458,18 @@ export default class BaseApplication {
 		sideEffects['encryption.passwordCache'] = sideEffects['syncInfoCache'];
 		sideEffects['encryption.masterPassword'] = sideEffects['syncInfoCache'];
 		sideEffects['sync.maxConcurrentConnections'] = sideEffects['net.proxyEnabled'];
-		sideEffects['sync.proxyTimeout'] = sideEffects['net.proxyEnabled'];
-		sideEffects['sync.proxyUrl'] = sideEffects['net.proxyEnabled'];
+		sideEffects['net.proxyTimeout'] = sideEffects['net.proxyEnabled'];
+		sideEffects['net.proxyUrl'] = sideEffects['net.proxyEnabled'];
 		sideEffects['ai.chat.baseUrl'] = sideEffects['ai.chat.providerType'];
 		sideEffects['ai.chat.apiKey'] = sideEffects['ai.chat.providerType'];
 		sideEffects['ai.chat.model'] = sideEffects['ai.chat.providerType'];
 
 		if (action) {
-			const effect = sideEffects[action.key];
+			const effect = sideEffects[action.key as keyof SideEffects];
 			if (effect) await effect();
 		} else {
 			for (const key in sideEffects) {
-				await sideEffects[key]();
+				await sideEffects[key as keyof SideEffects]();
 			}
 		}
 	}

@@ -710,6 +710,14 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [renderedBody, webviewReady]);
 
+	// Stop media playing in the viewer once it's hidden - https://github.com/laurent22/joplin/issues/15278
+	const viewerVisible = props.visiblePanes.includes('viewer');
+	useEffect(() => {
+		if (!viewerVisible) {
+			webviewRef.current?.stopMediaPlayback();
+		}
+	}, [viewerVisible]);
+
 	const { onSetInitialMarkersRef } = useEditorSearchHandler({
 		setLocalSearchResultCount: props.setLocalSearchResultCount,
 		searchMarkers: props.searchMarkers,

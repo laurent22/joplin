@@ -3,7 +3,7 @@ import { execRequest, execRequestC } from '../../utils/testing/apiUtils';
 import { Uuid } from '../../services/database/types';
 import { makeNoteSerializedBody } from '../../utils/testing/serializedItems';
 
-describe('index_items', () => {
+describe('index/items', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('index_items');

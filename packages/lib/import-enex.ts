@@ -121,6 +121,7 @@ interface ExtractedNote extends NoteEntity {
 	tags?: string[];
 	title?: string;
 	bodyXml?: string;
+	evernoteId?: string;
 }
 
 // Those are the notes that have been parsed and saved to Joplin. We don't keep
@@ -308,30 +309,38 @@ const preProcessFile = async (filePath: string): Promise<string> => {
 };
 
 const isEvernoteUrl = (url: string) => {
-	return url.toLowerCase().startsWith('evernote://');
+	url = url.toLowerCase();
+	return url.startsWith('evernote://') || url.startsWith('https://share.evernote.com/note/');
 };
 
-const restoreNoteLinks = async (notes: SavedNote[], noteTitlesToIds: Record<string, string[]>, importOptions: ImportOptions) => {
+type NoteId = string;
+type OnLoadNoteIdsByTitle = (title: string)=> NoteId[]|Promise<NoteId[]>;
+
+export const restoreEnexNoteLinks = async (notes: AsyncIterable<SavedNote>, noteTitlesToIds: OnLoadNoteIdsByTitle, importOptions: ImportOptions) => {
 	// --------------------------------------------------------
 	// Convert the Evernote note links to Joplin note links. If
 	// we don't find a matching note, or if there are multiple
 	// matching notes, we leave the Evernote links as is.
 	// --------------------------------------------------------
 
-	for (const note of notes) {
+	const noteIdsWithUnresolvedLinks = [];
+	for await (const note of notes) {
 		const links = importOptions.outputFormat === 'html' ?
 			extractUrlsFromHtml(note.body) :
 			extractUrlsFromMarkdown(note.body);
 
 		let noteChanged = false;
+		let hasUnresolvedLink = false;
 
 		for (const link of links) {
 			if (!isEvernoteUrl(link.url)) continue;
 
-			const matchingNoteIds = noteTitlesToIds[link.title];
-			if (matchingNoteIds && matchingNoteIds.length === 1) {
+			const matchingNoteIds = await noteTitlesToIds(link.title);
+			if (matchingNoteIds.length === 1) {
 				note.body = note.body.replace(link.url, `:/${matchingNoteIds[0]}`);
 				noteChanged = true;
+			} else {
+				hasUnresolvedLink = true;
 			}
 		}
 
@@ -344,12 +353,18 @@ const restoreNoteLinks = async (notes: SavedNote[], noteTitlesToIds: Record<stri
 				autoTimestamp: false,
 			});
 		}
+
+		if (hasUnresolvedLink) {
+			noteIdsWithUnresolvedLinks.push(note.id);
+		}
 	}
+
+	return { noteIdsWithUnresolvedLinks };
 };
 
 interface ParseNotesResult {
 	savedNotes: SavedNote[];
-	noteTitlesToIds: Record<string, string[]>;
+	noteTitlesToIds: Map<string, string[]>;
 }
 
 const parseNotes = async (parentFolderId: string, filePath: string, importOptions: ImportOptions = null): Promise<ParseNotesResult> => {
@@ -402,7 +417,7 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 		let processingNotes = false;
 		const savedNotes: SavedNote[] = [];
 		const createdNoteIds: string[] = [];
-		const noteTitlesToIds: Record<string, string[]> = {};
+		const noteTitlesToIds = new Map<string, string[]>();
 
 		const createErrorWithNoteTitle = (fnThis: { _parser?: { line: number; column: number } } | null, error: Error) => {
 			const line = [];
@@ -495,8 +510,8 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 					const result = await saveNoteToStorage(note);
 
 					createdNoteIds.push(note.id);
-					if (!noteTitlesToIds[note.title]) noteTitlesToIds[note.title] = [];
-					noteTitlesToIds[note.title].push(note.id);
+					if (!noteTitlesToIds.has(note.title)) noteTitlesToIds.set(note.title, []);
+					noteTitlesToIds.get(note.title).push(note.id);
 					savedNotes.push({
 						id: note.id,
 						body: note.body,
@@ -722,5 +737,18 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 	if (!('batchSize' in importOptions)) importOptions.batchSize = 10;
 
 	const result = await parseNotes(parentFolderId, filePath, importOptions);
-	await restoreNoteLinks(result.savedNotes, result.noteTitlesToIds, importOptions);
+
+	const noteIterator = (async function*() {
+		for (const note of result.savedNotes) {
+			yield note;
+		}
+	})();
+	const titleToIds = (title: string) => result.noteTitlesToIds.get(title) ?? [];
+
+	const { noteIdsWithUnresolvedLinks } = await restoreEnexNoteLinks(
+		noteIterator,
+		titleToIds,
+		importOptions,
+	);
+	return { noteIdsWithUnresolvedLinks, parentFolderId };
 }

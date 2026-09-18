@@ -5,7 +5,7 @@ import shim from '../../shim';
 // goal of this test is to catch packaging/native-binary breakage early, the
 // same way SqliteVec.test does for sqlite-vec.
 
-describe('onnxruntime-node', () => {
+describe('OnnxRuntime', () => {
 
 	it('is reachable via the shim', () => {
 		const ort = shim.onnxRuntime();

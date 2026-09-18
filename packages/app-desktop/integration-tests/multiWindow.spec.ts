@@ -1,6 +1,6 @@
-import { test, expect } from './util/test';
+import { test } from './util/test';
 import MainScreen from './models/MainScreen';
-import NoteEditorScreen from './models/NoteEditorScreen';
+import NoteEditorScreen from './models/NoteEditor/NoteEditorScreen';
 
 test.describe('multiWindow', () => {
 	// Disabled: Playwright's page.close() triggers a different code path than
@@ -23,7 +23,7 @@ test.describe('multiWindow', () => {
 		await mainWindow.waitForTimeout(2000);
 
 		// Main window should remain stable — no white screen or renderer crash
-		await expect(await mainPage.noteEditor.contentLocator()).toBeVisible();
+		await mainPage.noteEditor.waitFor();
 	});
 
 	test.fixme('should support quickly creating, then closing secondary windows', async ({ mainWindow, electronApp }) => {
@@ -47,6 +47,6 @@ test.describe('multiWindow', () => {
 		}
 
 		// Should not have crashed
-		await expect(await mainPage.noteEditor.contentLocator()).toBeVisible();
+		await mainPage.noteEditor.waitFor();
 	});
 });

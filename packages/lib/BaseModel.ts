@@ -644,41 +644,43 @@ class BaseModel {
 
 		const mutexRelease = await this.saveMutex(o).acquire();
 
-		options = this.modOptions(options);
-		const isNew = this.isNew(o, options);
-		options.isNew = isNew;
-
-		// Diff saving is an optimisation which takes a new version of the item and an old one,
-		// do a diff and save only this diff. IMPORTANT: When using this make sure that both
-		// models have been normalised using ItemClass.filter()
-		const isDiffSaving = options && options.oldItem && !options.isNew;
-
-		if (isDiffSaving) {
-			const newObject = BaseModel.diffObjects(options.oldItem, o);
-			newObject.type_ = o.type_;
-			newObject.id = o.id;
-			o = newObject;
-		}
-
-		o = this.filter(o);
-
-		if (options.userSideValidation) {
-			this.userSideValidation(o);
-		}
-
-		let queries = [];
-		const saveQuery = this.saveQuery(o, options);
-		const modelId = saveQuery.id;
-
-		queries.push(saveQuery);
-
-		if (options.nextQueries && options.nextQueries.length) {
-			queries = queries.concat(options.nextQueries);
-		}
-
 		let output = null;
 
+		// The try must cover everything after the mutex acquire: a throw from userSideValidation
+		// or saveQuery would otherwise leak the mutex and hang every later save of the same item.
 		try {
+			options = this.modOptions(options);
+			const isNew = this.isNew(o, options);
+			options.isNew = isNew;
+
+			// Diff saving is an optimisation which takes a new version of the item and an old one,
+			// do a diff and save only this diff. IMPORTANT: When using this make sure that both
+			// models have been normalised using ItemClass.filter()
+			const isDiffSaving = options && options.oldItem && !options.isNew;
+
+			if (isDiffSaving) {
+				const newObject = BaseModel.diffObjects(options.oldItem, o);
+				newObject.type_ = o.type_;
+				newObject.id = o.id;
+				o = newObject;
+			}
+
+			o = this.filter(o);
+
+			if (options.userSideValidation) {
+				this.userSideValidation(o);
+			}
+
+			let queries = [];
+			const saveQuery = this.saveQuery(o, options);
+			const modelId = saveQuery.id;
+
+			queries.push(saveQuery);
+
+			if (options.nextQueries && options.nextQueries.length) {
+				queries = queries.concat(options.nextQueries);
+			}
+
 			await this.db().transactionExecBatch(queries);
 
 			o = { ...o };

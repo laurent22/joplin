@@ -2,6 +2,7 @@
 @use "./Sidebar/style.scss" as sidebar-styles;
 @use "./controls/AiIndexStatus.scss" as ai-index-status;
 @use "./controls/AiStatus.scss" as ai-status;
+@use "./controls/NoteLockSettings.scss" as note-lock-settings;
 
 .config-screen-content-wrapper {
 	padding: 24px;

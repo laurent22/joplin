@@ -9,7 +9,7 @@ import { themeStyle } from '../global-style';
 import Logger, { LogEntry } from '@joplin/utils/Logger';
 import { BaseScreenComponent } from '../base-screen';
 import { _ } from '@joplin/lib/locale';
-import { MenuOptionType } from '../ScreenHeader';
+import { MenuOption } from '../ScreenHeader';
 import { AppState } from '../../utils/types';
 import { writeTextToCacheFile } from '../../utils/ShareUtils';
 import shim from '@joplin/lib/shim';
@@ -30,7 +30,7 @@ interface State {
 }
 
 class LogScreenComponent extends BaseScreenComponent<Props, State> {
-	private readonly menuOptions_: MenuOptionType[];
+	private readonly menuOptions_: MenuOption[];
 	private styles_: Record<number, ReturnType<typeof StyleSheet.create>>;
 	private readonly logListRef_ = React.createRef<FlatList>();
 

@@ -13,7 +13,11 @@
 	position: relative;
 }
 
-.page-note .note-main {
+.published-note-layout {
+	display: block;
+}
+
+.page-note .published-note-layout:not(.with-tree) .note-main {
 	margin-top: 2em;
 	max-width: 840px;
 	margin-left: auto;
@@ -50,4 +54,272 @@ https://github.com/laurent22/joplin/issues/6370
 */
 #rendered-md {
 	overflow-x: auto;
+}
+
+.page-note:has(.with-tree) {
+	height: 100vh;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+}
+
+.page-note:has(.with-tree) .main {
+	overflow: hidden;
+	padding: 0;
+	height: 100%;
+}
+
+.page-note:has(.with-tree) .main-container {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	max-width: none !important;
+}
+
+.page-note:has(.with-tree) .navbar {
+	flex-shrink: 0;
+}
+
+.page-note:has(.with-tree) .footer {
+	height: fit-content;
+	padding: 0.25rem 1rem;
+	margin: .5rem 0;
+}
+
+.page-note:has(.with-tree) .footer .content {
+	margin: 0;
+}
+
+.published-note-layout.with-tree {
+	display: flex;
+	align-items: stretch;
+	flex: 1 1 auto;
+	min-height: 0;
+	overflow: hidden;
+}
+
+.published-folder-sidebar {
+	flex: 0 0 320px;
+	max-width: 320px;
+	padding: 16px 0 0;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	background: #fff;
+	border-right: 1px solid #e3e5e8;
+}
+
+.sidebar-title {
+	font-size: 14px !important;
+	font-weight: 600;
+	text-transform: uppercase;
+	color: #363636;
+	margin: 0 0 8px 0;
+	padding: 0 1rem 12px;
+	border-bottom: 1px solid #e3e5e8;
+}
+
+div.folder-tree {
+	flex: 1 1 0;
+	height: 0;
+	min-height: 0;
+	overflow: hidden;
+	contain: strict;
+}
+
+div.wunderbaum.folder-tree {
+	flex: 1 1 0;
+	height: 0;
+	min-height: 0;
+	border: none !important;
+	outline: none;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	scrollbar-gutter: stable;
+	--wb-col-padding-x: 1rem;
+	--folder-tree-blue: #0557ba;
+	--folder-tree-blue-dark: #03468f;
+	--folder-tree-line: lightblue;
+	--folder-tree-hover-text: #616161;
+	--folder-tree-muted-text: #282828;
+	--folder-tree-background-blue-hover: #e5f8ff;
+	--folder-tree-background-gray-hover: #f6f6f6;
+}
+
+div.wunderbaum.folder-tree:not(.wb-initializing) {
+	overflow-y: auto;
+}
+
+div.wunderbaum.folder-tree .wb-col {
+	display: flex !important;
+	align-items: center !important;
+	height: 100%;
+	width: 100%;
+}
+
+div.wunderbaum.folder-tree .wb-row {
+	display: flex;
+	border-radius: 0.25rem;
+	border: none !important;
+	background-color: transparent !important;
+	transition: background-color 220ms ease;
+}
+
+/* div.wunderbaum.folder-tree .wb-row:hover {
+	color: var(--folder-tree-hover-text) !important;
+} */
+
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="folder"]:is(:hover, .is-pointer-hover) {
+	background-color: var(--folder-tree-background-gray-hover) !important;
+}
+
+div.wunderbaum.folder-tree .wb-row:is(:hover, .is-pointer-hover) .wb-title,
+div.wunderbaum.folder-tree .wb-row:is(:hover, .is-pointer-hover) .wb-expander {
+	color: var(--folder-tree-hover-text) !important;
+
+}
+
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="folder"].wb-active .wb-title,
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="folder"].wb-active .wb-expander {
+	color: var(--folder-tree-blue) !important;
+}
+
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="folder"].wb-active:is(:hover, .is-pointer-hover) .wb-title,
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="folder"].wb-active:is(:hover, .is-pointer-hover) .wb-expander {
+	color: var(--folder-tree-blue-dark) !important;
+}
+
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"]:hover {
+	background-color: transparent !important;
+}
+
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"]:is(:hover, .is-pointer-hover) .wb-title {
+	color: #000;
+	background-color: var(--folder-tree-background-gray-hover) !important;
+	border-top-right-radius: 999px !important;
+	border-bottom-right-radius: 999px !important;
+}
+
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"].wb-active .wb-title {
+	background-color: var(--folder-tree-background-blue-hover) !important;
+	border-top-right-radius: 999px !important;
+	border-bottom-right-radius: 999px !important;
+}
+
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"].wb-active:is(:hover, .is-pointer-hover) .wb-title {
+	color: var(--folder-tree-blue-dark) !important;
+}
+
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"].wb-active .wb-title {
+	color: var(--folder-tree-blue);
+}
+
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"].wb-active .wb-title::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0px;
+	width: 1px;
+	background-color: var(--folder-tree-blue-dark);
+}
+
+div.wunderbaum.folder-tree .wb-row.wb-active .wb-title {
+	font-weight: 600 !important;
+}
+
+div.wunderbaum.folder-tree .wb-title {
+	font-weight: 400 !important;
+	line-height: 1.25;
+	color: var(--folder-tree-muted-text);
+	transition: color 220ms ease, background-color 220ms ease;
+	display: flex;
+	align-content: center;
+	height: 100%;
+	position: relative;
+	border-left: 1px solid transparent;
+	box-sizing: border-box;
+	padding: .25rem 0rem;
+	padding-right: var(--wb-col-padding-x);
+}
+
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"] .wb-title {
+	padding-left: var(--wb-col-padding-x);
+	border-left-color: var(--folder-tree-line);
+}
+
+div.wunderbaum.folder-tree .wb-expander {
+	color: var(--folder-tree-muted-text);
+	transition: color 220ms ease;
+	order: 2;
+}
+
+div.wunderbaum.folder-tree.is-initializing .wb-row,
+div.wunderbaum.folder-tree.is-initializing .wb-title,
+div.wunderbaum.folder-tree.is-initializing .wb-expander {
+	transition: none;
+}
+
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"] .wb-expander.wb-indent {
+	display: none;
+}
+
+.page-note .published-note-layout.with-tree .note-main {
+	min-width: 0;
+	flex: 1 1 auto;
+	max-width: none;
+	margin: 0;
+	padding: 24px;
+	overflow-y: auto;
+}
+
+.folder-empty-state {
+	max-width: 640px;
+	margin: 3rem auto;
+	text-align: center;
+	color: #606770;
+}
+
+.folder-empty-state p {
+	font-size: 1.05rem;
+}
+
+.folder-tree-toggle {
+	display: none;
+}
+
+@media (max-width: 768px) {
+	.folder-tree-toggle {
+		display: flex;
+		margin-left: auto;
+	}
+
+	.published-note-layout.with-tree {
+		display: block;
+		position: relative;
+	}
+
+	.published-folder-sidebar {
+		position: fixed;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		z-index: 30;
+		max-width: 80vw;
+		width: 280px;
+		transform: translateX(-100%);
+		visibility: hidden;
+		transition: transform 0.2s ease;
+		box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+	}
+
+	.published-folder-sidebar.is-open {
+		transform: translateX(0);
+		visibility: visible;
+	}
+
+	.page-note .published-note-layout.with-tree .note-main {
+		padding: 16px;
+		overflow: visible;
+	}
 }

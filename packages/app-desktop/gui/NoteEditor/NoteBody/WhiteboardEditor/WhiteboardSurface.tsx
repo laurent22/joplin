@@ -28,6 +28,10 @@ import { Canvas, CanvasColor, CanvasEdge, CanvasNode } from '@joplin/lib/service
 import { presetColors, resolveCanvasColor } from '@joplin/lib/services/whiteboard/presetColors';
 import { useWhiteboardContext } from './WhiteboardContext';
 import shim from '@joplin/lib/shim';
+import CommandService from '@joplin/lib/services/CommandService';
+import { ModelType } from '@joplin/lib/BaseModel';
+import { Mode } from '../../../../plugins/GotoAnything';
+import { GotoAnythingOptions, UiType } from '../../../WindowCommandsAndDialogs/commands/gotoAnything';
 import Logger from '@joplin/utils/Logger';
 import { webUtils } from 'electron';
 import { canvasNodeToFlowNode, canvasToFlow, flowToCanvas, WhiteboardFlowEdge, WhiteboardFlowNode } from './canvasFlow';
@@ -171,7 +175,15 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 	}, []);
 
 	const onReconnect: OnReconnect = useCallback((oldEdge, newConnection) => {
-		setFlowEdges(prev => reconnectEdge(oldEdge as unknown as WhiteboardFlowEdge, newConnection, prev) as WhiteboardFlowEdge[]);
+		// `oldEdge` is the rendered edge, which carries the derived `style.stroke`
+		// (blue when selected) baked in by `renderedEdges`. reconnectEdge copies
+		// those fields onto the new edge, so it would persist that stroke into
+		// state and leave the edge blue-but-not-bold after deselection. Reconnect
+		// against the clean edge from state instead, keyed by id.
+		setFlowEdges(prev => {
+			const clean = prev.find(e => e.id === oldEdge.id);
+			return reconnectEdge((clean ?? oldEdge) as unknown as WhiteboardFlowEdge, newConnection, prev) as WhiteboardFlowEdge[];
+		});
 	}, []);
 
 	// Double-clicking an edge selects it exclusively and focuses the label
@@ -220,6 +232,39 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 			height: (typeof n.height === 'number' ? n.height : (typeof n.style?.height === 'number' ? n.style.height : 0)) ?? 0,
 		}));
 	}, [flowNodes]);
+
+	const addFileCard = useCallback((itemId: string, at: { x: number; y: number }, index = 0) => {
+		const offset = index * 24;
+		addCanvasNode({
+			id: generateId(),
+			type: 'file',
+			x: at.x - 120 + offset,
+			y: at.y - 60 + offset,
+			width: 240,
+			height: 160,
+			file: `:/${itemId}`,
+		});
+	}, [addCanvasNode]);
+
+	const onPaneDoubleClick = useCallback(async (event: React.MouseEvent) => {
+		// The <Background> svg covers the pane, so it's the event target on an
+		// empty-space click.
+		const target = event.target as Element;
+		if (!target?.closest) return;
+		const onEmptySpace = target.classList.contains('react-flow__pane')
+			|| !!target.closest('.react-flow__background');
+		if (!onEmptySpace) return;
+
+		const at = rf.screenToFlowPosition({ x: event.clientX, y: event.clientY });
+		const options: GotoAnythingOptions = { mode: Mode.TitleOnly };
+		const result = await CommandService.instance().execute('gotoAnything', UiType.ControlledApi, options);
+		if (!result) return;
+		if (result.type !== ModelType.Note) {
+			logger.warn('Selected item is not a note:', result);
+			return;
+		}
+		addFileCard(result.item.id, at);
+	}, [rf, addFileCard]);
 
 	const onAddText = useCallback(() => {
 		const { x: cx, y: cy } = viewportCentre();
@@ -388,16 +433,7 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 		};
 
 		const placeCardForResource = (resourceId: string, index: number) => {
-			const offset = index * 24;
-			addCanvasNode({
-				id: generateId(),
-				type: 'file',
-				x: drop.x - 120 + offset,
-				y: drop.y - 60 + offset,
-				width: 240,
-				height: 160,
-				file: `:/${resourceId}`,
-			});
+			addFileCard(resourceId, drop, index);
 		};
 
 		const internalIds = [
@@ -420,7 +456,7 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 				}
 			}));
 		}
-	}, [rf, addCanvasNode]);
+	}, [rf, addFileCard]);
 
 	return (
 		<div
@@ -428,6 +464,7 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 			className="whiteboard-surface"
 			onDragOver={onDragOver}
 			onDrop={onDrop}
+			onDoubleClick={onPaneDoubleClick}
 		>
 			<ReactFlow
 				nodes={flowNodes as unknown as Node[]}
@@ -444,6 +481,7 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 				onNodeDragStart={onNodeDragStart}
 				onNodeDrag={onNodeDrag}
 				onNodeDragStop={onNodeDragStop}
+				elevateEdgesOnSelect
 				deleteKeyCode={['Backspace', 'Delete']}
 				multiSelectionKeyCode={['Shift', 'Meta', 'Control']}
 				selectionKeyCode={['Shift']}
@@ -451,6 +489,7 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 				panOnDrag
 				zoomOnPinch
 				zoomOnScroll={false}
+				zoomOnDoubleClick={false}
 				fitView={flowNodes.length > 0}
 				elevateNodesOnSelect={false}
 				proOptions={{ hideAttribution: true }}

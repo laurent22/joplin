@@ -11,6 +11,7 @@ import { getCanReceiveFolder, getCanShareFolder, totalSizeClass } from '../../mo
 import config from '../../config';
 import { escapeHtml } from '../../utils/htmlUtils';
 import { betaStartSubUrl, betaUserTrialPeriodDays, isBetaUser } from '../../utils/stripe';
+import showJoplinServerBusinessPromo from '../../utils/showJoplinServerBusinessPromo';
 
 const router: Router = new Router(RouteType.Web);
 
@@ -119,7 +120,9 @@ router.get('home', async (_path: SubPath, ctx: AppContext) => {
 			betaStartSubUrl: betaStartSubUrl(user.email, user.account_type),
 			setupMessageHtml: setupMessageHtml(),
 			syncTargetName: isExternal ? 'Joplin Server Business' : config().appName,
+			isExternal,
 			isJoplinCloud: config().isJoplinCloud,
+			showJoplinServerBusinessPromo: await showJoplinServerBusinessPromo(ctx.joplin.models),
 			socialFeeds: socialFeeds(),
 		};
 

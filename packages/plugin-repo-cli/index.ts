@@ -70,7 +70,7 @@ async function extractPluginFilesFromPackage(existingManifests: PluginManifests,
 
 	// We need to validate the manifest to make sure the plugin author isn't
 	// trying to override an existing plugin, use an invalid ID, etc..
-	validateUntrustedManifest(manifest, existingManifests);
+	validateUntrustedManifest(manifest, existingManifests, { source: 'npm' });
 
 	const pluginDestDir = resolveRelativePathWithinDir(destDir, manifest.id);
 	await fs.mkdirp(pluginDestDir);
@@ -275,20 +275,89 @@ async function commandVersion() {
 	throw new Error(`Cannot find package.json in any of these paths: ${JSON.stringify(paths)}`);
 }
 
+interface CommandPublishPluginArgs {
+	pluginRepoDir: string;
+	manifestFile: string;
+	jplFile: string;
+}
+
+const commandPublishPlugin = async (args: CommandPublishPluginArgs) => {
+	const repoDir = args.pluginRepoDir;
+	const manifestFile = args.manifestFile;
+	const jplFile = args.jplFile;
+
+	if (!(await fs.pathExists(repoDir))) throw new Error(`No plugin repository at: ${repoDir}`);
+	if (!(await fs.pathExists(manifestFile))) throw new Error(`Manifest file does not exist: ${manifestFile}`);
+	if (!(await fs.pathExists(jplFile))) throw new Error(`JPL file does not exist: ${jplFile}`);
+
+	const manifest = await readJsonFile<PluginManifest>(manifestFile);
+	const originalPluginManifests = await readManifests(repoDir);
+	const manifestOverrides = await readManifestOverrides(repoDir);
+	const obsoleteManifests = getObsoleteManifests(manifestOverrides);
+
+	const existingManifests: PluginManifests = {
+		...originalPluginManifests,
+		...obsoleteManifests,
+	} as PluginManifests;
+
+	// Validate the manifest
+	validateUntrustedManifest(manifest, existingManifests, { source: 'repository' });
+
+	// Copy the manifest.json and plugin.jpl to plugins/<plugin_id>/
+	const destDir = path.resolve(repoDir, 'plugins', manifest.id);
+	await fs.mkdirp(destDir);
+	await fs.writeFile(path.resolve(destDir, 'manifest.json'), JSON.stringify(manifest, null, '\t'), 'utf8');
+	await fs.copy(jplFile, path.resolve(destDir, 'plugin.jpl'));
+
+	// Update manifests.json
+	let manifests: PluginManifests = {};
+	if (!obsoleteManifests[manifest.id]) {
+		manifests[manifest.id] = manifest;
+	}
+
+	manifests = {
+		...originalPluginManifests,
+		...manifests,
+	};
+
+	manifests = applyManifestOverrides(manifests, manifestOverrides);
+
+	await writeManifests(repoDir, manifests);
+
+	// Update README.md
+	await updateReadme(`${repoDir}/README.md`, manifests);
+
+	console.info(`Successfully published plugin ${manifest.id}@${manifest.version} to local registry!`);
+};
+
+interface CommandUpdateReleaseArgs {
+	pluginRepoDir: string;
+	dryRun?: boolean;
+}
+
+type CommandArgs = CommandBuildArgs | CommandPublishPluginArgs | CommandUpdateReleaseArgs;
+
+type CommandMap = {
+	build: (args: CommandBuildArgs)=> Promise<void>;
+	version: ()=> Promise<void>;
+	updateRelease: (args: CommandUpdateReleaseArgs)=> Promise<void>;
+	publishPlugin: (args: CommandPublishPluginArgs)=> Promise<void>;
+};
+
 async function main() {
 	const scriptName = 'plugin-repo-cli';
 
-	type CommandArgs = CommandBuildArgs;
-	const commands: Record<string, (args: CommandArgs)=> Promise<void>> = {
+	const commands: CommandMap = {
 		build: commandBuild,
 		version: commandVersion,
 		updateRelease: commandUpdateRelease,
+		publishPlugin: commandPublishPlugin,
 	};
 
 	let selectedCommand = '';
-	let selectedCommandArgs: CommandArgs = null;
+	let selectedCommandArgs: CommandArgs | null = null;
 
-	function setSelectedCommand(name: string, args: CommandArgs) {
+	function setSelectedCommand(name: string, args: CommandArgs | null) {
 		selectedCommand = name;
 		selectedCommandArgs = args;
 	}
@@ -303,11 +372,26 @@ async function main() {
 				type: 'string',
 				describe: 'Directory where the plugin repository is located',
 			});
-		}, (args: CommandArgs) => setSelectedCommand('build', args))
+		}, (args: CommandBuildArgs) => setSelectedCommand('build', args))
 
-		.command('version', 'Gives version info', () => {}, (args: CommandArgs) => setSelectedCommand('version', args))
+		.command('version', 'Gives version info', () => { }, () => setSelectedCommand('version', null))
 
-		.command('update-release <plugin-repo-dir>', 'Update GitHub release', () => {}, (args: CommandArgs) => setSelectedCommand('updateRelease', args))
+		.command('update-release <plugin-repo-dir>', 'Update GitHub release', () => { }, (args: CommandUpdateReleaseArgs) => setSelectedCommand('updateRelease', args))
+
+		.command('publish-plugin <plugin-repo-dir> <manifest-file> <jpl-file>', 'Publish a plugin to the repository', (yargs: { positional: (name: string, opts: object)=> void }) => {
+			yargs.positional('plugin-repo-dir', {
+				type: 'string',
+				describe: 'Directory where the plugin repository is located',
+			});
+			yargs.positional('manifest-file', {
+				type: 'string',
+				describe: 'Path to the manifest.json file',
+			});
+			yargs.positional('jpl-file', {
+				type: 'string',
+				describe: 'Path to the plugin.jpl file',
+			});
+		}, (args: CommandPublishPluginArgs) => setSelectedCommand('publishPlugin', args))
 
 		.help()
 		.argv;
@@ -317,12 +401,13 @@ async function main() {
 		process.exit(1);
 	}
 
-	if (!commands[selectedCommand]) {
+	if (!commands[selectedCommand as keyof CommandMap]) {
 		console.error(`No such command: ${selectedCommand}`);
 		process.exit(1);
 	}
 
-	await commands[selectedCommand](selectedCommandArgs);
+	const commandName = selectedCommand as keyof CommandMap;
+	await (commands[commandName] as (args: CommandArgs | null)=> Promise<void>)(selectedCommandArgs);
 }
 
 main().catch((error) => {

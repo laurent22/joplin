@@ -61,9 +61,11 @@ export const mapErrorByCode = (code: string | number | null, status: number, det
 // For now, avoid more than one event every second or two.
 const minimumTimeBetweenEvents = Second;
 
-type ApiError = Error & { code?: number; retryAfterSeconds?: number };
+type ApiError = Error & { code?: number|string; retryAfterSeconds?: number };
 
-const isRateLimitError = (error: ApiError) => error.code === 429 && typeof error.retryAfterSeconds === 'number';
+const isRateLimitError = (error: ApiError) => (
+	(error.code === 429 || error.code === 'aiRateLimitExceeded') && typeof error.retryAfterSeconds === 'number'
+);
 
 const canAutoRetryError = (error: ApiError) => {
 	return isRateLimitError(error) && error.retryAfterSeconds < 10;

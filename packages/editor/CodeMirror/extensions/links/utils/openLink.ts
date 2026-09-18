@@ -1,12 +1,13 @@
 import { EditorView } from '@codemirror/view';
-import findLineMatchingLink from './findLineMatchingLink';
+import findPositionMatchingLink from '../../../utils/findPositionMatchingLink';
 
 export type OnOpenExternalLink = (url: string, view: EditorView)=> void;
 const openLink = (link: string, view: EditorView, onOpenExternalLink: OnOpenExternalLink) => {
-	const targetLine = findLineMatchingLink(link, view.state);
-	if (targetLine) {
+	const target = findPositionMatchingLink(link, view.state);
+	if (target !== null) {
+		const targetLine = view.state.doc.lineAt(target);
 		view.dispatch({
-			selection: { anchor: targetLine.to },
+			selection: { anchor: target },
 			scrollIntoView: true,
 			effects: [
 				EditorView.announce.of(`Jumped to line ${targetLine.number}`),

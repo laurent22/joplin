@@ -58,7 +58,7 @@ describe('reports/userActivity', () => {
 					create_count: 1,
 					update_count: 1,
 					delete_count: 0,
-					uploaded_size: 350, // Note: this will break whenever the item sync format is changed
+					uploaded_size: 384, // Note: this will break whenever the item sync format is changed
 				},
 			],
 		);

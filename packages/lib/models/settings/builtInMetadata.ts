@@ -26,6 +26,12 @@ const show3rdPartySyncSettings = (Setting: typeof SettingType) => {
 	return !Setting.value('isJoplinCloudWebApp');
 };
 
+const showAiTools = (settings: Record<string, unknown>) => {
+	return !!settings['mcp.enabled'] || !!settings['ai.enabled'];
+};
+
+const addBetaMarker = (text: string) => _('%s (Beta)', text);
+
 export enum CameraDirection {
 	Back,
 	Front,
@@ -642,8 +648,19 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			public: true,
 			section: 'ai',
 			appTypes: [AppType.Desktop],
-			label: () => _('Enable AI features'),
-			description: () => _('When enabled, plugins and built-in features can use AI models to generate or analyse text. AI is off by default.'),
+			label: () => addBetaMarker(_('Enable AI features')),
+			description: () => _('When enabled, plugins and built-in features can use AI models to generate or analyse text.'),
+			storage: SettingStorage.File,
+		},
+
+		'mcp.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop],
+			label: () => addBetaMarker(_('Enable MCP server')),
+			description: () => _('Exposes Joplin notes to external AI applications (Claude Desktop, Cursor, etc.) via the Model Context Protocol. Requires the Web Clipper service to be running. Connected AI tools can read your note content; any text they retrieve may be sent to the external LLM provider those tools use.'),
 			storage: SettingStorage.File,
 		},
 
@@ -655,7 +672,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Desktop],
 			show: (settings) => !!settings['ai.enabled'],
 			label: () => _('Allow remote AI providers'),
-			description: () => _('Required to use cloud-hosted AI models, including Joplin Cloud AI. When disabled, only on-device providers can be used.'),
+			description: () => _('Required to use cloud-hosted AI models, including Joplin Cloud AI. When disabled, only providers on your own device or private network can be used.'),
 			storage: SettingStorage.File,
 		},
 
@@ -852,124 +869,136 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.Database,
 		},
 
-		'mcp.enabled': {
-			value: false,
-			type: SettingItemType.Bool,
-			public: true,
-			section: 'mcp',
-			appTypes: [AppType.Desktop],
-			label: () => _('Enable MCP server'),
-			description: () => _('Exposes Joplin notes to external AI applications (Claude Desktop, Cursor, etc.) via the Model Context Protocol. Requires the Web Clipper service to be running. Connected AI tools can read your note content; any text they retrieve may be sent to the external LLM provider those tools use.'),
-			storage: SettingStorage.File,
-		},
-
-		'mcp.tool.search_notes.enabled': {
+		'ai.tool.edit_current.enabled': {
 			value: true,
 			type: SettingItemType.Bool,
 			public: true,
-			section: 'mcp',
+			section: 'ai.tools',
 			appTypes: [AppType.Desktop],
-			show: (settings) => !!settings['mcp.enabled'],
-			label: () => _('MCP: Allow searching notes'),
+			show: showAiTools,
+			label: () => _('Allow editing the current note (chat panel only)'),
+			description: () => _('Enables the default edit operations for notes with an open AI chat panel. When disabled, the chat panel can still read the open note. Does not apply to MCP.'),
 			storage: SettingStorage.File,
 		},
 
-		'mcp.tool.read_note.enabled': {
-			value: true,
-			type: SettingItemType.Bool,
-			public: true,
-			section: 'mcp',
-			appTypes: [AppType.Desktop],
-			show: (settings) => !!settings['mcp.enabled'],
-			label: () => _('MCP: Allow reading notes'),
-			storage: SettingStorage.File,
-		},
-
-		'mcp.tool.list_notebooks.enabled': {
-			value: true,
-			type: SettingItemType.Bool,
-			public: true,
-			section: 'mcp',
-			appTypes: [AppType.Desktop],
-			show: (settings) => !!settings['mcp.enabled'],
-			label: () => _('MCP: Allow listing notebooks'),
-			storage: SettingStorage.File,
-		},
-
-		'mcp.tool.list_tags.enabled': {
-			value: true,
-			type: SettingItemType.Bool,
-			public: true,
-			section: 'mcp',
-			appTypes: [AppType.Desktop],
-			show: (settings) => !!settings['mcp.enabled'],
-			label: () => _('MCP: Allow listing tags'),
-			storage: SettingStorage.File,
-		},
-
-		'mcp.tool.create_note.enabled': {
+		'ai.tool.search_notes.enabled': {
 			value: false,
 			type: SettingItemType.Bool,
 			public: true,
-			section: 'mcp',
+			section: 'ai.tools',
 			appTypes: [AppType.Desktop],
-			show: (settings) => !!settings['mcp.enabled'],
-			label: () => _('MCP: Allow creating notes'),
+			show: showAiTools,
+			label: () => _('Allow searching notes'),
 			storage: SettingStorage.File,
 		},
 
-		'mcp.tool.update_note.enabled': {
+		'ai.tool.read_note.enabled': {
 			value: false,
 			type: SettingItemType.Bool,
 			public: true,
-			section: 'mcp',
+			section: 'ai.tools',
 			appTypes: [AppType.Desktop],
-			show: (settings) => !!settings['mcp.enabled'],
-			label: () => _('MCP: Allow updating notes'),
+			show: showAiTools,
+			label: () => _('Allow reading notes'),
 			storage: SettingStorage.File,
 		},
 
-		'mcp.tool.delete_note.enabled': {
+		'ai.tool.read_image.enabled': {
 			value: false,
 			type: SettingItemType.Bool,
 			public: true,
-			section: 'mcp',
+			section: 'ai.tools',
 			appTypes: [AppType.Desktop],
-			show: (settings) => !!settings['mcp.enabled'],
-			label: () => _('MCP: Allow trashing notes'),
+			show: showAiTools,
+			label: () => _('Allow reading images'),
 			storage: SettingStorage.File,
 		},
 
-		'mcp.tool.manage_tags.enabled': {
+		'ai.tool.list_notebooks.enabled': {
 			value: false,
 			type: SettingItemType.Bool,
 			public: true,
-			section: 'mcp',
+			section: 'ai.tools',
 			appTypes: [AppType.Desktop],
-			show: (settings) => !!settings['mcp.enabled'],
-			label: () => _('MCP: Allow editing tags on notes'),
+			show: showAiTools,
+			label: () => _('Allow listing notebooks'),
 			storage: SettingStorage.File,
 		},
 
-		'mcp.tool.create_notebook.enabled': {
+		'ai.tool.list_tags.enabled': {
 			value: false,
 			type: SettingItemType.Bool,
 			public: true,
-			section: 'mcp',
+			section: 'ai.tools',
 			appTypes: [AppType.Desktop],
-			show: (settings) => !!settings['mcp.enabled'],
-			label: () => _('MCP: Allow creating notebooks'),
+			show: showAiTools,
+			label: () => _('Allow listing tags'),
 			storage: SettingStorage.File,
 		},
 
-		'mcp.tool.semantic_search_notes.enabled': {
-			value: true,
+		'ai.tool.create_note.enabled': {
+			value: false,
 			type: SettingItemType.Bool,
 			public: true,
-			section: 'mcp',
+			section: 'ai.tools',
 			appTypes: [AppType.Desktop],
-			show: (settings) => !!settings['mcp.enabled'],
-			label: () => _('MCP: Allow semantic search of notes'),
+			show: showAiTools,
+			label: () => _('Allow creating notes'),
+			storage: SettingStorage.File,
+		},
+
+		'ai.tool.update_note.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai.tools',
+			appTypes: [AppType.Desktop],
+			show: showAiTools,
+			label: () => _('Allow updating notes'),
+			storage: SettingStorage.File,
+		},
+
+		'ai.tool.delete_note.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai.tools',
+			appTypes: [AppType.Desktop],
+			show: showAiTools,
+			label: () => _('Allow trashing notes'),
+			storage: SettingStorage.File,
+		},
+
+		'ai.tool.manage_tags.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai.tools',
+			appTypes: [AppType.Desktop],
+			show: showAiTools,
+			label: () => _('Allow editing tags on notes'),
+			storage: SettingStorage.File,
+		},
+
+		'ai.tool.create_notebook.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai.tools',
+			appTypes: [AppType.Desktop],
+			show: showAiTools,
+			label: () => _('Allow creating notebooks'),
+			storage: SettingStorage.File,
+		},
+
+		'ai.tool.semantic_search_notes.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai.tools',
+			appTypes: [AppType.Desktop],
+			show: showAiTools,
+			label: () => _('Allow semantic search of notes'),
 			storage: SettingStorage.File,
 		},
 
@@ -1835,7 +1864,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Mobile],
 			isGlobal: true,
 		},
-		noteVisiblePanes: { value: ['editor', 'viewer'], type: SettingItemType.Array, storage: SettingStorage.File, isGlobal: true, public: false, appTypes: [AppType.Desktop] },
+		noteVisiblePanes: { value: ['editor'], type: SettingItemType.Array, storage: SettingStorage.File, isGlobal: true, public: false, appTypes: [AppType.Desktop] },
 		tagHeaderIsExpanded: { value: true, type: SettingItemType.Bool, public: false, appTypes: [AppType.Desktop] },
 		folderHeaderIsExpanded: { value: true, type: SettingItemType.Bool, public: false, appTypes: [AppType.Desktop] },
 		syncReportIsVisible: { value: false, type: SettingItemType.Bool, public: false, appTypes: [AppType.Desktop] },
@@ -2274,10 +2303,25 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 		},
 
+		'sync.autoMergeConflicts': {
+			value: true,
+			type: SettingItemType.Bool,
+			section: 'sync',
+			public: true,
+			label: () => _('Automatically merge non-conflicting note changes'),
+			description: () => _('When the same note is edited on two devices, changes made to different lines are usually merged automatically. In rare cases, automatic merging may result in duplicated content or formatting changes'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+
 		'noteLock.lockOnNoteSwitch': {
 			value: false,
 			type: SettingItemType.Bool,
-			public: false,
+			public: true,
+			appTypes: [AppType.Desktop, AppType.Mobile],
+			section: 'noteLock',
+			label: () => _('Auto relock when switching notes'),
+			show: (settings) => !!settings['featureFlag.noteLock'],
 			storage: SettingStorage.File,
 		},
 
@@ -2308,6 +2352,16 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			advanced: true,
 		},
 
+		// Controls the new conflict resolution UI. It is hidden and turned off by
+		// default so the feature can be developed over multiple releases without
+		// affecting users. Make it public and enable it by default once it is ready.
+		'featureFlag.conflictResolution': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: false,
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
 
 		// 'featureFlag.syncAccurateTimestamps': {
 		// 	value: false,
@@ -2345,6 +2399,19 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			description: () => 'Improves the security of plugin WebViews. This may break some plugins.',
 			section: 'note',
 			isGlobal: true,
+		},
+
+		'featureFlag.enableSemanticSearch': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			storage: SettingStorage.File,
+			appTypes: [AppType.Desktop],
+			label: () => 'Include semantic search results in the search panel',
+			description: () => 'Allows using semantic search from the search panel',
+			section: 'general',
+			isGlobal: true,
+			advanced: true,
 		},
 
 		// As of December 2025, the voice typing feature doesn't work well on low-resource devices.

@@ -12,6 +12,7 @@ import com.facebook.react.ReactNativeHost
 import com.facebook.react.ReactPackage
 import com.facebook.react.common.ReleaseLevel
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint
+import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import net.cozic.joplin.versioninfo.SystemVersionInformationPackage
 import net.cozic.joplin.share.SharePackage
@@ -25,7 +26,7 @@ class MainApplication : Application(), ReactApplication {
                 PackageList(this).packages.apply {
                     add(SharePackage())
                     add(SslPackage())
-                    add(SystemVersionInformationPackage())
+                    add(SystemInformationPackage())
                 }
             )
     }

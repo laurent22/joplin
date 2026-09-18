@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { useMemo, useCallback } from 'react';
-import { TouchableOpacity, StyleSheet, Text } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, Linking } from 'react-native';
 import { themeStyle } from '../global-style';
 import NavService from '@joplin/lib/services/NavService';
 
 interface Props {
 	themeId: number;
 	targetScreen: string;
+	url?: string;
 	message: string;
 	testID?: string;
 }
@@ -32,8 +33,13 @@ const WarningBox: React.FC<Props> = props => {
 	const styles = useStyles(props.themeId);
 
 	const onPress = useCallback(() => {
+		if (props.url !== undefined) {
+			void Linking.openURL(props.url);
+			return;
+		}
+
 		void NavService.go(props.targetScreen);
-	}, [props.targetScreen]);
+	}, [props.targetScreen, props.url]);
 
 	return (
 		<TouchableOpacity

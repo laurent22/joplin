@@ -60,11 +60,7 @@ runs:
         # See https://github.com/laurent22/joplin/commit/47d0d3eb9e89153a609fb5441344da10904c6308#commitcomment-159577783.
         # cache: ${{ (!contains(runner.os, 'arm') && 'yarn') || '' }}
 
-    - name: Install Yarn
-      shell: bash
-      run: |
-        # https://yarnpkg.com/getting-started/install
-        corepack enable
+    - uses: ./.github/workflows/shared/install-yarn
 
     # macos-latest ships with Python 3.12 by default, but this removes a
     # utility that's used by electron-builder (distutils) so we need to pin

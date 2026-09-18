@@ -1,58 +1,96 @@
 import * as React from 'react';
-import { WarningBannerComponent } from './WarningBanner';
+import WarningBanner from './WarningBanner';
 import Setting from '@joplin/lib/models/Setting';
-import NavService from '@joplin/lib/services/NavService';
-import { render, screen, userEvent } from '../../utils/testing/testingLibrary';
+import { act, fireEvent, render, screen, userEvent } from '../../utils/testing/testingLibrary';
 import { ShareInvitation, ShareUserStatus } from '@joplin/lib/services/share/reducer';
 import makeShareInvitation from '@joplin/lib/testing/share/makeMockShareInvitation';
+import { encryptionService, setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
+import TestProviderStack from '../testing/TestProviderStack';
+import { AppState } from '../../utils/types';
+import { Store } from 'redux';
+import createMockReduxStore from '../../utils/testing/createMockReduxStore';
+import setupGlobalStore from '../../utils/testing/setupGlobalStore';
+import MasterKey from '@joplin/lib/models/MasterKey';
 
 interface WrapperProps {
-	showMissingMasterKeyMessage?: boolean;
-	hasDisabledSyncItems?: boolean;
-	shouldUpgradeSyncTarget?: boolean;
-	showShouldUpgradeSyncTargetMessage?: boolean;
-	hasDisabledEncryptionItems?: boolean;
-	mustUpgradeAppMessage?: string;
-	shareInvitations?: ShareInvitation[];
-	processingShareInvitationResponse?: boolean;
-	showInvalidJoplinCloudCredential?: boolean;
+	store: Store<AppState>;
 }
 
-const WarningBannerWrapper: React.FC<WrapperProps> = props => {
-	return <WarningBannerComponent
-		themeId={Setting.THEME_LIGHT}
-		showMissingMasterKeyMessage={props.showMissingMasterKeyMessage ?? false}
-		hasDisabledSyncItems={props.hasDisabledSyncItems ?? false}
-		shouldUpgradeSyncTarget={props.shouldUpgradeSyncTarget ?? false}
-		showShouldUpgradeSyncTargetMessage={props.showShouldUpgradeSyncTargetMessage ?? false}
-		hasDisabledEncryptionItems={props.hasDisabledEncryptionItems ?? false}
-		mustUpgradeAppMessage={props.mustUpgradeAppMessage ?? ''}
-		shareInvitations={props.shareInvitations ?? []}
-		processingShareInvitationResponse={props.processingShareInvitationResponse ?? false}
-		showInvalidJoplinCloudCredential={props.showInvalidJoplinCloudCredential ?? false}
-	/>;
+const WarningBannerWrapper: React.FC<WrapperProps> = ({ store }) => {
+	return <TestProviderStack store={store}>
+		<WarningBanner />
+	</TestProviderStack>;
+};
+
+const createMockStore = () => {
+	const store = createMockReduxStore();
+	setupGlobalStore(store);
+
+	return {
+		store,
+		getRouteName: () => store.getState().route.routeName,
+		simulateNotLoadedMasterKey: async () => {
+			const key = await MasterKey.save(await encryptionService().generateMasterKey('111111'));
+
+			act(() => {
+				store.dispatch({
+					type: 'MASTERKEY_ADD_NOT_LOADED',
+					id: key.id,
+				});
+			});
+		},
+		setShareInvitations: (invitations: ShareInvitation[]) => {
+			act(() => {
+				store.dispatch({
+					type: 'SHARE_INVITATION_SET',
+					shareInvitations: invitations,
+				});
+			});
+		},
+		setIsProcessingShareInvitations: (processing: boolean) => {
+			act(() => {
+				store.dispatch({
+					type: 'SHARE_INVITATION_RESPONSE_PROCESSING',
+					value: processing,
+				});
+			});
+		},
+		setMustAuthenticate: () => {
+			act(() => {
+				store.dispatch({
+					type: 'MUST_AUTHENTICATE',
+					value: true,
+				});
+			});
+		},
+	};
 };
 
 
 describe('WarningBanner', () => {
-	let navServiceMock: jest.Mock<(route: unknown)=> void>;
-	beforeEach(() => {
-		navServiceMock = jest.fn();
-		NavService.dispatch = navServiceMock;
+	beforeEach(async () => {
+		await setupDatabaseAndSynchronizer(0);
+		await switchClient(0);
+
 		jest.useFakeTimers();
 	});
 
 	test('the missing master key alert should link to the encryption config screen', async () => {
-		render(<WarningBannerWrapper showMissingMasterKeyMessage={true}/>);
+		const mock = createMockStore();
+		const defaultRoute = mock.getRouteName();
+
+		await mock.simulateNotLoadedMasterKey();
+
+		render(<WarningBannerWrapper store={mock.store}/>);
 		expect(await screen.findAllByTestId('warning-box')).toHaveLength(1);
 
-		expect(navServiceMock).not.toHaveBeenCalled();
+		expect(mock.getRouteName()).toBe(defaultRoute);
 
 		const masterKeyWarning = screen.getByText(/decryption password/);
 		const user = userEvent.setup();
 		await user.press(masterKeyWarning);
 
-		expect(navServiceMock.mock.lastCall).toMatchObject([{ routeName: 'EncryptionConfig' }]);
+		expect(mock.getRouteName()).toBe('EncryptionConfig');
 	});
 
 	test.each([
@@ -60,8 +98,10 @@ describe('WarningBanner', () => {
 		[makeShareInvitation('Test user', 'email@example.com', ShareUserStatus.Accepted), false],
 		[makeShareInvitation('Test user', 'email@example.com', ShareUserStatus.Rejected), false],
 	])('should display a warning banner when there is an incoming share (case %#)', (invitation, shouldShow) => {
-		const invitations = [invitation];
-		render(<WarningBannerWrapper shareInvitations={invitations}/>);
+		const mock = createMockStore();
+		mock.setShareInvitations([invitation]);
+
+		render(<WarningBannerWrapper store={mock.store}/>);
 		const checkShownState = () => {
 			if (shouldShow) {
 				expect(screen.getByText(/would like to share a notebook/)).toBeVisible();
@@ -73,11 +113,7 @@ describe('WarningBanner', () => {
 
 		// Should not be affected by additional rejected/accepted invitations
 		for (const inviteType of [ShareUserStatus.Accepted, ShareUserStatus.Rejected]) {
-			render(
-				<WarningBannerWrapper
-					shareInvitations={[...invitations, makeShareInvitation('A', 'a@example.com', inviteType)]}
-				/>,
-			);
+			mock.setShareInvitations([invitation, makeShareInvitation('A', 'a@example.com', inviteType)]);
 			checkShownState();
 		}
 	});
@@ -85,13 +121,37 @@ describe('WarningBanner', () => {
 	test('should not display a share warning banner while processing shares', () => {
 		const invitations = [makeShareInvitation('Test Name', 'email@example.com', ShareUserStatus.Waiting)];
 		const query = /Test Name \(email@example\.com\) would like to share a notebook/;
-		render(<WarningBannerWrapper shareInvitations={invitations} processingShareInvitationResponse={false}/>);
+
+		const { store, setShareInvitations, setIsProcessingShareInvitations } = createMockStore();
+		setShareInvitations(invitations);
+		setIsProcessingShareInvitations(false);
+
+		render(<WarningBannerWrapper store={store}/>);
 		expect(screen.getByText(query)).toBeVisible();
 
-		render(<WarningBannerWrapper shareInvitations={invitations} processingShareInvitationResponse={true}/>);
+		setIsProcessingShareInvitations(true);
 		expect(screen.queryByText(query)).toBeNull();
 
-		render(<WarningBannerWrapper shareInvitations={invitations} processingShareInvitationResponse={false}/>);
+		setIsProcessingShareInvitations(false);
 		expect(screen.getByText(query)).toBeVisible();
+	});
+
+	test('invalid credentials banner for Joplin Cloud should link to a login screen', () => {
+		Setting.setValue('sync.target', 10);
+		const mock = createMockStore();
+
+		mock.setMustAuthenticate();
+		render(<WarningBannerWrapper store={mock.store}/>);
+
+		const buttonName = 'Your Joplin Cloud credentials are invalid, please login.';
+		const button = screen.getByRole('button', { name: buttonName });
+		expect(button).toBeVisible();
+		fireEvent.press(button);
+
+		// Should open the login screen
+		expect(mock.getRouteName()).toBe('JoplinCloudLogin');
+
+		// Should hide the warning banner
+		expect(screen.queryByRole('button', { name: buttonName })).toBeNull();
 	});
 });

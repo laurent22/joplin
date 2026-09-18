@@ -297,6 +297,14 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 	useRefocusOnVisiblePaneChange({ editorRef, webviewRef, visiblePanes: props.visiblePanes });
 
+	// Stop media playing in the viewer once it's hidden - https://github.com/laurent22/joplin/issues/15278
+	const viewerVisible = props.visiblePanes.includes('viewer');
+	useEffect(() => {
+		if (!viewerVisible) {
+			webviewRef.current?.stopMediaPlayback();
+		}
+	}, [viewerVisible]);
+
 	useEditorSearchHandler({
 		setLocalSearchResultCount: props.setLocalSearchResultCount,
 		searchMarkers: props.searchMarkers,

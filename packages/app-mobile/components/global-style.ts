@@ -27,6 +27,8 @@ const baseStyle = {
 
 export type ThemeStyle = BaseTheme & typeof baseStyle & {
 	backgroundColorHover4: string;
+	shadowColorOpaque: string;
+	shadowOpacity: number;
 
 	fontSize: number;
 	fontSizeSmaller: number;
@@ -133,6 +135,9 @@ function extraStyles(theme: BaseTheme) {
 
 		backgroundColorHover4: Color(theme.color4).alpha(0.12).rgb().string(),
 		borderRadius: 8,
+
+		shadowColorOpaque: Color(theme.shadowColor).alpha(1).rgb().string(),
+		shadowOpacity: Color(theme.shadowColor).alpha(),
 	};
 }
 

@@ -54,7 +54,7 @@ import EncryptionConfigScreen from './components/screens/encryption-config';
 import DropboxLoginScreen from './components/screens/dropbox-login.js';
 import { MenuProvider } from 'react-native-popup-menu';
 import SideMenu, { SideMenuPosition } from './components/SideMenu';
-import SideMenuContent from './components/side-menu-content';
+import SideMenuContent from './components/SideMenuContent/SideMenuContent';
 import SideMenuContentNote, { SideMenuContentOptions } from './components/SideMenuContentNote';
 import { reg } from '@joplin/lib/registry';
 import { defaultState } from '@joplin/lib/reducer';
@@ -229,10 +229,24 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 			Setting.setValue('activeFolderId', newState.selectedFolderId);
 		}
 
-		const notesParent: NotesParent = {
-			type: action.smartFilterId ? 'SmartFilter' : 'Folder',
-			selectedItemId: action.smartFilterId ? action.smartFilterId : newState.selectedFolderId,
-		};
+		let notesParent: NotesParent;
+		if (action.smartFilterId) {
+			notesParent = {
+				type: 'SmartFilter',
+				selectedItemId: action.smartFilterId,
+			};
+		} else if (action.tagId) {
+			notesParent = {
+				type: 'Tag',
+				selectedItemId: action.tagId,
+			};
+		} else {
+			notesParent = {
+				type: 'Folder',
+				selectedItemId: newState.selectedFolderId,
+			};
+		}
+
 		Setting.setValue('notesParent', serializeNotesParent(notesParent));
 	}
 

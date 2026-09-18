@@ -35,7 +35,8 @@ test.describe('main', () => {
 		await expect(mainScreen.noteList.getNoteItemByTitle('Test note')).toBeVisible();
 
 		// Focus the editor
-		await editor.codeMirrorEditor.click();
+		const markdownEditor = await editor.showMarkdownEditor();
+		await markdownEditor.container.click();
 
 		// Type some text
 		await mainWindow.keyboard.type('# Test note!');
@@ -44,8 +45,8 @@ test.describe('main', () => {
 		await mainWindow.keyboard.type('New note content!');
 
 		// Should render
-		const viewerFrame = editor.getNoteViewerFrameLocator();
-		await expect(viewerFrame.locator('h1')).toHaveText('Test note!');
+		const viewer = await editor.showNoteViewer();
+		await expect(viewer.content.locator('h1')).toHaveText('Test note!');
 	});
 
 	test('mermaid and KaTeX should render', async ({ mainWindow }) => {
@@ -53,7 +54,8 @@ test.describe('main', () => {
 		const editor = await mainScreen.createNewNote('🚧 Test 🚧');
 
 		const testCommitId = 'bf59b2';
-		await editor.focusCodeMirrorEditor();
+		const markdownEditor = await editor.showMarkdownEditor();
+		await markdownEditor.focusContent();
 		const noteText = [
 			'```mermaid',
 			'gitGraph',
@@ -76,32 +78,32 @@ test.describe('main', () => {
 				if (!firstLine) {
 					// Remove any auto-indentation, but avoid pressing shift-tab at
 					// the beginning of the editor.
-					await mainWindow.keyboard.press('Shift+Tab');
+					await markdownEditor.pressKey('Shift+Tab');
 				}
 
-				await mainWindow.keyboard.type(line);
+				await markdownEditor.typeText(line);
 			}
 			await mainWindow.keyboard.press('Enter');
 			firstLine = false;
 		}
 
 		// Should render mermaid
-		const viewerFrame = editor.getNoteViewerFrameLocator();
+		const viewer = await editor.showNoteViewer();
 		await expect(
-			viewerFrame.locator('pre.mermaid text', { hasText: testCommitId }),
+			viewer.content.locator('pre.mermaid text', { hasText: testCommitId }),
 		).toBeVisible();
 
 		// Should render KaTeX (block)
 		// toBeAttached: To be added to the DOM.
-		await expect(viewerFrame.locator('.joplin-editable > .katex-display').first()).toBeAttached();
+		await expect(viewer.content.locator('.joplin-editable > .katex-display').first()).toBeAttached();
 		await expect(
-			viewerFrame.locator(
+			viewer.content.locator(
 				'.katex-display *', { hasText: 'cos' },
 			).last(),
 		).toBeVisible();
 
 		// Should render KaTeX (inline)
-		await expect(viewerFrame.locator('.joplin-editable > .katex').first()).toBeAttached();
+		await expect(viewer.content.locator('.joplin-editable > .katex').first()).toBeAttached();
 	});
 
 	test('should correctly resize large images', async ({ electronApp, mainWindow }) => {
@@ -109,7 +111,7 @@ test.describe('main', () => {
 		await mainScreen.createNewNote('Image resize test (part 1)');
 		const editor = mainScreen.noteEditor;
 
-		await editor.focusCodeMirrorEditor();
+		await editor.showMarkdownEditor();
 
 		const filename = 'large-jpg-image-with-exif-rotation.jpg';
 		await setFilePickerResponse(electronApp, [join(__dirname, 'resources', filename)]);
@@ -117,14 +119,14 @@ test.describe('main', () => {
 		// Should be possible to cancel attaching for large images
 		await setMessageBoxResponse(electronApp, /^Cancel/i);
 		await editor.attachFileButton.click();
-		await expect(editor.codeMirrorEditor).toHaveText('', { useInnerText: true });
+		await editor.expectToHaveText('\n');
 
 		// Clicking "No" should not resize
 		await setMessageBoxResponse(electronApp, /^No/i);
 		await editor.attachFileButton.click();
 
-		const viewerFrame = editor.getNoteViewerFrameLocator();
-		const renderedImage = viewerFrame
+		const viewer = await editor.showNoteViewer();
+		const renderedImage = viewer.content
 			.getByAltText(filename)
 			// Work around occasional "resolved to 2 elements" errors in CI
 			.last();
@@ -133,7 +135,7 @@ test.describe('main', () => {
 
 		// To make it easier to find the image (one image per note), we switch to a new, empty note.
 		await mainScreen.createNewNote('Image resize test (part 2)');
-		await editor.focusCodeMirrorEditor();
+		await editor.showMarkdownEditor();
 
 		// Clicking "Yes" should resize
 		await setMessageBoxResponse(electronApp, /^Yes/i);

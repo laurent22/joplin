@@ -9,7 +9,7 @@ import { Stripe } from 'stripe';
 import Logger from '@joplin/utils/Logger';
 import getRawBody = require('raw-body');
 import { AccountType } from '../../models/UserModel';
-import { autoAssignCustomerPreferredLocales, betaUserTrialPeriodDays, cancelSubscription, initStripe, isBetaUser, priceIdToAccountType, stripeConfig } from '../../utils/stripe';
+import { autoAssignCustomerPreferredLocales, betaUserTrialPeriodDays, cancelSubscription, initStripe, isBetaUser, priceIdToAccountType, stripeConfig, subscriptionItemByStripeSub } from '../../utils/stripe';
 import { Subscription, User, UserFlagType } from '../../services/database/types';
 import { findPrice, PricePeriod } from '@joplin/lib/utils/joplinCloud';
 import { Models } from '../../models/factory';
@@ -63,7 +63,7 @@ async function getSubscriptionInfo(event: Stripe.Event, ctx: AppContext): Promis
 	return { sub, stripeSub };
 }
 
-export const handleSubscriptionCreated = async (stripe: Stripe, models: Models, customerName: string, userEmail: string, accountType: AccountType, stripeUserId: string, stripeSubscriptionId: string) => {
+export const handleSubscriptionCreated = async (stripe: Stripe, models: Models, customerName: string, userEmail: string, accountType: AccountType, stripeUserId: string, stripeSubscriptionId: string, source: string) => {
 	const existingUser = await models.user().loadByEmail(userEmail);
 
 	if (existingUser) {
@@ -94,6 +94,7 @@ export const handleSubscriptionCreated = async (stripe: Stripe, models: Models, 
 				stripe_user_id: stripeUserId,
 				stripe_subscription_id: stripeSubscriptionId,
 				last_payment_time: Date.now(),
+				source,
 			});
 		} else {
 			if (sub.stripe_subscription_id === stripeSubscriptionId) {
@@ -117,6 +118,7 @@ export const handleSubscriptionCreated = async (stripe: Stripe, models: Models, 
 			accountType,
 			stripeUserId,
 			stripeSubscriptionId,
+			source,
 		);
 	}
 };
@@ -279,7 +281,7 @@ export const postHandlers: PostHandlers = {
 				const checkoutSession: Stripe.Checkout.Session = event.data.object as Stripe.Checkout.Session;
 				const userEmail = checkoutSession.customer_details.email || checkoutSession.customer_email;
 				const customer = await stripe.customers.retrieve(checkoutSession.customer as string) as Stripe.Customer;
-				await stripe.customers.update(customer.id, { metadata: { source: checkoutSession.metadata.source } });
+				await stripe.customers.update(customer.id, { metadata: { source: checkoutSession.metadata?.source || '' } });
 				logger.info('Checkout session completed:', checkoutSession.id);
 				logger.info('User email:', userEmail);
 			},
@@ -293,7 +295,7 @@ export const postHandlers: PostHandlers = {
 				let accountType = AccountType.Basic;
 				try {
 					// Really have to dig out the price ID
-					const priceId = stripeSub.items.data[0].price.id;
+					const priceId = subscriptionItemByStripeSub(stripeSub).price.id;
 					accountType = priceIdToAccountType(priceId);
 				} catch (error) {
 					logger.error('Could not determine account type from price ID - defaulting to "Basic"', error);
@@ -304,11 +306,13 @@ export const postHandlers: PostHandlers = {
 				await handleSubscriptionCreated(
 					stripe,
 					models,
-					customer.name,
+					// PayPal checkouts leave the customer name empty in Stripe
+					customer.name || '',
 					customer.email,
 					accountType,
 					stripeUserId,
 					stripeSubscriptionId,
+					customer.metadata?.source || '',
 				);
 
 				const subscription = await models.subscription().byStripeSubscriptionId(stripeSubscriptionId);
@@ -359,7 +363,7 @@ export const postHandlers: PostHandlers = {
 				// Stripe to the local account.
 
 				const { sub, stripeSub } = await getSubscriptionInfo(event, ctx);
-				const newAccountType = priceIdToAccountType(stripeSub.items.data[0].price.id);
+				const newAccountType = priceIdToAccountType(subscriptionItemByStripeSub(stripeSub).price.id);
 				const user = await models.user().load(sub.user_id, { fields: ['id'] });
 				if (!user) throw new Error(`No such user: ${sub.user_id}`);
 

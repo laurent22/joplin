@@ -2,6 +2,7 @@ import { EditorSelection } from '@codemirror/state';
 import createTestEditor from '../../testing/createTestEditor';
 import replaceInlineHtml from './replaceInlineHtml';
 import waitFor from '@joplin/lib/testing/waitFor';
+import visibleEditorText from '../../testing/visibleEditorText';
 
 const createEditorWithCursor = async (initialMarkdown: string, cursorIndex: number, expectedTags: string[] = ['HTMLTag']) => {
 	const editor = await createTestEditor(
@@ -38,7 +39,7 @@ describe('replaceInlineHtml', () => {
 		// Retry on failure to handle the case where the syntax tree is slow:
 		await waitFor(() => {
 			expect(editor.contentDOM.querySelector(expectedTagsQuery)).toBeTruthy();
-			expect(editor.contentDOM.textContent).toBe(expectedText);
+			expect(visibleEditorText(editor)).toBe(expectedText);
 		});
 	});
 
@@ -66,7 +67,7 @@ describe('replaceInlineHtml', () => {
 		const editor = await createEditorWithCursor(markdown, markdown.length);
 
 		await waitFor(() => {
-			expect(editor.contentDOM.textContent).toContain('<sup>x');
+			expect(visibleEditorText(editor)).toContain('<sup>x');
 		});
 	});
 
@@ -76,7 +77,7 @@ describe('replaceInlineHtml', () => {
 
 		await waitFor(() => {
 			expect(editor.contentDOM.querySelector('strike')).toBeFalsy();
-			expect(editor.contentDOM.textContent).toContain('<strike>');
+			expect(visibleEditorText(editor)).toContain('<strike>');
 		});
 	});
 
@@ -85,7 +86,7 @@ describe('replaceInlineHtml', () => {
 		const editor = await createEditorWithCursor(markdown, markdown.length);
 
 		await waitFor(() => {
-			expect(editor.contentDOM.textContent).toBe('<sup></sup>...');
+			expect(visibleEditorText(editor)).toBe('<sup></sup>...');
 		});
 	});
 });

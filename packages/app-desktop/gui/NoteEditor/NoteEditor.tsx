@@ -18,7 +18,7 @@ import styles_ from './styles';
 import { NoteEditorProps, FormNote, OnChangeEvent, AllAssetsOptions, NoteBodyEditorRef, NoteBodyEditorPropsAndRef, NoteBodyEditorType } from './utils/types';
 import CommandService from '@joplin/lib/services/CommandService';
 import Button, { ButtonLevel } from '../Button/Button';
-import eventManager, { EventName } from '@joplin/lib/eventManager';
+import eventManager, { EventName, NoteLockNoteStateChangeEvent } from '@joplin/lib/eventManager';
 import { AppState } from '../../app.reducer';
 import ToolbarButtonUtils, { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import { _, _n } from '@joplin/lib/locale';
@@ -28,6 +28,10 @@ import Setting from '@joplin/lib/models/Setting';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
 import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
 import { itemIsReadOnly } from '@joplin/lib/models/utils/readOnly';
+import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
+import { SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import NoteLockPanel from './NoteLockPanel/NoteLockPanel';
 import { themeStyle } from '@joplin/lib/theme';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
 import NoteSearchBar from '../NoteSearchBar';
@@ -62,6 +66,7 @@ import useConnectToEditorPlugin from './utils/useConnectToEditorPlugin';
 import getResourceBaseUrl from './utils/getResourceBaseUrl';
 import useInitialCursorLocation from './utils/useInitialCursorLocation';
 import NotePositionService, { EditorCursorLocations } from '@joplin/lib/services/NotePositionService';
+import { blur } from '@joplin/lib/utils/focusHandler';
 
 const debounce = require('debounce');
 
@@ -80,6 +85,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 	const [showRevisions, setShowRevisions] = useState(false);
 	const [titleHasBeenManuallyChanged, setTitleHasBeenManuallyChanged] = useState(false);
 	const [isReadOnly, setIsReadOnly] = useState<boolean>(false);
+	const [reloadInProgress, setReloadInProgress] = useState(false);
 
 	const editorRef = useRef<NoteBodyEditorRef|null>(null);
 	const titleInputRef = useRef<HTMLInputElement|null>(null);
@@ -92,11 +98,20 @@ function NoteEditorContent(props: NoteEditorProps) {
 	}, []);
 
 	const setFormNoteRef = useRef<OnSetFormNote>(null);
+	const formNoteRef = useRef<FormNote>(null);
 	const { saveNoteIfWillChange, scheduleSaveNote } = useScheduleSaveCallbacks({
-		setFormNote: setFormNoteRef, dispatch: props.dispatch, editorRef, editorId,
+		setFormNote: setFormNoteRef, formNote: formNoteRef, dispatch: props.dispatch, editorRef, editorId,
+		editorNoteReloadTimeRequest: props.editorNoteReloadTimeRequest,
 	});
 	const formNote_beforeLoad = useCallback(async (event: OnLoadEvent) => {
 		await saveNoteIfWillChange(event.formNote);
+		// The lock must wait for the pending saves of the note being left: a locked note's save
+		// needs the unlocked session to encrypt, so locking first would drop the last edits.
+		// The note being left may have no form note at all (unlock or cannot-decrypt overlay).
+		if (isNoteLockEnabled() && Setting.value('noteLock.lockOnNoteSwitch')) {
+			await event.formNote.saveActionQueue?.waitForAllDone();
+			NoteLockSession.instance().lock();
+		}
 		setShowRevisions(false);
 	}, [saveNoteIfWillChange]);
 
@@ -107,8 +122,37 @@ function NoteEditorContent(props: NoteEditorProps) {
 	const effectiveNoteId = useEffectiveNoteId(props);
 	const { editorPlugin, editorView } = usePluginEditorView(props.plugins);
 	const builtInEditorVisible = !editorPlugin;
+	const windowId = useContext(WindowIdContext);
+	const onDecryptFailedChange = useCallback((value: boolean) => {
+		props.dispatch({ type: 'SET_ACTIVE_NOTE_IS_UNDECRYPTABLE', value, windowId });
+	}, [props.dispatch, windowId]);
+	const onReloadInProgressChange = useCallback((value: boolean) => {
+		if (value) {
+			// TinyMCE edits inside its own document. Blurring only the outer window does
+			// not reliably stop input when the editor is in a secondary window.
+			editorRef.current?.blurEditor?.();
 
-	const { formNote, setFormNote, isNewNote, resourceInfos } = useFormNote({
+			// Blur only the window whose editor is being refreshed. A secondary window
+			// can refresh in response to a change saved by the main editor; blurring the
+			// global document here would incorrectly interrupt typing in the main window.
+			const editorWindowActiveElement = containerRef.current?.ownerDocument?.activeElement;
+			if (editorWindowActiveElement) {
+				blur('NoteEditor::reloadEditorWindow', editorWindowActiveElement);
+			}
+		}
+		setReloadInProgress(value);
+		if (!value) {
+			// TinyMCE can report onWillChange before a reload, then have its delayed
+			// onChange rejected while the reload is in progress. Since no save is queued
+			// in that case, clear the saving status when the reload completes.
+			props.dispatch({
+				type: 'EDITOR_NOTE_STATUS_REMOVE',
+				id: effectiveNoteId,
+			});
+		}
+	}, [effectiveNoteId, props.dispatch]);
+
+	const { formNote, setFormNote, isNewNote, resourceInfos, decryptFailed, loadBlocked } = useFormNote({
 		noteId: effectiveNoteId,
 		isProvisional: props.isProvisional,
 		titleInputRef: titleInputRef,
@@ -117,14 +161,48 @@ function NoteEditorContent(props: NoteEditorProps) {
 		onAfterLoad: formNote_afterLoad,
 		builtInEditorVisible,
 		editorId,
+		noteLockSessionUnlocked: props.noteLockSessionUnlocked,
+		onDecryptFailedChange,
+		onReloadInProgressChange,
+		editorNoteReloadTimeRequest: props.editorNoteReloadTimeRequest,
 	});
 	setFormNoteRef.current = setFormNote;
-	const formNoteRef = useRef<FormNote>(formNote);
 	formNoteRef.current = { ...formNote };
+
+	useEffect(() => {
+		if (!isNoteLockEnabled()) return () => {};
+		// Pending scheduled saves read the lock state from the form note, so it must follow an
+		// enable/disable triggered outside the editor (note list menu, another window) immediately.
+		const onLockStateChange = (event: NoteLockNoteStateChangeEvent) => {
+			if (formNoteRef.current.id !== event.noteId) return;
+			// Enabling requires an unlocked session, so capture the key the same way a decrypt
+			// does - a pending save can then still encrypt if the session locks before it runs.
+			const noteLockKey = event.isLocked && NoteLockSession.instance().isUnlocked() ? NoteLockSession.instance().decryptedKey() : null;
+			const newFormNote = { ...formNoteRef.current, is_locked: event.isLocked ? 1 : 0, noteLockKey, isDecrypted: event.isLocked };
+			setFormNote(newFormNote);
+			void scheduleSaveNote(newFormNote);
+		};
+		eventManager.on(EventName.NoteLockNoteStateChange, onLockStateChange);
+		return () => {
+			eventManager.off(EventName.NoteLockNoteStateChange, onLockStateChange);
+		};
+	}, [setFormNote, scheduleSaveNote]);
+
+	useAsyncEffect(async () => {
+		if (!isNoteLockEnabled() || props.noteLockSessionUnlocked) return;
+		const lockedFormNote = formNoteRef.current;
+		if (!lockedFormNote?.is_locked || !lockedFormNote.hasChanged) return;
+		// The panel replaces the editor only once the edits are written, so flush them the same way
+		// a note switch does before locking.
+		await saveNoteIfWillChange(lockedFormNote);
+		// The editor dispatches its pending change when it unmounts, which would be saved over the
+		// flushed one - clearing the change id makes onFieldChange drop it, as a note switch does.
+		setFormNote(prev => ({ ...prev, bodyWillChangeId: 0 }));
+		await lockedFormNote.saveActionQueue?.waitForAllDone();
+	}, [props.noteLockSessionUnlocked, saveNoteIfWillChange]);
 
 	const formNoteFolder = useFolder({ folderId: formNote.parent_id });
 
-	const windowId = useContext(WindowIdContext);
 	const shownEditorViewIds = useVisiblePluginEditorViewIds(props.plugins, windowId);
 	useConnectToEditorPlugin({
 		startupPluginsLoaded: props.startupPluginsLoaded,
@@ -210,6 +288,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 	}, [formNote.title, props.onTitleChange]);
 
 	const onFieldChange = useCallback(async (field: string, value: string, changeId = 0) => {
+		if (reloadInProgress) return;
 		if (!isMountedRef.current) {
 			// When the component is unmounted, various actions can happen which can
 			// trigger onChange events, for example the textarea might be cleared.
@@ -258,7 +337,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 			// - debounced because many calls to scheduleSaveNote can resolve at once
 			scheduleNoteListResort();
 		}
-	}, [handleProvisionalFlag, formNote, setFormNote, isNewNote, titleHasBeenManuallyChanged, scheduleNoteListResort, scheduleSaveNote]);
+	}, [reloadInProgress, handleProvisionalFlag, formNote, setFormNote, isNewNote, titleHasBeenManuallyChanged, scheduleNoteListResort, scheduleSaveNote]);
 
 	const onDrop = useDropHandler({ editorRef });
 
@@ -417,7 +496,16 @@ function NoteEditorContent(props: NoteEditorProps) {
 		return <div style={emptyDivStyle} ref={containerRef}></div>;
 	}
 
-	const searchMarkers = useSearchMarkers(showLocalSearch, localSearchMarkerOptions, props.searches, props.selectedSearchId, props.highlightedWords);
+	const searchMarkers = useSearchMarkers({
+		showLocalSearch,
+		localSearchMarkerOptions,
+		noteId: props.noteId,
+		searchResults: props.searchResults,
+		searchId: props.selectedSearchId,
+		searches: props.searches,
+		highlightedWords: props.highlightedWords,
+		noteTitle: formNote.title,
+	});
 	const initialCursorLocation = useInitialCursorLocation({
 		noteId: props.noteId,
 	});
@@ -434,13 +522,14 @@ function NoteEditorContent(props: NoteEditorProps) {
 		content: formNote.body,
 		contentMarkupLanguage: markupLanguage,
 		contentOriginalCss: formNote.originalCss,
+		editorNoteReloadTimeRequest: props.editorNoteReloadTimeRequest,
 		initialCursorLocation,
 		resourceInfos: resourceInfos,
 		resourceDirectory: Setting.value('resourceDir'),
 		htmlToMarkdown: htmlToMarkdown,
 		markupToHtml: markupToHtml,
 		allAssets: allAssets,
-		disabled: isReadOnly,
+		disabled: isReadOnly || reloadInProgress,
 		themeId: props.themeId,
 		dispatch: props.dispatch,
 		noteToolbar: null,
@@ -469,7 +558,9 @@ function NoteEditorContent(props: NoteEditorProps) {
 		useCustomPdfViewer: props.useCustomPdfViewer,
 		// We need it to identify the context for which media is rendered.
 		// It is currently used to remember pdf scroll position for each attachments of each note uniquely.
-		noteId: props.noteId,
+		// Use the form note object to ensure the editor is associated with the loaded form note until onBeforeLoad
+		// has flushed any pending changes from it.
+		noteId: formNote.id,
 		watchedNoteFiles: props.watchedNoteFiles,
 		enableHtmlToMarkdownBanner: props.enableHtmlToMarkdownBanner,
 		showNoteLinkIcon: props.showNoteLinkIcon,
@@ -488,11 +579,11 @@ function NoteEditorContent(props: NoteEditorProps) {
 	// show the editor toggle. We can't compute this from the redux note list
 	// because note bodies aren't in the preview fields.
 	useEffect(() => {
-		props.dispatch({ type: 'WHITEBOARD_ACTIVE_NOTE_SET', value: noteHasWhiteboardFence });
-	}, [noteHasWhiteboardFence, props.dispatch]);
+		props.dispatch({ type: 'WHITEBOARD_ACTIVE_NOTE_SET', value: noteHasWhiteboardFence, windowId });
+	}, [noteHasWhiteboardFence, windowId, props.dispatch]);
 
 	if (useWhiteboardEditor) {
-		editor = <WhiteboardEditor {...editorProps}/>;
+		editor = <WhiteboardEditor key={formNote.id} {...editorProps}/>;
 	} else if (builtInEditorVisible) {
 		if (props.bodyEditor === 'TinyMCE') {
 			editor = <TinyMCE {...editorProps}/>;
@@ -660,7 +751,43 @@ function NoteEditorContent(props: NoteEditorProps) {
 		/>;
 	};
 
-	if (formNote.encryption_applied || !formNote.id || !effectiveNoteId) {
+	// A locked note has no form note while the session is locked (see loadNoteForForm), so the
+	// panel is driven by the note metadata. A loaded form note stays mounted on lock only if it
+	// has unsaved changes, so they are not thrown away.
+	const lockedNoteMetadata = isNoteLockEnabled() && effectiveNoteId ? props.notes.find(n => n.id === effectiveNoteId) : null;
+	if (lockedNoteMetadata?.is_locked) {
+		// The session is unlocked but the note content failed to decrypt (e.g. it was encrypted
+		// prior to a password reset) - locking the session again shows the regular unlock panel.
+		if (decryptFailed && props.noteLockSessionUnlocked) {
+			return (
+				<div style={styles.root} ref={containerRef}>
+					<NoteLockPanel
+						noteTitle={lockedNoteMetadata.title}
+						hasNoteLockKey={props.hasNoteLockKey}
+						dispatch={props.dispatch}
+						undecryptable={true}
+					/>
+				</div>
+			);
+		}
+		const formNoteLoaded = formNote.id === effectiveNoteId;
+		const showLockPanel = formNoteLoaded
+			? !props.noteLockSessionUnlocked && !formNote.hasChanged
+			: !props.noteLockSessionUnlocked || loadBlocked;
+		if (showLockPanel) {
+			return (
+				<div style={styles.root} ref={containerRef}>
+					<NoteLockPanel
+						noteTitle={lockedNoteMetadata.title}
+						hasNoteLockKey={props.hasNoteLockKey}
+						dispatch={props.dispatch}
+					/>
+				</div>
+			);
+		}
+	}
+
+	if ((!editorPlugin && reloadInProgress) || formNote.encryption_applied || !formNote.id || !effectiveNoteId) {
 		return renderNoNotes(styles.root);
 	}
 
@@ -672,6 +799,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		const note = props.notes.find(n => n.id === props.selectedNoteIds[0]);
 		if (!note) return null;
 		if (note.markup_language !== MarkupLanguage.Html) return null;
+		if (isNoteLockEnabled() && note.is_locked && !props.noteLockSessionUnlocked) return null;
 
 		return (
 			<div style={styles.resourceWatchBanner}>
@@ -700,7 +828,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 					noteTitle={formNote.title}
 					noteUserUpdatedTime={formNote.user_updated_time}
 					onTitleChange={onTitleChange}
-					disabled={isReadOnly}
+					disabled={isReadOnly || reloadInProgress}
 				/>
 				{renderSearchInfo()}
 				<div style={{ display: 'flex', flex: 1, paddingLeft: theme.editorPaddingLeft, maxHeight: '100%', minHeight: '0' }}>
@@ -724,6 +852,15 @@ function NoteEditorContent(props: NoteEditorProps) {
 interface ConnectProps {
 	windowId: string;
 }
+
+// Memoized because mapStateToProps runs on every dispatch and SyncInfo parses the cached JSON.
+let hasNoteLockKeyCache: { syncInfoCache: string; value: boolean } = null;
+const hasNoteLockKey = (syncInfoCache: string) => {
+	if (!hasNoteLockKeyCache || hasNoteLockKeyCache.syncInfoCache !== syncInfoCache) {
+		hasNoteLockKeyCache = { syncInfoCache, value: !!new SyncInfo(syncInfoCache).noteLockKey };
+	}
+	return hasNoteLockKeyCache.value;
+};
 
 const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 	const whenClauseContext = stateToWhenClauseContext(state, { windowId: ownProps.windowId });
@@ -784,6 +921,9 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		enableInEditorRendering: state.settings['editor.inlineRendering'],
 		showNoteLinkIcon: state.settings['notes.showNoteLinkIcon'],
 		whiteboardForceMarkdown: windowState.whiteboardForceMarkdown ?? {},
+		noteLockSessionUnlocked: state.noteLockSessionUnlocked,
+		hasNoteLockKey: hasNoteLockKey(state.settings['syncInfoCache']),
+		editorNoteReloadTimeRequest: windowState.windowEditorNoteReloadTimeRequest,
 	};
 };
 

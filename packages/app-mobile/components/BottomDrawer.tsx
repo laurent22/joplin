@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Animated, Easing, NativeScrollEvent, NativeScrollPoint, NativeSyntheticEvent, PanResponder, Platform, Pressable, StyleSheet, useWindowDimensions, View, ViewStyle } from 'react-native';
+import { RefObject, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { Animated, Dimensions, Easing, GestureResponderEvent, LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, PanResponder, PanResponderGestureState, Platform, Pressable, ScrollView, StyleProp, StyleSheet, useWindowDimensions, View, ViewStyle } from 'react-native';
 import useSafeAreaPadding from '../utils/hooks/useSafeAreaPadding';
 import { themeStyle, ThemeStyle } from './global-style';
 import Modal from './Modal';
@@ -9,26 +9,46 @@ import { AppState } from '../utils/types';
 import useReduceMotionEnabled from '../utils/hooks/useReduceMotionEnabled';
 import { _ } from '@joplin/lib/locale';
 
+export enum MenuAlignment {
+	Center,
+	Right,
+}
+
+export enum MenuType {
+	Docked,
+	Floating,
+}
+
 interface Props {
 	themeId: number;
-	style: ViewStyle;
+	menuType?: MenuType;
+	style?: StyleProp<ViewStyle>;
+	contentStyle?: StyleProp<ViewStyle>;
+	alignment: MenuAlignment;
 	children: React.ReactNode;
 	visible: boolean;
 	draggable: boolean;
+	autoScrollToEnd?: boolean;
 	onDismiss: ()=> void;
 	onShow?: ()=> void;
 }
 
 interface UseStylesProps {
+	alignment: MenuAlignment;
+	menuType: MenuType;
 	theme: ThemeStyle;
 	dragging: boolean;
 	draggable: boolean;
+	backgroundOpacity: Animated.AnimatedInterpolation<number>;
 	dragOffset: Animated.AnimatedInterpolation<number>;
 }
 
-const useStyles = ({ theme, dragging, draggable, dragOffset }: UseStylesProps) => {
+const useStyles = ({ theme, menuType, dragging, alignment, draggable, dragOffset, backgroundOpacity }: UseStylesProps) => {
 	const { width: windowWidth, height: windowHeight } = useWindowDimensions();
 	const safeAreaPadding = useSafeAreaPadding();
+
+	const menuMarginTop = theme.margin + safeAreaPadding.paddingTop;
+	const showDragHandle = draggable && menuType === MenuType.Docked;
 
 	return useMemo(() => {
 		const isSmallWidthScreen = windowWidth < 500;
@@ -39,8 +59,26 @@ const useStyles = ({ theme, dragging, draggable, dragOffset }: UseStylesProps) =
 		const spaceBelowScreenEdge = Platform.OS === 'web' ? 0 : windowHeight;
 
 		return StyleSheet.create({
+			backgroundStyle: {
+				backgroundColor: theme.backgroundColorTransparent2,
+				opacity: backgroundOpacity.interpolate({
+					inputRange: [0, 1],
+					outputRange: [0, 1],
+					extrapolate: 'clamp',
+				}),
+				position: 'absolute',
+				left: 0,
+				right: 0,
+				// Add additional space to prevent the edge of the background from being visible
+				// during overscroll on iOS
+				top: -spaceBelowScreenEdge,
+				bottom: -spaceBelowScreenEdge,
+
+				zIndex: 0,
+			},
 			menuStyle: {
-				alignSelf: 'flex-end',
+				zIndex: 1,
+				alignSelf: alignment === MenuAlignment.Center ? 'center' : 'flex-end',
 				...(isSmallWidthScreen ? {
 					// Center on small screens, rather than float right.
 					alignSelf: 'center',
@@ -51,11 +89,23 @@ const useStyles = ({ theme, dragging, draggable, dragOffset }: UseStylesProps) =
 
 				backgroundColor: theme.backgroundColor,
 				borderRadius: 16,
-				borderBottomRightRadius: 0,
-				borderBottomLeftRadius: 0,
-				maxWidth: Math.min(400, windowWidth - menuGapRight - menuGapLeft),
+				...(menuType === MenuType.Docked ? {
+					borderBottomRightRadius: 0,
+					borderBottomLeftRadius: 0,
+					marginBottom: -spaceBelowScreenEdge,
+				} : {
+					marginBottom: safeAreaPadding.paddingBottom,
+				}),
+				maxWidth: Math.min(
+					menuType === MenuType.Floating ? 250 : 400,
+					windowWidth - menuGapRight - menuGapLeft,
+				),
 
-				marginBottom: -spaceBelowScreenEdge,
+				shadowRadius: 4,
+				shadowColor: theme.shadowColorOpaque,
+				shadowOpacity: theme.shadowOpacity,
+				elevation: 2,
+
 
 				userSelect: dragging ? 'none' : 'auto',
 				transform: [
@@ -77,18 +127,23 @@ const useStyles = ({ theme, dragging, draggable, dragOffset }: UseStylesProps) =
 				flexShrink: 1,
 				flexGrow: 1,
 
-				marginBottom: spaceBelowScreenEdge,
-
-				// The drag handle should be at the very top of the menu
-				paddingTop: draggable ? 0 : undefined,
-				paddingBottom: 14 + safeAreaPadding.paddingBottom,
 				padding: 20,
+
+				...(menuType === MenuType.Docked ? {
+					paddingBottom: 14 + safeAreaPadding.paddingBottom,
+					// The drag handle should be at the very top of the menu
+					paddingTop: showDragHandle ? 0 : undefined,
+					marginBottom: spaceBelowScreenEdge,
+				} : {
+					paddingTop: theme.marginSmall,
+					paddingBottom: theme.marginSmall,
+				}),
 			},
 			modalBackground: {
-				paddingTop: 0,
 				paddingLeft: 0,
 				paddingRight: 0,
 				paddingBottom: 0,
+				paddingTop: menuMarginTop,
 				justifyContent: 'flex-end',
 				flexDirection: 'column',
 			},
@@ -99,7 +154,7 @@ const useStyles = ({ theme, dragging, draggable, dragOffset }: UseStylesProps) =
 			},
 
 			dragHandleContainer: {
-				display: draggable ? 'flex' : 'none',
+				display: showDragHandle ? 'flex' : 'none',
 				width: '100%',
 				height: theme.margin,
 				cursor: 'auto',
@@ -127,36 +182,84 @@ const useStyles = ({ theme, dragging, draggable, dragOffset }: UseStylesProps) =
 				zIndex: 2,
 			},
 		});
-	}, [theme, safeAreaPadding, windowWidth, dragging, draggable, dragOffset, windowHeight]);
+	}, [theme, menuType, safeAreaPadding, showDragHandle, windowWidth, dragging, alignment, dragOffset, windowHeight, backgroundOpacity, menuMarginTop]);
 };
 
-const usePanResponder = (
-	setDragging: (dragging: boolean)=> void,
-	onDragEnd: (dx: number, dy: number)=> void,
-	dragValue: Animated.Value,
-) => {
-	const currentScrollRef = useRef<NativeScrollPoint|null>(null);
-	const onScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
-		currentScrollRef.current = event.nativeEvent.contentOffset;
-	}, []);
-	const panResponder = useMemo(() => {
-		return PanResponder.create({
-			// Don't use panResponderCapture
-			onMoveShouldSetPanResponder: (_event, gestureState) => {
-				if (currentScrollRef.current) {
-					const top = currentScrollRef.current.y;
+interface UsePanResponderProps {
+	visible: boolean;
+	animating: boolean;
+	setDragging: (dragging: boolean)=> void;
+	onDragEnd: (dx: number, dy: number)=> void;
+	dragValue: Animated.Value;
+	dragHandleRef: RefObject<View|null>;
+}
 
-					const tolerance = 3;
-					if (top > tolerance && gestureState.dy > 0) return false;
+const usePanResponder = ({
+	visible,
+	animating,
+	setDragging,
+	onDragEnd,
+	dragValue,
+	dragHandleRef,
+}: UsePanResponderProps) => {
+	const isScrolledToTopRef = useRef(true);
+	const onScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
+		isScrolledToTopRef.current = event.nativeEvent.contentOffset.y < 5;
+	}, []);
+
+	const dragHandleTop = useRef(0);
+	const dragHandleBottom = useRef(0);
+
+	const windowSize = useWindowDimensions();
+	// windowSizeKey forces re-measures on window size changes:
+	const windowSizeKey = `${windowSize.width}x${windowSize.height}`;
+	useLayoutEffect(() => {
+		if (!visible || animating || !windowSizeKey) return;
+
+		dragHandleRef.current?.measure((_x, _y, _width, height, _pageX, pageY) => {
+			dragHandleTop.current = pageY;
+			dragHandleBottom.current = pageY + height;
+		});
+	}, [visible, animating, dragHandleRef, windowSizeKey]);
+
+	const panResponder = useMemo(() => {
+		const isInDragHandle = (eventY: number) => {
+			return eventY >= dragHandleTop.current && eventY <= dragHandleBottom.current;
+		};
+
+		// Don't use panResponderCapture on web to prevent buttons from incorrectly being pressed
+		const onMoveEvent = Platform.OS === 'android' ? 'onMoveShouldSetPanResponderCapture' as const : 'onMoveShouldSetPanResponder' as const;
+		const onStartEvent = Platform.OS === 'android' ? 'onStartShouldSetPanResponderCapture' as const : 'onStartShouldSetPanResponder' as const;
+		return PanResponder.create({
+			// Check onStart and onMove: On Android, starting drag onMove is unreliable when the menu has scroll
+			[onStartEvent]: (event: GestureResponderEvent) => {
+				return isInDragHandle(event.nativeEvent.pageY);
+			},
+
+			// On Android, we need to set the pan responder immediately to allow dragging the menu on non-Pressable elements
+			...(Platform.OS === 'android' ? {
+				onStartShouldSetPanResponder: () => isScrolledToTopRef.current,
+				onShouldBlockNativeResponder: event => isInDragHandle(event.nativeEvent.pageY),
+			} : {}),
+
+			[onMoveEvent]: (_event: GestureResponderEvent, gestureState: PanResponderGestureState) => {
+				if (!isScrolledToTopRef.current) {
+					return false;
 				}
+
+				if (isInDragHandle(gestureState.moveY)) return true;
+
 				// Use a large tolerance so that buttons in the menu are still clickable, even
 				// with a noisy input source:
-				return Math.abs(gestureState.dx) < 40 && gestureState.dy > 22;
+				const tolerance = 22;
+				return Math.abs(gestureState.dx) < 40 && gestureState.dy >= tolerance;
 			},
 			onPanResponderGrant: () => {
 				setDragging(true);
 			},
-			onPanResponderTerminate: () => setDragging(false),
+			onPanResponderTerminate: () => {
+				setDragging(false);
+			},
 			onPanResponderMove: Animated.event([
 				null,
 				// Updates menuDragOffset with the .dy property of the second argument:
@@ -174,109 +277,234 @@ const usePanResponder = (
 
 interface UseSyncVisibleProps {
 	visible: boolean;
-	dragToOffset: (offset: number)=> void;
+	slideAnimation: boolean;
+	menuDragOffset: Animated.Value;
+	onDismiss: ()=> void;
 	containerRef: RefObject<View|null>;
+	scrollViewRef: RefObject<ScrollView|null>;
+	autoScrollToEnd: boolean;
 }
 
 const useUpdateOnVisibilityChange = (props: UseSyncVisibleProps) => {
 	const propsRef = useRef(props);
-	useEffect(() => {
-		if (props.visible) {
-			propsRef.current.dragToOffset(0);
-		} else {
-			propsRef.current.containerRef.current?.measure((_x, _y, _width, height) => {
-				propsRef.current.dragToOffset(height);
+	propsRef.current = props;
+
+	const screenSize = useWindowDimensions();
+	const screenSizeRef = useRef(screenSize);
+	screenSizeRef.current = screenSize;
+
+	const [animating, setAnimating] = useState(false);
+	const currentAnimation = useRef<Animated.CompositeAnimation|null>(null);
+	const dragToOffset = useCallback(async (offset: number, animate: boolean) => {
+		currentAnimation.current?.stop();
+
+		const baseAnimationProps = {
+			toValue: offset,
+			easing: Easing.elastic(0.5),
+			duration: animate ? 250 : 0,
+			useNativeDriver: true,
+		};
+		const animation = Animated.timing(propsRef.current.menuDragOffset, baseAnimationProps);
+		currentAnimation.current = animation;
+
+		setAnimating(true);
+		return new Promise<void>(resolve => {
+			animation.start(() => {
+				const interrupted = currentAnimation.current !== animation;
+				if (!interrupted) {
+					setAnimating(false);
+					currentAnimation.current = null;
+				}
+
+				resolve();
 			});
+		});
+	}, []);
+
+	const slideMenuOut = useCallback(async () => {
+		const getMenuDismissedOffset = () => new Promise<number>((resolve) => {
+			const container = propsRef.current.containerRef.current;
+			if (!container) {
+				// If the container isn't mounted use the screen height as an offset for fully-dismissed:
+				resolve(screenSizeRef.current.height);
+				return;
+			}
+
+			container.measure(async (_x, _y, _width, height, _pageX, pageY) => {
+				const menuBottom = screenSizeRef.current.height - (pageY + height);
+				resolve(height + menuBottom);
+			});
+		});
+		return await dragToOffset(await getMenuDismissedOffset(), propsRef.current.slideAnimation);
+	}, [dragToOffset]);
+
+	useEffect(() => {
+		const slideMenuIn = () => dragToOffset(0, propsRef.current.slideAnimation);
+
+		if (props.visible) {
+			if (propsRef.current.autoScrollToEnd) {
+				props.scrollViewRef.current?.scrollToEnd({ animated: false });
+			}
+
+			void slideMenuIn();
 		}
-	}, [props.visible]);
+	}, [props.visible, props.scrollViewRef, dragToOffset]);
+
+	const isDismissingRef = useRef(false);
+
+	const resetDrag = useCallback(() => {
+		void dragToOffset(0, true);
+	}, [dragToOffset]);
+
+	const onHide = useCallback(async () => {
+		// Avoid duplicate dismiss animations
+		if (isDismissingRef.current) return;
+		try {
+			isDismissingRef.current = true;
+			if (propsRef.current.slideAnimation) {
+				await slideMenuOut();
+			}
+
+			propsRef.current.onDismiss();
+		} finally {
+			isDismissingRef.current = false;
+		}
+	}, [slideMenuOut]);
+
+	return { onHide, resetDrag, animating };
 };
 
 const BottomDrawer: React.FC<Props> = props => {
+	const menuType = props.menuType ?? MenuType.Docked;
 	const theme = themeStyle(props.themeId);
 	const [dragging, setDragging] = useState(false);
 
-	const menuDragOffset = useMemo(() => new Animated.Value(0), []);
+	const [menuHeight, setMenuHeight] = useState(0);
+	const menuHeightRef = useRef(0);
+	menuHeightRef.current = menuHeight;
+
+	const menuDragOffset = useMemo(() => (
+		// Start with the menu offscreen so that the slide-in animation works.
+		// Using the window height as an initial offset ensures that the menu starts completely
+		// offscreen.
+		new Animated.Value(Dimensions.get('window').height)
+	), []);
+
+	const onContainerLayout = useCallback((layout: LayoutChangeEvent) => {
+		setMenuHeight(layout.nativeEvent.layout.height);
+	}, []);
+	const backgroundOpacity = useMemo(() => {
+		return Animated.divide(
+			Animated.add(Animated.multiply(menuDragOffset, -1), menuHeight), Math.max(menuHeight, 1),
+		);
+	}, [menuHeight, menuDragOffset]);
+
 	const menuYOffset = useMemo(() => menuDragOffset, [menuDragOffset]);
-	const styles = useStyles({ theme, dragging, draggable: props.draggable, dragOffset: menuYOffset });
+	const styles = useStyles({
+		theme, menuType: menuType, dragging, alignment: props.alignment, draggable: props.draggable, dragOffset: menuYOffset, backgroundOpacity,
+	});
 
-	const reduceMotionEnabled = useReduceMotionEnabled();
-	const reduceMotionEnabledRef = useRef(false);
-	reduceMotionEnabledRef.current = reduceMotionEnabled;
-
-	const dragToOffset = useCallback((offset: number) => {
-		const animation = Animated.timing(menuDragOffset, {
-			toValue: offset,
-			easing: Easing.elastic(0.5),
-			duration: reduceMotionEnabledRef.current ? 0 : 200,
-			useNativeDriver: true,
-		});
-		animation.start();
-	}, [menuDragOffset]);
-
-	const clearDragOffset = useCallback(() => {
-		dragToOffset(0);
-	}, [dragToOffset]);
+	const reduceMotion = useReduceMotionEnabled();
+	const slideAnimationEnabled = !reduceMotion && menuType === MenuType.Docked;
+	const nativeFadeAnimation = !slideAnimationEnabled;
+	const slideAnimationEnabledRef = useRef(false);
+	slideAnimationEnabledRef.current = slideAnimationEnabled;
 
 	const containerRef = useRef<View|null>(null);
-	useUpdateOnVisibilityChange({
-		visible: props.visible, dragToOffset, containerRef,
+	const scrollViewRef = useRef<ScrollView|null>(null);
+	const { onHide, resetDrag, animating } = useUpdateOnVisibilityChange({
+		visible: props.visible, slideAnimation: slideAnimationEnabled, menuDragOffset, containerRef, onDismiss: props.onDismiss, scrollViewRef, autoScrollToEnd: props.autoScrollToEnd,
 	});
 
 	const onDragEnd = useCallback((_dx: number, dy: number) => {
 		if (dy > 50) {
-			props.onDismiss();
+			void onHide();
 		} else {
-			clearDragOffset();
+			resetDrag();
 		}
-	}, [clearDragOffset, props.onDismiss]);
+	}, [resetDrag, onHide]);
 
-	const { panResponder, onScroll: onPanResponderScroll } = usePanResponder(
-		setDragging, onDragEnd, menuDragOffset,
-	);
+	const dragHandleRef = useRef<View|null>(null);
+	const { panResponder, onScroll: onPanResponderScroll } = usePanResponder({
+		visible: props.visible,
+		animating,
+		setDragging,
+		onDragEnd,
+		dragValue: menuDragOffset,
+		dragHandleRef,
+	});
 
-	const onContainerScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
+	const onScrollDragEnd = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
 		const offsetY = event.nativeEvent.contentOffset.y;
-		// On iOS, support menu dismissal through the native scrollview's overscroll behavior:
-		if (offsetY < -80) {
-			props.onDismiss();
-		} else {
-			onPanResponderScroll(event);
+		// Use a smaller tolerance for smaller menus to ensure that they're still dismissible
+		const overscrollTolerance = Math.min(80, menuHeightRef.current / 4);
+
+		// On platforms that support overscroll (iOS), support menu dismissal through the
+		// native scrollview's overscroll behavior:
+		if (offsetY < -overscrollTolerance) {
+			// Start the animation at the current scroll position, to avoid a jump when starting
+			// the animation:
+			menuDragOffset.setValue(-offsetY);
+			void onHide();
 		}
-	}, [props.onDismiss, onPanResponderScroll]);
+	}, [onHide, menuDragOffset]);
 
 	return <Modal
 		visible={props.visible}
-		onClose={props.onDismiss}
+		onClose={onHide}
 		onShow={props.onShow}
-		backgroundColor={theme.backgroundColorTransparent2}
+		backgroundColor='transparent'
 		modalBackgroundStyle={styles.modalBackground}
 		dismissButtonStyle={styles.dismissButton}
-		containerStyle={styles.menuStyle}
+		wrapContent={view => {
+			return <>
+				<Animated.View style={styles.backgroundStyle}/>
+				{view}
+			</>;
+		}}
+		containerStyle={[styles.menuStyle, props.style]}
+		animationType={nativeFadeAnimation ? 'fade' : 'none'}
 		scrollOverflow={{
-			onScroll: onContainerScroll,
+			onScroll: onPanResponderScroll,
+			onScrollEndDrag: onScrollDragEnd,
+
+			// Throttling scroll events avoids a warning on web
+			scrollEventThrottle: 30,
+
+			// Disable scrollbars during in/out animations on web to avoid layout shift
+			scrollEnabled: !animating,
+			ref: scrollViewRef,
 		}}
 	>
-		<View {...panResponder.panHandlers} style={[styles.contentContainer, props.style]} ref={containerRef}>
+		<View
+			{...panResponder.panHandlers}
+			onLayout={onContainerLayout}
+			style={[styles.contentContainer, props.contentStyle]}
+			ref={containerRef}
+		>
 			{dragging && <View style={styles.dragOverlay} />}
 			<DragHandle
+				containerRef={dragHandleRef}
 				containerStyle={styles.dragHandleContainer}
 				style={styles.dragHandle}
-				onDismiss={props.onDismiss}
+				onDismiss={onHide}
 			/>
 			{props.children}
 		</View>
 	</Modal>;
 };
 
-export default connect((state: AppState) => {
+const BottomDrawerComponent: React.FC<Omit<Props, 'themeId'>> = connect((state: AppState) => {
 	return {
 		themeId: state.settings.theme,
 	};
 })(BottomDrawer);
+export default BottomDrawerComponent;
 
 
 interface DragHandleProps {
 	style: ViewStyle;
+	containerRef: RefObject<View|null>;
 	containerStyle: ViewStyle;
 
 	onDismiss: ()=> void;
@@ -285,8 +513,9 @@ interface DragHandleProps {
 const DragHandle: React.FC<DragHandleProps> = props => {
 	return <Pressable
 		onPress={props.onDismiss}
-		style={props.containerStyle}
 		aria-label={_('Dismiss')}
+		style={props.containerStyle}
+		ref={props.containerRef}
 	>
 		<View style={props.style}/>
 	</Pressable>;

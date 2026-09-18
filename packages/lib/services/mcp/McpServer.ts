@@ -1,7 +1,8 @@
 import Logger from '@joplin/utils/Logger';
 import Setting from '../../models/Setting';
-import { allTools, enabledTools, findTool } from './registry';
-import { JsonRpcRequest, JsonRpcResponse, JsonRpcErrorCodes, McpProtocolVersion, ToolCallResult, ToolError } from './types';
+import ToolIndex from '../ai/tools/ToolIndex';
+import { JsonRpcRequest, JsonRpcResponse, JsonRpcErrorCodes, McpProtocolVersion, ToolCallResult, ToolContent, ToolTextContent } from './types';
+import { ToolError, ToolImageResponse, ToolOutput } from '../ai/tools/types';
 
 const logger = Logger.create('McpServer');
 
@@ -75,7 +76,7 @@ export default class McpServer {
 
 	private handleToolsList() {
 		return {
-			tools: enabledTools().map(t => ({
+			tools: new ToolIndex(null).getTools().map(t => ({
 				name: t.id,
 				description: t.description,
 				inputSchema: t.inputSchema,
@@ -88,17 +89,17 @@ export default class McpServer {
 		if (!params || typeof params.name !== 'string') {
 			throw new InvalidParamsError('Missing or invalid "name" parameter');
 		}
-		const tool = findTool(params.name);
+		const index = new ToolIndex(null);
+		const tool = index.findTool(params.name);
 		if (!tool) {
-			// "Disabled" vs "unknown" surface differently so the LLM gets actionable feedback.
-			const exists = allTools().some(t => t.id === params.name);
-			return toolErrorResult(exists ? `Tool '${params.name}' is disabled in Joplin settings` : `Unknown tool '${params.name}'`);
+			return toolErrorResult(index.describeToolNotFoundFailure(params.name));
 		}
 		const input = params.arguments ?? {};
 		try {
-			const payload = await tool.handler(input);
+			const payload = await tool.handler(input, {}) as ToolOutput;
+
 			return {
-				content: [{ type: 'text', text: serialisePayload(payload) }],
+				content: [serialisePayload(payload)],
 			};
 		} catch (error) {
 			if (error instanceof ToolError) {
@@ -129,8 +130,18 @@ const toolErrorResult = (message: string): ToolCallResult => ({
 
 // MCP content is always text, so we JSON-serialise objects/arrays and pass
 // strings through unchanged. null/undefined collapse to an empty string.
-const serialisePayload = (payload: unknown) => {
-	if (payload === null || payload === undefined) return '';
-	if (typeof payload === 'string') return payload;
-	return JSON.stringify(payload, null, 2);
+const serialisePayload = (payload: unknown): ToolContent => {
+	const textResponse = (text: string): ToolTextContent => ({
+		type: 'text', text,
+	});
+	if (payload === null || payload === undefined) return textResponse('');
+	if (typeof payload === 'string') return textResponse(payload);
+	if (payload instanceof ToolImageResponse) {
+		return {
+			type: 'image',
+			data: payload.base64Only,
+			mimeType: payload.mimeType,
+		};
+	}
+	return textResponse(JSON.stringify(payload, null, 2));
 };
