@@ -723,6 +723,13 @@ function NoteEditorContent(props: NoteEditorProps) {
 		props.dispatch({ type: 'CONFLICT_UI_ACTIVE_NOTE_SET', value: conflictBlocksPlugins, windowId });
 	}, [conflictBlocksPlugins, windowId, props.dispatch]);
 
+	useEffect(() => {
+		if (!conflictBlocksPlugins) return;
+		const noteId = formNote.id;
+		if (!props.watchedNoteFiles.includes(noteId)) return;
+		void ExternalEditWatcher.instance().stopWatching(noteId);
+	}, [conflictBlocksPlugins, formNote.id, props.watchedNoteFiles]);
+
 	if (useWhiteboardEditor) {
 		editor = <WhiteboardEditor key={formNote.id} {...editorProps}/>;
 	} else if (builtInEditorVisible) {
