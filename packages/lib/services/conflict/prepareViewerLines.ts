@@ -67,7 +67,8 @@ export const prepareViewerLines = (lines: string[]): PreparedLine[] => {
 				fence = { char: run[0], length: run.length };
 				continue;
 			}
-			if (run[0] === fence.char && run.length >= fence.length) {
+			const afterRun = lines[i].slice(marker[0].length);
+			if (run[0] === fence.char && run.length >= fence.length && /^[ \t]*$/.test(afterRun)) {
 				fence = null;
 				continue;
 			}

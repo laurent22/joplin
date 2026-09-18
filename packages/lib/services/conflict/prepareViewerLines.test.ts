@@ -24,6 +24,8 @@ describe('prepareViewerLines', () => {
 	test.each([
 		['a shorter fence inside a longer one', ['````', '```js', '| --- | --- |', '| a | b |', '````']],
 		['a different fence character', ['```', '~~~', '| --- | --- |', '| a | b |', '```']],
+		['a same-length fence with an info string', ['```', '```js', '| --- | --- |', '| a | b |', '```']],
+		['a same-length tilde fence with an info string', ['~~~', '~~~js', '| --- | --- |', '| a | b |', '~~~']],
 	])('should not end a code block at %s', (_label, lines) => {
 		expect(prepareViewerLines(lines).every(line => !line.isTableRow)).toBe(true);
 	});
