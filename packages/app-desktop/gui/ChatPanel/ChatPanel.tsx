@@ -110,14 +110,17 @@ const ChatPanel: React.FC<Props> = (props) => {
 	const { dispatch, messages } = props;
 	const [input, setInput] = useState('');
 	const [conversations, setConversations] = useState<Conversation[]>([]);
-	const handleHistoryToggle = useCallback(async (event: React.SyntheticEvent<HTMLDetailsElement>) => {
-		if (!event.currentTarget.open) return;
+	const loadConversationHistory = useCallback(async (search = '') => {
 		try {
-			setConversations(await ChatConversation.history());
+			setConversations(await ChatConversation.history(search));
 		} catch (error) {
 			logger.error('Could not load chat conversations', error);
 		}
 	}, []);
+	const handleHistoryToggle = useCallback(async (event: React.SyntheticEvent<HTMLDetailsElement>) => {
+		if (!event.currentTarget.open) return;
+		await loadConversationHistory();
+	}, [loadConversationHistory]);
 	const [sending, setSending] = useState(false);
 	const archivingRef = useRef(false);
 	const [disclosureShown, setDisclosureShown] = useState<boolean>(() => {
@@ -510,6 +513,7 @@ const ChatPanel: React.FC<Props> = (props) => {
 				conversations={conversations}
 				currentConversationId={props.conversationId}
 				onToggle={handleHistoryToggle}
+				onSearchChange={loadConversationHistory}
 				onOpen={handleOpenConversation}
 				onRename={handleRenameConversation}
 				onDelete={handleDeleteConversation}

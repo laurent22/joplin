@@ -7,13 +7,13 @@ export interface Conversation {
 	id: string;
 	title: string;
 	updated_time: number;
-	messageTexts: string[];
 }
 
 interface Props {
 	conversations: Conversation[];
 	currentConversationId?: string|null;
 	onToggle: (event: React.SyntheticEvent<HTMLDetailsElement>)=> void;
+	onSearchChange: (search: string)=> void;
 	onOpen: (conversationId: string)=> void;
 	onRename: (conversation: Conversation)=> void;
 	onDelete: (conversationId: string)=> void;
@@ -21,9 +21,6 @@ interface Props {
 
 const ChatHistory: React.FC<Props> = props => {
 	const [search, setSearch] = useState('');
-	const searchQuery = search.trim().toLowerCase();
-	const conversations = props.conversations.filter(conversation => conversation.title.toLowerCase().includes(searchQuery)
-		|| conversation.messageTexts.some(text => text.toLowerCase().includes(searchQuery)));
 
 	return <details className='chat-history history' onToggle={props.onToggle}>
 		<summary className='toggle' onClick={event => event.stopPropagation()}>{_('Chat history')}</summary>
@@ -33,10 +30,13 @@ const ChatHistory: React.FC<Props> = props => {
 			aria-label={_('Search conversations')}
 			placeholder={_('Search conversations')}
 			value={search}
-			onChange={event => setSearch(event.target.value)}
+			onChange={event => {
+				setSearch(event.target.value);
+				props.onSearchChange(event.target.value);
+			}}
 		/>
 		<ul className='conversations' aria-label={_('Conversations')}>
-			{conversations.map(conversation => {
+			{props.conversations.map(conversation => {
 				const current = conversation.id === props.currentConversationId;
 				const title = conversation.title || _('(untitled)');
 				return <li key={conversation.id} className={`conversation${current ? ' -current' : ''}`} aria-current={current ? 'true' : undefined}>
