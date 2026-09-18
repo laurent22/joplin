@@ -146,9 +146,25 @@ describe('ChatPanel', () => {
 		const view = renderPanel({ noteId: 'note-a', noteTitle: 'A', dispatch });
 		fireEvent.change(view.getByRole('textbox'), { target: { value: 'Question' } });
 		await act(async () => { fireEvent.click(view.getByRole('button', { name: 'Send' })); });
-		expect(dispatch.mock.calls.map(([action]) => action.message)).toMatchObject([
+		expect(dispatch.mock.calls.map(([action]) => action).filter(action => action.type === 'AI_CHAT_APPEND').map(action => action.message)).toMatchObject([
 			{ role: 'user', text: 'Question', noteId: 'note-a', noteTitle: 'A' },
 			{ role: 'assistant', text: 'Reply', noteId: 'note-a', noteTitle: 'A' },
 		]);
+	});
+
+	it('should save active messages without waiting for the conversation to close', async () => {
+		const saveMessages = jest.spyOn(ChatConversation, 'archive');
+		renderPanel({ conversationId: 'chat-1', messages: [message] });
+		await waitFor(() => expect(saveMessages).toHaveBeenCalledWith('chat-1', [message]));
+		await saveMessages.mock.results[0].value;
+		expect(await ChatConversation.messages('chat-1')).toMatchObject([{ text: 'Question' }]);
+	});
+
+	it('should assign an ID before messages are added to a new conversation', async () => {
+		const dispatch = jest.fn();
+		renderPanel({ dispatch });
+		await waitFor(() => expect(dispatch).toHaveBeenCalledWith({
+			type: 'AI_CHAT_OPEN', windowId: 'second', conversationId: expect.any(String), messages: [],
+		}));
 	});
 });

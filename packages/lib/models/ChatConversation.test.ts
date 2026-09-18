@@ -38,9 +38,10 @@ describe('ChatConversation', () => {
 		const note = await Note.save({ title: 'Original title', parent_id: folder.id });
 		await ChatConversation.archive('chat-1', [{ id: 'separator', role: 'separator', text: 'Note: Original title', raw: [], noteId: note.id, noteTitle: note.title }]);
 		await Note.delete(note.id, { toTrash: false });
-		expect(await BaseModel.db().selectOne('SELECT id FROM chat_conversations')).toEqual({ id: 'chat-1' });
-		expect(await BaseModel.db().selectOne('SELECT text, note_id, note_title FROM chat_messages')).toEqual({
-			text: 'Note: Original title', note_id: note.id, note_title: 'Original title',
-		});
+		expect(await ChatConversation.all({ fields: ['id'] })).toEqual([{ id: 'chat-1', type_: ModelType.ChatConversation }]);
+		expect(await ChatConversation.messages('chat-1')).toEqual([{
+			id: 'separator', role: 'separator', text: 'Note: Original title', raw: [], hide: false,
+			noteId: note.id, noteTitle: 'Original title',
+		}]);
 	});
 });

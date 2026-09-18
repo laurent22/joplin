@@ -35,16 +35,16 @@ const ChatHistory: React.FC<Props> = props => {
 				props.onSearchChange(event.target.value);
 			}}
 		/>
-		<ul className='conversations' aria-label={_('Conversations')}>
+		<ul className='conversation-list' aria-label={_('Conversations')}>
 			{props.conversations.map(conversation => {
 				const current = conversation.id === props.currentConversationId;
 				const title = conversation.title || _('(untitled)');
-				return <li key={conversation.id} className={`conversation${current ? ' -current' : ''}`} aria-current={current ? 'true' : undefined}>
-					<button className='open' type='button' onClick={() => props.onOpen(conversation.id)}>
+				return <li key={conversation.id} className={`conversation-row${current ? ' -current' : ''}`} aria-current={current ? 'true' : undefined}>
+					<button className='conversation-link open' type='button' onClick={() => props.onOpen(conversation.id)}>
 						<span className='title'>{title}</span>
 						<span className='timestamp'>{formatMsToRelativeTime(conversation.updated_time)}</span>
 					</button>
-					<details className='menu' onToggle={event => event.stopPropagation()}>
+					<details className='conversation-menu menu' onToggle={event => event.stopPropagation()}>
 						<summary className='toggle' onClick={event => event.stopPropagation()} aria-label={_('Actions for %s', title)}>{_('Actions')}</summary>
 						<button className='action' type='button' onClick={() => props.onRename(conversation)}>{_('Rename')}</button>
 						<button className='action' type='button' onClick={() => props.onDelete(conversation.id)}>{_('Delete')}</button>

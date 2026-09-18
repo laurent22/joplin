@@ -20,6 +20,7 @@ import { Second } from '@joplin/utils/time';
 import ChatMessageItem from './ChatMessageItem';
 import NavService from '@joplin/lib/services/NavService';
 import ChatConversation from '@joplin/lib/models/ChatConversation';
+import uuid from '@joplin/lib/uuid';
 import dialogs from '../dialogs';
 import ChatHistory, { Conversation } from './ChatHistory';
 import Button, { ButtonLevel } from '../Button/Button';
@@ -150,6 +151,24 @@ const ChatPanel: React.FC<Props> = (props) => {
 	const appendMessage = useCallback((message: Omit<AiChatMessage, 'noteId' | 'noteTitle'>) => {
 		dispatch({ type: 'AI_CHAT_APPEND', windowId, message: { ...message, noteId: props.noteId ?? '', noteTitle: props.noteId ? props.noteTitle : '' } });
 	}, [dispatch, windowId, props.noteId, props.noteTitle]);
+
+	useEffect(() => {
+		if (props.conversationId) return;
+		dispatch({ type: 'AI_CHAT_OPEN', windowId, conversationId: uuid.create(), messages });
+	}, [props.conversationId, dispatch, windowId, messages]);
+
+	useEffect(() => {
+		if (!props.conversationId || !messages.length) return;
+
+		const saveMessages = async () => {
+			try {
+				await ChatConversation.archive(props.conversationId, messages);
+			} catch (error) {
+				logger.error('Could not save chat conversation:', error);
+			}
+		};
+		void saveMessages();
+	}, [props.conversationId, messages]);
 
 	const addToolResult = useCallback((result: ChatToolMessage) => {
 		dispatch({ type: 'AI_CHAT_ADD_TOOL_RESULT', windowId, toolCall: result });
