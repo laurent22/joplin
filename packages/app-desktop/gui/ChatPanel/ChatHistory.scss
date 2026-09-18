@@ -1,0 +1,82 @@
+@mixin chat-history-button {
+	display: flex;
+	width: 100%;
+	padding: 6px;
+	gap: 8px;
+	text-align: left;
+	font: inherit;
+	color: inherit;
+	background: none;
+	border: none;
+	cursor: pointer;
+}
+
+.chat-history {
+	> .toggle {
+		cursor: pointer;
+	}
+
+	> .search {
+		display: block;
+		width: 100%;
+		box-sizing: border-box;
+		margin-top: 6px;
+		padding: 6px;
+		font: inherit;
+		color: var(--joplin-color);
+		background-color: var(--joplin-background-color);
+		border: 1px solid var(--joplin-divider-color);
+		border-radius: 4px;
+	}
+}
+
+.conversation-list {
+	list-style: none;
+	margin: 6px 0 0;
+	padding: 0;
+	max-height: 200px;
+	overflow-y: auto;
+}
+
+.conversation-row {
+	display: flex;
+
+	&.-current {
+		background-color: var(--joplin-selected-color);
+	}
+
+	> .open {
+		flex: 1;
+	}
+
+	> .menu {
+		flex-shrink: 0;
+	}
+}
+
+.conversation-link {
+	@include chat-history-button;
+
+	> .title {
+		flex: 1;
+		min-width: 0;
+		overflow-wrap: anywhere;
+	}
+
+	> .timestamp {
+		flex-shrink: 0;
+		text-align: right;
+		color: var(--joplin-color-faded);
+	}
+}
+
+.conversation-menu {
+	> .toggle {
+		padding: 6px;
+		cursor: pointer;
+	}
+
+	> .action {
+		@include chat-history-button;
+	}
+}

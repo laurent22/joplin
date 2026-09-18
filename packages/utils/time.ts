@@ -111,6 +111,12 @@ export const formatMsToRelative = (ms: number) => {
 	return d.fromNow(false);
 };
 
+export const formatMsToRelativeTime = (ms: number) => {
+	const date = dayjs(ms);
+	if (!date.isValid()) return 'Invalid date';
+	return date.fromNow(false);
+};
+
 const joplinLocaleToDayJsLocale = (locale: string) => {
 	locale = locale.toLowerCase().replace(/_/, '-');
 	if (supportedLocales[locale]) return locale;

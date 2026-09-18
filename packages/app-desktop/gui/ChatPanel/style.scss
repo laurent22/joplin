@@ -1,3 +1,5 @@
+@use './ChatHistory.scss';
+
 .chat-panel {
 	display: flex;
 	flex-direction: column;
@@ -38,6 +40,11 @@
 			color: var(--joplin-color);
 		}
 	}
+}
+
+.chat-panel > .history {
+	padding: 6px 10px;
+	border-bottom: 1px solid var(--joplin-divider-color);
 }
 
 .chat-panel > .degraded-status {
