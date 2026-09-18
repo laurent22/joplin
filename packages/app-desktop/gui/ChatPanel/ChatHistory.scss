@@ -1,3 +1,16 @@
+@mixin chat-history-button {
+	display: flex;
+	width: 100%;
+	padding: 6px;
+	gap: 8px;
+	text-align: left;
+	font: inherit;
+	color: inherit;
+	background: none;
+	border: none;
+	cursor: pointer;
+}
+
 .chat-history {
 	> .toggle {
 		cursor: pointer;
@@ -15,59 +28,55 @@
 		border: 1px solid var(--joplin-divider-color);
 		border-radius: 4px;
 	}
+}
 
-	> .conversations {
-		list-style: none;
-		margin: 6px 0 0;
-		padding: 0;
-		max-height: 200px;
-		overflow-y: auto;
-	}
+.conversation-list {
+	list-style: none;
+	margin: 6px 0 0;
+	padding: 0;
+	max-height: 200px;
+	overflow-y: auto;
+}
 
-	> .conversations > .conversation {
-		display: flex;
-	}
+.conversation-row {
+	display: flex;
 
-	> .conversations > .conversation.-current {
+	&.-current {
 		background-color: var(--joplin-selected-color);
 	}
 
-	> .conversations > .conversation > .open,
-	> .conversations > .conversation > .menu > .action {
-		display: flex;
-		width: 100%;
-		padding: 6px;
-		gap: 8px;
-		text-align: left;
-		font: inherit;
-		color: inherit;
-		background: none;
-		border: none;
-		cursor: pointer;
-	}
-
-	> .conversations > .conversation > .open {
+	> .open {
 		flex: 1;
 	}
 
-	> .conversations > .conversation > .open > .title {
+	> .menu {
+		flex-shrink: 0;
+	}
+}
+
+.conversation-link {
+	@include chat-history-button;
+
+	> .title {
 		flex: 1;
 		min-width: 0;
 		overflow-wrap: anywhere;
 	}
 
-	> .conversations > .conversation > .menu {
+	> .timestamp {
 		flex-shrink: 0;
+		text-align: right;
+		color: var(--joplin-color-faded);
 	}
+}
 
-	> .conversations > .conversation > .menu > .toggle {
+.conversation-menu {
+	> .toggle {
 		padding: 6px;
 		cursor: pointer;
 	}
 
-	> .conversations > .conversation > .open > .timestamp {
-		flex-shrink: 0;
-		text-align: right;
-		color: var(--joplin-color-faded);
+	> .action {
+		@include chat-history-button;
 	}
 }
