@@ -933,7 +933,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		if (event.noteId !== this.state.note?.id) return;
 		// The key is captured like on a gated load, so pending saves can encrypt after the session locks.
 		const noteLockKey = event.isLocked && NoteLockSession.instance().isUnlocked() ? NoteLockSession.instance().decryptedKey() : null;
-		const newNote = { ...this.state.note, is_locked: event.isLocked ? 1 : 0, isDecrypted: event.isLocked };
+		// The state note came from a gated load, so the marker stays true even when disabling.
+		const newNote = { ...this.state.note, is_locked: event.isLocked ? 1 : 0, isDecrypted: true };
 		this.setState({ note: newNote, noteLockKey });
 		this.scheduleSave({ ...this.state, note: newNote, noteLockKey });
 	};

@@ -182,15 +182,6 @@ shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, stat
 			note.is_locked = comp.state.note.is_locked;
 			note.isDecrypted = comp.state.note.isDecrypted;
 		}
-
-		// A gated save cannot persist the lock state or body partially: the encrypted body, its
-		// extracted resource ids and is_locked must always be written together. The lock state is
-		// also compared against lastSavedNote because the field diff above ran before the pickup.
-		if (saveOptions.fields.length && (saveOptions.fields.includes('is_locked') || (note.is_locked ?? 0) !== (state.lastSavedNote.is_locked ?? 0) || (NoteLockNote.isLocked(note) && saveOptions.fields.includes('body')))) {
-			for (const field of ['is_locked', 'body', 'extracted_resource_ids']) {
-				if (!saveOptions.fields.includes(field)) saveOptions.fields.push(field);
-			}
-		}
 	}
 
 	// This check is intentionally immediately before Note.save. The action may
@@ -363,7 +354,7 @@ shared.isModified = function(comp: BaseNoteScreenComponent) {
 shared.reloadNote = async (comp: BaseNoteScreenComponent, useDefaultEditorState = false) => {
 	const isProvisionalNote = comp.props.provisionalNoteIds.includes(comp.props.noteId);
 
-	let note = await Note.load(comp.props.noteId);
+	let note: NoteLockNoteEntity = await Note.load(comp.props.noteId);
 	if (note?.encryption_cipher_text) {
 		try {
 			note = await Note.decrypt(note);
@@ -385,21 +376,22 @@ shared.reloadNote = async (comp: BaseNoteScreenComponent, useDefaultEditorState 
 	if (isNoteLockEnabled() && note && NoteLockNote.isLocked(note)) {
 		if (NoteLockSession.instance().isUnlocked()) {
 			try {
-				note = await Note.load(comp.props.noteId, { useNoteLock: true });
-				noteLockKey = NoteLockSession.instance().decryptedKey();
+				// The key is captured first so a session lock during the load cannot leave decrypted
+				// data behind, and a still-unlocked session then means the note used a different key.
+				const key = NoteLockSession.instance().decryptedKey();
+				note = await Note.load(comp.props.noteId, { useNoteLock: true, noteLockKey: key });
+				noteLockKey = key;
 			} catch (error) {
-				// A mid-load session lock throws the same way, so only a still-unlocked session
-				// means the note itself was encrypted with a different key.
 				reg.logger().warn('Could not load locked note:', comp.props.noteId, error);
 				noteLockUndecryptable = NoteLockSession.instance().isUnlocked();
-				// The encrypted row is reloaded so note and lastSavedNote match: a diff-based
-				// save cannot write the body, and the screen hides it from the editor.
-				note = await Note.load(comp.props.noteId);
 				noteLockBlocked = true;
 			}
 		} else {
 			noteLockBlocked = true;
 		}
+	} else if (isNoteLockEnabled() && note) {
+		// An unlocked note has nothing to decrypt, so it gets the marker its gated saves require directly.
+		note = { ...note, isDecrypted: true };
 	}
 	let mode = comp.state.mode;
 
