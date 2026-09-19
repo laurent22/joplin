@@ -183,6 +183,7 @@ packages/app-desktop/commands/openNoteInNewWindow.js
 packages/app-desktop/commands/openPrimaryAppInstance.js
 packages/app-desktop/commands/openProfileDirectory.js
 packages/app-desktop/commands/openSecondaryAppInstance.js
+packages/app-desktop/commands/openSyncWizard.js
 packages/app-desktop/commands/replaceMisspelling.js
 packages/app-desktop/commands/restoreNoteRevision.js
 packages/app-desktop/commands/showProfileEditor.js
@@ -211,6 +212,7 @@ packages/app-desktop/gui/ConfigScreen/controls/GlobalHotkeyInput.test.js
 packages/app-desktop/gui/ConfigScreen/controls/GlobalHotkeyInput.js
 packages/app-desktop/gui/ConfigScreen/controls/MissingPasswordHelpLink.js
 packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.js
+packages/app-desktop/gui/ConfigScreen/controls/SettingButton.js
 packages/app-desktop/gui/ConfigScreen/controls/SettingComponent.js
 packages/app-desktop/gui/ConfigScreen/controls/SettingDescription.js
 packages/app-desktop/gui/ConfigScreen/controls/SettingHeader.js
@@ -222,6 +224,7 @@ packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js
 packages/app-desktop/gui/ConfigScreen/controls/useNoteLockMode.js
 packages/app-desktop/gui/ConfigScreen/searchHighlight.test.js
 packages/app-desktop/gui/ConfigScreen/searchHighlight.js
+packages/app-desktop/gui/ConfigScreen/types.js
 packages/app-desktop/gui/DialogButtonRow.js
 packages/app-desktop/gui/DialogButtonRow/useKeyboardHandler.js
 packages/app-desktop/gui/DialogTitle.js
@@ -612,6 +615,7 @@ packages/app-desktop/integration-tests/markdownEditor.spec.js
 packages/app-desktop/integration-tests/models/ChangeAppLayoutScreen.js
 packages/app-desktop/integration-tests/models/ChatPanel.js
 packages/app-desktop/integration-tests/models/GoToAnything.js
+packages/app-desktop/integration-tests/models/JoplinCloudLoginScreen.js
 packages/app-desktop/integration-tests/models/MainScreen.js
 packages/app-desktop/integration-tests/models/NoteEditor/BaseEditor.js
 packages/app-desktop/integration-tests/models/NoteEditor/EditorCodeDialog.js
@@ -620,7 +624,8 @@ packages/app-desktop/integration-tests/models/NoteEditor/NoteEditorScreen.js
 packages/app-desktop/integration-tests/models/NoteEditor/NoteViewer.js
 packages/app-desktop/integration-tests/models/NoteEditor/RichTextEditor.js
 packages/app-desktop/integration-tests/models/NoteList.js
-packages/app-desktop/integration-tests/models/SettingsScreen.js
+packages/app-desktop/integration-tests/models/SettingsScreen/SettingsScreen.js
+packages/app-desktop/integration-tests/models/SettingsScreen/SyncTab.js
 packages/app-desktop/integration-tests/models/Sidebar.js
 packages/app-desktop/integration-tests/multiWindow.spec.js
 packages/app-desktop/integration-tests/networking.spec.js

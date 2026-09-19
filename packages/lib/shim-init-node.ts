@@ -124,6 +124,7 @@ export interface ShimInitOptions {
 	onnxRuntime?: any;
 	pdfJs?: PdfJs;
 	isAppleSilicon?: ()=> boolean;
+	restartApp?: ()=> void;
 }
 
 function shimInit(options: ShimInitOptions = null) {
@@ -985,6 +986,10 @@ function shimInit(options: ShimInitOptions = null) {
 			await shim.fsDriver().remove(workDir);
 		}
 	};
+
+	if (options.restartApp) {
+		shim.restartApp = () => options.restartApp();
+	}
 }
 
 export { shimInit, setupProxySettings };

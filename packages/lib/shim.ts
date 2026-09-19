@@ -495,7 +495,7 @@ const shim = {
 		throw new Error('Not implemented');
 	},
 
-	restartApp: (): void => {
+	restartApp: (): void|Promise<void> => {
 		throw new Error('Not implemented');
 	},
 

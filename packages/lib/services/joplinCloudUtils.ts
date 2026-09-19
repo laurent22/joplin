@@ -7,6 +7,7 @@ import eventManager, { EventName } from '../eventManager';
 import { reg } from '../registry';
 import SyncTargetRegistry from '../SyncTargetRegistry';
 import Logger from '@joplin/utils/Logger';
+import NavService from './NavService';
 
 const logger = Logger.create('joplinCloudUtils');
 
@@ -97,6 +98,12 @@ export const generateApplicationConfirmUrl = async (confirmUrl: string) => {
 export const saveApplicationAuthId = async (applicationAuthId: string) => {
 	Setting.setValue('sync.10.pendingAuthId', applicationAuthId);
 	await Setting.saveAll();
+};
+
+export const openLoginScreen = () => {
+	const syncTargetId = 10;
+	const syncTarget = reg.syncTarget(syncTargetId);
+	return NavService.go(syncTarget.authRouteName());
 };
 
 // We have isWaitingResponse inside the function to avoid any state from lingering
