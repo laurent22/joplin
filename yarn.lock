@@ -12886,6 +12886,7 @@ __metadata:
     chokidar: "npm:3.6.0"
     color: "npm:3.2.1"
     compare-versions: "npm:6.1.1"
+    compliant-eyeballs: "npm:1.0.0"
     diff: "npm:9.0.0"
     diff-match-patch: "npm:1.0.5"
     fast-deep-equal: "npm:3.1.3"
@@ -25998,6 +25999,13 @@ __metadata:
   version: 6.1.1
   resolution: "compare-versions@npm:6.1.1"
   checksum: 10/9325c0fadfba81afa0ec17e6fc2ef823ba785c693089698b8d9374e5460509f1916a88591644d4cb4045c9a58e47fafbcc0724fe8bf446d2a875a3d6eeddf165
+  languageName: node
+  linkType: hard
+
+"compliant-eyeballs@npm:1.0.0":
+  version: 1.0.0
+  resolution: "compliant-eyeballs@npm:1.0.0"
+  checksum: 10/727fd0df4c1b7d34a96b60cdde2dc7e90b91189ef8e67072e021540fa5fae26a92e2743c08d6b4cb3526743bccec1ae15d8249189f41c819bb106e28f54bec27
   languageName: node
   linkType: hard
 

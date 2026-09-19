@@ -18,8 +18,8 @@ describe('setExtraRootCertificates', () => {
 
 		const tempDir = await createTempDir();
 		try {
-			await expectThrow(async () => await shim.fetch(httpsServer1.baseUrl));
-			await expectThrow(async () => await shim.fetch(httpsServer2.baseUrl));
+			await expectThrow(async () => await shim.fetch(httpsServer1.baseUrl), 'ECONNFAILED');
+			await expectThrow(async () => await shim.fetch(httpsServer2.baseUrl), 'ECONNFAILED');
 
 			await writeFile(join(tempDir, 'cert-1.pem'), httpsServer1.cert, 'utf-8');
 			await writeFile(join(tempDir, 'cert-2.pem'), httpsServer2.cert, 'utf-8');

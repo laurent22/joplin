@@ -24,6 +24,7 @@ import { pathToFileURL } from 'url';
 // Use fetch from undici rather than the built-in fetch: Undici's fetch provides
 // more information when fetch fails.
 import { Agent, Request, Response, Headers, fetch, FormData, ProxyAgent, interceptors } from 'undici';
+import { createUndiciConnector } from 'compliant-eyeballs/undici';
 import tls from 'tls';
 import type PdfJs from './utils/types/pdfJs';
 import { _ } from './locale';
@@ -703,9 +704,17 @@ function shimInit(options: ShimInitOptions = null) {
 				connections: 1,
 			} satisfies Agent.Options;
 			if (!fastDeepEqual(lastSettings, agentSettings)) {
+				const connect = createUndiciConnector({
+					connectTimeoutMs: options?.timeout ?? 10_000,
+					allowH2: true,
+					tls: {
+						ecdhCurve: tlsEcdhCurve,
+						ALPNProtocols: ['http/1.1', 'h2'],
+					},
+				});
 				shim.httpAgent_ = {
 					lastSettings: agentSettings,
-					agent: new Agent(agentSettings),
+					agent: new Agent({ ...agentSettings, connect }),
 				};
 			}
 		}

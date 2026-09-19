@@ -67,6 +67,7 @@
     "chokidar": "3.6.0",
     "color": "3.2.1",
     "compare-versions": "6.1.1",
+    "compliant-eyeballs": "1.0.0",
     "diff": "9.0.0",
     "diff-match-patch": "1.0.5",
     "fast-deep-equal": "3.1.3",
