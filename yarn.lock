@@ -12689,7 +12689,7 @@ __metadata:
     react-refresh: "npm:0.18.0"
     react-test-renderer: "npm:19.1.4"
     redux: "npm:4.2.1"
-    rn-fetch-blob: "npm:0.12.0"
+    rn-fetch-blob: "patch:rn-fetch-blob@npm%3A0.12.0#~/.yarn/patches/rn-fetch-blob-npm-0.12.0-cf02e3c544.patch"
     sharp: "npm:0.34.5"
     sqlite3: "npm:5.1.6"
     stream: "npm:0.0.3"
@@ -52516,13 +52516,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rn-fetch-blob@patch:rn-fetch-blob@npm%3A0.12.0#./.yarn/patches/rn-fetch-blob-npm-0.12.0-cf02e3c544.patch::locator=root%40workspace%3A.":
+"rn-fetch-blob@patch:rn-fetch-blob@npm%3A0.12.0#~/.yarn/patches/rn-fetch-blob-npm-0.12.0-cf02e3c544.patch":
   version: 0.12.0
-  resolution: "rn-fetch-blob@patch:rn-fetch-blob@npm%3A0.12.0#./.yarn/patches/rn-fetch-blob-npm-0.12.0-cf02e3c544.patch::version=0.12.0&hash=a1df16&locator=root%40workspace%3A."
+  resolution: "rn-fetch-blob@patch:rn-fetch-blob@npm%3A0.12.0#~/.yarn/patches/rn-fetch-blob-npm-0.12.0-cf02e3c544.patch::version=0.12.0&hash=763a1f"
   dependencies:
     base-64: "npm:0.1.0"
     glob: "npm:7.0.6"
-  checksum: 10/782c688c20fd9e68e993efedf157e9cb2bf925320f8bb5e6840579c0a30a0a44877778fe6c6994af4ea068a73e2b61832403b2efeb803b7519edfea5e25e7e5d
+  checksum: 10/788cc303c3a7ba39c25f446a0fe1f878dc383f21d90d32e19749ab266779fa6376df0248676f09fa9ea9fae41975fb4b62382f6edea9cbca205898dc8b2dabdd
   languageName: node
   linkType: hard
 
