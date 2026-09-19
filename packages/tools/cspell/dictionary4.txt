@@ -228,6 +228,7 @@ dpkg
 onepkg
 ATTLIST
 Keycloak
+undici
 abcjs
 Peacherine
 tablatures
@@ -341,6 +342,7 @@ Socialboom
 AABB
 Koofr
 undecryptable
+Interceptable
 wikilink
 wikilinks
 cssclasses

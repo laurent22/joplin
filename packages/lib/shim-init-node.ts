@@ -1,4 +1,4 @@
-import shim, { CreatePdfFromImagesOptions, CreateResourceFromPathOptions, PdfInfo, PdfPageImage } from './shim';
+import shim, { CreatePdfFromImagesOptions, CreateResourceFromPathOptions, HttpAgentOptions, PdfInfo, PdfPageImage } from './shim';
 import createAccessiblePdf from './services/ocr/utils/createAccessiblePdf';
 import GeolocationNode from './geolocation-node';
 import { setLocale, defaultLocale, closestSupportedLocale } from './locale';
@@ -13,6 +13,7 @@ import replaceUnsupportedCharacters from './utils/replaceUnsupportedCharacters';
 import { FetchBlobOptions } from './types';
 import { fromFile as fileTypeFromFile } from 'file-type';
 import crypto from './services/e2ee/crypto';
+import fastDeepEqual = require('fast-deep-equal');
 
 import FileApiDriverLocal from './file-api-driver-local';
 import * as mimeUtils from './mime-utils';
@@ -20,16 +21,17 @@ import BaseItem from './models/BaseItem';
 import { Size } from '@joplin/utils/types';
 import { cpus } from 'os';
 import { pathToFileURL } from 'url';
+// Use fetch from undici rather than the built-in fetch: Undici's fetch provides
+// more information when fetch fails.
+import { Agent, Request, Response, Headers, fetch, FormData, ProxyAgent, interceptors } from 'undici';
 import tls from 'tls';
 import type PdfJs from './utils/types/pdfJs';
 import { _ } from './locale';
-import http from 'http';
-import https from 'https';
-const { HttpProxyAgent, HttpsProxyAgent } = require('hpagent');
 const toRelative = require('relative');
 import timers from 'timers';
-import zlib from 'zlib';
 import dgram from 'dgram';
+import { pipeline } from 'stream/promises';
+import { Second } from '@joplin/utils/time';
 
 interface ProxySettings {
 	maxConcurrentConnections?: number;
@@ -38,18 +40,6 @@ interface ProxySettings {
 	proxyUrl?: string;
 }
 const proxySettings: ProxySettings = {};
-
-function fileExists(filePath: string) {
-	try {
-		return fs.statSync(filePath).isFile();
-	} catch (error) {
-		return false;
-	}
-}
-
-function isUrlHttps(url: string) {
-	return url.startsWith('https');
-}
 
 function resolveProxyUrl(proxyUrl: string) {
 	return (
@@ -69,34 +59,6 @@ function callsites(): NodeJS.CallSite[] {
 	Error.prepareStackTrace = _prepareStackTrace;
 	return stack;
 }
-
-const gunzipFile = function(source: string, destination: string) {
-	if (!fileExists(source)) {
-		throw new Error(`No such file: ${source}`);
-	}
-
-	return new Promise((resolve, reject) => {
-		// prepare streams
-		const src = fs.createReadStream(source);
-		const dest = fs.createWriteStream(destination);
-
-		// extract the archive
-		src.pipe(zlib.createGunzip()).pipe(dest);
-
-		// callback on extract completion
-		dest.on('close', () => {
-			resolve(null);
-		});
-
-		src.on('error', () => {
-			reject();
-		});
-
-		dest.on('error', () => {
-			reject();
-		});
-	});
-};
 
 function setupProxySettings(options: ProxySettings) {
 	proxySettings.maxConcurrentConnections = options.maxConcurrentConnections;
@@ -156,7 +118,7 @@ function shimInit(options: ShimInitOptions = null) {
 	};
 	shim.FileApiDriverLocal = FileApiDriverLocal;
 	shim.Geolocation = GeolocationNode;
-	shim.FormData = require('form-data');
+	shim.FormData = FormData as unknown as typeof shim.FormData;
 	shim.sjclModule = require('./vendor/sjcl.js');
 	shim.crypto = crypto;
 	shim.electronBridge_ = options.electronBridge;
@@ -538,12 +500,20 @@ function shimInit(options: ShimInitOptions = null) {
 		}
 	};
 
-	const nodeFetch = require('node-fetch');
-
 	// Not used??
 	shim.readLocalFileBase64 = path => {
 		const data = fs.readFileSync(path);
 		return new Buffer(data).toString('base64');
+	};
+
+	const mapFetchError = (error: Error & { cause?: unknown }) => {
+		// When error is a TypeError, information about the error failure is in
+		// error.cause:
+		const cause = error.cause;
+		if (error instanceof TypeError && cause instanceof Error) {
+			return cause;
+		}
+		return error;
 	};
 
 	shim.fetch = async function(url, options = {}) {
@@ -552,22 +522,17 @@ function shimInit(options: ShimInitOptions = null) {
 		} catch (error) { // If the url is not valid, a TypeError will be thrown
 			throw new Error(`Not a valid URL: ${url}`);
 		}
-		const resolvedProxyUrl = resolveProxyUrl(proxySettings.proxyUrl);
-		if (resolvedProxyUrl && proxySettings.proxyEnabled) {
-			options.agent = shim.proxyAgent(url, resolvedProxyUrl);
-		} else {
-			// node-fetch calls this for every request, including each redirect hop, so the agent
-			// always matches the protocol actually being used.
-			const agents = shim.httpAgents();
-			options.agent = (parsedUrl: URL) => parsedUrl.protocol === 'https:' ? agents.https : agents.http;
-		}
-		return shim.fetchWithRetry(() => {
-			return nodeFetch(url, options);
+		const agent = shim.httpAgent(url);
+		return shim.fetchWithRetry(async () => {
+			try {
+				return await fetch(url, { ...options, dispatcher: agent });
+			} catch (error) {
+				throw mapFetchError(error);
+			}
 		}, options);
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- url is passed as a string but reassigned to a parsed UrlWithStringQuery by urlParse below
-	shim.fetchBlob = async function(url: any, options: FetchBlobOptions) {
+	shim.fetchBlob = async function(url: string, options: FetchBlobOptions) {
 		if (!options || !options.path) throw new Error('fetchBlob: target file path is missing');
 		if (!options.method) options.method = 'GET';
 		// if (!('maxRetry' in options)) options.maxRetry = 5;
@@ -577,136 +542,86 @@ function shimInit(options: ShimInitOptions = null) {
 		if (!options.maxRedirects) options.maxRedirects = 21;
 		if (!options.timeout) options.timeout = undefined;
 
-		const urlParse = require('url').parse;
-
-		url = urlParse(url.trim());
 		const method = options.method ? options.method : 'GET';
-		const http = url.protocol.toLowerCase() === 'http:' ? require('follow-redirects').http : require('follow-redirects').https;
 		const headers = options.headers ? options.headers : {};
 		const filePath = options.path;
 		const downloadController = options.downloadController;
 
-		function makeResponse(response: { statusCode: number; statusMessage: string; headers: Record<string, string | string[]> }) {
+		function makeResponse(response: Response) {
 			return {
-				ok: response.statusCode < 400,
+				ok: response.status < 400,
 				path: filePath,
 				text: () => {
-					return response.statusMessage;
+					return response.statusText;
 				},
 				json: () => {
-					return { message: `${response.statusCode}: ${response.statusMessage}` };
+					return { message: `${response.status}: ${response.statusText}` };
 				},
-				status: response.statusCode,
+				status: response.status,
 				headers: response.headers,
 			};
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- requestOptions is the node http/https request options bag plus a runtime-set `agent` field
-		const requestOptions: any = {
-			protocol: url.protocol,
-			host: url.hostname,
-			port: url.port,
-			method: method,
-			path: url.pathname + (url.query ? `?${url.query}` : ''),
-			headers: headers,
-			timeout: options.timeout,
-			maxRedirects: options.maxRedirects,
-		};
-
-		const resolvedProxyUrl = resolveProxyUrl(proxySettings.proxyUrl);
-		if (resolvedProxyUrl && proxySettings.proxyEnabled) {
-			requestOptions.agent = shim.proxyAgent(url.href, resolvedProxyUrl);
-		} else {
-			// follow-redirects re-picks from this map on each hop, so a redirect that switches
-			// protocol gets the matching agent.
-			requestOptions.agents = shim.httpAgents();
-		}
-
 		const doFetchOperation = async () => {
-			return new Promise((resolve, reject) => {
-				let file: fs.WriteStream | null = null;
+			const agent: Agent = shim.httpAgent(url, options);
+			const dispatcher = agent.compose([
+				interceptors.redirect({ maxRedirections: options.maxRedirects }),
+				interceptors.decompress(),
+			]);
 
-				const cleanUpOnError = (error: Error) => {
-					// We ignore any unlink error as we only want to report on the main error
-					void fs.unlink(filePath)
-					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-						.catch(() => {})
-					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-						.then(() => {
-							if (file) {
-								file.close(() => {
-									file = null;
-									reject(error);
-								});
-							} else {
-								reject(error);
-							}
-						});
-				};
-
-				try {
-					// Note: relative paths aren't supported
-					file = fs.createWriteStream(filePath);
-
-					file.on('error', (error: Error) => {
-						cleanUpOnError(error);
-					});
-
-					const requestStart = new Date();
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- http is dynamically required from follow-redirects (http or https variant); response is its IncomingMessage
-					const request = http.request(requestOptions, (response: any) => {
-
-						if (downloadController) {
-							response.on('data', downloadController.handleChunk(request));
-						}
-
-						response.pipe(file);
-
-						const isGzipped = response.headers['content-encoding'] === 'gzip';
-
-						file.on('finish', () => {
-							file.close(async () => {
-								if (isGzipped) {
-									const gzipFilePath = `${filePath}.gzip`;
-									await shim.fsDriver().move(filePath, gzipFilePath);
-
-									try {
-										await gunzipFile(gzipFilePath, filePath);
-										// Calling request.destroy() within the downloadController can cause problems.
-										// The response.pipe(file) will continue even after request.destroy() is called,
-										// potentially causing the same promise to resolve while the cleanUpOnError
-										// is removing the file that have been downloaded by this function.
-										if (request.destroyed) return;
-										resolve(makeResponse(response));
-									} catch (error) {
-										cleanUpOnError(error);
-									}
-
-									await shim.fsDriver().remove(gzipFilePath);
-								} else {
-									if (request.destroyed) return;
-									resolve(makeResponse(response));
-								}
-							});
-						});
-					});
-
-					request.on('timeout', () => {
-						// We choose to not destroy the request when a timeout value is not specified to keep
-						// the behavior we had before the addition of this event handler.
-						if (!requestOptions.timeout) return;
-						request.destroy(new Error(`Request timed out. Timeout value: ${requestOptions.timeout}ms. Actual connection time: ${new Date().getTime() - requestStart.getTime()}ms`));
-					});
-
-					request.on('error', (error: Error) => {
-						cleanUpOnError(error);
-					});
-
-					request.end();
-				} catch (error) {
-					cleanUpOnError(error);
-				}
+			const abortController = new AbortController();
+			const requestOptions = new Request(url, {
+				method: method,
+				headers: new Headers(headers),
+				dispatcher,
+				signal: abortController.signal,
 			});
+			try {
+				const response = await fetch(requestOptions);
+
+				const notifyController = async function*(source: AsyncIterable<Buffer>) {
+					let cancelWithError: Error|null = null;
+					const chunkHandler = downloadController.handleChunk({
+						destroy: (error) => {
+							if (!cancelWithError) {
+								cancelWithError = error ?? new Error('Cancelled');
+								abortController.abort(error);
+							}
+						},
+					});
+
+					for await (const chunk of source) {
+						chunkHandler(chunk);
+
+						if (cancelWithError) throw cancelWithError;
+
+						yield chunk;
+					}
+				};
+				if (downloadController) {
+					await pipeline(
+						response.body,
+						notifyController,
+						fs.createWriteStream(filePath),
+					);
+				} else {
+					await pipeline(
+						response.body,
+						fs.createWriteStream(filePath),
+					);
+				}
+				return makeResponse(response);
+			} catch (error) {
+				if (await fs.exists(filePath)) {
+					try {
+						await fs.unlink(filePath);
+					} catch {
+						// Ignore. Report the original error
+					}
+				}
+
+				throw mapFetchError(error);
+			}
 		};
 
 		return shim.fetchWithRetry(doFetchOperation, options);
@@ -742,47 +657,60 @@ function shimInit(options: ShimInitOptions = null) {
 		tlsEcdhCurve = 'auto';
 	}
 
-	shim.httpAgents = () => {
-		if (!shim.httpAgent_) {
-			const AgentSettings = {
-				keepAlive: true,
-				maxSockets: 1,
-				keepAliveMsecs: 5000,
+	const agentSettingsBase = (options: HttpAgentOptions|undefined) => {
+		return {
+			headersTimeout: options?.timeout,
+			bodyTimeout: options?.timeout,
+			connectTimeout: options?.timeout,
+			keepAliveTimeout: 5000,
+
+			connect: {
 				ecdhCurve: tlsEcdhCurve,
-			};
-			shim.httpAgent_ = {
-				http: new http.Agent(AgentSettings),
-				https: new https.Agent(AgentSettings),
-			};
-		}
-		return shim.httpAgent_;
+			},
+		} satisfies Agent.Options;
 	};
 
-	shim.httpAgent = url => {
-		const agents = shim.httpAgents();
-		return url.startsWith('https') ? agents.https : agents.http;
-	};
+	shim.httpAgent = (_url, options) => {
+		const resolvedProxyUrl = resolveProxyUrl(proxySettings.proxyUrl);
+		const lastSettings = shim.httpAgent_?.lastSettings;
 
-	shim.proxyAgent = (serverUrl: string, proxyUrl: string) => {
-		const proxyAgentConfig = {
-			keepAlive: true,
-			maxSockets: proxySettings.maxConcurrentConnections,
-			keepAliveMsecs: 5000,
-			proxy: proxyUrl,
-			timeout: proxySettings.proxyTimeout * 1000,
-			ecdhCurve: tlsEcdhCurve,
-		};
+		if (resolvedProxyUrl && proxySettings.proxyEnabled) {
+			const baseSettings = agentSettingsBase(options);
+			const { connect: proxyConnectSettings } = agentSettingsBase(options);
 
-		// Based on https://github.com/delvedor/hpagent#usage
-		if (!isUrlHttps(proxyUrl) && !isUrlHttps(serverUrl)) {
-			return new HttpProxyAgent(proxyAgentConfig);
-		} else if (isUrlHttps(proxyUrl) && !isUrlHttps(serverUrl)) {
-			return new HttpProxyAgent(proxyAgentConfig);
-		} else if (!isUrlHttps(proxyUrl) && isUrlHttps(serverUrl)) {
-			return new HttpsProxyAgent(proxyAgentConfig);
+			const agentSettings = {
+				...baseSettings,
+				requestTls: baseSettings.connect,
+				proxyTls: {
+					...proxyConnectSettings,
+					timeout: (proxySettings.proxyTimeout ?? 5) * Second,
+				},
+
+				connections: proxySettings.maxConcurrentConnections ?? null,
+				uri: resolvedProxyUrl,
+			} satisfies ProxyAgent.Options;
+			delete agentSettings.connect;
+
+			if (!fastDeepEqual(lastSettings, agentSettings)) {
+				shim.httpAgent_ = {
+					lastSettings: agentSettings,
+					agent: new ProxyAgent(agentSettings),
+				};
+			}
 		} else {
-			return new HttpsProxyAgent(proxyAgentConfig);
+			const agentSettings: Agent.Options = {
+				...agentSettingsBase(options),
+				connections: 1,
+			} satisfies Agent.Options;
+			if (!fastDeepEqual(lastSettings, agentSettings)) {
+				shim.httpAgent_ = {
+					lastSettings: agentSettings,
+					agent: new Agent(agentSettings),
+				};
+			}
 		}
+
+		return shim.httpAgent_.agent;
 	};
 
 	shim.openOrCreateFile = (filepath, defaultContents) => {

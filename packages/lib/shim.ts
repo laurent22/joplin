@@ -5,6 +5,7 @@ import type FsDriverBase from './fs-driver-base';
 import type FileApiDriverLocal from './file-api-driver-local';
 import type { Crypto } from './services/e2ee/types';
 import type { MarkupLanguage } from '@joplin/renderer';
+import { FetchBlobOptions } from './types';
 
 export interface CreateResourceFromPathOptions {
 	resizeLargeImages?: 'always' | 'never' | 'ask';
@@ -79,6 +80,17 @@ export enum MobilePlatform {
 	Web = 'web',
 }
 
+export type SetClientCertificateOptions = {
+	certPath: string;
+	keyPath: string;
+	keyPassword: string;
+	domains: string[];
+};
+
+export interface HttpAgentOptions {
+	timeout?: number;
+}
+
 let isTestingEnv_ = false;
 
 // We need to ensure that there's only one instance of React being used by all
@@ -116,8 +128,6 @@ const shim = {
 	fsDriver_: null as any,
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- http agent set per-platform (node https.Agent, RN noop); accessed structurally
 	httpAgent_: null as any,
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- proxy agent set per-platform; accessed structurally
-	proxyAgent: null as any,
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See electronBridge_
 	electronBridge: (): any => {
@@ -286,6 +296,10 @@ const shim = {
 		// Code: ETIMEDOUT
 		if (error.code === 'ETIMEDOUT') return true;
 
+		// Failure to establish a connection
+		// See https://undici.nodejs.org/api/Errors#class-connecttimeouterror
+		if (error.code === 'UND_ERR_CONNECT_TIMEOUT') return true;
+
 		// ECONNREFUSED is generally temporary
 		if (error.code === 'ECONNREFUSED') return true;
 
@@ -399,7 +413,7 @@ const shim = {
 	},
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- options flow into FetchBlobOptions; return shape varies (node fetch Response vs RN blob)
-	fetchBlob: function(_url: string, _options: any = null): any {
+	fetchBlob: function(_url: string, _options: FetchBlobOptions = null): any {
 		throw new Error('Not implemented: fetchBlob');
 	},
 
@@ -431,16 +445,8 @@ const shim = {
 	},
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See httpAgent_ above
-	httpAgent: (_url: string): any => {
+	httpAgent: (_url: string, _options?: HttpAgentOptions): any => {
 		throw new Error('Not implemented: httpAgent');
-	},
-
-	// Returns the agents for both protocols, so that callers which follow redirects can pick the
-	// right one for each hop. Binding a single agent up-front breaks when a redirect switches
-	// between http: and https: - see https://github.com/laurent22/joplin/issues/16486
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See httpAgent_ above
-	httpAgents: (): { http: any; https: any } => {
-		throw new Error('Not implemented: httpAgents');
 	},
 
 	openOrCreateFile: (_path: string, _defaultContents: string): string => {

@@ -2,7 +2,7 @@ import { _ } from '@joplin/lib/locale';
 import time from '@joplin/lib/time';
 import Logger, { TargetType } from '@joplin/utils/Logger';
 import * as readline from 'readline';
-import { Writable } from 'stream';
+import { Stream, Writable } from 'stream';
 import BaseCommand from './base-command';
 import yargParser = require('yargs-parser');
 const stringPadding = require('string-padding');
@@ -236,7 +236,7 @@ cliUtils.prompt = function(_initialText = '', promptString = ':', options: Promp
 			if (!this.muted) process.stdout.write(chunk, encoding);
 			callback();
 		},
-	}) as MutableStdout;
+	} as Stream.WritableOptions<Writable>) as MutableStdout;
 
 	const rl = readline.createInterface({
 		input: process.stdin,
