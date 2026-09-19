@@ -12666,7 +12666,7 @@ __metadata:
     react-native-quick-base64: "npm:2.2.2"
     react-native-quick-crypto: "npm:1.1.4"
     react-native-rsa-native: "npm:2.0.5"
-    react-native-safe-area-context: "npm:5.7.0"
+    react-native-safe-area-context: "npm:5.8.0"
     react-native-securerandom: "npm:1.0.1"
     react-native-share: "npm:12.3.1"
     react-native-svg: "npm:15.15.5"
@@ -49658,13 +49658,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-safe-area-context@npm:5.7.0":
-  version: 5.7.0
-  resolution: "react-native-safe-area-context@npm:5.7.0"
+"react-native-safe-area-context@npm:5.8.0":
+  version: 5.8.0
+  resolution: "react-native-safe-area-context@npm:5.8.0"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/9f5d3469c18c90c527c4068560ce4dcc7689e9fc8ddc68b8a5e76c94a6eafdba975ced89a48e08fecfd1303331e8c2498722bc249fcd87b1c5ea64ef3abd1d00
+  checksum: 10/d4f526a98110f88ba9f5dfe6d6bda2c26b86404b2d29a6571931a1f02a531f565a2fd58d20b4ac70c1fa37c00ad6a72332fb0a463e27262c4ff1d1dfb694af7c
   languageName: node
   linkType: hard
 
