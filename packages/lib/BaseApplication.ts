@@ -54,6 +54,7 @@ import SyncTargetJoplinCloud from './SyncTargetJoplinCloud';
 import { setAutoFreeze } from 'immer';
 import { getEncryptionEnabled } from './services/synchronizer/syncInfoUtils';
 import { loadMasterKeysFromSettings, migrateMasterPassword, migratePpk } from './services/e2ee/utils';
+import { ALL_NOTES_FILTER_ID } from './reserved-ids';
 import SyncTargetNone from './SyncTargetNone';
 import { setRSA } from './services/e2ee/ppk/ppk';
 import RSA from './services/e2ee/ppk/RSA.node';
@@ -92,6 +93,13 @@ export interface StartOptions {
 	appId?: string;
 }
 export const safeModeFlagFilename = 'force-safe-mode-on-next-start';
+
+export const shouldPreserveSelectedNoteOnSmartFilterSelect = (state: State, smartFilterId: string) => {
+	if (smartFilterId !== ALL_NOTES_FILTER_ID) return true;
+
+	const selectedNote = stateUtils.selectedNote(state);
+	return !!selectedNote && !selectedNote.deleted_time && !selectedNote.is_conflict;
+};
 
 export default class BaseApplication {
 
@@ -552,7 +560,7 @@ export default class BaseApplication {
 
 		if (action.type === 'SMART_FILTER_SELECT') {
 			refreshNotes = true;
-			refreshNotesUseSelectedNoteId = true;
+			refreshNotesUseSelectedNoteId = shouldPreserveSelectedNoteOnSmartFilterSelect(newState, action.id);
 		}
 
 		// Switching windows can also change which note(s) and which note parent type is selected.
