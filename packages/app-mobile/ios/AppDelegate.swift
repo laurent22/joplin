@@ -1,4 +1,4 @@
-import Expo
+internal import Expo
 import React
 import ReactAppDependencyProvider
  
@@ -6,7 +6,7 @@ import ReactAppDependencyProvider
 // - UNUserNotificationCenterDelegate is required by @react-native-community/push-notification-ios
 // - This file is derived from the default React Native and Expo `AppDelegate.swift`.
 @main
-public class AppDelegate: ExpoAppDelegate, UNUserNotificationCenterDelegate {
+class AppDelegate: ExpoAppDelegate, UNUserNotificationCenterDelegate {
   var window: UIWindow?
  
   var reactNativeDelegate: ExpoReactNativeFactoryDelegate?

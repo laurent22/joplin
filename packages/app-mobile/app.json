@@ -3,6 +3,9 @@
   "displayName": "Joplin",
   "plugins": [
     "@react-native-community/datetimepicker",
-    "expo-audio"
+    "expo-audio",
+    ["expo-build-properties", {
+      "ios": { "enableSceneSupport": true }
+    }]
   ]
 }
