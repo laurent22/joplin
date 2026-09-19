@@ -1,8 +1,8 @@
 # Conflict auto-merge
 
-When the same note is edited on two devices before either of them syncs, Joplin creates a conflict note which requires manual resolution. The local version is copied to the Conflicts notebook and the remote version overwrites the local note.
+When the same note is edited on two devices, if a change is made when one of the devices was not fully synced, Joplin creates a conflict note which requires manual resolution. The local version is copied to the Conflicts notebook and the remote version overwrites the local note.
 
-Auto-merge avoids this when the changes don't overlap. It uses a three-way merge to combine the edits automatically, and only creates a conflict note if the merge fails. The merge only runs on the client that detects conflict, which is the client that syncs second. The other devices simply receive the merged note with their next sync.
+Auto-merge avoids this when the changes don't overlap. It uses a three-way merge to combine the edits automatically, and only creates a conflict note if the merge fails. The merge only runs on the client that detects the conflict, which is the client that syncs second. The other devices simply receive the merged note with their next sync.
 
 ### The three versions
 
@@ -16,7 +16,7 @@ The base is stored per sync target in `sync_items.base_body` and `base_title`. I
 
 - after a successful upload, the uploaded body and title,  
 - after a download in the delta step, the downloaded body and title,  
-- after a conflict, whichever version is left on the original note
+- after a conflict, whichever version is left in the original note
 
 That last case covers three outcomes. For a full merge, the base becomes the merged output. For a partial merge it becomes partially merged remote version and for a plain conflict note, where no merge ran, it will be the incoming remote version.
 
@@ -73,9 +73,7 @@ Diffing is bounded because an unbounded diff blocked the app for minutes on larg
 
 The remote note arrives encrypted, so it is decrypted into memory for the merge. Nothing is saved during this process. The local note is not decrypted \- it should already have been decrypted by a normal sync.
 
-When a conflict note is created for an encrypted remote note, the decrypted content is copied to the remote note and the encrypted data is cleared. This prevents decryption process from later overwriting the merged result. The resolution UI reads the remote version from the original note, so it’s readable there.
-
-This check is handled within the decryption process itself because decryption uses extra memory during sync. This ensures users can disable the setting to avoid the additional memory usage if sync has memory issues.
+When a conflict note is created for an encrypted remote note, the decrypted content is copied to the remote note and the encrypted data is cleared. This prevents the decryption process from later overwriting the merged result. The resolution UI reads the remote version from the original note, so it’s readable there.
 
 **Setting**
 
@@ -89,9 +87,9 @@ This check is handled within the decryption process itself because decryption us
 
 `packages/lib/services/conflict/autoMergeNote.ts`: Merges a whole note. Applies the title rules (mergeTitle()) and builds resolvedLocal, resolvedCurrent and fullyMerged.
 
-`packages/lib/services/conflict/decryptNoteInMemory.ts`: Returns a decrypted copy of a remote note without saving it. Returns null if the note cannot be decrypted, or if auto-merge is disabled.
+`packages/lib/services/conflict/decryptNoteInMemory.ts`: Returns a decrypted copy of a remote note without saving it. Returns null if the note cannot be decrypted.
 
-`packages/lib/services/conflict/isAutoMergeEnabled.ts`: A helper to read the sync.autoMergeConflicts setting, so the setting name is always not repeated.
+`packages/lib/services/conflict/isAutoMergeEnabled.ts`: A helper to read the sync.autoMergeConflicts setting, so the setting name is not repeated.
 
 `packages/lib/services/synchronizer/utils/handleConflictAction.ts`: Handles the merge process and applies its result. It decides whether to perform the merge, handles the three possible outcomes, updates `updated_time`, and writes the `conflict_note_states` row.
 

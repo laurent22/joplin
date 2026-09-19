@@ -1,6 +1,6 @@
 # Conflict resolution UI
 
-When two devices edit the same note, if automatic resolution is enabled then sync merges the changes automatically where they don't overlap. If a real conflict remains, Joplin creates a conflict note for the local version and saves the remote version over the original, with the merged changes already applied to both. The conflict resolution UI shows both versions together, highlights the differences, and saves the resolved result back to the original note.
+When two devices edit the same note, if automatic resolution is enabled, then sync merges the changes automatically where they don't overlap. If a real conflict remains, Joplin creates a conflict note for the local version and saves the remote version over the original, with the merged changes already applied to both. The conflict resolution UI shows both versions together, highlights the differences, and saves the resolved result back to the original note.
 
 The feature is behind the `featureFlag.conflictResolution` setting, read through `isConflictResolutionEnabled()`. It is desktop-only and Markdown-only; the rich text editor is not supported.
 
@@ -42,6 +42,12 @@ Since both notes already contain the same automatically merged changes, the two-
 `prepareViewerLines()` identifies Markdown table rows and tracks code fences so pipes inside code blocks are not treated as tables. It also creates `comparisonText` for each line. Table matching ignores column padding, and trailing whitespace is ignored. This means table formatting changes or Markdown hard breaks do not create unnecessary conflicts.
 
 Only the comparison uses `comparisonText`. The original `line.text` is used when showing the changes, so the text displayed to the user is never modified. This matching is only for the conflict viewer. `boundedDiff3.ts` still uses the normal line diff for auto-merge during sync.
+
+**Trailing whitespace**
+
+`sameViewerLine()` can ignore trailing spaces with `ignoreTrailingWhitespace`, helping Markdown hard breaks match correctly to avoid making the whole note look conflicted.
+
+The trimming only affects matching, not the output, which comes from the local text. So local trailing whitespace wins, while remote-only whitespace changes are not shown. Leading whitespace remains a real difference, and auto-merge is unaffected.
 
 **Sections**
 
