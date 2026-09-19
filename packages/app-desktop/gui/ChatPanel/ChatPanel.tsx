@@ -19,6 +19,7 @@ import eventManager, { EventName, ItemChangeEvent } from '@joplin/lib/eventManag
 import { Second } from '@joplin/utils/time';
 import ChatMessageItem from './ChatMessageItem';
 import NavService from '@joplin/lib/services/NavService';
+import Button, { ButtonLevel } from '../Button/Button';
 
 const logger = Logger.create('ChatPanel');
 
@@ -32,6 +33,7 @@ interface Props {
 	noteIsEncrypted: boolean;
 	messages: AiChatMessage[];
 	aiDegraded: boolean;
+	showToolbarButton: boolean;
 	dispatch: Dispatch;
 }
 
@@ -326,6 +328,11 @@ const ChatPanel: React.FC<Props> = (props) => {
 		void CommandService.instance().executeInWindow('toggleAiChat', { windowId: windowId, args: [] });
 	}, [windowId]);
 
+	const handleHideToolbarButton = useCallback(() => {
+		Setting.setValue('ai.chat.showToolbarButton', false);
+		handleClose();
+	}, [handleClose]);
+
 	const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLTextAreaElement>) => {
 		// Don't send while an IME composition is in flight — Enter commits
 		// the composition for CJK / accented input.
@@ -339,7 +346,16 @@ const ChatPanel: React.FC<Props> = (props) => {
 		if (!props.available) {
 			const content = (
 				<div className='disabled-message'>
-					{props.unavailableHint}
+					<div className='hint'>{props.unavailableHint}</div>
+					{props.showToolbarButton && <>
+						<div className='hint'>{_('If you do not want to use the AI features, you may hide the toolbar button:')}</div>
+						<Button
+							level={ButtonLevel.Secondary}
+							title={_('Hide the AI Chat button')}
+							onClick={handleHideToolbarButton}
+						/>
+						<div className='hint'>{_('(You can show it again from Settings → AI)')}</div>
+					</>}
 				</div>
 			);
 			return { content, showingMessages: false };
@@ -462,6 +478,7 @@ const mapStateToProps = (state: AppState, ownProps: OwnProps) => {
 		noteIsEncrypted: !!note?.encryption_applied,
 		messages: windowState.aiChatMessages || [],
 		aiDegraded: !!state.aiStatus?.degraded,
+		showToolbarButton: !!state.settings['ai.chat.showToolbarButton'],
 	};
 };
 
