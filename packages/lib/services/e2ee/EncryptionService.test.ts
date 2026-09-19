@@ -364,10 +364,17 @@ describe('EncryptionService', () => {
 		expect(plainText).toBe('🐶🐶🐶'.substr(0, 5));
 	}));
 
-	it('should only treat a complete note lock header as ciphertext', () => {
+	it('should only treat a complete note lock header as ciphertext', async () => {
+		let masterKey = await service.generateMasterKey('123456');
+		masterKey = await MasterKey.save(masterKey);
+		await service.loadMasterKey(masterKey, '123456', true);
+		expect(isValidNoteLockHeader(await service.encryptString('some text', { masterKeyId: masterKey.id, isNoteLock: true }))).toBe(true);
+
 		const header = service.encodeHeader_({ encryptionMethod: EncryptionMethod.StringV1, masterKeyId: '0123456789abcdef0123456789abcdef' }, true);
 		expect(isValidNoteLockHeader(`${header}{"payload":1}`)).toBe(true);
-		for (const text of ['JLD01 my shopping list', 'JLD99abc', header.replace('JLD', 'JED'), header.slice(0, -1), '']) {
+		// A later header version may use a different metadata size
+		expect(isValidNoteLockHeader('JLD02000004abcd{"payload":1}')).toBe(true);
+		for (const text of ['JLD01 my shopping list', 'JLD99abc', header.replace('JLD', 'JED'), header.slice(0, -1), 'JLD01000001a - [ ] plain text', 'JLD02000004abc', 'JLD01000000', null, '']) {
 			expect(isValidNoteLockHeader(text)).toBe(false);
 		}
 	});

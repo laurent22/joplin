@@ -65,8 +65,8 @@ export const runtime = (): CommandRuntime => {
 					newNote.user_updated_time = note.user_updated_time;
 					newNote.updated_time = Date.now();
 
-					const toSave = noteIsLocked ? { ...newNote, isDecrypted: true } : newNote;
-					await Note.save(toSave, { autoTimestamp: false, useNoteLock: noteIsLocked, noteLockKey });
+					const toSave = { ...newNote, isDecrypted: true };
+					await Note.save(toSave, { autoTimestamp: false, useNoteLock: true, noteLockKey });
 					await Note.delete(note.id, { toTrash: true });
 					processedCount ++;
 

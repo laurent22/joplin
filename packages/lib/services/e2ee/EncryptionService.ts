@@ -24,10 +24,26 @@ export function isValidHeaderIdentifier(id: string, ignoreTooLongLength = false,
 	return isNoteLock ? /JLD\d\d/.test(id) : /JED\d\d/.test(id);
 }
 
-// Same layout as encodeHeader_. The key id is deliberately not compared with the active key, so
-// data locked under another key still passes through instead of being encrypted a second time.
+// Version 1 has fixed-size metadata, later versions use the size in the header. The key id is
+// deliberately not compared, so data locked under another key is not encrypted a second time.
 export function isValidNoteLockHeader(text: string) {
-	return /^JLD\d\d[0-9a-f]{6}[0-9a-f]{2}[0-9a-f]{32}$/.test((text ?? '').substring(0, 45));
+	if (typeof text !== 'string') return false;
+
+	const identifierSize = 5;
+	const metadataSizeFieldSize = 6;
+	const identifier = text.substring(0, identifierSize);
+	if (!isValidHeaderIdentifier(identifier, false, true)) return false;
+
+	const metadataSizeHex = text.substring(identifierSize, identifierSize + metadataSizeFieldSize);
+	if (!/^[0-9a-f]{6}$/.test(metadataSizeHex)) return false;
+
+	const metadataSize = parseInt(metadataSizeHex, 16);
+	const maximumMetadataSize = 1024;
+	if (!metadataSize || metadataSize > maximumMetadataSize) return false;
+	if (identifier === 'JLD01' && metadataSize !== 34) return false;
+
+	const metadata = text.substring(identifierSize + metadataSizeFieldSize, identifierSize + metadataSizeFieldSize + metadataSize);
+	return metadata.length === metadataSize && /^[0-9a-f]+$/.test(metadata);
 }
 
 interface DecryptedMasterKey {

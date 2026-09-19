@@ -857,7 +857,10 @@ export default class Note extends BaseItem {
 	// a partial save to the body is used for a controlled change, but if the save allows
 	// altering the body as free text, a gated save should be used, and the isDecrypted flag
 	// from the note must be passed to the save, so that the gated validation will work
-	// correctly.
+	// correctly. In certain cases, it may be necessary to hardcode the isDecrypted flag to true
+	// before calling a gated save, but caution should be used if doing so, because if the body
+	// is ever not decrypted when doing so, it will cause the contents to be double encrypted,
+	// causing the plain text to become inaccessible in UI, with no automatic remedy available.
 	public static async save(o: NoteEntity, options: SaveOptions = null): Promise<NoteEntity> {
 		const isNew = this.isNew(o, options);
 
@@ -904,7 +907,7 @@ export default class Note extends BaseItem {
 		// gate on a new feature encrypts instead of leaking plaintext. Ciphertext bodies pass
 		// through untouched, the same way data saved via sync does, and so does a row that sync
 		// still holds encrypted, since its empty body is not a note lock body yet.
-		if (isNoteLockEnabled() && (options?.useNoteLock || ('body' in o && !o.encryption_applied && !isValidNoteLockHeader(o.body)))) {
+		if (isNoteLockEnabled() && (!!options?.useNoteLock || ('body' in o && !o.encryption_applied && !isValidNoteLockHeader(o.body)))) {
 			if (o.is_locked === undefined && !isNew && oldNote) o.is_locked = oldNote.is_locked;
 			// Callers use the returned note to update UI state, so it must carry the plaintext
 			// body even though the encrypted one is what gets persisted.
