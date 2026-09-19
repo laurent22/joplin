@@ -29,11 +29,10 @@ import { setDateFormat, setTimeFormat, setTimeLocale } from '@joplin/utils/time'
 import { reg } from './registry';
 import time from './time';
 import BaseSyncTarget from './BaseSyncTarget';
-import reduxSharedMiddleware from './components/shared/reduxSharedMiddleware';
 import dns = require('dns');
+import reduxSharedMiddleware from './components/shared/reduxSharedMiddleware';
 import fs = require('fs-extra');
 import { EventEmitter } from 'events';
-const syswidecas = require('./vendor/syswide-cas');
 import SyncTargetRegistry from './SyncTargetRegistry';
 import SyncTargetFilesystem from './SyncTargetFilesystem';
 import SyncTargetNextcloud from './SyncTargetNextcloud';
@@ -55,6 +54,7 @@ import SyncTargetJoplinCloud from './SyncTargetJoplinCloud';
 import { setAutoFreeze } from 'immer';
 import { getEncryptionEnabled } from './services/synchronizer/syncInfoUtils';
 import { loadMasterKeysFromSettings, migrateMasterPassword, migratePpk } from './services/e2ee/utils';
+import { ALL_NOTES_FILTER_ID } from './reserved-ids';
 import SyncTargetNone from './SyncTargetNone';
 import { setRSA } from './services/e2ee/ppk/ppk';
 import RSA from './services/e2ee/ppk/RSA.node';
@@ -76,6 +76,7 @@ import NoteLockKey from './services/noteLock/NoteLockKey';
 import isNoteLockEnabled from './services/noteLock/isNoteLockEnabled';
 import NoteLockSession from './services/noteLock/NoteLockSession';
 import NoteLockService from './services/noteLock/NoteLockService';
+import setExtraRootCertificates from './utils/tls/setExtraRootCertificates';
 import { BuiltInMetadataKeys } from './models/settings/builtInMetadata';
 
 const appLogger: LoggerWrapper = Logger.create('App');
@@ -92,6 +93,13 @@ export interface StartOptions {
 	appId?: string;
 }
 export const safeModeFlagFilename = 'force-safe-mode-on-next-start';
+
+export const shouldPreserveSelectedNoteOnSmartFilterSelect = (state: State, smartFilterId: string) => {
+	if (smartFilterId !== ALL_NOTES_FILTER_ID) return true;
+
+	const selectedNote = stateUtils.selectedNote(state);
+	return !!selectedNote && !selectedNote.deleted_time && !selectedNote.is_conflict;
+};
 
 export default class BaseApplication {
 
@@ -388,11 +396,13 @@ export default class BaseApplication {
 				process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = Setting.value('net.ignoreTlsErrors') ? '0' : '1';
 			},
 			'net.customCertificates': async () => {
-				const caPaths = Setting.value('net.customCertificates').split(',');
-				for (let i = 0; i < caPaths.length; i++) {
-					const f = caPaths[i].trim();
-					if (!f) continue;
-					syswidecas.addCAs(f);
+				const caPaths = Setting.value('net.customCertificates')
+					.split(',')
+					.filter(path => !!path.trim());
+				try {
+					await setExtraRootCertificates(caPaths.map(path => ({ path })));
+				} catch (error) {
+					this.logger().error('Failed to add extra CA certificates:', error);
 				}
 			},
 			'net.proxyEnabled': async () => {
@@ -550,7 +560,7 @@ export default class BaseApplication {
 
 		if (action.type === 'SMART_FILTER_SELECT') {
 			refreshNotes = true;
-			refreshNotesUseSelectedNoteId = true;
+			refreshNotesUseSelectedNoteId = shouldPreserveSelectedNoteOnSmartFilterSelect(newState, action.id);
 		}
 
 		// Switching windows can also change which note(s) and which note parent type is selected.

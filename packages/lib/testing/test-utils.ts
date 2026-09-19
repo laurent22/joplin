@@ -72,6 +72,8 @@ import { dirname } from '@joplin/utils/path';
 import SyncTargetJoplinServerSAML from '../SyncTargetJoplinServerSAML';
 import { MarkupLanguage } from '@joplin/renderer';
 import SearchEngine from '../services/search/SearchEngine';
+import { getCACertificates } from 'node:tls';
+import setExtraRootCertificates from '../utils/tls/setExtraRootCertificates';
 
 // Each suite has its own separate data and temp directory so that multiple
 // suites can be run at the same time. suiteName is what is used to
@@ -1186,15 +1188,13 @@ export const mockFetch = (requestHandler: MockFetchRequestHandler) => {
 };
 
 export const withExtraRootCa = async <T> (caPemData: string, task: ()=> Promise<T>) => {
-	// getCACertificates requires a newer NodeJS version than the current @types/node version.
-	// Dynamically import tls to work around the missing types:
-	const tls = require('node:tls');
-	const trustedCas = tls.getCACertificates();
+	const trustedCas = getCACertificates();
 	try {
-		tls.setDefaultCACertificates([...trustedCas, caPemData]);
+		await setExtraRootCertificates([...trustedCas, caPemData].map(cert => ({ pem: cert })));
+
 		await task();
 	} finally {
-		tls.setDefaultCACertificates([...trustedCas]);
+		await setExtraRootCertificates(trustedCas.map(cert => ({ pem: cert })));
 	}
 };
 

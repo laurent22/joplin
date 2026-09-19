@@ -7,7 +7,7 @@ import NavService from '../services/NavService';
 export const declaration: CommandDeclaration = {
 	name: 'synchronize',
 	label: () => _('Synchronise'),
-	iconName: 'fa-sync-alt',
+	iconName: 'ionicon sync',
 };
 
 // Note that this command actually acts as a toggle - it starts or cancels
@@ -66,7 +66,7 @@ export const runtime = (): CommandRuntime => {
 			}
 
 			if (action === 'cancel') {
-				sync.cancel();
+				void sync.cancel();
 				return 'cancel';
 			} else {
 				void reg.scheduleSync(0);

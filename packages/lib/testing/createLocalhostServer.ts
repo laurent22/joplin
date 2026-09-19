@@ -26,9 +26,13 @@ interface Options {
 	https: boolean;
 }
 
+let caIndex = 0;
 const createLocalhostCerts = async () => {
+	// Using the same common name for multiple root CAs breaks certificate handling.
+	// Change the CA name to allow running multiple localhost https servers with different CAs:
+	const caCommonName = `ca${++caIndex}.localhost`;
 	const rootCa = await selfsigned.generate(
-		[{ name: 'commonName', value: 'ca.localhost' }],
+		[{ name: 'commonName', value: caCommonName }],
 		{
 			extensions: [
 				{
