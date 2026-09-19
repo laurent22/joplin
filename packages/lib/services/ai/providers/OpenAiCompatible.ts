@@ -2,7 +2,7 @@ import shim from '../../../shim';
 import JoplinError from '../../../JoplinError';
 import Logger from '@joplin/utils/Logger';
 import { rtrimSlashes } from '@joplin/utils/path';
-import { ChatMessage, ChatOptions, ChatResult, ChatToolCall, ProviderClassification } from '../types';
+import { ChatFinishReason, ChatMessage, ChatOptions, ChatResult, ChatToolCall, ProviderClassification } from '../types';
 import ChatProviderBase from './ChatProviderBase';
 import { ToolSpec } from '../tools/types';
 import extractReasoning from '../utils/extractReasoning';
@@ -34,6 +34,7 @@ interface OpenAiMessage {
 
 interface OpenAiChoice {
 	message?: OpenAiMessage;
+	finish_reason?: string;
 }
 
 interface OpenAiResponse {
@@ -48,6 +49,15 @@ interface Options {
 	model: string;
 	classification: ProviderClassification;
 }
+
+const toChatFinishReason = (reason: string|undefined): ChatFinishReason|undefined => {
+	if (!reason) return undefined;
+	// Some providers use "max_tokens" or "MAX_TOKENS" instead of "length".
+	if (['length', 'max_tokens'].includes(reason.toLowerCase())) return 'length';
+	if (reason === 'stop') return 'stop';
+	if (reason === 'tool_calls') return 'tool_calls';
+	return 'other';
+};
 
 const convertTool = (tool: ToolSpec) => {
 	return {
@@ -207,9 +217,10 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 			);
 		}
 
-		const responseMessage = json.choices?.[0]?.message;
+		const choice = json.choices?.[0];
+		const responseMessage = choice?.message;
 		const { text: content, reasoning: inlineReasoning } = extractReasoning(responseMessage?.content ?? '');
-		const reasoning = responseMessage?.reasoning_content ?? responseMessage?.reasoning ?? inlineReasoning;
+		const reasoningText = responseMessage?.reasoning_content ?? responseMessage?.reasoning ?? (inlineReasoning || undefined);
 		// Some "OpenAI-compatible" providers (notably older Ollama versions)
 		// omit `usage` entirely. Default to zeros rather than throw.
 		const inputTokens = json.usage?.prompt_tokens ?? 0;
@@ -237,7 +248,13 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 			};
 		}).filter(toolCall => !!toolCall);
 
-		return { text: content, toolCalls, reasoning, usage: { inputTokens, outputTokens } };
+		return {
+			text: content,
+			toolCalls,
+			usage: { inputTokens, outputTokens },
+			finishReason: toChatFinishReason(choice?.finish_reason),
+			reasoningText,
+		};
 	}
 
 	protected async sendChatRequest(body: Record<string, unknown>, options: ChatRequestOptions): Promise<OpenAiChatResponse> {
