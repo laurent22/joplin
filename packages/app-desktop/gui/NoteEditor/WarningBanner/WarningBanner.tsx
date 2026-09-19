@@ -14,6 +14,7 @@ import { NoteBodyEditorType } from '../utils/types';
 
 interface Props {
 	bodyEditor: NoteBodyEditorType;
+	lockedInShare: boolean;
 	editorMigrationVersion: number;
 	richTextBannerDismissed: boolean;
 	inEditorRenderingEnabled: boolean;
@@ -53,6 +54,12 @@ const WarningBanner: React.FC<Props> = props => {
 			onDismiss={editorMigrationMessage.disable.onPress}
 			dismissMessage={editorMigrationMessage.disable.label}
 		>{editorMigrationMessage.label}</BannerContent>
+	);
+
+	const lockedInShareBanner = (
+		<BannerContent visible={props.lockedInShare}>
+			{_('This note is locked and may not be readable because it is contained within a share. To enable editing, it must be moved outside of the share.')}
+		</BannerContent>
 	);
 
 	const wysiwygBanner = (
@@ -101,6 +108,7 @@ const WarningBanner: React.FC<Props> = props => {
 	);
 
 	return <>
+		{lockedInShareBanner}
 		{wysiwygBanner}
 		{markdownPluginBanner}
 		{editorMigrationBanner}

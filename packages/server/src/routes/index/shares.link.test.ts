@@ -81,6 +81,23 @@ describe('shares.link', () => {
 		expect(bodyHtml).toContain('<title>Testing title'); // Means the page title is set to the note title
 	});
 
+	test('should not display a locked note', async () => {
+		const { session } = await createUserAndSession();
+
+		const noteItem = await createNote(session.id, {
+			title: 'Locked',
+			body: 'JLD01cipher',
+			is_locked: 1,
+		});
+
+		const share = await postApi<Share>(session.id, 'shares', {
+			type: ShareType.Note,
+			note_id: noteItem.jop_id,
+		});
+
+		await expectHttpError(async () => getShareContent(share.id), ErrorForbidden.httpCode);
+	});
+
 	test('should load plugins', async () => {
 		const { session } = await createUserAndSession();
 

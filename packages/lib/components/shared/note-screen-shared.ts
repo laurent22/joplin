@@ -8,7 +8,7 @@ import ResourceFetcher from '../../services/ResourceFetcher';
 import DecryptionWorker from '../../services/DecryptionWorker';
 import Setting from '../../models/Setting';
 import { Mutex } from 'async-mutex';
-import { itemIsReadOnlySync, ItemSlice } from '../../models/utils/readOnly';
+import { itemIsReadOnlySync, ItemSlice, noteIsLockedInShare } from '../../models/utils/readOnly';
 import ItemChange from '../../models/ItemChange';
 import BaseItem from '../../models/BaseItem';
 import isNoteLockEnabled from '../../services/noteLock/isNoteLockEnabled';
@@ -437,7 +437,7 @@ shared.reloadNote = async (comp: BaseNoteScreenComponent, useDefaultEditorState 
 			isLoading: false,
 			fromShare: !!comp.props.sharedData,
 			noteResources: await shared.attachedResources(note ? note.body : ''),
-			readOnly: noteLockBlocked || itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, note as ItemSlice, Setting.value('sync.userId'), BaseItem.syncShareCache),
+			readOnly: noteLockBlocked || noteIsLockedInShare(note) || itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, note as ItemSlice, Setting.value('sync.userId'), BaseItem.syncShareCache),
 			noteLastLoadTime: Date.now(),
 			noteLockKey,
 			noteLockUndecryptable,
