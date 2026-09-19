@@ -23,6 +23,13 @@ import { AppState } from '../../app.reducer';
 import ToolbarButtonUtils, { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import { _, _n } from '@joplin/lib/locale';
 import NoteTitleBar from './NoteTitle/NoteTitleBar';
+import useConflictTitle, { ConflictStaleReason } from './utils/useConflictTitle';
+import ConflictFooter from './ConflictFooter/ConflictFooter';
+import ConflictBanner from './ConflictBanner/ConflictBanner';
+import bridge from '../../services/bridge';
+import finishConflictResolution, { FinishStatus } from '@joplin/lib/services/conflict/finishConflictResolution';
+import keepConflictCopy, { KeepStatus } from '@joplin/lib/services/conflict/keepConflictCopy';
+import { conflictNoteIsResolvable } from '@joplin/lib/services/conflict/conflictIsResolvable';
 import markupLanguageUtils from '@joplin/lib/utils/markupLanguageUtils';
 import Setting from '@joplin/lib/models/Setting';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
@@ -37,6 +44,7 @@ import { substrWithEllipsis } from '@joplin/lib/string-utils';
 import NoteSearchBar from '../NoteSearchBar';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
+import getTrashFolderId from '@joplin/lib/services/trash/getTrashFolderId';
 import NoteRevisionViewer from '../NoteRevisionViewer';
 import { parseShareCache } from '@joplin/lib/services/share/reducer';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
@@ -81,6 +89,8 @@ const toolbarButtonUtils = new ToolbarButtonUtils(CommandService.instance());
 const onDragOver: React.DragEventHandler = event => event.preventDefault();
 let editorIdCounter = 0;
 
+const trashedConflictMessage = () => _('The note this conflict belongs to is in the trash. Restore it to finish resolving the conflict.');
+
 function NoteEditorContent(props: NoteEditorProps) {
 	const [showRevisions, setShowRevisions] = useState(false);
 	const [titleHasBeenManuallyChanged, setTitleHasBeenManuallyChanged] = useState(false);
@@ -91,6 +101,8 @@ function NoteEditorContent(props: NoteEditorProps) {
 	const titleInputRef = useRef<HTMLInputElement|null>(null);
 	const isMountedRef = useRef(true);
 	const noteSearchBarRef = useRef(null);
+	const conflictFinishingRef = useRef(false);
+	const [conflictReloadCount, setConflictReloadCount] = useState(0);
 
 	// Should be constant and unique to this instance of the editor.
 	const editorId = useMemo(() => {
@@ -120,7 +132,12 @@ function NoteEditorContent(props: NoteEditorProps) {
 	}, []);
 
 	const effectiveNoteId = useEffectiveNoteId(props);
-	const { editorPlugin, editorView } = usePluginEditorView(props.plugins);
+	const { conflictTitle, resolvedTitle, setResolvedTitle, hasTitleConflict, isConflictNote: noteHasConflict, conflictChecked, remoteUpdatedTime, originalIsStale, staleReason, reloadConflict } = useConflictTitle(effectiveNoteId);
+
+	// The resolution UI needs the Markdown editor, so it replaces plugin editors and whiteboards
+	const conflictRestrictsEditor = props.conflictIsInView && (!conflictChecked || noteHasConflict);
+	const conflictBlocksPlugins = props.conflictIsInView && conflictChecked && noteHasConflict;
+	const { editorPlugin, editorView } = usePluginEditorView(props.plugins, conflictRestrictsEditor);
 	const builtInEditorVisible = !editorPlugin;
 	const windowId = useContext(WindowIdContext);
 	const onDecryptFailedChange = useCallback((value: boolean) => {
@@ -203,7 +220,123 @@ function NoteEditorContent(props: NoteEditorProps) {
 
 	const formNoteFolder = useFolder({ folderId: formNote.parent_id });
 
-	const shownEditorViewIds = useVisiblePluginEditorViewIds(props.plugins, windowId);
+	const isConflictNote = conflictRestrictsEditor
+		&& props.bodyEditor === NoteBodyEditorType.CodeMirror6;
+
+	const onConflictReload = useCallback(() => {
+		reloadConflict();
+		setConflictReloadCount(count => count + 1);
+	}, [reloadConflict]);
+
+	// Shown when the change is already known, and again if a new one appears after saving.
+	const askToReloadConflict = useCallback(() => {
+		if (staleReason === ConflictStaleReason.Trashed) {
+			bridge().showMessageBox(trashedConflictMessage(), { buttons: [_('OK')] });
+			return;
+		}
+
+		const choice = bridge().showMessageBox(
+			_('This note changed while you were resolving it. Reload to see the latest changes.'),
+			{ buttons: [_('Reload'), _('Cancel')], defaultId: 0, cancelId: 1 },
+		);
+		if (choice === 0) onConflictReload();
+	}, [onConflictReload, staleReason]);
+
+	const onKeepBoth = useCallback(async () => {
+		if (conflictFinishingRef.current) return;
+		conflictFinishingRef.current = true;
+
+		try {
+			const note = formNoteRef.current;
+			if (!bridge().showConfirmMessageBox(_('Keep both versions as separate notes?'), { buttons: [_('Keep both'), _('Cancel')] })) return;
+
+			const result = await keepConflictCopy(note.id);
+
+			if (result.status !== KeepStatus.Ok) {
+				logger.warn('Could not keep the conflict note', note.id, result.status, result.reason);
+				bridge().showErrorMessageBox(_('This note could not be kept. It may have been deleted or changed elsewhere.'));
+				return;
+			}
+
+			// The note kept is no longer a conflict, so the editor moves on to the
+			// next one, or to the kept note when that was the last
+			props.dispatch({ type: 'NOTE_SELECT', id: result.nextConflictId || result.noteId });
+		} catch (error) {
+			logger.error('Could not keep the conflict note', error);
+			bridge().showErrorMessageBox(error.message);
+		} finally {
+			conflictFinishingRef.current = false;
+		}
+	}, [props.dispatch]);
+
+	const onGoToConflict = useCallback((direction: 'previous'|'next') => {
+		editorRef.current?.goToConflict?.(direction);
+	}, []);
+
+	const onConflictFinish = useCallback(async () => {
+		// The awaits allow another click to start before the first one finishes.
+		if (conflictFinishingRef.current) return;
+		conflictFinishingRef.current = true;
+
+		try {
+			const note = formNoteRef.current;
+
+			// A pending save would land after the note is deleted and bring it back
+			await note.saveActionQueue?.waitForAllDone();
+
+			// A half-resolved merge is never saved, so only the editor has it
+			const body = await editorRef.current?.content();
+			if (body === undefined || body === null) {
+				logger.warn('Could not read the resolved body for note', note.id);
+				bridge().showErrorMessageBox(_('The resolved note could not be read. Please try again.'));
+				return;
+			}
+
+			const resolved = {
+				title: hasTitleConflict ? resolvedTitle : note.title,
+				body,
+				remoteUpdatedTime,
+			};
+
+			if (originalIsStale) {
+				askToReloadConflict();
+				return;
+			}
+
+			if (!bridge().showConfirmMessageBox(_('Finish resolving this conflict?'), { buttons: [_('Finish'), _('Cancel')] })) return;
+
+			const result = await finishConflictResolution(note.id, resolved);
+
+			if (result.status === FinishStatus.OriginalChanged) {
+				askToReloadConflict();
+				return;
+			}
+
+			if (result.status === FinishStatus.CannotWrite) {
+				logger.warn('Could not write the resolved note', note.id, result.reason);
+				bridge().showErrorMessageBox(result.reason === 'trashed'
+					? trashedConflictMessage()
+					: _('This note cannot be updated, so the conflict was left as it is. It may be read-only, locked or encrypted.'));
+				return;
+			}
+
+			if (result.status !== FinishStatus.Ok) {
+				logger.warn('Could not finish the conflict resolution for note', note.id, result.status);
+				bridge().showErrorMessageBox(_('The conflict could not be resolved. The note may have been deleted or changed elsewhere.'));
+				return;
+			}
+
+			// The conflict note is gone, so open the note that kept the resolved content.
+			props.dispatch({ type: 'NOTE_SELECT', id: result.originalId });
+		} catch (error) {
+			logger.error('Could not finish the conflict resolution', error);
+			bridge().showErrorMessageBox(error.message);
+		} finally {
+			conflictFinishingRef.current = false;
+		}
+	}, [hasTitleConflict, resolvedTitle, remoteUpdatedTime, originalIsStale, askToReloadConflict, props.dispatch]);
+
+	const shownEditorViewIds = useVisiblePluginEditorViewIds(props.plugins, windowId, conflictRestrictsEditor);
 	useConnectToEditorPlugin({
 		startupPluginsLoaded: props.startupPluginsLoaded,
 		setFormNote,
@@ -213,6 +346,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		shownEditorViewIds,
 		activeEditorView: editorView,
 		plugins: props.plugins,
+		disabled: conflictBlocksPlugins,
 	});
 
 	const {
@@ -564,6 +698,8 @@ function NoteEditorContent(props: NoteEditorProps) {
 		watchedNoteFiles: props.watchedNoteFiles,
 		enableHtmlToMarkdownBanner: props.enableHtmlToMarkdownBanner,
 		showNoteLinkIcon: props.showNoteLinkIcon,
+		conflictReloadCount,
+		conflictIsInView: isConflictNote,
 	};
 
 	let editor = null;
@@ -573,14 +709,26 @@ function NoteEditorContent(props: NoteEditorProps) {
 
 	const useWhiteboardEditor = builtInEditorVisible
 		&& noteHasWhiteboardFence
+		&& !conflictRestrictsEditor
 		&& !props.whiteboardForceMarkdown?.[formNote.id];
 
 	// Mirror "active note is a whiteboard" to redux so the NoteToolbar can
 	// show the editor toggle. We can't compute this from the redux note list
 	// because note bodies aren't in the preview fields.
 	useEffect(() => {
-		props.dispatch({ type: 'WHITEBOARD_ACTIVE_NOTE_SET', value: noteHasWhiteboardFence, windowId });
-	}, [noteHasWhiteboardFence, windowId, props.dispatch]);
+		props.dispatch({ type: 'WHITEBOARD_ACTIVE_NOTE_SET', value: noteHasWhiteboardFence && !conflictRestrictsEditor, windowId });
+	}, [noteHasWhiteboardFence, conflictRestrictsEditor, windowId, props.dispatch]);
+
+	useEffect(() => {
+		props.dispatch({ type: 'CONFLICT_UI_ACTIVE_NOTE_SET', value: conflictBlocksPlugins, windowId });
+	}, [conflictBlocksPlugins, windowId, props.dispatch]);
+
+	useEffect(() => {
+		if (!conflictBlocksPlugins) return;
+		const noteId = formNote.id;
+		if (!props.watchedNoteFiles.includes(noteId)) return;
+		void ExternalEditWatcher.instance().stopWatching(noteId);
+	}, [conflictBlocksPlugins, formNote.id, props.watchedNoteFiles]);
 
 	if (useWhiteboardEditor) {
 		editor = <WhiteboardEditor key={formNote.id} {...editorProps}/>;
@@ -817,6 +965,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 	return (
 		<div style={styles.root} onDragOver={onDragOver} onDrop={onDrop} ref={containerRef}>
 			<div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+				<ConflictBanner visible={originalIsStale} reason={staleReason} onReload={onConflictReload}/>
 				{renderConvertHtmlToMarkdown()}
 				{renderResourceWatchingNotification()}
 				{renderResourceInSearchResultsNotification()}
@@ -829,6 +978,10 @@ function NoteEditorContent(props: NoteEditorProps) {
 					noteUserUpdatedTime={formNote.user_updated_time}
 					onTitleChange={onTitleChange}
 					disabled={isReadOnly || reloadInProgress}
+					isConflictNote={isConflictNote}
+					conflictTitle={hasTitleConflict ? conflictTitle : undefined}
+					resolvedTitle={resolvedTitle}
+					onResolvedTitleChange={setResolvedTitle}
 				/>
 				{renderSearchInfo()}
 				<div style={{ display: 'flex', flex: 1, paddingLeft: theme.editorPaddingLeft, maxHeight: '100%', minHeight: '0' }}>
@@ -838,6 +991,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
 					{renderSearchBar()}
 				</div>
+				{isConflictNote ? <ConflictFooter onFinish={onConflictFinish} onKeepBoth={onKeepBoth} onGoToConflict={onGoToConflict} disabled={isReadOnly}/> : null}
 				<StatusBar
 					noteId={formNote.id}
 					setTagsToolbarButtonInfo={props.setTagsToolbarButtonInfo}
@@ -867,9 +1021,30 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 	const windowState = stateUtils.windowStateById(state, ownProps.windowId);
 	const noteId = stateUtils.selectedNoteId(windowState);
 
+	const selectedNote = stateUtils
+		.allWindowStates(state)
+		.map(windowNotes => windowNotes.notes.find(n => n.id === noteId))
+		.find(note => !!note);
+	// "All notes" filter leaves the previous folder id in place
+	const inConflictFolder = windowState.notesParentType === 'Folder'
+		&& windowState.selectedFolderId === Folder.conflictFolderId();
+	const conflictResolutionEnabled = !!state.settings['featureFlag.conflictResolution'];
+	const noteIsConflict = conflictResolutionEnabled && (selectedNote
+		? conflictNoteIsResolvable(selectedNote)
+		: inConflictFolder);
+
+	// A conflict stays listed in the trash once deleted
+	const inTrash = windowState.notesParentType === 'Folder'
+		&& windowState.selectedFolderId === getTrashFolderId();
+	// A secondary window opens in the note's own notebook, not the conflicts folder
+	const isSecondaryWindow = ownProps.windowId !== defaultWindowId;
+	const conflictIsInView = noteIsConflict && (isSecondaryWindow || inConflictFolder || inTrash);
+
 	let bodyEditor = windowState.editorCodeView ? NoteBodyEditorType.CodeMirror6 : NoteBodyEditorType.TinyMce;
 	if (state.settings.isSafeMode) {
 		bodyEditor = NoteBodyEditorType.PlainText;
+	} else if (conflictIsInView && windowState.activeNoteIsConflict) {
+		bodyEditor = NoteBodyEditorType.CodeMirror6;
 	} else if (windowState.editorCodeView && state.settings['editor.legacyMarkdown']) {
 		bodyEditor = NoteBodyEditorType.CodeMirror5;
 	}
@@ -879,6 +1054,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 	return {
 		noteId,
 		bodyEditor,
+		conflictIsInView,
 		isProvisional: state.provisionalNoteIds.includes(noteId),
 		notes: windowState.notes,
 		selectedNoteIds: windowState.selectedNoteIds,
@@ -892,7 +1068,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		searches: state.searches,
 		selectedSearchId: windowState.selectedSearchId,
 		customCss: state.customViewerCss,
-		noteVisiblePanes: windowState.noteVisiblePanes,
+		noteVisiblePanes: conflictIsInView && windowState.activeNoteIsConflict ? ['editor'] : windowState.noteVisiblePanes,
 		watchedResources: windowState.watchedResources,
 		// For now, only the main window has search UI. Show the same search markers in all
 		// windows:

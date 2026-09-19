@@ -1,0 +1,533 @@
+import { invertedEffects } from '@codemirror/commands';
+import { EditorState, Extension, StateEffect, StateField, Transaction } from '@codemirror/state';
+import { Decoration, DecorationSet, EditorView, ViewPlugin, ViewUpdate, WidgetType } from '@codemirror/view';
+import { wordDiff, WordDiffSegment } from '@joplin/lib/services/conflict/wordDiff';
+import { focus } from '@joplin/lib/utils/focusHandler';
+
+export interface ConflictRegionSpec {
+	from: number;
+	to: number;
+	localText: string;
+	// Already on screen, so it is highlighted without a widget
+	addedByThem?: boolean;
+}
+
+export interface ConflictRegion extends ConflictRegionSpec {
+	id: number;
+	startedEmpty: boolean;
+	settled: boolean;
+}
+
+export interface SetConflictRegions {
+	regions: ConflictRegionSpec[];
+	forText: string|null;
+}
+
+export const setConflictRegions = StateEffect.define<SetConflictRegions>();
+export const resolveConflict = StateEffect.define<number>();
+export const restoreConflict = StateEffect.define<ConflictRegion>();
+
+const useLocalVersion = StateEffect.define<number>();
+
+const refreshConflictHighlights = StateEffect.define<void>();
+
+const typingPauseMs = 400;
+
+class LocalVersionWidget extends WidgetType {
+	public constructor(
+		private readonly regionId_: number,
+		private readonly localText_: string,
+		private readonly segments_: WordDiffSegment[],
+	) {
+		super();
+	}
+
+	private removeCopyListener_: (()=> void)|null = null;
+
+	public destroy() {
+		this.removeCopyListener_?.();
+		this.removeCopyListener_ = null;
+	}
+
+	private sameContent_(other: LocalVersionWidget) {
+		return this.regionId_ === other.regionId_
+			&& this.localText_ === other.localText_
+			&& this.segments_.length === other.segments_.length
+			&& this.segments_.every((segment, index) => segment.text === other.segments_[index].text
+				&& segment.highlighted === other.segments_[index].highlighted);
+	}
+
+	public eq(other: LocalVersionWidget) {
+		return this.sameContent_(other);
+	}
+
+	public updateDOM(dom: HTMLElement, view: EditorView, from: LocalVersionWidget) {
+		if (!this.sameContent_(from)) return false;
+
+		const button = dom.querySelector('button');
+		if (!button) return false;
+		button.disabled = view.state.readOnly;
+		return true;
+	}
+
+	public toDOM(view: EditorView) {
+		const container = document.createElement('div');
+		container.className = 'cm-conflictLocalVersion';
+		const editorColor = view.dom.ownerDocument.defaultView?.getComputedStyle(view.contentDOM).color;
+		if (editorColor) container.style.color = editorColor;
+
+		const text = document.createElement('div');
+		text.className = 'cm-conflictLocalVersion-text';
+		text.tabIndex = -1;
+		if (this.localText_.split('\n').some(line => line.trimStart().startsWith('|'))) {
+			text.classList.add('cm-conflictLocalVersion-table');
+		}
+
+		for (const segment of this.segments_) {
+			const span = document.createElement('span');
+			if (segment.highlighted) {
+				span.className = 'cm-conflictLocalVersion-changedWord';
+			}
+			span.textContent = segment.text;
+			text.appendChild(span);
+		}
+
+		const button = document.createElement('button');
+		button.className = 'cm-conflictUseVersionButton';
+		button.textContent = view.state.phrase('Use my version');
+		button.disabled = view.state.readOnly;
+		button.onclick = () => {
+			view.dispatch({ effects: useLocalVersion.of(this.regionId_) });
+			focus('conflictResolution::useMyVersion', view);
+		};
+
+		const flow = document.createElement('div');
+		flow.className = 'cm-conflictLocalVersion-flow';
+		flow.appendChild(text);
+		flow.appendChild(button);
+		container.appendChild(flow);
+
+		// The editor would otherwise copy its own selection, which is current version
+		const onCopy = (event: ClipboardEvent) => {
+			const selection = container.ownerDocument.getSelection();
+			if (!selection || selection.isCollapsed) return;
+			if (!container.contains(selection.getRangeAt(0).commonAncestorContainer)) return;
+
+			event.clipboardData?.setData('text/plain', selection.toString());
+			event.preventDefault();
+			event.stopPropagation();
+		};
+		container.ownerDocument.addEventListener('copy', onCopy, true);
+		this.removeCopyListener_ = () => container.ownerDocument.removeEventListener('copy', onCopy, true);
+
+		return container;
+	}
+
+	// Without this the button's own events are treated as editor input
+	public ignoreEvent() {
+		return true;
+	}
+}
+
+class CurrentVersionWidget extends WidgetType {
+	public eq() {
+		return true;
+	}
+
+	public toDOM(view: EditorView) {
+		const label = document.createElement('div');
+		label.className = 'cm-conflictCurrentVersion';
+		label.textContent = `✓ ${view.state.phrase('Current version')}`;
+		return label;
+	}
+
+	public ignoreEvent() {
+		return true;
+	}
+}
+
+const regionDecoration = Decoration.mark({ class: 'cm-conflictRegion' });
+
+const incomingLine = Decoration.line({ class: 'cm-conflictIncoming' });
+const incomingFirstLine = Decoration.line({ class: 'cm-conflictIncoming cm-conflictIncoming-first' });
+const incomingLastLine = Decoration.line({ class: 'cm-conflictIncoming cm-conflictIncoming-last' });
+const incomingOnlyLine = Decoration.line({ class: 'cm-conflictIncoming cm-conflictIncoming-first cm-conflictIncoming-last' });
+
+const changedWordDecoration = Decoration.mark({ class: 'cm-conflictChangedWord' });
+
+const changedWordRanges = (segments: WordDiffSegment[], offset: number) => {
+	const ranges = [];
+	let position = offset;
+
+	for (const segment of segments) {
+		const end = position + segment.text.length;
+		if (segment.highlighted) {
+			ranges.push(changedWordDecoration.range(position, end));
+		}
+		position = end;
+	}
+
+	return ranges;
+};
+
+interface DecorationDoc {
+	length: number;
+	sliceString: (from: number, to: number)=> string;
+	lineAt: (pos: number)=> { from: number; to: number };
+}
+
+const lineSpan = (doc: { length: number; lineAt: (pos: number)=> { number: number } }, from: number, to: number) => {
+	const end = Math.min(Math.max(to, 0), doc.length);
+	const start = Math.min(Math.max(from, 0), end);
+	return doc.lineAt(end).number - doc.lineAt(start).number;
+};
+
+const buildDecorations = (doc: DecorationDoc, regions: ConflictRegion[]) => {
+	const ranges = [];
+
+	for (const region of regions) {
+		if (region.settled) continue;
+
+		const regionText = doc.sliceString(region.from, region.to);
+		const diff = wordDiff(region.localText, regionText);
+
+		if (!region.addedByThem) {
+			// Block widgets must be at a line boundary or else they split the line in two
+			const lineStart = doc.lineAt(region.from).from;
+			ranges.push(Decoration.widget({
+				widget: new LocalVersionWidget(region.id, region.localText, diff.local),
+				block: true,
+				side: -1,
+			}).range(lineStart));
+		}
+
+		if (region.from < region.to) {
+			const firstLine = doc.lineAt(region.from);
+			const lastLine = doc.lineAt(region.to);
+			for (let line = firstLine; ; line = doc.lineAt(line.to + 1)) {
+				const isFirst = line.from === firstLine.from;
+				const isLast = line.from === lastLine.from;
+				let decoration = incomingLine;
+				if (isFirst && isLast) decoration = incomingOnlyLine;
+				else if (isFirst) decoration = incomingFirstLine;
+				else if (isLast) decoration = incomingLastLine;
+				ranges.push(decoration.range(line.from));
+				if (isLast || line.to >= doc.length) break;
+			}
+
+			ranges.push(regionDecoration.range(region.from, region.to));
+
+			// Every word in an addition differs, so highlighting them all would shade the line twice.
+			if (!region.addedByThem) {
+				ranges.push(...changedWordRanges(diff.remote, region.from));
+			}
+
+			ranges.push(Decoration.widget({
+				widget: new CurrentVersionWidget(),
+				block: true,
+				side: 1,
+			}).range(lastLine.to));
+		}
+	}
+
+	return Decoration.set(ranges, true);
+};
+
+interface ConflictState {
+	regions: ConflictRegion[];
+	decorations: DecorationSet;
+	pending: SetConflictRegions|null;
+}
+
+const emptyState: ConflictState = { regions: [], decorations: Decoration.none, pending: null };
+
+let nextRegionId = 0;
+
+const conflictState = StateField.define<ConflictState>({
+	create: () => emptyState,
+
+	update: (state, transaction: Transaction) => {
+		let regions = state.regions;
+		let decorations = state.decorations;
+		let pending = state.pending;
+		let rebuild = false;
+
+		if (transaction.docChanged) {
+			regions = regions.map(region => {
+				const from = transaction.changes.mapPos(region.from, -1);
+				const to = transaction.changes.mapPos(region.to, 1);
+				const settled = from >= to
+					? !region.startedEmpty
+					: transaction.state.doc.sliceString(from, to) === region.localText;
+
+				if (settled !== region.settled) rebuild = true;
+
+				// Mapping moves line decorations but cannot add them
+				if (lineSpan(transaction.startState.doc, region.from, region.to) !== lineSpan(transaction.state.doc, from, to)) {
+					rebuild = true;
+				}
+
+				return { ...region, from, to, settled };
+			});
+
+			const spans = new Set<string>();
+			regions = regions.filter(region => {
+				if (region.settled) return true;
+				const key = `${region.from}:${region.to}`;
+				if (spans.has(key)) return false;
+				spans.add(key);
+				return true;
+			});
+			decorations = decorations.map(transaction.changes);
+		}
+
+		for (const effect of transaction.effects) {
+			if (effect.is(setConflictRegions)) {
+				regions = [];
+				pending = effect.value.forText === null ? null : effect.value;
+				rebuild = true;
+			} else if (effect.is(resolveConflict)) {
+				regions = regions.filter(region => region.id !== effect.value);
+				rebuild = true;
+			} else if (effect.is(restoreConflict)) {
+				regions = [...regions, effect.value].sort((a, b) => a.from - b.from);
+				rebuild = true;
+			}
+		}
+
+		if (pending && transaction.state.doc.toString() === pending.forText) {
+			const docLength = transaction.state.doc.length;
+			regions = pending.regions
+				// Invalid positions would cause an error when mapped later.
+				.filter(spec => spec.from >= 0 && spec.to <= docLength && spec.from <= spec.to)
+				.map(spec => ({
+					...spec,
+					id: nextRegionId++,
+					startedEmpty: spec.from >= spec.to,
+					settled: spec.from >= spec.to
+						? spec.localText === ''
+						: transaction.state.doc.sliceString(spec.from, spec.to) === spec.localText,
+				}));
+			pending = null;
+			rebuild = true;
+		}
+
+		if (transaction.effects.some(effect => effect.is(refreshConflictHighlights))) {
+			rebuild = true;
+		}
+
+		if (rebuild) {
+			decorations = buildDecorations(transaction.state.doc, regions);
+		}
+
+		if (regions === state.regions && decorations === state.decorations && pending === state.pending) {
+			return state;
+		}
+		return { regions, decorations, pending };
+	},
+
+	provide: field => EditorView.decorations.from(field, state => state.decorations),
+});
+
+export const conflictRegions = (state: { field: <T>(field: StateField<T>)=> T }) => {
+	return state.field(conflictState).regions.filter(region => !region.settled);
+};
+
+export const goToConflict = (view: EditorView, direction: 'previous'|'next') => {
+	const regions = conflictRegions(view.state);
+	if (!regions.length) return false;
+
+	const sorted = [...regions].sort((a, b) => a.from - b.from);
+	const cursor = view.state.selection.main.head;
+
+	const target = direction === 'next'
+		? sorted.find(region => region.from > cursor) ?? sorted[0]
+		: [...sorted].reverse().find(region => region.from < cursor) ?? sorted[sorted.length - 1];
+
+	// The panel is inside this block, so scrolling to it keeps the panel on screen
+	const lineStart = view.state.doc.lineAt(target.from).from;
+
+	view.dispatch({ selection: { anchor: target.from }, scrollIntoView: false });
+
+	view.requestMeasure({
+		read: () => view.lineBlockAt(lineStart).top,
+		write: (blockTop: number) => {
+			view.scrollDOM.scrollTop = blockTop;
+		},
+	});
+
+	return true;
+};
+
+export const conflictIsOpen = (state: EditorState) => {
+	const field = state.field(conflictState, false);
+	return !!field && field.regions.length > 0;
+};
+
+export const conflictOpened = (transaction: Transaction) => {
+	return conflictIsOpen(transaction.state) && !conflictIsOpen(transaction.startState);
+};
+
+const applyLocalVersion = EditorState.transactionFilter.of(transaction => {
+	const chosen = transaction.effects.filter(effect => effect.is(useLocalVersion));
+	if (!chosen.length) return transaction;
+
+	if (transaction.startState.readOnly) return [];
+
+	const regions = transaction.startState.field(conflictState).regions;
+	const changes = [];
+	const effects = [];
+
+	for (const effect of chosen) {
+		const region = regions.find(item => item.id === effect.value);
+		if (!region) continue;
+
+		changes.push({ from: region.from, to: region.to, insert: region.localText });
+		effects.push(resolveConflict.of(region.id));
+	}
+
+	if (!changes.length) return transaction;
+
+	return { changes, effects };
+});
+
+const undoableResolutions = invertedEffects.of(transaction => {
+	const regions = transaction.startState.field(conflictState).regions;
+	const restored = [];
+
+	for (const effect of transaction.effects) {
+		if (effect.is(resolveConflict)) {
+
+			const region = regions.find(item => item.id === effect.value);
+			if (region) restored.push(restoreConflict.of(region));
+		} else if (effect.is(restoreConflict)) {
+			restored.push(resolveConflict.of(effect.value.id));
+		}
+	}
+
+	return restored;
+});
+
+const refreshOnTypingPause = ViewPlugin.fromClass(class {
+	private timeout_: ReturnType<typeof setTimeout>|null = null;
+
+	public constructor(private readonly view_: EditorView) {}
+
+	public update(update: ViewUpdate) {
+		if (!update.docChanged) return;
+		if (!conflictRegions(update.state).length) return;
+
+		this.cancel();
+		this.timeout_ = setTimeout(() => {
+			this.timeout_ = null;
+			this.view_.dispatch({ effects: refreshConflictHighlights.of(undefined) });
+		}, typingPauseMs);
+	}
+
+	public destroy() {
+		this.cancel();
+	}
+
+	private cancel() {
+		if (this.timeout_ !== null) {
+			clearTimeout(this.timeout_);
+			this.timeout_ = null;
+		}
+	}
+});
+
+const sectionPaddingLeft = '1px';
+
+const remoteAccent = 'var(--joplin-color4, #2D5BE5)';
+const localAccent = 'var(--joplin-search-marker-background-color, #F7D26E)';
+const surface = 'var(--joplin-background-color, #ffffff)';
+
+const conflictTheme = EditorView.baseTheme({
+	'& .cm-conflictIncoming': {
+		backgroundColor: `color-mix(in srgb, ${remoteAccent} 12%, transparent)`,
+		borderLeft: `2px solid ${remoteAccent}`,
+		paddingLeft: sectionPaddingLeft,
+	},
+	'& .cm-conflictIncoming-first': {
+		paddingTop: '2px',
+	},
+	'& .cm-conflictIncoming-last': {
+		paddingBottom: '0',
+	},
+	'& .cm-conflictCurrentVersion': {
+		color: remoteAccent,
+		fontSize: '0.85em',
+		textAlign: 'right',
+		backgroundColor: `color-mix(in srgb, ${remoteAccent} 12%, ${surface})`,
+		padding: '0 8px 3px 8px',
+		pointerEvents: 'none',
+		userSelect: 'none',
+	},
+	'& .cm-conflictChangedWord': {
+		backgroundColor: `color-mix(in srgb, ${remoteAccent} 22%, transparent)`,
+		borderRadius: '2px',
+	},
+	'& .cm-conflictLocalVersion': {
+		backgroundColor: `color-mix(in srgb, ${localAccent} 22%, ${surface})`,
+		paddingRight: '0',
+		color: 'var(--joplin-color, inherit)',
+		userSelect: 'text',
+		overflowX: 'auto',
+	},
+	'& .cm-conflictLocalVersion-flow': {
+		display: 'flow-root',
+		textAlign: 'right',
+	},
+	'& .cm-conflictLocalVersion-text': {
+		whiteSpace: 'pre-wrap',
+		overflowWrap: 'anywhere',
+		cursor: 'text',
+		display: 'block',
+		textAlign: 'left',
+		borderLeft: `2px solid color-mix(in srgb, ${localAccent} 80%, ${surface})`,
+		paddingLeft: sectionPaddingLeft,
+	},
+	'& .cm-conflictLocalVersion-table': {
+		fontFamily: 'monospace',
+		whiteSpace: 'pre',
+		overflowWrap: 'normal',
+	},
+	'& .cm-conflictLocalVersion-changedWord': {
+		backgroundColor: `color-mix(in srgb, ${localAccent} 45%, ${surface})`,
+		borderRadius: '2px',
+	},
+	'& .cm-conflictUseVersionButton': {
+		marginRight: '8px',
+		userSelect: 'none',
+		cursor: 'pointer',
+		whiteSpace: 'nowrap',
+		border: '1px solid var(--joplin-border-color4, rgba(0, 0, 0, 0.3))',
+		borderRadius: '3px',
+		padding: '0 6px',
+		backgroundColor: surface,
+		color: 'var(--joplin-color, inherit)',
+		font: 'inherit',
+		fontSize: '0.85em',
+		lineHeight: 'inherit',
+	},
+	'& .cm-conflictUseVersionButton:hover:not(:disabled)': {
+		backgroundColor: 'var(--joplin-background-color-hover3, rgba(0, 0, 0, 0.06))',
+	},
+	'& .cm-conflictUseVersionButton:active:not(:disabled)': {
+		backgroundColor: `color-mix(in srgb, ${localAccent} 35%, ${surface})`,
+	},
+	'& .cm-conflictUseVersionButton:disabled': {
+		opacity: 0.5,
+		cursor: 'default',
+	},
+});
+
+const conflictResolutionExtension = (): Extension => [
+	conflictState,
+	applyLocalVersion,
+	undoableResolutions,
+	refreshOnTypingPause,
+	conflictTheme,
+];
+
+export default conflictResolutionExtension;

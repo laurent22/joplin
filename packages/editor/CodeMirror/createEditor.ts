@@ -1,8 +1,7 @@
 import { Compartment, EditorState, Prec } from '@codemirror/state';
-import { indentOnInput, syntaxHighlighting } from '@codemirror/language';
+import { indentOnInput } from '@codemirror/language';
 import { openSearchPanel, closeSearchPanel, searchPanelOpen } from '@codemirror/search';
 
-import { classHighlighter } from '@lezer/highlight';
 
 import {
 	EditorView, drawSelection, highlightSpecialChars, ViewUpdate, Command, rectangularSelection,
@@ -23,7 +22,6 @@ import {
 	toggleItalicized, toggleMath,
 } from './editorCommands/markdownCommands';
 import { tableNextCell, tablePreviousCell } from './editorCommands/tableCommands';
-import decoratorExtension from './extensions/markdownDecorationExtension';
 import computeSelectionFormatting from './utils/formatting/computeSelectionFormatting';
 import { selectionFormattingEqual } from '../SelectionFormatting';
 import configFromSettings from './configFromSettings';
@@ -309,8 +307,6 @@ const createEditor = (
 					},
 				}),
 
-				// Apply styles to entire lines (block-display decorations)
-				decoratorExtension,
 				dropCursor(),
 
 				biDirectionalTextExtension,
@@ -322,9 +318,6 @@ const createEditor = (
 
 				props.localisations ? EditorState.phrases.of(props.localisations) : [],
 
-				// Adds additional CSS classes to tokens (the default CSS classes are
-				// auto-generated and thus unstable).
-				syntaxHighlighting(classHighlighter),
 
 				EditorView.lineWrapping,
 				EditorView.updateListener.of((viewUpdate: ViewUpdate) => {

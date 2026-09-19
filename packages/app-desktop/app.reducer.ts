@@ -75,6 +75,7 @@ export interface AppWindowState extends WindowState {
 	// the toolbar to show the editor toggle button. (We can't compute this
 	// from the redux note list because `body` isn't in the preview fields.)
 	activeNoteIsWhiteboard: boolean;
+	activeNoteIsConflict: boolean;
 	// In window state so the conversation survives panel hide/show (the
 	// layout container can swap component types and unmount the panel).
 	aiChatMessages: AiChatMessage[];
@@ -114,6 +115,7 @@ export const createAppDefaultWindowState = (): AppWindowState => {
 		watchedResources: {},
 		whiteboardForceMarkdown: {},
 		activeNoteIsWhiteboard: false,
+		activeNoteIsConflict: false,
 		aiChatMessages: [],
 		secondaryWindowLayout: null,
 	};
@@ -301,6 +303,12 @@ export default function(state: AppState, action: any) {
 		case 'WHITEBOARD_ACTIVE_NOTE_SET':
 			newState = withWindowStateUpdated(
 				state, action.windowId, 'activeNoteIsWhiteboard', () => !!action.value,
+			);
+			break;
+
+		case 'CONFLICT_UI_ACTIVE_NOTE_SET':
+			newState = withWindowStateUpdated(
+				state, action.windowId, 'activeNoteIsConflict', () => !!action.value,
 			);
 			break;
 
