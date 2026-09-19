@@ -50,7 +50,7 @@
     "crypto-browserify": "3.12.1",
     "deprecated-react-native-prop-types": "5.0.0",
     "events": "3.3.0",
-    "expo": "57.0.23",
+    "expo": "patch:expo@npm%3A57.0.23#~/.yarn/patches/expo-npm-57.0.23-a2b19bd138.patch",
     "expo-audio": "57.0.5",
     "expo-camera": "57.0.5",
     "expo-image-manipulator": "57.0.17",
