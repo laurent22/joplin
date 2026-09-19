@@ -83,7 +83,9 @@ const buildSharedConfig = (hotReload: boolean): webpack.Configuration => {
 				'expo-camera': emptyLibraryMock,
 				'expo-image-manipulator': emptyLibraryMock,
 				'react-native-nitro-modules': emptyLibraryMock,
+				// Force react-native-paper to use the correct icon library
 				'react-native-vector-icons/MaterialCommunityIcons': throwOnLoadLibraryMock,
+				'@expo/vector-icons/MaterialCommunityIcons': throwOnLoadLibraryMock,
 
 				// Workaround for applying serviceworker types to a single file.
 				// See https://joshuatz.com/posts/2021/strongly-typed-service-workers/.
