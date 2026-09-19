@@ -52,7 +52,6 @@
     "events": "3.3.0",
     "expo": "57.0.23",
     "expo-audio": "57.0.5",
-    "expo-build-properties": "57.0.20",
     "expo-camera": "57.0.5",
     "expo-image-manipulator": "57.0.17",
     "expo-local-authentication": "57.0.3",

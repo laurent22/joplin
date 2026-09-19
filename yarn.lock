@@ -12642,7 +12642,6 @@ __metadata:
     events: "npm:3.3.0"
     expo: "npm:57.0.23"
     expo-audio: "npm:57.0.5"
-    expo-build-properties: "npm:57.0.20"
     expo-camera: "npm:57.0.5"
     expo-image-manipulator: "npm:57.0.17"
     expo-local-authentication: "npm:57.0.3"
@@ -31853,19 +31852,6 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10/99702a03bab35219fc89b39a78a3b7c4eb69e89e62a76ee9d6cee2265975013be71a60249a897808bec62f97545aed1b15f9d6f0c157ae93f1f11b7d4ef347c0
-  languageName: node
-  linkType: hard
-
-"expo-build-properties@npm:57.0.20":
-  version: 57.0.20
-  resolution: "expo-build-properties@npm:57.0.20"
-  dependencies:
-    "@expo/schema-utils": "npm:^57.0.2"
-    resolve-from: "npm:^5.0.0"
-    semver: "npm:^7.6.0"
-  peerDependencies:
-    expo: "*"
-  checksum: 10/f6f346b62ef863437c056e6d3f68d9bcb4bb6bf327605ce049e8b14bda27ce2ac0285022b26ed7c7e2335d8e30d76ff468f2c773633da2c5d8a61eb079b13ffd
   languageName: node
   linkType: hard
 
