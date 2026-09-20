@@ -524,19 +524,19 @@ const ChatPanel: React.FC<Props> = (props) => {
 	const renderHeaderActions = () => {
 		if (showingMessages) {
 			const newChatLabel = _('New chat');
-			return <button type='button' className='reset' onClick={handleNewChat} title={newChatLabel} aria-label={newChatLabel}>
-				<i className='fas fa-comment-medical' aria-hidden='true'/>
+			return <button type='button' className='reset toolbar-button' onClick={handleNewChat} title={newChatLabel} aria-label={newChatLabel}>
+				<i className='toolbar-icon fas fa-comment-medical' aria-hidden='true'/>
 			</button>;
 		}
 
 		const closeLabel = _('Close');
 		return <button
 			type='button'
-			className='close'
+			className='close toolbar-button'
 			onClick={handleClose}
 			title={closeLabel}
 			aria-label={closeLabel}
-		><i className='fas fa-times' role='img' aria-hidden={true}/></button>;
+		><i className='toolbar-icon fas fa-times' role='img' aria-hidden={true}/></button>;
 	};
 
 	return (
@@ -553,14 +553,14 @@ const ChatPanel: React.FC<Props> = (props) => {
 				{props.availabilityReason !== AvailabilityReason.Disabled && (
 					<button
 						type='button'
-						className='history'
+						className='history toolbar-button'
 						onClick={handleHistoryToggle}
 						title={_('Chat history')}
 						aria-label={_('Chat history')}
 						aria-expanded={historyOpen}
 						aria-controls={historyId}
 					>
-						<i className='fas fa-history' aria-hidden='true'/>
+						<i className='toolbar-icon fas fa-history' aria-hidden='true'/>
 					</button>
 				)}
 			</div>
