@@ -329,8 +329,9 @@ const conflictState = StateField.define<ConflictState>({
 	provide: field => EditorView.decorations.from(field, state => state.decorations),
 });
 
-export const conflictRegions = (state: { field: <T>(field: StateField<T>)=> T }) => {
-	return state.field(conflictState).regions.filter(region => !region.settled);
+export const conflictRegions = (state: { field: <T>(field: StateField<T>, require: false)=> T|undefined }) => {
+	const field = state.field(conflictState, false);
+	return field ? field.regions.filter(region => !region.settled) : [];
 };
 
 export const goToConflict = (view: EditorView, direction: 'previous'|'next') => {

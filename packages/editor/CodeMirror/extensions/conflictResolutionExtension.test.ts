@@ -782,4 +782,11 @@ describe('conflictResolutionExtension', () => {
 		expect(conflictRegions(editor.state)).toHaveLength(1);
 	});
 
+	test('should report no regions when the extension is not installed', async () => {
+		const editor = await createTestEditor('no conflict here', EditorSelection.cursor(0), [], [history()]);
+
+		expect(conflictRegions(editor.state)).toEqual([]);
+		expect(goToConflict(editor, 'next')).toBe(false);
+	});
+
 });
