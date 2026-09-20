@@ -518,26 +518,10 @@ const ChatPanel: React.FC<Props> = (props) => {
 	};
 
 	const sendButtonLabel = sending ? _('Stop generating') : _('Send');
+	const closeLabel = _('Close');
+	const newChatLabel = _('New chat');
 	const headerId = useId();
 	const { content, showingMessages } = renderContent();
-
-	const renderHeaderActions = () => {
-		if (showingMessages) {
-			const newChatLabel = _('New chat');
-			return <button type='button' className='reset toolbar-button' onClick={handleNewChat} title={newChatLabel} aria-label={newChatLabel}>
-				<i className='toolbar-icon fas fa-comment-medical' aria-hidden='true'/>
-			</button>;
-		}
-
-		const closeLabel = _('Close');
-		return <button
-			type='button'
-			className='close toolbar-button'
-			onClick={handleClose}
-			title={closeLabel}
-			aria-label={closeLabel}
-		><i className='toolbar-icon fas fa-times' role='img' aria-hidden={true}/></button>;
-	};
 
 	return (
 		<div
@@ -549,7 +533,6 @@ const ChatPanel: React.FC<Props> = (props) => {
 		>
 			<div className='header chat-panel-header'>
 				<h1 className='title' id={headerId}>{_('AI Chat')}</h1>
-				{renderHeaderActions()}
 				{props.availabilityReason !== AvailabilityReason.Disabled && (
 					<button
 						type='button'
@@ -563,6 +546,18 @@ const ChatPanel: React.FC<Props> = (props) => {
 						<i className='toolbar-icon fas fa-history' aria-hidden='true'/>
 					</button>
 				)}
+				{showingMessages && (
+					<button type='button' className='reset toolbar-button' onClick={handleNewChat} title={newChatLabel} aria-label={newChatLabel}>
+						<i className='toolbar-icon fas fa-comment-medical' aria-hidden='true'/>
+					</button>
+				)}
+				<button
+					type='button'
+					className='close toolbar-button'
+					onClick={handleClose}
+					title={closeLabel}
+					aria-label={closeLabel}
+				><i className='toolbar-icon fas fa-times' role='img' aria-hidden={true}/></button>
 			</div>
 			{props.availabilityReason !== AvailabilityReason.Disabled && (
 				<ChatHistory
