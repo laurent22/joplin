@@ -1784,6 +1784,7 @@ packages/lib/services/noteList/defaultMultiColumnsRenderer.js
 packages/lib/services/noteList/depNameToNoteProp.js
 packages/lib/services/noteList/isSyncDisabledConflict.test.js
 packages/lib/services/noteList/isSyncDisabledConflict.js
+packages/lib/services/noteList/publishedIndicator.test.js
 packages/lib/services/noteList/renderTemplate.test.js
 packages/lib/services/noteList/renderTemplate.js
 packages/lib/services/noteList/renderViewProps.test.js

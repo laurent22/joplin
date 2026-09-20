@@ -120,6 +120,10 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 					color: var(--joplin-color);
 				}
 
+				> .publishedicon {
+					padding-right: 4px;
+				}
+
 				> .syncdisabledicon {
 					background-color: var(--joplin-color-faded);
 					display: inline-block;
@@ -191,6 +195,7 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 				{{#note.syncDisabled}}<i class="syncdisabledicon" role="img" aria-label="{{note.syncDisabledLabel}}"></i>{{/note.syncDisabled}}
 				<i class="watchedicon fa fa-share-square"></i>
 				{{#note.is_locked}}<i class="lockedicon fa fa-lock"></i>{{/note.is_locked}}
+				{{#note.is_published}}<i class="publishedicon fa fa-globe" role="img" aria-label="{{note.publishedLabel}}" title="{{note.publishedLabel}}"></i>{{/note.is_published}}
 				<div class="titlecontent">{{note.title}}</div>
 			</div>
 			<div class="preview">{{notePreview}}</div>
@@ -208,6 +213,7 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 				is_locked: isLocked,
 				syncDisabled: isSyncDisabledConflict(props.note),
 				syncDisabledLabel: _('Local only'),
+				publishedLabel: _('Published'),
 			},
 			// A locked note's body is ciphertext, so there is no meaningful preview to show.
 			notePreview: isLocked ? '' : markupToHtml_.stripMarkup(MarkupLanguage.Markdown, props.note.body).substring(0, 200),

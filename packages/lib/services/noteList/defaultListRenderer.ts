@@ -122,6 +122,10 @@ const renderer: ListRenderer = {
 					color: var(--joplin-color);
 				}
 
+				> .publishedicon {
+					padding-right: 4px;
+				}
+
 				> .syncdisabledicon {
 					background-color: var(--joplin-color-faded);
 					display: inline-block;
@@ -206,6 +210,7 @@ const renderer: ListRenderer = {
 				{{#note.syncDisabled}}<i class="syncdisabledicon" role="img" aria-label="{{note.syncDisabledLabel}}"></i>{{/note.syncDisabled}}
 				<i class="watchedicon fa fa-share-square"></i>
 				{{#note.is_locked}}<i class="lockedicon fa fa-lock"></i>{{/note.is_locked}}
+				{{#note.is_published}}<i class="publishedicon fa fa-globe" role="img" aria-label="{{note.publishedLabel}}" title="{{note.publishedLabel}}"></i>{{/note.is_published}}
 				<span>{{note.title}}</span>
 			</div>
 			{{#checkboxStats}}
@@ -229,6 +234,7 @@ const renderer: ListRenderer = {
 				is_locked: isNoteLockEnabled() ? props.note.is_locked : 0,
 				syncDisabled: isSyncDisabledConflict(props.note),
 				syncDisabledLabel: _('Local only'),
+				publishedLabel: _('Published'),
 			},
 			checkboxStats: props.note.checkboxes,
 		};
