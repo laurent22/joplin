@@ -135,8 +135,7 @@ export default class ReportService {
 		}
 
 		const conflictedCount = await Note.conflictedCount();
-		const syncEligibleConflictedCount = await Note.syncEligibleConflictedCount();
-		const syncIneligibleConflictedCount = conflictedCount - syncEligibleConflictedCount;
+		const syncIneligibleConflictedCount = await Note.syncIneligibleConflictedCount();
 
 		output.total = {
 			total: itemCount - syncIneligibleConflictedCount,

@@ -116,6 +116,11 @@ describe('ReportService', () => {
 		});
 		await Note.save({ title: 'Conflict without original', is_conflict: 1 });
 		await Note.save({
+			title: 'Trashed conflict without original',
+			is_conflict: 1,
+			deleted_time: Date.now(),
+		});
+		await Note.save({
 			title: 'Shared conflict',
 			is_conflict: 1,
 			conflict_original_id: originalNote.id,
