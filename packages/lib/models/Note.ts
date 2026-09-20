@@ -586,6 +586,11 @@ export default class Note extends BaseItem {
 		return r && r.total ? r.total : 0;
 	}
 
+	public static async syncIneligibleConflictedCount() {
+		const r = await this.db().selectOne('SELECT count(*) as total FROM notes WHERE is_conflict = 1 AND (conflict_original_id = "" OR share_id != "")');
+		return r && r.total ? r.total : 0;
+	}
+
 	// Count of notes that are eligible for indexing (anything searchable):
 	// not trashed, not in conflict, and not locked. Used by the AI status reporter as the
 	// denominator in "N / total indexed".
