@@ -725,7 +725,14 @@ export default class Note extends BaseItem {
 			updated_time: time.unixMs(),
 		};
 
-		return Note.save(modifiedNote, { autoTimestamp: false, ...saveOptions });
+		return Note.save(modifiedNote, {
+			autoTimestamp: false,
+			...saveOptions,
+			dispatchOptions: {
+				...saveOptions?.dispatchOptions,
+				noteMovedToFolder: true,
+			},
+		});
 	}
 
 	public static changeNoteType(note: NoteEntity, type: string) {

@@ -1180,16 +1180,9 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 				const modNote: NoteEntity = action.note;
 				const handleWindowState = (windowDraft: Draft<WindowState>) => {
 					const isSecondaryWindow = windowDraft.windowId !== defaultWindowId;
-					const isSelectedInSecondaryWindow = isSecondaryWindow && windowDraft.selectedNoteIds.includes(modNote.id);
-					if (isSelectedInSecondaryWindow) {
-						const parentFolder = draft.folders.find(f => f.id === modNote.parent_id);
-						let displayParentId = modNote.is_conflict && !modNote.deleted_time ? Folder.conflictFolderId() : getDisplayParentId(modNote, parentFolder);
-						if (!modNote.is_conflict && !modNote.deleted_time && !parentFolder) displayParentId = ALL_NOTES_FILTER_ID;
-						windowDraft.selectedFolderId = displayParentId;
-					}
-
 					const isViewingAllNotes = (windowDraft.notesParentType === 'SmartFilter' && windowDraft.selectedSmartFilterId === ALL_NOTES_FILTER_ID);
 					const isViewingConflictFolder = windowDraft.notesParentType === 'Folder' && windowDraft.selectedFolderId === Folder.conflictFolderId();
+					const isOnlySelectedInSecondaryWindow = isSecondaryWindow && windowDraft.selectedNoteIds.length === 1 && windowDraft.selectedNoteIds[0] === modNote.id;
 
 					const noteIsInCurrentView = function(note: NoteEntity, folderId: string) {
 						if (note.is_conflict) return isViewingConflictFolder;
@@ -1206,8 +1199,23 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 						const n = newNotes[i];
 						if (n.id === modNote.id) {
 							const previousDisplayParentId = ('parent_id' in n) ? getDisplayParentId(n, draft.folders.find(f => f.id === n.parent_id)) : '';
-							if (isSelectedInSecondaryWindow) {
+							// A trash operation changes the display parent without changing parent_id. In that
+							// case, keep showing the current folder and let the membership logic remove the note.
+							const displayParentChanged = previousDisplayParentId !== modNote.parent_id || !!action.noteMovedToFolder;
+							const shouldFollowMovedNote = isOnlySelectedInSecondaryWindow && windowDraft.notesParentType === 'Folder' && displayParentChanged;
+							if (shouldFollowMovedNote) {
 								newNotes[i] = { ...newNotes[i], ...modNote };
+								const parentFolder = draft.folders.find(f => f.id === modNote.parent_id);
+								if (parentFolder) {
+									windowDraft.notesParentType = 'Folder';
+									windowDraft.selectedFolderId = modNote.parent_id;
+									windowDraft.selectedFolderIds = [modNote.parent_id];
+								} else {
+									windowDraft.notesParentType = 'SmartFilter';
+									windowDraft.selectedSmartFilterId = ALL_NOTES_FILTER_ID;
+									windowDraft.selectedFolderId = null;
+									windowDraft.selectedFolderIds = [];
+								}
 							} else if (n.is_conflict && !modNote.is_conflict) {
 								// Note was a conflict but was moved outside of
 								// the conflict folder
