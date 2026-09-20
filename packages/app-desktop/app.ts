@@ -69,7 +69,6 @@ import Resource from '@joplin/lib/models/Resource';
 import AiService from '@joplin/lib/services/ai/AiService';
 import LocalEmbeddingProvider from '@joplin/lib/services/ai/LocalEmbeddingProvider';
 import { installAiStatusBridge, AiStatusStore } from './services/aiStatusBridge';
-import ItemChange from '@joplin/lib/models/ItemChange';
 import ChatConversation from '@joplin/lib/models/ChatConversation';
 import uuid from '@joplin/lib/uuid';
 
