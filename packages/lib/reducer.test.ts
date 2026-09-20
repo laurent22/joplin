@@ -1,5 +1,5 @@
 import { setupDatabaseAndSynchronizer, switchClient, createNTestNotes, createNTestFolders, createNTestTags } from './testing/test-utils';
-import reducer, { defaultState, defaultWindowId, MAX_HISTORY, State } from './reducer';
+import reducer, { defaultState, defaultWindowId, MAX_HISTORY, State, stateUtils } from './reducer';
 import { BaseItemEntity, FolderEntity, NoteEntity, TagEntity } from './services/database/types';
 import Note from './models/Note';
 import BaseModel from './BaseModel';
@@ -1141,5 +1141,36 @@ describe('reducer', () => {
 		expect(state.windowEditorNoteReloadTimeRequest).toBe(now + 1);
 
 		jest.useRealTimers();
+	});
+
+	describe('notesOrder', () => {
+
+		it('should fall back to the default order when the settings have not reached the state yet', (async () => {
+			// state.settings is empty until SETTING_UPDATE_ALL is reduced, and actions
+			// such as FOLDER_SELECT refresh the note list before that happens.
+			const order = stateUtils.notesOrder({});
+
+			expect(order.length).toBe(1);
+			expect(order[0].by).toBe('user_updated_time');
+			expect(order[0].dir).toBe('DESC');
+		}));
+
+		it('should use the sort order from the state when it is there', (async () => {
+			const order = stateUtils.notesOrder({
+				'notes.sortOrder.field': 'title',
+				'notes.sortOrder.reverse': false,
+			});
+
+			expect(order.length).toBe(1);
+			expect(order[0].by).toBe('title');
+			expect(order[0].dir).toBe('ASC');
+		}));
+
+		it('should sort by user_created_time as well when sorting by custom order', (async () => {
+			const order = stateUtils.notesOrder({ 'notes.sortOrder.field': 'order' });
+
+			expect(order.map(o => o.by)).toEqual(['order', 'user_created_time']);
+		}));
+
 	});
 });

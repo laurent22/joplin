@@ -25,6 +25,7 @@ import { ComplexTerm, ProcessResultsRow } from './services/search/SearchEngine';
 import { getDisplayParentId } from './services/trash';
 import Logger from '@joplin/utils/Logger';
 import { SettingsRecord } from './models/settings/types';
+import Setting from './models/Setting';
 import { Toast, ToastType } from './services/plugins/api/types';
 import { unique } from './array';
 import fastDeepEqual = require('fast-deep-equal');
@@ -34,6 +35,10 @@ const { createSelectorCreator, defaultMemoize } = require('reselect');
 const { createCachedSelector } = require('re-reselect');
 
 const logger = Logger.create('lib/reducer');
+
+// Reads what a setting falls back to without touching the settings cache, which
+// is not necessarily loaded when a selector runs.
+const defaultSettingValue = <T> (key: string): T => Setting.settingMetadata(key).value as T;
 
 // Reducers from plugins/share are immer-based and mutate Draft<State> in-place; the per-sub-state shapes
 // differ across consumers so we keep this loosely typed at the registration layer.
@@ -348,7 +353,15 @@ class StateUtils {
 	}
 
 	public notesOrder(stateSettings: Partial<SettingsRecord>) {
-		if (stateSettings['notes.sortOrder.field'] === 'order') {
+		// state.settings stays empty until SETTING_UPDATE_ALL reaches the reducer,
+		// but actions such as FOLDER_SELECT refresh the note list without waiting
+		// for it. Reading the keys straight through then produced `ORDER BY
+		// \`undefined\`` in the query Note.previews() builds, and silently flipped
+		// the direction to ASC, so fall back to what the settings default to.
+		const sortField = stateSettings['notes.sortOrder.field'] ?? defaultSettingValue('notes.sortOrder.field');
+		const reverse = stateSettings['notes.sortOrder.reverse'] ?? defaultSettingValue('notes.sortOrder.reverse');
+
+		if (sortField === 'order') {
 			return cacheEnabledOutput('notesOrder', [
 				{
 					by: 'order',
@@ -362,8 +375,8 @@ class StateUtils {
 		} else {
 			return cacheEnabledOutput('notesOrder', [
 				{
-					by: stateSettings['notes.sortOrder.field'],
-					dir: stateSettings['notes.sortOrder.reverse'] ? 'DESC' : 'ASC',
+					by: sortField,
+					dir: reverse ? 'DESC' : 'ASC',
 				},
 			]);
 		}
