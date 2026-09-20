@@ -772,8 +772,7 @@ class Application extends BaseApplication {
 				}
 			});
 
-			ipcRenderer.on('secondary-window-closing', async (_event, windowId: string) => {
-				await this.saveChatHistory();
+			ipcRenderer.on('secondary-window-closing', (_event, windowId: string) => {
 				this.dispatch({ type: 'WINDOW_CLOSE', windowId });
 			});
 		});

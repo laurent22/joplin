@@ -5,6 +5,7 @@
 	flex-direction: column;
 	width: 100%;
 	height: 100%;
+	overflow-y: auto;
 	box-sizing: border-box;
 	background-color: var(--joplin-background-color);
 	color: var(--joplin-color);
@@ -28,7 +29,7 @@
 		margin: 0;
 	}
 
-	> .reset, > .close {
+	> .reset, > .close, > .history {
 		background: none;
 		border: none;
 		color: var(--joplin-color-faded);

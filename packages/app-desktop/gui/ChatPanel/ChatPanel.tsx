@@ -10,7 +10,7 @@ import Logger from '@joplin/utils/Logger';
 import { stateUtils } from '@joplin/lib/reducer';
 import { AiChatMessage, AppState } from '../../app.reducer';
 import { runNoteChat } from '@joplin/lib/services/ai/noteChat';
-import { chatAvailability } from '@joplin/lib/services/ai/availability';
+import { AvailabilityReason, chatAvailability } from '@joplin/lib/services/ai/availability';
 import { WindowIdContext } from '../NewWindowOrIFrame';
 import AiDegradedNotice from '../AiDegradedNotice';
 import { ChatMessage, ChatRole, ChatToolMessage } from '@joplin/lib/services/ai/types';
@@ -30,6 +30,7 @@ const logger = Logger.create('ChatPanel');
 interface Props {
 	themeId: number;
 	available: boolean;
+	availabilityReason?: AvailabilityReason;
 	unavailableHint: string;
 	providerType: string;
 	noteId: string | null;
@@ -112,6 +113,8 @@ const useHasFocus = () => {
 const ChatPanel: React.FC<Props> = (props) => {
 	const { dispatch, messages } = props;
 	const [input, setInput] = useState('');
+	const [historyOpen, setHistoryOpen] = useState(false);
+	const historyId = useId();
 	const [conversations, setConversations] = useState<Conversation[]>([]);
 	const loadConversationHistory = useCallback(async (search = '') => {
 		try {
@@ -120,10 +123,11 @@ const ChatPanel: React.FC<Props> = (props) => {
 			logger.error('Could not load chat conversations', error);
 		}
 	}, []);
-	const handleHistoryToggle = useCallback(async (event: React.SyntheticEvent<HTMLDetailsElement>) => {
-		if (!event.currentTarget.open) return;
+	const handleHistoryToggle = useCallback(async () => {
+		setHistoryOpen(!historyOpen);
+		if (historyOpen) return;
 		await loadConversationHistory();
-	}, [loadConversationHistory]);
+	}, [historyOpen, loadConversationHistory]);
 	const [sending, setSending] = useState(false);
 	const archivingRef = useRef(false);
 	const [disclosureShown, setDisclosureShown] = useState<boolean>(() => {
@@ -519,7 +523,10 @@ const ChatPanel: React.FC<Props> = (props) => {
 
 	const renderHeaderActions = () => {
 		if (showingMessages) {
-			return <button type='button' className='reset' onClick={handleNewChat}>{_('New chat')}</button>;
+			const newChatLabel = _('New chat');
+			return <button type='button' className='reset' onClick={handleNewChat} title={newChatLabel} aria-label={newChatLabel}>
+				<i className='fas fa-comment-medical' aria-hidden='true'/>
+			</button>;
 		}
 
 		const closeLabel = _('Close');
@@ -543,16 +550,32 @@ const ChatPanel: React.FC<Props> = (props) => {
 			<div className='header chat-panel-header'>
 				<h1 className='title' id={headerId}>{_('AI Chat')}</h1>
 				{renderHeaderActions()}
+				{props.availabilityReason !== AvailabilityReason.Disabled && (
+					<button
+						type='button'
+						className='history'
+						onClick={handleHistoryToggle}
+						title={_('Chat history')}
+						aria-label={_('Chat history')}
+						aria-expanded={historyOpen}
+						aria-controls={historyId}
+					>
+						<i className='fas fa-history' aria-hidden='true'/>
+					</button>
+				)}
 			</div>
-			<ChatHistory
-				conversations={conversations}
-				currentConversationId={props.conversationId}
-				onToggle={handleHistoryToggle}
-				onSearchChange={loadConversationHistory}
-				onOpen={handleOpenConversation}
-				onRename={handleRenameConversation}
-				onDelete={handleDeleteConversation}
-			/>
+			{props.availabilityReason !== AvailabilityReason.Disabled && (
+				<ChatHistory
+					conversations={conversations}
+					currentConversationId={props.conversationId}
+					id={historyId}
+					hidden={!historyOpen}
+					onSearchChange={loadConversationHistory}
+					onOpen={handleOpenConversation}
+					onRename={handleRenameConversation}
+					onDelete={handleDeleteConversation}
+				/>
+			)}
 			{content}
 		</div>
 	);
@@ -570,6 +593,7 @@ const mapStateToProps = (state: AppState, ownProps: OwnProps) => {
 	return {
 		themeId: state.settings.theme,
 		available: availability.available,
+		availabilityReason: availability.reason,
 		unavailableHint: availability.hint ?? '',
 		providerType: state.settings['ai.chat.providerType'] || 'openai-compatible',
 		noteId,

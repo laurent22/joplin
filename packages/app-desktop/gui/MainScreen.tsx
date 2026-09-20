@@ -47,7 +47,6 @@ const logger = Logger.create('MainScreen');
 import { ipcRenderer } from 'electron';
 import layoutKeyToLabel from '../utils/layout/layoutKeyToLabel';
 import MainLayoutPane from './MainLayoutPane';
-import app from '../app';
 
 interface Props {
 	plugins: PluginStates;
@@ -288,7 +287,6 @@ class MainScreenComponent extends React.Component<Props, State> {
 			const sendCanClose = async (canClose: boolean) => {
 				logger.info('[appClose] Sending appCloseReply - canClose:', canClose);
 				if (canClose) {
-					await app().saveChatHistory();
 					Setting.setValue('wasClosedSuccessfully', true);
 					await Setting.saveAll();
 				}

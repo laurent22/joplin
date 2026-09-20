@@ -12,7 +12,8 @@ export interface Conversation {
 interface Props {
 	conversations: Conversation[];
 	currentConversationId?: string|null;
-	onToggle: (event: React.SyntheticEvent<HTMLDetailsElement>)=> void;
+	id: string;
+	hidden: boolean;
 	onSearchChange: (search: string)=> void;
 	onOpen: (conversationId: string)=> void;
 	onRename: (conversation: Conversation)=> void;
@@ -22,8 +23,7 @@ interface Props {
 const ChatHistory: React.FC<Props> = props => {
 	const [search, setSearch] = useState('');
 
-	return <details className='chat-history history' onToggle={props.onToggle}>
-		<summary className='toggle' onClick={event => event.stopPropagation()}>{_('Chat history')}</summary>
+	return <div className='chat-history history' id={props.id} hidden={props.hidden}>
 		<input
 			className='search'
 			type='search'
@@ -44,15 +44,18 @@ const ChatHistory: React.FC<Props> = props => {
 						<span className='title'>{title}</span>
 						<span className='timestamp'>{formatMsToRelativeTime(conversation.updated_time)}</span>
 					</button>
-					<details className='conversation-menu menu' onToggle={event => event.stopPropagation()}>
-						<summary className='toggle' onClick={event => event.stopPropagation()} aria-label={_('Actions for %s', title)}>{_('Actions')}</summary>
-						<button className='action' type='button' onClick={() => props.onRename(conversation)}>{_('Rename')}</button>
-						<button className='action' type='button' onClick={() => props.onDelete(conversation.id)}>{_('Delete')}</button>
-					</details>
+					<div className='conversation-actions actions'>
+						<button className='button toolbar-button' type='button' title={_('Rename')} aria-label={_('Rename')} onClick={() => props.onRename(conversation)}>
+							<i className='toolbar-icon fa fa-pen' aria-hidden='true'/>
+						</button>
+						<button className='button toolbar-button' type='button' title={_('Delete')} aria-label={_('Delete')} onClick={() => props.onDelete(conversation.id)}>
+							<i className='toolbar-icon fas fa-trash' aria-hidden='true'/>
+						</button>
+					</div>
 				</li>;
 			})}
 		</ul>
-	</details>;
+	</div>;
 };
 
 export default ChatHistory;

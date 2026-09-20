@@ -12,12 +12,16 @@
 }
 
 .chat-history {
-	> .toggle {
-		cursor: pointer;
+	min-height: 6em;
+	flex-direction: column;
+
+	&:not([hidden]) {
+		display: flex;
 	}
 
 	> .search {
 		display: block;
+		flex-shrink: 0;
 		width: 100%;
 		box-sizing: border-box;
 		margin-top: 6px;
@@ -45,12 +49,26 @@
 		background-color: var(--joplin-selected-color);
 	}
 
+	&:hover:not(.-current) {
+		background-color: var(--joplin-background-color-hover3);
+	}
+
 	> .open {
 		flex: 1;
 	}
 
-	> .menu {
+	> .actions {
 		flex-shrink: 0;
+	}
+
+	&:hover,
+	&:focus-within {
+		--chat-history-timestamp-display: none;
+	}
+
+	&:hover > .actions,
+	&:focus-within > .actions {
+		display: flex;
 	}
 }
 
@@ -64,19 +82,13 @@
 	}
 
 	> .timestamp {
+		display: var(--chat-history-timestamp-display, initial);
 		flex-shrink: 0;
 		text-align: right;
 		color: var(--joplin-color-faded);
 	}
 }
 
-.conversation-menu {
-	> .toggle {
-		padding: 6px;
-		cursor: pointer;
-	}
-
-	> .action {
-		@include chat-history-button;
-	}
+.conversation-actions {
+	display: none;
 }

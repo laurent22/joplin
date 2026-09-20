@@ -27,7 +27,7 @@ const renderPanel = (props: Partial<React.ComponentProps<typeof Panel>> = {}) =>
 );
 
 const openHistory = async (view: ReturnType<typeof render>) => {
-	await act(async () => { fireEvent.click(view.getByText('Chat history')); });
+	await act(async () => { fireEvent.click(view.getByTitle('Chat history')); });
 };
 
 const saveConversation = async (id: string, title: string, updatedTime = 1) => {
@@ -78,7 +78,6 @@ describe('ChatPanel', () => {
 		const view = renderPanel();
 		await openHistory(view);
 		const row = (await view.findByText('Old title')).closest('li');
-		fireEvent.click(within(row).getByText('Actions'));
 		await act(async () => { fireEvent.click(within(row).getByRole('button', { name: 'Rename' })); });
 		expect(await view.findByText('New title')).toBeTruthy();
 		expect(await ChatConversation.load('chat-1')).toMatchObject({ title: 'New title' });
@@ -93,7 +92,6 @@ describe('ChatPanel', () => {
 		const view = renderPanel({ conversationId: 'delete-chat', dispatch });
 		await openHistory(view);
 		const row = (await view.findByText('Delete this chat')).closest('li');
-		fireEvent.click(within(row).getByText('Actions'));
 		await act(async () => { fireEvent.click(within(row).getByRole('button', { name: 'Delete' })); });
 		await waitFor(() => expect(view.queryByText('Delete this chat')).toBeNull());
 		expect(view.getByText('Keep this chat')).toBeTruthy();
