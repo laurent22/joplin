@@ -438,11 +438,16 @@ function getNamedAnchorFromLink(node, options) {
   if (!id) id = node.getAttribute('name')
   if (id) id = id.trim();
 
-  if (id && options.anchorNames.indexOf(id.toLowerCase()) >= 0) {
-    return '<a id="' + htmlentities(id) + '"></a>';
-  } else {
-    return '';
-  }
+  if (!id || options.anchorNames.indexOf(id.toLowerCase()) < 0) return '';
+
+  // An anchor no link points at cannot be reached, so keeping it only adds
+  // noise. Pages served as Parsoid HTML, Wikipedia among them, put a
+  // generated id on nearly every element, which would otherwise leave
+  // hundreds of empty anchors in the output.
+  var referenced = options.referencedAnchorNames
+  if (referenced && referenced.indexOf(id.toLowerCase()) < 0) return '';
+
+  return '<a id="' + htmlentities(id) + '"></a>';
 }
 
 function isLinkifiedUrl(url) {

@@ -102,7 +102,14 @@ TurndownService.prototype = {
 
     if (input === '') return ''
 
-    var output = process.call(this, new RootNode(input, this.options))
+    var root = new RootNode(input, this.options)
+
+    // Which of the anchorNames some link in this document actually points
+    // at. Preserving the rest would only add noise - a page served as
+    // Parsoid HTML carries a generated id on nearly every element.
+    this.options.referencedAnchorNames = collectReferencedAnchorNames(root)
+
+    var output = process.call(this, root)
     return postProcess.call(this, output)
   },
 
@@ -331,6 +338,45 @@ function join (output, replacement, isCode) {
  * @returns Describe what it returns
  * @type String|Object|Array|Boolean|Number
  */
+
+/**
+ * Collects the fragment names that links within the document point at, in
+ * lower case, so that anchors nothing refers to can be left out.
+ * @private
+ * @param {HTMLElement} root The root of the document being converted
+ * @returns The referenced fragment names
+ * @type Array
+ */
+
+function collectReferencedAnchorNames (root) {
+  var output = []
+  var links = root.getElementsByTagName('a')
+
+  for (var i = 0; i < links.length; i++) {
+    var href = links[i].getAttribute('href')
+    if (!href || href.charAt(0) !== '#') continue
+
+    var name = href.substring(1).trim()
+    if (!name) continue
+
+    var candidates = [name.toLowerCase()]
+
+    // A fragment is often percent-encoded while the id it points at is not,
+    // so "#Orbit_%28dynamics%29" refers to id="Orbit_(dynamics)".
+    try {
+      var decoded = decodeURIComponent(name).toLowerCase()
+      if (decoded !== candidates[0]) candidates.push(decoded)
+    } catch (error) {
+      // Malformed escape sequence, so the raw form is all there is to go on.
+    }
+
+    for (var j = 0; j < candidates.length; j++) {
+      if (output.indexOf(candidates[j]) < 0) output.push(candidates[j])
+    }
+  }
+
+  return output
+}
 
 function canConvert (input) {
   return (

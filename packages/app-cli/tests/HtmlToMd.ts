@@ -32,6 +32,12 @@ describe('HtmlToMd', () => {
 				htmlToMdOptions.anchorNames = ['first', 'second', 'fourth'];
 			}
 
+			if (htmlFilename === 'anchor_unreferenced.html') {
+				// The clipper passes every id it finds in the page, generated
+				// ones included, so this is the list it would send here.
+				htmlToMdOptions.anchorNames = ['mwBw', 'mwCA', 'section', 'orbit_(dynamics)'];
+			}
+
 			if (htmlFilename.indexOf('image_preserve_size') === 0) {
 				htmlToMdOptions.preserveImageTagsWithSize = true;
 			}
