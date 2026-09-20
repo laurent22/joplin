@@ -666,6 +666,17 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[], tasks: Extra
 			}
 
 			text = !state.inPre ? unwrapInnerText(text) : text;
+
+			// Brackets in a link label only survive unescaped while they form
+			// matched pairs. A note titled "release [1" imports as
+			// "[release [1](:/<id>)", where the label silently starts at the
+			// second bracket, and a lone "]" ends the label early and leaves
+			// the whole link as plain text. Not applied inside code, where
+			// the content is literal.
+			if (state.anchorAttributes.length && !state.inPre && !state.inCode.length) {
+				text = text.replace(/[[\]]/g, '\\$&');
+			}
+
 			section.lines = collapseWhiteSpaceAndAppend(section.lines, state, text);
 		});
 
