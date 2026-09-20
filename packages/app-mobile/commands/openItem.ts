@@ -13,6 +13,8 @@ import goToFolder from './util/goToFolder';
 
 const logger = Logger.create('openItemCommand');
 
+const allowedExternalProtocols = ['http:', 'https:', 'mailto:'];
+
 export const declaration: CommandDeclaration = {
 	name: 'openItem',
 };
@@ -59,6 +61,11 @@ export const runtime = (): CommandRuntime => {
 						throw new Error('Unsupported link format.');
 					}
 				} else if (urlProtocol(link)) {
+					// The link may come from untrusted note content, and this
+					// reaches the OS URI dispatcher.
+					if (!allowedExternalProtocols.includes(urlProtocol(link))) {
+						throw new Error('Unsupported protocol');
+					}
 					shim.openUrl(link);
 				} else {
 					throw new Error('Unsupported protocol');

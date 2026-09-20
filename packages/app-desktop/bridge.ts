@@ -16,6 +16,8 @@ import { KB } from '@joplin/utils/bytes';
 import { defaultWindowId } from '@joplin/lib/reducer';
 import { execCommand } from '@joplin/utils';
 
+const allowedExternalProtocols = ['http:', 'https:', 'mailto:', 'joplin:'];
+
 interface LastSelectedPath {
 	file: string;
 	directory: string;
@@ -495,6 +497,12 @@ export class Bridge {
 		if (protocol === 'file:') {
 			await this.openItem(url);
 		} else {
+			// Some callers pass untrusted note content, and this reaches the OS
+			// URI dispatcher, where a dangerous scheme handler can mean RCE.
+			if (!allowedExternalProtocols.includes(protocol)) {
+				console.warn(`Bridge: openExternal: rejected URL with disallowed scheme "${protocol}"`);
+				return;
+			}
 			return shell.openExternal(url);
 		}
 	}
