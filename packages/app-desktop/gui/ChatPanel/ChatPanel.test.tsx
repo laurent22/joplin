@@ -22,6 +22,7 @@ const renderPanel = (props: Partial<React.ComponentProps<typeof Panel>> = {}) =>
 	<WindowIdContext.Provider value='second'><Panel
 		themeId={1} available={true} unavailableHint='' providerType='joplin-cloud'
 		noteId={null} noteTitle='' noteIsEncrypted={false} messages={[]} aiDegraded={false} dispatch={jest.fn()}
+		showToolbarButton={false}
 		{...props}
 	/></WindowIdContext.Provider>,
 );
