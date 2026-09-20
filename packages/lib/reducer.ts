@@ -1179,6 +1179,15 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			{
 				const modNote: NoteEntity = action.note;
 				const handleWindowState = (windowDraft: Draft<WindowState>) => {
+					const isSecondaryWindow = windowDraft.windowId !== defaultWindowId;
+					const isSelectedInSecondaryWindow = isSecondaryWindow && windowDraft.selectedNoteIds.includes(modNote.id);
+					if (isSelectedInSecondaryWindow) {
+						const parentFolder = draft.folders.find(f => f.id === modNote.parent_id);
+						let displayParentId = modNote.is_conflict && !modNote.deleted_time ? Folder.conflictFolderId() : getDisplayParentId(modNote, parentFolder);
+						if (!modNote.is_conflict && !modNote.deleted_time && !parentFolder) displayParentId = ALL_NOTES_FILTER_ID;
+						windowDraft.selectedFolderId = displayParentId;
+					}
+
 					const isViewingAllNotes = (windowDraft.notesParentType === 'SmartFilter' && windowDraft.selectedSmartFilterId === ALL_NOTES_FILTER_ID);
 					const isViewingConflictFolder = windowDraft.notesParentType === 'Folder' && windowDraft.selectedFolderId === Folder.conflictFolderId();
 
@@ -1197,7 +1206,9 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 						const n = newNotes[i];
 						if (n.id === modNote.id) {
 							const previousDisplayParentId = ('parent_id' in n) ? getDisplayParentId(n, draft.folders.find(f => f.id === n.parent_id)) : '';
-							if (n.is_conflict && !modNote.is_conflict) {
+							if (isSelectedInSecondaryWindow) {
+								newNotes[i] = { ...newNotes[i], ...modNote };
+							} else if (n.is_conflict && !modNote.is_conflict) {
 								// Note was a conflict but was moved outside of
 								// the conflict folder
 								newNotes.splice(i, 1);
@@ -1240,7 +1251,6 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 					// In some cases, however, the selection needs to be preserved (e.g. the mobile app, in secondary windows, or when an unselected note is moved by sync).
 					const preserveSelection = action.preserveSelection ?? draft.allowSelectionInOtherFolders;
 					const selectedNoteHasMoved = windowDraft.selectedNoteIds.length > 0 && !newNotes.some(o => windowDraft.selectedNoteIds.includes(o.id));
-					const isSecondaryWindow = windowDraft.windowId !== defaultWindowId;
 					if (noteFolderHasChanged && !preserveSelection && !isSecondaryWindow && (action.changeSource !== ItemChange.SOURCE_SYNC || selectedNoteHasMoved)) {
 						let newIndex = movedNotePreviousIndex;
 						if (newIndex >= newNotes.length) newIndex = newNotes.length - 1;

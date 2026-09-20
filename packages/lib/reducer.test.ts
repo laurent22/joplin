@@ -1040,12 +1040,15 @@ describe('reducer', () => {
 		expect(conflictState.notes.map(note => note.id)).toEqual([conflictNote.id]);
 	});
 
-	test('sync moving the selected note in a background window should not change its selection', async () => {
+	it.each([
+		['locally', ItemChange.SOURCE_UNSPECIFIED],
+		['during sync', ItemChange.SOURCE_SYNC],
+	])('moving the selected note %s should keep it open in a background window', async (_description, changeSource) => {
 		const folders = await createNTestFolders(2);
 		const notes = await createNTestNotes(3, folders[0]);
 
-		// Primary window selects note[0]
-		let state = initTestState(folders, 0, notes, [0]);
+		// The moved note is selected in the primary window and open in a secondary window.
+		let state = initTestState(folders, 0, notes, [2]);
 
 		// Background window selects note[2]
 		const secondaryWindowId = 'window1';
@@ -1061,19 +1064,22 @@ describe('reducer', () => {
 		state = reducer(state, {
 			type: 'NOTE_UPDATE_ONE',
 			note: movedNote,
-			changeSource: ItemChange.SOURCE_SYNC,
+			changeSource,
 		});
 
-		// The moved note should no longer be in the background window's list
-		expect(
-			state.backgroundWindows[secondaryWindowId].notes.every(n => n.id !== notes[2].id),
-		).toBe(true);
-
-		// The background window should continue rendering the moved note
+		// The background window should retain both the selection and the note metadata used
+		// to determine whether editor toolbar commands are enabled.
 		expect(state.backgroundWindows[secondaryWindowId].selectedNoteIds).toEqual([notes[2].id]);
+		expect(state.backgroundWindows[secondaryWindowId].notes).toContainEqual(movedNote);
+		expect(state.backgroundWindows[secondaryWindowId].selectedFolderId).toBe(folders[1].id);
 
-		// The primary window should be unaffected
-		expect(state.selectedNoteIds).toEqual([notes[0].id]);
+		// The primary window should select the preceding note after moving the selected note.
+		expect(state.selectedNoteIds).toEqual([notes[1].id]);
+
+		state = reducer(state, { type: 'WINDOW_FOCUS', windowId: secondaryWindowId });
+		state = reducer(state, { type: 'NOTE_UPDATE_ALL', notes: [movedNote], notesSource: 'test' });
+		expect(state.selectedNoteIds).toEqual([movedNote.id]);
+		expect(state.notes).toContainEqual(movedNote);
 	});
 
 	it.each([
