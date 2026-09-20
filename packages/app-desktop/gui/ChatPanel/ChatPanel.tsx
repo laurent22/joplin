@@ -543,7 +543,7 @@ const ChatPanel: React.FC<Props> = (props) => {
 						aria-expanded={historyOpen}
 						aria-controls={historyId}
 					>
-						<i className='toolbar-icon fas fa-history' aria-hidden='true'/>
+						<i className='toolbar-icon far fa-clock' aria-hidden='true'/>
 					</button>
 				)}
 				{showingMessages && (
