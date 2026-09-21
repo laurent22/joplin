@@ -25,6 +25,7 @@ interface LoadedDocument {
 
 const useConflictResolution = ({ noteId, inView, contentMarkupLanguage, editorRef, reloadCount }: Props) => {
 	const [loaded, setLoaded] = useState<LoadedDocument|null>(null);
+	const [installFailed, setInstallFailed] = useState(false);
 
 	const conflictDocument = loaded && loaded.noteId === noteId ? loaded.document : null;
 
@@ -108,6 +109,8 @@ const useConflictResolution = ({ noteId, inView, contentMarkupLanguage, editorRe
 			return true;
 		};
 
+		setInstallFailed(false);
+
 		if (install()) return () => {};
 
 		// The editor may not be ready yet, so retry until it is. Stop after a few tries
@@ -117,13 +120,19 @@ const useConflictResolution = ({ noteId, inView, contentMarkupLanguage, editorRe
 			attemptsLeft--;
 			if (install() || attemptsLeft <= 0) {
 				clearInterval(interval);
-				if (attemptsLeft <= 0) logger.warn('Gave up installing the conflict regions for note', noteId);
+				if (attemptsLeft <= 0) {
+					logger.warn('Gave up installing the conflict regions for note', noteId);
+					setInstallFailed(true);
+				}
 			}
 		}, 50);
 		return () => clearInterval(interval);
 	}, [conflictDocument, extension, editorRef, noteId]);
 
-	return { conflictContent: conflictDocument ? conflictDocument.text : null };
+	return {
+		conflictContent: conflictDocument ? conflictDocument.text : null,
+		conflictInstallFailed: installFailed,
+	};
 };
 
 export default useConflictResolution;

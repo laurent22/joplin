@@ -160,6 +160,7 @@ export interface NoteBodyEditorProps {
 	showNoteLinkIcon: boolean;
 	conflictReloadCount?: number;
 	conflictIsInView?: boolean;
+	onConflictInstallFailed?: (failed: boolean)=> void;
 }
 
 export interface NoteBodyEditorPropsAndRef extends NoteBodyEditorProps {

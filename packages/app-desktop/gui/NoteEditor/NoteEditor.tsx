@@ -103,6 +103,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 	const noteSearchBarRef = useRef(null);
 	const conflictFinishingRef = useRef(false);
 	const [conflictReloadCount, setConflictReloadCount] = useState(0);
+	const [conflictInstallFailed, setConflictInstallFailed] = useState(false);
 
 	// Should be constant and unique to this instance of the editor.
 	const editorId = useMemo(() => {
@@ -279,6 +280,11 @@ function NoteEditorContent(props: NoteEditorProps) {
 		conflictFinishingRef.current = true;
 
 		try {
+			if (conflictInstallFailed) {
+				bridge().showErrorMessageBox(_('This conflict could not be loaded, so it cannot be saved. Reload the note and try again.'));
+				return;
+			}
+
 			const note = formNoteRef.current;
 
 			// A pending save would land after the note is deleted and bring it back
@@ -334,7 +340,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		} finally {
 			conflictFinishingRef.current = false;
 		}
-	}, [hasTitleConflict, resolvedTitle, remoteUpdatedTime, originalIsStale, askToReloadConflict, props.dispatch]);
+	}, [hasTitleConflict, resolvedTitle, remoteUpdatedTime, originalIsStale, askToReloadConflict, conflictInstallFailed, props.dispatch]);
 
 	const shownEditorViewIds = useVisiblePluginEditorViewIds(props.plugins, windowId, conflictRestrictsEditor);
 	useConnectToEditorPlugin({
@@ -700,6 +706,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		showNoteLinkIcon: props.showNoteLinkIcon,
 		conflictReloadCount,
 		conflictIsInView: isConflictNote,
+		onConflictInstallFailed: setConflictInstallFailed,
 	};
 
 	let editor = null;
@@ -965,7 +972,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 	return (
 		<div style={styles.root} onDragOver={onDragOver} onDrop={onDrop} ref={containerRef}>
 			<div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-				<ConflictBanner visible={originalIsStale} reason={staleReason} onReload={onConflictReload}/>
+				<ConflictBanner visible={originalIsStale} reason={staleReason} loadFailed={conflictInstallFailed} onReload={onConflictReload}/>
 				{renderConvertHtmlToMarkdown()}
 				{renderResourceWatchingNotification()}
 				{renderResourceInSearchResultsNotification()}
