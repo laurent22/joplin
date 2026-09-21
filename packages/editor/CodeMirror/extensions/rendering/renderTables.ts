@@ -61,43 +61,48 @@ const escapeHtml = (s: string): string => {
 // shown as plain |. The assembled HTML is run through DOMPurify before
 // insertion, so unsafe URL schemes (javascript:, data:, ...) and any tags
 // or attributes that slipped through the regex are removed.
+// Wrapper contents recurse so nested markup works (**[label](url)** is a bold
+// link). Code spans do not: their contents are literal in markdown.
+const inlineMarkdownToHtml = (segment: string): string => {
+	// Single regex with alternatives, scanned left-to-right. Each branch
+	// captures its inner content. Single * and _ emphasis use word-
+	// boundary guards so identifiers like `foo_bar_baz` or `a*b*c` are
+	// not rendered as emphasis.
+	const re = /\*\*([\s\S]+?)\*\*|__([\s\S]+?)__|(?<![A-Za-z0-9])\*([^*]+)\*(?![A-Za-z0-9])|(?<![A-Za-z0-9])_([^_]+)_(?![A-Za-z0-9])|`([^`]+)`|~~([\s\S]+?)~~|\[([^\]]*)\]\(([^)\s]+)\)/g;
+	const parts: string[] = [];
+	let lastIdx = 0;
+	let m: RegExpExecArray | null;
+	while ((m = re.exec(segment)) !== null) {
+		if (m.index > lastIdx) {
+			parts.push(escapeHtml(segment.slice(lastIdx, m.index)));
+		}
+		if (m[1] !== undefined || m[2] !== undefined) {
+			parts.push(`<strong>${inlineMarkdownToHtml((m[1] ?? m[2])!)}</strong>`);
+		} else if (m[3] !== undefined || m[4] !== undefined) {
+			parts.push(`<em>${inlineMarkdownToHtml((m[3] ?? m[4])!)}</em>`);
+		} else if (m[5] !== undefined) {
+			parts.push(`<code>${escapeHtml(m[5])}</code>`);
+		} else if (m[6] !== undefined) {
+			parts.push(`<del>${inlineMarkdownToHtml(m[6])}</del>`);
+		} else {
+			parts.push(`<a href="${escapeHtml(m[8]!)}">${inlineMarkdownToHtml(m[7]!)}</a>`);
+		}
+		lastIdx = m.index + m[0].length;
+	}
+	if (lastIdx < segment.length) {
+		parts.push(escapeHtml(segment.slice(lastIdx)));
+	}
+	return parts.join('');
+};
+
 export const renderInlineMarkdown = (parent: HTMLElement, text: string) => {
 	// Normalise: escaped pipes → |, and split on literal <br> for soft breaks.
 	const normalised = text.replace(/\\\|/g, '|');
-	const segments = normalised.split(/<br\s*\/?>/i);
-	const parts: string[] = [];
-	for (let s = 0; s < segments.length; s++) {
-		if (s > 0) parts.push('<br>');
-		const segment = segments[s];
-		// Single regex with alternatives, scanned left-to-right. Each branch
-		// captures its inner content. Single * and _ emphasis use word-
-		// boundary guards so identifiers like `foo_bar_baz` or `a*b*c` are
-		// not rendered as emphasis.
-		const re = /\*\*([^*]+)\*\*|__([^_]+)__|(?<![A-Za-z0-9])\*([^*]+)\*(?![A-Za-z0-9])|(?<![A-Za-z0-9])_([^_]+)_(?![A-Za-z0-9])|`([^`]+)`|~~([^~]+)~~|\[([^\]]+)\]\(([^)\s]+)\)/g;
-		let lastIdx = 0;
-		let m: RegExpExecArray | null;
-		while ((m = re.exec(segment)) !== null) {
-			if (m.index > lastIdx) {
-				parts.push(escapeHtml(segment.slice(lastIdx, m.index)));
-			}
-			if (m[1] !== undefined || m[2] !== undefined) {
-				parts.push(`<strong>${escapeHtml((m[1] ?? m[2])!)}</strong>`);
-			} else if (m[3] !== undefined || m[4] !== undefined) {
-				parts.push(`<em>${escapeHtml((m[3] ?? m[4])!)}</em>`);
-			} else if (m[5] !== undefined) {
-				parts.push(`<code>${escapeHtml(m[5])}</code>`);
-			} else if (m[6] !== undefined) {
-				parts.push(`<del>${escapeHtml(m[6])}</del>`);
-			} else {
-				parts.push(`<a href="${escapeHtml(m[8]!)}">${escapeHtml(m[7]!)}</a>`);
-			}
-			lastIdx = m.index + m[0].length;
-		}
-		if (lastIdx < segment.length) {
-			parts.push(escapeHtml(segment.slice(lastIdx)));
-		}
-	}
-	parent.innerHTML = sanitizeHtml(parts.join(''));
+	const html = normalised
+		.split(/<br\s*\/?>/i)
+		.map(inlineMarkdownToHtml)
+		.join('<br>');
+	parent.innerHTML = sanitizeHtml(html);
 };
 
 // Stashed on the container so destroy() can reach toDOM()'s closure state.

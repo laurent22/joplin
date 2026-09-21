@@ -39,6 +39,13 @@ describe('renderTables', () => {
 		{ input: 'a **b** c', expected: 'a b c', inner: 'a <strong>b</strong> c' },
 		// Escaped pipes are unescaped for display.
 		{ input: 'a \\| b', expected: 'a | b', inner: 'a | b' },
+		// Nested markup renders both layers.
+		{ input: '**[label](https://example.com)**', expected: 'label', inner: '<strong><a href="https://example.com">label</a></strong>' },
+		{ input: '[**label**](https://example.com)', expected: 'label', inner: '<a href="https://example.com"><strong>label</strong></a>' },
+		{ input: '*[label](https://example.com)*', expected: 'label', inner: '<em><a href="https://example.com">label</a></em>' },
+		{ input: '**~~strike~~**', expected: 'strike', inner: '<strong><del>strike</del></strong>' },
+		// Code spans stay literal.
+		{ input: '`**not bold**`', expected: '**not bold**', inner: '<code>**not bold**</code>' },
 	])('renderInlineMarkdown should render $input', ({ input, expected, inner }) => {
 		const div = document.createElement('div');
 		renderInlineMarkdown(div, input);
