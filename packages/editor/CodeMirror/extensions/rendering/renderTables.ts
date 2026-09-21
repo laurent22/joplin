@@ -27,6 +27,8 @@ const W = 'cm-tw';
 const CELL = 'cm-tw-c';
 const HDR = 'cm-tw-h';
 const CTX = 'cm-tw-ctx';
+// Marks a cell holding raw source. Only these may be read back into the model.
+const RAW = 'cm-tw-raw';
 
 // Cache for rendered table widget heights so CodeMirror can estimate
 // heights correctly for scroll position and coordinate mapping.
@@ -97,6 +99,10 @@ export const renderInlineMarkdown = (parent: HTMLElement, text: string) => {
 	}
 	parent.innerHTML = sanitizeHtml(parts.join(''));
 };
+
+// Stashed on the container so destroy() can reach toDOM()'s closure state.
+const teardownKey = Symbol('tableWidgetTeardown');
+type TableWidgetContainer = HTMLElement & { [teardownKey]?: ()=> void };
 
 class TableWidget extends WidgetType {
 	public constructor(
@@ -202,6 +208,9 @@ class TableWidget extends WidgetType {
 		let scrollbarDragging = false;
 		let lastFocusedTextDiv: HTMLElement | null = null;
 
+		// Disconnected on destroy so a detached DOM cannot still schedule syncs.
+		const cellObservers: MutationObserver[] = [];
+
 		// Debounced dispatch so the document source stays in sync with cell
 		// edits — important so the preview pane reflects in-cell changes
 		// (e.g. deleting an image) without waiting for blur or a structural
@@ -214,19 +223,14 @@ class TableWidget extends WidgetType {
 			}
 		};
 
-		// Sync the focused cell's current text into the table model. Other
-		// cells are kept in sync continuously via their oninput handler, so
-		// this is just a final read of whichever cell is being edited right
-		// now. Reading textContent of an unfocused cell would be wrong —
-		// rendered cells have stripped markdown markers (** etc).
+		// Sync the raw-mode cell's text into the model. Reading a rendered cell
+		// would drop one layer of markup per round-trip, since its textContent
+		// has the markers stripped (#16498).
 		const syncDirtyCells = () => {
-			const active = doc.activeElement as HTMLElement | null;
-			if (!active || !active.classList.contains('cm-tw-text')) return;
-			if (!container.contains(active)) return;
 			for (let ri = 0; ri < allCells.length; ri++) {
 				for (let ci = 0; ci < allCells[ri].length; ci++) {
 					const td = allCells[ri][ci].querySelector('.cm-tw-text') as HTMLElement;
-					if (td !== active) continue;
+					if (!td || !td.classList.contains(RAW)) continue;
 					const v = (td.textContent || '').trim().replace(/\n/g, '<br>').replace(/\|/g, '\\|');
 					const isH = ri === 0;
 					if (isH) table.header.cells[ci].content = v;
@@ -250,6 +254,37 @@ class TableWidget extends WidgetType {
 			// swap to the raw source so the user edits the markdown text.
 			renderInlineMarkdown(textDiv, text);
 
+			// Track IME composition so we don't rebuild the cell DOM
+			// mid-composition — rebuilding would cancel the IME and drop
+			// any in-progress candidates.
+			let isComposing = false;
+
+			// Some browsers do not fire `input` reliably when non-text nodes
+			// (e.g. <img>) are removed via Backspace inside contentEditable.
+			// A MutationObserver catches DOM-level changes that `input` misses.
+			const mo = new win.MutationObserver(() => {
+				if (isComposing) return;
+				if (textDiv.classList.contains(RAW)) scheduleLiveSync();
+			});
+			mo.observe(textDiv, { childList: true, characterData: true, subtree: true });
+			cellObservers.push(mo);
+
+			// Observer is suspended while swapping: the render is itself a
+			// childList mutation, which would otherwise schedule a sync.
+			const showRendered = (src: string) => {
+				mo.disconnect();
+				textDiv.classList.remove(RAW);
+				renderInlineMarkdown(textDiv, src);
+				mo.observe(textDiv, { childList: true, characterData: true, subtree: true });
+			};
+
+			const showRaw = (src: string) => {
+				mo.disconnect();
+				textDiv.textContent = src.replace(/\\\|/g, '|');
+				textDiv.classList.add(RAW);
+				mo.observe(textDiv, { childList: true, characterData: true, subtree: true });
+			};
+
 			// Push this cell's current edit-mode text into the table model.
 			// Called on every input so the model stays in sync even if a
 			// rebuild is triggered by an external event (image paste, toolbar
@@ -257,6 +292,7 @@ class TableWidget extends WidgetType {
 			// Not trimmed: an edge space the user just typed is real content
 			// and must stay visible while editing (see #15918).
 			const pushToModel = () => {
+				if (!textDiv.classList.contains(RAW)) return;
 				const v = (textDiv.textContent || '')
 					.replace(/\n/g, '<br>').replace(/\|/g, '\\|');
 				if (isHdr) table.header.cells[c].content = v;
@@ -277,6 +313,7 @@ class TableWidget extends WidgetType {
 			};
 
 			const scheduleLiveSync = () => {
+				if (!textDiv.classList.contains(RAW)) return;
 				pushToModel();
 				cancelLiveSync();
 				const offset = caretOffset();
@@ -330,10 +367,6 @@ class TableWidget extends WidgetType {
 				}, 500);
 			};
 
-			// Track IME composition so we don't rebuild the cell DOM
-			// mid-composition — rebuilding would cancel the IME and drop
-			// any in-progress candidates.
-			let isComposing = false;
 			textDiv.addEventListener('compositionstart', () => {
 				isComposing = true;
 				cancelLiveSync();
@@ -347,14 +380,6 @@ class TableWidget extends WidgetType {
 				if (isComposing) return;
 				scheduleLiveSync();
 			};
-			// Some browsers do not fire `input` reliably when non-text nodes
-			// (e.g. <img>) are removed via Backspace inside contentEditable.
-			// A MutationObserver catches DOM-level changes that `input` misses.
-			const mo = new win.MutationObserver(() => {
-				if (isComposing) return;
-				if (doc.activeElement === textDiv) scheduleLiveSync();
-			});
-			mo.observe(textDiv, { childList: true, characterData: true, subtree: true });
 
 			// Sync CM cursor to this cell so toolbar commands work, and
 			// swap the rendered DOM for the raw markdown source for editing.
@@ -367,7 +392,7 @@ class TableWidget extends WidgetType {
 				const src = isHdr
 					? table.header.cells[c]?.content ?? ''
 					: table.body[r - 1]?.cells[c]?.content ?? '';
-				textDiv.textContent = src.replace(/\\\|/g, '|');
+				showRaw(src);
 				// Place caret at end so typing appends (matches prior behaviour
 				// where cells started empty of selection).
 				const sel = doc.defaultView!.getSelection();
@@ -401,6 +426,9 @@ class TableWidget extends WidgetType {
 					// context menu action), the old container is detached.
 					// Do nothing — the rebuild already has the latest data.
 					if (!container.isConnected) return;
+					// Already re-rendered (second blur, or a race with this
+					// timer) — its textContent is no longer source.
+					if (!textDiv.classList.contains(RAW)) return;
 					const v = (textDiv.textContent || '').trim();
 					const orig = isHdr
 						? table.header.cells[c]?.content
@@ -426,8 +454,7 @@ class TableWidget extends WidgetType {
 					const src = isHdr
 						? table.header.cells[c]?.content ?? ''
 						: table.body[r - 1]?.cells[c]?.content ?? '';
-					textDiv.textContent = '';
-					renderInlineMarkdown(textDiv, src);
+					showRendered(src);
 				}, 80);
 			};
 
@@ -861,7 +888,19 @@ class TableWidget extends WidgetType {
 			container.classList.toggle('cm-tw-mod-link', overLink);
 		});
 
+		// Runs on every rebuild and on teardown. No dispatch here: destroy()
+		// runs inside CodeMirror's update cycle, where it is not allowed.
+		(container as TableWidgetContainer)[teardownKey] = () => {
+			for (const observer of cellObservers) observer.disconnect();
+			cellObservers.length = 0;
+			cancelLiveSync();
+		};
+
 		return container;
+	}
+
+	public destroy(dom: HTMLElement) {
+		(dom as TableWidgetContainer)[teardownKey]?.();
 	}
 
 	public ignoreEvent() { return true; }

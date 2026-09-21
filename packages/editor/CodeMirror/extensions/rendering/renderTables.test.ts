@@ -202,4 +202,63 @@ describe('renderTables', () => {
 		}
 	});
 
+	test.each([
+		'**[label](https://example.com)**',
+		'**bold**',
+		'*italic*',
+		'`code`',
+	])('focus/blur cycles should not degrade cell markdown: %s', async (cellSource) => {
+		jest.useFakeTimers();
+		let editor: EditorView | null = null;
+		try {
+			const markdown = `| a | b |\n|---|---|\n| ${cellSource} | y |`;
+			editor = await createEditor(markdown);
+			document.body.appendChild(editor.dom);
+
+			// Each cycle re-renders the cell without editing it.
+			for (let i = 0; i < 3; i++) {
+				const cell = findCellTextDivs(editor)[2];
+				focusCell(cell);
+				cell.dispatchEvent(new Event('blur'));
+				jest.advanceTimersByTime(200);
+				jest.runOnlyPendingTimers();
+
+				const rendered = findCellTextDivs(editor)[2];
+				expect(rendered.classList.contains('cm-tw-raw')).toBe(false);
+			}
+
+			expect(editor.state.doc.toString()).toContain(cellSource);
+		} finally {
+			editor?.destroy();
+			jest.useRealTimers();
+		}
+	});
+
+	test('a blurred cell should not write its rendered text back to the document', async () => {
+		jest.useFakeTimers();
+		let editor: EditorView | null = null;
+		try {
+			editor = await createEditor('| a | b |\n|---|---|\n| **[x](http://e.com)** | y |');
+			document.body.appendChild(editor.dom);
+
+			const cell = findCellTextDivs(editor)[2];
+			focusCell(cell);
+			cell.dispatchEvent(new Event('blur'));
+			jest.advanceTimersByTime(200);
+			jest.runOnlyPendingTimers();
+
+			// An input event on the now-rendered cell, as a stray mutation
+			// would fire, must not harvest its stripped text.
+			const rendered = findCellTextDivs(editor)[2];
+			rendered.dispatchEvent(new Event('input'));
+			jest.advanceTimersByTime(700);
+			jest.runOnlyPendingTimers();
+
+			expect(editor.state.doc.toString()).toContain('**[x](http://e.com)**');
+		} finally {
+			editor?.destroy();
+			jest.useRealTimers();
+		}
+	});
+
 });
