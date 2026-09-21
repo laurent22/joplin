@@ -1,15 +1,23 @@
 package com.ikuteam.notestn.ui.nav
 
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.VerticalDragHandle
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavType
@@ -151,20 +159,66 @@ private fun TwoPaneNotesAndEditor(viewModel: NotesViewModel, isTrash: Boolean, o
     val selectedNoteId by viewModel.selectedNoteId.collectAsStateWithLifecycle()
     val selectedNote = notes.firstOrNull { it.id == selectedNoteId }
 
-    Row(modifier = Modifier.fillMaxSize()) {
-        NoteListScreen(
-            viewModel = viewModel,
-            isTrash = isTrash,
-            onNoteClick = { note -> viewModel.selectNote(note) },
-            selectedNoteId = selectedNoteId,
-            onOpenSidebar = onOpenSidebar,
-            modifier = Modifier.width(360.dp).fillMaxHeight(),
-        )
-        Box(modifier = Modifier.weight(1f).fillMaxHeight()) {
-            if (selectedNote != null) {
-                EditorScreen(note = selectedNote, viewModel = viewModel, readOnly = isTrash, onBack = null)
-            } else {
-                EditorEmptyState(onCreateNote = { viewModel.createNote() })
+    // BoxWithConstraints so the note-list width can be clamped against the space this
+    // layout actually has, rather than a fixed number: the same app runs on a folded
+    // phone, an unfolded one and a tablet, and a width that is reasonable on one would
+    // leave no room for the editor on another.
+    BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+        val density = LocalDensity.current
+        // Lower bound keeps a note row readable (title + date still fit); upper bound
+        // always leaves the editor the larger share.
+        val minPaneWidth = 240.dp
+        val maxPaneWidth = (maxWidth * 0.6f).coerceAtLeast(minPaneWidth)
+        val paneWidth = viewModel.noteListPaneWidthDp.dp.coerceIn(minPaneWidth, maxPaneWidth)
+
+        // Shared with the drag handle so it shows its own pressed/dragged state while
+        // the divider is being moved, instead of us drawing that state by hand.
+        val interactionSource = remember { MutableInteractionSource() }
+        val dragState = rememberDraggableState { deltaPx ->
+            val deltaDp = with(density) { deltaPx.toDp() }
+            viewModel.updateNoteListPaneWidthDp(
+                (paneWidth + deltaDp).coerceIn(minPaneWidth, maxPaneWidth).value
+            )
+        }
+
+        Row(modifier = Modifier.fillMaxSize()) {
+            NoteListScreen(
+                viewModel = viewModel,
+                isTrash = isTrash,
+                onNoteClick = { note -> viewModel.selectNote(note) },
+                selectedNoteId = selectedNoteId,
+                onOpenSidebar = onOpenSidebar,
+                modifier = Modifier.width(paneWidth).fillMaxHeight(),
+            )
+            // Material 3's own drag handle rather than a hand-drawn divider — it brings
+            // the platform's touch target, shape, colours and press feedback with it.
+            // The draggable sits on the surrounding Box so the whole strip responds,
+            // not just the handle glyph.
+            Box(
+                modifier = Modifier
+                    // Half of the 48dp the drag handle claims on its own (Material's
+                    // minimum touch target), which left a conspicuously wide empty gap
+                    // between the panes for a 4dp handle. See the note in the summary:
+                    // this is deliberately under that 48dp minimum.
+                    .width(24.dp)
+                    .fillMaxHeight()
+                    .draggable(
+                        state = dragState,
+                        orientation = Orientation.Horizontal,
+                        interactionSource = interactionSource,
+                        // One SharedPreferences write per drag, not per frame.
+                        onDragStopped = { viewModel.persistNoteListPaneWidthDp() },
+                    ),
+                contentAlignment = Alignment.Center,
+            ) {
+                VerticalDragHandle(interactionSource = interactionSource)
+            }
+            Box(modifier = Modifier.weight(1f).fillMaxHeight()) {
+                if (selectedNote != null) {
+                    EditorScreen(note = selectedNote, viewModel = viewModel, readOnly = isTrash, onBack = null)
+                } else {
+                    EditorEmptyState(onCreateNote = { viewModel.createNote() })
+                }
             }
         }
     }

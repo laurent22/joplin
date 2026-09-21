@@ -110,6 +110,7 @@ import com.ikuteam.notestn.ui.theme.GroupedBackgroundLight
 import com.ikuteam.notestn.ui.theme.NoteRowSelectedInactiveDark
 import com.ikuteam.notestn.ui.theme.NoteRowSelectedInactiveLight
 import com.ikuteam.notestn.ui.theme.NotesYellowDimmed
+import com.ikuteam.notestn.ui.theme.NotesYellowDimmedDark
 import com.ikuteam.notestn.ui.theme.NotesYellowTextSelect
 import com.ikuteam.notestn.ui.theme.NotesYellowVivid
 import com.ikuteam.notestn.ui.theme.SearchFieldBackgroundDark
@@ -1020,10 +1021,6 @@ private fun NoteRow(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                // Margin from the list edge + rounded corners on the selection
-                // background — mirrors Mac's NoteListView.swift and the sidebar's
-                // own rounded/inset selection above.
-                .padding(horizontal = 8.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .combinedClickable(onClick = onClick, onLongClick = { showMenu = true })
                 .background(
@@ -1034,12 +1031,18 @@ private fun NoteRow(
                         if (editorFocused) {
                             if (darkTheme) NoteRowSelectedInactiveDark else NoteRowSelectedInactiveLight
                         } else {
-                            NotesYellowDimmed
+                            if (darkTheme) NotesYellowDimmedDark else NotesYellowDimmed
                         }
                     } else {
                         Color.Transparent
                     }
                 )
+                // Applied after .background so the selection fill spans the cell edge
+                // to edge. It used to sit before it, which inset the fill by 8dp and
+                // left a strip of the list's own background showing down both sides of
+                // a selected row. Row content keeps exactly the position it had: this
+                // 8dp plus the 16dp below is the same 24dp inset as before.
+                .padding(horizontal = 8.dp)
                 // Only the start (left) side is shared at the Row level now — the end
                 // (right) side is applied to the text column instead, so the thumbnail
                 // can sit flush against the row's right edge (0 padding) independent of
@@ -1085,7 +1088,11 @@ private fun NoteRow(
                 style = MaterialTheme.typography.bodySmall.let {
                     it.copy(fontSize = it.fontSize * 1.2f)
                 },
-                color = if (selected) Color.Black.copy(alpha = 0.75f) else MaterialTheme.colorScheme.onSurfaceVariant,
+                color = if (selected) {
+                    // Tracks the selection background above: black on the light
+                    // tint, white on the dark shade.
+                    if (darkTheme) Color.White.copy(alpha = 0.75f) else Color.Black.copy(alpha = 0.75f)
+                } else MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1,
                 modifier = Modifier.padding(top = 4.dp),
             )

@@ -2,6 +2,7 @@ package com.ikuteam.notestn.viewmodel
 
 import android.app.Application
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
@@ -41,6 +42,7 @@ class NotesViewModel(application: Application) : AndroidViewModel(application) {
     private val prefs = application.getSharedPreferences("notestn_prefs", Application.MODE_PRIVATE)
     private val selectedNoteKey = "lastSelectedNoteID"
     private val selectedFolderKey = "lastSelectedFolderID"
+    private val noteListPaneWidthKey = "noteListPaneWidthDp"
     private val syncEngine = JoplinSyncEngine(application)
 
     // MARK: - Published state
@@ -67,6 +69,26 @@ class NotesViewModel(application: Application) : AndroidViewModel(application) {
     // StateFlow) since it's only read by composables and never needs a
     // cold-start replay value.
     var isEditorFocused by mutableStateOf(false)
+
+    // Width (in dp) of the note-list column in the tablet/fold two-pane layout, set by
+    // dragging the divider between the two panes (see NotesNavHost's
+    // TwoPaneNotesAndEditor). Kept here rather than as composable state so it survives
+    // recomposition and configuration changes, and persisted so the split the user
+    // chose is still there next launch. The default is the width the column used to be
+    // pinned to. NotesNavHost clamps it to the space actually available, so a width
+    // saved on a wide screen can't strand the editor off-screen on a narrow one.
+    var noteListPaneWidthDp by mutableFloatStateOf(prefs.getFloat(noteListPaneWidthKey, 360f))
+        private set
+
+    /** Called continuously while the divider is dragged — state only, no disk writes. */
+    fun updateNoteListPaneWidthDp(widthDp: Float) {
+        noteListPaneWidthDp = widthDp
+    }
+
+    /** Called once when the drag ends, so a drag is one write instead of hundreds. */
+    fun persistNoteListPaneWidthDp() {
+        prefs.edit().putFloat(noteListPaneWidthKey, noteListPaneWidthDp).apply()
+    }
 
     // null = "All Notes". Restored synchronously here (not in the async init{} block
     // below) so NotesNavHost can read the last-open notebook via .value before its

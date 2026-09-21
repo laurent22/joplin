@@ -117,6 +117,15 @@
     height: 100%;
   }
 
+  /* The note text always wraps to whatever width the editor pane currently has, so
+     there is never a horizontal scrollbar. overflow-wrap handles the case that used
+     to cause one — a single unbreakable token (a pasted URL, almost always) longer
+     than the pane — by breaking it instead of widening the page. overflow-x is the
+     backstop for anything else that might overflow. */
+  html, body {
+    overflow-x: hidden;
+  }
+
   body {
     /* min-height (not height) — height:100% pins the box's own bottom edge
        (and thus its bottom padding) at the viewport boundary, so on a long
@@ -136,6 +145,8 @@
     font-size: 16px;
     line-height: 1.7;
     -webkit-font-smoothing: antialiased;
+    /* Inherited by everything in the note — see the html, body rule above. */
+    overflow-wrap: anywhere;
   }
 
   /* Android only (see index.ts's ?platform=android detection) — 64px more than

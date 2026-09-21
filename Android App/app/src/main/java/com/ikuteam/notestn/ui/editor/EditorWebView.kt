@@ -14,6 +14,7 @@ import android.webkit.RenderProcessGoneDetail
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
+import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.ikuteam.notestn.BuildConfig
@@ -87,6 +88,14 @@ fun EditorWebView(
                 )
                 settings.javaScriptEnabled = true
                 settings.domStorageEnabled = true
+                // WebView's default layout algorithm is TEXT_AUTOSIZING, which inflates
+                // font sizes by the ratio between the WebView's width and the screen's.
+                // In the resizable two-pane layout that means dragging the divider
+                // silently rescaled the note's text, and the same note rendered at a
+                // different size depending on the split. NORMAL turns the boosting off,
+                // so the CSS font sizes in editor.html are what actually renders and
+                // text only ever reflows to the new width.
+                settings.layoutAlgorithm = WebSettings.LayoutAlgorithm.NORMAL
                 setBackgroundColor(Color.TRANSPARENT)
                 if (BuildConfig.DEBUG) {
                     webChromeClient = object : WebChromeClient() {
