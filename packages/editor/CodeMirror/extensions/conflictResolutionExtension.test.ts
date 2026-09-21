@@ -447,6 +447,143 @@ describe('conflictResolutionExtension', () => {
 		expect(conflictRegions(editor.state)).toHaveLength(decoratedText(editor, 'cm-conflictLocalVersion').length);
 	});
 
+	test('should keep every local version when regions collapse together', async () => {
+		const editor = await createEditor('remote one\nremote two', [
+			{ from: 0, to: 10, localText: 'local one' },
+			{ from: 11, to: 21, localText: 'local two' },
+		]);
+
+		editor.dispatch({ changes: { from: 0, to: editor.state.doc.length, insert: 'pasted replacement' } });
+
+		expect(conflictRegions(editor.state).map(region => region.localText)).toEqual(['local one\nlocal two']);
+	});
+
+	test('should bring the conflicts back when deleting the whole note is undone', async () => {
+		const editor = await createEditor('remote one\nremote two', [
+			{ from: 0, to: 10, localText: 'local one' },
+			{ from: 11, to: 21, localText: 'local two' },
+		]);
+
+		editor.dispatch({ changes: { from: 0, to: editor.state.doc.length, insert: '' } });
+		expect(conflictRegions(editor.state)).toHaveLength(0);
+
+		undo(editor);
+
+		expect(conflictRegions(editor.state).map(region => region.localText)).toEqual(['local one', 'local two']);
+		expect(decoratedText(editor, 'cm-conflictLocalVersion')).toHaveLength(2);
+	});
+
+	test('should keep a resolved conflict resolved when deleting the note is undone', async () => {
+		const editor = await createEditor('Hello, World!\n\n# Crazy World!', [
+			{ from: 0, to: 13, localText: 'Hello, World!' },
+			{ from: 15, to: 29, localText: '# Hello Earth!' },
+		]);
+		expect(decoratedText(editor, 'cm-conflictLocalVersion')).toHaveLength(1);
+
+		editor.dispatch({ changes: { from: 0, to: editor.state.doc.length, insert: '' } });
+		undo(editor);
+
+		expect(conflictRegions(editor.state).map(region => region.localText)).toEqual(['# Hello Earth!']);
+		expect(decoratedText(editor, 'cm-conflictLocalVersion')).toHaveLength(1);
+	});
+
+	test('should bring back a region that was already empty when the note is deleted and undone', async () => {
+		const editor = await createEditor('alpha line\nbravo line\ncharlie line', [
+			{ from: 0, to: 10, localText: 'ALPHA local' },
+			{ from: 22, to: 22, localText: 'only mine\n' },
+		]);
+		expect(conflictRegions(editor.state)).toHaveLength(2);
+
+		editor.dispatch({ changes: { from: 0, to: editor.state.doc.length, insert: '' } });
+		undo(editor);
+
+		expect(conflictRegions(editor.state).map(region => [region.from, region.to])).toEqual([[0, 10], [22, 22]]);
+	});
+
+	test('should hide a local-only widget while the note is empty', async () => {
+		const editor = await createEditor('alpha line\nbravo line\ncharlie line', [
+			{ from: 0, to: 10, localText: 'ALPHA local' },
+			{ from: 22, to: 22, localText: 'only mine\n' },
+		]);
+		expect(decoratedText(editor, 'cm-conflictLocalVersion')).toHaveLength(2);
+
+		editor.dispatch({ changes: { from: 0, to: editor.state.doc.length, insert: '' } });
+
+		expect(decoratedText(editor, 'cm-conflictLocalVersion')).toHaveLength(0);
+	});
+
+	test('should keep a local-only widget hidden once typing replaces the deleted note', async () => {
+		const editor = await createEditor('alpha line\nbravo line\ncharlie line', [
+			{ from: 0, to: 10, localText: 'ALPHA local' },
+			{ from: 22, to: 22, localText: 'only mine\n' },
+		]);
+
+		editor.dispatch({ selection: EditorSelection.range(0, editor.state.doc.length) });
+		editor.dispatch(editor.state.replaceSelection(''));
+		editor.dispatch(editor.state.replaceSelection('x'));
+		editor.dispatch(editor.state.replaceSelection('y'));
+
+		expect(decoratedText(editor, 'cm-conflictLocalVersion')).toHaveLength(0);
+	});
+
+	test('should keep a local-only widget hidden when it is the last thing in the note', async () => {
+		const editor = await createEditor('alpha line\nbravo line', [
+			{ from: 21, to: 21, localText: 'only mine at end\n' },
+		]);
+		expect(decoratedText(editor, 'cm-conflictLocalVersion')).toHaveLength(1);
+
+		editor.dispatch({ selection: EditorSelection.range(0, editor.state.doc.length) });
+		editor.dispatch(editor.state.replaceSelection(''));
+		editor.dispatch(editor.state.replaceSelection('x'));
+
+		expect(decoratedText(editor, 'cm-conflictLocalVersion')).toHaveLength(0);
+	});
+
+	test('should restore the conflicts when the note is deleted, undone, edited and undone again', async () => {
+		const editor = await createEditor('alpha line\nbravo line', [
+			{ from: 0, to: 10, localText: 'ALPHA local' },
+			{ from: 21, to: 21, localText: 'only mine\n' },
+		]);
+
+		editor.dispatch({ selection: EditorSelection.range(0, editor.state.doc.length) });
+		editor.dispatch(editor.state.replaceSelection(''));
+		undo(editor);
+		editor.dispatch({ selection: EditorSelection.cursor(5) });
+		editor.dispatch(editor.state.replaceSelection('ZZZ'));
+		undo(editor);
+
+		expect(decoratedText(editor, 'cm-conflictLocalVersion')).toHaveLength(2);
+		expect(conflictRegions(editor.state).map(region => [region.from, region.to])).toEqual([[0, 10], [21, 21]]);
+	});
+
+	test('should restore the conflicts after the emptied note is typed into and undone', async () => {
+		const editor = await createEditor('alpha line\nbravo line', [
+			{ from: 0, to: 10, localText: 'ALPHA local' },
+			{ from: 21, to: 21, localText: 'only mine\n' },
+		]);
+
+		editor.dispatch({ selection: EditorSelection.range(0, editor.state.doc.length) });
+		editor.dispatch(editor.state.replaceSelection(''));
+		editor.dispatch(editor.state.replaceSelection('hello typed'));
+		undo(editor);
+
+		expect(decoratedText(editor, 'cm-conflictLocalVersion')).toHaveLength(2);
+		expect(conflictRegions(editor.state).map(region => [region.from, region.to])).toEqual([[0, 10], [21, 21]]);
+	});
+
+	test('should split the merged region again when the change is undone', async () => {
+		const editor = await createEditor('remote one\nremote two', [
+			{ from: 0, to: 10, localText: 'local one' },
+			{ from: 11, to: 21, localText: 'local two' },
+		]);
+
+		editor.dispatch({ changes: { from: 0, to: editor.state.doc.length, insert: 'pasted replacement' } });
+		undo(editor);
+
+		expect(conflictRegions(editor.state).map(region => region.localText)).toEqual(['local one', 'local two']);
+		expect(decoratedText(editor, 'cm-conflictLocalVersion')).toHaveLength(2);
+	});
+
 	test('should install the new regions when a note switch replaces the document', async () => {
 		const editor = await createEditor('remote one\nremote two', [
 			{ from: 0, to: 10, localText: 'local one' },

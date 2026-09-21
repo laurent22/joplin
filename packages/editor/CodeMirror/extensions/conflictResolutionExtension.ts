@@ -16,6 +16,9 @@ export interface ConflictRegion extends ConflictRegionSpec {
 	id: number;
 	startedEmpty: boolean;
 	settled: boolean;
+	mergedFrom?: (ConflictRegion & { coveredText: string })[];
+	restoreFrom?: ConflictRegion & { coveredText: string; docText: string };
+	reopened?: boolean;
 }
 
 export interface SetConflictRegions {
@@ -146,6 +149,14 @@ class CurrentVersionWidget extends WidgetType {
 	}
 }
 
+const withCoveredText = (region: ConflictRegion, state: EditorState) => {
+	return {
+		...region,
+		coveredText: state.doc.sliceString(region.from, region.to),
+		docText: state.doc.toString(),
+	};
+};
+
 const regionDecoration = Decoration.mark({ class: 'cm-conflictRegion' });
 
 const incomingLine = Decoration.line({ class: 'cm-conflictIncoming' });
@@ -254,11 +265,38 @@ const conflictState = StateField.define<ConflictState>({
 
 		if (transaction.docChanged) {
 			regions = regions.map(region => {
+				if (!region.restoreFrom || region.from < region.to) return region;
+
+				const original = region.restoreFrom;
+				if (transaction.state.doc.toString() !== original.docText) return region;
+
+				rebuild = true;
+				const restored: ConflictRegion = {
+					...original,
+					restoreFrom: undefined,
+					reopened: true,
+					settled: original.coveredText === original.localText,
+				};
+				return restored;
+			});
+
+			const mapped = regions.map(region => {
+				if (region.reopened) {
+					const kept: ConflictRegion = { ...region, reopened: undefined };
+					return { region: kept, before: region };
+				}
+
 				const from = transaction.changes.mapPos(region.from, -1);
-				const to = transaction.changes.mapPos(region.to, 1);
-				const settled = from >= to
-					? !region.startedEmpty
-					: transaction.state.doc.sliceString(from, to) === region.localText;
+				const to = region.from >= region.to
+					? from
+					: transaction.changes.mapPos(region.to, 1);
+				const collapsed = from >= to && (region.from < region.to
+					|| transaction.changes.touchesRange(region.from, region.to) !== false);
+				const settled = region.restoreFrom
+					? true
+					: from >= to
+						? (!region.startedEmpty || collapsed)
+						: transaction.state.doc.sliceString(from, to) === region.localText;
 
 				if (settled !== region.settled) rebuild = true;
 
@@ -266,18 +304,59 @@ const conflictState = StateField.define<ConflictState>({
 				if (lineSpan(transaction.startState.doc, region.from, region.to) !== lineSpan(transaction.state.doc, from, to)) {
 					rebuild = true;
 				}
+				const restoreFrom = collapsed
+					? withCoveredText(region, transaction.startState)
+					: region.restoreFrom;
 
-				return { ...region, from, to, settled };
+				return { region: { ...region, from, to, settled, restoreFrom }, before: region };
 			});
 
-			const spans = new Set<string>();
-			regions = regions.filter(region => {
-				if (region.settled) return true;
+			const bySpan = new Map<string, number>();
+			const merged: ConflictRegion[] = [];
+			const mappedFrom = new Map<number, ConflictRegion>();
+			for (const { region, before } of mapped) {
+				mappedFrom.set(region.id, before);
+				if (region.settled || region.from >= region.to) {
+					merged.push(region);
+					continue;
+				}
+
 				const key = `${region.from}:${region.to}`;
-				if (spans.has(key)) return false;
-				spans.add(key);
-				return true;
+				const at = bySpan.get(key);
+				if (at === undefined) {
+					bySpan.set(key, merged.length);
+					merged.push(region);
+					continue;
+				}
+
+				const first = merged[at];
+				const localText = `${first.localText}\n${region.localText}`;
+				merged[at] = {
+					...first,
+					localText,
+					mergedFrom: [
+						...(first.mergedFrom ?? [withCoveredText(mappedFrom.get(first.id) ?? first, transaction.startState)]),
+						withCoveredText(before, transaction.startState),
+					],
+					settled: transaction.state.doc.sliceString(first.from, first.to) === localText,
+				};
+				rebuild = true;
+			}
+			regions = merged;
+
+			const docLength = transaction.state.doc.length;
+
+			regions = regions.flatMap(region => {
+				if (!region.mergedFrom) return [region];
+
+				const fits = region.mergedFrom.every(original => original.to <= docLength
+					&& transaction.state.doc.sliceString(original.from, original.to) === original.coveredText);
+				if (!fits) return [region];
+
+				rebuild = true;
+				return region.mergedFrom.map((original): ConflictRegion => ({ ...original, mergedFrom: undefined }));
 			});
+
 			decorations = decorations.map(transaction.changes);
 		}
 
