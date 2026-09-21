@@ -9,6 +9,12 @@ import androidx.compose.ui.graphics.Color
 val NotesYellowVivid = Color(0xFFF9B524)   // selected notebook/note row (list focused), text-select handles, new note/notebook buttons
 val NotesYellowDark = Color(0xFFF9B524)    // main tint color, caret, modal text buttons, active text field
 val NotesYellowDimmed = Color(0xFFFBE699)  // selected note row when the editor (not list) has focus
+// Dark-mode counterpart of NotesYellowDimmed. The pale tint above only works under
+// dark text; in dark mode the row label is near-white, so the yellow is shaded down
+// rather than tinted up (brand yellow #F9B524 at 62% brightness, hue/saturation kept).
+// Mirrors Mac's AppColors.dimmedYellowDark. Apple Notes does the same: #FFE381 light,
+// #9E8223 dark.
+val NotesYellowDimmedDark = Color(0xFF9E7417)
 val NotesYellowTextSelect = Color(0xFFFAEBC3) // text selection highlight in the editor
 
 // Selected-but-unfocused row backgrounds — mirrors Mac's AppColors.swift

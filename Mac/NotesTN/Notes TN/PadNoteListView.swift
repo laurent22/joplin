@@ -205,7 +205,7 @@ struct PadNoteListView: View {
                 VStack(alignment: .leading) {
                     Text(searchHighlighted(note.title.isEmpty ? "Untitled" : note.title, query: appState.searchText, scheme: colorScheme))
                         .font(.headline)
-                        .foregroundStyle(isSelected ? .white : .primary)
+                        .foregroundStyle(.primary)
                     // Timestamp matches the title's color; preview keeps its own
                     // (unchanged) secondary color — set per-segment since they're
                     // concatenated into one Text. In search results the matched preview
@@ -213,12 +213,12 @@ struct PadNoteListView: View {
                     Group {
                         if note.preview.isEmpty {
                             Text(rowDate(note))
-                                .foregroundColor(isSelected ? .white : .primary)
+                                .foregroundColor(.primary)
                         } else {
                             Text(rowDate(note))
-                                .foregroundColor(isSelected ? .white : .primary)
+                                .foregroundColor(.primary)
                             + Text(searchHighlighted("  \(note.preview)", query: appState.searchText, scheme: colorScheme))
-                                .foregroundColor(isSelected ? .white : .secondary)
+                                .foregroundColor(.secondary)
                         }
                     }
                     .font(.subheadline)
@@ -258,7 +258,7 @@ struct PadNoteListView: View {
         // rather than clipped by the list's own edge.
         .listRowBackground(
             RoundedRectangle(cornerRadius: 16)
-                .fill(isSelected ? AppColors.darkYellow : Color.clear)
+                .fill(isSelected ? AppColors.noteRowSelectedActiveBackground(colorScheme) : Color.clear)
                 .padding(.horizontal, 8)
         )
         // Long press — Pin/Unpin + Delete (or, when viewing Trash, Restore/Delete

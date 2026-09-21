@@ -29,7 +29,6 @@ private let noteListSearchPlacement: SearchFieldPlacement = .toolbar
 // MARK: - Selection colors
 // Brand yellow palette — see AppColors.swift for the full set shared with
 // EditorView.swift/SidebarView.swift and Android's Color.kt.
-private let notesYellowDimmed = AppColors.dimmedYellow
 
 // MARK: - Section grouping
 
@@ -489,7 +488,7 @@ struct NoteRowView: View {
         .background(
             RoundedRectangle(cornerRadius: 10)
                 .fill(
-                    isSelected ? (appState.isSidebarFocused ? notesYellowDimmed : AppColors.noteRowSelectedInactiveBackground(colorScheme)) : Color.clear
+                    isSelected ? (appState.isSidebarFocused ? AppColors.noteRowSelectedActiveBackground(colorScheme) : AppColors.noteRowSelectedInactiveBackground(colorScheme)) : Color.clear
                 )
         )
     }

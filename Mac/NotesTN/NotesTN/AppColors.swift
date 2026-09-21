@@ -25,6 +25,20 @@ enum AppColors {
     /// Text selection highlight inside the editor.
     static let textSelectYellow = Color(red: 0xFA / 255, green: 0xEB / 255, blue: 0xC3 / 255)     // #FAEBC3
 
+    /// Dark-mode counterpart of dimmedYellow for the selected note row. The pale
+    /// tint above only works under dark text; in dark mode the row's label is
+    /// near-white, so the yellow is shaded down rather than tinted up (the brand
+    /// yellow #F9B524 at 62% brightness, hue and saturation unchanged). Apple Notes
+    /// solves it the same way: its selected note row is #FFE381 in light mode and
+    /// #9E8223 in dark, keeping the label near-white in both.
+    static let dimmedYellowDark = Color(red: 0x9E / 255, green: 0x74 / 255, blue: 0x17 / 255)     // #9E7417
+
+    /// Selected note row background when the sidebar DOES have focus (the yellow one):
+    /// the pale tint in light mode, the shaded gold in dark. See dimmedYellowDark.
+    static func noteRowSelectedActiveBackground(_ scheme: ColorScheme) -> Color {
+        scheme == .dark ? dimmedYellowDark : dimmedYellow
+    }
+
     /// Selected notebook row background when the sidebar does NOT have focus.
     static func sidebarSelectedInactiveBackground(_ scheme: ColorScheme) -> Color {
         scheme == .dark
