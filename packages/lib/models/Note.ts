@@ -587,7 +587,7 @@ export default class Note extends BaseItem {
 	}
 
 	public static async syncIneligibleConflictedCount() {
-		const r = await this.db().selectOne('SELECT count(*) as total FROM notes WHERE is_conflict = 1 AND (conflict_original_id = "" OR share_id != "")');
+		const r = await this.db().selectOne('SELECT count(*) as total FROM notes WHERE is_conflict = 1 AND (conflict_original_id = \'\' OR share_id != \'\')');
 		return r && r.total ? r.total : 0;
 	}
 
