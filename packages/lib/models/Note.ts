@@ -385,7 +385,7 @@ export default class Note extends BaseItem {
 	public static previewFields(options: { includeTimestamps?: boolean } = null) {
 		options = { includeTimestamps: true, ...options };
 
-		const output = ['id', 'title', 'is_todo', 'todo_completed', 'todo_due', 'parent_id', 'encryption_applied', 'is_locked', 'order', 'markup_language', 'is_conflict', 'is_shared', 'share_id', 'deleted_time'];
+		const output = ['id', 'title', 'is_todo', 'todo_completed', 'todo_due', 'parent_id', 'encryption_applied', 'is_locked', 'order', 'markup_language', 'is_conflict', 'conflict_original_id', 'is_shared', 'share_id', 'deleted_time'];
 
 		if (options.includeTimestamps) {
 			output.push('updated_time');
@@ -583,6 +583,11 @@ export default class Note extends BaseItem {
 
 	public static async conflictedCount() {
 		const r = await this.db().selectOne('SELECT count(*) as total FROM notes WHERE is_conflict = 1 AND deleted_time = 0');
+		return r && r.total ? r.total : 0;
+	}
+
+	public static async syncIneligibleConflictedCount() {
+		const r = await this.db().selectOne('SELECT count(*) as total FROM notes WHERE is_conflict = 1 AND (conflict_original_id = "" OR share_id != "")');
 		return r && r.total ? r.total : 0;
 	}
 
@@ -1290,13 +1295,13 @@ export default class Note extends BaseItem {
 		}
 	}
 
-	public static async createConflictNote(sourceNote: NoteEntity, changeSource: number): Promise<NoteEntity> {
+	public static async createConflictNote(sourceNote: NoteEntity, changeSource: number, includeConflictOriginalId = true): Promise<NoteEntity> {
 		const conflictNote = { ...sourceNote };
 		delete conflictNote.id;
 		delete conflictNote.is_shared;
 		delete conflictNote.share_id;
 		conflictNote.is_conflict = 1;
-		conflictNote.conflict_original_id = sourceNote.id;
+		conflictNote.conflict_original_id = includeConflictOriginalId ? sourceNote.id : '';
 		return await Note.save(conflictNote, { autoTimestamp: false, changeSource: changeSource });
 	}
 

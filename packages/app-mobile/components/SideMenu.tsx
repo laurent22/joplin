@@ -121,6 +121,7 @@ interface UseAnimationsProps {
 
 const useAnimations = ({ menuWidth, isLeftMenu, open }: UseAnimationsProps) => {
 	const [animating, setIsAnimating] = useState(false);
+	const animationGenerationRef = useRef(0);
 	const menuDragOffset = useMemo(() => new Animated.Value(0), []);
 	const basePositioningFraction = useMemo(() => new Animated.Value(0), []);
 	const maximumDragOffsetValue = useMemo(() => new Animated.Value(1), []);
@@ -143,6 +144,10 @@ const useAnimations = ({ menuWidth, isLeftMenu, open }: UseAnimationsProps) => {
 	const reduceMotionEnabled = useReduceMotionEnabled();
 	const reduceMotionEnabledRef = useRef(false);
 	reduceMotionEnabledRef.current = reduceMotionEnabled;
+	const beginAnimating = useCallback(() => {
+		animationGenerationRef.current++;
+		setIsAnimating(true);
+	}, []);
 
 	const updateMenuPosition = useCallback(() => {
 		const baseAnimationProps = {
@@ -150,23 +155,22 @@ const useAnimations = ({ menuWidth, isLeftMenu, open }: UseAnimationsProps) => {
 			duration: reduceMotionEnabledRef.current ? 0 : 200,
 			useNativeDriver: true,
 		};
+		const animationGeneration = ++animationGenerationRef.current;
 		setIsAnimating(true);
 
 		const animation = Animated.parallel([
 			Animated.timing(basePositioningFraction, { toValue: open ? 1 : 0, ...baseAnimationProps }),
 			Animated.timing(menuDragOffset, { toValue: 0, ...baseAnimationProps }),
 		]);
-		animation.start((result) => {
-			if (result.finished) {
-				setIsAnimating(false);
-			}
+		animation.start(() => {
+			if (animationGeneration === animationGenerationRef.current) setIsAnimating(false);
 		});
 	}, [open, menuDragOffset, basePositioningFraction]);
 	useEffect(() => {
 		updateMenuPosition();
 	}, [updateMenuPosition]);
 
-	return { setIsAnimating, animating, updateMenuPosition, menuOpenFraction, menuDragOffset };
+	return { beginAnimating, animating, updateMenuPosition, menuOpenFraction, menuDragOffset };
 };
 
 const SideMenuComponent: React.FC<Props> = props => {
@@ -190,7 +194,7 @@ const SideMenuComponent: React.FC<Props> = props => {
 		setMenuWidth(menuWidth);
 	}, [props.openMenuOffset]);
 
-	const { animating, setIsAnimating, menuDragOffset, updateMenuPosition, menuOpenFraction } = useAnimations({
+	const { animating, beginAnimating, menuDragOffset, updateMenuPosition, menuOpenFraction } = useAnimations({
 		isLeftMenu, menuWidth, open,
 	});
 
@@ -244,7 +248,7 @@ const SideMenuComponent: React.FC<Props> = props => {
 				);
 			},
 			onPanResponderGrant: () => {
-				setIsAnimating(true);
+				beginAnimating();
 			},
 			onPanResponderMove: Animated.event([
 				null,
@@ -259,7 +263,7 @@ const SideMenuComponent: React.FC<Props> = props => {
 				onGestureEnd(gestureState);
 			},
 		});
-	}, [isLeftMenu, menuDragOffset, props.toleranceX, props.minHorizontalSwipe, open, props.disableGestures, props.disableOpenGesture, onGestureEnd, setIsAnimating]);
+	}, [isLeftMenu, menuDragOffset, props.toleranceX, props.minHorizontalSwipe, open, props.disableGestures, props.disableOpenGesture, onGestureEnd, beginAnimating]);
 
 	const onChangeRef = useRef(props.onChange);
 	onChangeRef.current = props.onChange;
@@ -272,10 +276,11 @@ const SideMenuComponent: React.FC<Props> = props => {
 	}, [open]);
 
 	const onCloseButtonPress = useCallback(() => {
+		if (!open) return;
 		setIsOpen(false);
 		// Set isAnimating as soon as possible to avoid components disappearing, then reappearing.
-		setIsAnimating(true);
-	}, [setIsAnimating]);
+		beginAnimating();
+	}, [open, beginAnimating]);
 
 	const styles = useStyles({ themeId: props.themeId, menuOpenFraction, menuWidth, isLeftMenu });
 

@@ -33,3 +33,33 @@ if (typeof document !== 'undefined') {
 		return range;
 	};
 }
+if (typeof window !== 'undefined') {
+	const { Buffer, Blob, File } = require('node:buffer');
+	const { TextDecoder, TextEncoder } = require('node:util');
+	const { URLSearchParams, URL } = require('node:url');
+	const { ReadableStream } = require('node:stream/web');
+	const { MessageChannel, MessagePort } = require('node:worker_threads');
+	const { setTimeout, setInterval, clearTimeout, clearInterval, setImmediate, clearImmediate } = require('node:timers');
+	const { performance } = require('node:perf_hooks');
+
+	window.performance.markResourceTiming = performance.markResourceTiming;
+
+	// Override some of the JSDom globals. Some libraries (e.g. Undici) require the
+	// original Node.js versions of these globals:
+	globalThis.Buffer = Buffer;
+	globalThis.Blob = Blob;
+	globalThis.File = File;
+	globalThis.URLSearchParams = URLSearchParams;
+	globalThis.URL = URL;
+	globalThis.TextDecoder = TextDecoder;
+	globalThis.TextEncoder = TextEncoder;
+	globalThis.ReadableStream = ReadableStream;
+	globalThis.MessageChannel = MessageChannel;
+	globalThis.MessagePort = MessagePort;
+	globalThis.setTimeout = setTimeout;
+	globalThis.setInterval = setInterval;
+	globalThis.clearTimeout = clearTimeout;
+	globalThis.clearInterval = clearInterval;
+	globalThis.setImmediate = setImmediate;
+	globalThis.clearImmediate = clearImmediate;
+}

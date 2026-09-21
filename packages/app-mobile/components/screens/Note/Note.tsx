@@ -1931,7 +1931,6 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 							onChangeText={this.onPlainEditorTextChange}
 							onSelectionChange={this.onPlainEditorSelectionChange}
 							blurOnSubmit={false}
-							selectionColor={theme.textSelectionColor}
 							keyboardAppearance={theme.keyboardAppearance}
 							placeholder={_('Add body')}
 							placeholderTextColor={theme.colorFaded}
@@ -2037,7 +2036,6 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					style={this.styles().titleTextInput}
 					value={note.title}
 					onChangeText={this.title_changeText}
-					selectionColor={theme.textSelectionColor}
 					keyboardAppearance={theme.keyboardAppearance}
 					placeholder={_('Add title')}
 					placeholderTextColor={theme.colorFaded}
