@@ -571,6 +571,23 @@ describe('conflictResolutionExtension', () => {
 		expect(conflictRegions(editor.state).map(region => [region.from, region.to])).toEqual([[0, 10], [21, 21]]);
 	});
 
+	test('should not merge away a region that can restore itself', async () => {
+		const editor = await createEditor('remote one\nremote two\nremote three', [
+			{ from: 0, to: 10, localText: 'local one' },
+			{ from: 11, to: 21, localText: 'local two' },
+			{ from: 22, to: 34, localText: 'local three' },
+		]);
+
+		editor.dispatch({ changes: { from: 0, to: editor.state.doc.length, insert: 'X' } });
+
+		expect(conflictRegions(editor.state).length).toBeGreaterThan(1);
+
+		undo(editor);
+
+		expect(conflictRegions(editor.state).map(region => region.localText).sort())
+			.toEqual(['local one', 'local three', 'local two']);
+	});
+
 	test('should split the merged region again when the change is undone', async () => {
 		const editor = await createEditor('remote one\nremote two', [
 			{ from: 0, to: 10, localText: 'local one' },

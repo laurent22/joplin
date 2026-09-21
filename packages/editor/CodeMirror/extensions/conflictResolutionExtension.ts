@@ -265,7 +265,7 @@ const conflictState = StateField.define<ConflictState>({
 
 		if (transaction.docChanged) {
 			regions = regions.map(region => {
-				if (!region.restoreFrom || region.from < region.to) return region;
+				if (!region.restoreFrom) return region;
 
 				const original = region.restoreFrom;
 				if (transaction.state.doc.toString() !== original.docText) return region;
@@ -304,9 +304,12 @@ const conflictState = StateField.define<ConflictState>({
 				if (lineSpan(transaction.startState.doc, region.from, region.to) !== lineSpan(transaction.state.doc, from, to)) {
 					rebuild = true;
 				}
-				const restoreFrom = collapsed
+				const covered = transaction.changes.touchesRange(region.from, region.to) === 'cover';
+				const lostText = covered
+					&& transaction.state.doc.sliceString(from, to) !== transaction.startState.doc.sliceString(region.from, region.to);
+				const restoreFrom = region.restoreFrom ?? (collapsed || lostText
 					? withCoveredText(region, transaction.startState)
-					: region.restoreFrom;
+					: undefined);
 
 				return { region: { ...region, from, to, settled, restoreFrom }, before: region };
 			});
@@ -316,7 +319,7 @@ const conflictState = StateField.define<ConflictState>({
 			const mappedFrom = new Map<number, ConflictRegion>();
 			for (const { region, before } of mapped) {
 				mappedFrom.set(region.id, before);
-				if (region.settled || region.from >= region.to) {
+				if (region.settled || region.from >= region.to || region.restoreFrom) {
 					merged.push(region);
 					continue;
 				}
