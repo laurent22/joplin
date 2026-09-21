@@ -28,8 +28,8 @@ class AppDelegate: ExpoAppDelegate, ExpoReactNativeFactoryProvider, UNUserNotifi
     reactNativeFactory = factory
 
     // Define UNUserNotificationCenter -- required by @react-native-community/push-notification-ios
-    //let center = UNUserNotificationCenter.current();
-    //center.delegate = self;
+    let center = UNUserNotificationCenter.current();
+    center.delegate = self;
 
     // The window is created and React Native is started by `SceneDelegate` under the
     // scene-based life cycle (required by the iOS 27 SDK).
@@ -53,15 +53,6 @@ class AppDelegate: ExpoAppDelegate, ExpoReactNativeFactoryProvider, UNUserNotifi
   ) -> Bool {
     let result = RCTLinkingManager.application(application, continue: userActivity, restorationHandler: restorationHandler)
     return super.application(application, continue: userActivity, restorationHandler: restorationHandler) || result
-  }
-  
-  // Quick actions
-  public override func application(
-    _ application: UIApplication,
-    performActionFor shortcutItem: UIApplicationShortcutItem,
-    completionHandler: @escaping (Bool) -> Void
-  ) {
-    RNQuickActionManager.onQuickActionPress(shortcutItem, completionHandler: completionHandler)
   }
   
   // Notifications with @react-native-community/push-notification-ios

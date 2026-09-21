@@ -12673,7 +12673,7 @@ __metadata:
     react-native-nitro-modules: "npm:0.33.9"
     react-native-paper: "npm:5.15.3"
     react-native-popup-menu: "npm:0.17.0"
-    react-native-quick-actions: "npm:0.3.13"
+    react-native-quick-actions: "patch:react-native-quick-actions@npm%3A0.3.13#~/.yarn/patches/react-native-quick-actions-npm-0.3.13-eb0753e0b7.patch"
     react-native-quick-base64: "npm:3.0.1"
     react-native-quick-crypto: "npm:1.1.4"
     react-native-rsa-native: "patch:react-native-rsa-native@npm%3A2.0.5#~/.yarn/patches/react-native-rsa-native-npm-2.0.5-4664e1ce79.patch"
@@ -50373,6 +50373,13 @@ __metadata:
   version: 0.3.13
   resolution: "react-native-quick-actions@npm:0.3.13"
   checksum: 10/8837ebffe78c10b2b4a520d0a3d2ca21f138ee7acc9b8247dbb20068f75edc737a2d36f5b343c7846b7684ec8e60daa8207aaa4bca5e7a5e9dc258e257bc393c
+  languageName: node
+  linkType: hard
+
+"react-native-quick-actions@patch:react-native-quick-actions@npm%3A0.3.13#~/.yarn/patches/react-native-quick-actions-npm-0.3.13-eb0753e0b7.patch":
+  version: 0.3.13
+  resolution: "react-native-quick-actions@patch:react-native-quick-actions@npm%3A0.3.13#~/.yarn/patches/react-native-quick-actions-npm-0.3.13-eb0753e0b7.patch::version=0.3.13&hash=195632"
+  checksum: 10/b911963b6b6ace9e2219ecea3c238ee82a796d2871b03dc295e53f2ad605c0bb4e7f0ca278137e5c5ef01fcf74a344fd83e6e536fd16578b60724c71d364eb66
   languageName: node
   linkType: hard
 

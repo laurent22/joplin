@@ -1,0 +1,53 @@
+diff --git a/RNQuickAction/RNQuickAction/RNQuickActionManager.h b/RNQuickAction/RNQuickAction/RNQuickActionManager.h
+index ad4baad075513115892bd120a278f1ba664480b7..7a366391a48e77d7b08eb2741d2a499a267304b8 100644
+--- a/RNQuickAction/RNQuickAction/RNQuickActionManager.h
++++ b/RNQuickAction/RNQuickAction/RNQuickActionManager.h
+@@ -10,4 +10,5 @@
+ 
+ @interface RNQuickActionManager : NSObject <RCTBridgeModule>
+ +(void) onQuickActionPress:(UIApplicationShortcutItem *) shortcutItem completionHandler:(void (^)(BOOL succeeded)) completionHandler;
+++(void) setInitialAction:(UIApplicationShortcutItem *) shortcutItem;
+ @end
+diff --git a/RNQuickAction/RNQuickAction/RNQuickActionManager.m b/RNQuickAction/RNQuickAction/RNQuickActionManager.m
+index 8db8cab947349763a9c3d9d6004868b675b9c7ef..3217a35634ad457e33756b895b32d80f3fa11178 100644
+--- a/RNQuickAction/RNQuickAction/RNQuickActionManager.m
++++ b/RNQuickAction/RNQuickAction/RNQuickActionManager.m
+@@ -31,6 +31,7 @@ @implementation RNQuickActionManager
+ RCT_EXPORT_MODULE();
+ 
+ @synthesize bridge = _bridge;
++UIApplicationShortcutItem *lastInitialAction_ = NULL;
+ 
+ - (instancetype)init
+ {
+@@ -39,6 +40,7 @@ - (instancetype)init
+                                                  selector:@selector(handleQuickActionPress:)
+                                                      name:RCTShortcutItemClicked
+                                                    object:nil];
++        _initialAction = lastInitialAction_;
+     }
+     return self;
+ }
+@@ -59,7 +61,9 @@ - (void)dealloc
+ - (void)setBridge:(RCTBridge *)bridge
+ {
+     _bridge = bridge;
+-    _initialAction = [bridge.launchOptions[UIApplicationLaunchOptionsShortcutItemKey] copy];
++    // Patch: The initial action must now be set through `setInitialAction`:
++    // _initialAction = NULL;
++    // _initialAction = [bridge.launchOptions[UIApplicationLaunchOptionsShortcutItemKey] copy];
+ }
+ 
+ // Map user passed array of UIApplicationShortcutItem
+@@ -155,6 +159,11 @@ + (void)onQuickActionPress:(UIApplicationShortcutItem *) shortcutItem completion
+     completionHandler(YES);
+ }
+ 
+++ (void)setInitialAction:(UIApplicationShortcutItem *) shortcutItem
++{
++    lastInitialAction_ = [shortcutItem copy];
++}
++
+ - (void)handleQuickActionPress:(NSNotification *) notification
+ {
+     [_bridge.eventDispatcher sendDeviceEventWithName:@"quickActionShortcut"

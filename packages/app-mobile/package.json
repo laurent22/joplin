@@ -74,7 +74,7 @@
     "react-native-nitro-modules": "0.33.9",
     "react-native-paper": "5.15.3",
     "react-native-popup-menu": "0.17.0",
-    "react-native-quick-actions": "0.3.13",
+    "react-native-quick-actions": "patch:react-native-quick-actions@npm%3A0.3.13#~/.yarn/patches/react-native-quick-actions-npm-0.3.13-eb0753e0b7.patch",
     "react-native-quick-base64": "3.0.1",
     "react-native-quick-crypto": "1.1.4",
     "react-native-rsa-native": "patch:react-native-rsa-native@npm%3A2.0.5#~/.yarn/patches/react-native-rsa-native-npm-2.0.5-4664e1ce79.patch",
