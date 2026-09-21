@@ -12670,7 +12670,7 @@ __metadata:
     react-native-image-picker: "npm:8.2.1"
     react-native-localize: "npm:3.7.0"
     react-native-modal-datetime-picker: "npm:18.0.0"
-    react-native-nitro-modules: "npm:0.33.9"
+    react-native-nitro-modules: "npm:0.37.1"
     react-native-paper: "npm:5.15.3"
     react-native-popup-menu: "npm:0.17.0"
     react-native-quick-actions: "patch:react-native-quick-actions@npm%3A0.3.13#~/.yarn/patches/react-native-quick-actions-npm-0.3.13-eb0753e0b7.patch"
@@ -50327,16 +50327,6 @@ __metadata:
     "@react-native-community/datetimepicker": ">=6.7.0"
     react-native: ">=0.65.0"
   checksum: 10/8f065f4ee6572f7cd6731fb049b71653ce73dd7ce564a4cf4f310f6a25a659c388b46f8b51625ea8671c5f139439a0c1824ac0cec787832a36d799982d1e51d9
-  languageName: node
-  linkType: hard
-
-"react-native-nitro-modules@npm:0.33.9":
-  version: 0.33.9
-  resolution: "react-native-nitro-modules@npm:0.33.9"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 10/4ebf4db46d1e4987a0e52054724081aa9712bcd1d505a6dbdd47aebc6afe72a7abaa0e947651d9f3cc594e4eb3dba47fc6f59db27c5a5ed383946e40d96543a0
   languageName: node
   linkType: hard
 

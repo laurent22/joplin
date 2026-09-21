@@ -71,7 +71,7 @@
     "react-native-image-picker": "8.2.1",
     "react-native-localize": "3.7.0",
     "react-native-modal-datetime-picker": "18.0.0",
-    "react-native-nitro-modules": "0.33.9",
+    "react-native-nitro-modules": "0.37.1",
     "react-native-paper": "5.15.3",
     "react-native-popup-menu": "0.17.0",
     "react-native-quick-actions": "patch:react-native-quick-actions@npm%3A0.3.13#~/.yarn/patches/react-native-quick-actions-npm-0.3.13-eb0753e0b7.patch",
