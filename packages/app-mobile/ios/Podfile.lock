@@ -2798,12 +2798,12 @@ SPEC CHECKSUMS:
   ExpoImageManipulator: 410f59a94cd6a9c28617096b64d2971c247f8605
   ExpoLocalAuthentication: 1e4aef156a3a1f953f8278b8d8309f6118919640
   ExpoLogBox: 80957303325cd4439137765c90a87d7f22aaf2ff
-  ExpoModulesCore: f9f656f4890f0f2612835a207850db0ffa701b02
+  ExpoModulesCore: 1be0fe05fa0914a55b56533b0e6200591d7456ba
   ExpoModulesJSI: 9df8e7c9719f59e8c001ec33611774137fc1484a
   ExpoModulesWorklets: 986cf72c18400743869b4642d243115f831e404d
   ExpoSQLite: 72e6ada0504a27cd043eb1bf172db70485a761b6
   FBLazyVector: 3c3be9a019176b5699455f7f66c5444b78a411c6
-  hermes-engine: 051c32ee0270aba9f6c62acbb2c44109998639c5
+  hermes-engine: 02753191dd1c7588ce1d3c41169f0f1f27e48da7
   JoplinCommonShareExtension: a8b60b02704d85a7305627912c0240e94af78db7
   JoplinRNShareExtension: e158a4b53ee0aa9cd3037a16221dc8adbd6f7860
   NitroModules: 7870d5dcc285bb2de2be9d4dfd501db52d13cfd4
