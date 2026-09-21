@@ -157,6 +157,12 @@ struct PadSidebarView: View {
                 }
             }
         }
+        // Same list style the note list already uses (PadNoteListView). Without it this
+        // List defaults to the sidebar style inside NavigationSplitView, and on iPadOS
+        // that style paints a persistent tinted outline around the selected row, which
+        // stacked on top of the row background we draw ourselves. The note list, being
+        // .plain, never showed that. Rows keep their own selection highlight either way.
+        .listStyle(.plain)
         .navigationTitle("Notes TN")
         // Syncing spinner — same appState.isSyncing signal + placement Mac/iPhone's
         // SidebarView.swift already uses; iPad had no visual feedback for this at all
