@@ -2,7 +2,7 @@ import * as React from 'react';
 import { PrimaryButton, SecondaryButton } from '../buttons';
 import { _ } from '@joplin/lib/locale';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { AudioQuality, getRecordingPermissionsAsync, IOSOutputFormat, requestRecordingPermissionsAsync, setAudioModeAsync, type RecordingOptions, useAudioRecorder as useExpoAudioRecorder, useAudioRecorderState } from 'expo-audio';
+import { AudioQuality, getRecordingPermissionsAsync, IOSOutputFormat, requestRecordingPermissionsAsync, setAudioModeAsync, type RecordingOptions, useAudioRecorder as useExpoAudioRecorder, useAudioRecorderState, requestNotificationPermissionsAsync } from 'expo-audio';
 import Logger from '@joplin/utils/Logger';
 import { OnFileSavedCallback, RecorderState } from './types';
 import { Platform } from 'react-native';
@@ -125,9 +125,18 @@ const useAudioRecorder = (onFileSaved: OnFileSavedCallback, onDismiss: ()=> void
 				await msleep(500);
 			}
 
+			let allowsBackgroundRecording = true;
+			if (Platform.OS === 'android') {
+				const notificationPermission = await requestNotificationPermissionsAsync();
+				if (!notificationPermission.granted) {
+					allowsBackgroundRecording = false;
+					await shim.showErrorDialog(_('Notification permissions are missing: Audio recording may stop if Joplin is moved to the background.'));
+				}
+			}
+
 			await setAudioModeAsync({
 				allowsRecording: true,
-				allowsBackgroundRecording: true,
+				allowsBackgroundRecording,
 				playsInSilentMode: true,
 				shouldPlayInBackground: true,
 				// Fixes an issue where opening a recording in the iOS audio player
