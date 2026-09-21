@@ -6,6 +6,7 @@ import BaseModel from './BaseModel';
 import Folder from './models/Folder';
 import ItemChange from './models/ItemChange';
 import getConflictFolderId from './models/utils/getConflictFolderId';
+import getTrashFolderId from './services/trash/getTrashFolderId';
 import { ALL_NOTES_FILTER_ID } from './reserved-ids';
 
 function initTestState(folders: FolderEntity[], selectedFolderIndex: number, notes: NoteEntity[], selectedNoteIndexes: number[], tags: TagEntity[] = null, selectedTagIndex: number = null) {
@@ -1173,6 +1174,28 @@ describe('reducer', () => {
 
 		expect(state.backgroundWindows[secondaryWindowId].selectedFolderId).toBe(folders[0].id);
 		expect(state.backgroundWindows[secondaryWindowId].notes.map(n => n.id)).toEqual([notes[0].id, notes[1].id]);
+	});
+
+	test('updating a trashed note should not switch its background window out of the trash', async () => {
+		const folders = await createNTestFolders(1);
+		const notes = await createNTestNotes(1, folders[0]);
+		const trashedNote = { ...notes[0], deleted_time: Date.now() };
+		const secondaryWindowId = 'window1';
+		let state = initTestState(folders, 0, notes, [0]);
+		state = createBackgroundWindow(state, secondaryWindowId, trashedNote, [trashedNote]);
+		state = reducer(state, { type: 'WINDOW_FOCUS', windowId: secondaryWindowId });
+		state = reducer(state, { type: 'FOLDER_SELECT', id: getTrashFolderId() });
+		state = reducer(state, { type: 'NOTE_UPDATE_ALL', notes: [trashedNote], notesSource: 'test' });
+		state = reducer(state, { type: 'NOTE_SELECT', ids: [trashedNote.id] });
+		state = reducer(state, { type: 'WINDOW_FOCUS', windowId: defaultWindowId });
+
+		const updatedNote = { ...trashedNote, title: 'Updated title' };
+		state = reducer(state, { type: 'NOTE_UPDATE_ONE', note: updatedNote });
+
+		const secondaryWindow = state.backgroundWindows[secondaryWindowId];
+		expect(secondaryWindow.selectedFolderId).toBe(getTrashFolderId());
+		expect(secondaryWindow.selectedFolderIds).toEqual([getTrashFolderId()]);
+		expect(secondaryWindow.notes).toContainEqual(updatedNote);
 	});
 
 	it.each([

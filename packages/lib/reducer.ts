@@ -1201,7 +1201,8 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 							const previousDisplayParentId = ('parent_id' in n) ? getDisplayParentId(n, draft.folders.find(f => f.id === n.parent_id)) : '';
 							// A trash operation changes the display parent without changing parent_id. In that
 							// case, keep showing the current folder and let the membership logic remove the note.
-							const displayParentChanged = previousDisplayParentId !== modNote.parent_id || !!action.noteMovedToFolder;
+							const noteDisplaysInRegularFolder = !modNote.deleted_time && !modNote.is_conflict;
+							const displayParentChanged = noteDisplaysInRegularFolder && (previousDisplayParentId !== modNote.parent_id || !!action.noteMovedToFolder);
 							const shouldFollowMovedNote = isOnlySelectedInSecondaryWindow && windowDraft.notesParentType === 'Folder' && displayParentChanged;
 							if (shouldFollowMovedNote) {
 								newNotes[i] = { ...newNotes[i], ...modNote };
