@@ -63,7 +63,7 @@
     "prop-types": "15.8.1",
     "punycode": "2.3.1",
     "react": "19.2.3",
-    "react-native": "0.86.2",
+    "react-native": "0.86.3",
     "react-native-device-info": "15.0.2",
     "react-native-dropdownalert": "5.2.0",
     "react-native-file-viewer": "2.1.5",
