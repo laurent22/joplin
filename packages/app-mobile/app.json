@@ -3,6 +3,6 @@
   "displayName": "Joplin",
   "plugins": [
     "@react-native-community/datetimepicker",
-    "expo-audio"
+    ["expo-audio", { "enableBackgroundRecording": true }]
   ]
 }
