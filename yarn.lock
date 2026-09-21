@@ -52574,11 +52574,11 @@ __metadata:
 
 "rn-fetch-blob@patch:rn-fetch-blob@npm%3A0.12.0#~/.yarn/patches/rn-fetch-blob-npm-0.12.0-cf02e3c544.patch":
   version: 0.12.0
-  resolution: "rn-fetch-blob@patch:rn-fetch-blob@npm%3A0.12.0#~/.yarn/patches/rn-fetch-blob-npm-0.12.0-cf02e3c544.patch::version=0.12.0&hash=763a1f"
+  resolution: "rn-fetch-blob@patch:rn-fetch-blob@npm%3A0.12.0#~/.yarn/patches/rn-fetch-blob-npm-0.12.0-cf02e3c544.patch::version=0.12.0&hash=61864b"
   dependencies:
     base-64: "npm:0.1.0"
     glob: "npm:7.0.6"
-  checksum: 10/788cc303c3a7ba39c25f446a0fe1f878dc383f21d90d32e19749ab266779fa6376df0248676f09fa9ea9fae41975fb4b62382f6edea9cbca205898dc8b2dabdd
+  checksum: 10/7dc1d89c6c582163210335a4ba694e6343022823c9842e548ff1ecb7bf15770dc5c153c067d057f3a0e5ad43f020f1a876045e79db4a7cd2a46e93a5e690323b
   languageName: node
   linkType: hard
 
