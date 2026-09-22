@@ -11,6 +11,7 @@ const logger = Logger.create('app.reducer');
 
 export interface AiChatMessage {
 	id: string;
+	createdTime: number;
 	noteId: string;
 	noteTitle: string;
 	role: 'user' | 'assistant' | 'error' | 'separator';
@@ -332,30 +333,20 @@ export default function(state: AppState, action: any) {
 		case 'AI_CHAT_ADD_TOOL_RESULT':
 		case 'AI_CHAT_REMOVE':
 			newState = produce(state, draft => {
-				const sourceWindow = stateUtils.windowStateById(draft, action.windowId);
-				if (action.type === 'AI_CHAT_APPEND') {
-					sourceWindow.aiChatMessages.push(action.message);
-				} else if (action.type === 'AI_CHAT_REMOVE') {
-					sourceWindow.aiChatMessages = sourceWindow.aiChatMessages.filter(message => message.id !== action.id);
-				} else {
-					const message = sourceWindow.aiChatMessages.find(message => message.raw.some(entry =>
-						entry.role === ChatRole.Assistant && entry.toolCalls?.some(call => call.callId === action.toolCall.toolCallId),
-					));
-					message?.raw.push(action.toolCall);
-				}
-
-				if (!sourceWindow.aiChatConversationId) return;
 				for (const windowState of stateUtils.allWindowStates(draft)) {
-					if (windowState.aiChatConversationId !== sourceWindow.aiChatConversationId) continue;
-					windowState.aiChatMessages = sourceWindow.aiChatMessages;
+					if (windowState.aiChatConversationId !== action.conversationId) continue;
+					if (action.type === 'AI_CHAT_APPEND') {
+						windowState.aiChatMessages.push(action.message);
+					} else if (action.type === 'AI_CHAT_REMOVE') {
+						windowState.aiChatMessages = windowState.aiChatMessages.filter(message => message.id !== action.id);
+					} else {
+						const message = windowState.aiChatMessages.find(message => message.raw.some(entry =>
+							entry.role === ChatRole.Assistant && entry.toolCalls?.some(call => call.callId === action.toolCall.toolCallId),
+						));
+						message?.raw.push(action.toolCall);
+					}
 				}
 			});
-			break;
-
-		case 'AI_CHAT_RESET':
-			newState = withWindowStateUpdated(
-				state, action.windowId, 'aiChatMessages', (): AiChatMessage[] => [],
-			);
 			break;
 
 		case 'AI_STATUS_UPDATE':

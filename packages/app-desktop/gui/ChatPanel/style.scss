@@ -14,6 +14,7 @@
 }
 
 .chat-panel > .header {
+	position: relative;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -40,11 +41,6 @@
 			color: var(--joplin-color);
 		}
 	}
-}
-
-.chat-panel > .history {
-	padding: 6px 10px;
-	border-bottom: 1px solid var(--joplin-divider-color);
 }
 
 .chat-panel > .degraded-status {

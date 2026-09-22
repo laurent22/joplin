@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { act, fireEvent, render, waitFor, within } from '@testing-library/react';
+import BaseModel from '@joplin/lib/BaseModel';
 import ChatConversation from '@joplin/lib/models/ChatConversation';
 import Note from '@joplin/lib/models/Note';
 import CommandService from '@joplin/lib/services/CommandService';
@@ -9,14 +10,14 @@ import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/
 import appReducer, { AiChatMessage, createAppDefaultState, createAppDefaultWindowState } from '../../app.reducer';
 import ChatPanel from './ChatPanel';
 import { WindowIdContext } from '../NewWindowOrIFrame';
-import dialogs from '../dialogs';
+import uuid from '@joplin/lib/uuid';
 import '../../utils/window/eventHandlerOverrides';
 
 jest.mock('@joplin/lib/services/ai/noteChat', () => ({ runNoteChat: jest.fn() }));
 jest.mock('./ChatMessageItem', () => ({ message }: { message: { text: string } }) => <div>{message.text}</div>);
 
 const Panel = ChatPanel.WrappedComponent;
-const message: AiChatMessage = { id: 'question', role: 'user', text: 'Question', raw: [], noteId: 'note-a', noteTitle: 'A' };
+const message: AiChatMessage = { id: 'question', createdTime: 1, role: 'user', text: 'Question', raw: [], noteId: 'note-a', noteTitle: 'A' };
 
 const renderPanel = (props: Partial<React.ComponentProps<typeof Panel>> = {}) => render(
 	<WindowIdContext.Provider value='second'><Panel
@@ -36,22 +37,24 @@ const saveConversation = async (id: string, title: string, updatedTime = 1) => {
 };
 
 const saveMessage = async (conversationId: string, text: string) => {
-	await ChatConversation.archive(conversationId, [{ id: conversationId, role: 'user', text, raw: [], noteId: '', noteTitle: '' }]);
+	await ChatConversation.addMessage(conversationId, { id: uuid.create(), createdTime: 1, role: 'user', text, raw: [], noteId: '', noteTitle: '' });
 };
 
 describe('ChatPanel', () => {
+	let modelDispatch: jest.Mock;
+
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		for (const conversation of await ChatConversation.history()) {
-			await ChatConversation.deleteConversation(conversation.id);
-		}
 		Element.prototype.scrollIntoView = jest.fn();
 		jest.mocked(runNoteChat).mockReset();
+		modelDispatch = jest.fn();
+		BaseModel.dispatch = modelDispatch;
 	});
 
 	afterEach(() => {
 		jest.restoreAllMocks();
+		BaseModel.dispatch = () => {};
 	});
 
 	it('should search conversation titles and messages', async () => {
@@ -73,15 +76,29 @@ describe('ChatPanel', () => {
 		expect(view.getAllByRole('listitem')).toHaveLength(2);
 	});
 
-	it('should save and display a renamed conversation title', async () => {
+	it('should rename a conversation inline when Enter is pressed', async () => {
 		await saveConversation('chat-1', 'Old title');
-		jest.spyOn(dialogs, 'prompt').mockResolvedValue('New title');
 		const view = renderPanel();
 		await openHistory(view);
 		const row = (await view.findByText('Old title')).closest('li');
-		await act(async () => { fireEvent.click(within(row).getByRole('button', { name: 'Rename' })); });
+		fireEvent.click(within(row).getByRole('button', { name: 'Rename' }));
+		const input = within(row).getByRole('textbox', { name: 'Conversation title' });
+		fireEvent.change(input, { target: { value: 'New title' } });
+		await act(async () => { fireEvent.keyDown(input, { key: 'Enter' }); });
 		expect(await view.findByText('New title')).toBeTruthy();
+		expect(view.queryByRole('textbox', { name: 'Conversation title' })).toBeNull();
 		expect(await ChatConversation.load('chat-1')).toMatchObject({ title: 'New title' });
+	});
+
+	it('should close the history popup when clicking outside of it', async () => {
+		await saveConversation('chat-1', 'Saved chat');
+		const view = renderPanel();
+		await openHistory(view);
+		await view.findByText('Saved chat');
+		fireEvent.mouseDown(view.getByRole('searchbox', { name: 'Search conversations' }));
+		expect(view.getByText('Saved chat')).toBeTruthy();
+		fireEvent.mouseDown(view.getByRole('textbox', { name: 'Chat message' }));
+		await waitFor(() => expect(view.queryByText('Saved chat')).toBeNull());
 	});
 
 	it('should delete the selected conversation and its messages', async () => {
@@ -104,12 +121,12 @@ describe('ChatPanel', () => {
 	});
 
 	it('should keep history when New chat opens an empty conversation in the current window', async () => {
+		await saveConversation('chat-1', 'Current chat');
 		const dispatch = jest.fn();
 		const view = renderPanel({ conversationId: 'chat-1', messages: [message], dispatch });
 		await act(async () => { fireEvent.click(view.getByRole('button', { name: 'New chat' })); });
 		await waitFor(() => expect(dispatch).toHaveBeenCalled());
-		expect(await ChatConversation.load('chat-1')).toMatchObject({ title: 'Question' });
-		expect(await ChatConversation.messages('chat-1')).toMatchObject([{ text: 'Question' }]);
+		expect(await ChatConversation.load('chat-1')).toMatchObject({ title: 'Current chat' });
 		const action = dispatch.mock.calls[0][0];
 		expect(action).toEqual({ type: 'AI_CHAT_OPEN', windowId: 'second', conversationId: expect.any(String), messages: [] });
 		expect(action.conversationId).not.toBe('chat-1');
@@ -124,7 +141,7 @@ describe('ChatPanel', () => {
 		expect(opened.backgroundWindows.second.aiChatMessages).toEqual([]);
 	});
 
-	it('should save the current conversation and open the selected history row', async () => {
+	it('should open the selected history row in the current window', async () => {
 		await saveConversation('chat-1', 'Current chat');
 		await saveConversation('chat-2', 'Saved chat');
 		const execute = jest.spyOn(CommandService.instance(), 'executeInWindow').mockResolvedValue(undefined);
@@ -132,31 +149,34 @@ describe('ChatPanel', () => {
 		await openHistory(view);
 		fireEvent.click(await view.findByRole('button', { name: /Saved chat/ }));
 		await waitFor(() => expect(execute).toHaveBeenCalledWith('openAiChatConversation', { windowId: 'second', args: ['chat-2'] }));
-		expect(await ChatConversation.messages('chat-1')).toMatchObject([{ text: 'Question' }]);
 	});
 
-	it('should capture the active note ID and title on the question and reply', async () => {
+	it('should save the question and reply with the active note ID and title as they are created', async () => {
 		jest.spyOn(Note, 'load').mockResolvedValue({ id: 'note-a', title: 'A', body: '' });
 		jest.mocked(runNoteChat).mockImplementation(async (_context, _history, _text, _tools, onHistoryChanged) => {
 			onHistoryChanged([{ role: ChatRole.System, content: '' }, { role: ChatRole.Assistant, content: 'Reply' }]);
 			return [];
 		});
-		const dispatch = jest.fn();
-		const view = renderPanel({ noteId: 'note-a', noteTitle: 'A', dispatch });
+		const view = renderPanel({ conversationId: 'chat-1', noteId: 'note-a', noteTitle: 'A' });
 		fireEvent.change(view.getByRole('textbox'), { target: { value: 'Question' } });
 		await act(async () => { fireEvent.click(view.getByRole('button', { name: 'Send' })); });
-		expect(dispatch.mock.calls.map(([action]) => action).filter(action => action.type === 'AI_CHAT_APPEND').map(action => action.message)).toMatchObject([
+		const expected = [
 			{ role: 'user', text: 'Question', noteId: 'note-a', noteTitle: 'A' },
 			{ role: 'assistant', text: 'Reply', noteId: 'note-a', noteTitle: 'A' },
-		]);
+		];
+		await waitFor(async () => expect(await ChatConversation.messages('chat-1')).toMatchObject(expected));
+		expect(await ChatConversation.load('chat-1')).toMatchObject({ title: 'Question' });
+		const appended = modelDispatch.mock.calls.map(([action]) => action).filter(action => action.type === 'AI_CHAT_APPEND');
+		expect(appended).toMatchObject(expected.map(message => ({ conversationId: 'chat-1', message })));
 	});
 
-	it('should save active messages without waiting for the conversation to close', async () => {
-		const saveMessages = jest.spyOn(ChatConversation, 'archive');
-		renderPanel({ conversationId: 'chat-1', messages: [message] });
-		await waitFor(() => expect(saveMessages).toHaveBeenCalledWith('chat-1', [message]));
-		await saveMessages.mock.results[0].value;
-		expect(await ChatConversation.messages('chat-1')).toMatchObject([{ text: 'Question' }]);
+	it('should remove the saved question when the request fails before any reply', async () => {
+		jest.spyOn(Note, 'load').mockResolvedValue({ id: 'note-a', title: 'A', body: '' });
+		jest.mocked(runNoteChat).mockRejectedValue(new Error('Network down'));
+		const view = renderPanel({ conversationId: 'chat-1', noteId: 'note-a', noteTitle: 'A', dispatch: jest.fn() });
+		fireEvent.change(view.getByRole('textbox'), { target: { value: 'Question' } });
+		await act(async () => { fireEvent.click(view.getByRole('button', { name: 'Send' })); });
+		await waitFor(async () => expect(await ChatConversation.messages('chat-1')).toMatchObject([{ role: 'error', text: 'Network down' }]));
 	});
 
 	it('should assign an ID before messages are added to a new conversation', async () => {

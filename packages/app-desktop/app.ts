@@ -46,14 +46,14 @@ const electronContextMenu = require('./services/electron-context-menu');
 import PerFolderSortOrderService from '@joplin/lib/services/sortOrder/PerFolderSortOrderService';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import checkForUpdates from './checkForUpdates';
-import { AiChatMessage, AppState } from './app.reducer';
+import { AppState } from './app.reducer';
 import syncDebugLog from '@joplin/lib/services/synchronizer/syncDebugLog';
 import { completePendingAuthentication } from '@joplin/lib/services/joplinCloudUtils';
 import eventManager, { EventName } from '@joplin/lib/eventManager';
 import path = require('path');
 import { afterDefaultPluginsLoaded, loadAndRunDefaultPlugins } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
 import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetcher';
-import { parseNotesParent, stateUtils } from '@joplin/lib/reducer';
+import { parseNotesParent } from '@joplin/lib/reducer';
 import OcrService from '@joplin/lib/services/ocr/OcrService';
 import OcrDriverTesseract from '@joplin/lib/services/ocr/drivers/OcrDriverTesseract';
 import OcrDriverTranscribe from '@joplin/lib/services/ocr/drivers/OcrDriverTranscribe';
@@ -69,8 +69,6 @@ import Resource from '@joplin/lib/models/Resource';
 import AiService from '@joplin/lib/services/ai/AiService';
 import LocalEmbeddingProvider from '@joplin/lib/services/ai/LocalEmbeddingProvider';
 import { installAiStatusBridge, AiStatusStore } from './services/aiStatusBridge';
-import ChatConversation from '@joplin/lib/models/ChatConversation';
-import uuid from '@joplin/lib/uuid';
 
 const perfLogger = PerformanceLogger.create();
 
@@ -97,28 +95,6 @@ class Application extends BaseApplication {
 
 	public hasGui() {
 		return true;
-	}
-
-	public async saveChatHistory() {
-		const state = this.store().getState() as AppState;
-		const conversations = new Map<string, Map<string, AiChatMessage>>();
-		for (const windowState of stateUtils.allWindowStates(state)) {
-			if (!windowState.aiChatMessages.length) continue;
-			const id = windowState.aiChatConversationId || uuid.create();
-			const messages = conversations.get(id) || new Map<string, AiChatMessage>();
-			for (const message of windowState.aiChatMessages) {
-				if ((messages.get(message.id)?.raw.length ?? -1) > message.raw.length) continue;
-				messages.set(message.id, message);
-			}
-			conversations.set(id, messages);
-		}
-		for (const [id, messages] of conversations) {
-			try {
-				await ChatConversation.archive(id, [...messages.values()]);
-			} catch (error) {
-				this.logger().error(`Could not save chat history for conversation ${id}:`, error);
-			}
-		}
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Redux actions are heterogeneous; typing would require an action-type union and base class signature change

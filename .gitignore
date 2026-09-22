@@ -1504,6 +1504,7 @@ packages/lib/models/BaseItem.test.js
 packages/lib/models/BaseItem.js
 packages/lib/models/ChatConversation.test.js
 packages/lib/models/ChatConversation.js
+packages/lib/models/ChatMessage.js
 packages/lib/models/ConflictNoteState.js
 packages/lib/models/Folder.publishing.test.js
 packages/lib/models/Folder.sharing.test.js

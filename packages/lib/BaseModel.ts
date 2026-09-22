@@ -29,6 +29,7 @@ export enum ModelType {
 	NoteEmbedding = 17,
 	ConflictNoteState = 18,
 	ChatConversation = 19,
+	ChatMessage = 20,
 }
 
 export interface SearchOptions {
@@ -92,6 +93,7 @@ class BaseModel {
 		['TYPE_NOTE_EMBEDDING', ModelType.NoteEmbedding],
 		['TYPE_CONFLICT_NOTE_STATE', ModelType.ConflictNoteState],
 		['TYPE_CHAT_CONVERSATION', ModelType.ChatConversation],
+		['TYPE_CHAT_MESSAGE', ModelType.ChatMessage],
 	];
 
 	private static uuidGenerator: ()=> string = uuid.create;
@@ -115,6 +117,7 @@ class BaseModel {
 	public static TYPE_NOTE_EMBEDDING = ModelType.NoteEmbedding;
 	public static TYPE_CONFLICT_NOTE_STATE = ModelType.ConflictNoteState;
 	public static TYPE_CHAT_CONVERSATION = ModelType.ChatConversation;
+	public static TYPE_CHAT_MESSAGE = ModelType.ChatMessage;
 
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Set by the app to redux dispatch; per-app action types diverge so the function is typed loosely here
 	public static dispatch: Function = function() {};

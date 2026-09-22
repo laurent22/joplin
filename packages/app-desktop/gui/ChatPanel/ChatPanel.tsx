@@ -45,8 +45,7 @@ interface Props {
 
 const disclosureSetting = 'ai.chat.disclosureAcknowledged';
 
-let nextMessageId = 0;
-const makeId = () => `m-${Date.now()}-${++nextMessageId}`;
+const makeId = () => uuid.create();
 
 const waitForNextNoteChangeOrTimeout = (noteId: string, timeout: number) => {
 	return new Promise<void>((resolve) => {
@@ -128,6 +127,19 @@ const ChatPanel: React.FC<Props> = (props) => {
 		if (historyOpen) return;
 		await loadConversationHistory();
 	}, [historyOpen, loadConversationHistory]);
+	const historyPopupRef = useRef<HTMLDivElement>(null);
+	const historyButtonRef = useRef<HTMLButtonElement>(null);
+	useEffect(() => {
+		if (!historyOpen) return () => {};
+		const onMouseDown = (event: MouseEvent) => {
+			const target = event.target as Node;
+			if (historyPopupRef.current?.contains(target) || historyButtonRef.current?.contains(target)) return;
+			setHistoryOpen(false);
+		};
+		const doc = historyButtonRef.current.ownerDocument;
+		doc.addEventListener('mousedown', onMouseDown);
+		return () => doc.removeEventListener('mousedown', onMouseDown);
+	}, [historyOpen]);
 	const [sending, setSending] = useState(false);
 	const archivingRef = useRef(false);
 	const [disclosureShown, setDisclosureShown] = useState<boolean>(() => {
@@ -152,31 +164,35 @@ const ChatPanel: React.FC<Props> = (props) => {
 
 	const windowId = useContext(WindowIdContext);
 
-	const appendMessage = useCallback((message: Omit<AiChatMessage, 'noteId' | 'noteTitle'>) => {
-		dispatch({ type: 'AI_CHAT_APPEND', windowId, message: { ...message, noteId: props.noteId ?? '', noteTitle: props.noteId ? props.noteTitle : '' } });
-	}, [dispatch, windowId, props.noteId, props.noteTitle]);
+	const appendMessage = useCallback(async (message: Omit<AiChatMessage, 'noteId' | 'noteTitle' | 'createdTime'>) => {
+		const fullMessage: AiChatMessage = { ...message, createdTime: Date.now(), noteId: props.noteId ?? '', noteTitle: props.noteId ? props.noteTitle : '' };
+		try {
+			await ChatConversation.addMessage(props.conversationId, fullMessage);
+		} catch (error) {
+			logger.error('Could not save chat message:', error);
+		}
+	}, [props.noteId, props.noteTitle, props.conversationId]);
+
+	const removeMessage = useCallback(async (id: string) => {
+		try {
+			await ChatConversation.removeMessage(props.conversationId, id);
+		} catch (error) {
+			logger.error('Could not remove chat message:', error);
+		}
+	}, [props.conversationId]);
+
+	const addToolResult = useCallback(async (result: ChatToolMessage) => {
+		try {
+			await ChatConversation.addToolResult(props.conversationId, result);
+		} catch (error) {
+			logger.error('Could not save chat tool result:', error);
+		}
+	}, [props.conversationId]);
 
 	useEffect(() => {
 		if (props.conversationId) return;
 		dispatch({ type: 'AI_CHAT_OPEN', windowId, conversationId: uuid.create(), messages });
 	}, [props.conversationId, dispatch, windowId, messages]);
-
-	useEffect(() => {
-		if (!props.conversationId || !messages.length) return;
-
-		const saveMessages = async () => {
-			try {
-				await ChatConversation.archive(props.conversationId, messages);
-			} catch (error) {
-				logger.error('Could not save chat conversation:', error);
-			}
-		};
-		void saveMessages();
-	}, [props.conversationId, messages]);
-
-	const addToolResult = useCallback((result: ChatToolMessage) => {
-		dispatch({ type: 'AI_CHAT_ADD_TOOL_RESULT', windowId, toolCall: result });
-	}, [dispatch, windowId]);
 
 	// Drop a separator when the active note changes mid-conversation. Skip
 	// the first ever opened note (no prior context to separate from).
@@ -187,7 +203,7 @@ const ChatPanel: React.FC<Props> = (props) => {
 		if (messagesLengthRef.current === 0) return;
 
 		const text = _('— now viewing: %s —', props.noteTitle || _('(untitled)'));
-		appendMessage({
+		void appendMessage({
 			id: makeId(),
 			role: 'separator',
 			text,
@@ -212,14 +228,14 @@ const ChatPanel: React.FC<Props> = (props) => {
 
 	const handleCancel = useCallback(() => {
 		cancelRequest();
-		appendMessage({ id: makeId(), role: 'assistant', text: _('(Cancelled)'), raw: [] });
+		void appendMessage({ id: makeId(), role: 'assistant', text: _('(Cancelled)'), raw: [] });
 	}, [cancelRequest, appendMessage]);
 
 	const handleSend = useCallback(async () => {
 		const text = input.trim();
 		if (!text || sending) return;
 		if (!props.noteId) {
-			appendMessage({
+			void appendMessage({
 				id: makeId(), role: 'error', text: _('Open a note to start chatting.'), raw: [],
 			});
 			return;
@@ -234,7 +250,7 @@ const ChatPanel: React.FC<Props> = (props) => {
 		// send the prior user turn as history alongside the new prompt.
 		const userTurnId = makeId();
 		let hadVisibleResponse = false;
-		appendMessage({
+		void appendMessage({
 			id: userTurnId,
 			role: 'user',
 			text,
@@ -285,11 +301,11 @@ const ChatPanel: React.FC<Props> = (props) => {
 					if (entry.role === ChatRole.System) continue;
 
 					if (entry.role === ChatRole.Tool) {
-						addToolResult(entry);
+						void addToolResult(entry);
 					} else {
 						hadVisibleResponse ||= !entry.hide;
 
-						appendMessage({
+						void appendMessage({
 							id: makeId(),
 							role: entry.role,
 							text: entry.content,
@@ -336,7 +352,7 @@ const ChatPanel: React.FC<Props> = (props) => {
 						await changeListener;
 					},
 					displayError: (message) => {
-						appendMessage({ id: makeId(), role: 'error', text: message, raw: [] });
+						void appendMessage({ id: makeId(), role: 'error', text: message, raw: [] });
 					},
 				}, onHistoryChanged, abortController.signal,
 			);
@@ -345,14 +361,14 @@ const ChatPanel: React.FC<Props> = (props) => {
 			if (abortController.signal.aborted) return;
 
 			if (!hadVisibleResponse) {
-				dispatch({ type: 'AI_CHAT_REMOVE', windowId, id: userTurnId });
+				void removeMessage(userTurnId);
 				setInput(text);
 			}
-			appendMessage({ id: makeId(), role: 'error', text: error.message || _('Something went wrong.'), raw: [] });
+			void appendMessage({ id: makeId(), role: 'error', text: error.message || _('Something went wrong.'), raw: [] });
 		} finally {
 			setSending(false);
 		}
-	}, [input, sending, props.noteId, conversationTurns, windowId, addToolResult, appendMessage, dispatch, cancelRequest, abortControllerRef]);
+	}, [input, sending, props.noteId, conversationTurns, windowId, addToolResult, appendMessage, removeMessage, cancelRequest, abortControllerRef]);
 
 	const handleAcknowledgeDisclosure = useCallback(() => {
 		Setting.setValue(disclosureSetting, true);
@@ -364,7 +380,6 @@ const ChatPanel: React.FC<Props> = (props) => {
 		archivingRef.current = true;
 		cancelRequest();
 		try {
-			await ChatConversation.archive(props.conversationId, messages);
 			const conversationId = await ChatConversation.createConversation();
 			dispatch({ type: 'AI_CHAT_OPEN', windowId, conversationId, messages: [] });
 		} catch (error) {
@@ -372,21 +387,20 @@ const ChatPanel: React.FC<Props> = (props) => {
 		} finally {
 			archivingRef.current = false;
 		}
-	}, [dispatch, windowId, cancelRequest, props.conversationId, messages]);
+	}, [dispatch, windowId, cancelRequest]);
 
 	const handleOpenConversation = useCallback(async (conversationId: string) => {
 		if (conversationId === props.conversationId || archivingRef.current) return;
 		archivingRef.current = true;
 		cancelRequest();
 		try {
-			await ChatConversation.archive(props.conversationId, messages);
 			await CommandService.instance().executeInWindow('openAiChatConversation', { windowId, args: [conversationId] });
 		} catch (error) {
 			logger.error('Could not open chat conversation:', error);
 		} finally {
 			archivingRef.current = false;
 		}
-	}, [windowId, cancelRequest, props.conversationId, messages]);
+	}, [windowId, cancelRequest, props.conversationId]);
 
 	const handleClose = useCallback(() => {
 		void CommandService.instance().executeInWindow('toggleAiChat', { windowId: windowId, args: [] });
@@ -408,10 +422,8 @@ const ChatPanel: React.FC<Props> = (props) => {
 		}
 	}, [dispatch, cancelRequest, props.conversationId]);
 
-	const handleRenameConversation = useCallback(async (conversation: { id: string; title: string }) => {
-		const answer = await dialogs.prompt(_('Conversation title:'), _('Rename conversation'), conversation.title);
-		if (answer === null) return;
-		const title = answer.trim();
+	const handleRenameConversation = useCallback(async (conversation: Conversation, newTitle: string) => {
+		const title = newTitle.trim();
 		if (!title || title === conversation.title) return;
 		try {
 			await ChatConversation.renameConversation(conversation.id, title);
@@ -537,6 +549,7 @@ const ChatPanel: React.FC<Props> = (props) => {
 					<button
 						type='button'
 						className='history toolbar-button'
+						ref={historyButtonRef}
 						onClick={handleHistoryToggle}
 						title={_('Chat history')}
 						aria-label={_('Chat history')}
@@ -558,19 +571,19 @@ const ChatPanel: React.FC<Props> = (props) => {
 					title={closeLabel}
 					aria-label={closeLabel}
 				><i className='toolbar-icon fas fa-times' role='img' aria-hidden={true}/></button>
+				{historyOpen && (
+					<ChatHistory
+						conversations={conversations}
+						currentConversationId={props.conversationId}
+						id={historyId}
+						popupRef={historyPopupRef}
+						onSearchChange={loadConversationHistory}
+						onOpen={handleOpenConversation}
+						onRename={handleRenameConversation}
+						onDelete={handleDeleteConversation}
+					/>
+				)}
 			</div>
-			{props.availabilityReason !== AvailabilityReason.Disabled && (
-				<ChatHistory
-					conversations={conversations}
-					currentConversationId={props.conversationId}
-					id={historyId}
-					hidden={!historyOpen}
-					onSearchChange={loadConversationHistory}
-					onOpen={handleOpenConversation}
-					onRename={handleRenameConversation}
-					onDelete={handleDeleteConversation}
-				/>
-			)}
 			{content}
 		</div>
 	);

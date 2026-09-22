@@ -6,8 +6,7 @@ export default (): (SqlQuery|string)[] => {
 			id TEXT PRIMARY KEY NOT NULL,
 			title TEXT NOT NULL DEFAULT "",
 			created_time INT NOT NULL,
-			updated_time INT NOT NULL,
-			archived INT NOT NULL DEFAULT 0
+			updated_time INT NOT NULL
 		)`,
 		`CREATE TABLE chat_messages (
 			id TEXT PRIMARY KEY NOT NULL,
