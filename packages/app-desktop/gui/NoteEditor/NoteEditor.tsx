@@ -243,6 +243,14 @@ function NoteEditorContent(props: NoteEditorProps) {
 		if (choice === 0) onConflictReload();
 	}, [onConflictReload, staleReason]);
 
+	const nextConflictAfter = useCallback((resolvedNoteId: string) => {
+		const at = props.notes.findIndex(note => note.id === resolvedNoteId);
+		const isNext = (note: NoteEntity) => note.is_conflict && note.id !== resolvedNoteId;
+
+		const after = props.notes.slice(at + 1).find(isNext);
+		return (after ?? props.notes.find(isNext))?.id ?? '';
+	}, [props.notes]);
+
 	const onKeepBoth = useCallback(async () => {
 		if (conflictFinishingRef.current) return;
 		conflictFinishingRef.current = true;
@@ -261,14 +269,14 @@ function NoteEditorContent(props: NoteEditorProps) {
 
 			// The note kept is no longer a conflict, so the editor moves on to the
 			// next one, or to the kept note when that was the last
-			props.dispatch({ type: 'NOTE_SELECT', id: result.nextConflictId || result.noteId });
+			props.dispatch({ type: 'NOTE_SELECT', id: nextConflictAfter(result.noteId) || result.noteId });
 		} catch (error) {
 			logger.error('Could not keep the conflict note', error);
 			bridge().showErrorMessageBox(error.message);
 		} finally {
 			conflictFinishingRef.current = false;
 		}
-	}, [props.dispatch]);
+	}, [nextConflictAfter, props.dispatch]);
 
 	const onGoToConflict = useCallback((direction: 'previous'|'next') => {
 		editorRef.current?.goToConflict?.(direction);
@@ -332,15 +340,16 @@ function NoteEditorContent(props: NoteEditorProps) {
 				return;
 			}
 
-			// The conflict note is gone, so open the note that kept the resolved content.
-			props.dispatch({ type: 'NOTE_SELECT', id: result.originalId });
+			// Move on to the next conflict so the user can keep working, falling back to
+			// the note that kept the resolved content when this was the last one
+			props.dispatch({ type: 'NOTE_SELECT', id: nextConflictAfter(note.id) || result.originalId });
 		} catch (error) {
 			logger.error('Could not finish the conflict resolution', error);
 			bridge().showErrorMessageBox(error.message);
 		} finally {
 			conflictFinishingRef.current = false;
 		}
-	}, [hasTitleConflict, resolvedTitle, remoteUpdatedTime, originalIsStale, askToReloadConflict, conflictInstallFailed, props.dispatch]);
+	}, [hasTitleConflict, resolvedTitle, remoteUpdatedTime, originalIsStale, askToReloadConflict, conflictInstallFailed, nextConflictAfter, props.dispatch]);
 
 	const shownEditorViewIds = useVisiblePluginEditorViewIds(props.plugins, windowId, conflictRestrictsEditor);
 	useConnectToEditorPlugin({
