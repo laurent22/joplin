@@ -23,9 +23,31 @@ export const deleteResourceLocally = async (resourceId: string) => {
 	}
 
 	const blobEncrypted = await Resource.shouldBlobBeEncrypted(resource);
-	await shim.fsDriver().remove(plainTextPath);
-	if (await shim.fsDriver().exists(encryptedPath)) await shim.fsDriver().remove(encryptedPath);
-	await Resource.setLocalFileMissing(resource.id, blobEncrypted);
+	const fsDriver = shim.fsDriver();
+	const filesToStage = [plainTextPath];
+	if (await fsDriver.exists(encryptedPath)) filesToStage.push(encryptedPath);
+	const stagedFiles: { originalPath: string; stagedPath: string }[] = [];
+
+	try {
+		for (const originalPath of filesToStage) {
+			const stagedPath = await fsDriver.findUniqueFilename(`${originalPath}.delete`);
+			await fsDriver.move(originalPath, stagedPath);
+			stagedFiles.push({ originalPath, stagedPath });
+		}
+
+		await Resource.setLocalFileMissing(resource.id, blobEncrypted);
+	} catch (error) {
+		for (const { originalPath, stagedPath } of stagedFiles.reverse()) {
+			try {
+				await fsDriver.move(stagedPath, originalPath);
+			} catch (restoreError) {
+				logger.error(`Could not restore staged resource file ${stagedPath}`, restoreError);
+			}
+		}
+		throw error;
+	}
+
+	for (const { stagedPath } of stagedFiles) await fsDriver.remove(stagedPath);
 };
 
 export const deleteSyncedResourcesLocally = async () => {

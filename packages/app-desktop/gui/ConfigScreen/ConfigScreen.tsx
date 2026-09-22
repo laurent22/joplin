@@ -278,7 +278,7 @@ class ConfigScreenComponent extends React.Component<Props, State> {
 		}
 
 		if (section.name === 'sync') {
-			if (this.props.settings['sync.resourceDownloadMode'] !== 'always') {
+			if (settings['sync.resourceDownloadMode'] !== 'always') {
 				const resourceDownloadModeIndex = advancedSettingComps.findIndex(component => component.key === 'sync.resourceDownloadMode');
 				if (resourceDownloadModeIndex >= 0) {
 					advancedSettingComps.splice(resourceDownloadModeIndex + 1, 0,
@@ -638,4 +638,3 @@ const mapStateToProps = (state: AppState) => {
 };
 
 export default connect(mapStateToProps)(ConfigScreenComponent);
-

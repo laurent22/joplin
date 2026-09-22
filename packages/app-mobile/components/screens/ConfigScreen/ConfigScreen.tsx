@@ -553,7 +553,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		}
 
 		if (section.name === 'sync') {
-			if (this.props.settings['sync.resourceDownloadMode'] !== 'always') {
+			if (settings['sync.resourceDownloadMode'] !== 'always') {
 				const resourceDownloadModeIndex = advancedSettingComps.findIndex(component => component.key === 'sync.resourceDownloadMode');
 				if (resourceDownloadModeIndex >= 0) {
 					const title = _('Delete synced attachments locally');
