@@ -235,6 +235,28 @@ export async function testFilePerformance(method: EncryptionMethod, dataSize: nu
 	}
 }
 
+const checkRandomBytes = async () => {
+	const randomBytes = await shim.randomBytes(100);
+
+	if (randomBytes.length !== 100) {
+		throw new Error(`shim.randomBytes(100) has unexpected length ${randomBytes.length}`);
+	}
+
+	let sum = 0;
+	for (const b of randomBytes) {
+		sum += b;
+
+		if (b < 0 || b > 255 || !isFinite(b)) {
+			throw new Error(`randomBytes test failed: Byte out of range: ${b}`);
+		}
+	}
+
+	// It's extremely unlikely that all 100 bytes will all be zero by chance:
+	if (sum === 0) {
+		throw new Error('randomBytes test failed: Did not generate a non-zero byte.');
+	}
+};
+
 // cSpell:disable
 
 // Data generated on desktop, using node:crypto in packages/lib/services/e2ee/crypto.ts
@@ -277,6 +299,9 @@ export const runIntegrationTests = async (silent = false, testPerformance = fals
 
 	log('Testing bufferToString...');
 	checkBufferToString();
+
+	log('Testing shim.randomBytes...');
+	await checkRandomBytes();
 
 	log('Decrypting using known data...');
 	for (const testLabel in decryptTestData) {
