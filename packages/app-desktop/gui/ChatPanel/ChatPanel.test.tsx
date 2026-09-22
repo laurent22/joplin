@@ -141,6 +141,17 @@ describe('ChatPanel', () => {
 		expect(opened.backgroundWindows.second.aiChatMessages).toEqual([]);
 	});
 
+	it('should not add an empty conversation to history', async () => {
+		await saveConversation('chat-1', 'Current chat');
+		const before = await ChatConversation.history();
+		const dispatch = jest.fn();
+		const view = renderPanel({ conversationId: 'chat-1', messages: [message], dispatch });
+		await act(async () => { fireEvent.click(view.getByRole('button', { name: 'New chat' })); });
+		await waitFor(() => expect(dispatch).toHaveBeenCalled());
+		const after = await ChatConversation.history();
+		expect(after).toHaveLength(before.length);
+	});
+
 	it('should open the selected history row in the current window', async () => {
 		await saveConversation('chat-1', 'Current chat');
 		await saveConversation('chat-2', 'Saved chat');

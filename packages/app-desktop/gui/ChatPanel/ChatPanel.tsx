@@ -375,18 +375,11 @@ const ChatPanel: React.FC<Props> = (props) => {
 		setDisclosureShown(true);
 	}, []);
 
-	const handleNewChat = useCallback(async () => {
+	const handleNewChat = useCallback(() => {
 		if (archivingRef.current) return;
-		archivingRef.current = true;
 		cancelRequest();
-		try {
-			const conversationId = await ChatConversation.createConversation();
-			dispatch({ type: 'AI_CHAT_OPEN', windowId, conversationId, messages: [] });
-		} catch (error) {
-			logger.error('Could not start new conversation:', error);
-		} finally {
-			archivingRef.current = false;
-		}
+		// Only saved once a message is sent so empty chats don't show up in history
+		dispatch({ type: 'AI_CHAT_OPEN', windowId, conversationId: uuid.create(), messages: [] });
 	}, [dispatch, windowId, cancelRequest]);
 
 	const handleOpenConversation = useCallback(async (conversationId: string) => {
