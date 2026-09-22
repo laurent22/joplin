@@ -130,7 +130,6 @@ const useAudioRecorder = (onFileSaved: OnFileSavedCallback, onDismiss: ()=> void
 				const notificationPermission = await requestNotificationPermissionsAsync();
 				if (!notificationPermission.granted) {
 					allowsBackgroundRecording = false;
-					await shim.showErrorDialog(_('Notification permissions are missing: Audio recording may stop if Joplin is moved to the background.'));
 				}
 			}
 
