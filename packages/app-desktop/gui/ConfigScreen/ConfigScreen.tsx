@@ -638,3 +638,4 @@ const mapStateToProps = (state: AppState) => {
 };
 
 export default connect(mapStateToProps)(ConfigScreenComponent);
+
