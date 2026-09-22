@@ -1,5 +1,6 @@
 import { Mutex } from 'async-mutex';
 import BaseModel, { ModelType } from '../BaseModel';
+import markdownUtils from '../markdownUtils';
 import { ChatMessage as ChatTurn, ChatRole, ChatToolMessage } from '../services/ai/types';
 import ChatMessage from './ChatMessage';
 
@@ -128,7 +129,7 @@ export default class ChatConversation extends BaseModel {
 	}
 
 	private static async saveForMessage(conversationId: string, message: ChatHistoryMessage) {
-		const title = message.role === 'user' ? message.text.slice(0, 80) : '';
+		const title = message.role === 'user' ? markdownUtils.titleFromBody(message.text) : '';
 		const bumpsUpdatedTime = message.role === 'user' || message.role === 'assistant';
 		const conversation = await this.load(conversationId, { fields: ['id', 'title', 'updated_time'] });
 		if (!conversation) {
