@@ -22,9 +22,10 @@ export const deleteResourceLocally = async (resourceId: string) => {
 		return;
 	}
 
+	const blobEncrypted = await Resource.shouldBlobBeEncrypted(resource);
 	await shim.fsDriver().remove(plainTextPath);
 	if (await shim.fsDriver().exists(encryptedPath)) await shim.fsDriver().remove(encryptedPath);
-	await Resource.setLocalFileMissing(resource.id, await Resource.shouldBlobBeEncrypted(resource));
+	await Resource.setLocalFileMissing(resource.id, blobEncrypted);
 };
 
 export const deleteSyncedResourcesLocally = async () => {

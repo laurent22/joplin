@@ -398,7 +398,10 @@ export default class Resource extends BaseItem {
 			fetch_status: Resource.FETCH_STATUS_IDLE,
 			fetch_error: '',
 		}));
-		queries.push(...this.markForDownloadQueries(resourceId));
+		queries.push({
+			sql: 'DELETE FROM resources_to_download WHERE resource_id = ?',
+			params: [resourceId],
+		});
 		await this.db().transactionExecBatch(queries);
 	}
 

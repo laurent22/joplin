@@ -112,6 +112,20 @@ describe('models/Resource', () => {
 		expect(!ls.id).toBe(true);
 	}));
 
+	it('should mark a locally deleted resource as missing without queuing a download', async () => {
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'note', parent_id: folder.id });
+		await shim.attachFileToNote(note, testImagePath);
+		const resource = (await Resource.all())[0];
+		await Resource.markForDownload(resource.id);
+
+		await Resource.setLocalFileMissing(resource.id, false);
+
+		expect((await Resource.localState(resource)).fetch_status).toBe(Resource.FETCH_STATUS_IDLE);
+		expect(await Resource.needToBeFetched('auto')).toHaveLength(0);
+		expect((await Resource.needToBeFetched('always')).map(r => r.id)).toContain(resource.id);
+	});
+
 	it('should resize the resource if the image is below the required dimensions', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
