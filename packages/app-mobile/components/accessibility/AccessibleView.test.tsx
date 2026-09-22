@@ -38,13 +38,18 @@ describe('AccessibleView', () => {
 	const findNodeHandleMock = findNodeHandle as jest.Mock;
 	beforeEach(() => {
 		findNodeHandleMock.mockRestore();
+		findNodeHandleMock.mockImplementation(() => null);
 	});
 
 	test('should wait for the currently-open dialog to dismiss before applying focus requests', () => {
 		const setFocusMock = AccessibilityInfo.setAccessibilityFocus as jest.Mock;
 		setFocusMock.mockClear();
-		// Mock findNodeHandle: In a testing environment, it always returns null:
-		findNodeHandleMock.mockImplementation(() => 1);
+		findNodeHandleMock.mockImplementation(() => {
+			// Since the React 19.2 upgrade, findNodeHandle with react-test-renderer
+			// seems to return null even for views that exist. Mock a non-null return value:
+			const mockViewId = 1;
+			return mockViewId;
+		});
 
 		interface TestContentOptions {
 			modalState: ModalState;
