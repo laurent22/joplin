@@ -1,3 +1,6 @@
+# This patch makes react-native-quick-actions compatible with the iOS UIKit
+# scene-based lifecycle. Requires calling `setInitialAction` on app load when
+# started from a quick action.
 diff --git a/RNQuickAction/RNQuickAction/RNQuickActionManager.h b/RNQuickAction/RNQuickAction/RNQuickActionManager.h
 index ad4baad075513115892bd120a278f1ba664480b7..7a366391a48e77d7b08eb2741d2a499a267304b8 100644
 --- a/RNQuickAction/RNQuickAction/RNQuickActionManager.h
