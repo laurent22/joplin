@@ -22,18 +22,6 @@ describe('ChatConversation', () => {
 		BaseModel.dispatch = () => {};
 	});
 
-	it('should create and load conversations through the base model', async () => {
-		const id = await ChatConversation.createConversation();
-		const conversation = await ChatConversation.load(id);
-		expect(id).toMatch(/^[a-f0-9]{32}$/);
-		expect(conversation).toMatchObject({ id, title: '', type_: ModelType.ChatConversation });
-		expect(conversation.created_time).toBeGreaterThan(0);
-		expect(conversation.updated_time).toBe(conversation.created_time);
-		expect(BaseModel.modelTypeToName(conversation.type_)).toBe('chat_conversation');
-		expect(BaseModel.modelNameToType('chat_conversation')).toBe(ModelType.ChatConversation);
-		expect(await ChatConversation.messages(id)).toEqual([]);
-	});
-
 	it('should fill the conversation from the first message, save it through the message model and dispatch it', async () => {
 		const id = uuid.create();
 		const message = makeMessage();

@@ -53,11 +53,6 @@ export default class ChatConversation extends BaseModel {
 		`, [searchQuery, searchQuery]);
 	}
 
-	public static async createConversation() {
-		const conversation = await this.save({});
-		return conversation.id;
-	}
-
 	public static async renameConversation(id: string, title: string) {
 		await this.save({ id, title }, { autoTimestamp: false });
 	}
