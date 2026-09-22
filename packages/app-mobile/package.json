@@ -108,6 +108,7 @@
     "@react-native-community/cli-platform-android": "20.2.0",
     "@react-native-community/cli-platform-ios": "20.2.0",
     "@react-native/babel-preset": "0.86.2",
+    "@react-native/jest-preset": "0.86.2",
     "@react-native/metro-config": "0.86.2",
     "@react-native/typescript-config": "0.86.2",
     "@sqlite.org/sqlite-wasm": "3.46.0-build2",
