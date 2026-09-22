@@ -137,7 +137,7 @@
     "react-dom": "19.2.3",
     "react-native-web": "0.21.2",
     "react-refresh": "0.18.0",
-    "react-test-renderer": "19.1.4",
+    "react-test-renderer": "19.2.3",
     "sharp": "0.34.5",
     "sqlite3": "5.1.6",
     "timers-browserify": "2.0.12",

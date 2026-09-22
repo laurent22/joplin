@@ -133,12 +133,6 @@ jest.mock('react-native-zip-archive', () => {
 
 jest.mock('@react-native-documents/picker', () => ({ default: { } }));
 
-// This is one of the icon libraries that react-native-paper attempts to use.
-// Throwing an Error causes react-native-paper to select a different icon library
-// that better supports our automated testing environment.
-jest.doMock('@expo/vector-icons/MaterialCommunityIcons', () => {
-	throw new Error('Not supported in testing environments.');
-});
 
 const mockIconLibrary = (libraryName, exportName) => {
 	jest.doMock(libraryName, () => {
