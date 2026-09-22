@@ -38,12 +38,13 @@ import getVersionInfoText from '../../../utils/getVersionInfoText';
 import JoplinCloudConfig, { emailToNoteDescription, emailToNoteLabel } from './JoplinCloudConfig';
 import NoteLockConfig from './NoteLockConfig';
 import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
-import shim from '@joplin/lib/shim';
+import shim, { MessageBoxType } from '@joplin/lib/shim';
 import SettingsToggle from './SettingsToggle';
 import { UpdateSettingValueCallback } from './types';
 import Folder from '@joplin/lib/models/Folder';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
+import { deleteSyncedResourcesLocally } from '@joplin/lib/services/deleteResourceLocally';
 
 interface ConfigScreenState {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Settings values are heterogeneous (string/number/boolean/object) and accessed by string key across many call sites; tightening to `unknown` forces casts everywhere
@@ -165,6 +166,17 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 	private noteResourcesButtonPress_ = () => {
 		void NavService.go('NoteResources');
+	};
+
+	private deleteSyncedResourcesLocally_ = async () => {
+		const answer = await shim.showMessageBox(_('Delete all synced attachments from this device?'), {
+			buttons: [_('Yes'), _('No')],
+			defaultId: 1,
+			cancelId: 1,
+			type: MessageBoxType.Confirm,
+		});
+		if (answer !== 0) return;
+		await deleteSyncedResourcesLocally();
 	};
 
 	private fixSearchEngineIndexButtonPress_ = async () => {
@@ -541,6 +553,16 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		}
 
 		if (section.name === 'sync') {
+			if (this.props.settings['sync.resourceDownloadMode'] !== 'always') {
+				const resourceDownloadModeIndex = advancedSettingComps.findIndex(component => component.key === 'sync.resourceDownloadMode');
+				if (resourceDownloadModeIndex >= 0) {
+					const title = _('Delete synced attachments locally');
+					advancedSettingComps.splice(resourceDownloadModeIndex + 1, 0,
+						this.renderButton('delete_synced_resources_locally_button', title, this.deleteSyncedResourcesLocally_),
+					);
+				}
+			}
+
 			addSettingButton('e2ee_config_button', _('Encryption Config'), this.e2eeConfig_);
 		}
 

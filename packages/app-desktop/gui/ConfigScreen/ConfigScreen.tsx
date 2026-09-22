@@ -31,6 +31,7 @@ import { OnChangeEvent } from '../lib/SearchInput/SearchInput';
 import highlightSearchText from './searchHighlight';
 import { UpdateSettingValueEvent } from './types';
 import { Dispatch } from 'redux';
+import { deleteSyncedResourcesLocally } from '@joplin/lib/services/deleteResourceLocally';
 
 
 interface Font {
@@ -119,6 +120,17 @@ class ConfigScreenComponent extends React.Component<Props, State> {
 		}
 		return await shared.checkSyncConfig(this, this.state.settings);
 	}
+
+	private deleteSyncedResourcesLocally_ = async () => {
+		const answer = await shim.showMessageBox(_('Delete all synced attachments from this device?'), {
+			buttons: [_('Yes'), _('No')],
+			defaultId: 1,
+			cancelId: 1,
+			type: MessageBoxType.Confirm,
+		});
+		if (answer !== 0) return;
+		await deleteSyncedResourcesLocally();
+	};
 
 	public UNSAFE_componentWillMount() {
 		this.setState({ settings: this.props.settings });
@@ -266,6 +278,21 @@ class ConfigScreenComponent extends React.Component<Props, State> {
 		}
 
 		if (section.name === 'sync') {
+			if (this.props.settings['sync.resourceDownloadMode'] !== 'always') {
+				const resourceDownloadModeIndex = advancedSettingComps.findIndex(component => component.key === 'sync.resourceDownloadMode');
+				if (resourceDownloadModeIndex >= 0) {
+					advancedSettingComps.splice(resourceDownloadModeIndex + 1, 0,
+						<div key="delete_synced_resources_locally_button" style={this.rowStyle_}>
+							<Button
+								title={_('Delete synced attachments locally')}
+								level={ButtonLevel.Secondary}
+								onClick={this.deleteSyncedResourcesLocally_}
+							/>
+						</div>,
+					);
+				}
+			}
+
 			const syncTargetMd = SyncTargetRegistry.idToMetadata(settings['sync.target'] as number);
 			const statusStyle = { ...theme.textStyle, marginTop: 10 };
 			const warningStyle = { ...theme.textStyle, color: theme.colorWarn };

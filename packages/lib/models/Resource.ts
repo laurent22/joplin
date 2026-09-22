@@ -270,6 +270,11 @@ export default class Resource extends BaseItem {
 		return { path: encryptedPath, resource: resourceCopy };
 	}
 
+	public static async shouldBlobBeEncrypted(resource: ResourceEntity) {
+		const share = resource.share_id ? await this.shareService().shareById(resource.share_id) : null;
+		return getEncryptionEnabled() && itemCanBeEncrypted(resource as Parameters<typeof itemCanBeEncrypted>[0], share);
+	}
+
 	public static markupTag(resource: ResourceEntity & { alt?: string }, markupLanguage: MarkupLanguage = MarkupLanguage.Markdown) {
 		let tagAlt = resource.alt ? resource.alt : resource.title;
 		if (!tagAlt) tagAlt = '';
@@ -371,9 +376,40 @@ export default class Resource extends BaseItem {
 	}
 
 	public static async markForDownload(resourceId: string) {
-		// Insert the row only if it's not already there
+		await this.db().transactionExecBatch(this.markForDownloadQueries(resourceId));
+	}
+
+	private static markForDownloadQueries(resourceId: string): SqlQuery[] {
 		const t = Date.now();
-		await this.db().exec('INSERT INTO resources_to_download (resource_id, updated_time, created_time) SELECT ?, ?, ? WHERE NOT EXISTS (SELECT 1 FROM resources_to_download WHERE resource_id = ?)', [resourceId, t, t, resourceId]);
+		return [{
+			sql: 'INSERT INTO resources_to_download (resource_id, updated_time, created_time) SELECT ?, ?, ? WHERE NOT EXISTS (SELECT 1 FROM resources_to_download WHERE resource_id = ?)',
+			params: [resourceId, t, t, resourceId],
+		}];
+	}
+
+	public static async setLocalFileMissing(resourceId: string, blobEncrypted: boolean) {
+		const queries: SqlQuery[] = [{
+			// This flag describes the local blob and must not make the resource metadata
+			// appear modified or cause it to be uploaded.
+			sql: 'UPDATE resources SET encryption_blob_encrypted = ? WHERE id = ?',
+			params: [blobEncrypted ? 1 : 0, resourceId],
+		}];
+		queries.push(...this.setLocalStateQueries(resourceId, {
+			fetch_status: Resource.FETCH_STATUS_IDLE,
+			fetch_error: '',
+		}));
+		queries.push(...this.markForDownloadQueries(resourceId));
+		await this.db().transactionExecBatch(queries);
+	}
+
+	public static async canDeleteLocalFile(resource: ResourceEntity) {
+		const syncTarget = Number(Setting.value('sync.target'));
+		if (!syncTarget) return false;
+
+		const syncItem = await this.syncItem(syncTarget, resource.id, { fields: ['sync_time', 'force_sync'] });
+		if (!syncItem || syncItem.force_sync) return false;
+
+		return syncItem.sync_time >= resource.updated_time && syncItem.sync_time >= resource.blob_updated_time;
 	}
 
 	public static async downloadedButEncryptedBlobCount(excludedIds: string[] = null) {

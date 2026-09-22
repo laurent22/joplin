@@ -1713,6 +1713,8 @@ packages/lib/services/database/migrations/index.js
 packages/lib/services/database/sqlStringToLines.js
 packages/lib/services/database/types.js
 packages/lib/services/debug/populateDatabase.js
+packages/lib/services/deleteResourceLocally.test.js
+packages/lib/services/deleteResourceLocally.js
 packages/lib/services/e2ee/EncryptionService.test.js
 packages/lib/services/e2ee/EncryptionService.js
 packages/lib/services/e2ee/crypto.test.js
