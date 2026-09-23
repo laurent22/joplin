@@ -1,3 +1,6 @@
+// Set to true once a Windows ARM64 build is published in a release.
+const windowsArm64Enabled = false;
+
 async function getOs() {
 
 	// The macOS release is available for Intel and Apple silicon processors,
@@ -25,7 +28,21 @@ async function getOs() {
 		}
 	}
 
-	if (navigator.appVersion.indexOf("Win")!=-1) return "windows";
+	// Windows on ARM has the same appVersion as x64, so the architecture has to
+	// come from getHighEntropyValues, as for Apple Silicon above. Falling back
+	// to the x64 build is fine - it runs on ARM under emulation.
+	if (navigator.appVersion.indexOf("Win")!=-1) {
+		if (windowsArm64Enabled) {
+			try {
+				const platformInfo = await navigator.userAgentData.getHighEntropyValues(['architecture']);
+				console.info('Got platform info:', platformInfo);
+				if (platformInfo.architecture === 'arm') return "windowsArm64";
+			} catch (error) {
+				console.warn('Failed getting Windows architecture:', error);
+			}
+		}
+		return "windows";
+	}
 	if (navigator.appVersion.indexOf("X11")!=-1) return "linux";
 	if (navigator.appVersion.indexOf("Linux")!=-1) return "linux";
 	return null;
@@ -78,7 +95,12 @@ async function setupDownloadPage() {
 	$('.page-download .get-it-desktop a').each(function() {
 		const href = $(this).attr('href');
 		
-		if (href.indexOf('-Setup') > 0) downloadLinks['windows'] = href;
+		// The arm64 installer is also named "-Setup", so it must be excluded
+		// from the x64 link even when disabled, or it would overwrite it.
+		if (href.indexOf('-arm64.exe') > 0) {
+			if (windowsArm64Enabled) downloadLinks['windowsArm64'] = href;
+		}
+		else if (href.indexOf('-Setup') > 0) downloadLinks['windows'] = href;
 		if (href.indexOf('.dmg') > 0) downloadLinks['macOs'] = href;
 		if (href.indexOf('arm64.DMG') > 0) downloadLinks['macOsM1'] = href;
 		if (href.indexOf('.AppImage') > 0) downloadLinks['linux'] = href;

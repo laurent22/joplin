@@ -1,0 +1,15 @@
+diff --git a/binary.js b/binary.js
+index f91bdbd2e4b9bfb3a6376849598a9352f8678584..f42f96aef91c483c88fdd47ff82473069ce3456d 100644
+--- a/binary.js
++++ b/binary.js
+@@ -9,7 +9,9 @@ const getPlatform = () => {
+   const arch = os.arch();
+ 
+   // https://github.com/nodejs/node/blob/c3664227a83cf009e9a2e1ddeadbd09c14ae466f/deps/uv/src/win/util.c#L1566-L1573
+-  if ((type === "Windows_NT" || type.startsWith("MINGW32_NT-")) && arch === "x64") {
++  // arm64 uses the x64 binary, which runs under emulation - as for Darwin
++  // below. Upstream publishes no aarch64-pc-windows-msvc build.
++  if ((type === "Windows_NT" || type.startsWith("MINGW32_NT-")) && (arch === "x64" || arch === "arm64")) {
+     return windows;
+   }
+   if (type === "Linux" && arch === "x64") {

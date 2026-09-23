@@ -72,6 +72,8 @@ import { dirname } from '@joplin/utils/path';
 import SyncTargetJoplinServerSAML from '../SyncTargetJoplinServerSAML';
 import { MarkupLanguage } from '@joplin/renderer';
 import SearchEngine from '../services/search/SearchEngine';
+import { getCACertificates } from 'node:tls';
+import setExtraRootCertificates from '../utils/tls/setExtraRootCertificates';
 
 // Each suite has its own separate data and temp directory so that multiple
 // suites can be run at the same time. suiteName is what is used to
@@ -1183,6 +1185,17 @@ export const mockFetch = (requestHandler: MockFetchRequestHandler) => {
 			shim.fetch = originalFetch;
 		},
 	};
+};
+
+export const withExtraRootCa = async <T> (caPemData: string, task: ()=> Promise<T>) => {
+	const trustedCas = getCACertificates();
+	try {
+		await setExtraRootCertificates([...trustedCas, caPemData].map(cert => ({ pem: cert })));
+
+		await task();
+	} finally {
+		await setExtraRootCertificates(trustedCas.map(cert => ({ pem: cert })));
+	}
 };
 
 interface WithWarningSilencedOptions {

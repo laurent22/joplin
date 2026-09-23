@@ -91,10 +91,6 @@ const shimInit = () => {
 		return null;
 	};
 
-	shim.httpAgents = () => {
-		return { http: null, https: null };
-	};
-
 	shim.waitForFrame = () => {
 		return new Promise<void>((resolve) => {
 			requestAnimationFrame(() => {

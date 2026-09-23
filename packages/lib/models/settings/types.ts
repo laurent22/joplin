@@ -22,6 +22,11 @@ export enum SettingStorage {
 	File = 2,
 }
 
+export enum SettingButtonStyle {
+	Default = 0,
+	Highlighted = 1,
+}
+
 
 // This is the definition of a setting item
 export interface SettingItem {
@@ -49,6 +54,7 @@ export interface SettingItem {
 	maximum?: number;
 	step?: number;
 	onClick?(): void;
+	buttonStyle?: SettingButtonStyle;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partially refactored old code before rule was applied
 	unitLabel?: (value: any)=> string;
 	needRestart?: boolean;

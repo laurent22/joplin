@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Platform, Linking, View, ScrollView, Text, TouchableOpacity, Alert, PermissionsAndroid, Dimensions, AccessibilityInfo, LayoutChangeEvent } from 'react-native';
-import Setting, { AppType, SettingMetadataSection } from '@joplin/lib/models/Setting';
+import Setting, { AppType, SettingMetadataSection, SettingValueType } from '@joplin/lib/models/Setting';
 import NavService from '@joplin/lib/services/NavService';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import checkPermissions from '../../../utils/checkPermissions';
@@ -97,10 +97,6 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 		shared.init(reg);
 	}
-
-	private goToJoplinCloudLogin_ = async () => {
-		await NavService.go('JoplinCloudLogin');
-	};
 
 	private goToJoplinServerSamlLogin_ = async () => {
 		// Save the settings to allow for sync when the user completes authentication
@@ -374,6 +370,10 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		);
 	}
 
+	private onSettingButtonPress_ = async (key: string) => {
+		await shared.onSettingButtonPress(this, Setting.settingMetadata(key));
+	};
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See ConfigScreenState.settings — same reason
 	public sectionToComponent(key: string, section: SettingMetadataSection, settings: Record<string, any>, isSelected: boolean) {
 		const settingComps: ReactElement[] = [];
@@ -468,9 +468,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 						</View>
 					);
 
-					if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud')) {
-						addSettingButton('go_to_joplin_cloud_login_button', _('Connect to Joplin Cloud'), this.goToJoplinCloudLogin_);
-					} else if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServerSaml')) {
+					if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServerSaml')) {
 						addSettingButton('login_joplin_server_saml_button', _('Connect using your organisation account'), this.goToJoplinServerSamlLogin_);
 
 						if (Setting.value('sync.11.id') !== '' || Setting.value('sync.11.userId') !== '') {
@@ -719,6 +717,11 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		/>;
 	}
 
+	public setSettingValue = async <Key extends string> (key: Key, value: SettingValueType<Key>): Promise<void> => {
+		const handled = await this.handleSetting(key, value);
+		if (!handled) shared.updateSettingValue(this, key, value);
+	};
+
 	private handleSetting = async (key: string, value: unknown): Promise<boolean> => {
 		// When the user tries to enable biometrics unlock, we ask for the
 		// fingerprint or Face ID, and if it's correct we save immediately. If
@@ -743,18 +746,14 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 	};
 
 	public settingToComponent(key: string, value: unknown) {
-		const updateSettingValue = async (key: string, value: unknown) => {
-			const handled = await this.handleSetting(key, value);
-			if (!handled) shared.updateSettingValue(this, key, value);
-		};
-
 		return (
 			<SettingComponent
 				key={key}
 				settingId={key}
 				value={value}
 				themeId={this.props.themeId}
-				updateSettingValue={updateSettingValue}
+				onUpdateSettingValue={this.setSettingValue}
+				onSettingButtonClick={this.onSettingButtonPress_}
 				styles={this.styles()}
 			/>
 		);
@@ -762,13 +761,9 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See ConfigScreenState.settings — same reason
 	private renderFeatureFlags(settings: Record<string, any>, featureFlagKeys: string[]): ReactElement[] {
-		const updateSettingValue = (key: string, value: unknown) => {
-			return shared.updateSettingValue(this, key, value);
-		};
-
 		const output: ReactElement[] = [];
 		for (const key of featureFlagKeys) {
-			output.push(this.renderToggle(key, key, settings[key], updateSettingValue));
+			output.push(this.renderToggle(key, key, settings[key], this.setSettingValue));
 		}
 		return output;
 	}

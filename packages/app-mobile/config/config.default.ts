@@ -1,4 +1,4 @@
 
 export default {
-	runStartupTests: __DEV__,
+	runStartupTests: () => __DEV__,
 };

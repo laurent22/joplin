@@ -1,4 +1,20 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Joplin]]></title><description><![CDATA[Joplin, the open source note-taking application]]></description><link>https://joplinapp.org</link><generator>RSS for Node</generator><lastBuildDate>Mon, 31 Aug 2026 00:00:00 GMT</lastBuildDate><atom:link href="https://joplinapp.org/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Mon, 31 Aug 2026 00:00:00 GMT</pubDate><item><title><![CDATA[What's new in Joplin 3.7]]></title><description><![CDATA[<p>Joplin 3.7 is the release where AI arrives in the app. A new chat panel lets you ask questions about the note you're working on, semantic search finds notes by meaning rather than by keyword, and a built-in MCP server allows external tools to work with your notes.</p>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Joplin]]></title><description><![CDATA[Joplin, the open source note-taking application]]></description><link>https://joplinapp.org</link><generator>RSS for Node</generator><lastBuildDate>Mon, 14 Sep 2026 00:00:00 GMT</lastBuildDate><atom:link href="https://joplinapp.org/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Mon, 14 Sep 2026 00:00:00 GMT</pubDate><item><title><![CDATA[Your notes and AI: privacy first]]></title><description><![CDATA[<p>AI can be useful for summarising, rewriting and asking questions about your notes. But your notes are private, so you should always know where your data is going.</p>
+<p><strong>Joplin does not send your notes to an AI service by default.</strong> AI features are disabled by default, and you have to explicitly enable them and choose an AI provider. <a href="https://joplinapp.org/help/apps/ai_chat">Learn more about AI Chat</a>.</p>
+<h2>Keep your notes on your own device<a name="keep-your-notes-on-your-own-device" href="#keep-your-notes-on-your-own-device" class="heading-anchor">🔗</a></h2>
+<p>You can connect Joplin to a local AI model, such as Ollama or LM Studio. In this case, your notes stay within your own device or private network and are not sent to an external service.</p>
+<p>Joplin also blocks remote AI providers by default, as an additional safeguard.</p>
+<h2>You control what AI can access<a name="you-control-what-ai-can-access" href="#you-control-what-ai-can-access" class="heading-anchor">🔗</a></h2>
+<p>Joplin lets you choose <strong>which tools are available to AI</strong>. This applies both to AI Chat and to the Model Context Protocol (MCP) integration.</p>
+<p>For example, you can allow an AI assistant to search your notes without giving it permission to modify them. You can enable or disable individual tools depending on what you are comfortable with.</p>
+<p>This means that connecting an AI service to Joplin does not automatically give it unrestricted access to your data or to all of Joplin's capabilities. <a href="https://joplinapp.org/help/apps/ai_mcp">Learn more about MCP</a>.</p>
+<h2>If you use a cloud AI provider<a name="if-you-use-a-cloud-ai-provider" href="#if-you-use-a-cloud-ai-provider" class="heading-anchor">🔗</a></h2>
+<p>You can connect Joplin to cloud AI services such as Joplin Cloud AI, OpenAI or Anthropic. When you do, the relevant data is sent to the provider you have selected.</p>
+<p>For AI Chat, Joplin only sends the note content required for your request — such as the currently open note or selected text — rather than automatically sending your entire notebook. <a href="https://joplinapp.org/help/apps/ai_chat_panel">Learn more about the AI Chat panel</a>.</p>
+<h2>You are in control<a name="you-are-in-control" href="#you-are-in-control" class="heading-anchor">🔗</a></h2>
+<p>Joplin's approach is simple: <strong>AI should be opt-in, transparent and configurable.</strong></p>
+<p>You choose whether to use AI, which provider to use, whether to use a local or remote model, and which tools that AI is allowed to access.</p>
+<p>If you want maximum privacy, use a local AI model and only enable the tools you actually need.</p>
+]]></description><link>https://joplinapp.org/news/20260914-ai-privacy</link><guid isPermaLink="false">20260914-ai-privacy</guid><pubDate>Mon, 14 Sep 2026 00:00:00 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[What's new in Joplin 3.7]]></title><description><![CDATA[<p>Joplin 3.7 is the release where AI arrives in the app. A new chat panel lets you ask questions about the note you're working on, semantic search finds notes by meaning rather than by keyword, and a built-in MCP server allows external tools to work with your notes.</p>
 <p>Alongside this, the desktop app gains whiteboards - a new way to lay out notes and ideas visually - while mobile continues its interface redesign. Both platforms benefit from a more capable Markdown table editor and a number of sync reliability improvements.</p>
 <h2>Improvements across desktop and mobile<a name="improvements-across-desktop-and-mobile" href="#improvements-across-desktop-and-mobile" class="heading-anchor">🔗</a></h2>
 <h3>A real table editor in the Markdown editor<a name="a-real-table-editor-in-the-markdown-editor" href="#a-real-table-editor-in-the-markdown-editor" class="heading-anchor">🔗</a></h3>
@@ -568,34 +584,4 @@ sys 0m38.013s</p>
 <li>Android: <a href="https://joplinapp.org/help/about/changelog/android">https://joplinapp.org/help/about/changelog/android</a></li>
 <li>iOS: <a href="https://joplinapp.org/help/about/changelog/ios">https://joplinapp.org/help/about/changelog/ios</a></li>
 </ul>
-]]></description><link>https://joplinapp.org/news/20230508-release-2-12</link><guid isPermaLink="false">20230508-release-2-12</guid><pubDate>Wed, 06 Sep 2023 12:00:00 GMT</pubDate><twitter-text>What&apos;s new in Joplin 2.12</twitter-text></item><item><title><![CDATA[What's new in Joplin 2.11]]></title><description><![CDATA[<h2>Desktop<a name="desktop" href="#desktop" class="heading-anchor">🔗</a></h2>
-<h3>Add support for plugin user data<a name="add-support-for-plugin-user-data" href="#add-support-for-plugin-user-data" class="heading-anchor">🔗</a></h3>
-<p>Developers of plugins now have the ability to associate additional information with notes, notebooks, and tags. This data is then synchronized across multiple devices. For instance, it is possible to envision attaching OCR data to an image or incorporating plugin-specific parameters to a note, which can subsequently be synchronized across all devices.</p>
-<h3>Improved end-to-end encryption<a name="improved-end-to-end-encryption" href="#improved-end-to-end-encryption" class="heading-anchor">🔗</a></h3>
-<p>End-to-end encryption (E2EE) plays a vital role in safeguarding your data privacy. Our aim is to make it effortlessly user-friendly, seamlessly integrated, and possibly enabled by default.</p>
-<p>To achieve this objective, we have implemented several enhancements in this version. These improvements encompass more streamlined management of encryption keys and simplified setup processes for both new and existing devices utilising end-to-end encryption.</p>
-<p>Moreover, we have upgraded the encryption algorithm from AES-128 to AES-256, ensuring heightened security for your data in the long run.</p>
-<h3>Export a Mermaid graph<a name="export-a-mermaid-graph" href="#export-a-mermaid-graph" class="heading-anchor">🔗</a></h3>
-<p>There is now a context menu on Mermaid graphs which you can use to export your graph as PNG, SVG, or by copying the vector data to the clipboard.</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20230711-mermaid-export.png" alt=""></p>
-<h3>Auto-detect language on startup<a name="auto-detect-language-on-startup" href="#auto-detect-language-on-startup" class="heading-anchor">🔗</a></h3>
-<p>A small but useful change - the application language is now automatically detected startup. Of course, if needed you can later change it in the configuration screen.</p>
-<h2>Android<a name="android" href="#android" class="heading-anchor">🔗</a></h2>
-<p>As always most of these changes also apply to the mobile applications, such as the improved end-to-end encryption support, language auto-detection, and various bug fixes and improvements. But besides those, we also have several mobile-specific updates:</p>
-<h3>Support for offline voice typing<a name="support-for-offline-voice-typing" href="#support-for-offline-voice-typing" class="heading-anchor">🔗</a></h3>
-<p>The Android mobile app now support offline voice typing - it means your voice recording does not need to be uploaded to Google or Samsung server - it all takes place on your device for added security. To make use of it, open any note, tap on the three dots menu, then &quot;Voice typing&quot;.</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20230711-voice-typing-1.png" alt=""></p>
-<p>The first time, the app will need to download the language files to your device:</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20230711-voice-typing-2.png" alt=""></p>
-<p>Once they are there, simply record your message and it will appear in the note:</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20230711-voice-typing-3.png" alt=""></p>
-<h3>Create and move sub-notebooks<a name="create-and-move-sub-notebooks" href="#create-and-move-sub-notebooks" class="heading-anchor">🔗</a></h3>
-<p>@jcgurango implemented support for creating sub-notebooks, and moving notebooks around in the mobile app. To do so, long press on any notebook and press &quot;Edit&quot;. You can now choose to move it under any other notebook using the provided dropdown list.</p>
-<h2>Full changelog<a name="full-changelog" href="#full-changelog" class="heading-anchor">🔗</a></h2>
-<p>This is just an overview of the main features. The full changelog is available there:</p>
-<ul>
-<li>Desktop: <a href="https://joplinapp.org/help/about/changelog/desktop">https://joplinapp.org/help/about/changelog/desktop</a></li>
-<li>Android: <a href="https://joplinapp.org/help/about/changelog/android">https://joplinapp.org/help/about/changelog/android</a></li>
-<li>iOS: <a href="https://joplinapp.org/help/about/changelog/ios">https://joplinapp.org/help/about/changelog/ios</a></li>
-</ul>
-]]></description><link>https://joplinapp.org/news/20230508-release-2-11</link><guid isPermaLink="false">20230508-release-2-11</guid><pubDate>Fri, 14 Jul 2023 12:00:00 GMT</pubDate><twitter-text>What&apos;s new in Joplin 2.11</twitter-text></item></channel></rss>
+]]></description><link>https://joplinapp.org/news/20230508-release-2-12</link><guid isPermaLink="false">20230508-release-2-12</guid><pubDate>Wed, 06 Sep 2023 12:00:00 GMT</pubDate><twitter-text>What&apos;s new in Joplin 2.12</twitter-text></item></channel></rss>

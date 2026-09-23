@@ -9,7 +9,7 @@
   },
   "browser": "lib/turndown.browser.cjs.js",
   "dependencies": {
-    "@adobe/css-tools": "4.4.4",
+    "@adobe/css-tools": "4.5.0",
     "@mixmark-io/domino": "2.2.0",
     "html-entities": "1.4.0"
   },

@@ -337,11 +337,13 @@ test.describe('richTextEditor', () => {
 		const richTextEditor = await editor.showRichTextEditor();
 		const editorBody = richTextEditor.body;
 		await editorBody.pressSequentially('search-match1 note search-match2');
+		await expect(editorBody).toHaveText('search-match1 note search-match2');
 
 		// Should highlight initial matches
 		await mainScreen.search('/search-match');
 		await expect.poll(
 			() => richTextEditor.getSearchMatches(),
+			{ timeout: 30_000 },
 		).toEqual(['search-match', 'search-match']);
 
 		// Should highlight new matches

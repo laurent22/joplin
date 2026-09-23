@@ -4,7 +4,7 @@ import { Stripe } from 'stripe';
 import { Subscription, Uuid } from '../services/database/types';
 import { Models } from '../models/factory';
 import { AccountType } from '../models/UserModel';
-import { findPrice, PricePeriod } from '@joplin/lib/utils/joplinCloud';
+import { findPrice, PricePeriod, ProductType } from '@joplin/lib/utils/joplinCloud';
 import { ErrorWithCode, ErrorCode } from './errors';
 const stripeLib = require('stripe');
 
@@ -46,8 +46,24 @@ export async function stripePriceIdByUserId(stripe: Stripe, models: Models, user
 	return stripePriceIdByStripeSub(stripeSub);
 }
 
+// Stripe does not guarantee the order of `items.data`, so the subscription item
+// must be located by price rather than by position. A subscription may contain
+// other items, such as add-ons, alongside the plan itself.
+export function subscriptionItemByStripeSub(stripeSub: Stripe.Subscription): Stripe.SubscriptionItem {
+	const items = stripeSub.items.data.filter(item => {
+		if (!item.price?.id) return false;
+		const price = findPrice(stripeConfig(), { priceId: item.price.id }, { throwOnNotFound: false });
+		return price && (price.productType === undefined || price.productType === ProductType.Subscription);
+	});
+
+	if (!items.length) throw new Error(`Could not find a subscription item in Stripe subscription: ${stripeSub.id}`);
+	if (items.length > 1) throw new Error(`More than one subscription item in Stripe subscription: ${stripeSub.id}`);
+
+	return items[0];
+}
+
 export function stripePriceIdByStripeSub(stripeSub: Stripe.Subscription): string {
-	return stripeSub.items.data[0].price.id;
+	return subscriptionItemByStripeSub(stripeSub).price.id;
 }
 
 export async function cancelSubscriptionByUserId(models: Models, userId: Uuid) {

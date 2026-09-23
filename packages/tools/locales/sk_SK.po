@@ -1,19 +1,21 @@
 # Slovak translation of Joplin
 # Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin package.
+# Jozef Gaal <preklady@mayday.sk>, 2024-2026.
 #
-# Jozef Gaal <preklady@mayday.sk>, 2024,2025, 2026.
 msgid ""
 msgstr ""
-"Project-Id-Version: Joplin v3.5.11\n"
-"Last-Translator: Jozef Riha <jose1711@gmail.com>\n"
-"Language-Team: Jozef Gaal <preklady@mayday.sk>\n"
-"Language: sk_SK\n"
+"Project-Id-Version: Joplin v3.7.18\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2026-09-19 01:55+0200\n"
+"Last-Translator: Jozef Gaal <preklady@mayday.sk>\n"
+"Language-Team: Slovak <preklady@mayday.sk>\n"
+"Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.9\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:634
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -34,7 +36,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:147
 msgid "— now viewing: %s —"
-msgstr ""
+msgstr "— práve sa zobrazuje: %s —"
 
 #: packages/lib/services/KeymapService.ts:350
 #: packages/lib/services/KeymapService.ts:356
@@ -46,18 +48,17 @@ msgid "(%s)"
 msgstr "(%s)"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:173
-#, fuzzy
 msgid "(Cancelled)"
-msgstr "Zrušiť"
+msgstr "(Zrušené)"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/TextNode.tsx:141
 msgid "(empty — double-click to edit)"
-msgstr ""
+msgstr "(prázdne — dvojitým kliknutím môžete upraviť)"
 
 #: packages/lib/services/ai/tools/global/searchNotes.ts:19
 #: packages/lib/services/ai/tools/global/semanticSearchNotes.ts:16
 msgid "(empty)"
-msgstr ""
+msgstr "(prázdne)"
 
 #: packages/lib/services/plugins/api/JoplinViewsDialogs.ts:75
 msgid "(In plugin: %s)"
@@ -68,15 +69,13 @@ msgid "(level %d)"
 msgstr "(úroveň %d)"
 
 #: packages/app-desktop/gui/ChatPanel/ChatMessageItem.tsx:60
-#, fuzzy
 msgid "(no message)"
-msgstr "Správa doplnku"
+msgstr "(žiadna správa)"
 
 #: packages/lib/services/ai/tools/global/createNote.ts:16
 #: packages/lib/services/ai/tools/global/createNotebook.ts:13
-#, fuzzy
 msgid "(no title)"
-msgstr "Názov poznámky"
+msgstr "(bez názvu)"
 
 #: packages/lib/SyncTargetNone.ts:17
 msgid "(None)"
@@ -89,9 +88,8 @@ msgstr "(Iba na čítanie)"
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:147
 #: packages/lib/services/ai/tools/global/readImage.ts:35
 #: packages/lib/services/ai/tools/global/readNote.ts:18
-#, fuzzy
 msgid "(untitled)"
-msgstr "Nepomenované"
+msgstr "(nepomenované)"
 
 #: packages/lib/models/settings/builtInMetadata.ts:64
 #: packages/lib/models/settings/builtInMetadata.ts:65
@@ -145,17 +143,16 @@ msgstr "&Okno"
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:506
 msgid "%d card"
 msgid_plural "%d cards"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d karta"
+msgstr[1] "%d karty"
+msgstr[2] "%d kariet"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:479
-#, fuzzy
 msgid "%d connection"
 msgid_plural "%d connections"
-msgstr[0] "Skryť ďalšie akcie"
-msgstr[1] "Skryť ďalšie akcie"
-msgstr[2] "Skryť ďalšie akcie"
+msgstr[0] "%d pripojenie"
+msgstr[1] "%d pripojenia"
+msgstr[2] "%d pripojení"
 
 #: packages/lib/models/settings/builtInMetadata.ts:2154
 #: packages/lib/models/settings/builtInMetadata.ts:2529
@@ -167,11 +164,11 @@ msgstr[2] "%d dní"
 
 #: packages/app-desktop/gui/ChatPanel/ChatMessageItem.tsx:29
 msgid "%d edit(s) applied, %d could not be placed automatically."
-msgstr ""
+msgstr "Bolo vykonaných %d úprav, %d sa nepodarilo umiestniť automaticky."
 
 #: packages/app-desktop/gui/ChatPanel/ChatMessageItem.tsx:27
 msgid "%d edit(s) applied."
-msgstr ""
+msgstr "Bolo vykonaných %d úprav."
 
 #: packages/lib/utils/joplinCloud/index.ts:279
 #: packages/lib/utils/joplinCloud/index.ts:280
@@ -220,12 +217,11 @@ msgstr[1] "%d minúty"
 msgstr[2] "%d minút"
 
 #: packages/app-desktop/gui/PublishFolderDialog.tsx:97
-#, fuzzy
 msgid "%d note in notebook"
 msgid_plural "%d notes in notebook"
-msgstr[0] "Presunúť %d poznámku do zápisníka „%s“?"
-msgstr[1] "Presunúť %d poznámky do zápisníka „%s“?"
-msgstr[2] "Presunúť %d poznámok do zápisníka „%s“?"
+msgstr[0] "%d poznámka v zápisníku"
+msgstr[1] "%d poznámky v zápisníku"
+msgstr[2] "%d poznámok v zápisníku"
 
 #: packages/app-cli/app/command-rmnote.ts:33
 msgid "%d note matches this pattern. Delete it?"
@@ -247,7 +243,7 @@ msgstr "%d nasnímaných fotografií"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:552
 msgid "%d sections found"
-msgstr ""
+msgstr "Našlo sa %d sekcií"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:231
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:241
@@ -259,9 +255,8 @@ msgid "%s - Copy"
 msgstr "%s - Kópia"
 
 #: packages/lib/services/commands/ToolbarButtonUtils.ts:64
-#, fuzzy
 msgid "%s (%s)"
-msgstr "%s (%s): %s"
+msgstr "%s (%s)"
 
 #: packages/lib/services/ReportService.ts:194
 msgid "%s (%s) could not be uploaded: %s"
@@ -277,9 +272,8 @@ msgid "%s (%s): %s"
 msgstr "%s (%s): %s"
 
 #: packages/lib/models/settings/builtInMetadata.ts:33
-#, fuzzy
 msgid "%s (Beta)"
-msgstr "Beta"
+msgstr "%s (Beta)"
 
 #: packages/app-desktop/checkForUpdates.ts:110
 msgid "%s (pre-release)"
@@ -309,7 +303,7 @@ msgstr "%s = %s (%s)"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:280
 msgid "%s added to toolbar"
-msgstr ""
+msgstr "%s bol pridaný na panel nástrojov"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ValidatedIntegerInput.tsx:32
 msgid "%s cannot be greater than %s"
@@ -325,7 +319,7 @@ msgstr "%s z %s"
 
 #: packages/lib/models/settings/builtInMetadata.ts:799
 msgid "%s input / %s output tokens used."
-msgstr ""
+msgstr "Použitých %s vstupných a %s výstupných tokenov."
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:292
 msgid ""
@@ -336,22 +330,20 @@ msgstr ""
 "počiatočná synchronizácia bude pomalá."
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:221
-#, fuzzy
 msgid "%s moved down"
-msgstr "Presunúť nadol"
+msgstr "%s sa posunulo nižšie"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:215
 msgid "%s moved up"
-msgstr ""
+msgstr "%s sa posunulo nahor"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ValidatedIntegerInput.tsx:26
 msgid "%s must be a valid whole number"
 msgstr "%s musí byť platné celé číslo"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:209
-#, fuzzy
 msgid "%s removed from toolbar"
-msgstr "Odstránené %s zo zdieľania."
+msgstr "%s bolo odstránené z panela nástrojov"
 
 #: packages/app-mobile/components/plugins/dialogs/PluginPanelViewer.tsx:74
 msgid "%s tab opened"
@@ -387,12 +379,11 @@ msgstr "%s: Chýbajúce heslo."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:473
 msgid "+ Group"
-msgstr ""
+msgstr "+ Skupina"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:472
-#, fuzzy
 msgid "+ Text"
-msgstr "Rozšírený text"
+msgstr "+ text"
 
 #: packages/app-cli/app/command-tag.ts:15
 msgid ""
@@ -403,7 +394,7 @@ msgid ""
 msgstr ""
 "<tag-command> môže byť „add“, „remove“, „list“ alebo „notetags“ na "
 "priradenie alebo odstránenie [tag] z [note], na zoznam poznámok spojených s "
-"[tag] alebo na zoznam tagov spojených s [note]. Príkaz `tag list` možno "
+"[tag] alebo na zoznam štítkov spojených s [note]. Príkaz `tag list` možno "
 "použiť na vypísanie všetkých značiek (pre dlhú voľbu použite -l)."
 
 #: packages/app-cli/app/command-todo.ts:15
@@ -419,10 +410,9 @@ msgstr ""
 "chcete úlohu previesť späť na bežnú poznámku."
 
 #: packages/server/src/utils/time.ts:56
-#, fuzzy
 msgid "1 day"
 msgid_plural "%d days"
-msgstr[0] "%d deň"
+msgstr[0] "1 deň"
 msgstr[1] "%d dni"
 msgstr[2] "%d dní"
 
@@ -430,6 +420,8 @@ msgstr[2] "%d dní"
 msgid ""
 "14-day free trial. Cancel anytime during the trial and you won't be charged."
 msgstr ""
+"14-dňová bezplatná skúšobná verzia. Ak ju kedykoľvek počas skúšobného "
+"obdobia zrušíte, nebude vám účtovaný žiadny poplatok."
 
 #: packages/editor/ProseMirror/plugins/imagePlugin.ts:148
 msgid "A brief description of the image:"
@@ -453,6 +445,9 @@ msgid ""
 "when Joplin is not focused. Example: CommandOrControl+Shift+J. Leave empty "
 "to disable."
 msgstr ""
+"Systémová klávesová skratka, ktorá prepína okno programu Joplin. Funguje aj "
+"vtedy, keď nie je Joplin aktívny. Príklad: Command alebo Control + Shift + "
+"J. Ak necháte pole prázdne, funkcia nebude aktívna."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1876
 msgid "A3"
@@ -526,10 +521,12 @@ msgstr ""
 #: packages/lib/utils/joplinCloud/index.ts:310
 msgid "Access your notes from any web browser at %s."
 msgstr ""
+"K svojim poznámkam máte prístup z akéhokoľvek webového prehliadača na adrese "
+"%s."
 
 #: packages/lib/models/settings/builtInMetadata.ts:589
 msgid "Accessible"
-msgstr ""
+msgstr "Prístupný"
 
 #: packages/lib/models/settings/builtInMetadata.ts:586
 msgid ""
@@ -537,6 +534,9 @@ msgid ""
 "accessible PDFs. It increases database size by approximately 10-20 KB per "
 "page."
 msgstr ""
+"Režim prístupnosti ukladá dodatočné informácie, čím umožňuje vytvárať "
+"prístupné súbory PDF. Zväčšuje veľkosť databázy približne o 10–20 KB na "
+"stránku."
 
 #: packages/server/src/routes/admin/users.ts:159
 msgid "Account"
@@ -574,13 +574,12 @@ msgid "Actual Size"
 msgstr "Skutočná veľkosť"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:473
-#, fuzzy
 msgid "Add a group"
-msgstr "Pridať riadok"
+msgstr "Pridať skupinu"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:472
 msgid "Add a text card"
-msgstr ""
+msgstr "Pridať textovú kartu"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1772
 msgid "Add body"
@@ -598,7 +597,7 @@ msgstr "Pridať novú"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addNoteToWhiteboard.ts:18
 msgid "Add note to whiteboard..."
-msgstr ""
+msgstr "Pridať poznámku na nástenku..."
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/setTags.ts:52
 msgid "Add or remove tags:"
@@ -631,9 +630,9 @@ msgstr "Pridať k poznámke"
 #: packages/lib/services/ai/tools/buildEditorTools.ts:50
 msgid "Added %d word"
 msgid_plural "Added %d words"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Pridané %d slovo"
+msgstr[1] "Pridané %d slová"
+msgstr[2] "Pridaných %d slov"
 
 #: packages/app-mobile/components/ComboBox.tsx:93
 msgid "Added new: %s"
@@ -641,12 +640,11 @@ msgstr "Pridaný nový: %s"
 
 #: packages/app-mobile/components/TagEditor.tsx:244
 #: packages/lib/services/ai/tools/global/manageTags.ts:21
-#, fuzzy
 msgid "Added tag: %s"
 msgid_plural "Added tags: %s"
 msgstr[0] "Pridaný štítok: %s"
-msgstr[1] "Pridaný štítok: %s"
-msgstr[2] "Pridaný štítok: %s"
+msgstr[1] "Pridané štítky: %s"
+msgstr[2] "Pridaných štítkov: %s"
 
 #: packages/app-mobile/components/TagEditor.tsx:228
 msgid "Adds tag"
@@ -675,35 +673,39 @@ msgstr "Pokročilé nástroje"
 
 #: packages/lib/models/Setting.ts:1374
 msgid "AI"
-msgstr ""
+msgstr "AI"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:438
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleAiChat.ts:22
 #: packages/app-desktop/utils/layout/layoutKeyToLabel.ts:9
 msgid "AI Chat"
-msgstr ""
+msgstr "AI konverzácia"
 
 #: packages/lib/services/ai/availability.ts:36
 #: packages/lib/services/ai/availability.ts:65
 msgid "AI features are disabled. Enable them in Settings → AI."
-msgstr ""
+msgstr "Funkcie umelej inteligencie sú vypnuté. Zapnite ich v Nastavenia → AI."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:24
-#, fuzzy
 msgid "AI is disabled"
-msgstr "Skryť zakázané"
+msgstr "Umelá inteligencia je vypnutá"
 
 #: packages/app-desktop/gui/AiDegradedNotice.tsx:15
 msgid ""
 "AI is running in reduced-quality mode — monthly allowance exceeded. Credits "
 "replenish on a rolling 30-day basis, or you can"
 msgstr ""
+"AI beží v režime so zníženou kvalitou – prekročil sa mesačný limit. Kredity "
+"sa dopĺňajú priebežne v 30-dňových intervaloch, alebo môžete"
 
 #: packages/app-desktop/services/aiStatusBridge.ts:62
 msgid ""
 "AI usage has exceeded your monthly allowance — responses are using a reduced-"
 "quality model. Credits replenish on a rolling 30-day basis. Buy more at %s."
 msgstr ""
+"Vyčerpali ste mesačný limit na využívanie umelej inteligencie — odpovede sa "
+"generujú pomocou modelu so zníženou kvalitou. Kredity sa dopĺňajú priebežne "
+"v 30-dňových intervaloch. Ďalšie kredity si môžete zakúpiť na %s."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:18
 msgid "all"
@@ -727,13 +729,10 @@ msgid "All notes"
 msgstr "Všetky poznámky"
 
 #: packages/app-mobile/components/screens/tags.tsx:176
-#, fuzzy
 msgid ""
 "All notes associated with this tag will remain, but the tag will be removed "
 "from all notes."
 msgstr ""
-"Odstrániť štítok „%s“?\n"
-"\n"
 "Všetky poznámky spojené s týmto štítkom zostanú zachované, ale štítok bude "
 "odstránený zo všetkých poznámok."
 
@@ -746,63 +745,56 @@ msgid "All shared folders:"
 msgstr "Všetky zdieľané priečinky:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:990
-#, fuzzy
 msgid "Allow creating notebooks"
-msgstr "Vytvoriť zápisník"
+msgstr "Povoliť vytváranie zápisníkov"
 
 #: packages/lib/models/settings/builtInMetadata.ts:946
-#, fuzzy
 msgid "Allow creating notes"
-msgstr "Vytvára sa poznámka."
+msgstr "Povoliť vytváranie poznámok"
 
 #: packages/lib/models/settings/builtInMetadata.ts:979
 msgid "Allow editing tags on notes"
-msgstr ""
+msgstr "Povoliť úpravy štítkov v poznámkach"
 
 #: packages/lib/models/settings/builtInMetadata.ts:879
 msgid "Allow editing the current note (chat panel only)"
-msgstr ""
+msgstr "Povoliť úpravy aktuálnej poznámky (len v paneli konverzácie)"
 
 #: packages/lib/models/settings/builtInMetadata.ts:924
-#, fuzzy
 msgid "Allow listing notebooks"
-msgstr "Zverejniť aj prepojené poznámky"
+msgstr "Povoliť zoznam zápisníkov"
 
 #: packages/lib/models/settings/builtInMetadata.ts:935
 msgid "Allow listing tags"
-msgstr ""
+msgstr "Povoliť zoznam štítkov"
 
 #: packages/lib/models/settings/builtInMetadata.ts:913
 msgid "Allow reading images"
-msgstr ""
+msgstr "Povoliť čítanie obrázkov"
 
 #: packages/lib/models/settings/builtInMetadata.ts:902
-#, fuzzy
 msgid "Allow reading notes"
-msgstr "Vytvára sa poznámka."
+msgstr "Povoliť čítanie poznámok"
 
 #: packages/lib/models/settings/builtInMetadata.ts:674
 msgid "Allow remote AI providers"
-msgstr ""
+msgstr "Povoliť vzdialených poskytovateľov AI"
 
 #: packages/lib/models/settings/builtInMetadata.ts:891
-#, fuzzy
 msgid "Allow searching notes"
-msgstr "Zverejniť aj prepojené poznámky"
+msgstr "Povoliť vyhľadávanie v poznámkach"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1001
 msgid "Allow semantic search of notes"
-msgstr ""
+msgstr "Povoliť sémantické vyhľadávanie v poznámkach"
 
 #: packages/lib/models/settings/builtInMetadata.ts:968
-#, fuzzy
 msgid "Allow trashing notes"
-msgstr "Zverejniť aj prepojené poznámky"
+msgstr "Povoliť vymazanie poznámok"
 
 #: packages/lib/models/settings/builtInMetadata.ts:957
-#, fuzzy
 msgid "Allow updating notes"
-msgstr "Všetky poznámky"
+msgstr "Povoliť aktualizáciu poznámok"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1433
 msgid "Allows debugging mobile plugins. See %s for details."
@@ -810,7 +802,7 @@ msgstr "Umožňuje ladenie mobilných doplnkov. Podrobnosti nájdete v časti %s
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:267
 msgid "Already have an account? Log in"
-msgstr ""
+msgstr "Už máte účet? Prihláste sa"
 
 #: packages/app-cli/app/command-config.ts:19
 msgid "Also displays unset and hidden config variables."
@@ -876,7 +868,7 @@ msgstr "Úroveň Android API: %d"
 
 #: packages/lib/models/settings/builtInMetadata.ts:701
 msgid "Anthropic"
-msgstr ""
+msgstr "Anthropic"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:48
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:24
@@ -889,7 +881,7 @@ msgstr ""
 
 #: packages/lib/models/settings/builtInMetadata.ts:738
 msgid "API key"
-msgstr ""
+msgstr "API kľúč"
 
 #: packages/lib/models/Setting.ts:1358
 msgid "Appearance"
@@ -900,9 +892,8 @@ msgid "Application"
 msgstr "Aplikácia"
 
 #: packages/server/src/services/MustacheService.ts:153
-#, fuzzy
 msgid "Applications"
-msgstr "Aplikácia"
+msgstr "Aplikácie"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:41
 #: packages/app-mobile/components/screens/NoteTagsDialog.tsx:99
@@ -946,23 +937,24 @@ msgid "Aritim Dark"
 msgstr "Aritim Dark"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:483
-#, fuzzy
 msgid "Arrow at source"
-msgstr "Prejsť na zdrojovú URL"
+msgstr "Šípka na zdroji"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:482
 msgid "Arrow at target"
-msgstr ""
+msgstr "Šípka na cieli"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:390
 msgid "Ask about this note, or request a change…"
-msgstr ""
+msgstr "Opýtať sa na túto poznámku alebo požiadať o zmenu…"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:363
 msgid ""
 "Ask about this note, or request changes. Select text in the editor first to "
 "scope the request to that selection."
 msgstr ""
+"Opýtať sa na túto poznámku alebo požiadať o jej zmenu. Najprv v editore "
+"označte text, aby sa žiadosť týkala len tohto výberu."
 
 #: packages/app-mobile/components/TagEditor.tsx:188
 msgid "Associated tags:"
@@ -974,7 +966,7 @@ msgid ""
 "the other instance of Joplin."
 msgstr ""
 "V súčasnosti je možné otvoriť Joplin Web iba na jednej karte. Druhú "
-"inštanciu Joplinu prosím zatvorte."
+"inštanciu aplikácie Joplin prosím zatvorte."
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:25
 msgid "Attach"
@@ -1017,9 +1009,8 @@ msgid "Attachment download behaviour"
 msgstr "Správanie pri sťahovaní príloh"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:367
-#, fuzzy
 msgid "Attachment: %s. Size: %s"
-msgstr "Konflikt príloh: \"%s\""
+msgstr "Príloha: \"%s\". Veľkosť: %s"
 
 #: packages/lib/services/ReportService.ts:313
 msgid "Attachments"
@@ -1036,6 +1027,10 @@ msgid ""
 "notebooks will also be unshared, so please ask the notebook owner to share "
 "it again with you."
 msgstr ""
+"Upozornenie: Po zmenení hesla už nebude možné dešifrovať žiadne údaje "
+"zašifrované vaším súčasným heslom. Zdieľanie všetkých zašifrovaných zošitov "
+"bude zároveň zrušené, preto prosím požiadajte vlastníka zošitu, aby vám ho "
+"opäť sprístupnil."
 
 #: packages/lib/models/settings/builtInMetadata.ts:68
 msgid ""
@@ -1055,9 +1050,8 @@ msgid ""
 msgstr "Overovanie nebolo dokončené (nebol prijatý overovací token)."
 
 #: packages/server/src/routes/index/applications.ts:32
-#, fuzzy
 msgid "Authorisation required"
-msgstr "Overovací token:"
+msgstr "Je potrebné schválenie"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:159
 msgid "Authorisation token:"
@@ -1075,7 +1069,7 @@ msgstr "Automaticky"
 
 #: packages/lib/models/settings/builtInMetadata.ts:2312
 msgid "Auto lock when switching note"
-msgstr ""
+msgstr "Automaticky uzamknúť pri prechode na ďalšiu poznámku"
 
 #: packages/server/src/services/TaskService.ts:31
 msgid "Auto-add disabled accounts for deletion"
@@ -1106,9 +1100,8 @@ msgid "Automatically switch theme to match system theme"
 msgstr "Automaticky prepínať tému tak, aby zodpovedala systémovej téme"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:411
-#, fuzzy
 msgid "Available"
-msgstr "Aktualizácia je k dispozícii"
+msgstr "Dostupné"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:50
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:621
@@ -1122,11 +1115,11 @@ msgstr "Späť"
 
 #: packages/lib/utils/joplinCloud/index.ts:449
 msgid "Back to %s"
-msgstr ""
+msgstr "Spať na %s"
 
 #: packages/lib/models/settings/builtInMetadata.ts:725
 msgid "Base URL"
-msgstr ""
+msgstr "Základná URL adresa"
 
 #: packages/lib/utils/joplinCloud/index.ts:614
 msgid "Basic"
@@ -1137,13 +1130,12 @@ msgid "Beta"
 msgstr "Beta"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:484
-#, fuzzy
 msgid "Bidirectional"
-msgstr "Skryť ďalšie akcie"
+msgstr "Obojsmerné"
 
 #: packages/lib/utils/joplinCloud/index.ts:604
 msgid "Billed annually (%s per user per year respectively)."
-msgstr ""
+msgstr "Fakturácia je ročne (%s na používateľa za rok)."
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:122
 msgid "Block code"
@@ -1175,7 +1167,7 @@ msgstr "Zoznam s odrážkami"
 
 #: packages/app-desktop/gui/AiDegradedNotice.tsx:20
 msgid "buy more credits"
-msgstr ""
+msgstr "kúpiť viac kreditov"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:127
 msgid "by %s"
@@ -1269,24 +1261,22 @@ msgid "Cannot access %s"
 msgstr "Nedá sa získať prístup k %s"
 
 #: packages/app-cli/app/base-command.ts:25
-#, fuzzy
 msgid "Cannot change a locked note"
-msgstr "Nedá sa zmeniť zašifrovaná položka"
+msgstr "Zamknutú poznámku nie je možné zmeniť"
 
 #: packages/app-desktop/gui/NoteListItem/NoteListItem.tsx:71
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:76
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleNoteType.ts:18
 msgid "Cannot change a locked note while the session is locked"
-msgstr ""
+msgstr "Zatvorenú poznámku nie je možné upraviť, pokiaľ je relácia uzamknutá"
 
 #: packages/app-cli/app/base-command.ts:24
 msgid "Cannot change encrypted item"
 msgstr "Nedá sa zmeniť zašifrovaná položka"
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:39
-#, fuzzy
 msgid "Cannot convert locked note: \"%s\""
-msgstr "Nie je možné previesť položku len na čítanie: „%s“"
+msgstr "Zamknutú poznámku nie je možné previesť: „%s“"
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:51
 msgid "Cannot convert read-only item: \"%s\""
@@ -1301,9 +1291,8 @@ msgid "Cannot create a new note: %s"
 msgstr "Nedá sa vytvoriť nová poznámka: %s"
 
 #: packages/app-cli/app/command-cat.ts:28
-#, fuzzy
 msgid "Cannot display a locked note"
-msgstr "Nedá sa vytvoriť nová poznámka: %s"
+msgstr "Zamknutú poznámku nie je možné zobraziť"
 
 #: packages/app-cli/app/app.ts:81 packages/app-cli/app/command-attach.ts:21
 #: packages/app-cli/app/command-cat.ts:27 packages/app-cli/app/command-cp.ts:24
@@ -1380,9 +1369,8 @@ msgstr ""
 "veľkosť (%s) pre tento účet"
 
 #: packages/app-mobile/root.tsx:636
-#, fuzzy
 msgid "Cannot share"
-msgstr "Môže zdieľať"
+msgstr "Nie je možné zdieľať"
 
 #: packages/lib/services/share/ShareService.ts:423
 msgid ""
@@ -1404,6 +1392,9 @@ msgid ""
 "example, **bold** will appear as actual bold text. You can change this "
 "behaviour in the \"Editor\" section of Settings."
 msgstr ""
+"Niektoré formátovacie prvky Markdownu sa teraz v editore zobrazujú "
+"štandardne. Napríklad **tučné písmo** sa zobrazí ako skutočne tučný text. "
+"Toto správanie môžete zmeniť v časti „Editor“ v nastaveniach."
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleLayoutMoveMode.ts:7
 msgid "Change application layout"
@@ -1414,15 +1405,13 @@ msgid "Change language"
 msgstr "Zmeniť jazyk"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:211
-#, fuzzy
 msgid "Change master password"
-msgstr "Spravovať hlavné heslo"
+msgstr "Zmeniť hlavné heslo"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:130
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:140
-#, fuzzy
 msgid "Change note lock password"
-msgstr "Spravovať hlavné heslo"
+msgstr "Zmeniť heslo na uzamknutie poznámok"
 
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:124
 msgid "Change ratio"
@@ -1441,13 +1430,12 @@ msgid "Characters excluding spaces"
 msgstr "Znaky bez medzier"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:391
-#, fuzzy
 msgid "Chat message"
-msgstr "Správa doplnku"
+msgstr "Správa v konverzácii"
 
 #: packages/lib/models/settings/builtInMetadata.ts:687
 msgid "Chat provider"
-msgstr ""
+msgstr "Poskytovateľ konverzácie"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:207
 msgid "Check"
@@ -1458,9 +1446,8 @@ msgid "Check elements to display in the toolbar"
 msgstr "Označte prvky, ktoré sa majú zobraziť na paneli nástrojov"
 
 #: packages/app-desktop/gui/MainScreen.tsx:653
-#, fuzzy
 msgid "Check for updates"
-msgstr "Skontrolovať aktualizácie..."
+msgstr "Skontrolovať aktualizácie"
 
 #: packages/app-desktop/gui/MenuBar.tsx:598
 #: packages/app-desktop/gui/MenuBar.tsx:923
@@ -1477,9 +1464,8 @@ msgid "Checkbox"
 msgstr "Výberové políčko"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:5
-#, fuzzy
 msgid "Checkbox completion"
-msgstr "Zoznam výberových políčok"
+msgstr "Vyplnenie zaškrtávacieho políčka"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2148
 msgid "Checkbox list"
@@ -1525,7 +1511,7 @@ msgstr "Vyčistiť vyhľadávanie"
 
 #: packages/app-cli/app/command-clear.ts:11
 msgid "Clears the console output."
-msgstr ""
+msgstr "Vyčistí výstup konzoly."
 
 #: packages/lib/components/shared/NoteRevisionViewer/getHelpMessage.ts:5
 msgid ""
@@ -1545,6 +1531,8 @@ msgid ""
 "Click the eye icon in the toolbar to switch to the Markdown editor and fix "
 "the JSON manually."
 msgstr ""
+"Kliknutím na ikonu oka na paneli nástrojov prejdite do editora Markdown a "
+"opravte JSON ručne."
 
 #: packages/app-desktop/gui/NoteEditor/StatusBar.tsx:79
 msgid "Click to add tags..."
@@ -1749,13 +1737,12 @@ msgid "Configures the size of scrollbars used in the app."
 msgstr "Nastavuje veľkosť posuvníkov používaných v aplikácii."
 
 #: packages/server/src/routes/index/recovery_codes.ts:30
-#, fuzzy
 msgid "Confirm"
-msgstr "Potvrdenie"
+msgstr "Potvrdiť"
 
 #: packages/server/src/routes/index/recovery_codes.ts:28
 msgid "Confirm credentials"
-msgstr ""
+msgstr "Potvrdiť prihlasovacie údaje"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:163
 msgid "Confirm password cannot be empty"
@@ -1819,9 +1806,8 @@ msgid "Continue"
 msgstr "Pokračovať"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:51
-#, fuzzy
 msgid "Continue?"
-msgstr "Pokračovať"
+msgstr "Pokračovať?"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:6
 msgid "Control character"
@@ -1833,7 +1819,7 @@ msgstr "Previesť ju"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/TextNode.tsx:149
 msgid "Convert this card into a Joplin note"
-msgstr ""
+msgstr "Previezť túto kartu na poznámku Joplin"
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:21
 msgid "Convert to Markdown"
@@ -1852,9 +1838,8 @@ msgid "Converting speech to text..."
 msgstr "Prevod reči na text..."
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:378
-#, fuzzy
 msgid "Copies a Markdown link to this attachment"
-msgstr "Pri sťahovaní tejto prílohy sa vyskytla chyba:"
+msgstr "Skopíruje odkaz v formáte Markdown na túto prílohu"
 
 #: packages/app-desktop/gui/MenuBar.tsx:565
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:52
@@ -2008,7 +1993,7 @@ msgstr "Vytvoriť zápisník"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:215
 msgid "Create accessible document"
-msgstr ""
+msgstr "Vytvoriť prístupný dokument"
 
 #: packages/app-mobile/components/FolderPicker.tsx:112
 msgid "Create new notebook"
@@ -2032,9 +2017,8 @@ msgid "Create user"
 msgstr "Vytvoriť používateľa"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newWhiteboard.ts:8
-#, fuzzy
 msgid "Create whiteboard"
-msgstr "Vytvoriť zápisník"
+msgstr "Vytvoriť nástenku"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:15
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:77
@@ -2054,14 +2038,12 @@ msgid "Created locally"
 msgstr "Vytvorené lokálne"
 
 #: packages/lib/services/ai/tools/global/createNote.ts:16
-#, fuzzy
 msgid "Created note: %s"
-msgstr "Vytvoriť poznámku"
+msgstr "Vytvorená poznámka: %s"
 
 #: packages/lib/services/ai/tools/global/createNotebook.ts:13
-#, fuzzy
 msgid "Created notebook: %s"
-msgstr "Vytvoriť zápisník"
+msgstr "Vytvorený zápisník: %s"
 
 #: packages/lib/Synchronizer.ts:220
 msgid "Created remote items: %d."
@@ -2174,7 +2156,7 @@ msgstr "Tmavá"
 
 #: packages/server/src/services/MustacheService.ts:116
 msgid "Dashboard"
-msgstr "Nástenka"
+msgstr "Ovládací panel"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:236
 msgid "Date"
@@ -2218,7 +2200,7 @@ msgstr "Predvolený názov, ktorý sa používa pre dokumenty vytvorené skenero
 
 #: packages/lib/models/settings/builtInMetadata.ts:1681
 msgid "Default view / edit state"
-msgstr ""
+msgstr "Predvolený stav zobrazenia / úpravy"
 
 #: packages/app-cli/app/help-utils.ts:76
 msgid "Default: %s"
@@ -2242,9 +2224,8 @@ msgid "Delete"
 msgstr "Vymazať"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:389
-#, fuzzy
 msgid "Delete attachment"
-msgstr "Vymazať prílohu \"%s\"?"
+msgstr "Vymazať prílohu"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:235
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:264
@@ -2316,9 +2297,8 @@ msgid "Delete selected notes"
 msgstr "Vymazať vybrané poznámky"
 
 #: packages/app-mobile/components/screens/tags.tsx:175
-#, fuzzy
 msgid "Delete tag \"%s\"?"
-msgstr "Vymazať doplnok \"%s\"?"
+msgstr "Vymazať štítok \"%s\"?"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:38
 #: packages/app-mobile/components/side-menu-content.tsx:431
@@ -2355,9 +2335,8 @@ msgid "Deleted local items: %d."
 msgstr "Odstránené lokálne položky: %d."
 
 #: packages/lib/services/ai/tools/global/deleteNote.ts:12
-#, fuzzy
 msgid "Deleted note"
-msgstr "Vymazať poznámku"
+msgstr "Vymazať poznámkuVymazaná poznámka"
 
 #: packages/lib/Synchronizer.ts:223
 msgid "Deleted remote items: %d."
@@ -2384,9 +2363,8 @@ msgid "Deletes the notes without asking for confirmation."
 msgstr "Vymaže poznámky bez vyžiadania potvrdenia."
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:390
-#, fuzzy
 msgid "Deletes this attachment"
-msgstr "Vymazať prílohu \"%s\"?"
+msgstr "Vymaže túto prílohu"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:580
 msgid "Deletion log"
@@ -2426,9 +2404,8 @@ msgid "Disable"
 msgstr "Zakázať"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:175
-#, fuzzy
 msgid "Disable %s"
-msgstr "Zakázať"
+msgstr "Zakázať %s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:409
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:427
@@ -2438,7 +2415,6 @@ msgid "Disable encryption"
 msgstr "Zakázať šifrovanie"
 
 #: packages/lib/components/shared/NoteEditor/WarningBanner/useEditorTypeMigrationBanner.ts:24
-#, fuzzy
 msgid "Disable it"
 msgstr "Zakázať"
 
@@ -2584,12 +2560,11 @@ msgstr ""
 
 #: packages/app-desktop/gui/JoplinCloudSignUpCallToAction.tsx:31
 msgid "Don't have an account yet?"
-msgstr ""
+msgstr "Ešte nemáte účet?"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:381
-#, fuzzy
 msgid "Don't show again"
-msgstr "Túto správu už nezobrazovať"
+msgstr "Už nezobrazovať"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:811
 msgid "Don't show this message again"
@@ -2612,6 +2587,8 @@ msgstr "Hotovo"
 msgid ""
 "Double tap to open this attachment. Long press to expand or collapse details."
 msgstr ""
+"Dvojitým ťuknutím otvoríte túto prílohu. Dlhým stlačením rozbalíte alebo "
+"skryjete podrobnosti."
 
 #: packages/app-desktop/checkForUpdates.ts:116
 msgid "Download"
@@ -2624,11 +2601,11 @@ msgstr "Stiahnite a nainštalujte príslušné rozšírenie pre váš prehliada�
 #: packages/app-desktop/gui/MainScreen.tsx:641
 #: packages/app-desktop/gui/MainScreen.tsx:653
 msgid "Download it from GitHub Releases"
-msgstr ""
+msgstr "Stiahnuť ju z GitHub Releases"
 
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:84
 msgid "Download it from the Joplin Android repository"
-msgstr ""
+msgstr "Stiahnite si ju z repozitára Joplin pre Android"
 
 #: packages/app-desktop/gui/MainScreen.tsx:669
 msgid "Download it now"
@@ -2660,9 +2637,8 @@ msgid "Downloading resources..."
 msgstr "Sťahovanie zdrojov..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:14
-#, fuzzy
 msgid "Downloading…"
-msgstr "Sťahovanie"
+msgstr "Sťahovanie…"
 
 #: packages/lib/models/settings/builtInMetadata.ts:78
 msgid "Dracula"
@@ -2670,7 +2646,7 @@ msgstr "Drakula"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/GroupNode.tsx:71
 msgid "Drag to move group"
-msgstr ""
+msgstr "Presuňte skupinu ťahaním"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1355
 msgid "Draw picture"
@@ -2755,9 +2731,8 @@ msgid "Edit link"
 msgstr "Upraviť odkaz"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1685
-#, fuzzy
 msgid "Edit mode"
-msgstr "Upraviť poznámku."
+msgstr "Režim úpravy"
 
 #: packages/app-cli/app/command-edit.ts:17
 msgid "Edit note."
@@ -2781,9 +2756,8 @@ msgid "Edit tag"
 msgstr "Upraviť štítok"
 
 #: packages/app-mobile/components/screens/Note/commands/toggleVisiblePanes.ts:25
-#, fuzzy
 msgid "Editing"
-msgstr "Upraviť odkaz"
+msgstr "Upravuje sa"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:153
 #: packages/app-desktop/utils/layout/layoutKeyToLabel.ts:8
@@ -2859,7 +2833,7 @@ msgstr "E-maily"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:58
 msgid "Embedding index"
-msgstr ""
+msgstr "Index vloženia"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:194
 msgid "emphasised text"
@@ -2879,9 +2853,8 @@ msgid "Enable"
 msgstr "Povoliť"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:175
-#, fuzzy
 msgid "Enable %s"
-msgstr "Povoliť"
+msgstr "Povoliť %s"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1502
 msgid "Enable ^sup^ syntax"
@@ -2908,9 +2881,8 @@ msgid "Enable ABC musical notation support"
 msgstr "Povoliť podporu hudobnej notácie ABC"
 
 #: packages/lib/models/settings/builtInMetadata.ts:651
-#, fuzzy
 msgid "Enable AI features"
-msgstr "Povoliť soft breaks"
+msgstr "Povoliť funkcie AI"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1495
 msgid "Enable audio player"
@@ -2933,7 +2905,7 @@ msgstr "Povoliť šifrovanie"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1508
 msgid "Enable external embeds (e.g. YouTube Videos)"
-msgstr ""
+msgstr "Povoliť vkladanie externého obsahu (napr. videá z YouTube)"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1519
 msgid "Enable file:// URLs for images and videos"
@@ -2968,9 +2940,8 @@ msgid "Enable math expressions"
 msgstr "Povoliť matematické výrazy"
 
 #: packages/lib/models/settings/builtInMetadata.ts:662
-#, fuzzy
 msgid "Enable MCP server"
-msgstr "Povoliť prehliadač PDF"
+msgstr "Povoliť MCP server"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1492
 msgid "Enable Mermaid diagrams support"
@@ -3058,6 +3029,9 @@ msgid ""
 "When disabled, the chat panel can still read the open note. Does not apply "
 "to MCP."
 msgstr ""
+"Aktivuje predvolené operácie úpravy poznámok pri otvorenom paneli AI "
+"konverzácie. Ak je táto funkcia deaktivovaná, panel konverzácie môže naďalej "
+"čítať otvorenú poznámku. Nevzťahuje sa na MCP."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:52
 msgid ""
@@ -3080,6 +3054,8 @@ msgid ""
 "Encrypting a note requires a note lock password, which has not yet been set. "
 "Set it up now?"
 msgstr ""
+"Na zašifrovanie poznámky je potrebné heslo na uzamknutie poznámky, ktoré "
+"ešte nebolo nastavené. Chcete ho nastaviť teraz?"
 
 #: packages/lib/models/Setting.ts:1366
 msgid "Encryption"
@@ -3105,6 +3081,8 @@ msgid ""
 "Encryption was setup previously, but all keys have been disabled. To "
 "continue, please use the desktop app to enable a key."
 msgstr ""
+"Šifrovanie bolo nastavené už skôr, ale všetky kľúče boli deaktivované. Ak "
+"chcete pokračovať, aktivujte prosím kľúč pomocou aplikácie pre počítač."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:438
 msgid "Encryption:"
@@ -3128,9 +3106,8 @@ msgid "Enter master password:"
 msgstr "Zadajte hlavné heslo:"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:175
-#, fuzzy
 msgid "Enter new password"
-msgstr "Zadajte heslo"
+msgstr "Zadajte nové heslo"
 
 #: packages/app-mobile/components/screens/folder.tsx:115
 msgid "Enter notebook title"
@@ -3153,6 +3130,8 @@ msgstr "Zadajte kód:"
 msgid ""
 "Enter the note lock password to unlock encrypted notes for this session."
 msgstr ""
+"Zadajte heslo na odomknutie poznámok, aby ste odomkli šifrované poznámky pre "
+"túto reláciu."
 
 #: packages/app-mobile/components/NoteItem.tsx:156
 msgid "Entering selection mode"
@@ -3200,7 +3179,7 @@ msgstr ""
 
 #: packages/lib/components/shared/config/config-shared.ts:154
 msgid "Error. The AI provider test failed:"
-msgstr ""
+msgstr "Chyba. Test poskytovateľa umelej inteligencie zlyhal:"
 
 #: packages/app-mobile/components/screens/LogScreen.tsx:237
 msgid "Errors only"
@@ -3316,6 +3295,12 @@ msgid ""
 "running. Connected AI tools can read your note content; any text they "
 "retrieve may be sent to the external LLM provider those tools use."
 msgstr ""
+"Sprístupňuje poznámky z aplikácie Joplin externým aplikáciám umelej "
+"inteligencie (Claude Desktop, Cursor atď.) prostredníctvom protokolu Model "
+"Context Protocol. Vyžaduje, aby bola spustená služba Web Clipper. Pripojené "
+"nástroje umelej inteligencie môžu čítať obsah vašich poznámok; akýkoľvek "
+"text, ktorý získajú, môže byť odoslaný externému poskytovateľovi veľkého "
+"jazykového modelu (LLM), ktorého služby tieto nástroje využívajú."
 
 #: packages/lib/models/settings/builtInMetadata.ts:2115
 msgid "Fail-safe"
@@ -3347,7 +3332,7 @@ msgstr "Nepodarilo sa pripojiť k vášmu účtu. Skúste to prosím znova."
 
 #: packages/app-desktop/commands/createAccessibleDocument.ts:75
 msgid "Failed to create accessible document: %s"
-msgstr ""
+msgstr "Nepodarilo sa vytvoriť prístupný dokument: %s"
 
 #: packages/app-cli/app/main.js:107
 msgid "Fatal error:"
@@ -3385,7 +3370,7 @@ msgstr "Filter"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:556
 msgid "Filtered by section [%s]"
-msgstr ""
+msgstr "Filtrované podľa sekcie [%s]"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:14
 msgid "Find"
@@ -3413,7 +3398,7 @@ msgstr "Oprava indexu vyhľadávania..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:486
 msgid "Flip"
-msgstr ""
+msgstr "Preklopiť"
 
 #: packages/app-desktop/gui/MenuBar.tsx:850
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.ts:9
@@ -3474,9 +3459,8 @@ msgid "Force path style"
 msgstr "Vynútiť štýl cesty"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:147
-#, fuzzy
 msgid "Forgot password?"
-msgstr "Zobraziť heslo"
+msgstr "Zabudnuté heslo?"
 
 #: packages/lib/commands/historyForward.ts:6
 msgid "Forward"
@@ -3516,11 +3500,8 @@ msgstr[1] "Generovanie odkazov..."
 msgstr[2] "Generovanie odkazov..."
 
 #: packages/lib/models/Setting.ts:1411
-#, fuzzy
 msgid "Geolocation, image resize"
-msgstr ""
-"Geografická poloha, kontrola pravopisu, panel s nástrojmi editora, zmena "
-"veľkosti obrázka"
+msgstr "Geografická poloha, zmena veľkosti obrázka"
 
 #: packages/lib/utils/joplinCloud/index.ts:727
 msgid "Get a quote"
@@ -3546,7 +3527,7 @@ msgstr ""
 
 #: packages/lib/models/settings/builtInMetadata.ts:1557
 msgid "Global shortcut to show/hide Joplin"
-msgstr ""
+msgstr "Globálna klávesová skratka na zobrazenie/skrytie aplikácie Joplin"
 
 #: packages/app-mobile/services/voiceTyping/whisper.ts:188
 msgid "Glossary:"
@@ -3562,7 +3543,7 @@ msgstr "Ísť späť"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:177
 msgid "Go to end of note"
-msgstr ""
+msgstr "Prejsť na koniec poznámky"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:44
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:59
@@ -3579,7 +3560,7 @@ msgstr "Prejsť na zdrojovú URL"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:172
 msgid "Go to start of note"
-msgstr ""
+msgstr "Prejsť na začiatok poznámky"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/gotoAnything.ts:19
 #: packages/app-desktop/plugins/GotoAnything.tsx:790
@@ -3593,7 +3574,7 @@ msgstr "Udeliť povolenie"
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/GroupNode.tsx:85
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/GroupNode.tsx:86
 msgid "Group"
-msgstr ""
+msgstr "Skupina"
 
 #: packages/app-cli/app/command-sync.ts:114
 msgid "Have you authorised the application login in the above URL?"
@@ -3717,6 +3698,8 @@ msgid ""
 "If enabled, opening an HTML note displays a prompt to convert the note to "
 "Markdown."
 msgstr ""
+"Ak je táto funkcia zapnutá, pri otvorení poznámky vo formáte HTML sa zobrazí "
+"výzva na konverziu poznámky do formátu Markdown."
 
 #: packages/lib/services/joplinCloudUtils.ts:39
 msgid ""
@@ -3756,23 +3739,23 @@ msgid ""
 "Import a note from a text file (%s). The note will be imported into notebook "
 "'%s'."
 msgstr ""
+"Importovať poznámku z textového súboru (%s). Poznámka bude importovaná do "
+"zápisníka „%s“."
 
 #: packages/lib/models/Setting.ts:1372
 msgid "Import and Export"
 msgstr "Import a export"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.ts:114
-#, fuzzy
 msgid "Import anyway"
-msgstr "Importovať"
+msgstr "Importovať aj tak"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:105
-#, fuzzy
 msgid ""
 "Import failed. Make sure a %s file was selected.\n"
 "Details: %s"
 msgstr ""
-"Import sa nepodaril. Skontrolujte, či bol vybraný súbor JEX.\n"
+"Importovanie sa nepodarilo. Skontrolujte, či bol vybraný súbor %s.\n"
 "Podrobnosti: %s"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:593
@@ -3780,9 +3763,8 @@ msgid "Import from JEX"
 msgstr "Importovať z JEX"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:599
-#, fuzzy
 msgid "Import from text file"
-msgstr "Importovať z JEX"
+msgstr "Importovať z textového súboru"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:594
 msgid "Import notes from a JEX (Joplin Export) file."
@@ -3797,9 +3779,8 @@ msgid "Import..."
 msgstr "Importovať..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:28
-#, fuzzy
 msgid "Imported Notes"
-msgstr "Obnovené poznámky"
+msgstr "Importované poznámky"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:114
 msgid "Imported successfully!"
@@ -3873,30 +3854,33 @@ msgstr ""
 "Dôležité: je potrebné to spustiť iba JEDENKRÁT na jednom zariadení."
 
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:104
-#, fuzzy
 msgid "In order to synchronise, Please upgrade your application to version %s"
-msgstr "Ak chcete synchronizovať, aktualizujte svoju aplikáciu na verziu %s+"
+msgstr ""
+"Ak chcete synchronizovať, aktualizujte prosím svoju aplikáciu na verziu %s"
 
 #: packages/app-desktop/gui/MainScreen.tsx:655
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:74
-#, fuzzy
 msgid ""
 "In order to synchronise, Please upgrade your application to version %s: %s"
-msgstr "Ak chcete synchronizovať, aktualizujte svoju aplikáciu na verziu %s+"
+msgstr ""
+"Ak chcete synchronizovať, aktualizujte prosím svoju aplikáciu na verziu %s: "
+"%s"
 
 #: packages/app-desktop/gui/MainScreen.tsx:643
-#, fuzzy
 msgid ""
 "In order to synchronise, Please upgrade your application to version %s: %s "
 "or update it using your package manager"
-msgstr "Ak chcete synchronizovať, aktualizujte svoju aplikáciu na verziu %s+"
+msgstr ""
+"Ak chcete synchronizovať, aktualizujte prosím svoju aplikáciu na verziu %s: "
+"%s alebo ju aktualizujte pomocou správcu balíkov"
 
 #: packages/app-desktop/gui/MainScreen.tsx:635
-#, fuzzy
 msgid ""
 "In order to synchronise, Please upgrade your application to version %s. "
 "Joplin could not check update information."
-msgstr "Ak chcete synchronizovať, aktualizujte svoju aplikáciu na verziu %s+"
+msgstr ""
+"Ak chcete synchronizovať, aktualizujte svoju aplikáciu na verziu %s. Joplin "
+"nedokázal overiť informácie o aktualizácii."
 
 #: packages/lib/services/synchronizer/syncInfoUtils.ts:617
 msgid "In order to synchronise, please upgrade your application to version %s+"
@@ -3953,25 +3937,23 @@ msgstr "Odsadiť viac"
 
 #: packages/lib/models/settings/builtInMetadata.ts:835
 msgid "Index notes for AI search"
-msgstr ""
+msgstr "Indexovať poznámky pre vyhľadávanie pomocou umelej inteligencie"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:64
-#, fuzzy
 msgid "Indexed notes:"
-msgstr "Odsadiť menej"
+msgstr "Indexované poznámky:"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:62
 msgid "Indexer:"
-msgstr ""
+msgstr "Indexátor:"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:25
-#, fuzzy
 msgid "Indexing is disabled"
-msgstr "Skryť zakázané"
+msgstr "Indexovanie je vypnuté"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:23
 msgid "Indexing…"
-msgstr ""
+msgstr "Indexovanie…"
 
 #: packages/app-desktop/gui/PopupNotification/NotificationItem.tsx:22
 #: packages/app-mobile/components/DialogManager/hooks/useDialogControl.ts:21
@@ -3992,14 +3974,13 @@ msgstr "Vložiť"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:33
 #: packages/editor/CodeMirror/extensions/rendering/renderTables.ts:713
-#, fuzzy
 msgid "Insert column left"
-msgstr "Vložiť čas"
+msgstr "Vložiť stĺpec vľavo"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:34
 #: packages/editor/CodeMirror/extensions/rendering/renderTables.ts:714
 msgid "Insert column right"
-msgstr ""
+msgstr "Vložiť stĺpec vpravo"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:196
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/useEditorCommands.ts:84
@@ -4009,17 +3990,16 @@ msgstr "Vložiť hypertextový odkaz"
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:31
 #: packages/editor/CodeMirror/extensions/rendering/renderTables.ts:711
 msgid "Insert row above"
-msgstr ""
+msgstr "Vložiť riadok nad"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:32
 #: packages/editor/CodeMirror/extensions/rendering/renderTables.ts:712
 msgid "Insert row below"
-msgstr ""
+msgstr "Vložiť riadok pod"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:188
-#, fuzzy
 msgid "Insert table"
-msgstr "Vložiť čas"
+msgstr "Vložiť tabuľku"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:122
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:881
@@ -4090,11 +4070,12 @@ msgid ""
 "Invalid password. Please try again. If you have forgotten your password you "
 "will need to reset it."
 msgstr ""
+"Neplatné heslo. Skúste to prosím znova. Ak ste zabudli heslo, budete si ho "
+"musieť obnoviť."
 
 #: packages/lib/services/plugins/PluginService.ts:600
-#, fuzzy
 msgid "Invalid plugin manifest: %s"
-msgstr "Neplatná odpoveď: %s"
+msgstr "Neplatný manifest doplnku: %s"
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:24
 msgid "iOS version: %s"
@@ -4110,13 +4091,12 @@ msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "Položku \"%s\" nebolo možné stiahnuť: %s"
 
 #: packages/server/src/middleware/notificationHandler.ts:91
-#, fuzzy
 msgid "Item upload has been disabled."
-msgstr "Poznámka bola uložená."
+msgstr "Nahrávanie položiek bolo vypnuté."
 
 #: packages/server/src/middleware/notificationHandler.ts:69
 msgid "Item upload will be disabled in %s."
-msgstr ""
+msgstr "Nahrávanie položiek bude v %s deaktivované."
 
 #: packages/server/src/services/MustacheService.ts:161
 #: packages/server/src/services/MustacheService.ts:284
@@ -4154,9 +4134,8 @@ msgstr "Joplin Cloud"
 
 #: packages/lib/models/settings/builtInMetadata.ts:699
 #: packages/lib/utils/joplinCloud/index.ts:345
-#, fuzzy
 msgid "Joplin Cloud AI (beta)"
-msgstr "Joplin Cloud"
+msgstr "Joplin Cloud AI (beta)"
 
 #: packages/lib/models/settings/builtInMetadata.ts:694
 #: packages/lib/services/ai/availability.ts:44
@@ -4164,6 +4143,8 @@ msgid ""
 "Joplin Cloud AI requires Joplin Cloud sync. Pick a different provider or "
 "restore Joplin Cloud sync."
 msgstr ""
+"Aplikácia Joplin Cloud AI vyžaduje synchronizáciu s Joplin Cloud. Vyberte si "
+"iného poskytovateľa alebo obnovte synchronizáciu s Joplin Cloud."
 
 #: packages/app-desktop/gui/Root.tsx:165
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:149
@@ -4219,6 +4200,8 @@ msgid ""
 "Joplin needs your permission to access your %s account and to synchronise "
 "data with it."
 msgstr ""
+"Aplikácia Joplin potrebuje váš súhlas na prístup k vášmu účtu %s a na "
+"synchronizáciu údajov s ním."
 
 #: packages/lib/SyncTargetJoplinServer.ts:64
 msgid "Joplin Server"
@@ -4264,9 +4247,8 @@ msgstr ""
 "v nastaveniach."
 
 #: packages/lib/utils/joplinCloud/index.ts:309
-#, fuzzy
 msgid "Joplin Web App"
-msgstr "Joplin Desktop"
+msgstr "Joplin Web aplikácia"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:139
 msgid ""
@@ -4291,9 +4273,8 @@ msgstr ""
 "spolupráca na zápisníkoch s ostatnými."
 
 #: packages/lib/components/shared/NoteEditor/WarningBanner/useEditorTypeMigrationBanner.ts:33
-#, fuzzy
 msgid "Keep it enabled"
-msgstr "Hermes povolené: %d"
+msgstr "Ponechajte to zapnuté"
 
 #: packages/lib/models/settings/builtInMetadata.ts:2156
 msgid "Keep note history for"
@@ -4304,9 +4285,8 @@ msgid "Keep notes in the trash for"
 msgstr "Uchovávať poznámky v koši po dobu"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:210
-#, fuzzy
 msgid "Key upgrade"
-msgstr "Aktualizovať"
+msgstr "Aktualizovať kľúč"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1909
 msgid "Keyboard Mode"
@@ -4358,9 +4338,8 @@ msgid "Last error: %s"
 msgstr "Posledná chyba: %s"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1686
-#, fuzzy
 msgid "Last used"
-msgstr "Vytvoriť používateľa"
+msgstr "Naposledy použité"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:439
 msgid "Later"
@@ -4451,9 +4430,8 @@ msgid "Link text"
 msgstr "Text odkazu"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:830
-#, fuzzy
 msgid "Link to note"
-msgstr "Odkaz na poznámku..."
+msgstr "Odkaz na poznámku"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/linkToNote.ts:13
 msgid "Link to note..."
@@ -4461,9 +4439,8 @@ msgstr "Odkaz na poznámku..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/FileNode.tsx:201
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/FileNode.tsx:209
-#, fuzzy
 msgid "Linked item"
-msgstr "Položka zoznamu"
+msgstr "Prepojená položka"
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:179
 msgid "Links"
@@ -4488,18 +4465,16 @@ msgid "Loading..."
 msgstr "Načítava sa..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/FileNode.tsx:210
-#, fuzzy
 msgid "Loading…"
-msgstr "Načítava sa..."
+msgstr "Načítava sa…"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:81
 msgid "Location"
 msgstr "Poloha"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/lockEncryptedNotes.ts:8
-#, fuzzy
 msgid "Lock encrypted notes"
-msgstr "Nedá sa zmeniť zašifrovaná položka"
+msgstr "Zamknúť šifrované poznámky"
 
 #: packages/app-cli/app/command-sync.ts:152
 msgid ""
@@ -4511,9 +4486,8 @@ msgstr ""
 "môžete odstrániť súbor zámku na „%s“ a pokračovať v operácii."
 
 #: packages/app-desktop/gui/NoteEditor/NoteLockPanel/NoteLockPanel.tsx:83
-#, fuzzy
 msgid "Locked note"
-msgstr "Nová poznámka"
+msgstr "Zamknutá poznámka"
 
 #: packages/lib/models/Setting.ts:1390
 msgid ""
@@ -4521,10 +4495,13 @@ msgid ""
 "entering your note lock password. The password is required again after "
 "locking or restarting Joplin."
 msgstr ""
+"Zamknuté poznámky sú na tomto zariadení zašifrované a je možné ich prečítať "
+"až po zadaní hesla na uzamknutie poznámok. Heslo je potrebné zadať znova po "
+"uzamknutí alebo reštartovaní aplikácie Joplin."
 
 #: packages/app-desktop/commands/startExternalEditing.ts:24
 msgid "Locked notes cannot be opened in an external editor"
-msgstr ""
+msgstr "Zamknuté poznámky nie je možné otvoriť v externom editore"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:579
 #: packages/app-mobile/components/screens/LogScreen.tsx:214
@@ -4568,9 +4545,8 @@ msgid "Make a donation"
 msgstr "Prispejte"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:370
-#, fuzzy
 msgid "Manage capabilities"
-msgstr "Spravovať profily"
+msgstr "Spravovať funkcie"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:238
 msgid "Manage master password"
@@ -4585,9 +4561,8 @@ msgid "Manage multiple users"
 msgstr "Spravovať viacerých používateľov"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:131
-#, fuzzy
 msgid "Manage password"
-msgstr "Spravovať hlavné heslo"
+msgstr "Spravovať heslo"
 
 #: packages/app-desktop/commands/showProfileEditor.ts:6
 #: packages/app-desktop/gui/Root.tsx:170
@@ -4601,7 +4576,7 @@ msgstr "Spravovať zdieľané zápisníky"
 
 #: packages/server/src/middleware/notificationHandler.ts:116
 msgid "Manage this server's license from the [admin dashboard](%s)."
-msgstr ""
+msgstr "Licenciu tohto servera spravujte z [panelu správcu](%s)."
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:384
 msgid "Manage toolbar options"
@@ -4655,9 +4630,8 @@ msgid "Markdown editor: Highlight active line"
 msgstr "Editor Markdown: Zvýrazniť aktívny riadok"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1947
-#, fuzzy
 msgid "Markdown editor: Interactive table editing"
-msgstr "Editor Markdown: Zvýrazniť aktívny riadok"
+msgstr "Editor Markdown: Interaktívna úprava tabuliek"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1957
 msgid "Markdown editor: Render images"
@@ -4690,9 +4664,8 @@ msgid "Master password"
 msgstr "Hlavné heslo"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:230
-#, fuzzy
 msgid "Master password status:"
-msgstr "Hlavné heslo:"
+msgstr "Stav hlavného hesla:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:475
 #: packages/app-mobile/components/screens/encryption-config.tsx:261
@@ -4727,6 +4700,7 @@ msgstr "Maximálna celková veľkosť"
 msgid ""
 "MCP requires the Web Clipper service. Enable it in Settings → Web Clipper."
 msgstr ""
+"MCP vyžaduje službu Web Clipper. Aktivujte ju v Nastaveniach → Web Clipper."
 
 #: packages/lib/models/Setting.ts:1410
 msgid "Media player, math, diagrams, table of contents"
@@ -4770,11 +4744,11 @@ msgstr "Mobilné dáta – automatická synchronizácia je vypnutá"
 
 #: packages/lib/models/settings/builtInMetadata.ts:749
 msgid "Model"
-msgstr ""
+msgstr "Model"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:60
 msgid "Model:"
-msgstr ""
+msgstr "Model:"
 
 #: packages/app-desktop/gui/MainScreen.tsx:604
 msgid "More info"
@@ -4815,26 +4789,22 @@ msgstr ""
 "zápisníkoch."
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:259
-#, fuzzy
 msgid "Move %s down"
-msgstr "Presunúť nadol"
+msgstr "Presunúť %s nadol"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:250
-#, fuzzy
 msgid "Move %s up"
-msgstr "Presunúť hore"
+msgstr "Presunúť %s hore"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:37
 #: packages/editor/CodeMirror/extensions/rendering/renderTables.ts:720
-#, fuzzy
 msgid "Move column left"
-msgstr "Presunúť doľava"
+msgstr "Presunúť stĺpec doľava"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:38
 #: packages/editor/CodeMirror/extensions/rendering/renderTables.ts:721
-#, fuzzy
 msgid "Move column right"
-msgstr "Presunúť doprava"
+msgstr "Presunúť stĺpec doprava"
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:73
 msgid "Move down"
@@ -4864,15 +4834,13 @@ msgstr "Presunúť doprava"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:36
 #: packages/editor/CodeMirror/extensions/rendering/renderTables.ts:719
-#, fuzzy
 msgid "Move row down"
-msgstr "Presunúť nadol"
+msgstr "Posunúť riadok dole"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:35
 #: packages/editor/CodeMirror/extensions/rendering/renderTables.ts:718
-#, fuzzy
 msgid "Move row up"
-msgstr "Presunúť hore"
+msgstr "Presunúť riadok hore"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.ts:16
 msgid "Move to notebook"
@@ -4916,9 +4884,8 @@ msgid "New drawing"
 msgstr "Nový náčrt"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:260
-#, fuzzy
 msgid "New group"
-msgstr "Nový profil"
+msgstr "Nová skupina"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:120
 msgid "New invitations"
@@ -4960,9 +4927,8 @@ msgid "New notebook title"
 msgstr "Nový názov zápisníka"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:170
-#, fuzzy
 msgid "New password"
-msgstr "Zobraziť heslo"
+msgstr "Nové heslo"
 
 #: packages/app-mobile/setupQuickActions.ts:32
 msgid "New photo"
@@ -4978,7 +4944,7 @@ msgstr "Nový pod-zápisník"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:241
 msgid "New text card"
-msgstr ""
+msgstr "Nová textová karta"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:125
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:72
@@ -5041,35 +5007,35 @@ msgstr "Žiadny aktívny zápisník."
 
 #: packages/lib/models/settings/builtInMetadata.ts:798
 msgid "No AI usage recorded yet."
-msgstr ""
+msgstr "Zatiaľ nebolo zaznamenané žiadne využitie umelej inteligencie."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:481
 msgid "No arrow"
-msgstr ""
+msgstr "Žiadna šípka"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:332
-#, fuzzy
 msgid "No attachments match your search."
-msgstr "Nasledujúca príloha zodpovedá vašej vyhľadávacej požiadavke:"
+msgstr "Žiadne prílohy nezodpovedajú vášmu vyhľadávaniu."
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:333
-#, fuzzy
 msgid "No attachments!"
-msgstr "Prílohy poznámok"
+msgstr "Žiadne prílohy!"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:355
 msgid "No colour"
-msgstr ""
+msgstr "Žiadna farba"
 
 #: packages/lib/services/ai/availability.ts:74
 msgid ""
 "No embedding model is installed. It is downloaded automatically on first use "
 "— check Settings → AI for progress."
 msgstr ""
+"Nie je nainštalovaný žiadny model na vloženie. Pri prvom použití sa stiahne "
+"automaticky – priebeh stiahnutia si môžete skontrolovať v časti Nastavenia → "
+"AI."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:538
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:552
-#, fuzzy
 msgid "No matching results"
 msgstr "Žiadne výsledky"
 
@@ -5142,6 +5108,8 @@ msgid ""
 "No valid notebook is available. Please create or select a notebook and try "
 "again."
 msgstr ""
+"Nie je k dispozícii žiadny platný zápisník. Vytvorte alebo vyberte zápisník "
+"a skúste to znova."
 
 #: packages/app-cli/app/command-share.ts:188
 #: packages/app-cli/app/command-share.ts:208
@@ -5155,7 +5123,7 @@ msgstr "Nord"
 
 #: packages/lib/models/settings/builtInMetadata.ts:588
 msgid "Normal"
-msgstr ""
+msgstr "Normálny"
 
 #: packages/app-cli/app/command-sync.ts:121
 msgid "Not authenticated with %s. Please provide any missing credentials."
@@ -5178,24 +5146,20 @@ msgid "Not now"
 msgstr "Teraz nie"
 
 #: packages/app-desktop/gui/PublishFolderDialog.tsx:96
-#, fuzzy
 msgid "Not published"
-msgstr "Poznámka neuverejnená: %s"
+msgstr "Nezverejnené"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteLockConfig.tsx:142
-#, fuzzy
 msgid "Not set"
-msgstr "Nie je užitočné"
+msgstr "Nenastavené"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:13
-#, fuzzy
 msgid "Not started"
-msgstr "Nevygenerované"
+msgstr "Nespustené"
 
 #: packages/server/src/routes/index/recovery_codes.ts:65
-#, fuzzy
 msgid "Not Used"
-msgstr "Nie je užitočné"
+msgstr "Nepoužívané"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:113
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
@@ -5256,7 +5220,7 @@ msgstr "História poznámky bola vymazaná."
 
 #: packages/lib/services/ai/availability.ts:68
 msgid "Note indexing is turned off in Settings → AI."
-msgstr ""
+msgstr "Indexovanie poznámok je vypnuté v Nastaveniach → AI."
 
 #: packages/app-cli/app/command-done.ts:22
 msgid "Note is not a to-do: \"%s\""
@@ -5278,25 +5242,22 @@ msgid "Note list style"
 msgstr "Štýl zoznamu poznámok"
 
 #: packages/lib/models/Setting.ts:1367
-#, fuzzy
 msgid "Note lock"
-msgstr "Blok kódu"
+msgstr "Uzamknutie poznámky"
 
 #: packages/app-desktop/gui/NoteEditor/NoteLockPanel/NoteLockPanel.tsx:70
 #: packages/app-desktop/gui/NoteLockUnlockDialog/Dialog.tsx:70
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:558
-#, fuzzy
 msgid "Note lock password"
-msgstr "Heslo Nextcloud"
+msgstr "Heslo na uzamknutie poznámky"
 
 #: packages/lib/models/Setting.ts:1407
 msgid "Note lock password, auto lock"
-msgstr ""
+msgstr "Heslo na uzamknutie poznámky, automatické uzamknutie"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteLockConfig.tsx:142
-#, fuzzy
 msgid "Note lock password:"
-msgstr "Heslo Nextcloud"
+msgstr "Heslo na uzamknutie poznámky:"
 
 #: packages/app-cli/app/command-unpublish.ts:35
 msgid "Note not published: %s"
@@ -5389,23 +5350,29 @@ msgstr "Číslovaný zoznam"
 
 #: packages/lib/services/interop/InteropService.ts:138
 msgid "Obsidian Vault"
-msgstr ""
+msgstr "Obsidian Vault"
 
 #: packages/app-desktop/commands/createAccessibleDocument.ts:57
 msgid "OCR has been queued. Please wait for it to complete and then try again."
 msgstr ""
+"OCR bolo zaradené do poradia. Počkajte, kým sa spracovanie dokončí, a potom "
+"to skúste znova."
 
 #: packages/app-desktop/commands/createAccessibleDocument.ts:33
 msgid ""
 "OCR is not complete. Please wait for OCR to finish before creating an "
 "accessible document."
 msgstr ""
+"OCR ešte nie je dokončené. Pred vytvorením prístupného dokumentu prosím "
+"počkajte, kým sa OCR dokončí."
 
 #: packages/app-desktop/commands/createAccessibleDocument.ts:42
 msgid ""
 "OCR needs to run to generate an accessible document. This may take a moment. "
 "Would you like to continue?"
 msgstr ""
+"Na vytvorenie prístupného dokumentu je potrebné spustiť OCR. Môže to chvíľu "
+"trvať. Chcete pokračovať?"
 
 #: packages/lib/models/settings/builtInMetadata.ts:632
 msgid "OCR: Clear cache and re-download language data files"
@@ -5413,9 +5380,8 @@ msgstr ""
 "OCR: Vymazať vyrovnávaciu pamäť a znovu stiahnuť súbory s jazykovými údajmi"
 
 #: packages/lib/models/settings/builtInMetadata.ts:573
-#, fuzzy
 msgid "OCR: Enable optical character recognition"
-msgstr "Povoliť optické rozpoznávanie znakov (OCR)"
+msgstr "OCR: Povoliť optické rozpoznávanie znakov"
 
 #: packages/lib/models/settings/builtInMetadata.ts:613
 msgid "OCR: Language data URL or path"
@@ -5423,7 +5389,7 @@ msgstr "OCR: URL k údajom jazyka alebo cesta"
 
 #: packages/lib/models/settings/builtInMetadata.ts:585
 msgid "OCR: PDF processing mode"
-msgstr ""
+msgstr "OCR: Režim spracovania PDF"
 
 #: packages/lib/models/settings/builtInMetadata.ts:642
 msgid "OCR: Search in extracted content"
@@ -5507,6 +5473,9 @@ msgid ""
 "be created, and any notes locked with the old one will become permanently "
 "unreadable."
 msgstr ""
+"Toto urobte len v prípade, že ste zabudli svoje aktuálne heslo. Vytvorí sa "
+"nové heslo a všetky poznámky uzamknuté starým heslom sa stanú natrvalo "
+"nečitateľnými."
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/print.ts:18
 msgid "Only one note can be printed at a time."
@@ -5521,9 +5490,8 @@ msgid "Open %s"
 msgstr "Otvoriť %s"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:181
-#, fuzzy
 msgid "Open a note to start chatting."
-msgstr "Zadaním názvu poznámky ju vyhľadáte."
+msgstr "Otvorte správu a začnite konverzáciu."
 
 #: packages/app-desktop/commands/startExternalEditing.ts:11
 msgid "Open in external editor"
@@ -5580,9 +5548,8 @@ msgid "Open..."
 msgstr "Otvoriť..."
 
 #: packages/lib/models/settings/builtInMetadata.ts:700
-#, fuzzy
 msgid "OpenAI-compatible"
-msgstr "Nekompatibilné"
+msgstr "OpenAI-kompatibilné"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:238
 msgid "Opening section %s"
@@ -5633,9 +5600,8 @@ msgid "Other applications..."
 msgstr "Iné aplikácie..."
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:363
-#, fuzzy
 msgid "Other sync options"
-msgstr "Vyberte možnosť"
+msgstr "Ďalšie možnosti synchronizácie"
 
 #: packages/app-cli/app/command-import.ts:30
 msgid "Output format: %s"
@@ -5671,9 +5637,8 @@ msgstr "Heslo nemôže byť prázdne"
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:132
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:558
 #: packages/app-mobile/components/screens/ConfigScreen/NoteLockConfig.tsx:103
-#, fuzzy
 msgid "Password setup"
-msgstr "Heslo"
+msgstr "Nastavenie hesla"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:367
 #: packages/app-mobile/components/screens/encryption-config.tsx:145
@@ -5684,9 +5649,8 @@ msgstr "Heslo:"
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:182
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:198
 #: packages/app-mobile/components/screens/ConfigScreen/NoteLockConfig.tsx:132
-#, fuzzy
 msgid "Passwords do not match"
-msgstr "Heslá sa nezhodujú!"
+msgstr "Heslá sa nezhodujú"
 
 #: packages/app-cli/app/command-e2ee.ts:100
 #: packages/app-mobile/components/screens/encryption-config.tsx:164
@@ -5701,9 +5665,8 @@ msgstr "Vložiť"
 
 #: packages/app-desktop/gui/NoteEditor/commands/pasteAsMarkdown.ts:11
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.ts:178
-#, fuzzy
 msgid "Paste as Markdown"
-msgstr "Upraviť ako Markdown"
+msgstr "Vložiť ako Markdown"
 
 #: packages/app-desktop/gui/NoteEditor/commands/pasteAsText.ts:7
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:280
@@ -5775,6 +5738,8 @@ msgid ""
 "Please disable users from the [admin dashboard](%s) to bring this server "
 "under the limit."
 msgstr ""
+"Prosím, deaktivujte používateľov v [paneli správcu](%s), aby sa tento server "
+"dostal pod stanovený limit."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:227
 msgid ""
@@ -5791,6 +5756,9 @@ msgid ""
 "Please make sure you remember your password. It cannot be recovered if lost, "
 "and any data encrypted with it will become inaccessible."
 msgstr ""
+"Svoje heslo si prosím nezabudnite zapamätať. V prípade straty ho nebude "
+"možné obnoviť a všetky údaje, ktoré boli pomocou neho zašifrované, budú "
+"nedostupné."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:411
 msgid ""
@@ -5844,7 +5812,7 @@ msgstr "Uveďte prosím zápisník, do ktorého sa majú poznámky importovať."
 
 #: packages/server/src/middleware/notificationHandler.ts:62
 msgid "Please update the license key from the [admin dashboard](%s)."
-msgstr ""
+msgstr "Aktualizujte prosím licenčný kľúč v [paneli správcu](%s)."
 
 #: packages/lib/services/plugins/PluginService.ts:607
 msgid "Please upgrade Joplin to version %s or later to use this plugin."
@@ -6004,7 +5972,7 @@ msgstr "Pro"
 
 #: packages/lib/utils/joplinCloud/index.ts:660
 msgid "Pro 100 GB"
-msgstr ""
+msgstr "Pro 100 GB"
 
 #: packages/server/src/services/TaskService.ts:27
 msgid "Process failed payment subscriptions"
@@ -6053,7 +6021,6 @@ msgid "Profiles"
 msgstr "Profily"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/TextNode.tsx:151
-#, fuzzy
 msgid "Promote to note"
 msgstr "Premeniť na poznámku"
 
@@ -6090,19 +6057,16 @@ msgid "Publish note..."
 msgstr "Zverejniť poznámku..."
 
 #: packages/app-desktop/gui/PublishFolderDialog.tsx:108
-#, fuzzy
 msgid "Publish notebook"
-msgstr "Zverejniť poznámku"
+msgstr "Zverejniť zápisník"
 
 #: packages/app-desktop/gui/PublishFolderDialog.tsx:91
-#, fuzzy
 msgid "Publish Notebook"
-msgstr "Zverejniť poznámku"
+msgstr "Zverejniť zápisník"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showPublishFolderDialog.ts:6
-#, fuzzy
 msgid "Publish notebook..."
-msgstr "Zverejniť poznámku..."
+msgstr "Zverejniť zápisník..."
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:103
 msgid "Publish Notes"
@@ -6120,9 +6084,8 @@ msgstr "Zverejniť/Zrušiť zverejnenie"
 
 #: packages/app-desktop/gui/PublishFolderDialog.tsx:96
 #: packages/app-desktop/gui/Sidebar/listItemComponents/FolderItem.tsx:61
-#, fuzzy
 msgid "Published"
-msgstr "Zverejniť poznámku"
+msgstr "Zverejnené"
 
 #: packages/app-cli/app/command-publish.ts:60
 msgid "Published at URL: %s"
@@ -6145,7 +6108,7 @@ msgstr "Ukončiť"
 
 #: packages/app-desktop/gui/QuitSyncDialog.tsx:76
 msgid "Quit anyway"
-msgstr ""
+msgstr "Ukončiť aj tak"
 
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:183
 msgid "Re-download model"
@@ -6169,12 +6132,11 @@ msgstr "Opätovné odoslanie lokálnych údajov do cieľa synchronizácie"
 
 #: packages/lib/services/ai/tools/global/listTags.ts:7
 msgid "Read all tags"
-msgstr ""
+msgstr "Čítať všetky štítky"
 
 #: packages/lib/services/ai/tools/global/readImage.ts:35
-#, fuzzy
 msgid "Read image: %s"
-msgstr "Čas čítania: %s min"
+msgstr "Prečítať obrázok: %s"
 
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:41
 msgid "Read more"
@@ -6185,19 +6147,16 @@ msgid "Read more about it"
 msgstr "Prečítajte si o tom viac"
 
 #: packages/lib/services/ai/tools/buildEditorTools.ts:209
-#, fuzzy
 msgid "Read note"
-msgstr "Prečítajte si viac"
+msgstr "Prečítať poznámku"
 
 #: packages/lib/services/ai/tools/global/readNote.ts:18
-#, fuzzy
 msgid "Read note: %s"
-msgstr "Čas čítania: %s min"
+msgstr "Prečítať poznámku: %s"
 
 #: packages/lib/services/ai/tools/global/listNotebooks.ts:8
-#, fuzzy
 msgid "Read notebooks"
-msgstr "Premenovať zápisník:"
+msgstr "Čítať poznámky"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:169
 msgid "Read time: %s min"
@@ -6213,6 +6172,8 @@ msgid ""
 "Reading this note requires the note lock password, which has not been set up "
 "on this device yet."
 msgstr ""
+"Na prečítanie tejto poznámky je potrebné heslo na uzamknutie poznámok, ktoré "
+"však na tomto zariadení ešte nebolo nastavené."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:344
 msgid "Recipient has accepted the invitation"
@@ -6311,12 +6272,11 @@ msgid "Remove this search from the sidebar?"
 msgstr "Odstrániť toto vyhľadávanie z bočného panela?"
 
 #: packages/lib/services/ai/tools/buildEditorTools.ts:51
-#, fuzzy
 msgid "Removed %d word"
 msgid_plural "Removed %d words"
-msgstr[0] "Odstrániť %s"
-msgstr[1] "Odstrániť %s"
-msgstr[2] "Odstrániť %s"
+msgstr[0] "Odstránilo sa %d slovo"
+msgstr[1] "Odstránili sa %d slová"
+msgstr[2] "Odstránilo sa %d slov"
 
 #: packages/app-cli/app/command-share.ts:112
 msgid "Removed %s from share."
@@ -6324,12 +6284,11 @@ msgstr "Odstránené %s zo zdieľania."
 
 #: packages/app-mobile/components/TagEditor.tsx:258
 #: packages/lib/services/ai/tools/global/manageTags.ts:24
-#, fuzzy
 msgid "Removed tag: %s"
 msgid_plural "Removed tags: %s"
-msgstr[0] "Odstránené štítky: %s"
+msgstr[0] "Odstránený štítok: %s"
 msgstr[1] "Odstránené štítky: %s"
-msgstr[2] "Odstránené štítky: %s"
+msgstr[2] "Odstránených štítkov: %s"
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:68
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameFolder.ts:9
@@ -6361,7 +6320,6 @@ msgstr "Obnoviť token"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:176
 #: packages/app-mobile/components/screens/ConfigScreen/NoteLockConfig.tsx:118
-#, fuzzy
 msgid "Repeat password"
 msgstr "Znova zadajte heslo"
 
@@ -6399,9 +6357,8 @@ msgid "replaced match on line $"
 msgstr "nahradená zhoda v riadku $"
 
 #: packages/lib/services/ai/tools/buildEditorTools.ts:62
-#, fuzzy
 msgid "Replaced selection"
-msgstr "Nahradiť všetko"
+msgstr "Nahradený výber"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:160
 msgid "Report an issue"
@@ -6428,14 +6385,17 @@ msgid ""
 "Required to use cloud-hosted AI models, including Joplin Cloud AI. When "
 "disabled, only on-device providers can be used."
 msgstr ""
+"Vyžaduje používanie modelov umelej inteligencie hostovaných v cloude, "
+"vrátane Joplin Cloud AI. Ak je táto funkcia vypnutá, je možné používať iba "
+"poskytovateľov fungujúcich priamo na zariadení."
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:416
 msgid "Reset"
-msgstr ""
+msgstr "Obnoviť"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:140
 msgid "Reset AI token usage counters?"
-msgstr ""
+msgstr "Vynulovať počítadlá používania AI tokenov?"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/resetLayout.ts:7
 msgid "Reset application layout"
@@ -6448,23 +6408,20 @@ msgid "Reset master password"
 msgstr "Obnoviť hlavné heslo"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:125
-#, fuzzy
 msgid "Reset password"
-msgstr "Znova zadajte heslo"
+msgstr "Obnoviť heslo"
 
 #: packages/lib/models/settings/builtInMetadata.ts:794
-#, fuzzy
 msgid "Reset token usage"
-msgstr "Obnoviť token"
+msgstr "Obnoviť využitie tokenu"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1374
 msgid "Resize large images:"
 msgstr "Zmeniť veľkosť veľkých obrázkov:"
 
 #: packages/app-desktop/commands/createAccessibleDocument.ts:21
-#, fuzzy
 msgid "Resource not found"
-msgstr "Obnoviť poznámku"
+msgstr "Zdroj sa nenašiel"
 
 #: packages/app-cli/app/command-import.ts:56
 #: packages/app-desktop/gui/ImportScreen.tsx:101
@@ -6540,12 +6497,10 @@ msgid "Reveal file in folder"
 msgstr "Odhaliť súbor v priečinku"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1481
-#, fuzzy
 msgid "Reveal in notebook"
-msgstr "Opustiť zápisník"
+msgstr "Zobraziť v zápisníku"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1289
-#, fuzzy
 msgid "Reverse notebook sort order"
 msgstr "Obrátiť poradie"
 
@@ -6580,7 +6535,7 @@ msgstr ""
 
 #: packages/app-desktop/commands/createAccessibleDocument.ts:43
 msgid "Run OCR"
-msgstr ""
+msgstr "Spustiť OCR"
 
 #: packages/app-cli/app/command-batch.ts:29
 msgid ""
@@ -6711,9 +6666,8 @@ msgid "Search in current note"
 msgstr "Hľadať v aktuálnej poznámke"
 
 #: packages/app-mobile/components/screens/SearchScreen/index.tsx:109
-#, fuzzy
 msgid "Search notes, notebooks..."
-msgstr "Zdieľať poznámku..."
+msgstr "Hľadať poznámky, zápisníky..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:548
 #: packages/app-desktop/plugins/GotoAnything.tsx:710
@@ -6721,9 +6675,8 @@ msgid "Search results"
 msgstr "Výsledky vyhľadávania"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:166
-#, fuzzy
 msgid "Search settings..."
-msgstr "Hľadať štítky"
+msgstr "Hľadať nastavenia..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:202
 msgid "Search shown"
@@ -6750,9 +6703,8 @@ msgstr "Hľadať..."
 
 #: packages/lib/services/ai/tools/global/searchNotes.ts:19
 #: packages/lib/services/ai/tools/global/semanticSearchNotes.ts:16
-#, fuzzy
 msgid "Searched for: %s"
-msgstr "Formát zdroja: %s"
+msgstr "Hľadané: %s"
 
 #: packages/app-cli/app/command-search.ts:13
 msgid "Searches for the given <pattern> in all the notes."
@@ -6825,10 +6777,12 @@ msgid ""
 "Self-hosted instances of the Joplin web app cannot sync with Joplin Cloud. "
 "Open the official web app?"
 msgstr ""
+"Vlastné inštancie webovej aplikácie Joplin sa nemôžu synchronizovať so "
+"službou Joplin Cloud. Chcete otvoriť oficiálnu webovú aplikáciu?"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:410
 msgid "Send"
-msgstr ""
+msgstr "Odoslať"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.ts:159
 msgid "Send bug report"
@@ -6848,9 +6802,8 @@ msgid "Server is running on port %d"
 msgstr "Server beží na porte %d"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteLockConfig.tsx:142
-#, fuzzy
 msgid "Set"
-msgstr "Vybrať"
+msgstr "Nastaviť"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/editAlarm.ts:13
 #: packages/app-mobile/components/screens/Note/Note.tsx:1363
@@ -6876,9 +6829,8 @@ msgid "Set the password"
 msgstr "Set the password"
 
 #: packages/app-desktop/gui/NoteEditor/NoteLockPanel/NoteLockPanel.tsx:60
-#, fuzzy
 msgid "Set up note lock"
-msgstr "Vyberie zápisník"
+msgstr "Nastaviť uzamknutie poznámok"
 
 #: packages/app-cli/app/command-set.ts:23
 msgid ""
@@ -6969,13 +6921,12 @@ msgid "Show all"
 msgstr "Zobraziť všetko"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:566
-#, fuzzy
 msgid "Show all results"
-msgstr "Žiadne výsledky"
+msgstr "Zobraziť všetky výsledky"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1403
 msgid "Show checkbox completion chart in note list"
-msgstr ""
+msgstr "Zobraziť graf vyplnenia zaškrtávacích políčok v zozname poznámok"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1088
 msgid "Show completed to-dos"
@@ -6991,7 +6942,7 @@ msgstr "Zobraziť nepovolené kľúče"
 
 #: packages/lib/models/settings/builtInMetadata.ts:2544
 msgid "Show Joplin icon for note links"
-msgstr ""
+msgstr "Zobraziť ikonu Joplin pre odkazy na poznámky"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/FontSearch.tsx:51
 msgid "Show monospace fonts only."
@@ -7023,7 +6974,7 @@ msgstr "Zobraziť/skryť bočný panel"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:557
 msgid "Showing all matching settings"
-msgstr ""
+msgstr "Zobrazujú sa všetky zodpovedajúce nastavenia"
 
 #: packages/app-mobile/components/screens/tags.tsx:68
 msgid "Shows notes for tag"
@@ -7059,13 +7010,12 @@ msgid "Size"
 msgstr "Veľkosť"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:34
-#, fuzzy
 msgid "Size (largest first)"
-msgstr "Zmeniť veľkosť veľkých obrázkov:"
+msgstr "Veľkosť (najskôr najväčšie)"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:34
 msgid "Size (smallest first)"
-msgstr ""
+msgstr "Veľkosť (najmenšie ako prvé)"
 
 #: packages/app-desktop/checkForUpdates.ts:116
 msgid "Skip this version"
@@ -7131,7 +7081,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:308
 msgid "Something went wrong."
-msgstr ""
+msgstr "Niečo sa pokazilo."
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:96
 msgid "Sort \"%s\" in ascending order"
@@ -7142,14 +7092,12 @@ msgid "Sort \"%s\" in descending order"
 msgstr "Zoradiť „%s“ zostupne"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:424
-#, fuzzy
 msgid "Sort by size"
-msgstr "Veľkosť posuvníka"
+msgstr "Zoradiť podľa veľkosti"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:424
-#, fuzzy
 msgid "Sort by title"
-msgstr "Názov poznámky"
+msgstr "Zoradiť podľa názvu"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1266
 msgid "Sort notebooks by"
@@ -7222,9 +7170,8 @@ msgstr "Spustiť aplikáciu minimalizovanú na paneli s ikonou"
 #: packages/lib/utils/joplinCloud/index.ts:675
 #: packages/lib/utils/joplinCloud/index.ts:698
 #: packages/lib/utils/joplinCloud/index.ts:720
-#, fuzzy
 msgid "Start free trial"
-msgstr "Spustiť nahrávanie"
+msgstr "Spustiť bezplatnú skúšobnú verziu"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:211
 msgid "Start recording"
@@ -7305,18 +7252,16 @@ msgid "Stop"
 msgstr "Zastaviť"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:403
-#, fuzzy
 msgid "Stop editing"
-msgstr "Zastaviť externú úpravu"
+msgstr "Zastaviť úpravu"
 
 #: packages/app-desktop/commands/stopExternalEditing.ts:8
 msgid "Stop external editing"
 msgstr "Zastaviť externú úpravu"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:410
-#, fuzzy
 msgid "Stop generating"
-msgstr "Zastaviť externú úpravu"
+msgstr "Zastaviť generovanie"
 
 #: packages/lib/utils/joplinCloud/index.ts:270
 msgid "Storage space"
@@ -7349,7 +7294,7 @@ msgstr "Hotovo! Zdá sa, že konfigurácia synchronizácie je správna."
 
 #: packages/lib/components/shared/config/config-shared.ts:151
 msgid "Success! The AI provider responded:"
-msgstr ""
+msgstr "Hotovo! Poskytovateľ umelej inteligencie odpovedal:"
 
 #: packages/app-desktop/gui/InlineCombobox.tsx:185
 msgid "Suggestions"
@@ -7371,7 +7316,7 @@ msgstr "Vymeniť riadok hore"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:486
 msgid "Swap source and target"
-msgstr ""
+msgstr "Vymeniť zdroj a cieľ"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleNoteType.ts:9
 msgid "Switch between note and to-do type"
@@ -7417,9 +7362,8 @@ msgid "Switch to to-do type"
 msgstr "Prepnúť na typ úlohy"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:152
-#, fuzzy
 msgid "Switched notes: %s"
-msgstr "Prepnúť na typ poznámky"
+msgstr "Prepnuté poznámky: %s"
 
 #: packages/app-cli/app/command-use.ts:13
 msgid ""
@@ -7434,9 +7378,8 @@ msgid "Sync as many devices as you want"
 msgstr "Synchronizujte toľko zariadení, koľko len chcete"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:92
-#, fuzzy
 msgid "Sync report"
-msgstr "Odoslať hlásenie o chybe"
+msgstr "Hlásenie o synchronizácii"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:578
 msgid "Sync Status"
@@ -7456,9 +7399,8 @@ msgid "Sync Target Upgrade"
 msgstr "Aktualizácia cieľa synchronizácie"
 
 #: packages/lib/versionInfo.ts:104
-#, fuzzy
 msgid "Sync target: %s"
-msgstr "Stav synchronizácie"
+msgstr "Cieľ synchronizácie: %s"
 
 #: packages/app-cli/app/command-sync.ts:40
 msgid "Sync to provided target (defaults to sync.target config value)"
@@ -7480,6 +7422,9 @@ msgid ""
 "Sync your notes with Joplin Cloud to access them on all your devices. Other "
 "sync options are also available."
 msgstr ""
+"Synchronizujte si poznámky s Joplin Cloud, aby ste k nim mali prístup na "
+"všetkých svojich zariadeniach. K dispozícii sú aj ďalšie možnosti "
+"synchronizácie."
 
 #: packages/lib/models/Setting.ts:1406
 msgid "Sync, encryption, proxy"
@@ -7491,9 +7436,8 @@ msgid "Synchronisation"
 msgstr "Synchronizácia"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:43
-#, fuzzy
 msgid "Synchronisation error"
-msgstr "Synchronizácia"
+msgstr "Chyba synchronizácie"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1842
 msgid "Synchronisation interval"
@@ -7527,9 +7471,8 @@ msgid "Synchronise only over WiFi connection"
 msgstr "Synchronizácia iba cez WiFi pripojenie"
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:142
-#, fuzzy
 msgid "Synchronise with Joplin Cloud"
-msgstr "Pripojte sa k Joplin Cloud"
+msgstr "Synchronizovať s Joplin Cloud"
 
 #: packages/app-cli/app/command-sync.ts:35
 msgid "Synchronises with remote storage."
@@ -7537,7 +7480,7 @@ msgstr "Synchronizuje sa so vzdialeným úložiskom."
 
 #: packages/app-desktop/gui/QuitSyncDialog.tsx:75
 msgid "Synchronising remaining changes, please wait..."
-msgstr ""
+msgstr "Synchronizácia zostávajúcich zmien, prosím, počkajte..."
 
 #: packages/app-cli/app/command-publish.ts:55
 #: packages/app-cli/app/command-unpublish.ts:46
@@ -7563,24 +7506,20 @@ msgid "Table"
 msgstr "Tabuľka"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:198
-#, fuzzy
 msgid "Table: Add column"
-msgstr "Pridať stĺpec"
+msgstr "Tabuľka: Pridať stĺpec"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:193
-#, fuzzy
 msgid "Table: Add row"
-msgstr "Pridať riadok"
+msgstr "Tabuľka: Pridať riadok"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:208
-#, fuzzy
 msgid "Table: Delete column"
-msgstr "Vymazať stĺpec"
+msgstr "Tabuľka: Vymazať stĺpec"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:203
-#, fuzzy
 msgid "Table: Delete row"
-msgstr "Vymazať riadok"
+msgstr "Tabuľka: Vymazať riadok"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1878
 msgid "Tabloid"
@@ -7607,6 +7546,7 @@ msgstr "Štítky"
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/setTags.ts:26
 msgid "Tags cannot be changed for locked notes while the session is locked"
 msgstr ""
+"Zatvorené poznámky nemožno označiť štítkami, pokiaľ je relácia uzamknutá"
 
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:111
 #: packages/app-mobile/components/screens/Note/commands/attachFile.ts:96
@@ -7631,9 +7571,8 @@ msgid "Teams"
 msgstr "Tímy"
 
 #: packages/lib/models/settings/builtInMetadata.ts:810
-#, fuzzy
 msgid "Test AI configuration"
-msgstr "Nastavenie"
+msgstr "Test nastavenia umelej inteligencie"
 
 #: packages/lib/services/interop/InteropService.ts:147
 msgid "Text document"
@@ -7655,7 +7594,7 @@ msgstr ""
 #: packages/lib/services/ai/availability.ts:48
 #: packages/lib/services/ai/availability.ts:51
 msgid "The API key is missing. Set it in Settings → AI."
-msgstr ""
+msgstr "Chýba kľúč API. Nastavte ho v časti Nastavenia → AI."
 
 #: packages/app-desktop/bridge.ts:649
 msgid ""
@@ -7691,11 +7630,8 @@ msgid "The command \"%s\" is only available in GUI mode"
 msgstr "Príkaz \"%s\" je dostupný len v režime GUI"
 
 #: packages/server/src/middleware/notificationHandler.ts:43
-#, fuzzy
 msgid "The default admin password has not been changed! [Change it now](%s)"
-msgstr ""
-"Predvolené heslo správcu je nezabezpečené a nebolo zmenené! [Zmeňte ho teraz]"
-"(%s)"
+msgstr "Predvolené heslo správcu nebolo zmenené! [Zmeňte ho teraz](%s)"
 
 #: packages/server/src/middleware/notificationHandler.ts:41
 msgid ""
@@ -7723,9 +7659,8 @@ msgstr ""
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:209
 #: packages/app-mobile/components/ProfileSwitcher/utils/deleteProfile.ts:79
-#, fuzzy
 msgid "The default profile has been reset."
-msgstr "Predvolený profil nie je možné odstrániť"
+msgstr "Predvolený profil bol obnovený."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1871
 msgid ""
@@ -7805,19 +7740,24 @@ msgstr ""
 
 #: packages/server/src/middleware/notificationHandler.ts:113
 msgid "The license for this server failed to refresh."
-msgstr ""
+msgstr "Obnovenie licencie pre tento server sa nepodarilo."
 
 #: packages/server/src/middleware/notificationHandler.ts:68
 msgid ""
 "The license key for this Joplin Server Business instance has expired and "
 "needs to be renewed."
 msgstr ""
+"Platnosť licenčného kľúča pre túto inštanciu Joplin Server Business vypršala "
+"a je potrebné ho obnoviť."
 
 #: packages/server/src/middleware/notificationHandler.ts:80
 msgid ""
 "The license key for this Joplin Server Business instance has expired or is "
 "invalid. Uploading items has been disabled until the license is renewed."
 msgstr ""
+"Platnosť licenčného kľúča pre túto inštanciu Joplin Server Business vypršala "
+"alebo je neplatný. Nahrávanie položiek bolo deaktivované, kým nebude "
+"licencia obnovená."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:236
 msgid "The master key has been upgraded successfully!"
@@ -7835,18 +7775,20 @@ msgstr ""
 
 #: packages/lib/services/ai/availability.ts:84
 msgid "The MCP server is disabled. Enable it in Settings → MCP."
-msgstr ""
+msgstr "Server MCP je vypnutý. Zapnite ho v Nastaveniach → MCP."
 
 #: packages/lib/models/settings/builtInMetadata.ts:750
 msgid ""
 "The model identifier to use, for example gpt-4o-mini or claude-3-5-sonnet-"
 "latest."
 msgstr ""
+"Identifikátor modelu, ktorý sa má použiť, napríklad gpt-4o-mini alebo "
+"claude-3-5-sonnet-latest."
 
 #: packages/lib/services/ai/availability.ts:49
 #: packages/lib/services/ai/availability.ts:52
 msgid "The model name is missing. Set it in Settings → AI."
-msgstr ""
+msgstr "Chýba názov modelu. Nastavte ho v časti Nastavenia → AI."
 
 #: packages/lib/services/RevisionService.ts:291
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
@@ -7857,6 +7799,8 @@ msgid ""
 "The note changed while the request was running; edits were not applied. Try "
 "again."
 msgstr ""
+"Poznámka sa zmenila počas spracovávania požiadavky; úpravy neboli "
+"zapracované. Skúste to znova."
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:82
 msgid ""
@@ -7876,19 +7820,18 @@ msgstr[2] ""
 "presunuté do koša"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:211
-#, fuzzy
 msgid ""
 "The note lock key uses an out-dated encryption algorithm and it is "
 "recommended to upgrade it. The upgraded key will still be able to decrypt "
 "and encrypt your data as usual."
 msgstr ""
-"Nasledujúce kľúče používajú zastaraný šifrovací algoritmus a odporúča sa ich "
-"aktualizácia. Aktualizovaný kľúč bude stále schopný dešifrovať a šifrovať "
-"vaše údaje ako zvyčajne."
+"Kľúč na uzamknutie poznámok používa zastaraný šifrovací algoritmus, preto sa "
+"odporúča jeho aktualizácia. Aktualizovaný kľúč bude naďalej schopný "
+"dešifrovať a šifrovať vaše údaje tak ako doteraz."
 
 #: packages/app-cli/app/command-set.ts:40
 msgid "The note lock state cannot be changed from the command line"
-msgstr ""
+msgstr "Stav uzamknutia poznámky nie je možné zmeniť z príkazového riadku"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:45
 msgid "The note was successfully moved to the trash."
@@ -7915,11 +7858,15 @@ msgid ""
 "The OpenAI-compatible API endpoint. For example, https://api.openai.com/v1 "
 "or http://localhost:11434/v1 for Ollama."
 msgstr ""
+"Koncový bod rozhrania API kompatibilný s OpenAI. Napríklad https://"
+"api.openai.com/v1 alebo http://localhost:11434/v1 pre Ollama."
 
 #: packages/lib/services/ai/availability.ts:47
 msgid ""
 "The OpenAI-compatible provider needs a base URL. Set it in Settings → AI."
 msgstr ""
+"Poskytovateľ kompatibilný s OpenAI vyžaduje základnú URL adresu. Nastavte ju "
+"v časti Nastavenia → AI."
 
 #: packages/app-cli/app/command-help.ts:73
 msgid "The possible commands are:"
@@ -7930,6 +7877,8 @@ msgid ""
 "The provider returned an empty response. Check that the base URL ends with /"
 "v1 and that a model is loaded."
 msgstr ""
+"Poskytovateľ vrátil prázdnu odpoveď. Skontrolujte, či základná URL adresa "
+"končí na /v1 a či je načítaný model."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:275
 msgid ""
@@ -8032,9 +7981,8 @@ msgid "Theme"
 msgstr "Téma"
 
 #: packages/lib/models/Setting.ts:1405
-#, fuzzy
 msgid "Themes, notebook sort order"
-msgstr "Obrátiť poradie"
+msgstr "Témy, poradie zápisníkov"
 
 #: packages/lib/components/shared/NoteList/getEmptyFolderMessage.ts:17
 msgid "There are currently no notes. Create one by clicking on the (+) button."
@@ -8101,11 +8049,11 @@ msgid ""
 msgstr ""
 "Tieto doplnky vylepšujú vykresľovač Markdown o ďalšie funkcie. Upozorňujeme, "
 "že hoci tieto funkcie môžu byť užitočné, nie sú štandardným Markdown, a "
-"preto väčšina z nich bude fungovať len v Jopline. Okrem toho sú niektoré z "
-"nich *nekompatibilné* s editorom WYSIWYG. Ak v tomto editore otvoríte "
-"poznámku, ktorá používa niektorý z týchto doplnkov, stratíte formátovanie "
-"doplnku. Nižšie sú uvedené, ktoré zásuvné moduly sú alebo nie sú "
-"kompatibilné s editorom WYSIWYG."
+"preto väčšina z nich bude fungovať len v aplikácii Joplin. Okrem toho sú "
+"niektoré z nich *nekompatibilné* s editorom WYSIWYG. Ak v tomto editore "
+"otvoríte poznámku, ktorá používa niektorý z týchto doplnkov, stratíte "
+"formátovanie doplnku. Nižšie sú uvedené, ktoré zásuvné moduly sú alebo nie "
+"sú kompatibilné s editorom WYSIWYG."
 
 #: packages/lib/utils/joplinCloud/index.ts:319
 msgid ""
@@ -8147,18 +8095,16 @@ msgstr ""
 "možnosti „Zapnúť prepis rukopisu“."
 
 #: packages/app-desktop/commands/createAccessibleDocument.ts:28
-#, fuzzy
 msgid "This feature is only available for PDF files."
-msgstr "Táto funkcia je k dispozícii iba v Joplin Cloud a Joplin Server."
+msgstr "Táto funkcia je k dispozícii iba pre súbory PDF."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:168
 msgid "This feature is only available on Joplin Cloud and Joplin Server."
 msgstr "Táto funkcia je k dispozícii iba v Joplin Cloud a Joplin Server."
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:290
-#, fuzzy
 msgid "This file could not be opened: %s"
-msgstr "Túto poznámku nebolo možné presunúť: %s"
+msgstr "Tento súbor sa nepodarilo otvoriť: %s"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:180
 msgid "This image type is not supported by the recognition system."
@@ -8180,19 +8126,23 @@ msgid "This Joplin Server Business instance is only licensed for %d user."
 msgid_plural ""
 "This Joplin Server Business instance is only licensed for %d users."
 msgstr[0] ""
+"Táto inštancia Joplin Server Business má licenciu len pre %d používateľa."
 msgstr[1] ""
+"Táto inštancia Joplin Server Business má licenciu len pre %d používateľov."
 msgstr[2] ""
+"Táto inštancia Joplin Server Business má licenciu len pre %d používateľov."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/FileNode.tsx:202
-#, fuzzy
 msgid "This linked item has been deleted."
-msgstr "História poznámky bola vymazaná."
+msgstr "Táto prepojená položka bola odstránená."
 
 #: packages/app-desktop/gui/NoteEditor/NoteLockPanel/NoteLockPanel.tsx:53
 msgid ""
 "This note could not be decrypted. If it was encrypted prior to a password "
 "reset, the contents are no longer recoverable."
 msgstr ""
+"Túto poznámku sa nepodarilo dešifrovať. Ak bola zašifrovaná pred obnovením "
+"hesla, jej obsah už nie je možné obnoviť."
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:275
 msgid "This note could not be deleted: %s"
@@ -8239,17 +8189,20 @@ msgstr "Táto poznámka nemá históriu"
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/disableNoteEncryption.ts:23
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/enableNoteEncryption.ts:28
 msgid "This note is currently being saved. Please try again in a moment."
-msgstr ""
+msgstr "Táto poznámka sa práve ukladá. Skúste to prosím o chvíľu znova."
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:350
 msgid "This note is encrypted and cannot be used with AI Chat."
 msgstr ""
+"Táto poznámka je zašifrovaná a nie je možné ju použiť v AI konverzácii."
 
 #: packages/app-desktop/gui/NoteEditor/NoteLockPanel/NoteLockPanel.tsx:67
 msgid ""
 "This note is encrypted. Enter the note lock password to unlock encrypted "
 "notes for this session."
 msgstr ""
+"Táto poznámka je zašifrovaná. Zadajte heslo na odomknutie poznámok, aby ste "
+"mohli odomknúť zašifrované poznámky pre túto reláciu."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:807
 msgid ""
@@ -8263,6 +8216,9 @@ msgid ""
 "This notebook contains Windows-specific files. For maximum compatibility, "
 "consider importing the notebook from Windows."
 msgstr ""
+"Tento zápisník obsahuje súbory špecifické pre systém Windows. Ak chcete "
+"dosiahnuť maximálnu kompatibilitu, zvážte importovanie zápisníka zo systému "
+"Windows."
 
 #: packages/lib/services/plugins/PluginService.ts:615
 msgid "This plugin doesn't support %s."
@@ -8273,6 +8229,8 @@ msgid ""
 "This provider sends data off your device. Turn on \"Allow remote AI "
 "providers\" in Settings → AI."
 msgstr ""
+"Tento poskytovateľ odosiela údaje z vášho zariadenia. V nastaveniach → AI "
+"zapnite možnosť „Povoliť vzdialených poskytovateľov AI“."
 
 #: packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.tsx:65
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:37
@@ -8286,6 +8244,7 @@ msgstr ""
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:516
 msgid "This section opens in its own screen and is matched by section title."
 msgstr ""
+"Táto sekcia sa otvorí na samostatnej obrazovke a je označená názvom sekcie."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:144
 msgid ""
@@ -8302,9 +8261,8 @@ msgid "This subfolder of the trash has no notes."
 msgstr "Tento podpriečinok koša neobsahuje žiadne poznámky."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardEditor.tsx:181
-#, fuzzy
 msgid "This whiteboard could not be loaded"
-msgstr "Túto poznámku nebolo možné presunúť: %s"
+msgstr "Túto nástenku sa nepodarilo načítať"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1536
 msgid ""
@@ -8351,20 +8309,20 @@ msgid "Title"
 msgstr "Názov"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:33
-#, fuzzy
 msgid "Title (A-Z)"
-msgstr "Názov"
+msgstr "Názov (A-Z)"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:33
-#, fuzzy
 msgid "Title (Z-A)"
-msgstr "Názov"
+msgstr "Názov (Z-A)"
 
 #: packages/server/src/routes/index/recovery_codes.ts:29
 msgid ""
 "To access your recovery codes please enter an authentication code or your "
 "password."
 msgstr ""
+"Ak chcete získať prístup k svojim obnovovacím kódom, zadajte overovací kód "
+"alebo svoje heslo."
 
 #: packages/app-cli/app/command-sync.ts:79
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:52
@@ -8444,11 +8402,8 @@ msgstr ""
 "retry-failed-items`"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:72
-#, fuzzy
 msgid "To switch the profile, the app is going to restart."
-msgstr ""
-"Ak chcete prepnúť profil, aplikácia sa zatvorí a budete ju musieť "
-"reštartovať."
+msgstr "Ak chcete prepnúť profil, aplikácia sa bude musieť reštartovať."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:628
 msgid ""
@@ -8472,9 +8427,8 @@ msgid "to-do: %s"
 msgstr "úloha: %s"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleAiChat.ts:10
-#, fuzzy
 msgid "Toggle AI Chat"
-msgstr "Prepnúť panel s ponukami"
+msgstr "Prepnúť AI konverzáciu"
 
 #: packages/lib/commands/toggleAllFolders.ts:8
 msgid "Toggle all notebooks"
@@ -8542,16 +8496,15 @@ msgstr "Prepnúť pole poradia zoradenia"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleWhiteboardEditor.ts:6
 msgid "Toggle whiteboard / Markdown view"
-msgstr ""
+msgstr "Prepnúť medzi zobrazením nástenka / Markdown"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:42
 msgid "Token has been copied to the clipboard!"
 msgstr "Token bol skopírovaný do schránky!"
 
 #: packages/lib/services/ai/noteChat.ts:327
-#, fuzzy
 msgid "Tool not found: %s"
-msgstr "Nedá sa nájsť: \"%s\""
+msgstr "Nástroj sa nenašiel: %s"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementToolbar.ts:8
 msgid "Toolbar"
@@ -8566,6 +8519,10 @@ msgid ""
 "Tools and services to expose to AI. AI agents can use these tools either via "
 "the note chat panel or Joplin's MCP server (if enabled)."
 msgstr ""
+"Nástroje a služby, ktoré je možné sprístupniť umelej inteligencii. Agenti "
+"umelej inteligencie môžu tieto nástroje využívať buď prostredníctvom panelu "
+"chatu v poznámkach, alebo cez server MCP aplikácie Joplin (ak je táto "
+"funkcia povolená)."
 
 #: packages/server/src/routes/admin/users.ts:167
 msgid "Total Size"
@@ -8620,11 +8577,11 @@ msgstr "Typ: %s."
 
 #: packages/lib/models/Setting.ts:1409
 msgid "Typography, spellcheck, layout"
-msgstr ""
+msgstr "Typografia, kontrola pravopisu, grafická úprava"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:63
 msgid "Unable to access the recording file."
-msgstr ""
+msgstr "Nie je možné otvoriť súbor s nahrávkou."
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1153
 msgid "Unable to edit resource of type %s"
@@ -8640,7 +8597,7 @@ msgstr "Nie je možné zdieľať údaje poznámky. Dôvod: %s"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:16
 msgid "Unavailable on this platform"
-msgstr ""
+msgstr "Na tejto platforme nie je k dispozícii"
 
 #: packages/app-mobile/components/Checkbox.tsx:51
 msgid "Unchecked"
@@ -8690,19 +8647,17 @@ msgid "Unknown platform"
 msgstr "Neznáma platforma"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:42
-#, fuzzy
 msgid "Unknown size"
-msgstr "Neznáme"
+msgstr "Neznáma veľkosť"
 
 #: packages/app-desktop/gui/NoteEditor/NoteLockPanel/NoteLockPanel.tsx:76
 #: packages/app-desktop/gui/NoteLockUnlockDialog/Dialog.tsx:79
 msgid "Unlock"
-msgstr ""
+msgstr "Odomknúť"
 
 #: packages/app-desktop/gui/NoteLockUnlockDialog/Dialog.tsx:66
-#, fuzzy
 msgid "Unlock encrypted notes"
-msgstr "Nedá sa zmeniť zašifrovaná položka"
+msgstr "Odomknúť šifrované poznámky"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:107
 msgid "Unordered list"
@@ -8721,14 +8676,12 @@ msgid "Unpublish note"
 msgstr "Zrušiť zverejnenie poznámky"
 
 #: packages/app-desktop/gui/PublishFolderDialog.tsx:101
-#, fuzzy
 msgid "Unpublish notebook"
-msgstr "Zrušiť zverejnenie poznámky"
+msgstr "Zrušiť zverejnenie zápisníka"
 
 #: packages/app-cli/app/command-unpublish.ts:24
-#, fuzzy
 msgid "Unpublishes a note from Joplin Server or Joplin Cloud"
-msgstr "Uverejní poznámku na serveri Joplin alebo v cloude Joplin"
+msgstr "Zruší zverejnenie poznámky na serveri Joplin alebo v Joplin Cloud"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:431
 msgid "Unshare"
@@ -8751,9 +8704,8 @@ msgstr ""
 "obsahu."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:79
-#, fuzzy
 msgid "Unsupported file extension. Expected: %s"
-msgstr "Nepodporovaný typ obrázka: %s"
+msgstr "Nepodporovaná prípona súboru. Očakáva sa: %s"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1012
 msgid "Unsupported image type: %s"
@@ -8777,6 +8729,8 @@ msgid ""
 "Unsupported public key format. Please check that Joplin is updated to the "
 "latest version and try again."
 msgstr ""
+"Nepodporovaný formát verejného kľúča. Skontrolujte, či máte nainštalovanú "
+"najnovšiu verziu aplikácie Joplin, a skúste to znova."
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:54
 #: packages/app-desktop/gui/ResourceScreen.tsx:127
@@ -8788,7 +8742,7 @@ msgstr "Nepomenované"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newWhiteboard.ts:16
 msgid "Untitled whiteboard"
-msgstr ""
+msgstr "Nástenka bez názvu"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:205
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:170
@@ -8801,11 +8755,11 @@ msgstr "Aktualizácia je k dispozícii"
 
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:91
 msgid "Update it from Google Play"
-msgstr ""
+msgstr "Aktualizujte ju cez Google Play"
 
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:99
 msgid "Update it from the App Store"
-msgstr ""
+msgstr "Aktualizujte ju z App Store"
 
 #: packages/app-desktop/gui/UpdateNotification/UpdateNotification.tsx:53
 msgid "Update later"
@@ -8829,9 +8783,8 @@ msgid "Updated"
 msgstr "Aktualizované"
 
 #: packages/lib/services/ai/tools/buildEditorTools.ts:60
-#, fuzzy
 msgid "Updated %s block"
-msgstr "Aktualizované: %s"
+msgstr "Aktualizovaný blok %s"
 
 #: packages/lib/models/Folder.ts:56 packages/lib/models/Note.ts:80
 msgid "updated date"
@@ -8842,9 +8795,8 @@ msgid "Updated local items: %d."
 msgstr "Aktualizované lokálne položky: %d."
 
 #: packages/lib/services/ai/tools/global/updateNote.ts:26
-#, fuzzy
 msgid "Updated note"
-msgstr "Aktualizované: "
+msgstr "Aktualizovaná poznámka"
 
 #: packages/lib/Synchronizer.ts:221
 msgid "Updated remote items: %d."
@@ -8873,9 +8825,8 @@ msgid "Upgrade"
 msgstr "Aktualizovať"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:222
-#, fuzzy
 msgid "Upgrade key"
-msgstr "Aktualizovať"
+msgstr "Aktualizovať kľúč"
 
 #: packages/app-cli/app/command-sync.ts:41
 msgid "Upgrade the sync target to the latest version."
@@ -8883,7 +8834,7 @@ msgstr "Aktualizujte cieľ synchronizácie na najnovšiu verziu."
 
 #: packages/lib/utils/joplinCloud/index.ts:443
 msgid "Upgrade to 100 GB"
-msgstr ""
+msgstr "Zväčšiť kapacitu na 100 GB"
 
 #: packages/app-mobile/components/CameraView/CameraView.web.tsx:45
 msgid "Upload photo"
@@ -8914,9 +8865,8 @@ msgstr ""
 "TODO_CHECKED (pre úlohy), TITLE"
 
 #: packages/app-mobile/components/screens/Notes/Notes.tsx:113
-#, fuzzy
 msgid "Use own sort order"
-msgstr "Prepnúť vlastné poradie zoradenia"
+msgstr "Použiť vlastné poradie"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.ts:185
 msgid "Use spell checker"
@@ -8958,7 +8908,7 @@ msgstr ""
 
 #: packages/server/src/routes/index/recovery_codes.ts:65
 msgid "Used"
-msgstr ""
+msgstr "Používané"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1669
 msgid ""
@@ -8996,13 +8946,15 @@ msgstr "Platné"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:26
 msgid "Vector search is not available on this platform"
-msgstr ""
+msgstr "Vektorové vyhľadávanie nie je na tejto platforme k dispozícii"
 
 #: packages/lib/services/ai/availability.ts:71
 msgid ""
 "Vector search is unavailable on this platform (sqlite-vec extension not "
 "loaded)."
 msgstr ""
+"Vektorové vyhľadávanie nie je na tejto platforme k dispozícii (rozšírenie "
+"sqlite-vec nebolo načítané)."
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:9
 msgid "Verify your identity"
@@ -9013,9 +8965,8 @@ msgid "View"
 msgstr "Zobraziť"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1684
-#, fuzzy
 msgid "View mode"
-msgstr "Prehliadač"
+msgstr "Režim zobrazenia"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:198
 msgid "View OCR text"
@@ -9047,9 +8998,8 @@ msgid "Viewer font size"
 msgstr "Veľkosť písma prehliadača"
 
 #: packages/app-mobile/components/screens/Note/commands/toggleVisiblePanes.ts:25
-#, fuzzy
 msgid "Viewing"
-msgstr "Zobraziť"
+msgstr "Zobrazuje sa"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1914
 msgid "Vim"
@@ -9088,9 +9038,8 @@ msgstr "Upozornenie"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:160
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:50
-#, fuzzy
 msgid "Warning:"
-msgstr "Upozornenie"
+msgstr "Upozornenie:"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:319
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
@@ -9152,7 +9101,7 @@ msgid ""
 "\n"
 "For example, to create a notebook press `mb`; to create a note press `mn`."
 msgstr ""
-"Vitajte v Jopline!\n"
+"Vitajte v Joplin!\n"
 "\n"
 "Zadajte `:help shortcuts` pre zoznam klávesových skratiek alebo len `:help` "
 "pre informácie o použití.\n"
@@ -9181,6 +9130,8 @@ msgid ""
 "When enabled, plugins and built-in features can use AI models to generate or "
 "analyse text."
 msgstr ""
+"Ak je táto funkcia zapnutá, doplnky a vstavané funkcie môžu využívať modely "
+"umelej inteligencie na generovanie alebo analýzu textu."
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:167
 msgid ""
@@ -9197,6 +9148,9 @@ msgid ""
 "When enabled, tables are rendered as an interactive widget in the editor. "
 "Disable this if you prefer to edit tables as raw Markdown."
 msgstr ""
+"Ak je táto funkcia zapnutá, tabuľky sa v editore zobrazujú ako interaktívna "
+"miniaplikácia. Túto funkciu vypnite, ak chcete tabuľky upravovať ako čistý "
+"Markdown."
 
 #: packages/lib/models/settings/builtInMetadata.ts:574
 msgid ""
@@ -9264,19 +9218,18 @@ msgid ""
 "You are running the Intel version of Joplin on an Apple Silicon processor. "
 "Download the Apple Silicon one for better performance."
 msgstr ""
-"Používate Intel verziu Joplinu na procesore Apple Silicon. Pre lepší výkon "
-"si stiahnite verziu Apple Silicon."
+"Používate Intel verziu aplikácie Joplin na procesore Apple Silicon. Pre "
+"lepší výkon si stiahnite verziu Apple Silicon."
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:137
-#, fuzzy
 msgid ""
 "You can synchronise your notes using Joplin Cloud, which also gives access "
 "to Joplin-specific features such as publishing notes or collaborating on "
 "notebooks with others."
 msgstr ""
-"Vlastná synchronizačná služba aplikácie Joplin. Poskytuje tiež prístup k "
-"funkciám špecifickým pre Joplin, ako je publikovanie poznámok alebo "
-"spolupráca na zápisníkoch s ostatnými."
+"Svoje poznámky môžete synchronizovať pomocou služby Joplin Cloud, ktorá "
+"zároveň umožňuje využívať funkcie špecifické pre Joplin, ako je "
+"zverejňovanie poznámok alebo spolupráca na zápisníkoch s ostatnými."
 
 #: packages/app-mobile/components/NoteList.tsx:98
 msgid "You currently have no notebooks."
@@ -9288,7 +9241,7 @@ msgstr "Nemáte nainštalovaný žiadny doplnok."
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.tsx:63
 msgid "You have unsaved tag changes. Discard them?"
-msgstr ""
+msgstr "Máte neuložené zmeny štítkov. Chcete ich zrušiť?"
 
 #: packages/app-cli/app/gui/NoteWidget.ts:58
 msgid "You may also type `status` for more information."
@@ -9308,6 +9261,8 @@ msgid ""
 "You switched notes while the request was running; edits were not applied. "
 "Try again."
 msgstr ""
+"Počas spracovávania požiadavky ste prešli na inú poznámku; úpravy neboli "
+"uložené. Skúste to znova."
 
 #: packages/lib/services/joplinCloudUtils.ts:55
 msgid ""
@@ -9342,10 +9297,16 @@ msgid ""
 "(E2EE) is enabled, or to share and encrypt notes with someone who has E2EE "
 "enabled."
 msgstr ""
+"Vaše hlavné heslo slúži na ochranu citlivých informácií. Konkrétne sa "
+"používa na šifrovanie vašich poznámok, ak je zapnuté šifrovanie typu end-to-"
+"end (E2EE), alebo na zdieľanie a šifrovanie poznámok s osobou, ktorá má "
+"zapnuté E2EE."
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:379
 msgid "Your note will be sent to the configured AI provider (%s)."
 msgstr ""
+"Vaša správa bude odoslaná nastavenému poskytovateľovi umelej inteligencie "
+"(%s)."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:460
 msgid "Your password is needed to decrypt some of your data."
