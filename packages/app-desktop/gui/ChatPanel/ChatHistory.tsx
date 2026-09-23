@@ -78,10 +78,10 @@ const ChatHistory: React.FC<Props> = props => {
 						</button>
 					)}
 					<div className='conversation-actions actions'>
-						<button type='button' title={_('Rename')} aria-label={_('Rename')} onClick={() => startEditing(conversation)}>
+						<button className='flat-button' type='button' title={_('Rename')} aria-label={_('Rename')} onClick={() => startEditing(conversation)}>
 							<i className='fa fa-pen' aria-hidden='true'/>
 						</button>
-						<button type='button' title={_('Delete')} aria-label={_('Delete')} onClick={() => props.onDelete(conversation.id)}>
+						<button className='flat-button' type='button' title={_('Delete')} aria-label={_('Delete')} onClick={() => props.onDelete(conversation.id)}>
 							<i className='fas fa-trash' aria-hidden='true'/>
 						</button>
 					</div>
