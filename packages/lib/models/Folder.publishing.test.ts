@@ -11,6 +11,14 @@ const publishedFolderShareState = (folderId: string): StateShare => ({
 	master_key_id: '',
 });
 
+const publishedNoteShareState = (noteId: string): StateShare => ({
+	id: `share-note-${noteId}`,
+	type: ShareType.Note,
+	folder_id: noteId,
+	note_id: '',
+	master_key_id: '',
+});
+
 type ItemSlice = { title: string };
 
 const expectPublished = async (items: ItemSlice[], published = true) => {
@@ -117,6 +125,7 @@ describe('models/Folder.publishing', () => {
 								is_shared: 1,
 								children: [
 									{ title: 'now unpublished note', is_shared: 1 },
+									{ title: 'directly published note', is_shared: 1 },
 								],
 							},
 						],
@@ -149,6 +158,7 @@ describe('models/Folder.publishing', () => {
 
 		const shareState: StateShare[] = [
 			publishedFolderShareState((await Folder.loadByTitle('still published')).id),
+			publishedNoteShareState((await Note.loadByTitle('directly published note')).id),
 		];
 
 		await Folder.updateNoLongerPublishedFolders(shareState);
@@ -168,6 +178,7 @@ describe('models/Folder.publishing', () => {
 			'still published sub-folder',
 
 			'still published note',
+			'directly published note',
 		].map(title => ({ title })));
 	});
 
