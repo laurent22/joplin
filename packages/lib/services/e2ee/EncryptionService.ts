@@ -40,6 +40,7 @@ export function isValidNoteLockHeader(text: string) {
 	const metadataSize = parseInt(metadataSizeHex, 16);
 	const maximumMetadataSize = 1024;
 	if (!metadataSize || metadataSize > maximumMetadataSize) return false;
+	// Avoids validating a very short header, in case of a very specific combination of the first few characters
 	if (identifier === 'JLD01' && metadataSize !== 34) return false;
 
 	const metadata = text.substring(identifierSize + metadataSizeFieldSize, identifierSize + metadataSizeFieldSize + metadataSize);
