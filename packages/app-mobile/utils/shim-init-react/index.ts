@@ -100,10 +100,11 @@ export default function shimInit() {
 		delete options.overwrite;
 
 		const doFetchBlob = () => {
+			type Method = 'POST' | 'GET' | 'DELETE' | 'PUT';
 			return RNFetchBlob.config({
 				path: localFilePath,
 				trusty: options.ignoreTlsErrors,
-			}).fetch(method, url, headers);
+			}).fetch(method as Method, url, headers);
 		};
 
 		try {
