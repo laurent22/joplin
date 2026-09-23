@@ -372,9 +372,9 @@ describe('EncryptionService', () => {
 
 		const header = service.encodeHeader_({ encryptionMethod: EncryptionMethod.StringV1, masterKeyId: '0123456789abcdef0123456789abcdef' }, true);
 		expect(isValidNoteLockHeader(`${header}{"payload":1}`)).toBe(true);
-		// A later header version may use a different metadata size
-		expect(isValidNoteLockHeader('JLD02000004abcd{"payload":1}')).toBe(true);
-		for (const text of ['JLD01 my shopping list', 'JLD99abc', header.replace('JLD', 'JED'), header.slice(0, -1), 'JLD01000001a - [ ] plain text', 'JLD02000004abc', 'JLD01000000', null, '']) {
+		// A later header version may use a larger metadata size
+		expect(isValidNoteLockHeader(`JLD02000028${'a'.repeat(40)}{"payload":1}`)).toBe(true);
+		for (const text of ['JLD01 my shopping list', 'JLD99abc', header.replace('JLD', 'JED'), header.slice(0, -1), 'JLD01000001a - [ ] plain text', 'JLD02000004abcd{"payload":1}', 'JLD02000004abc', 'JLD01000000', null, '']) {
 			expect(isValidNoteLockHeader(text)).toBe(false);
 		}
 	});
