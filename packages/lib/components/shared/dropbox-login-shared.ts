@@ -4,6 +4,7 @@ import { reg } from '../../registry';
 import { _ } from '../../locale';
 import Setting from '../../models/Setting';
 import { Dispatch } from 'redux';
+import SyncTargetDropbox from '../../SyncTargetDropbox';
 
 interface BaseProps {
 	dispatch: Dispatch;
@@ -91,8 +92,8 @@ export default class Shared<Host extends BaseComponent> {
 	public async dropboxApi(): Promise<DropboxApi> {
 		if (this.dropboxApi_) return this.dropboxApi_;
 
-		const syncTarget = reg.syncTarget(this.syncTargetId());
-		this.dropboxApi_ = await syncTarget.api() as DropboxApi;
+		const syncTarget = reg.syncTarget(this.syncTargetId()) as SyncTargetDropbox;
+		this.dropboxApi_ = await syncTarget.api();
 		return this.dropboxApi_;
 	}
 

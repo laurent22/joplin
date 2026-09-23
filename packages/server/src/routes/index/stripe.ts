@@ -9,7 +9,7 @@ import { Stripe } from 'stripe';
 import Logger from '@joplin/utils/Logger';
 import getRawBody = require('raw-body');
 import { AccountType } from '../../models/UserModel';
-import { autoAssignCustomerPreferredLocales, betaUserTrialPeriodDays, cancelSubscription, initStripe, isBetaUser, priceIdToAccountType, stripeConfig } from '../../utils/stripe';
+import { autoAssignCustomerPreferredLocales, betaUserTrialPeriodDays, cancelSubscription, initStripe, isBetaUser, priceIdToAccountType, stripeConfig, subscriptionItemByStripeSub } from '../../utils/stripe';
 import { Subscription, User, UserFlagType } from '../../services/database/types';
 import { findPrice, PricePeriod } from '@joplin/lib/utils/joplinCloud';
 import { Models } from '../../models/factory';
@@ -295,7 +295,7 @@ export const postHandlers: PostHandlers = {
 				let accountType = AccountType.Basic;
 				try {
 					// Really have to dig out the price ID
-					const priceId = stripeSub.items.data[0].price.id;
+					const priceId = subscriptionItemByStripeSub(stripeSub).price.id;
 					accountType = priceIdToAccountType(priceId);
 				} catch (error) {
 					logger.error('Could not determine account type from price ID - defaulting to "Basic"', error);
@@ -363,7 +363,7 @@ export const postHandlers: PostHandlers = {
 				// Stripe to the local account.
 
 				const { sub, stripeSub } = await getSubscriptionInfo(event, ctx);
-				const newAccountType = priceIdToAccountType(stripeSub.items.data[0].price.id);
+				const newAccountType = priceIdToAccountType(subscriptionItemByStripeSub(stripeSub).price.id);
 				const user = await models.user().load(sub.user_id, { fields: ['id'] });
 				if (!user) throw new Error(`No such user: ${sub.user_id}`);
 

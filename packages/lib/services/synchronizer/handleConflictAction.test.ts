@@ -1,6 +1,6 @@
 import BaseItem from '../../models/BaseItem';
 import Note from '../../models/Note';
-import { setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
+import { encryptionService, loadEncryptionMasterKey, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import handleConflictAction from './utils/handleConflictAction';
 import { SyncAction } from './utils/types';
 
@@ -64,6 +64,105 @@ describe('handleConflictAction', () => {
 		expect(initialSyncItem).toBeUndefined();
 		expect(createdSyncItem).toBeDefined();
 		expect(notes.length).toBe(1);
+	});
+
+	test('note conflict is not created when encrypted remote and local contents match', async () => {
+		await loadEncryptionMasterKey();
+		const local = await Note.save({ title: 'Test', body: 'body' });
+		const encryption_cipher_text = await encryptionService().encryptString(await Note.serialize(local));
+		const remoteContent = {
+			...local,
+			title: '',
+			body: '',
+			encryption_applied: 1,
+			encryption_cipher_text,
+		};
+
+		await handleConflictAction(
+			SyncAction.NoteConflict,
+			Note,
+			true,
+			remoteContent,
+			local,
+			1,
+			false,
+			jest.fn(),
+		);
+
+		expect(await Note.all()).toHaveLength(1);
+	});
+
+	test('conflict created for a remote deletion does not reference the deleted local note', async () => {
+		const local = await Note.save({ title: 'Locally changed', body: 'local body' });
+
+		await handleConflictAction(
+			SyncAction.NoteConflict,
+			Note,
+			false,
+			null,
+			local,
+			1,
+			false,
+			jest.fn(),
+		);
+
+		expect(await Note.load(local.id)).toBeFalsy();
+		const notes = await Note.all();
+		expect(notes).toHaveLength(1);
+		expect(notes[0]).toMatchObject({
+			title: local.title,
+			body: local.body,
+			is_conflict: 1,
+			conflict_original_id: '',
+		});
+	});
+
+	test('conflict of a conflict is not created for a read-only note', async () => {
+		const local = await Note.save({ title: 'Local conflict', body: 'local', is_conflict: 1 });
+		const remoteContent = { ...local, title: 'Remote conflict', body: 'remote' };
+
+		await handleConflictAction(
+			SyncAction.NoteConflict,
+			Note,
+			true,
+			remoteContent,
+			local,
+			1,
+			true,
+			jest.fn(),
+		);
+
+		const notes = await Note.all();
+		expect(notes).toHaveLength(1);
+		expect(notes[0].id).toBe(local.id);
+		expect(notes[0].title).toBe(remoteContent.title);
+	});
+
+	test('remote content is not decrypted for an existing conflict note', async () => {
+		const local = await Note.save({ title: 'Local conflict', body: 'local', is_conflict: 1 });
+		const remoteContent = {
+			...local,
+			title: '',
+			body: '',
+			encryption_applied: 1,
+			encryption_cipher_text: 'invalid',
+		};
+		const decryptStringSpy = jest.spyOn(encryptionService(), 'decryptString');
+
+		await handleConflictAction(
+			SyncAction.NoteConflict,
+			Note,
+			true,
+			remoteContent,
+			local,
+			1,
+			false,
+			jest.fn(),
+		);
+
+		expect(decryptStringSpy).not.toHaveBeenCalled();
+		decryptStringSpy.mockRestore();
+		expect(await Note.all()).toHaveLength(1);
 	});
 
 	test('editor reload event is emitted for note conflict', async () => {

@@ -334,12 +334,12 @@ export default class BaseItem extends BaseModel {
 		let trackDeleted = true;
 		if (options && options.trackDeleted !== null && options.trackDeleted !== undefined) trackDeleted = options.trackDeleted;
 
-		// Don't create a deleted_items entry when conflicted notes are deleted
-		// since no other client have (or should have) them.
 		let conflictNoteIds: string[] = [];
+		const syncIneligibleConflictNoteIds = new Set<string>();
 		if (this.modelType() === BaseModel.TYPE_NOTE) {
-			const conflictNotes = await this.db().selectAll(`SELECT id FROM notes WHERE id IN (${this.escapeIdsForSql(ids)}) AND is_conflict = 1`);
+			const conflictNotes = await this.db().selectAll(`SELECT id, conflict_original_id, share_id FROM notes WHERE id IN (${this.escapeIdsForSql(ids)}) AND is_conflict = 1`);
 			conflictNoteIds = conflictNotes.map((n: NoteEntity) => {
+				if (!n.conflict_original_id || n.share_id) syncIneligibleConflictNoteIds.add(n.id);
 				return n.id;
 			});
 		}
@@ -359,7 +359,7 @@ export default class BaseItem extends BaseModel {
 			const queries = [];
 			const now = time.unixMs();
 			for (let i = 0; i < ids.length; i++) {
-				if (conflictNoteIds.indexOf(ids[i]) >= 0) continue;
+				if (syncIneligibleConflictNoteIds.has(ids[i])) continue;
 
 				// For each deleted item, for each sync target, we need to add an entry in deleted_items.
 				// That way, each target can later delete the remote item.
@@ -772,7 +772,7 @@ export default class BaseItem extends BaseModel {
 			// 'SELECT * FROM [ITEMS] items JOIN sync_items s ON s.item_id = items.id WHERE sync_target = ? AND'
 
 			let extraWhere: string[]|string = [];
-			if (className === 'Note') extraWhere.push('is_conflict = 0');
+			if (className === 'Note') extraWhere.push('(is_conflict = 0 OR (conflict_original_id != "" AND share_id = ""))');
 			if (className === 'Resource') extraWhere.push('encryption_blob_encrypted = 0');
 			if (ItemClass.encryptionSupported()) extraWhere.push('encryption_applied = 0');
 
@@ -994,8 +994,7 @@ export default class BaseItem extends BaseModel {
 			const className = classNames[i];
 			const ItemClass = this.getClass(className);
 
-			let selectSql = `SELECT id FROM ${ItemClass.tableName()}`;
-			if (ItemClass.modelType() === this.TYPE_NOTE) selectSql += ' WHERE is_conflict = 0';
+			const selectSql = `SELECT id FROM ${ItemClass.tableName()}`;
 
 			queries.push(`DELETE FROM sync_items WHERE item_location = ${BaseItem.SYNC_ITEM_LOCATION_LOCAL} AND item_type = ${ItemClass.modelType()} AND item_id NOT IN (${selectSql})`);
 		}

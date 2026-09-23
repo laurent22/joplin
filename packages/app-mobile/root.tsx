@@ -751,7 +751,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 			disableSideMenuOpenGesture = true;
 		} else if (this.props.routeName === 'Notes') {
 			sideMenuContent = <SideMenuContent/>;
-			disableSideMenuGestures = false;
+			disableSideMenuGestures = this.props.noteSelectionEnabled;
 		} else {
 			sideMenuContent = <SideMenuContent/>;
 		}

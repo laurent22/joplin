@@ -11,6 +11,8 @@ import FontSearch from './FontSearch';
 import * as pathUtils from '@joplin/lib/path-utils';
 import SettingLabel from './SettingLabel';
 import SettingDescription from './SettingDescription';
+import { OnUpdateSettingValue } from '../types';
+import SettingButton from './SettingButton';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Each control component has different prop types
 const settingKeyToControl: Record<string, React.FC<any>> = {
@@ -18,18 +20,13 @@ const settingKeyToControl: Record<string, React.FC<any>> = {
 	'globalHotkey': control_GlobalHotkeyInput,
 };
 
-export interface UpdateSettingValueEvent {
-	key: string;
-	value: unknown;
-}
-
 interface Props {
 	themeId: number;
 	settingKey: string;
 	value: unknown;
 	fonts: string[];
-	onUpdateSettingValue: (event: UpdateSettingValueEvent)=> void;
-	onSettingButtonClick: (key: string)=> void;
+	onUpdateSettingValue: OnUpdateSettingValue;
+	onSettingButtonClick: (key: string)=> Promise<void>;
 	renderSearchText?: (text: string)=> React.ReactNode;
 }
 
@@ -363,10 +360,9 @@ const SettingComponent: React.FC<Props> = props => {
 		return (
 			<div style={rowStyle}>
 				{labelComp}
-				<Button
-					level={ButtonLevel.Secondary}
-					title={md.label()}
-					onClick={md.onClick ? md.onClick : () => props.onSettingButtonClick(key)}
+				<SettingButton
+					settingKey={key}
+					onSettingButtonClick={props.onSettingButtonClick}
 				/>
 				{descriptionComp}
 			</div>

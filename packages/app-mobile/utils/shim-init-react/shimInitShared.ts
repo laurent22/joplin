@@ -20,7 +20,6 @@ const shimInitShared = () => {
 	};
 
 	shim.httpAgent = () => null;
-	shim.httpAgents = () => ({ http: null, https: null });
 
 	shim.fetch = async function(url, options = null) {
 		// The native fetch() throws an uncatchable error that crashes the

@@ -225,7 +225,12 @@ type FindPriceQuery = {
 	productType: ProductType;
 };
 
-export function findPrice(config: StripePublicConfig, query: FindPriceQuery): StripePublicConfigPrice {
+interface FindPriceOptions {
+	throwOnNotFound?: boolean;
+}
+
+export function findPrice(config: StripePublicConfig, query: FindPriceQuery, options: FindPriceOptions = null) {
+	const throwOnNotFound = options?.throwOnNotFound !== false;
 	let output: StripePublicConfigPrice = null;
 
 	for (const prices of [config.prices, config.archivedPrices]) {
@@ -242,7 +247,7 @@ export function findPrice(config: StripePublicConfig, query: FindPriceQuery): St
 		if (output) break;
 	}
 
-	if (!output) throw new Error(`Not found: ${JSON.stringify(query)}`);
+	if (!output && throwOnNotFound) throw new Error(`Not found: ${JSON.stringify(query)}`);
 
 	return output;
 }

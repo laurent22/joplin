@@ -5,11 +5,11 @@ import shim from './shim';
 import SyncTargetRegistry from './SyncTargetRegistry';
 import { AnyAction, Dispatch } from 'redux';
 import Synchronizer, { SyncStartOptions } from './Synchronizer';
+import BaseSyncTarget from './BaseSyncTarget';
 
 class Registry {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Heterogeneous: each sync target subclass adds methods (e.g. OneDrive .api(), JoplinServer .driver()) accessed by callers
-	private syncTargets_: any = {};
+	private syncTargets_: Record<number, BaseSyncTarget> = {};
 	private logger_: Logger = null;
 	private schedSyncCalls_: boolean[] = [];
 	private waitForReSyncCalls_: boolean[] = [];

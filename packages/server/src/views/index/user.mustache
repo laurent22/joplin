@@ -8,20 +8,20 @@
 		<input type="hidden" name="id" value="{{user.id}}"/>
 		<input type="hidden" name="is_new" value="{{isNew}}"/>
 		<div class="field">
-			<label class="label">Full name</label>
+			<label class="label" for="full_name">Full name</label>
 			<div class="control">
-				<input {{disabledIfExternalAuth}} class="input" type="text" name="full_name" value="{{user.full_name}}"/>
+				<input {{disabledIfExternalAuth}} class="input" type="text" id="full_name" name="full_name" value="{{user.full_name}}"/>
 			</div>
 		</div>
 		<div class="field">
-			<label class="label">Email</label>
+			<label class="label" for="email">Email</label>
 			<div class="control">
-				<input {{disabledIfExternalAuth}} class="input" type="email" name="email" value="{{user.email}}"/>
+				<input {{disabledIfExternalAuth}} class="input" type="email" id="email" name="email" value="{{user.email}}"/>
 			</div>
 		</div>
 
 		<div class="field">
-			<label class="label">Password</label>
+			<label class="label" for="password">Password</label>
 			<div class="control">
 				<input {{disabledIfExternalAuth}} id="password" class="input" type="password" name="password" autocomplete="new-password"/>
 			</div>
@@ -29,9 +29,9 @@
 		</div>
 
 		<div class="field">
-			<label class="label">Repeat password</label>
+			<label class="label" for="password2">Repeat password</label>
 			<div class="control">
-				<input {{disabledIfExternalAuth}} class="input" type="password" name="password2" autocomplete="new-password"/>
+				<input {{disabledIfExternalAuth}} class="input" type="password" id="password2" name="password2" autocomplete="new-password"/>
 			</div>
 		</div>
 
