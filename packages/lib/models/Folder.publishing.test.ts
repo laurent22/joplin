@@ -141,7 +141,14 @@ describe('models/Folder.publishing', () => {
 						is_shared: 1,
 						children: [
 							{ title: 'still published note', is_shared: 1 },
+							{ title: 'deleted published note', is_shared: 1, deleted_time: Date.now() },
 						],
+					},
+					{
+						title: 'deleted sub-folder',
+						deleted_time: Date.now(),
+						is_shared: 1,
+						children: [],
 					},
 				],
 			},
@@ -170,8 +177,10 @@ describe('models/Folder.publishing', () => {
 			'sub-sub-folder 1',
 			'never published',
 			'never published sub-folder',
+			'deleted sub-folder',
 
 			'now unpublished note',
+			'deleted published note',
 		].map(title => ({ title })));
 		await expectPublished([
 			'still published',

@@ -639,14 +639,21 @@ export default class Note extends BaseItem {
 	public static async updateNoLongerPublishedNotes(activeShares: StateShare[]) {
 		const directlyPublishedNoteIds = new Set(getDirectlyPublishedNoteIds(activeShares));
 
+		// Exclude notes in shared folders, since share participants don't have access to
+		// the full list of published items:
+		const andConditions = 'AND notes.share_id = \'\'';
+
 		const publishedNotesInUnpublishedFolders: NoteEntity[] = await this.db().selectAll(`
 			SELECT notes.id, notes.parent_id, notes.is_shared, notes.share_id
 			FROM notes
 			JOIN folders ON notes.parent_id = folders.id
 			WHERE notes.is_shared = 1 AND folders.is_shared = 0
-				-- Exclude notes in shared folders, since share participants don't have access to
-				-- the full list of published items:
-				AND notes.share_id = ''
+				${andConditions}
+			UNION ALL -- Deleted notes
+				SELECT id, parent_id, is_shared, share_id
+				FROM notes
+				WHERE is_shared = 1 AND deleted_time > 0
+					${andConditions}
 		`);
 
 		for (const note of publishedNotesInUnpublishedFolders) {

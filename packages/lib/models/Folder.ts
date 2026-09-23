@@ -819,13 +819,18 @@ export default class Folder extends BaseItem {
 		let unsharedFolders = true;
 		while (unsharedFolders) {
 			unsharedFolders = false;
+			const fields = ['id', 'parent_id', 'is_shared', 'share_id'];
+			const fieldsString = fields.join(', ');
 			const allLocalToplevelPublishedFolders = await this.modelSelectAll(`
-				SELECT child.id, child.parent_id, child.is_shared, child.share_id FROM folders AS child
+				SELECT ${fields.map(f => `child.${f}`).join(', ')} FROM folders AS child
 					JOIN folders AS parent ON parent.id = child.parent_id
 					WHERE child.is_shared = 1 AND parent.is_shared = 0
 				UNION ALL -- Toplevel folders
-					SELECT id, parent_id, is_shared, share_id FROM folders
+					SELECT ${fieldsString} FROM folders
 					WHERE is_shared = 1 AND parent_id = ''
+				UNION ALL -- Deleted folders
+					SELECT ${fieldsString} FROM folders
+					WHERE is_shared = 1 AND deleted_time > 0
 			`);
 			for (const folder of allLocalToplevelPublishedFolders) {
 				if (remotePublishedRootIds.has(folder.id)) continue;
