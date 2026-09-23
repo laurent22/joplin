@@ -14,8 +14,8 @@ const publishedFolderShareState = (folderId: string): StateShare => ({
 const publishedNoteShareState = (noteId: string): StateShare => ({
 	id: `share-note-${noteId}`,
 	type: ShareType.Note,
-	folder_id: noteId,
-	note_id: '',
+	note_id: noteId,
+	folder_id: '',
 	master_key_id: '',
 });
 
