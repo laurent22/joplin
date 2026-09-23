@@ -1435,7 +1435,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		const note = this.state.note;
 		const isTodo = note && !!note.is_todo;
 		const isSaved = note && note.id;
-		const readOnly = this.state.readOnly;
+		const readOnly = this.isReadOnly();
 		const isDeleted = !!this.state.note.deleted_time;
 		const isCodeView = this.props.editorType === EditorType.Markdown;
 
@@ -1755,6 +1755,11 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		return noteIsLockedInShare(this.state.note);
 	}
 
+	// state.readOnly is only refreshed by a reload, so a note locked while it sits in a share is covered by the live note.
+	private isReadOnly() {
+		return this.state.readOnly || this.lockedInShare();
+	}
+
 	public folderPickerOptions() {
 		const options = {
 			// Moving the note out of the share is how a locked note becomes editable again, when the share allows it.
@@ -1948,7 +1953,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 							keyboardAppearance={theme.keyboardAppearance}
 							placeholder={_('Add body')}
 							placeholderTextColor={theme.colorFaded}
-							editable={!this.state.readOnly && !this.state.reloadInProgress}
+							editable={!this.isReadOnly() && !this.state.reloadInProgress}
 							// need some extra padding for iOS so that the keyboard won't cover last line of the note
 							// see https://github.com/laurent22/joplin/issues/3607
 							// Property is gone as of RN 0.72?
@@ -1974,7 +1979,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 						onSearchVisibleChange={this.onSearchVisibleChange_}
 						onAttach={this.onAttach}
 						noteResources={this.state.noteResources}
-						readOnly={this.state.readOnly || this.state.reloadInProgress}
+						readOnly={this.isReadOnly() || this.state.reloadInProgress}
 						plugins={this.props.plugins}
 						style={{
 							...editorStyle,
@@ -2053,7 +2058,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					keyboardAppearance={theme.keyboardAppearance}
 					placeholder={_('Add title')}
 					placeholderTextColor={theme.colorFaded}
-					editable={!this.state.readOnly && !this.state.reloadInProgress}
+					editable={!this.isReadOnly() && !this.state.reloadInProgress}
 					multiline={this.state.multiline}
 					submitBehavior = "blurAndSubmit"
 				/>

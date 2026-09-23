@@ -330,6 +330,22 @@ describe('screens/Note/Note', () => {
 		Setting.setValue('featureFlag.noteLock', false);
 	});
 
+	it('should become read-only as soon as a note inside a share is locked', async () => {
+		await setupUnlockedNoteLock('123456');
+		const noteId = await openNewNote({ title: 'Shared then locked', body: 'plain', share_id: 'share-1' });
+		const { unmount } = render(<WrappedNoteScreen />);
+
+		expect(await screen.findByDisplayValue('Shared then locked')).not.toBeDisabled();
+		await act(async () => {
+			await enableNoteLock(noteId);
+		});
+
+		expect(screen.getByDisplayValue('Shared then locked')).toBeDisabled();
+
+		unmount();
+		Setting.setValue('featureFlag.noteLock', false);
+	});
+
 	it('should disable tags for a note that cannot be unlocked while the session is unlocked', async () => {
 		await setupUndecryptableNote({ title: 'Old key note', body: 'secret' });
 
