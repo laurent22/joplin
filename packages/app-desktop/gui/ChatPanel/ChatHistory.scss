@@ -1,16 +1,3 @@
-@mixin chat-history-button {
-	display: flex;
-	width: 100%;
-	padding: 6px;
-	gap: 8px;
-	text-align: left;
-	font: inherit;
-	color: inherit;
-	background: none;
-	border: none;
-	cursor: pointer;
-}
-
 @mixin chat-history-input {
 	box-sizing: border-box;
 	font: inherit;
@@ -23,11 +10,12 @@
 .chat-history {
 	position: absolute;
 	top: 100%;
-	left: 0;
-	right: 0;
+	left: 30px;
+	right: 30px;
 	z-index: 10;
 	display: flex;
 	flex-direction: column;
+	max-width: 400px;
 	padding: 6px 10px 10px;
 	font-weight: normal;
 	background-color: var(--joplin-background-color);
@@ -68,6 +56,8 @@
 
 .conversation-row {
 	display: flex;
+	align-items: center;
+	padding: 10px 20px;
 
 	&.-current {
 		font-weight: bold;
@@ -80,6 +70,7 @@
 
 	> .open {
 		flex: 1;
+		min-width: 0;
 	}
 
 	> .title-input {
@@ -106,12 +97,23 @@
 }
 
 .conversation-link {
-	@include chat-history-button;
+	display: flex;
+	line-height: 16px;
+	gap: 8px;
+	text-align: left;
+	font: inherit;
+	color: inherit;
+	background: none;
+	border: none;
+	cursor: pointer;
 
 	> .title {
 		flex: 1;
 		min-width: 0;
-		overflow-wrap: anywhere;
+		margin-right: 10px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 
 	> .timestamp {
@@ -124,4 +126,17 @@
 
 .conversation-actions {
 	display: none;
+	gap: 10px;
+	align-items: center;
+
+	> button {
+		display: flex;
+		padding: 0;
+		border: none;
+		background: none;
+		color: var(--joplin-color3);
+		cursor: pointer;
+		font-size: 16px;
+		line-height: 1;
+	}
 }
