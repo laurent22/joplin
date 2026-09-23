@@ -101,4 +101,74 @@ describe('models/Folder.publishing', () => {
 			'unpublished note',
 		].map(title => ({ title })));
 	});
+
+	it('should clear is_shared when a folder is no longer published', async () => {
+		await createFolderTree('', [
+			{
+				title: 'unpublished',
+				is_shared: 1,
+				children: [
+					{
+						title: 'sub-folder 1',
+						is_shared: 1,
+						children: [
+							{
+								title: 'sub-sub-folder 1',
+								is_shared: 1,
+								children: [
+									{ title: 'now unpublished note', is_shared: 1 },
+								],
+							},
+						],
+					},
+				],
+			},
+			{
+				title: 'still published',
+				is_shared: 1,
+				children: [
+					{
+						title: 'still published sub-folder',
+						is_shared: 1,
+						children: [
+							{ title: 'still published note', is_shared: 1 },
+						],
+					},
+				],
+			},
+			{
+				title: 'never published',
+				children: [
+					{
+						title: 'never published sub-folder',
+						children: [],
+					},
+				],
+			},
+		]);
+
+		const shareState: StateShare[] = [
+			publishedFolderShareState((await Folder.loadByTitle('still published')).id),
+		];
+
+		await Folder.updateNoLongerPublishedFolders(shareState);
+		await Note.updateNoLongerPublishedNotes(shareState);
+
+		await expectUnpublished([
+			'unpublished',
+			'sub-folder 1',
+			'sub-sub-folder 1',
+			'never published',
+			'never published sub-folder',
+
+			'now unpublished note',
+		].map(title => ({ title })));
+		await expectPublished([
+			'still published',
+			'still published sub-folder',
+
+			'still published note',
+		].map(title => ({ title })));
+	});
+
 });
