@@ -57,6 +57,7 @@
 .conversation-row {
 	display: flex;
 	align-items: center;
+	gap: 18px;
 	padding: 10px 20px;
 
 	&.-current {
@@ -99,7 +100,7 @@
 .conversation-link {
 	display: flex;
 	padding: 0;
-	gap: 8px;
+	gap: 18px;
 	text-align: left;
 	font: inherit;
 	line-height: 16px;
@@ -111,7 +112,6 @@
 	> .title {
 		flex: 1;
 		min-width: 0;
-		margin-right: 10px;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
