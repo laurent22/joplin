@@ -770,6 +770,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 						hasNoteLockKey={props.hasNoteLockKey}
 						dispatch={props.dispatch}
 						undecryptable={true}
+						lockedInShare={noteIsLockedInShare(lockedNoteMetadata)}
 					/>
 				</div>
 			);
@@ -785,6 +786,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 						noteTitle={lockedNoteMetadata.title}
 						hasNoteLockKey={props.hasNoteLockKey}
 						dispatch={props.dispatch}
+						lockedInShare={noteIsLockedInShare(lockedNoteMetadata)}
 					/>
 				</div>
 			);

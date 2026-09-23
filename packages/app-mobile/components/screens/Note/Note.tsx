@@ -2090,8 +2090,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			viewEditToggleMode = ViewToggleButtonMode.Hidden;
 		}
 
-		const lockedInShareBanner = this.lockedInShare() && !noteLockPanelVisible ? (
-			<Text style={this.styles().lockedInShareBanner}>{_('This note is locked and may not be readable because it is contained within a share. To enable editing, it must be moved outside of the share.')}</Text>
+		const lockedInShareBanner = this.lockedInShare() ? (
+			<Text style={this.styles().lockedInShareBanner}>{noteLockPanelVisible ? _('This note may not be readable because it is contained within a share.') : _('This note is read-only because it is locked and contained within a share. To enable editing, it must be moved outside of the share.')}</Text>
 		) : null;
 
 		const header = <ScreenHeader

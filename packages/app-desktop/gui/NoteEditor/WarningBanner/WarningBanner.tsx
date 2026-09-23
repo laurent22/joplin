@@ -58,7 +58,7 @@ const WarningBanner: React.FC<Props> = props => {
 
 	const lockedInShareBanner = (
 		<BannerContent visible={props.lockedInShare}>
-			{_('This note is locked and may not be readable because it is contained within a share. To enable editing, it must be moved outside of the share.')}
+			{_('This note is read-only because it is locked and contained within a share. To enable editing, it must be moved outside of the share.')}
 		</BannerContent>
 	);
 
