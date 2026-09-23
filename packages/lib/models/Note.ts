@@ -913,6 +913,8 @@ export default class Note extends BaseItem {
 		// through untouched, the same way data saved via sync does, and so does a row that sync
 		// still holds encrypted, since its empty body is not a note lock body yet.
 		if (isNoteLockEnabled() && (!!options?.useNoteLock || ('body' in o && !o.encryption_applied && !isValidNoteLockHeader(o.body)))) {
+			// The caller's note can be one the store has frozen, as when Note.duplicate saves it a second time.
+			o = { ...o };
 			if (o.is_locked === undefined && !isNew && oldNote) o.is_locked = oldNote.is_locked;
 			// Callers use the returned note to update UI state, so it must carry the plaintext
 			// body even though the encrypted one is what gets persisted.

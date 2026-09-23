@@ -381,6 +381,12 @@ describe('models/Note', () => {
 		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe('JLD01 shopping list');
 	});
 
+	it('should save a note object that the store has frozen', async () => {
+		const note = await Note.save({ title: 'note', body: 'plain' });
+		await Note.save(Object.freeze({ ...note, body: 'edited' }));
+		expect((await Note.load(note.id)).body).toBe('edited');
+	});
+
 	it('should treat a locked note as a normal note while the feature is disabled', async () => {
 		await NoteLockKey.instance().create('123456');
 		await NoteLockSession.instance().unlock('123456');
