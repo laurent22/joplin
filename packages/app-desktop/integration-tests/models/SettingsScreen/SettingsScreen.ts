@@ -1,5 +1,6 @@
 
 import { Page, Locator } from '@playwright/test';
+import SyncTab from './SyncTab';
 
 export default class SettingsScreen {
 	private readonly container: Locator;
@@ -23,5 +24,13 @@ export default class SettingsScreen {
 	public async waitFor() {
 		await this.okayButton.waitFor();
 		await this.appearanceTabButton.waitFor();
+	}
+
+	public async openSyncTab() {
+		await this.waitFor();
+		const syncTab = this.getTabLocator('Synchronisation');
+		await syncTab.click();
+
+		return new SyncTab(this.container);
 	}
 }

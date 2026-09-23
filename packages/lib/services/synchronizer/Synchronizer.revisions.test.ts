@@ -5,6 +5,12 @@ import Note from '../../models/Note';
 import Revision from '../../models/Revision';
 import { loadMasterKeysFromSettings, setupAndEnableEncryption } from '../e2ee/utils';
 import { onRevisionServiceSettingsChanged } from './syncInfoUtils';
+import EncryptionService from '../e2ee/EncryptionService';
+import NoteLockKey from '../noteLock/NoteLockKey';
+import NoteLockSession from '../noteLock/NoteLockSession';
+import ItemChange from '../../models/ItemChange';
+import { ModelType } from '../../BaseModel';
+import RevisionService from '../RevisionService';
 
 describe('Synchronizer.revisions', () => {
 
@@ -328,6 +334,84 @@ describe('Synchronizer.revisions', () => {
 		expect(Setting.value('revisionService.enabled')).toBe(false);
 		await synchronizerStart();
 		expect(Setting.value('revisionService.enabled')).toBe(true);
+	}));
+
+	it('should delete local plaintext revisions when a note arrives locked via sync', (async () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		const note = await Note.save({ title: 'note', body: 'secret v1' });
+		await Note.save({ id: note.id, body: 'secret v2' });
+		await synchronizerStart();
+		// The plaintext revision only exists on this client: it is collected after the sync.
+		await revisionService().collectRevisions();
+		expect((await Revision.allByType(BaseModel.TYPE_NOTE, note.id)).some(r => !r.is_locked)).toBe(true);
+
+		await switchClient(2);
+
+		Setting.setValue('featureFlag.noteLock', true);
+		NoteLockSession.destroyInstance();
+		NoteLockKey.destroyInstance();
+		EncryptionService.instance_ = encryptionService();
+		await synchronizerStart();
+		await NoteLockKey.instance().create('123456');
+		await NoteLockSession.instance().unlock('123456');
+		// setNoteLockState only emits events now, so the lock transition is applied like the note screen does it.
+		const toSave = { ...await Note.load(note.id), is_locked: 1 };
+		(toSave as Record<string, unknown>).isDecrypted = true;
+		await Note.save(toSave, { useNoteLock: true });
+		await synchronizerStart();
+
+		await switchClient(1);
+
+		Setting.setValue('featureFlag.noteLock', true);
+		await synchronizerStart();
+
+		for (const rev of await Revision.allByType(BaseModel.TYPE_NOTE, note.id)) {
+			expect(rev.is_locked).toBe(1);
+		}
+		// The cached pre-change body is cleared too, otherwise the next collection would build a
+		// plaintext revision from it.
+		const itemChange = await ItemChange.itemChange(ModelType.Note, note.id);
+		expect(itemChange?.before_change_item ?? '').not.toContain('secret');
+	}));
+
+	it('should advance the editor reload marker before the incoming lock revision cleanup', (async () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		const note = await Note.save({ title: 'note', body: 'secret v1' });
+		await synchronizerStart();
+
+		await switchClient(2);
+
+		Setting.setValue('featureFlag.noteLock', true);
+		NoteLockSession.destroyInstance();
+		NoteLockKey.destroyInstance();
+		EncryptionService.instance_ = encryptionService();
+		await synchronizerStart();
+		await NoteLockKey.instance().create('123456');
+		await NoteLockSession.instance().unlock('123456');
+		const toSave = { ...await Note.load(note.id), is_locked: 1 };
+		(toSave as Record<string, unknown>).isDecrypted = true;
+		await Note.save(toSave, { useNoteLock: true });
+		await synchronizerStart();
+
+		await switchClient(1);
+
+		Setting.setValue('featureFlag.noteLock', true);
+		// A queued editor save only becomes stale once the reload marker advances, so the
+		// dispatch must fire before the awaited revision cleanup opens a race window.
+		const dispatch = jest.fn();
+		synchronizer().dispatch = dispatch;
+		let dispatchedBeforeCleanup = false;
+		const cleanupSpy = jest.spyOn(RevisionService.instance(), 'deleteUnencryptedHistoryForNote').mockImplementation(async () => {
+			dispatchedBeforeCleanup = dispatch.mock.calls.some(([action]) => action.type === 'EDITOR_NOTE_NEEDS_RELOAD' && action.noteId === note.id);
+		});
+		try {
+			await synchronizerStart();
+			expect(cleanupSpy).toHaveBeenCalled();
+			expect(dispatchedBeforeCleanup).toBe(true);
+		} finally {
+			cleanupSpy.mockRestore();
+			synchronizer().dispatch = () => {};
+		}
 	}));
 
 	it('should not overwrite a customised local ttlDays with another client default', (async () => {
