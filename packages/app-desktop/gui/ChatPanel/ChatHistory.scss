@@ -98,10 +98,11 @@
 
 .conversation-link {
 	display: flex;
-	line-height: 16px;
+	padding: 0;
 	gap: 8px;
 	text-align: left;
 	font: inherit;
+	line-height: 16px;
 	color: inherit;
 	background: none;
 	border: none;
