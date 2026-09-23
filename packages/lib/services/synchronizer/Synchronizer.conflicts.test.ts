@@ -73,13 +73,16 @@ describe('Synchronizer.conflicts', () => {
 		}
 	}));
 
-	it('should keep a locked note as a conflict when an older client drops its lock inside a share', (async () => {
+	it.each([
+		['missing', ''],
+		['empty', 'is_locked: \n'],
+	])('should keep a locked note as a conflict when an older client drops its lock inside a share (%s is_locked)', (async (_name, lockLine) => {
 		const folder = await Folder.save({ title: 'folder' });
 		const note = await Note.save({ title: 'Locked', body: 'JLD01cipher', is_locked: 1, parent_id: folder.id });
 		await synchronizerStart();
 
 		const path = `${note.id}.md`;
-		const remote = (await fileApi().get(path)).replace('share_id: \n', 'share_id: share-1\n').replace('is_locked: 1\n', '').replace('JLD01cipher', 'edited on an old client').replace(/^updated_time: .*$/m, `updated_time: ${time.unixMsToIso(note.updated_time + 1000)}`);
+		const remote = (await fileApi().get(path)).replace('share_id: \n', 'share_id: share-1\n').replace('is_locked: 1\n', lockLine).replace('JLD01cipher', 'edited on an old client').replace(/^updated_time: .*$/m, `updated_time: ${time.unixMsToIso(note.updated_time + 1000)}`);
 		await fileApi().put(path, remote);
 		await synchronizerStart();
 
