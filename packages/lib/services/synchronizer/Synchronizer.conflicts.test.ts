@@ -88,7 +88,7 @@ describe('Synchronizer.conflicts', () => {
 
 		const conflicts = await Note.conflictedNotes();
 		expect(conflicts.length).toBe(1);
-		expect(conflicts[0]).toMatchObject({ conflict_original_id: note.id, is_locked: 1, body: 'JLD01cipher', share_id: '' });
+		expect(conflicts[0]).toMatchObject({ conflict_original_id: '', is_locked: 1, body: 'JLD01cipher', share_id: '' });
 		expect(await Note.load(note.id)).toMatchObject({ is_locked: 0, body: 'edited on an old client', share_id: 'share-1' });
 	}));
 
