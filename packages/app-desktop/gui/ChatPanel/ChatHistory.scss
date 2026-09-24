@@ -57,8 +57,8 @@
 .conversation-row {
 	display: flex;
 	align-items: center;
-	gap: 18px;
-	padding: 10px 20px;
+	line-height: 16px;
+	cursor: pointer;
 
 	&.-current {
 		font-weight: bold;
@@ -78,12 +78,13 @@
 		@include chat-history-input;
 		flex: 1;
 		min-width: 0;
-		margin: 2px;
+		margin: 6px 20px;
 		padding: 3px 4px;
 	}
 
 	> .actions {
 		flex-shrink: 0;
+		margin-right: 20px;
 	}
 
 	&:hover,
@@ -99,11 +100,10 @@
 
 .conversation-link {
 	display: flex;
-	padding: 0;
+	padding: 10px 20px;
 	gap: 18px;
 	text-align: left;
 	font: inherit;
-	line-height: 16px;
 	color: inherit;
 	background: none;
 	border: none;

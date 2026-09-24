@@ -59,7 +59,11 @@ const ChatHistory: React.FC<Props> = props => {
 				const current = conversation.id === props.currentConversationId;
 				const title = conversation.title || _('(untitled)');
 				const editing = conversation.id === editingId;
-				return <li key={conversation.id} className={`conversation-row${current ? ' -current' : ''}`} aria-current={current ? 'true' : undefined}>
+				return <li key={conversation.id} className={`conversation-row${current ? ' -current' : ''}`} aria-current={current ? 'true' : undefined}
+					onClick={event => {
+						if (event.target === event.currentTarget) props.onOpen(conversation.id);
+					}}
+				>
 					{editing ? (
 						<input
 							className='title-input'
