@@ -18,6 +18,7 @@ interface Props {
 	onOpen: (conversationId: string)=> void;
 	onRename: (conversation: Conversation, title: string)=> void;
 	onDelete: (conversationId: string)=> void;
+	onClose: ()=> void;
 }
 
 const ChatHistory: React.FC<Props> = props => {
@@ -33,18 +34,31 @@ const ChatHistory: React.FC<Props> = props => {
 	const stopEditing = () => setEditingId(null);
 
 	const onTitleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>, conversation: Conversation) => {
-		if (event.nativeEvent.isComposing || event.key !== 'Enter') return;
+		if (event.nativeEvent.isComposing) return;
+		if (event.key === 'Escape') {
+			event.stopPropagation();
+			stopEditing();
+			return;
+		}
+		if (event.key !== 'Enter') return;
 		event.preventDefault();
 		props.onRename(conversation, draftTitle);
 		stopEditing();
 	};
 
-	return <div className='chat-history' id={props.id} ref={props.popupRef}>
+	const onPopupKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+		if (event.nativeEvent.isComposing || event.key !== 'Escape') return;
+		event.stopPropagation();
+		props.onClose();
+	};
+
+	return <div className='chat-history' id={props.id} ref={props.popupRef} onKeyDown={onPopupKeyDown}>
 		<div className='conversation-search search'>
 			<i className='icon icon-search' aria-hidden='true'/>
 			<input
 				className='field'
 				type='search'
+				autoFocus
 				aria-label={_('Search conversations')}
 				placeholder={_('Search conversations')}
 				value={search}

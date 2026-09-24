@@ -21,6 +21,7 @@ import ChatMessageItem from './ChatMessageItem';
 import NavService from '@joplin/lib/services/NavService';
 import ChatConversation from '@joplin/lib/models/ChatConversation';
 import uuid from '@joplin/lib/uuid';
+import { focus } from '@joplin/lib/utils/focusHandler';
 import dialogs from '../dialogs';
 import ChatHistory, { Conversation } from './ChatHistory';
 import Button, { ButtonLevel } from '../Button/Button';
@@ -129,6 +130,10 @@ const ChatPanel: React.FC<Props> = (props) => {
 	}, [historyOpen, loadConversationHistory]);
 	const historyPopupRef = useRef<HTMLDivElement>(null);
 	const historyButtonRef = useRef<HTMLButtonElement>(null);
+	const closeHistory = useCallback(() => {
+		setHistoryOpen(false);
+		focus('ChatPanel::closeHistory', historyButtonRef.current);
+	}, []);
 	useEffect(() => {
 		if (!historyOpen) return () => {};
 		const onMouseDown = (event: MouseEvent) => {
@@ -552,6 +557,20 @@ const ChatPanel: React.FC<Props> = (props) => {
 						<i className='toolbar-icon far fa-clock' aria-hidden='true'/>
 					</button>
 				)}
+				{historyOpen && (
+					// Placed right after its button so that Tab moves from the button into the popup
+					<ChatHistory
+						conversations={conversations}
+						currentConversationId={props.conversationId}
+						id={historyId}
+						popupRef={historyPopupRef}
+						onSearchChange={loadConversationHistory}
+						onOpen={handleOpenConversation}
+						onRename={handleRenameConversation}
+						onDelete={handleDeleteConversation}
+						onClose={closeHistory}
+					/>
+				)}
 				{showingMessages && (
 					<button type='button' className='reset toolbar-button' onClick={handleNewChat} title={newChatLabel} aria-label={newChatLabel}>
 						<i className='toolbar-icon fas fa-comment-medical' aria-hidden='true'/>
@@ -564,18 +583,6 @@ const ChatPanel: React.FC<Props> = (props) => {
 					title={closeLabel}
 					aria-label={closeLabel}
 				><i className='toolbar-icon fas fa-times' role='img' aria-hidden={true}/></button>
-				{historyOpen && (
-					<ChatHistory
-						conversations={conversations}
-						currentConversationId={props.conversationId}
-						id={historyId}
-						popupRef={historyPopupRef}
-						onSearchChange={loadConversationHistory}
-						onOpen={handleOpenConversation}
-						onRename={handleRenameConversation}
-						onDelete={handleDeleteConversation}
-					/>
-				)}
 			</div>
 			{content}
 		</div>
