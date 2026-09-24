@@ -821,6 +821,8 @@ export default class Folder extends BaseItem {
 			unsharedFolders = false;
 			const fields = ['id', 'parent_id', 'is_shared', 'share_id'];
 			const fieldsString = fields.join(', ');
+			// For now, don't adjust is_shared for folders in the trash -- older Joplin versions will
+			// immediately re-publish those folders on sync
 			const allLocalToplevelPublishedFolders = await this.modelSelectAll(`
 				SELECT ${fields.map(f => `child.${f}`).join(', ')} FROM folders AS child
 					JOIN folders AS parent ON parent.id = child.parent_id
@@ -828,9 +830,6 @@ export default class Folder extends BaseItem {
 				UNION ALL -- Toplevel folders
 					SELECT ${fieldsString} FROM folders
 					WHERE is_shared = 1 AND parent_id = ''
-				UNION ALL -- Deleted folders
-					SELECT ${fieldsString} FROM folders
-					WHERE is_shared = 1 AND deleted_time > 0
 			`);
 			for (const folder of allLocalToplevelPublishedFolders) {
 				if (remotePublishedRootIds.has(folder.id)) continue;
