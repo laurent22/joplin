@@ -769,7 +769,7 @@ export default class SearchEngine {
 
 		// Some plugins search for item IDs and expect only full-text matches.
 		// See https://github.com/laurent22/joplin/issues/16644
-		if (isItemIdQuery(rawQuery)) {
+		if (isItemIdQuery(rawQuery.trim())) {
 			return false;
 		}
 

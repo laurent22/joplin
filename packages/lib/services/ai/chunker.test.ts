@@ -14,8 +14,8 @@ describe('chunker', () => {
 	});
 
 	it('removes item IDs from chunked text chunking', () => {
-		const body = `![image](:/${uuid.create()}), [link](:/${uuid.create()}) and :/${uuid.create()}.`;
-		expect(chunkText(body)).toEqual(['![image], [link] and .']);
+		const body = `![image](:/${uuid.create()}), [link](:/${uuid.create()}), :/${uuid.create()}, and :/${uuid.create()}`;
+		expect(chunkText(body)).toEqual(['![image], [link], , and']);
 	});
 
 	it('produces overlapping chunks for long input', () => {

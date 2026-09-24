@@ -63,11 +63,11 @@ const removeItemIds = (text: string) => {
 	// to avoid trailing empty parentheses after links and images:
 	return text.replace(/\(:\/[a-z0-9]{32}\)/g, '')
 		// Remove other item URLs (e.g. in `<img src=":/id">` HTML)
-		.replace(/:\/[a-z0-9]{32}([^a-z0-9])/g, '$1');
+		.replace(/:\/[a-z0-9]{32}([^a-z0-9]|$)/g, '$1');
 };
 
 export const chunkText = (text: string, options?: ChunkOptions): string[] => {
-	const normalised = removeItemIds((text ?? '').trim());
+	const normalised = removeItemIds(text ?? '').trim();
 	if (!normalised) return [];
 	const effective = options ?? optionsForText(normalised);
 	if (normalised.length <= effective.chunkSize) return [normalised];
