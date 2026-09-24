@@ -21,6 +21,7 @@ import PerformanceLogger from '../../PerformanceLogger';
 import SearchService from '../ai/SearchService';
 import { unique } from '../../ArrayUtils';
 import { embeddingAvailability } from '../ai/availability';
+import isItemId from '../../models/utils/isItemId';
 
 const perfLogger = PerformanceLogger.create();
 
@@ -760,6 +761,15 @@ export default class SearchEngine {
 	private canSemanticSearch_(parsedQuery: ParsedQuery) {
 		// Disable semantic search if the user has explicitly specified a field to search in
 		if (parsedQuery.allTerms.some(term => term.name !== 'text')) {
+			return false;
+		}
+
+		const trimQuotes = (text: string) => text.replace(/^"(.*)"$/, '$1');
+		const isItemIdQuery = (query: string) => isItemId(trimQuotes(query));
+
+		// Some plugins search for item IDs and expect only full-text matches.
+		// See https://github.com/laurent22/joplin/issues/16644
+		if (parsedQuery.allTerms.length === 1 && isItemIdQuery(parsedQuery.allTerms[0].value)) {
 			return false;
 		}
 
