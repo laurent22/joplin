@@ -355,3 +355,4 @@ syncdisabledicon
 syncable
 selfsigned
 combobox
+Brieuc
