@@ -1,8 +1,7 @@
 import { history, undo, redo } from '@codemirror/commands';
-import { EditorSelection, EditorState, StateEffect } from '@codemirror/state';
+import { EditorSelection, EditorState } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
 import createTestEditor from '../testing/createTestEditor';
-import renderTables from './rendering/renderTables';
 import conflictResolutionExtension, { conflictRegions, goToConflict, resolveConflict, restoreConflict, setConflictRegions, ConflictRegionSpec } from './conflictResolutionExtension';
 
 const createEditor = async (initialText: string, regions: ConflictRegionSpec[] = []) => {
@@ -781,34 +780,6 @@ describe('conflictResolutionExtension', () => {
 		editor.dispatch({ effects: restoreConflict.of(middle) });
 		expect(regionTexts(editor)).toEqual(['one', 'two', 'three']);
 	});
-
-	// Conflicts are reviewed as markdown, so tables are not rendered
-	test('should not render tables while a conflict is open', async () => {
-		const text = '| name | id |\n| --- | --- |\n| hot | 789 |';
-		const editor = await createTestEditor(text, EditorSelection.cursor(0), ['Table'], [
-			renderTables({ onEvent: () => {} } as never),
-		]);
-		const renderedTables = () => editor.dom.querySelectorAll('.cm-tw');
-
-		expect(renderedTables()).toHaveLength(1);
-
-		editor.dispatch({ effects: StateEffect.appendConfig.of([conflictResolutionExtension()]) });
-		editor.dispatch({ effects: setConflictRegions.of({
-			regions: [{ from: 28, to: 41, localText: '| gun | 789 |' }],
-			forText: text,
-		}) });
-
-		expect(renderedTables()).toHaveLength(0);
-		expect(editor.dom.querySelectorAll('.cm-conflictLocalVersion')).toHaveLength(1);
-
-		// Resolving the regions does not bring the tables back: the note keeps the
-		// same shape until the conflict is finished
-		const region = conflictRegions(editor.state)[0];
-		editor.dispatch({ effects: resolveConflict.of(region.id) });
-
-		expect(renderedTables()).toHaveLength(0);
-	});
-
 
 	test('should use a monospace font when the local version is a table', async () => {
 		const editor = await createEditor('| name | id |\n| hot  | 789 |', [

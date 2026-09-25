@@ -442,15 +442,6 @@ export const goToConflict = (view: EditorView, direction: 'previous'|'next') => 
 	return true;
 };
 
-export const conflictIsOpen = (state: EditorState) => {
-	const field = state.field(conflictState, false);
-	return !!field && field.regions.length > 0;
-};
-
-export const conflictOpened = (transaction: Transaction) => {
-	return conflictIsOpen(transaction.state) && !conflictIsOpen(transaction.startState);
-};
-
 const applyLocalVersion = EditorState.transactionFilter.of(transaction => {
 	const chosen = transaction.effects.filter(effect => effect.is(useLocalVersion));
 	if (!chosen.length) return transaction;
