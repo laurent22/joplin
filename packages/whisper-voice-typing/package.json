@@ -46,10 +46,10 @@
   "license": "AGPL-3.0-or-later",
   "devDependencies": {
     "@types/react": "19.1.10",
-    "nitrogen": "0.33.9",
-    "react": "19.1.5",
-    "react-native": "0.81.6",
-    "react-native-nitro-modules": "0.33.9",
+    "nitrogen": "0.37.1",
+    "react": "19.2.3",
+    "react-native": "0.86.2",
+    "react-native-nitro-modules": "0.37.1",
     "typescript": "5.9.3"
   },
   "peerDependencies": {

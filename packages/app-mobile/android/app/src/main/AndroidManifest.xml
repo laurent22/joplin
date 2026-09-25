@@ -10,7 +10,12 @@
 	<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
+	<!-- expo-audio recording
+		(see https://github.com/expo/expo/blob/51c14bb4b88afa4b8c21ea617b0096349098b098/packages/expo-audio/plugin/src/withAudio.ts#L78) -->
 	<uses-permission android:name="android.permission.RECORD_AUDIO" />
+	<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+	<uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
 
 	<!-- Make these features optional to enable Chromebooks -->
 	<!-- https://github.com/laurent22/joplin/issues/37 -->
@@ -55,6 +60,13 @@
 
 		<!-- Enable profiling in release builds (Android 10+) -->
 		<profileable android:shell="true" />
+
+		<!-- expo-audio: Required for background recording -->
+		<service
+			android:name="expo.modules.audio.service.AudioRecordingService"
+			android:exported="false"
+			android:foregroundServiceType="microphone"
+		/>
 
 		<!--
 		2018-12-16: Changed android:launchMode from "singleInstance" to "singleTop" for Firebase notification

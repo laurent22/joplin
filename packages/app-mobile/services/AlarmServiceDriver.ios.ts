@@ -1,6 +1,6 @@
 import { Notification } from '@joplin/lib/models/Alarm';
 import Logger from '@joplin/utils/Logger';
-import PushNotificationIOS, { PushNotification, PushNotificationPermissions, ScheduleLocalNotificationDetails } from '@react-native-community/push-notification-ios';
+import PushNotificationIOS, { NotificationRequest, PushNotification, PushNotificationPermissions } from '@react-native-community/push-notification-ios';
 
 export default class AlarmServiceDriver {
 
@@ -71,15 +71,15 @@ export default class AlarmServiceDriver {
 		}
 
 		// ID must be a string and userInfo must be supplied otherwise cancel won't work
-		const iosNotification: Partial<ScheduleLocalNotificationDetails> & { id: string } = {
+		const iosNotification: NotificationRequest = {
 			id: `${notification.id}`,
-			alertTitle: notification.title,
-			fireDate: notification.date.toISOString(),
+			title: notification.title,
+			fireDate: notification.date,
 			userInfo: { id: `${notification.id}` },
 		};
 
-		if ('body' in notification) iosNotification.alertBody = notification.body;
+		if ('body' in notification) iosNotification.body = notification.body;
 
-		PushNotificationIOS.scheduleLocalNotification(iosNotification as ScheduleLocalNotificationDetails);
+		PushNotificationIOS.addNotificationRequest(iosNotification);
 	}
 }
