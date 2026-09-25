@@ -654,6 +654,8 @@ export default class ShareService {
 	private async updateNoLongerSharedItems() {
 		const shareIds = this.shares.map(share => share.id).concat(this.shareInvitations.map(si => si.share.id));
 		await Folder.updateNoLongerSharedItems(shareIds);
+		await Folder.updateNoLongerPublishedFolders(this.shares);
+		await Note.updateNoLongerPublishedNotes(this.shares);
 	}
 
 	public async maintenance() {

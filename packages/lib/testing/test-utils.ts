@@ -324,6 +324,8 @@ async function clearDatabase(id: number = null) {
 	await ItemChange.waitForAllSaved();
 
 	const tableNames = [
+		'chat_conversations',
+		'chat_messages',
 		'deleted_items',
 		'folders',
 		'item_changes',

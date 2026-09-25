@@ -3,20 +3,22 @@ import { setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../te
 import { ImportModuleOutputFormat, ImportOptions } from './types';
 import InteropService from './InteropService';
 import Folder from '../../models/Folder';
+import { isRecoverableError } from '../../import-enex';
 
-const importFolder = async (path: string) => {
+const importFolder = async (path: string, onError: ImportOptions['onError'] = null) => {
 	const importOptions: ImportOptions = {
 		path: path,
 		format: 'enex',
 		outputFormat: ImportModuleOutputFormat.Markdown,
+		onError,
 	};
 
 	await InteropService.instance().import(importOptions);
 };
 
-const importTestFile = async (name: string) => {
+const importTestFile = async (name: string, onError: ImportOptions['onError'] = null) => {
 	const enexSampleBaseDir = `${supportDir}/../enex_to_md`;
-	await importFolder(`${enexSampleBaseDir}/${name}`);
+	await importFolder(`${enexSampleBaseDir}/${name}`, onError);
 };
 
 describe('InteropService_Importer_EnexToMd', () => {
@@ -53,5 +55,22 @@ describe('InteropService_Importer_EnexToMd', () => {
 		// Same-folder link (evernote:// link)
 		expect(notes[2].body).toContain(`[Test note](:/${notes[3].id})`);
 		expect(notes[4].body).toContain(`[Test](:/${notes[2].id})`);
+	});
+
+	it('should import notes even if the file contains unescaped ampersands', async () => {
+		const errors: Error[] = [];
+		await importTestFile('unescaped_ampersand.enex', error => errors.push(error));
+
+		const notes = await Note.all({ order: [{ by: 'title', dir: 'ASC' }] });
+		expect(notes.map(n => n.title)).toEqual([
+			'Note after the bad one',
+			'Unescaped ampersand',
+		]);
+		expect(notes[0].body).toContain('This note must still be imported');
+		expect(notes[1].body).toContain('Mobilize & Measure');
+
+		// Reported, but flagged so it's not presented as a failed import.
+		expect(errors.length).toBe(1);
+		expect(isRecoverableError(errors[0])).toBe(true);
 	});
 });

@@ -10,6 +10,7 @@ import Setting from '@joplin/lib/models/Setting';
 import { PackageInfo } from '@joplin/lib/versionInfo';
 import shim from '@joplin/lib/shim';
 import { ImportModule } from '@joplin/lib/services/interop/Module';
+import { isRecoverableError } from '@joplin/lib/import-enex';
 import Logger from '@joplin/utils/Logger';
 const packageInfo: PackageInfo = require('../../../packageInfo.js');
 
@@ -136,7 +137,9 @@ export const runtime = (control: WindowControl): CommandRuntime => {
 					void CommandService.instance().execute('showModalMessage', `${modalMessage}\n\n${statusStrings.join('\n')}`);
 				},
 				onError: (error: string|Error) => {
-					errors.push(error);
+					// Recovered errors are logged but not reported, since the
+					// notes were imported successfully anyway.
+					if (!isRecoverableError(error)) errors.push(error);
 					console.warn(error);
 				},
 				destinationFolderId: options.destinationFolderId,

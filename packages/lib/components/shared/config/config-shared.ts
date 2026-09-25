@@ -127,13 +127,21 @@ export const checkAiConfig = async (comp: ConfigScreenComponent) => {
 	comp.setState({ checkAiConfigResult: 'checking' });
 	try {
 		const { default: AiService } = await import('../../../services/ai/AiService');
+		// Reasoning models spend hundreds of tokens before emitting any content,
+		// so a small budget returns empty text with finish_reason "length".
 		const result = await AiService.instance().chat([
 			{ role: ChatRole.System, content: 'Keep replies brief, but non-empty.' },
 			{ role: ChatRole.User, content: 'Reply with the single word OK.' },
-		], { maxTokens: 20 });
+		], { maxTokens: 512 });
 		const text = (result.text || '').trim();
 		if (!text) {
-			comp.setState({ checkAiConfigResult: { ok: false, message: _('The provider returned an empty response. Check that the base URL ends with /v1 and that a model is loaded.') } });
+			// Truncation or a reasoning trace means the model was reached, so the
+			// base URL, key and model name are all fine.
+			if (result.finishReason === 'length' || result.reasoningText) {
+				comp.setState({ checkAiConfigResult: { ok: true, message: _('Connected successfully, but the model used its entire output budget on reasoning and returned no text.') } });
+			} else {
+				comp.setState({ checkAiConfigResult: { ok: false, message: _('The provider returned an empty response. Check that the base URL ends with /v1 and that a model is loaded.') } });
+			}
 		} else {
 			comp.setState({ checkAiConfigResult: { ok: true, message: text } });
 		}

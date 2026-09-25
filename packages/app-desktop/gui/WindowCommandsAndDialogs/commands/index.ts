@@ -21,6 +21,7 @@ import * as newNote from './newNote';
 import * as newSubFolder from './newSubFolder';
 import * as newTodo from './newTodo';
 import * as newWhiteboard from './newWhiteboard';
+import * as openAiChatConversation from './openAiChatConversation';
 import * as openFolder from './openFolder';
 import * as openFolderDialog from './openFolderDialog';
 import * as openItem from './openItem';
@@ -81,6 +82,7 @@ const index: any[] = [
 	newSubFolder,
 	newTodo,
 	newWhiteboard,
+	openAiChatConversation,
 	openFolder,
 	openFolderDialog,
 	openItem,

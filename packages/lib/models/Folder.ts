@@ -34,6 +34,14 @@ export interface SortFolderOptions {
 	includeDeleted?: boolean;
 }
 
+const activeSharesToPublishedFolderRootIds = (activeShares: StateShare[]) => {
+	const publishedFolderRootIds = activeShares
+		.filter(share => share.type === ShareType.PublishedFolder && !!share.folder_id)
+		.map(share => share.folder_id);
+
+	return publishedFolderRootIds;
+};
+
 export default class Folder extends BaseItem {
 	public static tableName() {
 		return 'folders';
@@ -789,9 +797,7 @@ export default class Folder extends BaseItem {
 	}
 
 	private static async updateFolderPublishStatus_(activeShares: StateShare[]) {
-		const publishedFolderRootIds = activeShares
-			.filter(share => share.type === ShareType.PublishedFolder && !!share.folder_id)
-			.map(share => share.folder_id);
+		const publishedFolderRootIds = activeSharesToPublishedFolderRootIds(activeShares);
 		const publishedFolderIds = unique(publishedFolderRootIds.concat(
 			(await Promise.all(
 				publishedFolderRootIds.map(id => this.allChildrenFolders(id)),
@@ -804,6 +810,35 @@ export default class Folder extends BaseItem {
 			for (const folder of await this.all({ fields: ['id', 'is_shared'] })) {
 				if (!publishedFolderIdSet.has(folder.id)) continue;
 				await this.updateShareStatus({ ...folder, type_: BaseModel.TYPE_FOLDER }, true);
+			}
+		}
+	}
+
+	public static async updateNoLongerPublishedFolders(activeShares: StateShare[]) {
+		const remotePublishedRootIds = new Set(activeSharesToPublishedFolderRootIds(activeShares));
+		let unsharedFolders = true;
+		while (unsharedFolders) {
+			unsharedFolders = false;
+			const fields = ['id', 'parent_id', 'is_shared', 'share_id'];
+			const fieldsString = fields.join(', ');
+			// For now, don't adjust is_shared for folders in the trash -- older Joplin versions will
+			// immediately re-publish those folders on sync
+			const allLocalToplevelPublishedFolders = await this.modelSelectAll(`
+				SELECT ${fields.map(f => `child.${f}`).join(', ')} FROM folders AS child
+					JOIN folders AS parent ON parent.id = child.parent_id
+					WHERE child.is_shared = 1 AND parent.is_shared = 0
+				UNION ALL -- Toplevel folders
+					SELECT ${fieldsString} FROM folders
+					WHERE is_shared = 1 AND parent_id = ''
+			`);
+			for (const folder of allLocalToplevelPublishedFolders) {
+				if (remotePublishedRootIds.has(folder.id)) continue;
+				// For now, exclude published folders within a share -- as of Sept 2026, share participants
+				// can't accurately know whether a folder in the share is directly published:
+				if (folder.share_id) continue;
+
+				await this.updateShareStatus({ ...folder, type_: BaseModel.TYPE_FOLDER }, false);
+				unsharedFolders = true;
 			}
 		}
 	}
