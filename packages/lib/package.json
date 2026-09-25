@@ -1,6 +1,6 @@
 {
   "name": "@joplin/lib",
-  "version": "3.7.2",
+  "version": "3.7.3",
   "description": "Joplin Core library",
   "author": "Laurent Cozic",
   "homepage": "",
@@ -49,15 +49,15 @@
     "@adobe/css-tools": "4.4.4",
     "@aws-sdk/client-s3": "3.296.0",
     "@aws-sdk/s3-request-presigner": "3.296.0",
-    "@joplin/fork-htmlparser2": "^4.1.65",
-    "@joplin/fork-sax": "^1.2.69",
-    "@joplin/fork-uslug": "^2.0.8",
-    "@joplin/htmlpack": "^3.7.2",
-    "@joplin/onenote-converter": "^3.7.2",
-    "@joplin/renderer": "^3.7.2",
-    "@joplin/turndown": "^4.0.87",
-    "@joplin/turndown-plugin-gfm": "^1.0.69",
-    "@joplin/utils": "^3.7.2",
+    "@joplin/fork-htmlparser2": "^4.1.66",
+    "@joplin/fork-sax": "^1.2.70",
+    "@joplin/fork-uslug": "^2.0.9",
+    "@joplin/htmlpack": "^3.7.3",
+    "@joplin/onenote-converter": "^3.7.3",
+    "@joplin/renderer": "^3.7.3",
+    "@joplin/turndown": "^4.0.88",
+    "@joplin/turndown-plugin-gfm": "^1.0.70",
+    "@joplin/utils": "^3.7.3",
     "adm-zip": "0.5.17",
     "async-mutex": "0.5.0",
     "base-64": "1.0.0",
@@ -111,5 +111,5 @@
     "word-wrap": "1.2.5",
     "xml2js": "0.4.23"
   },
-  "gitHead": "500e4c02809d3ebe463aa590e86f541d1ef0661c"
+  "gitHead": "898d2999f93fbedf0ce5f6626feb63e1a732ce0a"
 }
