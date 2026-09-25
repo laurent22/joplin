@@ -10,12 +10,13 @@
 .chat-history {
 	position: absolute;
 	top: 100%;
-	left: 30px;
+	left: 0;
 	right: 30px;
 	z-index: 10;
 	display: flex;
 	flex-direction: column;
 	max-width: 400px;
+	margin-left: auto;
 	padding: 6px 10px 10px;
 	font-weight: normal;
 	background-color: var(--joplin-background-color);
