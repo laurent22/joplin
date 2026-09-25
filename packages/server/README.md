@@ -30,6 +30,15 @@ The following tags are available:
 - Specific minor versions, such as `2.1`, `2.2`, `2.3-beta`
 - Specific patch versions, such as `2.0.4`, `2.2.8-beta`
 
+## Hosting Platforms
+
+[Easypanel](https://easypanel.io) is a self-hosted Docker deployment platform, and it maintains a one-click deployment template for Joplin Server:
+
+[![Deploy on Easypanel][easypanel-btn]][easypanel-deploy]
+
+[easypanel-btn]: https://easypanel.io/img/deploy-on-easypanel-40.svg
+[easypanel-deploy]: https://easypanel.io/templates/joplin
+
 ## Setup the database
 
 You can setup the container to either use an existing PostgreSQL server, or connect it to a new database using `docker compose`.
