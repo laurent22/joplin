@@ -62,6 +62,12 @@ interface ByTitleAndParentOptions {
 	fields: string[];
 }
 
+const getDirectlyPublishedNoteIds = (shares: StateShare[]) => {
+	return shares
+		.filter(share => share.type === ShareType.Note && !!share.note_id)
+		.map(share => share.note_id);
+};
+
 export default class Note extends BaseItem {
 
 	public static defaultIntevalBetweenNotes = 60 * 60 * 1000;
@@ -601,9 +607,7 @@ export default class Note extends BaseItem {
 	}
 
 	public static async updatePublishedNotes(activeShares: StateShare[]) {
-		const directlyPublishedNoteIds = activeShares
-			.filter(share => share.type === ShareType.Note && !!share.note_id)
-			.map(share => share.note_id);
+		const directlyPublishedNoteIds = getDirectlyPublishedNoteIds(activeShares);
 
 		const loadUnpublishedWithDirectShare = async (): Promise<NoteEntity[]> => {
 			if (directlyPublishedNoteIds.length === 0) return [];
@@ -629,6 +633,32 @@ export default class Note extends BaseItem {
 				{ ...note, type_: BaseModel.TYPE_NOTE },
 				true,
 			);
+		}
+	}
+
+	public static async updateNoLongerPublishedNotes(activeShares: StateShare[]) {
+		const directlyPublishedNoteIds = new Set(getDirectlyPublishedNoteIds(activeShares));
+
+		// Exclude notes in shared folders, since share participants don't have access to
+		// the full list of published items:
+		const andConditions = 'AND notes.share_id = \'\'';
+
+		const publishedNotesInUnpublishedFolders: NoteEntity[] = await this.db().selectAll(`
+			SELECT notes.id, notes.parent_id, notes.is_shared, notes.share_id
+			FROM notes
+			JOIN folders ON notes.parent_id = folders.id
+			WHERE notes.is_shared = 1 AND folders.is_shared = 0
+				${andConditions}
+			UNION ALL -- Deleted notes
+				SELECT id, parent_id, is_shared, share_id
+				FROM notes
+				WHERE is_shared = 1 AND deleted_time > 0
+					${andConditions}
+		`);
+
+		for (const note of publishedNotesInUnpublishedFolders) {
+			if (directlyPublishedNoteIds.has(note.id)) continue;
+			await this.updateShareStatus({ ...note, type_: BaseModel.TYPE_NOTE }, false);
 		}
 	}
 
