@@ -1695,7 +1695,7 @@ PODS:
     - Yoga
   - react-native-rsa-native (2.0.5):
     - React
-  - react-native-saf-x (3.7.1):
+  - react-native-saf-x (3.7.3):
     - React-Core
   - react-native-safe-area-context (5.8.0):
     - hermes-engine
@@ -2854,7 +2854,7 @@ SPEC CHECKSUMS:
   react-native-netinfo: 2f906d5d9a639090ed1c079135d6485a95f749f1
   react-native-quick-base64: 5c829c9016276132ac03c4d598c8d256b964e6ac
   react-native-rsa-native: a7931cdda1f73a8576a46d7f431378c5550f0c38
-  react-native-saf-x: 0e7b108f24b0e3e7b10ad14008b32b70f57d227f
+  react-native-saf-x: 9206cd17845263003a4f623ec2138202f2900342
   react-native-safe-area-context: fb5c8ee9f6dd62ef710611b3d370c501f42a4ac0
   react-native-vector-icons: fa90a3e51f7174137fa0836808ad5166efbf22dc
   react-native-vector-icons-fontawesome5: 787102f6050e011721d7368d990532debd19bc08

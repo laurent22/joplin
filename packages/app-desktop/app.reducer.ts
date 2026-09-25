@@ -5,12 +5,15 @@ import iterateItems from './gui/ResizableLayout/utils/iterateItems';
 import { LayoutItem } from './gui/ResizableLayout/utils/types';
 import validateLayout from './gui/ResizableLayout/utils/validateLayout';
 import Logger from '@joplin/utils/Logger';
-import { ChatMessage } from '@joplin/lib/services/ai/types';
+import { ChatMessage, ChatRole } from '@joplin/lib/services/ai/types';
 
 const logger = Logger.create('app.reducer');
 
 export interface AiChatMessage {
 	id: string;
+	createdTime: number;
+	noteId: string;
+	noteTitle: string;
 	role: 'user' | 'assistant' | 'error' | 'separator';
 	text: string;
 	hide?: boolean;
@@ -78,6 +81,7 @@ export interface AppWindowState extends WindowState {
 	// In window state so the conversation survives panel hide/show (the
 	// layout container can swap component types and unmount the panel).
 	aiChatMessages: AiChatMessage[];
+	aiChatConversationId: string|null;
 	// Layout for secondary windows
 	secondaryWindowLayout: LayoutItem|null;
 }
@@ -115,6 +119,7 @@ export const createAppDefaultWindowState = (): AppWindowState => {
 		whiteboardForceMarkdown: {},
 		activeNoteIsWhiteboard: false,
 		aiChatMessages: [],
+		aiChatConversationId: null,
 		secondaryWindowLayout: null,
 	};
 };
@@ -304,43 +309,44 @@ export default function(state: AppState, action: any) {
 			);
 			break;
 
+		case 'AI_CHAT_DELETE':
+			newState = produce(state, draft => {
+				for (const windowState of stateUtils.allWindowStates(draft)) {
+					if (windowState.aiChatConversationId !== action.conversationId) continue;
+					windowState.aiChatConversationId = null;
+					windowState.aiChatMessages = [];
+				}
+			});
+			break;
+
+		case 'AI_CHAT_OPEN':
+			newState = produce(state, draft => {
+				const openConversation = action.conversationId && stateUtils.allWindowStates(state)
+					.find(windowState => windowState.aiChatConversationId === action.conversationId);
+				const windowState = stateUtils.windowStateById(draft, action.windowId);
+				windowState.aiChatConversationId = action.conversationId;
+				windowState.aiChatMessages = openConversation ? openConversation.aiChatMessages : action.messages;
+			});
+			break;
+
 		case 'AI_CHAT_APPEND':
-			newState = withWindowStateUpdated(
-				state, action.windowId, 'aiChatMessages', messages => [...messages, action.message as AiChatMessage],
-			);
-			break;
-
 		case 'AI_CHAT_ADD_TOOL_RESULT':
-			newState = withWindowStateUpdated(
-				state, action.windowId, 'aiChatMessages', messages => {
-					let lastMessage = messages[messages.length - 1];
-					if (lastMessage) {
-						lastMessage = {
-							...lastMessage,
-							raw: [
-								...lastMessage.raw,
-								action.toolCall,
-							],
-						};
-
-						return [...messages.slice(0, messages.length - 1), lastMessage];
-					}
-
-					return messages;
-				},
-			);
-			break;
-
 		case 'AI_CHAT_REMOVE':
-			newState = withWindowStateUpdated(
-				state, action.windowId, 'aiChatMessages', messages => messages.filter(m => m.id !== action.id),
-			);
-			break;
-
-		case 'AI_CHAT_RESET':
-			newState = withWindowStateUpdated(
-				state, action.windowId, 'aiChatMessages', (): AiChatMessage[] => [],
-			);
+			newState = produce(state, draft => {
+				for (const windowState of stateUtils.allWindowStates(draft)) {
+					if (windowState.aiChatConversationId !== action.conversationId) continue;
+					if (action.type === 'AI_CHAT_APPEND') {
+						windowState.aiChatMessages.push(action.message);
+					} else if (action.type === 'AI_CHAT_REMOVE') {
+						windowState.aiChatMessages = windowState.aiChatMessages.filter(message => message.id !== action.id);
+					} else {
+						const message = windowState.aiChatMessages.find(message => message.raw.some(entry =>
+							entry.role === ChatRole.Assistant && entry.toolCalls?.some(call => call.callId === action.toolCall.toolCallId),
+						));
+						message?.raw.push(action.toolCall);
+					}
+				}
+			});
 			break;
 
 		case 'AI_STATUS_UPDATE':

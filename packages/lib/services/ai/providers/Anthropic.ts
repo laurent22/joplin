@@ -1,7 +1,7 @@
 import shim from '../../../shim';
 import JoplinError from '../../../JoplinError';
 import Logger from '@joplin/utils/Logger';
-import { ChatMessage, ChatOptions, ChatResult, ChatRole, ChatToolCall, ChatToolMessage, ProviderClassification } from '../types';
+import { ChatFinishReason, ChatMessage, ChatOptions, ChatResult, ChatRole, ChatToolCall, ChatToolMessage, ProviderClassification } from '../types';
 import ChatProviderBase from './ChatProviderBase';
 
 const logger = Logger.create('AnthropicProvider');
@@ -38,13 +38,27 @@ interface AnthropicToolResultContentBlock {
 	content: string|AnthropicImageContent[];
 }
 
-type AnthropicContentBlock = AnthropicToolUseContentBlock|AnthropicToolResultContentBlock|AnthropicTextContentBlock;
+interface AnthropicThinkingContentBlock {
+	type: 'thinking';
+	thinking: string;
+}
+
+type AnthropicContentBlock = AnthropicToolUseContentBlock|AnthropicToolResultContentBlock|AnthropicTextContentBlock|AnthropicThinkingContentBlock;
 
 interface AnthropicResponse {
 	content?: AnthropicContentBlock[];
 	usage?: AnthropicUsage;
+	stop_reason?: string;
 	error?: { message?: string };
 }
+
+const toChatFinishReason = (reason: string|undefined): ChatFinishReason|undefined => {
+	if (!reason) return undefined;
+	if (reason === 'max_tokens') return 'length';
+	if (reason === 'end_turn' || reason === 'stop_sequence') return 'stop';
+	if (reason === 'tool_use') return 'tool_calls';
+	return 'other';
+};
 
 interface Options {
 	apiKey: string;
@@ -251,6 +265,7 @@ export default class AnthropicProvider extends ChatProviderBase {
 
 		const toolCalls: ChatToolCall[] = [];
 		const textMessages = [];
+		const thinkingMessages = [];
 		for (const response of json.content) {
 			if (response.type === 'tool_use' && typeof response.input === 'object') {
 				toolCalls.push({
@@ -261,10 +276,18 @@ export default class AnthropicProvider extends ChatProviderBase {
 				});
 			} else if (response.type === 'text' && typeof response.text === 'string') {
 				textMessages.push(response.text);
+			} else if (response.type === 'thinking' && typeof response.thinking === 'string') {
+				thinkingMessages.push(response.thinking);
 			}
 		}
 
-		return { text: textMessages.join(''), toolCalls, usage: { inputTokens, outputTokens } };
+		return {
+			text: textMessages.join(''),
+			toolCalls,
+			usage: { inputTokens, outputTokens },
+			finishReason: toChatFinishReason(json.stop_reason),
+			reasoningText: thinkingMessages.length ? thinkingMessages.join('') : undefined,
+		};
 	}
 }
 

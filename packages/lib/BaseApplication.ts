@@ -278,6 +278,10 @@ export default class BaseApplication {
 			}
 		}
 
+		// The active window may have changed while the note query was running. Applying this
+		// result to another window would replace its note list and selection with stale state.
+		if (this.store().getState().windowId !== state.windowId) return;
+
 		this.store().dispatch({
 			type: 'SET_HIGHLIGHTED',
 			words: highlightedWords,

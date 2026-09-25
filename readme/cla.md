@@ -1,7 +1,7 @@
 # Individual Contributor License Agreement
 
 Thank you for your interest in the Joplin applications, owned by JOPLIN,
-registered in France, 3 Place Simone Veil, CS 20739 54064 Nancy (the "Company").
+registered in France, 23 rue Saint Guillaume, 22000 Saint-Brieuc (the "Company").
 In order to clarify the intellectual property license granted with Contributions
 from any person or entity, the Company must have a Contributor License Agreement
 ("CLA") on file that has been signed by each Contributor, indicating agreement

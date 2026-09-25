@@ -224,7 +224,9 @@ packages/app-desktop/commands/toggleSafeMode.js
 packages/app-desktop/commands/toggleTabMovesFocus.js
 packages/app-desktop/gui/AiDegradedNotice.js
 packages/app-desktop/gui/Button/Button.js
+packages/app-desktop/gui/ChatPanel/ChatHistory.js
 packages/app-desktop/gui/ChatPanel/ChatMessageItem.js
+packages/app-desktop/gui/ChatPanel/ChatPanel.test.js
 packages/app-desktop/gui/ChatPanel/ChatPanel.js
 packages/app-desktop/gui/ClipperConfigScreen.js
 packages/app-desktop/gui/ConfigScreen/ButtonBar.js
@@ -566,6 +568,7 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newNote.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newSubFolder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newTodo.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newWhiteboard.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openAiChatConversation.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openFolder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openFolderDialog.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openItem.js
@@ -730,6 +733,7 @@ packages/app-desktop/utils/customProtocols/registerCustomProtocols.js
 packages/app-desktop/utils/getAssetPath.js
 packages/app-desktop/utils/initReact.js
 packages/app-desktop/utils/initializeCommandService.js
+packages/app-desktop/utils/initializeNetworkConnectionAttemptTimeout.js
 packages/app-desktop/utils/isSafeToOpen.test.js
 packages/app-desktop/utils/isSafeToOpen.js
 packages/app-desktop/utils/layout/layoutKeyToLabel.js
@@ -1483,6 +1487,7 @@ packages/lib/errorUtils.js
 packages/lib/errors.js
 packages/lib/eventManager.test.js
 packages/lib/eventManager.js
+packages/lib/file-api-driver-joplinServer.test.js
 packages/lib/file-api-driver-joplinServer.js
 packages/lib/file-api-driver-local.js
 packages/lib/file-api-driver-memory.js
@@ -1539,6 +1544,9 @@ packages/lib/mimeUtils.test.js
 packages/lib/models/Alarm.js
 packages/lib/models/BaseItem.test.js
 packages/lib/models/BaseItem.js
+packages/lib/models/ChatConversation.test.js
+packages/lib/models/ChatConversation.js
+packages/lib/models/ChatMessage.js
 packages/lib/models/ConflictNoteState.js
 packages/lib/models/Folder.publishing.test.js
 packages/lib/models/Folder.sharing.test.js
@@ -1672,6 +1680,7 @@ packages/lib/services/ai/providers/Anthropic.js
 packages/lib/services/ai/providers/ChatProviderBase.js
 packages/lib/services/ai/providers/JoplinCloud.test.js
 packages/lib/services/ai/providers/JoplinCloud.js
+packages/lib/services/ai/providers/OpenAiCompatible.test.js
 packages/lib/services/ai/providers/OpenAiCompatible.js
 packages/lib/services/ai/providers/TestProvider.js
 packages/lib/services/ai/testing/TestEmbeddingProvider.test.js
@@ -1697,6 +1706,8 @@ packages/lib/services/ai/tools/utils/buildTool.js
 packages/lib/services/ai/tools/utils/serializeToolOutput.js
 packages/lib/services/ai/tools/utils/settings.js
 packages/lib/services/ai/types.js
+packages/lib/services/ai/utils/extractReasoning.test.js
+packages/lib/services/ai/utils/extractReasoning.js
 packages/lib/services/ai/utils/findFencedBlock.js
 packages/lib/services/commands/MenuUtils.js
 packages/lib/services/commands/ToolbarButtonUtils.test.js
@@ -1735,6 +1746,7 @@ packages/lib/services/database/migrations/50.js
 packages/lib/services/database/migrations/51.js
 packages/lib/services/database/migrations/52.js
 packages/lib/services/database/migrations/53.js
+packages/lib/services/database/migrations/54.js
 packages/lib/services/database/migrations/index.js
 packages/lib/services/database/sqlStringToLines.js
 packages/lib/services/database/types.js

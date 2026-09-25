@@ -1,5 +1,12 @@
 # Joplin iOS Changelog
 
+## [ios-v13.7.6](https://github.com/laurent22/joplin/releases/tag/ios-v13.7.6) - 2026-09-25T11:32:23Z
+
+- Fixed: Fix AI configuration test failing on reasoning models (#16594)
+- Fixed: Fix notes and sub-folders are still marked as published after being moved out of a published folder (#16648) (#16647 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix sync deadlock when Joplin Server rejects an item with HTTP 422 (#16544) (#16504)
+- Fixed: Fix table editor losing and mis-rendering inline markdown (#16632)
+
 ## [ios-v13.7.5](https://github.com/laurent22/joplin/releases/tag/ios-v13.7.5) - 2026-09-10T19:10:44Z
 
 - Improved: Remove sync wizard button from config screen (#16458) (#16442 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
