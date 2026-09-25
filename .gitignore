@@ -196,7 +196,9 @@ packages/app-desktop/commands/toggleSafeMode.js
 packages/app-desktop/commands/toggleTabMovesFocus.js
 packages/app-desktop/gui/AiDegradedNotice.js
 packages/app-desktop/gui/Button/Button.js
+packages/app-desktop/gui/ChatPanel/ChatHistory.js
 packages/app-desktop/gui/ChatPanel/ChatMessageItem.js
+packages/app-desktop/gui/ChatPanel/ChatPanel.test.js
 packages/app-desktop/gui/ChatPanel/ChatPanel.js
 packages/app-desktop/gui/ClipperConfigScreen.js
 packages/app-desktop/gui/ConfigScreen/ButtonBar.js
@@ -536,6 +538,7 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newNote.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newSubFolder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newTodo.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newWhiteboard.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openAiChatConversation.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openFolder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openFolderDialog.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openItem.js
@@ -1499,6 +1502,9 @@ packages/lib/mimeUtils.test.js
 packages/lib/models/Alarm.js
 packages/lib/models/BaseItem.test.js
 packages/lib/models/BaseItem.js
+packages/lib/models/ChatConversation.test.js
+packages/lib/models/ChatConversation.js
+packages/lib/models/ChatMessage.js
 packages/lib/models/ConflictNoteState.js
 packages/lib/models/Folder.publishing.test.js
 packages/lib/models/Folder.sharing.test.js
@@ -1691,6 +1697,7 @@ packages/lib/services/database/migrations/50.js
 packages/lib/services/database/migrations/51.js
 packages/lib/services/database/migrations/52.js
 packages/lib/services/database/migrations/53.js
+packages/lib/services/database/migrations/54.js
 packages/lib/services/database/migrations/index.js
 packages/lib/services/database/sqlStringToLines.js
 packages/lib/services/database/types.js
