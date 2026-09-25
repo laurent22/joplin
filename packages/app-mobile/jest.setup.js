@@ -1,5 +1,6 @@
 /* eslint-disable jest/require-top-level-describe */
 
+require('../../jest.base-setup.js')();
 const { afterEachCleanUp, afterAllCleanUp } = require('@joplin/lib/testing/test-utils.js');
 const shim = require('@joplin/lib/shim').default;
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
@@ -12,7 +13,6 @@ const uuid = require('@joplin/lib/uuid').default;
 const Setting = require('@joplin/lib/models/Setting').default;
 const sqlite3 = require('sqlite3');
 const React = require('react');
-require('../../jest.base-setup.js')();
 
 import { setImmediate } from 'timers';
 

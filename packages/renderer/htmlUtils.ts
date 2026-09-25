@@ -325,8 +325,11 @@ class HtmlUtils {
 				// particular we want to exclude `javascript:` URLs. This
 				// applies to A tags, and also AREA ones but to be safe we don't
 				// filter on the tag name and process all HREF attributes.
-				if ('href' in attrs && !this.isAcceptedUrl(attrs['href'], options.allowedFilePrefixes)) {
-					attrs['href'] = '#';
+				// "xlink:href" too, because the viewer click handler reads it.
+				for (const hrefAttr of ['href', 'xlink:href']) {
+					if (hrefAttr in attrs && !this.isAcceptedUrl(attrs[hrefAttr], options.allowedFilePrefixes)) {
+						attrs[hrefAttr] = '#';
+					}
 				}
 
 				// We need to clear any such attribute, otherwise it will

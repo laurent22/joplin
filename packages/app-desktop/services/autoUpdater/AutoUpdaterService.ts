@@ -30,9 +30,13 @@ const supportedPlatformAssets: PlatformAssets = {
 		'x64': 'latest-mac.yml',
 		'arm64': 'latest-mac-arm64.yml',
 	},
+	// arm64 has its own file because electron-builder names the metadata
+	// `latest.yml` for every Windows arch, and it's built on a separate runner.
+	// https://github.com/electron-userland/electron-builder/issues/6372
 	'win32': {
 		'x64': 'latest.yml',
 		'ia32': 'latest.yml',
+		'arm64': 'latest-win-arm64.yml',
 	},
 };
 
@@ -140,7 +144,10 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 				let assetUrl = this.getDownloadUrlForPlatform(release, shim.platformName(), process.arch);
 				// electron's autoUpdater appends automatically the platform's yml file to the link so we should remove it
 				assetUrl = assetUrl.substring(0, assetUrl.lastIndexOf('/'));
-				autoUpdater.setFeedURL({ provider: 'generic', url: assetUrl });
+				// The file name is rebuilt from the channel, so without this Windows
+				// arm64 would request latest.yml and get the x64 build.
+				const channel = shim.platformName() === 'win32' && process.arch === 'arm64' ? 'latest-win-arm64' : 'latest';
+				autoUpdater.setFeedURL({ provider: 'generic', url: assetUrl, channel });
 				const result = await autoUpdater.checkForUpdates();
 
 				// Wait for the installation to finish. By default, .checkForUpdates runs in the background

@@ -59,5 +59,5 @@ export const switchProfile = async (profileId: string) => {
 
 	config.currentProfileId = profileId;
 	await saveProfileConfig(config);
-	shim.restartApp();
+	await shim.restartApp();
 };

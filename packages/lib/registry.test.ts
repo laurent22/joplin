@@ -1,5 +1,7 @@
+import BaseSyncTarget from './BaseSyncTarget';
 import Setting, { Env } from './models/Setting';
 import { reg } from './registry';
+import Synchronizer from './Synchronizer';
 
 const sync = {
 	start: jest.fn().mockReturnValue({}),
@@ -11,10 +13,14 @@ describe('registry', () => {
 	beforeAll(() => {
 		Setting.setConstant('env', Env.Prod);
 		originalSyncTarget = reg.syncTarget;
-		reg.syncTarget = () => ({
-			isAuthenticated: () => true,
-			synchronizer: () => sync,
-		});
+		reg.syncTarget = () => new class extends BaseSyncTarget {
+			public constructor() {
+				super(null);
+			};
+
+			public override isAuthenticated() { return Promise.resolve(true); }
+			public override synchronizer() { return Promise.resolve(sync as unknown as Synchronizer); }
+		};
 	});
 
 	afterAll(() => {

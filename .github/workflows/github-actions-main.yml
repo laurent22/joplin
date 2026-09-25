@@ -10,7 +10,12 @@ jobs:
       matrix:
         # Do not use unbuntu-latest because it causes `The operation was canceled` failures:
         # https://github.com/actions/runner-images/issues/6709
-        os: [macos-15-intel, ubuntu-22.04, windows-2025, ubuntu-22.04-arm]
+        #
+        # windows-11-vs2026-arm is pinned because windows-11-arm migrates to
+        # Visual Studio 2026 in late September 2026, and that job compiles
+        # sqlite3 from source.
+        # https://github.com/actions/runner-images/issues/14602
+        os: [macos-15-intel, ubuntu-22.04, windows-2025, ubuntu-22.04-arm, windows-11-vs2026-arm]
     steps:
       - uses: actions/checkout@v6
 
@@ -45,7 +50,7 @@ jobs:
       # Login to Docker only if we're on a server release tag. If we run this on
       # a pull request it will fail because the PR doesn't have access to
       # secrets
-      - uses: docker/login-action@v3
+      - uses: docker/login-action@v4
         if: runner.os == 'Linux' && (startsWith(github.ref, 'refs/tags/server-v') || startsWith(github.ref, 'refs/tags/transcribe-v'))
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
