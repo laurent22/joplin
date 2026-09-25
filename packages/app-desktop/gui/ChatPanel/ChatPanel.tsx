@@ -571,11 +571,9 @@ const ChatPanel: React.FC<Props> = (props) => {
 						onClose={closeHistory}
 					/>
 				)}
-				{showingMessages && (
-					<button type='button' className='reset toolbar-button' onClick={handleNewChat} title={newChatLabel} aria-label={newChatLabel}>
-						<i className='toolbar-icon fas fa-comment-medical' aria-hidden='true'/>
-					</button>
-				)}
+				<button type='button' className='reset toolbar-button' onClick={handleNewChat} disabled={!showingMessages} title={newChatLabel} aria-label={newChatLabel}>
+					<i className='toolbar-icon fas fa-comment-medical' aria-hidden='true'/>
+				</button>
 				<button
 					type='button'
 					className='close toolbar-button'

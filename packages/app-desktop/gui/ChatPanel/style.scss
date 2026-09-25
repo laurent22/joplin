@@ -37,7 +37,7 @@
 		cursor: pointer;
 		padding: 2px 6px;
 
-		&:hover {
+		&:hover:not(:disabled) {
 			color: var(--joplin-color);
 		}
 	}
