@@ -86,22 +86,4 @@ describe('keepConflictCopy', () => {
 		expect((await keepConflictCopy(conflictNote.id)).status).toBe(KeepStatus.Unavailable);
 	});
 
-
-	test('should point at the next conflict so the editor can move on', async () => {
-		const { conflictNote } = await createConflict('First');
-		const { conflictNote: other } = await createConflict('Second');
-
-		const result = await keepConflictCopy(conflictNote.id);
-
-		expect(result.nextConflictId).toBe(other.id);
-	});
-
-	test('should point at nothing when that was the last conflict', async () => {
-		const { conflictNote } = await createConflict();
-
-		const result = await keepConflictCopy(conflictNote.id);
-
-		expect(result.nextConflictId).toBe('');
-	});
-
 });

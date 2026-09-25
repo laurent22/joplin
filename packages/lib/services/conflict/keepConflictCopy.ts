@@ -13,7 +13,6 @@ export interface KeepResult {
 	status: KeepStatus;
 	noteId: string;
 	title?: string;
-	nextConflictId?: string;
 	reason?: string;
 }
 
@@ -67,9 +66,5 @@ export default async (conflictNoteId: string): Promise<KeepResult> => {
 		return { status: KeepStatus.CannotWrite, noteId: conflictNoteId, reason: error.message };
 	}
 
-	// opens next conflict as it's no longer a conflict
-	const remaining = await Note.conflictedNotes();
-	const nextConflictId = remaining.length ? remaining[0].id : '';
-
-	return { status: KeepStatus.Ok, noteId: note.id, title, nextConflictId };
+	return { status: KeepStatus.Ok, noteId: note.id, title };
 };
