@@ -1,5 +1,21 @@
 # Joplin Desktop Changelog
 
+## [v3.7.21](https://github.com/laurent22/joplin/releases/tag/v3.7.21) - 2026-09-25T21:31:12Z
+
+- New: Add setting to hide the AI Chat toolbar button ([#16607](https://github.com/laurent22/joplin/issues/16607))
+- Improved: AI Chat: Persist conversation history and add a chat switcher ([#16583](https://github.com/laurent22/joplin/issues/16583)) ([#16498](https://github.com/laurent22/joplin/issues/16498) by [@Rygaa](https://github.com/Rygaa))
+- Improved: Improve how semantic search interacts with item IDs ([#16652](https://github.com/laurent22/joplin/issues/16652)) ([#16644](https://github.com/laurent22/joplin/issues/16644) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix AI configuration test failing on reasoning models ([#16594](https://github.com/laurent22/joplin/issues/16594))
+- Fixed: Fix AppImage StartupWMClass ([#16547](https://github.com/laurent22/joplin/issues/16547)) ([#16434](https://github.com/laurent22/joplin/issues/16434) by [@MiQ71](https://github.com/MiQ71))
+- Fixed: Fix ENEX import failing on Evernote's unescaped ampersands ([#16580](https://github.com/laurent22/joplin/issues/16580))
+- Fixed: Fix LMStudio compatibility ([#16552](https://github.com/laurent22/joplin/issues/16552)) ([#16539](https://github.com/laurent22/joplin/issues/16539) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix dropping notes into the whiteboard editor ([#16565](https://github.com/laurent22/joplin/issues/16565)) ([#16457](https://github.com/laurent22/joplin/issues/16457) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix notes and sub-folders are still marked as published after being moved out of a published folder ([#16648](https://github.com/laurent22/joplin/issues/16648)) ([#16647](https://github.com/laurent22/joplin/issues/16647) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix reasoning blocks leaking into AI chat replies ([#16595](https://github.com/laurent22/joplin/issues/16595))
+- Fixed: Fix sync deadlock when Joplin Server rejects an item with HTTP 422 ([#16544](https://github.com/laurent22/joplin/issues/16544)) ([#16504](https://github.com/laurent22/joplin/issues/16504))
+- Fixed: Fix table editor losing and mis-rendering inline markdown ([#16632](https://github.com/laurent22/joplin/issues/16632))
+- Fixed: Fix x-callback-url responses never reaching the calling app ([#16497](https://github.com/laurent22/joplin/issues/16497))
+
 ## [v3.7.18](https://github.com/laurent22/joplin/releases/tag/v3.7.18) - 2026-09-11T17:47:56Z
 
 - Improved: Fix notes imported from OneNote are displayed with a very small font size ([#16440](https://github.com/laurent22/joplin/issues/16440)) ([#16424](https://github.com/laurent22/joplin/issues/16424) by [@Rygaa](https://github.com/Rygaa))
