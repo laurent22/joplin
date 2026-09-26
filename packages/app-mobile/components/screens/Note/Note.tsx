@@ -552,13 +552,24 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			flexDirection: 'row',
 			flexBasis: 'auto',
 			paddingLeft: theme.marginLeft,
-			borderBottomColor: theme.dividerColor,
-			borderBottomWidth: 1,
+			paddingRight: theme.marginRight,
 			maxHeight: '40%',
+
+			// Prevents the title/content divider overlaying the title's focus indicator on web:
+			zIndex: 1,
 		};
 
 		styles.titleContainerTodo = { ...styles.titleContainer };
 		styles.titleContainerTodo.paddingLeft = 0;
+
+		styles.titleDivider = {
+			flex: 0,
+			height: 0,
+			marginLeft: theme.marginLeft,
+			marginRight: theme.marginRight,
+			borderBottomColor: theme.dividerColor,
+			borderBottomWidth: 1,
+		};
 
 		styles.titleTextInput = {
 			flex: 1,
@@ -567,8 +578,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			color: theme.color,
 			fontWeight: 'bold',
 			fontSize: theme.fontSize,
-			paddingTop: theme.itemMarginTop, // Added for iOS (Not needed for Android??)
-			paddingBottom: theme.itemMarginBottom, // Added for iOS (Not needed for Android??)
+			paddingTop: theme.marginTop,
+			paddingBottom: theme.marginBottom,
 		};
 
 		this.styles_[cacheKey] = StyleSheet.create(styles);
@@ -2002,7 +2013,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				style={{ width: 30, height: 30, alignSelf: 'center' }}
 			/>;
 
-		const titleComp = (
+		const titleComp = <>
 			<View
 				style={titleContainerStyle}
 				onLayout={(e) => {
@@ -2045,7 +2056,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				/>
 				{ titleToggleButton }
 			</View>
-		);
+			<View style={this.styles().titleDivider}/>
+		</>;
 
 		const noteTagDialog = !this.state.noteTagDialogShown ? null : <NoteTagsDialog onCloseRequested={this.noteTagDialog_closeRequested} />;
 
