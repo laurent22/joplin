@@ -20,6 +20,7 @@ export interface UpdateEvent {
 interface EmitActivationCheckOptions {
 	noteId: string;
 	parentWindowId: string;
+	isCancelled?: ()=> boolean;
 }
 
 interface SaveNoteEvent {
@@ -82,7 +83,7 @@ export default class {
 		}
 	}
 
-	public async emitActivationCheck({ noteId, parentWindowId }: EmitActivationCheckOptions) {
+	public async emitActivationCheck({ noteId, parentWindowId, isCancelled }: EmitActivationCheckOptions) {
 		let filterObject: EditorActivationCheckFilterObject = {
 			activatedEditors: [],
 			effectiveNoteId: noteId,
@@ -91,6 +92,8 @@ export default class {
 		filterObject = await eventManager.filterEmit('editorActivationCheck', filterObject);
 
 		logger.info('emitActivationCheck: responses:', filterObject);
+
+		if (isCancelled?.()) return;
 
 		for (const editor of filterObject.activatedEditors) {
 			const controller = this.pluginService_.pluginById(editor.pluginId).viewController(editor.viewId) as WebviewController;

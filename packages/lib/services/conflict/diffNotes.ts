@@ -1,4 +1,5 @@
-import boundedDiff3MergeRegions, { ArrayChange, createDiffLines, DiffLines, diffOptions, DiffOptions, Region, viewerDiffOptions } from './boundedDiff3';
+import boundedDiff3MergeRegions, { ArrayChange, createDiffLines, DiffLines, diffOptions, DiffOptions, Region } from './boundedDiff3';
+import { createViewerDiffLines, viewerLineOptions, ViewerDiffOptions } from './prepareViewerLines';
 
 export type MergedSectionType = 'unchanged' | 'auto-merged' | 'conflict';
 
@@ -7,6 +8,8 @@ export interface MergedSection {
 	type: MergedSectionType;
 	localText?: string;
 	remoteText?: string;
+	localLineCount?: number;
+	remoteLineCount?: number;
 }
 
 export interface AutoMergeResult {
@@ -68,6 +71,62 @@ const touchesDuplicateRun = (base: string[], side: string[], diffLines: DiffLine
 	return changedRangeTouchesRun();
 };
 
+const isBlank = (line: string) => /^\s*$/.test(line);
+
+// A blank line can split one replacement into two conflicts, so keep the
+// changes together when both sides keep blank line
+const joinAcrossBlankLines = (changes: ArrayChange[]): ArrayChange[] => {
+	const sides = (from: number, to: number) => {
+		let added = 0;
+		let removed = 0;
+		for (let i = from; i <= to; i++) {
+			if (changes[i].added) added += changes[i].count;
+			if (changes[i].removed) removed += changes[i].count;
+		}
+		return { added, removed };
+	};
+
+	const runBefore = (index: number) => {
+		if (index === 0 || !(changes[index - 1].added || changes[index - 1].removed)) return null;
+		let start = index - 1;
+		while (start > 0 && (changes[start - 1].added || changes[start - 1].removed)) start--;
+		return [start, index - 1] as const;
+	};
+	const runAfter = (index: number) => {
+		if (index === changes.length - 1 || !(changes[index + 1].added || changes[index + 1].removed)) return null;
+		let end = index + 1;
+		while (end < changes.length - 1 && (changes[end + 1].added || changes[end + 1].removed)) end++;
+		return [index + 1, end] as const;
+	};
+
+	const result: ArrayChange[] = [];
+
+	for (let i = 0; i < changes.length; i++) {
+		const change = changes[i];
+		const separates = !change.added && !change.removed && change.value.every(isBlank);
+		const before = separates ? runBefore(i) : null;
+		const after = separates ? runAfter(i) : null;
+
+		const beforeSides = before && sides(...before);
+		const afterSides = after && sides(...after);
+
+		const foldable = beforeSides && afterSides
+			&& beforeSides.added > 0 && afterSides.added > 0
+			&& (beforeSides.removed === 0 || afterSides.removed === 0);
+
+		if (!foldable) {
+			result.push(change);
+			continue;
+		}
+
+		// The blank lines belong to both versions, so each side keeps them
+		result.push({ removed: true, count: change.count, value: change.value });
+		result.push({ added: true, count: change.count, value: change.value });
+	}
+
+	return result;
+};
+
 const bothSidesChanged = (base: string[], local: string[], remote: string[]): boolean => {
 	const same = (a: string[], b: string[]) => a.length === b.length && a.every((line, i) => line === b[i]);
 	return !same(base, local) && !same(base, remote) && !same(local, remote);
@@ -75,10 +134,11 @@ const bothSidesChanged = (base: string[], local: string[], remote: string[]): bo
 
 // Used by the conflict UI when a note has no base
 // Without an ancestor every difference is a conflict
-export const twoWayDiff = (localRaw: string, remoteRaw: string, options: DiffOptions = viewerDiffOptions): AutoMergeResult => {
+export const twoWayDiff = (localRaw: string, remoteRaw: string, options: ViewerDiffOptions = viewerLineOptions): AutoMergeResult => {
 	const localLines = splitLines(localRaw);
 	const remoteLines = splitLines(remoteRaw);
-	const changes = createDiffLines(options)(localLines, remoteLines);
+	const rawChanges = createViewerDiffLines(options)(localLines, remoteLines);
+	const changes = rawChanges && joinAcrossBlankLines(rawChanges);
 
 	// Too different to compare without blocking app, so the whole note will be a conflict
 	if (!changes) {
@@ -89,12 +149,19 @@ export const twoWayDiff = (localRaw: string, remoteRaw: string, options: DiffOpt
 	const sections: MergedSection[] = [];
 	const mergedParts: string[] = [];
 
-	const addConflict = (local: string[], remote: string[]) => {
+	const addConflict = (local: string[], remote: string[], localStart: number) => {
 		if (!local.length && !remote.length) return;
-		const localText = local.join('\n');
+		const localText = localLines.slice(localStart, localStart + local.length).join('\n');
 		const remoteText = remote.join('\n');
 		const text = conflictPlaceholder(localText, remoteText);
-		sections.push({ text, type: 'conflict', localText, remoteText });
+		sections.push({
+			text,
+			type: 'conflict',
+			localText,
+			remoteText,
+			localLineCount: local.length,
+			remoteLineCount: remote.length,
+		});
 		mergedParts.push(text);
 	};
 
@@ -102,6 +169,8 @@ export const twoWayDiff = (localRaw: string, remoteRaw: string, options: DiffOpt
 	// so combined them into one conflict.
 	let removed: string[] = [];
 	let added: string[] = [];
+
+	let localCursor = 0;
 
 	for (const change of changes) {
 		if (change.added) {
@@ -113,16 +182,18 @@ export const twoWayDiff = (localRaw: string, remoteRaw: string, options: DiffOpt
 			continue;
 		}
 
-		addConflict(removed, added);
+		addConflict(removed, added, localCursor);
+		localCursor += removed.length;
 		removed = [];
 		added = [];
 
-		const text = change.value.join('\n');
+		const text = localLines.slice(localCursor, localCursor + change.value.length).join('\n');
+		localCursor += change.value.length;
 		sections.push({ text, type: 'unchanged' });
 		mergedParts.push(text);
 	}
 
-	addConflict(removed, added);
+	addConflict(removed, added, localCursor);
 
 	return { mergedText: mergedParts.join('\n'), sections };
 };

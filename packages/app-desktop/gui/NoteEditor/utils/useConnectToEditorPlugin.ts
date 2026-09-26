@@ -22,6 +22,7 @@ interface Props {
 	scheduleSaveNote: OnScheduleSaveNote;
 	effectiveNoteId: string;
 	shownEditorViewIds: string[];
+	disabled: boolean;
 }
 
 const useEditorPluginHandler = (formNote: FormNote, setFormNote: OnSetFormNote, scheduleSaveNote: OnScheduleSaveNote) => {
@@ -70,29 +71,33 @@ const useLoadedViewIdsCacheKey = (windowId: string, plugins: PluginStates) => {
 
 // Connects editor plugins to the current editor (handles editor plugin saving, loading).
 const useConnectToEditorPlugin = ({
-	plugins, startupPluginsLoaded, setFormNote, formNote, scheduleSaveNote, effectiveNoteId, activeEditorView, shownEditorViewIds,
+	plugins, startupPluginsLoaded, setFormNote, formNote, scheduleSaveNote, effectiveNoteId, activeEditorView, shownEditorViewIds, disabled,
 }: Props) => {
 	const windowId = useContext(WindowIdContext);
 	const loadedViewIdCacheKey = useLoadedViewIdsCacheKey(windowId, plugins);
 	const editorPluginHandler = useEditorPluginHandler(formNote, setFormNote, scheduleSaveNote);
 
+	const disabledRef = useRef(disabled);
+	disabledRef.current = disabled;
+
 	useQueuedAsyncEffect(async () => {
-		if (!startupPluginsLoaded) return;
+		if (!startupPluginsLoaded || disabled) return;
 		logger.debug('Emitting activation check for views:', loadedViewIdCacheKey);
 
 		await editorPluginHandler.emitActivationCheck({
 			parentWindowId: windowId,
 			noteId: effectiveNoteId,
+			isCancelled: () => disabledRef.current,
 		});
 		// It's important to re-run the activation check when the loaded view IDs change.
 		// As such, `loadedViewIds` needs to be in the dependencies list:
-	}, [loadedViewIdCacheKey, windowId, effectiveNoteId, editorPluginHandler, startupPluginsLoaded]);
+	}, [loadedViewIdCacheKey, windowId, effectiveNoteId, editorPluginHandler, startupPluginsLoaded, disabled]);
 
 	useEffect(() => {
-		if (activeEditorView) {
+		if (activeEditorView && !disabled) {
 			editorPluginHandler.onEditorPluginShown(activeEditorView.id);
 		}
-	}, [activeEditorView, editorPluginHandler]);
+	}, [activeEditorView, editorPluginHandler, disabled]);
 
 	const formNoteBody = formNote.body;
 	const formNoteId = formNote.id;
@@ -101,12 +106,13 @@ const useConnectToEditorPlugin = ({
 		// This can happen during note navigation when effectiveNoteId updates
 		// immediately but formNote still contains the previous note's data.
 		if (formNoteId !== effectiveNoteId) return;
+		if (disabled) return;
 
 		editorPluginHandler.emitUpdate({
 			noteId: effectiveNoteId,
 			newBody: formNoteBody,
 		}, shownEditorViewIds);
-	}, [effectiveNoteId, formNoteId, formNoteBody, editorPluginHandler, shownEditorViewIds]);
+	}, [effectiveNoteId, formNoteId, formNoteBody, editorPluginHandler, shownEditorViewIds, disabled]);
 };
 
 export default useConnectToEditorPlugin;

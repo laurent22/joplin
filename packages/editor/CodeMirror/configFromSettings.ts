@@ -2,6 +2,9 @@ import { EditorView, keymap } from '@codemirror/view';
 import { closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete';
 import { EditorKeymap, EditorLanguageType, EditorSettings } from '../types';
 import createTheme from './theme';
+import decoratorExtension, { plainTextDecoratorExtension } from './extensions/markdownDecorationExtension';
+import { classHighlighter } from '@lezer/highlight';
+import { syntaxHighlighting } from '@codemirror/language';
 import { EditorState, Prec, StateField } from '@codemirror/state';
 import { deleteMarkupBackward, markdown, markdownLanguage } from '@codemirror/lang-markdown';
 import { GFM as GitHubFlavoredMarkdownExtension } from '@lezer/markdown';
@@ -84,7 +87,15 @@ const configFromSettings = (settings: EditorSettings, context: RenderedContentCo
 	const extensions = [
 		languageExtension,
 		closingFencedBlock,
-		createTheme(settings.themeData),
+		createTheme(settings.themeData, settings.plainTextEnabled),
+
+		// Apply styles to entire lines (block-display decorations). Plain text keeps
+		// the table ones, whose monospace font is what lines table columns up.
+		settings.plainTextEnabled ? plainTextDecoratorExtension : decoratorExtension,
+
+		// Adds additional CSS classes to tokens (the default CSS classes are
+		// auto-generated and thus unstable).
+		...(settings.plainTextEnabled ? [] : [syntaxHighlighting(classHighlighter)]),
 		EditorView.contentAttributes.of({
 			autocapitalize: 'sentence',
 			autocorrect: settings.spellcheckEnabled ? 'true' : 'false',
