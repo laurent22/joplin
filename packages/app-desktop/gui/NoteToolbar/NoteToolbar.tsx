@@ -10,6 +10,7 @@ import { _ } from '@joplin/lib/locale';
 import getActivePluginEditorView from '@joplin/lib/services/plugins/utils/getActivePluginEditorView';
 import { stateUtils } from '@joplin/lib/reducer';
 import { AppState, AppWindowState } from '../../app.reducer';
+import { chatAvailability } from '@joplin/lib/services/ai/availability';
 
 interface NoteToolbarProps {
 	themeId: number;
@@ -59,9 +60,12 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		'editAlarm',
 		'toggleVisiblePanes',
 		'showNoteProperties',
-		// Always shown — the panel itself surfaces any configuration issue.
-		'toggleAiChat',
 	];
+
+	// The hide setting only applies while chat is unavailable.
+	if (chatAvailability().available || state.settings['ai.chat.showToolbarButton']) {
+		commands.push('toggleAiChat');
+	}
 
 	// `toggleEditorPlugin` shows for plugin editors; we extend it to also
 	// toggle the core whiteboard editor on whiteboard notes (see the command's

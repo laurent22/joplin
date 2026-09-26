@@ -4,6 +4,23 @@ import appReducer, { createAppDefaultState } from './app.reducer';
 import { defaultWindowId } from '@joplin/lib/reducer';
 
 describe('app.reducer', () => {
+	it('should clear a deleted conversation from matching windows and keep other conversations', () => {
+		const messages: AiChatMessage[] = [{ id: 'question', createdTime: 1, role: 'user', text: 'Question', raw: [], noteId: '', noteTitle: '' }];
+		const state = createAppDefaultState({});
+		state.aiChatConversationId = 'deleted';
+		state.aiChatMessages = messages;
+		state.backgroundWindows = {
+			second: { ...createAppDefaultWindowState(), windowId: 'second', aiChatConversationId: 'deleted', aiChatMessages: messages },
+			third: { ...createAppDefaultWindowState(), windowId: 'third', aiChatConversationId: 'other', aiChatMessages: messages },
+		};
+		const result = appReducer(state, { type: 'AI_CHAT_DELETE', conversationId: 'deleted' });
+		expect(result.aiChatConversationId).toBeNull();
+		expect(result.aiChatMessages).toEqual([]);
+		expect(result.backgroundWindows.second.aiChatConversationId).toBeNull();
+		expect(result.backgroundWindows.second.aiChatMessages).toEqual([]);
+		expect(result.backgroundWindows.third.aiChatConversationId).toBe('other');
+		expect(result.backgroundWindows.third.aiChatMessages).toEqual(messages);
+	});
 
 	it('should handle DIALOG_OPEN', async () => {
 		const state: AppState = createAppDefaultState({});
@@ -131,11 +148,15 @@ describe('app.reducer', () => {
 	it('should build AI chat history', () => {
 		let state: AppState = {
 			...createAppDefaultState({}),
+			aiChatConversationId: 'chat-1',
 		};
 
 		let idCounter = 0;
 		const buildMessage = (role: ChatRole.User | ChatRole.Assistant, content: string, toolCalls: ChatToolCall[]) => ({
 			id: `id-${idCounter++}`,
+			createdTime: 1,
+			noteId: 'note-a',
+			noteTitle: 'A',
 			role,
 			text: content,
 			raw: [
@@ -149,12 +170,12 @@ describe('app.reducer', () => {
 
 		state = appReducer(state, {
 			type: 'AI_CHAT_APPEND',
-			windowId: defaultWindowId,
+			conversationId: 'chat-1',
 			message: buildMessage(ChatRole.User, 'Test', []),
 		});
 		state = appReducer(state, {
 			type: 'AI_CHAT_APPEND',
-			windowId: defaultWindowId,
+			conversationId: 'chat-1',
 			message: buildMessage(
 				ChatRole.Assistant,
 				'Testing',
@@ -163,7 +184,7 @@ describe('app.reducer', () => {
 		});
 		state = appReducer(state, {
 			type: 'AI_CHAT_ADD_TOOL_RESULT',
-			windowId: defaultWindowId,
+			conversationId: 'chat-1',
 			toolCall: ({
 				role: ChatRole.Tool,
 				toolName: 'testTool',
@@ -179,13 +200,5 @@ describe('app.reducer', () => {
 			{ id: 'id-0', role: 'user', text: 'Test', raw: [{ role: 'user' }] },
 			{ id: 'id-1', role: 'assistant', text: 'Testing' },
 		]);
-
-
-		state = appReducer(state, {
-			type: 'AI_CHAT_RESET',
-			windowId: defaultWindowId,
-		});
-
-		expect(state.aiChatMessages).toEqual([]);
 	});
 });

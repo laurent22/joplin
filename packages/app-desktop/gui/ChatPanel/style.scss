@@ -1,8 +1,11 @@
+@use './ChatHistory.scss';
+
 .chat-panel {
 	display: flex;
 	flex-direction: column;
 	width: 100%;
 	height: 100%;
+	overflow-y: auto;
 	box-sizing: border-box;
 	background-color: var(--joplin-background-color);
 	color: var(--joplin-color);
@@ -11,6 +14,7 @@
 }
 
 .chat-panel > .header {
+	position: relative;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -26,15 +30,14 @@
 		margin: 0;
 	}
 
-	> .reset, > .close {
+	> .reset, > .close, > .history {
 		background: none;
 		border: none;
 		color: var(--joplin-color-faded);
 		cursor: pointer;
-		font-size: 0.85em;
 		padding: 2px 6px;
 
-		&:hover {
+		&:hover:not(:disabled) {
 			color: var(--joplin-color);
 		}
 	}
@@ -215,10 +218,10 @@
 .chat-panel > .disabled-message {
 	flex: 1;
 	display: flex;
-	align-items: center;
-	justify-content: center;
-	padding: 20px;
-	text-align: center;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 12px;
+	padding: 12px;
 	color: var(--joplin-color-faded);
 	line-height: 1.5;
 }

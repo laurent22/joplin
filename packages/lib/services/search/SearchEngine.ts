@@ -21,6 +21,7 @@ import PerformanceLogger from '../../PerformanceLogger';
 import SearchService from '../ai/SearchService';
 import { unique } from '../../ArrayUtils';
 import { embeddingAvailability } from '../ai/availability';
+import isItemId from '../../models/utils/isItemId';
 
 const perfLogger = PerformanceLogger.create();
 
@@ -728,7 +729,7 @@ export default class SearchEngine {
 	private determineSearchType_(query: string, parsedQuery: ParsedQuery, preferredSearchType: SearchType) {
 		if (preferredSearchType === SearchType.Basic) return SearchType.Basic;
 		if (preferredSearchType === SearchType.Nonlatin) return SearchType.Nonlatin;
-		if (preferredSearchType === SearchType.Semantic && this.canSemanticSearch_(parsedQuery)) {
+		if (preferredSearchType === SearchType.Semantic && this.canSemanticSearch_(query, parsedQuery)) {
 			return SearchType.Semantic;
 		}
 
@@ -757,9 +758,18 @@ export default class SearchEngine {
 		return SearchEngine.SEARCH_TYPE_FTS;
 	}
 
-	private canSemanticSearch_(parsedQuery: ParsedQuery) {
+	private canSemanticSearch_(rawQuery: string, parsedQuery: ParsedQuery) {
 		// Disable semantic search if the user has explicitly specified a field to search in
 		if (parsedQuery.allTerms.some(term => term.name !== 'text')) {
+			return false;
+		}
+
+		const trimQuotes = (text: string) => text.replace(/^"(.*)"$/, '$1');
+		const isItemIdQuery = (query: string) => isItemId(trimQuotes(query));
+
+		// Some plugins search for item IDs and expect only full-text matches.
+		// See https://github.com/laurent22/joplin/issues/16644
+		if (isItemIdQuery(rawQuery.trim())) {
 			return false;
 		}
 
@@ -926,7 +936,7 @@ export default class SearchEngine {
 			rows = await this.searchFromItemIds(searchString);
 		}
 
-		if (this.canSemanticSearch_(parsedQuery)
+		if (this.canSemanticSearch_(searchString, parsedQuery)
 			// Don't use semantic search if another search type was explicitly requested
 			&& options.searchType === SearchType.Auto
 			// Avoid doing semantic search twice

@@ -1,6 +1,6 @@
 {
   "name": "@joplin/app-desktop",
-  "version": "3.7.18",
+  "version": "3.7.21",
   "description": "Joplin for Desktop",
   "main": "main.bundle.js",
   "private": true,
@@ -139,7 +139,7 @@
         "entry": {
           "Icon": "joplin",
           "MimeType": "x-scheme-handler/joplin;",
-          "StartupWMClass": "@joplin/app-desktop"
+          "StartupWMClass": "appimagekit-joplin"
         }
       },
       "target": [
