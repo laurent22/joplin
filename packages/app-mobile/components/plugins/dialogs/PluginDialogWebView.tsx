@@ -13,6 +13,7 @@ import { Theme } from '@joplin/lib/themes/type';
 import useDialogSize from './hooks/useDialogSize';
 import PluginUserWebView from './PluginUserWebView';
 import useKeyboardState from '../../../utils/hooks/useKeyboardState';
+import useSafeAreaPadding from '../../../utils/hooks/useSafeAreaPadding';
 
 interface Props {
 	themeId: number;
@@ -28,6 +29,7 @@ const useStyles = (
 ) => {
 	const windowSize = useWindowDimensions();
 	const keyboardState = useKeyboardState();
+	const safeAreaPadding = useSafeAreaPadding();
 
 	return useMemo(() => {
 		const theme: Theme = themeStyle(themeId);
@@ -40,8 +42,11 @@ const useStyles = (
 		// Use the smaller height so the dialog stays above any remaining keyboard
 		// overlap without deducting the keyboard twice.
 		const keyboardTop = Dimensions.get('screen').height - keyboardState.dockedKeyboardHeight;
-		const availableHeight = Math.max(0, Math.min(windowSize.height, keyboardTop));
-		const maxHeight = availableHeight * 0.95;
+		const availableHeight = Math.max(
+			0,
+			Math.min(windowSize.height, keyboardTop) - safeAreaPadding.paddingTop - safeAreaPadding.paddingBottom,
+		);
+		const maxHeight = availableHeight * 0.97;
 		const dialogWidth = useDialogSize ? dialogContentSize.width : maxWidth;
 		const dialogHeight = useDialogSize ? dialogContentSize.height : maxHeight;
 
@@ -78,7 +83,7 @@ const useStyles = (
 				justifyContent: 'flex-end',
 			},
 		});
-	}, [themeId, dialogContentSize, fitToContent, windowSize.width, windowSize.height, keyboardState.dockedKeyboardHeight]);
+	}, [themeId, dialogContentSize, fitToContent, windowSize.width, windowSize.height, keyboardState.dockedKeyboardHeight, safeAreaPadding]);
 };
 
 const defaultButtonSpecs: ButtonSpec[] = [
