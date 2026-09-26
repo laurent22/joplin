@@ -101,7 +101,7 @@
     "sqlite3": "5.1.6",
     "string-padding": "1.0.2",
     "string-to-stream": "3.0.1",
-    "tar": "7.5.17",
+    "tar": "7.5.19",
     "tcp-port-used": "1.0.3",
     "uglifycss": "0.0.29",
     "undici": "8.10.0",
