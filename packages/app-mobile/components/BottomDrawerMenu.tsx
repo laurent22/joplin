@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useMemo, useRef } from 'react';
-import { StyleSheet, View, useWindowDimensions, TextStyle, StyleProp, ViewStyle } from 'react-native';
+import { useCallback, useMemo, useRef } from 'react';
+import { Platform, StyleSheet, View, useWindowDimensions, TextStyle, StyleProp, ViewStyle } from 'react-native';
 import { themeStyle } from './global-style';
 import BottomDrawer, { MenuAlignment, MenuType } from './BottomDrawer';
 import { TouchableRipple, Text } from 'react-native-paper';
@@ -122,6 +122,13 @@ const BottomDrawerMenu: React.FC<Props> = props => {
 
 	const autoFocusView = useFocusView(props.visible);
 
+	const pendingActionRef = useRef<(()=> void)|null>(null);
+	const onDismissed = useCallback(() => {
+		const action = pendingActionRef.current;
+		pendingActionRef.current = null;
+		action?.();
+	}, []);
+
 	const menuOptionComponents: React.ReactNode[] = [];
 
 	let keyCounter = 0;
@@ -146,7 +153,13 @@ const BottomDrawerMenu: React.FC<Props> = props => {
 					role='button'
 					style={styles.menuItem}
 					onPress={() => {
-						option.onPress();
+						if (Platform.OS === 'ios') {
+							// iOS silently drops native views (e.g. the share sheet) presented while
+							// the menu's modal is being dismissed. See https://github.com/laurent22/joplin/issues/16551
+							pendingActionRef.current = option.onPress;
+						} else {
+							option.onPress();
+						}
 						props.onDismiss();
 					}}
 					accessibilityHint={option.accessibilityHint}
@@ -176,6 +189,7 @@ const BottomDrawerMenu: React.FC<Props> = props => {
 	return <BottomDrawer
 		visible={props.visible}
 		onDismiss={props.onDismiss}
+		onDismissed={onDismissed}
 		alignment={props.alignment}
 		autoScrollToEnd={props.autoScrollToEnd}
 		draggable={true}
