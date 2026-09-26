@@ -6,6 +6,7 @@ import BaseModel from './BaseModel';
 import Folder from './models/Folder';
 import ItemChange from './models/ItemChange';
 import getConflictFolderId from './models/utils/getConflictFolderId';
+import getTrashFolderId from './services/trash/getTrashFolderId';
 import { ALL_NOTES_FILTER_ID } from './reserved-ids';
 
 function initTestState(folders: FolderEntity[], selectedFolderIndex: number, notes: NoteEntity[], selectedNoteIndexes: number[], tags: TagEntity[] = null, selectedTagIndex: number = null) {
@@ -1040,12 +1041,14 @@ describe('reducer', () => {
 		expect(conflictState.notes.map(note => note.id)).toEqual([conflictNote.id]);
 	});
 
-	test('sync moving the selected note in a background window should not change its selection', async () => {
+	it.each([
+		['locally', ItemChange.SOURCE_UNSPECIFIED, 2, 1],
+		['during sync', ItemChange.SOURCE_SYNC, 0, 0],
+	])('moving the selected note %s should keep it open in a background window', async (_description, changeSource, primarySelectedIndex, expectedPrimarySelectedIndex) => {
 		const folders = await createNTestFolders(2);
 		const notes = await createNTestNotes(3, folders[0]);
 
-		// Primary window selects note[0]
-		let state = initTestState(folders, 0, notes, [0]);
+		let state = initTestState(folders, 0, notes, [primarySelectedIndex]);
 
 		// Background window selects note[2]
 		const secondaryWindowId = 'window1';
@@ -1061,19 +1064,138 @@ describe('reducer', () => {
 		state = reducer(state, {
 			type: 'NOTE_UPDATE_ONE',
 			note: movedNote,
-			changeSource: ItemChange.SOURCE_SYNC,
+			changeSource,
 		});
 
-		// The moved note should no longer be in the background window's list
-		expect(
-			state.backgroundWindows[secondaryWindowId].notes.every(n => n.id !== notes[2].id),
-		).toBe(true);
-
-		// The background window should continue rendering the moved note
+		// The background window should retain both the selection and the note metadata used
+		// to determine whether editor toolbar commands are enabled.
 		expect(state.backgroundWindows[secondaryWindowId].selectedNoteIds).toEqual([notes[2].id]);
+		expect(state.backgroundWindows[secondaryWindowId].notes).toContainEqual(movedNote);
+		expect(state.backgroundWindows[secondaryWindowId].selectedFolderId).toBe(folders[1].id);
+		expect(state.backgroundWindows[secondaryWindowId].selectedFolderIds).toEqual([folders[1].id]);
 
-		// The primary window should be unaffected
-		expect(state.selectedNoteIds).toEqual([notes[0].id]);
+		expect(state.selectedNoteIds).toEqual([notes[expectedPrimarySelectedIndex].id]);
+
+		state = reducer(state, { type: 'WINDOW_FOCUS', windowId: secondaryWindowId });
+		state = reducer(state, { type: 'NOTE_UPDATE_ALL', notes: [movedNote], notesSource: 'test' });
+		expect(state.selectedNoteIds).toEqual([movedNote.id]);
+		expect(state.notes).toContainEqual(movedNote);
+	});
+
+	test('moving one of multiple selected notes should not change a background window folder', async () => {
+		const folders = await createNTestFolders(2);
+		const notes = await createNTestNotes(3, folders[0]);
+		const secondaryWindowId = 'window1';
+		let state = initTestState(folders, 0, notes, [0]);
+		state = createBackgroundWindow(state, secondaryWindowId, notes[2], notes);
+		state = reducer(state, { type: 'WINDOW_FOCUS', windowId: secondaryWindowId });
+		state = reducer(state, { type: 'NOTE_SELECT', ids: [notes[1].id, notes[2].id] });
+		state = reducer(state, { type: 'WINDOW_FOCUS', windowId: defaultWindowId });
+
+		state = reducer(state, {
+			type: 'NOTE_UPDATE_ONE',
+			note: { ...notes[2], parent_id: folders[1].id },
+		});
+
+		expect(state.backgroundWindows[secondaryWindowId].selectedFolderId).toBe(folders[0].id);
+		expect(state.backgroundWindows[secondaryWindowId].notes.map(n => n.id)).toEqual([notes[0].id, notes[1].id]);
+	});
+
+	test('moving a selected note without a parent should switch its background window to All Notes', async () => {
+		const folders = await createNTestFolders(1);
+		const notes = await createNTestNotes(1, folders[0]);
+		const secondaryWindowId = 'window1';
+		let state = initTestState(folders, 0, notes, [0]);
+		state = createBackgroundWindow(state, secondaryWindowId, notes[0], notes);
+
+		const movedNote = { ...notes[0], parent_id: '' };
+		state = reducer(state, { type: 'NOTE_UPDATE_ONE', note: movedNote });
+
+		const secondaryWindow = state.backgroundWindows[secondaryWindowId];
+		expect(secondaryWindow.notesParentType).toBe('SmartFilter');
+		expect(secondaryWindow.selectedSmartFilterId).toBe(ALL_NOTES_FILTER_ID);
+		expect(secondaryWindow.selectedFolderId).toBeNull();
+		expect(secondaryWindow.selectedFolderIds).toEqual([]);
+		expect(secondaryWindow.notes).toContainEqual(movedNote);
+	});
+
+	test('resolving a conflict should not switch a background window out of the conflict folder', async () => {
+		const folders = await createNTestFolders(1);
+		const notes = await createNTestNotes(1, folders[0]);
+		const conflictNote = { ...notes[0], is_conflict: 1 };
+		const secondaryWindowId = 'window1';
+		let state = initTestState(folders, 0, notes, [0]);
+		state = createBackgroundWindow(state, secondaryWindowId, conflictNote, [conflictNote]);
+		state = reducer(state, { type: 'WINDOW_FOCUS', windowId: secondaryWindowId });
+		state = reducer(state, { type: 'FOLDER_SELECT', id: getConflictFolderId() });
+		state = reducer(state, { type: 'NOTE_UPDATE_ALL', notes: [conflictNote], notesSource: 'test' });
+		state = reducer(state, { type: 'NOTE_SELECT', ids: [conflictNote.id] });
+		state = reducer(state, { type: 'WINDOW_FOCUS', windowId: defaultWindowId });
+
+		state = reducer(state, { type: 'NOTE_UPDATE_ONE', note: { ...conflictNote, is_conflict: 0 } });
+
+		expect(state.backgroundWindows[secondaryWindowId].selectedFolderId).toBe(getConflictFolderId());
+		expect(state.backgroundWindows[secondaryWindowId].notes).toEqual([]);
+	});
+
+	test('moving a conflict to another folder should keep it open in its background window', async () => {
+		const folders = await createNTestFolders(1);
+		const notes = await createNTestNotes(1, folders[0]);
+		const conflictNote = { ...notes[0], is_conflict: 1 };
+		const secondaryWindowId = 'window1';
+		let state = initTestState(folders, 0, notes, [0]);
+		state = createBackgroundWindow(state, secondaryWindowId, conflictNote, [conflictNote]);
+		state = reducer(state, { type: 'WINDOW_FOCUS', windowId: secondaryWindowId });
+		state = reducer(state, { type: 'FOLDER_SELECT', id: getConflictFolderId() });
+		state = reducer(state, { type: 'NOTE_UPDATE_ALL', notes: [conflictNote], notesSource: 'test' });
+		state = reducer(state, { type: 'NOTE_SELECT', ids: [conflictNote.id] });
+		state = reducer(state, { type: 'WINDOW_FOCUS', windowId: defaultWindowId });
+
+		const movedNote = { ...conflictNote, is_conflict: 0 };
+		state = reducer(state, { type: 'NOTE_UPDATE_ONE', note: movedNote, noteMovedToFolder: true });
+
+		const secondaryWindow = state.backgroundWindows[secondaryWindowId];
+		expect(secondaryWindow.selectedFolderId).toBe(folders[0].id);
+		expect(secondaryWindow.selectedFolderIds).toEqual([folders[0].id]);
+		expect(secondaryWindow.notes).toContainEqual(movedNote);
+	});
+
+	test('trashing a selected note should not switch its background window to the trash', async () => {
+		const folders = await createNTestFolders(1);
+		const notes = await createNTestNotes(3, folders[0]);
+		const secondaryWindowId = 'window1';
+		let state = initTestState(folders, 0, notes, [0]);
+		state = createBackgroundWindow(state, secondaryWindowId, notes[2], notes);
+
+		state = reducer(state, {
+			type: 'NOTE_UPDATE_ONE',
+			note: { ...notes[2], deleted_time: Date.now() },
+		});
+
+		expect(state.backgroundWindows[secondaryWindowId].selectedFolderId).toBe(folders[0].id);
+		expect(state.backgroundWindows[secondaryWindowId].notes.map(n => n.id)).toEqual([notes[0].id, notes[1].id]);
+	});
+
+	test('updating a trashed note should not switch its background window out of the trash', async () => {
+		const folders = await createNTestFolders(1);
+		const notes = await createNTestNotes(1, folders[0]);
+		const trashedNote = { ...notes[0], deleted_time: Date.now() };
+		const secondaryWindowId = 'window1';
+		let state = initTestState(folders, 0, notes, [0]);
+		state = createBackgroundWindow(state, secondaryWindowId, trashedNote, [trashedNote]);
+		state = reducer(state, { type: 'WINDOW_FOCUS', windowId: secondaryWindowId });
+		state = reducer(state, { type: 'FOLDER_SELECT', id: getTrashFolderId() });
+		state = reducer(state, { type: 'NOTE_UPDATE_ALL', notes: [trashedNote], notesSource: 'test' });
+		state = reducer(state, { type: 'NOTE_SELECT', ids: [trashedNote.id] });
+		state = reducer(state, { type: 'WINDOW_FOCUS', windowId: defaultWindowId });
+
+		const updatedNote = { ...trashedNote, title: 'Updated title' };
+		state = reducer(state, { type: 'NOTE_UPDATE_ONE', note: updatedNote });
+
+		const secondaryWindow = state.backgroundWindows[secondaryWindowId];
+		expect(secondaryWindow.selectedFolderId).toBe(getTrashFolderId());
+		expect(secondaryWindow.selectedFolderIds).toEqual([getTrashFolderId()]);
+		expect(secondaryWindow.notes).toContainEqual(updatedNote);
 	});
 
 	it.each([
