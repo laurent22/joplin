@@ -8,6 +8,7 @@ import Setting from '../Setting';
 import { checkObjectHasProperties } from '@joplin/utils/object';
 import isTrashableItem from '../../services/trash/isTrashableItem';
 import isJoplinServerVariant from './isJoplinServerVariant';
+import { NoteEntity } from '../../services/database/types';
 
 const logger = Logger.create('models/utils/readOnly');
 
@@ -67,6 +68,9 @@ export const checkIfItemCanBeAddedToFolder = async (itemType: ModelType, Folder:
 		}
 	}
 };
+
+// A locked note inside a share is read-only until moved out: an older client editing it there would drop the lock.
+export const noteIsLockedInShare = (note: Pick<NoteEntity, 'is_locked' | 'share_id'>) => !!note?.is_locked && !!note.share_id;
 
 // Originally all these functions were there to handle share permissions - a note, folder or
 // resource that is not editable would be read-only. However this particular function now is also

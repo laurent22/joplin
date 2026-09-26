@@ -8,11 +8,13 @@ import checkPermissions from '../../../utils/checkPermissions';
 import NoteEditor from '../../NoteEditor/NoteEditor';
 import { EditorControl } from '../../NoteEditor/types';
 import * as React from 'react';
-import { Keyboard, View, TextInput, StyleSheet, Linking, Share, NativeSyntheticEvent, useWindowDimensions } from 'react-native';
+import { Keyboard, View, TextInput, StyleSheet, Linking, Share, NativeSyntheticEvent, useWindowDimensions, Text } from 'react-native';
 import { Platform, PermissionsAndroid } from 'react-native';
 import { connect } from 'react-redux';
 import Note from '@joplin/lib/models/Note';
 import BaseItem from '@joplin/lib/models/BaseItem';
+import ItemChange from '@joplin/lib/models/ItemChange';
+import { itemIsReadOnlySync, ItemSlice, noteIsLockedInShare } from '@joplin/lib/models/utils/readOnly';
 import Resource from '@joplin/lib/models/Resource';
 import Folder from '@joplin/lib/models/Folder';
 import Clipboard from '@react-native-clipboard/clipboard';
@@ -536,6 +538,13 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			markdownButtons: {
 				borderColor: theme.dividerColor,
 				color: theme.urlColor,
+			},
+			lockedInShareBanner: {
+				backgroundColor: theme.warningBackgroundColor,
+				color: theme.color,
+				paddingLeft: theme.marginLeft,
+				paddingRight: theme.marginRight,
+				paddingVertical: 8,
 			},
 		};
 
@@ -1426,7 +1435,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		const note = this.state.note;
 		const isTodo = note && !!note.is_todo;
 		const isSaved = note && note.id;
-		const readOnly = this.state.readOnly;
+		const readOnly = this.isReadOnly();
 		const isDeleted = !!this.state.note.deleted_time;
 		const isCodeView = this.props.editorType === EditorType.Markdown;
 
@@ -1742,9 +1751,19 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		});
 	}
 
+	private lockedInShare() {
+		return noteIsLockedInShare(this.state.note);
+	}
+
+	// state.readOnly is only refreshed by a reload, so a note locked while it sits in a share is covered by the live note.
+	private isReadOnly() {
+		return this.state.readOnly || this.lockedInShare();
+	}
+
 	public folderPickerOptions() {
 		const options = {
-			visible: !this.state.readOnly,
+			// Moving the note out of the share is how a locked note becomes editable again, when the share allows it.
+			visible: !this.state.readOnly || (this.lockedInShare() && !itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, this.state.note as ItemSlice, Setting.value('sync.userId'), BaseItem.syncShareCache)),
 			disabled: false,
 			selectedFolderId: this.state.folder ? this.state.folder.id : null,
 			onValueChange: this.folderPickerOptions_valueChanged,
@@ -1934,7 +1953,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 							keyboardAppearance={theme.keyboardAppearance}
 							placeholder={_('Add body')}
 							placeholderTextColor={theme.colorFaded}
-							editable={!this.state.readOnly && !this.state.reloadInProgress}
+							editable={!this.isReadOnly() && !this.state.reloadInProgress}
 							// need some extra padding for iOS so that the keyboard won't cover last line of the note
 							// see https://github.com/laurent22/joplin/issues/3607
 							// Property is gone as of RN 0.72?
@@ -1960,7 +1979,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 						onSearchVisibleChange={this.onSearchVisibleChange_}
 						onAttach={this.onAttach}
 						noteResources={this.state.noteResources}
-						readOnly={this.state.readOnly || this.state.reloadInProgress}
+						readOnly={this.isReadOnly() || this.state.reloadInProgress}
 						plugins={this.props.plugins}
 						style={{
 							...editorStyle,
@@ -2039,7 +2058,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					keyboardAppearance={theme.keyboardAppearance}
 					placeholder={_('Add title')}
 					placeholderTextColor={theme.colorFaded}
-					editable={!this.state.readOnly && !this.state.reloadInProgress}
+					editable={!this.isReadOnly() && !this.state.reloadInProgress}
 					multiline={this.state.multiline}
 					submitBehavior = "blurAndSubmit"
 				/>
@@ -2076,6 +2095,10 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			viewEditToggleMode = ViewToggleButtonMode.Hidden;
 		}
 
+		const lockedInShareBanner = this.lockedInShare() ? (
+			<Text style={this.styles().lockedInShareBanner}>{noteLockPanelVisible ? _('This note may not be readable because it is contained within a share.') : _('This note is read-only because it is locked and contained within a share. To enable editing, it must be moved outside of the share.')}</Text>
+		) : null;
+
 		const header = <ScreenHeader
 			folderPickerOptions={this.folderPickerOptions()}
 			menuOptions={this.menuOptions()}
@@ -2096,6 +2119,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			<View style={this.rootStyle(this.props.themeId).root}>
 				{!increaseSpaceForEditor && header}
 				{!increaseSpaceForEditor && titleComp}
+				{lockedInShareBanner}
 				{bodyComponent}
 				{renderVoiceTypingDialogs()}
 

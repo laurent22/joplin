@@ -27,7 +27,7 @@ import markupLanguageUtils from '@joplin/lib/utils/markupLanguageUtils';
 import Setting from '@joplin/lib/models/Setting';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
 import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
-import { itemIsReadOnly } from '@joplin/lib/models/utils/readOnly';
+import { itemIsReadOnly, noteIsLockedInShare } from '@joplin/lib/models/utils/readOnly';
 import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
 import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
 import hasNoteLockKey from '../utils/hasNoteLockKey';
@@ -84,7 +84,7 @@ let editorIdCounter = 0;
 function NoteEditorContent(props: NoteEditorProps) {
 	const [showRevisions, setShowRevisions] = useState(false);
 	const [titleHasBeenManuallyChanged, setTitleHasBeenManuallyChanged] = useState(false);
-	const [isReadOnly, setIsReadOnly] = useState<boolean>(false);
+	const [isReadOnlyItem, setIsReadOnlyItem] = useState<boolean>(false);
 	const [reloadInProgress, setReloadInProgress] = useState(false);
 
 	const editorRef = useRef<NoteBodyEditorRef|null>(null);
@@ -375,13 +375,17 @@ function NoteEditorContent(props: NoteEditorProps) {
 		return parseShareCache(props.shareCacheSetting);
 	}, [props.shareCacheSetting]);
 
+	// The list row covers a form whose refresh was skipped for unsaved edits, the form covers a window whose list no longer holds the note.
+	const lockedInShare = noteIsLockedInShare(formNote) || noteIsLockedInShare(props.notes.find(n => n.id === formNote.id));
+	const isReadOnly = isReadOnlyItem || lockedInShare;
+
 	useAsyncEffect(async event => {
 		if (!formNote.id) return;
 
 		try {
 			const result = await itemIsReadOnly(BaseItem, ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, formNote.id, props.syncUserId, shareCache);
 			if (event.cancelled) return;
-			setIsReadOnly(result);
+			setIsReadOnlyItem(result);
 		} catch (error) {
 			if (error.code === ErrorCode.NotFound) {
 				// Can happen if the note has been deleted but a render is
@@ -766,6 +770,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 						hasNoteLockKey={props.hasNoteLockKey}
 						dispatch={props.dispatch}
 						undecryptable={true}
+						lockedInShare={noteIsLockedInShare(lockedNoteMetadata)}
 					/>
 				</div>
 			);
@@ -781,6 +786,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 						noteTitle={lockedNoteMetadata.title}
 						hasNoteLockKey={props.hasNoteLockKey}
 						dispatch={props.dispatch}
+						lockedInShare={noteIsLockedInShare(lockedNoteMetadata)}
 					/>
 				</div>
 			);
@@ -843,7 +849,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 					setTagsToolbarButtonInfo={props.setTagsToolbarButtonInfo}
 					selectedNoteTags={props.selectedNoteTags}
 				/>
-				<WarningBanner bodyEditor={props.bodyEditor}/>
+				<WarningBanner bodyEditor={props.bodyEditor} lockedInShare={lockedInShare}/>
 			</div>
 		</div>
 	);
