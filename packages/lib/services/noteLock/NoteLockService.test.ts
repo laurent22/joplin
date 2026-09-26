@@ -43,6 +43,9 @@ describe('NoteLockService', () => {
 		await session.unlock('123456');
 
 		const cipherText = await service.encryptString('some secret');
+		// Note lock data carries its own header prefix so a JED prefix check cannot mistake it
+		// for sync E2EE data.
+		expect(cipherText.startsWith('JLD01')).toBe(true);
 		expect(await service.decryptString(cipherText)).toBe('some secret');
 
 		const sourcePath = `${supportDir}/photo.jpg`;

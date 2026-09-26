@@ -67,8 +67,8 @@ export const runtime = (): CommandRuntime => {
 					note.markup_language = MarkupLanguage.Markdown;
 					note.updated_time = Date.now();
 
-					const toSave = noteIsLocked ? { ...note, isDecrypted: true } : note;
-					await Note.save(toSave, { autoTimestamp: false, useNoteLock: noteIsLocked, noteLockKey });
+					const toSave = { ...note, isDecrypted: true };
+					await Note.save(toSave, { autoTimestamp: false, useNoteLock: true, noteLockKey });
 					await Note.delete(backupNote.id, { toTrash: true });
 					processedCount ++;
 

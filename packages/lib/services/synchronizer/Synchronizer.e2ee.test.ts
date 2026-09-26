@@ -14,6 +14,10 @@ import { loadMasterKeysFromSettings, setupAndDisableEncryption, setupAndEnableEn
 import { remoteNotesAndFolders } from '../../testing/test-utils-synchronizer';
 import { EncryptionMethod } from '../e2ee/EncryptionService';
 import { NoteEntity } from '../database/types';
+import NoteLockKey from '../noteLock/NoteLockKey';
+import NoteLockSession from '../noteLock/NoteLockSession';
+import NoteLockService from '../noteLock/NoteLockService';
+import EncryptionService from '../e2ee/EncryptionService';
 
 let insideBeforeEach = false;
 
@@ -100,6 +104,43 @@ describe('Synchronizer.e2ee', () => {
 		const remoteNote1 = remoteItems.find((item): item is NoteEntity => item.id === note1.id);
 		expect(remoteNote1.is_locked).toBe(1);
 		expect(remoteNote1.extracted_resource_ids).toBe(extractedResourceIds);
+	}));
+
+	it('should store a downloaded locked note while the note lock session is locked', (async () => {
+		// The note lock singletons bind to the current client's encryption service, like in Note.test.
+		const bindNoteLockToClient = () => {
+			NoteLockKey.destroyInstance();
+			NoteLockSession.destroyInstance();
+			NoteLockService.destroyInstance();
+			EncryptionService.instance_ = encryptionService();
+		};
+		Setting.setValue('featureFlag.noteLock', true);
+		setEncryptionEnabled(true);
+		await loadEncryptionMasterKey();
+		bindNoteLockToClient();
+		await NoteLockKey.instance().create('654321');
+		await NoteLockSession.instance().unlock('654321');
+		const note = await Note.save({ title: 'Locked', body: 'secret', is_locked: 1 }, { useNoteLock: true });
+		NoteLockSession.instance().lock();
+		await synchronizerStart();
+
+		await switchClient(2);
+		bindNoteLockToClient();
+		Setting.setValue('featureFlag.noteLock', true);
+		await synchronizerStart();
+		// The encrypted placeholder lands even though no note lock key is available yet.
+		expect(await Note.load(note.id)).toMatchObject({ encryption_applied: 1, is_locked: 1, body: '' });
+
+		const masterKey = (await MasterKey.all())[0];
+		Setting.setObjectValue('encryption.passwordCache', masterKey.id, '123456');
+		await loadMasterKeysFromSettings(encryptionService());
+		await decryptionWorker().start();
+		expect((await Note.load(note.id)).encryption_applied).toBe(0);
+
+		await NoteLockSession.instance().unlock('654321');
+		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe('secret');
+		NoteLockSession.instance().lock();
+		Setting.setValue('featureFlag.noteLock', false);
 	}));
 
 	it('should mark the key has having been used when synchronising the first time', (async () => {
