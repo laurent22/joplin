@@ -126,7 +126,7 @@ const DismissibleDialog: React.FC<Props> = props => {
 	return (
 		<Modal
 			visible={props.visible}
-			onClose={props.onDismiss}
+			onClose={props.inert ? null : props.onDismiss}
 			containerStyle={styles.dialogContainer}
 			modalBackgroundStyle={styles.modalBackground}
 			backgroundColor={theme.backgroundColorTransparent2}
