@@ -191,7 +191,8 @@ describe('note-screen-shared', () => {
 	});
 
 	it('should save a body property change and keep it in the state', async () => {
-		const testNote = await Note.save({ title: 'Task note', body: '- [ ] task', parent_id: folderId });
+		// Reloaded through the gate so the state note carries the marker, like after reloadNote.
+		const testNote = await Note.load((await Note.save({ title: 'Task note', body: '- [ ] task', parent_id: folderId })).id, { useNoteLock: true });
 		const comp = makeComp(testNote);
 
 		await shared.saveOneProperty(comp, 'body', '- [x] task');
@@ -199,6 +200,9 @@ describe('note-screen-shared', () => {
 		expect((await Note.load(testNote.id)).body).toBe('- [x] task');
 		expect(comp.state.note.body).toBe('- [x] task');
 		expect(comp.state.lastSavedNote.body).toBe('- [x] task');
+
+		// The body save is gated, so a state note without the marker is refused.
+		await expect(shared.saveOneProperty(makeComp(testNote, { note: { ...testNote, isDecrypted: false } }), 'body', '- [ ] task')).rejects.toThrow('Gated note lock save is missing decrypted state');
 	});
 
 	it('should not revert a lock state change that happens while a save is in flight', async () => {

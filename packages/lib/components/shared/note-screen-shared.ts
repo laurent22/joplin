@@ -271,8 +271,9 @@ shared.saveOneProperty = async function(comp: BaseNoteScreenComponent, name: str
 
 	const toSave: Record<string, unknown> = { id: note.id };
 	toSave[name] = value;
+	if (name === 'body') toSave.isDecrypted = note.isDecrypted;
 
-	const saved = await Note.save(toSave) as Record<string, unknown>;
+	const saved = await Note.save(toSave, name === 'body' ? { useNoteLock: true, noteLockKey: comp.state.noteLockKey } : null) as Record<string, unknown>;
 	(note as Record<string, unknown>)[name] = saved[name];
 
 	const stateNote = { ...note };

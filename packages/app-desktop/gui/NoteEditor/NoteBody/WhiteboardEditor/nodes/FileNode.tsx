@@ -14,6 +14,7 @@ import { resourceFullPath } from '@joplin/lib/models/utils/resourceUtils';
 import { NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
 import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
 import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
+import { NoteLockNoteEntity } from '@joplin/lib/services/noteLock/NoteLockNote';
 import eventManager, { EventName } from '@joplin/lib/eventManager';
 import { FileCanvasNode } from '@joplin/lib/services/whiteboard/jsoncanvas';
 import { resolveCanvasColor } from '@joplin/lib/services/whiteboard/presetColors';
@@ -38,6 +39,7 @@ interface ResolvedItem {
 	kind: 'note' | 'resource' | 'unknown';
 	title: string;
 	body?: string;
+	isDecrypted?: boolean;
 	lockedState?: LockedState;
 	userUpdatedTime?: number;
 	deletedTime?: number;
@@ -81,16 +83,20 @@ const useResolvedRef = (file: string): { resolved: ResolvedItem | null; refetch:
 				}
 				if (item.type_ === ModelType.Note) {
 					let body = item.body || '';
+					let isDecrypted = false;
 					let lockedState: LockedState = null;
 					// A locked note's body only decrypts through the gated load; the card never
-					// shows ciphertext and never prompts to unlock the session itself.
-					if (isNoteLockEnabled() && (item as NoteEntity).is_locked) {
+					// shows ciphertext and never prompts to unlock the session itself. Unlocked notes
+					// load through the gate as well, so that a checkbox toggle can use a gated save.
+					if (isNoteLockEnabled()) {
 						body = '';
-						if (!NoteLockSession.instance().isUnlocked()) {
+						if ((item as NoteEntity).is_locked && !NoteLockSession.instance().isUnlocked()) {
 							lockedState = 'sessionLocked';
 						} else {
 							try {
-								body = (await Note.load(ref.id, { useNoteLock: true })).body || '';
+								const note: NoteLockNoteEntity = await Note.load(ref.id, { useNoteLock: true });
+								body = note.body || '';
+								isDecrypted = !!note.isDecrypted;
 							} catch (error) {
 								logger.warn(`Could not decrypt linked note ${ref.id}:`, error);
 								lockedState = 'undecryptable';
@@ -102,6 +108,7 @@ const useResolvedRef = (file: string): { resolved: ResolvedItem | null; refetch:
 						kind: 'note',
 						title: item.title || 'Untitled',
 						body,
+						isDecrypted,
 						lockedState,
 						userUpdatedTime: item.user_updated_time,
 						deletedTime: item.deleted_time,
@@ -171,6 +178,7 @@ const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; da
 	const linkedNoteId = resolved?.kind === 'note' ? resolveFileRef(node.file).id : null;
 	const linkedNoteUserUpdatedTime = resolved?.kind === 'note' ? resolved.userUpdatedTime : undefined;
 	const linkedNoteDeletedTime = resolved?.kind === 'note' ? resolved.deletedTime : undefined;
+	const linkedNoteIsDecrypted = resolved?.kind === 'note' ? resolved.isDecrypted : undefined;
 	const savingRef = useRef(false);
 	const onLinkedNoteBodyChange = useCallback(async (newBody: string) => {
 		if (!linkedNoteId) return;
@@ -188,9 +196,10 @@ const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; da
 				{
 					id: linkedNoteId,
 					body: newBody,
+					isDecrypted: linkedNoteIsDecrypted,
 					...(linkedNoteUserUpdatedTime ? { user_updated_time: linkedNoteUserUpdatedTime } : {}),
-				},
-				{ changeSource: ItemChange.SOURCE_UNSPECIFIED },
+				} as NoteLockNoteEntity,
+				{ changeSource: ItemChange.SOURCE_UNSPECIFIED, useNoteLock: true },
 			);
 			refetch();
 		} catch (error) {
@@ -199,7 +208,7 @@ const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; da
 		} finally {
 			savingRef.current = false;
 		}
-	}, [linkedNoteId, linkedNoteUserUpdatedTime, linkedNoteDeletedTime, refetch]);
+	}, [linkedNoteId, linkedNoteUserUpdatedTime, linkedNoteDeletedTime, linkedNoteIsDecrypted, refetch]);
 	const checkboxRef = useCheckboxToggle({
 		body: resolved?.kind === 'note' ? (resolved.body ?? '') : '',
 		onChange: onLinkedNoteBodyChange,
