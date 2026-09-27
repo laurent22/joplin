@@ -15,7 +15,7 @@ const ModalMessageOverlay: React.FC<Props> = ({ message, hasCloseButton, onClose
 		return <div key={line} className="text">{line}</div>;
 	});
 
-	return <Dialog contentFillsScreen={true}>
+	return <Dialog contentFillsScreen={true} onCancel={hasCloseButton ? onClose : undefined}>
 		<div className={`modal-message ${hasCloseButton ? '-with-close-button' : ''}`}>
 			{!hasCloseButton && <div className="loading-animation" />}
 			<div className={`text ${hasCloseButton ? 'modal-message-scrollable-content' : ''}`} role="status">
