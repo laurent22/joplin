@@ -107,6 +107,7 @@ export default class BaseApplication {
 	private scheduleAutoAddResourcesIID_: ReturnType<typeof shim.setTimeout> = null;
 	protected database_: JoplinDatabase = null;
 	private profileConfig_: ProfileConfig = null;
+	private refreshNotesEvent_ = { cancelled: false };
 
 	protected showStackTraces_ = false;
 	protected showPromptString_ = false;
@@ -226,6 +227,9 @@ export default class BaseApplication {
 	}
 
 	public async refreshNotes(state: State, useSelectedNoteId = false, noteHash = '') {
+		this.refreshNotesEvent_.cancelled = true;
+		const event = { cancelled: false };
+		this.refreshNotesEvent_ = event;
 		let parentType: string | number = state.notesParentType;
 		let parentId = null;
 
@@ -281,6 +285,8 @@ export default class BaseApplication {
 		// The active window may have changed while the note query was running. Applying this
 		// result to another window would replace its note list and selection with stale state.
 		if (this.store().getState().windowId !== state.windowId) return;
+
+		if (event.cancelled) return;
 
 		this.store().dispatch({
 			type: 'SET_HIGHLIGHTED',
