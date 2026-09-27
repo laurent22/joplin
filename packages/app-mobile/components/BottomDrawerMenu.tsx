@@ -154,8 +154,8 @@ const BottomDrawerMenu: React.FC<Props> = props => {
 					style={styles.menuItem}
 					onPress={() => {
 						if (Platform.OS === 'ios') {
-							// iOS silently drops native views (e.g. the share sheet) presented while
-							// the menu's modal is being dismissed. See https://github.com/laurent22/joplin/issues/16551
+							// Wait for the menu to close because iOS cannot show other native views while it's closing.
+							// See https://github.com/laurent22/joplin/issues/16551
 							pendingActionRef.current = option.onPress;
 						} else {
 							option.onPress();
