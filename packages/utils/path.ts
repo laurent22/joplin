@@ -87,7 +87,7 @@ export function rtrimSlashes(path: string) {
 }
 
 export function ltrimSlashes(path: string) {
-	return path.replace(/^\/+/, '');
+	return path.replace(/^[\/\\]+/, '');
 }
 
 export function trimSlashes(path: string): string {

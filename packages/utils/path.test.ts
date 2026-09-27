@@ -1,4 +1,4 @@
-import { extractExecutablePath, isUncPath, quotePath, toFileProtocolPath, unquotePath } from './path';
+import { extractExecutablePath, isUncPath, ltrimSlashes, quotePath, rtrimSlashes, trimSlashes, toFileProtocolPath, unquotePath } from './path';
 
 describe('path', () => {
 	it('should quote and unquote paths', (async () => {
@@ -72,5 +72,20 @@ describe('path', () => {
 		['\\\\LOCALHOST/', 'win32', true],
 	])('should correctly detect UNC paths', (path, os, expected) => {
 		expect(isUncPath(path, os)).toBe(expected);
+	});
+
+	it('should trim slashes and backslashes correctly', () => {
+		expect(rtrimSlashes('/path/to/dir/')).toBe('/path/to/dir');
+		expect(rtrimSlashes('c:\\path\\to\\dir\\')).toBe('c:\\path\\to\\dir');
+		expect(rtrimSlashes('c:\\path\\to\\dir\\\\\\')).toBe('c:\\path\\to\\dir');
+
+		expect(ltrimSlashes('/path/to/dir')).toBe('path/to/dir');
+		expect(ltrimSlashes('///path/to/dir')).toBe('path/to/dir');
+		expect(ltrimSlashes('\\path\\to\\dir')).toBe('path\\to\\dir');
+		expect(ltrimSlashes('\\\\\\path\\to\\dir')).toBe('path\\to\\dir');
+
+		expect(trimSlashes('/path/to/dir/')).toBe('path/to/dir');
+		expect(trimSlashes('\\path\\to\\dir\\')).toBe('path\\to\\dir');
+		expect(trimSlashes('\\//path/to/dir/\\')).toBe('path/to/dir');
 	});
 });
