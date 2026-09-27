@@ -832,7 +832,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 		const refreshKey = this.props.editorNoteReloadTimeRequest;
 		this.refreshKey = refreshKey;
-		if (this.useEditorBeta() && this.state.mode === 'edit') {
+		const { editorPlugin } = getShownPluginEditorView(this.props.plugins, this.props.windowId);
+		if (this.useEditorBeta() && this.state.mode === 'edit' && !editorPlugin) {
 			this.forceUpdate();
 		} else {
 			this.setState({}, () => this.editorReloadComplete(refreshKey));
