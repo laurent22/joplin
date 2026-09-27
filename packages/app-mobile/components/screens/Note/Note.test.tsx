@@ -34,6 +34,7 @@ import setupGlobalStore from '../../../utils/testing/setupGlobalStore';
 import CommandService from '@joplin/lib/services/CommandService';
 import BackButtonService from '../../../services/BackButtonService';
 import shared from '@joplin/lib/components/shared/note-screen-shared';
+import { DialogContext, DialogControl } from '../../DialogManager';
 
 jest.retryTimes(2);
 
@@ -454,6 +455,20 @@ describe('screens/Note/Note', () => {
 		expect(titleInput).toBeDisabled();
 		expect(await screen.findByText('This note is read-only because it is locked and contained within a share. To enable editing, it must be moved outside of the share.')).toBeVisible();
 		expect(screen.getByHintText(/Selects a notebook/)).toBeVisible();
+
+		unmount();
+	});
+
+	it('should not tick the to-do checkbox of a locked note inside a share', async () => {
+		const noteId = await openNewNote({ title: 'Locked to-do', body: 'plain', is_todo: 1, is_locked: 1, share_id: 'share-1' });
+		const dialogs: Partial<DialogControl> = { error: jest.fn() };
+		const { unmount } = render(<DialogContext.Provider value={dialogs as DialogControl}><WrappedNoteScreen /></DialogContext.Provider>);
+
+		fireEvent.press(await screen.findByRole('checkbox'));
+
+		await waitFor(() => expect(dialogs.error).toHaveBeenCalledWith(expect.stringMatching(/read-only because it is locked/)));
+		expect(screen.getByRole('checkbox')).not.toBeChecked();
+		expect((await Note.load(noteId)).todo_completed).toBe(0);
 
 		unmount();
 	});

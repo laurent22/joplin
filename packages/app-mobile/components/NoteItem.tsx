@@ -19,6 +19,7 @@ import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
 import { DialogContext } from './DialogManager';
 import Icon from './Icon';
 import isSyncDisabledConflict from '@joplin/lib/services/noteList/isSyncDisabledConflict';
+import { noteIsLockedInShare } from '@joplin/lib/models/utils/readOnly';
 
 interface Props {
 	dispatch: Dispatch;
@@ -128,11 +129,16 @@ const NoteItemComponent: React.FC<Props> = memo(props => {
 
 		// Ignore the row press emitted by the checkbox gesture without blocking a deliberate
 		// follow-up tap on the row.
-		if (isNoteLockEnabled()) suppressPressUntilRef.current = Date.now() + 100;
+		if (isNoteLockEnabled() || noteIsLockedInShare(props.note)) suppressPressUntilRef.current = Date.now() + 100;
 
 		// Duplicates the locked-note guard in app-desktop/gui/NoteListItem/NoteListItem.tsx.
+		const lockState = await Note.load(props.note.id, { fields: ['is_locked', 'share_id'] });
+		if (noteIsLockedInShare(lockState)) {
+			setCheckboxKey(key => key + 1);
+			await dialogs.error(_('This note is read-only because it is locked and contained within a share. To enable editing, it must be moved outside of the share.'));
+			return;
+		}
 		if (isNoteLockEnabled()) {
-			const lockState = await Note.load(props.note.id, { fields: ['is_locked'] });
 			if (NoteLockNote.isLocked(lockState) && !NoteLockSession.instance().isUnlocked()) {
 				// The checkbox keeps its own checked state, so a remount reverts the tick.
 				setCheckboxKey(key => key + 1);

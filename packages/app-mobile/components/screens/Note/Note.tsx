@@ -1671,6 +1671,11 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 
 	private async todoCheckbox_change(checked: boolean) {
+		if (this.lockedInShare()) {
+			this.setState(state => ({ todoCheckboxKey: state.todoCheckboxKey + 1 }));
+			await this.props.dialogs.error(_('This note is read-only because it is locked and contained within a share. To enable editing, it must be moved outside of the share.'));
+			return;
+		}
 		if (isNoteLockEnabled() && NoteLockNote.isLocked(this.state.note) && !this.props.noteLockSessionUnlocked) {
 			// The checkbox keeps its own checked state, so a remount reverts the tick.
 			this.setState(state => ({ todoCheckboxKey: state.todoCheckboxKey + 1 }));
