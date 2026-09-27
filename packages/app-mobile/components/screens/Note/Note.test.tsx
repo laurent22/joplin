@@ -459,6 +459,22 @@ describe('screens/Note/Note', () => {
 		unmount();
 	});
 
+	it('should make a locked note editable as soon as it is moved out of a share', async () => {
+		const sharedFolder = await Folder.save({ title: 'Shared', share_id: 'share-1', parent_id: '' });
+		await Folder.save({ title: 'Outside the share', parent_id: '' });
+		await openNewNote({ title: 'Locked in a share', body: 'plain', is_locked: 1, share_id: 'share-1', parent_id: sharedFolder.id });
+		const { unmount } = render(<WrappedNoteScreen />);
+
+		expect(await screen.findByDisplayValue('Locked in a share')).toBeDisabled();
+		fireEvent.press(screen.getByHintText(/Selects a notebook/));
+		fireEvent.press(await screen.findByRole('menuitem', { name: 'Outside the share' }));
+
+		await waitFor(() => expect(screen.getByDisplayValue('Locked in a share')).not.toBeDisabled());
+		expect(screen.queryByText(/read-only because it is locked/)).toBeNull();
+
+		unmount();
+	});
+
 	it('should not tick the to-do checkbox of a locked note inside a share', async () => {
 		const noteId = await openNewNote({ title: 'Locked to-do', body: 'plain', is_todo: 1, is_locked: 1, share_id: 'share-1' });
 		const dialogs: Partial<DialogControl> = { error: jest.fn() };

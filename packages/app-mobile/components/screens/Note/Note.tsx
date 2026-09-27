@@ -1738,11 +1738,12 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		if (isProvisionalNote) {
 			await this.saveNoteButton_press(itemValue);
 		} else {
-			await Note.moveToFolder(
+			const movedNote = await Note.moveToFolder(
 				note.id,
 				itemValue,
 				{ dispatchOptions: { preserveSelection: true } },
 			);
+			note.share_id = movedNote.share_id;
 		}
 
 		note.parent_id = itemValue;
@@ -1760,7 +1761,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		return noteIsLockedInShare(this.state.note);
 	}
 
-	// state.readOnly is only refreshed by a reload, so a note locked while it sits in a share is covered by the live note.
+	// state.readOnly is only refreshed by a reload, so a note locked in a share, or moved out of it, is covered by the live note.
 	private isReadOnly() {
 		return this.state.readOnly || this.lockedInShare();
 	}

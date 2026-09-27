@@ -749,6 +749,18 @@ describe('models/Note', () => {
 		expect(movedNote.conflict_original_id).toBe('');
 	}));
 
+	it('should take the share_id of the target folder when moving a note', (async () => {
+		const sharedFolder = await Folder.save({ title: 'Shared', share_id: 'share-1' });
+		const folder = await Folder.save({ title: 'Folder' });
+		const note = await Note.save({ title: 'note', parent_id: sharedFolder.id, share_id: 'share-1' });
+
+		await Note.moveToFolder(note.id, folder.id);
+		expect((await Note.load(note.id)).share_id).toBe('');
+
+		await Note.moveToFolder(note.id, sharedFolder.id);
+		expect((await Note.load(note.id)).share_id).toBe('share-1');
+	}));
+
 	function testResourceReplacement(body: string, pathsToTry: string[], expected: string) {
 		expect(Note['replaceResourceExternalToInternalLinks_'](pathsToTry, body)).toBe(expected);
 	}
