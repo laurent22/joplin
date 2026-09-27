@@ -126,7 +126,7 @@ function checkboxPlugin(markdownIt: MarkdownIt, options: RuleOptions) {
 		const tokens = state.tokens;
 		const Token = state.Token;
 
-		const checkboxPattern = /^\[([x|X| ])\] (.*)$/;
+		const checkboxPattern = /^\[([xX ])\](?:\s(.*))?$/;
 		let currentListItem = null;
 		let processedFirstInline = false;
 		const lists = [];
@@ -165,7 +165,7 @@ function checkboxPlugin(markdownIt: MarkdownIt, options: RuleOptions) {
 				if (!matches || matches.length < 2) continue;
 
 				const checked = matches[1] !== ' ';
-				const label = matches.length >= 3 ? matches[2] : '';
+				const label = matches[2] || '';
 
 				const currentList = lists[lists.length - 1];
 
@@ -189,10 +189,12 @@ function checkboxPlugin(markdownIt: MarkdownIt, options: RuleOptions) {
 					itemClass += ' md-checkbox joplin-checkbox';
 					currentListItem.attrSet('class', itemClass.trim());
 				} else {
-					const textToken = new Token('text', '', 0);
-					textToken.content = label;
 					const tokens = [];
-					tokens.push(textToken);
+					if (label) {
+						const textToken = new Token('text', '', 0);
+						textToken.content = label;
+						tokens.push(textToken);
+					}
 
 					token.children = markdownIt.utils.arrayReplaceAt(token.children, 0, tokens);
 
