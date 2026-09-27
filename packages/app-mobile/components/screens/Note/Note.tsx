@@ -736,7 +736,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		const editorPluginIdsChanged = this.props.visibleEditorPluginIds !== prevProps.visibleEditorPluginIds;
 		if (editorPluginIdsChanged || this.props.editorNoteReloadTimeRequest !== prevProps.editorNoteReloadTimeRequest) {
 			const { editorPlugin } = getShownPluginEditorView(this.props.plugins, this.props.windowId);
-			const explicitReloadRequired = !editorPlugin && this.props.editorNoteReloadTimeRequest > this.state.noteLastLoadTime;
+			const explicitReloadRequired = this.props.editorNoteReloadTimeRequest > this.state.noteLastLoadTime;
 
 			if (explicitReloadRequired) {
 				this.reloadInProgress_ = true;
