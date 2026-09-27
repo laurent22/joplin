@@ -342,23 +342,22 @@ describe('models/Note', () => {
 		expect(unlockedNote.extracted_resource_ids).toBe('');
 	});
 
-	it('should encrypt an ungated save whose body is plaintext for a locked note', async () => {
+	it('should encrypt an ungated partial save whose body is plaintext for a locked note', async () => {
 		await NoteLockKey.instance().create('123456');
 		await NoteLockSession.instance().unlock('123456');
 		const resourceId = '06894e83b8f84d3d8cbe0f1587f9e226';
 		const note = await Note.save({ body: 'secret', is_locked: 1 }, { useNoteLock: true });
 
-		// Gated loaded data saved through an ungated path is encrypted instead of rejected, and the
-		// caller still gets the plaintext back.
-		const editedNote = await Note.save({ ...await Note.load(note.id, { useNoteLock: true }), body: 'edited' });
-		expect(editedNote.body).toBe('edited');
-		expect((await Note.load(note.id)).body).not.toBe('edited');
-		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe('edited');
+		// Gated loaded data saved in full through an ungated path is refused, and so is a lock
+		// change without the body.
+		await expect(Note.save({ ...await Note.load(note.id, { useNoteLock: true }), body: 'edited' })).rejects.toThrow('must be gated when the body was loaded using a gated load');
+		await expect(Note.save({ id: note.id, is_locked: 0 })).rejects.toThrow('Saves that change is_locked must include the body field');
+		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe('secret');
 
 		// A fresh partial save picks up the row's lock state and keeps the lock fields together
-		// even when the caller restricts the saved fields.
+		// even when the caller restricts the saved fields, and the caller still gets the plaintext back.
 		const partialBody = `partial [](:/${resourceId})`;
-		await Note.save({ id: note.id, body: partialBody }, { fields: ['body'] });
+		expect((await Note.save({ id: note.id, body: partialBody }, { fields: ['body'] })).body).toBe(partialBody);
 		const storedNote = await Note.load(note.id);
 		expect(storedNote.is_locked).toBe(1);
 		expect(storedNote.body).not.toBe(partialBody);
