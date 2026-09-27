@@ -74,9 +74,10 @@ describe('Synchronizer.conflicts', () => {
 	}));
 
 	it.each([
-		['missing', ''],
-		['empty', 'is_locked: \n'],
-	])('should keep a locked note as a conflict when an older client drops its lock inside a share (%s is_locked)', (async (_name, lockLine) => {
+		['missing', false, ''],
+		['empty', false, 'is_locked: \n'],
+		['empty', true, 'is_locked: \n'],
+	])('should keep a locked note as a conflict when an older client drops its lock inside a share (%s is_locked, changed locally: %s)', (async (_name, changedLocally, lockLine) => {
 		const folder = await Folder.save({ title: 'folder' });
 		const note = await Note.save({ title: 'Locked', body: 'JLD01cipher', is_locked: 1, parent_id: folder.id });
 		await synchronizerStart();
@@ -84,11 +85,12 @@ describe('Synchronizer.conflicts', () => {
 		const path = `${note.id}.md`;
 		const remote = (await fileApi().get(path)).replace('share_id: \n', 'share_id: share-1\n').replace('is_locked: 1\n', lockLine).replace('JLD01cipher', 'edited on an old client').replace(/^updated_time: .*$/m, `updated_time: ${time.unixMsToIso(note.updated_time + 1000)}`);
 		await fileApi().put(path, remote);
+		if (changedLocally) await Note.save({ id: note.id, title: 'Renamed locally' });
 		await synchronizerStart();
 
 		const conflicts = await Note.conflictedNotes();
 		expect(conflicts.length).toBe(1);
-		expect(conflicts[0]).toMatchObject({ conflict_original_id: '', is_locked: 1, body: 'JLD01cipher', share_id: '' });
+		expect(conflicts[0]).toMatchObject({ conflict_original_id: changedLocally ? note.id : '', is_locked: 1, body: 'JLD01cipher', share_id: '' });
 		expect(await Note.load(note.id)).toMatchObject({ is_locked: 0, body: 'edited on an old client', share_id: 'share-1' });
 	}));
 

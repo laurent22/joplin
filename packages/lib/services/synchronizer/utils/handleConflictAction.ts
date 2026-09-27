@@ -166,6 +166,10 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 				base_title: base ? base.base_title : '',
 				remote_updated_time: remoteNote ? remoteNote.updated_time : 0,
 			});
+
+			// An older client drops is_locked when it edits a shared locked note. As in the delta step, the lock
+			// is cleared, now that the conflict note keeps the locked copy.
+			if (remoteNote?.is_locked === undefined && remoteNote?.share_id && (local as NoteEntity).is_locked) remoteContent = { ...remoteNote, is_locked: 0 };
 		}
 	} else if (action === SyncAction.ResourceConflict) {
 		if (!remoteContent || Resource.mustHandleConflict(local, remoteContent)) {
