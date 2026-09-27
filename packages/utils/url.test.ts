@@ -24,6 +24,7 @@ describe('utils/url', () => {
 		}
 
 		expect(fileUriToPath('file://c:/not/quite/right')).toBe('c:/not/quite/right');
+		expect(fileUriToPath('file://c:/not/quite/right', 'win32')).toBe('c:\\not\\quite\\right');
 		expect(fileUriToPath('file:///d:/better')).toBe('d:/better');
 		expect(fileUriToPath('file:///c:/AUTOEXEC.BAT', 'win32')).toBe('c:\\AUTOEXEC.BAT');
 	}));
