@@ -26,8 +26,11 @@ export default class JoplinViewsMenus {
 
 	private registerCommandAccelerators(menuItems: MenuItem[]) {
 		for (const menuItem of menuItems) {
-			if (menuItem.accelerator) {
-				KeymapService.instance().registerCommandAccelerator(menuItem.commandName, menuItem.accelerator);
+			// Also register commands without an accelerator, so that they appear
+			// in the keymap editor and the user can assign a shortcut, as is done
+			// in JoplinViewsMenuItems.
+			if (menuItem.commandName) {
+				KeymapService.instance().registerCommandAccelerator(menuItem.commandName, menuItem.accelerator || null);
 			}
 
 			if (menuItem.submenu) {
