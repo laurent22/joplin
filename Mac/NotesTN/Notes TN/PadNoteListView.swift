@@ -261,6 +261,7 @@ struct PadNoteListView: View {
                 .fill(isSelected ? AppColors.noteRowSelectedActiveBackground(colorScheme) : Color.clear)
                 .padding(.horizontal, 8)
         )
+        .disablingCellFocusRing()
         // Long press — Pin/Unpin + Delete (or, when viewing Trash, Restore/Delete
         // Permanently instead).
         .contextMenu {
