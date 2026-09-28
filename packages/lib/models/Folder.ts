@@ -332,7 +332,6 @@ export default class Folder extends BaseItem {
 		const applyChildTimeToParent = (folderId: string, visitedIds: string[]) => {
 			const parent = findFolderParent(folderId);
 			if (!parent) return;
-			// Cycle: Avoid infinite loop
 			if (visitedIds.includes(folderId)) return;
 
 			if (folderIdToTime[parent.id] && folderIdToTime[parent.id] >= folderIdToTime[folderId]) {
