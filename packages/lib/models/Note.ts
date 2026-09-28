@@ -863,8 +863,10 @@ export default class Note extends BaseItem {
 	// Normally a partial save to the body is used for a controlled change, but if the data may
 	// have been loaded via a gated load, a gated save should be used, and the isDecrypted flag
 	// from the full note object must be passed to the save, so that the gated validation will
-	// work correctly. For other partial saves, a plain text body of a locked note is encrypted
-	// as a fallback protection. Do not pass is_locked to an ungated partial save: it throws if
+	// work correctly. For ungated partial saves which supply a body without the is_locked field,
+	// if the original note is locked and the new body does not begin with a suitable encryption
+	// header, it will be encrypted, as a fallback protection for code paths which have not been
+	// handled correctly. Do not pass is_locked to an ungated partial save: it throws if
 	// the lock state changes without the body, and bypasses these validations with the body.
 	// In certain cases, it may be necessary to hardcode the isDecrypted flag to true
 	// before calling a gated save, but caution should be used if doing so, because if the body
