@@ -329,9 +329,11 @@ export default class Folder extends BaseItem {
 			return null;
 		};
 
-		const applyChildTimeToParent = (folderId: string) => {
+		const applyChildTimeToParent = (folderId: string, visitedIds: string[]) => {
 			const parent = findFolderParent(folderId);
 			if (!parent) return;
+			// Cycle: Avoid infinite loop
+			if (visitedIds.includes(folderId)) return;
 
 			if (folderIdToTime[parent.id] && folderIdToTime[parent.id] >= folderIdToTime[folderId]) {
 				// Don't change so that parent has the same time as the last updated child
@@ -339,12 +341,12 @@ export default class Folder extends BaseItem {
 				folderIdToTime[parent.id] = folderIdToTime[folderId];
 			}
 
-			applyChildTimeToParent(parent.id);
+			applyChildTimeToParent(parent.id, [...visitedIds, folderId]);
 		};
 
 		for (const folderId in folderIdToTime) {
 			if (!folderIdToTime.hasOwnProperty(folderId)) continue;
-			applyChildTimeToParent(folderId);
+			applyChildTimeToParent(folderId, []);
 		}
 
 		const mod = dir === 'DESC' ? +1 : -1;
