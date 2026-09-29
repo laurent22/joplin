@@ -73,7 +73,7 @@
     "fast-xml-parser": "3.21.1",
     "file-type": "16.5.4",
     "follow-redirects": "1.16.0",
-    "fs-extra": "11.3.5",
+    "fs-extra": "11.3.6",
     "html-entities": "1.4.0",
     "html-minifier": "4.0.0",
     "image-data-uri": "2.0.1",
