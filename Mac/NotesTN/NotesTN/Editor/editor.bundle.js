@@ -16965,6 +16965,11 @@
         }
         line.textContent = text;
       },
+      // Mac Settings: the tint (yellow or purple) and the note body's text-size scale.
+      setDisplay(tint, scale) {
+        document.body.classList.toggle("pm-tint-purple", tint === "purple");
+        document.documentElement.style.setProperty("--pm-zoom", String(scale));
+      },
       getSelectedText() {
         const { from: from2, to } = linkTargetRange(view.state);
         return view.state.doc.textBetween(from2, to, " ");

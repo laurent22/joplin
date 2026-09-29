@@ -6,6 +6,8 @@ struct SettingsView: View {
     @State private var isConfirmingLogout = false
     @State private var isConfirmingForceResync = false
     @State private var isShowingLogin = false
+    @AppStorage(NotesTint.storageKey) private var tint: NotesTint = .yellow
+    @AppStorage(NoteTextSize.storageKey) private var textSizeIndex = NoteTextSize.defaultIndex
 
     private var isSignedIn: Bool { accountStore.account != nil }
 
@@ -26,10 +28,7 @@ struct SettingsView: View {
                 }
             }
 
-            Divider()
-                .gridCellUnsizedAxes(.horizontal)
-                .padding(.top, 15)
-                .padding(.bottom, 16)
+            sectionDivider
 
             GridRow {
                 label("Sync:")
@@ -54,14 +53,55 @@ struct SettingsView: View {
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }
+
+            sectionDivider
+
+            GridRow {
+                label("Tint:")
+                VStack(alignment: .leading, spacing: 6) {
+                    Picker("Tint", selection: $tint) {
+                        ForEach(NotesTint.allCases) { Text($0.title).tag($0) }
+                    }
+                    .labelsHidden()
+                    .pickerStyle(.menu)
+                    .frame(width: 120)
+                    Text("Colours selections, links, highlights and buttons.")
+                        .font(.system(size: 11))
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            sectionDivider
+
+            GridRow(alignment: .bottom) {
+                label("Default text size:")
+                    .padding(.bottom, 4)
+                VStack(spacing: 2) {
+                    HStack(alignment: .lastTextBaseline) {
+                        Text("A").font(.system(size: 10))
+                        Spacer()
+                        Text("A").font(.system(size: 20))
+                    }
+                    TextSizeSlider(index: $textSizeIndex)
+                }
+                .frame(width: 360)
+            }
         }
         .padding(.horizontal, 20)
         .padding(.top, 18)
         .padding(.bottom, 20)
         .frame(width: 548, alignment: .leading)
         .fixedSize(horizontal: false, vertical: true)
+        .tint(tint.accent)
         .accountAlerts(isConfirmingLogout: $isConfirmingLogout, isConfirmingForceResync: $isConfirmingForceResync)
         .sheet(isPresented: $isShowingLogin) { LoginView() }
+    }
+
+    private var sectionDivider: some View {
+        Divider()
+            .gridCellUnsizedAxes(.horizontal)
+            .padding(.top, 15)
+            .padding(.bottom, 16)
     }
 
     private func label(_ text: String) -> some View {
@@ -91,6 +131,33 @@ struct SettingsView: View {
             Text("Not synced yet")
                 .foregroundStyle(.secondary)
         }
+    }
+}
+
+// NSSlider rather than SwiftUI's Slider for the tick marks and tick-only stops that
+// Notes' own "Default text size" slider has.
+private struct TextSizeSlider: NSViewRepresentable {
+    @Binding var index: Int
+
+    func makeNSView(context: Context) -> NSSlider {
+        let slider = NSSlider(value: Double(index), minValue: 0, maxValue: Double(NoteTextSize.points.count - 1), target: context.coordinator, action: #selector(Coordinator.changed(_:)))
+        slider.numberOfTickMarks = NoteTextSize.points.count
+        slider.allowsTickMarkValuesOnly = true
+        slider.tickMarkPosition = .below
+        return slider
+    }
+
+    func updateNSView(_ slider: NSSlider, context: Context) {
+        context.coordinator.index = $index
+        if slider.integerValue != index { slider.integerValue = index }
+    }
+
+    func makeCoordinator() -> Coordinator { Coordinator(index: $index) }
+
+    final class Coordinator: NSObject {
+        var index: Binding<Int>
+        init(index: Binding<Int>) { self.index = index }
+        @objc func changed(_ sender: NSSlider) { index.wrappedValue = sender.integerValue }
     }
 }
 

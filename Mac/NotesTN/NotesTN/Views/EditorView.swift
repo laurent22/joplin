@@ -224,6 +224,10 @@ final class EditorCoordinator: NSObject, ObservableObject, WKScriptMessageHandle
         wv.evaluateJavaScript("window.NativeEditor?.highlightSearch(\(json))")
     }
 
+    func setDisplay(tint: NotesTint, scale: CGFloat) {
+        webView?.evaluateJavaScript("window.NativeEditor?.setDisplay('\(tint.rawValue)', \(scale))")
+    }
+
     func setDateLine(_ text: String) {
         guard let wv = webView, let json = Self.jsonString(text) else { return }
         wv.evaluateJavaScript("window.NativeEditor?.setDateLine(\(json))")
@@ -570,6 +574,8 @@ struct NoteEditorView: View {
     // editorCoordinator.setTopInset so it can flow its full height underneath the
     // toolbar's translucent material instead of hard-clipping flush against it.
     @State private var toolbarInset: CGFloat = 0
+    @AppStorage(NotesTint.storageKey) private var tint: NotesTint = .yellow
+    @AppStorage(NoteTextSize.storageKey) private var textSizeIndex = NoteTextSize.defaultIndex
     private let noteID: String
     private let initialTitle: String
     private let initialBody: String
@@ -665,6 +671,7 @@ struct NoteEditorView: View {
             // by which time the init-time snapshot may be stale.
             guard ready else { return }
             pushTopInset()
+            pushDisplay()
             let note = currentNote
             editorCoordinator.setContent(title: note?.title ?? initialTitle, body: note?.body ?? initialBody)
             pushDateLine()
@@ -691,6 +698,8 @@ struct NoteEditorView: View {
                 reapplyHighlights()
             }
         }
+        .onChange(of: tint) { _, _ in pushDisplay() }
+        .onChange(of: textSizeIndex) { _, _ in pushDisplay() }
         .onChange(of: appState.searchText) { _, query in
             guard editorCoordinator.isReady, !editorCoordinator.isShowingFind else { return }
             editorCoordinator.highlightSearch(query)
@@ -774,6 +783,10 @@ struct NoteEditorView: View {
         } else if !appState.searchText.isEmpty {
             editorCoordinator.highlightSearch(appState.searchText)
         }
+    }
+
+    private func pushDisplay() {
+        editorCoordinator.setDisplay(tint: tint, scale: NoteTextSize.scale(forIndex: textSizeIndex))
     }
 
     private func pushDateLine() {
@@ -1252,6 +1265,7 @@ struct TableMenu: View {
 /// on top, then the paragraph styles, each drawn in its own style.
 private struct FormatPopover: View {
     @ObservedObject var coordinator: EditorCoordinator
+    @AppStorage(NotesTint.storageKey) private var tint: NotesTint = .yellow
     @Binding var isPresented: Bool
 
     private struct Style {
@@ -1317,7 +1331,7 @@ private struct FormatPopover: View {
             Image(systemName: symbol)
                 .font(.system(size: 14, weight: .medium))
                 .frame(width: width, height: 26)
-                .foregroundStyle(isActive ? Color.accentColor : Self.ink)
+                .foregroundStyle(isActive ? tint.accent : Self.ink)
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)

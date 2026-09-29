@@ -758,6 +758,7 @@ function writeEditorHtml(outDir) {
     --color-find-other-outline: transparent;
     --color-search-match: #fbf1cc;
     --color-caret: #f9b524;
+    --color-highlight-bg: #fdeba5;
     padding: calc(var(--native-toolbar-inset) + 7px) 20px 48px 23px;
     font-size: 13px;
     line-height: 17px;
@@ -776,8 +777,29 @@ function writeEditorHtml(outDir) {
       --color-find-other-outline: #ffffff;
       --color-search-match: #514516;
       --color-caret: #ffc837;
+      --color-highlight-bg: #6b5516;
     }
   }
+  /* Settings > Tint: Purple (Figma modes Purple Light / Purple Dark). */
+  body.pm-mac.pm-tint-purple {
+    --color-link: #783ce5;
+    --color-checkbox-checked-bg: #783ce5;
+    --color-search-match: #eee6fd;
+    --color-caret: #783ce5;
+    --color-highlight-bg: #e4d6fb;
+  }
+  @media (prefers-color-scheme: dark) {
+    body.pm-mac.pm-tint-purple {
+      --color-link: #a47df1;
+      --color-checkbox-checked-bg: #8350ea;
+      --color-search-match: #372757;
+      --color-caret: #8350ea;
+      --color-highlight-bg: #4c3582;
+    }
+  }
+  /* Settings > Default text size scales the note body (not the date line). */
+  body.pm-mac .ProseMirror { zoom: var(--pm-zoom, 1); }
+  body.pm-mac .ProseMirror mark { color: inherit; padding: 0 1px; }
   body.pm-mac #pm-date {
     font-size: 12px;
     line-height: 15px;

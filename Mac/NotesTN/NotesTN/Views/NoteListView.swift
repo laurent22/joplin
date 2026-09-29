@@ -14,14 +14,12 @@ func dynamicColor(light: UInt32, dark: UInt32) -> Color {
 
 private enum ListPalette {
     static let surface = dynamicColor(light: 0xFFFFFF, dark: 0x222626)
-    static let rowSelectedFocused = dynamicColor(light: 0xFFE381, dark: 0x9E8422)
     static let rowSelectedUnfocused = dynamicColor(light: 0xDCDCDC, dark: 0x464646)
     static let separator = dynamicColor(light: 0xE6E6E6, dark: 0x383B3B)
     static let placeholder = dynamicColor(light: 0xE8E8E8, dark: 0x3A3A3A)
     static let headerTitle = dynamicColor(light: 0x4D4D4D, dark: 0xE8E9E9)
     static let headerSubtitle = dynamicColor(light: 0x7F7F7F, dark: 0x909292)
     static let notice = dynamicColor(light: 0x272727, dark: 0xDDDEDE)
-    static let match = Color(red: 0xFC / 255, green: 0xB8 / 255, blue: 0x27 / 255)
 }
 
 // MARK: - Sorting (saved per notebook)
@@ -138,6 +136,7 @@ struct NoteListView: View {
     @State private var isConfirmingDeleteAll = false
     @State private var permanentlyDeleting: Note?
     @State private var permanentlyDeletingFolder: Folder?
+    @AppStorage(NotesTint.storageKey) private var tint: NotesTint = .yellow
 
     // Keyed off the fetched results, not the typed text, so the list doesn't draw
     // search rows over the notebook's notes during the search debounce.
@@ -415,7 +414,8 @@ struct NoteListView: View {
             query: appState.searchResultsQuery,
             folderTitle: isSearching ? folderTitle(note) : nil,
             selection: isSelected ? (isListFocused ? .focused : .unfocused) : nil,
-            showsSeparator: showsSeparator
+            showsSeparator: showsSeparator,
+            tint: tint
         )
         .padding(.horizontal, 10)
         .onTapGesture {
@@ -503,6 +503,7 @@ struct NoteRowView: View {
     let folderTitle: String?
     let selection: Selection?
     let showsSeparator: Bool
+    let tint: NotesTint
 
     private var isSearchRow: Bool { folderTitle != nil }
 
@@ -567,7 +568,7 @@ struct NoteRowView: View {
         }
         .background(
             RoundedRectangle(cornerRadius: 10)
-                .fill(selection == .focused ? ListPalette.rowSelectedFocused : selection == .unfocused ? ListPalette.rowSelectedUnfocused : Color.clear)
+                .fill(selection == .focused ? tint.rowSelectedFocused : selection == .unfocused ? ListPalette.rowSelectedUnfocused : Color.clear)
         )
         .contentShape(Rectangle())
     }
@@ -583,7 +584,7 @@ struct NoteRowView: View {
         return "…" + text[min(wordStart, match.lowerBound)...]
     }
 
-    // Matches are drawn in the accent colour, with no background.
+    // Matches are drawn in the tint's link colour, with no background.
     private func highlighted(_ text: String) -> AttributedString {
         guard !query.isEmpty else { return AttributedString(text) }
         var result = AttributedString()
@@ -591,7 +592,7 @@ struct NoteRowView: View {
         while start < text.endIndex, let match = text.range(of: query, options: .caseInsensitive, range: start..<text.endIndex) {
             result += AttributedString(String(text[start..<match.lowerBound]))
             var matched = AttributedString(String(text[match]))
-            matched.foregroundColor = ListPalette.match
+            matched.foregroundColor = tint.link
             result += matched
             start = match.upperBound
         }

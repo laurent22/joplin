@@ -52,6 +52,7 @@
 		6C2163029A7A422AA2767533 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD34E8DB134431FB90A2EE6 /* SettingsView.swift */; };
 		C9455C61D7584761B9A58942 /* MacCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BC9AFA22A664DEEA8CD5912 /* MacCommands.swift */; };
 		DC1FEC7B8DE44A0C8E12CA1B /* MacSidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82120D2AF80C4957BA027945 /* MacSidebarView.swift */; };
+		8A415E9AF5864612AB1711E8 /* NotesTint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FE0FB74504D43BDA7237D32 /* NotesTint.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,6 +85,7 @@
 		1FD34E8DB134431FB90A2EE6 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		2BC9AFA22A664DEEA8CD5912 /* MacCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacCommands.swift; sourceTree = "<group>"; };
 		82120D2AF80C4957BA027945 /* MacSidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacSidebarView.swift; sourceTree = "<group>"; };
+		0FE0FB74504D43BDA7237D32 /* NotesTint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesTint.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -178,6 +180,7 @@
 				B5C6D7E8F9A0B1C2D3E4F5A6 /* NoteListView.swift */,
 				B7C8D9E0F1A2B3C4D5E6F7A8 /* EditorView.swift */,
 				F6A6A6A6A6A6A6A6A6A6A6A6 /* LoginView.swift */,
+				0FE0FB74504D43BDA7237D32 /* NotesTint.swift */,
 				82120D2AF80C4957BA027945 /* MacSidebarView.swift */,
 				1FD34E8DB134431FB90A2EE6 /* SettingsView.swift */,
 			);
@@ -347,6 +350,7 @@
 				B2C3D4E5F6A7B8C9D0E1F2A3 /* AppState.swift in Sources */,
 				B6C7D8E9F0A1B2C3D4E5F6A7 /* NoteListView.swift in Sources */,
 				B8C9D0E1F2A3B4C5D6E7F8A9 /* EditorView.swift in Sources */,
+				8A415E9AF5864612AB1711E8 /* NotesTint.swift in Sources */,
 				DC1FEC7B8DE44A0C8E12CA1B /* MacSidebarView.swift in Sources */,
 				C9455C61D7584761B9A58942 /* MacCommands.swift in Sources */,
 				6C2163029A7A422AA2767533 /* SettingsView.swift in Sources */,

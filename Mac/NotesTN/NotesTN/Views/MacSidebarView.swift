@@ -1,15 +1,13 @@
 import SwiftUI
 
-// Plain String tags rather than nil for All Notes: macOS List(selection:) treats a
-// nil-tagged row as "clear selection", which made that row unselectable once
-// something else was picked. Real folder ids are 32-char hex, so these can't collide.
 private enum SidebarPalette {
     static let label = dynamicColor(light: 0x191918, dark: 0xF1F5F5)
-    static let accentText = dynamicColor(light: 0xF5B01F, dark: 0xFFCF3E)
-    static let accentTextInactive = dynamicColor(light: 0xF9E7C3, dark: 0x5C4F2C)
     static let count = dynamicColor(light: 0xB9B9B9, dark: 0x5E6161)
+    static let selectionUnfocused = dynamicColor(light: 0xEFEFEF, dark: 0x2B2E2E)
+    static let selectionInactiveWindow = dynamicColor(light: 0xF7F7F7, dark: 0x252828)
 }
 
+// Row tags: real folder ids are 32-char hex, so these can't collide.
 private let allNotesTag = "__all__"
 private let trashTag = "__trash__"
 
@@ -17,6 +15,7 @@ struct MacSidebarView: View {
     @EnvironmentObject var appState: AppState
     @FocusState private var isFocused: Bool
     @Environment(\.appearsActive) private var appearsActive
+    @AppStorage(NotesTint.storageKey) private var tint: NotesTint = .yellow
     @FocusState private var isRenameFieldFocused: Bool
     @State private var renamingFolderID: String?
     @State private var renameText = ""
@@ -44,8 +43,12 @@ struct MacSidebarView: View {
         )
     }
 
+    private var orderedTags: [String] { [allNotesTag, trashTag] + appState.folders.map(\.id) }
+
+    // The selection is drawn here, not by List(selection:): the native capsule uses the
+    // app's built-in accent colour, so it can't follow Settings > Tint.
     var body: some View {
-        List(selection: selection) {
+        List {
             row("All Notes", systemImage: "note.text", count: db.noteCount(trashed: false), tag: allNotesTag)
             row("Trash", systemImage: "trash", count: db.noteCount(trashed: true), tag: trashTag)
 
@@ -68,7 +71,7 @@ struct MacSidebarView: View {
                                 .font(.system(size: 13, weight: .medium))
                                 .foregroundStyle(labelColor(isSelected: selection.wrappedValue == folder.id))
                         }
-                        .tag(folder.id)
+                        .listRowBackground(selectionPill(isSelected: selection.wrappedValue == folder.id))
                     } else {
                         row(folder.title, systemImage: "folder", count: db.noteCount(folderId: folder.id), tag: folder.id)
                             .contextMenu {
@@ -82,7 +85,17 @@ struct MacSidebarView: View {
             }
         }
         .listStyle(.sidebar)
+        .focusable()
+        .focusEffectDisabled()
         .focused($isFocused)
+        .onMoveCommand { direction in
+            guard let index = orderedTags.firstIndex(of: selection.wrappedValue) else { return }
+            switch direction {
+            case .up where index > 0: selection.wrappedValue = orderedTags[index - 1]
+            case .down where index < orderedTags.count - 1: selection.wrappedValue = orderedTags[index + 1]
+            default: break
+            }
+        }
         .onChange(of: isFocused) { _, focused in appState.isSidebarFocused = focused }
         .toolbar {
             ToolbarItem {
@@ -128,13 +141,32 @@ struct MacSidebarView: View {
                 .foregroundStyle(isSelected && isFocused && appearsActive ? Color.white : SidebarPalette.count)
         }
         .lineLimit(1)
-        .tag(tag)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            selection.wrappedValue = tag
+            isFocused = true
+        }
+        .listRowBackground(selectionPill(isSelected: isSelected))
+    }
+
+    private func selectionPill(isSelected: Bool) -> some View {
+        let fill: Color
+        if !isSelected {
+            fill = .clear
+        } else if !appearsActive {
+            fill = SidebarPalette.selectionInactiveWindow
+        } else {
+            fill = isFocused ? tint.accent : SidebarPalette.selectionUnfocused
+        }
+        return RoundedRectangle(cornerRadius: 8)
+            .fill(fill)
+            .padding(.horizontal, 10)
     }
 
     private func labelColor(isSelected: Bool) -> Color {
         guard isSelected else { return SidebarPalette.label }
-        if !appearsActive { return SidebarPalette.accentTextInactive }
-        return isFocused ? .white : SidebarPalette.accentText
+        if !appearsActive { return tint.accentTextInactive }
+        return isFocused ? .white : tint.accentText
     }
 
     private func startRename(_ folder: Folder) {

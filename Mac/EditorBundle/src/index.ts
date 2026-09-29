@@ -1802,6 +1802,7 @@ interface NativeEditorBridge {
   endFind: () => void;
   highlightSearch: (query: string) => void;
   setDateLine: (text: string) => void;
+  setDisplay: (tint: string, scale: number) => void;
   getSelectedText: () => string;
   insertLink: (href: string, name: string) => void;
   focus: () => void;
@@ -1990,6 +1991,12 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.insertBefore(line, document.getElementById('editor'));
       }
       line.textContent = text;
+    },
+
+    // Mac Settings: the tint (yellow or purple) and the note body's text-size scale.
+    setDisplay(tint: string, scale: number) {
+      document.body.classList.toggle('pm-tint-purple', tint === 'purple');
+      document.documentElement.style.setProperty('--pm-zoom', String(scale));
     },
 
     getSelectedText() {

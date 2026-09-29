@@ -33,6 +33,7 @@ private struct WindowRestorationDisabler: NSViewRepresentable {
 struct ContentView: View {
     @EnvironmentObject var appState: AppState
     @FocusState private var isSearchFieldFocused: Bool
+    @AppStorage(NotesTint.storageKey) private var tint: NotesTint = .yellow
 
     // Persists whether the sidebar is shown across launches.
     private static let sidebarVisibilityKey = "sidebarExpanded"
@@ -49,6 +50,7 @@ struct ContentView: View {
             EditorView()
         }
         .navigationSplitViewStyle(.balanced)
+        .tint(tint.accent)
         .sheet(isPresented: $appState.isShowingNewNotebook) {
             NewNotebookSheet { appState.createFolder(title: $0) }
         }
