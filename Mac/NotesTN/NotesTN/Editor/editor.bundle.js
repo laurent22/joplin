@@ -16405,6 +16405,7 @@
     if (isAndroid) document.body.classList.add("pm-android");
     const isIOSPhone = /[?&]platform=ios-phone(&|$)/.test(location.search);
     if (isIOSPhone) document.body.classList.add("pm-ios-phone");
+    if (/[?&]platform=mac(&|$)/.test(location.search)) document.body.classList.add("pm-mac");
     let lastTitle = "";
     let lastHTML = "";
     let selectionDebounce = null;
@@ -16820,6 +16821,26 @@
     notifySelection(view.state);
     return view;
   }
+  function linkTargetRange(state) {
+    const { from: from2, to, empty: empty2, $from } = state.selection;
+    const current = schema_default.marks.link.isInSet($from.marks());
+    if (!empty2 || !current) return { from: from2, to };
+    const children = [];
+    let pos = $from.start();
+    $from.parent.forEach((child) => {
+      const mark = schema_default.marks.link.isInSet(child.marks);
+      children.push({ from: pos, to: pos + child.nodeSize, href: mark ? mark.attrs.href : null });
+      pos += child.nodeSize;
+    });
+    const href = current.attrs.href;
+    let index = children.findIndex((c) => c.href === href && c.from <= from2 && from2 <= c.to);
+    if (index < 0) return { from: from2, to };
+    let first = index;
+    let last = index;
+    while (first > 0 && children[first - 1].href === href) first--;
+    while (last < children.length - 1 && children[last + 1].href === href) last++;
+    return { from: children[first].from, to: children[last].to };
+  }
   document.addEventListener("DOMContentLoaded", () => {
     let view;
     try {
@@ -16883,6 +16904,8 @@
       // caseSensitive is passed by native: false for plain find, true once Replace is
       // showing, so a replace only ever rewrites the exact-case text it highlighted.
       find(query, caseSensitive) {
+        document.body.classList.remove("pm-search-highlight");
+        document.body.classList.toggle("pm-finding", query.length > 0);
         view.dispatch(view.state.tr.setMeta(findKey, { type: "set", query, caseSensitive: !!caseSensitive }));
         afterFindUpdate();
       },
@@ -16922,7 +16945,47 @@
         afterFindUpdate();
       },
       endFind() {
+        document.body.classList.remove("pm-finding", "pm-search-highlight");
         view.dispatch(view.state.tr.setMeta(findKey, { type: "clear" }));
+      },
+      // Tints every match of the note-list search in the open note, without the find
+      // bar's dimming or a current match (Notes does the same while a search is active).
+      highlightSearch(query) {
+        document.body.classList.remove("pm-finding");
+        document.body.classList.toggle("pm-search-highlight", query.length > 0);
+        view.dispatch(view.state.tr.setMeta(findKey, query ? { type: "set", query, caseSensitive: false } : { type: "clear" }));
+      },
+      // The non-editable "28 September 2026 at 12:21" line above the title.
+      setDateLine(text) {
+        let line = document.getElementById("pm-date");
+        if (!line) {
+          line = document.createElement("div");
+          line.id = "pm-date";
+          document.body.insertBefore(line, document.getElementById("editor"));
+        }
+        line.textContent = text;
+      },
+      getSelectedText() {
+        const { from: from2, to } = linkTargetRange(view.state);
+        return view.state.doc.textBetween(from2, to, " ");
+      },
+      // Add Link sheet: links the selection (or the link the caret is in), replacing
+      // its text only when the Name field was changed; with nothing selected it inserts
+      // the name, or the URL itself, at the caret.
+      insertLink(href, name) {
+        const { state } = view;
+        const { from: from2, to } = linkTargetRange(state);
+        const current = state.doc.textBetween(from2, to, " ");
+        const link = schema_default.marks.link.create({ href, title: null });
+        let tr = state.tr;
+        if (from2 !== to && (!name || name === current)) {
+          tr = tr.removeMark(from2, to, schema_default.marks.link).addMark(from2, to, link);
+        } else {
+          const marks2 = link.addToSet(schema_default.marks.link.removeFromSet(state.doc.resolve(from2).marks()));
+          tr = tr.replaceWith(from2, to, schema_default.text(name || href, marks2));
+        }
+        view.dispatch(tr.removeStoredMark(schema_default.marks.link).scrollIntoView());
+        view.focus();
       },
       focus() {
         view.focus();

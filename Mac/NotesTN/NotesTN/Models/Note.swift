@@ -70,6 +70,12 @@ struct Note: Identifiable, Hashable, Equatable {
     }
 
     private func computePreview() -> String {
+        String(plainText.prefix(160))
+    }
+
+    // The whole body as plain text — for search snippets, which need to find a match
+    // past the preview's first 160 characters. Not cached; only search rows read it.
+    var plainText: String {
         // Strip HTML tags
         let noTags = body.replacingOccurrences(of: "<[^>]+>", with: " ", options: .regularExpression)
         // Collapse whitespace and newlines
@@ -85,7 +91,7 @@ struct Note: Identifiable, Hashable, Equatable {
             .replacingOccurrences(of: "&#39;", with: "'")
             .replacingOccurrences(of: "&quot;", with: "\"")
             .trimmingCharacters(in: .whitespaces)
-        return String(collapsed.prefix(160))
+        return collapsed
     }
 
     // Resource id of the first image in the body, or nil if there is none — used

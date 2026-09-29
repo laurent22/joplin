@@ -34,7 +34,7 @@ enum JoplinCloudApi {
             switch self {
             case .invalidCredentials: return "Incorrect email or password."
             case .other(let message): return message
-            case .network: return "Couldn't reach Joplin Cloud. Check your connection."
+            case .network: return "The server didn’t respond. Check your connection, then try again."
             }
         }
     }
@@ -131,9 +131,9 @@ enum JoplinCloudApi {
 
         var errorDescription: String? {
             switch self {
-            case .unauthorized: return "Joplin Cloud session expired — please log in again."
+            case .unauthorized: return "Your Joplin Cloud session expired. Log in again to keep syncing."
             case .other(let message): return message
-            case .network: return "Couldn't reach Joplin Cloud. Check your connection."
+            case .network: return "The server didn’t respond. Check your connection, then try again."
             }
         }
     }

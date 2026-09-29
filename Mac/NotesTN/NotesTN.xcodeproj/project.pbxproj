@@ -49,6 +49,9 @@
 		G3A3A3A3A3A3A3A3A3A3A3A3 /* HtmlToMarkdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = G4A4A4A4A4A4A4A4A4A4A4A4 /* HtmlToMarkdown.swift */; };
 		G5A5A5A5A5A5A5A5A5A5A5A5 /* JoplinItemSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = G6A6A6A6A6A6A6A6A6A6A6A6 /* JoplinItemSerializer.swift */; };
 		H1A1A1A1A1A1A1A1A1A1A1A1 /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = H2A2A2A2A2A2A2A2A2A2A2A2 /* AppColors.swift */; };
+		6C2163029A7A422AA2767533 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD34E8DB134431FB90A2EE6 /* SettingsView.swift */; };
+		C9455C61D7584761B9A58942 /* MacCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BC9AFA22A664DEEA8CD5912 /* MacCommands.swift */; };
+		DC1FEC7B8DE44A0C8E12CA1B /* MacSidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82120D2AF80C4957BA027945 /* MacSidebarView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -78,6 +81,9 @@
 		G4A4A4A4A4A4A4A4A4A4A4A4 /* HtmlToMarkdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HtmlToMarkdown.swift; sourceTree = "<group>"; };
 		G6A6A6A6A6A6A6A6A6A6A6A6 /* JoplinItemSerializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoplinItemSerializer.swift; sourceTree = "<group>"; };
 		H2A2A2A2A2A2A2A2A2A2A2A2 /* AppColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColors.swift; sourceTree = "<group>"; };
+		1FD34E8DB134431FB90A2EE6 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		2BC9AFA22A664DEEA8CD5912 /* MacCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacCommands.swift; sourceTree = "<group>"; };
+		82120D2AF80C4957BA027945 /* MacSidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacSidebarView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -126,6 +132,7 @@
 				A1B2C3D4E5F6A7B8C9D0E1F2 /* NotesTNApp.swift */,
 				H2A2A2A2A2A2A2A2A2A2A2A2 /* AppColors.swift */,
 				A3B4C5D6E7F8A9B0C1D2E3F4 /* ContentView.swift */,
+				2BC9AFA22A664DEEA8CD5912 /* MacCommands.swift */,
 				C5D6E7F8A9B0C1D2E3F4A5B6 /* Models */,
 				C6D7E8F9A0B1C2D3E4F5A6B7 /* Database */,
 				C7D8E9F0A1B2C3D4E5F6A7B8 /* ViewModels */,
@@ -171,6 +178,8 @@
 				B5C6D7E8F9A0B1C2D3E4F5A6 /* NoteListView.swift */,
 				B7C8D9E0F1A2B3C4D5E6F7A8 /* EditorView.swift */,
 				F6A6A6A6A6A6A6A6A6A6A6A6 /* LoginView.swift */,
+				82120D2AF80C4957BA027945 /* MacSidebarView.swift */,
+				1FD34E8DB134431FB90A2EE6 /* SettingsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -336,9 +345,11 @@
 				A8B9C0D1E2F3A4B5C6D7E8F9 /* Folder.swift in Sources */,
 				B0C1D2E3F4A5B6C7D8E9F0A1 /* DatabaseManager.swift in Sources */,
 				B2C3D4E5F6A7B8C9D0E1F2A3 /* AppState.swift in Sources */,
-				B4C5D6E7F8A9B0C1D2E3F4A5 /* SidebarView.swift in Sources */,
 				B6C7D8E9F0A1B2C3D4E5F6A7 /* NoteListView.swift in Sources */,
 				B8C9D0E1F2A3B4C5D6E7F8A9 /* EditorView.swift in Sources */,
+				DC1FEC7B8DE44A0C8E12CA1B /* MacSidebarView.swift in Sources */,
+				C9455C61D7584761B9A58942 /* MacCommands.swift in Sources */,
+				6C2163029A7A422AA2767533 /* SettingsView.swift in Sources */,
 				E6F7A8B9C0D1E2F3A4B5C6D7 /* Resource.swift in Sources */,
 				F1A1A1A1A1A1A1A1A1A1A1A1 /* JoplinCloudApi.swift in Sources */,
 				F3A3A3A3A3A3A3A3A3A3A3A3 /* JoplinAccountStore.swift in Sources */,
@@ -479,7 +490,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -536,7 +547,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -567,7 +578,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ikuteam.NotesTN;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -599,7 +610,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ikuteam.NotesTN;
 				PRODUCT_NAME = "$(TARGET_NAME)";

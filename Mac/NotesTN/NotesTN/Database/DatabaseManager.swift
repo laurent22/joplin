@@ -332,6 +332,18 @@ final class DatabaseManager {
         return count
     }
 
+    /// Counts for the sidebar's All Notes and Trash rows.
+    func noteCount(trashed: Bool) -> Int {
+        var count = 0
+        let sql = trashed
+            ? "SELECT COUNT(*) FROM notes WHERE deleted_time != 0"
+            : "SELECT COUNT(*) FROM notes WHERE is_conflict = 0 AND deleted_time = 0"
+        withStatement(sql) { stmt in
+            if sqlite3_step(stmt) == SQLITE_ROW { count = Int(sqlite3_column_int64(stmt, 0)) }
+        }
+        return count
+    }
+
     /// Every trashed note across all notebooks, most-recently-deleted first.
     func fetchTrashedNotes() -> [Note] {
         var notes: [Note] = []

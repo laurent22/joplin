@@ -27,6 +27,8 @@ struct EditorSelectionState {
     var linkHref: String? = nil
 }
 
+enum EditorPickerKind { case image, attachment }
+
 // MARK: - Editor Coordinator (owns WKWebView, bridges Swift ↔ JS)
 
 @MainActor
@@ -35,6 +37,21 @@ final class EditorCoordinator: NSObject, ObservableObject, WKScriptMessageHandle
     // MARK: Published
     @Published var selectionState = EditorSelectionState()
     @Published var isReady = false
+    @Published var isFocused = false
+    // Requests shared by the toolbar, the menu bar (MacCommands) and the web view.
+    @Published var pickerRequest: EditorPickerKind?
+    @Published var isShowingAddLink = false
+    @Published var isShowingMarkdownSource = false
+    @Published var isShowingFind = false
+    @Published var isShowingReplace = false
+    @Published var isShowingTrashedEditAlert = false
+    // Bumped by every ⌘F so an already-open find field takes focus again.
+    @Published var findFocusRequest = 0
+    var linkInitialURL = ""
+    var linkInitialName = ""
+    // False for the placeholder coordinator the empty editor uses to draw a disabled toolbar.
+    var hasNote = true
+    var readOnly = false
 
     // The last content this editor is known to hold — written by setContent (what we
     // pushed in) and by the contentChanged message (what the user typed). Lets
@@ -134,6 +151,9 @@ final class EditorCoordinator: NSObject, ObservableObject, WKScriptMessageHandle
                 NSWorkspace.shared.open(url)
             }
 
+        case "focusChanged":
+            isFocused = body["focused"] as? Bool ?? false
+
         case "findResult":
             onFindResult?(body["count"] as? Int ?? 0, body["index"] as? Int ?? 0)
 
@@ -198,6 +218,44 @@ final class EditorCoordinator: NSObject, ObservableObject, WKScriptMessageHandle
     func findNext() { webView?.evaluateJavaScript("window.NativeEditor?.findNext()") }
     func findPrevious() { webView?.evaluateJavaScript("window.NativeEditor?.findPrevious()") }
     func endFind() { webView?.evaluateJavaScript("window.NativeEditor?.endFind()") }
+
+    func highlightSearch(_ query: String) {
+        guard let wv = webView, let json = Self.jsonString(query) else { return }
+        wv.evaluateJavaScript("window.NativeEditor?.highlightSearch(\(json))")
+    }
+
+    func setDateLine(_ text: String) {
+        guard let wv = webView, let json = Self.jsonString(text) else { return }
+        wv.evaluateJavaScript("window.NativeEditor?.setDateLine(\(json))")
+    }
+
+    /// Opens the Add Link sheet with the Name field filled from the current selection.
+    func requestAddLink() {
+        linkInitialURL = selectionState.linkHref ?? ""
+        webView?.evaluateJavaScript("window.NativeEditor?.getSelectedText()") { [weak self] result, _ in
+            MainActor.assumeIsolated {
+                self?.linkInitialName = result as? String ?? ""
+                self?.isShowingAddLink = true
+            }
+        }
+    }
+
+    func insertLink(href: String, name: String) {
+        guard let wv = webView, let hrefJSON = Self.jsonString(href), let nameJSON = Self.jsonString(name) else { return }
+        wv.window?.makeFirstResponder(wv)
+        wv.evaluateJavaScript("window.NativeEditor?.insertLink(\(hrefJSON), \(nameJSON))")
+    }
+
+    func openFind(replace: Bool = false) {
+        if replace && !readOnly { isShowingReplace = true }
+        isShowingFind = true
+        findFocusRequest += 1
+    }
+
+    private static func jsonString(_ value: String) -> String? {
+        guard let data = try? JSONEncoder().encode(value) else { return nil }
+        return String(data: data, encoding: .utf8)
+    }
 
     func replaceCurrent(_ replacement: String) { evaluateReplace("replaceCurrent", replacement) }
     func replaceAll(_ replacement: String) { evaluateReplace("replaceAll", replacement) }
@@ -329,6 +387,48 @@ final class EditorCoordinator: NSObject, ObservableObject, WKScriptMessageHandle
 /// events on the SwiftUI toolbar above it and on the note-list column to the left.
 /// Overriding hitTest here ensures only points actually inside this view are handled.
 final class EditorWebView: WKWebView {
+    weak var coordinator: EditorCoordinator?
+
+    private static let editingKeys: Set<NSEvent.SpecialKey> = [.delete, .backspace, .deleteForward, .carriageReturn, .newline, .enter, .tab]
+
+    // A trashed note is read-only; typing into it asks to restore it, as in Notes.
+    override func keyDown(with event: NSEvent) {
+        if let coordinator, coordinator.readOnly,
+           event.modifierFlags.intersection([.command, .control]).isEmpty,
+           event.specialKey == nil || Self.editingKeys.contains(event.specialKey!), event.keyCode != 53,
+           let characters = event.characters, !characters.isEmpty {
+            coordinator.isShowingTrashedEditAlert = true
+            return
+        }
+        super.keyDown(with: event)
+    }
+
+    // Edit > Find (the system submenu) drives the in-note find bar.
+    @objc override func performTextFinderAction(_ sender: Any?) {
+        guard let coordinator, let tag = (sender as? NSValidatedUserInterfaceItem)?.tag,
+              let action = NSTextFinder.Action(rawValue: tag) else { return }
+        switch action {
+        case .showFindInterface: coordinator.openFind()
+        case .showReplaceInterface: coordinator.openFind(replace: true)
+        case .nextMatch: coordinator.isShowingFind ? coordinator.findNext() : coordinator.openFind()
+        case .previousMatch: coordinator.isShowingFind ? coordinator.findPrevious() : coordinator.openFind()
+        case .hideFindInterface:
+            coordinator.isShowingFind = false
+            coordinator.focus()
+        default: break
+        }
+    }
+
+    @objc func performFindPanelAction(_ sender: Any?) {
+        performTextFinderAction(sender)
+    }
+
+    override func validateUserInterfaceItem(_ item: NSValidatedUserInterfaceItem) -> Bool {
+        if item.action == #selector(performTextFinderAction(_:)) || item.action == #selector(performFindPanelAction(_:)) {
+            return coordinator?.hasNote == true
+        }
+        return super.validateUserInterfaceItem(item)
+    }
     override func hitTest(_ point: NSPoint) -> NSView? {
         // `point` arrives in the superview's coordinate space, not our own — must
         // convert before comparing against `bounds`, or this check is meaningless
@@ -374,7 +474,9 @@ struct RichTextEditorView: NSViewRepresentable {
         let wv = EditorWebView(frame: .zero, configuration: config)
         wv.setValue(false, forKey: "drawsBackground") // transparent — body bg handles color
         wv.navigationDelegate = coordinator
+        wv.coordinator = coordinator
         coordinator.webView = wv
+        coordinator.readOnly = readOnly
         #if DEBUG
         // Lets Safari's Develop menu attach to this WKWebView (Develop > [device name] >
         // NotesTN) for real console errors/breakpoints — debug builds only.
@@ -393,7 +495,8 @@ struct RichTextEditorView: NSViewRepresentable {
             // URLComponents since htmlURL is a file:// URL (query strings are still
             // valid there and WKWebView preserves them for location.search).
             var components = URLComponents(url: htmlURL, resolvingAgainstBaseURL: false)
-            if readOnly { components?.queryItems = [URLQueryItem(name: "readonly", value: "1")] }
+            components?.queryItems = [URLQueryItem(name: "platform", value: "mac")]
+            if readOnly { components?.queryItems?.append(URLQueryItem(name: "readonly", value: "1")) }
             wv.loadFileURL(components?.url ?? htmlURL, allowingReadAccessTo: accessRoot)
         } else {
             let fallback = "<html><body><p style='color:red'>editor.html not found in bundle</p></body></html>"
@@ -419,31 +522,28 @@ struct RichTextEditorView: NSViewRepresentable {
 
 struct EditorView: View {
     @EnvironmentObject var appState: AppState
+    // Drives the disabled toolbar shown when no note is open.
+    @StateObject private var placeholderCoordinator: EditorCoordinator = {
+        let coordinator = EditorCoordinator()
+        coordinator.hasNote = false
+        return coordinator
+    }()
+    @State private var isShowingFormatPopover = false
 
     var body: some View {
         Group {
             if let note = appState.selectedNote {
                 NoteEditorView(note: note, readOnly: appState.isTrashSelected)
-                    .id(note.id)
+                    // Read-only is baked into the web view, so a restored note gets a new one.
+                    .id("\(note.id)-\(appState.isTrashSelected)")
             } else {
-                emptyState
+                Color(nsColor: .textBackgroundColor)
+                    .ignoresSafeArea()
+                    .toolbar {
+                        EditorToolbar(coordinator: placeholderCoordinator, isShowingFormatPopover: $isShowingFormatPopover)
+                    }
             }
         }
-    }
-
-    private var emptyState: some View {
-        VStack(spacing: 10) {
-            Image(systemName: "square.and.pencil")
-                .font(.system(size: 48))
-                .foregroundStyle(.quaternary)
-            Text("Select or create a note")
-                .foregroundStyle(.secondary)
-            Button("New Note") { appState.createNote() }
-                .keyboardShortcut("n", modifiers: .command)
-                .tint(Color.secondary)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.windowBackground)
     }
 }
 
@@ -456,21 +556,14 @@ struct NoteEditorView: View {
     // Which picker the single .fileImporter below is currently standing in for.
     // pickerKind is set before opening and left alone afterwards, so it's still valid
     // when the completion handler runs.
-    private enum PickerKind { case image, attachment }
-    @State private var pickerKind: PickerKind = .image
+    @State private var pickerKind: EditorPickerKind = .image
     @State private var isShowingPicker = false
     // A picked file waiting on the "this is a large file" confirmation below.
     @State private var oversizeAttachment: URL?
-    @State private var showPermanentDeleteConfirm = false
-    // In-note find (Cmd+Shift+F) — highlights matches in the editor, distinct from the
-    // global note-list search.
-    @State private var showFind = false
+    @State private var isShowingFormatPopover = false
     @State private var findQuery = ""
     @State private var findCount = 0
     @State private var findCurrent = 0
-    // Replace row (Apple Notes-style toggle). While it's showing, matching switches
-    // to case-sensitive so a replace only rewrites the exact text it highlighted.
-    @State private var showReplace = false
     @State private var replaceText = ""
     // Captured below (see the GeometryReader background) from the safe area the
     // native window toolbar reserves — pushed into the WebView's own content via
@@ -490,44 +583,29 @@ struct NoteEditorView: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
+        dialogs(editorContent)
+    }
 
-            // In-note find bar (Cmd+Shift+F) — sits under the window toolbar like
-            // Apple Notes' find bar, above the editor content.
-            if showFind {
+    private var editorContent: some View {
+        VStack(spacing: 0) {
+            if editorCoordinator.isShowingFind {
                 EditorFindBar(
                     query: $findQuery,
                     replacement: $replaceText,
-                    showReplace: $showReplace,
+                    showReplace: $editorCoordinator.isShowingReplace,
                     current: findCurrent,
                     count: findCount,
+                    canReplace: !readOnly,
+                    focusRequest: editorCoordinator.findFocusRequest,
                     onNext: { editorCoordinator.findNext() },
                     onPrevious: { editorCoordinator.findPrevious() },
                     onReplace: { editorCoordinator.replaceCurrent(replaceText) },
                     onReplaceAll: { editorCoordinator.replaceAll(replaceText) },
-                    onClose: closeFind
-                )
-                Divider()
-            }
-
-            // MARK: Toolbar
-            // A trashed note is read-only until restored — Restore/Delete Permanently
-            // replace the formatting toolbar entirely instead of sitting alongside it.
-            // The formatting toolbar itself now lives in the native window toolbar
-            // (see .toolbar below) instead of this content row, so it renders on the
-            // same line as NoteListView's search field / New Note button.
-            if readOnly {
-                HStack {
-                    Spacer()
-                    Button("Restore") {
-                        guard let note = trashedNote else { return }
-                        appState.restoreNote(note)
+                    onClose: {
+                        editorCoordinator.isShowingFind = false
+                        editorCoordinator.focus()
                     }
-                    Button("Delete Permanently", role: .destructive) { showPermanentDeleteConfirm = true }
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 11)
-                .background(.windowBackground)
+                )
             }
 
             // Title now lives inside the shared ProseMirror doc (see
@@ -540,7 +618,7 @@ struct NoteEditorView: View {
             // scrolling up underneath the toolbar instead of hard-clipping against it.
             RichTextEditorView(coordinator: editorCoordinator, readOnly: readOnly)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .ignoresSafeArea(edges: .top)
+                .ignoresSafeArea(edges: editorCoordinator.isShowingFind ? [] : .top)
         }
         .background(
             // Reads the safe area the native toolbar reserves — measured on this
@@ -552,63 +630,32 @@ struct NoteEditorView: View {
                     .onChange(of: proxy.safeAreaInsets.top) { _, newValue in toolbarInset = newValue }
             }
         )
-        .onChange(of: toolbarInset) { _, newValue in editorCoordinator.setTopInset(newValue) }
-        .onChange(of: editorCoordinator.isReady) { _, ready in
-            // The CSS variable lives on the page itself, so a fresh page load (or
-            // switching notes, which re-keys this whole view — see NotesNavHost)
-            // starts back at the default 0px until we push the current value again.
-            if ready { editorCoordinator.setTopInset(toolbarInset) }
+        .onChange(of: toolbarInset) { _, _ in pushTopInset() }
+        .onChange(of: editorCoordinator.isShowingFind) { _, showing in
+            pushTopInset()
+            if showing {
+                editorCoordinator.find(findQuery, caseSensitive: editorCoordinator.isShowingReplace)
+            } else {
+                endFind()
+            }
         }
-        .background(.windowBackground)
+        .background(Color(nsColor: .textBackgroundColor))
+        .focusedSceneObject(editorCoordinator)
         .toolbar {
-            // Merges into the same native window toolbar as NoteListView's search
-            // field / New Note button (NavigationSplitView combines .toolbar content
-            // from every visible column into one bar) — not shown for a read-only
-            // (trashed) note, which uses Restore/Delete Permanently instead.
-            if !readOnly {
-                ToolbarItem(placement: .primaryAction) {
-                    EditorToolbarView(
-                        coordinator: editorCoordinator,
-                        onInsertImage: { pickerKind = .image; isShowingPicker = true },
-                        onAttachFile: { pickerKind = .attachment; isShowingPicker = true }
-                    )
-                }
-            }
-        }
-        .confirmationDialog(
-            "Permanently delete this note?",
-            isPresented: $showPermanentDeleteConfirm,
-            titleVisibility: .visible
-        ) {
-            Button("Delete Permanently", role: .destructive) {
-                guard let note = trashedNote else { return }
-                appState.permanentlyDeleteNote(note)
-            }
-            Button("Cancel", role: .cancel) {}
-        } message: {
-            Text("This can't be undone.")
+            EditorToolbar(coordinator: editorCoordinator, isShowingFormatPopover: $isShowingFormatPopover)
         }
         .onAppear {
+            editorCoordinator.readOnly = readOnly
             setupCallbacks()
         }
-        // Cmd+Shift+F toggles the in-note find bar (a hidden, zero-opacity button just
-        // to host the keyboard shortcut).
-        .background(
-            Button("") { toggleFind() }
-                .keyboardShortcut("f", modifiers: [.command, .shift])
-                .opacity(0)
-        )
-        // Cmd+Option+F — the standard macOS Find & Replace shortcut: opens find with
-        // the replace row already showing.
-        .background(
-            Button("") { openFindWithReplace() }
-                .keyboardShortcut("f", modifiers: [.command, .option])
-                .opacity(0)
-        )
-        .onChange(of: findQuery) { _, q in editorCoordinator.find(q, caseSensitive: showReplace) }
+        .onChange(of: findQuery) { _, q in
+            guard editorCoordinator.isShowingFind else { return }
+            editorCoordinator.find(q, caseSensitive: editorCoordinator.isShowingReplace)
+        }
         // Toggling Replace changes how matches are found (exact case while replacing),
         // so re-run the search against the current query.
-        .onChange(of: showReplace) { _, replacing in
+        .onChange(of: editorCoordinator.isShowingReplace) { _, replacing in
+            guard editorCoordinator.isShowingFind else { return }
             editorCoordinator.find(findQuery, caseSensitive: replacing)
         }
         .onChange(of: editorCoordinator.isReady) { _, ready in
@@ -617,8 +664,11 @@ struct NoteEditorView: View {
             // reload (see EditorCoordinator.webViewWebContentProcessDidTerminate),
             // by which time the init-time snapshot may be stale.
             guard ready else { return }
+            pushTopInset()
             let note = currentNote
             editorCoordinator.setContent(title: note?.title ?? initialTitle, body: note?.body ?? initialBody)
+            pushDateLine()
+            reapplyHighlights()
             // A just-created note starts with the cursor in its empty title, so typing
             // names it straight away (see AppState.createNote). setContent leaves the
             // selection at the very start of the document, which is the title, so this
@@ -635,10 +685,26 @@ struct NoteEditorView: View {
         // reacting to the echo of the editor's own autosaves.
         .onChange(of: currentNote?.updatedTime) { _, _ in
             guard editorCoordinator.isReady, let note = currentNote else { return }
+            pushDateLine()
             if note.title != editorCoordinator.lastKnownTitle || note.body != editorCoordinator.lastKnownBody {
                 editorCoordinator.setContent(title: note.title, body: note.body)
+                reapplyHighlights()
             }
         }
+        .onChange(of: appState.searchText) { _, query in
+            guard editorCoordinator.isReady, !editorCoordinator.isShowingFind else { return }
+            editorCoordinator.highlightSearch(query)
+        }
+        .onChange(of: editorCoordinator.pickerRequest) { _, request in
+            guard let request, !readOnly else { return }
+            editorCoordinator.pickerRequest = nil
+            pickerKind = request
+            isShowingPicker = true
+        }
+    }
+
+    private func dialogs(_ content: some View) -> some View {
+        content
         // ONE file importer for both the image and attachment pickers, switching its
         // allowed types on pickerKind. Two .fileImporter modifiers stacked on the same
         // view is a SwiftUI trap — the second one often never presents.
@@ -652,22 +718,67 @@ struct NoteEditorView: View {
             case .attachment: handleAttachmentPick(result: result)
             }
         }
-        .confirmationDialog(
+        .alert(
             "Attach this large file?",
             isPresented: Binding(
                 get: { oversizeAttachment != nil },
                 set: { if !$0 { oversizeAttachment = nil } }
-            ),
-            titleVisibility: .visible
+            )
         ) {
+            Button("Cancel", role: .cancel) { oversizeAttachment = nil }
             Button("Attach") {
                 if let url = oversizeAttachment { attachFile(at: url) }
                 oversizeAttachment = nil
             }
-            Button("Cancel", role: .cancel) { oversizeAttachment = nil }
+            .keyboardShortcut(.defaultAction)
         } message: {
             Text("This file is over 20 MB. It will be uploaded to Joplin Cloud and downloaded onto your other devices.")
         }
+        .alert("Notes in the Trash can’t be edited.", isPresented: $editorCoordinator.isShowingTrashedEditAlert) {
+            Button("Cancel", role: .cancel) {}
+            Button("Restore") {
+                // Opens the restored note in its notebook so it can be edited straight away.
+                guard let note = trashedNote else { return }
+                appState.restoreNote(note)
+                appState.selectFolder(appState.folders.first { $0.id == note.folderId })
+                appState.selectNote(note)
+            }
+            .keyboardShortcut(.defaultAction)
+        } message: {
+            Text("To edit this note, you’ll need to restore it.")
+        }
+        .sheet(isPresented: $editorCoordinator.isShowingAddLink) {
+            AddLinkSheet(initialURL: editorCoordinator.linkInitialURL, initialName: editorCoordinator.linkInitialName) { url, name in
+                editorCoordinator.insertLink(href: url, name: name)
+            }
+        }
+        .sheet(isPresented: $editorCoordinator.isShowingMarkdownSource) {
+            MarkdownSourceView(markdown: markdownSource)
+        }
+    }
+
+    private var markdownSource: String {
+        let body: String = HtmlToMarkdown.convert(editorCoordinator.lastKnownBody)
+        return "# " + editorCoordinator.lastKnownTitle + "\n\n" + body
+    }
+
+    private func pushTopInset() {
+        // With the find bar open the web view sits below it rather than under the toolbar.
+        editorCoordinator.setTopInset(editorCoordinator.isShowingFind ? 0 : toolbarInset)
+    }
+
+    // setContent rebuilds the editor state, which drops find and search matches.
+    private func reapplyHighlights() {
+        if editorCoordinator.isShowingFind {
+            editorCoordinator.find(findQuery, caseSensitive: editorCoordinator.isShowingReplace)
+        } else if !appState.searchText.isEmpty {
+            editorCoordinator.highlightSearch(appState.searchText)
+        }
+    }
+
+    private func pushDateLine() {
+        guard let note = currentNote else { return }
+        editorCoordinator.setDateLine(editorDateLine(note.updatedTime))
     }
 
     private var trashedNote: Note? {
@@ -716,24 +827,14 @@ struct NoteEditorView: View {
 
     // MARK: Find
 
-    private func toggleFind() {
-        if showFind { closeFind() } else { showFind = true }
-    }
-
-    /// Cmd+Option+F: open find with the replace row already showing.
-    private func openFindWithReplace() {
-        showReplace = true
-        showFind = true
-    }
-
-    private func closeFind() {
-        showFind = false
-        showReplace = false
+    private func endFind() {
+        editorCoordinator.isShowingReplace = false
         findQuery = ""
         replaceText = ""
         findCount = 0
         findCurrent = 0
         editorCoordinator.endFind()
+        if !appState.searchText.isEmpty { editorCoordinator.highlightSearch(appState.searchText) }
     }
 
     // MARK: Attachment handling
@@ -1024,308 +1125,455 @@ final class AttachmentPreview: NSObject, QLPreviewPanelDataSource {
     }
 }
 
+// MARK: - Date line
+
+// .long + .short gives "28 September 2026 at 12:21", with the locale's own connector.
+private let editorDateFormatter: DateFormatter = {
+    let f = DateFormatter(); f.dateStyle = .long; f.timeStyle = .short; return f
+}()
+
+func editorDateLine(_ date: Date) -> String {
+    editorDateFormatter.string(from: date)
+}
+
+// MARK: - Toolbar
+
+/// The editor column's toolbar: New Note, then one group (Aa, Checklist, Table,
+/// Attach, More). The search field comes from ContentView's .searchable, which macOS
+/// places after these.
+struct EditorToolbar: ToolbarContent {
+    @EnvironmentObject var appState: AppState
+    @ObservedObject var coordinator: EditorCoordinator
+    @Binding var isShowingFormatPopover: Bool
+
+    private var canEdit: Bool { coordinator.hasNote && !coordinator.readOnly }
+    private var state: EditorSelectionState { coordinator.selectionState }
+
+    var body: some ToolbarContent {
+        // Not .navigation: macOS puts that right after the list column's title.
+        ToolbarItem {
+            Button { appState.createNote() } label: {
+                Label("New Note", systemImage: "square.and.pencil")
+            }
+            .help("New Note")
+            .disabled(appState.isTrashSelected)
+        }
+
+        ToolbarSpacer(.flexible)
+
+        ToolbarItemGroup {
+            Button { isShowingFormatPopover = true } label: {
+                Label("Format", systemImage: "textformat")
+            }
+            .help("Format")
+            .disabled(!canEdit || coordinator.isShowingFind || !(coordinator.isFocused || isShowingFormatPopover))
+            .popover(isPresented: $isShowingFormatPopover, arrowEdge: .bottom) {
+                FormatPopover(coordinator: coordinator, isPresented: $isShowingFormatPopover)
+            }
+
+            Button { coordinator.execCommand("taskList") } label: {
+                Label("Checklist", systemImage: "checklist")
+            }
+            .help("Checklist")
+            .disabled(!canEdit || coordinator.isShowingFind || state.inTable)
+
+            TableMenu(coordinator: coordinator)
+                .disabled(!canEdit || coordinator.isShowingFind)
+
+            Menu {
+                Button("Insert Image…") { coordinator.pickerRequest = .image }
+                Button("Attach File…") { coordinator.pickerRequest = .attachment }
+                    .keyboardShortcut("a", modifiers: [.command, .shift])
+            } label: {
+                Label("Attach", systemImage: "paperclip")
+            }
+            .menuIndicator(.hidden)
+            .help("Attach")
+            .disabled(!canEdit)
+
+            Menu {
+                Button("Show Markdown Source") { coordinator.isShowingMarkdownSource = true }
+                    .keyboardShortcut("u", modifiers: [.command, .option])
+                Divider()
+                Button("Add Link…") { coordinator.requestAddLink() }
+                    .keyboardShortcut("k", modifiers: .command)
+                Divider()
+                Button("Find…") { coordinator.openFind() }
+                    .keyboardShortcut("f", modifiers: .command)
+            } label: {
+                Label("More", systemImage: "ellipsis")
+            }
+            .menuIndicator(.hidden)
+            .help("More")
+            .disabled(!canEdit)
+        }
+
+        ToolbarSpacer(.flexible)
+    }
+}
+
+/// The toolbar's table control: inserts a table, or inside one offers the row and
+/// column actions. Every item runs a prosemirror-tables command through the shared
+/// bundle (see commands.ts), which is also what decides whether an action applies.
+struct TableMenu: View {
+    @ObservedObject var coordinator: EditorCoordinator
+
+    var body: some View {
+        if coordinator.selectionState.inTable {
+            Menu {
+                Button("Add Row Above") { coordinator.execCommand("rowBefore") }
+                Button("Add Row Below") { coordinator.execCommand("rowAfter") }
+                Button("Delete Row") { coordinator.execCommand("deleteRow") }
+                Divider()
+                Button("Add Column Before") { coordinator.execCommand("columnBefore") }
+                Button("Add Column After") { coordinator.execCommand("columnAfter") }
+                Button("Delete Column") { coordinator.execCommand("deleteColumn") }
+                Divider()
+                Button("Delete Table") { coordinator.execCommand("deleteTable") }
+            } label: {
+                Label("Table", systemImage: "tablecells")
+            }
+            .menuIndicator(.hidden)
+            .help("Table")
+        } else {
+            Button {
+                coordinator.execCommand("table", value: ["rows": 3, "cols": 3])
+            } label: {
+                Label("Table", systemImage: "tablecells")
+            }
+            .help("Table")
+        }
+    }
+}
+
+// MARK: - Format popover
+
+/// The Aa popover (Figma component Editor/Format Popover): inline styles and indent
+/// on top, then the paragraph styles, each drawn in its own style.
+private struct FormatPopover: View {
+    @ObservedObject var coordinator: EditorCoordinator
+    @Binding var isPresented: Bool
+
+    private struct Style {
+        let title: String
+        let command: String
+        let font: Font
+        let isCurrent: (EditorSelectionState) -> Bool
+        var isChip = false
+    }
+
+    private static let styles: [Style] = [
+        Style(title: "Title", command: "heading1", font: .system(size: 21, weight: .semibold)) { $0.headingLevel == 1 },
+        Style(title: "Heading", command: "heading2", font: .system(size: 16, weight: .bold)) { $0.headingLevel == 2 || $0.headingLevel == 3 },
+        Style(title: "Subheading", command: "heading4", font: .system(size: 13, weight: .bold)) { $0.headingLevel >= 4 },
+        Style(title: "Body", command: "paragraph", font: .system(size: 13)) { isBody($0) },
+        Style(title: "Monostyled", command: "code", font: .system(size: 13, design: .monospaced)) { $0.code },
+        Style(title: "Code Block", command: "codeBlock", font: .system(size: 13, design: .monospaced), isCurrent: { $0.inCode }, isChip: true),
+        Style(title: "• Bulleted List", command: "bulletList", font: .system(size: 13)) { $0.inBulletList },
+        Style(title: "1. Numbered List", command: "orderedList", font: .system(size: 13)) { $0.inOrderedList },
+    ]
+    private static let blockQuote = Style(title: "| Block Quote", command: "blockquote", font: .system(size: 13)) { $0.inBlockquote }
+
+    static let ink = dynamicColor(light: 0x424242, dark: 0xFFFFFF)
+
+    static func isBody(_ state: EditorSelectionState) -> Bool {
+        state.headingLevel == 0 && !state.code && !state.inCode && !state.inBulletList && !state.inOrderedList && !state.inBlockquote
+    }
+
+    var body: some View {
+        let state = coordinator.selectionState
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(spacing: 0) {
+                markButton("bold", "Bold", state.bold, "bold")
+                markButton("italic", "Italic", state.italic, "italic")
+                markButton("strikethrough", "Strikethrough", state.strikethrough, "strikethrough")
+                markButton("highlighter", "Highlight", state.highlight, "highlight")
+                PopoverSeparator()
+                    .frame(width: 1, height: 18)
+                    .padding(.leading, 3)
+                    .padding(.trailing, 5)
+                markButton("decrease.indent", "Decrease Indent", false, "outdent", width: 26)
+                markButton("increase.indent", "Increase Indent", false, "indent", width: 26)
+            }
+            .padding(.leading, 2)
+            .frame(height: 39)
+
+            PopoverSeparator().frame(height: 1).padding(.horizontal, 7)
+            VStack(alignment: .leading, spacing: 0) {
+                ForEach(Self.styles, id: \.title) { styleRow($0, state: state) }
+            }
+            .padding(.top, 7)
+            .padding(.bottom, 6)
+            PopoverSeparator().frame(height: 1).padding(.horizontal, 7)
+            styleRow(Self.blockQuote, state: state)
+                .padding(.vertical, 7)
+        }
+        .foregroundStyle(Self.ink)
+        .frame(width: 179)
+    }
+
+    private func markButton(_ symbol: String, _ help: String, _ isActive: Bool, _ command: String, width: CGFloat = 28) -> some View {
+        Button { coordinator.execCommand(command) } label: {
+            Image(systemName: symbol)
+                .font(.system(size: 14, weight: .medium))
+                .frame(width: width, height: 26)
+                .foregroundStyle(isActive ? Color.accentColor : Self.ink)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .help(help)
+    }
+
+    private func styleRow(_ style: Style, state: EditorSelectionState) -> some View {
+        Button {
+            coordinator.execCommand(style.command)
+            isPresented = false
+        } label: {
+            HStack(spacing: 0) {
+                Image(systemName: "checkmark")
+                    .font(.system(size: 11))
+                    .padding(.leading, 16)
+                    .frame(width: 36, alignment: .leading)
+                    .opacity(style.isCurrent(state) ? 1 : 0)
+                Text(style.title)
+                    .font(style.font)
+                    .padding(.horizontal, style.isChip ? 5 : 0)
+                    .padding(.vertical, style.isChip ? 2 : 0)
+                    .background(style.isChip ? RoundedRectangle(cornerRadius: 4).fill(Color.primary.opacity(0.09)) : nil)
+                    .padding(.leading, style.isChip ? -5 : 0)
+                Spacer(minLength: 0)
+            }
+            .frame(height: 29)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+private struct PopoverSeparator: View {
+    var body: some View { Rectangle().fill(Color(white: 0xAA / 255)) }
+}
+
 // MARK: - Find bar
 
-/// In-note find bar (Cmd+Shift+F, or Cmd+Option+F to open with Replace showing).
-/// Search field, match counter, prev/next, a Replace toggle, and — when it's on — a
-/// second row with the replacement field and Replace / Replace All, mirroring the
-/// Mac Notes find bar.
+/// In-note find bar (⌘F): a search field with the match count, previous/next, Done
+/// and the Replace checkbox, plus a replace row when that's on. Laid out as the
+/// Figma Editor/Find Bar component (Notes' own find bar).
 struct EditorFindBar: View {
     @Binding var query: String
     @Binding var replacement: String
     @Binding var showReplace: Bool
     let current: Int
     let count: Int
+    let canReplace: Bool
+    let focusRequest: Int
     var onNext: () -> Void
     var onPrevious: () -> Void
     var onReplace: () -> Void
     var onReplaceAll: () -> Void
     var onClose: () -> Void
-    @FocusState private var focused: Bool
 
     var body: some View {
         VStack(spacing: 6) {
             HStack(spacing: 8) {
-                Toggle("Replace", isOn: $showReplace)
-                    .toggleStyle(.checkbox)
-                Image(systemName: "magnifyingglass").foregroundStyle(.secondary)
-                TextField("Find in note", text: $query)
-                    .textFieldStyle(.plain)
-                    .autocorrectionDisabled()
-                    .focused($focused)
-                    .onSubmit(onNext)
-                if !query.isEmpty {
-                    Text(count > 0 ? "\(current)/\(count)" : "0/0")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .monospacedDigit()
+                FindField(text: $query, count: query.isEmpty ? nil : count, focusRequest: focusRequest, onNext: onNext, onPrevious: onPrevious, onCancel: onClose)
+                ControlGroup {
+                    // ⌘G / ⇧⌘G while the field has focus: Edit > Find stops at its field editor.
+                    Button(action: onPrevious) { Image(systemName: "chevron.left") }
+                        .keyboardShortcut("g", modifiers: [.command, .shift])
+                        .help("Previous")
+                    Button(action: onNext) { Image(systemName: "chevron.right") }
+                        .keyboardShortcut("g", modifiers: .command)
+                        .help("Next")
                 }
-                Button(action: onPrevious) { Image(systemName: "chevron.up") }
-                    .buttonStyle(.borderless)
-                    .disabled(count == 0)
-                Button(action: onNext) { Image(systemName: "chevron.down") }
-                    .buttonStyle(.borderless)
-                    .disabled(count == 0)
+                .fixedSize()
+                .disabled(count == 0)
                 Button("Done", action: onClose)
-                    .keyboardShortcut(.cancelAction)
+                if canReplace {
+                    Toggle("Replace", isOn: $showReplace)
+                        .toggleStyle(.checkbox)
+                        .padding(.leading, -2)
+                }
             }
-            if showReplace {
+            if showReplace && canReplace {
                 HStack(spacing: 8) {
-                    Image(systemName: "arrow.2.squarepath").foregroundStyle(.secondary)
-                    TextField("Replace with", text: $replacement)
-                        .textFieldStyle(.plain)
-                        .autocorrectionDisabled()
+                    TextField("Replace", text: $replacement)
+                        .textFieldStyle(.roundedBorder)
+                        .controlSize(.regular)
+                        .font(.system(size: 11))
                         .onSubmit(onReplace)
-                    Button("Replace", action: onReplace)
-                        .disabled(count == 0)
-                    Button("Replace All", action: onReplaceAll)
-                        .disabled(count == 0)
+                    HStack(spacing: 6) {
+                        Button(action: onReplace) { Text("Replace").frame(maxWidth: .infinity) }
+                            .frame(width: 68)
+                        Button(action: onReplaceAll) { Text("All").frame(maxWidth: .infinity) }
+                            .frame(width: 40)
+                    }
+                    .disabled(count == 0)
+                    Spacer(minLength: 0)
+                        .frame(width: 36)
                 }
             }
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 8)
-        .background(.bar)
-        .onAppear { focused = true }
+        .controlSize(.small)
+        .padding(.horizontal, 7)
+        .padding(.vertical, 5)
+        .background(dynamicColor(light: 0xFDFDFD, dark: 0x212525))
+        .overlay(alignment: .bottom) { Divider() }
     }
 }
 
-// MARK: - Toolbar
+/// NSSearchField with the match count drawn inside it, left of the clear button.
+private struct FindField: NSViewRepresentable {
+    @Binding var text: String
+    let count: Int?
+    let focusRequest: Int
+    var onNext: () -> Void
+    var onPrevious: () -> Void
+    var onCancel: () -> Void
 
-struct EditorToolbarView: View {
-    @ObservedObject var coordinator: EditorCoordinator
-    var onInsertImage: () -> Void
-    var onAttachFile: () -> Void
-    @State private var showMarkdownSource = false
+    func makeNSView(context: Context) -> NSSearchField {
+        let field = NSSearchField()
+        field.delegate = context.coordinator
+        field.controlSize = .regular
+        field.font = .systemFont(ofSize: NSFont.smallSystemFontSize)
+        field.sendsSearchStringImmediately = true
+        field.focusRingType = .exterior
+        let countLabel = NSTextField(labelWithString: "")
+        countLabel.font = .systemFont(ofSize: 13)
+        countLabel.textColor = .secondaryLabelColor
+        countLabel.translatesAutoresizingMaskIntoConstraints = false
+        field.addSubview(countLabel)
+        NSLayoutConstraint.activate([
+            countLabel.centerYAnchor.constraint(equalTo: field.centerYAnchor),
+            countLabel.trailingAnchor.constraint(equalTo: field.trailingAnchor, constant: -20),
+        ])
+        context.coordinator.countLabel = countLabel
+        DispatchQueue.main.async { field.window?.makeFirstResponder(field) }
+        return field
+    }
+
+    func updateNSView(_ field: NSSearchField, context: Context) {
+        context.coordinator.parent = self
+        if field.stringValue != text { field.stringValue = text }
+        if context.coordinator.focusRequest != focusRequest {
+            context.coordinator.focusRequest = focusRequest
+            DispatchQueue.main.async {
+                field.window?.makeFirstResponder(field)
+                field.selectText(nil)
+            }
+        }
+        context.coordinator.countLabel?.stringValue = count.map(String.init) ?? ""
+    }
+
+    func makeCoordinator() -> Coordinator { Coordinator(parent: self) }
+
+    final class Coordinator: NSObject, NSSearchFieldDelegate {
+        var parent: FindField
+        var focusRequest: Int
+        weak var countLabel: NSTextField?
+
+        init(parent: FindField) {
+            self.parent = parent
+            focusRequest = parent.focusRequest
+        }
+
+        func controlTextDidChange(_ obj: Notification) {
+            guard let field = obj.object as? NSSearchField else { return }
+            parent.text = field.stringValue
+        }
+
+        func control(_ control: NSControl, textView: NSTextView, doCommandBy selector: Selector) -> Bool {
+            switch selector {
+            case #selector(NSResponder.insertNewline(_:)):
+                NSApp.currentEvent?.modifierFlags.contains(.shift) == true ? parent.onPrevious() : parent.onNext()
+                return true
+            case #selector(NSResponder.insertBacktab(_:)): parent.onPrevious(); return true
+            case #selector(NSResponder.cancelOperation(_:)): parent.onCancel(); return true
+            default: return false
+            }
+        }
+    }
+}
+
+// MARK: - Add Link sheet
+
+private struct AddLinkSheet: View {
+    let initialURL: String
+    let initialName: String
+    var onAdd: (String, String) -> Void
+    @Environment(\.dismiss) private var dismiss
+    @State private var url = ""
+    @State private var name = ""
+
+    private var trimmedURL: String { url.trimmingCharacters(in: .whitespacesAndNewlines) }
+
+    // "example.com" would otherwise be saved as a relative link that opens nothing.
+    // Joplin note links (":/id"), anchors and paths, and URLs with a scheme stay as typed.
+    private var linkURL: String {
+        let url = trimmedURL
+        let lower = url.lowercased()
+        let keeps = [":/", "#", "/"].contains { url.hasPrefix($0) }
+            || lower.contains("://")
+            || ["mailto:", "tel:", "file:", "joplin:"].contains { lower.hasPrefix($0) }
+        if keeps { return url }
+        let isEmail = url.range(of: "^[^\\s/:@]+@[^\\s/@]+\\.[^\\s/@]+$", options: .regularExpression) != nil
+        return (isEmail ? "mailto:" : "https://") + url
+    }
 
     var body: some View {
-        HStack(spacing: 8) {
-            // Text style picker
-            Menu {
-                // "Title" reuses heading level 1 (restyled in CSS to match the note
-                // title's look) so it can be applied to any paragraph in the body.
-                Button("Title") { coordinator.execCommand("heading1") }
-                Button("Heading") { coordinator.execCommand("heading3") }
-                Button("Subheading") { coordinator.execCommand("heading4") }
-                Button("Paragraph") { coordinator.execCommand("paragraph") }
-                Divider()
-                Button("Bullet List") { coordinator.execCommand("bulletList") }
-                Button("Number List") { coordinator.execCommand("orderedList") }
-                Divider()
-                Button("Monospaced") { coordinator.execCommand("code") }
-                Button("Code Block") { coordinator.execCommand("codeBlock") }
-            } label: {
-                // .imageScale(.large) instead of a fixed point size/frame — lets AppKit
-                // size the icon to the native toolbar's own max comfortable height
-                // instead of us guessing a value that could get clipped by the
-                // toolbar's fixed row height.
-                Image(systemName: "textformat")
-                    .imageScale(.large)
-                    .contentShape(Rectangle())
-            }
-            .menuStyle(.borderlessButton)
-            .padding(.leading, 8)
-
-            Divider()
-
-            // Task list + Insert Image — moved up front (2nd/3rd items), per request
-            FormatToggleButton(icon: "checklist", tooltip: "Task List", isActive: coordinator.selectionState.inTaskList) {
-                coordinator.execCommand("taskList")
-            }
-            FormatButton(icon: "photo", tooltip: "Insert Image") {
-                onInsertImage()
-            }
-            FormatButton(icon: "paperclip", tooltip: "Attach File") {
-                onAttachFile()
-            }
-
-            Divider()
-
-            // Inline marks
-            FormatToggleButton(icon: "bold", tooltip: "Bold (⌘B)", isActive: coordinator.selectionState.bold) {
-                coordinator.execCommand("bold")
-            }
-            FormatToggleButton(icon: "italic", tooltip: "Italic (⌘I)", isActive: coordinator.selectionState.italic) {
-                coordinator.execCommand("italic")
-            }
-            FormatToggleButton(icon: "strikethrough", tooltip: "Strikethrough", isActive: coordinator.selectionState.strikethrough) {
-                coordinator.execCommand("strikethrough")
-            }
-            FormatToggleButton(icon: "highlighter", tooltip: "Highlight", isActive: coordinator.selectionState.highlight) {
-                coordinator.execCommand("highlight")
-            }
-            // Code: a partial selection inside a line becomes inline code, a whole
-            // paragraph (or several) becomes a code block — see setCodeBlock in
-            // EditorBundle/src/commands.ts. Active for either kind.
-            FormatToggleButton(icon: "chevron.left.forwardslash.chevron.right", tooltip: "Code", isActive: coordinator.selectionState.inCode || coordinator.selectionState.code) {
-                coordinator.execCommand("codeBlock")
-            }
-
-            Divider()
-
-            // Lists
-            FormatToggleButton(icon: "list.bullet", tooltip: "Bullet List", isActive: coordinator.selectionState.inBulletList) {
-                coordinator.execCommand("bulletList")
-            }
-            FormatToggleButton(icon: "list.number", tooltip: "Number List", isActive: coordinator.selectionState.inOrderedList) {
-                coordinator.execCommand("orderedList")
-            }
-
-            Divider()
-
-            // Block formatting
-            FormatToggleButton(icon: "quote.opening", tooltip: "Blockquote", isActive: coordinator.selectionState.inBlockquote) {
-                coordinator.execCommand("blockquote")
-            }
-
-            Divider()
-
-            // Indent / outdent
-            FormatButton(icon: "decrease.indent", tooltip: "Outdent (⇧Tab)") {
-                coordinator.execCommand("outdent")
-            }
-            FormatButton(icon: "increase.indent", tooltip: "Indent (Tab)") {
-                coordinator.execCommand("indent")
-            }
-
-            Divider()
-
-            // Insert (image moved above; table/HR remain)
-            TableMenu(coordinator: coordinator, showsTooltips: true)
-            FormatButton(icon: "minus", tooltip: "Horizontal Rule") {
-                coordinator.execCommand("horizontalRule")
-            }
-
-            Divider()
-
-            // Link
-            FormatToggleButton(icon: "link", tooltip: "Insert Link", isActive: coordinator.selectionState.hasLink) {
-                if coordinator.selectionState.hasLink {
-                    coordinator.execCommand("link")  // removes link
-                } else {
-                    // TODO: show link input panel — for now use a simple prompt
-                    showLinkInput()
+        VStack(alignment: .leading, spacing: 0) {
+            Text("Add Link")
+                .font(.system(size: 13, weight: .bold))
+                .frame(maxWidth: .infinity)
+                .padding(.bottom, 16)
+            Text("Link To")
+                .foregroundStyle(.secondary)
+                .padding(.leading, 10)
+                .padding(.bottom, 9)
+            TextField("Enter a URL", text: $url, axis: .vertical)
+                .lineLimit(3, reservesSpace: true)
+                .textFieldStyle(.roundedBorder)
+                .padding(.bottom, 19)
+            Text("Name")
+                .foregroundStyle(.secondary)
+                .padding(.leading, 10)
+                .padding(.bottom, 11)
+            TextField("", text: $name)
+                .textFieldStyle(.roundedBorder)
+                .controlSize(.large)
+                .overlay(alignment: .trailing) {
+                    if !name.isEmpty {
+                        Button { name = "" } label: {
+                            Image(systemName: "xmark.circle.fill").foregroundStyle(.tertiary)
+                        }
+                        .buttonStyle(.plain)
+                        .padding(.trailing, 12)
+                        .help("Clear")
+                    }
                 }
-            }
-
-            Divider()
-
-            // Debugging aid — view the Joplin Markdown the current editor HTML converts
-            // to (the format actually stored/synced), so an HTML rendering bug can be
-            // traced to its Markdown source.
-            FormatButton(icon: "doc.plaintext", tooltip: "View Markdown Source") {
-                showMarkdownSource = true
-            }
-            .padding(.trailing, 8)
-        }
-        .contentShape(Rectangle())  // entire toolbar row is event-opaque; gaps between buttons don't fall through
-        .sheet(isPresented: $showMarkdownSource) {
-            MarkdownSourceView(markdown: HtmlToMarkdown.convert(coordinator.lastKnownBody))
-        }
-    }
-
-    private func showLinkInput() {
-        // Simple NSAlert-based link input for now
-        let alert = NSAlert()
-        alert.messageText = "Insert Link"
-        alert.addButton(withTitle: "OK")
-        alert.addButton(withTitle: "Cancel")
-
-        let input = NSTextField(frame: NSRect(x: 0, y: 0, width: 300, height: 24))
-        input.placeholderString = "https://example.com"
-        alert.accessoryView = input
-
-        alert.window.initialFirstResponder = input
-        let response = alert.runModal()
-        if response == .alertFirstButtonReturn {
-            let href = input.stringValue.trimmingCharacters(in: .whitespaces)
-            if !href.isEmpty {
-                coordinator.execCommand("link", value: ["href": href])
-            }
-        }
-    }
-}
-
-// MARK: - Format buttons
-
-/// The toolbar's table control: a native pull-down menu. Outside a table it offers
-/// only Insert Table; inside one it offers the row and column actions, so the same
-/// button covers making a table and editing it. Every item runs a prosemirror-tables
-/// command through the shared bundle (see commands.ts), which is also what decides
-/// whether an action applies at all.
-struct TableMenu: View {
-    @ObservedObject var coordinator: EditorCoordinator
-    var showsTooltips = false
-
-    var body: some View {
-        Menu {
-            if coordinator.selectionState.inTable {
-                Button("Add Row Above")    { coordinator.execCommand("rowBefore") }
-                Button("Add Row Below")    { coordinator.execCommand("rowAfter") }
-                Button("Delete Row")       { coordinator.execCommand("deleteRow") }
-                Divider()
-                Button("Add Column Left")  { coordinator.execCommand("columnBefore") }
-                Button("Add Column Right") { coordinator.execCommand("columnAfter") }
-                Button("Delete Column")    { coordinator.execCommand("deleteColumn") }
-                Divider()
-                Button("Delete Table", role: .destructive) { coordinator.execCommand("deleteTable") }
-            } else {
-                Button("Insert Table") {
-                    coordinator.execCommand("table", value: ["rows": 3, "cols": 3])
+                .padding(.bottom, 27)
+            HStack(spacing: 8) {
+                Spacer()
+                Button("Cancel") { dismiss() }
+                    .keyboardShortcut(.cancelAction)
+                    .frame(width: 74)
+                Button {
+                    onAdd(linkURL, name)
+                    dismiss()
+                } label: {
+                    Text("OK").frame(maxWidth: .infinity)
                 }
+                .keyboardShortcut(.defaultAction)
+                .frame(width: 74)
+                .disabled(trimmedURL.isEmpty)
             }
-        } label: {
-            Image(systemName: "tablecells")
-                .imageScale(.large)
-                .contentShape(Rectangle())
         }
-        .menuStyle(.borderlessButton)
-        .menuIndicator(.hidden)
-        .fixedSize()
-        .foregroundStyle(.secondary)
-        .help(showsTooltips ? (coordinator.selectionState.inTable ? "Table" : "Insert Table") : "")
-    }
-}
-
-struct FormatButton: View {
-    let icon: String
-    let tooltip: String
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            // .imageScale(.large) instead of a fixed point size/frame — matches the
-            // text-style menu icon above: lets AppKit size this to the native
-            // toolbar's own max comfortable height rather than a guessed value that
-            // could get clipped by the toolbar's fixed row height.
-            Image(systemName: icon)
-                .imageScale(.large)
-                .contentShape(Rectangle())  // full frame is clickable, not just icon pixels
+        .padding(20)
+        .frame(width: 420)
+        .onAppear {
+            url = initialURL
+            name = initialName
         }
-        .buttonStyle(.borderless)
-        .help(tooltip)
-        .foregroundStyle(.secondary)
-    }
-}
-
-struct FormatToggleButton: View {
-    let icon: String
-    let tooltip: String
-    let isActive: Bool
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            Image(systemName: icon)
-                .imageScale(.large)
-                .padding(4)
-                .background(isActive ? Color.accentColor.opacity(0.15) : Color.clear)
-                .cornerRadius(4)
-                .contentShape(Rectangle())  // full frame is clickable
-        }
-        .buttonStyle(.borderless)
-        .help(tooltip)
-        .foregroundStyle(isActive ? Color.accentColor : Color.secondary)
     }
 }
 
@@ -1339,28 +1587,39 @@ private struct MarkdownSourceView: View {
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
-        VStack(spacing: 0) {
-            HStack {
-                Text("Markdown Source").font(.headline)
-                Spacer()
-                Button("Copy") {
-                    NSPasteboard.general.clearContents()
-                    NSPasteboard.general.setString(markdown, forType: .string)
-                }
-                Button("Done") { dismiss() }
-                    .keyboardShortcut(.defaultAction)
-            }
-            .padding()
-            Divider()
+        VStack(spacing: 14) {
+            Text("Markdown Source")
+                .font(.system(size: 13, weight: .bold))
             ScrollView {
                 Text(markdown.isEmpty ? "(empty)" : markdown)
-                    .font(.system(.body, design: .monospaced))
+                    .font(.system(size: 12, design: .monospaced))
+                    .lineSpacing(3)
                     .textSelection(.enabled)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 10)
+            }
+            .background(RoundedRectangle(cornerRadius: 6).fill(dynamicColor(light: 0xFFFFFF, dark: 0x202326)))
+            .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(Color(nsColor: .separatorColor)))
+            .padding(.bottom, 2)
+            HStack(spacing: 8) {
+                Spacer()
+                Button {
+                    NSPasteboard.general.clearContents()
+                    NSPasteboard.general.setString(markdown, forType: .string)
+                } label: {
+                    Text("Copy").frame(maxWidth: .infinity)
+                }
+                .frame(width: 74)
+                Button { dismiss() } label: {
+                    Text("Done").frame(maxWidth: .infinity)
+                }
+                .keyboardShortcut(.defaultAction)
+                .frame(width: 74)
             }
         }
-        .frame(width: 540, height: 480)
+        .padding(20)
+        .frame(width: 560, height: 440)
     }
 }
 

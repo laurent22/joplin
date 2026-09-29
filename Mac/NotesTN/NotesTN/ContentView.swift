@@ -32,53 +32,54 @@ private struct WindowRestorationDisabler: NSViewRepresentable {
 
 struct ContentView: View {
     @EnvironmentObject var appState: AppState
+    @FocusState private var isSearchFieldFocused: Bool
 
-    // Persists whether the sidebar (Sidebar column: All Notes, Trash, etc.) is
-    // expanded or collapsed across launches — per request. First launch (no saved
-    // preference yet) starts collapsed; every launch after that restores whatever
-    // the user last left it as (see the onChange below that saves it).
+    // Persists whether the sidebar is shown across launches.
     private static let sidebarVisibilityKey = "sidebarExpanded"
-    @State private var columnVisibility: NavigationSplitViewVisibility = {
-        guard UserDefaults.standard.object(forKey: sidebarVisibilityKey) != nil else {
-            return .doubleColumn // collapsed — no saved preference yet (first launch)
-        }
-        return UserDefaults.standard.bool(forKey: sidebarVisibilityKey) ? .all : .doubleColumn
-    }()
-
-    // Persists the note list column's width across launches. NavigationSplitView has
-    // no live width binding to read the user's dragged size back from — only a static
-    // `ideal:` starting value — so a GeometryReader on the column observes its actual
-    // rendered width and writes it to UserDefaults on every change. That keeps the
-    // saved value continuously up to date, which covers "save on app close" for free
-    // without needing a separate app-termination hook.
-    private static let noteListWidthKey = "noteListColumnWidth"
-    // Every launch starts at max width (360), ignoring whatever was saved from the
-    // previous session, per request. Resizing during the running session is still
-    // written to UserDefaults below (onChange, unchanged) — it's just no longer read
-    // back as the initial value here.
-    @State private var noteListColumnWidth: CGFloat = 360
 
     var body: some View {
-        NavigationSplitView(columnVisibility: $columnVisibility) {
-            SidebarView()
-                .navigationSplitViewColumnWidth(min: 180, ideal: 220, max: 280)
+        NavigationSplitView(columnVisibility: $appState.sidebarVisibility) {
+            MacSidebarView()
+                .navigationSplitViewColumnWidth(min: 180, ideal: 228, max: 320)
         } content: {
             NoteListView()
-                .background(
-                    GeometryReader { proxy in
-                        Color.clear
-                            .onChange(of: proxy.size.width) { _, newWidth in
-                                UserDefaults.standard.set(Double(newWidth), forKey: Self.noteListWidthKey)
-                            }
-                    }
-                )
                 .background(WindowRestorationDisabler())
-                .navigationSplitViewColumnWidth(min: 220, ideal: noteListColumnWidth, max: 360)
+                .navigationSplitViewColumnWidth(min: 220, ideal: 280, max: 420)
         } detail: {
             EditorView()
         }
         .navigationSplitViewStyle(.balanced)
-        .onChange(of: columnVisibility) { _, newValue in
+        .sheet(isPresented: $appState.isShowingNewNotebook) {
+            NewNotebookSheet { appState.createFolder(title: $0) }
+        }
+        .searchable(
+            text: Binding(get: { appState.searchText }, set: { appState.search($0) }),
+            placement: .toolbar,
+            prompt: "Search"
+        )
+        .searchFocused($isSearchFieldFocused)
+        // Enter opens the first result.
+        .onSubmit(of: .search) { appState.submitSearch() }
+        .onChange(of: appState.isFocusingSearch) { _, focused in
+            guard focused else { return }
+            isSearchFieldFocused = true
+            appState.isFocusingSearch = false
+        }
+        // ⌥⌘F searches all notes, as in Notes (⌘F is find in the open note).
+        .background(
+            Button("") { isSearchFieldFocused = true }
+                .keyboardShortcut("f", modifiers: [.command, .option])
+                .opacity(0)
+        )
+        .onAppear {
+            DispatchQueue.main.async {
+                appState.isToolbarHidden = NSApp.keyWindow?.toolbar?.isVisible == false
+            }
+            if UserDefaults.standard.object(forKey: Self.sidebarVisibilityKey) != nil {
+                appState.sidebarVisibility = UserDefaults.standard.bool(forKey: Self.sidebarVisibilityKey) ? .all : .doubleColumn
+            }
+        }
+        .onChange(of: appState.sidebarVisibility) { _, newValue in
             UserDefaults.standard.set(newValue == .all, forKey: Self.sidebarVisibilityKey)
         }
     }

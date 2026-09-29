@@ -6,21 +6,46 @@ struct NotesTNApp: App {
 
     @ObservedObject private var joplinAccountStore = JoplinAccountStore.shared
 
+    #if os(macOS)
+    init() {
+        // No Show Tab Bar / Merge All Windows items; Notes TN has one window.
+        NSWindow.allowsAutomaticWindowTabbing = false
+    }
+
+    var body: some Scene {
+        WindowGroup(id: "main") {
+            ContentView()
+                .frame(minWidth: 800, minHeight: 500)
+                .sheet(isPresented: $appState.isShowingJoplinLogin) {
+                    LoginView()
+                }
+                .accountAlerts(isConfirmingLogout: $appState.isConfirmingLogout, isConfirmingForceResync: $appState.isConfirmingForceResync)
+                // Last, so the account alerts above can read it too.
+                .environmentObject(appState)
+        }
+        .windowStyle(.titleBar)
+        .windowToolbarStyle(.unified(showsTitle: false))
+        .commands {
+            TextFormattingCommands()
+            MacCommands(appState: appState, accountStore: joplinAccountStore)
+        }
+
+        Settings {
+            SettingsView()
+                .environmentObject(appState)
+                .navigationTitle("Notes TN Settings")
+        }
+        .windowResizability(.contentSize)
+    }
+    #else
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(appState)
-                #if os(macOS)
-                .frame(minWidth: 800, minHeight: 500)
-                #endif
                 .sheet(isPresented: $appState.isShowingJoplinLogin) {
                     LoginView()
                 }
         }
-        #if os(macOS)
-        .windowStyle(.titleBar)
-        .windowToolbarStyle(.unified(showsTitle: false))
-        #endif
         .commands {
             CommandGroup(after: .appInfo) {
                 if let account = joplinAccountStore.account {
@@ -29,14 +54,6 @@ struct NotesTNApp: App {
                     // screen, which shows the same thing as a non-interactive row).
                     Button("Signed in as \(account.email)") {}
                         .disabled(true)
-                    #if os(macOS)
-                    // iOS equivalent (a SwiftUI alert/sheet reachable from in-view UI,
-                    // since there's no Mac-style menu bar) is a follow-up — see the
-                    // NSAlert dialogs task.
-                    Button("Log Out of Joplin Cloud…") {
-                        confirmLogout()
-                    }
-                    #endif
                     // ⌘R — a normal (non-force) sync: push local changes, pull whatever's
                     // new on the server. Matches Android/iOS's pull-to-refresh. "Force
                     // Resync" below is the heavier full re-download/re-render and is
@@ -75,19 +92,6 @@ struct NotesTNApp: App {
                 }
                 .keyboardShortcut("f", modifiers: .command)
             }
-        }
-    }
-
-    #if os(macOS)
-    /// Matches Android's confirmation before logging out ("local notes stay put").
-    private func confirmLogout() {
-        let alert = NSAlert()
-        alert.messageText = "Log Out"
-        alert.informativeText = "Log out of Joplin Cloud on this device? Your local notes stay put."
-        alert.addButton(withTitle: "Log Out")
-        alert.addButton(withTitle: "Cancel")
-        if alert.runModal() == .alertFirstButtonReturn {
-            joplinAccountStore.clear()
         }
     }
     #endif

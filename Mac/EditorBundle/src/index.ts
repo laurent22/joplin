@@ -1253,6 +1253,8 @@ function createEditor(): EditorView {
   const isIOSPhone = /[?&]platform=ios-phone(&|$)/.test(location.search);
   if (isIOSPhone) document.body.classList.add('pm-ios-phone');
 
+  if (/[?&]platform=mac(&|$)/.test(location.search)) document.body.classList.add('pm-mac');
+
   let lastTitle = '';
   let lastHTML = '';
   let selectionDebounce: ReturnType<typeof setTimeout> | null = null;
@@ -1763,6 +1765,31 @@ function createEditor(): EditorView {
 
 // ── Native API (called from Swift via evaluateJavaScript) ─────────────────────
 
+// The selection, or with an empty selection inside a link, that whole link, so the
+// Add Link sheet edits it rather than nesting a new link in it.
+function linkTargetRange(state: EditorState): { from: number; to: number } {
+  const { from, to, empty, $from } = state.selection;
+  const current = schema.marks.link.isInSet($from.marks());
+  if (!empty || !current) return { from, to };
+  // Children of the text block with their positions; a link split by other marks
+  // (bold, italic) spans several of them.
+  const children: { from: number; to: number; href: string | null }[] = [];
+  let pos = $from.start();
+  $from.parent.forEach((child) => {
+    const mark = schema.marks.link.isInSet(child.marks);
+    children.push({ from: pos, to: pos + child.nodeSize, href: mark ? mark.attrs.href : null });
+    pos += child.nodeSize;
+  });
+  const href = current.attrs.href;
+  let index = children.findIndex((c) => c.href === href && c.from <= from && from <= c.to);
+  if (index < 0) return { from, to };
+  let first = index;
+  let last = index;
+  while (first > 0 && children[first - 1].href === href) first--;
+  while (last < children.length - 1 && children[last + 1].href === href) last++;
+  return { from: children[first].from, to: children[last].to };
+}
+
 interface NativeEditorBridge {
   setContent: (title: string, body: string) => void;
   execCommand: (command: string, value?: any) => void;
@@ -1773,6 +1800,10 @@ interface NativeEditorBridge {
   replaceCurrent: (replacement: string) => void;
   replaceAll: (replacement: string) => void;
   endFind: () => void;
+  highlightSearch: (query: string) => void;
+  setDateLine: (text: string) => void;
+  getSelectedText: () => string;
+  insertLink: (href: string, name: string) => void;
   focus: () => void;
   blur: () => void;
   getHTML: () => string;
@@ -1894,6 +1925,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // caseSensitive is passed by native: false for plain find, true once Replace is
     // showing, so a replace only ever rewrites the exact-case text it highlighted.
     find(query: string, caseSensitive?: boolean) {
+      document.body.classList.remove('pm-search-highlight');
+      document.body.classList.toggle('pm-finding', query.length > 0);
       view.dispatch(view.state.tr.setMeta(findKey, { type: 'set', query, caseSensitive: !!caseSensitive }));
       afterFindUpdate();
     },
@@ -1936,7 +1969,51 @@ document.addEventListener('DOMContentLoaded', () => {
     },
 
     endFind() {
+      document.body.classList.remove('pm-finding', 'pm-search-highlight');
       view.dispatch(view.state.tr.setMeta(findKey, { type: 'clear' }));
+    },
+
+    // Tints every match of the note-list search in the open note, without the find
+    // bar's dimming or a current match (Notes does the same while a search is active).
+    highlightSearch(query: string) {
+      document.body.classList.remove('pm-finding');
+      document.body.classList.toggle('pm-search-highlight', query.length > 0);
+      view.dispatch(view.state.tr.setMeta(findKey, query ? { type: 'set', query, caseSensitive: false } : { type: 'clear' }));
+    },
+
+    // The non-editable "28 September 2026 at 12:21" line above the title.
+    setDateLine(text: string) {
+      let line = document.getElementById('pm-date');
+      if (!line) {
+        line = document.createElement('div');
+        line.id = 'pm-date';
+        document.body.insertBefore(line, document.getElementById('editor'));
+      }
+      line.textContent = text;
+    },
+
+    getSelectedText() {
+      const { from, to } = linkTargetRange(view.state);
+      return view.state.doc.textBetween(from, to, ' ');
+    },
+
+    // Add Link sheet: links the selection (or the link the caret is in), replacing
+    // its text only when the Name field was changed; with nothing selected it inserts
+    // the name, or the URL itself, at the caret.
+    insertLink(href: string, name: string) {
+      const { state } = view;
+      const { from, to } = linkTargetRange(state);
+      const current = state.doc.textBetween(from, to, ' ');
+      const link = schema.marks.link.create({ href, title: null });
+      let tr = state.tr;
+      if (from !== to && (!name || name === current)) {
+        tr = tr.removeMark(from, to, schema.marks.link).addMark(from, to, link);
+      } else {
+        const marks = link.addToSet(schema.marks.link.removeFromSet(state.doc.resolve(from).marks()));
+        tr = tr.replaceWith(from, to, schema.text(name || href, marks));
+      }
+      view.dispatch(tr.removeStoredMark(schema.marks.link).scrollIntoView());
+      view.focus();
     },
 
     focus() {

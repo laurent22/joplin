@@ -741,6 +741,177 @@ function writeEditorHtml(outDir) {
     background: var(--color-selection);
     pointer-events: none;
   }
+  /* ── macOS (?platform=mac): Notes.app metrics from the Figma "04 Editor" page ── */
+  body.pm-mac {
+    --color-text: #454545;
+    --color-bg: #ffffff;
+    --color-secondary: #979797;
+    --color-link: #fcb827;
+    --color-code-bg: #e8e8e8;
+    --color-inline-code-text: var(--color-text);
+    --color-checkbox-border: #bebebe;
+    --color-checkbox-checked-bg: #fcb827;
+    --color-table-border: #bebec0;
+    --color-find-dimmed: #c7c7c7;
+    --color-find-dimmed-text: #454545;
+    --color-find-other: #ffffff;
+    --color-find-other-outline: transparent;
+    --color-search-match: #fbf1cc;
+    --color-caret: #f9b524;
+    padding: calc(var(--native-toolbar-inset) + 7px) 20px 48px 23px;
+    font-size: 13px;
+    line-height: 17px;
+  }
+  @media (prefers-color-scheme: dark) {
+    body.pm-mac {
+      --color-text: #dcdcdc;
+      --color-bg: #1e1e1e;
+      --color-secondary: #818181;
+      --color-code-bg: #3a3a3a;
+      --color-checkbox-border: #555555;
+      --color-table-border: #636367;
+      --color-find-dimmed: #1e1e1e;
+      --color-find-dimmed-text: #adadad;
+      --color-find-other: transparent;
+      --color-find-other-outline: #ffffff;
+      --color-search-match: #514516;
+      --color-caret: #ffc837;
+    }
+  }
+  body.pm-mac #pm-date {
+    font-size: 12px;
+    line-height: 15px;
+    color: var(--color-secondary);
+    text-align: center;
+    margin-bottom: 9px;
+    /* Centred in the column: the body padding is 23 left, 20 right. */
+    margin-left: -3px;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  body.pm-mac .ProseMirror { caret-color: var(--color-caret); }
+  body.pm-mac .ProseMirror > * + * { margin-top: 0; }
+  body.pm-mac .ProseMirror p + p { margin-top: 0.5em; }
+  body.pm-mac .ProseMirror .pm-title,
+  body.pm-mac .ProseMirror h1 {
+    font-size: 21px;
+    font-weight: 600;
+    line-height: 26px;
+    letter-spacing: -0.54px;
+    margin: 0;
+  }
+  body.pm-mac .ProseMirror h2,
+  body.pm-mac .ProseMirror h3 {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: -0.23px;
+  }
+  body.pm-mac .ProseMirror h4,
+  body.pm-mac .ProseMirror h5,
+  body.pm-mac .ProseMirror h6 {
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 17px;
+    color: var(--color-text);
+  }
+  body.pm-mac .ProseMirror h1, body.pm-mac .ProseMirror h2, body.pm-mac .ProseMirror h3,
+  body.pm-mac .ProseMirror h4, body.pm-mac .ProseMirror h5, body.pm-mac .ProseMirror h6 {
+    margin-top: 15px;
+  }
+  body.pm-mac .ProseMirror ul,
+  body.pm-mac .ProseMirror ol,
+  body.pm-mac .ProseMirror table,
+  body.pm-mac .ProseMirror pre,
+  body.pm-mac .ProseMirror blockquote,
+  body.pm-mac .ProseMirror img { margin-top: 9px; }
+  /* After this block margin rule, which has the same specificity. */
+  body.pm-mac .ProseMirror :is(h1, h2, h3, h4, h5, h6) + * { margin-top: 3px; }
+  body.pm-mac .ProseMirror :is(h1, h2, h3, h4, h5, h6) + ul:not([data-is-checklist]),
+  body.pm-mac .ProseMirror :is(h1, h2, h3, h4, h5, h6) + ol { margin-top: 0; }
+  body.pm-mac .ProseMirror :is(h1, h2, h3, h4, h5, h6) + table { margin-top: 6px; }
+  body.pm-mac .ProseMirror .pm-title + * { margin-top: 0; }
+  body.pm-mac .ProseMirror :is(ul, ol) + p { margin-top: 18px; }
+  /* Images are inline, each in its own paragraph: the image's 9px is the gap. */
+  body.pm-mac .ProseMirror p + p:has(> img:only-child) { margin-top: 0; }
+  body.pm-mac .ProseMirror p:has(> img:only-child) + :is(h1, h2, h3, h4, h5, h6) { margin-top: 12px; }
+  /* Short notes don't scroll: the date line, top inset and bottom padding fit the view. */
+  body.pm-mac #editor { min-height: calc(100vh - var(--native-toolbar-inset) - 7px - 24px - 48px); }
+  body.pm-mac .ProseMirror ul,
+  body.pm-mac .ProseMirror ol { padding-left: 23px; }
+  body.pm-mac .ProseMirror li { margin: 0; }
+  body.pm-mac .ProseMirror ul[data-is-checklist] { padding-left: 2px; }
+  body.pm-mac .ProseMirror ul[data-is-checklist] li {
+    gap: 4px;
+    min-height: 22px;
+    padding: 0 0 5px;
+  }
+  body.pm-mac .ProseMirror ul[data-is-checklist] li input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    margin: 2px 0 0 0;
+    border-width: 1px;
+  }
+  body.pm-mac .ProseMirror ul[data-is-checklist] li.checked > div {
+    text-decoration: none;
+    opacity: 1;
+  }
+  body.pm-mac .ProseMirror code {
+    font-size: 13px;
+    border-radius: 4px;
+    padding: 0 2px;
+  }
+  body.pm-mac .ProseMirror pre {
+    border-radius: 4px;
+    padding: 4px 6px;
+  }
+  body.pm-mac .ProseMirror pre code { font-size: 13px; }
+  body.pm-mac .ProseMirror blockquote {
+    border-left-width: 2px;
+    border-left-color: var(--color-checkbox-border);
+    padding-left: 10px;
+    color: var(--color-text);
+  }
+  body.pm-mac .ProseMirror table { font-size: 13px; }
+  body.pm-mac .ProseMirror th,
+  body.pm-mac .ProseMirror td {
+    border-color: var(--color-table-border);
+    padding: 3px 4px 4px;
+    line-height: 17px;
+  }
+  body.pm-mac .ProseMirror th { background: none; font-weight: 400; }
+  body.pm-mac .ProseMirror img { border-radius: 0; }
+  body.pm-mac .ProseMirror a,
+  body.pm-mac .ProseMirror .pm-autolink { text-underline-offset: 1px; }
+
+  /* Selection while a sheet or another column has focus. */
+  body.pm-mac .ProseMirror:not(.ProseMirror-focused) ::selection { background: #dcdcdc; }
+  @media (prefers-color-scheme: dark) {
+    body.pm-mac .ProseMirror:not(.ProseMirror-focused) ::selection { background: #464646; }
+  }
+
+  /* Find bar open: the note dims and matches read as Notes' find does. */
+  body.pm-mac.pm-finding { background: var(--color-find-dimmed); color: var(--color-find-dimmed-text); }
+  body.pm-mac.pm-finding #pm-date { color: var(--color-secondary); }
+  body.pm-mac.pm-finding .ProseMirror :is(h4, h5, h6, blockquote, pre code, code) { color: inherit; }
+  body.pm-mac.pm-finding .ProseMirror .pm-find-match {
+    padding: 0 1px;
+    margin: 0 -1px;
+    background: var(--color-find-other);
+    box-shadow: 0 0 0 1px var(--color-find-other-outline);
+    border-radius: 3px;
+  }
+  body.pm-mac.pm-finding .ProseMirror .pm-find-current {
+    background: #ffff00;
+    color: #000000;
+    box-shadow: none;
+  }
+  /* Note-list search: matches tinted, no current match. */
+  body.pm-mac.pm-search-highlight .ProseMirror .pm-find-match,
+  body.pm-mac.pm-search-highlight .ProseMirror .pm-find-current {
+    background: var(--color-search-match);
+    border-radius: 3px;
+  }
 </style>
 </head>
 <body>

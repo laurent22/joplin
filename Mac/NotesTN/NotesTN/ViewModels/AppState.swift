@@ -22,17 +22,24 @@ final class AppState: ObservableObject {
     // editor has taken the cursor. A new note is the one case where the editor should
     // grab focus on Mac without the user clicking into it.
     @Published var pendingFocusNoteID: String? = nil
-    // True while the sidebar (notebooks list) has keyboard focus, vs. the note
-    // list or the editor. Drives both the sidebar's selected-row color (Vivid
-    // when focused, gray+dark-yellow text when not) and the note list's
-    // selected-row color (gray when the sidebar is focused, Dimmed otherwise).
-    // See SidebarView.swift's `.focused($isSidebarFocused)`.
+    // True while the sidebar (notebooks list) has keyboard focus. Read by the iOS
+    // note list; the Mac note list tracks its own focus.
     @Published var isSidebarFocused: Bool = false
     @Published var searchText: String = ""
+    // The query the current `notes` were fetched for ("" when not searching). The Mac
+    // list opens the first result whenever it changes.
+    @Published private(set) var searchResultsQuery = ""
     @Published var isFocusingSearch: Bool = false
     @Published var isShowingJoplinLogin: Bool = false
     @Published private(set) var isSyncing: Bool = false
-    @Published var syncError: String? = nil
+    // Kept across launches so Settings can still say the last sync failed.
+    @Published var syncError: String? = UserDefaults.standard.string(forKey: "lastSyncError")
+    @Published private(set) var lastSyncDate: Date? = UserDefaults.standard.object(forKey: "lastSyncDate") as? Date
+    @Published var isConfirmingLogout = false
+    @Published var isConfirmingForceResync = false
+    @Published var isShowingNewNotebook = false
+    @Published var sidebarVisibility: NavigationSplitViewVisibility = .all
+    @Published var isToolbarHidden = false
 
     // MARK: - Derived
 
@@ -80,7 +87,10 @@ final class AppState: ObservableObject {
         let didBecomeActiveNotification = UIApplication.didBecomeActiveNotification
         #endif
         NotificationCenter.default.publisher(for: didBecomeActiveNotification)
-            .sink { [weak self] _ in self?.syncNow() }
+            .sink { [weak self] _ in
+                guard JoplinAccountStore.shared.account != nil else { return }
+                self?.syncNow()
+            }
             .store(in: &cancellables)
 
         #if os(macOS)
@@ -104,10 +114,12 @@ final class AppState: ObservableObject {
     // until something else happened to trigger another sync. Rerun once the current
     // sync finishes instead of dropping it.
     private var syncRerunRequested = false
+    private var syncRerunForce = false
 
     func syncNow(force: Bool = false) {
         guard !isSyncing else {
             syncRerunRequested = true
+            syncRerunForce = syncRerunForce || force
             return
         }
         guard let account = JoplinAccountStore.shared.account else {
@@ -118,10 +130,23 @@ final class AppState: ObservableObject {
         syncError = nil
         Task {
             await runSync(account: account, force: force, allowRelogin: true)
+            // Logged out while this ran: its cursor and status belong to the old account.
+            guard JoplinAccountStore.shared.account != nil else {
+                isSyncing = false
+                syncRerunRequested = false
+                resetSyncStatus()
+                return
+            }
             isSyncing = false
+            lastSyncDate = Date()
+            UserDefaults.standard.set(lastSyncDate, forKey: "lastSyncDate")
+            UserDefaults.standard.set(syncError, forKey: "lastSyncError")
             if syncRerunRequested {
                 syncRerunRequested = false
-                syncNow()
+                let force = syncRerunForce
+                syncRerunForce = false
+                // A logout during the sync cancels the queued rerun.
+                if JoplinAccountStore.shared.account != nil { syncNow(force: force) }
             }
         }
     }
@@ -136,8 +161,10 @@ final class AppState: ObservableObject {
         case .success:
             loadAll()
         case .unauthorized:
+            // Logged out mid-sync: don't log back in with the saved password.
+            guard JoplinAccountStore.shared.account != nil else { return }
             guard allowRelogin else {
-                syncError = "Joplin Cloud session expired — please log in again."
+                syncError = "Your Joplin Cloud session expired. Log in again to keep syncing."
                 return
             }
             switch await JoplinCloudApi.login(email: account.email, password: account.password) {
@@ -151,10 +178,20 @@ final class AppState: ObservableObject {
                 JoplinAccountStore.shared.save(refreshed)
                 await runSync(account: refreshed, force: force, allowRelogin: false)
             case .failure:
-                syncError = "Joplin Cloud session expired — please log in again."
+                syncError = "Your Joplin Cloud session expired. Log in again to keep syncing."
             }
         case .failure(let message):
             syncError = message
+        }
+    }
+
+    /// Log Out: forgets this account's sync position and status, so logging in to
+    /// another account pulls its notes from the start.
+    func resetSyncStatus() {
+        syncError = nil
+        lastSyncDate = nil
+        for key in ["lastSyncError", "lastSyncDate", "joplin_sync_delta_cursor"] {
+            UserDefaults.standard.removeObject(forKey: key)
         }
     }
 
@@ -232,6 +269,7 @@ final class AppState: ObservableObject {
             freshNotes = db.fetchNotes(folderId: selectedFolderID)
         }
         if freshNotes != notes { notes = freshNotes }
+        if searchResultsQuery != searchText { searchResultsQuery = searchText }
         // Trashed notes are only visible while Trash is selected — skipping the fetch
         // otherwise avoids loading every trashed note's full body on every call (this
         // runs after each sync). selectTrash() re-runs loadNotes(), so the array is
@@ -274,7 +312,7 @@ final class AppState: ObservableObject {
         // synced since the server doesn't know about it.
         db.saveFolder(folder, dirty: true, synced: false)
         loadAll()
-        selectedFolderID = folder.id
+        selectFolder(folder)
         schedulePushDebounce()
     }
 
@@ -350,6 +388,12 @@ final class AppState: ObservableObject {
     }
 
     func createNote() {
+        // A new, empty note can't match the search, so it would never be shown. End
+        // the search first, as Notes does.
+        if !searchText.isEmpty {
+            searchDebounceTask?.cancel()
+            searchText = ""
+        }
         // Joplin has no "notebook-less note" concept — every real client always
         // resolves to a concrete folder id before saving. A note pushed with
         // parent_id = "" (which is what "All Notes" selected means locally) doesn't
@@ -444,6 +488,8 @@ final class AppState: ObservableObject {
 
     /// Un-trashes the note, leaving its notebook assignment untouched.
     func restoreNote(_ note: Note) {
+        // The note leaves the Trash list, so it shouldn't stay open there.
+        if isTrashSelected && selectedNoteID == note.id { selectedNoteID = nil }
         var updated = note
         updated.deletedTime = nil
         updated.updatedTime = Date()
@@ -557,13 +603,19 @@ final class AppState: ObservableObject {
 
     private var searchDebounceTask: Task<Void, Never>?
 
-    // While typing: just re-filters the results list, nothing auto-opens. Preview
-    // of the first result only happens on submitSearch() (Enter key) — see below.
-    // The actual query is debounced: searchNotes is an unindexed LIKE scan over
+    // While typing: re-filters the results list (the Mac list then opens the first
+    // result, see NoteListView). The actual query is debounced: searchNotes is an unindexed LIKE scan over
     // every note's title and full body, so running it synchronously per keystroke
     // made the search field itself hitch on larger databases. Clearing the field
     // refreshes immediately (fetchNotes by folder is cheap and it feels snappier).
     func search(_ query: String) {
+        // Search covers every note, so the sidebar moves to All Notes (as in Notes).
+        if searchText.isEmpty && !query.isEmpty {
+            // A trashed note mustn't stay open once Trash is left (it would turn editable).
+            if isTrashSelected { selectedNoteID = nil }
+            isTrashSelected = false
+            selectedFolderID = nil
+        }
         searchText = query
         searchDebounceTask?.cancel()
         guard !query.isEmpty else {
@@ -590,9 +642,8 @@ final class AppState: ObservableObject {
         // however far the debounce had gotten.
         searchDebounceTask?.cancel()
         loadNotes()
-        #if os(macOS)
-        autoSelectFirstSearchResult()
-        #elseif os(iOS)
+        // Mac: NoteListView opens the first result (its Top Hits order) itself.
+        #if os(iOS)
         if UIDevice.current.userInterfaceIdiom == .pad {
             autoSelectFirstSearchResult()
         }
