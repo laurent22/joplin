@@ -12896,7 +12896,7 @@ __metadata:
     "@types/react": "npm:19.1.10"
     "@types/react-dom": "npm:19.1.7"
     "@types/uuid": "npm:11.0.0"
-    adm-zip: "npm:0.5.17"
+    adm-zip: "npm:0.5.18"
     async-mutex: "npm:0.5.0"
     base-64: "npm:1.0.0"
     base64-stream: "npm:1.0.0"
@@ -21267,7 +21267,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"adm-zip@npm:0.5.17, adm-zip@npm:^0.5.16":
+"adm-zip@npm:0.5.18":
+  version: 0.5.18
+  resolution: "adm-zip@npm:0.5.18"
+  checksum: 10/6eaa298828b92e543241fa24d01af774ad8709b80539b3fa60d4ba6f69fd5a15a19d8177e6d739f18f4e0933610ed555215dc6553b51c532534414702c255167
+  languageName: node
+  linkType: hard
+
+"adm-zip@npm:^0.5.16":
   version: 0.5.17
   resolution: "adm-zip@npm:0.5.17"
   checksum: 10/035ea96d04376c290bed3401b67d1a2a2654996450ec9056dccc0fb194cb6a956bf7ad388d2648b0e1775338a377805601deca4bcd689658dc1d39247a1e9bdd
