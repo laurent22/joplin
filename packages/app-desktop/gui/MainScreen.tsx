@@ -624,7 +624,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 			);
 		} else if (this.props.showUnknownKeyFormatMessage) {
 			msg = this.renderNotificationMessage(
-				_('One or more master keys are stored in an unknown format.'),
+				_('One or more encryption keys are stored in an unknown format.'),
 				_('Manage'),
 				onViewEncryptionConfigScreen,
 			);
