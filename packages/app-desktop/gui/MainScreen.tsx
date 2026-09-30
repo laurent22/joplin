@@ -30,7 +30,7 @@ import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncIn
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import executeCallbackUrl from './MainScreen/handleCallbackUrl';
 import ElectronAppWrapper from '../ElectronAppWrapper';
-import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
+import { showMissingMasterKeyMessage, showUnknownKeyFormatBanner } from '@joplin/lib/services/e2ee/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import invitationRespond from '@joplin/lib/services/share/invitationRespond';
 import restart from '../services/restart';
@@ -61,6 +61,7 @@ interface Props {
 	hasDisabledEncryptionItems: boolean;
 	hasMissingSyncCredentials: boolean;
 	showMissingMasterKeyMessage: boolean;
+	showUnknownKeyFormatMessage: boolean;
 	showNeedUpgradingMasterKeyMessage: boolean;
 	showShouldReencryptMessage: boolean;
 	themeId: number;
@@ -621,6 +622,12 @@ class MainScreenComponent extends React.Component<Props, State> {
 				_('View them now'),
 				onViewStatusScreen,
 			);
+		} else if (this.props.showUnknownKeyFormatMessage) {
+			msg = this.renderNotificationMessage(
+				_('One or more master keys are stored in an unknown format.'),
+				_('Manage'),
+				onViewEncryptionConfigScreen,
+			);
 		} else if (this.props.showMissingMasterKeyMessage) {
 			msg = this.renderNotificationMessage(
 				_('One or more master keys need a password.'),
@@ -697,6 +704,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		if (!props) props = this.props;
 		return props.hasDisabledSyncItems ||
 			props.showMissingMasterKeyMessage ||
+			props.showUnknownKeyFormatMessage ||
 			props.hasMissingSyncCredentials ||
 			props.showNeedUpgradingMasterKeyMessage ||
 			props.showShouldReencryptMessage ||
@@ -818,6 +826,7 @@ const mapStateToProps = (state: AppState) => {
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
 		hasDisabledEncryptionItems: state.hasDisabledEncryptionItems,
 		showMissingMasterKeyMessage: showMissingMasterKeyMessage(syncInfo, state.notLoadedMasterKeys),
+		showUnknownKeyFormatMessage: showUnknownKeyFormatBanner(syncInfo),
 		showNeedUpgradingMasterKeyMessage: showNeedUpgradingEnabledMasterKeyMessage,
 		showShouldReencryptMessage: state.settings['encryption.shouldReencrypt'] >= Setting.SHOULD_REENCRYPT_YES,
 		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,
