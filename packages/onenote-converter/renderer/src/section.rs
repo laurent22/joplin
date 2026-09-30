@@ -175,21 +175,58 @@ impl Renderer {
     ) -> Result<String> {
         let filename = filename_base.trim().replace("/", "_");
         let mut i = 0;
-        let mut current_filename =
-            fs_driver().sanitize_file_name(&format!("{}{}", filename, extension));
 
         loop {
+            let suffix = if i == 0 {
+                String::new()
+            } else {
+                format!("_{i}")
+            };
+            let max_base_bytes = 255usize.saturating_sub(suffix.len() + extension.len());
+            let mut base_end = filename.len().min(max_base_bytes);
+            while !filename.is_char_boundary(base_end) {
+                base_end -= 1;
+            }
+            let current_filename = fs_driver().sanitize_file_name(&format!(
+                "{}{}{}",
+                &filename[..base_end],
+                suffix,
+                extension
+            ));
             let current_full_path = fs_driver().join(parent_dir, &current_filename);
             if !self.files.contains(&current_full_path) {
                 self.files.insert(current_full_path);
-                break;
+                return Ok(current_filename);
             }
 
             i += 1;
-            current_filename =
-                fs_driver().sanitize_file_name(&format!("{}_{}{}", filename, i, extension));
         }
+    }
+}
 
-        Ok(current_filename)
+#[cfg(test)]
+mod tests {
+    use super::Renderer;
+
+    #[test]
+    fn long_page_title_keeps_html_extension() {
+        let title = "a".repeat(260);
+        let mut renderer = Renderer::new();
+        let filename = renderer
+            .title_to_unique_safe_filename("/tmp", &title, ".html")
+            .unwrap();
+        let duplicate = renderer
+            .title_to_unique_safe_filename("/tmp", &title, ".html")
+            .unwrap();
+        let unicode = renderer
+            .title_to_unique_safe_filename("/tmp", &"é".repeat(140), ".html")
+            .unwrap();
+
+        assert!(filename.ends_with(".html"));
+        assert!(filename.len() <= 255);
+        assert!(duplicate.ends_with("_1.html"));
+        assert_ne!(duplicate, filename);
+        assert!(unicode.ends_with(".html"));
+        assert!(unicode.len() <= 255);
     }
 }
