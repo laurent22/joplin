@@ -32,10 +32,6 @@ export default class MasterKey extends BaseItem {
 		return masterKeys.filter(m => !methods.includes(m.encryption_method));
 	}
 
-	public static allWithEncryptionMethod(masterKeys: MasterKeyEntity[], methods: number[]) {
-		return masterKeys.filter(m => !methods.includes(m.encryption_method));
-	}
-
 	public static async all(): Promise<MasterKeyEntity[]> {
 		return localSyncInfo().masterKeys;
 	}
