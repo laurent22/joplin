@@ -110,7 +110,7 @@
     "@react-native-community/cli-platform-ios": "20.0.0",
     "@react-native/babel-preset": "0.81.6",
     "@react-native/metro-config": "0.81.6",
-    "@react-native/typescript-config": "0.85.2",
+    "@react-native/typescript-config": "0.85.3",
     "@sqlite.org/sqlite-wasm": "3.46.0-build2",
     "@testing-library/react-native": "13.2.0",
     "@types/fs-extra": "11.0.4",
