@@ -77,6 +77,7 @@ rules.heading = {
 
   replacement: function (content, node, options) {
     var hLevel = Number(node.nodeName.charAt(1))
+    content = content.replace(/^\u{00A0}+$/u, '&nbsp;')
 
     if (options.headingStyle === 'setext' && hLevel < 3) {
       var underline = repeat((hLevel === 1 ? '=' : '-'), content.length)
