@@ -145,13 +145,13 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 
 				local = { ...local, title: merge.resolvedLocal.title, body: merge.resolvedLocal.body } as NoteEntity;
 				// Ahead of the remote time so the merged changes upload as a local change
-				const newUpdatedTime = remoteUnchanged ? remoteNote.updated_time : Math.max(time.unixMs(), remoteNote.updated_time + 1);
+				const newUpdatedTime = Math.max(time.unixMs(), remoteNote.updated_time + 1);
 				remoteContent = {
 					...remoteNote,
 					title: merge.resolvedCurrent.title,
 					body: merge.resolvedCurrent.body,
-					updated_time: newUpdatedTime,
-					user_updated_time: newUpdatedTime,
+					updated_time: remoteUnchanged ? remoteNote.updated_time : newUpdatedTime,
+					user_updated_time: remoteUnchanged ? remoteNote.user_updated_time : newUpdatedTime,
 				} as NoteEntity;
 			}
 
