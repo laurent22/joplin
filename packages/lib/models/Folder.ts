@@ -588,6 +588,7 @@ export default class Folder extends BaseItem {
 			FROM notes
 			LEFT JOIN folders ON notes.parent_id = folders.id
 			WHERE notes.share_id != folders.share_id
+			AND notes.is_conflict = 0
 		`);
 
 		logger.debug('updateNoteShareIds: notes to update:', rows.length);
