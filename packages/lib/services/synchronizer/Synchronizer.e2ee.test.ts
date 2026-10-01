@@ -79,11 +79,12 @@ describe('Synchronizer.e2ee', () => {
 		expect(!folder1_2.encryption_cipher_text).toBe(true);
 	}));
 
-	it('should not copy a locked note still awaiting decryption when an older client drops its lock inside a share', (async () => {
+	it('should push back a locked note still awaiting decryption when an older client drops its lock inside a share', (async () => {
 		setEncryptionEnabled(true);
 		const masterKey = await loadEncryptionMasterKey();
 		const folder = await Folder.save({ title: 'folder' });
-		const note = await Note.save({ title: 'Locked', body: 'JLD01cipher', is_locked: 1, parent_id: folder.id });
+		// Dated in the past, as is the older client's edit below, so the sync time cap does not hold back the push back.
+		const note = await Note.save({ title: 'Locked', body: 'JLD01cipher', is_locked: 1, parent_id: folder.id, updated_time: time.unixMs() - 60_000 }, { autoTimestamp: false });
 		await synchronizerStart();
 		// An older client's edit knows no is_locked, inside the encrypted payload as well as on the envelope.
 		const oldClientNote = (await Note.serialize({ ...await Note.load(note.id), body: 'edited on an old client', share_id: 'share-1' })).replace('is_locked: 1\n', '');
@@ -100,12 +101,15 @@ describe('Synchronizer.e2ee', () => {
 		await synchronizerStart();
 
 		expect((await Note.conflictedNotes()).length).toBe(0);
-		expect(await Note.load(note.id)).toMatchObject({ is_locked: 0, encryption_applied: 1 });
+		expect(await Note.load(note.id)).toMatchObject({ is_locked: 1, encryption_applied: 1 });
 
+		// The placeholder is uploaded once decrypted, which keeps its time ahead of the remote one.
 		await encryptionService().loadMasterKey(await MasterKey.load(masterKey.id), '123456', true);
 		await decryptionWorker().start();
-		expect(await Note.load(note.id)).toMatchObject({ body: 'edited on an old client', is_locked: 0, share_id: 'share-1', encryption_applied: 0 });
+		expect(await Note.load(note.id)).toMatchObject({ body: 'JLD01cipher', is_locked: 1, encryption_applied: 0 });
 		expect((await Note.all()).length).toBe(1);
+		await synchronizerStart();
+		expect(await BaseItem.unserialize(await fileApi().get(path))).toMatchObject({ is_locked: 1 });
 	}));
 
 	it('should not encrypt structural properties', (async () => {

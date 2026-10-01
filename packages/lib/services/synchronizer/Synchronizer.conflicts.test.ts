@@ -77,21 +77,40 @@ describe('Synchronizer.conflicts', () => {
 		['missing', false, ''],
 		['empty', false, 'is_locked: \n'],
 		['empty', true, 'is_locked: \n'],
-	])('should keep a locked note as a conflict when an older client drops its lock inside a share (%s is_locked, changed locally: %s)', (async (_name, changedLocally, lockLine) => {
+	])('should discard the change of an older client that drops the lock of a note inside a share and push the local version back (%s is_locked, changed locally: %s)', (async (_name, changedLocally, lockLine) => {
 		const folder = await Folder.save({ title: 'folder' });
-		const note = await Note.save({ title: 'Locked', body: 'JLD01cipher', is_locked: 1, parent_id: folder.id });
+		// Dated in the past, as is the older client's edit below, so the sync time cap does not hold back the push back.
+		const note = await Note.save({ title: 'Locked', body: 'JLD01cipher', is_locked: 1, parent_id: folder.id, updated_time: time.unixMs() - 60_000 }, { autoTimestamp: false });
 		await synchronizerStart();
 
 		const path = `${note.id}.md`;
 		const remote = (await fileApi().get(path)).replace('share_id: \n', 'share_id: share-1\n').replace('is_locked: 1\n', lockLine).replace('JLD01cipher', 'edited on an old client').replace(/^updated_time: .*$/m, `updated_time: ${time.unixMsToIso(note.updated_time + 1000)}`);
 		await fileApi().put(path, remote);
-		if (changedLocally) await Note.save({ id: note.id, title: 'Renamed locally' });
+		const title = changedLocally ? 'Renamed locally' : 'Locked';
+		if (changedLocally) await Note.save({ id: note.id, title });
 		await synchronizerStart();
 
-		const conflicts = await Note.conflictedNotes();
-		expect(conflicts.length).toBe(1);
-		expect(conflicts[0]).toMatchObject({ conflict_original_id: changedLocally ? note.id : '', is_locked: 1, body: 'JLD01cipher', share_id: '' });
-		expect(await Note.load(note.id)).toMatchObject({ is_locked: 0, body: 'edited on an old client', share_id: 'share-1' });
+		expect((await Note.conflictedNotes()).length).toBe(0);
+		expect(await Note.load(note.id)).toMatchObject({ title, is_locked: 1, body: 'JLD01cipher' });
+
+		await synchronizerStart();
+		expect(await BaseItem.unserialize(await fileApi().get(path))).toMatchObject({ title, is_locked: 1, body: 'JLD01cipher' });
+	}));
+
+	it.each([
+		['an older client edits an unlocked note', 0, ''],
+		['another device removes the lock', 1, 'is_locked: 0\n'],
+	])('should keep a remote change to a note inside a share when %s', (async (_name, isLocked, lockLine) => {
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'note', body: 'JLD01cipher', is_locked: isLocked, parent_id: folder.id });
+		await synchronizerStart();
+
+		const path = `${note.id}.md`;
+		const remote = (await fileApi().get(path)).replace('share_id: \n', 'share_id: share-1\n').replace(`is_locked: ${isLocked}\n`, lockLine).replace('JLD01cipher', 'changed remotely').replace(/^updated_time: .*$/m, `updated_time: ${time.unixMsToIso(note.updated_time + 1000)}`);
+		await fileApi().put(path, remote);
+		await synchronizerStart();
+
+		expect(await Note.load(note.id)).toMatchObject({ is_locked: 0, body: 'changed remotely' });
 	}));
 
 	it('should not keep a conflict when a shared locked note arrives with its lock state', (async () => {
