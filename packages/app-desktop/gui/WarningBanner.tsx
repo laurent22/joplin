@@ -346,6 +346,7 @@ const NotificationMessage: React.FC<NotificationMessageProps> = ({ message, call
 	);
 };
 
+
 interface AppMinVersionIsReleaseProps {
 	appMinVersion: string;
 	mustUpgradeAppMessage: string;
@@ -353,9 +354,6 @@ interface AppMinVersionIsReleaseProps {
 
 const useAppMinVersionState = (props: AppMinVersionIsReleaseProps) => {
 	const version = props.appMinVersion;
-	const propsRef = useRef(props);
-	propsRef.current = props;
-
 	const [state, setState] = useState({
 		isRelease: null,
 		didReleaseLoadFail: false,
@@ -363,18 +361,18 @@ const useAppMinVersionState = (props: AppMinVersionIsReleaseProps) => {
 
 	useAsyncEffect(async (event) => {
 		if (event.cancelled) return;
-		if (!propsRef.current.mustUpgradeAppMessage || !version) return;
+		if (!props.mustUpgradeAppMessage || !version) return;
 
 		try {
 			const isRelease = await isReleaseVersion(version);
-			if (!propsRef.current.mustUpgradeAppMessage || propsRef.current.appMinVersion !== version) return;
+			if (event.cancelled) return;
 			setState({
 				isRelease,
 				didReleaseLoadFail: isRelease === null,
 			});
 		} catch (error) {
 			logger.error(error);
-			if (!propsRef.current.mustUpgradeAppMessage || propsRef.current.appMinVersion !== version) return;
+			if (event.cancelled) return;
 			setState(state => ({
 				...state,
 				didReleaseLoadFail: true,
