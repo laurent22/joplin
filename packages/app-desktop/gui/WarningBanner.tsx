@@ -357,7 +357,7 @@ const useAppMinVersionState = (props: AppMinVersionIsReleaseProps) => {
 	});
 
 	useAsyncEffect(async (event) => {
-		if (event.cancelled) return;
+		setState({ isRelease: null, didReleaseLoadFail: false });
 		if (!props.mustUpgradeAppMessage || !version) return;
 
 		try {
