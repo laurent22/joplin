@@ -12625,7 +12625,7 @@ __metadata:
     "@react-native-vector-icons/material-icons": "npm:12.5.0"
     "@react-native/babel-preset": "npm:0.81.6"
     "@react-native/metro-config": "npm:0.81.6"
-    "@react-native/typescript-config": "npm:0.85.2"
+    "@react-native/typescript-config": "npm:0.85.3"
     "@sqlite.org/sqlite-wasm": "npm:3.46.0-build2"
     "@testing-library/react-native": "npm:13.2.0"
     "@types/fs-extra": "npm:11.0.4"
@@ -12821,7 +12821,7 @@ __metadata:
     entities: "npm:2.2.0"
     eslint: "npm:9.39.4"
     jest: "npm:29.7.0"
-    prettier: "npm:3.8.3"
+    prettier: "npm:3.8.5"
     ts-jest: "npm:29.4.11"
     typescript: "npm:5.9.3"
   languageName: unknown
@@ -16464,10 +16464,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native/typescript-config@npm:0.85.2":
-  version: 0.85.2
-  resolution: "@react-native/typescript-config@npm:0.85.2"
-  checksum: 10/9459f686acad048eff47e6a144ea2b1c8b5cdfeb98be774826a8604a116f3bd47f23fe8003141d9109a898d41a3adc288335ef173dec4b9438c4a3a7846ea05c
+"@react-native/typescript-config@npm:0.85.3":
+  version: 0.85.3
+  resolution: "@react-native/typescript-config@npm:0.85.3"
+  checksum: 10/0d4295fba2b3abc9136457c9fdf788de26c237bf91e96a48d8434f0a919aea26ddb19f4e008c75d00bc7ca41d6fa1839a73cd67a39d12e5e1a36147e102b45ce
   languageName: node
   linkType: hard
 
@@ -31057,9 +31057,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jest@npm:29.15.2":
-  version: 29.15.2
-  resolution: "eslint-plugin-jest@npm:29.15.2"
+"eslint-plugin-jest@npm:29.15.4":
+  version: 29.15.4
+  resolution: "eslint-plugin-jest@npm:29.15.4"
   dependencies:
     "@typescript-eslint/utils": "npm:^8.0.0"
   peerDependencies:
@@ -31074,7 +31074,7 @@ __metadata:
       optional: true
     typescript:
       optional: true
-  checksum: 10/c7bc4dc705e5613e51a1d19bb924a439db9897c67e694f091e29dbacaa218b758040aacbb8d3f9136f2af0171ad69c1c49736b5e3f30098bdf44d4c1e93c6381
+  checksum: 10/5b8e710828983fd1b1093fbe85248ebced7650ddc9d953cba8840cce89a43fd040be23848b47b26a68e2bebe9395e9acc3c64577f39a78c6b4dde0659636b764
   languageName: node
   linkType: hard
 
@@ -48211,12 +48211,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:3.8.3":
-  version: 3.8.3
-  resolution: "prettier@npm:3.8.3"
+"prettier@npm:3.8.5":
+  version: 3.8.5
+  resolution: "prettier@npm:3.8.5"
   bin:
     prettier: bin/prettier.cjs
-  checksum: 10/4b3b12cbb29e4c96bed936e5d070167552500c18d37676fb3e0caae6199c42860662608e4dc116230698f6e2bb0267ef2548158224c92d40f188d309d72fdd6f
+  checksum: 10/61b59be2f6fdb06850aa8add77a4c3ea31d9536ae25ee9206cdd7a52de968276270a69f4bb71a6e23cbe7bfe6705a74eebdfae2022659c4ccea246e45c290c94
   languageName: node
   linkType: hard
 
@@ -51886,7 +51886,7 @@ __metadata:
     eslint-interactive: "npm:14.0.0"
     eslint-plugin-github: "npm:4.10.2"
     eslint-plugin-import: "npm:2.32.0"
-    eslint-plugin-jest: "npm:29.15.2"
+    eslint-plugin-jest: "npm:29.15.4"
     eslint-plugin-promise: "npm:7.3.0"
     eslint-plugin-react: "npm:7.37.5"
     execa: "npm:5.1.1"
