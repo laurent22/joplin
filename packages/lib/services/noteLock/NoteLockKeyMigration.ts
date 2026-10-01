@@ -65,7 +65,7 @@ const countNotesUnderKey = async (keyId: string) => {
 
 // Adopts the target key and lineage, unless a note is still locked with the local key (an editor can re-save one
 // after the migration passed it): then nothing is adopted and their count comes back, so the UI can offer a retry.
-export const finishNoteLockKeyMigration = async (acceptLoss = false) => {
+export const finishNoteLockKeyMigration = async (acceptLoss: boolean) => {
 	if (!acceptLoss) {
 		const remaining = await countNotesUnderKey(NoteLockKey.instance().load()?.id);
 		if (remaining) return remaining;

@@ -74,7 +74,7 @@ export const NoteLockMigrationScreenComponent: React.FC<Props> = props => {
 		let remaining = 0;
 		try {
 			const result = await migrateLockedNotes(localPassword, targetPassword);
-			remaining = result.failed || await finishNoteLockKeyMigration();
+			remaining = result.failed || await finishNoteLockKeyMigration(false);
 		} catch (error) {
 			setErrorMessage(error.name === 'OperationError' ? _('Invalid password') : error.message);
 			setMigrating(false);

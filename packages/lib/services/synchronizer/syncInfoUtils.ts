@@ -654,7 +654,7 @@ export const adoptNoteLockKeyConflict = () => {
 
 // Different lineages with local notes depending on the local key stop the sync: the remote key is parked for the
 // migration and keeps rejecting syncs until resolved. A stale reset (another device reset first) counts as a different lineage.
-export const checkNoteLockKeyConflict = (local: SyncInfo, remote: SyncInfo, hasLocalLockedNotes: boolean, staleReset = false) => {
+export const checkNoteLockKeyConflict = (local: SyncInfo, remote: SyncInfo, hasLocalLockedNotes: boolean, staleReset: boolean) => {
 	if (!noteLockKeyConflict()) {
 		const keysDiffer = !!local.noteLockKey && !!remote.noteLockKey && local.noteLockKey.id !== remote.noteLockKey.id;
 		if (!keysDiffer || (local.syncMigrationId === remote.syncMigrationId && !staleReset) || !hasLocalLockedNotes) return;

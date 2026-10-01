@@ -113,7 +113,7 @@ describe('Synchronizer.noteLock', () => {
 		}
 
 		expect(await migrateLockedNotes('222222', '333333')).toEqual({ migrated: 1, skipped: 0, failed: 0 });
-		await finishNoteLockKeyMigration();
+		await finishNoteLockKeyMigration(false);
 		expect(Setting.value('noteLock.passwordReset')).toBe(false);
 		expect(Setting.value('noteLock.keyIdToReset')).toBe('');
 		await synchronizerStart(null, { throwOnError: true });
@@ -192,7 +192,7 @@ describe('Synchronizer.noteLock', () => {
 		await expect(synchronizerStart(null, { throwOnError: true })).rejects.toMatchObject({ code: ErrorCode.NoteLockKeyConflict });
 
 		expect(await migrateLockedNotes('222222', '111111')).toEqual({ migrated: 1, skipped: 0, failed: 0 });
-		await finishNoteLockKeyMigration();
+		await finishNoteLockKeyMigration(false);
 		await synchronizerStart(null, { throwOnError: true });
 		expect(NoteLockKey.instance().load()).toEqual(remoteKey);
 		expect(localSyncInfo().syncMigrationId).toBe(remoteSyncMigrationId);
@@ -369,7 +369,7 @@ describe('Synchronizer.noteLock', () => {
 		await Note.save({ title: 'secret', body: 'secret body', is_locked: 1 }, { useNoteLock: true });
 		await expect(synchronizerStart(null, { throwOnError: true })).rejects.toMatchObject({ code: ErrorCode.NoteLockKeyConflict });
 		await migrateLockedNotes('222222', '111111');
-		duringTheLockedNotesCheck(() => finishNoteLockKeyMigration());
+		duringTheLockedNotesCheck(() => finishNoteLockKeyMigration(false));
 
 		await expect(synchronizerStart(null, { throwOnError: true })).rejects.toThrow('changed on this device');
 		expect(noteLockKeyConflict()).toBeNull();

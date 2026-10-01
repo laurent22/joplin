@@ -183,7 +183,7 @@ describe('syncInfoUtils', () => {
 		const local = syncInfoWithNoteLockKey(noteLockKey('2', 300), 'L2');
 		const remote = syncInfoWithNoteLockKey(noteLockKey('1', 200), 'L1');
 
-		expect(() => checkNoteLockKeyConflict(local, remote, true)).toThrow(expect.objectContaining({ code: ErrorCode.NoteLockKeyConflict }));
+		expect(() => checkNoteLockKeyConflict(local, remote, true, false)).toThrow(expect.objectContaining({ code: ErrorCode.NoteLockKeyConflict }));
 		expect(Setting.value('noteLock.conflictNoteLockKey')).toEqual({ noteLockKey: remote.noteLockKey, syncMigrationId: 'L1' });
 	});
 
@@ -194,7 +194,7 @@ describe('syncInfoUtils', () => {
 		const local = syncInfoWithNoteLockKey(noteLockKey('2', 300), localLineage);
 		const remote = syncInfoWithNoteLockKey(noteLockKey('1', 200), 'L1');
 
-		expect(() => checkNoteLockKeyConflict(local, remote, hasLocalLockedNotes)).not.toThrow();
+		expect(() => checkNoteLockKeyConflict(local, remote, hasLocalLockedNotes, false)).not.toThrow();
 		expect(Setting.value('noteLock.conflictNoteLockKey')).toEqual({});
 	});
 
@@ -204,7 +204,7 @@ describe('syncInfoUtils', () => {
 		const local = syncInfoWithNoteLockKey(noteLockKey('3', 300), 'L3');
 		const remote = syncInfoWithNoteLockKey(noteLockKey('3', 300), 'L3');
 
-		expect(() => checkNoteLockKeyConflict(local, remote, false)).toThrow(expect.objectContaining({ code: ErrorCode.NoteLockKeyConflict }));
+		expect(() => checkNoteLockKeyConflict(local, remote, false, false)).toThrow(expect.objectContaining({ code: ErrorCode.NoteLockKeyConflict }));
 		expect(Setting.value('noteLock.conflictNoteLockKey')).toEqual(parked);
 	});
 

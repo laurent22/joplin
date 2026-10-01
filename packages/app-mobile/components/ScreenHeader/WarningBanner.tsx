@@ -31,7 +31,7 @@ interface Props {
 	processingShareInvitationResponse: boolean;
 	showInvalidJoplinCloudCredential: boolean;
 	noteLockKeyConflict: boolean;
-	showNoteLockKeyConflictMessage?: boolean|undefined;
+	showNoteLockKeyConflictMessage: boolean|undefined;
 }
 
 const androidGooglePlayUrl = 'https://play.google.com/store/apps/details?id=net.cozic.joplin';
