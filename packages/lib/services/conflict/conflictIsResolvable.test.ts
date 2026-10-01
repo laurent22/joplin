@@ -33,8 +33,18 @@ describe('conflictIsResolvable', () => {
 
 		const result = await conflictIsResolvable(note);
 
+		expect(conflictNoteIsResolvable(note)).toBe(false);
 		expect(result.resolvable).toBe(false);
 		expect(result.original).toBe(null);
+	});
+
+	test('should not be resolvable when the original is locked but the conflict is not', async () => {
+		const note = await createConflictNote({}, { is_locked: 1 });
+		const original = await Note.load(note.conflict_original_id);
+
+		expect(conflictNoteIsResolvable(note)).toBe(true);
+		expect(conflictNoteIsResolvable(note, original)).toBe(false);
+		expect((await conflictIsResolvable(note)).resolvable).toBe(false);
 	});
 
 	test.each([

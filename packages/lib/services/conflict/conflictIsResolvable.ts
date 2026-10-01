@@ -28,23 +28,24 @@ const isReadOnlyShare = (note: NoteEntity) => {
 	);
 };
 
-export const conflictNoteIsResolvable = (note: NoteEntity|null|undefined) => {
+export const conflictNoteIsResolvable = (note: NoteEntity|null|undefined, original: NoteEntity|null = null) => {
+	// A folder conflict marks the note without linking an original
+	if (!note || !note.is_conflict || !note.conflict_original_id) return false;
 	if (!isConflictResolutionEnabled()) return false;
-	if (!note || !note.is_conflict) return false;
 	if (note.encryption_applied || note.is_locked) return false;
+	if (original?.is_locked) return false;
 	if (!isMarkdown(note)) return false;
 	return true;
 };
 
 export default async (note: NoteEntity|null|undefined): Promise<{ resolvable: boolean; original: NoteEntity|null }> => {
 	if (!conflictNoteIsResolvable(note)) return { resolvable: false, original: null };
-	// A folder conflict marks the note without linking an original
-	if (!note.conflict_original_id) return { resolvable: false, original: null };
 
 	const original = await Note.load(note.conflict_original_id);
 	if (!original) return { resolvable: false, original: null };
 
-	if (original.encryption_applied || original.is_locked) return { resolvable: false, original };
+	if (!conflictNoteIsResolvable(note, original)) return { resolvable: false, original };
+	if (original.encryption_applied) return { resolvable: false, original };
 	if (!isMarkdown(original)) return { resolvable: false, original };
 	if (original.deleted_time) return { resolvable: false, original };
 	if (isReadOnlyShare(original)) return { resolvable: false, original };
