@@ -130,9 +130,6 @@ const WarningBanner: React.FC<Props> = props => {
 
 	let msg = null;
 
-	// When adding something here, don't forget to update the condition in
-	// this.messageBoxVisible()
-
 	if (props.isSafeMode) {
 		msg = renderNotificationMessage(
 			_('Safe mode is currently active. Note rendering and all plugins are temporarily disabled.'),
