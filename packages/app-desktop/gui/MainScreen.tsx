@@ -367,8 +367,6 @@ class MainScreenComponent extends React.Component<Props, State> {
 		const styleKey = [themeId, width, height, messageBoxVisible].join('_');
 		if (styleKey === this.styleKey_) return this.styles_;
 
-		const theme = themeStyle(themeId);
-
 		this.styleKey_ = styleKey;
 
 		this.styles_ = {};
@@ -377,16 +375,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 			width: width,
 		};
 
-		this.styles_.messageBox = {
-			width: width,
-			height: this.messageBoxHeight(),
-			display: 'flex',
-			alignItems: 'center',
-			paddingLeft: 10,
-			backgroundColor: theme.warningBackgroundColor,
-		};
-
-		const rowHeight = height - (messageBoxVisible ? this.styles_.messageBox.height : 0);
+		const rowHeight = height - (messageBoxVisible ? this.messageBoxHeight() : 0);
 
 		this.styles_.rowHeight = rowHeight;
 
@@ -404,6 +393,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 	public renderNotification() {
 		return <WarningBanner
+			height={this.messageBoxHeight()}
 			onShow={() => this.setState({ messageBoxVisible: true })}
 			onHide={() => this.setState({ messageBoxVisible: false })}
 		/>;

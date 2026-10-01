@@ -1,6 +1,5 @@
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
-import { themeStyle } from '@joplin/lib/theme';
 import * as React from 'react';
 import { Dispatch } from 'redux';
 import checkForUpdates, { isReleaseVersion } from '../checkForUpdates';
@@ -24,7 +23,6 @@ const logger = Logger.create('WarningBanner');
 
 interface Props {
 	dispatch: Dispatch;
-	themeId: number;
 	isSafeMode: boolean;
 	hasMissingSyncCredentials: boolean;
 	shouldUpgradeSyncTarget: boolean;
@@ -41,6 +39,7 @@ interface Props {
 	showInvalidJoplinCloudCredential: boolean;
 	onShow: ()=> void;
 	onHide: ()=> void;
+	height: number;
 }
 
 const WarningBanner: React.FC<Props> = props => {
@@ -51,7 +50,6 @@ const WarningBanner: React.FC<Props> = props => {
 		message: string, callForAction: string = null, callForActionHandler: ()=> void = null, callForAction2: string = null, callForActionHandler2: ()=> void = null,
 	) => {
 		return <NotificationMessage
-			themeId={props.themeId}
 			message={message}
 			callForAction={callForAction}
 			callForActionHandler={callForActionHandler}
@@ -264,7 +262,10 @@ const WarningBanner: React.FC<Props> = props => {
 	if (!visible) return null;
 
 	return (
-		<div className='warning-banner'>
+		<div
+			style={{ height: props.height }}
+			className='warning-banner -header'
+		>
 			<span
 				className='content'
 				role='alert'
@@ -282,7 +283,6 @@ const mapStateToProps = (state: AppState) => {
 	const showNeedUpgradingEnabledMasterKeyMessage = !!EncryptionService.instance().masterKeysThatNeedUpgrading(syncInfo.masterKeys.filter((k) => !!k.enabled)).length;
 
 	return {
-		themeId: state.settings.theme,
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
 		hasDisabledEncryptionItems: state.hasDisabledEncryptionItems,
 		showMissingMasterKeyMessage: showMissingMasterKeyMessage(syncInfo, state.notLoadedMasterKeys),
@@ -305,7 +305,6 @@ export default connect(mapStateToProps)(WarningBanner);
 
 type CallForActionHandler = ()=> void;
 interface NotificationMessageProps {
-	themeId: number;
 	message: string;
 	callForAction: string|null;
 	callForActionHandler: CallForActionHandler|null;
@@ -313,20 +312,17 @@ interface NotificationMessageProps {
 	callForActionHandler2: CallForActionHandler|null;
 }
 
-const NotificationMessage: React.FC<NotificationMessageProps> = ({ themeId, message, callForAction, callForActionHandler, callForAction2, callForActionHandler2 }) => {
-	const theme = themeStyle(themeId);
-	const urlStyle: React.CSSProperties = { color: theme.colorWarnUrl, textDecoration: 'underline' };
-
+const NotificationMessage: React.FC<NotificationMessageProps> = ({ message, callForAction, callForActionHandler, callForAction2, callForActionHandler2 }) => {
 	if (!callForAction) return <span>{message}</span>;
 
 	const cfa = (
-		<a href="#" style={urlStyle} onClick={() => callForActionHandler()}>
+		<a href="#" className='warning-banner-link -underline' onClick={() => callForActionHandler()}>
 			{callForAction}
 		</a>
 	);
 
 	const cfa2 = !callForAction2 ? null : (
-		<a href="#" style={urlStyle} onClick={() => callForActionHandler2()}>
+		<a href="#" className='warning-banner-link -underline' onClick={() => callForActionHandler2()}>
 			{callForAction2}
 		</a>
 	);
