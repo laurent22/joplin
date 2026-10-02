@@ -60,7 +60,8 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 				remoteContent = { ...remoteContent, is_locked: (local as NoteEntity).is_locked } as NoteEntity;
 			} else {
 				const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, BaseItem.remoteItemSyncTime(remoteSyncedTime), null, remoteSyncedTime);
-				await ItemClass.save({ id: local.id, updated_time: remoteSyncedTime + 1 }, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries: syncTimeQueries });
+				const newUpdatedTime = Math.max(local.updated_time, remoteSyncedTime + 1);
+				await ItemClass.save({ id: local.id, updated_time: newUpdatedTime, user_updated_time: newUpdatedTime }, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries: syncTimeQueries });
 				return;
 			}
 		}
