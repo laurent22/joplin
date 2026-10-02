@@ -86,7 +86,7 @@ const useStyles = (themeId: number, showTopBorder: boolean) => {
 				alignItems: 'center',
 			},
 			lockIcon: {
-				color: theme.colorFaded,
+				color: theme.color,
 				fontSize: theme.fontSize,
 				marginRight: 8,
 			},
