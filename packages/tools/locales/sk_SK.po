@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin v3.7.18\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2026-09-14 20:46+0200\n"
+"PO-Revision-Date: 2026-09-19 01:55+0200\n"
 "Last-Translator: Jozef Gaal <preklady@mayday.sk>\n"
 "Language-Team: Slovak <preklady@mayday.sk>\n"
 "Language: sk\n"
@@ -597,7 +597,7 @@ msgstr "Pridať novú"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addNoteToWhiteboard.ts:18
 msgid "Add note to whiteboard..."
-msgstr "Pridať poznámku na tabuľu..."
+msgstr "Pridať poznámku na nástenku..."
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/setTags.ts:52
 msgid "Add or remove tags:"
@@ -2018,7 +2018,7 @@ msgstr "Vytvoriť používateľa"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newWhiteboard.ts:8
 msgid "Create whiteboard"
-msgstr "Vytvoriť tabuľu"
+msgstr "Vytvoriť nástenku"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:15
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:77
@@ -2156,7 +2156,7 @@ msgstr "Tmavá"
 
 #: packages/server/src/services/MustacheService.ts:116
 msgid "Dashboard"
-msgstr "Nástenka"
+msgstr "Ovládací panel"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:236
 msgid "Date"
@@ -8262,7 +8262,7 @@ msgstr "Tento podpriečinok koša neobsahuje žiadne poznámky."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardEditor.tsx:181
 msgid "This whiteboard could not be loaded"
-msgstr "Túto tabuľu sa nepodarilo načítať"
+msgstr "Túto nástenku sa nepodarilo načítať"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1536
 msgid ""
@@ -8496,7 +8496,7 @@ msgstr "Prepnúť pole poradia zoradenia"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleWhiteboardEditor.ts:6
 msgid "Toggle whiteboard / Markdown view"
-msgstr "Prepnúť medzi zobrazením tabuľa / Markdown"
+msgstr "Prepnúť medzi zobrazením nástenka / Markdown"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:42
 msgid "Token has been copied to the clipboard!"
@@ -8742,7 +8742,7 @@ msgstr "Nepomenované"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newWhiteboard.ts:16
 msgid "Untitled whiteboard"
-msgstr "Tabuľa bez názvu"
+msgstr "Nástenka bez názvu"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:205
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:170

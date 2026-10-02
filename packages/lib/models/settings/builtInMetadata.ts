@@ -4,7 +4,7 @@ import { _, _n, defaultLocale, supportedLocalesToLanguages } from '../../locale'
 import shim from '../../shim';
 import time from '../../time';
 import type SettingType from '../Setting';
-import { AppType, SettingItemSubType, SettingItemType, SettingStorage, SyncStartupOperation, SettingItem } from './types';
+import { AppType, SettingItemSubType, SettingItemType, SettingStorage, SyncStartupOperation, SettingItem, SettingButtonStyle } from './types';
 import { defaultListColumns } from '../../services/plugins/api/noteListType';
 import type { PluginSettings } from '../../services/plugins/PluginService';
 import type { PublicPrivateKeyPair } from '../../services/e2ee/ppk/ppk';
@@ -28,6 +28,24 @@ const show3rdPartySyncSettings = (Setting: typeof SettingType) => {
 
 const showAiTools = (settings: Record<string, unknown>) => {
 	return !!settings['mcp.enabled'] || !!settings['ai.enabled'];
+};
+
+const showJoplinServerConnectDisconnectButtons = (settings: Record<string, unknown>, targetId: number) => {
+	return settings['sync.target'] === targetId;
+};
+
+const buildJoplinServerConnectButton = (syncTargetId: number, syncTargetName: string) => {
+	return {
+		value: null as null,
+		type: SettingItemType.Button,
+		buttonStyle: SettingButtonStyle.Highlighted,
+		hideLabel: true,
+		label: () => _('Connect to %s', syncTargetName),
+		public: true,
+		appTypes: [AppType.Desktop, AppType.Mobile],
+		show: settings => showJoplinServerConnectDisconnectButtons(settings, syncTargetId),
+		section: 'sync',
+	} satisfies SettingItem;
 };
 
 const addBetaMarker = (text: string) => _('%s (Beta)', text);
@@ -453,6 +471,8 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 
 		'sync.10.userEmail': { value: '', type: SettingItemType.String, public: false },
 
+		'sync.10.connect': buildJoplinServerConnectButton(10, _('Joplin Cloud')),
+
 		'sync.5.syncTargets': { value: {}, type: SettingItemType.Object, public: false },
 
 		'sync.resourceDownloadMode': {
@@ -748,6 +768,18 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			show: (settings) => !!settings['ai.enabled'] && (settings['ai.chat.providerType'] === 'openai-compatible' || settings['ai.chat.providerType'] === 'anthropic'),
 			label: () => _('Model'),
 			description: () => _('The model identifier to use, for example gpt-4o-mini or claude-3-5-sonnet-latest.'),
+			storage: SettingStorage.File,
+		},
+
+		// Not gated on `ai.enabled` since it only applies when chat is off.
+		'ai.chat.showToolbarButton': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			advanced: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop],
+			label: () => _('Show the AI Chat button in the note toolbar'),
 			storage: SettingStorage.File,
 		},
 

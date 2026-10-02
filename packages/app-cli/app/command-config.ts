@@ -58,7 +58,7 @@ class Command extends BaseCommand {
 				}
 			});
 
-			inputStream.on('error', (error) => {
+			inputStream.on('error', (error: Error) => {
 				if (!isSettled) {
 					isSettled = true;
 					reject(error);

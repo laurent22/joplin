@@ -102,6 +102,26 @@ describe('autoMergeNote', () => {
 		expect(merged.resolvedCurrent.title).toBe('Remote title');
 	});
 
+	test.each([
+		['the middle, deleted remotely', 'A\nB\nC', 'A\nX\nC', 'A\nC'],
+		['the middle, deleted locally', 'A\nB\nC', 'A\nC', 'A\nX\nC'],
+		['the start, deleted remotely', 'A\nB\nC', 'X\nB\nC', 'B\nC'],
+		['the start, deleted locally', 'A\nB\nC', 'B\nC', 'X\nB\nC'],
+		['the end, deleted remotely', 'A\nB\nC', 'A\nB\nX', 'A\nB'],
+		['the end, deleted locally', 'A\nB\nC', 'A\nB', 'A\nB\nX'],
+		['the middle, replaced with a blank line', 'A\nB\nC', 'A\nX\nC', 'A\n\nC'],
+	])('should rebuild each side exactly when a conflict is at %s', (_label, base, local, remote) => {
+		const merged = autoMergeNote(
+			{ title: 'Title', body: base },
+			{ title: 'Title', body: local },
+			{ title: 'Title', body: remote },
+		);
+
+		expect(merged.fullyMerged).toBe(false);
+		expect(merged.resolvedLocal.body).toBe(local);
+		expect(merged.resolvedCurrent.body).toBe(remote);
+	});
+
 	test('should report fully merged when both sides made identical edits', () => {
 		const edited = baseBody.replace('Second paragraph.', 'Second paragraph, same edit.');
 

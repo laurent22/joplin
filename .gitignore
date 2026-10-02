@@ -183,6 +183,7 @@ packages/app-desktop/commands/openNoteInNewWindow.js
 packages/app-desktop/commands/openPrimaryAppInstance.js
 packages/app-desktop/commands/openProfileDirectory.js
 packages/app-desktop/commands/openSecondaryAppInstance.js
+packages/app-desktop/commands/openSyncWizard.js
 packages/app-desktop/commands/replaceMisspelling.js
 packages/app-desktop/commands/restoreNoteRevision.js
 packages/app-desktop/commands/showProfileEditor.js
@@ -197,7 +198,9 @@ packages/app-desktop/commands/toggleSafeMode.js
 packages/app-desktop/commands/toggleTabMovesFocus.js
 packages/app-desktop/gui/AiDegradedNotice.js
 packages/app-desktop/gui/Button/Button.js
+packages/app-desktop/gui/ChatPanel/ChatHistory.js
 packages/app-desktop/gui/ChatPanel/ChatMessageItem.js
+packages/app-desktop/gui/ChatPanel/ChatPanel.test.js
 packages/app-desktop/gui/ChatPanel/ChatPanel.js
 packages/app-desktop/gui/ClipperConfigScreen.js
 packages/app-desktop/gui/ConfigScreen/ButtonBar.js
@@ -211,6 +214,7 @@ packages/app-desktop/gui/ConfigScreen/controls/GlobalHotkeyInput.test.js
 packages/app-desktop/gui/ConfigScreen/controls/GlobalHotkeyInput.js
 packages/app-desktop/gui/ConfigScreen/controls/MissingPasswordHelpLink.js
 packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.js
+packages/app-desktop/gui/ConfigScreen/controls/SettingButton.js
 packages/app-desktop/gui/ConfigScreen/controls/SettingComponent.js
 packages/app-desktop/gui/ConfigScreen/controls/SettingDescription.js
 packages/app-desktop/gui/ConfigScreen/controls/SettingHeader.js
@@ -222,6 +226,7 @@ packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js
 packages/app-desktop/gui/ConfigScreen/controls/useNoteLockMode.js
 packages/app-desktop/gui/ConfigScreen/searchHighlight.test.js
 packages/app-desktop/gui/ConfigScreen/searchHighlight.js
+packages/app-desktop/gui/ConfigScreen/types.js
 packages/app-desktop/gui/DialogButtonRow.js
 packages/app-desktop/gui/DialogButtonRow/useKeyboardHandler.js
 packages/app-desktop/gui/DialogTitle.js
@@ -509,6 +514,7 @@ packages/app-desktop/gui/ToolbarSpace.js
 packages/app-desktop/gui/TrashNotification/TrashNotification.js
 packages/app-desktop/gui/TrashNotification/TrashNotificationMessage.js
 packages/app-desktop/gui/UpdateNotification/UpdateNotification.js
+packages/app-desktop/gui/WarningBanner.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/AppDialogs.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/ModalMessageOverlay.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/PluginDialogs.js
@@ -537,6 +543,7 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newNote.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newSubFolder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newTodo.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newWhiteboard.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openAiChatConversation.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openFolder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openFolderDialog.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openItem.js
@@ -602,6 +609,7 @@ packages/app-desktop/gui/utils/NoteListUtils.js
 packages/app-desktop/gui/utils/announceForAccessibility.js
 packages/app-desktop/gui/utils/convertToScreenCoordinates.js
 packages/app-desktop/gui/utils/dragAndDrop.js
+packages/app-desktop/gui/utils/hasNoteLockKey.js
 packages/app-desktop/gui/utils/loadScript.js
 packages/app-desktop/gulpfile.js
 packages/app-desktop/integration-tests/chatPanel.spec.js
@@ -611,6 +619,7 @@ packages/app-desktop/integration-tests/markdownEditor.spec.js
 packages/app-desktop/integration-tests/models/ChangeAppLayoutScreen.js
 packages/app-desktop/integration-tests/models/ChatPanel.js
 packages/app-desktop/integration-tests/models/GoToAnything.js
+packages/app-desktop/integration-tests/models/JoplinCloudLoginScreen.js
 packages/app-desktop/integration-tests/models/MainScreen.js
 packages/app-desktop/integration-tests/models/NoteEditor/BaseEditor.js
 packages/app-desktop/integration-tests/models/NoteEditor/EditorCodeDialog.js
@@ -619,7 +628,8 @@ packages/app-desktop/integration-tests/models/NoteEditor/NoteEditorScreen.js
 packages/app-desktop/integration-tests/models/NoteEditor/NoteViewer.js
 packages/app-desktop/integration-tests/models/NoteEditor/RichTextEditor.js
 packages/app-desktop/integration-tests/models/NoteList.js
-packages/app-desktop/integration-tests/models/SettingsScreen.js
+packages/app-desktop/integration-tests/models/SettingsScreen/SettingsScreen.js
+packages/app-desktop/integration-tests/models/SettingsScreen/SyncTab.js
 packages/app-desktop/integration-tests/models/Sidebar.js
 packages/app-desktop/integration-tests/multiWindow.spec.js
 packages/app-desktop/integration-tests/networking.spec.js
@@ -698,6 +708,7 @@ packages/app-desktop/utils/customProtocols/registerCustomProtocols.js
 packages/app-desktop/utils/getAssetPath.js
 packages/app-desktop/utils/initReact.js
 packages/app-desktop/utils/initializeCommandService.js
+packages/app-desktop/utils/initializeNetworkConnectionAttemptTimeout.js
 packages/app-desktop/utils/isSafeToOpen.test.js
 packages/app-desktop/utils/isSafeToOpen.js
 packages/app-desktop/utils/layout/layoutKeyToLabel.js
@@ -1451,6 +1462,7 @@ packages/lib/errorUtils.js
 packages/lib/errors.js
 packages/lib/eventManager.test.js
 packages/lib/eventManager.js
+packages/lib/file-api-driver-joplinServer.test.js
 packages/lib/file-api-driver-joplinServer.js
 packages/lib/file-api-driver-local.js
 packages/lib/file-api-driver-memory.js
@@ -1507,6 +1519,9 @@ packages/lib/mimeUtils.test.js
 packages/lib/models/Alarm.js
 packages/lib/models/BaseItem.test.js
 packages/lib/models/BaseItem.js
+packages/lib/models/ChatConversation.test.js
+packages/lib/models/ChatConversation.js
+packages/lib/models/ChatMessage.js
 packages/lib/models/ConflictNoteState.js
 packages/lib/models/Folder.publishing.test.js
 packages/lib/models/Folder.sharing.test.js
@@ -1606,6 +1621,7 @@ packages/lib/services/ResourceEditWatcher/reducer.js
 packages/lib/services/ResourceFetcher.js
 packages/lib/services/ResourceService.test.js
 packages/lib/services/ResourceService.js
+packages/lib/services/RevisionService.noteLock.test.js
 packages/lib/services/RevisionService.test.js
 packages/lib/services/RevisionService.js
 packages/lib/services/SettingUtils.js
@@ -1639,6 +1655,7 @@ packages/lib/services/ai/providers/Anthropic.js
 packages/lib/services/ai/providers/ChatProviderBase.js
 packages/lib/services/ai/providers/JoplinCloud.test.js
 packages/lib/services/ai/providers/JoplinCloud.js
+packages/lib/services/ai/providers/OpenAiCompatible.test.js
 packages/lib/services/ai/providers/OpenAiCompatible.js
 packages/lib/services/ai/providers/TestProvider.js
 packages/lib/services/ai/testing/TestEmbeddingProvider.test.js
@@ -1664,6 +1681,8 @@ packages/lib/services/ai/tools/utils/buildTool.js
 packages/lib/services/ai/tools/utils/serializeToolOutput.js
 packages/lib/services/ai/tools/utils/settings.js
 packages/lib/services/ai/types.js
+packages/lib/services/ai/utils/extractReasoning.test.js
+packages/lib/services/ai/utils/extractReasoning.js
 packages/lib/services/ai/utils/findFencedBlock.js
 packages/lib/services/commands/MenuUtils.js
 packages/lib/services/commands/ToolbarButtonUtils.test.js
@@ -1702,6 +1721,7 @@ packages/lib/services/database/migrations/50.js
 packages/lib/services/database/migrations/51.js
 packages/lib/services/database/migrations/52.js
 packages/lib/services/database/migrations/53.js
+packages/lib/services/database/migrations/54.js
 packages/lib/services/database/migrations/index.js
 packages/lib/services/database/sqlStringToLines.js
 packages/lib/services/database/types.js
@@ -1775,6 +1795,8 @@ packages/lib/services/noteList/defaultLeftToRightListRenderer.js
 packages/lib/services/noteList/defaultListRenderer.js
 packages/lib/services/noteList/defaultMultiColumnsRenderer.js
 packages/lib/services/noteList/depNameToNoteProp.js
+packages/lib/services/noteList/isSyncDisabledConflict.test.js
+packages/lib/services/noteList/isSyncDisabledConflict.js
 packages/lib/services/noteList/renderTemplate.test.js
 packages/lib/services/noteList/renderTemplate.js
 packages/lib/services/noteList/renderViewProps.test.js
@@ -2043,6 +2065,8 @@ packages/lib/utils/replaceUnsupportedCharacters.test.js
 packages/lib/utils/replaceUnsupportedCharacters.js
 packages/lib/utils/resolvePathWithinDir.test.js
 packages/lib/utils/resolvePathWithinDir.js
+packages/lib/utils/tls/setExtraRootCertificates.test.js
+packages/lib/utils/tls/setExtraRootCertificates.js
 packages/lib/utils/types/pdfJs.js
 packages/lib/utils/userFetcher.js
 packages/lib/utils/webDAVUtils.test.js

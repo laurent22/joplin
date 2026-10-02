@@ -115,6 +115,22 @@ describe('htmlUtils', () => {
 	});
 
 	it.each([
+		['href', 'https://example.com/', true],
+		['href', 'ms-msdt:/id/PCWDiagnostic', false],
+		['xlink:href', 'https://example.com/', true],
+		['xlink:href', 'ms-msdt:/id/PCWDiagnostic', false],
+		['xlink:href', 'javascript:alert(1)', false],
+	])('should scheme-filter %s links (input: %s)', (attrName, url, shouldKeep) => {
+		const output = htmlUtils.sanitizeHtml(`<a ${attrName}="${url}">Click</a>`);
+		if (shouldKeep) {
+			expect(output).toContain(`${attrName}="${url}"`);
+		} else {
+			expect(output).not.toContain(`${attrName}="${url}"`);
+			expect(output).toContain(`${attrName}="#"`);
+		}
+	});
+
+	it.each([
 		{
 			label: 'should replace anchor href attributes',
 			input: '<a>test <a href="href-1"></a></a><div><a href="href-1">another</a></div>',

@@ -1,6 +1,6 @@
 {
   "name": "@joplin/app-desktop",
-  "version": "3.7.18",
+  "version": "3.7.21",
   "description": "Joplin for Desktop",
   "main": "main.bundle.js",
   "private": true,
@@ -139,7 +139,7 @@
         "entry": {
           "Icon": "joplin",
           "MimeType": "x-scheme-handler/joplin;",
-          "StartupWMClass": "@joplin/app-desktop"
+          "StartupWMClass": "appimagekit-joplin"
         }
       },
       "target": [
@@ -168,14 +168,14 @@
     "@joplin/renderer": "~3.7",
     "@joplin/tools": "~3.7",
     "@joplin/utils": "~3.7",
-    "@playwright/test": "1.59.1",
+    "@playwright/test": "1.60.0",
     "@sentry/electron": "4.24.0",
     "@testing-library/dom": "10.4.1",
     "@testing-library/react": "16.3.2",
     "@types/jest": "29.5.14",
     "@types/markdown-it": "13.0.9",
     "@types/mustache": "4.2.6",
-    "@types/node": "18.19.130",
+    "@types/node": "22.19.21",
     "@types/react": "19.1.10",
     "@types/react-dom": "19.1.7",
     "@types/react-redux": "7.1.34",
@@ -231,16 +231,16 @@
     "tinymce": "6.8.5",
     "ts-jest": "29.4.11",
     "ts-node": "10.9.2",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "undici": "8.10.0"
   },
   "dependencies": {
     "@electron/remote": "2.1.3",
     "@huggingface/transformers": "4.2.0",
     "@joplin/onenote-converter": "~3.7",
     "@xyflow/react": "12.10.2",
-    "fs-extra": "11.3.5",
+    "fs-extra": "11.3.6",
     "keytar": "7.9.0",
-    "node-fetch": "2.6.7",
     "onnxruntime-node": "1.26.0",
     "sqlite-vec": "0.1.9",
     "sqlite3": "5.1.6"

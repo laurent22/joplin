@@ -66,7 +66,7 @@ export const runtime = (): CommandRuntime => {
 			}
 
 			if (action === 'cancel') {
-				sync.cancel();
+				void sync.cancel();
 				return 'cancel';
 			} else {
 				void reg.scheduleSync(0);

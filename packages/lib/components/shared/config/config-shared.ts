@@ -1,4 +1,4 @@
-import Setting, { AppType, SettingMetadataSection, SettingSectionSource, type SettingsRecord } from '../../../models/Setting';
+import Setting, { AppType, SettingItem, SettingMetadataSection, SettingSectionSource, SettingValueType, SyncStartupOperation, type SettingsRecord } from '../../../models/Setting';
 import SyncTargetRegistry from '../../../SyncTargetRegistry';
 import { _ } from '../../../locale';
 import { createSelector } from 'reselect';
@@ -10,12 +10,15 @@ import settingValidations from '../../../models/settings/settingValidations';
 import { convertValuesToFunctions } from '../../../ObjectUtils';
 import aiSettingsTransition from '../../../services/ai/aiSettingsTransition';
 import { ChatRole } from '../../../services/ai/types';
+import { openLoginScreen as openJoplinOAuthLogin } from '../../../services/joplinCloudUtils';
+import shim from '../../../shim';
+import CommandService from '../../../services/CommandService';
 
 const logger = Logger.create('config-shared');
 
-type SettingsMap = Partial<SettingsRecord> & Record<string, unknown>;
+export type SettingsMap = Partial<SettingsRecord>;
 
-interface ConfigScreenState {
+export interface ConfigScreenState {
 	checkSyncConfigResult: { ok: boolean; errorMessage: string }|'checking'|null;
 	checkAiConfigResult: { ok: boolean; message: string }|'checking'|null;
 	settings: SettingsMap;
@@ -43,6 +46,7 @@ interface ConfigScreenComponent {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mirrors React.Component.setState signature (Pick<S, K> etc.); a narrower local type breaks subclass assignment of `this` to ConfigScreenComponent
 	setState(callbackOrNew: any, callback?: ()=> void): void;
+	setSettingValue<Key extends string>(key: Key, value: SettingValueType<Key>): void;
 }
 
 interface SettingsSavedEvent {
@@ -123,13 +127,21 @@ export const checkAiConfig = async (comp: ConfigScreenComponent) => {
 	comp.setState({ checkAiConfigResult: 'checking' });
 	try {
 		const { default: AiService } = await import('../../../services/ai/AiService');
+		// Reasoning models spend hundreds of tokens before emitting any content,
+		// so a small budget returns empty text with finish_reason "length".
 		const result = await AiService.instance().chat([
 			{ role: ChatRole.System, content: 'Keep replies brief, but non-empty.' },
 			{ role: ChatRole.User, content: 'Reply with the single word OK.' },
-		], { maxTokens: 20 });
+		], { maxTokens: 512 });
 		const text = (result.text || '').trim();
 		if (!text) {
-			comp.setState({ checkAiConfigResult: { ok: false, message: _('The provider returned an empty response. Check that the base URL ends with /v1 and that a model is loaded.') } });
+			// Truncation or a reasoning trace means the model was reached, so the
+			// base URL, key and model name are all fine.
+			if (result.finishReason === 'length' || result.reasoningText) {
+				comp.setState({ checkAiConfigResult: { ok: true, message: _('Connected successfully, but the model used its entire output budget on reasoning and returned no text.') } });
+			} else {
+				comp.setState({ checkAiConfigResult: { ok: false, message: _('The provider returned an empty response. Check that the base URL ends with /v1 and that a model is loaded.') } });
+			}
 		} else {
 			comp.setState({ checkAiConfigResult: { ok: true, message: text } });
 		}
@@ -371,4 +383,45 @@ export const settingsToComponents2 = (
 	}
 
 	return sectionComps;
+};
+
+export const restartMessage = () => _('The application must be restarted for these changes to take effect.');
+
+export const onSettingButtonPress = async (comp: ConfigScreenComponent, metadata: SettingItem) => {
+	const key = metadata.key;
+
+	if (key === 'sync.10.connect') {
+		await openJoplinOAuthLogin();
+	} else if (key === 'sync.clearLocalSyncStateButton') {
+		if (!await shim.showConfirmationDialog('This cannot be undone. Do you want to continue?')) return;
+		Setting.setValue('sync.startupOperation', SyncStartupOperation.ClearLocalSyncState);
+		await Setting.saveAll();
+		await shim.restartApp();
+	} else if (key === 'sync.clearLocalDataButton') {
+		if (!await shim.showConfirmationDialog('This cannot be undone. Do you want to continue?')) return;
+		Setting.setValue('sync.startupOperation', SyncStartupOperation.ClearLocalData);
+		await Setting.saveAll();
+		await shim.restartApp();
+	} else if (key === 'ocr.clearLanguageDataCacheButton') {
+		if (!await shim.showConfirmationDialog(restartMessage())) return;
+		Setting.setValue('ocr.clearLanguageDataCache', true);
+		await Setting.saveAll();
+		await shim.restartApp();
+	} else if (key === 'ai.usage.resetButton') {
+		if (!await shim.showConfirmationDialog(_('Reset AI token usage counters?'))) return;
+		Setting.setValue('ai.usage.inputTokens', 0);
+		Setting.setValue('ai.usage.outputTokens', 0);
+		await Setting.saveAll();
+	} else if (key === 'ai.chat.testButton') {
+		await checkAiConfig(comp);
+	} else if (key === 'sync.openSyncWizard') {
+		await CommandService.instance().execute('openSyncWizard');
+	} else {
+		const metadata = Setting.settingMetadata(key);
+		if (metadata.onClick) {
+			await metadata.onClick();
+		} else {
+			throw new Error(`Unhandled key: ${key}`);
+		}
+	}
 };

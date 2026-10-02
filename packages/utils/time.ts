@@ -111,6 +111,17 @@ export const formatMsToRelative = (ms: number) => {
 	return d.fromNow(false);
 };
 
+export const formatMsToRelativeTime = (ms: number) => {
+	const date = dayjs(ms);
+	if (!date.isValid()) return 'Invalid date';
+
+	const elapsed = Math.max(0, Date.now() - ms);
+	if (elapsed < Minute) return `${Math.floor(elapsed / Second)}s`;
+	if (elapsed < Hour) return `${Math.floor(elapsed / Minute)}m`;
+	if (elapsed < Day) return `${Math.floor(elapsed / Hour)}h`;
+	return `${Math.floor(elapsed / Day)}d`;
+};
+
 const joplinLocaleToDayJsLocale = (locale: string) => {
 	locale = locale.toLowerCase().replace(/_/, '-');
 	if (supportedLocales[locale]) return locale;

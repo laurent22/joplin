@@ -107,6 +107,34 @@ describe('ReportService', () => {
 		await switchClient(1);
 	});
 
+	it('should include sync-eligible conflict notes in sync status totals', async () => {
+		const originalNote = await Note.save({ title: 'Original' });
+		await Note.save({
+			title: 'Sync-eligible conflict',
+			is_conflict: 1,
+			conflict_original_id: originalNote.id,
+		});
+		await Note.save({ title: 'Conflict without original', is_conflict: 1 });
+		await Note.save({
+			title: 'Trashed conflict without original',
+			is_conflict: 1,
+			deleted_time: Date.now(),
+		});
+		await Note.save({
+			title: 'Shared conflict',
+			is_conflict: 1,
+			conflict_original_id: originalNote.id,
+			share_id: 'share-id',
+		});
+
+		await synchronizerStart();
+
+		const status = await new ReportService().syncStatus(syncTargetId());
+		expect(status.items.Note).toEqual({ total: 2, synced: 2 });
+		expect(status.conflicted.total).toBe(3);
+		expect(status.total.synced).toBe(status.total.total);
+	});
+
 	it('should move sync errors to the "ignored" section after clicking "ignore"', async () => {
 		const folder = await Folder.save({ title: 'Test' });
 		const noteCount = 5;

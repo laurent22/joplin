@@ -1,6 +1,8 @@
-import BaseApplication from '@joplin/lib/BaseApplication';
+import BaseApplication, { shouldPreserveSelectedNoteOnSmartFilterSelect } from '@joplin/lib/BaseApplication';
 import ItemChange from '@joplin/lib/models/ItemChange';
 import Note from '@joplin/lib/models/Note';
+import { defaultState, defaultWindowId, State } from '@joplin/lib/reducer';
+import { ALL_NOTES_FILTER_ID } from '@joplin/lib/reserved-ids';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
 import { setEncryptionEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
@@ -32,6 +34,46 @@ describe('app', () => {
 	const originalTextEncoder = globalThis.TextEncoder;
 	const originalNoteDispatch = Note.dispatch;
 	let baseMiddlewareMock: jest.SpyInstance;
+
+	test.each([
+		['regular', { deleted_time: 0, is_conflict: 0 }, true],
+		['trashed', { deleted_time: 1, is_conflict: 0 }, false],
+		['conflict', { deleted_time: 0, is_conflict: 1 }, false],
+	])('should determine whether to preserve a %s note when selecting all notes', (_noteType, noteProperties, expected) => {
+		watcher.initialize(jest.fn(), jest.fn());
+		const note = { id: 'note-id', ...noteProperties } as NoteEntity;
+		const state = { ...defaultState, notes: [note], selectedNoteIds: [note.id] };
+
+		expect(shouldPreserveSelectedNoteOnSmartFilterSelect(state, ALL_NOTES_FILTER_ID)).toBe(expected);
+	});
+
+	test('should not apply a note refresh after the active window changes', async () => {
+		const secondaryState = {
+			...defaultState,
+			windowId: 'secondary-window',
+			notesParentType: 'Folder',
+			selectedFolderId: 'secondary-folder',
+			selectedNoteIds: ['secondary-note'],
+		} as State;
+		let activeState = secondaryState;
+		const dispatch = jest.fn();
+		const storeMock = jest.spyOn(app(), 'store').mockReturnValue({
+			dispatch,
+			getState: () => activeState,
+		} as unknown as ReturnType<ReturnType<typeof app>['store']>);
+		const previewsMock = jest.spyOn(Note, 'previews').mockImplementation(async () => {
+			activeState = { ...defaultState, windowId: defaultWindowId } as State;
+			return [{ id: 'secondary-note' }] as NoteEntity[];
+		});
+
+		try {
+			await app().refreshNotes(secondaryState, true);
+			expect(dispatch).not.toHaveBeenCalled();
+		} finally {
+			previewsMock.mockRestore();
+			storeMock.mockRestore();
+		}
+	});
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(0);
