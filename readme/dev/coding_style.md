@@ -407,6 +407,22 @@ We don't use built-in database enums because they make migrations difficult. The
 ### Prefer using `tinyint(1)` to `bool`
 Booleans are not a distinct types in many common DBMS, including SQLite (which we use) and MySQL, so prefer using a `tinyint(1)` instead.
 
+### Use single quotes for SQLite string literals
+
+The web app's SQLite build disallows double quoted strings. Use single quotes for string literals to follow the SQL standard and support the web app.
+
+**Bad:**
+```tsx
+db().selectAll('SELECT * FROM folders WHERE id = "627eaaed99d2ad554de017786771c08e"')
+```
+
+**Good:**
+```tsx
+db().selectAll('SELECT * FROM folders WHERE id = \'627eaaed99d2ad554de017786771c08e\'')
+```
+
+**See also:** [SQLite quirks: Double quoted string literals](https://www.sqlite.org/quirks.html#double_quoted_string_literals_are_accepted)
+
 ## Web requests and API
 
 ### Use `snake_case`

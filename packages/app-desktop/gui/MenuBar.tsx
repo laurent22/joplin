@@ -32,6 +32,7 @@ import NavService from '@joplin/lib/services/NavService';
 import Logger from '@joplin/utils/Logger';
 import { ImportCommandOptions } from './WindowCommandsAndDialogs/commands/importFrom';
 import { FileSystemItem } from '@joplin/lib/services/interop/types';
+import { chatAvailability } from '@joplin/lib/services/ai/availability';
 
 const logger = Logger.create('MenuBar');
 
@@ -185,6 +186,7 @@ interface Props {
 	secondaryWindowFocused: boolean;
 	showMenuBar: boolean;
 	syncPending: boolean;
+	showAiChatMenuItem: boolean;
 }
 
 const commandNames: string[] = menuCommandNames();
@@ -755,7 +757,7 @@ function useMenu(props: Props) {
 						menuItemDic.toggleSideBar,
 						shim.isMac() ? noItem : menuItemDic.toggleMenuBar,
 						menuItemDic.toggleNoteList,
-						menuItemDic.toggleAiChat,
+						{ ...menuItemDic.toggleAiChat, visible: props.showAiChatMenuItem },
 						menuItemDic.toggleVisiblePanes,
 						menuItemDic.toggleEditorPlugin,
 						menuItemDic.toggleEditors,
@@ -1071,6 +1073,7 @@ function useMenu(props: Props) {
 		switchProfileMenuItems,
 		menuItemDic,
 		props.syncPending,
+		props.showAiChatMenuItem,
 	]);
 
 	useMenuStates(menu, props);
@@ -1158,6 +1161,7 @@ const mapStateToProps = (state: AppState): Partial<Props> => {
 		noteListRendererId: state.settings['notes.listRendererId'],
 		showMenuBar: state.settings.showMenuBar,
 		syncPending: state.syncPending,
+		showAiChatMenuItem: chatAvailability().available || !!state.settings['ai.chat.showToolbarButton'],
 	};
 };
 

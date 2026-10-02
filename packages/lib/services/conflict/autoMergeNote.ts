@@ -15,7 +15,11 @@ export const mergeTitle = (base: string, local: string, remote: string) => {
 
 // Only conflict sections differ between the two sides; everything else is shared between them
 const buildBody = (sections: MergedSection[], conflictSide: 'localText' | 'remoteText'): string => {
-	return sections.map(section => section.type === 'conflict' ? (section[conflictSide] ?? '') : section.text).join('\n');
+	const lineCount = conflictSide === 'localText' ? 'localLineCount' : 'remoteLineCount';
+	return sections
+		.filter(section => section.type !== 'conflict' || section[lineCount] !== 0)
+		.map(section => section.type === 'conflict' ? (section[conflictSide] ?? '') : section.text)
+		.join('\n');
 };
 
 export interface PartialMergeResult {
