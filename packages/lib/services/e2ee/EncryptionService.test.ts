@@ -25,8 +25,8 @@ describe('EncryptionService', () => {
 			masterKeyId: '01234568abcdefgh01234568abcdefgh',
 		};
 
-		const encodedHeader = service.encodeHeader_(header);
-		const decodedHeader = service.decodeHeaderBytes_(encodedHeader);
+		const encodedHeader = service.encodeHeader_(header, false);
+		const decodedHeader = service.decodeHeaderBytes_(encodedHeader, false);
 		delete decodedHeader.length;
 
 		expect(objectsEqual(header, decodedHeader)).toBe(true);

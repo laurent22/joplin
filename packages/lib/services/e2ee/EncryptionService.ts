@@ -796,7 +796,7 @@ export default class EncryptionService {
 		return r;
 	}
 
-	public encodeHeader_(header: { encryptionMethod: number; masterKeyId: string }, isNoteLock = false) {
+	public encodeHeader_(header: { encryptionMethod: number; masterKeyId: string }, isNoteLock: boolean) {
 		// Sanity check
 		if (header.masterKeyId.length !== 32) throw new Error(`Invalid master key ID size: ${header.masterKeyId}`);
 
@@ -823,7 +823,7 @@ export default class EncryptionService {
 		return this.decodeHeaderBytes_(identifier + mdSizeHex + md, isNoteLock);
 	}
 
-	public decodeHeaderBytes_(headerHexaBytes: string, isNoteLock = false) {
+	public decodeHeaderBytes_(headerHexaBytes: string, isNoteLock: boolean) {
 		const reader = this.stringReader_(headerHexaBytes, true) as { read: (size: number)=> string };
 		const identifier = reader.read(3);
 		const version = parseInt(reader.read(2), 16);
