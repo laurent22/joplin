@@ -22,7 +22,7 @@ export interface SearchEntry {
 }
 import { getListRendererIds } from './services/noteList/renderers';
 import { ComplexTerm, ProcessResultsRow } from './services/search/SearchEngine';
-import { getDisplayParentId } from './services/trash';
+import { getDisplayParentId, getTrashFolderId } from './services/trash';
 import Logger from '@joplin/utils/Logger';
 import { SettingsRecord } from './models/settings/types';
 import { Toast, ToastType } from './services/plugins/api/types';
@@ -1179,10 +1179,23 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			{
 				const modNote: NoteEntity = action.note;
 				const handleWindowState = (windowDraft: Draft<WindowState>) => {
+					const isSecondaryWindow = windowDraft.windowId !== defaultWindowId;
 					const isViewingAllNotes = (windowDraft.notesParentType === 'SmartFilter' && windowDraft.selectedSmartFilterId === ALL_NOTES_FILTER_ID);
 					const isViewingConflictFolder = windowDraft.notesParentType === 'Folder' && windowDraft.selectedFolderId === Folder.conflictFolderId();
+					const isOnlySelectedInSecondaryWindow = isSecondaryWindow && windowDraft.selectedNoteIds.length === 1 && windowDraft.selectedNoteIds[0] === modNote.id;
+					const noteDisplayParentId = (note: NoteEntity) => {
+						if (note.deleted_time) return getDisplayParentId(note, draft.folders.find(f => f.id === note.parent_id));
+						if (note.is_conflict) return Folder.conflictFolderId();
+						return getDisplayParentId(note, draft.folders.find(f => f.id === note.parent_id));
+					};
 
 					const noteIsInCurrentView = function(note: NoteEntity, folderId: string) {
+						// Deleted conflicts belong to Trash. This check needs to happen before the
+						// conflict check because is_conflict is only available after decryption.
+						if (note.deleted_time) {
+							const noteDisplayParentId = getDisplayParentId(note, draft.folders.find(f => f.id === note.parent_id));
+							return folderId === noteDisplayParentId;
+						}
 						if (note.is_conflict) return isViewingConflictFolder;
 						if (isViewingAllNotes) return true;
 						const noteDisplayParentId = getDisplayParentId(note, draft.folders.find(f => f.id === note.parent_id));
@@ -1196,8 +1209,48 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 					for (let i = 0; i < newNotes.length; i++) {
 						const n = newNotes[i];
 						if (n.id === modNote.id) {
-							const previousDisplayParentId = ('parent_id' in n) ? getDisplayParentId(n, draft.folders.find(f => f.id === n.parent_id)) : '';
-							if (n.is_conflict && !modNote.is_conflict) {
+							const previousDisplayParentId = ('parent_id' in n) ? noteDisplayParentId(n) : '';
+							// is_conflict is encrypted. During sync, retain the conflict identity from
+							// the existing deleted note until the restored placeholder is decrypted.
+							const isEncryptedRestoredConflict = !!n.is_conflict && !!n.deleted_time && !modNote.deleted_time && !!modNote.encryption_applied;
+							const displayParentId = isEncryptedRestoredConflict ? Folder.conflictFolderId() : noteDisplayParentId(modNote);
+							const conflictTrashStateChanged = !!n.is_conflict && (!!modNote.is_conflict || isEncryptedRestoredConflict) && !!n.deleted_time !== !!modNote.deleted_time;
+							const conflictBecameRegularNote = !!n.is_conflict && !modNote.is_conflict;
+							const regularNoteMoved = !n.is_conflict && !modNote.is_conflict && previousDisplayParentId !== displayParentId;
+							const displayParentChanged = !!action.noteMovedToFolder || conflictTrashStateChanged || conflictBecameRegularNote || regularNoteMoved;
+							const shouldFollowMovedNote = isOnlySelectedInSecondaryWindow && windowDraft.notesParentType === 'Folder' && displayParentChanged;
+							if (shouldFollowMovedNote) {
+								const parentFolder = draft.folders.find(f => f.id === displayParentId);
+								const isVirtualFolder = displayParentId === getTrashFolderId() || displayParentId === Folder.conflictFolderId();
+								if (parentFolder) {
+									windowDraft.notesParentType = 'Folder';
+									windowDraft.selectedSmartFilterId = null;
+									windowDraft.selectedFolderId = displayParentId;
+									windowDraft.selectedFolderIds = [displayParentId];
+								} else if (isVirtualFolder) {
+									windowDraft.notesParentType = 'Folder';
+									windowDraft.selectedSmartFilterId = null;
+									windowDraft.selectedFolderId = displayParentId;
+									windowDraft.selectedFolderIds = [displayParentId];
+								} else if (action.changeSource === ItemChange.SOURCE_SYNC && displayParentId) {
+									// Sync can deliver a note before its parent folder. Select the destination
+									// by ID now; the folder list and focus refresh will populate it later.
+									windowDraft.notesParentType = 'Folder';
+									windowDraft.selectedSmartFilterId = null;
+									windowDraft.selectedFolderId = displayParentId;
+									windowDraft.selectedFolderIds = [displayParentId];
+								} else {
+									windowDraft.notesParentType = 'SmartFilter';
+									windowDraft.selectedSmartFilterId = ALL_NOTES_FILTER_ID;
+									windowDraft.selectedFolderId = null;
+									windowDraft.selectedFolderIds = [];
+								}
+
+								// The previous list belongs to the old folder. Until WINDOW_FOCUS refreshes
+								// the destination, the only item known to belong to the new source is this note.
+								newNotes.splice(0, newNotes.length, { ...newNotes[i], ...modNote });
+								windowDraft.notesSource = '';
+							} else if (n.is_conflict && !modNote.is_conflict) {
 								// Note was a conflict but was moved outside of
 								// the conflict folder
 								newNotes.splice(i, 1);
@@ -1240,7 +1293,6 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 					// In some cases, however, the selection needs to be preserved (e.g. the mobile app, in secondary windows, or when an unselected note is moved by sync).
 					const preserveSelection = action.preserveSelection ?? draft.allowSelectionInOtherFolders;
 					const selectedNoteHasMoved = windowDraft.selectedNoteIds.length > 0 && !newNotes.some(o => windowDraft.selectedNoteIds.includes(o.id));
-					const isSecondaryWindow = windowDraft.windowId !== defaultWindowId;
 					if (noteFolderHasChanged && !preserveSelection && !isSecondaryWindow && (action.changeSource !== ItemChange.SOURCE_SYNC || selectedNoteHasMoved)) {
 						let newIndex = movedNotePreviousIndex;
 						if (newIndex >= newNotes.length) newIndex = newNotes.length - 1;
