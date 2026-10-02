@@ -30,6 +30,7 @@ interface Props {
 	draggable: boolean;
 	autoScrollToEnd?: boolean;
 	onDismiss: ()=> void;
+	onDismissed?: ()=> void;
 	onShow?: ()=> void;
 }
 
@@ -452,6 +453,7 @@ const BottomDrawer: React.FC<Props> = props => {
 	return <Modal
 		visible={props.visible}
 		onClose={onHide}
+		onDismissed={props.onDismissed}
 		onShow={props.onShow}
 		backgroundColor='transparent'
 		modalBackgroundStyle={styles.modalBackground}

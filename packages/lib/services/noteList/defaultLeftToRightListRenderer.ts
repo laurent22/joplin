@@ -190,7 +190,7 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 				{{/note.is_todo}}
 				{{#note.syncDisabled}}<i class="syncdisabledicon" role="img" aria-label="{{note.syncDisabledLabel}}"></i>{{/note.syncDisabled}}
 				<i class="watchedicon fa fa-share-square"></i>
-				{{#note.is_locked}}<i class="lockedicon fa fa-lock"></i>{{/note.is_locked}}
+				{{#note.is_locked}}<i class="lockedicon fa fa-lock" role="img" aria-label="{{note.lockedLabel}}"></i>{{/note.is_locked}}
 				<div class="titlecontent">{{note.title}}</div>
 			</div>
 			<div class="preview">{{notePreview}}</div>
@@ -206,6 +206,7 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 			note: {
 				...props.note,
 				is_locked: isLocked,
+				lockedLabel: _('Locked'),
 				syncDisabled: isSyncDisabledConflict(props.note),
 				syncDisabledLabel: _('Local only'),
 			},
