@@ -53,15 +53,16 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 		local = await Note.load(local.id);
 
 		// An older client drops is_locked when it edits a shared locked note: its change is discarded and the local version pushed back,
-		// ahead of the remote time. A read-only share rejects the push back, so there the local version is only kept.
+		// ahead of the remote time. A read-only share rejects the push back, so there the lock is restored on the remote version and the
+		// normal conflict below keeps the local version.
 		if (remoteExists && (remoteContent as NoteEntity).is_locked === undefined && (local as NoteEntity).is_locked) {
 			if (itemIsReadOnly) {
-				await BaseItem.saveSyncTime(syncTargetId, local, local.updated_time, remoteSyncedTime);
+				remoteContent = { ...remoteContent, is_locked: (local as NoteEntity).is_locked } as NoteEntity;
+			} else {
+				const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, BaseItem.remoteItemSyncTime(remoteSyncedTime), null, remoteSyncedTime);
+				await ItemClass.save({ id: local.id, updated_time: remoteSyncedTime + 1 }, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries: syncTimeQueries });
 				return;
 			}
-			const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, BaseItem.remoteItemSyncTime(remoteSyncedTime), null, remoteSyncedTime);
-			await ItemClass.save({ id: local.id, updated_time: remoteSyncedTime + 1 }, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries: syncTimeQueries });
-			return;
 		}
 
 		// ------------------------------------------------------------------------------

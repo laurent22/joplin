@@ -138,9 +138,9 @@ describe('handleConflictAction', () => {
 		expect(notes[0].title).toBe(remoteContent.title);
 	});
 
-	test('locked note is kept without a push back when a read-only remote lost its lock', async () => {
+	test('locked note becomes a conflict and the lock is restored when a read-only remote lost its lock', async () => {
 		const local = await Note.save({ title: 'Locked', body: 'JLD01cipher', is_locked: 1 });
-		const remoteContent = { ...local, body: 'edited on an old client', updated_time: local.updated_time + 1000 };
+		const remoteContent = { ...local, body: 'edited on an old client' };
 		delete remoteContent.is_locked;
 
 		await handleConflictAction(
@@ -154,8 +154,9 @@ describe('handleConflictAction', () => {
 			jest.fn(),
 		);
 
-		expect(await Note.load(local.id)).toMatchObject({ body: 'JLD01cipher', updated_time: local.updated_time });
-		expect((await BaseItem.itemsThatNeedSync(1)).items).toHaveLength(0);
+		expect(await Note.load(local.id)).toMatchObject({ body: remoteContent.body, is_locked: 1 });
+		expect((await Note.all()).find(note => note.is_conflict)).toMatchObject({ body: 'JLD01cipher', is_locked: 1 });
+		expect((await BaseItem.itemsThatNeedSync(1)).items.map(item => item.id)).not.toContain(local.id);
 	});
 
 	test('remote content is not decrypted for an existing conflict note', async () => {
