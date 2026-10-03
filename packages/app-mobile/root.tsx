@@ -99,6 +99,7 @@ import { setDispatch } from './services/profiles';
 import { ReactNode } from 'react';
 import autodetectTheme, { onSystemColorSchemeChange } from './utils/autodetectTheme';
 import PluginRunnerWebView from './components/plugins/PluginRunnerWebView';
+import CommandService from '@joplin/lib/services/CommandService';
 import { refreshFolders, scheduleRefreshFolders } from '@joplin/lib/folders-screen-utils';
 import ShareManager from './components/screens/ShareManager';
 import { setDateFormat, setTimeFormat, setTimeLocale } from '@joplin/utils/time';
@@ -310,6 +311,7 @@ interface AppComponentProps {
 	disableSideMenuGestures: boolean;
 	historyCanGoBack: boolean;
 	showSideMenu: boolean;
+	showPanelsDialog: boolean;
 	noteSelectionEnabled: boolean;
 	syncStarted: boolean;
 }
@@ -599,6 +601,11 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 	}
 
 	private async backButtonHandler() {
+		if (this.props.showPanelsDialog) {
+			await CommandService.instance().execute('dismissPluginPanels');
+			return true;
+		}
+
 		if (this.props.noteSelectionEnabled) {
 			this.props.dispatch({ type: 'NOTE_SELECTION_END' });
 			return true;
@@ -890,6 +897,7 @@ const mapStateToProps = (state: AppState) => {
 	return {
 		historyCanGoBack: state.historyCanGoBack,
 		showSideMenu: state.showSideMenu,
+		showPanelsDialog: state.showPanelsDialog,
 		syncStarted: state.syncStarted,
 		appState: state.appState,
 		noteSelectionEnabled: state.noteSelectionEnabled,

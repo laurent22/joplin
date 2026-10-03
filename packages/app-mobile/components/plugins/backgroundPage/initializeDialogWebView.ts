@@ -18,6 +18,7 @@ let themeCssElement: HTMLStyleElement|null = null;
 
 const initializeDialogWebView = (messageChannelId: string) => {
 	const loadedPaths: Set<string> = new Set();
+	let maximumContentWidth = 0;
 
 	type ScriptType = 'js'|'css';
 	const includeScriptsOrStyles = (type: ScriptType, paths: string[]) => {
@@ -79,11 +80,10 @@ const initializeDialogWebView = (messageChannelId: string) => {
 			const dpr = window.devicePixelRatio ?? 1;
 
 			const element = document.getElementById('joplin-plugin-content') ?? document.body;
+			maximumContentWidth = Math.max(maximumContentWidth, element.clientWidth);
 			return {
-				// clientWidth excludes the vertical scrollbar. On web, feeding that width
-				// back into a fit-to-content iframe repeatedly subtracts the scrollbar
-				// gutter. innerWidth includes it and remains stable across size checks.
-				width: window.innerWidth * dpr,
+				// Prevent a scrollbar from repeatedly shrinking fit-to-content dialogs.
+				width: maximumContentWidth * dpr,
 				height: element.clientHeight * dpr,
 			};
 		},

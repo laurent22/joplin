@@ -129,7 +129,7 @@ const DismissibleDialog: React.FC<Props> = props => {
 			onClose={props.inert ? null : props.onDismiss}
 			containerStyle={styles.dialogContainer}
 			modalBackgroundStyle={styles.modalBackground}
-			backgroundColor={theme.backgroundColorTransparent2}
+			backgroundColor={props.inert ? 'transparent' : theme.backgroundColorTransparent2}
 			scrollOverflow={props.scrollOverflow}
 			// Allows the modal background to extend under the statusbar
 			statusBarTranslucent
