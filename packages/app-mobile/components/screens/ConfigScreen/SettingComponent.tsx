@@ -19,6 +19,8 @@ type OnSettingButtonClick = (key: string)=> Promise<void>;
 
 interface Props {
 	settingId: string;
+
+	// The value associated with the given settings key
 	value: unknown;
 
 	styles: ConfigScreenStyles;
