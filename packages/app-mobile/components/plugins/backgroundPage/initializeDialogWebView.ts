@@ -19,6 +19,11 @@ let themeCssElement: HTMLStyleElement|null = null;
 const initializeDialogWebView = (messageChannelId: string) => {
 	const loadedPaths: Set<string> = new Set();
 	let maximumContentWidth = 0;
+	let resetContentWidthBaseline = true;
+	const contentObserver = new MutationObserver(() => {
+		resetContentWidthBaseline = true;
+	});
+	contentObserver.observe(document.body, { attributes: true, childList: true, characterData: true, subtree: true });
 
 	type ScriptType = 'js'|'css';
 	const includeScriptsOrStyles = (type: ScriptType, paths: string[]) => {
@@ -80,7 +85,8 @@ const initializeDialogWebView = (messageChannelId: string) => {
 			const dpr = window.devicePixelRatio ?? 1;
 
 			const element = document.getElementById('joplin-plugin-content') ?? document.body;
-			maximumContentWidth = Math.max(maximumContentWidth, element.clientWidth);
+			maximumContentWidth = resetContentWidthBaseline ? element.clientWidth : Math.max(maximumContentWidth, element.clientWidth);
+			resetContentWidthBaseline = false;
 			return {
 				// Prevent a scrollbar from repeatedly shrinking fit-to-content dialogs.
 				width: maximumContentWidth * dpr,
