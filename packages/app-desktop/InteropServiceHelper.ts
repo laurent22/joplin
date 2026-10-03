@@ -228,17 +228,23 @@ export default class InteropServiceHelper {
 		if (options.sourceNoteIds) exportOptions.sourceNoteIds = options.sourceNoteIds;
 
 		const service = InteropService.instance();
+		let keepModalOpen = false;
 
 		try {
 			const result = await service.export(exportOptions);
 			// eslint-disable-next-line no-console
 			console.info('Export result: ', result);
+			if (result.warnings.length) {
+				keepModalOpen = true;
+				const message = [_('Export completed, but some items were skipped because they have not been downloaded to this device or could not be exported:'), '', ...result.warnings].join('\n');
+				void CommandService.instance().execute('showModalMessage', message, true);
+			}
 		} catch (error) {
 			console.error(error);
 			bridge().showErrorMessageBox(_('Could not export notes: %s', error.message));
 		}
 
-		void CommandService.instance().execute('hideModalMessage');
+		if (!keepModalOpen) void CommandService.instance().execute('hideModalMessage');
 	}
 
 }
