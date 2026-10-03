@@ -6,10 +6,11 @@ export const declaration: CommandDeclaration = {
 
 export const runtime = (): CommandRuntime => {
 	return {
-		execute: async (context: CommandContext, message: string) => {
+		execute: async (context: CommandContext, message: string, hasCloseButton = false) => {
 			context.dispatch({
 				type: 'SHOW_MODAL_MESSAGE',
 				message,
+				hasCloseButton,
 			});
 		},
 	};

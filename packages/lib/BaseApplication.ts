@@ -3,7 +3,7 @@ import Logger, { TargetType, LoggerWrapper } from '@joplin/utils/Logger';
 import shim from './shim';
 import { setupProxySettings } from './shim-init-node';
 import BaseService from './services/BaseService';
-import reducer, { getNotesParent, serializeNotesParent, setStore, State } from './reducer';
+import reducer, { defaultWindowId, getNotesParent, serializeNotesParent, setStore, State } from './reducer';
 import KeychainServiceDriverNode from './services/keychain/KeychainServiceDriver.node';
 import KeychainServiceDriverElectron from './services/keychain/KeychainServiceDriver.electron';
 import { setLocale } from './locale';
@@ -498,9 +498,9 @@ export default class BaseApplication {
 	protected async generalMiddleware(store: any, next: any, action: any) {
 		// appLogger.debug('Reducer action', this.reducerActionToString(action));
 
-		const previousWindowId = store.getState().windowId;
+		const previousState = store.getState() as State;
 		const result = next(action);
-		const activeWindowChanged = previousWindowId !== store.getState().windowId;
+		const activeWindowChanged = previousState.windowId !== store.getState().windowId;
 		let refreshNotes = false;
 		let doRefreshFolders: boolean | string = false;
 		let refreshNotesUseSelectedNoteId = false;
@@ -509,6 +509,22 @@ export default class BaseApplication {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mirrors the generalMiddleware variance above; reduxSharedMiddleware accepts the same union
 		await reduxSharedMiddleware(store, next, action, ((action: any) => { this.dispatch(action); }) as any);
 		const newState = store.getState() as State;
+		const activeNoteSourceChanged = action.type === 'NOTE_UPDATE_ONE' &&
+			previousState.windowId !== defaultWindowId &&
+			previousState.windowId === newState.windowId && (
+			previousState.notesParentType !== newState.notesParentType ||
+				previousState.selectedFolderId !== newState.selectedFolderId ||
+				previousState.selectedSmartFilterId !== newState.selectedSmartFilterId ||
+				previousState.selectedTagId !== newState.selectedTagId ||
+				previousState.selectedSearchId !== newState.selectedSearchId
+		);
+		if (activeNoteSourceChanged) {
+			Setting.setValue('activeFolderId', newState.selectedFolderId);
+			Setting.setValue('notesParent', serializeNotesParent(getNotesParent(newState)));
+			this.currentFolder_ = newState.selectedFolderId ? await Folder.load(newState.selectedFolderId) : null;
+			refreshNotes = true;
+			refreshNotesUseSelectedNoteId = true;
+		}
 
 		if (this.hasGui() && ['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
 			if (!(await reg.syncTarget().syncStarted())) void reg.scheduleSync(reg.syncAsYouTypeInterval(), { syncSteps: Synchronizer.partialSyncSteps });
@@ -579,6 +595,9 @@ export default class BaseApplication {
 		// Refreshing notes after switching windows helps ensure that the selected note/tags/other state
 		// is correct for the current window.
 		if (activeWindowChanged) {
+			Setting.setValue('activeFolderId', newState.selectedFolderId);
+			Setting.setValue('notesParent', serializeNotesParent(getNotesParent(newState)));
+			this.currentFolder_ = newState.selectedFolderId ? await Folder.load(newState.selectedFolderId) : null;
 			refreshNotes = true;
 			refreshNotesUseSelectedNoteId = action.type === 'WINDOW_FOCUS';
 		}

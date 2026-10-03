@@ -126,6 +126,33 @@ a {
 	color: grey;
 	font-size: 1.2em;
 	margin: 40px 20px;
+
+	&.-with-close-button {
+		align-items: stretch;
+		flex-direction: column;
+		height: calc(100vh - 80px);
+		justify-content: flex-start;
+		max-height: calc(100vh - 80px);
+		min-width: min(600px, calc(100vw - 40px));
+	}
+}
+
+.modal-message-scrollable-content {
+	flex: 1 1 auto;
+	min-height: 0;
+	overflow-y: auto;
+}
+
+.modal-message-actions {
+	display: flex;
+	flex-shrink: 0;
+	justify-content: flex-end;
+	padding-top: 20px;
+
+	button {
+		min-width: 80px;
+		padding: 6px 16px;
+	}
 }
 
 .loading-animation {
