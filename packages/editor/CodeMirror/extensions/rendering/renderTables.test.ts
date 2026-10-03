@@ -39,6 +39,13 @@ describe('renderTables', () => {
 		{ input: 'a **b** c', expected: 'a b c', inner: 'a <strong>b</strong> c' },
 		// Escaped pipes are unescaped for display.
 		{ input: 'a \\| b', expected: 'a | b', inner: 'a | b' },
+		// Nested markup renders both layers.
+		{ input: '**[label](https://example.com)**', expected: 'label', inner: '<strong><a href="https://example.com">label</a></strong>' },
+		{ input: '[**label**](https://example.com)', expected: 'label', inner: '<a href="https://example.com"><strong>label</strong></a>' },
+		{ input: '*[label](https://example.com)*', expected: 'label', inner: '<em><a href="https://example.com">label</a></em>' },
+		{ input: '**~~strike~~**', expected: 'strike', inner: '<strong><del>strike</del></strong>' },
+		// Code spans stay literal.
+		{ input: '`**not bold**`', expected: '**not bold**', inner: '<code>**not bold**</code>' },
 	])('renderInlineMarkdown should render $input', ({ input, expected, inner }) => {
 		const div = document.createElement('div');
 		renderInlineMarkdown(div, input);
@@ -196,6 +203,65 @@ describe('renderTables', () => {
 			// rather than the markdown-trimmed "Hello".
 			const refocused = findCellTextDivs(editor)[0];
 			expect(refocused.textContent).toBe('Hello ');
+		} finally {
+			editor?.destroy();
+			jest.useRealTimers();
+		}
+	});
+
+	test.each([
+		'**[label](https://example.com)**',
+		'**bold**',
+		'*italic*',
+		'`code`',
+	])('focus/blur cycles should not degrade cell markdown: %s', async (cellSource) => {
+		jest.useFakeTimers();
+		let editor: EditorView | null = null;
+		try {
+			const markdown = `| a | b |\n|---|---|\n| ${cellSource} | y |`;
+			editor = await createEditor(markdown);
+			document.body.appendChild(editor.dom);
+
+			// Each cycle re-renders the cell without editing it.
+			for (let i = 0; i < 3; i++) {
+				const cell = findCellTextDivs(editor)[2];
+				focusCell(cell);
+				cell.dispatchEvent(new Event('blur'));
+				jest.advanceTimersByTime(200);
+				jest.runOnlyPendingTimers();
+
+				const rendered = findCellTextDivs(editor)[2];
+				expect(rendered.classList.contains('cm-tw-raw')).toBe(false);
+			}
+
+			expect(editor.state.doc.toString()).toContain(cellSource);
+		} finally {
+			editor?.destroy();
+			jest.useRealTimers();
+		}
+	});
+
+	test('a blurred cell should not write its rendered text back to the document', async () => {
+		jest.useFakeTimers();
+		let editor: EditorView | null = null;
+		try {
+			editor = await createEditor('| a | b |\n|---|---|\n| **[x](http://e.com)** | y |');
+			document.body.appendChild(editor.dom);
+
+			const cell = findCellTextDivs(editor)[2];
+			focusCell(cell);
+			cell.dispatchEvent(new Event('blur'));
+			jest.advanceTimersByTime(200);
+			jest.runOnlyPendingTimers();
+
+			// An input event on the now-rendered cell, as a stray mutation
+			// would fire, must not harvest its stripped text.
+			const rendered = findCellTextDivs(editor)[2];
+			rendered.dispatchEvent(new Event('input'));
+			jest.advanceTimersByTime(700);
+			jest.runOnlyPendingTimers();
+
+			expect(editor.state.doc.toString()).toContain('**[x](http://e.com)**');
 		} finally {
 			editor?.destroy();
 			jest.useRealTimers();

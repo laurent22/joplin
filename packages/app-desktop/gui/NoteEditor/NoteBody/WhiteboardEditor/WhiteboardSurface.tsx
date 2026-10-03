@@ -405,10 +405,15 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 	);
 
 	const onDragOver = useCallback((e: ReactDragEvent<HTMLDivElement>) => {
+		const effectAllowed = e.dataTransfer.effectAllowed;
+		const canLink = effectAllowed.toLowerCase().includes('link') || ['all', 'uninitialized'].includes(effectAllowed);
+
 		const types = Array.from(e.dataTransfer.types);
 		if (types.includes('text/x-jop-note-ids') || types.includes('text/x-jop-resource-ids')) {
 			e.preventDefault();
-			e.dataTransfer.dropEffect = 'link';
+			// Workaround: On Linux, the 'link' drag effect prevents dropping items into the editor.
+			// See https://github.com/laurent22/joplin/issues/16457.
+			e.dataTransfer.dropEffect = canLink ? 'link' : 'copy';
 		} else if (types.includes('Files')) {
 			e.preventDefault();
 			e.dataTransfer.dropEffect = 'copy';

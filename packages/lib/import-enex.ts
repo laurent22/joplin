@@ -273,6 +273,12 @@ interface NoteResourceRecognition {
 	objID?: string;
 }
 
+interface SaxParser {
+	line: number;
+	column: number;
+	resume: ()=> SaxParser;
+}
+
 const preProcessFile = async (filePath: string): Promise<string> => {
 	// Disabled pre-processing for now because it runs out of memory:
 	// https://github.com/laurent22/joplin/issues/5543
@@ -306,6 +312,27 @@ const preProcessFile = async (filePath: string): Promise<string> => {
 	// const newFilePath = `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}.enex`;
 	// await shim.fsDriver().writeFile(newFilePath, newContent, 'utf8');
 	// return newFilePath;
+};
+
+// Evernote doesn't escape "&" in the "evernote.caption" fields. The parser
+// recovers from this on its own, but in strict mode it's fatal, so one stray
+// character would prevent the whole file from being imported.
+const recoverableParsingErrors = [
+	'Invalid character in entity name',
+	'Invalid character entity',
+];
+
+const isRecoverableParsingError = (error: Error) => {
+	return recoverableParsingErrors.some(m => error.message.includes(m));
+};
+
+// An error the importer recovered from - the import still completed.
+export interface RecoverableError extends Error {
+	recoverable?: boolean;
+}
+
+export const isRecoverableError = (error: Error | string) => {
+	return typeof error !== 'string' && !!(error as RecoverableError).recoverable;
 };
 
 const isEvernoteUrl = (url: string) => {
@@ -419,7 +446,7 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 		const createdNoteIds: string[] = [];
 		const noteTitlesToIds = new Map<string, string[]>();
 
-		const createErrorWithNoteTitle = (fnThis: { _parser?: { line: number; column: number } } | null, error: Error) => {
+		const createErrorWithNoteTitle = (fnThis: { _parser?: SaxParser } | null, error: Error) => {
 			const line = [];
 
 			const parser = fnThis ? fnThis._parser : null;
@@ -439,7 +466,7 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 		};
 
 		stream.on('error', function(error: Error) {
-			importOptions.onError(createErrorWithNoteTitle(this as { _parser?: { line: number; column: number } }, error));
+			importOptions.onError(createErrorWithNoteTitle(this as { _parser?: SaxParser }, error));
 		});
 
 		function currentNodeName() {
@@ -532,8 +559,23 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 			return true;
 		}
 
-		saxStream.on('error', function(error: Error) {
-			importOptions.onError(createErrorWithNoteTitle(this as { _parser?: { line: number; column: number } }, error));
+		saxStream.on('error', function(error: RecoverableError) {
+			const parser = (this as { _parser?: SaxParser })._parser;
+			const canRecover = !!parser && isRecoverableParsingError(error);
+
+			// So that the caller can log it without reporting a failed import.
+			error.recoverable = canRecover;
+
+			importOptions.onError(createErrorWithNoteTitle(this as { _parser?: SaxParser }, error));
+
+			if (canRecover) {
+				// Node disconnects the source stream whenever the destination
+				// emits "error", so without piping it again the rest of the file
+				// - and the "end" event - would never be received.
+				parser.resume();
+				stream.pipe(saxStream);
+				return;
+			}
 
 			// We need to reject the promise here, or parsing will get stuck
 			// ("end" handler will never be called).
@@ -650,7 +692,7 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 				if (notes.length >= importOptions.batchSize) {
 					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 					processNotes().catch(error => {
-						importOptions.onError(createErrorWithNoteTitle(this as { _parser?: { line: number; column: number } }, error));
+						importOptions.onError(createErrorWithNoteTitle(this as { _parser?: SaxParser }, error));
 					});
 				}
 				note = null;

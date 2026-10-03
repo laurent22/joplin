@@ -8,6 +8,7 @@ export interface MasterKeyEntity {
 	content?: string;
 	type_?: number;
 	enabled?: number;
+	appMinVersion?: string;
 	hasBeenUsed?: boolean;
 }
 
