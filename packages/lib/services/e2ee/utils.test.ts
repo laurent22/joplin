@@ -47,10 +47,11 @@ describe('e2ee/utils', () => {
 	it.each([
 		[EncryptionMethod.KeyV1, false],
 		[1234, true],
-	])('should decide whether to show the unknown key format banner (encryption method: %d, should show: %j)', async (encryptionMethod, shouldShow) => {
+		[{ toString: 'throws if converted to string with String(...)' }, true],
+	])('should decide whether to show the unknown key format banner (encryption method: %j, should show: %j)', async (encryptionMethod, shouldShow) => {
 		await MasterKey.save({
 			...await encryptionService().generateMasterKey('111111'),
-			encryption_method: encryptionMethod,
+			encryption_method: encryptionMethod as unknown as number,
 		});
 
 		expect(showUnknownKeyFormatBanner(localSyncInfo())).toBe(shouldShow);

@@ -138,6 +138,7 @@ export const migratePpk = async () => {
 };
 
 export const isKnownEncryptionMethod = (method: EncryptionMethod|number) => {
+	if (typeof method !== 'number') return false;
 	return hasOwnProperty(EncryptionMethod, String(method));
 };
 
