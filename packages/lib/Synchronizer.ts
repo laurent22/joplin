@@ -549,7 +549,8 @@ export default class Synchronizer {
 
 					await this.lockHandler().acquireLock(LockType.Exclusive, this.lockClientType(), this.clientId_, { clearExistingSyncLocksFromTheSameClient: true });
 					await uploadSyncInfo(this.api(), newInfo);
-					// The upload is a window: the key may have moved, or a note may now depend on the local key about to be replaced.
+					// A reset, password change or migration done on this device during the upload would be overwritten by the save below,
+					// and a note locked meanwhile may depend on the local key that is about to be replaced.
 					checkNoteLockKeyUnchanged(localInfo);
 					if (localInfo.noteLockKey && newInfo.noteLockKey?.id !== localInfo.noteLockKey.id) {
 						checkNoteLockKeyConflict(localInfo, remoteInfo, await Note.hasLockedNotes(), staleReset);

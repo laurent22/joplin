@@ -178,6 +178,24 @@ describe('Synchronizer.noteLock', () => {
 		expect(Setting.value('noteLock.conflictNoteLockKey')).toEqual({});
 	});
 
+	it('should keep the sync stopped and say how to migrate when note lock is off', async () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		await NoteLockKey.instance().create('111111');
+		await synchronizerStart();
+
+		await switchToClient(2);
+		Setting.setValue('featureFlag.noteLock', true);
+		const localKey = await NoteLockKey.instance().create('222222');
+		await NoteLockSession.instance().unlock('222222');
+		await Note.save({ title: 'secret', body: 'secret body', is_locked: 1 }, { useNoteLock: true });
+		Setting.setValue('featureFlag.noteLock', false);
+
+		for (let i = 0; i < 2; i++) {
+			await expect(synchronizerStart(null, { throwOnError: true })).rejects.toThrow('Enable the note lock feature');
+		}
+		expect(NoteLockKey.instance().load()).toEqual(localKey);
+	});
+
 	it('should sync again after migrating local locked notes to the sync target key', async () => {
 		Setting.setValue('featureFlag.noteLock', true);
 		const remoteKey = await NoteLockKey.instance().create('111111');

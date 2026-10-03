@@ -12,6 +12,7 @@ import JoplinError from '../../JoplinError';
 import { ErrorCode } from '../../errors';
 import fastDeepEqual = require('fast-deep-equal');
 import { createSelector } from 'reselect';
+import isNoteLockEnabled from '../noteLock/isNoteLockEnabled';
 
 const logger = Logger.create('syncInfoUtils');
 
@@ -661,7 +662,9 @@ export const checkNoteLockKeyConflict = (local: SyncInfo, remote: SyncInfo, hasL
 		const conflict: NoteLockKeyConflict = { noteLockKey: remote.noteLockKey, syncMigrationId: remote.syncMigrationId };
 		Setting.setValue(noteLockKeyConflictSettingKey, conflict);
 	}
-	throw new JoplinError(_('Synchronisation was stopped because the sync target uses a different note lock password. Your locked notes must be migrated to that password before synchronisation can continue.'), ErrorCode.NoteLockKeyConflict);
+	throw new JoplinError(isNoteLockEnabled()
+		? _('Synchronisation was stopped because the sync target uses a different note lock key to the one on your device. Your locked notes must be migrated to the synced key before synchronisation can continue.')
+		: _('Synchronisation was stopped because a note lock key migration is required. Enable the note lock feature to migrate your locked notes.'), ErrorCode.NoteLockKeyConflict);
 };
 
 // A reset, password change or migration that lands while a sync is in flight would be clobbered by the sync's

@@ -126,7 +126,7 @@ const WarningBannerComponent: React.FC<Props> = props => {
 		warningComps.push(renderWarningBox('cannotDecrypt', _('Some items cannot be decrypted.'), { screen: 'Status' }));
 	}
 	if (props.noteLockKeyConflict && props.showNoteLockKeyConflictMessage !== false) {
-		warningComps.push(renderWarningBox('noteLockMigration', _('The sync target uses a different note lock password. Press to migrate your locked notes.'), { screen: 'NoteLockMigration' }));
+		warningComps.push(renderWarningBox('noteLockMigration', _('The sync target uses a different note lock key to the one on your device. Press to migrate your locked notes.'), { screen: 'NoteLockMigration' }));
 	}
 	if (props.showInvalidJoplinCloudCredential) {
 		const target = { screen: 'JoplinCloudLogin' };

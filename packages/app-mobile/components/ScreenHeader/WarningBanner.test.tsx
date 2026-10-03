@@ -142,7 +142,7 @@ describe('WarningBanner', () => {
 		const mock = createMockStore();
 
 		render(<WarningBannerWrapper store={mock.store}/>);
-		const banner = screen.getByText(/note lock password/);
+		const banner = screen.getByText(/different note lock key/);
 		expect(banner).toBeVisible();
 		fireEvent.press(banner);
 

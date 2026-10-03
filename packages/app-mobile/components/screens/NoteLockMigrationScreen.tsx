@@ -98,7 +98,7 @@ export const NoteLockMigrationScreenComponent: React.FC<Props> = props => {
 		<View style={styles.root}>
 			<ScreenHeader title={_('Migrate locked notes')} showSearchButton={false} showBackButton={!migrating} showNoteLockKeyConflictMessage={false}/>
 			<View style={styles.container}>
-				<Text style={styles.normalText}>{_('The sync target uses a different note lock password. Your locked notes must be re-encrypted with that password before synchronisation can continue.')}</Text>
+				<Text style={styles.normalText}>{_('The sync target uses a different note lock key to the one on your device. Your locked notes must be re-encrypted with the synced key before synchronisation can continue. Locked notes cannot be read while they are being migrated.')}</Text>
 				<Text nativeID={localLabelId} style={styles.normalText}>{_('Note lock password on this device')}</Text>
 				<TextInput
 					accessibilityLabelledBy={localLabelId}

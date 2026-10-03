@@ -154,7 +154,7 @@ const WarningBanner: React.FC<Props> = props => {
 		);
 	} else if (props.showNoteLockKeyConflictMessage) {
 		msg = renderNotificationMessage(
-			_('Synchronisation is stopped because the sync target uses a different note lock password.'),
+			_('Synchronisation is stopped because the sync target uses a different note lock key to the one on your device.'),
 			_('Migrate your locked notes'),
 			onMigrateLockedNotes,
 		);
