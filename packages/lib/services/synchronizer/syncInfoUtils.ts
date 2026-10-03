@@ -12,6 +12,7 @@ import JoplinError from '../../JoplinError';
 import { ErrorCode } from '../../errors';
 import fastDeepEqual = require('fast-deep-equal');
 import { createSelector } from 'reselect';
+import isNoteLockEnabled from '../noteLock/isNoteLockEnabled';
 
 const logger = Logger.create('syncInfoUtils');
 
@@ -33,6 +34,16 @@ export interface SyncInfoValueInt {
 export interface SyncInfoValuePublicPrivateKeyPair {
 	value: PublicPrivateKeyPair;
 	updatedTime: number;
+}
+
+export interface MergeSyncInfosOptions {
+	resetPropagates?: boolean;
+}
+
+// The sync target's note lock key and sync migration id, parked while a sync is stopped on a conflict.
+export interface NoteLockKeyConflict {
+	noteLockKey: MasterKeyEntity;
+	syncMigrationId: string;
 }
 
 // This should be set to the client version whenever we require all the clients to be at the same
@@ -269,7 +280,7 @@ const mergeActiveMasterKeys = (s1: SyncInfo, s2: SyncInfo, output: SyncInfo) => 
 };
 
 // If there is a distinction, s1 should be local sync info and s2 remote.
-export function mergeSyncInfos(s1: SyncInfo, s2: SyncInfo): SyncInfo {
+export function mergeSyncInfos(s1: SyncInfo, s2: SyncInfo, options: MergeSyncInfosOptions = {}): SyncInfo {
 	const output: SyncInfo = new SyncInfo();
 
 	output.setWithTimestamp(s1.keyTimestamp('e2ee') > s2.keyTimestamp('e2ee') ? s1 : s2, 'e2ee');
@@ -292,15 +303,20 @@ export function mergeSyncInfos(s1: SyncInfo, s2: SyncInfo): SyncInfo {
 		}
 	}
 
-	const noteLockKey1 = s1.noteLockKey;
-	const noteLockKey2 = s2.noteLockKey;
-	if (!noteLockKey1) {
-		output.noteLockKey = noteLockKey2;
-	} else if (!noteLockKey2) {
-		output.noteLockKey = noteLockKey1;
-	} else {
-		output.noteLockKey = (noteLockKey1.updated_time || 0) >= (noteLockKey2.updated_time || 0) ? noteLockKey1 : noteLockKey2;
+	// Same key: newest copy wins. Same lineage: a local reset propagates, else the remote key is adopted. Different
+	// lineage: checkNoteLockKeyConflict() already stopped the sync if a local note depends on the local key, so remote wins.
+	let noteLockKeySource = s2;
+	if (!s2.noteLockKey) {
+		noteLockKeySource = s1;
+	} else if (s1.noteLockKey) {
+		if (s1.noteLockKey.id === s2.noteLockKey.id) {
+			noteLockKeySource = (s1.noteLockKey.updated_time || 0) >= (s2.noteLockKey.updated_time || 0) ? s1 : s2;
+		} else if (s1.syncMigrationId === s2.syncMigrationId && options.resetPropagates) {
+			noteLockKeySource = s1;
+		}
 	}
+	output.noteLockKey = noteLockKeySource.noteLockKey;
+	output.syncMigrationId = noteLockKeySource.syncMigrationId;
 
 	// We use >= so that the version from s1 (local) is preferred to the version in s2 (remote).
 	// For example, if s2 has appMinVersion 0.00 and s1 has appMinVersion 0.0.0, we choose the
@@ -321,6 +337,7 @@ export class SyncInfo {
 	private activeMasterKeyId_: SyncInfoValueString;
 	private masterKeys_: MasterKeyEntity[] = [];
 	private noteLockKey_: MasterKeyEntity = null;
+	private syncMigrationId_ = '';
 	private ppk_: SyncInfoValuePublicPrivateKeyPair;
 	private appMinVersion_: string = appMinVersion_;
 	private revisionServiceEnabled_: SyncInfoValueBoolean;
@@ -343,6 +360,7 @@ export class SyncInfo {
 			activeMasterKeyId: this.activeMasterKeyId_,
 			masterKeys: this.masterKeys,
 			noteLockKey: this.noteLockKey,
+			syncMigrationId: this.syncMigrationId,
 			ppk: this.ppk_,
 			appMinVersion: this.appMinVersion,
 			revisionServiceEnabled: this.revisionServiceEnabled_,
@@ -393,6 +411,7 @@ export class SyncInfo {
 		this.activeMasterKeyId_ = 'activeMasterKeyId' in s ? s.activeMasterKeyId : { value: '', updatedTime: 0 };
 		this.masterKeys_ = 'masterKeys' in s ? s.masterKeys : [];
 		this.noteLockKey_ = 'noteLockKey' in s ? s.noteLockKey : null;
+		this.syncMigrationId_ = 'syncMigrationId' in s ? s.syncMigrationId : '';
 		this.ppk_ = 'ppk' in s ? s.ppk : { value: null, updatedTime: 0 };
 		this.appMinVersion_ = s.appMinVersion ? s.appMinVersion : '0.0.0';
 		this.revisionServiceEnabled_ = 'revisionServiceEnabled' in s ? s.revisionServiceEnabled : { value: true, updatedTime: 0 };
@@ -502,6 +521,16 @@ export class SyncInfo {
 		this.noteLockKey_ = v;
 	}
 
+	// Identifies the note lock key lineage: created with the first key, kept through password resets and
+	// replaced only when the user migrates to a sync target's key.
+	public get syncMigrationId(): string {
+		return this.syncMigrationId_;
+	}
+
+	public set syncMigrationId(v: string) {
+		this.syncMigrationId_ = v;
+	}
+
 	public keyTimestamp(name: string): number {
 		const self = this as unknown as Record<string, { updatedTime: number }>;
 		if (!(`${name}_` in self)) throw new Error(`Invalid name: ${name}`);
@@ -576,8 +605,7 @@ export const setMasterKeyHasBeenUsed = (s: SyncInfo, mkId: string) => {
 		updated_time: Date.now(),
 	};
 
-	saveLocalSyncInfo(s);
-
+	// Saved by the caller with the rest of the merge, so the sync never persists a candidate its checks may still reject.
 	return s;
 };
 
@@ -603,6 +631,58 @@ export function setPpk(ppk: PublicPrivateKeyPair) {
 export function masterKeyById(id: string) {
 	return localSyncInfo().masterKeys.find(mk => mk.id === id);
 }
+
+const noteLockKeyConflictSettingKey = 'noteLock.conflictNoteLockKey';
+
+export const noteLockKeyConflict = (): NoteLockKeyConflict | null => {
+	const conflict = Setting.value(noteLockKeyConflictSettingKey) as Partial<NoteLockKeyConflict>;
+	return conflict.noteLockKey ? conflict as NoteLockKeyConflict : null;
+};
+
+// Replaces the local key and lineage with the sync target's, so callers migrate first or warn: notes still locked
+// with the local key become unreadable. A pending reset belonged to the dropped lineage, so it is cleared too.
+export const adoptNoteLockKeyConflict = () => {
+	const conflict = noteLockKeyConflict();
+	if (!conflict) throw new Error('No note lock key conflict to adopt');
+	const syncInfo = localSyncInfo();
+	syncInfo.noteLockKey = conflict.noteLockKey;
+	syncInfo.syncMigrationId = conflict.syncMigrationId;
+	saveLocalSyncInfo(syncInfo);
+	Setting.setValue(noteLockKeyConflictSettingKey, {});
+	Setting.setValue('noteLock.passwordReset', false);
+	Setting.setValue('noteLock.keyIdToReset', '');
+};
+
+// Different lineages with local notes depending on the local key stop the sync: the remote key is parked for the
+// migration and keeps rejecting syncs until resolved. A stale reset (another device reset first) counts as a different lineage.
+export const checkNoteLockKeyConflict = (local: SyncInfo, remote: SyncInfo, hasLocalLockedNotes: boolean, staleReset: boolean) => {
+	if (!noteLockKeyConflict()) {
+		const keysDiffer = !!local.noteLockKey && !!remote.noteLockKey && local.noteLockKey.id !== remote.noteLockKey.id;
+		if (!keysDiffer || (local.syncMigrationId === remote.syncMigrationId && !staleReset) || !hasLocalLockedNotes) return;
+		const conflict: NoteLockKeyConflict = { noteLockKey: remote.noteLockKey, syncMigrationId: remote.syncMigrationId };
+		Setting.setValue(noteLockKeyConflictSettingKey, conflict);
+	}
+	throw new JoplinError(isNoteLockEnabled()
+		? _('Synchronisation was stopped because the sync target uses a different note lock key to the one on your device. Your locked notes must be migrated to the synced key before synchronisation can continue.')
+		: _('Synchronisation was stopped because a note lock key migration is required. Enable the note lock feature to migrate your locked notes.'), ErrorCode.NoteLockKeyConflict);
+};
+
+// A reset, password change or migration that lands while a sync is in flight would be clobbered by the sync's
+// local save, so the sync stops instead and the next one starts from the new state.
+export const checkNoteLockKeyUnchanged = (snapshot: SyncInfo) => {
+	const current = localSyncInfo();
+	if (current.noteLockKey?.id === snapshot.noteLockKey?.id && current.noteLockKey?.updated_time === snapshot.noteLockKey?.updated_time && current.syncMigrationId === snapshot.syncMigrationId) return;
+	throw new Error(_('Synchronisation was stopped because the note lock key changed on this device during the sync. Please synchronise again.'));
+};
+
+// Sync migration ids predate the release of the note lock feature, so a key without one comes from a
+// development build and cannot take part in the reset and migration handling.
+export const checkNoteLockKeyMigrationId = (s: SyncInfo, isRemote: boolean) => {
+	if (!s.noteLockKey || s.syncMigrationId) return;
+	throw new Error(isRemote
+		? _('Synchronisation was stopped because the note lock key on the sync target has no sync migration ID.')
+		: _('Synchronisation was stopped because the note lock key on this device has no sync migration ID. Please reset the note lock password.'));
+};
 
 export const checkIfCanSync = (s: SyncInfo, appVersion: string) => {
 	const isForwardCompatible = () => {

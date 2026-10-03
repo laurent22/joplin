@@ -6,4 +6,5 @@ export enum ErrorCode {
 	UnsupportedMimeType = 'unsupportedMimeType',
 	MustUpgradeApp = 'mustUpgradeApp',
 	DownloadLimiter = 'downloadLimiter',
+	NoteLockKeyConflict = 'noteLockKeyConflict',
 }

@@ -6,7 +6,8 @@ import { AppState } from '../../utils/types';
 import WarningBox, { WarningBoxTarget } from './WarningBox';
 import { _ } from '@joplin/lib/locale';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
-import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import { localSyncInfoFromState, NoteLockKeyConflict } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
 import Setting from '@joplin/lib/models/Setting';
 import { ShareInvitation, ShareUserStatus } from '@joplin/lib/services/share/reducer';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
@@ -29,6 +30,8 @@ interface Props {
 	shareInvitations: ShareInvitation[];
 	processingShareInvitationResponse: boolean;
 	showInvalidJoplinCloudCredential: boolean;
+	noteLockKeyConflict: boolean;
+	showNoteLockKeyConflictMessage: boolean|undefined;
 }
 
 const androidGooglePlayUrl = 'https://play.google.com/store/apps/details?id=net.cozic.joplin';
@@ -122,6 +125,9 @@ const WarningBannerComponent: React.FC<Props> = props => {
 	if (props.hasDisabledEncryptionItems) {
 		warningComps.push(renderWarningBox('cannotDecrypt', _('Some items cannot be decrypted.'), { screen: 'Status' }));
 	}
+	if (props.noteLockKeyConflict && props.showNoteLockKeyConflictMessage !== false) {
+		warningComps.push(renderWarningBox('noteLockMigration', _('The sync target uses a different note lock key to the one on your device. Press to migrate your locked notes.'), { screen: 'NoteLockMigration' }));
+	}
 	if (props.showInvalidJoplinCloudCredential) {
 		const target = { screen: 'JoplinCloudLogin' };
 		warningComps.push(renderWarningBox('syncLogin', _('Your Joplin Cloud credentials are invalid, please login.'), target));
@@ -174,5 +180,6 @@ export default connect((state: AppState) => {
 		shareInvitations: state.shareService.shareInvitations,
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
 		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && !isSyncLoginRoute(state) && state.mustAuthenticate,
+		noteLockKeyConflict: isNoteLockEnabled() && !!(state.settings['noteLock.conflictNoteLockKey'] as Partial<NoteLockKeyConflict>)?.noteLockKey,
 	};
 })(WarningBannerComponent);

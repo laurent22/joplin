@@ -136,6 +136,19 @@ describe('WarningBanner', () => {
 		expect(screen.getByText(query)).toBeVisible();
 	});
 
+	test('the note lock key conflict banner should link to the migration screen', () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		Setting.setValue('noteLock.conflictNoteLockKey', { noteLockKey: { id: 'sync-target-key' }, syncMigrationId: 'lineage' });
+		const mock = createMockStore();
+
+		render(<WarningBannerWrapper store={mock.store}/>);
+		const banner = screen.getByText(/different note lock key/);
+		expect(banner).toBeVisible();
+		fireEvent.press(banner);
+
+		expect(mock.getRouteName()).toBe('NoteLockMigration');
+	});
+
 	test('invalid credentials banner for Joplin Cloud should link to a login screen', () => {
 		Setting.setValue('sync.target', 10);
 		const mock = createMockStore();

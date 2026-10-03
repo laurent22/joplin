@@ -16,6 +16,8 @@ import { AppState } from '../app.reducer';
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
+import type { NoteLockKeyConflict } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/config/shouldShowMissingPasswordWarning';
 import { connect } from 'react-redux';
 
@@ -33,6 +35,7 @@ interface Props {
 	shareInvitations: ShareInvitation[];
 	hasDisabledSyncItems: boolean;
 	showMissingMasterKeyMessage: boolean;
+	showNoteLockKeyConflictMessage: boolean;
 	mustUpgradeAppMessage: string;
 	syncTargetAppMinVersion: string;
 	shouldSwitchToAppleSiliconVersion: boolean;
@@ -72,6 +75,13 @@ const WarningBanner: React.FC<Props> = props => {
 			props: {
 				defaultSection: 'encryption',
 			},
+		});
+	};
+
+	const onMigrateLockedNotes = () => {
+		props.dispatch({
+			type: 'DIALOG_OPEN',
+			name: 'noteLockMigration',
 		});
 	};
 
@@ -141,6 +151,12 @@ const WarningBanner: React.FC<Props> = props => {
 			_('The synchronisation password is missing.'),
 			_('Set the password'),
 			onViewSyncSettingsScreen,
+		);
+	} else if (props.showNoteLockKeyConflictMessage) {
+		msg = renderNotificationMessage(
+			_('Synchronisation is stopped because the sync target uses a different note lock key to the one on your device.'),
+			_('Migrate your locked notes'),
+			onMigrateLockedNotes,
 		);
 	} else if (props.shouldUpgradeSyncTarget) {
 		msg = renderNotificationMessage(
@@ -283,6 +299,7 @@ const mapStateToProps = (state: AppState) => {
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
 		hasDisabledEncryptionItems: state.hasDisabledEncryptionItems,
 		showMissingMasterKeyMessage: showMissingMasterKeyMessage(syncInfo, state.notLoadedMasterKeys),
+		showNoteLockKeyConflictMessage: isNoteLockEnabled() && !!(state.settings['noteLock.conflictNoteLockKey'] as Partial<NoteLockKeyConflict>)?.noteLockKey,
 		showNeedUpgradingMasterKeyMessage: showNeedUpgradingEnabledMasterKeyMessage,
 		showShouldReencryptMessage: state.settings['encryption.shouldReencrypt'] >= Setting.SHOULD_REENCRYPT_YES,
 		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,
