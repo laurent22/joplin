@@ -184,12 +184,6 @@ const WarningBanner: React.FC<Props> = props => {
 			_('View them now'),
 			onViewStatusScreen,
 		);
-	} else if (props.showUnknownKeyFormatMessage) {
-		msg = renderNotificationMessage(
-			_('One or more encryption keys are stored in an unknown format.'),
-			_('Manage'),
-			onViewEncryptionConfigScreen,
-		);
 	} else if (props.showMissingMasterKeyMessage) {
 		msg = renderNotificationMessage(
 			_('One or more master keys need a password.'),
@@ -232,6 +226,12 @@ const WarningBanner: React.FC<Props> = props => {
 		} else {
 			msg = renderNotificationMessage(props.mustUpgradeAppMessage);
 		}
+	} else if (props.showUnknownKeyFormatMessage) {
+		msg = renderNotificationMessage(
+			_('One or more encryption keys are stored in an unknown format.'),
+			_('Manage'),
+			onViewEncryptionConfigScreen,
+		);
 	} else if (props.shouldSwitchToAppleSiliconVersion) {
 		msg = renderNotificationMessage(
 			_('You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.'),
