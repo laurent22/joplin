@@ -8,6 +8,10 @@ import { ExportModule } from '@joplin/lib/services/interop/Module';
 import { _ } from '@joplin/lib/locale';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import bridge from './services/bridge';
+import dialogs from './gui/dialogs';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
+import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
+import hasLockedNoteWhileSessionLocked from '@joplin/lib/services/noteLock/hasLockedNoteWhileSessionLocked';
 import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
 import { friendlySafeFilename } from '@joplin/lib/path-utils';
@@ -193,6 +197,32 @@ export default class InteropServiceHelper {
 		return `${filename}.${fileExtension}`;
 	}
 
+	// Backups keep locked notes encrypted, so only the decrypting formats need an unlocked session.
+	private static async confirmLockedNoteExport_(format: ExportModuleOutputFormat, options: ExportNoteOptions) {
+		if (format === ExportModuleOutputFormat.Raw || format === ExportModuleOutputFormat.Jex) return true;
+		if (!isNoteLockEnabled() || NoteLockSession.instance().isUnlocked()) return true;
+		const hasLockedNotes = options.sourceNoteIds && options.sourceNoteIds.length ? await hasLockedNoteWhileSessionLocked(options.sourceNoteIds) : await Note.hasLockedNotes();
+		if (!hasLockedNotes) return true;
+
+		const answer = bridge().showMessageBox(_('Some notes are encrypted and this export format needs them decrypted. Unlock them, or export without them.'), {
+			buttons: [_('Unlock'), _('Export without locked notes'), _('Cancel')],
+		});
+		if (answer === 1) return true;
+		if (answer !== 0) return false;
+
+		while (true) {
+			const password = await dialogs.prompt(_('Enter your note lock password'), '', '', { type: 'password' });
+			if (!password) return false;
+			try {
+				await NoteLockSession.instance().unlock(password);
+				return true;
+			} catch (error) {
+				// WebCrypto reports a wrong password as a generic OperationError.
+				bridge().showErrorMessageBox(error.name === 'OperationError' ? _('Invalid password') : error.message);
+			}
+		}
+	}
+
 	public static async export(_dispatch: Dispatch, module: ExportModule, options: ExportNoteOptions = null) {
 		if (!options) options = {};
 
@@ -214,6 +244,8 @@ export default class InteropServiceHelper {
 
 		if (Array.isArray(path)) path = path[0];
 
+		if (!(await this.confirmLockedNoteExport_(module.format, options))) return;
+
 		void CommandService.instance().execute('showModalMessage', _('Exporting to "%s" as "%s" format. Please wait...', path, module.format));
 
 		const exportOptions: ExportOptions = {};
@@ -229,16 +261,20 @@ export default class InteropServiceHelper {
 
 		const service = InteropService.instance();
 
+		let lockedNotesSkipped = 0;
 		try {
 			const result = await service.export(exportOptions);
 			// eslint-disable-next-line no-console
 			console.info('Export result: ', result);
+			lockedNotesSkipped = result.lockedNotesSkipped ?? 0;
 		} catch (error) {
 			console.error(error);
 			bridge().showErrorMessageBox(_('Could not export notes: %s', error.message));
 		}
 
 		void CommandService.instance().execute('hideModalMessage');
+
+		if (lockedNotesSkipped) bridge().showInfoMessageBox(_('%d locked note(s) could not be decrypted and were not exported.', lockedNotesSkipped));
 	}
 
 }

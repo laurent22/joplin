@@ -8,6 +8,10 @@ import Folder from '../../models/Folder';
 import NoteTag from '../../models/NoteTag';
 import Note from '../../models/Note';
 import * as ArrayUtils from '../../ArrayUtils';
+import isNoteLockEnabled from '../noteLock/isNoteLockEnabled';
+import NoteLockNote from '../noteLock/NoteLockNote';
+import NoteLockSession from '../noteLock/NoteLockSession';
+import { NoteEntity } from '../database/types';
 import InteropService_Importer_Jex from './InteropService_Importer_Jex';
 import InteropService_Importer_Md from './InteropService_Importer_Md';
 import InteropService_Importer_Md_frontmatter from './InteropService_Importer_Md_frontmatter';
@@ -360,6 +364,17 @@ export default class InteropService {
 		}
 	}
 
+	private async decryptedNoteForExport_(note: NoteEntity): Promise<NoteEntity|null> {
+		if (!NoteLockSession.instance().isUnlocked()) return null;
+		try {
+			const decrypted = await NoteLockNote.decryptBody(note);
+			delete (decrypted as Record<string, unknown>).isDecrypted;
+			return { ...decrypted, is_locked: 0, extracted_resource_ids: '' };
+		} catch {
+			return null;
+		}
+	}
+
 	public async export(options: ExportOptions): Promise<ImportExportResult> {
 		options = {
 			format: ExportModuleOutputFormat.Jex,
@@ -387,6 +402,9 @@ export default class InteropService {
 
 		const exportedNoteIds = [];
 		let resourceIds: string[] = [];
+		// Backups keep locked notes encrypted; every other format exports the decrypted content.
+		const keepsLockedNotes = options.format === ExportModuleOutputFormat.Raw || options.format === ExportModuleOutputFormat.Jex;
+		let lockedNotesSkipped = 0;
 
 		// Recursively get all the folders that have valid parents
 		const folderIds = await Folder.childrenIds('');
@@ -412,13 +430,29 @@ export default class InteropService {
 			for (let noteIndex = 0; noteIndex < noteIds.length; noteIndex++) {
 				const noteId = noteIds[noteIndex];
 				if (sourceNoteIds.length && sourceNoteIds.indexOf(noteId) < 0) continue;
-				const note = await Note.load(noteId);
+				let note = await Note.load(noteId);
+				if (isNoteLockEnabled() && NoteLockNote.isLocked(note) && !keepsLockedNotes) {
+					const decrypted = await this.decryptedNoteForExport_(note);
+					if (!decrypted) {
+						lockedNotesSkipped++;
+						continue;
+					}
+					note = decrypted;
+				}
 				await queueExportItem(BaseModel.TYPE_NOTE, note);
 				exportedNoteIds.push(noteId);
 
-				const rids = await Note.linkedResourceIds(note.body);
+				// A locked note's body is ciphertext, so its resource ids come from the extracted list.
+				const rids = isNoteLockEnabled() && NoteLockNote.isLocked(note)
+					? Note.unserializeExtractedResourceIds(note.extracted_resource_ids)
+					: await Note.linkedResourceIds(note.body);
 				resourceIds = resourceIds.concat(rids);
 			}
+		}
+
+		if (lockedNotesSkipped) {
+			result.lockedNotesSkipped = lockedNotesSkipped;
+			result.warnings.push(`${lockedNotesSkipped} locked note(s) could not be decrypted and were not exported`);
 		}
 
 		resourceIds = ArrayUtils.unique(resourceIds);

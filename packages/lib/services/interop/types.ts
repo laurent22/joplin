@@ -1,5 +1,7 @@
 import { FolderEntity } from '../database/types';
 import { PluginStates } from '../plugins/reducer';
+import { MasterKeyEntity } from '../e2ee/types';
+import { DecryptedNoteLockKey } from '../noteLock/NoteLockKey';
 
 export interface CustomImportContext {
 	sourcePath: string;
@@ -54,6 +56,10 @@ export interface ImportOptions {
 	xmlSerializer?: XMLSerializer;
 
 	defaultFolderTitle?: string;
+
+	// Called when a backup carries a note lock key from another profile. Return that key decrypted
+	// to re-encrypt the imported locked notes for this profile, or null to import them unchanged.
+	onNoteLockKey?: (key: MasterKeyEntity)=> Promise<DecryptedNoteLockKey|null>;
 }
 
 export enum ExportProgressState {
@@ -82,6 +88,7 @@ export interface ExportOptions {
 
 export interface ImportExportResult {
 	warnings: string[];
+	lockedNotesSkipped?: number;
 }
 
 // These are the fields that will be included in an exported Md+Front Matter note

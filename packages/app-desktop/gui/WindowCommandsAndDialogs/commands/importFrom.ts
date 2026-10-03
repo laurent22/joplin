@@ -12,9 +12,52 @@ import shim from '@joplin/lib/shim';
 import { ImportModule } from '@joplin/lib/services/interop/Module';
 import { isRecoverableError } from '@joplin/lib/import-enex';
 import Logger from '@joplin/utils/Logger';
+import dialogs from '../../dialogs';
+import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
+import NoteLockKey, { DecryptedNoteLockKey } from '@joplin/lib/services/noteLock/NoteLockKey';
+import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
 const packageInfo: PackageInfo = require('../../../packageInfo.js');
 
 const logger = Logger.create('importFrom');
+
+const makeImportNoteLockKeyHandler = (modalMessage: string) => async (keyFile: MasterKeyEntity): Promise<DecryptedNoteLockKey|null> => {
+	// The password prompts are DOM dialogs and would render behind the import modal overlay.
+	void CommandService.instance().execute('hideModalMessage');
+	try {
+		const answer = bridge().showMessageBox(_('This backup contains encrypted notes, locked with a different note lock key. Decrypt them with the password the backup was created with?'), {
+			buttons: [_('Yes'), _('No')],
+		});
+		if (answer !== 0) return null;
+
+		if (!NoteLockKey.instance().load()) {
+			bridge().showInfoMessageBox(_('A note lock password needs to be set up before these notes can be decrypted. They will be imported still encrypted, and the backup can be imported again once the password is set up.'));
+			return null;
+		}
+
+		while (!NoteLockSession.instance().isUnlocked()) {
+			const password = await dialogs.prompt(_('Enter your note lock password'), '', '', { type: 'password' });
+			if (!password) return null;
+			try {
+				await NoteLockSession.instance().unlock(password);
+			} catch (error) {
+				// WebCrypto reports a wrong password as a generic OperationError.
+				bridge().showErrorMessageBox(error.name === 'OperationError' ? _('Invalid password') : error.message);
+			}
+		}
+
+		while (true) {
+			const password = await dialogs.prompt(_('Enter the note lock password the backup was created with'), '', '', { type: 'password' });
+			if (!password) return null;
+			try {
+				return await NoteLockKey.instance().decrypt(password, keyFile);
+			} catch (error) {
+				bridge().showErrorMessageBox(error.name === 'OperationError' ? _('Invalid password') : error.message);
+			}
+		}
+	} finally {
+		void CommandService.instance().execute('showModalMessage', modalMessage);
+	}
+};
 
 export const declaration: CommandDeclaration = {
 	name: 'importFrom',
@@ -143,6 +186,7 @@ export const runtime = (control: WindowControl): CommandRuntime => {
 					console.warn(error);
 				},
 				destinationFolderId: options.destinationFolderId,
+				onNoteLockKey: makeImportNoteLockKeyHandler(modalMessage),
 			};
 
 			const service = InteropService.instance();

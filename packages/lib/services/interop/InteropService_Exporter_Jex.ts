@@ -28,6 +28,8 @@ export default class InteropService_Exporter_Jex extends InteropService_Exporter
 	}
 
 	public async close() {
+		await this.rawExporter_.close();
+
 		const stats = await shim.fsDriver().readDirStats(this.tempDir_, { recursive: true });
 		const filePaths = stats.filter(a => !a.isDirectory()).map(a => a.path);
 

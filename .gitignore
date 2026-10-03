@@ -1744,6 +1744,7 @@ packages/lib/services/e2ee/ppk/webCrypto/buildRsaCryptoProvider.js
 packages/lib/services/e2ee/types.js
 packages/lib/services/e2ee/utils.test.js
 packages/lib/services/e2ee/utils.js
+packages/lib/services/interop/InteropService.noteLock.test.js
 packages/lib/services/interop/InteropService.test.js
 packages/lib/services/interop/InteropService.js
 packages/lib/services/interop/InteropService_Exporter_Base.js

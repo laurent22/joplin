@@ -882,6 +882,10 @@ export default class Note extends BaseItem {
 		return n.updated_time < date;
 	}
 
+	public static async hasLockedNotes() {
+		return !!(await this.db().selectOne('SELECT id FROM notes WHERE is_locked = 1 LIMIT 1'));
+	}
+
 	public static async load(id: string, options: LoadOptions = null): Promise<NoteEntity> {
 		const note = await super.load(id, options);
 		if (isNoteLockEnabled() && !!options?.useNoteLock) return NoteLockNote.decryptBody(note, options.noteLockKey);
