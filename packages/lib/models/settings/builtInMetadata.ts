@@ -113,6 +113,8 @@ export enum SurveyProgress {
 	Dismissed,
 }
 
+type PendingAuthData = EmptyObject|{ path: string; appId: string };
+
 const builtInMetadata = (Setting: typeof SettingType) => {
 	const platform = shim.platformName();
 	const mobilePlatform = shim.mobilePlatform();
@@ -440,7 +442,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			description: () => _('By default, authentication is done by opening the Joplin Server web UI. Enable this setting to prefer email/password authentication.'),
 			advanced: true,
 		},
-		'sync.9.pendingAuthId': { value: '', type: SettingItemType.String, public: false },
+		'sync.9.pendingAuthData': { value: null as PendingAuthData|null, type: SettingItemType.Object, public: false },
 		'sync.9.connect': buildJoplinServerConnectButton(9, _('Joplin Server')),
 		'sync.9.disconnect': buildJoplinServerDisconnectButton(9, _('Joplin Server')),
 
@@ -511,7 +513,10 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		},
 		'sync.10.connect': buildJoplinServerConnectButton(10, _('Joplin Cloud')),
 
-		'sync.10.pendingAuthId': { value: '', type: SettingItemType.String, public: false },
+		// pendingAuthId was historically used for resuming authentication after closing the app.
+		// Superseded by pendingAuthData:
+		// 'sync.10.pendingAuthId': { value: '', type: SettingItemType.String, public: false },
+		'sync.10.pendingAuthData': { value: null as PendingAuthData|null, type: SettingItemType.Object, public: false },
 
 		'sync.10.inboxEmail': { value: '', type: SettingItemType.String, public: false },
 

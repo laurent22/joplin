@@ -125,7 +125,12 @@ export const hasValidBaseUrl = (id: JoplinSyncTargetId, settings: SettingsMap|nu
 export const isValidBaseUrl = (url: string) => isHttpOrHttpsUrl(url);
 
 export const saveApplicationAuthId = async (applicationAuthId: string, syncTarget: JoplinSyncTargetId) => {
-	Setting.setValue(`sync.${syncTarget}.pendingAuthId`, applicationAuthId);
+	Setting.setValue(`sync.${syncTarget}.pendingAuthData`, {
+		appId: applicationAuthId,
+		// Record the sync target URL to ensure that appId isn't sent to the wrong server if
+		// the user changes the path:
+		path: Setting.value(`sync.${syncTarget}.path`),
+	});
 	await Setting.saveAll();
 };
 
@@ -203,7 +208,7 @@ export const checkIfLoginWasSuccessful = async (applicationsUrl: string, syncTar
 		Setting.setValue(`sync.${syncTarget}.username`, jsonBody.id);
 		Setting.setValue(`sync.${syncTarget}.password`, jsonBody.password);
 		Setting.setValue('sync.target', syncTarget);
-		Setting.setValue(`sync.${syncTarget}.pendingAuthId`, '');
+		Setting.setValue(`sync.${syncTarget}.pendingAuthData`, null);
 
 		const fileApi = await reg.syncTarget().fileApi();
 		await fileApi.driver().api().loadSession();
@@ -222,13 +227,17 @@ export const completePendingAuthentication = async () => {
 	const syncTarget = Setting.value('sync.target');
 	if (!isJoplinOAuthSyncTarget(syncTarget)) return;
 
-	const pendingAuthId = Setting.value(`sync.${syncTarget}.pendingAuthId`);
-	if (!pendingAuthId) return;
-
-	const apiBaseUrl = normalizeBaseUrl(Setting.value(`sync.${syncTarget}.path`));
-	const applicationsUrl = `${apiBaseUrl}/api/application_auth/${pendingAuthId}`;
-
+	const pendingAuthData = Setting.value(`sync.${syncTarget}.pendingAuthData`);
+	if (!pendingAuthData?.appId || !pendingAuthData?.path) return;
 	try {
+		const apiPath = Setting.value(`sync.${syncTarget}.path`);
+		if (pendingAuthData.path !== apiPath) {
+			throw new Error('Server URL changed since last authentication');
+		}
+
+		const apiBaseUrl = normalizeBaseUrl(apiPath);
+		const applicationsUrl = `${apiBaseUrl}/api/application_auth/${pendingAuthData.appId}`;
+
 		const result = await checkIfLoginWasSuccessful(applicationsUrl, syncTarget);
 		if (result && result.success) {
 			logger.info('Completed pending Joplin Cloud authentication');
@@ -236,6 +245,6 @@ export const completePendingAuthentication = async () => {
 	} catch (error) {
 		logger.error('Could not complete pending authentication:', error);
 	} finally {
-		Setting.setValue(`sync.${syncTarget}.pendingAuthId`, '');
+		Setting.setValue(`sync.${syncTarget}.pendingAuthData`, null);
 	}
 };
