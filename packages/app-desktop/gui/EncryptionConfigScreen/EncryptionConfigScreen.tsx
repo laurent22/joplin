@@ -211,11 +211,7 @@ export const EncryptionConfigScreen = (props: Props) => {
 				{renderPasswordInput(mk.id)}
 				<td
 					style={theme.textStyle}
-				>{
-						knownKeyType
-							? passwordOk
-							: <span title={_('Unknown key type')}>❓</span>
-					}</td>
+				>{knownKeyType ? passwordOk : <span title={_('Unknown key format')}>❓</span>}</td>
 				<td style={theme.textStyle}>
 					<button style={theme.buttonStyle} onClick={() => onToggleEnabledClick(mk)}>{masterKeyEnabled(mk) ? _('Disable') : _('Enable')}</button>
 				</td>
