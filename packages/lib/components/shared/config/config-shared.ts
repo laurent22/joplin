@@ -428,6 +428,7 @@ export const onSettingButtonPress = async (comp: ConfigScreenComponent, metadata
 			};
 			setValueAndSave(`sync.${syncCommandId}.username`, '');
 			setValueAndSave(`sync.${syncCommandId}.password`, '');
+			setValueAndSave(`sync.${syncCommandId}.pendingAuthId`, '');
 
 			const syncTarget = reg.syncTarget(syncCommandId);
 			await (syncTarget as SyncTargetJoplinServerBase).clearSession();
