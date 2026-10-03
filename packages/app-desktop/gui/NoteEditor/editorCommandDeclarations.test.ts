@@ -18,19 +18,19 @@ describe('editorCommandDeclarations', () => {
 	test.each([
 		[
 			{},
-			{ textBold: true },
+			{ textBold: true, textHighlight: true },
 		],
 		[
 			{
 				markdownEditorPaneVisible: false,
 			},
-			{ textBold: false },
+			{ textBold: false, textHighlight: false },
 		],
 		[
 			{
 				noteIsReadOnly: true,
 			},
-			{ textBold: false },
+			{ textBold: false, textHighlight: false },
 		],
 		[
 			// In the Markdown editor, but only the viewer is visible
@@ -54,7 +54,7 @@ describe('editorCommandDeclarations', () => {
 				markdownEditorPaneVisible: false,
 				richTextEditorVisible: true,
 			},
-			{ textBold: true },
+			{ textBold: true, textHighlight: true },
 		],
 		[
 			// In the Markdown editor, and the command palette is visible

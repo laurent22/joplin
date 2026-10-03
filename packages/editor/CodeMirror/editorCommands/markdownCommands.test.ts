@@ -2,7 +2,7 @@ import { EditorSelection } from '@codemirror/state';
 import {
 	insertHorizontalRule,
 	insertOrIncreaseIndent,
-	toggleBlockQuote, toggleBolded, toggleCode, toggleHeaderLevel, toggleItalicized, toggleMath, updateLink,
+	toggleBlockQuote, toggleBolded, toggleCode, toggleHeaderLevel, toggleHighlight, toggleItalicized, toggleMath, updateLink,
 } from '../editorCommands/markdownCommands';
 import createTestEditor from '../testing/createTestEditor';
 import { blockMathTagName } from '../extensions/markdownMathExtension';
@@ -73,6 +73,29 @@ describe('markdownCommands', () => {
 		toggleItalicized(editor);
 		expect(editor.state.doc.toString()).toBe('Testing...');
 	});
+	it('should highlight everything selected and toggle it off', async () => {
+		const initialDocText = 'Testing...';
+		const editor = await createTestEditor(
+			initialDocText,
+			EditorSelection.range(0, initialDocText.length),
+			[],
+		);
+
+		toggleHighlight(editor);
+
+		let mainSel = editor.state.selection.main;
+		const highlightedText = '==Testing...==';
+		expect(editor.state.doc.toString()).toBe(highlightedText);
+		expect(mainSel.from).toBe(0);
+		expect(mainSel.to).toBe(highlightedText.length);
+
+		toggleHighlight(editor);
+		mainSel = editor.state.selection.main;
+		expect(editor.state.doc.toString()).toBe(initialDocText);
+		expect(mainSel.from).toBe(0);
+		expect(mainSel.to).toBe(initialDocText.length);
+	});
+
 
 	it.each([
 		{

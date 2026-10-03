@@ -192,6 +192,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 						},
 						textBold: () => wrapSelectionWithStrings('**', '**', _('strong text')),
 						textItalic: () => wrapSelectionWithStrings('*', '*', _('emphasised text')),
+						textHighlight: () => wrapSelectionWithStrings('==', '==', _('highlighted text')),
 						textLink: async () => {
 							const url = await dialogs.prompt(_('Insert Hyperlink'));
 							focus('v5/CodeMirror::textLink', editorRef.current);

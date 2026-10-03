@@ -729,6 +729,7 @@ function useMenu(props: Props) {
 						separator(),
 						menuItemDic.textBold,
 						menuItemDic.textItalic,
+						menuItemDic.textHighlight,
 						menuItemDic.textLink,
 						menuItemDic.textCode,
 						separator(),

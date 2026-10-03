@@ -5,7 +5,7 @@ import {
 	decreaseIndent, increaseIndent,
 	insertHorizontalRule,
 	toggleBlockQuote, toggleBolded, toggleCode,
-	toggleHeaderLevel, toggleItalicized,
+	toggleHeaderLevel, toggleHighlight, toggleItalicized,
 	toggleList, toggleMath,
 } from './markdownCommands';
 import duplicateLine from './duplicateLine';
@@ -64,6 +64,7 @@ const editorCommands: Record<EditorCommandType, EditorCommandFunction> = {
 			scrollIntoView: true,
 		}));
 	},
+	[EditorCommandType.ToggleHighlight]: toggleHighlight,
 	[EditorCommandType.DeleteToLineEnd]: deleteToLineEnd,
 	[EditorCommandType.DeleteToLineStart]: deleteToLineStart,
 	[EditorCommandType.DeleteLine]: deleteLine,

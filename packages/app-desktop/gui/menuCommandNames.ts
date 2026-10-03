@@ -32,6 +32,7 @@ export default function() {
 		'textCopy',
 		'textCut',
 		'textItalic',
+		'textHighlight',
 		'textLink',
 		'textPaste',
 		'textSelectAll',
