@@ -4,6 +4,7 @@ import { _ } from './locale';
 import { FileApi } from './file-api';
 import SyncTargetJoplinServerBase, { initFileApi } from './SyncTargetJoplinServerBase';
 import { joplinServerRequiresPassword } from './models/settings/builtInMetadata';
+import { isValidBaseUrl } from './services/joplinOAuthUtils';
 
 export interface FileApiOptions {
 	path(): string;
@@ -35,6 +36,15 @@ export default class SyncTargetJoplinServer extends SyncTargetJoplinServerBase {
 		const username = Setting.value(`sync.${this.id()}.username`);
 		const preferPasswordAuth = Setting.value(`sync.${this.id()}.preferPasswordAuth`);
 		return joplinServerRequiresPassword(username, preferPasswordAuth);
+	}
+
+	public static override authRouteName() {
+		const validPath = isValidBaseUrl(Setting.value('sync.9.path'));
+		if (validPath) {
+			return super.authRouteName();
+		} else {
+			return null;
+		}
 	}
 
 	public static override supportsShare(): boolean {
