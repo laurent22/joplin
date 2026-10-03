@@ -80,7 +80,10 @@ const initializeDialogWebView = (messageChannelId: string) => {
 
 			const element = document.getElementById('joplin-plugin-content') ?? document.body;
 			return {
-				width: element.clientWidth * dpr,
+				// clientWidth excludes the vertical scrollbar. On web, feeding that width
+				// back into a fit-to-content iframe repeatedly subtracts the scrollbar
+				// gutter. innerWidth includes it and remains stable across size checks.
+				width: window.innerWidth * dpr,
 				height: element.clientHeight * dpr,
 			};
 		},
