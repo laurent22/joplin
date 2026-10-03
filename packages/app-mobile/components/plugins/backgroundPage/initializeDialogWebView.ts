@@ -24,6 +24,7 @@ const initializeDialogWebView = (messageChannelId: string) => {
 		resetContentWidthBaseline = true;
 	});
 	contentObserver.observe(document.body, { attributes: true, childList: true, characterData: true, subtree: true });
+	contentObserver.observe(document.head, { attributes: true, childList: true, characterData: true, subtree: true });
 
 	type ScriptType = 'js'|'css';
 	const includeScriptsOrStyles = (type: ScriptType, paths: string[]) => {
@@ -37,6 +38,9 @@ const initializeDialogWebView = (messageChannelId: string) => {
 				const stylesheetLink = document.createElement('link');
 				stylesheetLink.rel = 'stylesheet';
 				stylesheetLink.href = path;
+				stylesheetLink.addEventListener('load', () => {
+					resetContentWidthBaseline = true;
+				});
 				document.head.appendChild(stylesheetLink);
 			} else {
 				const script = document.createElement('script');
