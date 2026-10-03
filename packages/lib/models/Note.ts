@@ -1335,6 +1335,8 @@ export default class Note extends BaseItem {
 	public static async createConflictNote(sourceNote: NoteEntity, changeSource: number, includeConflictOriginalId = true): Promise<NoteEntity> {
 		const conflictNote = { ...sourceNote };
 		delete conflictNote.id;
+		// Avoid inheriting a shared folder's share ID; the original note retains the folder context.
+		if (includeConflictOriginalId) delete conflictNote.parent_id;
 		delete conflictNote.is_shared;
 		delete conflictNote.share_id;
 		conflictNote.is_conflict = 1;

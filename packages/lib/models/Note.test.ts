@@ -714,9 +714,18 @@ describe('models/Note', () => {
 
 		expect(conflictedNote.is_conflict).toBe(1);
 		expect(conflictedNote.conflict_original_id).toBe(origNote.id);
-		expect(conflictedNote.parent_id).toBe(folder.id);
+		expect(conflictedNote.parent_id).toBeUndefined();
 		expect(conflictedNote.is_shared).toBeUndefined();
 		expect(conflictedNote.share_id).toBe('');
+	});
+
+	it('should retain the parent when creating a conflict without an original ID', async () => {
+		const folder = await Folder.save({ title: 'Source Folder' });
+		const origNote = await Note.save({ title: 'note', parent_id: folder.id });
+		const conflictedNote = await Note.createConflictNote(origNote, ItemChange.SOURCE_SYNC, false);
+
+		expect(conflictedNote.conflict_original_id).toBe('');
+		expect(conflictedNote.parent_id).toBe(folder.id);
 	});
 
 	it('should copy conflicted note to target folder and cancel conflict', (async () => {
