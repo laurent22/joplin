@@ -41,10 +41,18 @@ const useStyles = (
 		// Opening the keyboard may resize the window fully, partially, or not at all.
 		// Use the smaller height so the dialog stays above any remaining keyboard
 		// overlap without deducting the keyboard twice.
-		const keyboardTop = Dimensions.get('screen').height - keyboardState.dockedKeyboardHeight;
+		const screenHeight = Dimensions.get('screen').height;
+		// Convert the screen-relative keyboard position to window coordinates. Cap the
+		// offset because the screen/window height difference may also include an IME resize.
+		const screenToWindowOffset = Math.min(
+			safeAreaPadding.paddingBottom,
+			Math.max(0, screenHeight - windowSize.height),
+		);
+		const keyboardTop = screenHeight - screenToWindowOffset - keyboardState.dockedKeyboardHeight;
+		const bottomPadding = safeAreaPadding.paddingBottom;
 		const availableHeight = Math.max(
 			0,
-			Math.min(windowSize.height, keyboardTop) - safeAreaPadding.paddingTop - safeAreaPadding.paddingBottom,
+			Math.min(windowSize.height, keyboardTop) - safeAreaPadding.paddingTop - bottomPadding,
 		);
 		const maxHeight = availableHeight * 0.97;
 		const dialogWidth = useDialogSize ? dialogContentSize.width : maxWidth;
