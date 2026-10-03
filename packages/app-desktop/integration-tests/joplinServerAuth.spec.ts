@@ -65,7 +65,7 @@ test.describe('joplinServerAuth', () => {
 			newAuthSystem: true,
 		},
 	]) {
-		test(`clicking "Connect to Joplin Server" should ${label}`, async ({ mainWindow, electronApp }) => {
+		test(`clicking "Connect to Joplin Server" ${label}`, async ({ mainWindow, electronApp }) => {
 			await using server = await mockJoplinServer({
 				webLoginUrl: () => (
 					newAuthSystem ? `${server.baseUrl}/login` : null
