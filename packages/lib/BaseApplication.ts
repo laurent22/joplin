@@ -498,7 +498,9 @@ export default class BaseApplication {
 	protected async generalMiddleware(store: any, next: any, action: any) {
 		// appLogger.debug('Reducer action', this.reducerActionToString(action));
 
+		const previousWindowId = store.getState().windowId;
 		const result = next(action);
+		const activeWindowChanged = previousWindowId !== store.getState().windowId;
 		let refreshNotes = false;
 		let doRefreshFolders: boolean | string = false;
 		let refreshNotesUseSelectedNoteId = false;
@@ -576,9 +578,9 @@ export default class BaseApplication {
 		// Switching windows can also change which note(s) and which note parent type is selected.
 		// Refreshing notes after switching windows helps ensure that the selected note/tags/other state
 		// is correct for the current window.
-		if (action.type === 'WINDOW_FOCUS' && action.lastWindowId !== action.windowId) {
+		if (activeWindowChanged) {
 			refreshNotes = true;
-			refreshNotesUseSelectedNoteId = true;
+			refreshNotesUseSelectedNoteId = action.type === 'WINDOW_FOCUS';
 		}
 
 		// Should refresh the notes when:
