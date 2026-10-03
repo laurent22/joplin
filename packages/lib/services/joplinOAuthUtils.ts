@@ -54,7 +54,7 @@ export const reducer: Reducer<DefaultState, Action> = (state: DefaultState, acti
 	case 'COMPLETED': {
 		return {
 			className: 'bold',
-			message: () => _('You are logged in in to %s. You can leave this screen now.', state.syncTargetName),
+			message: () => _('You are logged in to %s. You can leave this screen now.', state.syncTargetName),
 			active: 'COMPLETED',
 			next: 'COMPLETED',
 			syncTargetName: state.syncTargetName,
