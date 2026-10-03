@@ -18,7 +18,7 @@ import shim from '@joplin/lib/shim';
 const allMasterPasswordKeysStoredInUnknownFormat = (keyIds: string[], allKeys: MasterKeyEntity[]) => {
 	return keyIds.length > 0 && keyIds.every(id => {
 		const masterKey = allKeys.find(key => key.id === id);
-		return !isKnownEncryptionMethod(masterKey.encryption_method);
+		return !!masterKey && !isKnownEncryptionMethod(masterKey.encryption_method);
 	});
 };
 
