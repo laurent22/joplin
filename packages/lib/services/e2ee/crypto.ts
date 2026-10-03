@@ -111,6 +111,8 @@ const crypto: Crypto = {
 	generateNonce: generateNonceShared,
 
 	increaseNonce: increaseNonceShared,
+
+	randomUuid: () => webcrypto.randomUUID(),
 };
 
 setRandomBytesImplementation(crypto.randomBytes);

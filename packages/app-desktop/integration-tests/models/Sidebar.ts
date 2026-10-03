@@ -6,10 +6,12 @@ import expect from '../util/extendedExpect';
 export default class Sidebar {
 	public readonly container: Locator;
 	public readonly allNotes: Locator;
+	public readonly syncButton: Locator;
 
 	public constructor(page: Page, private mainScreen: MainScreen) {
 		this.container = page.locator('.rli-sideBar');
 		this.allNotes = this.container.getByText('All notes');
+		this.syncButton = this.container.getByRole('button', { name: 'Synchronise' });
 	}
 
 	public async createNewFolder(title: string) {

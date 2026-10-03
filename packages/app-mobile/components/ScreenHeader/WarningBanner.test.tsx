@@ -136,20 +136,25 @@ describe('WarningBanner', () => {
 		expect(screen.getByText(query)).toBeVisible();
 	});
 
-	test('invalid credentials banner for Joplin Cloud should link to a login screen', () => {
-		Setting.setValue('sync.target', 10);
+	test.each([
+		'Joplin Cloud' as const,
+		'Joplin Server' as const,
+	])('invalid credentials banner for %s should link to a login screen', (syncTarget) => {
+		const isJoplinCloud = syncTarget === 'Joplin Cloud';
+		Setting.setValue('sync.target', isJoplinCloud ? 10 : 9);
+		Setting.setValue('sync.9.path', 'http://localhost:22300/');
 		const mock = createMockStore();
 
 		mock.setMustAuthenticate();
 		render(<WarningBannerWrapper store={mock.store}/>);
 
-		const buttonName = 'Your Joplin Cloud credentials are invalid, please login.';
+		const buttonName = `Your ${syncTarget} credentials are invalid, please log in.`;
 		const button = screen.getByRole('button', { name: buttonName });
 		expect(button).toBeVisible();
 		fireEvent.press(button);
 
 		// Should open the login screen
-		expect(mock.getRouteName()).toBe('JoplinCloudLogin');
+		expect(mock.getRouteName()).toBe(isJoplinCloud ? 'JoplinCloudLogin' : 'JoplinServerLogin');
 
 		// Should hide the warning banner
 		expect(screen.queryByRole('button', { name: buttonName })).toBeNull();

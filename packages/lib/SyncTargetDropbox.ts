@@ -29,7 +29,7 @@ export default class SyncTargetDropbox extends BaseSyncTarget {
 		return false;
 	}
 
-	public authRouteName() {
+	public static authRouteName() {
 		return 'DropboxLogin';
 	}
 

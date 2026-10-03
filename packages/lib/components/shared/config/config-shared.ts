@@ -5,13 +5,15 @@ import { createSelector } from 'reselect';
 import Logger from '@joplin/utils/Logger';
 
 import { type ReactNode } from 'react';
-import { type Registry } from '../../../registry';
+import { reg, type Registry } from '../../../registry';
 import settingValidations from '../../../models/settings/settingValidations';
 import { convertValuesToFunctions } from '../../../ObjectUtils';
 import aiSettingsTransition from '../../../services/ai/aiSettingsTransition';
 import { ChatRole } from '../../../services/ai/types';
-import { openLoginScreen as openJoplinOAuthLogin } from '../../../services/joplinCloudUtils';
+import { fetchLoginUrl, hasValidBaseUrl, isJoplinOAuthSyncTarget, openLoginScreen } from '../../../services/joplinOAuthUtils';
+import NavService from '../../../services/NavService';
 import shim from '../../../shim';
+import SyncTargetJoplinServerBase from '../../../SyncTargetJoplinServerBase';
 import CommandService from '../../../services/CommandService';
 
 const logger = Logger.create('config-shared');
@@ -84,6 +86,21 @@ export const checkSyncConfig = async (comp: ConfigScreenComponent, settings: Set
 
 	const syncTargetId = settings['sync.target'];
 	const SyncTargetClass = SyncTargetRegistry.classById(syncTargetId);
+
+	if (isJoplinOAuthSyncTarget(syncTargetId) && hasValidBaseUrl(syncTargetId, settings)) {
+		// Settings need to be saved in order for the authentication check to be successful
+		if (!await saveSettings(comp)) {
+			return { ok: false, errorMessage: _('Failed to save settings') };
+		}
+
+		const syncTarget = reg.syncTarget(syncTargetId);
+		const authRouteName = SyncTargetClass.authRouteName();
+		const needsWebLogin = !!authRouteName && !await syncTarget.isAuthenticated();
+		if (needsWebLogin) {
+			await NavService.go(authRouteName);
+			return { ok: false, errorMessage: 'Not signed in' };
+		}
+	}
 
 	const options = {
 		...Setting.subValues(`sync.${syncTargetId}`, settings, { includeConstants: true }),
@@ -389,9 +406,36 @@ export const restartMessage = () => _('The application must be restarted for the
 
 export const onSettingButtonPress = async (comp: ConfigScreenComponent, metadata: SettingItem) => {
 	const key = metadata.key;
+	const syncCommandMatch = key.match(/^sync\.(\d+)\.(connect|disconnect)$/);
+	const syncCommandId = syncCommandMatch ? Number(syncCommandMatch[1]) : -1;
 
-	if (key === 'sync.10.connect') {
-		await openJoplinOAuthLogin();
+	if (syncCommandMatch && isJoplinOAuthSyncTarget(syncCommandId)) {
+		const syncCommand = syncCommandMatch[2];
+		if (syncCommand === 'connect') {
+			const loginUrl = await fetchLoginUrl(syncCommandId, comp.state.settings[`sync.${syncCommandId}.path`]);
+			// Older Joplin Server versions don't support fetching the login URL
+			if (!loginUrl && syncCommandId === 9) {
+				comp.setSettingValue(`sync.${syncCommandId}.preferPasswordAuth`, true);
+			} else {
+				if (await saveSettings(comp)) {
+					await openLoginScreen(syncCommandId);
+				}
+			}
+		} else if (syncCommand === 'disconnect') {
+			const setValueAndSave = <Key extends string> (key: Key, value: SettingValueType<Key>) => {
+				comp.setSettingValue(key, value);
+				Setting.setValue(key, value);
+			};
+			setValueAndSave(`sync.${syncCommandId}.username`, '');
+			setValueAndSave(`sync.${syncCommandId}.password`, '');
+			setValueAndSave(`sync.${syncCommandId}.authorizedForPath`, '*');
+			setValueAndSave(`sync.${syncCommandId}.pendingAuthData`, { });
+
+			const syncTarget = reg.syncTarget(syncCommandId);
+			await (syncTarget as SyncTargetJoplinServerBase).clearSession();
+		} else {
+			throw new Error(`Invalid sync command ID: ${key}`);
+		}
 	} else if (key === 'sync.clearLocalSyncStateButton') {
 		if (!await shim.showConfirmationDialog('This cannot be undone. Do you want to continue?')) return;
 		Setting.setValue('sync.startupOperation', SyncStartupOperation.ClearLocalSyncState);

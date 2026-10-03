@@ -81,7 +81,7 @@ class Registry {
 		return 1000 * 10;
 	}
 
-	public syncTarget = (syncTargetId: number = null) => {
+	public syncTarget = (syncTargetId: number = null): BaseSyncTarget => {
 		if (syncTargetId === null) syncTargetId = Setting.value('sync.target');
 		if (this.syncTargets_[syncTargetId]) return this.syncTargets_[syncTargetId];
 

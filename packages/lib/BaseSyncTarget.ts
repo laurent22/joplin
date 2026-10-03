@@ -80,7 +80,7 @@ export default class BaseSyncTarget {
 		return false;
 	}
 
-	public authRouteName(): string {
+	public static authRouteName(): string {
 		return null;
 	}
 

@@ -1,4 +1,6 @@
+import Setting from '../../../models/Setting';
 import SyncTargetRegistry from '../../../SyncTargetRegistry';
+import { setupDatabase } from '../../../testing/test-utils';
 import shouldShowMissingPasswordWarning from './shouldShowMissingPasswordWarning';
 
 // Maps targets to whether each target requires a password.
@@ -7,13 +9,17 @@ const targetToRequiresPassword: Record<string, boolean> = {
 	'nextcloud': true,
 	'webdav': true,
 	'amazon_s3': true,
-	'joplinServer': true,
+	'joplinServer': false,
 	'joplinCloud': false,
 	'onedrive': false,
 	'dropbox': false,
 };
 
 describe('shouldShowMissingPasswordWarning', () => {
+	beforeEach(async () => {
+		await setupDatabase();
+	});
+
 	it('should return true when sync target requires a password and the password is missing', () => {
 		for (const targetName in targetToRequiresPassword) {
 			const targetId = SyncTargetRegistry.nameToId(targetName);
@@ -27,6 +33,13 @@ describe('shouldShowMissingPasswordWarning', () => {
 			};
 			expect(shouldShowMissingPasswordWarning(targetId, settings)).toBe(expected);
 		}
+	});
+
+	it('should return true for Joplin Server when password auth is enabled', () => {
+		const targetId = SyncTargetRegistry.nameToId('joplinServer');
+		Setting.setValue(`sync.${targetId}.preferPasswordAuth`, true);
+
+		expect(shouldShowMissingPasswordWarning(targetId, {})).toBe(true);
 	});
 
 	it('should return false when a password is present', () => {

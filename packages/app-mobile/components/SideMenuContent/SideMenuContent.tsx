@@ -28,6 +28,7 @@ import { ALL_NOTES_FILTER_ID } from '@joplin/lib/reserved-ids';
 import SidebarIcon from './SidebarIcon';
 import SideMenuItem, { ToggleState } from './SideMenuItem';
 import BottomPanelActions from './BottomPanelActions';
+import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 
 interface Props {
 	syncStarted: boolean;
@@ -249,10 +250,12 @@ const SideMenuContentComponent = (props: Props) => {
 		}
 
 		if (!(await reg.syncTarget().isAuthenticated())) {
-			if (reg.syncTarget().authRouteName()) {
+			const syncTargetClass = SyncTargetRegistry.classById(Setting.value('sync.target'));
+			const authRouteName = syncTargetClass.authRouteName();
+			if (authRouteName) {
 				props.dispatch({
 					type: 'NAV_GO',
-					routeName: reg.syncTarget().authRouteName(),
+					routeName: authRouteName,
 				});
 				return 'auth';
 			}

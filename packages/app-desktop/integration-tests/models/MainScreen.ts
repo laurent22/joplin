@@ -9,6 +9,7 @@ import { expect } from '../util/test';
 import ChangeAppLayoutScreen from './ChangeAppLayoutScreen';
 import waitForNextWindowMatching from '../util/waitForNextWindowMatching';
 import ChatPanel from './ChatPanel';
+import SettingsScreen from './SettingsScreen/SettingsScreen';
 
 export default class MainScreen {
 	public readonly newNoteButton: Locator;
@@ -19,6 +20,7 @@ export default class MainScreen {
 	public readonly goToAnything: GoToAnything;
 	public readonly changeLayoutScreen: ChangeAppLayoutScreen;
 	public readonly chatPanel: ChatPanel;
+	public readonly warningBanner: Locator;
 
 	public constructor(private page: Page) {
 		this.newNoteButton = page.locator('.new-note-button');
@@ -29,6 +31,7 @@ export default class MainScreen {
 		this.goToAnything = new GoToAnything(page, this);
 		this.changeLayoutScreen = new ChangeAppLayoutScreen(page, this);
 		this.chatPanel = new ChatPanel(page, this);
+		this.warningBanner = page.locator('.warning-banner.-header');
 	}
 
 	public async setup() {
@@ -73,6 +76,7 @@ export default class MainScreen {
 	public async openSettings(electronApp: ElectronApplication) {
 		// Check both labels so this works on MacOS
 		await activateMainMenuItem(electronApp, /^(Preferences\.\.\.|Options)$/);
+		return new SettingsScreen(this.page);
 	}
 
 	public async openNewWindow(electronApp: ElectronApplication) {

@@ -1,0 +1,175 @@
+import FileApiDriverJoplinServer from './file-api-driver-joplinServer';
+import Setting from './models/Setting';
+import Synchronizer from './Synchronizer';
+import JoplinServerApi, { Session } from './JoplinServerApi';
+import BaseSyncTarget from './BaseSyncTarget';
+import { FileApi } from './file-api';
+import Logger from '@joplin/utils/Logger';
+import { isValidBaseUrl, normalizeBaseUrl } from './services/joplinOAuthUtils';
+import JoplinError from './JoplinError';
+
+const staticLogger = Logger.create('SyncTargetJoplinServer');
+
+export interface FileApiOptions {
+	path(): string;
+	userContentPath(): string;
+	authorizedForPath(): string;
+	username(): string;
+	password(): string;
+	apiKey(): string;
+}
+
+export async function newFileApi(id: number, options: FileApiOptions) {
+	const apiOptions = {
+		baseUrl: () => options.path(),
+		userContentBaseUrl: () => options.userContentPath(),
+		username: () => options.username(),
+		password: () => {
+			const password = options.password();
+			const authorizedPath = options.authorizedForPath();
+			const authorizedForAllPaths = authorizedPath === '*';
+
+			// Guard against the case where a user changes the server URL
+			// from a trusted server to a malicious/compromised server.
+			if (!authorizedForAllPaths && normalizeBaseUrl(authorizedPath) !== normalizeBaseUrl(options.path())) {
+				throw new JoplinError('Credentials were created with a different sync URL, please sign in again', 403);
+			}
+
+			return password;
+		},
+		apiKey: () => options.apiKey(),
+		session: (): Session => null,
+		env: Setting.value('env'),
+	};
+
+	const api = new JoplinServerApi(apiOptions);
+	const driver = new FileApiDriverJoplinServer(api);
+	const fileApi = new FileApi('', driver);
+	fileApi.setSyncTargetId(id);
+	await fileApi.initialize();
+	return fileApi;
+}
+
+export async function initFileApi(syncTargetId: number, logger: Logger, options: FileApiOptions) {
+	const fileApi = await newFileApi(syncTargetId, options);
+	fileApi.setLogger(logger);
+	return fileApi;
+}
+
+export default abstract class SyncTargetJoplinServerBase extends BaseSyncTarget {
+
+	public static supportsConfigCheck() {
+		return true;
+	}
+
+	protected async api(): Promise<JoplinServerApi> {
+		const fileApi = await this.fileApi();
+		return fileApi.driver().api();
+	}
+
+	public async clearSession() {
+		const api = await this.api();
+		await api.clearSession();
+	}
+
+	public async isAuthenticated() {
+		try {
+			const api = await this.api();
+			if (!isValidBaseUrl(api.baseUrl())) return false;
+
+			const sessionId = await api.sessionId();
+			return !!sessionId;
+		} catch (error) {
+			if (error.code === 403) {
+				return false;
+			}
+			throw error;
+		}
+	}
+
+	public static override authRouteName() {
+		if (this.requiresPassword()) return null;
+		return 'JoplinServerLogin';
+	}
+
+	public static override supportsShare(): boolean {
+		return true;
+	}
+
+	public async fileApi(): Promise<FileApi> {
+		return super.fileApi();
+	}
+
+	public static async checkConfig(options: FileApiOptions, syncTargetId: number = null, fileApi: FileApi|null = null) {
+		const output = {
+			ok: false,
+			errorMessage: '',
+		};
+
+		syncTargetId = syncTargetId === null ? this.id() : syncTargetId;
+
+		if (!isValidBaseUrl(options.path())) {
+			output.errorMessage = `Invalid path: Not an HTTP or HTTPS URL: ${options.path()}`;
+			return output;
+		}
+
+		if (!fileApi) {
+			try {
+				fileApi = await newFileApi(syncTargetId, options);
+			} catch (error) {
+				// If there's an error it's probably an application error, but we
+				// can't proceed anyway, so exit.
+				output.errorMessage = error.message;
+				if (error.code) output.errorMessage += ` (Code ${error.code})`;
+				return output;
+			}
+		}
+
+		const previousRequestRepeatCount = fileApi.requestRepeatCount_;
+		fileApi.requestRepeatCount_ = 0;
+
+		try {
+			// First we try to fetch info.json. It may not be present if it's a new
+			// sync target but otherwise, if it is, and it's valid, we know the
+			// credentials are valid. We do this test first because it will work
+			// even if account upload is disabled. And we need such account to
+			// successfully login so that they can fix it by deleting extraneous
+			// notes or resources.
+			try {
+				const r = await fileApi.get('info.json');
+				if (r) {
+					const parsed = JSON.parse(r);
+					if (parsed) {
+						output.ok = true;
+						return output;
+					}
+				}
+			} catch (error) {
+				// Ignore because we'll use the next test to check for sure if it
+				// works or not.
+				staticLogger.warn('Could not fetch or parse info.json:', error);
+			}
+
+			// This is a more generic test, which writes a file and tries to read it
+			// back.
+			try {
+				await fileApi.put('testing.txt', 'testing');
+				const result = await fileApi.get('testing.txt');
+				if (result !== 'testing') throw new Error(`Could not access data on server "${options.path()}"`);
+				await fileApi.delete('testing.txt');
+				output.ok = true;
+			} catch (error) {
+				output.errorMessage = error.message;
+				if (error.code) output.errorMessage += ` (Code ${error.code})`;
+			}
+		} finally {
+			fileApi.requestRepeatCount_ = previousRequestRepeatCount;
+		}
+
+		return output;
+	}
+
+	protected async initSynchronizer() {
+		return new Synchronizer(this.db(), await this.fileApi(), Setting.value('appType'));
+	}
+}

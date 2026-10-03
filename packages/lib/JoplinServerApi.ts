@@ -6,7 +6,7 @@ import { Env } from './models/Setting';
 import Logger from '@joplin/utils/Logger';
 import personalizedUserContentBaseUrl from './services/joplinServer/personalizedUserContentBaseUrl';
 import { getHttpStatusMessage } from './net-utils';
-import { getApplicationInformation } from './services/joplinCloudUtils';
+import { getApplicationInformation } from './services/joplinOAuthUtils';
 import { stringify } from 'query-string';
 
 const logger = Logger.create('JoplinServerApi');
@@ -83,6 +83,10 @@ export default class JoplinServerApi {
 		return clientInfo;
 	}
 
+	public async clearSession() {
+		this.session_ = null;
+	}
+
 	private async session() {
 		const optionSession = this.options_.session();
 
@@ -114,7 +118,7 @@ export default class JoplinServerApi {
 		}
 	}
 
-	private async sessionId() {
+	public async sessionId() {
 		const session = await this.session();
 		return session ? session.id : '';
 	}

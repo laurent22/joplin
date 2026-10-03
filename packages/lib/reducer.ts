@@ -1129,10 +1129,14 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 				newSettings[action.key] = action.value;
 				draft.settings = newSettings;
 
-				// Reset the sync pending status when the user updates the sync target, because if the sync target has changed then the "dirty"
-				// state is no longer relevant
 				if (action.key === 'sync.target') {
+					// Reset the sync pending status when the user updates the sync target, because if the sync target has changed then the "dirty"
+					// state is no longer relevant
 					draft.syncPending = false;
+
+					// Changing the sync target also changes the credentials used for sync. Avoid showing
+					// an outdated banner for the wrong sync target:
+					draft.mustAuthenticate = false;
 				}
 			}
 			break;

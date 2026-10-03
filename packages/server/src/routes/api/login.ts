@@ -4,7 +4,7 @@ import { redirect, SubPath } from '../../utils/routeUtils';
 import { generateRedirectHtml, getIdentityProvider, getServiceProvider } from '../../utils/saml';
 import { AppContext, RouteType, SamlPostResponse } from '../../utils/types';
 import { bodyFields, userIp } from '../../utils/requestUtils';
-import { ErrorBadRequest, ErrorForbidden } from '../../utils/errors';
+import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from '../../utils/errors';
 import { cookieSet } from '../../utils/cookies';
 import defaultView from '../../utils/defaultView';
 import limiterLoginBruteForce from '../../utils/request/limiterLoginBruteForce';
@@ -73,6 +73,12 @@ router.post('api/saml', async (_path: SubPath, ctx: AppContext) => {
 
 		return { code: user.sso_auth_code };
 	}
+});
+
+router.get('api/web_login_base_url', async () => {
+	if (!config().LOCAL_AUTH_ENABLED) throw new ErrorNotFound();
+
+	return { uri: config().baseUrl };
 });
 
 router.get('api/login_with_code/:id', async (path: SubPath, ctx: AppContext) => {
