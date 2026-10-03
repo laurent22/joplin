@@ -76,6 +76,21 @@ const EncryptionConfigScreen = (props: Props) => {
 				fontSize: theme.fontSize,
 				color: theme.color,
 			},
+			warningText: {
+				...theme.normalText,
+				color: theme.color,
+			},
+			warningTextBold: {
+				fontWeight: 'bold',
+			},
+			warningBox: {
+				marginBottom: theme.itemMarginBottom,
+				backgroundColor: theme.warningBackgroundColor,
+				paddingTop: 5,
+				paddingBottom: 5,
+				paddingLeft: 10,
+				paddingRight: 10,
+			},
 			masterPasswordLabel: {
 				...theme.normalText,
 				flex: 0,
@@ -386,12 +401,10 @@ const EncryptionConfigScreen = (props: Props) => {
 	</List.Accordion> : null;
 
 	const unknownKeyFormatText = useHasUnknownEncryptionMethodKeysMessage(props.masterKeys);
-	const unknownKeyFormatMessage = !!unknownKeyFormatText && <View style={styles.unknownKeyFormatMessage}>
-		<Divider/>
-		<View style={styles.container}>
-			<Text style={styles.normalText}>{_('Warning: ')}{unknownKeyFormatText}</Text>
-		</View>
-		<Divider/>
+	const unknownKeyFormatMessage = !!unknownKeyFormatText && <View style={styles.warningBox}>
+		<Text
+			style={styles.warningText}
+		><Text style={styles.warningTextBold}>{_('Warning: ')}</Text>{unknownKeyFormatText}</Text>
 	</View>;
 
 	return (
@@ -399,15 +412,15 @@ const EncryptionConfigScreen = (props: Props) => {
 			<ScreenHeader title={_('Encryption Config')} />
 			<ScrollView>
 				<View style={styles.container}>
-					<View style={{ backgroundColor: theme.warningBackgroundColor, paddingTop: 5, paddingBottom: 5, paddingLeft: 10, paddingRight: 10 }}>
-						<Text>{_('For more information about End-To-End Encryption (E2EE) and advice on how to enable it please check the documentation:')}</Text>
+					<View style={styles.warningBox}>
+						<Text style={styles.warningText}>{_('For more information about End-To-End Encryption (E2EE) and advice on how to enable it please check the documentation:')}</Text>
 						<TouchableOpacity
 							onPress={() => {
 								void Linking.openURL('https://joplinapp.org/help/apps/sync/e2ee');
 							}}
 							accessibilityRole='link'
 						>
-							<Text>https://joplinapp.org/help/apps/sync/e2ee</Text>
+							<Text style={styles.warningText}>https://joplinapp.org/help/apps/sync/e2ee</Text>
 						</TouchableOpacity>
 					</View>
 
