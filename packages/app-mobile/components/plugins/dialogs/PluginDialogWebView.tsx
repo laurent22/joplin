@@ -37,7 +37,11 @@ const useStyles = (
 		const useDialogSize = fitToContent && dialogContentSize;
 		const dialogHasLoaded = !!dialogContentSize;
 
-		const maxWidth = windowSize.width * 0.97;
+		const availableWidth = Math.max(
+			0,
+			windowSize.width - safeAreaPadding.paddingLeft - safeAreaPadding.paddingRight,
+		);
+		const maxWidth = availableWidth * 0.97;
 		// Opening the keyboard may resize the window fully, partially, or not at all.
 		// Use the smaller height so the dialog stays above any remaining keyboard
 		// overlap without deducting the keyboard twice.
