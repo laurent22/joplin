@@ -33,7 +33,7 @@ rules.paragraph = {
   filter: 'p',
 
   replacement: function (content, node, options) {
-    content = escapeNonbreakingSpaces(content, /^\u{00A0}/u);
+    content = escapeNonbreakingSpaces(content, /^\u{00A0}/ug);
 
     // Paragraphs that are truly empty (not even containing nonbreaking spaces)
     // take up by default no space. Output nothing.
