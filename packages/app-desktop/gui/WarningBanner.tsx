@@ -167,6 +167,12 @@ const WarningBanner: React.FC<Props> = props => {
 			_('More info'),
 			onViewEncryptionConfigScreen,
 		);
+	} else if (props.showUnknownKeyFormatMessage) {
+		msg = renderNotificationMessage(
+			_('One or more encryption keys are stored in an unknown format.'),
+			_('View them now'),
+			onViewEncryptionConfigScreen,
+		);
 	} else if (showShareInvitationNotification()) {
 		const invitation = props.shareInvitations.find(inv => inv.status === 0);
 		const sharer = invitation.share.user;
@@ -183,12 +189,6 @@ const WarningBanner: React.FC<Props> = props => {
 			_('Some items cannot be synchronised.'),
 			_('View them now'),
 			onViewStatusScreen,
-		);
-	} else if (props.showUnknownKeyFormatMessage) {
-		msg = renderNotificationMessage(
-			_('One or more encryption keys are stored in an unknown format.'),
-			_('Manage'),
-			onViewEncryptionConfigScreen,
 		);
 	} else if (props.showMissingMasterKeyMessage) {
 		msg = renderNotificationMessage(
