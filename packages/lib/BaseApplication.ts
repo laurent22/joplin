@@ -597,7 +597,9 @@ export default class BaseApplication {
 		if (activeWindowChanged) {
 			Setting.setValue('activeFolderId', newState.selectedFolderId);
 			Setting.setValue('notesParent', serializeNotesParent(getNotesParent(newState)));
-			this.currentFolder_ = newState.selectedFolderId ? await Folder.load(newState.selectedFolderId) : null;
+			const currentFolder = newState.selectedFolderId ? await Folder.load(newState.selectedFolderId) : null;
+			if (store.getState().windowId !== newState.windowId) return result;
+			this.currentFolder_ = currentFolder;
 			refreshNotes = true;
 			refreshNotesUseSelectedNoteId = action.type === 'WINDOW_FOCUS';
 		}
