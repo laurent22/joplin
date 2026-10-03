@@ -24,7 +24,9 @@ elif ! git rev-parse --verify --quiet "$BASE_REF" > /dev/null; then
 	exit 1
 fi
 
-testFiles=$(git diff --name-only --diff-filter=d "$BASE_REF" HEAD | grep -E '^packages/[^/]+/.*\.(test|spec)\.(ts|tsx|js|jsx)$' || true)
+# `integration-tests` holds the Playwright specs (see app-desktop/playwright.config.ts),
+# which Jest cannot run. Other `.spec.*` files are Jest tests, so they are kept.
+testFiles=$(git diff --name-only --diff-filter=d "$BASE_REF" HEAD | grep -E '^packages/[^/]+/.*\.(test|spec)\.(ts|tsx|js|jsx)$' | grep -v -E '^packages/[^/]+/integration-tests/' || true)
 
 if [ -z "$testFiles" ]; then
 	echo "No test files were changed - skipping flaky test detection"
