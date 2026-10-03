@@ -44,6 +44,7 @@ test.describe('joplinServerAuth', () => {
 		await mainScreen.waitFor();
 
 		await enableJoplinServerSync(electronApp, mainWindow, server.baseUrl);
+		// Clicking the sync button directly would open the login screen without first showing a warning
 		await scheduleSync(mainWindow);
 
 		await expect(mainScreen.warningBanner).toBeVisible();
@@ -52,6 +53,20 @@ test.describe('joplinServerAuth', () => {
 		// Should link to the login screen
 		const logInLink = mainScreen.warningBanner.getByRole('link', { name: 'Log in to Joplin Server' });
 		await logInLink.click();
+		await new JoplinOAuthLoginScreen(mainWindow).waitFor();
+	});
+
+	test('clicking the sync button should open the login screen when logged out', async ({ mainWindow, electronApp }) => {
+		await using server = await mockJoplinServer({
+			webLoginUrl: () => `${server.baseUrl}/login`,
+		});
+
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.waitFor();
+
+		await enableJoplinServerSync(electronApp, mainWindow, server.baseUrl);
+		await mainScreen.sidebar.syncButton.click();
+
 		await new JoplinOAuthLoginScreen(mainWindow).waitFor();
 	});
 
