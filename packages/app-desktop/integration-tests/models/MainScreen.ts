@@ -9,6 +9,7 @@ import { expect } from '../util/test';
 import ChangeAppLayoutScreen from './ChangeAppLayoutScreen';
 import waitForNextWindowMatching from '../util/waitForNextWindowMatching';
 import ChatPanel from './ChatPanel';
+import SettingsScreen from './SettingsScreen/SettingsScreen';
 
 export default class MainScreen {
 	public readonly newNoteButton: Locator;
@@ -75,6 +76,7 @@ export default class MainScreen {
 	public async openSettings(electronApp: ElectronApplication) {
 		// Check both labels so this works on MacOS
 		await activateMainMenuItem(electronApp, /^(Preferences\.\.\.|Options)$/);
+		return new SettingsScreen(this.page);
 	}
 
 	public async openNewWindow(electronApp: ElectronApplication) {

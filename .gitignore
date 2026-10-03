@@ -620,7 +620,7 @@ packages/app-desktop/integration-tests/markdownEditor.spec.js
 packages/app-desktop/integration-tests/models/ChangeAppLayoutScreen.js
 packages/app-desktop/integration-tests/models/ChatPanel.js
 packages/app-desktop/integration-tests/models/GoToAnything.js
-packages/app-desktop/integration-tests/models/JoplinCloudLoginScreen.js
+packages/app-desktop/integration-tests/models/JoplinOAuthLoginScreen.js
 packages/app-desktop/integration-tests/models/MainScreen.js
 packages/app-desktop/integration-tests/models/NoteEditor/BaseEditor.js
 packages/app-desktop/integration-tests/models/NoteEditor/EditorCodeDialog.js

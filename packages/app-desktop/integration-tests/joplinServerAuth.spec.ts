@@ -4,6 +4,7 @@ import createLocalhostServer from '@joplin/lib/testing/createLocalhostServer';
 import setSettingValue from './util/setSettingValue';
 import { ElectronApplication, Page } from '@playwright/test';
 import scheduleSync from './util/scheduleSync';
+import JoplinOAuthLoginScreen from './models/JoplinOAuthLoginScreen';
 
 interface ServerMockOptions {
 	webLoginUrl: ()=> string|null;
@@ -11,11 +12,9 @@ interface ServerMockOptions {
 
 const mockJoplinServer = ({ webLoginUrl }: ServerMockOptions) => {
 	return createLocalhostServer((request, response) => {
-		const url = new URL(request.url ?? 'http://localhost/');
-
 		let jsonResponse: unknown = {};
 		let status = 400;
-		if (url.pathname === '/api/web_login_base_url') {
+		if (request.url?.endsWith('/api/web_login_base_url')) {
 			const redirectUrl = webLoginUrl();
 			if (!redirectUrl) {
 				status = 404;
@@ -30,8 +29,9 @@ const mockJoplinServer = ({ webLoginUrl }: ServerMockOptions) => {
 	}, { https: false });
 };
 
-const enableJoplinServerSync = async (electronApp: ElectronApplication, mainWindow: Page) => {
+const enableJoplinServerSync = async (electronApp: ElectronApplication, mainWindow: Page, joplinServerUrl: string) => {
 	await setSettingValue(electronApp, mainWindow, 'sync.target', 9);
+	await setSettingValue(electronApp, mainWindow, 'sync.9.path', joplinServerUrl);
 };
 
 test.describe('joplinServerAuth', () => {
@@ -43,7 +43,7 @@ test.describe('joplinServerAuth', () => {
 		const mainScreen = await new MainScreen(mainWindow).setup();
 		await mainScreen.waitFor();
 
-		await enableJoplinServerSync(electronApp, mainWindow);
+		await enableJoplinServerSync(electronApp, mainWindow, server.baseUrl);
 		await scheduleSync(mainWindow);
 
 		await expect(mainScreen.warningBanner).toBeVisible();
@@ -52,7 +52,44 @@ test.describe('joplinServerAuth', () => {
 		// Should link to the login screen
 		const logInLink = mainScreen.warningBanner.getByRole('link', { name: 'Log in to Joplin Server' });
 		await logInLink.click();
-		await expect(mainWindow.getByText('Copy link to website')).toBeVisible();
+		await new JoplinOAuthLoginScreen(mainWindow).waitFor();
 	});
+
+	for (const { label, newAuthSystem } of [
+		{
+			label: 'should show the username/password auth fields if the new auth system is unsupported',
+			newAuthSystem: false,
+		},
+		{
+			label: 'should show the Joplin Server login screen if the new auth system is supported',
+			newAuthSystem: true,
+		},
+	]) {
+		test(`clicking "Connect to Joplin Server" should ${label}`, async ({ mainWindow, electronApp }) => {
+			await using server = await mockJoplinServer({
+				webLoginUrl: () => (
+					newAuthSystem ? `${server.baseUrl}/login` : null
+				),
+			});
+
+			const mainScreen = await new MainScreen(mainWindow).setup();
+			await mainScreen.waitFor();
+
+			await enableJoplinServerSync(electronApp, mainWindow, server.baseUrl);
+
+			const settingsScreen = await mainScreen.openSettings(electronApp);
+			await settingsScreen.waitFor();
+			const syncTab = await settingsScreen.openSyncTab();
+
+			await expect(syncTab.joplinServerUsernameInput).not.toBeVisible();
+			await syncTab.connectToJoplinServerButton.click();
+
+			if (newAuthSystem) {
+				await new JoplinOAuthLoginScreen(mainWindow).waitFor();
+			} else {
+				await expect(syncTab.joplinServerUsernameInput).toBeVisible();
+			}
+		});
+	}
 });
 
