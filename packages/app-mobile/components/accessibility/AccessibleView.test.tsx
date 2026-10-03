@@ -5,6 +5,7 @@ import AccessibleView from './AccessibleView';
 import { AccessibilityInfo } from 'react-native';
 import ModalWrapper from './FocusControl/ModalWrapper';
 import { ModalState } from './FocusControl/types';
+import { findNodeHandle } from 'react-native';
 
 interface TestContentWrapperProps {
 	mainContent: React.ReactNode;
@@ -23,13 +24,32 @@ const TestContentWrapper: React.FC<TestContentWrapperProps> = props => {
 jest.mock('react-native', () => {
 	const ReactNative = jest.requireActual('react-native');
 	ReactNative.AccessibilityInfo.setAccessibilityFocus = jest.fn();
-	return ReactNative;
+	const findNodeHandle = jest.fn((): null|number => null);
+
+	return new Proxy(ReactNative, {
+		get: (target, property) => {
+			if (property === 'findNodeHandle') return findNodeHandle;
+			return target[property];
+		},
+	});
 });
 
 describe('AccessibleView', () => {
+	const findNodeHandleMock = findNodeHandle as jest.Mock;
+	beforeEach(() => {
+		findNodeHandleMock.mockRestore();
+		findNodeHandleMock.mockImplementation(() => null);
+	});
+
 	test('should wait for the currently-open dialog to dismiss before applying focus requests', () => {
 		const setFocusMock = AccessibilityInfo.setAccessibilityFocus as jest.Mock;
 		setFocusMock.mockClear();
+		findNodeHandleMock.mockImplementation(() => {
+			// Since the React 19.2 upgrade, findNodeHandle with react-test-renderer
+			// seems to return null even for views that exist. Mock a non-null return value:
+			const mockViewId = 1;
+			return mockViewId;
+		});
 
 		interface TestContentOptions {
 			modalState: ModalState;
