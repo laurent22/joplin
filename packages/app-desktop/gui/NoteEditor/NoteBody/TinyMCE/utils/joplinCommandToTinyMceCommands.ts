@@ -15,6 +15,7 @@ export const joplinCommandToTinyMceCommands: JoplinCommandToTinyMceCommands = {
 	'textBold': { name: 'mceToggleFormat', value: 'bold' },
 	'textItalic': { name: 'mceToggleFormat', value: 'italic' },
 	'textCode': { name: 'mceToggleFormat', value: 'code' },
+	'textHighlight': { name: 'mceToggleFormat', value: 'joplinHighlight' },
 	'textLink': { name: 'mceLink' },
 	'textBulletedList': { name: 'InsertUnorderedList' },
 	'textNumberedList': { name: 'InsertOrderedList' },

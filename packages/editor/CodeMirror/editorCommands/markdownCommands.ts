@@ -515,3 +515,11 @@ export const updateLink = (label: string, url: string): Command => {
 		return true;
 	};
 };
+
+export const toggleHighlight: Command = (view: EditorView): boolean => {
+	const spec = RegionSpec.of({ template: '==', nodeName: 'Highlight' });
+	const changes = toggleInlineFormatGlobally(view.state, spec);
+
+	view.dispatch(changes);
+	return true;
+};

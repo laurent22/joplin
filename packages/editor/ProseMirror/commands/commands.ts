@@ -122,6 +122,7 @@ const commands: Record<EditorCommandType, ExtendedCommand|null> = {
 	[EditorCommandType.Focus]: focusEditor,
 	[EditorCommandType.ToggleBolded]: toggleMark(schema.marks.strong),
 	[EditorCommandType.ToggleItalicized]: toggleMark(schema.marks.emphasis),
+	[EditorCommandType.ToggleHighlight]: toggleMark(schema.marks.mark),
 	[EditorCommandType.ToggleCode]: toggleCode,
 	[EditorCommandType.ToggleMath]: (state, dispatch, view) => {
 		const inlineNodeType = schema.nodes.joplinEditableInline;
