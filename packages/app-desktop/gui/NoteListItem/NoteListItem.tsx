@@ -10,6 +10,7 @@ import { NoteEntity } from '@joplin/lib/services/database/types';
 import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
 import NoteLockNote from '@joplin/lib/services/noteLock/NoteLockNote';
 import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
+import { noteIsLockedInShare } from '@joplin/lib/models/utils/readOnly';
 import bridge from '../../services/bridge';
 import { _ } from '@joplin/lib/locale';
 import useRenderedNote from './utils/useRenderedNote';
@@ -63,8 +64,13 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 		};
 
 		if (changeEvent.elementId === 'todo-checkbox') {
+			const lockState = await Note.load(changeEvent.noteId, { fields: ['is_locked', 'share_id'] });
+			if (noteIsLockedInShare(lockState)) {
+				event.target.checked = !changeEvent.value;
+				bridge().showErrorMessageBox(_('This note is read-only because it is locked and contained within a share. To enable editing, it must be moved outside of the share.'));
+				return;
+			}
 			if (isNoteLockEnabled()) {
-				const lockState = await Note.load(changeEvent.noteId, { fields: ['is_locked'] });
 				if (NoteLockNote.isLocked(lockState) && !NoteLockSession.instance().isUnlocked()) {
 					// event.currentTarget is already cleared here, after the await - target is the same input
 					event.target.checked = !changeEvent.value;

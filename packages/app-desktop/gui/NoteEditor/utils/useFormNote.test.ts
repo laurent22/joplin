@@ -239,15 +239,17 @@ describe('useFormNote', () => {
 		await waitFor(() => {
 			expect(formNote.result.current.formNote.title).toBe('Test Note!');
 		});
+		expect(formNote.result.current.formNote.share_id).toBe('');
 
-		// Simulate the note being modified outside the editor
+		// Simulate the note being modified outside the editor, e.g. sync assigning it to a share
 		await act(async () => {
-			await Note.save({ id: note.id, title: 'Modified' });
+			await Note.save({ id: note.id, title: 'Modified', share_id: 'share-1' });
 		});
 
 		await waitFor(() => {
 			expect(formNote.result.current.formNote.title).toBe('Modified');
 		});
+		expect(formNote.result.current.formNote.share_id).toBe('share-1');
 		expect(onReloadInProgressChange).not.toHaveBeenCalled();
 
 		formNote.unmount();

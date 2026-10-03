@@ -79,6 +79,39 @@ describe('Synchronizer.e2ee', () => {
 		expect(!folder1_2.encryption_cipher_text).toBe(true);
 	}));
 
+	it('should push back a locked note still awaiting decryption when an older client drops its lock inside a share', (async () => {
+		setEncryptionEnabled(true);
+		const masterKey = await loadEncryptionMasterKey();
+		const folder = await Folder.save({ title: 'folder' });
+		// Dated in the past, as is the older client's edit below, so the sync time cap does not hold back the push back.
+		const note = await Note.save({ title: 'Locked', body: 'JLD01cipher', is_locked: 1, parent_id: folder.id, updated_time: time.unixMs() - 60_000 }, { autoTimestamp: false });
+		await synchronizerStart();
+		// An older client's edit knows no is_locked, inside the encrypted payload as well as on the envelope.
+		const oldClientNote = (await Note.serialize({ ...await Note.load(note.id), body: 'edited on an old client', share_id: 'share-1' })).replace('is_locked: 1\n', '');
+		const oldClientCipherText = await encryptionService().encryptString(oldClientNote);
+
+		// This client has not entered its master key yet, so it only holds placeholders.
+		await switchClient(2);
+		await synchronizerStart();
+		expect(await Note.load(note.id)).toMatchObject({ is_locked: 1, encryption_applied: 1 });
+
+		const path = `${note.id}.md`;
+		const remote = (await fileApi().get(path)).replace('share_id: \n', 'share_id: share-1\n').replace('is_locked: 1\n', '').replace(/^encryption_cipher_text: .*$/m, `encryption_cipher_text: ${oldClientCipherText}`).replace(/^updated_time: .*$/m, `updated_time: ${time.unixMsToIso(note.updated_time + 1000)}`);
+		await fileApi().put(path, remote);
+		await synchronizerStart();
+
+		expect((await Note.conflictedNotes()).length).toBe(0);
+		expect(await Note.load(note.id)).toMatchObject({ is_locked: 1, encryption_applied: 1 });
+
+		// The placeholder is uploaded once decrypted, which keeps its time ahead of the remote one.
+		await encryptionService().loadMasterKey(await MasterKey.load(masterKey.id), '123456', true);
+		await decryptionWorker().start();
+		expect(await Note.load(note.id)).toMatchObject({ body: 'JLD01cipher', is_locked: 1, encryption_applied: 0 });
+		expect((await Note.all()).length).toBe(1);
+		await synchronizerStart();
+		expect(await BaseItem.unserialize(await fileApi().get(path))).toMatchObject({ is_locked: 1 });
+	}));
+
 	it('should not encrypt structural properties', (async () => {
 		setEncryptionEnabled(true);
 		await loadEncryptionMasterKey();
