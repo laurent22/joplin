@@ -738,6 +738,7 @@ packages/app-desktop/utils/initializeNetworkConnectionAttemptTimeout.js
 packages/app-desktop/utils/isSafeToOpen.test.js
 packages/app-desktop/utils/isSafeToOpen.js
 packages/app-desktop/utils/layout/layoutKeyToLabel.js
+packages/app-desktop/utils/noteLockPrompts.js
 packages/app-desktop/utils/restartInSafeModeFromMain.test.js
 packages/app-desktop/utils/restartInSafeModeFromMain.js
 packages/app-desktop/utils/sourceMapSetup.js
@@ -1837,6 +1838,8 @@ packages/lib/services/noteLock/NoteLockSession.test.js
 packages/lib/services/noteLock/NoteLockSession.js
 packages/lib/services/noteLock/hasLockedNoteWhileSessionLocked.js
 packages/lib/services/noteLock/isNoteLockEnabled.js
+packages/lib/services/noteLock/noteLockPrompts.test.js
+packages/lib/services/noteLock/noteLockPrompts.js
 packages/lib/services/noteLock/setNoteLockState.test.js
 packages/lib/services/noteLock/setNoteLockState.js
 packages/lib/services/ocr/OcrDriverBase.js

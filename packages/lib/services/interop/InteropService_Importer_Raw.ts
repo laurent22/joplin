@@ -17,7 +17,7 @@ import { fileExtension } from '../../path-utils';
 import uuid from '../../uuid';
 import isNoteLockEnabled from '../noteLock/isNoteLockEnabled';
 import NoteLockService from '../noteLock/NoteLockService';
-import NoteLockKey, { DecryptedNoteLockKey, noteLockKeyFileName } from '../noteLock/NoteLockKey';
+import { DecryptedNoteLockKey, noteLockKeyFileName } from '../noteLock/NoteLockKey';
 
 export default class InteropService_Importer_Raw extends InteropService_Importer_Base {
 	public async exec(result: ImportExportResult) {
@@ -41,13 +41,12 @@ export default class InteropService_Importer_Raw extends InteropService_Importer
 
 		const stats = await shim.fsDriver().readDirStats(this.sourcePath_);
 
-		// A backup with locked notes carries their encrypted key (see the raw exporter). Under the
-		// profile's own key the ciphertext already fits, so the caller is only asked about foreign keys.
+		// A backup with locked notes carries their encrypted key (see the raw exporter).
 		let importNoteLockKey: DecryptedNoteLockKey = null;
 		let undecryptableNotes = 0;
 		if (isNoteLockEnabled() && await shim.fsDriver().exists(`${this.sourcePath_}/${noteLockKeyFileName}`)) {
 			const keyFile: MasterKeyEntity = JSON.parse(await shim.fsDriver().readFile(`${this.sourcePath_}/${noteLockKeyFileName}`));
-			if (keyFile?.id && keyFile.id !== NoteLockKey.instance().load()?.id && this.options_.onNoteLockKey) {
+			if (keyFile?.id && this.options_.onNoteLockKey) {
 				importNoteLockKey = await this.options_.onNoteLockKey(keyFile);
 			}
 		}
@@ -183,7 +182,7 @@ export default class InteropService_Importer_Raw extends InteropService_Importer
 			}
 		}
 
-		if (undecryptableNotes) result.warnings.push(`${undecryptableNotes} locked note(s) could not be decrypted with the provided key and were imported unchanged`);
+		if (undecryptableNotes) result.warnings.push(`${undecryptableNotes} locked note(s) could not be unlocked with the provided key and were imported unchanged`);
 
 		for (let i = 0; i < noteTagsToCreate.length; i++) {
 			const noteTag = noteTagsToCreate[i];

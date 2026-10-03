@@ -607,6 +607,11 @@ export default class Note extends BaseItem {
 		return r && r.total ? r.total : 0;
 	}
 
+	// Trashed and conflict notes count too: their content still depends on the note lock key.
+	public static async hasLockedNotes() {
+		return !!(await this.db().selectOne('SELECT 1 FROM notes WHERE is_locked = 1 LIMIT 1'));
+	}
+
 	public static unconflictedNotes() {
 		return this.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0');
 	}
@@ -880,10 +885,6 @@ export default class Note extends BaseItem {
 		const n = await this.db().selectOne('SELECT updated_time FROM notes WHERE id = ?', [noteId]);
 		if (!n) throw new Error(`No such note: ${noteId}`);
 		return n.updated_time < date;
-	}
-
-	public static async hasLockedNotes() {
-		return !!(await this.db().selectOne('SELECT id FROM notes WHERE is_locked = 1 LIMIT 1'));
 	}
 
 	public static async load(id: string, options: LoadOptions = null): Promise<NoteEntity> {

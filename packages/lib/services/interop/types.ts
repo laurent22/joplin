@@ -57,8 +57,8 @@ export interface ImportOptions {
 
 	defaultFolderTitle?: string;
 
-	// Called when a backup carries a note lock key from another profile. Return that key decrypted
-	// to re-encrypt the imported locked notes for this profile, or null to import them unchanged.
+	// Called when a backup carries a note lock key. Return it decrypted to re-encrypt the imported
+	// locked notes for this profile, or null to import them unchanged.
 	onNoteLockKey?: (key: MasterKeyEntity)=> Promise<DecryptedNoteLockKey|null>;
 }
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/utils/Logger';
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useContext } from 'react';
 import { join, basename } from 'path';
 import { ConfigScreenStyles } from '../configScreenStyles';
 import InteropService from '@joplin/lib/services/interop/InteropService';
@@ -13,6 +13,9 @@ import { Platform } from 'react-native';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import Folder from '@joplin/lib/models/Folder';
 import { fileExtension } from '@joplin/lib/path-utils';
+import NavService from '@joplin/lib/services/NavService';
+import { NoteLockPrompts, promptForImportedNoteLockKey } from '@joplin/lib/services/noteLock/noteLockPrompts';
+import { DialogContext } from '../../../DialogManager';
 
 const logger = Logger.create('NoteImportButton');
 
@@ -42,6 +45,12 @@ const importedFolder = async () => {
 };
 
 const NoteImportButton: FunctionComponent<Props> = props => {
+	const dialogs = useContext(DialogContext);
+	const noteLockPrompts: NoteLockPrompts = {
+		promptPassword: label => dialogs.promptForText(label, '', true),
+		goToNoteLockSetup: () => void NavService.go('Config', { sectionName: 'noteLock' }),
+	};
+
 	const getTitle = (taskStatus: TaskStatus) => {
 		if (taskStatus === TaskStatus.InProgress) {
 			return _('Importing...');
@@ -96,6 +105,7 @@ const NoteImportButton: FunctionComponent<Props> = props => {
 				path: importTargetPath,
 				format: props.format,
 				destinationFolderId: activeFolderId,
+				onNoteLockKey: backupKey => promptForImportedNoteLockKey(backupKey, noteLockPrompts),
 			});
 
 			logger.info('Imported successfully');

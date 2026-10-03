@@ -210,7 +210,7 @@ describe('InteropService.noteLock', () => {
 
 		const imported = (await Note.all()).find(n => n.id !== note.id && !!n.is_locked);
 		expect(imported.body).not.toContain('secret');
-		expect(result.warnings.some(w => w.includes('could not be decrypted'))).toBe(true);
+		expect(result.warnings.some(w => w.includes('could not be unlocked'))).toBe(true);
 	});
 
 });

@@ -19,6 +19,13 @@ export const runtime = (comp: WindowControl): CommandRuntime => {
 
 				if (!noteIds.length) throw new Error('No notes selected for pdf export');
 
+				const lockedNoteChoice = await InteropServiceHelper.confirmLockedNoteExport(context.dispatch, noteIds);
+				if (lockedNoteChoice === 'cancel') return;
+				if (lockedNoteChoice === 'skipLocked') {
+					noteIds = (await Note.byIds(noteIds, { fields: ['id', 'is_locked'] })).filter(note => !note.is_locked).map(note => note.id);
+					if (!noteIds.length) return;
+				}
+
 				let path = null;
 				if (noteIds.length === 1) {
 					path = await bridge().showSaveDialog({
@@ -61,6 +68,6 @@ export const runtime = (comp: WindowControl): CommandRuntime => {
 			}
 		},
 
-		enabledCondition: 'someNotesSelected && !noteLockContentUnavailable',
+		enabledCondition: 'someNotesSelected && (!noteLockContentUnavailable || !noteLockSessionUnlocked)',
 	};
 };

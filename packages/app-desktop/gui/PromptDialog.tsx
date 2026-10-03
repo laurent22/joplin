@@ -322,7 +322,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- makeAnimated's generic doesn't unify with react-select's expected SelectComponents shape
 			inputComp = <Select className="item-selector" onMenuOpen={this.select_menuOpen} onMenuClose={this.select_menuClose} styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} components={makeAnimated() as any} value={this.props.answer} defaultValue={this.props.defaultValue} isClearable={false} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={onKeyDown} />;
 		} else {
-			inputComp = <input style={styles.input} ref={this.answerInput_} value={this.state.answer} type="text" onChange={event => onChange(event)} onKeyDown={event => onKeyDown(event)} />;
+			inputComp = <input style={styles.input} ref={this.answerInput_} value={this.state.answer} type={this.props.inputType === 'password' ? 'password' : 'text'} onChange={event => onChange(event)} onKeyDown={event => onKeyDown(event)} />;
 		}
 
 		const buttonComps = [];
