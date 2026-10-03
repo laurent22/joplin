@@ -432,6 +432,12 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			label: () => _('Joplin Server password'),
 			secure: true,
 		},
+		'sync.9.authorizedForPath': {
+			value: '*',
+			type: SettingItemType.String,
+			public: false,
+			label: () => 'The sync.9.path used for application auth',
+		},
 		'sync.9.preferPasswordAuth': {
 			value: false,
 			type: SettingItemType.Bool,
@@ -457,6 +463,11 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			label: () => _('Joplin Server URL'),
 			description: () => emptyDirWarning,
 			storage: SettingStorage.File,
+		},
+		'sync.11.authorizedForPath': { // Unused, but required by checkSyncConfig
+			value: '*',
+			type: SettingItemType.String,
+			public: false,
 		},
 		'sync.11.userContentPath': {
 			value: '',
@@ -510,6 +521,11 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			type: SettingItemType.String,
 			public: false,
 			secure: true,
+		},
+		'sync.10.authorizedForPath': {
+			value: '*',
+			type: SettingItemType.String,
+			public: false,
 		},
 		'sync.10.connect': buildJoplinServerConnectButton(10, _('Joplin Cloud')),
 

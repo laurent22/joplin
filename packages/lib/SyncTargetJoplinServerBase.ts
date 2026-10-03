@@ -5,13 +5,15 @@ import JoplinServerApi, { Session } from './JoplinServerApi';
 import BaseSyncTarget from './BaseSyncTarget';
 import { FileApi } from './file-api';
 import Logger from '@joplin/utils/Logger';
-import { isValidBaseUrl } from './services/joplinOAuthUtils';
+import { isValidBaseUrl, normalizeBaseUrl } from './services/joplinOAuthUtils';
+import JoplinError from './JoplinError';
 
 const staticLogger = Logger.create('SyncTargetJoplinServer');
 
 export interface FileApiOptions {
 	path(): string;
 	userContentPath(): string;
+	authorizedForPath(): string;
 	username(): string;
 	password(): string;
 	apiKey(): string;
@@ -22,7 +24,19 @@ export async function newFileApi(id: number, options: FileApiOptions) {
 		baseUrl: () => options.path(),
 		userContentBaseUrl: () => options.userContentPath(),
 		username: () => options.username(),
-		password: () => options.password(),
+		password: () => {
+			const password = options.password();
+			const authorizedPath = options.authorizedForPath();
+			const authorizedForAllPaths = authorizedPath === '*';
+
+			// Guard against the case where a user changes the server URL
+			// from a trusted server to a malicious/compromised server.
+			if (!authorizedForAllPaths && normalizeBaseUrl(authorizedPath) !== normalizeBaseUrl(options.path())) {
+				throw new JoplinError('Credentials were created with a different sync URL, please sign in again', 403);
+			}
+
+			return password;
+		},
 		apiKey: () => options.apiKey(),
 		session: (): Session => null,
 		env: Setting.value('env'),

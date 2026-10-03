@@ -29,7 +29,6 @@ const JoplinOAuthScreenComponent = (props: Props) => {
 	const serverApi = normalizeBaseUrl(props.serverApi);
 
 	const applicationAuthId = useMemo(() => generateAppId(), []);
-	const applicationAuthUrl = (applicationAuthId: string) => `${serverApi}/api/application_auth/${applicationAuthId}`;
 
 	const [intervalIdentifier, setIntervalIdentifier] = useState(undefined);
 	const [state, dispatch] = useReducer(reducer, defaultState(syncTargetLabel));
@@ -44,7 +43,11 @@ const JoplinOAuthScreenComponent = (props: Props) => {
 			try {
 				assertIsJoplinOAuthSyncTarget(props.syncTargetId);
 
-				const response = await checkIfLoginWasSuccessful(applicationAuthUrl(applicationAuthId), props.syncTargetId);
+				const response = await checkIfLoginWasSuccessful({
+					applicationAuthId,
+					syncTarget: props.syncTargetId,
+					baseUrl: props.serverApi,
+				});
 				if (response && response.success) {
 					dispatch({ type: 'COMPLETED' });
 					clearInterval(interval);

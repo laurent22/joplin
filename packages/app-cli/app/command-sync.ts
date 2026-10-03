@@ -14,7 +14,7 @@ const { cliUtils } = require('./cli-utils.js');
 const md5 = require('md5');
 import * as locker from 'proper-lockfile';
 import { pathExists, writeFile } from 'fs-extra';
-import { checkIfLoginWasSuccessful, fetchLoginUrl, generateAppId, generateApplicationConfirmUrl, isJoplinOAuthSyncTarget, normalizeBaseUrl } from '@joplin/lib/services/joplinOAuthUtils';
+import { checkIfLoginWasSuccessful, fetchLoginUrl, generateAppId, generateApplicationConfirmUrl, isJoplinOAuthSyncTarget } from '@joplin/lib/services/joplinOAuthUtils';
 import Logger from '@joplin/utils/Logger';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
@@ -95,8 +95,11 @@ class Command extends BaseCommand {
 			const applicationAuthId = generateAppId();
 			const checkForCredentials = async () => {
 				try {
-					const applicationAuthUrl = `${normalizeBaseUrl(Setting.value(`sync.${id}.path`))}/api/application_auth/${applicationAuthId}`;
-					const response = await checkIfLoginWasSuccessful(applicationAuthUrl, id);
+					const response = await checkIfLoginWasSuccessful({
+						syncTarget: id,
+						baseUrl: Setting.value(`sync.${id}.path`),
+						applicationAuthId,
+					});
 					if (response && response.success) {
 						return response;
 					}

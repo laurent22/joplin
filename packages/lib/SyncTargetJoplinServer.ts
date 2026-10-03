@@ -61,6 +61,7 @@ export default class SyncTargetJoplinServer extends SyncTargetJoplinServerBase {
 			userContentPath: () => Setting.value('sync.9.userContentPath'),
 			username: () => Setting.value('sync.9.username'),
 			password: () => Setting.value('sync.9.password'),
+			authorizedForPath: () => Setting.value('sync.9.authorizedForPath'),
 			apiKey: () => Setting.value('sync.9.apiKey'),
 		});
 	}

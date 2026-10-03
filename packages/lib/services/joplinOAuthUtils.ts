@@ -173,16 +173,25 @@ export const openSyncSettings = () => {
 	}
 };
 
+interface CheckIfLoginWasSuccessfulOptions {
+	baseUrl: string;
+	applicationAuthId: string;
+	syncTarget: JoplinSyncTargetId;
+}
+
 // We have isWaitingResponse inside the function to avoid any state from lingering
 // after an error occurs. E.g.: if the function would throw an error while isWaitingResponse
 // was set to true the next time we call the function the value would still be true.
 // The closure function prevents that.
-export const checkIfLoginWasSuccessful = async (applicationsUrl: string, syncTarget: JoplinSyncTargetId) => {
+export const checkIfLoginWasSuccessful = async ({ baseUrl, applicationAuthId, syncTarget }: CheckIfLoginWasSuccessfulOptions) => {
+	if (!isValidBaseUrl(baseUrl)) throw new Error('Invalid base URL');
+
 	let isWaitingResponse = false;
 	const performLoginRequest = async () => {
 		if (isWaitingResponse) return undefined;
 		isWaitingResponse = true;
 
+		const applicationsUrl = `${normalizeBaseUrl(baseUrl)}/api/application_auth/${applicationAuthId}`;
 		const response = await shim.fetch(applicationsUrl, {
 			headers: {
 				'X-JOPLIN-CUSTOM-API-KEY': syncTarget === 10 ? Setting.value('sync.10.apiKey') : '',
@@ -205,8 +214,11 @@ export const checkIfLoginWasSuccessful = async (applicationsUrl: string, syncTar
 			return undefined;
 		}
 
-		Setting.setValue(`sync.${syncTarget}.username`, jsonBody.id);
+		Setting.setValue(`sync.${syncTarget}.password`, '');
+		Setting.setValue(`sync.${syncTarget}.authorizedForPath`, baseUrl);
 		Setting.setValue(`sync.${syncTarget}.password`, jsonBody.password);
+		Setting.setValue(`sync.${syncTarget}.username`, jsonBody.id);
+
 		Setting.setValue('sync.target', syncTarget);
 		Setting.setValue(`sync.${syncTarget}.pendingAuthData`, null);
 
@@ -236,9 +248,11 @@ export const completePendingAuthentication = async () => {
 		}
 
 		const apiBaseUrl = normalizeBaseUrl(apiPath);
-		const applicationsUrl = `${apiBaseUrl}/api/application_auth/${pendingAuthData.appId}`;
-
-		const result = await checkIfLoginWasSuccessful(applicationsUrl, syncTarget);
+		const result = await checkIfLoginWasSuccessful({
+			baseUrl: apiBaseUrl,
+			applicationAuthId: pendingAuthData.appId,
+			syncTarget,
+		});
 		if (result && result.success) {
 			logger.info('Completed pending Joplin Cloud authentication');
 		}

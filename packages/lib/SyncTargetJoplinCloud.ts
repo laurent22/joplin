@@ -58,6 +58,7 @@ export default class SyncTargetJoplinCloud extends SyncTargetJoplinServerBase {
 			username: () => Setting.value('sync.10.username'),
 			password: () => Setting.value('sync.10.password'),
 			apiKey: () => Setting.value('sync.10.apiKey'),
+			authorizedForPath: () => Setting.value('sync.10.authorizedForPath'),
 		});
 	}
 
