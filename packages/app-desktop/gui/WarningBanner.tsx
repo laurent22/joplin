@@ -246,7 +246,7 @@ const WarningBanner: React.FC<Props> = props => {
 		);
 	} else if (props.showInvalidJoplinServerCredential) {
 		msg = renderNotificationMessage(
-			_('Your %s credentials are invalid, please login.', props.syncTargetName),
+			_('Your %s credentials are invalid, please log in.', props.syncTargetName),
 			_('Log in to %s.', props.syncTargetName),
 			onViewJoplinServerLoginScreen,
 			_('Disable synchronisation'),

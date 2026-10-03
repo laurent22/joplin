@@ -614,6 +614,7 @@ packages/app-desktop/gui/utils/loadScript.js
 packages/app-desktop/gulpfile.js
 packages/app-desktop/integration-tests/chatPanel.spec.js
 packages/app-desktop/integration-tests/goToAnything.spec.js
+packages/app-desktop/integration-tests/joplinServerAuth.spec.js
 packages/app-desktop/integration-tests/main.spec.js
 packages/app-desktop/integration-tests/markdownEditor.spec.js
 packages/app-desktop/integration-tests/models/ChangeAppLayoutScreen.js
@@ -649,6 +650,7 @@ packages/app-desktop/integration-tests/util/getMainWindow.js
 packages/app-desktop/integration-tests/util/ignoreFlakyReporter.js
 packages/app-desktop/integration-tests/util/mockClipboard.js
 packages/app-desktop/integration-tests/util/retryOnFailure.js
+packages/app-desktop/integration-tests/util/scheduleSync.js
 packages/app-desktop/integration-tests/util/setDarkMode.js
 packages/app-desktop/integration-tests/util/setFilePickerResponse.js
 packages/app-desktop/integration-tests/util/setMessageBoxResponse.js

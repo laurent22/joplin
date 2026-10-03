@@ -739,6 +739,7 @@ class Application extends BaseApplication {
 					resourceService: ResourceService.instance(),
 					searchEngine: SearchEngine.instance(),
 					shim,
+					reg,
 					Note,
 					Folder,
 					Resource,

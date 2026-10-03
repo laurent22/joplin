@@ -151,6 +151,10 @@ export const fetchLoginUrl = async (syncTargetId: number, apiBaseUrl: string) =>
 	return normalizeBaseUrl(uri);
 };
 
+export const failedToDetermineLoginUrlMessage = () => (
+	_('Failed to determine login URL: Either the server does not support the new auth system or the server URL is incorrect.')
+);
+
 export const openLoginScreen = (syncTargetId: number) => {
 	const syncTargetClass = SyncTargetRegistry.classById(syncTargetId);
 	return NavService.go(syncTargetClass.authRouteName());

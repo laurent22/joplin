@@ -5,7 +5,7 @@ import { _ } from '@joplin/lib/locale';
 import { clipboard } from 'electron';
 import Button, { ButtonLevel } from './Button/Button';
 import { Dispatch } from 'redux';
-import { reducer, defaultState, generateApplicationConfirmUrl, checkIfLoginWasSuccessful, saveApplicationAuthId, isJoplinOAuthSyncTarget, assertIsJoplinOAuthSyncTarget, Action, fetchLoginUrl, normalizeBaseUrl, generateAppId, isValidBaseUrl, openSyncSettings } from '@joplin/lib/services/joplinOAuthUtils';
+import { reducer, defaultState, generateApplicationConfirmUrl, checkIfLoginWasSuccessful, saveApplicationAuthId, isJoplinOAuthSyncTarget, assertIsJoplinOAuthSyncTarget, Action, fetchLoginUrl, normalizeBaseUrl, generateAppId, isValidBaseUrl, openSyncSettings, failedToDetermineLoginUrlMessage } from '@joplin/lib/services/joplinOAuthUtils';
 import { AppState } from '../app.reducer';
 import Logger from '@joplin/utils/Logger';
 import { reg } from '@joplin/lib/registry';
@@ -146,7 +146,7 @@ const useConfirmUrl = (syncTarget: number, apiBaseUrl: string, applicationAuthId
 
 			if (!baseUrl) {
 				setIsUnsupported(true);
-				throw new Error('Failed to determine login URL: The server URL is incorrect or the server does not support the new auth system.');
+				throw new Error(failedToDetermineLoginUrlMessage());
 			}
 			setUrl(`${normalizeBaseUrl(baseUrl)}/applications/${applicationAuthId}/confirm`);
 		} catch (error) {

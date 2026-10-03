@@ -19,6 +19,7 @@ export default class MainScreen {
 	public readonly goToAnything: GoToAnything;
 	public readonly changeLayoutScreen: ChangeAppLayoutScreen;
 	public readonly chatPanel: ChatPanel;
+	public readonly warningBanner: Locator;
 
 	public constructor(private page: Page) {
 		this.newNoteButton = page.locator('.new-note-button');
@@ -29,6 +30,7 @@ export default class MainScreen {
 		this.goToAnything = new GoToAnything(page, this);
 		this.changeLayoutScreen = new ChangeAppLayoutScreen(page, this);
 		this.chatPanel = new ChatPanel(page, this);
+		this.warningBanner = page.locator('.warning-banner.-header');
 	}
 
 	public async setup() {

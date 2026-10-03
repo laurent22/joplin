@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { _ } from '@joplin/lib/locale';
 import { themeStyle } from '../global-style';
 import { AppState } from '../../utils/types';
-import { generateApplicationConfirmUrl, reducer, checkIfLoginWasSuccessful, saveApplicationAuthId, defaultState, assertIsJoplinOAuthSyncTarget, fetchLoginUrl, normalizeBaseUrl, generateAppId, isValidBaseUrl, openSyncSettings } from '@joplin/lib/services/joplinOAuthUtils';
+import { generateApplicationConfirmUrl, reducer, checkIfLoginWasSuccessful, saveApplicationAuthId, defaultState, assertIsJoplinOAuthSyncTarget, fetchLoginUrl, normalizeBaseUrl, generateAppId, isValidBaseUrl, openSyncSettings, failedToDetermineLoginUrlMessage } from '@joplin/lib/services/joplinOAuthUtils';
 import { Button } from 'react-native-paper';
 import createRootStyle from '../../utils/createRootStyle';
 import ScreenHeader from '../ScreenHeader';
@@ -79,7 +79,7 @@ const JoplinOAuthScreenComponent = (props: Props) => {
 		const baseUrl = await fetchLoginUrl(props.syncTargetId, props.syncTargetApi);
 		if (!baseUrl) {
 			setUnsupportedServerInstance(true);
-			throw new Error('Unable to determine login URL: This server instance may not support the new auth system.');
+			throw new Error(failedToDetermineLoginUrlMessage());
 		}
 		return `${baseUrl}/applications/${applicationAuthId}/confirm`;
 	};
