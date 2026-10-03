@@ -736,7 +736,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		const editorPluginIdsChanged = this.props.visibleEditorPluginIds !== prevProps.visibleEditorPluginIds;
 		if (editorPluginIdsChanged || this.props.editorNoteReloadTimeRequest !== prevProps.editorNoteReloadTimeRequest) {
 			const { editorPlugin } = getShownPluginEditorView(this.props.plugins, this.props.windowId);
-			const explicitReloadRequired = !editorPlugin && this.props.editorNoteReloadTimeRequest > this.state.noteLastLoadTime;
+			const explicitReloadRequired = this.props.editorNoteReloadTimeRequest > this.state.noteLastLoadTime;
 
 			if (explicitReloadRequired) {
 				this.reloadInProgress_ = true;
@@ -832,7 +832,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 		const refreshKey = this.props.editorNoteReloadTimeRequest;
 		this.refreshKey = refreshKey;
-		if (this.useEditorBeta() && this.state.mode === 'edit') {
+		if (this.useEditorBeta() && this.state.mode === 'edit' && !this.props.visibleEditorPluginIds.length) {
 			this.forceUpdate();
 		} else {
 			this.setState({}, () => this.editorReloadComplete(refreshKey));
@@ -914,7 +914,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 
 	public scheduleSave(state: State) {
-		if (this.reloadInProgress_) return;
+		if (this.reloadInProgress_ && !this.props.visibleEditorPluginIds.length) return;
 		const editorNoteReloadTimeRequest = this.props.editorNoteReloadTimeRequest;
 		this.saveActionQueue(state.note.id).push(this.makeSaveAction(state, editorNoteReloadTimeRequest));
 	}
