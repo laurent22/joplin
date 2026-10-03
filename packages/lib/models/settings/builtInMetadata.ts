@@ -2388,11 +2388,16 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		// default so the feature can be developed over multiple releases without
 		// affecting users. Make it public and enable it by default once it is ready.
 		'featureFlag.conflictResolution': {
-			value: false,
+			value: true,
 			type: SettingItemType.Bool,
-			public: false,
+			public: true,
 			storage: SettingStorage.File,
+			appTypes: [AppType.Desktop],
+			label: () => _('Enable conflict resolution UI'),
+			description: () => _('Show a view to review and merge the two versions of a conflicted note.'),
+			section: 'general',
 			isGlobal: true,
+			advanced: true,
 		},
 
 		// 'featureFlag.syncAccurateTimestamps': {
