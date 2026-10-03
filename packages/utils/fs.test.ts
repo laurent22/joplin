@@ -1,16 +1,15 @@
 /* eslint-disable import/prefer-default-export */
 
 import { mkdirp } from 'fs-extra';
-import { utimes } from 'fs/promises';
+import { mkdtemp, utimes } from 'fs/promises';
 import { FileLocker } from './fs';
 import { msleep, Second } from './time';
 
 const baseTempDir = `${__dirname}/../app-cli/tests/tmp`;
 
 export const createTempDir = async () => {
-	const p = `${baseTempDir}/${Date.now()}`;
-	await mkdirp(p);
-	return p;
+	await mkdirp(baseTempDir);
+	return mkdtemp(`${baseTempDir}/`);
 };
 
 describe('fs', () => {
