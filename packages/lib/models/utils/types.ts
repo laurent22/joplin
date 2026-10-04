@@ -1,4 +1,5 @@
 import { SqlQuery } from '../../services/database/types';
+import type { DecryptedNoteLockKey } from '../../services/noteLock/NoteLockKey';
 
 export enum PaginationOrderDir {
 	ASC = 'ASC',
@@ -32,6 +33,8 @@ export interface LoadOptions {
 	includeConflicts?: boolean;
 	includeDeleted?: boolean;
 	useNoteLock?: boolean;
+	// Decrypt with this key captured while the session was unlocked, instead of the live session key.
+	noteLockKey?: DecryptedNoteLockKey;
 }
 
 export interface FolderLoadOptions extends LoadOptions {
@@ -49,9 +52,15 @@ export interface SaveOptions {
 	provisional?: boolean;
 	ignoreProvisionalFlag?: boolean;
 	dispatchUpdateAction?: boolean;
-	dispatchOptions?: { preserveSelection: boolean };
+	dispatchOptions?: {
+		preserveSelection?: boolean;
+		noteMovedToFolder?: boolean;
+	};
 	disableReadOnlyCheck?: boolean;
 	useNoteLock?: boolean;
+	// Encrypt with this key captured when the note was decrypted, instead of the live session key.
+	// Lets a pending editor save complete after the session locks; a real key rotation still aborts it.
+	noteLockKey?: DecryptedNoteLockKey;
 
 	changeSource?: number;
 

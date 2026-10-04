@@ -57,12 +57,13 @@ const GroupNode = ({ data, selected, id }: NodeProps<{ id: string; type: 'wbGrou
 	}, [beginEdit]);
 
 	const colorStroke = resolveCanvasColor(node.color, ctx.themeAppearance, 'stroke');
+	const colorFill = resolveCanvasColor(node.color, ctx.themeAppearance, 'fill');
 	const edgeStyle = colorStroke ? { borderColor: colorStroke } : undefined;
 	return (
 		<>
 			<NodeResizer minWidth={80} minHeight={60} isVisible={selected && !editing} />
 			<div className={`whiteboard-group ${selected ? '-selected' : ''}`}>
-				<div className="background" />
+				<div className="background" style={colorFill ? { background: colorFill } : undefined} />
 				<div className="edge -top whiteboard-group-handle" style={edgeStyle} />
 				<div className="edge -right whiteboard-group-handle" style={edgeStyle} />
 				<div className="edge -bottom whiteboard-group-handle" style={edgeStyle} />

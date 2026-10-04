@@ -1,5 +1,41 @@
 # Joplin Terminal App Changelog
 
+## [cli-v3.7.1](https://github.com/laurent22/joplin/releases/tag/cli-v3.7.1) - 2026-09-07T09:20:25Z
+
+- New: Add support for post-quantum cryptography (PQS) TLS (#15055 by Alex Martens)
+- Improved: Add fail-closed guardrails for locked notes (#16098) (#16054 by [@keshav0479](https://github.com/keshav0479))
+- Improved: Add local note encryption schema metadata (#15557) (#15556 by [@keshav0479](https://github.com/keshav0479))
+- Improved: Add migration 51 for conflict resolution columns (#15565) (#15549 by Sriram Varun Kumar)
+- Improved: Add support to import notes from Obsidian (#16136) (#15223 by [@Rygaa](https://github.com/Rygaa))
+- Improved: Do not load plugin if it is disabled (#15083)
+- Improved: Exclude user_data from note revisions (#15245 by [@alondmnt](https://github.com/alondmnt))
+- Improved: Give conflict_note_states table a numeric primary key and set note_id as unique (#15724) (#15722 by Sriram Varun Kumar)
+- Improved: Improve how resource filenames are determined (#15672 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Index locked note resources (#15717) (#15714 by [@keshav0479](https://github.com/keshav0479))
+- Improved: Joplin Server/Cloud sync: Improve item deletion performance (#15392 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Preserve customised note history settings when syncing across clients (#15728)
+- Improved: Prevent notes with null bytes in title or body from being saved (#15485)
+- Improved: Prevent race which allows changes to be lost, during a long delta step (#16208 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Reject malformed item IDs during sync (#15540)
+- Improved: Support syncing with Joplin v3.7 (#15889) (#15753 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Sync: Enable new notebook sharing key format (#16305) (#16251 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Update note lock session state (#15773) (#15772 by [@keshav0479](https://github.com/keshav0479))
+- Fixed: Add safeguard to prevent revision chains being broken by revision cleaning, where old revisions still exist unexpectedly (#15812) (#15811 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix Markdown export folder paths with dot in parent path (#15455) (#15374 by [@Rygaa](https://github.com/Rygaa))
+- Fixed: Fix WebDAV support for Koofr (#15983) (#15975 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix `version` command when published to NPM (#15740) (#15738 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix duplicate tag creation for special unicode characters (#15613) (#15608 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix inability to cancel the sync during the deletion step (#15243 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix note screen is not properly refreshed when updated by the sync, when E2EE is enabled (#16179 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix potential unresolved promise race conditions when scheduling the sync (#15216 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix silent sync failure which prevents new changes being synced, when a single server object has an updated_time in the future (#15262 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fixed crash when the profile database is updated (d85f430)
+- Fixed: Importing from OneNote: Notebooks can be imported as subfolders of the trash (#15555) (#15217 by [@Rygaa](https://github.com/Rygaa))
+- Fixed: Prevent incrementing the master key updated_time when the key has not actually changed (#16223) (#16194 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Release the save mutex when a save fails validation (#16147) (#16145 by [@keshav0479](https://github.com/keshav0479))
+- Fixed: Revert PR #14612 (#15384) (#15382)
+- Fixed: Support unpublishing notes published by other users (#16246) (#16153 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [cli-v3.6.2](https://github.com/laurent22/joplin/releases/tag/cli-v3.6.2) - 2026-05-08T16:56:16Z
 
 - New: Add `clear` command to clear console output (#14844 by [@querysmith-sys](https://github.com/querysmith-sys))

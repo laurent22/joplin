@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Platform, Linking, View, ScrollView, Text, TouchableOpacity, Alert, PermissionsAndroid, Dimensions, AccessibilityInfo, LayoutChangeEvent } from 'react-native';
-import Setting, { AppType, SettingMetadataSection } from '@joplin/lib/models/Setting';
+import Setting, { AppType, SettingMetadataSection, SettingValueType } from '@joplin/lib/models/Setting';
 import NavService from '@joplin/lib/services/NavService';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import checkPermissions from '../../../utils/checkPermissions';
@@ -31,11 +31,13 @@ import { TextInput, List } from 'react-native-paper';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import PluginStates, { getSearchText as getPluginStatesSearchText } from './plugins/PluginStates';
 import PluginUploadButton, { canInstallPluginsFromFile, buttonLabel as pluginUploadButtonSearchText } from './plugins/PluginUploadButton';
-import NoteImportButton, { importedFolderTitle } from './NoteExportSection/NoteImportButton';
+import NoteImportButton, { importedFolderTitle, textImportExtensions } from './NoteExportSection/NoteImportButton';
 import SectionDescription from './SectionDescription';
 import EnablePluginSupportPage from './plugins/EnablePluginSupportPage';
 import getVersionInfoText from '../../../utils/getVersionInfoText';
 import JoplinCloudConfig, { emailToNoteDescription, emailToNoteLabel } from './JoplinCloudConfig';
+import NoteLockConfig from './NoteLockConfig';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
 import shim from '@joplin/lib/shim';
 import SettingsToggle from './SettingsToggle';
 import { UpdateSettingValueCallback } from './types';
@@ -96,10 +98,6 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		shared.init(reg);
 	}
 
-	private goToJoplinCloudLogin_ = async () => {
-		await NavService.go('JoplinCloudLogin');
-	};
-
 	private goToJoplinServerSamlLogin_ = async () => {
 		// Save the settings to allow for sync when the user completes authentication
 		await this.saveButton_press();
@@ -131,13 +129,6 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 	private e2eeConfig_ = () => {
 		void NavService.go('EncryptionConfig');
-	};
-
-	private onShowSyncWizard_ = () => {
-		this.props.dispatch({
-			type: 'SYNC_WIZARD_VISIBLE_CHANGE',
-			visible: true,
-		});
 	};
 
 	private saveButton_press = async () => {
@@ -379,6 +370,10 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		);
 	}
 
+	private onSettingButtonPress_ = async (key: string) => {
+		await shared.onSettingButtonPress(this, Setting.settingMetadata(key));
+	};
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See ConfigScreenState.settings — same reason
 	public sectionToComponent(key: string, section: SettingMetadataSection, settings: Record<string, any>, isSelected: boolean) {
 		const settingComps: ReactElement[] = [];
@@ -473,9 +468,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 						</View>
 					);
 
-					if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud')) {
-						addSettingButton('go_to_joplin_cloud_login_button', _('Connect to Joplin Cloud'), this.goToJoplinCloudLogin_);
-					} else if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServerSaml')) {
+					if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServerSaml')) {
 						addSettingButton('login_joplin_server_saml_button', _('Connect using your organisation account'), this.goToJoplinServerSamlLogin_);
 
 						if (Setting.value('sync.11.id') !== '' || Setting.value('sync.11.userId') !== '') {
@@ -548,8 +541,11 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		}
 
 		if (section.name === 'sync') {
-			addSettingButton('sync_wizard_button', _('Open Sync Wizard...'), this.onShowSyncWizard_);
 			addSettingButton('e2ee_config_button', _('Encryption Config'), this.e2eeConfig_);
+		}
+
+		if (section.name === 'noteLock' && isNoteLockEnabled()) {
+			addSettingComponent(<NoteLockConfig key='note-lock-config'/>, [_('Password setup'), _('Note lock password')]);
 		}
 
 		if (section.name === 'joplinCloud') {
@@ -590,11 +586,11 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				<NoteImportButton key='import_as_jex_button' styles={this.styles()} defaultTitle={importJexLabel()} description={importJexDescription()} format='jex' />,
 				[importJexLabel(), importJexDescription()],
 			);
-			const importTxtLabel = () => _('Import from TXT');
+			const importTxtLabel = () => _('Import from text file');
 			const importTxtDescription = () => {
 				let folderTitle = importedFolderTitle();
 				if (this.state.activeFolder) folderTitle = this.state.activeFolder.title;
-				return _('Import a note from a Text file. The note will be imported into notebook \'%s\'.', substrWithEllipsis(folderTitle, 0, 32));
+				return _('Import a note from a text file (%s). The note will be imported into notebook \'%s\'.', textImportExtensions.join(', '), substrWithEllipsis(folderTitle, 0, 32));
 			};
 			addSettingComponent(
 				<NoteImportButton key='import_as_txt_button' styles={this.styles()} defaultTitle={importTxtLabel()} description={importTxtDescription()} format='txt' activeFolder={this.state.activeFolder} />,
@@ -721,6 +717,11 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		/>;
 	}
 
+	public setSettingValue = async <Key extends string> (key: Key, value: SettingValueType<Key>): Promise<void> => {
+		const handled = await this.handleSetting(key, value);
+		if (!handled) shared.updateSettingValue(this, key, value);
+	};
+
 	private handleSetting = async (key: string, value: unknown): Promise<boolean> => {
 		// When the user tries to enable biometrics unlock, we ask for the
 		// fingerprint or Face ID, and if it's correct we save immediately. If
@@ -745,18 +746,14 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 	};
 
 	public settingToComponent(key: string, value: unknown) {
-		const updateSettingValue = async (key: string, value: unknown) => {
-			const handled = await this.handleSetting(key, value);
-			if (!handled) shared.updateSettingValue(this, key, value);
-		};
-
 		return (
 			<SettingComponent
 				key={key}
 				settingId={key}
 				value={value}
 				themeId={this.props.themeId}
-				updateSettingValue={updateSettingValue}
+				onUpdateSettingValue={this.setSettingValue}
+				onSettingButtonClick={this.onSettingButtonPress_}
 				styles={this.styles()}
 			/>
 		);
@@ -764,13 +761,9 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See ConfigScreenState.settings — same reason
 	private renderFeatureFlags(settings: Record<string, any>, featureFlagKeys: string[]): ReactElement[] {
-		const updateSettingValue = (key: string, value: unknown) => {
-			return shared.updateSettingValue(this, key, value);
-		};
-
 		const output: ReactElement[] = [];
 		for (const key of featureFlagKeys) {
-			output.push(this.renderToggle(key, key, settings[key], updateSettingValue));
+			output.push(this.renderToggle(key, key, settings[key], this.setSettingValue));
 		}
 		return output;
 	}

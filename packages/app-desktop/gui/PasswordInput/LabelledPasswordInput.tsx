@@ -9,6 +9,7 @@ interface Props {
 	value: string;
 	onChange: ChangeEventHandler;
 	valid?: boolean;
+	reserveIconGutter?: boolean;
 }
 
 const LabelledPasswordInput: React.FC<Props> = props => {
@@ -38,7 +39,8 @@ const LabelledPasswordInput: React.FC<Props> = props => {
 		></i>;
 	};
 
-	return <div className='labelled-password-input form-input-group'>
+	const rootClassName = `labelled-password-input form-input-group${props.reserveIconGutter ? ' -reserve-icon-gutter' : ''}`;
+	return <div className={rootClassName}>
 		<label htmlFor={inputId}>{props.labelText}</label>
 		<div className='password'>
 			<PasswordInput

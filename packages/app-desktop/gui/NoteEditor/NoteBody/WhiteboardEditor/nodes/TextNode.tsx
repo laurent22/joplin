@@ -10,6 +10,8 @@ import { useWhiteboardContext, WhiteboardContextValue } from '../WhiteboardConte
 import { WhiteboardNodeData } from '../canvasFlow';
 import useCheckboxToggle from '../useCheckboxToggle';
 import handlePositions from './handlePositions';
+import useCardWheel from './useCardWheel';
+import stripUnsafeStyles from './stripUnsafeStyles';
 
 const useRenderedMarkdown = (md: string, ctx: WhiteboardContextValue) => {
 	const [html, setHtml] = useState<string>('');
@@ -25,7 +27,7 @@ const useRenderedMarkdown = (md: string, ctx: WhiteboardContextValue) => {
 				const result = await ctx.markupToHtml(MarkupLanguage.Markdown, md, {
 					resourceInfos: ctx.resourceInfos,
 				});
-				if (!cancelled) setHtml(result?.html ?? '');
+				if (!cancelled) setHtml(stripUnsafeStyles(result?.html ?? ''));
 			} catch {
 				if (!cancelled) setHtml('');
 			}
@@ -39,6 +41,7 @@ const useRenderedMarkdown = (md: string, ctx: WhiteboardContextValue) => {
 const TextNode = ({ data, selected, id }: NodeProps<{ id: string; type: 'wbText'; data: WhiteboardNodeData; position: { x: number; y: number } }>) => {
 	const ctx = useWhiteboardContext();
 	const node = data.canvasNode as TextCanvasNode;
+	const onWheel = useCardWheel();
 
 	const [editing, setEditing] = useState(false);
 	const [draft, setDraft] = useState(node.text);
@@ -117,7 +120,11 @@ const TextNode = ({ data, selected, id }: NodeProps<{ id: string; type: 'wbText'
 				className={`whiteboard-node -text ${selected ? '-selected' : ''}`}
 				onDoubleClick={onDoubleClick}
 				onKeyDown={onCardKeyDown}
-				style={{ borderColor: resolveCanvasColor(node.color, ctx.themeAppearance, 'stroke') ?? (selected ? '#4a90e2' : undefined) }}
+				onWheelCapture={onWheel}
+				style={{
+					borderColor: resolveCanvasColor(node.color, ctx.themeAppearance, 'stroke') ?? (selected ? '#4a90e2' : undefined),
+					backgroundColor: resolveCanvasColor(node.color, ctx.themeAppearance, 'fill'),
+				}}
 			>
 				{editing ? (
 					<textarea

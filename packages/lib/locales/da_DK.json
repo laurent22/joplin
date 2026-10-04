@@ -2,9 +2,19 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"\"%s\" mangler for den påkrævede \"%s\" egenskab."
 	],
+	"%d card": [
+		"",
+		""
+	],
 	"%d day": [
 		"%d dag",
 		"%d dage"
+	],
+	"%d edit(s) applied, %d could not be placed automatically.": [
+		""
+	],
+	"%d edit(s) applied.": [
+		""
 	],
 	"%d GB": [
 		"%d GB"
@@ -36,6 +46,9 @@
 	],
 	"%d photo(s) taken": [
 		"%d foto(s) taget"
+	],
+	"%d sections found": [
+		""
 	],
 	"%s": [
 		"%s"
@@ -70,6 +83,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s added to toolbar": [
+		""
+	],
 	"%s cannot be greater than %s": [
 		"%s kan ikke være større end %s"
 	],
@@ -79,8 +95,14 @@
 	"%s from %s": [
 		"%s fra %s"
 	],
+	"%s input / %s output tokens used.": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s er ikke optimeret til at synkronisere mange små filer, så din første synkronisering vil være langsom."
+	],
+	"%s moved up": [
+		""
 	],
 	"%s must be a valid whole number": [
 		"%s skal være et gyldigt heltal"
@@ -131,6 +153,12 @@
 	"(%s)": [
 		"(%s)"
 	],
+	"(empty — double-click to edit)": [
+		""
+	],
+	"(empty)": [
+		""
+	],
 	"(In plugin: %s)": [
 		"(I udvidelse: %s)"
 	],
@@ -149,6 +177,9 @@
 	"(You may disable this prompt in the options)": [
 		"(Du kan deaktivere denne prompt i indstillingerne)"
 	],
+	"+ Group": [
+		""
+	],
 	"- Camera: to allow taking a picture and attaching it to a note.": [
 		"- Kamera: For at kunne tage et billede og vedhæfte det til en note."
 	],
@@ -157,6 +188,9 @@
 	],
 	"- Storage: to allow attaching files to notes and to enable filesystem synchronisation.": [
 		"- Lager: For at tillade vedhæftning af filer til noter og for at tillade synkronisering af filsystem."
+	],
+	"14-day free trial. Cancel anytime during the trial and you won't be charged.": [
+		""
 	],
 	"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign or remove [tag] from [note], to list notes associated with [tag], or to list tags associated with [note]. The command `tag list` can be used to list all the tags (use -l for long option).": [
 		"<tag-command> (etiket-kommando) kan enten være \"add\" (tilføj), \"remove\" (slet) eller \"list\" (liste) for at tilføje eller fjerne [tag] fra [note], eller for at liste de noter der bruger [tag]. Kommandoen `tag-list` kan bruges til at vise alle etiketter (brug -l for at vise den lange udgave)."
@@ -176,6 +210,9 @@
 	"A new update (%s) is available": [
 		"En ny opdatering (%s) er tilgængelig"
 	],
+	"A system-wide keyboard shortcut that toggles the Joplin window. Works even when Joplin is not focused. Example: CommandOrControl+Shift+J. Leave empty to disable.": [
+		""
+	],
 	"A3": [
 		"A3"
 	],
@@ -186,7 +223,7 @@
 		"A5"
 	],
 	"ABC musical notation: Options": [
-		""
+		"ABC-noder: Indstillinger"
 	],
 	"About": [
 		"Om"
@@ -221,6 +258,15 @@
 	"Access denied: Please re-enter your password and/or username": [
 		"Adgang nægtet: Indtast venligst din adgangskode og/eller dit brugernavn igen"
 	],
+	"Access your notes from any web browser at %s.": [
+		""
+	],
+	"Accessible": [
+		""
+	],
+	"Accessible mode saves additional information, enabling creation of accessible PDFs. It increases database size by approximately 10-20 KB per page.": [
+		""
+	],
 	"Account": [
 		"Konto"
 	],
@@ -242,6 +288,9 @@
 	"Actual Size": [
 		"Faktisk størrelse"
 	],
+	"Add a text card": [
+		""
+	],
 	"Add body": [
 		"Tilføj brødtekst"
 	],
@@ -250,6 +299,9 @@
 	],
 	"Add new": [
 		"Tilføj ny"
+	],
+	"Add note to whiteboard...": [
+		""
 	],
 	"Add or remove tags:": [
 		"Tilføj eller fjern etiketter:"
@@ -272,11 +324,12 @@
 	"Add to note": [
 		"Tilføj til note"
 	],
+	"Added %d word": [
+		"",
+		""
+	],
 	"Added new: %s": [
 		"Tilføjet ny: %s"
-	],
-	"Added tag: %s": [
-		"Tilføjet etikette: %s"
 	],
 	"Adds tag": [
 		"Tilføjer etikette"
@@ -296,6 +349,21 @@
 	"Advanced tools": [
 		"Avancerede værktøjer"
 	],
+	"AI": [
+		""
+	],
+	"AI Chat": [
+		""
+	],
+	"AI features are disabled. Enable them in Settings → AI.": [
+		""
+	],
+	"AI is running in reduced-quality mode — monthly allowance exceeded. Credits replenish on a rolling 30-day basis, or you can": [
+		""
+	],
+	"AI usage has exceeded your monthly allowance — responses are using a reduced-quality model. Credits replenish on a rolling 30-day basis. Buy more at %s.": [
+		""
+	],
 	"all": [
 		"alle"
 	],
@@ -314,8 +382,29 @@
 	"All shared folders:": [
 		"Alle delte mapper:"
 	],
+	"Allow editing tags on notes": [
+		""
+	],
+	"Allow editing the current note (chat panel only)": [
+		""
+	],
+	"Allow listing tags": [
+		""
+	],
+	"Allow reading images": [
+		""
+	],
+	"Allow remote AI providers": [
+		""
+	],
+	"Allow semantic search of notes": [
+		""
+	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		"Gør det muligt at fejlsøge mobil-plugins. Se %s for detaljer."
+	],
+	"Already have an account? Log in": [
+		""
 	],
 	"Also displays unset and hidden config variables.": [
 		"Viser også tomme eller skjulte konfigurations variabler."
@@ -347,9 +436,6 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"Der blev fundet en automatisk gemt tegning. Vedhæfter en kopi af den til noten?"
 	],
-	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
-		"Der opstod en fejl under afsendelse af svaret. Dette kan ske, hvis appen er offline eller ikke kan oprette forbindelse til serveren.\nFejl: %s"
-	],
 	"An error occurred: %s": [
 		"Der opstod en fejl: %s"
 	],
@@ -359,8 +445,14 @@
 	"Android API level: %d": [
 		"Android API-niveau: %d"
 	],
+	"Anthropic": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		"Enhver e-mail, der sendes til denne adresse, bliver konverteret til en note og føjet til din samling. Noten gemmes i indbakkens notesbog"
+	],
+	"API key": [
+		""
 	],
 	"Appearance": [
 		"Udseende"
@@ -388,6 +480,15 @@
 	],
 	"Aritim Dark": [
 		"Aritim Mørk"
+	],
+	"Arrow at target": [
+		""
+	],
+	"Ask about this note, or request a change…": [
+		""
+	],
+	"Ask about this note, or request changes. Select text in the editor first to scope the request to that selection.": [
+		""
 	],
 	"Associated tags:": [
 		"Tilknyttede etiketter:"
@@ -428,6 +529,9 @@
 	"Attachments that could not be downloaded": [
 		"Vedhæftninger kunne ikke downloades"
 	],
+	"Attention: After resetting your password it will no longer be possible to decrypt any data encrypted with your current password. All encrypted shared notebooks will also be unshared, so please ask the notebook owner to share it again with you.": [
+		""
+	],
 	"Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s": [
 		"Bemærk: Hvis du ændre denne placering skal du sikre dig, at du kopierer alt dit indhold til den før du synkroniserer, ellers vil alle filer blive slettet! Læs FAQ'en for flere detaljer: %s"
 	],
@@ -442,6 +546,9 @@
 	],
 	"Auto": [
 		"Auto"
+	],
+	"Auto lock when switching note": [
+		""
 	],
 	"Auto-add disabled accounts for deletion": [
 		"Føj automatisk deaktiverede konti til sletning"
@@ -467,14 +574,23 @@
 	"Back": [
 		"Tilbage"
 	],
+	"Back to %s": [
+		""
+	],
+	"Base URL": [
+		""
+	],
 	"Basic": [
 		"Grundlæggende"
 	],
 	"Beta": [
 		"Beta"
 	],
-	"Block code": [
+	"Billed annually (%s per user per year respectively).": [
 		""
+	],
+	"Block code": [
+		"Blokkode"
 	],
 	"Bold": [
 		"Fed"
@@ -490,6 +606,9 @@
 	],
 	"Bulleted List": [
 		"Punktliste"
+	],
+	"buy more credits": [
+		""
 	],
 	"by %s": [
 		"af %s"
@@ -527,8 +646,14 @@
 	"Cannot access %s": [
 		"Kan ikke tilgå %s"
 	],
+	"Cannot change a locked note while the session is locked": [
+		""
+	],
 	"Cannot change encrypted item": [
 		"Kan ikke ændre krypteret emne"
+	],
+	"Cannot convert read-only item: \"%s\"": [
+		"Kan ikke konvertere skrivebeskyttet element: \"%s\""
 	],
 	"Cannot copy note to \"%s\" notebook": [
 		"Kan ikke kopiere note til \"%s\" notesbog"
@@ -572,6 +697,9 @@
 	"Case sensitive": [
 		"Bogstavstørrelse har betydning"
 	],
+	"Certain Markdown formatting is now rendered in the editor by default. For example, **bold** will appear as actual bold text. You can change this behaviour in the \"Editor\" section of Settings.": [
+		""
+	],
 	"Change application layout": [
 		"Skift applikationslayout"
 	],
@@ -589,6 +717,9 @@
 	],
 	"Characters excluding spaces": [
 		"Tegn eksklusiv mellemrum"
+	],
+	"Chat provider": [
+		""
 	],
 	"Check": [
 		"Afkryds"
@@ -615,7 +746,7 @@
 		"Tjekker...  Vent venligst."
 	],
 	"Chinese/Japanese/Korean characters": [
-		""
+		"Kinesiske/japanske/koreanske tegn"
 	],
 	"Choose an option": [
 		"Vælg en mulighed"
@@ -632,11 +763,17 @@
 	"Clear search": [
 		"Ryd søgning"
 	],
+	"Clears the console output.": [
+		""
+	],
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"Klik på \"%s\" for at gendanne noten. Den vil blive kopieret til notesbogen \"%s\". Den nuværende version af noten vil ikke blive erstattet eller ændret."
 	],
 	"Click \"start\" to attach a new voice memo to the note.": [
 		"Klik på \"start\" for at vedhæfte et nyt stemmememo til noten."
+	],
+	"Click the eye icon in the toolbar to switch to the Markdown editor and fix the JSON manually.": [
+		""
 	],
 	"Click to add tags...": [
 		"Klik for at tilføje etiketter..."
@@ -711,7 +848,7 @@
 		"Kommando"
 	],
 	"COMMAND": [
-		""
+		"KOMMANDO"
 	],
 	"Command palette": [
 		"Kommando-udvalg"
@@ -752,8 +889,17 @@
 	"Configuration": [
 		"Indstillinger"
 	],
+	"Configured keyboard shortcuts:": [
+		"Konfigurerede tastaturgenveje:"
+	],
 	"Configures the size of scrollbars used in the app.": [
 		"Konfigurerer størrelsen på de rullebjælker, der bruges i appen."
+	],
+	"Confirm": [
+		"Bekræft"
+	],
+	"Confirm credentials": [
+		""
 	],
 	"Confirm password cannot be empty": [
 		"Bekræftelsen af adgangskode må ikke være tom"
@@ -800,6 +946,12 @@
 	],
 	"Convert it": [
 		"Konverter den"
+	],
+	"Convert this card into a Joplin note": [
+		""
+	],
+	"Convert to Markdown": [
+		"Konverter til Markdown"
 	],
 	"Convert to note": [
 		"Konverter til note"
@@ -856,6 +1008,9 @@
 	"Could not connect to plugin repository.": [
 		"Kunne ikke forbinde til plugin-lager."
 	],
+	"Could not convert notes to Markdown: %s": [
+		"Kunne ikke konvertere noter til Markdown: %s"
+	],
 	"Could not export notes: %s": [
 		"Kunne ikke eksportere noterne: %s"
 	],
@@ -885,6 +1040,9 @@
 	],
 	"Create a notebook": [
 		"Opret en notesbog"
+	],
+	"Create accessible document": [
+		""
 	],
 	"Create new notebook": [
 		"Opretter ny notesbog"
@@ -1021,6 +1179,9 @@
 	"Default title to use for documents created by the scanner.": [
 		"Standardtitel til brug for dokumenter, der er oprettet af scanneren."
 	],
+	"Default view / edit state": [
+		""
+	],
 	"Default: %s": [
 		"Standard: %s"
 	],
@@ -1060,14 +1221,14 @@
 	"Delete profile \"%s\"": [
 		"Slet profilen \"%s\""
 	],
+	"Delete profile \"%s\"?\n\nAll data, including notes, notebooks and tags will be permanently deleted.": [
+		"Slet profilen \"%s\"?\n\nAlle data, herunder noter, notesbøger og etiketter, bliver slettet permanent."
+	],
 	"Delete row": [
 		"Slet række"
 	],
 	"Delete selected notes": [
 		"Slet valgte noter"
-	],
-	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
-		""
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Slet indbakke notesbogen?\n\nHvis du sletter indbakke-notesbogen, kan e-mails, der for nylig er blevet sendt til den, gå tabt."
@@ -1175,7 +1336,7 @@
 		"Viser komplet information om note."
 	],
 	"Displays the configured keyboard shortcuts.": [
-		""
+		"Viser de konfigurerede tastaturgenveje."
 	],
 	"Displays the given note.": [
 		"Viser valgt note."
@@ -1201,14 +1362,14 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Glem ikke adgangkoden, da den af sikkerhedshensyn er den *eneste* mulighed for dekryptering af data! For at aktivere kryptering til, skal du indtaste din adgangskode herunder."
 	],
-	"Do you find the Joplin web app useful?": [
-		"Synes du, at Joplin-webappen er nyttig?"
-	],
 	"Document scanner: Title template": [
 		"Dokumentscanner: Skabelon til titel"
 	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
 		"Tillad ikke modtageren af delingen at skrive til den delte notesbog. Gælder kun for underkommandoen `tilføj`."
+	],
+	"Don't have an account yet?": [
+		""
 	],
 	"Don't show this message again": [
 		"Vis ikke denne besked igen"
@@ -1219,11 +1380,20 @@
 	"Done": [
 		"Færdig"
 	],
+	"Double tap to open this attachment. Long press to expand or collapse details.": [
+		""
+	],
 	"Download": [
 		"Download"
 	],
 	"Download and install the relevant extension for your browser:": [
 		"Download og installer den relevante udvidelse til din browser:"
+	],
+	"Download it from GitHub Releases": [
+		""
+	],
+	"Download it from the Joplin Android repository": [
+		""
 	],
 	"Download it now": [
 		"Download det nu"
@@ -1248,6 +1418,9 @@
 	],
 	"Dracula": [
 		"Dracula"
+	],
+	"Drag to move group": [
+		""
 	],
 	"Draw picture": [
 		"Tegn billede"
@@ -1309,6 +1482,9 @@
 	"Edit profile configuration...": [
 		"Rediger profilkonfiguration..."
 	],
+	"Edit tag": [
+		"Rediger etiket"
+	],
 	"Editor": [
 		"Editor"
 	],
@@ -1354,6 +1530,9 @@
 	"Emails": [
 		"E-mails"
 	],
+	"Embedding index": [
+		""
+	],
 	"emphasised text": [
 		"fremhævet tekst"
 	],
@@ -1375,6 +1554,9 @@
 	"Enable abbreviation syntax": [
 		"Aktivér forkortelsessyntaks"
 	],
+	"Enable ABC musical notation support": [
+		"Aktivér understøttelse af ABC-noder"
+	],
 	"Enable audio player": [
 		"Aktivér lydafspiller"
 	],
@@ -1386,6 +1568,9 @@
 	],
 	"Enable encryption": [
 		"Aktivér kryptering"
+	],
+	"Enable external embeds (e.g. YouTube Videos)": [
+		""
 	],
 	"Enable file:// URLs for images and videos": [
 		"Aktivér file:// URLs for billeder og videoer"
@@ -1419,9 +1604,6 @@
 	],
 	"Enable note history": [
 		"Slå note-historie til"
-	],
-	"Enable optical character recognition (OCR)": [
-		"Aktivér optisk tegngenkendelse (OCR)"
 	],
 	"Enable or disable plugins": [
 		"Aktivér eller deaktivér udvidelser"
@@ -1468,6 +1650,9 @@
 	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
 		"Aktiverer erstatning af Markdown-mønstre i Rich Text Editor. Når det er aktiveret, vil det f.eks. skabe fed tekst at skrive **bold**."
 	],
+	"Enables the default edit operations for notes with an open AI chat panel. When disabled, the chat panel can still read the open note. Does not apply to MCP.": [
+		""
+	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"Slås kryptering fra vil *alle* dine noter og vedhæftninger blive re-synkroniseret og sendt ukrypteret til synk-modtageren."
 	],
@@ -1476,6 +1661,9 @@
 	],
 	"Encrypted items cannot be modified": [
 		"Krypteret emner kan ikke rettes"
+	],
+	"Encrypting a note requires a note lock password, which has not yet been set. Set it up now?": [
+		""
 	],
 	"Encryption": [
 		"Kryptering"
@@ -1488,6 +1676,9 @@
 	],
 	"Encryption keys": [
 		"Krypteringsnøgler"
+	],
+	"Encryption was setup previously, but all keys have been disabled. To continue, please use the desktop app to enable a key.": [
+		""
 	],
 	"Encryption:": [
 		"Kryptering:"
@@ -1516,6 +1707,9 @@
 	"Enter the code:": [
 		"Indtast koden:"
 	],
+	"Enter the note lock password to unlock encrypted notes for this session.": [
+		""
+	],
 	"Entering selection mode": [
 		"Går i valgtilstand"
 	],
@@ -1533,6 +1727,9 @@
 	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"Fejl. Sørg for at URL, brugernavn, adgangskode, osv. er korrekte og at synkroniseringsmålet er tilgængeligt. Den rapporterede fejl var:"
+	],
+	"Error. The AI provider test failed:": [
+		""
 	],
 	"Error: %s": [
 		"Fejl: %s"
@@ -1609,6 +1806,9 @@
 	"Exports only the given notebook.": [
 		"Eksporterer kun valgt notesbog."
 	],
+	"Exposes Joplin notes to external AI applications (Claude Desktop, Cursor, etc.) via the Model Context Protocol. Requires the Web Clipper service to be running. Connected AI tools can read your note content; any text they retrieve may be sent to the external LLM provider those tools use.": [
+		""
+	],
 	"Fail-safe": [
 		"Fejlsikring"
 	],
@@ -1621,14 +1821,14 @@
 	"Failed to connect to your account. Please try again.": [
 		"Kunne ikke oprette forbindelse til din konto. Prøv venligst igen."
 	],
+	"Failed to create accessible document: %s": [
+		""
+	],
 	"Fatal error:": [
 		"Kritisk fejl:"
 	],
 	"Feature flags": [
 		"Feature-markeringer"
-	],
-	"Feedback": [
-		"Feedback"
 	],
 	"Fetched items: %d/%d.": [
 		"Hentede emner: %d/%d."
@@ -1644,6 +1844,9 @@
 	],
 	"Filter": [
 		"Filtrér"
+	],
+	"Filtered by section [%s]": [
+		""
 	],
 	"Find": [
 		"Find"
@@ -1662,6 +1865,9 @@
 	],
 	"Fixing search index...": [
 		"Fikser søgeindeks..."
+	],
+	"Flip": [
+		""
 	],
 	"Focus": [
 		"Fokuser"
@@ -1721,9 +1927,6 @@
 		"Opretter link...",
 		"Opretter links..."
 	],
-	"Geolocation, spellcheck, editor toolbar, image resize": [
-		"Geolokalisering, stavekontrol, redigeringsværktøjslinje, ændring af billedstørrelse"
-	],
 	"Get a quote": [
 		"Få et tilbud"
 	],
@@ -1736,6 +1939,9 @@
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Henter eller tilføjer konfigurationsværdi. Hvis [value] er tilføjet, vises værdien af [name]. Hvis hverken [name] eller [value] er tilføjet, vises aktuel konfiguration."
 	],
+	"Global shortcut to show/hide Joplin": [
+		""
+	],
 	"Glossary:": [
 		"Ordliste:"
 	],
@@ -1744,6 +1950,9 @@
 	],
 	"Go back": [
 		"Gå tilbage"
+	],
+	"Go to end of note": [
+		""
 	],
 	"Go to Joplin Cloud profile": [
 		"Gå til Joplin Cloud-profil"
@@ -1754,11 +1963,17 @@
 	"Go to source URL": [
 		"Gå til kilde-URL"
 	],
+	"Go to start of note": [
+		""
+	],
 	"Goto Anything...": [
 		"Gå til tilfældig..."
 	],
 	"Grant authorisation": [
 		"Giv tilladelse"
+	],
+	"Group": [
+		""
 	],
 	"Have you authorised the application login in the above URL?": [
 		"Har du godkendt login til applikationen i ovenstående URL?"
@@ -1835,6 +2050,9 @@
 	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
 		"Hvis en billedvedhæftning står på sin egen linje og efterfølges af en tom linje, vil den blive gengivet lige under Markdown-kilden."
 	],
+	"If enabled, opening an HTML note displays a prompt to convert the note to Markdown.": [
+		""
+	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"Hvis du allerede har godkendt, skal du vente på, at applikationen synkroniseres med Joplin Cloud."
 	],
@@ -1853,11 +2071,11 @@
 	"Import": [
 		"Importer"
 	],
+	"Import a note from a text file (%s). The note will be imported into notebook '%s'.": [
+		""
+	],
 	"Import and Export": [
 		"Import og eksport"
-	],
-	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
-		"Importen mislykkedes. Sørg for, at der er valgt en JEX-fil.\nDetaljer: %s"
 	],
 	"Import from JEX": [
 		"Importér fra JEX"
@@ -1867,6 +2085,9 @@
 	],
 	"Import or export your data": [
 		"Importér eller eksportér dine data"
+	],
+	"Import...": [
+		"Importer..."
 	],
 	"Imported successfully!": [
 		"Importeret!"
@@ -1928,6 +2149,15 @@
 	"Indent more": [
 		"Indryk mere"
 	],
+	"Index notes for AI search": [
+		""
+	],
+	"Indexer:": [
+		""
+	],
+	"Indexing…": [
+		""
+	],
 	"Info": [
 		"Info"
 	],
@@ -1940,8 +2170,17 @@
 	"Insert": [
 		"Indsæt"
 	],
+	"Insert column right": [
+		""
+	],
 	"Insert Hyperlink": [
 		"Indsæt hyperlink"
+	],
+	"Insert row above": [
+		""
+	],
+	"Insert row below": [
+		""
 	],
 	"Insert time": [
 		"Indsæt tid"
@@ -1982,6 +2221,9 @@
 	"Invalid password": [
 		"Ugyldig adgangskode"
 	],
+	"Invalid password. Please try again. If you have forgotten your password you will need to reset it.": [
+		""
+	],
 	"iOS version: %s": [
 		"iOS-version: %s"
 	],
@@ -1990,6 +2232,9 @@
 	],
 	"Item \"%s\" could not be downloaded: %s": [
 		"Emnet \"%s\" kunne ikke downloades: %s"
+	],
+	"Item upload will be disabled in %s.": [
+		""
 	],
 	"Items": [
 		"Emner"
@@ -2011,6 +2256,9 @@
 	],
 	"Joplin Cloud": [
 		"Joplin Cloud"
+	],
+	"Joplin Cloud AI requires Joplin Cloud sync. Pick a different provider or restore Joplin Cloud sync.": [
+		""
 	],
 	"Joplin Cloud Login": [
 		"Joplin Cloud Login"
@@ -2038,6 +2286,9 @@
 	],
 	"Joplin Mobile": [
 		"Joplin Mobil"
+	],
+	"Joplin needs your permission to access your %s account and to synchronise data with it.": [
+		""
 	],
 	"Joplin Server": [
 		"Joplin server"
@@ -2094,7 +2345,7 @@
 		"Keychain-understøttet: %s"
 	],
 	"KEYS": [
-		""
+		"TASTER"
 	],
 	"Keys that need upgrading": [
 		"Nøgler der har brug for opgradering"
@@ -2194,6 +2445,12 @@
 	"Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at \"%s\" and resume the operation.": [
 		"Låsefil er allerede i brug. Hvis du ved at ingen synkronisering er i gang kan du slette låsefilen \"%s\" og genoptage synkroniseringen."
 	],
+	"Locked notes are encrypted on this device and can only be read after entering your note lock password. The password is required again after locking or restarting Joplin.": [
+		""
+	],
+	"Locked notes cannot be opened in an external editor": [
+		""
+	],
 	"Log": [
 		"Log"
 	],
@@ -2236,6 +2493,9 @@
 	"Manage shared notebooks": [
 		"Administrer delte notesbøger"
 	],
+	"Manage this server's license from the [admin dashboard](%s).": [
+		""
+	],
 	"Manage toolbar options": [
 		"Administrer indstillinger for værktøjslinjen"
 	],
@@ -2243,7 +2503,7 @@
 		"Administrer dine udvidelser"
 	],
 	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
-		""
+		"Administrer dine profiler. Du kan omdøbe eller slette profiler. Den aktive profil kan ikke slettes."
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Administrer E2EE-konfiguration. Kommandoer er `enable`(aktiver), `disable`(sluk), `decrypt`(dekrypter), `status`, `decrypt-file`(dekrypter fil) og `target-status` (modtager-status)."
@@ -2305,6 +2565,9 @@
 	"Max Total Size": [
 		"Maks samlet størrelse"
 	],
+	"MCP requires the Web Clipper service. Enable it in Settings → Web Clipper.": [
+		""
+	],
 	"Media player, math, diagrams, table of contents": [
 		"Medieafspiller, matematik, diagrammer, indholdsfortegnelse"
 	],
@@ -2335,6 +2598,12 @@
 	"Mobile data - auto-sync disabled": [
 		"Mobildata - auto-synk deaktiveret"
 	],
+	"Model": [
+		""
+	],
+	"Model:": [
+		""
+	],
 	"More info": [
 		"Mere information"
 	],
@@ -2350,6 +2619,9 @@
 	"Move %d note to notebook \"%s\"?": [
 		"Flyt %d note til notesbogen \"%s\"?",
 		"Flyt %d noter til notesbogen \"%s\"?"
+	],
+	"Move %d notebooks to the trash?\n\nAll notes and sub-notebooks within these notebooks will also be moved to the trash.": [
+		"Flyt %d notesbøger til papirkurven?\n\nAlle noter og undernotesbøger i disse notesbøger vil også blive flyttet til papirkurven."
 	],
 	"Move down": [
 		"Flyt ned"
@@ -2423,6 +2695,9 @@
 	"New sub-notebook": [
 		"Ny under-notesbog"
 	],
+	"New text card": [
+		""
+	],
 	"New to-do": [
 		"Ny opgave"
 	],
@@ -2458,6 +2733,18 @@
 	],
 	"No active notebook.": [
 		"Ingen aktiv notesbog."
+	],
+	"No AI usage recorded yet.": [
+		""
+	],
+	"No arrow": [
+		""
+	],
+	"No colour": [
+		""
+	],
+	"No embedding model is installed. It is downloaded automatically on first use — check Settings → AI for progress.": [
+		""
 	],
 	"No new invitations": [
 		"Ingen nye invitationer"
@@ -2502,6 +2789,9 @@
 		"Ingen opdatering tilgængelig"
 	],
 	"No URL for SAML authentication set.": [
+		"Der er ikke angivet nogen URL til SAML-godkendelse."
+	],
+	"No valid notebook is available. Please create or select a notebook and try again.": [
 		""
 	],
 	"None": [
@@ -2509,6 +2799,9 @@
 	],
 	"Nord": [
 		"Nord"
+	],
+	"Normal": [
+		""
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Ikke godkendt med %s. Angiv venligst eventuelle manglende legitimationsoplysninger."
@@ -2524,9 +2817,6 @@
 	],
 	"Not now": [
 		"Ikke nu"
-	],
-	"Not useful": [
-		"Ikke nyttig"
 	],
 	"note": [
 		"note"
@@ -2564,6 +2854,9 @@
 	"Note history has been deleted.": [
 		"Notehistorik slettet."
 	],
+	"Note indexing is turned off in Settings → AI.": [
+		""
+	],
 	"Note is not a to-do: \"%s\"": [
 		"Noten er ikke en opgave: \"%s\""
 	],
@@ -2575,6 +2868,9 @@
 	],
 	"Note list style": [
 		"Notatliste-stil"
+	],
+	"Note lock password, auto lock": [
+		""
 	],
 	"Note not published: %s": [
 		"Note ikke offentliggjort: %s"
@@ -2633,11 +2929,23 @@
 	"Numbered List": [
 		"Nummeret liste"
 	],
+	"Obsidian Vault": [
+		""
+	],
+	"OCR is not complete. Please wait for OCR to finish before creating an accessible document.": [
+		""
+	],
+	"OCR needs to run to generate an accessible document. This may take a moment. Would you like to continue?": [
+		""
+	],
 	"OCR: Clear cache and re-download language data files": [
 		"OCR: Ryd cache og download sprogdatafiler igen"
 	],
 	"OCR: Language data URL or path": [
 		"OCR: URL eller sti til sprogdata"
+	],
+	"OCR: PDF processing mode": [
+		""
 	],
 	"OCR: Search in extracted content": [
 		"OCR: Søg i udtrukket indhold"
@@ -2671,6 +2979,9 @@
 	],
 	"OneNote Notebook": [
 		"OneNote-notesbog"
+	],
+	"Only do this if you've forgotten your current password. A new password will be created, and any notes locked with the old one will become permanently unreadable.": [
+		""
 	],
 	"Only one note can be printed at a time.": [
 		"Kun én note kan printes ad gangen."
@@ -2715,7 +3026,7 @@
 		"Open Synk-hjælper..."
 	],
 	"Open-source licences": [
-		""
+		"Open source-licenser"
 	],
 	"Open...": [
 		"Åbn..."
@@ -2739,7 +3050,7 @@
 		"Indstillinger"
 	],
 	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
-		""
+		"Indstillinger, der skal bruges, når ABC-kode gengives. Det skal være et JSON5-objekt. Den fulde liste over indstillinger findes på: %s"
 	],
 	"Ordered list": [
 		"Sorteret liste"
@@ -2817,8 +3128,14 @@
 	"Please confirm that you would like to re-encrypt your complete database.": [
 		"Bekræft venligst at du ønsker at genkryptere hele din database."
 	],
+	"Please disable users from the [admin dashboard](%s) to bring this server under the limit.": [
+		""
+	],
 	"Please enter your password in the master key list below before upgrading the key.": [
 		"Indtast din adgangskode i hovednøglelisten nedenfor før opgradering af nøglen."
+	],
+	"Please make sure you remember your password. It cannot be recovered if lost, and any data encrypted with it will become inaccessible.": [
+		""
 	],
 	"Please note that if it is a large notebook, it may take a few minutes for all the notes to show up on the recipient's device.": [
 		"Bemærk, at hvis der er tale om en stor notesbog, kan det tage et par minutter, før alle noter vises på modtagerens enhed."
@@ -2846,6 +3163,9 @@
 	],
 	"Please specify the notebook where the notes should be imported to.": [
 		"Angiv hvilken notesbog, noterne skal importeres til."
+	],
+	"Please update the license key from the [admin dashboard](%s).": [
+		""
 	],
 	"Please upgrade Joplin to version %s or later to use this plugin.": [
 		"Opgrader Joplin til version %s eller nyere for at bruge dette plugin."
@@ -2949,6 +3269,9 @@
 	"Pro": [
 		"Pro"
 	],
+	"Pro 100 GB": [
+		""
+	],
 	"Process failed payment subscriptions": [
 		"Behandl mislykkede betalingsabonnementer"
 	],
@@ -2969,6 +3292,9 @@
 	],
 	"Profile name": [
 		"Profilnavn"
+	],
+	"Profile name cannot be empty": [
+		"Profilnavnet må ikke være tomt"
 	],
 	"Profile name:": [
 		"Profilnavn:"
@@ -3024,6 +3350,9 @@
 	"Quit": [
 		"Afslut"
 	],
+	"Quit anyway": [
+		""
+	],
 	"Re-download model": [
 		"Download model igen"
 	],
@@ -3039,6 +3368,9 @@
 	"Re-upload local data to sync target": [
 		"Upload lokal data igen til synkroniseringsmål"
 	],
+	"Read all tags": [
+		""
+	],
 	"Read more": [
 		"Læs mere"
 	],
@@ -3050,6 +3382,9 @@
 	],
 	"Reading commands from standard input is only available in CLI mode.": [
 		"Det er kun muligt at læse kommandoer fra standardinput i CLI-tilstand."
+	],
+	"Reading this note requires the note lock password, which has not been set up on this device yet.": [
+		""
 	],
 	"Recipient has accepted the invitation": [
 		"Modtageren har accepteret invitationen"
@@ -3102,6 +3437,9 @@
 	"Remove": [
 		"Fjern"
 	],
+	"Remove %d tags from all notes? This cannot be undone.": [
+		"Slet %d etiketter fra alle noter? Dette kan ikke gøres om."
+	],
 	"Remove %s": [
 		"Fjern %s"
 	],
@@ -3116,9 +3454,6 @@
 	],
 	"Removed %s from share.": [
 		"Fjern %s fra deling."
-	],
-	"Removed tag: %s": [
-		"Fjernet etikette: %s"
 	],
 	"Rename": [
 		"Omdøb"
@@ -3176,6 +3511,15 @@
 	],
 	"Reports": [
 		"Rapporter"
+	],
+	"Required to use cloud-hosted AI models, including Joplin Cloud AI. When disabled, only on-device providers can be used.": [
+		""
+	],
+	"Reset": [
+		""
+	],
+	"Reset AI token usage counters?": [
+		""
 	],
 	"Reset application layout": [
 		"Nulstil applikationslayout"
@@ -3248,6 +3592,9 @@
 	],
 	"Rich Text editor. Press Escape then Tab to escape focus.": [
 		"Rich Text-editor. Tryk på Escape og derefter Tab for at forlade fokus."
+	],
+	"Run OCR": [
+		""
 	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
 		"Afvikler kommandoerne i tekstfilen. Der skal være én kommando pr. linje."
@@ -3373,7 +3720,7 @@
 		"Vælg overordnet notesbog"
 	],
 	"Select the type of file to be imported:": [
-		""
+		"Vælg den filtype, der skal importeres:"
 	],
 	"Selected: %s": [
 		"Valgte: %s"
@@ -3386,6 +3733,12 @@
 	],
 	"Self-hosted": [
 		"Selv-hostet"
+	],
+	"Self-hosted instances of the Joplin web app cannot sync with Joplin Cloud. Open the official web app?": [
+		""
+	],
+	"Send": [
+		""
 	],
 	"Send bug report": [
 		"Send fejlrapport"
@@ -3462,6 +3815,9 @@
 	"Show all": [
 		"Vis alt"
 	],
+	"Show checkbox completion chart in note list": [
+		""
+	],
 	"Show completed to-dos": [
 		"Vis færdige opgaver"
 	],
@@ -3470,6 +3826,9 @@
 	],
 	"Show disabled keys": [
 		"Vis deaktiverede nøgler"
+	],
+	"Show Joplin icon for note links": [
+		""
 	],
 	"Show monospace fonts only.": [
 		"Vis kun monospace-skrifttyper."
@@ -3492,6 +3851,9 @@
 	"Show/hide the sidebar": [
 		"Vis/skjul sidebjælken"
 	],
+	"Showing all matching settings": [
+		""
+	],
 	"Shows notes for tag": [
 		"Vis noter for etiketter"
 	],
@@ -3512,6 +3874,9 @@
 	],
 	"Size": [
 		"Størrelse"
+	],
+	"Size (smallest first)": [
+		""
 	],
 	"Skip this version": [
 		"Spring denne version over"
@@ -3549,6 +3914,9 @@
 	"Some items could not be synchronised. Please try to synchronise them first.": [
 		"Nogle elementer kunne ikke synkroniseres. Prøv at synkronisere dem først."
 	],
+	"Something went wrong.": [
+		""
+	],
 	"Sort \"%s\" in ascending order": [
 		"Sorter \"%s\" i stigende rækkefølge"
 	],
@@ -3580,7 +3948,7 @@
 		"Kilde: "
 	],
 	"SPACE": [
-		""
+		"MELLEMRUM"
 	],
 	"Spacer": [
 		"Mellemrum"
@@ -3666,6 +4034,9 @@
 	"Success! Synchronisation configuration appears to be correct.": [
 		"Succes! Synkroniseringsindstillinger lader til at være korrekte."
 	],
+	"Success! The AI provider responded:": [
+		""
+	],
 	"Suggestions": [
 		"Forslag"
 	],
@@ -3677,6 +4048,9 @@
 	],
 	"Swap line up": [
 		"Ombyt linje opad"
+	],
+	"Swap source and target": [
+		""
 	],
 	"Switch between note and to-do type": [
 		"Skift mellem note- og opgave type"
@@ -3711,9 +4085,6 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Skifter til [notebook] - alle fremtidige handlinger sker i denne notesbog."
 	],
-	"Sync": [
-		"Synk"
-	],
 	"Sync as many devices as you want": [
 		"Synkroniser så mange enheder, du vil"
 	],
@@ -3737,6 +4108,9 @@
 	],
 	"Sync your notes": [
 		"Synk dine noter"
+	],
+	"Sync your notes with Joplin Cloud to access them on all your devices. Other sync options are also available.": [
+		""
 	],
 	"Sync, encryption, proxy": [
 		"Synkronisering, kryptering, proxy"
@@ -3768,6 +4142,9 @@
 	"Synchronises with remote storage.": [
 		"Synkroniserer med fjernlager."
 	],
+	"Synchronising remaining changes, please wait...": [
+		""
+	],
 	"Synchronising...": [
 		"Synkroniserer..."
 	],
@@ -3780,8 +4157,14 @@
 	"Tab moves focus": [
 		"Tabulator flytter fokus"
 	],
+	"Table": [
+		"Tabel"
+	],
 	"Tabloid": [
 		"US Tabloid"
+	],
+	"Tag: %s": [
+		"Etiket: %s"
 	],
 	"Tagged: %d.": [
 		"Etiketterede: %d."
@@ -3789,11 +4172,11 @@
 	"Tags": [
 		"Etiketter"
 	],
+	"Tags cannot be changed for locked notes while the session is locked": [
+		""
+	],
 	"Take photo": [
 		"Tag et foto"
-	],
-	"Take survey": [
-		"Deltag i undersøgelse"
 	],
 	"Task \"%s\" failed with error: %s": [
 		"Afstandsstykke"
@@ -3813,11 +4196,11 @@
 	"Text editor command": [
 		"Tekstredigeringskomando"
 	],
-	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
-		"Tak for din feedback!\nHar du tid til at udfylde en kort undersøgelse?"
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Den aktive profil kan ikke slettes. Skift til en anden profil, og prøv igen."
+	],
+	"The API key is missing. Set it in Settings → AI.": [
+		""
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
 		"Appen lukker nu. Genstart den for at fuldføre processen."
@@ -3849,9 +4232,6 @@
 	"The default encryption method has been changed, you should re-encrypt your data.": [
 		"Standard-krypteringsmetoden er blevet ændret, du bør genkryptere dine data."
 	],
-	"The default profile cannot be deleted": [
-		"Standardprofilen kan ikke slettes"
-	],
 	"The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.": [
 		"Editorkommandoen (kan inkludere argumenter) der bruges til at åbne noter. Hvis der ikke er angivet nogen, vil den prøve at autodetektere standardeditoren."
 	],
@@ -3880,14 +4260,42 @@
 	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
 		"Den gamle Markdown-editor ser ud til at være gået ned på grund af en inkompatibilitet med et plugin. Vi anbefaler at bruge den nye editor."
 	],
+	"The license for this server failed to refresh.": [
+		""
+	],
+	"The license key for this Joplin Server Business instance has expired and needs to be renewed.": [
+		""
+	],
+	"The license key for this Joplin Server Business instance has expired or is invalid. Uploading items has been disabled until the license is renewed.": [
+		""
+	],
 	"The master key has been upgraded successfully!": [
 		"Hovednøglen er succesfuldt opgraderet!"
 	],
 	"The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
 		"Hovednøglerne til disse ID'er er brugt til at kryptere nogle af dine emner, men app'en har pt. ikke adgang til dem. Det er sandsynligt at de vil blive hentet via synkronisering."
 	],
+	"The MCP server is disabled. Enable it in Settings → MCP.": [
+		""
+	],
+	"The model identifier to use, for example gpt-4o-mini or claude-3-5-sonnet-latest.": [
+		""
+	],
+	"The model name is missing. Set it in Settings → AI.": [
+		""
+	],
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"Noten \"%s\" er blevet gendannet til notesbogen \"%s\"."
+	],
+	"The note changed while the request was running; edits were not applied. Try again.": [
+		""
+	],
+	"The note has been converted to Markdown and the original note has been moved to the trash": [
+		"Noten er blevet konverteret til Markdown, og den oprindelige note er blevet flyttet til papirkurven",
+		"Noterne er blevet konverteret til Markdown, og de oprindelige noter er blevet flyttet til papirkurven"
+	],
+	"The note lock state cannot be changed from the command line": [
+		""
 	],
 	"The note was successfully moved to the trash.": [
 		"Noten blev flyttet til papirkurven.",
@@ -3902,8 +4310,17 @@
 	"The notes have been imported: %s": [
 		"Noterne er importeret: %s"
 	],
+	"The OpenAI-compatible API endpoint. For example, https://api.openai.com/v1 or http://localhost:11434/v1 for Ollama.": [
+		""
+	],
+	"The OpenAI-compatible provider needs a base URL. Set it in Settings → AI.": [
+		""
+	],
 	"The possible commands are:": [
 		"Mulige kommandoer er:"
+	],
+	"The provider returned an empty response. Check that the base URL ends with /v1 and that a model is loaded.": [
+		""
 	],
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"Modtageren kunne ikke fjernes fra listen. Prøv venligst igen.\n\nFejlen var: \"%s\""
@@ -3946,9 +4363,6 @@
 	],
 	"Theme": [
 		"Tema"
-	],
-	"Themes, editor font": [
-		"Temaer, editorskrifttype"
 	],
 	"There are currently no notes. Create one by clicking on the (+) button.": [
 		"Der er ingen noter. Opret note ved at klikke på (+) knappen."
@@ -4004,6 +4418,13 @@
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Dette er et avanceret værktøj til at vise de vedhæftninger, som er knyttet til dine noter. Vær forsigtig med at slette dem, da de ikke kan gendannes bagefter."
 	],
+	"This Joplin Server Business instance is only licensed for %d user.": [
+		"",
+		""
+	],
+	"This note could not be decrypted. If it was encrypted prior to a password reset, the contents are no longer recoverable.": [
+		""
+	],
 	"This note could not be deleted: %s": [
 		"Denne note kunne ikke slettes: %s",
 		"Disse noter kunne ikke slettes: %s"
@@ -4028,14 +4449,32 @@
 	"This note has no history": [
 		"Denne note har ingen historie"
 	],
+	"This note is currently being saved. Please try again in a moment.": [
+		""
+	],
+	"This note is encrypted and cannot be used with AI Chat.": [
+		""
+	],
+	"This note is encrypted. Enter the note lock password to unlock encrypted notes for this session.": [
+		""
+	],
 	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
 		"Denne note er i HTML-format. Konverter den til Markdown for at gøre det lettere at redigere den."
+	],
+	"This notebook contains Windows-specific files. For maximum compatibility, consider importing the notebook from Windows.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		"Dette plugin understøtter ikke %s."
 	],
+	"This provider sends data off your device. Turn on \"Allow remote AI providers\" in Settings → AI.": [
+		""
+	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"Denne Rich Text editor har en række begrænsninger, og det anbefales at være opmærksom på disse, før den bruges."
+	],
+	"This section opens in its own screen and is matched by section title.": [
+		""
 	],
 	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
 		"Denne tjeneste tillader browser udvidelsen at kommunikere med Joplin. Når du slår den til kan det være, at din firewall beder om tilladelse til at lytte på en bestemt port."
@@ -4063,6 +4502,9 @@
 	],
 	"Title": [
 		"Titel"
+	],
+	"To access your recovery codes please enter an authentication code or your password.": [
+		""
 	],
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
 		"For at give Joplin tilladelse til at synkronisere med Dropbox, skal du følge nedenstående trin:"
@@ -4102,9 +4544,6 @@
 	],
 	"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`": [
 		"For at prøve at dekryptere dem igen. Kør `e2ee decrypt --retry-failed-items`"
-	],
-	"To switch the profile, the app is going to close and you will need to restart it.": [
-		"Hvis du vil skifte profil, lukkes appen, og du skal genstarte den."
 	],
 	"To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions": [
 		"For at virke korrekt skal app'en bruge følgende tilladelser. Slå dem til i din telefons indstillinger, i Apps > Joplin > Tilladelser"
@@ -4166,6 +4605,9 @@
 	"Toggle sort order field": [
 		"Slå felt for sorteringsrækkefølge til eller fra"
 	],
+	"Toggle whiteboard / Markdown view": [
+		""
+	],
 	"Token has been copied to the clipboard!": [
 		"Din token er blevet kopieret til udklipsholderen!"
 	],
@@ -4174,6 +4616,9 @@
 	],
 	"Tools": [
 		"Værktøjer"
+	],
+	"Tools and services to expose to AI. AI agents can use these tools either via the note chat panel or Joplin's MCP server (if enabled).": [
+		""
 	],
 	"Total Size": [
 		"Samlet størrelse"
@@ -4187,11 +4632,8 @@
 	"Try again": [
 		"Prøv igen"
 	],
-	"Try it now": [
-		"Prøv det nu"
-	],
 	"TYPE": [
-		""
+		"TYPE"
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Tast `help [kommando]` for mere info om en kommando; eller tast `help all` for fuld brugsinformation."
@@ -4208,6 +4650,12 @@
 	"Type: %s.": [
 		"Tast: %s."
 	],
+	"Typography, spellcheck, layout": [
+		""
+	],
+	"Unable to access the recording file.": [
+		""
+	],
 	"Unable to edit resource of type %s": [
 		"Kan ikke redigere ressource af typen %s"
 	],
@@ -4216,6 +4664,9 @@
 	],
 	"Unable to share note data. Reason: %s": [
 		"Kan ikke dele notedata. Årsag: %s"
+	],
+	"Unavailable on this platform": [
+		""
 	],
 	"Unchecked": [
 		"Ikke markeret"
@@ -4243,6 +4694,9 @@
 	],
 	"Unknown platform": [
 		"Ukendt platform"
+	],
+	"Unlock": [
+		""
 	],
 	"Unordered list": [
 		"Usorteret liste"
@@ -4274,14 +4728,23 @@
 	"Unsupported link or message: %s.\nError: %s": [
 		"Ikke-understøttet link eller besked: %s\nFejl: %s"
 	],
+	"Unsupported public key format. Please check that Joplin is updated to the latest version and try again.": [
+		""
+	],
 	"Untitled": [
 		"Uden titel"
+	],
+	"Untitled whiteboard": [
+		""
 	],
 	"Update": [
 		"Opdater"
 	],
 	"Update available": [
 		"Opdatering tilgængelig"
+	],
+	"Update it from Google Play": [
+		""
 	],
 	"Update later": [
 		"Opdater senere"
@@ -4322,6 +4785,9 @@
 	"Upgrade the sync target to the latest version.": [
 		"Opgrader synkmålet til den seneste version."
 	],
+	"Upgrade to 100 GB": [
+		""
+	],
 	"Upload photo": [
 		"Upload foto"
 	],
@@ -4355,14 +4821,14 @@
 	"Use your biometrics to secure access to your application. You can always set it up later in Settings.": [
 		"Brug dine biometriske data til at sikre adgangen til din applikation. Du kan altid konfigurere det senere i Indstillinger."
 	],
+	"Used": [
+		""
+	],
 	"Used for most text in the markdown editor. If not found, a generic proportional (variable width) font is used.": [
 		"Bruges til det meste tekst i markdown-editoren. Hvis ikke fundet, bruges en proportional (variabel bredde) font."
 	],
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"Bruges hvor en font med fast bredde er nødvendig for at vise læsbar tekst (f.eks. tabeller, afkrydsningsfelter, kode). Hvis ikke fundet, bruges en generisk monospatieret (fast bredde) font."
-	],
-	"Useful": [
-		"Nyttig"
 	],
 	"User deletions": [
 		"Brugersletninger"
@@ -4372,6 +4838,12 @@
 	],
 	"Valid": [
 		"Gyldig"
+	],
+	"Vector search is not available on this platform": [
+		""
+	],
+	"Vector search is unavailable on this platform (sqlite-vec extension not loaded).": [
+		""
 	],
 	"Verify your identity": [
 		"Bekræft din identitet"
@@ -4469,8 +4941,14 @@
 	"When creating a new to-do:": [
 		"Ved oprettelse af ny opgave:"
 	],
+	"When enabled, plugins and built-in features can use AI models to generate or analyse text.": [
+		""
+	],
 	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
 		"Når denne funktion er aktiveret, anmodes der om, at billederne i noten transskriberes med en transskriptionstjeneste på serveren, der leverer højere kvalitet. Kræver synkronisering med en kopi af desktop-appen."
+	],
+	"When enabled, tables are rendered as an interactive widget in the editor. Disable this if you prefer to edit tables as raw Markdown.": [
+		""
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"Når det er aktiveret, vil applikationen scanne dine vedhæftede filer og udtrække teksten fra dem. Dette giver dig mulighed for at søge efter tekst i disse vedhæftede filer."
@@ -4514,11 +4992,17 @@
 	"You do not have any installed plugin.": [
 		"Du har ikke installeret nogen udvidelser."
 	],
+	"You have unsaved tag changes. Discard them?": [
+		""
+	],
 	"You may also type `status` for more information.": [
 		"Du kan også indtaste `status` for mere information."
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"Du kan bruge værktøjet nedenfor til at genkryptere dine data for eksempel hvis du ved at nogle af dine noter er krypteret med en forældet krypteringsmetode."
+	],
+	"You switched notes while the request was running; edits were not applied. Try again.": [
+		""
 	],
 	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
 		"Du kunne ikke oprette forbindelse til Joplin Cloud. Tjek dine legitimationsoplysninger og prøv igen. Fejl:"
@@ -4535,6 +5019,12 @@
 	"Your Joplin Cloud credentials are invalid, please login.": [
 		"Dine Joplin Cloud-legitimationsoplysninger er ugyldige, log venligst ind."
 	],
+	"Your master password is used to protect sensitive information. In particular, it is used to encrypt your notes when end-to-end encryption (E2EE) is enabled, or to share and encrypt notes with someone who has E2EE enabled.": [
+		""
+	],
+	"Your note will be sent to the configured AI provider (%s).": [
+		""
+	],
 	"Your password is needed to decrypt some of your data.": [
 		"Din adgangskode er nødvendig for at dekryptere nogle af dine data."
 	],
@@ -4549,5 +5039,8 @@
 	],
 	"Zoom Out": [
 		"Zoom ud"
+	],
+	"— now viewing: %s —": [
+		""
 	]
 }

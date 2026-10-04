@@ -4,6 +4,8 @@ import { _ } from '@joplin/lib/locale';
 import { ModelType } from '@joplin/lib/BaseModel';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Note from '@joplin/lib/models/Note';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
+import NoteLockNote from '@joplin/lib/services/noteLock/NoteLockNote';
 
 class Command extends BaseCommand {
 	public override usage() {
@@ -23,6 +25,7 @@ class Command extends BaseCommand {
 
 		const item = await app().loadItem(ModelType.Note, title, { parent: app().currentFolder() });
 		if (!item) throw new Error(_('Cannot find "%s".', title));
+		if (isNoteLockEnabled() && NoteLockNote.isLocked(item)) throw new Error(_('Cannot display a locked note'));
 
 		let content = '';
 

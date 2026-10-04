@@ -54,7 +54,7 @@ import EncryptionConfigScreen from './components/screens/encryption-config';
 import DropboxLoginScreen from './components/screens/dropbox-login.js';
 import { MenuProvider } from 'react-native-popup-menu';
 import SideMenu, { SideMenuPosition } from './components/SideMenu';
-import SideMenuContent from './components/side-menu-content';
+import SideMenuContent from './components/SideMenuContent/SideMenuContent';
 import SideMenuContentNote, { SideMenuContentOptions } from './components/SideMenuContentNote';
 import { reg } from '@joplin/lib/registry';
 import { defaultState } from '@joplin/lib/reducer';
@@ -229,10 +229,24 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 			Setting.setValue('activeFolderId', newState.selectedFolderId);
 		}
 
-		const notesParent: NotesParent = {
-			type: action.smartFilterId ? 'SmartFilter' : 'Folder',
-			selectedItemId: action.smartFilterId ? action.smartFilterId : newState.selectedFolderId,
-		};
+		let notesParent: NotesParent;
+		if (action.smartFilterId) {
+			notesParent = {
+				type: 'SmartFilter',
+				selectedItemId: action.smartFilterId,
+			};
+		} else if (action.tagId) {
+			notesParent = {
+				type: 'Tag',
+				selectedItemId: action.tagId,
+			};
+		} else {
+			notesParent = {
+				type: 'Folder',
+				selectedItemId: newState.selectedFolderId,
+			};
+		}
+
 		Setting.setValue('notesParent', serializeNotesParent(notesParent));
 	}
 
@@ -727,14 +741,17 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 		let sideMenuContent: ReactNode = null;
 		let menuPosition = SideMenuPosition.Left;
 		let disableSideMenuGestures = true;
+		let disableSideMenuOpenGesture = false;
 
 		if (this.props.routeName === 'Note') {
 			sideMenuContent = <SideMenuContentNote options={this.props.noteSideMenuOptions}/>;
 			menuPosition = SideMenuPosition.Right;
 			disableSideMenuGestures = this.props.disableSideMenuGestures;
+			// Opening the properties menu requires using the kebab menu, as open gestures would interfere with horizontally scrollable content in notes
+			disableSideMenuOpenGesture = true;
 		} else if (this.props.routeName === 'Notes') {
 			sideMenuContent = <SideMenuContent/>;
-			disableSideMenuGestures = false;
+			disableSideMenuGestures = this.props.noteSelectionEnabled;
 		} else {
 			sideMenuContent = <SideMenuContent/>;
 		}
@@ -773,27 +790,20 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 		logger.info('root.biometrics: shouldShowMainContent', shouldShowMainContent);
 		logger.info('root.biometrics: this.state.sensorInfo', this.state.sensorInfo);
 
-		// The right sidemenu can be difficult to close due to a bug in the sidemenu
-		// library (right sidemenus can't be swiped closed).
-		//
-		// Additionally, it can interfere with scrolling in the note viewer, so we use
-		// a smaller edge hit width.
-		const menuEdgeHitWidth = menuPosition === 'right' ? 20 : 30;
-
 		const mainContent = (
 			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 				<View style={{ flexGrow: 1, flexShrink: 1, flexBasis: '100%' }}>
 					<SafeAreaView style={{ flex: 1 }} titleBarUnderlayColor={theme.backgroundColor2}>
 						<SideMenu
 							menu={sideMenuContent}
-							edgeHitWidth={menuEdgeHitWidth}
 							toleranceX={4}
-							toleranceY={20}
+							minHorizontalSwipe={10}
 							openMenuOffset={this.state.sideMenuWidth}
 							menuPosition={menuPosition}
 							onChange={this.sideMenu_change}
 							isOpen={this.props.showSideMenu}
 							disableGestures={disableSideMenuGestures}
+							disableOpenGesture={disableSideMenuOpenGesture}
 						>
 							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 								{ shouldShowMainContent && <AppNav screens={appNavInit} dispatch={this.props.dispatch} /> }

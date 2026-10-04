@@ -3,7 +3,7 @@ import Logger, { TargetType, LoggerWrapper } from '@joplin/utils/Logger';
 import shim from './shim';
 import { setupProxySettings } from './shim-init-node';
 import BaseService from './services/BaseService';
-import reducer, { getNotesParent, serializeNotesParent, setStore, State } from './reducer';
+import reducer, { defaultWindowId, getNotesParent, serializeNotesParent, setStore, State } from './reducer';
 import KeychainServiceDriverNode from './services/keychain/KeychainServiceDriver.node';
 import KeychainServiceDriverElectron from './services/keychain/KeychainServiceDriver.electron';
 import { setLocale } from './locale';
@@ -29,11 +29,10 @@ import { setDateFormat, setTimeFormat, setTimeLocale } from '@joplin/utils/time'
 import { reg } from './registry';
 import time from './time';
 import BaseSyncTarget from './BaseSyncTarget';
-import reduxSharedMiddleware from './components/shared/reduxSharedMiddleware';
 import dns = require('dns');
+import reduxSharedMiddleware from './components/shared/reduxSharedMiddleware';
 import fs = require('fs-extra');
 import { EventEmitter } from 'events';
-const syswidecas = require('./vendor/syswide-cas');
 import SyncTargetRegistry from './SyncTargetRegistry';
 import SyncTargetFilesystem from './SyncTargetFilesystem';
 import SyncTargetNextcloud from './SyncTargetNextcloud';
@@ -55,6 +54,7 @@ import SyncTargetJoplinCloud from './SyncTargetJoplinCloud';
 import { setAutoFreeze } from 'immer';
 import { getEncryptionEnabled } from './services/synchronizer/syncInfoUtils';
 import { loadMasterKeysFromSettings, migrateMasterPassword, migratePpk } from './services/e2ee/utils';
+import { ALL_NOTES_FILTER_ID } from './reserved-ids';
 import SyncTargetNone from './SyncTargetNone';
 import { setRSA } from './services/e2ee/ppk/ppk';
 import RSA from './services/e2ee/ppk/RSA.node';
@@ -73,8 +73,11 @@ import getAppName from './getAppName';
 import PerformanceLogger from './PerformanceLogger';
 import Synchronizer from './Synchronizer';
 import NoteLockKey from './services/noteLock/NoteLockKey';
+import isNoteLockEnabled from './services/noteLock/isNoteLockEnabled';
 import NoteLockSession from './services/noteLock/NoteLockSession';
 import NoteLockService from './services/noteLock/NoteLockService';
+import setExtraRootCertificates from './utils/tls/setExtraRootCertificates';
+import { BuiltInMetadataKeys } from './models/settings/builtInMetadata';
 
 const appLogger: LoggerWrapper = Logger.create('App');
 const perfLogger = PerformanceLogger.create();
@@ -90,6 +93,13 @@ export interface StartOptions {
 	appId?: string;
 }
 export const safeModeFlagFilename = 'force-safe-mode-on-next-start';
+
+export const shouldPreserveSelectedNoteOnSmartFilterSelect = (state: State, smartFilterId: string) => {
+	if (smartFilterId !== ALL_NOTES_FILTER_ID) return true;
+
+	const selectedNote = stateUtils.selectedNote(state);
+	return !!selectedNote && !selectedNote.deleted_time && !selectedNote.is_conflict;
+};
 
 export default class BaseApplication {
 
@@ -268,6 +278,10 @@ export default class BaseApplication {
 			}
 		}
 
+		// The active window may have changed while the note query was running. Applying this
+		// result to another window would replace its note list and selection with stale state.
+		if (this.store().getState().windowId !== state.windowId) return;
+
 		this.store().dispatch({
 			type: 'SET_HIGHLIGHTED',
 			words: highlightedWords,
@@ -372,7 +386,8 @@ export default class BaseApplication {
 	}
 
 	protected async applySettingsSideEffects(action: { type?: string; key?: string; keys?: string[] } = null) {
-		const sideEffects: Record<string, ()=> Promise<void>> = {
+		type SideEffects = Partial<Record<BuiltInMetadataKeys, ()=> Promise<void>>>;
+		const sideEffects: SideEffects = {
 			'dateFormat': async () => {
 				time.setLocale(Setting.value('locale'));
 				setTimeLocale(Setting.value('locale'));
@@ -385,11 +400,13 @@ export default class BaseApplication {
 				process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = Setting.value('net.ignoreTlsErrors') ? '0' : '1';
 			},
 			'net.customCertificates': async () => {
-				const caPaths = Setting.value('net.customCertificates').split(',');
-				for (let i = 0; i < caPaths.length; i++) {
-					const f = caPaths[i].trim();
-					if (!f) continue;
-					syswidecas.addCAs(f);
+				const caPaths = Setting.value('net.customCertificates')
+					.split(',')
+					.filter(path => !!path.trim());
+				try {
+					await setExtraRootCertificates(caPaths.map(path => ({ path })));
+				} catch (error) {
+					this.logger().error('Failed to add extra CA certificates:', error);
 				}
 			},
 			'net.proxyEnabled': async () => {
@@ -409,6 +426,10 @@ export default class BaseApplication {
 			//   to do.
 			'syncInfoCache': async () => {
 				appLogger.info('"syncInfoCache" was changed - setting up encryption related code');
+
+				// The note lock session only detects a synced key change lazily; polling here locks
+				// it (and notifies the UI) as soon as the change arrives.
+				if (isNoteLockEnabled()) NoteLockSession.instance().isUnlocked();
 
 				await loadMasterKeysFromSettings(EncryptionService.instance());
 				const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
@@ -451,18 +472,18 @@ export default class BaseApplication {
 		sideEffects['encryption.passwordCache'] = sideEffects['syncInfoCache'];
 		sideEffects['encryption.masterPassword'] = sideEffects['syncInfoCache'];
 		sideEffects['sync.maxConcurrentConnections'] = sideEffects['net.proxyEnabled'];
-		sideEffects['sync.proxyTimeout'] = sideEffects['net.proxyEnabled'];
-		sideEffects['sync.proxyUrl'] = sideEffects['net.proxyEnabled'];
+		sideEffects['net.proxyTimeout'] = sideEffects['net.proxyEnabled'];
+		sideEffects['net.proxyUrl'] = sideEffects['net.proxyEnabled'];
 		sideEffects['ai.chat.baseUrl'] = sideEffects['ai.chat.providerType'];
 		sideEffects['ai.chat.apiKey'] = sideEffects['ai.chat.providerType'];
 		sideEffects['ai.chat.model'] = sideEffects['ai.chat.providerType'];
 
 		if (action) {
-			const effect = sideEffects[action.key];
+			const effect = sideEffects[action.key as keyof SideEffects];
 			if (effect) await effect();
 		} else {
 			for (const key in sideEffects) {
-				await sideEffects[key]();
+				await sideEffects[key as keyof SideEffects]();
 			}
 		}
 	}
@@ -471,6 +492,7 @@ export default class BaseApplication {
 	protected async generalMiddleware(store: any, next: any, action: any) {
 		// appLogger.debug('Reducer action', this.reducerActionToString(action));
 
+		const previousState = store.getState() as State;
 		const result = next(action);
 		let refreshNotes = false;
 		let doRefreshFolders: boolean | string = false;
@@ -480,6 +502,22 @@ export default class BaseApplication {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mirrors the generalMiddleware variance above; reduxSharedMiddleware accepts the same union
 		await reduxSharedMiddleware(store, next, action, ((action: any) => { this.dispatch(action); }) as any);
 		const newState = store.getState() as State;
+		const activeNoteSourceChanged = action.type === 'NOTE_UPDATE_ONE' &&
+			previousState.windowId !== defaultWindowId &&
+			previousState.windowId === newState.windowId && (
+			previousState.notesParentType !== newState.notesParentType ||
+				previousState.selectedFolderId !== newState.selectedFolderId ||
+				previousState.selectedSmartFilterId !== newState.selectedSmartFilterId ||
+				previousState.selectedTagId !== newState.selectedTagId ||
+				previousState.selectedSearchId !== newState.selectedSearchId
+		);
+		if (activeNoteSourceChanged) {
+			Setting.setValue('activeFolderId', newState.selectedFolderId);
+			Setting.setValue('notesParent', serializeNotesParent(getNotesParent(newState)));
+			this.currentFolder_ = newState.selectedFolderId ? await Folder.load(newState.selectedFolderId) : null;
+			refreshNotes = true;
+			refreshNotesUseSelectedNoteId = true;
+		}
 
 		if (this.hasGui() && ['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
 			if (!(await reg.syncTarget().syncStarted())) void reg.scheduleSync(reg.syncAsYouTypeInterval(), { syncSteps: Synchronizer.partialSyncSteps });
@@ -543,13 +581,16 @@ export default class BaseApplication {
 
 		if (action.type === 'SMART_FILTER_SELECT') {
 			refreshNotes = true;
-			refreshNotesUseSelectedNoteId = true;
+			refreshNotesUseSelectedNoteId = shouldPreserveSelectedNoteOnSmartFilterSelect(newState, action.id);
 		}
 
 		// Switching windows can also change which note(s) and which note parent type is selected.
 		// Refreshing notes after switching windows helps ensure that the selected note/tags/other state
 		// is correct for the current window.
 		if (action.type === 'WINDOW_FOCUS' && action.lastWindowId !== action.windowId) {
+			Setting.setValue('activeFolderId', newState.selectedFolderId);
+			Setting.setValue('notesParent', serializeNotesParent(getNotesParent(newState)));
+			this.currentFolder_ = newState.selectedFolderId ? await Folder.load(newState.selectedFolderId) : null;
 			refreshNotes = true;
 			refreshNotesUseSelectedNoteId = true;
 		}

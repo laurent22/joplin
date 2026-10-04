@@ -1,7 +1,7 @@
 import checkProviderIsSupported from './webDAVUtils';
 import Setting from '../models/Setting';
 
-describe('checkProviderIsSupported', () => {
+describe('webDAVUtils', () => {
 	describe('when no unsupported provider is already configured', () => {
 		beforeAll(() => {
 			Setting.setValue('sync.allowUnsupportedProviders', 0);

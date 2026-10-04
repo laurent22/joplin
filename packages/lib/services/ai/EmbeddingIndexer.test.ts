@@ -1,4 +1,4 @@
-import { setupDatabaseAndSynchronizer, switchClient, db, msleep } from '../../testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, db, msleep, withWarningSilenced } from '../../testing/test-utils';
 import Setting from '../../models/Setting';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
@@ -342,7 +342,9 @@ describe('EmbeddingIndexer', () => {
 		AiService.instance().setEmbeddingProvider(failingProvider);
 
 		// First tick processes both — bad fails, good succeeds.
-		await EmbeddingIndexer.instance().maintenance();
+		await withWarningSilenced(/synthetic failure/, async () => {
+			await EmbeddingIndexer.instance().maintenance();
+		});
 		// Second tick must NOT retry the bad note (would re-incur failureCalls).
 		await EmbeddingIndexer.instance().maintenance();
 		await EmbeddingIndexer.instance().maintenance();
@@ -362,7 +364,9 @@ describe('EmbeddingIndexer', () => {
 		Setting.setValue('ai.enabled', true);
 		const spy = jest.spyOn(NoteEmbedding, 'vectorSearchAvailable').mockReturnValue(false);
 		try {
-			await EmbeddingIndexer.instance().runInBackground();
+			await withWarningSilenced(/Not starting background indexer: sqlite-vec extension is not loaded/, async () => {
+				await EmbeddingIndexer.instance().runInBackground();
+			});
 			const status = await EmbeddingIndexer.instance().getStatus();
 			expect(status.indexerState).toBe('vector-search-unavailable');
 		} finally {

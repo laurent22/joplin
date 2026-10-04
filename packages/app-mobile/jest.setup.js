@@ -1,5 +1,6 @@
 /* eslint-disable jest/require-top-level-describe */
 
+require('../../jest.base-setup.js')();
 const { afterEachCleanUp, afterAllCleanUp } = require('@joplin/lib/testing/test-utils.js');
 const shim = require('@joplin/lib/shim').default;
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
@@ -12,7 +13,6 @@ const uuid = require('@joplin/lib/uuid').default;
 const Setting = require('@joplin/lib/models/Setting').default;
 const sqlite3 = require('sqlite3');
 const React = require('react');
-require('../../jest.base-setup.js')();
 
 import { setImmediate } from 'timers';
 
@@ -70,6 +70,26 @@ jest.mock('./components/ExtendedWebView', () => {
 
 jest.mock('./components/CameraView/Camera', () => {
 	return require('./components/CameraView/Camera/index.jest');
+});
+
+// The React Native Modal mock never calls onDismiss, but the real Modal on iOS does when close
+// Tests run as iOS by default so this mock calls it too.
+jest.mock('react-native/Libraries/Modal/Modal', () => {
+	const React = require('react');
+	const MockModal = jest.requireActual('react-native/jest/mocks/Modal').default;
+	const Modal = (props) => {
+		const wasVisibleRef = React.useRef(props.visible);
+		const onDismissRef = React.useRef(props.onDismiss);
+		onDismissRef.current = props.onDismiss;
+		React.useEffect(() => {
+			if (wasVisibleRef.current && !props.visible) {
+				onDismissRef.current?.();
+			}
+			wasVisibleRef.current = props.visible;
+		}, [props.visible]);
+		return React.createElement(MockModal, props);
+	};
+	return { __esModule: true, default: Modal };
 });
 
 jest.mock('@react-native-clipboard/clipboard', () => {

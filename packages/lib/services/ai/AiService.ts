@@ -8,8 +8,26 @@ import ChatProviderBase from './providers/ChatProviderBase';
 import OpenAiCompatibleProvider from './providers/OpenAiCompatible';
 import AnthropicProvider from './providers/Anthropic';
 import JoplinCloudProvider from './providers/JoplinCloud';
+import TestProvider from './providers/TestProvider';
 
 const logger = Logger.create('AiService');
+
+// Bridge from packages/lib to a UI store without importing Redux. Desktop
+// registers a dispatcher at boot; other apps leave it null and AiService
+// silently no-ops. Payload is partial so callers (or the reducer) can bump
+// individual fields without clobbering unrelated ones.
+export interface AiStatusUpdate {
+	degraded?: boolean;
+	tokensUsed?: number;
+	tokensBudget?: number;
+	lastToastShownAt?: number | null;
+}
+
+let statusListener_: ((update: AiStatusUpdate)=> void) | null = null;
+
+export const setAiStatusListener = (fn: ((update: AiStatusUpdate)=> void) | null) => {
+	statusListener_ = fn;
+};
 
 export default class AiService {
 
@@ -57,6 +75,10 @@ export default class AiService {
 			}));
 		}
 
+		if (providerType === 'test-provider') {
+			return this.attachRecorder(new TestProvider());
+		}
+
 		throw new JoplinError(`Unknown AI provider type: ${providerType}`, 'aiUnknownProvider');
 	}
 
@@ -95,7 +117,33 @@ export default class AiService {
 			throw new JoplinError('Remote AI access is not allowed. Enable "Allow remote AI providers" in Settings → AI to use cloud-hosted models.', 'aiRemoteNotAllowed');
 		}
 
-		return provider.chat(messages, options);
+		const result = await provider.chat(messages, options);
+		this.applyStatusFromResult(result);
+		return result;
+	}
+
+	// Best-effort: a listener/persistence failure must not turn a successful
+	// chat into a failed one.
+	private applyStatusFromResult(result: ChatResult) {
+		if (result.degraded === undefined && result.tokensUsed === undefined && result.tokensBudget === undefined) return;
+
+		const update: AiStatusUpdate = {};
+		if (result.degraded !== undefined) update.degraded = result.degraded;
+		if (result.tokensUsed !== undefined) update.tokensUsed = result.tokensUsed;
+		if (result.tokensBudget !== undefined) update.tokensBudget = result.tokensBudget;
+
+		try {
+			if (statusListener_) statusListener_(update);
+		} catch (error) {
+			logger.warn('AI status listener failed:', error);
+		}
+
+		try {
+			const current = Setting.value('ai.status') as unknown as Record<string, unknown>;
+			Setting.setValue('ai.status', { ...current, ...update } as never);
+		} catch (error) {
+			logger.warn('Failed to persist ai.status:', error);
+		}
 	}
 
 	// Called when ai.enabled flips from false to true. If the user has never

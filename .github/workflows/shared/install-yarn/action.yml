@@ -1,0 +1,22 @@
+name: 'Install Yarn'
+description: 'Enable Corepack and install the pinned Yarn version, with retries'
+runs:
+  using: 'composite'
+  steps:
+    - name: Install Yarn
+      shell: bash
+      # https://yarnpkg.com/getting-started/install
+      #
+      # `corepack enable` only sets up the shims - Corepack downloads the
+      # pinned Yarn version from repo.yarnpkg.com on first use. That fetch has
+      # a short timeout and no built-in retry, so a transient network blip on
+      # CI fails the whole job. Prepare it eagerly with a retry loop.
+      env:
+        COREPACK_NETWORK_TIMEOUT: '60000'
+      run: |
+        corepack enable
+        for i in 1 2 3; do
+          corepack prepare --activate && break
+          echo "corepack prepare failed (attempt $i), retrying in 15s..."
+          sleep 15
+        done

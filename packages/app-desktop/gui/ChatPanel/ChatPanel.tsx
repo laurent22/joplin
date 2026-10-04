@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { _ } from '@joplin/lib/locale';
@@ -10,42 +10,43 @@ import Logger from '@joplin/utils/Logger';
 import { stateUtils } from '@joplin/lib/reducer';
 import { AiChatMessage, AppState } from '../../app.reducer';
 import { runNoteChat } from '@joplin/lib/services/ai/noteChat';
-import { chatAvailability } from '@joplin/lib/services/ai/availability';
+import { AvailabilityReason, chatAvailability } from '@joplin/lib/services/ai/availability';
 import { WindowIdContext } from '../NewWindowOrIFrame';
+import AiDegradedNotice from '../AiDegradedNotice';
 import { ChatMessage, ChatRole, ChatToolMessage } from '@joplin/lib/services/ai/types';
 import JoplinError from '@joplin/lib/JoplinError';
 import eventManager, { EventName, ItemChangeEvent } from '@joplin/lib/eventManager';
 import { Second } from '@joplin/utils/time';
-import InlineMarkdownDisplay from '../InlineMarkdownDisplay';
+import ChatMessageItem from './ChatMessageItem';
+import NavService from '@joplin/lib/services/NavService';
+import ChatConversation from '@joplin/lib/models/ChatConversation';
+import uuid from '@joplin/lib/uuid';
+import { focus } from '@joplin/lib/utils/focusHandler';
+import dialogs from '../dialogs';
+import ChatHistory, { Conversation } from './ChatHistory';
+import Button, { ButtonLevel } from '../Button/Button';
 
 const logger = Logger.create('ChatPanel');
 
 interface Props {
 	themeId: number;
 	available: boolean;
+	availabilityReason?: AvailabilityReason;
 	unavailableHint: string;
 	providerType: string;
 	noteId: string | null;
 	noteTitle: string;
 	noteIsEncrypted: boolean;
 	messages: AiChatMessage[];
+	conversationId?: string|null;
+	aiDegraded: boolean;
+	showToolbarButton: boolean;
 	dispatch: Dispatch;
 }
 
 const disclosureSetting = 'ai.chat.disclosureAcknowledged';
 
-let nextMessageId = 0;
-const makeId = () => `m-${Date.now()}-${++nextMessageId}`;
-
-const editsSummary = (actions: ChatMessage[], applied: number, missed: number) => {
-	if (applied + missed === 0) return '';
-	if (missed === 0 && applied > 1) return _('%d edit(s) applied.', applied);
-	if (missed === 0) {
-		const toolResults = actions.filter(action => action.role === ChatRole.Tool);
-		return toolResults.map(result => result.userDescription).join('\n');
-	}
-	return _('%d edit(s) applied, %d could not be placed automatically.', applied, missed);
-};
+const makeId = () => uuid.create();
 
 const waitForNextNoteChangeOrTimeout = (noteId: string, timeout: number) => {
 	return new Promise<void>((resolve) => {
@@ -89,12 +90,63 @@ const useCancelCallback = () => {
 	return { abortControllerRef, cancelRequest };
 };
 
+const useHasFocus = () => {
+	const [hasFocus, setHasFocus] = useState(false);
+	const onFocus = useCallback(() => setHasFocus(true), []);
+	const onBlur: React.FocusEventHandler<HTMLDivElement> = useCallback((event) => {
+		const chatPanelContainer = event.currentTarget;
+		const newElementWithFocus = event.relatedTarget;
+		const movingFocusOut = !chatPanelContainer.contains(newElementWithFocus);
+
+		// Avoid quickly toggling hasFocus: onBlur/onFocus are emitted when moving focus between
+		// elements within the container.
+		if (movingFocusOut) {
+			setHasFocus(false);
+		}
+	}, []);
+
+	return { hasFocus, onFocus, onBlur };
+};
+
 // Single-window for v1: mapStateToProps hard-codes defaultWindowId and the
 // toggle writes to the app-wide layout. A second window would mirror the main.
 const ChatPanel: React.FC<Props> = (props) => {
 	const { dispatch, messages } = props;
 	const [input, setInput] = useState('');
+	const [historyOpen, setHistoryOpen] = useState(false);
+	const historyId = useId();
+	const [conversations, setConversations] = useState<Conversation[]>([]);
+	const loadConversationHistory = useCallback(async (search = '') => {
+		try {
+			setConversations(await ChatConversation.history(search));
+		} catch (error) {
+			logger.error('Could not load chat conversations', error);
+		}
+	}, []);
+	const handleHistoryToggle = useCallback(async () => {
+		setHistoryOpen(!historyOpen);
+		if (historyOpen) return;
+		await loadConversationHistory();
+	}, [historyOpen, loadConversationHistory]);
+	const historyPopupRef = useRef<HTMLDivElement>(null);
+	const historyButtonRef = useRef<HTMLButtonElement>(null);
+	const closeHistory = useCallback(() => {
+		setHistoryOpen(false);
+		focus('ChatPanel::closeHistory', historyButtonRef.current);
+	}, []);
+	useEffect(() => {
+		if (!historyOpen) return () => {};
+		const onMouseDown = (event: MouseEvent) => {
+			const target = event.target as Node;
+			if (historyPopupRef.current?.contains(target) || historyButtonRef.current?.contains(target)) return;
+			setHistoryOpen(false);
+		};
+		const doc = historyButtonRef.current.ownerDocument;
+		doc.addEventListener('mousedown', onMouseDown);
+		return () => doc.removeEventListener('mousedown', onMouseDown);
+	}, [historyOpen]);
 	const [sending, setSending] = useState(false);
+	const archivingRef = useRef(false);
 	const [disclosureShown, setDisclosureShown] = useState<boolean>(() => {
 		try {
 			return !!Setting.value(disclosureSetting);
@@ -111,17 +163,41 @@ const ChatPanel: React.FC<Props> = (props) => {
 	noteIdRef.current = props.noteId;
 	const messagesEndRef = useRef<HTMLDivElement>(null);
 
+	const { hasFocus, onFocus, onBlur } = useHasFocus();
+
 	const { abortControllerRef, cancelRequest } = useCancelCallback();
 
 	const windowId = useContext(WindowIdContext);
 
-	const appendMessage = useCallback((message: AiChatMessage) => {
-		dispatch({ type: 'AI_CHAT_APPEND', windowId, message });
-	}, [dispatch, windowId]);
+	const appendMessage = useCallback(async (message: Omit<AiChatMessage, 'noteId' | 'noteTitle' | 'createdTime'>) => {
+		const fullMessage: AiChatMessage = { ...message, createdTime: Date.now(), noteId: props.noteId ?? '', noteTitle: props.noteId ? props.noteTitle : '' };
+		try {
+			await ChatConversation.addMessage(props.conversationId, fullMessage);
+		} catch (error) {
+			logger.error('Could not save chat message:', error);
+		}
+	}, [props.noteId, props.noteTitle, props.conversationId]);
 
-	const addToolResult = useCallback((result: ChatToolMessage) => {
-		dispatch({ type: 'AI_CHAT_ADD_TOOL_RESULT', windowId, toolCall: result });
-	}, [dispatch, windowId]);
+	const removeMessage = useCallback(async (id: string) => {
+		try {
+			await ChatConversation.removeMessage(props.conversationId, id);
+		} catch (error) {
+			logger.error('Could not remove chat message:', error);
+		}
+	}, [props.conversationId]);
+
+	const addToolResult = useCallback(async (result: ChatToolMessage) => {
+		try {
+			await ChatConversation.addToolResult(props.conversationId, result);
+		} catch (error) {
+			logger.error('Could not save chat tool result:', error);
+		}
+	}, [props.conversationId]);
+
+	useEffect(() => {
+		if (props.conversationId) return;
+		dispatch({ type: 'AI_CHAT_OPEN', windowId, conversationId: uuid.create(), messages });
+	}, [props.conversationId, dispatch, windowId, messages]);
 
 	// Drop a separator when the active note changes mid-conversation. Skip
 	// the first ever opened note (no prior context to separate from).
@@ -130,11 +206,13 @@ const ChatPanel: React.FC<Props> = (props) => {
 		lastNoteIdRef.current = props.noteId;
 		if (prev === null || prev === props.noteId || !props.noteId) return;
 		if (messagesLengthRef.current === 0) return;
-		appendMessage({
+
+		const text = _('— now viewing: %s —', props.noteTitle || _('(untitled)'));
+		void appendMessage({
 			id: makeId(),
 			role: 'separator',
-			text: _('— now viewing: %s —', props.noteTitle || _('(untitled)')),
-			raw: [],
+			text,
+			raw: [{ role: ChatRole.User, content: _('Switched notes: %s', text) }],
 		});
 	}, [props.noteId, props.noteTitle, appendMessage]);
 
@@ -153,11 +231,16 @@ const ChatPanel: React.FC<Props> = (props) => {
 	const requiresDisclosure = props.providerType !== 'joplin-cloud';
 	const showDisclosure = requiresDisclosure && !disclosureShown && messages.length === 0;
 
+	const handleCancel = useCallback(() => {
+		cancelRequest();
+		void appendMessage({ id: makeId(), role: 'assistant', text: _('(Cancelled)'), raw: [] });
+	}, [cancelRequest, appendMessage]);
+
 	const handleSend = useCallback(async () => {
 		const text = input.trim();
 		if (!text || sending) return;
 		if (!props.noteId) {
-			appendMessage({
+			void appendMessage({
 				id: makeId(), role: 'error', text: _('Open a note to start chatting.'), raw: [],
 			});
 			return;
@@ -171,11 +254,17 @@ const ChatPanel: React.FC<Props> = (props) => {
 		// Captured so we can roll it back on failure — otherwise a retry would
 		// send the prior user turn as history alongside the new prompt.
 		const userTurnId = makeId();
-		let hadSuccessfulResponse = false;
-		appendMessage({ id: userTurnId, role: 'user', text, raw: [] });
+		let hadVisibleResponse = false;
+		void appendMessage({
+			id: userTurnId,
+			role: 'user',
+			text,
+			raw: [{ role: ChatRole.User, content: text }],
+		});
 
 		try {
 			const note = await Note.load(props.noteId);
+			if (abortController.signal.aborted) return;
 			if (!note) throw new Error(`Note not found: ${props.noteId}`);
 
 			const getContext = async () => {
@@ -195,6 +284,8 @@ const ChatPanel: React.FC<Props> = (props) => {
 					body: note.body,
 					title: note.title,
 					selection,
+					noteId: note.id,
+					folderId: note.parent_id,
 				};
 			};
 
@@ -214,15 +305,16 @@ const ChatPanel: React.FC<Props> = (props) => {
 					// System messages are not shown in the UI
 					if (entry.role === ChatRole.System) continue;
 
-					hadSuccessfulResponse = true;
-
 					if (entry.role === ChatRole.Tool) {
-						addToolResult(entry);
+						void addToolResult(entry);
 					} else {
-						appendMessage({
+						hadVisibleResponse ||= !entry.hide;
+
+						void appendMessage({
 							id: makeId(),
 							role: entry.role,
 							text: entry.content,
+							hide: entry.hide,
 							raw: [entry],
 						});
 					}
@@ -265,7 +357,7 @@ const ChatPanel: React.FC<Props> = (props) => {
 						await changeListener;
 					},
 					displayError: (message) => {
-						appendMessage({ id: makeId(), role: 'error', text: message, raw: [] });
+						void appendMessage({ id: makeId(), role: 'error', text: message, raw: [] });
 					},
 				}, onHistoryChanged, abortController.signal,
 			);
@@ -273,26 +365,77 @@ const ChatPanel: React.FC<Props> = (props) => {
 			logger.warn('Chat failed:', error);
 			if (abortController.signal.aborted) return;
 
-			if (!hadSuccessfulResponse) {
-				dispatch({ type: 'AI_CHAT_REMOVE', windowId, id: userTurnId });
+			if (!hadVisibleResponse) {
+				void removeMessage(userTurnId);
 				setInput(text);
 			}
-			appendMessage({ id: makeId(), role: 'error', text: error.message || _('Something went wrong.'), raw: [] });
+			void appendMessage({ id: makeId(), role: 'error', text: error.message || _('Something went wrong.'), raw: [] });
 		} finally {
 			setSending(false);
 		}
-	}, [input, sending, props.noteId, conversationTurns, windowId, addToolResult, appendMessage, dispatch, cancelRequest, abortControllerRef]);
+	}, [input, sending, props.noteId, conversationTurns, windowId, addToolResult, appendMessage, removeMessage, cancelRequest, abortControllerRef]);
 
 	const handleAcknowledgeDisclosure = useCallback(() => {
 		Setting.setValue(disclosureSetting, true);
 		setDisclosureShown(true);
 	}, []);
 
-	const handleReset = useCallback(() => {
+	const handleNewChat = useCallback(() => {
+		if (archivingRef.current) return;
 		cancelRequest();
-
-		dispatch({ type: 'AI_CHAT_RESET', windowId: windowId });
+		// Only saved once a message is sent so empty chats don't show up in history
+		dispatch({ type: 'AI_CHAT_OPEN', windowId, conversationId: uuid.create(), messages: [] });
 	}, [dispatch, windowId, cancelRequest]);
+
+	const handleOpenConversation = useCallback(async (conversationId: string) => {
+		if (conversationId === props.conversationId || archivingRef.current) return;
+		archivingRef.current = true;
+		cancelRequest();
+		try {
+			await CommandService.instance().executeInWindow('openAiChatConversation', { windowId, args: [conversationId] });
+		} catch (error) {
+			logger.error('Could not open chat conversation:', error);
+		} finally {
+			archivingRef.current = false;
+		}
+	}, [windowId, cancelRequest, props.conversationId]);
+
+	const handleClose = useCallback(() => {
+		void CommandService.instance().executeInWindow('toggleAiChat', { windowId: windowId, args: [] });
+	}, [windowId]);
+
+	const handleDeleteConversation = useCallback(async (conversationId: string) => {
+		if (archivingRef.current) return;
+		archivingRef.current = true;
+		if (conversationId === props.conversationId) cancelRequest();
+		try {
+			await ChatConversation.deleteConversation(conversationId);
+			setConversations(current => current.filter(item => item.id !== conversationId));
+			dispatch({ type: 'AI_CHAT_DELETE', conversationId });
+		} catch (error) {
+			logger.error('Could not delete chat conversation:', error);
+			await dialogs.alert(_('Could not delete conversation.'));
+		} finally {
+			archivingRef.current = false;
+		}
+	}, [dispatch, cancelRequest, props.conversationId]);
+
+	const handleRenameConversation = useCallback(async (conversation: Conversation, newTitle: string) => {
+		const title = newTitle.trim();
+		if (!title || title === conversation.title) return;
+		try {
+			await ChatConversation.renameConversation(conversation.id, title);
+			setConversations(current => current.map(item => item.id === conversation.id ? { ...item, title } : item));
+		} catch (error) {
+			logger.error('Could not rename chat conversation:', error);
+			await dialogs.alert(_('Could not rename conversation.'));
+		}
+	}, []);
+
+	const handleHideToolbarButton = useCallback(() => {
+		Setting.setValue('ai.chat.showToolbarButton', false);
+		handleClose();
+	}, [handleClose]);
 
 	const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLTextAreaElement>) => {
 		// Don't send while an IME composition is in flight — Enter commits
@@ -303,79 +446,51 @@ const ChatPanel: React.FC<Props> = (props) => {
 		}
 	}, [handleSend, sending]);
 
-	if (!props.available) {
-		return (
-			<div className='chat-panel'>
-				<div className='header'>
-					<span className='title'>{_('AI Chat')}</span>
-				</div>
+	const renderContent = () => {
+		if (!props.available) {
+			const content = (
 				<div className='disabled-message'>
-					{props.unavailableHint}
+					<div className='hint'>{props.unavailableHint}</div>
+					{props.showToolbarButton && <>
+						<div className='hint'>{_('If you do not want to use the AI features, you may hide the toolbar button:')}</div>
+						<Button
+							level={ButtonLevel.Secondary}
+							title={_('Hide the AI Chat button')}
+							onClick={handleHideToolbarButton}
+						/>
+						<div className='hint'>{_('(You can show it again from Settings → AI)')}</div>
+					</>}
 				</div>
-			</div>
-		);
-	}
-
-	if (props.noteIsEncrypted) {
-		return (
-			<div className='chat-panel'>
-				<div className='header'>
-					<span className='title'>{_('AI Chat')}</span>
-				</div>
+			);
+			return { content, showingMessages: false };
+		}
+		if (props.noteIsEncrypted) {
+			const content = (
 				<div className='disabled-message'>
 					{_('This note is encrypted and cannot be used with AI Chat.')}
 				</div>
-			</div>
-		);
-	}
+			);
+			return { content, showingMessages: false };
+		}
 
-	return (
-		<div className='chat-panel'>
-			<div className='header'>
-				<span className='title'>{_('AI Chat')}</span>
-				{messages.length > 0 && (
-					<button type='button' className='reset' onClick={handleReset}>{_('Reset')}</button>
-				)}
-			</div>
-			<div className='messages'>
-				{messages.length === 0 && (
+		const visibleMessages = messages.filter(m => !m.hide);
+
+		const content = <>
+			{props.aiDegraded && <AiDegradedNotice className='degraded-status' />}
+			<div className='messages' aria-live={hasFocus ? 'polite' : undefined}>
+				{visibleMessages.length === 0 && (
 					<div className='empty'>
 						{_('Ask about this note, or request changes. Select text in the editor first to scope the request to that selection.')}
+						<br/>
+						<br/>
+						<button
+							type='button'
+							className='link-button'
+							onClick={() => NavService.go('Config', { props: { defaultSection: 'ai.tools' } })}
+						>{_('Manage capabilities')}</button>
 					</div>
 				)}
-				{messages.map(m => {
-					if (m.role === 'separator') {
-						return <div key={m.id} className='separator'>{m.text}</div>;
-					}
-					if (m.role === 'error') {
-						return <div key={m.id} className='error'>{m.text}</div>;
-					}
-
-					const summary = m.role === 'assistant' ? editsSummary(m.raw, m.editsApplied ?? 0, m.editsMissed ?? 0) : '';
-					// Always show something in the message box:
-					const textContent = !m.text && !summary ? _('(no message)') : m.text;
-
-					const renderMarkdown = m.role === 'assistant';
-					const content = renderMarkdown
-						? <InlineMarkdownDisplay
-							className='content'
-							markdown={textContent}
-							allowLinks={false} />
-						: <div className='content'>{textContent}</div>;
-
-					return (
-						<div key={m.id} className={`turn -${m.role}`}>
-							{content}
-							{summary && (
-								<div className='meta'>
-									{(m.editsMissed ?? 0) > 0
-										? <span className='warning'>{summary}</span>
-										: <span>{summary}</span>}
-								</div>
-							)}
-						</div>
-					);
-				})}
+				{visibleMessages.map(m => <ChatMessageItem key={m.id} message={m}/>)}
 				<div ref={messagesEndRef} />
 			</div>
 			<div className='composer'>
@@ -398,15 +513,76 @@ const ChatPanel: React.FC<Props> = (props) => {
 					<button
 						type='button'
 						className='send'
-						onClick={() => { void handleSend(); }}
-						disabled={sending || !input.trim()}
-						aria-label={sending ? _('Sending') : _('Send')}
-						title={sending ? _('Sending…') : _('Send')}
+						onClick={sending ? handleCancel : handleSend}
+						disabled={!sending && !input.trim()}
+						aria-label={sendButtonLabel}
+						title={sendButtonLabel}
 					>
-						<i className={sending ? 'fas fa-spinner' : 'fas fa-paper-plane'} aria-hidden='true' />
+						<i className={sending ? 'fas fa-stop' : 'fas fa-paper-plane'} aria-hidden='true' />
 					</button>
 				</div>
 			</div>
+		</>;
+
+		return { content, showingMessages: visibleMessages.length > 0 };
+	};
+
+	const sendButtonLabel = sending ? _('Stop generating') : _('Send');
+	const closeLabel = _('Close');
+	const newChatLabel = _('New chat');
+	const headerId = useId();
+	const { content, showingMessages } = renderContent();
+
+	return (
+		<div
+			className='chat-panel'
+			role='region'
+			aria-labelledby={headerId}
+			onFocus={onFocus}
+			onBlur={onBlur}
+		>
+			<div className='header chat-panel-header'>
+				<h1 className='title' id={headerId}>{_('AI Chat')}</h1>
+				{props.availabilityReason !== AvailabilityReason.Disabled && (
+					<button
+						type='button'
+						className='history toolbar-button'
+						ref={historyButtonRef}
+						onClick={handleHistoryToggle}
+						title={_('Chat history')}
+						aria-label={_('Chat history')}
+						aria-expanded={historyOpen}
+						aria-controls={historyId}
+					>
+						<i className='toolbar-icon far fa-clock' aria-hidden='true'/>
+					</button>
+				)}
+				{historyOpen && (
+					// Placed right after its button so that Tab moves from the button into the popup
+					<ChatHistory
+						conversations={conversations}
+						currentConversationId={props.conversationId}
+						id={historyId}
+						popupRef={historyPopupRef}
+						onSearchChange={loadConversationHistory}
+						onOpen={handleOpenConversation}
+						onRename={handleRenameConversation}
+						onDelete={handleDeleteConversation}
+						onClose={closeHistory}
+					/>
+				)}
+				<button type='button' className='reset toolbar-button' onClick={handleNewChat} disabled={!showingMessages} title={newChatLabel} aria-label={newChatLabel}>
+					<i className='toolbar-icon fas fa-comment-medical' aria-hidden='true'/>
+				</button>
+				<button
+					type='button'
+					className='close toolbar-button'
+					onClick={handleClose}
+					title={closeLabel}
+					aria-label={closeLabel}
+				><i className='toolbar-icon fas fa-times' role='img' aria-hidden={true}/></button>
+			</div>
+			{content}
 		</div>
 	);
 };
@@ -423,13 +599,19 @@ const mapStateToProps = (state: AppState, ownProps: OwnProps) => {
 	return {
 		themeId: state.settings.theme,
 		available: availability.available,
+		availabilityReason: availability.reason,
 		unavailableHint: availability.hint ?? '',
 		providerType: state.settings['ai.chat.providerType'] || 'openai-compatible',
 		noteId,
 		noteTitle: note?.title || '',
 		noteIsEncrypted: !!note?.encryption_applied,
 		messages: windowState.aiChatMessages || [],
+		conversationId: windowState.aiChatConversationId,
+		aiDegraded: !!state.aiStatus?.degraded,
+		showToolbarButton: !!state.settings['ai.chat.showToolbarButton'],
 	};
 };
 
-export default connect(mapStateToProps)(ChatPanel);
+const ConversationPanel: React.FC<Props> = props => <ChatPanel key={props.conversationId} {...props} />;
+
+export default connect(mapStateToProps)(ConversationPanel);

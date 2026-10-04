@@ -120,14 +120,14 @@ const ProfileListItem: React.FC<ProfileItemProps> = ({ profile, profileConfig, s
 			_('All data, including notes, notebooks and tags will be permanently deleted.'),
 			[
 				{
-					text: _('Delete profile "%s"', profile.name),
-					onPress: () => doIt(),
-					style: 'destructive',
-				},
-				{
 					text: _('Cancel'),
 					onPress: () => {},
 					style: 'cancel',
+				},
+				{
+					text: _('Delete profile "%s"', profile.name),
+					onPress: () => doIt(),
+					style: 'destructive',
 				},
 			],
 		);
@@ -139,19 +139,19 @@ const ProfileListItem: React.FC<ProfileItemProps> = ({ profile, profileConfig, s
 			'',
 			[
 				{
-					text: _('Edit'),
-					onPress: () => onEditProfile(profile.id),
-					style: 'default',
+					text: _('Close'),
+					onPress: () => {},
+					style: 'cancel',
 				},
 				{
 					text: _('Delete'),
 					onPress: () => onDeleteProfile(profile),
-					style: 'default',
+					style: 'destructive',
 				},
 				{
-					text: _('Close'),
-					onPress: () => {},
-					style: 'cancel',
+					text: _('Edit'),
+					onPress: () => onEditProfile(profile.id),
+					style: 'default',
 				},
 			],
 		);

@@ -64,6 +64,44 @@
 			"title": "Route4Me",
 			"imageName": "Route4Me.png",
 			"githubUser": "route4me"
+		},
+		{
+			"url": "https://socialboom.io/",
+			"title": "Buy YouTube, Instagram, TikTok & Facebook Growth Services at Socialboom",
+			"imageName": "Socialboom.png",
+			"githubUser": "doleocent1",
+			"alt": "Buy YouTube, Instagram, TikTok & Facebook Growth Services at Socialboom"
+		},
+		{
+			"url": "https://essaypro.com/",
+			"title": "write my essay EssayPro",
+			"imageName": "EssayPro.png",
+			"alt": "write my essay EssayPro"
+		},
+		{
+			"url": "https://writepaper.com/",
+			"title": "write my paper",
+			"imageName": "WritePaper.png",
+			"alt": "write my paper"
+		},
+		{
+			"url": "https://mypaperhelp.com/",
+			"title": "MyPaperHelp",
+			"imageName": "MyPaperHelp.png",
+			"alt": "MyPaperHelp"
+		},
+		{
+			"url": "https://essaypay.com/",
+			"title": "EssayPay",
+			"imageName": "EssayPay.png",
+			"githubUser": "collegeboom",
+			"alt": "EssayPay"
+		},
+		{
+			"url": "https://essayservice.com/nursing-essay-writing-service",
+			"title": "write my nursing paper today",
+			"imageName": "EssayService.png",
+			"alt": "write my nursing paper today"
 		}
 	]
 }

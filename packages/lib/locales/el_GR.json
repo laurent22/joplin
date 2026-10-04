@@ -2,6 +2,16 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"Το \"%s\" δεν διαθέτει την απαιτούμενη ιδιότητα \"%s\"."
 	],
+	"%d card": [
+		"",
+		""
+	],
+	"%d edit(s) applied, %d could not be placed automatically.": [
+		""
+	],
+	"%d edit(s) applied.": [
+		""
+	],
 	"%d GB": [
 		"%d GB"
 	],
@@ -16,6 +26,9 @@
 	],
 	"%d photo(s) taken": [
 		"%d φωτογραφία(ες) που ελήφθησαν"
+	],
+	"%d sections found": [
+		""
 	],
 	"%s": [
 		"%s"
@@ -50,11 +63,20 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s added to toolbar": [
+		""
+	],
 	"%s cannot be less than %s": [
 		"%s δεν μπορεί να είναι μικρότερο από %s"
 	],
+	"%s input / %s output tokens used.": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"Το %s δεν έχει βελτιστοποιηθεί για συγχρονισμό πολλών μικρών αρχείων, επομένως ο αρχικός συγχρονισμός θα καθυστερήσει."
+	],
+	"%s moved up": [
+		""
 	],
 	"%s must be a valid whole number": [
 		"%s πρέπει να είναι έγκυρος ακέραιος αριθμός"
@@ -101,6 +123,12 @@
 	"(%s)": [
 		"(%s)"
 	],
+	"(empty — double-click to edit)": [
+		""
+	],
+	"(empty)": [
+		""
+	],
 	"(In plugin: %s)": [
 		"(Στο πρόσθετο: %s)"
 	],
@@ -119,6 +147,9 @@
 	"(You may disable this prompt in the options)": [
 		"(μπορείτε να απενεργοποιήσετε αυτό το παράθυρο διαλόγου στις ρυθμίσεις)"
 	],
+	"+ Group": [
+		""
+	],
 	"- Camera: to allow taking a picture and attaching it to a note.": [
 		"- Κάμερα: για να μπορείτε να τραβήξετε μια φωτογραφία και να την επισυνάψετε σε μια σημείωση."
 	],
@@ -127,6 +158,9 @@
 	],
 	"- Storage: to allow attaching files to notes and to enable filesystem synchronisation.": [
 		"- Χώρος αποθήκευσης: για να επιτρέπεται η επισύναψη αρχείων στις σημειώσεις και ο συγχρονισμός αρχείων συστήματος."
+	],
+	"14-day free trial. Cancel anytime during the trial and you won't be charged.": [
+		""
 	],
 	"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign or remove [tag] from [note], to list notes associated with [tag], or to list tags associated with [note]. The command `tag list` can be used to list all the tags (use -l for long option).": [
 		"<tag-command> μπορεί να είναι \"add\", \"remove\", \"list\" ή \"notetags\" για προσθήκη ή αφαίρεση [tag] στη [note], για λίστα σημειώσεων με τη συγκεκριμένη [tag] ή για λίστα ετικετών της συγκεκριμένης [note].τη συγκεκριμένη [tag] ή για λίστα ετικετών της συγκεκριμένης [note]. Η εντολή `tag list` μπορεί να χρησιμοποιηθεί για να πάρετε λίστα με όλες τις ετικέτες (χρησιμοποιήστε το -l για μακρά επιλογή)."
@@ -139,6 +173,9 @@
 	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		"Ένας κατάλογος λέξεων χωρισμένος με κόμμα. Μπορεί να χρησιμοποιηθεί για ασυνήθιστες λέξεις, για να βοηθήσει τη φωνητική πληκτρολόγηση να τις συλλαβίσει σωστά."
+	],
+	"A system-wide keyboard shortcut that toggles the Joplin window. Works even when Joplin is not focused. Example: CommandOrControl+Shift+J. Leave empty to disable.": [
+		""
 	],
 	"A3": [
 		"A3"
@@ -179,6 +216,15 @@
 	"Access denied: Please re-enter your password and/or username": [
 		"Απαγορεύεται η πρόσβαση: παρακαλώ εισάγετε εκ νέου τον κωδικό και/ή το όνομα χρήστη"
 	],
+	"Access your notes from any web browser at %s.": [
+		""
+	],
+	"Accessible": [
+		""
+	],
+	"Accessible mode saves additional information, enabling creation of accessible PDFs. It increases database size by approximately 10-20 KB per page.": [
+		""
+	],
 	"Account": [
 		"Λογαριασμός"
 	],
@@ -200,6 +246,9 @@
 	"Actual Size": [
 		"Πραγματικό μέγεθος"
 	],
+	"Add a text card": [
+		""
+	],
 	"Add body": [
 		"Προσθήκη σώματος κειμένου"
 	],
@@ -208,6 +257,9 @@
 	],
 	"Add new": [
 		"Προσθήκη νέου"
+	],
+	"Add note to whiteboard...": [
+		""
 	],
 	"Add or remove tags:": [
 		"Προσθήκη ή διαγραφή ετικετών:"
@@ -221,8 +273,9 @@
 	"Add to dictionary": [
 		"Προσθήκη στο λεξικό"
 	],
-	"Added tag: %s": [
-		"Προστέθηκε ετικέτα: %s"
+	"Added %d word": [
+		"",
+		""
 	],
 	"Adds tag": [
 		"Προσθέτει ετικέτα"
@@ -242,6 +295,21 @@
 	"Advanced tools": [
 		"Προηγμένα εργαλεία"
 	],
+	"AI": [
+		""
+	],
+	"AI Chat": [
+		""
+	],
+	"AI features are disabled. Enable them in Settings → AI.": [
+		""
+	],
+	"AI is running in reduced-quality mode — monthly allowance exceeded. Credits replenish on a rolling 30-day basis, or you can": [
+		""
+	],
+	"AI usage has exceeded your monthly allowance — responses are using a reduced-quality model. Credits replenish on a rolling 30-day basis. Buy more at %s.": [
+		""
+	],
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
 		"Όλα τα δεδομένα, συμπεριλαμβανομένων των σημειώσεων, των σημειωματάριων και των ετικετών, θα διαγραφούν οριστικά."
 	],
@@ -251,14 +319,38 @@
 	"All notes": [
 		"Όλες οι σημειώσεις"
 	],
+	"All notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"All potential ports are in use - please report the issue at %s": [
 		"Όλες οι πιθανές θύρες χρησιμοποιούνται - αναφέρετε το ζήτημα στο %s"
 	],
 	"All shared folders:": [
 		"Όλοι οι κοινόχρηστοι φάκελοι:"
 	],
+	"Allow editing tags on notes": [
+		""
+	],
+	"Allow editing the current note (chat panel only)": [
+		""
+	],
+	"Allow listing tags": [
+		""
+	],
+	"Allow reading images": [
+		""
+	],
+	"Allow remote AI providers": [
+		""
+	],
+	"Allow semantic search of notes": [
+		""
+	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		"Επιτρέπει την αποσφαλμάτωση φορητών πρόσθετων. Δείτε %s για λεπτομέρειες."
+	],
+	"Already have an account? Log in": [
+		""
 	],
 	"Also displays unset and hidden config variables.": [
 		"Εμφανίζει επίσης μη ορισμένες και κρυφές μεταβλητές."
@@ -287,9 +379,6 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"Βρέθηκε ένα αυτόματα αποθηκευμένο σχέδιο. Να επισυναφθεί αντίγραφό του στην σημείωση;"
 	],
-	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
-		"Προέκυψε σφάλμα κατά την αποστολή της απάντησης. Αυτό μπορεί να συμβεί αν η εφαρμογή είναι εκτός σύνδεσης ή δεν μπορεί να συνδεθεί με τον διακομιστή.\nΣφάλμα: %s"
-	],
 	"An error occurred: %s": [
 		"Συνέβη ένα σφάλμα: %s"
 	],
@@ -299,8 +388,14 @@
 	"Android API level: %d": [
 		"Επίπεδο API Android: %d"
 	],
+	"Anthropic": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		"Κάθε e-mail σε αυτή τη διεύθυνση θα μετατρέπεται σε σημείωση και θα προστίθεται στη συλλογή σας. Η σημείωση θα αποθηκεύεται στο Σημειωματάριο εισερχομένων"
+	],
+	"API key": [
+		""
 	],
 	"Appearance": [
 		"Εμφάνιση"
@@ -322,6 +417,15 @@
 	],
 	"Aritim Dark": [
 		"Aritim Dark"
+	],
+	"Arrow at target": [
+		""
+	],
+	"Ask about this note, or request a change…": [
+		""
+	],
+	"Ask about this note, or request changes. Select text in the editor first to scope the request to that selection.": [
+		""
 	],
 	"Associated tags:": [
 		"Σχετικές ετικέτες:"
@@ -359,6 +463,9 @@
 	"Attachments that could not be downloaded": [
 		"Συνημμένα που δεν ήταν δυνατή η λήψη τους"
 	],
+	"Attention: After resetting your password it will no longer be possible to decrypt any data encrypted with your current password. All encrypted shared notebooks will also be unshared, so please ask the notebook owner to share it again with you.": [
+		""
+	],
 	"Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s": [
 		"Προσοχή: Αν αλλάξετε αυτή τη θέση, βεβαιωθείτε ότι αντιγράφετε όλο το περιεχόμενό σας πριν από το συγχρονισμό, διαφορετικά θα καταργηθούν όλα τα αρχεία! Δείτε τις συνήθεις ερωτήσεις για περισσότερες λεπτομέρειες: %s"
 	],
@@ -373,6 +480,9 @@
 	],
 	"Auto": [
 		"Αυτόματα"
+	],
+	"Auto lock when switching note": [
+		""
 	],
 	"Auto-add disabled accounts for deletion": [
 		"Αυτόματη προσθήκη απενεργοποιημένων λογαριασμών για διαγραφή"
@@ -398,11 +508,20 @@
 	"Back": [
 		"Πίσω"
 	],
+	"Back to %s": [
+		""
+	],
+	"Base URL": [
+		""
+	],
 	"Basic": [
 		"Βασικό"
 	],
 	"Beta": [
 		"Beta"
+	],
+	"Billed annually (%s per user per year respectively).": [
+		""
 	],
 	"Block code": [
 		""
@@ -421,6 +540,9 @@
 	],
 	"Bulleted List": [
 		"Λίστα με κουκκίδες"
+	],
+	"buy more credits": [
+		""
 	],
 	"by %s": [
 		"από %s"
@@ -457,6 +579,9 @@
 	],
 	"Cannot access %s": [
 		"Δεν είναι δυνατή η πρόσβαση στο %s"
+	],
+	"Cannot change a locked note while the session is locked": [
+		""
 	],
 	"Cannot change encrypted item": [
 		"Δεν είναι δυνατή η τροποποίηση κρυπτογραφημένου στοιχείου"
@@ -503,6 +628,9 @@
 	"Case sensitive": [
 		"Case sensitive"
 	],
+	"Certain Markdown formatting is now rendered in the editor by default. For example, **bold** will appear as actual bold text. You can change this behaviour in the \"Editor\" section of Settings.": [
+		""
+	],
 	"Change application layout": [
 		"Αλλαγή διάταξης εφαρμογής"
 	],
@@ -517,6 +645,9 @@
 	],
 	"Characters excluding spaces": [
 		"Χαρακτήρες χωρίς τα κενά"
+	],
+	"Chat provider": [
+		""
 	],
 	"Check elements to display in the toolbar": [
 		"Ελέγξτε τα στοιχεία που θα εμφανίζονται στη γραμμή εργαλείων"
@@ -554,11 +685,17 @@
 	"Clear search": [
 		"Εκκαθάριση αναζήτησης"
 	],
+	"Clears the console output.": [
+		""
+	],
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"Κάντε κλικ στο \"%s\" για να επαναφέρετε τη σημείωση. Θα αντιγραφεί στο σημειωματάριο που ονομάζεται \"%s\". Η τρέχουσα έκδοση της σημείωσης δεν αντικαθίσταται ή τροποποιείται."
 	],
 	"Click \"start\" to attach a new voice memo to the note.": [
 		"Κάντε κλικ στην επιλογή \"έναρξη\" για να επισυνάψετε ένα νέο φωνητικό σημείωμα στη σημείωση."
+	],
+	"Click the eye icon in the toolbar to switch to the Markdown editor and fix the JSON manually.": [
+		""
 	],
 	"Click to add tags...": [
 		"Κάντε κλικ για να προσθέσετε ετικέτες..."
@@ -656,6 +793,12 @@
 	"Configures the size of scrollbars used in the app.": [
 		"Διαμορφώνει το μέγεθος των γραμμών κύλισης που χρησιμοποιούνται στην εφαρμογή."
 	],
+	"Confirm": [
+		"Επιβεβαίωση"
+	],
+	"Confirm credentials": [
+		""
+	],
 	"Confirm password cannot be empty": [
 		"Η επιβεβαίωση του κωδικού πρόσβασης δεν μπορεί να είναι κενή"
 	],
@@ -691,6 +834,9 @@
 	],
 	"Continue": [
 		"Συνέχεια"
+	],
+	"Convert this card into a Joplin note": [
+		""
 	],
 	"Convert to note": [
 		"Μετατροπή σε σημείωση"
@@ -776,6 +922,9 @@
 	],
 	"Create a notebook": [
 		"Δημιουργία σημειωματάριου"
+	],
+	"Create accessible document": [
+		""
 	],
 	"Create new profile...": [
 		"Δημιουργία νέου προφίλ..."
@@ -891,6 +1040,9 @@
 	"Default title to use for documents created by the scanner.": [
 		"Προεπιλεγμένος τίτλος που θα χρησιμοποιείται για τα έγγραφα που δημιουργούνται από το σαρωτή."
 	],
+	"Default view / edit state": [
+		""
+	],
 	"Default: %s": [
 		"Προεπιλογή: %s"
 	],
@@ -926,9 +1078,6 @@
 	],
 	"Delete selected notes": [
 		"Διαγραφή επιλεγμένων σημειώσεων"
-	],
-	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
-		""
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Να διαγραφεί το σημειωματάριο εισερχομένων;\n\nΑν διαγράψετε το σημειωματάριο εισερχομένων, κάθε e-mail που εστάλη σε αυτό πρόσφατα ίσως χαθεί."
@@ -1044,14 +1193,14 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Μην χάσετε τον κωδικό πρόσβασης, καθώς, για λόγους ασφαλείας, αυτός θα είναι ο *μόνος* τρόπος αποκρυπτογράφησης των δεδομένων! Για να ενεργοποιήσετε την κρυπτογράφηση, εισαγάγετε τον κωδικό πρόσβασής σας παρακάτω."
 	],
-	"Do you find the Joplin web app useful?": [
-		"Θεωρείτε χρήσιμη την εφαρμογή Joplin web;"
-	],
 	"Document scanner: Title template": [
 		"Σαρωτής εγγράφων: Πρότυπο τίτλου"
 	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
 		"Μην επιτρέπετε στον παραλήπτη της κοινής χρήσης να γράφει στο κοινόχρηστο σημειωματάριο. Ισχύει μόνο για την υποεντολή `add`."
+	],
+	"Don't have an account yet?": [
+		""
 	],
 	"Don't show this message again": [
 		"Μην εμφανίσετε ξανά αυτό το μήνυμα"
@@ -1062,11 +1211,20 @@
 	"Done": [
 		"Ολοκληρώθηκε"
 	],
+	"Double tap to open this attachment. Long press to expand or collapse details.": [
+		""
+	],
 	"Download": [
 		"Λήψη"
 	],
 	"Download and install the relevant extension for your browser:": [
 		"Κάντε λήψη και εγκατάσταση της αντίστοιχης επέκτασης για το πρόγραμμα περιήγησής σας:"
+	],
+	"Download it from GitHub Releases": [
+		""
+	],
+	"Download it from the Joplin Android repository": [
+		""
 	],
 	"Downloaded": [
 		"Έχουν ληφθεί"
@@ -1088,6 +1246,9 @@
 	],
 	"Dracula": [
 		"Dracula"
+	],
+	"Drag to move group": [
+		""
 	],
 	"Draw picture": [
 		"Σχεδίαση"
@@ -1185,6 +1346,9 @@
 	"Emails": [
 		"Emails"
 	],
+	"Embedding index": [
+		""
+	],
 	"emphasised text": [
 		"κείμενο με έμφαση"
 	],
@@ -1218,6 +1382,9 @@
 	"Enable encryption": [
 		"Ενεργοποίηση κρυπτογράφησης"
 	],
+	"Enable external embeds (e.g. YouTube Videos)": [
+		""
+	],
 	"Enable file:// URLs for images and videos": [
 		"Ενεργοποίηση των διευθύνσεων URL file:// για εικόνες και βίντεο"
 	],
@@ -1244,9 +1411,6 @@
 	],
 	"Enable note history": [
 		"Ενεργοποίηση ιστορικού σημειώσεων"
-	],
-	"Enable optical character recognition (OCR)": [
-		"Ενεργοποίηση αναγνώρισης κειμένου (OCR)"
 	],
 	"Enable or disable plugins": [
 		"Διαχείριση πρόσθετων"
@@ -1290,6 +1454,9 @@
 	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
 		"Ενεργοποιεί την αντικατάσταση μοτίβων Markdown στον επεξεργαστή πλούσιου κειμένου. Για παράδειγμα, όταν είναι ενεργοποιημένη, η πληκτρολόγηση **bold** δημιουργεί έντονο κείμενο."
 	],
+	"Enables the default edit operations for notes with an open AI chat panel. When disabled, the chat panel can still read the open note. Does not apply to MCP.": [
+		""
+	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"Ενεργοποίηση κρυπτογράφησης σημαίνει *όλες* οι σημειώσεις και τα συνημμένα σας πρόκειται να συγχρονιστούν εκ νέου και να σταλούν κρυπτογραφημένα στο στόχο συγχρονισμού."
 	],
@@ -1298,6 +1465,9 @@
 	],
 	"Encrypted items cannot be modified": [
 		"Δεν είναι δυνατή η τροποποίηση κρυπτογραφημένων στοιχείων"
+	],
+	"Encrypting a note requires a note lock password, which has not yet been set. Set it up now?": [
+		""
 	],
 	"Encryption": [
 		"Κρυπτογράφηση"
@@ -1310,6 +1480,9 @@
 	],
 	"Encryption keys": [
 		"Κλειδιά κρυπτογράφησης"
+	],
+	"Encryption was setup previously, but all keys have been disabled. To continue, please use the desktop app to enable a key.": [
+		""
 	],
 	"Encryption:": [
 		"Κρυπτογράφηση:"
@@ -1329,6 +1502,9 @@
 	"Enter password": [
 		"Εισάγετε κωδικό"
 	],
+	"Enter the note lock password to unlock encrypted notes for this session.": [
+		""
+	],
 	"Enum": [
 		"Enum"
 	],
@@ -1343,6 +1519,9 @@
 	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"Σφάλμα. Παρακαλώ ελέγξτε ότι η διεύθυνση URL, το όνομα, ο κωδικός, κλπ είναι σωστά και ότι το προορισμός συγχρονισμού είναι προσπελάσιμος. Το σφάλμα ήταν:"
+	],
+	"Error. The AI provider test failed:": [
+		""
 	],
 	"Error: %s": [
 		"Σφάλμα: %s"
@@ -1407,6 +1586,9 @@
 	"Exports only the given notebook.": [
 		"Εξάγει μόνο το καθορισμένο σημειωματάριο."
 	],
+	"Exposes Joplin notes to external AI applications (Claude Desktop, Cursor, etc.) via the Model Context Protocol. Requires the Web Clipper service to be running. Connected AI tools can read your note content; any text they retrieve may be sent to the external LLM provider those tools use.": [
+		""
+	],
 	"Fail-safe": [
 		"Δικλείδα ασφαλείας"
 	],
@@ -1419,14 +1601,14 @@
 	"Failed to connect to your account. Please try again.": [
 		"Απέτυχε η σύνδεση με το λογαριασμό σας. Προσπαθήστε ξανά."
 	],
+	"Failed to create accessible document: %s": [
+		""
+	],
 	"Fatal error:": [
 		"Ανεπανόρθωτο σφάλμα:"
 	],
 	"Feature flags": [
 		"Feature flags"
-	],
-	"Feedback": [
-		"Ανατροφοδότηση"
 	],
 	"Fetched items: %d/%d.": [
 		"Ληφθέντα στοιχεία: %d/%d."
@@ -1443,6 +1625,9 @@
 	"Filter": [
 		"Φίλτρο"
 	],
+	"Filtered by section [%s]": [
+		""
+	],
 	"Find: ": [
 		"Εύρεση: "
 	],
@@ -1457,6 +1642,9 @@
 	],
 	"Fixing search index...": [
 		"Διόρθωση ευρετηρίων αναζήτησης..."
+	],
+	"Flip": [
+		""
 	],
 	"Focus": [
 		"Εστίαση"
@@ -1516,9 +1704,6 @@
 		"Δημιουργία συνδέσμου...",
 		"Δημιουργία νεου %s..."
 	],
-	"Geolocation, spellcheck, editor toolbar, image resize": [
-		"Γεωεντοπισμός, ορθογραφικός έλεγχος, γραμμή εργαλείων επεξεργασίας, αλλαγή μεγέθους εικόνας"
-	],
 	"Get a quote": [
 		"Αποκτήστε μια προσφορά"
 	],
@@ -1531,6 +1716,9 @@
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Αποκτά ή ορίζει την τιμή μιας παραμέτρου. Αν δεν υπάρχει [value], θα εμφανιστεί  το [name]. Εάν δεν υπάρχει ούτε [name] ούτε [value], θα εμφανιστεί η τρέχουσα παράμετρος."
 	],
+	"Global shortcut to show/hide Joplin": [
+		""
+	],
 	"Glossary:": [
 		"Γλωσσάριο:"
 	],
@@ -1539,6 +1727,9 @@
 	],
 	"Go back": [
 		"Πηγαίνετε πίσω"
+	],
+	"Go to end of note": [
+		""
 	],
 	"Go to Joplin Cloud profile": [
 		"Μεταβείτε στο προφίλ Joplin Cloud"
@@ -1549,11 +1740,17 @@
 	"Go to source URL": [
 		"Μεταβείτε στη διεύθυνση URL προέλευσης"
 	],
+	"Go to start of note": [
+		""
+	],
 	"Goto Anything...": [
 		"Γρήγορη Μετακίνηση..."
 	],
 	"Grant authorisation": [
 		"Έγκριση εξουσιοδότησης"
+	],
+	"Group": [
+		""
 	],
 	"Have you authorised the application login in the above URL?": [
 		"Έχετε εξουσιοδοτήσει τη σύνδεση της εφαρμογής στην ανώτερω διεύθυνση;"
@@ -1624,6 +1821,9 @@
 	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
 		"Εάν ένα συνημμένο εικόνας βρίσκεται σε δική του γραμμή και ακολουθείται από κενή γραμμή, θα αποδίδεται ακριβώς κάτω από την πηγή Markdown."
 	],
+	"If enabled, opening an HTML note displays a prompt to convert the note to Markdown.": [
+		""
+	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"Αν έχετε ήδη εξουσιοδοτήσει την εφαρμογή, παρακαλώ περιμένετε για τον συγχρονισμό με το Joplin Cloud."
 	],
@@ -1642,11 +1842,11 @@
 	"Import": [
 		"Εισαγωγή"
 	],
+	"Import a note from a text file (%s). The note will be imported into notebook '%s'.": [
+		""
+	],
 	"Import and Export": [
 		"Εισαγωγή και Εξαγωγή"
-	],
-	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
-		"Η εισαγωγή απέτυχε. Βεβαιωθείτε ότι επιλέξετε ένα αρχείο JEX. Λεπτομέρειες: %s"
 	],
 	"Import from JEX": [
 		"Εισαγωγή από JEX"
@@ -1708,6 +1908,15 @@
 	"Indent more": [
 		"Αύξηση εσοχής"
 	],
+	"Index notes for AI search": [
+		""
+	],
+	"Indexer:": [
+		""
+	],
+	"Indexing…": [
+		""
+	],
 	"Info": [
 		"Πληροφορίες"
 	],
@@ -1720,8 +1929,17 @@
 	"Insert": [
 		"Εισαγωγή"
 	],
+	"Insert column right": [
+		""
+	],
 	"Insert Hyperlink": [
 		"Εισαγωγή υπερσύνδεσης"
+	],
+	"Insert row above": [
+		""
+	],
+	"Insert row below": [
+		""
 	],
 	"Insert time": [
 		"Εισαγωγή ώρας"
@@ -1762,6 +1980,9 @@
 	"Invalid password": [
 		"Μη έγκυρος κωδικός πρόσβασης"
 	],
+	"Invalid password. Please try again. If you have forgotten your password you will need to reset it.": [
+		""
+	],
 	"iOS version: %s": [
 		"έκδοση iOS: %s"
 	],
@@ -1770,6 +1991,9 @@
 	],
 	"Item \"%s\" could not be downloaded: %s": [
 		"Η λήψη του στοιχείου \"%s\" απέτυχε: %s"
+	],
+	"Item upload will be disabled in %s.": [
+		""
 	],
 	"Items": [
 		"Στοιχεία"
@@ -1785,6 +2009,9 @@
 	],
 	"Joplin Cloud": [
 		"Joplin Cloud"
+	],
+	"Joplin Cloud AI requires Joplin Cloud sync. Pick a different provider or restore Joplin Cloud sync.": [
+		""
 	],
 	"Joplin Cloud Login": [
 		"Σύνδεση Joplin Cloud"
@@ -1809,6 +2036,9 @@
 	],
 	"Joplin Mobile": [
 		"Joplin Mobile"
+	],
+	"Joplin needs your permission to access your %s account and to synchronise data with it.": [
+		""
 	],
 	"Joplin Server": [
 		"Joplin Server"
@@ -1946,6 +2176,12 @@
 	"Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at \"%s\" and resume the operation.": [
 		"Το αρχείο κλειδώματος έχει ήδη δημιουργηθεί. Αν γνωρίζετε ότι δεν πραγματοποιείται συγχρονισμός, μπορείτε να διαγράψετε το αρχείο κλειδώματος στο \"%s\" και να συνεχίσετε τη λειτουργία."
 	],
+	"Locked notes are encrypted on this device and can only be read after entering your note lock password. The password is required again after locking or restarting Joplin.": [
+		""
+	],
+	"Locked notes cannot be opened in an external editor": [
+		""
+	],
 	"Log": [
 		"Log"
 	],
@@ -1984,6 +2220,9 @@
 	],
 	"Manage shared notebooks": [
 		"Διαχείριση κοινόχρηστων σημειωματαρίων"
+	],
+	"Manage this server's license from the [admin dashboard](%s).": [
+		""
 	],
 	"Manage your plugins": [
 		"Διαχείριση πρόσθετων"
@@ -2042,6 +2281,9 @@
 	"Max Total Size": [
 		"Μέγιστο συνολικό μέγεθος"
 	],
+	"MCP requires the Web Clipper service. Enable it in Settings → Web Clipper.": [
+		""
+	],
 	"Media player, math, diagrams, table of contents": [
 		"Πολυμέσα, μαθηματικές παραστάσεις, διαγράμματα, πίνακας περιεχομένων"
 	],
@@ -2065,6 +2307,12 @@
 	],
 	"Mobile data - auto-sync disabled": [
 		"Δεδομένα κινητής τηλεφωνίας - ο αυτόματος συγχρονισμός απενεργοποιήθηκε"
+	],
+	"Model": [
+		""
+	],
+	"Model:": [
+		""
 	],
 	"More info": [
 		"Περισσότερες πληροφορίες"
@@ -2129,6 +2377,9 @@
 	"New sub-notebook": [
 		"Νέο υπο-σημειωματάριο"
 	],
+	"New text card": [
+		""
+	],
 	"New to-do": [
 		"Νέα υπόμνηση"
 	],
@@ -2161,6 +2412,18 @@
 	],
 	"No active notebook.": [
 		"Δεν υπάρχει ενεργό σημειωματάριο."
+	],
+	"No AI usage recorded yet.": [
+		""
+	],
+	"No arrow": [
+		""
+	],
+	"No colour": [
+		""
+	],
+	"No embedding model is installed. It is downloaded automatically on first use — check Settings → AI for progress.": [
+		""
 	],
 	"No new invitations": [
 		"Καμία πρόσκληση"
@@ -2198,8 +2461,14 @@
 	"No URL for SAML authentication set.": [
 		""
 	],
+	"No valid notebook is available. Please create or select a notebook and try again.": [
+		""
+	],
 	"Nord": [
 		"Nord"
+	],
+	"Normal": [
+		""
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Δεν έγινε επαλήθευση με το %s. Παρακαλώ καταχωρίστε τα διαπιστευτήρια που λείπουν."
@@ -2215,9 +2484,6 @@
 	],
 	"Not now": [
 		"Αργότερα"
-	],
-	"Not useful": [
-		"Δεν είναι χρήσιμο"
 	],
 	"note": [
 		"σημείωση"
@@ -2249,6 +2515,9 @@
 	"Note History": [
 		"Ιστορικό Σημείωσης"
 	],
+	"Note indexing is turned off in Settings → AI.": [
+		""
+	],
 	"Note is not a to-do: \"%s\"": [
 		"Η σημείωση δεν είναι υπόμνηση: \"%s\""
 	],
@@ -2260,6 +2529,9 @@
 	],
 	"Note list style": [
 		"Στυλ λίστας σημειώσεων"
+	],
+	"Note lock password, auto lock": [
+		""
 	],
 	"Note properties": [
 		"Ιδιότητες σημείωσης"
@@ -2306,8 +2578,20 @@
 	"Numbered List": [
 		"Αριθμημένη λίστα"
 	],
+	"Obsidian Vault": [
+		""
+	],
+	"OCR is not complete. Please wait for OCR to finish before creating an accessible document.": [
+		""
+	],
+	"OCR needs to run to generate an accessible document. This may take a moment. Would you like to continue?": [
+		""
+	],
 	"OCR: Clear cache and re-download language data files": [
 		"OCR: Εκκαθάριση προσωρινής μνήμης και εκ νέου λήψη αρχείων γλωσσικών δεδομένων"
+	],
+	"OCR: PDF processing mode": [
+		""
 	],
 	"OK": [
 		"Εντάξει"
@@ -2335,6 +2619,9 @@
 	],
 	"OneDrive Login": [
 		"Σύνδεση OneDrive"
+	],
+	"Only do this if you've forgotten your current password. A new password will be created, and any notes locked with the old one will become permanently unreadable.": [
+		""
 	],
 	"Only one note can be printed at a time.": [
 		"Μόνο μία σημείωση τη φορά μπορεί να εκτυπωθεί."
@@ -2456,8 +2743,14 @@
 	"Please confirm that you would like to re-encrypt your complete database.": [
 		"Επιβεβαιώστε ότι θέλετε να ξανακρυπτογραφήσετε την πλήρη βάση δεδομένων σας."
 	],
+	"Please disable users from the [admin dashboard](%s) to bring this server under the limit.": [
+		""
+	],
 	"Please enter your password in the master key list below before upgrading the key.": [
 		"Εισαγάγετε τον κωδικό πρόσβασής σας στη λίστα του master κλειδιού πριν αναβαθμίσετε το κλειδί."
+	],
+	"Please make sure you remember your password. It cannot be recovered if lost, and any data encrypted with it will become inaccessible.": [
+		""
 	],
 	"Please note that if it is a large notebook, it may take a few minutes for all the notes to show up on the recipient's device.": [
 		"Λάβετε υπόψη ότι αν πρόκειται για ένα μεγάλο σημειωματάριο, μπορεί να χρειαστούν μερικά λεπτά για να εμφανιστούν όλες οι σημειώσεις στη συσκευή του παραλήπτη."
@@ -2485,6 +2778,9 @@
 	],
 	"Please specify the notebook where the notes should be imported to.": [
 		"Προσδιορίστε το σημειωματάριο στο οποίο πρέπει να εισαχθούν οι σημειώσεις."
+	],
+	"Please update the license key from the [admin dashboard](%s).": [
+		""
 	],
 	"Please upgrade Joplin to version %s or later to use this plugin.": [
 		"Παρακαλώ αναβαθμίστε το Joplin στην έκδοση %s ή μεταγενέστερη για να χρησιμοποιήσετε αυτό το πρόσθετο."
@@ -2582,6 +2878,9 @@
 	"Pro": [
 		"Pro"
 	],
+	"Pro 100 GB": [
+		""
+	],
 	"Process failed payment subscriptions": [
 		"Επεξεργασία αποτυχημένων συνδρομών πληρωμής"
 	],
@@ -2642,6 +2941,9 @@
 	"Quit": [
 		"Έξοδος"
 	],
+	"Quit anyway": [
+		""
+	],
 	"Re-download model": [
 		"Εκ νέου λήψη του μοντέλου"
 	],
@@ -2654,11 +2956,17 @@
 	"Re-upload local data to sync target": [
 		"Εκ νέου αποστολή τοπικών δεδομένων στον προορισμό για συγχρονισμό"
 	],
+	"Read all tags": [
+		""
+	],
 	"Read more about it": [
 		"Διαβάστε περισσότερα σχετικά με αυτό"
 	],
 	"Read time: %s min": [
 		"Χρόνος ανάγνωσης: %s min"
+	],
+	"Reading this note requires the note lock password, which has not been set up on this device yet.": [
+		""
 	],
 	"Recipient has accepted the invitation": [
 		"Ο παραλήπτης αποδέχθηκε την πρόσκληση"
@@ -2753,6 +3061,15 @@
 	"Reports": [
 		"Αναφορές"
 	],
+	"Required to use cloud-hosted AI models, including Joplin Cloud AI. When disabled, only on-device providers can be used.": [
+		""
+	],
+	"Reset": [
+		""
+	],
+	"Reset AI token usage counters?": [
+		""
+	],
 	"Reset application layout": [
 		"Επαναφορά διάταξης εφαρμογής"
 	],
@@ -2818,6 +3135,9 @@
 	],
 	"Rich Text editor. Press Escape then Tab to escape focus.": [
 		"Επεξεργαστής πλούσιου κειμένου. Πατήστε Escape και στη συνέχεια Tab για να ξεφύγετε από την εστίαση."
+	],
+	"Run OCR": [
+		""
 	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
 		"Εκτελεί τις εντολές που περιέχονται στο αρχείο κειμένου. Θα πρέπει να υπάρχει μία εντολή ανά γραμμή."
@@ -2927,6 +3247,12 @@
 	"Self-hosted": [
 		"Self-hosted"
 	],
+	"Self-hosted instances of the Joplin web app cannot sync with Joplin Cloud. Open the official web app?": [
+		""
+	],
+	"Send": [
+		""
+	],
 	"Send bug report": [
 		"Αποστολή αναφοράς σφάλματος"
 	],
@@ -2999,6 +3325,9 @@
 	"Show all": [
 		"Εμφάνιση όλων"
 	],
+	"Show checkbox completion chart in note list": [
+		""
+	],
 	"Show completed to-dos": [
 		"Εμφάνιση ολοκληρωμένων υπομνήσεων"
 	],
@@ -3007,6 +3336,9 @@
 	],
 	"Show disabled keys": [
 		"Εμφάνιση απενεργοποιημένων κλειδιών"
+	],
+	"Show Joplin icon for note links": [
+		""
 	],
 	"Show monospace fonts only.": [
 		"Προβολή monospace γραμματοσειρών αποκλειστικά."
@@ -3023,6 +3355,9 @@
 	"Show/hide the sidebar": [
 		"Εμφάνιση/απόκρυψη της πλευρικής μπάρας"
 	],
+	"Showing all matching settings": [
+		""
+	],
 	"Shrink large images before adding them to notes.": [
 		"Σμίκρυνση μεγάλων εικόνων πριν την εισαγωγή τους σε σημειώσεις."
 	],
@@ -3037,6 +3372,9 @@
 	],
 	"Size": [
 		"Μέγεθος"
+	],
+	"Size (smallest first)": [
+		""
 	],
 	"Skip this version": [
 		"Παραλείψτε αυτή την έκδοση"
@@ -3073,6 +3411,9 @@
 	],
 	"Some items could not be synchronised. Please try to synchronise them first.": [
 		"Ορισμένα στοιχεία δεν είναι δυνατό να συγχρονιστούν. Παρακαλώ αρχικά επιχειρήστε να τα συγχρονίσετε."
+	],
+	"Something went wrong.": [
+		""
 	],
 	"Sort \"%s\" in ascending order": [
 		"Ταξινόμηση \"%s\" σε αύξουσα σειρά"
@@ -3185,8 +3526,14 @@
 	"Success! Synchronisation configuration appears to be correct.": [
 		"Επιτυχία! Οι ρυθμίσεις συγχρονισμού φαίνονται να είναι σωστές."
 	],
+	"Success! The AI provider responded:": [
+		""
+	],
 	"Superscript": [
 		"Εκθέτης"
+	],
+	"Swap source and target": [
+		""
 	],
 	"Switch between note and to-do type": [
 		"Εναλλαγή μεταξύ σημείωσης και υπόμνησης"
@@ -3208,9 +3555,6 @@
 	],
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Αλλάζει σε [notebook] - όλες οι περαιτέρω λειτουργίες θα πραγματοποιηθούν μέσα σε αυτό το σημειωματάριο."
-	],
-	"Sync": [
-		"Συγχρονισμός"
 	],
 	"Sync as many devices as you want": [
 		"Συγχρονίστε όσες συσκευές επιθυμείτε"
@@ -3235,6 +3579,9 @@
 	],
 	"Sync your notes": [
 		"Συγχρονισμός των σημειώσεών σας"
+	],
+	"Sync your notes with Joplin Cloud to access them on all your devices. Other sync options are also available.": [
+		""
 	],
 	"Sync, encryption, proxy": [
 		"Συγχρονισμός, κρυπτογράφηση, διαμεσολαβητής"
@@ -3266,6 +3613,9 @@
 	"Synchronises with remote storage.": [
 		"Συγχρονίζει με απομακρυσμένο αποθηκευτικό χώρο."
 	],
+	"Synchronising remaining changes, please wait...": [
+		""
+	],
 	"Synchronising...": [
 		"Συγχρονισμός..."
 	],
@@ -3286,6 +3636,9 @@
 	],
 	"Tags": [
 		"Ετικέτες"
+	],
+	"Tags cannot be changed for locked notes while the session is locked": [
+		""
 	],
 	"Take photo": [
 		"Βγάλτε μια φωτογραφία"
@@ -3308,11 +3661,11 @@
 	"Text editor command": [
 		"Εντολή \"Επεξεργαστή κειμένου\""
 	],
-	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
-		"Σας ευχαριστούμε για τα σχόλια!\nΈχετε χρόνο να συμπληρώσετε μια σύντομη έρευνα;"
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Το ενεργό προφίλ δεν μπορεί να διαγραφεί. Μεταβείτε σε ένα άλλο προφίλ και δοκιμάστε ξανά."
+	],
+	"The API key is missing. Set it in Settings → AI.": [
+		""
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
 		"Η εφαρμογή θα κλείσει τώρα. Παρακαλώ ανοίξτε την ξανά για να ολοκληρώσετε τη διαδικασία."
@@ -3344,9 +3697,6 @@
 	"The default encryption method has been changed, you should re-encrypt your data.": [
 		"Η προεπιλεγμένη μέθοδος κρυπτογράφησης έχει αλλάξει, θα πρέπει να κρυπτογραφήσετε εκ νέου τα δεδομένα σας."
 	],
-	"The default profile cannot be deleted": [
-		"Το προεπιλεγμένο προφίλ δεν μπορεί να διαγραφεί"
-	],
 	"The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.": [
 		"Η εντολή του επεξεργαστή κειμένου (που μπορεί να περιλαμβάνει ορίσματα) θα χρησιμοποιηθεί για το άνοιγμα μιας σημείωσης. Εάν δεν δωθεί καμία, θα προσπαθήσει να ανιχνεύσει αυτόματα το προεπιλεγμένο πρόγραμμα επεξεργασίας."
 	],
@@ -3375,14 +3725,38 @@
 	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
 		"Ο παλαιός επεξεργαστής Markdown φαίνεται να έχει καταρρεύσει λόγω ασυμβατότητας με ένα πρόσθετο. Συνιστούμε τη χρήση του νέου επεξεργαστή."
 	],
+	"The license for this server failed to refresh.": [
+		""
+	],
+	"The license key for this Joplin Server Business instance has expired and needs to be renewed.": [
+		""
+	],
+	"The license key for this Joplin Server Business instance has expired or is invalid. Uploading items has been disabled until the license is renewed.": [
+		""
+	],
 	"The master key has been upgraded successfully!": [
 		"Το κλειδί master αναβαθμίστηκε με επιτυχία!"
 	],
 	"The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
 		"Τα κύρια κλειδιά με αυτά τα αναγνωριστικά (ID) χρησιμοποιούνται για την κρυπτογράφηση ορισμένων στοιχείων σας, ωστόσο η εφαρμογή δεν έχει - επί του παρόντος - πρόσβαση σε αυτά. Είναι πιθανό τελικά να ληφθούν μέσω συγχρονισμού."
 	],
+	"The MCP server is disabled. Enable it in Settings → MCP.": [
+		""
+	],
+	"The model identifier to use, for example gpt-4o-mini or claude-3-5-sonnet-latest.": [
+		""
+	],
+	"The model name is missing. Set it in Settings → AI.": [
+		""
+	],
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"Η σημείωση \"%s\" έχει επαναφερθεί με επιτυχία στο σημειωματάριο \"%s\"."
+	],
+	"The note changed while the request was running; edits were not applied. Try again.": [
+		""
+	],
+	"The note lock state cannot be changed from the command line": [
+		""
 	],
 	"The note was successfully moved to the trash.": [
 		"Η σημείωση έχει μεταφερθεί επιτυχώς στον κάδο.",
@@ -3397,8 +3771,17 @@
 	"The notes have been imported: %s": [
 		"Οι σημειώσεις έχουν εισαχθεί: %s"
 	],
+	"The OpenAI-compatible API endpoint. For example, https://api.openai.com/v1 or http://localhost:11434/v1 for Ollama.": [
+		""
+	],
+	"The OpenAI-compatible provider needs a base URL. Set it in Settings → AI.": [
+		""
+	],
 	"The possible commands are:": [
 		"Οι πιθανές εντολές είναι:"
+	],
+	"The provider returned an empty response. Check that the base URL ends with /v1 and that a model is loaded.": [
+		""
 	],
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"Ο παραλήπτης δεν μπόρεσε να διαγραφεί από τη λίστα. Προσπαθήστε ξανά.\n\nΤο σφάλμα ήταν: \"%s\""
@@ -3438,9 +3821,6 @@
 	],
 	"Theme": [
 		"Θέμα"
-	],
-	"Themes, editor font": [
-		"Θέμα, γραμματοσειρά επεξεργαστή κειμένου"
 	],
 	"There are currently no notes. Create one by clicking on the (+) button.": [
 		"Δεν υπάρχουν προς το παρόν σημειώσεις. Δημιουργήστε μία κάνοντας κλικ στο κουμπί (+)."
@@ -3496,6 +3876,13 @@
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Πρόκειται για ένα προηγμένο εργαλείο που προβάλλει τα συνημμένα που συνδέονται με τις σημειώσεις σας. Να είστε προσεκτικοί κατά τη διαγραφή ενός από αυτά, καθώς δεν είναι δυνατή η επαναφορά τους."
 	],
+	"This Joplin Server Business instance is only licensed for %d user.": [
+		"",
+		""
+	],
+	"This note could not be decrypted. If it was encrypted prior to a password reset, the contents are no longer recoverable.": [
+		""
+	],
 	"This note could not be deleted: %s": [
 		"Αυτή η σημείωση δεν ήταν δυνατό να διαγραφεί: %s",
 		"Αυτό το αρχείο δεν ήταν δυνατό να ανοιχτεί: %s"
@@ -3520,14 +3907,32 @@
 	"This note has no history": [
 		"Αυτή η σημείωση δεν έχει ιστορικό"
 	],
+	"This note is currently being saved. Please try again in a moment.": [
+		""
+	],
+	"This note is encrypted and cannot be used with AI Chat.": [
+		""
+	],
+	"This note is encrypted. Enter the note lock password to unlock encrypted notes for this session.": [
+		""
+	],
 	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
 		"Αυτό το σημείωμα είναι σε μορφή HTML. Μετατρέψτε την σε Markdown για να την επεξεργαστείτε πιο εύκολα."
+	],
+	"This notebook contains Windows-specific files. For maximum compatibility, consider importing the notebook from Windows.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		"Αυτό το πρόσθετο δεν υποστηρίζει %s."
 	],
+	"This provider sends data off your device. Turn on \"Allow remote AI providers\" in Settings → AI.": [
+		""
+	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"Αυτός ο επεξεργαστής εμπλουτισμένου κειμένου έχει ορισμένους περιορισμούς και συνιστάται να τους γνωρίζετε πριν το χρησιμοποιήσετε."
+	],
+	"This section opens in its own screen and is matched by section title.": [
+		""
 	],
 	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
 		"Αυτή η υπηρεσία επιτρέπει στην επέκταση του προγράμματος περιήγησης να επικοινωνεί με το Joplin. Όταν την ενεργοποιήσετε, το τείχος προστασίας μπορεί να σας ζητήσει να δώσετε άδεια στο Joplin να επικοινωνεί μέσω της συγκεκριμένης πόρτας."
@@ -3555,6 +3960,9 @@
 	],
 	"Title": [
 		"Τίτλος"
+	],
+	"To access your recovery codes please enter an authentication code or your password.": [
+		""
 	],
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
 		"Για να επιτρέψετε στο Joplin να συγχρονιστεί με το Dropbox, ακολουθήστε τα παρακάτω βήματα:"
@@ -3591,9 +3999,6 @@
 	],
 	"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`": [
 		"Για να επαναλάβετε την αποκρυπτογράφηση αυτών των στοιχείων. Τρέξτε `e2ee decrypt --retry-failed-items`"
-	],
-	"To switch the profile, the app is going to close and you will need to restart it.": [
-		"Για να αλλάξετε το προφίλ, η εφαρμογή θα κλείσει και θα πρέπει να την επανεκκινήσετε."
 	],
 	"To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions": [
 		"Για να λειτουργήσει σωστά, η εφαρμογή χρειάζεται τα ακόλουθα δικαιώματα. Ενεργοποιήστε τα στις ρυθμίσεις του τηλεφώνου σας, στο Apps> Joplin> Permissions"
@@ -3643,11 +4048,17 @@
 	"Toggle sort order field": [
 		"Εναλλαγή του πεδίου ταξινόμησης"
 	],
+	"Toggle whiteboard / Markdown view": [
+		""
+	],
 	"Token has been copied to the clipboard!": [
 		"Το Token έχει αντιγραφεί στο πρόχειρο!"
 	],
 	"Tools": [
 		"Εργαλεία"
+	],
+	"Tools and services to expose to AI. AI agents can use these tools either via the note chat panel or Joplin's MCP server (if enabled).": [
+		""
 	],
 	"Total Size": [
 		"Συνολικό μέγεθος"
@@ -3660,9 +4071,6 @@
 	],
 	"Try again": [
 		"Δοκιμάστε ξανά"
-	],
-	"Try it now": [
-		"Δοκιμάστε το τώρα"
 	],
 	"TYPE": [
 		""
@@ -3679,11 +4087,20 @@
 	"Type: %s.": [
 		"Τύπος: %s."
 	],
+	"Typography, spellcheck, layout": [
+		""
+	],
+	"Unable to access the recording file.": [
+		""
+	],
 	"Unable to edit resource of type %s": [
 		"Αδύνατη η επεξεργασία πόρου του τύπου %s"
 	],
 	"Unable to share log data. Reason: %s": [
 		"Αδύνατη η κοινοποίηση δεδομένων αρχείου καταγραφής. Αιτία: %s"
+	],
+	"Unavailable on this platform": [
+		""
 	],
 	"Unchecked": [
 		"Μη επιλεγμένο"
@@ -3709,6 +4126,9 @@
 	"Unknown item type downloaded - please upgrade Joplin to the latest version": [
 		"Ελήφθη άγνωστος τύπος στοιχείου - αναβαθμίστε το Joplin στην πιο πρόσφατη έκδοση"
 	],
+	"Unlock": [
+		""
+	],
 	"Unordered list": [
 		"Μη ταξινομημένη λίστα"
 	],
@@ -3730,14 +4150,23 @@
 	"Unsupported link or message: %s": [
 		"Μη υποστηριζόμενος σύνδεσμος ή μήνυμα: %s"
 	],
+	"Unsupported public key format. Please check that Joplin is updated to the latest version and try again.": [
+		""
+	],
 	"Untitled": [
 		"Χωρίς τίτλο"
+	],
+	"Untitled whiteboard": [
+		""
 	],
 	"Update": [
 		"Ενημέρωση"
 	],
 	"Update available": [
 		"Διατίθεται ενημέρωση"
+	],
+	"Update it from Google Play": [
+		""
 	],
 	"Update profile": [
 		"Ενημέρωση προφίλ"
@@ -3775,6 +4204,9 @@
 	"Upgrade the sync target to the latest version.": [
 		"Αναβαθμίστε το στόχο συγχρονισμού στην πιο πρόσφατη έκδοση."
 	],
+	"Upgrade to 100 GB": [
+		""
+	],
 	"URL": [
 		"URL"
 	],
@@ -3802,14 +4234,14 @@
 	"Use your biometrics to secure access to your application. You can always set it up later in Settings.": [
 		"Χρησιμοποιήστε τα βιομετρικά σας στοιχεία για να εξασφαλίσετε την πρόσβαση στην εφαρμογή σας. Μπορείτε πάντα να το ρυθμίσετε αργότερα στις Ρυθμίσεις."
 	],
+	"Used": [
+		""
+	],
 	"Used for most text in the markdown editor. If not found, a generic proportional (variable width) font is used.": [
 		"Χρησιμοποιείται για το μεγαλύτερο μέρος του κειμένου στο πρόγραμμα επεξεργασίας σημειώσεων. Εάν δεν βρεθεί, χρησιμοποιείται μια γενική αναλογική γραμματοσειρά (μεταβλητού πλάτους)."
 	],
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"Χρησιμοποιείται όταν απαιτείται γραμματοσειρά σταθερού πλάτους για την ευανάκριβη δημιουργία κειμένου (π.χ. πίνακες, πλαίσια ελέγχου, κωδικός). Εάν δεν βρεθεί, χρησιμοποιείται μια γενική μονοδιάστημα (σταθερού πλάτους)."
-	],
-	"Useful": [
-		"Χρήσιμο"
 	],
 	"User deletions": [
 		"Διαγραφές χρήστη"
@@ -3819,6 +4251,12 @@
 	],
 	"Valid": [
 		"Έγκυρo"
+	],
+	"Vector search is not available on this platform": [
+		""
+	],
+	"Vector search is unavailable on this platform (sqlite-vec extension not loaded).": [
+		""
 	],
 	"Verify your identity": [
 		"Επαληθεύστε την ταυτότητα σας"
@@ -3904,8 +4342,14 @@
 	"When creating a new to-do:": [
 		"Κατά τη δημιουργία νέας υπόμνησης:"
 	],
+	"When enabled, plugins and built-in features can use AI models to generate or analyse text.": [
+		""
+	],
 	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
 		"Όταν είναι ενεργοποιημένη, ζητά να μεταγραφούν οι εικόνες της σημείωσης με μια υπηρεσία μεταγραφής υψηλότερης ποιότητας στον διακομιστή. Απαιτεί συγχρονισμό με ένα αντίγραφο της εφαρμογής γραφείου."
+	],
+	"When enabled, tables are rendered as an interactive widget in the editor. Disable this if you prefer to edit tables as raw Markdown.": [
+		""
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"Αν είναι ενεργοποιημένο, η εφαρμογή θα σαρώσει τα συνημμένα σας και θα εξάγει το κείμενο από αυτά. Έτσι, θα έχετε τη δυνατότητα να αναζητήσετε κείμενο μέσα στα συνημμένα."
@@ -3949,11 +4393,17 @@
 	"You do not have any installed plugin.": [
 		"Δεν υπάρχουν εγκατεστημένα πρόσθετα."
 	],
+	"You have unsaved tag changes. Discard them?": [
+		""
+	],
 	"You may also type `status` for more information.": [
 		"Μπορείτε επίσης να πληκτρολογήσετε `status` για περισσότερες πληροφορίες."
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"Μπορείτε να χρησιμοποιήσετε το παρακάτω εργαλείο για να κρυπτογραφήσετε εκ νέου τα δεδομένα σας, για παράδειγμα, εάν γνωρίζετε ότι ορισμένες από τις σημειώσεις σας είναι κρυπτογραφημένες με μια παρωχημένη μέθοδο κρυπτογράφησης."
+	],
+	"You switched notes while the request was running; edits were not applied. Try again.": [
+		""
 	],
 	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
 		"Υπήρξε σφάλμα στη ρύθμιση του λογαριασμού σας στο Joplin Cloud. Παρακαλούμε επαληθεύστε το email και τον κωδικό πρόσβασης και δοκιμάστε ξανά. Το σφάλμα ήταν:"
@@ -3970,6 +4420,12 @@
 	"Your Joplin Cloud credentials are invalid, please login.": [
 		"Τα διαπιστευτήρια σας για το Joplin Cloud δεν είναι έγκυρα, παρακαλώ συνδεθείτε."
 	],
+	"Your master password is used to protect sensitive information. In particular, it is used to encrypt your notes when end-to-end encryption (E2EE) is enabled, or to share and encrypt notes with someone who has E2EE enabled.": [
+		""
+	],
+	"Your note will be sent to the configured AI provider (%s).": [
+		""
+	],
 	"Your password is needed to decrypt some of your data.": [
 		"Ο κωδικός πρόσβασής σας είναι απαραίτητος για την αποκρυπτογράφηση ορισμένων δεδομένων σας."
 	],
@@ -3984,5 +4440,8 @@
 	],
 	"Zoom Out": [
 		"Σμίκρυνση"
+	],
+	"— now viewing: %s —": [
+		""
 	]
 }

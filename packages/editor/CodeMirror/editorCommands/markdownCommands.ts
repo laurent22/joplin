@@ -334,6 +334,12 @@ export const toggleList = (listType: ListType): Command => {
 	};
 };
 
+export const toggleBlockQuote: Command = (view: EditorView): boolean => {
+	const { changes } = toggleSelectedLinesStartWith(view.state, /^>\s?/, '> ', true, /^/);
+	view.dispatch({ changes });
+	return true;
+};
+
 
 export const toggleHeaderLevel = (level: number): Command => {
 	return (view: EditorView): boolean => {

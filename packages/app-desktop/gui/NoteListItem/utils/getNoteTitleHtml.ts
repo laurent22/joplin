@@ -2,8 +2,9 @@ import { htmlentities } from '@joplin/utils/html';
 const Mark = require('mark.js/dist/mark.min.js');
 const markJsUtils = require('@joplin/lib/markJsUtils');
 import { replaceRegexDiacritics, pregQuote } from '@joplin/lib/string-utils';
+import { HighlightedWord } from '@joplin/lib/reducer';
 
-const getNoteTitleHtml = (highlightedWords: string[], displayTitle: string) => {
+const getNoteTitleHtml = (highlightedWords: HighlightedWord[], displayTitle: string) => {
 	if (highlightedWords.length) {
 		const titleElement = document.createElement('span');
 		titleElement.textContent = displayTitle;

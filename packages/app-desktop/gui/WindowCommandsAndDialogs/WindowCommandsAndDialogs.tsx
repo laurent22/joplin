@@ -4,6 +4,7 @@ import ShareFolderDialog from '../ShareFolderDialog/ShareFolderDialog';
 import NotePropertiesDialog from '../NotePropertiesDialog';
 import NoteContentPropertiesDialog from '../NoteContentPropertiesDialog';
 import ShareNoteDialog from '../ShareNoteDialog';
+import PublishFolderDialog from '../PublishFolderDialog';
 import { PluginHtmlContents, PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { DialogState } from './types';
@@ -31,6 +32,7 @@ interface Props {
 	appDialogStates: AppStateDialog[];
 	pluginsLegacy: Record<string, { dialogOpen?: boolean; userData?: unknown }>;
 	modalMessage: string|null;
+	modalMessageHasCloseButton: boolean;
 
 	customCss: string;
 	editorNoteStatuses: EditorNoteStatuses;
@@ -47,6 +49,9 @@ const defaultDialogState: DialogState = {
 		visible: false,
 	},
 	shareFolderDialogOptions: {
+		visible: false,
+	},
+	publishFolderDialogOptions: {
 		visible: false,
 	},
 	promptOptions: null,
@@ -116,14 +121,18 @@ const WindowCommandsAndDialogs: React.FC<Props> = props => {
 	const pluginDialog = !dialogInfo || !Dialog ? null : <Dialog {...dialogInfo.props} />;
 
 	const {
-		noteContentPropertiesDialogOptions, notePropertiesDialogOptions, shareNoteDialogOptions, shareFolderDialogOptions, promptOptions,
+		noteContentPropertiesDialogOptions, notePropertiesDialogOptions, shareNoteDialogOptions, shareFolderDialogOptions, publishFolderDialogOptions, promptOptions,
 	} = dialogState;
 
 
 	return <>
 		<div ref={setReferenceElement}/>
 		{pluginDialog}
-		{props.modalMessage !== null ? <ModalMessageOverlay message={props.modalMessage}/> : null}
+		{props.modalMessage !== null ? <ModalMessageOverlay
+			message={props.modalMessage}
+			hasCloseButton={props.modalMessageHasCloseButton}
+			onClose={() => props.dispatch({ type: 'HIDE_MODAL_MESSAGE' })}
+		/> : null}
 		<PluginDialogs
 			themeId={props.themeId}
 			visibleDialogs={props.visibleDialogs}
@@ -165,6 +174,13 @@ const WindowCommandsAndDialogs: React.FC<Props> = props => {
 				onClose={onDialogHideCallbacks.shareFolderDialogOptions}
 			/>
 		)}
+		{publishFolderDialogOptions.visible && (
+			<PublishFolderDialog
+				themeId={props.themeId}
+				folderId={publishFolderDialogOptions.folderId}
+				onClose={onDialogHideCallbacks.publishFolderDialogOptions}
+			/>
+		)}
 
 		<PromptDialog
 			autocomplete={promptOptions && 'autocomplete' in promptOptions ? promptOptions.autocomplete : null}
@@ -199,5 +215,6 @@ export default connect((state: AppState, ownProps: ConnectProps) => {
 		editorNoteStatuses: state.editorNoteStatuses,
 		pluginsLegacy: state.pluginsLegacy,
 		modalMessage: state.modalOverlayMessage,
+		modalMessageHasCloseButton: state.modalOverlayHasCloseButton,
 	};
 })(WindowCommandsAndDialogs);

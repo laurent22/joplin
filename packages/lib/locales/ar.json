@@ -2,6 +2,20 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"يفتقد \"%s\" خاصية \"%s\" المطلوبة."
 	],
+	"%d card": [
+		"",
+		"",
+		"",
+		"",
+		"",
+		""
+	],
+	"%d edit(s) applied, %d could not be placed automatically.": [
+		""
+	],
+	"%d edit(s) applied.": [
+		""
+	],
 	"%d GB": [
 		""
 	],
@@ -17,6 +31,9 @@
 	"%d photo(s) taken": [
 		""
 	],
+	"%d sections found": [
+		""
+	],
 	"%s %s (%s, %s)": [
 		"%s %s (%s, %s)"
 	],
@@ -28,6 +45,9 @@
 	],
 	"%s (%s): %s": [
 		"%s (%s): %s"
+	],
+	"%s (Beta)": [
+		""
 	],
 	"%s (pre-release)": [
 		"%s (ما قبل الإصدار)"
@@ -47,10 +67,19 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s added to toolbar": [
+		""
+	],
 	"%s cannot be less than %s": [
 		""
 	],
+	"%s input / %s output tokens used.": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
+	"%s moved up": [
 		""
 	],
 	"%s must be a valid whole number": [
@@ -92,6 +121,12 @@
 	"(%s)": [
 		"(%s)"
 	],
+	"(empty — double-click to edit)": [
+		""
+	],
+	"(empty)": [
+		""
+	],
 	"(In plugin: %s)": [
 		""
 	],
@@ -110,6 +145,12 @@
 	"(You may disable this prompt in the options)": [
 		""
 	],
+	"+ Group": [
+		""
+	],
+	"+ Text": [
+		""
+	],
 	"- Camera: to allow taking a picture and attaching it to a note.": [
 		"- الكاميرا: للسماح بالتقاط صورة و إرفاقها بملاحظة."
 	],
@@ -118,6 +159,9 @@
 	],
 	"- Storage: to allow attaching files to notes and to enable filesystem synchronisation.": [
 		"- التخزين: للسماح بإرفاق ملفات للملاحظات و لتمكين المزامنة من نظام الملفات."
+	],
+	"14-day free trial. Cancel anytime during the trial and you won't be charged.": [
+		""
 	],
 	"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign or remove [tag] from [note], to list notes associated with [tag], or to list tags associated with [note]. The command `tag list` can be used to list all the tags (use -l for long option).": [
 		"<tag-command> (أمر-وسم) يمكن أن يكون \"add\" (أضف) ، \"remove\" (أزل) أو \"list\" (أسرد) ، وذلك لإضافة [وسم] أو إزالته من [ملاحظة] أو لسرد الملاحظات المرتبطة بال [وسم]. الأمر`tag list` يمكن استخدامه لسرد كل الوسوم (استخدم -l لخيار الوسوم الطويلة)."
@@ -129,6 +173,9 @@
 		""
 	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+		""
+	],
+	"A system-wide keyboard shortcut that toggles the Joplin window. Works even when Joplin is not focused. Example: CommandOrControl+Shift+J. Leave empty to disable.": [
 		""
 	],
 	"A3": [
@@ -167,6 +214,15 @@
 	"Access denied: Please re-enter your password and/or username": [
 		"تم رفض الدخول: المرجو إعادة إدخال كلمة السر و/أو اسم المستخدم"
 	],
+	"Access your notes from any web browser at %s.": [
+		""
+	],
+	"Accessible": [
+		""
+	],
+	"Accessible mode saves additional information, enabling creation of accessible PDFs. It increases database size by approximately 10-20 KB per page.": [
+		""
+	],
 	"Account": [
 		"حساب"
 	],
@@ -182,6 +238,9 @@
 	"Actual Size": [
 		"الحجم الفعلي"
 	],
+	"Add a text card": [
+		""
+	],
 	"Add body": [
 		"أضف الجسم"
 	],
@@ -190,6 +249,9 @@
 	],
 	"Add new": [
 		"إضافة جديدة"
+	],
+	"Add note to whiteboard...": [
+		""
 	],
 	"Add or remove tags:": [
 		"إضافة أو حذف وسوم:"
@@ -203,7 +265,20 @@
 	"Add to dictionary": [
 		"أضف إلى القاموس"
 	],
+	"Added %d word": [
+		"",
+		"",
+		"",
+		"",
+		"",
+		""
+	],
 	"Added tag: %s": [
+		"",
+		"",
+		"",
+		"",
+		"",
 		""
 	],
 	"Adds tag": [
@@ -221,6 +296,21 @@
 	"Advanced tools": [
 		"أدوات متقدمة"
 	],
+	"AI": [
+		""
+	],
+	"AI Chat": [
+		""
+	],
+	"AI features are disabled. Enable them in Settings → AI.": [
+		""
+	],
+	"AI is running in reduced-quality mode — monthly allowance exceeded. Credits replenish on a rolling 30-day basis, or you can": [
+		""
+	],
+	"AI usage has exceeded your monthly allowance — responses are using a reduced-quality model. Credits replenish on a rolling 30-day basis. Buy more at %s.": [
+		""
+	],
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
 		"جميع البيانات، بما فيها الملاحظات، ملفات الملاحظات و العلامات ستحذف بشكل دائم."
 	],
@@ -230,13 +320,37 @@
 	"All notes": [
 		"جميع الملاحظات"
 	],
+	"All notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"All potential ports are in use - please report the issue at %s": [
 		"كافة المنافذ المحتملة قيد الاستخدام - الرجاء الإبلاغ عن المشكلة على %s"
 	],
 	"All shared folders:": [
 		""
 	],
+	"Allow editing tags on notes": [
+		""
+	],
+	"Allow editing the current note (chat panel only)": [
+		""
+	],
+	"Allow listing tags": [
+		""
+	],
+	"Allow reading images": [
+		""
+	],
+	"Allow remote AI providers": [
+		""
+	],
+	"Allow semantic search of notes": [
+		""
+	],
 	"Allows debugging mobile plugins. See %s for details.": [
+		""
+	],
+	"Already have an account? Log in": [
 		""
 	],
 	"Also displays unset and hidden config variables.": [
@@ -260,9 +374,6 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		""
 	],
-	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
-		""
-	],
 	"An error occurred: %s": [
 		""
 	],
@@ -272,7 +383,13 @@
 	"Android API level: %d": [
 		""
 	],
+	"Anthropic": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
+		""
+	],
+	"API key": [
 		""
 	],
 	"Appearance": [
@@ -295,6 +412,15 @@
 	],
 	"Aritim Dark": [
 		"Aritim Dark"
+	],
+	"Arrow at target": [
+		""
+	],
+	"Ask about this note, or request a change…": [
+		""
+	],
+	"Ask about this note, or request changes. Select text in the editor first to scope the request to that selection.": [
+		""
 	],
 	"Associated tags:": [
 		""
@@ -332,6 +458,9 @@
 	"Attachments that could not be downloaded": [
 		"المرفقات التي لا يمكن تنزيلها"
 	],
+	"Attention: After resetting your password it will no longer be possible to decrypt any data encrypted with your current password. All encrypted shared notebooks will also be unshared, so please ask the notebook owner to share it again with you.": [
+		""
+	],
 	"Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s": [
 		"تنبيه: إذا غيرت هذا المكان ، تأكد من نسخ كافة المحتويات لديك إليه قبل البدء بالمزامنة ، وإلا فسيتم حذف كل الملفات! أنظر الأسئلة المتكررة لتفاصيل أكثر: %s"
 	],
@@ -343,6 +472,9 @@
 	],
 	"Auto": [
 		"تلقائي"
+	],
+	"Auto lock when switching note": [
+		""
 	],
 	"Auto-add disabled accounts for deletion": [
 		""
@@ -368,10 +500,19 @@
 	"Back": [
 		"عودة"
 	],
+	"Back to %s": [
+		""
+	],
+	"Base URL": [
+		""
+	],
 	"Basic": [
 		""
 	],
 	"Beta": [
+		""
+	],
+	"Billed annually (%s per user per year respectively).": [
 		""
 	],
 	"Block code": [
@@ -391,6 +532,9 @@
 	],
 	"Bulleted List": [
 		"قائمة تعداد نقطي"
+	],
+	"buy more credits": [
+		""
 	],
 	"by %s": [
 		""
@@ -427,6 +571,9 @@
 	],
 	"Cannot access %s": [
 		"لا يمكن الوصول إلى"
+	],
+	"Cannot change a locked note while the session is locked": [
+		""
 	],
 	"Cannot change encrypted item": [
 		"لا يمكن تغيير العنصر المشفَّر"
@@ -470,6 +617,9 @@
 	"Case sensitive": [
 		""
 	],
+	"Certain Markdown formatting is now rendered in the editor by default. For example, **bold** will appear as actual bold text. You can change this behaviour in the \"Editor\" section of Settings.": [
+		""
+	],
 	"Change application layout": [
 		"تغيير تصميم التطبيق"
 	],
@@ -484,6 +634,9 @@
 	],
 	"Characters excluding spaces": [
 		"الأحرف بإستثناء المسافات"
+	],
+	"Chat provider": [
+		""
 	],
 	"Check elements to display in the toolbar": [
 		""
@@ -518,10 +671,16 @@
 	"Clear alarm": [
 		"مسح المنبّه"
 	],
+	"Clears the console output.": [
+		""
+	],
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"انقر \"%s\" لاستعادة الملاحظة. سيتم نسخه في دفتر الملاحظات المسمى \"%s\". لن يتم استبدال أو تعديل الإصدار الحالي من الملاحظة."
 	],
 	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
+	"Click the eye icon in the toolbar to switch to the Markdown editor and fix the JSON manually.": [
 		""
 	],
 	"Click to add tags...": [
@@ -614,6 +773,12 @@
 	"Configures the size of scrollbars used in the app.": [
 		""
 	],
+	"Confirm": [
+		"تأكيد"
+	],
+	"Confirm credentials": [
+		""
+	],
 	"Confirm password cannot be empty": [
 		"تأكيد كلمة المرور لا يمكن أن تكون فارغة"
 	],
@@ -643,6 +808,9 @@
 	],
 	"Continue": [
 		"واصل"
+	],
+	"Convert this card into a Joplin note": [
+		""
 	],
 	"Convert to note": [
 		"تحويل إلى ملاحظة"
@@ -726,6 +894,9 @@
 	],
 	"Create a notebook": [
 		"إنشاء دفتر ملاحظات"
+	],
+	"Create accessible document": [
+		""
 	],
 	"Create new profile...": [
 		"إنشاء تعريف جديد..."
@@ -835,6 +1006,9 @@
 	"Default title to use for documents created by the scanner.": [
 		""
 	],
+	"Default view / edit state": [
+		""
+	],
 	"Default: %s": [
 		"التلقائية: %s"
 	],
@@ -870,9 +1044,6 @@
 	],
 	"Delete selected notes": [
 		"حدف الملاحظات المحددة"
-	],
-	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
-		""
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
@@ -982,13 +1153,16 @@
 	"Do not ask for confirmation.": [
 		"لا تطلب التأكيد."
 	],
-	"Do you find the Joplin web app useful?": [
-		""
-	],
 	"Document scanner: Title template": [
 		""
 	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't have an account yet?": [
+		""
+	],
+	"Don't show again": [
 		""
 	],
 	"Don't show this message again": [
@@ -997,11 +1171,20 @@
 	"Done": [
 		"تم"
 	],
+	"Double tap to open this attachment. Long press to expand or collapse details.": [
+		""
+	],
 	"Download": [
 		"تحميل"
 	],
 	"Download and install the relevant extension for your browser:": [
 		"قم بتنزيل و تثبيت الإضافة المذكورة في المستعرض لديك:"
+	],
+	"Download it from GitHub Releases": [
+		""
+	],
+	"Download it from the Joplin Android repository": [
+		""
 	],
 	"Downloaded": [
 		"تم التنزيل"
@@ -1023,6 +1206,9 @@
 	],
 	"Dracula": [
 		"Dracula"
+	],
+	"Drag to move group": [
+		""
 	],
 	"Draw picture": [
 		""
@@ -1114,6 +1300,9 @@
 	"Emails": [
 		"رسائل البريد الإلكتروني"
 	],
+	"Embedding index": [
+		""
+	],
 	"emphasised text": [
 		"نص مشدَّد علية"
 	],
@@ -1147,6 +1336,9 @@
 	"Enable encryption": [
 		"تفعيل التشفير"
 	],
+	"Enable external embeds (e.g. YouTube Videos)": [
+		""
+	],
 	"Enable file:// URLs for images and videos": [
 		""
 	],
@@ -1173,9 +1365,6 @@
 	],
 	"Enable note history": [
 		"تمكين تاريخ الملاحظة"
-	],
-	"Enable optical character recognition (OCR)": [
-		""
 	],
 	"Enable PDF viewer": [
 		"تمكين عارض PDF"
@@ -1210,6 +1399,9 @@
 	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
 		""
 	],
+	"Enables the default edit operations for notes with an open AI chat panel. When disabled, the chat panel can still read the open note. Does not apply to MCP.": [
+		""
+	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"تخويل التشفير يعني أن *كل* ملاحظاتك ومرفقاتها ستجري إعادة مزامنتها ثم ترسل مشفرة إلى وجهة المزامنة."
 	],
@@ -1218,6 +1410,9 @@
 	],
 	"Encrypted items cannot be modified": [
 		"لا يمكن تعديل العناصر المشفَّرة"
+	],
+	"Encrypting a note requires a note lock password, which has not yet been set. Set it up now?": [
+		""
 	],
 	"Encryption": [
 		"التشفير"
@@ -1230,6 +1425,9 @@
 	],
 	"Encryption keys": [
 		"رموز التشفير"
+	],
+	"Encryption was setup previously, but all keys have been disabled. To continue, please use the desktop app to enable a key.": [
+		""
 	],
 	"Encryption:": [
 		"التشفير:"
@@ -1249,6 +1447,9 @@
 	"Enter notebook title": [
 		"أدخل عنوان دفتر الملاحظات"
 	],
+	"Enter the note lock password to unlock encrypted notes for this session.": [
+		""
+	],
 	"Entering selection mode": [
 		""
 	],
@@ -1266,6 +1467,9 @@
 	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"خطأ. فضلاً تحقق من صحة عنوان URL ، اسم المستخدم ، كلمة المرور وغيرها وأن جهة المزامنة المستهدفة يمكن الوصول إليها. كان الخطأ المبلّغ عنه:"
+	],
+	"Error. The AI provider test failed:": [
+		""
 	],
 	"Error: %s": [
 		"خطأ: %s"
@@ -1315,6 +1519,9 @@
 	"Exports only the given notebook.": [
 		"تصدير دفتر الملاحظات المعطى فقط."
 	],
+	"Exposes Joplin notes to external AI applications (Claude Desktop, Cursor, etc.) via the Model Context Protocol. Requires the Web Clipper service to be running. Connected AI tools can read your note content; any text they retrieve may be sent to the external LLM provider those tools use.": [
+		""
+	],
 	"Fail-safe": [
 		"أمان فشل"
 	],
@@ -1327,14 +1534,14 @@
 	"Failed to connect to your account. Please try again.": [
 		""
 	],
+	"Failed to create accessible document: %s": [
+		""
+	],
 	"Fatal error:": [
 		"خطأ فادح:"
 	],
 	"Feature flags": [
 		"علامات الميزة"
-	],
-	"Feedback": [
-		""
 	],
 	"Fetched items: %d/%d.": [
 		"العناصر المجلوبة: %d/%d."
@@ -1347,6 +1554,9 @@
 	],
 	"File system": [
 		"نظام الملفات"
+	],
+	"Filtered by section [%s]": [
+		""
 	],
 	"Find: ": [
 		"بحث:"
@@ -1362,6 +1572,9 @@
 	],
 	"Fixing search index...": [
 		"جارٍ إصلاح فهرس البحث ..."
+	],
+	"Flip": [
+		""
 	],
 	"Focus": [
 		"تركيز"
@@ -1425,7 +1638,7 @@
 		"جارٍ إنشاء الروابط...",
 		"جارٍ إنشاء الروابط..."
 	],
-	"Geolocation, spellcheck, editor toolbar, image resize": [
+	"Geolocation, image resize": [
 		""
 	],
 	"Get a quote": [
@@ -1440,6 +1653,9 @@
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"يستخرج قيمة إعداد أو يضبطها. إذا لم يجر التزويد بـ [value] (قيمة) فسيعرض التطبيق قيمة [name] (اسم). إذا لم يجر التزويد بـ [name] ولا [value] فسيسرد التطبيق الإعداد الحالي."
 	],
+	"Global shortcut to show/hide Joplin": [
+		""
+	],
 	"Glossary:": [
 		""
 	],
@@ -1449,17 +1665,26 @@
 	"Go back": [
 		""
 	],
+	"Go to end of note": [
+		""
+	],
 	"Go to line": [
 		""
 	],
 	"Go to source URL": [
 		"الذهاب إلى عنوان URL المصدر"
 	],
+	"Go to start of note": [
+		""
+	],
 	"Goto Anything...": [
 		"اذهب إلى أي شيء..."
 	],
 	"Grant authorisation": [
 		"منح ال"
+	],
+	"Group": [
+		""
 	],
 	"Have you authorised the application login in the above URL?": [
 		""
@@ -1515,6 +1740,9 @@
 	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
 		""
 	],
+	"If enabled, opening an HTML note displays a prompt to convert the note to Markdown.": [
+		""
+	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		""
 	],
@@ -1530,7 +1758,10 @@
 	"Import": [
 		"استيراد"
 	],
-	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
+	"Import a note from a text file (%s). The note will be imported into notebook '%s'.": [
+		""
+	],
+	"Import failed. Make sure a %s file was selected.\nDetails: %s": [
 		""
 	],
 	"Import from JEX": [
@@ -1557,7 +1788,19 @@
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"للقيام بذلك، يجب تشفير مجموعة بياناتك بالكامل ومزامنتها، لذا من الأفضل تشغيلها خلال الليل.\n\nللبدء، يرجى اتباع هذه التعليمات:\n\n1. قم بمزامنة جميع أجهزتك.\n2. انقر فوق \"%s\" \n3. دعها تعمل حتى الاكتمال. أثناء تشغيله، تجنب تغيير أي ملاحظة على أجهزتك الأخرى، لتجنب التعارضات.\n4. بمجرد إتمام المزامنة على هذا الجهاز، قم بمزامنة جميع أجهزتك الأخرى واتركها تعمل حتى الاكتمال.\n\nهام: ما عليك سوى تشغيل هذا مرة واحدة على جهاز واحد."
 	],
+	"In order to synchronise, Please upgrade your application to version %s": [
+		""
+	],
 	"In order to synchronise, please upgrade your application to version %s+": [
+		""
+	],
+	"In order to synchronise, Please upgrade your application to version %s. Joplin could not check update information.": [
+		""
+	],
+	"In order to synchronise, Please upgrade your application to version %s: %s": [
+		""
+	],
+	"In order to synchronise, Please upgrade your application to version %s: %s or update it using your package manager": [
 		""
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
@@ -1584,6 +1827,15 @@
 	"Indent more": [
 		"مسافة بادئة أكثر"
 	],
+	"Index notes for AI search": [
+		""
+	],
+	"Indexer:": [
+		""
+	],
+	"Indexing…": [
+		""
+	],
 	"Info": [
 		""
 	],
@@ -1596,8 +1848,17 @@
 	"Insert": [
 		"إدخال"
 	],
+	"Insert column right": [
+		""
+	],
 	"Insert Hyperlink": [
 		"إدراج ارتباط تشعبي"
+	],
+	"Insert row above": [
+		""
+	],
+	"Insert row below": [
+		""
 	],
 	"Insert time": [
 		"إدراج الوقت"
@@ -1635,11 +1896,17 @@
 	"Invalid password": [
 		"كلمة سر غير صحيحة"
 	],
+	"Invalid password. Please try again. If you have forgotten your password you will need to reset it.": [
+		""
+	],
 	"Italic": [
 		"مائل"
 	],
 	"Item \"%s\" could not be downloaded: %s": [
 		"العنصر \"%s\" لم يتم الإمكان من تحميله: %s"
+	],
+	"Item upload will be disabled in %s.": [
+		""
 	],
 	"Items": [
 		"عناصر"
@@ -1656,6 +1923,9 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
+	"Joplin Cloud AI requires Joplin Cloud sync. Pick a different provider or restore Joplin Cloud sync.": [
+		""
+	],
 	"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. What would you like to do?": [
 		""
 	],
@@ -1670,6 +1940,9 @@
 	],
 	"Joplin Forum": [
 		"منتدى Joplin"
+	],
+	"Joplin needs your permission to access your %s account and to synchronise data with it.": [
+		""
 	],
 	"Joplin Server": [
 		"خادم Joplin"
@@ -1793,6 +2066,12 @@
 	"Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at \"%s\" and resume the operation.": [
 		"ملف القفل هو قيد الحجز بالفعل. بإمكانك حذف ملف القفل في \"%s\" واستئناف العملية إن كنت تعلم أنه لا توجد مزامنة تجري حالياً."
 	],
+	"Locked notes are encrypted on this device and can only be read after entering your note lock password. The password is required again after locking or restarting Joplin.": [
+		""
+	],
+	"Locked notes cannot be opened in an external editor": [
+		""
+	],
 	"Log": [
 		"السجل"
 	],
@@ -1825,6 +2104,9 @@
 	],
 	"Manage profiles": [
 		"إدارة التعاريف"
+	],
+	"Manage this server's license from the [admin dashboard](%s).": [
+		""
 	],
 	"Manage your plugins": [
 		"إدارة الإضافات الخاصة بك"
@@ -1874,6 +2156,9 @@
 	"Max Item Size": [
 		""
 	],
+	"MCP requires the Web Clipper service. Enable it in Settings → Web Clipper.": [
+		""
+	],
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
@@ -1892,6 +2177,12 @@
 	"Mobile data - auto-sync disabled": [
 		"بيانات الجوال - تم تعطيل المزامنة التلقائية"
 	],
+	"Model": [
+		""
+	],
+	"Model:": [
+		""
+	],
 	"More info": [
 		"معلومات اكثر"
 	],
@@ -1902,6 +2193,12 @@
 		"أكثر من عنصر واحد يطابق \"%s\". يرجى تضييق الاستعلام الخاص بك."
 	],
 	"Most plugins have source code available for review on the plugin website.": [
+		""
+	],
+	"Move column left": [
+		""
+	],
+	"Move column right": [
 		""
 	],
 	"Move left": [
@@ -1946,6 +2243,9 @@
 	"New sub-notebook": [
 		"دفتر ملاحظات فرعي جديد"
 	],
+	"New text card": [
+		""
+	],
 	"New to-do": [
 		"قائمة جديدة للمهام"
 	],
@@ -1978,6 +2278,18 @@
 	],
 	"No active notebook.": [
 		"لا يوجد دفتر ملاحظات نشط."
+	],
+	"No AI usage recorded yet.": [
+		""
+	],
+	"No arrow": [
+		""
+	],
+	"No colour": [
+		""
+	],
+	"No embedding model is installed. It is downloaded automatically on first use — check Settings → AI for progress.": [
+		""
 	],
 	"No new invitations": [
 		""
@@ -2012,8 +2324,14 @@
 	"No URL for SAML authentication set.": [
 		""
 	],
+	"No valid notebook is available. Please create or select a notebook and try again.": [
+		""
+	],
 	"Nord": [
 		"Nord"
+	],
+	"Normal": [
+		""
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"لا يمكن المصادقة باستخدام %s. يرجى التزويد بأي من بيانات اعتماد الدخول المفقودة."
@@ -2030,7 +2348,10 @@
 	"Not now": [
 		"ليس الآن"
 	],
-	"Not useful": [
+	"Not set": [
+		""
+	],
+	"Not Used": [
 		""
 	],
 	"note": [
@@ -2063,6 +2384,9 @@
 	"Note History": [
 		"تاريخ الملاحظة"
 	],
+	"Note indexing is turned off in Settings → AI.": [
+		""
+	],
 	"Note is not a to-do: \"%s\"": [
 		"الملاحظة: \"%s\" ليست قائمة مهام"
 	],
@@ -2071,6 +2395,9 @@
 	],
 	"Note list growth factor": [
 		"عامل نمو قائمة ااملاحظات"
+	],
+	"Note lock password, auto lock": [
+		""
 	],
 	"Note properties": [
 		"خصائص الملاحظة"
@@ -2111,7 +2438,22 @@
 	"Numbered List": [
 		"قائمة مرقّمة"
 	],
+	"Obsidian Vault": [
+		""
+	],
+	"OCR is not complete. Please wait for OCR to finish before creating an accessible document.": [
+		""
+	],
+	"OCR needs to run to generate an accessible document. This may take a moment. Would you like to continue?": [
+		""
+	],
 	"OCR: Clear cache and re-download language data files": [
+		""
+	],
+	"OCR: Enable optical character recognition": [
+		""
+	],
+	"OCR: PDF processing mode": [
 		""
 	],
 	"OK": [
@@ -2140,6 +2482,9 @@
 	],
 	"OneDrive Login": [
 		"تسجيل الدخول إلى OneDrive"
+	],
+	"Only do this if you've forgotten your current password. A new password will be created, and any notes locked with the old one will become permanently unreadable.": [
+		""
 	],
 	"Only one note can be printed at a time.": [
 		"يمكن طباعة ملاحظة واحدة فقط في كل مرة."
@@ -2173,6 +2518,9 @@
 	],
 	"Open...": [
 		"فتح..."
+	],
+	"OpenAI-compatible": [
+		""
 	],
 	"Opening section %s": [
 		""
@@ -2243,8 +2591,14 @@
 	"Please confirm that you would like to re-encrypt your complete database.": [
 		"يرجى تأكيد رغبتك في إعادة تشفير قاعدة البيانات الكاملة الخاصة بك."
 	],
+	"Please disable users from the [admin dashboard](%s) to bring this server under the limit.": [
+		""
+	],
 	"Please enter your password in the master key list below before upgrading the key.": [
 		"الرجاء إدخال كلمة المرور الخاصة بك في قائمة المفاتيح الرئيسية أدناه قبل ترقية المفتاح."
+	],
+	"Please make sure you remember your password. It cannot be recovered if lost, and any data encrypted with it will become inaccessible.": [
+		""
 	],
 	"Please note that if it is a large notebook, it may take a few minutes for all the notes to show up on the recipient's device.": [
 		""
@@ -2272,6 +2626,9 @@
 	],
 	"Please specify the notebook where the notes should be imported to.": [
 		"فضلاً حدّد دفتر الملاحظات الذي ترغب استيراد الملاحظات إليه."
+	],
+	"Please update the license key from the [admin dashboard](%s).": [
+		""
 	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"يرجى الانتظار حتى يتم تنزيل جميع المرفقات وفك تشفيرها. يمكنك أيضًا التبديل إلى %s لتحرير الملاحظة."
@@ -2357,6 +2714,9 @@
 	"Pro": [
 		""
 	],
+	"Pro 100 GB": [
+		""
+	],
 	"Process failed payment subscriptions": [
 		""
 	],
@@ -2405,6 +2765,9 @@
 	"Quit": [
 		"إغلاق"
 	],
+	"Quit anyway": [
+		""
+	],
 	"Re-download model": [
 		""
 	],
@@ -2417,11 +2780,17 @@
 	"Re-upload local data to sync target": [
 		"إعادة رفع البيانات المحليّة إلى وجهة المزامنة"
 	],
+	"Read all tags": [
+		""
+	],
 	"Read more about it": [
 		"إقرأ المزيد عن هذا"
 	],
 	"Read time: %s min": [
 		"وقت القراءة: %s دقيقة"
+	],
+	"Reading this note requires the note lock password, which has not been set up on this device yet.": [
+		""
 	],
 	"Recipient has accepted the invitation": [
 		"قام المستلم بقبول الدعوة"
@@ -2498,6 +2867,15 @@
 	"Report fraudulent plugin": [
 		""
 	],
+	"Required to use cloud-hosted AI models, including Joplin Cloud AI. When disabled, only on-device providers can be used.": [
+		""
+	],
+	"Reset": [
+		""
+	],
+	"Reset AI token usage counters?": [
+		""
+	],
 	"Resources: %d.": [
 		"الموارد: %d."
 	],
@@ -2538,6 +2916,9 @@
 		""
 	],
 	"Rich Text editor. Press Escape then Tab to escape focus.": [
+		""
+	],
+	"Run OCR": [
 		""
 	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
@@ -2612,6 +2993,12 @@
 	"Self-hosted": [
 		""
 	],
+	"Self-hosted instances of the Joplin web app cannot sync with Joplin Cloud. Open the official web app?": [
+		""
+	],
+	"Send": [
+		""
+	],
 	"Server is already running on port %d": [
 		"الخادم قيد التشغيل بالفعل على المنفذ %d"
 	],
@@ -2666,8 +3053,14 @@
 	"Show all": [
 		"إظهار الكل"
 	],
+	"Show checkbox completion chart in note list": [
+		""
+	],
 	"Show completed to-dos": [
 		"إظهار قوائم المهام المكتملة"
+	],
+	"Show Joplin icon for note links": [
+		""
 	],
 	"Show note counts": [
 		"إظهار عدد الملاحظات"
@@ -2676,6 +3069,9 @@
 		"إظهار أيقونة لوحة النظام"
 	],
 	"Show/hide the sidebar": [
+		""
+	],
+	"Showing all matching settings": [
 		""
 	],
 	"Shrink large images before adding them to notes.": [
@@ -2689,6 +3085,9 @@
 	],
 	"Size": [
 		"حجم"
+	],
+	"Size (smallest first)": [
+		""
 	],
 	"Skip this version": [
 		"تجاوز هذه النسخة"
@@ -2720,10 +3119,16 @@
 	"Some items cannot be synchronised.": [
 		"لا يمكن مزامنة بعض العناصر."
 	],
+	"Something went wrong.": [
+		""
+	],
 	"Sort \"%s\" in ascending order": [
 		""
 	],
 	"Sort \"%s\" in descending order": [
+		""
+	],
+	"Sort by size": [
 		""
 	],
 	"Sort notebooks by": [
@@ -2764,6 +3169,9 @@
 	],
 	"Start application minimised in the tray icon": [
 		"بدء التطبيق مصغراً في لوحة النظام"
+	],
+	"Start free trial": [
+		""
 	],
 	"Start recording": [
 		""
@@ -2831,6 +3239,9 @@
 	"Success! Synchronisation configuration appears to be correct.": [
 		"نجاح! يبدو أن إعداد المزامنة صحيح."
 	],
+	"Success! The AI provider responded:": [
+		""
+	],
 	"Superscript": [
 		"أحرف فوقية"
 	],
@@ -2839,6 +3250,9 @@
 	],
 	"Swap line up": [
 		"اصطف بلمبادلة لأعلى"
+	],
+	"Swap source and target": [
+		""
 	],
 	"Switch between note and to-do type": [
 		"التبديل بين نوعي الملاحظة و قائمة المهام"
@@ -2854,9 +3268,6 @@
 	],
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"التبديل إلى [notebook] - جميع العمليات التالية ستجري في هذا الدفتر."
-	],
-	"Sync": [
-		""
 	],
 	"Sync as many devices as you want": [
 		""
@@ -2881,6 +3292,9 @@
 	],
 	"Sync your notes": [
 		"زامِن ملاحظاتك"
+	],
+	"Sync your notes with Joplin Cloud to access them on all your devices. Other sync options are also available.": [
+		""
 	],
 	"Synchronisation": [
 		"المزامنة"
@@ -2909,6 +3323,9 @@
 	"Synchronises with remote storage.": [
 		"يزامن مع المخزن البعيد."
 	],
+	"Synchronising remaining changes, please wait...": [
+		""
+	],
 	"Synchronising...": [
 		"مزامنة..."
 	],
@@ -2930,6 +3347,9 @@
 	"Tags": [
 		"وسوم"
 	],
+	"Tags cannot be changed for locked notes while the session is locked": [
+		""
+	],
 	"Take photo": [
 		"التقاط صورة"
 	],
@@ -2945,10 +3365,10 @@
 	"Text editor command": [
 		"أمر محرر النصوص"
 	],
-	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		""
 	],
-	"The active profile cannot be deleted. Switch to a different profile and try again.": [
+	"The API key is missing. Set it in Settings → AI.": [
 		""
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
@@ -2981,7 +3401,7 @@
 	"The default encryption method has been changed, you should re-encrypt your data.": [
 		"تم تغيير طريقة التشفير الافتراضية، يجب إعادة تشفير بياناتك."
 	],
-	"The default profile cannot be deleted": [
+	"The default profile has been reset.": [
 		""
 	],
 	"The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.": [
@@ -3002,14 +3422,38 @@
 	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
 		""
 	],
+	"The license for this server failed to refresh.": [
+		""
+	],
+	"The license key for this Joplin Server Business instance has expired and needs to be renewed.": [
+		""
+	],
+	"The license key for this Joplin Server Business instance has expired or is invalid. Uploading items has been disabled until the license is renewed.": [
+		""
+	],
 	"The master key has been upgraded successfully!": [
 		"تمت ترقية المفتاح الرئيسي بنجاح!"
 	],
 	"The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
 		"تم استخدام المفاتيح الرئيسة ذات المعرّفات التالية لتشفير بعض العناصر لديك ، إلا أن التطبيق لم يتمكن من الوصول إليها حالياً. من المحتمل أن يجري تنزيلها فيما بعد عبر المزامنة."
 	],
+	"The MCP server is disabled. Enable it in Settings → MCP.": [
+		""
+	],
+	"The model identifier to use, for example gpt-4o-mini or claude-3-5-sonnet-latest.": [
+		""
+	],
+	"The model name is missing. Set it in Settings → AI.": [
+		""
+	],
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"تمت استعادة الملاحظة \"%s\" بنجاح إلى دفتر الملاحظات \"%s\"."
+	],
+	"The note changed while the request was running; edits were not applied. Try again.": [
+		""
+	],
+	"The note lock state cannot be changed from the command line": [
+		""
 	],
 	"The notebook could not be saved: %s": [
 		"لم يتم حفظ دفتر الملاحظات: %s"
@@ -3017,8 +3461,17 @@
 	"The notes have been imported: %s": [
 		"جرى استيراد الملاحظات: %s"
 	],
+	"The OpenAI-compatible API endpoint. For example, https://api.openai.com/v1 or http://localhost:11434/v1 for Ollama.": [
+		""
+	],
+	"The OpenAI-compatible provider needs a base URL. Set it in Settings → AI.": [
+		""
+	],
 	"The possible commands are:": [
 		"الأوامر الممكنة هي:"
+	],
+	"The provider returned an empty response. Check that the base URL ends with /v1 and that a model is loaded.": [
+		""
 	],
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		""
@@ -3095,6 +3548,9 @@
 	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
 		""
 	],
+	"This feature is only available for PDF files.": [
+		""
+	],
 	"This feature is only available on Joplin Cloud and Joplin Server.": [
 		""
 	],
@@ -3103,6 +3559,17 @@
 	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"هذه أداة متقدمة لإظهار المرفقات المرتبطة بملاحظاتك. يرجى توخّي الحذر عند حذف أحدها حيث لا يمكن استعادتها بعد ذلك."
+	],
+	"This Joplin Server Business instance is only licensed for %d user.": [
+		"",
+		"",
+		"",
+		"",
+		"",
+		""
+	],
+	"This note could not be decrypted. If it was encrypted prior to a password reset, the contents are no longer recoverable.": [
+		""
 	],
 	"This note does not have geolocation information.": [
 		"ليس لدى هذه الملاحظة معلومة موقع جغرافي."
@@ -3116,14 +3583,32 @@
 	"This note has no history": [
 		"هذه المذكرة ليس لها تاريخ"
 	],
+	"This note is currently being saved. Please try again in a moment.": [
+		""
+	],
+	"This note is encrypted and cannot be used with AI Chat.": [
+		""
+	],
+	"This note is encrypted. Enter the note lock password to unlock encrypted notes for this session.": [
+		""
+	],
 	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
+	],
+	"This notebook contains Windows-specific files. For maximum compatibility, consider importing the notebook from Windows.": [
 		""
 	],
 	"This plugin doesn't support %s.": [
 		""
 	],
+	"This provider sends data off your device. Turn on \"Allow remote AI providers\" in Settings → AI.": [
+		""
+	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"يحتوي محرر النص المنسق هذا على عدد من القيود ومن المستحسن أن تكون على دراية بها قبل استخدامه."
+	],
+	"This section opens in its own screen and is matched by section title.": [
+		""
 	],
 	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
 		"تتيح هذه الخدمة تواصل إضافة المستعرض مع Joplin. عندما تفعّلها قد يسألك الجدار الناري أن تعطي الإذن لـ Joplin بالاستماع إلى منفذ محدّد."
@@ -3148,6 +3633,9 @@
 	],
 	"Title": [
 		"العنوان"
+	],
+	"To access your recovery codes please enter an authentication code or your password.": [
+		""
 	],
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
 		"يرجى اتباع الخطوات التالية للسماح لـ Joplin بالمزامنة مع Dropbox:"
@@ -3179,7 +3667,7 @@
 	"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`": [
 		"لإعادة محاولة فك تشفير هذه العناصر. شغّل `e2ee decrypt --retry-failed-items`"
 	],
-	"To switch the profile, the app is going to close and you will need to restart it.": [
+	"To switch the profile, the app is going to restart.": [
 		""
 	],
 	"To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions": [
@@ -3212,11 +3700,17 @@
 	"Toggle sidebar": [
 		"تبديل الشريط الجانبي"
 	],
+	"Toggle whiteboard / Markdown view": [
+		""
+	],
 	"Token has been copied to the clipboard!": [
 		"تم نسخ الرمز المميز إلى الحافظة!"
 	],
 	"Tools": [
 		"أدوات"
+	],
+	"Tools and services to expose to AI. AI agents can use these tools either via the note chat panel or Joplin's MCP server (if enabled).": [
+		""
 	],
 	"Total: %d/%d": [
 		"الإجمالي: %d/%d"
@@ -3242,6 +3736,12 @@
 	"Type: %s.": [
 		"النوع: %s."
 	],
+	"Typography, spellcheck, layout": [
+		""
+	],
+	"Unable to access the recording file.": [
+		""
+	],
 	"Unable to edit resource of type %s": [
 		""
 	],
@@ -3249,6 +3749,9 @@
 		""
 	],
 	"Unable to share note data. Reason: %s": [
+		""
+	],
+	"Unavailable on this platform": [
 		""
 	],
 	"Unchecked": [
@@ -3272,8 +3775,14 @@
 	"Unknown item type downloaded - please upgrade Joplin to the latest version": [
 		"تم تنزيل نوع عنصر غير معروف - يرجى ترقية Joplin إلى أحدث إصدار"
 	],
+	"Unlock": [
+		""
+	],
 	"Unpublish note": [
 		"إلغاء نشر الملاحظة"
+	],
+	"Unpublishes a note from Joplin Server or Joplin Cloud": [
+		""
 	],
 	"Unshare": [
 		"إلغاء المشاركة"
@@ -3290,11 +3799,20 @@
 	"Unsupported link or message: %s": [
 		"رابط أو رسالة غير مدعومان: %s"
 	],
+	"Unsupported public key format. Please check that Joplin is updated to the latest version and try again.": [
+		""
+	],
 	"Untitled": [
 		"بدون اسم"
 	],
+	"Untitled whiteboard": [
+		""
+	],
 	"Update": [
 		"تحديث"
+	],
+	"Update it from Google Play": [
+		""
 	],
 	"Updated": [
 		"التحديث"
@@ -3326,6 +3844,9 @@
 	"Upgrade the sync target to the latest version.": [
 		"قم بترقية هدف المزامنة إلى أحدث إصدار."
 	],
+	"Upgrade to 100 GB": [
+		""
+	],
 	"URL": [
 		"عنوان URL"
 	],
@@ -3353,14 +3874,14 @@
 	"Use your biometrics to secure access to your application. You can always set it up later in Settings.": [
 		""
 	],
+	"Used": [
+		""
+	],
 	"Used for most text in the markdown editor. If not found, a generic proportional (variable width) font is used.": [
 		"الخط المستخدم لأغلب النصوص في محرِّر Markdown.  سيتم استخدام خط عامّ ذو عرض تناسبي (متغيّر)."
 	],
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"الخط المستخدم عند الحاجة إلى خط ثابت العرض لوضع النص بصورة مقروءة (في الجداول وخانات الاختيار والشفرة البرمجية مثلاً). عندما لا يُعثر عليه سيتم استخدام خط عامّ أحادي المسافة (ثابت العرض)."
-	],
-	"Useful": [
-		""
 	],
 	"User deletions": [
 		""
@@ -3370,6 +3891,12 @@
 	],
 	"Valid": [
 		"صحيح"
+	],
+	"Vector search is not available on this platform": [
+		""
+	],
+	"Vector search is unavailable on this platform (sqlite-vec extension not loaded).": [
+		""
 	],
 	"Verify your identity": [
 		""
@@ -3446,7 +3973,13 @@
 	"When creating a new to-do:": [
 		"عند إنشاء قائمة جديدة للمهام:"
 	],
+	"When enabled, plugins and built-in features can use AI models to generate or analyse text.": [
+		""
+	],
 	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		""
+	],
+	"When enabled, tables are rendered as an interactive widget in the editor. Disable this if you prefer to edit tables as raw Markdown.": [
 		""
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
@@ -3491,11 +4024,17 @@
 	"You do not have any installed plugin.": [
 		"ليس لديك أي مكون إضافي مثبت."
 	],
+	"You have unsaved tag changes. Discard them?": [
+		""
+	],
 	"You may also type `status` for more information.": [
 		"يمكنك أيضًا كتابة \"الحالة\" لمزيد من المعلومات."
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"يمكنك استخدام الأداة أدناه لإعادة تشفير بياناتك، على سبيل المثال إذا كنت تعلم أن بعض ملاحظاتك مشفرة بطريقة تشفير قديمة."
+	],
+	"You switched notes while the request was running; edits were not applied. Try again.": [
+		""
 	],
 	"Your account doesn't have access to this feature": [
 		""
@@ -3507,6 +4046,12 @@
 		"ستتم إعادة تشفير بياناتك ومزامنتها مرة أخرى."
 	],
 	"Your Joplin Cloud credentials are invalid, please login.": [
+		""
+	],
+	"Your master password is used to protect sensitive information. In particular, it is used to encrypt your notes when end-to-end encryption (E2EE) is enabled, or to share and encrypt notes with someone who has E2EE enabled.": [
+		""
+	],
+	"Your note will be sent to the configured AI provider (%s).": [
 		""
 	],
 	"Your password is needed to decrypt some of your data.": [
@@ -3523,5 +4068,8 @@
 	],
 	"Zoom Out": [
 		"تصغير"
+	],
+	"— now viewing: %s —": [
+		""
 	]
 }

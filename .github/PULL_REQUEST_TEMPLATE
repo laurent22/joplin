@@ -26,6 +26,7 @@ Valid prefixes:
 - `Mobile` — the mobile app (both Android and iOS)
 - `Android` — only the Android app
 - `iOS` — only the iOS app
+- `Web` — only the web app
 - `Windows` — Windows-specific changes
 - `Linux` — Linux-specific changes
 - `macOS` — macOS-specific changes

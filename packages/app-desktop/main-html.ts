@@ -37,7 +37,11 @@ import initLib from '@joplin/lib/initLib';
 import PerformanceLogger from '@joplin/lib/PerformanceLogger';
 import * as pdfJs from 'pdfjs-dist';
 import { isAppleSilicon } from 'is-apple-silicon';
+import restart from './services/restart';
+import initializeNetworkConnectionAttemptTimeout from './utils/initializeNetworkConnectionAttemptTimeout';
 require('@sentry/electron/renderer');
+
+initializeNetworkConnectionAttemptTimeout();
 
 // Allows components to use React as a global
 window.React = React;
@@ -123,6 +127,7 @@ const main = async () => {
 		onnxRuntime,
 		pdfJs: pdfJs as PdfJs,
 		isAppleSilicon,
+		restartApp: restart,
 	});
 
 	const logger = new Logger();

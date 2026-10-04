@@ -4,7 +4,7 @@ import KeymapService, { KeymapItem } from '../services/KeymapService';
 const keymapService = KeymapService.instance();
 keymapService.initialize([]);
 
-describe('services_KeymapService', () => {
+describe('KeymapService', () => {
 	describe('validateAccelerator', () => {
 		it('should identify valid Accelerators', () => {
 			const testCases = {

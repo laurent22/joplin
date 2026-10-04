@@ -21,6 +21,7 @@ export interface Theme {
 	dividerColor: string;
 	selectedColor: string;
 	urlColor: string;
+	shadowColor: string;
 
 	// Color scheme "2" is used for the sidebar. It's white text over
 	// dark blue background.
@@ -29,6 +30,7 @@ export interface Theme {
 	color2: string;
 	selectedColor2: string;
 	colorError2: string;
+	colorPublished2?: string; // Published items on the sidebar
 	colorWarn2: string; // On a darker background (eg. sidebar)
 	colorWarn3: string; // On a lighter background (eg. note list)
 

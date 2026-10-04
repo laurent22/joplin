@@ -36,15 +36,15 @@ test.describe('markdownEditor', () => {
 	test('editor should render the full content of HTML notes', async ({ mainWindow, electronApp }) => {
 		const { mainScreen } = await importAndOpenHtmlExport(mainWindow, electronApp, 'test-html-file-with-spans');
 
-		const editor = mainScreen.noteEditor.codeMirrorEditor;
+		await mainScreen.noteEditor.showMarkdownEditor();
 		// Regression test: The <span> should not be hidden by inline Markdown rendering (since this is an HTML note):
-		await expect(editor).toHaveText('<p><span style="margin-left: 100px;">test</span></p>');
+		await mainScreen.noteEditor.expectToHaveText('<p><span style="margin-left: 100px;">test</span></p>');
 	});
 
 	test('preview pane should render images in HTML notes', async ({ mainWindow, electronApp }) => {
 		const { mainScreen } = await importAndOpenHtmlExport(mainWindow, electronApp, 'test-html-file-with-image');
 
-		const viewerFrame = mainScreen.noteEditor.getNoteViewerFrameLocator();
+		const viewerFrame = (await mainScreen.noteEditor.showNoteViewer()).content;
 		// Should render headers
 		await expect(viewerFrame.locator('h1')).toHaveText('Test HTML file!');
 
@@ -59,12 +59,12 @@ test.describe('markdownEditor', () => {
 		await mainScreen.createNewNote('PDF attachments');
 		const editor = mainScreen.noteEditor;
 
-		await editor.focusCodeMirrorEditor();
+		await editor.showMarkdownEditor();
 
 		await setFilePickerResponse(electronApp, [join(__dirname, 'resources', 'small-pdf.pdf')]);
 		await editor.attachFileButton.click();
 
-		const viewerFrame = mainScreen.noteEditor.getNoteViewerFrameLocator();
+		const viewerFrame = (await mainScreen.noteEditor.showNoteViewer()).content;
 		const pdfLink = viewerFrame.getByText('small-pdf.pdf');
 		await expect(pdfLink).toBeVisible();
 
@@ -93,9 +93,8 @@ test.describe('markdownEditor', () => {
 		await expectToBeRendered();
 
 		// Should still render after switching editors
-		await mainScreen.noteEditor.toggleEditorsButton.click();
-		await mainScreen.noteEditor.richTextEditor.waitFor();
-		await mainScreen.noteEditor.toggleEditorsButton.click();
+		await mainScreen.noteEditor.showRichTextEditor();
+		await mainScreen.noteEditor.showNoteViewer();
 
 		await expectToBeRendered();
 	});
@@ -105,11 +104,11 @@ test.describe('markdownEditor', () => {
 		await mainScreen.createNewNote('Media attachments');
 		const editor = mainScreen.noteEditor;
 
-		await editor.focusCodeMirrorEditor();
+		await editor.showMarkdownEditor();
 		await setFilePickerResponse(electronApp, [join(__dirname, 'resources', 'video.mp4')]);
 		await editor.attachFileButton.click();
 
-		const videoLocator = editor.getNoteViewerFrameLocator().locator('video');
+		const videoLocator = (await editor.showNoteViewer()).content.locator('video');
 		const expectVideoToRender = async () => {
 			await expect(videoLocator).toBeSeekableMediaElement(6.9, 7);
 		};
@@ -117,9 +116,8 @@ test.describe('markdownEditor', () => {
 		await expectVideoToRender();
 
 		// Should be able to render again if the editor is closed and re-opened.
-		await mainScreen.noteEditor.toggleEditorsButton.click();
-		await mainScreen.noteEditor.richTextEditor.waitFor();
-		await mainScreen.noteEditor.toggleEditorsButton.click();
+		await mainScreen.noteEditor.showRichTextEditor();
+		await mainScreen.noteEditor.showNoteViewer();
 
 		await expectVideoToRender();
 	});
@@ -131,7 +129,8 @@ test.describe('markdownEditor', () => {
 		await mainScreen.createNewNote('Note 1');
 		await mainScreen.createNewNote('Note 2');
 		const noteEditor = mainScreen.noteEditor;
-		await noteEditor.focusCodeMirrorEditor();
+		await (await noteEditor.showMarkdownEditor()).focusContent();
+
 
 		// Escape, then Shift+Tab should focus the toolbar
 		await mainWindow.keyboard.press('Escape');
@@ -168,20 +167,19 @@ test.describe('markdownEditor', () => {
 
 		await mainScreen.createNewNote('Note');
 
-		await noteEditor.focusCodeMirrorEditor();
+		const { editor: markdownEditor, viewer } = await noteEditor.showNoteViewerAndMarkdownEditor();
 
-		await mainWindow.keyboard.type('# Testing');
-		await mainWindow.keyboard.press('Enter');
-		await mainWindow.keyboard.press('Enter');
-		await mainWindow.keyboard.type('This is a test of search. `Test inline code`');
+		await markdownEditor.typeText('# Testing');
+		await markdownEditor.pressKey('Enter');
+		await markdownEditor.pressKey('Enter');
+		await markdownEditor.typeText('This is a test of search. `Test inline code`');
 
-		const viewer = noteEditor.getNoteViewerFrameLocator();
-		await expect(viewer.locator('h1')).toHaveText('Testing');
+		await expect(viewer.content.locator('h1')).toHaveText('Testing');
 
-		const matches = viewer.locator('mark-ghost');
+		const matches = viewer.content.locator('mark-ghost');
 		await expect(matches).toHaveCount(0);
 
-		await mainWindow.keyboard.press(process.platform === 'darwin' ? 'Meta+f' : 'Control+f');
+		await markdownEditor.pressKey(process.platform === 'darwin' ? 'Meta+f' : 'Control+f');
 		await expect(noteEditor.editorSearchInput).toBeVisible();
 
 		await noteEditor.editorSearchInput.click();
@@ -200,7 +198,7 @@ test.describe('markdownEditor', () => {
 		// Should continue searching after switching to view-only mode
 		await noteEditor.toggleEditorLayout();
 		await noteEditor.toggleEditorLayout();
-		await expect(noteEditor.codeMirrorEditor).not.toBeVisible();
+		await expect(markdownEditor.container).not.toBeVisible();
 		await expect(noteEditor.editorSearchInput).not.toBeVisible();
 		await expect(noteEditor.viewerSearchInput).toBeVisible();
 
@@ -213,7 +211,7 @@ test.describe('markdownEditor', () => {
 
 		// After showing the viewer again, search should still be hidden
 		await noteEditor.toggleEditorLayout();
-		await expect(noteEditor.codeMirrorEditor).toBeVisible();
+		await expect(markdownEditor.container).toBeVisible();
 		await expect(noteEditor.editorSearchInput).not.toBeVisible();
 	});
 
@@ -223,30 +221,33 @@ test.describe('markdownEditor', () => {
 		const noteEditor = mainScreen.noteEditor;
 
 		await mainScreen.createNewNote('Note');
+		const {
+			viewer: markdownViewer, editor: markdownEditor,
+		} = await noteEditor.showNoteViewerAndMarkdownEditor();
 
-		await noteEditor.focusCodeMirrorEditor();
+		await markdownEditor.content.click();
 		await mainWindow.keyboard.type('test');
-		const focusInMarkdownEditor = noteEditor.codeMirrorEditor.locator(':focus');
+		const focusInMarkdownEditor = markdownEditor.container.locator(':focus');
 		await expect(focusInMarkdownEditor).toBeAttached();
 
+		// Use the "toggle layout" menu item to avoid changing focus
 		const toggleEditorLayout = () => activateMainMenuItem(electronApp, 'Toggle editor layout');
 
 		// Editor only
 		await toggleEditorLayout();
-		await expect(noteEditor.noteViewerContainer).not.toBeVisible();
 		// Markdown editor should be focused
 		await expect(focusInMarkdownEditor).toBeAttached();
 
 		// Viewer only
 		await toggleEditorLayout();
-		await expect(noteEditor.codeMirrorEditor).not.toBeVisible();
+		await expect(markdownEditor.container).not.toBeVisible();
 		// Viewer should be focused
-		await expect(noteEditor.noteViewerContainer).toBeFocused();
+		await expect(markdownViewer.container).toBeFocused();
 
 		// Viewer and editor
 		await toggleEditorLayout();
-		await expect(noteEditor.noteViewerContainer).toBeAttached();
-		await expect(noteEditor.codeMirrorEditor).toBeVisible();
+		await expect(markdownEditor.container).toBeAttached();
+		await expect(markdownViewer.container).toBeVisible();
 		// Editor should be focused
 		await expect(focusInMarkdownEditor).toBeAttached();
 	});
@@ -258,20 +259,21 @@ test.describe('markdownEditor', () => {
 
 		await mainScreen.createNewNote('Note');
 
-		await noteEditor.focusCodeMirrorEditor();
-		await mainWindow.keyboard.type('# Test');
-		await mainWindow.keyboard.press('Enter');
-		await mainWindow.keyboard.press('Enter');
-		await mainWindow.keyboard.type('Test paragraph.');
+		const markdownEditor = await noteEditor.showMarkdownEditor();
+		await markdownEditor.typeText('# Test');
+		await markdownEditor.pressKey('Enter');
+		await markdownEditor.pressKey('Enter');
+		await markdownEditor.typeText('Test paragraph.');
 
 		// Wait for rendering
-		await expect(noteEditor.getNoteViewerFrameLocator().getByText('Test paragraph.')).toBeAttached();
+		const noteViewer = await noteEditor.showNoteViewer();
+		await expect(noteViewer.content.getByText('Test paragraph.')).toBeAttached();
 
 		// Move focus
 		await mainScreen.goToAnything.runCommand(electronApp, 'focusElementNoteViewer');
 
 		// Note viewer should be focused
-		await expect(noteEditor.noteViewerContainer).toBeFocused();
+		await expect(noteViewer.container).toBeFocused();
 	});
 
 	test('local file URLs setting should allow loading images from local file URLs', async ({ mainWindow, electronApp }) => {
@@ -282,10 +284,10 @@ test.describe('markdownEditor', () => {
 		await mainScreen.createNewNote('Test local file URLs');
 
 		const editor = mainScreen.noteEditor;
-		await editor.focusCodeMirrorEditor();
-		await mainWindow.keyboard.type(`![Test image](file://${toForwardSlashes(join(__dirname, 'resources', 'test.png'))})`);
+		const markdownEditor = await editor.showMarkdownEditor();
+		await markdownEditor.typeText(`![Test image](file://${toForwardSlashes(join(__dirname, 'resources', 'test.png'))})`);
 
-		const renderedImage = editor.getNoteViewerFrameLocator().getByRole('img', { name: 'Test image' });
+		const renderedImage = (await editor.showNoteViewer()).content.getByRole('img', { name: 'Test image' });
 		await expect(renderedImage).toBeAttached();
 
 		const imageSize = await getImageSourceSize(renderedImage);
@@ -300,17 +302,19 @@ test.describe('markdownEditor', () => {
 
 		await mainScreen.setup();
 		await mainScreen.createNewNote('Original');
+		const { editor: markdownEditor } = await mainScreen.noteEditor.showNoteViewerAndMarkdownEditor();
+
 		const noteEditor = mainScreen.noteEditor;
 		await noteEditor.hideViewer();
 
-		await noteEditor.focusCodeMirrorEditor();
-		await mainWindow.keyboard.type('# Test');
-		await mainWindow.keyboard.press('Enter');
-		await mainWindow.keyboard.type('## Test 2');
-		await mainWindow.keyboard.press('Enter');
-		await mainWindow.keyboard.type('### Test 3');
+		await markdownEditor.focusContent();
+		await markdownEditor.typeText('# Test');
+		await markdownEditor.pressKey('Enter');
+		await markdownEditor.typeText('## Test 2');
+		await markdownEditor.pressKey('Enter');
+		await markdownEditor.typeText('### Test 3');
 
-		const editorContent = await noteEditor.contentLocator();
+		const editorContent = markdownEditor.content;
 
 		// Extract the note ID
 		const note1Locator = mainScreen.noteList.getNoteItemByTitle('Original');
@@ -322,14 +326,14 @@ test.describe('markdownEditor', () => {
 		await mainScreen.createNewNote('Test note links');
 
 		// Create a new link to a header
-		await noteEditor.focusCodeMirrorEditor();
-		await mainWindow.keyboard.press('Enter');
-		await mainWindow.keyboard.press('Enter');
-		await mainWindow.keyboard.type('[link](:/');
-		await mainWindow.keyboard.type(targetNoteId);
-		await mainWindow.keyboard.type('#test-2');
-		await mainWindow.keyboard.type(')');
-		await mainWindow.keyboard.press('Enter');
+		await markdownEditor.focusContent();
+		await markdownEditor.pressKey('Enter');
+		await markdownEditor.pressKey('Enter');
+		await markdownEditor.typeText('[link](:/');
+		await markdownEditor.typeText(targetNoteId);
+		await markdownEditor.typeText('#test-2');
+		await markdownEditor.typeText(')');
+		await markdownEditor.pressKey('Enter');
 
 		// Clicking the link should navigate to note1
 		const link = editorContent.getByText(/\[?link\]?/);
@@ -366,8 +370,8 @@ test.describe('markdownEditor', () => {
 
 		await mainScreen.createNewNote('Test copy');
 		const noteEditor = mainScreen.noteEditor;
-		await noteEditor.focusCodeMirrorEditor();
-		await mainWindow.keyboard.type('Test content.');
+		const markdownEditor = await noteEditor.showMarkdownEditor();
+		await markdownEditor.typeText('Test content.');
 
 		const { expectClipboardToMatch } = await mockClipboard(electronApp, 'original');
 
@@ -380,6 +384,8 @@ test.describe('markdownEditor', () => {
 		await mainScreen.waitFor();
 
 		await mainScreen.createNewNote('Test paste');
+		await mainScreen.noteEditor.showMarkdownEditor();
+
 		const { expectClipboardToMatch } = await mockClipboard(electronApp, 'test!');
 		await expectClipboardToMatch('test!');
 
@@ -391,8 +397,8 @@ test.describe('markdownEditor', () => {
 
 		// Should cut text using the textCut command
 		await mainScreen.createNewNote('Test cut');
-		await noteEditor.focusCodeMirrorEditor();
-		await mainWindow.keyboard.type('Test (new content!)');
+		const markdownEditor = await noteEditor.showMarkdownEditor();
+		await markdownEditor.typeText('Test (new content!)');
 
 		await goToAnything.runCommand(electronApp, 'textCut');
 		await noteEditor.expectToHaveText('\n');
@@ -415,10 +421,10 @@ test.describe('markdownEditor', () => {
 			await mainScreen.setup();
 
 			const noteEditor = await mainScreen.createNewNote('Test Affinity image paste');
-			const editorContent = testCase.useLegacyMarkdownEditor ? mainWindow.locator('.rli-editor .CodeMirror5 .CodeMirror-code') : await noteEditor.contentLocator();
-			const editorToFocus = testCase.useLegacyMarkdownEditor ? mainWindow.locator('.rli-editor .CodeMirror5') : editorContent;
+			const markdownEditor = await noteEditor.showMarkdownEditor();
+			const editorContent = markdownEditor.container;
 			const noteBody = async () => editorContent.innerText();
-			await editorToFocus.click();
+			await editorContent.click();
 
 			const affinityClipboardText = await readFile(join(__dirname, 'resources', 'affinity.txt'), 'utf8');
 
@@ -446,7 +452,7 @@ test.describe('markdownEditor', () => {
 				return isImageResource && doesNotContainSvg && doesNotContainBase64;
 			}).toBe(true);
 
-			const renderedImage = noteEditor.getNoteViewerFrameLocator().locator('img');
+			const renderedImage = (await noteEditor.showNoteViewer()).content.locator('img');
 			await expect(renderedImage).toHaveCount(1);
 			await expect(await getImageSourceSize(renderedImage.first())).toMatchObject([64, 64]);
 		});
@@ -459,9 +465,9 @@ test.describe('markdownEditor', () => {
 		await mainScreen.createNewNote('Test undo/redo');
 
 		const noteEditor = mainScreen.noteEditor;
-		await noteEditor.focusCodeMirrorEditor();
+		const markdownEditor = await noteEditor.showMarkdownEditor();
 
-		await mainWindow.keyboard.type('A');
+		await markdownEditor.typeText('A');
 		await noteEditor.expectToHaveText('A');
 
 		await activateMainMenuItem(electronApp, 'Undo');
@@ -480,10 +486,10 @@ test.describe('markdownEditor', () => {
 
 		await mainScreen.createNewNote('Test copy formatting');
 		const noteEditor = mainScreen.noteEditor;
-		await noteEditor.focusCodeMirrorEditor();
-		await mainWindow.keyboard.type('**hello**');
+		const markdownEditor = await noteEditor.showMarkdownEditor();
+		await markdownEditor.typeText('**hello**');
 
-		const viewerFrame = noteEditor.getNoteViewerFrameLocator();
+		const viewerFrame = (await mainScreen.noteEditor.showNoteViewer()).content;
 		await expect(viewerFrame.locator('strong')).toHaveText('hello');
 
 		// Double-click selects the text node inside <strong>, not <strong> itself.

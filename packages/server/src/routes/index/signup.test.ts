@@ -8,7 +8,7 @@ import { beforeAllDb, afterAllTests, beforeEachDb, models } from '../../utils/te
 import { uuidgen } from '@joplin/lib/uuid';
 import { FormUser } from './signup';
 
-describe('index_signup', () => {
+describe('signup', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('index_signup');

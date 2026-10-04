@@ -33,6 +33,7 @@ interface WrapperProps {
 	onLinkClick?: (link: string)=> void;
 	note?: NoteEntity;
 	noteBody: string;
+	readOnly?: boolean;
 }
 
 const defaultEditorProps = createTestEditorProps();
@@ -45,6 +46,7 @@ const WrappedEditor: React.FC<WrapperProps> = (
 		onLinkClick,
 		noteResources,
 		ref,
+		readOnly = false,
 	}: WrapperProps,
 ) => {
 	const onEvent = useCallback((event: EditorEvent) => {
@@ -63,9 +65,10 @@ const WrappedEditor: React.FC<WrapperProps> = (
 		const isHtml = note?.markup_language === MarkupLanguage.Html;
 		return {
 			...defaultEditorProps.editorSettings,
+			readOnly,
 			language: isHtml ? EditorLanguageType.Html : EditorLanguageType.Markdown,
 		};
-	}, [note]);
+	}, [note, readOnly]);
 
 	return <TestProviderStack store={testStore}>
 		<RichTextEditor
@@ -171,6 +174,28 @@ describe('RichTextEditor', () => {
 
 		await waitFor(async () => {
 			expect(body.trim()).toBe('**bold** normal test');
+		});
+	});
+
+	it('should become non-editable when set to read-only', async () => {
+		const table = '| A | B |\n| --- | --- |\n| C | D |';
+		const component = render(<WrappedEditor
+			noteBody={table}
+			onBodyChange={jest.fn()}
+		/>);
+		const editor = await findElement('.prosemirror-editor');
+		expect(editor.getAttribute('contenteditable')).toBe('true');
+		mockSelectionMovement(await getEditorWindow(), 4);
+		const tableToolbar = await findElement('.floating-button-bar:not(.-hidden)');
+
+		component.rerender(<WrappedEditor
+			noteBody={table}
+			onBodyChange={jest.fn()}
+			readOnly={true}
+		/>);
+		await waitFor(() => {
+			expect(editor.getAttribute('contenteditable')).toBe('false');
+			expect(tableToolbar.classList).toContain('-hidden');
 		});
 	});
 

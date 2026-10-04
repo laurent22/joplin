@@ -104,18 +104,15 @@ export default function(props: Props) {
 		return !hasMasterPasswordEncryptedData;
 	}, [mode, showCurrentPassword, hasMasterPasswordEncryptedData]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- PasswordInput's ChangeEventHandler is typed as a custom {value} event but the runtime hands a React.ChangeEvent through
-	const onCurrentPasswordChange = useCallback((event: any) => {
+	const onCurrentPasswordChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
 		setCurrentPassword(event.target.value);
 	}, []);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Same as onCurrentPasswordChange
-	const onPasswordChange1 = useCallback((event: any) => {
+	const onPasswordChange1 = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
 		setPassword1(event.target.value);
 	}, []);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Same as onCurrentPasswordChange
-	const onPasswordChange2 = useCallback((event: any) => {
+	const onPasswordChange2 = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
 		setPassword2(event.target.value);
 	}, []);
 

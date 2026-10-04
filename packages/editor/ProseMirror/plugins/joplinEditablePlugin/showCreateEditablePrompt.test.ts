@@ -30,7 +30,7 @@ const findEditorDialog = () => {
 	};
 };
 
-describe('showCreateEditorPrompt', () => {
+describe('showCreateEditablePrompt', () => {
 	beforeEach(() => {
 		jest.useFakeTimers();
 		document.body.replaceChildren();

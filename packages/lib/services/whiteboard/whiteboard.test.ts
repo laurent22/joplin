@@ -17,7 +17,7 @@ const sampleCanvas: Canvas = {
 	],
 };
 
-describe('whiteboard format module', () => {
+describe('whiteboard', () => {
 	test('parses a body with a jsoncanvas fence and preserves surrounding text', () => {
 		const before = '# My note\n\nSome intro text.\n\n';
 		const after = '\nA closing paragraph.\n';

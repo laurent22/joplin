@@ -28,6 +28,8 @@ export enum ModelType {
 	Command = 16,
 	NoteEmbedding = 17,
 	ConflictNoteState = 18,
+	ChatConversation = 19,
+	ChatMessage = 20,
 }
 
 export interface SearchOptions {
@@ -90,6 +92,8 @@ class BaseModel {
 		['TYPE_COMMAND', ModelType.Command],
 		['TYPE_NOTE_EMBEDDING', ModelType.NoteEmbedding],
 		['TYPE_CONFLICT_NOTE_STATE', ModelType.ConflictNoteState],
+		['TYPE_CHAT_CONVERSATION', ModelType.ChatConversation],
+		['TYPE_CHAT_MESSAGE', ModelType.ChatMessage],
 	];
 
 	private static uuidGenerator: ()=> string = uuid.create;
@@ -112,6 +116,8 @@ class BaseModel {
 	public static TYPE_COMMAND = ModelType.Command;
 	public static TYPE_NOTE_EMBEDDING = ModelType.NoteEmbedding;
 	public static TYPE_CONFLICT_NOTE_STATE = ModelType.ConflictNoteState;
+	public static TYPE_CHAT_CONVERSATION = ModelType.ChatConversation;
+	public static TYPE_CHAT_MESSAGE = ModelType.ChatMessage;
 
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Set by the app to redux dispatch; per-app action types diverge so the function is typed loosely here
 	public static dispatch: Function = function() {};
@@ -644,41 +650,43 @@ class BaseModel {
 
 		const mutexRelease = await this.saveMutex(o).acquire();
 
-		options = this.modOptions(options);
-		const isNew = this.isNew(o, options);
-		options.isNew = isNew;
-
-		// Diff saving is an optimisation which takes a new version of the item and an old one,
-		// do a diff and save only this diff. IMPORTANT: When using this make sure that both
-		// models have been normalised using ItemClass.filter()
-		const isDiffSaving = options && options.oldItem && !options.isNew;
-
-		if (isDiffSaving) {
-			const newObject = BaseModel.diffObjects(options.oldItem, o);
-			newObject.type_ = o.type_;
-			newObject.id = o.id;
-			o = newObject;
-		}
-
-		o = this.filter(o);
-
-		if (options.userSideValidation) {
-			this.userSideValidation(o);
-		}
-
-		let queries = [];
-		const saveQuery = this.saveQuery(o, options);
-		const modelId = saveQuery.id;
-
-		queries.push(saveQuery);
-
-		if (options.nextQueries && options.nextQueries.length) {
-			queries = queries.concat(options.nextQueries);
-		}
-
 		let output = null;
 
+		// The try must cover everything after the mutex acquire: a throw from userSideValidation
+		// or saveQuery would otherwise leak the mutex and hang every later save of the same item.
 		try {
+			options = this.modOptions(options);
+			const isNew = this.isNew(o, options);
+			options.isNew = isNew;
+
+			// Diff saving is an optimisation which takes a new version of the item and an old one,
+			// do a diff and save only this diff. IMPORTANT: When using this make sure that both
+			// models have been normalised using ItemClass.filter()
+			const isDiffSaving = options && options.oldItem && !options.isNew;
+
+			if (isDiffSaving) {
+				const newObject = BaseModel.diffObjects(options.oldItem, o);
+				newObject.type_ = o.type_;
+				newObject.id = o.id;
+				o = newObject;
+			}
+
+			o = this.filter(o);
+
+			if (options.userSideValidation) {
+				this.userSideValidation(o);
+			}
+
+			let queries = [];
+			const saveQuery = this.saveQuery(o, options);
+			const modelId = saveQuery.id;
+
+			queries.push(saveQuery);
+
+			if (options.nextQueries && options.nextQueries.length) {
+				queries = queries.concat(options.nextQueries);
+			}
+
 			await this.db().transactionExecBatch(queries);
 
 			o = { ...o };

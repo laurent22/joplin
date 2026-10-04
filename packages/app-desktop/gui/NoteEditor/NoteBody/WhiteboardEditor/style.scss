@@ -428,7 +428,13 @@ $hover-bg: rgba(127, 127, 127, 0.12);
 	h2 { font-size: 15px; margin: 4px 0; }
 	h3 { font-size: 14px; margin: 3px 0; }
 	h4, h5, h6 { font-size: 13px; margin: 3px 0; }
-	p { margin: 4px 0; }
+	p { margin: 8px 0; }
+	// Drop the top margin on whatever comes first so a leading heading /
+	// paragraph / list sits flush against the card's own 8px padding
+	// instead of stacking margins on top of it. The renderer wraps its
+	// output in a `#rendered-md` div, so we also target the first child
+	// inside that wrapper — `:first-child` alone would only match the div.
+	> :first-child, > * > :first-child { margin-top: 0; }
 	ul, ol { margin: 4px 0; padding-left: 20px; }
 	li { margin: 2px 0; }
 	li.md-checkbox, li.joplin-checkbox { list-style: none; margin-left: -20px; }
@@ -448,19 +454,44 @@ $hover-bg: rgba(127, 127, 127, 0.12);
 		font-size: 12px;
 		background: var(--joplin-code-background-color);
 		color: var(--joplin-code-color);
-		padding: 1px 4px;
+		border: 1px solid var(--joplin-code-border-color);
+		padding: 0 3px;
 		border-radius: 3px;
 	}
 	pre code { background: transparent; padding: 0; border: none; }
 	blockquote {
 		margin: 4px 0;
 		padding-left: 8px;
-		border-left: 3px solid var(--joplin-divider-color);
+		border-left: 3px solid var(--joplin-code-border-color);
 		color: var(--joplin-color-faded);
 	}
 	img { max-width: 100%; height: auto; }
-	table { font-size: 12px; border-collapse: collapse; }
-	th, td { padding: 2px 6px; border: 1px solid var(--joplin-divider-color); }
-	hr { margin: 6px 0; border: none; border-top: 1px solid var(--joplin-divider-color); }
-	a { color: var(--joplin-url-color, #{$selection-color}); }
+	table {
+		font-size: 12px;
+		border-collapse: collapse;
+		border: 1px solid var(--joplin-code-border-color);
+	}
+	th, td { padding: 2px 6px; border: 1px solid var(--joplin-code-border-color); }
+	th {
+		background: var(--joplin-background-color-hover3, var(--joplin-background-color3));
+		border-bottom-width: 2px;
+	}
+	// Only zebra rows for tables with an explicit thead — matches the viewer
+	// (see noteStyle.ts) so freeform key/value tables don't get striped.
+	table:has(thead) tr:nth-child(even) {
+		background: var(--joplin-background-color-hover3, var(--joplin-background-color3));
+	}
+	hr { margin: 6px 0; border: none; border-top: 2px solid var(--joplin-divider-color); }
+	a {
+		color: var(--joplin-url-color, #{$selection-color});
+		&:hover { text-decoration: underline; }
+	}
+	mark {
+		background: var(--joplin-search-marker-background-color);
+		color: var(--joplin-search-marker-color);
+	}
+	// Match the viewer's checked-checkbox affordance so completed items visually
+	// recede without disappearing.
+	.md-checkbox input[type=checkbox]:checked { opacity: 0.7; }
+	.md-checkbox .checkbox-label-checked { opacity: 0.5; }
 }

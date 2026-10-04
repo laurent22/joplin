@@ -1,0 +1,48 @@
+# Patched to work around a Windows install issue: On Windows, if an existing uninstaller fails,
+# this change gives an option to continue with the installation despite the failure
+# (https://github.com/laurent22/joplin/pull/11541).
+diff --git a/templates/nsis/include/installUtil.nsh b/templates/nsis/include/installUtil.nsh
+index 47367741632726ba0886ac516461dbe98b7aea58..c40a0907688cd8b1b8d09047cb0b380e42110ea1 100644
+--- a/templates/nsis/include/installUtil.nsh
++++ b/templates/nsis/include/installUtil.nsh
+@@ -128,8 +128,9 @@ Function handleUninstallResult
+   ${if} $R0 != 0
+-    MessageBox MB_OK|MB_ICONEXCLAMATION "$(uninstallFailed): $R0"
++    # MessageBox MB_OK|MB_ICONEXCLAMATION "$(uninstallFailed): $R0"
+     DetailPrint `Uninstall was not successful. Uninstaller error code: $R0.`
+-    SetErrorLevel 2
+-    Quit
++    DetailPrint `Continuing anyway. See https://github.com/laurent22/joplin/pull/11612.`
++    # SetErrorLevel 2
++    # Quit
+   ${endif}
+ FunctionEnd
+ 
+@@ -216,11 +217,13 @@ Function uninstallOldVersion
+     IntOp $R5 $R5 + 1
+ 
+     ${if} $R5 > 5
+-      MessageBox MB_RETRYCANCEL|MB_ICONEXCLAMATION "$(appCannotBeClosed)" /SD IDCANCEL IDRETRY OneMoreAttempt
+-      Return
++      MessageBox MB_RETRYCANCEL|MB_ICONEXCLAMATION "$(appCannotBeUninstalled)" /SD IDCANCEL IDRETRY ContinueWithoutUninstall
++        Abort ; Exit early
++      ContinueWithoutUninstall:
++        Return
+     ${endIf}
+ 
+-  OneMoreAttempt:
++#  OneMoreAttempt: ; OneMoreAttempt is unused
+     ExecWait '"$uninstallerFileNameTemp" /S /KEEP_APP_DATA $0 _?=$installationDir' $R0
+     ifErrors TryInPlace CheckResult
+ 
+diff --git a/templates/nsis/messages.yml b/templates/nsis/messages.yml
+index 982e1b09e424c4f07ce7c1152fe5ce8b703f5f57..20dfa5743d18f8775ce88658014092cf977ad055 100644
+--- a/templates/nsis/messages.yml
++++ b/templates/nsis/messages.yml
+@@ -238,3 +238,5 @@ uninstallFailed:
+ appClosing:
+   en: "Closing running ${PRODUCT_NAME}..."
+   cs: "Ukončuji aplikaci ${PRODUCT_NAME}..."
++appCannotBeUninstalled:
++  en: "The old version of ${PRODUCT_NAME} could not be removed. \nClick Retry to skip this step."
+\ No newline at end of file

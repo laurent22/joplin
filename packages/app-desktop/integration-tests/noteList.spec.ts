@@ -28,11 +28,12 @@ test.describe('noteList', () => {
 
 		// Typing should not cause the note to disappear
 		const editor = mainScreen.noteEditor;
-		await editor.codeMirrorEditor.click();
-		await mainWindow.keyboard.type('[Testing...](http://example.com/)');
+		const markdownEditor = await editor.showMarkdownEditor();
+		await markdownEditor.typeText('[Testing...](http://example.com/)');
 
 		// Wait to render
-		await expect(editor.getNoteViewerFrameLocator().locator('a', { hasText: 'Testing...' })).toBeVisible();
+		const noteViewer = await editor.showNoteViewer();
+		await expect(noteViewer.content.locator('a', { hasText: 'Testing...' })).toBeVisible();
 
 		// Updating the title should force the sidebar to update sooner
 		await expect(editor.noteTitleInput).toHaveValue('note-1');
@@ -66,8 +67,8 @@ test.describe('noteList', () => {
 		await expect(noteList.getNoteItemByTitle('test note 2')).not.toBeVisible();
 
 		// Should not delete when the editor is focused
-		await mainScreen.noteEditor.focusCodeMirrorEditor();
-		await mainWindow.keyboard.type('test');
+		const markdownEditor = await mainScreen.noteEditor.showMarkdownEditor();
+		await markdownEditor.typeText('test');
 		await pressShiftDelete();
 
 		await folderBHeader.click();

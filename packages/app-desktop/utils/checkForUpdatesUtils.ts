@@ -76,7 +76,15 @@ export const extractVersionInfo = (releases: GitHubRelease[], platform: Platform
 
 	let foundAsset: GitHubReleaseAsset = null;
 
-	if (platform === 'win32' && portable) {
+	// The x64 assets have no arch suffix, so arm64 has to be matched first.
+	// Falling back to x64 is intended when a release has no arm64 build.
+	if (platform === 'win32' && arch === 'arm64') {
+		foundAsset = release.assets.find(asset => {
+			return portable ? asset.name === 'JoplinPortable-arm64.exe' : !!asset.name.match(/^Joplin-Setup-[\d.]+-arm64\.exe$/);
+		});
+	}
+
+	if (!foundAsset && platform === 'win32' && portable) {
 		foundAsset = release.assets.find(asset => {
 			return asset.name === 'JoplinPortable.exe';
 		});

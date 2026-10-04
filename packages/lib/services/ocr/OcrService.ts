@@ -9,6 +9,8 @@ import { Minute } from '@joplin/utils/time';
 import Logger from '@joplin/utils/Logger';
 import TaskQueue from '../../TaskQueue';
 import eventManager, { EventName } from '../../eventManager';
+import { bytesToHuman, MB } from '@joplin/utils/bytes';
+import { substrWithEllipsis } from '../../string-utils';
 
 const logger = Logger.create('OcrService');
 
@@ -73,6 +75,13 @@ export default class OcrService {
 		this.handwrittenTextQueue_.keepTaskResults = false;
 	}
 
+	// The maximum OCR data length in characters. Depending on the encoded text, the byte length can
+	// larger than this:
+	private ocrDataMaxSize_: number = 7 * MB;
+	public testing_setOcrMaxSize(value: number) {
+		this.ocrDataMaxSize_ = value;
+	}
+
 	private async pdfExtractDir(): Promise<string> {
 		if (this.pdfExtractDir_ !== null) return this.pdfExtractDir_;
 		const p = `${Setting.value('tempDir')}/ocr_pdf_extract`;
@@ -83,6 +92,10 @@ export default class OcrService {
 
 	public get running() {
 		return this.runInBackground;
+	}
+
+	private mapOcrText_(text: string) {
+		return substrWithEllipsis(text, 0, this.ocrDataMaxSize_);
 	}
 
 	private async recognize(language: string, resource: ResourceEntity): Promise<RecognizeResult|null> {
@@ -113,22 +126,30 @@ export default class OcrService {
 					return {
 						...emptyRecognizeResult(),
 						ocr_status: ResourceOcrStatus.Done,
-						ocr_text: pageTexts.join('\n'),
+						ocr_text: substrWithEllipsis(pageTexts.join('\n'), 0, this.ocrDataMaxSize_),
 					};
 				}
 			}
 
 			const imageFilePaths = await shim.pdfToImages(resourceFilePath, await this.pdfExtractDir());
 
-			const results: RecognizeResult[] = [];
+			const resultText: string[] = [];
 			const pdfOcrPages: PdfOcrPage[] = [];
 
 			try {
 				let pageIndex = 0;
+				let sizeEstimate = 0;
 				for (const imagePath of imageFilePaths) {
+					// TODO: Fow now, do not truncate ocr_details, since doing so breaks creating accessible PDFs
+					if (!saveOcrDetails && sizeEstimate > this.ocrDataMaxSize_) {
+						logger.warn(`Recognize: Truncated: ${resourceInfo(resource)} after ${pageIndex + 1} pages (at roughly ${bytesToHuman(sizeEstimate)} of OCR data).`);
+						resultText.push('...');
+						break;
+					}
+
 					logger.info(`Recognize: ${resourceInfo(resource)}: Processing PDF page ${pageIndex + 1} / ${imageFilePaths.length}...`);
 					const result = await driver.recognize(language, imagePath, resource.id);
-					results.push(result);
+					resultText.push(result.ocr_text);
 
 					if (saveOcrDetails) {
 						// Parse OCR details for this page
@@ -141,8 +162,11 @@ export default class OcrService {
 						pdfOcrPages.push({
 							lines: pageLines,
 						});
+
+						sizeEstimate += result.ocr_details.length;
 					}
 
+					sizeEstimate += result.ocr_text.length;
 					pageIndex++;
 				}
 			} finally {
@@ -164,11 +188,15 @@ export default class OcrService {
 			return {
 				...emptyRecognizeResult(),
 				ocr_status: ResourceOcrStatus.Done,
-				ocr_text: results.map(r => r.ocr_text).join('\n'),
+				ocr_text: this.mapOcrText_(resultText.join('\n')),
 				ocr_details: ocrDetails,
 			};
 		} else {
-			return driver.recognize(language, resourceFilePath, resource.id);
+			const result = await driver.recognize(language, resourceFilePath, resource.id);
+			return {
+				...result,
+				ocr_text: this.mapOcrText_(result.ocr_text),
+			};
 		}
 	}
 

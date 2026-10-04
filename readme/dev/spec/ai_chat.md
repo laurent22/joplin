@@ -75,9 +75,13 @@ The first is the master `ai.enabled` toggle. Until it is on, no AI call from any
 The second is `ai.allowRemote`. Providers are classified as either `local` or `remote`:
 
 - Anthropic and Joplin Cloud AI are always `remote`.
-- OpenAI-compatible is `local` when its base URL points at `localhost` / `127.0.0.1` / `::1`, and `remote` otherwise. LAN addresses are deliberately classified as remote — the contract is "does my data leave my network", and LAN traffic does.
+- OpenAI-compatible is `local` when its base URL points at a private network address, and `remote` otherwise. The contract is "does my data leave my private network", so loopback, LAN and internal-only hostnames all count as `local`. See `deriveClassification()` in `packages/lib/services/ai/classification.ts` for the exact ranges: loopback, RFC 1918 IPv4, IPv4 link-local, IPv6 unique-local (`fc00::/7`) and link-local (`fe80::/10`), and the `.localhost` / `.internal` / `.home.arpa` suffixes.
+
+`.local` is deliberately excluded: it resolves via mDNS and can point at an arbitrary host on whatever network the device is currently joined to, so it isn't a trustworthy signal of "my own network".
 
 A remote-classified provider call throws unless `ai.allowRemote` is also on. The user must therefore toggle two switches before any cloud provider is reachable.
+
+A `local` classification also waives the API key requirement in `chatAvailability()` — private-network servers such as Ollama typically have no authentication. The key is still sent when set, so servers behind an authenticating proxy keep working.
 
 ## First-enable default
 

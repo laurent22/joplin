@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
-import { StyleSheet, TextInput, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { themeStyle } from '../../global-style';
-import IconButton from '../../IconButton';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
+import { Searchbar } from 'react-native-paper';
 
 interface Props {
 	themeId: number;
@@ -20,57 +20,47 @@ const useStyles = (themeId: number) => {
 		const theme = themeStyle(themeId);
 		return StyleSheet.create({
 			searchContainer: {
-				flexDirection: 'row',
-				alignItems: 'center',
-				borderWidth: 1,
+				borderWidth: 2,
 				borderColor: theme.dividerColor,
+				backgroundColor: theme.backgroundColor,
+				margin: theme.margin,
+				borderRadius: theme.borderRadius,
 			},
 			searchTextInput: {
-				...theme.lineInput,
-				paddingLeft: theme.marginLeft,
-				flex: 1,
-				backgroundColor: theme.backgroundColor,
 				color: theme.color,
-			},
-			clearIcon: {
-				...theme.icon,
-				color: theme.colorFaded,
-				paddingRight: theme.marginRight,
-				backgroundColor: theme.backgroundColor,
+				fontSize: theme.fontSize,
 			},
 		});
 	}, [themeId]);
 };
 
 const SearchBar: React.FC<Props> = ({ themeId, value, autoFocus, placeholder, onChangeText, onClearButtonPress, onSubmitEditing }) => {
+	const [isFocused, setIsFocused] = useState(false);
 	const theme = themeStyle(themeId);
 	const styles = useStyles(themeId);
 
 	return (
-		<View style={styles.searchContainer}>
-			<TextInput
-				style={styles.searchTextInput}
-				autoFocus={autoFocus}
-				autoCapitalize='none'
-				autoComplete='off'
-				autoCorrect={false}
-				underlineColorAndroid="#ffffff00"
-				onChangeText={onChangeText}
-				onSubmitEditing={onSubmitEditing}
-				placeholder={placeholder}
-				placeholderTextColor={theme.colorFaded}
-				value={value}
-				selectionColor={theme.textSelectionColor}
-				keyboardAppearance={theme.keyboardAppearance}
-			/>
-			<IconButton
-				themeId={themeId}
-				iconStyle={styles.clearIcon}
-				iconName='ionicon close-circle'
-				onPress={onClearButtonPress}
-				description={_('Clear')}
-			/>
-		</View>
+		<Searchbar
+			style={[styles.searchContainer, isFocused && { borderColor: theme.color4 }]}
+			inputStyle={styles.searchTextInput}
+			autoFocus={autoFocus}
+			autoCapitalize='none'
+			autoComplete='off'
+			autoCorrect={false}
+			clearAccessibilityLabel={_('Clear')}
+			clearIcon='close'
+			iconColor={theme.colorFaded}
+			onBlur={() => setIsFocused(false)}
+			onChangeText={onChangeText}
+			onClearIconPress={onClearButtonPress}
+			onFocus={() => setIsFocused(true)}
+			onSubmitEditing={onSubmitEditing}
+			placeholder={placeholder ?? _('Search')}
+			placeholderTextColor={theme.colorFaded}
+			value={value}
+			selectionColor={theme.textSelectionColor}
+			keyboardAppearance={theme.keyboardAppearance}
+		/>
 	);
 };
 

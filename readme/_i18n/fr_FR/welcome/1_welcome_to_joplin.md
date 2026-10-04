@@ -20,7 +20,7 @@ Joplin a trois colonnes principales :
 
 Markdown est un langage de balisage léger. Joplin prend en charge une [syntaxe Markdown à saveur Github](https://joplinapp.org/help/apps/markdown) avec quelques variantes et ajouts.
 
-En général, bien que Markdown soit un langage de balisage, il lisible directement. Ceci est un exemple simple (vous pouvez voir à quoi il ressemble dans le panneau de visualisation) :
+En général, bien que Markdown soit un langage de balisage, il est conçu pour être lisible directement. Ceci est un exemple simple (vous pouvez voir à quoi il ressemble dans le panneau de visualisation) :
 
 * * *
 

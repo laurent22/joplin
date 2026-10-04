@@ -1,7 +1,7 @@
 import shim from '../../../shim';
 import JoplinError from '../../../JoplinError';
 import Logger from '@joplin/utils/Logger';
-import { ChatMessage, ChatOptions, ChatResult, ChatRole, ChatToolCall, ProviderClassification } from '../types';
+import { ChatFinishReason, ChatMessage, ChatOptions, ChatResult, ChatRole, ChatToolCall, ChatToolMessage, ProviderClassification } from '../types';
 import ChatProviderBase from './ChatProviderBase';
 
 const logger = Logger.create('AnthropicProvider');
@@ -23,19 +23,42 @@ interface AnthropicToolUseContentBlock {
 	input: Record<string, unknown>;
 }
 
+interface AnthropicImageContent {
+	type: 'image';
+	source: {
+		type: 'base64';
+		media_type: string;
+		data: string;
+	};
+}
+
 interface AnthropicToolResultContentBlock {
 	type: 'tool_result';
 	tool_use_id: string;
-	content: string;
+	content: string|AnthropicImageContent[];
 }
 
-type AnthropicContentBlock = AnthropicToolUseContentBlock|AnthropicToolResultContentBlock|AnthropicTextContentBlock;
+interface AnthropicThinkingContentBlock {
+	type: 'thinking';
+	thinking: string;
+}
+
+type AnthropicContentBlock = AnthropicToolUseContentBlock|AnthropicToolResultContentBlock|AnthropicTextContentBlock|AnthropicThinkingContentBlock;
 
 interface AnthropicResponse {
 	content?: AnthropicContentBlock[];
 	usage?: AnthropicUsage;
+	stop_reason?: string;
 	error?: { message?: string };
 }
+
+const toChatFinishReason = (reason: string|undefined): ChatFinishReason|undefined => {
+	if (!reason) return undefined;
+	if (reason === 'max_tokens') return 'length';
+	if (reason === 'end_turn' || reason === 'stop_sequence') return 'stop';
+	if (reason === 'tool_use') return 'tool_calls';
+	return 'other';
+};
 
 interface Options {
 	apiKey: string;
@@ -98,21 +121,39 @@ const convertMessages = (messages: ChatMessage[]) => {
 		};
 	};
 
+	const convertToolResponse = (message: ChatToolMessage): AnthropicMessage => {
+		let content;
+		if (typeof message.content === 'string') {
+			content = message.content;
+		} else {
+			content = [{
+				type: 'image' as const,
+				source: {
+					type: 'base64' as const,
+					media_type: message.content.mimeType,
+					data: message.content.base64Only,
+				},
+			}];
+		}
+
+		return {
+			role: 'user',
+			content: [
+				{
+					type: 'tool_result',
+					tool_use_id: message.toolCallId,
+					content,
+					...(message.isError ? { is_error: true } : {}),
+				},
+			],
+		};
+	};
+
 	const result = messages
 		.map((message): AnthropicMessage => {
 			if (message.role === ChatRole.System) return null;
 			if (message.role === ChatRole.Tool) {
-				return {
-					role: 'user',
-					content: [
-						{
-							type: 'tool_result',
-							tool_use_id: message.toolCallId,
-							content: message.content,
-							...(message.isError ? { is_error: true } : {}),
-						},
-					],
-				};
+				return convertToolResponse(message);
 			} else if (message.role === ChatRole.Assistant || message.role === ChatRole.User) {
 				return {
 					role: message.role,
@@ -177,7 +218,7 @@ export default class AnthropicProvider extends ChatProviderBase {
 		if (options?.tools) {
 			body.tools = options.tools.map(tool => {
 				return {
-					name: tool.name,
+					name: tool.id,
 					description: tool.description,
 					input_schema: tool.inputSchema,
 				};
@@ -224,19 +265,29 @@ export default class AnthropicProvider extends ChatProviderBase {
 
 		const toolCalls: ChatToolCall[] = [];
 		const textMessages = [];
+		const thinkingMessages = [];
 		for (const response of json.content) {
 			if (response.type === 'tool_use' && typeof response.input === 'object') {
 				toolCalls.push({
 					callId: response.id,
 					toolName: response.name,
 					arguments: response.input,
+					parseError: null,
 				});
 			} else if (response.type === 'text' && typeof response.text === 'string') {
 				textMessages.push(response.text);
+			} else if (response.type === 'thinking' && typeof response.thinking === 'string') {
+				thinkingMessages.push(response.thinking);
 			}
 		}
 
-		return { text: textMessages.join(''), toolCalls, usage: { inputTokens, outputTokens } };
+		return {
+			text: textMessages.join(''),
+			toolCalls,
+			usage: { inputTokens, outputTokens },
+			finishReason: toChatFinishReason(json.stop_reason),
+			reasoningText: thinkingMessages.length ? thinkingMessages.join('') : undefined,
+		};
 	}
 }
 

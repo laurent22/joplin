@@ -200,8 +200,14 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 		},
 		// Only underline level 1 headings not in block quotes. The underline overlaps with the blockquote border.
 		'& .cm-h1:not(.cm-blockQuote)': {
-			borderBottom: `1px solid ${theme.dividerColor}`,
-			marginBottom: '0.1em',
+			// Use a background image in place of a solid border with a margin.
+			// Margins between lines aren't supported in CodeMirror and can break selection.
+			// See https://discuss.codemirror.net/t/css-causing-inability-to-click-on-a-line/8919/5, https://github.com/laurent22/joplin/issues/16407
+			paddingBottom: '0.3em',
+			backgroundPositionY: 'bottom 0.1em',
+			backgroundSize: '100% 1px',
+			backgroundRepeat: 'no-repeat',
+			backgroundImage: `linear-gradient(${theme.dividerColor})`,
 		},
 		'& .cm-h2': {
 			...baseHeadingStyle,

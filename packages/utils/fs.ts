@@ -1,6 +1,8 @@
 import { GlobOptionsWithFileTypesFalse, sync } from 'glob';
-import { stat, utimes } from 'fs/promises';
-import { ensureFile, removeSync } from 'fs-extra';
+import { readFileSync } from 'fs';
+import { readFile, stat, utimes, writeFile } from 'fs/promises';
+import { removeSync } from 'fs-extra';
+import { getSecureRandomString } from './crypto';
 import { Second } from './time';
 
 // Wraps glob.sync but with good default options so that it works across
@@ -28,6 +30,7 @@ interface FileLockerOptions {
 export class FileLocker {
 
 	private filePath_ = '';
+	private lockId_ = getSecureRandomString(64);
 	private interval_: ReturnType<typeof setInterval> | null = null;
 	private options_: FileLockerOptions;
 
@@ -47,7 +50,7 @@ export class FileLocker {
 	public async lock() {
 		if (!(await this.canLock())) return false;
 
-		await this.updateLock();
+		await writeFile(this.filePath_, this.lockId_, 'utf8');
 
 		this.interval_ = setInterval(() => {
 			void this.updateLock();
@@ -72,13 +75,34 @@ export class FileLocker {
 	// is closing.
 	public unlockSync() {
 		this.stopMonitoring_();
-		removeSync(this.filePath_);
+
+		try {
+			if (readFileSync(this.filePath_, 'utf8') === this.lockId_) removeSync(this.filePath_);
+		} catch (error) {
+			if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
+		}
 	}
 
 	private async updateLock() {
-		await ensureFile(this.filePath_);
-		const now = new Date();
-		await utimes(this.filePath_, now, now);
+		try {
+			if (!this.interval_) return;
+			if (await readFile(this.filePath_, 'utf8') !== this.lockId_) {
+				this.stopMonitoring_();
+				return;
+			}
+
+			// The locker may have been released while the ownership check was pending.
+			if (!this.interval_) return;
+			const now = new Date();
+			await utimes(this.filePath_, now, now);
+		} catch (error) {
+			if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+				this.stopMonitoring_();
+				return;
+			}
+
+			throw error;
+		}
 	}
 
 	public stopMonitoring_() {

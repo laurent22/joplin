@@ -147,6 +147,7 @@ const createEditor = async (
 
 	const view = new EditorView(parentElement, {
 		state: await createInitialState(props.initialText),
+		editable: () => !settings.readOnly,
 		dispatchTransaction: transaction => {
 			const newState = view.state.apply(transaction);
 
@@ -224,6 +225,9 @@ const createEditor = async (
 		updateSettings: async (newSettings: EditorSettings) => {
 			const oldSettings = settings;
 			settings = newSettings;
+			if (oldSettings.readOnly !== newSettings.readOnly) {
+				view.setProps({ editable: () => !settings.readOnly });
+			}
 
 			if (oldSettings.themeData.themeId !== newSettings.themeData.themeId) {
 				// Refresh global CSS when the theme changes -- render the full document

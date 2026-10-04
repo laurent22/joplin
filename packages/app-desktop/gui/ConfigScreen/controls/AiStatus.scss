@@ -1,0 +1,17 @@
+.ai-status {
+	margin-top: 16px;
+	padding: 10px 14px;
+	border-radius: 4px;
+	line-height: 1.4;
+
+	&.-degraded {
+		background: var(--joplin-background-color3);
+		color: var(--joplin-color-warn);
+		border: 1px solid var(--joplin-color-warn);
+	}
+
+	> a {
+		color: var(--joplin-url-color);
+		text-decoration: underline;
+	}
+}

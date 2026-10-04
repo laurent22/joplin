@@ -29,6 +29,7 @@ const theme: Theme = {
 	color2: '#ffffff',
 	selectedColor2: '#013F74',
 	colorError2: '#ff6c6c',
+	colorPublished2: '#789FE9',
 	colorWarn2: '#ffcb81',
 	colorWarn3: '#ffcb81',
 	backgroundColorTransparent2: 'rgba(255, 255, 255, 0.1)',

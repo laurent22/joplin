@@ -2,13 +2,14 @@ import { State, stateUtils } from '../../reducer';
 import BaseModel, { ModelType } from '../../BaseModel';
 import Folder from '../../models/Folder';
 import MarkupToHtml from '@joplin/renderer/MarkupToHtml';
-import { isRootSharedFolder, isSharedFolderOwner } from '../share/reducer';
+import { isFolderPublished, isRootSharedFolder, isSharedFolderOwner } from '../share/reducer';
 import { NoteEntity } from '../database/types';
 import { itemIsReadOnlySync, ItemSlice } from '../../models/utils/readOnly';
 import ItemChange from '../../models/ItemChange';
 import { getTrashFolderId } from '../trash';
 import getActivePluginEditorView from '../plugins/utils/getActivePluginEditorView';
 import { MarkupLanguage } from '@joplin/renderer';
+import isNoteLockEnabled from '../noteLock/isNoteLockEnabled';
 
 export interface WhenClauseContextOptions {
 	commandFolderId?: string;
@@ -24,6 +25,7 @@ export interface WhenClauseContext {
 	foldersIncludeReadOnly: boolean;
 	folderIsDeleted: boolean;
 	folderIsReadOnly: boolean;
+	folderIsPublished: boolean;
 	folderIsShared: boolean;
 	folderIsShareRoot: boolean;
 	folderIsShareRootAndNotOwnedByUser: boolean;
@@ -40,8 +42,12 @@ export interface WhenClauseContext {
 	noNotesSelected: boolean;
 	noteIsDeleted: boolean;
 	noteIsHtml: boolean;
+	noteIsLocked: boolean;
+	noteLockContentUnavailable: boolean;
+	noteLockSessionUnlocked: boolean;
 	noteIsMarkdown: boolean;
 	noteIsReadOnly: boolean;
+	noteIsReadOnlyShare: boolean;
 	noteIsTodo: boolean;
 	notesAreBeingSaved: boolean;
 	noteTodoCompleted: boolean;
@@ -82,6 +88,12 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 		: null;
 	const selectedFolderIsValid = !!selectedFolder && !selectedFolder.deleted_time;
 
+	const noteIsLocked = isNoteLockEnabled() && selectedNote ? !!selectedNote.is_locked : false;
+	// While the unlock or the cannot-decrypt overlay covers the editor, menu actions (attach file,
+	// insert date, etc.) could still modify the note underneath it, so treat the note as read-only.
+	const noteLockContentUnavailable = noteIsLocked && (!state.noteLockSessionUnlocked || windowState.activeNoteIsUndecryptable);
+	const noteIsReadOnlyShare = selectedNote ? itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, selectedNote as ItemSlice, settings['sync.userId'], state.shareService) : false;
+
 	return {
 		// Application state
 		notesAreBeingSaved: stateUtils.hasNotesBeingSaved(state),
@@ -114,10 +126,15 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 		noteTodoCompleted: selectedNote ? !!selectedNote.todo_completed : false,
 		noteIsMarkdown: selectedNote ? selectedNote.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN : false,
 		noteIsHtml: selectedNote ? selectedNote.markup_language === MarkupToHtml.MARKUP_LANGUAGE_HTML : false,
-		noteIsReadOnly: selectedNote ? itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, selectedNote as ItemSlice, settings['sync.userId'], state.shareService) : false,
+		noteIsLocked,
+		noteLockContentUnavailable,
+		noteLockSessionUnlocked: state.noteLockSessionUnlocked,
+		noteIsReadOnly: noteLockContentUnavailable || noteIsReadOnlyShare,
+		noteIsReadOnlyShare,
 		noteIsDeleted: selectedNote ? !!selectedNote.deleted_time : false,
 
 		// Current context folder -- if multiple folders are selected, this only applies to one
+		folderIsPublished: commandFolder ? isFolderPublished(state, commandFolder.id) : false,
 		folderIsShareRoot: commandFolder ? isRootSharedFolder(commandFolder) : false,
 		folderIsShareRootAndNotOwnedByUser: commandFolder ? isRootSharedFolder(commandFolder) && !isSharedFolderOwner(state, commandFolder.id) : false,
 		folderIsShareRootAndOwnedByUser: commandFolder ? isRootSharedFolder(commandFolder) && isSharedFolderOwner(state, commandFolder.id) : false,

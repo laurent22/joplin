@@ -39,6 +39,7 @@ class FloatingButtonBar implements PluginView {
 
 	private currentTarget_: TargetNode|null = null;
 	private observer_: ElementObserver;
+	private editable_: boolean|null = null;
 
 	public constructor(
 		private view_: EditorView,
@@ -152,11 +153,19 @@ class FloatingButtonBar implements PluginView {
 
 	public update(view: EditorView, lastState: EditorState|null) {
 		this.view_ = view;
+		const editableChanged = this.editable_ !== view.editable;
+		this.editable_ = view.editable;
+		if (!view.editable) {
+			this.observer_.setElement(null);
+			this.currentTarget_ = null;
+			this.container_.classList.add('-hidden');
+			return;
+		}
 
 		const state = view.state;
 		const sameSelection = lastState && state.selection.eq(lastState.selection);
 		const sameDoc = lastState && state.doc.eq(lastState.doc);
-		if (sameSelection && sameDoc) {
+		if (!editableChanged && sameSelection && sameDoc) {
 			return;
 		}
 

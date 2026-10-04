@@ -12,7 +12,7 @@ import {
 const logger = Logger.create('LocalEmbeddingProvider');
 
 // Runs the bundled multilingual-e5-small model locally via onnxruntime-node.
-// Tokenization is delegated to @xenova/transformers; inference runs through
+// Tokenization is delegated to @huggingface/transformers; inference runs through
 // shim.onnxRuntime() so non-desktop builds without ONNX wired in degrade
 // cleanly instead of crashing on require().
 
@@ -226,15 +226,16 @@ export default class LocalEmbeddingProvider implements EmbeddingProvider {
 		// See dynamicEsmImport.js for why this isn't a plain `await import()`.
 		// eslint-disable-next-line @typescript-eslint/no-require-imports -- see dynamicEsmImport.js
 		const dynamicImport = require('./dynamicEsmImport') as (s: string)=> Promise<{
-			env: { localModelPath: string; allowRemoteModels: boolean };
+			env: { localModelPath: string; allowRemoteModels: boolean; allowLocalModels: boolean };
 			AutoTokenizer: { from_pretrained: (name: string)=> Promise<Tokenizer> };
 		}>;
-		const transformers = await dynamicImport('@xenova/transformers');
+		const transformers = await dynamicImport('@huggingface/transformers');
 		// transformers.js resolves model_id against env.localModelPath, so we
 		// point it at the parent and pass the model dir name as the id.
 		// allowRemoteModels=false stops it falling back to huggingface.co.
 		transformers.env.localModelPath = `${modelDir}/..`;
 		transformers.env.allowRemoteModels = false;
+		transformers.env.allowLocalModels = true;
 		const tokenizer = await transformers.AutoTokenizer.from_pretrained(this.model_.archiveName);
 		return tokenizer as Tokenizer;
 	}

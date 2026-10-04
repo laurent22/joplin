@@ -38,6 +38,7 @@ export const chatAvailability = (): Availability => {
 
 	const providerType = Setting.value('ai.chat.providerType') as ProviderType;
 	const baseUrl = providerType === 'openai-compatible' ? Setting.value('ai.chat.baseUrl') as string : '';
+	const classification = deriveClassification(providerType, baseUrl);
 
 	if (providerType === 'joplin-cloud') {
 		if (Setting.value('sync.target') !== SyncTargetRegistry.nameToId('joplinCloud')) {
@@ -45,14 +46,13 @@ export const chatAvailability = (): Availability => {
 		}
 	} else if (providerType === 'openai-compatible') {
 		if (!baseUrl) return unavailable(AvailabilityReason.MissingBaseUrl, _('The OpenAI-compatible provider needs a base URL. Set it in Settings → AI.'));
-		if (!Setting.value('ai.chat.apiKey')) return unavailable(AvailabilityReason.MissingApiKey, _('The API key is missing. Set it in Settings → AI.'));
+		if (classification === 'remote' && !Setting.value('ai.chat.apiKey')) return unavailable(AvailabilityReason.MissingApiKey, _('The API key is missing. Set it in Settings → AI.'));
 		if (!Setting.value('ai.chat.model')) return unavailable(AvailabilityReason.MissingModel, _('The model name is missing. Set it in Settings → AI.'));
 	} else if (providerType === 'anthropic') {
 		if (!Setting.value('ai.chat.apiKey')) return unavailable(AvailabilityReason.MissingApiKey, _('The API key is missing. Set it in Settings → AI.'));
 		if (!Setting.value('ai.chat.model')) return unavailable(AvailabilityReason.MissingModel, _('The model name is missing. Set it in Settings → AI.'));
 	}
 
-	const classification = deriveClassification(providerType, baseUrl);
 	if (classification === 'remote' && !Setting.value('ai.allowRemote')) {
 		return unavailable(AvailabilityReason.RemoteNotAllowed, _('This provider sends data off your device. Turn on "Allow remote AI providers" in Settings → AI.'));
 	}

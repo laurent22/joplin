@@ -50,6 +50,15 @@ interface SafxInterface {
 		mimeType?: string,
 		append?: boolean,
 	): Promise<void>;
+	writeFileInDirectory(
+		directoryUri: string,
+		fileName: string,
+		data: string,
+		encoding?: Encoding,
+		mimeType?: string,
+		replaceIfDestinationExists?: boolean,
+	): Promise<DocumentFileDetail>;
+	copyFileToDirectory(sourceUri: string, directoryUri: string, fileName: string, replaceIfDestinationExists?: boolean): Promise<DocumentFileDetail>;
 	createFile(uriString: string, mimeType?: string): Promise<DocumentFileDetail>;
 	unlink(uriString: string): Promise<boolean>;
 	mkdir(uriString: string): Promise<DocumentFileDetail>;
@@ -68,6 +77,7 @@ interface SafxInterface {
 
 export type DocumentFileDetail = {
 	uri: string;
+	documentUri?: string;
 	name: string;
 	type: 'directory' | 'file';
 	lastModified: number;
@@ -151,6 +161,21 @@ export function writeFile(
 	if (!options) options = {};
 	const { encoding, append, mimeType } = options;
 	return SafX.writeFile(uriString, data, encoding, mimeType, !!append);
+}
+
+export function writeFileInDirectory(
+	directoryUri: string,
+	fileName: string,
+	data: string,
+	options?: Pick<FileOperationOptions, 'encoding' | 'mimeType'> & FileTransferOptions,
+) {
+	if (!options) options = {};
+	const { encoding, mimeType, replaceIfDestinationExists = false } = options;
+	return SafX.writeFileInDirectory(directoryUri, fileName, data, encoding, mimeType, replaceIfDestinationExists);
+}
+
+export function copyFileToDirectory(sourceUri: string, directoryUri: string, fileName: string, options: FileTransferOptions = {}) {
+	return SafX.copyFileToDirectory(sourceUri, directoryUri, fileName, !!options.replaceIfDestinationExists);
 }
 
 // Creates an empty file at given uri.
@@ -243,6 +268,8 @@ export default {
 	exists,
 	readFile,
 	writeFile,
+	writeFileInDirectory,
+	copyFileToDirectory,
 	createFile,
 	unlink,
 	mkdir,

@@ -1,0 +1,12 @@
+.warning-banner-link {
+	color: var(--joplin-color);
+	font-family: var(--joplin-font-family);
+	font-size: var(--joplin-font-siize);
+	font-weight: bold;
+
+	&.-underline {
+		font-weight: normal;
+		text-decoration: underline;
+		color: var(--joplin-color-warn-url);
+	}
+}

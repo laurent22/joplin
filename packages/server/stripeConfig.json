@@ -168,11 +168,11 @@
 						"users": [2, 10]
 					},
 					{
-						"amount": "30.00",
+						"amount": "35.00",
 						"users": [11, 50]
 					},
 					{
-						"amount": "20.00",
+						"amount": "30.00",
 						"users": [51, "infinity"]
 					}
 				],

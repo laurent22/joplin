@@ -8,7 +8,7 @@ type Props = {
 	makeItemIndexVisible: (index: number)=> void;
 };
 
-describe('useAutoScroll', () => {
+describe('UseAutoScroll', () => {
 
 	test('scrolls to the note when a new note is selected', () => {
 		const makeItemIndexVisible = jest.fn();

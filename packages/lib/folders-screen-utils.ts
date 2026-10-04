@@ -50,8 +50,9 @@ export const refreshFolders = async (dispatch: Dispatch, selectedFolderId: strin
 			items: folders,
 		});
 
-		// If the currently selected folder no longer exist, select a default folder
-		if (selectedFolderId && !folders.find(f => f.id === selectedFolderId)) {
+		// If the currently selected folder no longer exists and a smart filter is not set, select a default folder
+		const notesParent = Setting.value('notesParent');
+		if ((!notesParent || JSON.parse(notesParent).type !== 'SmartFilter') && selectedFolderId && !folders.find(f => f.id === selectedFolderId)) {
 			const defaultFolder = await Folder.defaultFolder();
 			if (defaultFolder) {
 				dispatch({

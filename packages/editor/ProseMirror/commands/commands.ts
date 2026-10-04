@@ -152,6 +152,7 @@ const commands: Record<EditorCommandType, ExtendedCommand|null> = {
 	[EditorCommandType.ToggleNumberedList]: toggleList(schema.nodes.ordered_list),
 	[EditorCommandType.ToggleBulletedList]: toggleList(schema.nodes.bullet_list),
 	[EditorCommandType.ToggleCheckList]: toggleList(schema.nodes.task_list),
+	[EditorCommandType.ToggleBlockQuote]: null,
 	[EditorCommandType.ToggleHeading]: toggleHeading(2),
 	[EditorCommandType.ToggleHeading1]: toggleHeading(1),
 	[EditorCommandType.ToggleHeading2]: toggleHeading(2),

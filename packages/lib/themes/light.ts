@@ -19,6 +19,7 @@ const theme: Theme = {
 	selectedColor: '#e5e5e5',
 	urlColor: '#155BDA',
 	colorErrorSelected: '#d00000',
+	shadowColor: 'rgba(0,0,0,0.15)',
 
 	// Color scheme "2" is used for the sidebar. It's white text over
 	// dark blue background.
@@ -26,6 +27,7 @@ const theme: Theme = {
 	color2: '#ffffff',
 	selectedColor2: '#131313',
 	colorError2: '#ff7070',
+	colorPublished2: '#789FE9',
 	colorWarn2: '#ffcb81',
 	colorWarn3: '#ff7626',
 	backgroundColorTransparent2: 'rgba(0, 0, 0, 0.1)',

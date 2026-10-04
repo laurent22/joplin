@@ -169,6 +169,10 @@ const MarkdownEditor: React.FC<EditorProps> = props => {
 
 		editorWebViewSetup.webViewEventHandlers.onMessage(event);
 	}, [editorWebViewSetup]);
+	const onLoadEnd = useCallback(() => {
+		editorWebViewSetup.webViewEventHandlers.onLoadEnd();
+		props.onLoadEnd?.();
+	}, [editorWebViewSetup, props.onLoadEnd]);
 
 	const onError = useCallback((event: NativeSyntheticEvent<WebViewErrorEvent>) => {
 		logger.error(`Load error: Code ${event.nativeEvent.code}: ${event.nativeEvent.description}`);
@@ -185,7 +189,7 @@ const MarkdownEditor: React.FC<EditorProps> = props => {
 			css={css}
 			hasPluginScripts={editorWebViewSetup.hasPlugins}
 			onMessage={onMessage}
-			onLoadEnd={editorWebViewSetup.webViewEventHandlers.onLoadEnd}
+			onLoadEnd={onLoadEnd}
 			onError={onError}
 		/>
 	);

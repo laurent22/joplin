@@ -36,6 +36,12 @@ async function fetchLatestReleases() {
 	return (await response.json()) as GitHubRelease[];
 }
 
+export async function isReleaseVersion(version: string): Promise<boolean | null> {
+	const releases = await fetchLatestReleases();
+	const release = releases.find(release => release.tag_name === `v${version}`);
+	return release ? !release.prerelease : null;
+}
+
 function truncateText(text: string, length: number) {
 	let truncated = text.substring(0, length);
 	const lastNewLine = truncated.lastIndexOf('\n');

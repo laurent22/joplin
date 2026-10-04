@@ -54,7 +54,7 @@ describe('SearchService', () => {
 	const seed = async () => {
 		const folderA = await Folder.save({ title: 'A' });
 		const folderB = await Folder.save({ title: 'B' });
-		const catNote = await Note.save({ title: 'Cats', body: 'cats and kittens love yarn', parent_id: folderA.id });
+		const catNote = await Note.save({ title: 'Cats', body: 'cats and *kittens* love **yarn**', parent_id: folderA.id });
 		const dogNote = await Note.save({ title: 'Dogs', body: 'dogs and puppies chase sticks', parent_id: folderA.id });
 		const carNote = await Note.save({ title: 'Cars', body: 'sedans and SUVs share roads', parent_id: folderB.id });
 		await waitForChangesSince(0, 3);
@@ -315,5 +315,22 @@ describe('SearchService', () => {
 		expect(embedQueryCalls).toBe(1);
 		// Sanity-check the search still produced a result.
 		expect(results.some(r => r.noteId === catNote.id)).toBe(true);
+	});
+
+	it('narrows search results down to a smaller chunk', async () => {
+		if (skipIfNoVec()) return;
+		const { catNote } = await seed();
+
+		const queryText = 'yarn!';
+		const results = await SearchService.instance().search({
+			query: { text: queryText },
+			relevance: 'loose',
+		});
+
+		expect(results.length).toBeGreaterThan(0);
+		expect(results[0].noteId).toBe(catNote.id);
+
+		const bestChunk = await SearchService.instance().bestMatchInResult(queryText, results[0]);
+		expect(bestChunk).toBe('yarn');
 	});
 });

@@ -14,6 +14,7 @@ import { clipboard } from 'electron';
 import { Dispatch } from 'redux';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { MarkupLanguage } from '@joplin/renderer';
+import hasLockedNoteWhileSessionLocked from '@joplin/lib/services/noteLock/hasLockedNoteWhileSessionLocked';
 
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
@@ -71,6 +72,10 @@ export default class NoteListUtils {
 				);
 			} else {
 				const switchNoteType = async (noteIds: string[], type: string) => {
+					if (await hasLockedNoteWhileSessionLocked(noteIds)) {
+						bridge().showErrorMessageBox(_('Cannot change a locked note while the session is locked'));
+						return;
+					}
 					for (let i = 0; i < noteIds.length; i++) {
 						const note = await Note.load(noteIds[i]);
 						const newNote = Note.changeNoteType(note, type);

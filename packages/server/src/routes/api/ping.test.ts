@@ -1,7 +1,7 @@
 import routeHandler from '../../middleware/routeHandler';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext } from '../../utils/testing/testUtils';
 
-describe('api_ping', () => {
+describe('ping', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('api_ping');

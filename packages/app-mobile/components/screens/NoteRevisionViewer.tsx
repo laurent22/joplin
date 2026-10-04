@@ -7,7 +7,7 @@ import Revision from '@joplin/lib/models/Revision';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import { IconButton, Text } from 'react-native-paper';
 import Dropdown from '../Dropdown';
-import ScreenHeader, { MenuOptionType } from '../ScreenHeader';
+import ScreenHeader, { MenuOption } from '../ScreenHeader';
 import { formatMsToLocal } from '@joplin/utils/time';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { PrimaryButton } from '../buttons';
@@ -24,10 +24,16 @@ import { DialogContext } from '../DialogManager';
 import useDeleteHistoryClick from '@joplin/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick';
 import { OnScrollCallback } from '../NoteBodyViewer/types';
 import TextWrapCalculator from './Notes/TextWrapCalculator';
+import { MenuOptionStyle } from '../BottomDrawerMenu';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
+import NoteLockService from '@joplin/lib/services/noteLock/NoteLockService';
+import NoteLockKey from '@joplin/lib/services/noteLock/NoteLockKey';
+import NoteLockPanel from './Note/NoteLockPanel';
 
 interface Props {
 	themeId: number;
 	selectedNoteId: string;
+	noteLockSessionUnlocked: boolean;
 
 	// Properties passed by the navigation logic
 	navigation?: {
@@ -54,26 +60,53 @@ const useRevisions = (noteId: string) => {
 	return revisions;
 };
 
-const useRevisionNote = (revisions: RevisionEntity[], revisionId: string) => {
+const useRevisionNote = (revisions: RevisionEntity[], revisionId: string, canDecrypt: boolean) => {
 	const [note, setNote] = useState<NoteEntity|null>(null);
+	// The revision note as merged from the diffs, with a locked body still encrypted. Restoring
+	// this keeps the restored copy a valid locked note, so it is never decrypted for restore.
+	const [restoreNote, setRestoreNote] = useState<NoteEntity|null>(null);
+	const [decryptFailed, setDecryptFailed] = useState(false);
 	const [resources, setResources] = useState<AttachedResources>({});
 
 	useAsyncEffect(async event => {
+		// Cleared before the load so a switch never keeps the previous revision's failure or restore target.
+		setRestoreNote(null);
+		setDecryptFailed(false);
 		const revisionIndex = BaseModel.modelIndexById(revisions, revisionId);
 		if (revisionIndex === -1) {
 			setNote(null);
+			setResources({});
 			return;
 		}
-		const note = await RevisionService.instance().revisionNote(revisions, revisionIndex);
+		let note = await RevisionService.instance().revisionNote(revisions, revisionIndex);
 		if (event.cancelled) return;
+		const encryptedNote = note;
+		if (isNoteLockEnabled() && revisions[revisionIndex].is_locked) {
+			// Revisions are merged before decryption, so a gated load is not possible.
+			// Keep this in sync with app-desktop/gui/NoteRevisionViewer.tsx.
+			let displayBody = '';
+			let failed = false;
+			if (canDecrypt) {
+				try {
+					displayBody = await NoteLockService.instance().decryptString(note.body ?? '');
+				} catch (error) {
+					console.warn('Could not decrypt revision content:', error);
+					failed = true;
+				}
+				if (event.cancelled) return;
+			}
+			setDecryptFailed(failed);
+			note = { ...note, body: displayBody };
+		}
 		setNote(note);
+		setRestoreNote(encryptedNote);
 
 		const resources = await attachedResources(note?.body ?? '');
 		if (event.cancelled) return;
 		setResources(resources);
-	}, [revisions, revisionId]);
+	}, [revisions, revisionId, canDecrypt]);
 
-	return { note, resources };
+	return { note, restoreNote, decryptFailed, resources };
 };
 
 const useStyles = (themeId: number) => {
@@ -136,7 +169,11 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 	const noteId = props.navigation?.state?.noteId ?? props.selectedNoteId;
 	const revisions = useRevisions(noteId);
 	const [currentRevisionId, setCurrentRevisionId] = useState<string>('');
-	const { note, resources } = useRevisionNote(revisions, currentRevisionId);
+	const hasNoteLockKey = isNoteLockEnabled() && !!NoteLockKey.instance().load();
+	const canDecrypt = props.noteLockSessionUnlocked && hasNoteLockKey;
+	const { note, restoreNote, decryptFailed, resources } = useRevisionNote(revisions, currentRevisionId, canDecrypt);
+	const revisionLocked = isNoteLockEnabled() && revisions.some(r => r.id === currentRevisionId && !!r.is_locked);
+	const showLockPanel = revisionLocked && (!canDecrypt || decryptFailed);
 	const [initialScroll, setInitialScroll] = useState(0);
 	const [hasRevisions, setHasRevisions] = useState(false);
 	const [multiline, setMultiline] = useState(false);
@@ -167,15 +204,15 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 
 	const [restoring, setRestoring] = useState(false);
 	const onRestore = useCallback(async () => {
-		if (!note) return;
+		if (!restoreNote) return;
 		setRestoring(true);
 		try {
-			await RevisionService.instance().importRevisionNote(note);
-			await shim.showMessageBox(RevisionService.instance().restoreSuccessMessage(note), { type: MessageBoxType.Info });
+			await RevisionService.instance().importRevisionNote(restoreNote);
+			await shim.showMessageBox(RevisionService.instance().restoreSuccessMessage(restoreNote), { type: MessageBoxType.Info });
 		} finally {
 			setRestoring(false);
 		}
-	}, [note]);
+	}, [restoreNote]);
 
 	const resetScreenState = useCallback(() => {
 		setCurrentRevisionId(null);
@@ -193,8 +230,10 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 
 	const disableDeleteHistory = deleting || !hasRevisions;
 	const menuOptions = useMemo(() => {
-		const output: MenuOptionType[] = [{
+		const output: MenuOption[] = [{
 			title: _('Delete history'),
+			icon: 'material delete-outline',
+			style: MenuOptionStyle.Destructive,
 			onPress: deleteHistory_onPress,
 			disabled: disableDeleteHistory,
 		}];
@@ -218,7 +257,7 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 	const restoreButton = (
 		<PrimaryButton
 			onPress={onRestore}
-			disabled={restoring || !note}
+			disabled={restoring || !restoreNote || showLockPanel}
 		>{restoreButtonTitle}</PrimaryButton>
 	);
 
@@ -303,21 +342,29 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 			/>
 		</View>
 		{note ? titleComponent : ''}
-		<NoteBodyViewer
-			style={styles.noteViewer}
-			noteBody={note?.body ?? _('No revision selected')}
-			noteMarkupLanguage={MarkupLanguage.Markdown}
-			noteResources={resources}
-			highlightedKeywords={emptyStringList}
-			paddingBottom={0}
-			initialScrollPercent={initialScroll}
-			onScroll={onScroll}
-			noteHash={''}
-		/>
+		{showLockPanel ?
+			<NoteLockPanel
+				themeId={props.themeId}
+				hasNoteLockKey={hasNoteLockKey}
+				undecryptable={decryptFailed && props.noteLockSessionUnlocked}
+			/> :
+			<NoteBodyViewer
+				style={styles.noteViewer}
+				noteBody={note?.body ?? _('No revision selected')}
+				noteMarkupLanguage={MarkupLanguage.Markdown}
+				noteResources={resources}
+				highlightedKeywords={emptyStringList}
+				paddingBottom={0}
+				initialScrollPercent={initialScroll}
+				onScroll={onScroll}
+				noteHash={''}
+			/>
+		}
 	</View>;
 };
 
 export default connect((state: AppState) => ({
 	themeId: state.settings.theme,
 	selectedNoteId: state.selectedNoteIds[0] ?? '',
+	noteLockSessionUnlocked: state.noteLockSessionUnlocked,
 }))(NoteRevisionViewer);

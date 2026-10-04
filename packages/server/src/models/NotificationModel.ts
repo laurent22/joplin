@@ -148,6 +148,14 @@ export default class NotificationModel extends BaseModel<Notification> {
 			.first();
 	}
 
+	public loadByUserId(userId: Uuid, id: Uuid): Promise<Notification> {
+		return this.db(this.tableName)
+			.select(this.defaultFields)
+			.where('id', '=', id)
+			.andWhere('owner_id', '=', userId)
+			.first();
+	}
+
 	public async deleteByUserId(userId: Uuid) {
 		await this.db(this.tableName).where('owner_id', '=', userId).delete();
 	}

@@ -1,6 +1,6 @@
 import PromptDialog from './PromptDialog';
 
-describe('PromptDialog Escape key handling', () => {
+describe('PromptDialog', () => {
 
 	const setupKeyHandler = (inputType: string, menuIsOpened: boolean) => {
 		const onCloseMock = jest.fn();

@@ -2,6 +2,8 @@ import { _ } from '../../locale';
 import CommandService from '../CommandService';
 import { ItemFlow, ListRenderer, OnClickEvent } from '../plugins/api/noteListType';
 import checkboxPieCss from './checkboxPieCss';
+import isNoteLockEnabled from '../noteLock/isNoteLockEnabled';
+import isSyncDisabledConflict from './isSyncDisabledConflict';
 
 const renderer: ListRenderer = {
 	id: 'detailed',
@@ -13,7 +15,12 @@ const renderer: ListRenderer = {
 	dependencies: [
 		'note.todo_completed',
 		'item.selected',
+		'note.conflict_original_id',
+		'note.is_conflict',
+		'note.is_locked',
+		'note.is_published',
 		'note.is_shared',
+		'note.share_id',
 		'note.isWatched',
 	],
 
@@ -64,9 +71,34 @@ const renderer: ListRenderer = {
 				display: none;
 				margin-right: 8px;
 			}
+
+			> .item > .content > .lockedicon {
+				display: none;
+				margin-right: 8px;
+			}
+
+			> .item > .content > .syncdisabledicon {
+				background-color: var(--joplin-color-faded);
+				display: none;
+				flex-shrink: 0;
+				height: 14px;
+				margin-right: 8px;
+				mask: url('vendor/lib/images/cloud-offline-outline.svg') center / contain no-repeat;
+				-webkit-mask: url('vendor/lib/images/cloud-offline-outline.svg') center / contain no-repeat;
+				vertical-align: -3px;
+				width: 14px;
+			}
 		}
 
 		> .row.-watched > .item[data-name="note.title"] > .content > .watchedicon {
+			display: inline-block;
+		}
+
+		> .row.-locked > .item[data-name="note.title"] > .content > .lockedicon {
+			display: inline-block;
+		}
+
+		> .row.-sync-disabled > .item[data-name="note.title"] > .content > .syncdisabledicon {
 			display: inline-block;
 		}
 
@@ -76,6 +108,14 @@ const renderer: ListRenderer = {
 
 		> .row.-shared {
 			color: var(--joplin-color-warn3);
+		}
+
+		> .row.-published {
+			color: var(--joplin-color4);
+		}
+
+		> .row.-published.-selected {
+			color: var(--joplin-color);
 		}
 
 		> .row.-completed {
@@ -96,11 +136,11 @@ const renderer: ListRenderer = {
 
 	itemTemplate: // html
 		`
-			<div class="row {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
+			<div class="row {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.is_published}}-published{{/note.is_published}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}} {{#note.syncDisabled}}-sync-disabled{{/note.syncDisabled}} {{#note.is_locked}}-locked{{/note.is_locked}}">
 				{{#cells}}
 					<div data-name="{{name}}" class="item" style="{{{styleHtml}}}">
 						<div class="content">
-							<i class="watchedicon fa fa-share-square"></i>{{{contentHtml}}}
+							<i class="syncdisabledicon" role="img" aria-label="{{note.syncDisabledLabel}}"></i><i class="watchedicon fa fa-share-square"></i><i class="lockedicon fa fa-lock" role="img" aria-label="{{note.lockedLabel}}"></i>{{{contentHtml}}}
 						</div>
 					</div>
 				{{/cells}}
@@ -140,6 +180,13 @@ const renderer: ListRenderer = {
 	onRenderNote: async (props: any) => {
 		return {
 			...props,
+			note: {
+				...props.note,
+				is_locked: isNoteLockEnabled() ? props.note.is_locked : 0,
+				lockedLabel: _('Locked'),
+				syncDisabled: isSyncDisabledConflict(props.note),
+				syncDisabledLabel: _('Local only'),
+			},
 		};
 	},
 };

@@ -21,11 +21,12 @@ import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import { Dispatch } from 'redux';
 import WarningBanner from './WarningBanner';
 
-import Menu, { MenuOptionType } from './Menu';
 import shim from '@joplin/lib/shim';
 import CommandService from '@joplin/lib/services/CommandService';
 import Icon from '../Icon';
-export { MenuOptionType };
+import Menu from './Menu';
+import { MenuOption, MenuOptionStyle } from '../BottomDrawerMenu';
+export { MenuOption, MenuOptionStyle };
 
 // Rather than applying a padding to the whole bar, it is applied to each
 // individual component (button, picker, etc.) so that the touchable areas
@@ -58,7 +59,7 @@ interface ScreenHeaderProps {
 	showUndoButton: boolean;
 	undoButtonDisabled?: boolean;
 	showRedoButton: boolean;
-	menuOptions: MenuOptionType[];
+	menuOptions: MenuOption[];
 	title?: string|null;
 	folders: FolderEntity[];
 	folderPickerOptions?: FolderPickerOptions;
@@ -559,26 +560,22 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
-		const menuOptions: MenuOptionType[] = [...this.props.menuOptions];
+		const menuOptions: MenuOption[] = [...this.props.menuOptions];
 
 		const selectedFolder = this.props.notesParentType === 'Folder' ? Folder.byId(this.props.folders, this.props.selectedFolderId) : null;
 		const selectedFolderInTrash = itemIsInTrash(selectedFolder);
 
-		if (!this.props.noteSelectionEnabled) {
-			if (menuOptions.length) {
-				menuOptions.push({ isDivider: true });
-			}
-		} else {
+		if (this.props.noteSelectionEnabled) {
 			menuOptions.push({
 				key: 'delete',
 				title: _('Delete'),
-				onPress: this.deleteButton_press,
+				onPress: () => this.deleteButton_press(),
 			});
 
 			menuOptions.push({
 				key: 'duplicate',
 				title: _('Duplicate'),
-				onPress: this.duplicateButton_press,
+				onPress: () => this.duplicateButton_press(),
 			});
 		}
 

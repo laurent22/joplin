@@ -1,0 +1,9 @@
+{
+	"compilerOptions": {
+		"outDir": "./dist/",
+		"rootDir": "./",
+		"module": "commonjs",
+		"target": "es2015",
+		"skipLibCheck": true
+	}
+}

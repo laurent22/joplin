@@ -68,6 +68,7 @@ export interface EditorProps {
 	plugins: PluginStates;
 
 	onAttach: OnAttachCallback;
+	onLoadEnd?: ()=> void;
 	onEditorEvent: (event: EditorEvent)=> void;
 }
 

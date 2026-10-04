@@ -1,0 +1,210 @@
+import BaseApplication, { shouldPreserveSelectedNoteOnSmartFilterSelect } from '@joplin/lib/BaseApplication';
+import ItemChange from '@joplin/lib/models/ItemChange';
+import Note from '@joplin/lib/models/Note';
+import { defaultState, defaultWindowId, State } from '@joplin/lib/reducer';
+import { ALL_NOTES_FILTER_ID } from '@joplin/lib/reserved-ids';
+import { NoteEntity } from '@joplin/lib/services/database/types';
+import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
+import { setEncryptionEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import { loadEncryptionMasterKey, setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
+import { readFile } from 'fs/promises';
+import { TextEncoder as NodeTextEncoder } from 'util';
+import app from './app';
+
+type NoteUpdateAction = {
+	changeSource: number;
+	changedFields: string[];
+	note: NoteEntity;
+	[key: string]: unknown;
+};
+
+const mockBaseMiddleware = () => {
+	return jest.spyOn(BaseApplication.prototype as unknown as {
+		generalMiddleware: (store: unknown, next: (action: unknown)=> unknown, action: unknown)=> Promise<unknown>;
+	}, 'generalMiddleware').mockImplementation(async (_store, next, action) => next(action));
+};
+
+const createDesktopActionHandler = () => {
+	const middleware = app().generalMiddlewareFn()({ getState: jest.fn() });
+	return middleware(jest.fn());
+};
+
+describe('app', () => {
+	const watcher = ExternalEditWatcher.instance();
+	const originalTextEncoder = globalThis.TextEncoder;
+	const originalNoteDispatch = Note.dispatch;
+	let baseMiddlewareMock: jest.SpyInstance;
+
+	test.each([
+		['regular', { deleted_time: 0, is_conflict: 0 }, true],
+		['trashed', { deleted_time: 1, is_conflict: 0 }, false],
+		['conflict', { deleted_time: 0, is_conflict: 1 }, false],
+	])('should determine whether to preserve a %s note when selecting all notes', (_noteType, noteProperties, expected) => {
+		watcher.initialize(jest.fn(), jest.fn());
+		const note = { id: 'note-id', ...noteProperties } as NoteEntity;
+		const state = { ...defaultState, notes: [note], selectedNoteIds: [note.id] };
+
+		expect(shouldPreserveSelectedNoteOnSmartFilterSelect(state, ALL_NOTES_FILTER_ID)).toBe(expected);
+	});
+
+	test('should not apply a note refresh after the active window changes', async () => {
+		const secondaryState = {
+			...defaultState,
+			windowId: 'secondary-window',
+			notesParentType: 'Folder',
+			selectedFolderId: 'secondary-folder',
+			selectedNoteIds: ['secondary-note'],
+		} as State;
+		let activeState = secondaryState;
+		const dispatch = jest.fn();
+		const storeMock = jest.spyOn(app(), 'store').mockReturnValue({
+			dispatch,
+			getState: () => activeState,
+		} as unknown as ReturnType<ReturnType<typeof app>['store']>);
+		const previewsMock = jest.spyOn(Note, 'previews').mockImplementation(async () => {
+			activeState = { ...defaultState, windowId: defaultWindowId } as State;
+			return [{ id: 'secondary-note' }] as NoteEntity[];
+		});
+
+		try {
+			await app().refreshNotes(secondaryState, true);
+			expect(dispatch).not.toHaveBeenCalled();
+		} finally {
+			previewsMock.mockRestore();
+			storeMock.mockRestore();
+		}
+	});
+
+	beforeEach(async () => {
+		await setupDatabaseAndSynchronizer(0);
+		await switchClient(0);
+		baseMiddlewareMock = mockBaseMiddleware();
+	});
+
+	afterEach(async () => {
+		Note.dispatch = originalNoteDispatch;
+		baseMiddlewareMock.mockRestore();
+		setEncryptionEnabled(false);
+		Object.defineProperty(globalThis, 'TextEncoder', { configurable: true, value: originalTextEncoder });
+		await watcher.stopWatchingAll();
+	});
+
+	const startExternalEditing = async () => {
+		const openItem = jest.fn();
+		watcher.initialize(jest.fn(() => ({
+			openItem,
+		})), jest.fn());
+
+		const originalNote = await Note.save({
+			title: 'Test note',
+			body: 'Original body',
+		});
+		await watcher.openAndWatch(originalNote);
+
+		return {
+			originalNote,
+			externalFilePath: openItem.mock.calls[0][0] as string,
+		};
+	};
+
+	test('should update the external edit file after a synced note changes', async () => {
+		const { originalNote, externalFilePath } = await startExternalEditing();
+		const syncedNote = await Note.save({
+			...originalNote,
+			body: 'Changed on another device',
+		}, { changeSource: ItemChange.SOURCE_SYNC });
+		const syncedUpdateAction = {
+			type: 'NOTE_UPDATE_ONE',
+			changeSource: ItemChange.SOURCE_SYNC,
+			changedFields: ['body'],
+			note: syncedNote,
+		};
+
+		const handleDesktopAction = createDesktopActionHandler();
+		await handleDesktopAction(syncedUpdateAction);
+
+		expect(await readFile(externalFilePath, 'utf8')).toBe(await Note.serializeForEdit(syncedNote));
+	});
+
+	test('should not update the external edit file when the note is not watched', async () => {
+		const note = await Note.save({
+			title: 'Test note',
+			body: 'Changed on another device',
+		}, { changeSource: ItemChange.SOURCE_SYNC });
+		const updateNoteFile = jest.spyOn(watcher, 'updateNoteFile');
+
+		const handleDesktopAction = createDesktopActionHandler();
+		await handleDesktopAction({
+			type: 'NOTE_UPDATE_ONE',
+			changeSource: ItemChange.SOURCE_SYNC,
+			changedFields: ['body'],
+			note,
+		});
+
+		expect(watcher.noteIsWatched(note)).toBe(false);
+		expect(updateNoteFile).not.toHaveBeenCalled();
+		updateNoteFile.mockRestore();
+	});
+
+	test('should not update the external edit file when the synced note is locked', async () => {
+		const { originalNote } = await startExternalEditing();
+		const updateNoteFile = jest.spyOn(watcher, 'updateNoteFile');
+
+		const handleDesktopAction = createDesktopActionHandler();
+		await handleDesktopAction({
+			type: 'NOTE_UPDATE_ONE',
+			changeSource: ItemChange.SOURCE_SYNC,
+			changedFields: ['body', 'is_locked'],
+			note: { ...originalNote, body: 'Locked note ciphertext', is_locked: 1 },
+		});
+
+		expect(updateNoteFile).not.toHaveBeenCalled();
+		updateNoteFile.mockRestore();
+	});
+
+	test('should wait for a synced encrypted note to be decrypted before updating the external edit file', async () => {
+		const { originalNote, externalFilePath } = await startExternalEditing();
+		const noteActions = jest.fn();
+		Note.dispatch = noteActions;
+
+		Object.defineProperty(globalThis, 'TextEncoder', { configurable: true, value: NodeTextEncoder });
+		setEncryptionEnabled(true);
+		await loadEncryptionMasterKey();
+
+		const encryptedSyncPayload = await Note.serializeForSync({
+			...originalNote,
+			body: 'Changed on another device',
+		} as NoteEntity);
+		const encryptedNote = Note.filter(await Note.unserialize(encryptedSyncPayload));
+		const savedEncryptedNote = await Note.save(encryptedNote, {
+			autoTimestamp: false,
+			changeSource: ItemChange.SOURCE_SYNC,
+			oldItem: originalNote as unknown as Record<string, unknown>,
+		});
+		const encryptedSyncAction = noteActions.mock.calls[0][0] as NoteUpdateAction;
+
+		expect(encryptedSyncAction.note.encryption_applied).toBe(1);
+
+		const handleDesktopAction = createDesktopActionHandler();
+		await handleDesktopAction(encryptedSyncAction);
+
+		expect(await readFile(externalFilePath, 'utf8')).toBe(await Note.serializeForEdit(originalNote));
+
+		noteActions.mockClear();
+		const decryptedNote = await Note.decrypt(savedEncryptedNote);
+		const decryptedUpdateActions = noteActions.mock.calls
+			.map(call => call[0] as NoteUpdateAction)
+			.filter(action => action.type === 'NOTE_UPDATE_ONE');
+		expect(decryptedUpdateActions).toHaveLength(1);
+		const decryptedAction = decryptedUpdateActions[0];
+
+		expect(decryptedAction.note).toEqual(decryptedNote);
+		expect(decryptedAction.note.body).toBe('Changed on another device');
+		expect(decryptedAction.note.encryption_applied).toBe(0);
+		expect(decryptedAction.changedFields).toEqual(expect.arrayContaining(['body', 'encryption_applied']));
+
+		await handleDesktopAction(decryptedAction);
+
+		expect(await readFile(externalFilePath, 'utf8')).toBe(await Note.serializeForEdit(decryptedNote));
+	});
+});

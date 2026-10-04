@@ -3,7 +3,7 @@ import createTestEditor from '../../testing/createTestEditor';
 import followLinkTooltip from './followLinkTooltipExtension';
 import { EditorSelection } from '@codemirror/state';
 
-describe('followLinkTooltip', () => {
+describe('followLinkTooltipExtension', () => {
 	it('should show a clickable tooltip for a URL link', async () => {
 		const doc = '[link](http://example.com/)';
 		const onOpenLink = jest.fn();

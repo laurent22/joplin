@@ -12,7 +12,7 @@ import { MasterKeyEntity } from './services/e2ee/types';
 import type { ProgressReport } from './Synchronizer';
 import type { SharedData } from './components/shared/note-screen-shared';
 
-interface SearchEntry {
+export interface SearchEntry {
 	id: string;
 	type_: number;
 	title: string;
@@ -21,14 +21,15 @@ interface SearchEntry {
 	parent_id?: string;
 }
 import { getListRendererIds } from './services/noteList/renderers';
-import { ProcessResultsRow } from './services/search/SearchEngine';
-import { getDisplayParentId } from './services/trash';
+import { ComplexTerm, ProcessResultsRow } from './services/search/SearchEngine';
+import { getDisplayParentId, getTrashFolderId } from './services/trash';
 import Logger from '@joplin/utils/Logger';
 import { SettingsRecord } from './models/settings/types';
 import { Toast, ToastType } from './services/plugins/api/types';
 import { unique } from './array';
 import fastDeepEqual = require('fast-deep-equal');
 import { ALL_NOTES_FILTER_ID } from './reserved-ids';
+import ItemChange from './models/ItemChange';
 const { createSelectorCreator, defaultMemoize } = require('reselect');
 const { createCachedSelector } = require('re-reselect');
 
@@ -89,6 +90,8 @@ export interface StateLastDeletion {
 	timestamp: number;
 }
 
+export type HighlightedWord = ComplexTerm|string;
+
 export interface WindowState {
 	windowId: string;
 	notes: NoteEntity[];
@@ -100,6 +103,9 @@ export interface WindowState {
 
 	selectedNoteIds: string[];
 	selectedNoteHash: string;
+	// Only used to disable menu actions that update the active note in the editor. Bulk actions
+	// do not need to be disabled because they do not result in an error.
+	activeNoteIsUndecryptable: boolean;
 	selectedFolderId: string;
 	selectedFolderIds: string[];
 	selectedTagId: string;
@@ -108,11 +114,12 @@ export interface WindowState {
 	selectedItemType: string;
 	selectedSmartFilterId: string;
 
-	highlightedWords: string[];
+	highlightedWords: HighlightedWord[];
 
 	backwardHistoryNotes: NoteEntity[];
 	forwardHistoryNotes: NoteEntity[];
 	lastSelectedNotesIds: StateLastSelectedNotesIds;
+	windowEditorNoteReloadTimeRequest: number;
 }
 
 export const defaultWindowId = 'default';
@@ -124,6 +131,7 @@ export const defaultWindowState: WindowState = {
 	notesParentType: null,
 	selectedNoteIds: [],
 	selectedNoteHash: '',
+	activeNoteIsUndecryptable: false,
 	selectedFolderId: null,
 	selectedFolderIds: [],
 	selectedTagId: null,
@@ -140,6 +148,7 @@ export const defaultWindowState: WindowState = {
 		Tag: {},
 		Search: {},
 	},
+	windowEditorNoteReloadTimeRequest: 0,
 };
 
 export interface EditorNoteStatuses {
@@ -181,6 +190,7 @@ export interface State extends WindowState {
 	editorNoteStatuses: EditorNoteStatuses;
 	isInsertingNotes: boolean;
 	hasEncryptedItems: boolean;
+	noteLockSessionUnlocked: boolean;
 	needApiAuth: boolean;
 	profileConfig: ProfileConfig;
 	noteListRendererIds: string[];
@@ -191,7 +201,6 @@ export interface State extends WindowState {
 	mustAuthenticate: boolean;
 	toast: Toast | null;
 	editorNoteReloadTimeRequest: number;
-
 	allowSelectionInOtherFolders: boolean;
 	noteHtmlToMarkdownDone: string;
 
@@ -252,6 +261,7 @@ export const defaultState: State = {
 	editorNoteStatuses: {},
 	isInsertingNotes: false,
 	hasEncryptedItems: false,
+	noteLockSessionUnlocked: false,
 	needApiAuth: false,
 	profileConfig: null,
 	noteListRendererIds: getListRendererIds(),
@@ -264,8 +274,8 @@ export const defaultState: State = {
 	lastDeletionNotificationTime: 0,
 	mustUpgradeAppMessage: '',
 	mustAuthenticate: false,
-	allowSelectionInOtherFolders: false,
 	editorNoteReloadTimeRequest: 0,
+	allowSelectionInOtherFolders: false,
 	noteHtmlToMarkdownDone: '',
 
 	pluginService: pluginServiceDefaultState,
@@ -1168,12 +1178,26 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 		case 'NOTE_UPDATE_ONE':
 			{
 				const modNote: NoteEntity = action.note;
-				const handleWindowState = (windowDraft: Draft<WindowState>, isActiveWindow: boolean) => {
+				const handleWindowState = (windowDraft: Draft<WindowState>) => {
+					const isSecondaryWindow = windowDraft.windowId !== defaultWindowId;
 					const isViewingAllNotes = (windowDraft.notesParentType === 'SmartFilter' && windowDraft.selectedSmartFilterId === ALL_NOTES_FILTER_ID);
 					const isViewingConflictFolder = windowDraft.notesParentType === 'Folder' && windowDraft.selectedFolderId === Folder.conflictFolderId();
+					const isOnlySelectedInSecondaryWindow = isSecondaryWindow && windowDraft.selectedNoteIds.length === 1 && windowDraft.selectedNoteIds[0] === modNote.id;
+					const noteDisplayParentId = (note: NoteEntity) => {
+						if (note.deleted_time) return getDisplayParentId(note, draft.folders.find(f => f.id === note.parent_id));
+						if (note.is_conflict) return Folder.conflictFolderId();
+						return getDisplayParentId(note, draft.folders.find(f => f.id === note.parent_id));
+					};
 
-					const noteIsInFolder = function(note: NoteEntity, folderId: string) {
-						if (note.is_conflict && isViewingConflictFolder) return true;
+					const noteIsInCurrentView = function(note: NoteEntity, folderId: string) {
+						// Deleted conflicts belong to Trash. This check needs to happen before the
+						// conflict check because is_conflict is only available after decryption.
+						if (note.deleted_time) {
+							const noteDisplayParentId = getDisplayParentId(note, draft.folders.find(f => f.id === note.parent_id));
+							return folderId === noteDisplayParentId;
+						}
+						if (note.is_conflict) return isViewingConflictFolder;
+						if (isViewingAllNotes) return true;
 						const noteDisplayParentId = getDisplayParentId(note, draft.folders.find(f => f.id === note.parent_id));
 						return folderId === noteDisplayParentId;
 					};
@@ -1185,14 +1209,54 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 					for (let i = 0; i < newNotes.length; i++) {
 						const n = newNotes[i];
 						if (n.id === modNote.id) {
-							const previousDisplayParentId = ('parent_id' in n) ? getDisplayParentId(n, draft.folders.find(f => f.id === n.parent_id)) : '';
-							if (n.is_conflict && !modNote.is_conflict) {
+							const previousDisplayParentId = ('parent_id' in n) ? noteDisplayParentId(n) : '';
+							// is_conflict is encrypted. During sync, retain the conflict identity from
+							// the existing deleted note until the restored placeholder is decrypted.
+							const isEncryptedRestoredConflict = !!n.is_conflict && !!n.deleted_time && !modNote.deleted_time && !!modNote.encryption_applied;
+							const displayParentId = isEncryptedRestoredConflict ? Folder.conflictFolderId() : noteDisplayParentId(modNote);
+							const conflictTrashStateChanged = !!n.is_conflict && (!!modNote.is_conflict || isEncryptedRestoredConflict) && !!n.deleted_time !== !!modNote.deleted_time;
+							const conflictBecameRegularNote = !!n.is_conflict && !modNote.is_conflict;
+							const regularNoteMoved = !n.is_conflict && !modNote.is_conflict && previousDisplayParentId !== displayParentId;
+							const displayParentChanged = !!action.noteMovedToFolder || conflictTrashStateChanged || conflictBecameRegularNote || regularNoteMoved;
+							const shouldFollowMovedNote = isOnlySelectedInSecondaryWindow && windowDraft.notesParentType === 'Folder' && displayParentChanged;
+							if (shouldFollowMovedNote) {
+								const parentFolder = draft.folders.find(f => f.id === displayParentId);
+								const isVirtualFolder = displayParentId === getTrashFolderId() || displayParentId === Folder.conflictFolderId();
+								if (parentFolder) {
+									windowDraft.notesParentType = 'Folder';
+									windowDraft.selectedSmartFilterId = null;
+									windowDraft.selectedFolderId = displayParentId;
+									windowDraft.selectedFolderIds = [displayParentId];
+								} else if (isVirtualFolder) {
+									windowDraft.notesParentType = 'Folder';
+									windowDraft.selectedSmartFilterId = null;
+									windowDraft.selectedFolderId = displayParentId;
+									windowDraft.selectedFolderIds = [displayParentId];
+								} else if (action.changeSource === ItemChange.SOURCE_SYNC && displayParentId) {
+									// Sync can deliver a note before its parent folder. Select the destination
+									// by ID now; the folder list and focus refresh will populate it later.
+									windowDraft.notesParentType = 'Folder';
+									windowDraft.selectedSmartFilterId = null;
+									windowDraft.selectedFolderId = displayParentId;
+									windowDraft.selectedFolderIds = [displayParentId];
+								} else {
+									windowDraft.notesParentType = 'SmartFilter';
+									windowDraft.selectedSmartFilterId = ALL_NOTES_FILTER_ID;
+									windowDraft.selectedFolderId = null;
+									windowDraft.selectedFolderIds = [];
+								}
+
+								// The previous list belongs to the old folder. Until WINDOW_FOCUS refreshes
+								// the destination, the only item known to belong to the new source is this note.
+								newNotes.splice(0, newNotes.length, { ...newNotes[i], ...modNote });
+								windowDraft.notesSource = '';
+							} else if (n.is_conflict && !modNote.is_conflict) {
 								// Note was a conflict but was moved outside of
 								// the conflict folder
 								newNotes.splice(i, 1);
 								noteFolderHasChanged = true;
 								movedNotePreviousIndex = i;
-							} else if (isViewingAllNotes || noteIsInFolder(modNote, previousDisplayParentId)) {
+							} else if (noteIsInCurrentView(modNote, previousDisplayParentId)) {
 								// Note is still in the same folder
 								// Merge the properties that have changed (in modNote) into
 								// the object we already have.
@@ -1216,7 +1280,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 					// Note was not found - if the current folder is the same as the note folder,
 					// add it to it.
 					if (!found) {
-						if (isViewingAllNotes || noteIsInFolder(modNote, windowDraft.selectedFolderId)) {
+						if (noteIsInCurrentView(modNote, windowDraft.selectedFolderId)) {
 							newNotes.push(modNote);
 						}
 					}
@@ -1226,9 +1290,10 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 					// Ensure that the selected note is still in the current folder.
 					// For example, if the user drags the current note to a different folder,
 					// a new note should be selected.
-					// In some cases, however, the selection needs to be preserved (e.g. the mobile app).
+					// In some cases, however, the selection needs to be preserved (e.g. the mobile app, in secondary windows, or when an unselected note is moved by sync).
 					const preserveSelection = action.preserveSelection ?? draft.allowSelectionInOtherFolders;
-					if (noteFolderHasChanged && !preserveSelection && isActiveWindow) {
+					const selectedNoteHasMoved = windowDraft.selectedNoteIds.length > 0 && !newNotes.some(o => windowDraft.selectedNoteIds.includes(o.id));
+					if (noteFolderHasChanged && !preserveSelection && !isSecondaryWindow && (action.changeSource !== ItemChange.SOURCE_SYNC || selectedNoteHasMoved)) {
 						let newIndex = movedNotePreviousIndex;
 						if (newIndex >= newNotes.length) newIndex = newNotes.length - 1;
 						if (!newNotes.length) newIndex = -1;
@@ -1253,9 +1318,9 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 					}
 				};
 
-				handleWindowState(draft, true);
+				handleWindowState(draft);
 				for (const backgroundWindow of Object.values(draft.backgroundWindows)) {
-					handleWindowState(backgroundWindow, false);
+					handleWindowState(backgroundWindow);
 				}
 			}
 			break;
@@ -1510,6 +1575,19 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			draft.hasDisabledEncryptionItems = action.value;
 			break;
 
+		case 'SET_NOTE_LOCK_SESSION_UNLOCKED':
+			draft.noteLockSessionUnlocked = action.value;
+			break;
+
+		case 'SET_ACTIVE_NOTE_IS_UNDECRYPTABLE':
+			{
+				// The editor reporting this may be in a background window, so the flag follows that
+				// window rather than whichever one currently has focus.
+				const windowDraft = stateUtils.windowStateById(draft, action.windowId ?? draft.windowId);
+				if (windowDraft) windowDraft.activeNoteIsUndecryptable = action.value;
+			}
+			break;
+
 		case 'CLIPPER_SERVER_SET':
 			{
 				const clipperServer = { ...draft.clipperServer };
@@ -1595,7 +1673,22 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'EDITOR_NOTE_NEEDS_RELOAD':
 			{
-				draft.editorNoteReloadTimeRequest = Date.now();
+				const nextReloadRequest = (previous: number) => Math.max(Date.now(), previous + 1);
+
+				// Mobile uses the root field and supports reload requests without a note ID.
+				if (!action.noteId || stateUtils.selectedNoteId(draft) === action.noteId) {
+					draft.editorNoteReloadTimeRequest = nextReloadRequest(draft.editorNoteReloadTimeRequest);
+				}
+
+				// Desktop reload requests must identify the note so that only windows
+				// displaying that note are invalidated.
+				if (action.noteId) {
+					for (const windowState of stateUtils.allWindowStates(draft)) {
+						if (stateUtils.selectedNoteId(windowState) === action.noteId) {
+							windowState.windowEditorNoteReloadTimeRequest = nextReloadRequest(windowState.windowEditorNoteReloadTimeRequest);
+						}
+					}
+				}
 			}
 			break;
 

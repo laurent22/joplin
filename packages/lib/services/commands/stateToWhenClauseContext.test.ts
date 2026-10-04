@@ -4,6 +4,8 @@ import { FolderEntity, NoteEntity } from '../database/types';
 import { getTrashFolderId } from '../trash';
 import stateToWhenClauseContext from './stateToWhenClauseContext';
 
+jest.mock('../noteLock/isNoteLockEnabled', () => () => true);
+
 interface StateOptions {
 	folders: FolderEntity[];
 	notes: NoteEntity[];
@@ -11,6 +13,8 @@ interface StateOptions {
 	selectedFolderIds: string[];
 	selectedNoteIds: string[];
 	notesParentType: string;
+	noteLockSessionUnlocked: boolean;
+	activeNoteIsUndecryptable: boolean;
 }
 const buildState = (options: Partial<StateOptions>) => {
 	return {
@@ -21,6 +25,48 @@ const buildState = (options: Partial<StateOptions>) => {
 };
 
 describe('stateToWhenClauseContext', () => {
+	it.each([
+		{
+			label: 'the note lock session is locked',
+			noteLockSessionUnlocked: false,
+			activeNoteIsUndecryptable: false,
+			isLocked: 1,
+			expected: true,
+		},
+		{
+			label: 'the active note cannot be decrypted',
+			noteLockSessionUnlocked: true,
+			activeNoteIsUndecryptable: true,
+			isLocked: 1,
+			expected: true,
+		},
+		{
+			label: 'the locked note has been decrypted',
+			noteLockSessionUnlocked: true,
+			activeNoteIsUndecryptable: false,
+			isLocked: 1,
+			expected: false,
+		},
+		{
+			label: 'the active note is not locked',
+			noteLockSessionUnlocked: false,
+			activeNoteIsUndecryptable: true,
+			isLocked: 0,
+			expected: false,
+		},
+	])('should make the note read-only when $label', ({ noteLockSessionUnlocked, activeNoteIsUndecryptable, isLocked, expected }) => {
+		const applicationState = buildState({
+			selectedNoteIds: ['1'],
+			notes: [{ id: '1', is_locked: isLocked, deleted_time: 0 }],
+			noteLockSessionUnlocked,
+			activeNoteIsUndecryptable,
+		});
+		const resultingState = stateToWhenClauseContext(applicationState);
+
+		expect(resultingState.noteIsReadOnly).toBe(expected);
+		expect(resultingState.noteIsReadOnlyShare).toBe(false);
+	});
+
 	it('should be in trash if selected note has been deleted and selected folder is trash', async () => {
 		const applicationState = buildState({
 			selectedNoteIds: ['1'],

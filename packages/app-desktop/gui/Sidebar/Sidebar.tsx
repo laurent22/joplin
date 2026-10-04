@@ -32,13 +32,15 @@ const SidebarComponent = (props: Props) => {
 	const renderSynchronizeButton = (type: string) => {
 		const label = type === 'sync' ? _('Synchronise') : _('Cancel');
 		const nothingToSync = type === 'sync' && !props.syncPending && syncCompletedWithoutError(props.syncReport);
-		const iconName = nothingToSync ? 'fas fa-check' : 'icon-sync';
+		const syncHasErrors = type === 'sync' && !props.syncPending && !!props.syncReport.errors?.length;
+		const iconName = syncHasErrors ? 'fas fa-exclamation-triangle' : nothingToSync ? 'fas fa-check' : 'icon-sync';
 
 		return (
 			<StyledSynchronizeButton
 				level={ButtonLevel.SidebarSecondary}
-				className={`sidebar-sync-button ${type === 'sync' ? '' : '-syncing'} ${nothingToSync ? '-synced' : ''}`}
+				className={`sidebar-sync-button ${type === 'sync' ? '' : '-syncing'} ${nothingToSync ? '-synced' : ''} ${syncHasErrors ? '-error' : ''}`}
 				iconName={iconName}
+				iconLabel={syncHasErrors ? _('Synchronisation error') : undefined}
 				key="sync_button"
 				title={label}
 				onClick={() => {

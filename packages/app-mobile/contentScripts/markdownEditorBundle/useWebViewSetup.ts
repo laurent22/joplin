@@ -78,7 +78,27 @@ const useWebViewSetup = ({
 				${setInitialSelectionJs}
 				${setInitialSearchJs}
 
+				let scrollAllowed = false;
+				let scrollAllowedTimeout;
+
+				window.onclick = () => {
+					scrollAllowed = true;
+
+					// Allow scrolling into view for a brief period after clicking / tapping the editor, which is what triggers opening
+					// the on-screen keyboard. A 1 second delay is needed to give time for the onresize event to trigger, then disallow
+					// the scroll so that other actions which trigger resize events will not cause unwanted scrolling. A small caveat is
+					// that dismissing the keyboard within 1 second of tapping may still cause a scroll, but this is acceptable given a
+					// user would be unable to scroll away much from the cursor position in just 1 second.
+					clearTimeout(scrollAllowedTimeout);
+					scrollAllowedTimeout = setTimeout(() => {
+						scrollAllowed = false;
+					}, 1000);
+				};
+
 				window.onresize = () => {
+					if (!scrollAllowed) return;
+					// Do not reset scrollAllowed here, let scrollAllowedTimeout do it, because multiple resize events fire on keyboard open,
+					// so scroll should not be suppressed after the first one
 					cm.execCommand('scrollSelectionIntoView');
 				};
 			} else if (parentClassName) {

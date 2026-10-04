@@ -1,7 +1,7 @@
 import { extractVersionInfo, Release, Platform, Architecture, GitHubRelease, handleReleaseResponseError } from './checkForUpdatesUtils';
 import { releases1, releases2 } from './checkForUpdatesUtilsTestData';
 
-describe('checkForUpdates', () => {
+describe('checkForUpdatesUtils', () => {
 
 	it('should extract version info and return the non-arm64 version', async () => {
 		const testCases: [GitHubRelease[], Platform, Architecture, boolean, Release][] = [
@@ -145,6 +145,27 @@ describe('checkForUpdates', () => {
 			pageUrl: releaseData.html_url,
 			prerelease: releaseData.prerelease,
 		});
+	});
+
+	test.each([
+		['installer', false, ['Joplin-Setup-2.12.4.exe', 'Joplin-Setup-2.12.4-arm64.exe'], 'Joplin-Setup-2.12.4-arm64.exe'],
+		['portable', true, ['JoplinPortable.exe', 'JoplinPortable-arm64.exe'], 'JoplinPortable-arm64.exe'],
+		['installer without an arm64 build', false, ['Joplin-Setup-2.12.4.exe'], 'Joplin-Setup-2.12.4.exe'],
+		['portable without an arm64 build', true, ['JoplinPortable.exe'], 'JoplinPortable.exe'],
+	])('should pick the right Windows arm64 asset - %s', (_description, portable, assetNames, expected) => {
+		const release: GitHubRelease = {
+			prerelease: false,
+			body: 'this is a test',
+			tag_name: 'v2.12.4',
+			assets: assetNames.map(name => ({
+				name,
+				browser_download_url: `https://github.com/laurent22/joplin/releases/download/v2.12.4/${name}`,
+			})),
+			html_url: 'https://github.com/laurent22/joplin/releases/tag/v2.12.4',
+		};
+
+		const releaseInfo = extractVersionInfo([release], 'win32', 'arm64', portable, { });
+		expect(releaseInfo.downloadUrl).toBe(`https://objects.joplinusercontent.com/v2.12.4/${expected}`);
 	});
 
 	test.each([

@@ -2,8 +2,10 @@ import shim from '../../../shim';
 import JoplinError from '../../../JoplinError';
 import Logger from '@joplin/utils/Logger';
 import { rtrimSlashes } from '@joplin/utils/path';
-import { ChatMessage, ChatOptions, ChatResult, ChatToolCall, ProviderClassification, ToolSpec } from '../types';
+import { ChatFinishReason, ChatMessage, ChatOptions, ChatResult, ChatToolCall, ProviderClassification } from '../types';
 import ChatProviderBase from './ChatProviderBase';
+import { ToolSpec } from '../tools/types';
+import extractReasoning from '../utils/extractReasoning';
 
 const logger = Logger.create('OpenAiCompatibleProvider');
 
@@ -24,11 +26,15 @@ interface OpenAiToolCall {
 
 interface OpenAiMessage {
 	content?: string;
+	// Non-standard: `reasoning_content` (DeepSeek, vLLM), `reasoning` (OpenRouter).
+	reasoning_content?: string;
+	reasoning?: string;
 	tool_calls?: OpenAiToolCall[];
 }
 
 interface OpenAiChoice {
 	message?: OpenAiMessage;
+	finish_reason?: string;
 }
 
 interface OpenAiResponse {
@@ -44,31 +50,59 @@ interface Options {
 	classification: ProviderClassification;
 }
 
+const toChatFinishReason = (reason: string|undefined): ChatFinishReason|undefined => {
+	if (!reason) return undefined;
+	// Some providers use "max_tokens" or "MAX_TOKENS" instead of "length".
+	if (['length', 'max_tokens'].includes(reason.toLowerCase())) return 'length';
+	if (reason === 'stop') return 'stop';
+	if (reason === 'tool_calls') return 'tool_calls';
+	return 'other';
+};
+
 const convertTool = (tool: ToolSpec) => {
 	return {
 		type: 'function',
 		function: {
-			name: tool.name,
+			name: tool.id,
 			description: tool.description,
 			parameters: tool.inputSchema,
-			strict: true,
 		},
 	};
 };
 
 const convertMessage = (message: ChatMessage) => {
 	if (message.role === 'tool') {
-		return {
-			role: 'tool',
-			name: message.toolName,
-			content: message.content,
-			tool_call_id: message.toolCallId,
-		};
+		const content = message.content;
+		if (typeof content === 'string') {
+			return [{
+				role: 'tool',
+				name: message.toolName,
+				content,
+				tool_call_id: message.toolCallId,
+			}];
+		} else {
+			// Joplin currently uses the older OpenAI chat responses API, which does not support
+			// images in tool results. Attach the image in a user message instead:
+			return [{
+				role: 'tool',
+				name: message.toolName,
+				content: 'success: will be attached in user message',
+				tool_call_id: message.toolCallId,
+			}, {
+				role: 'user',
+				content: [
+					{
+						type: 'image_url',
+						image_url: { url: content.dataUrl },
+					},
+				],
+			}];
+		}
 	} else {
-		return {
+		return [{
 			role: message.role,
 			content: message.content,
-			...(message.toolCalls ? {
+			...(message.toolCalls?.length ? {
 				tool_calls: message.toolCalls.map(call => {
 					return {
 						id: call.callId,
@@ -80,12 +114,30 @@ const convertMessage = (message: ChatMessage) => {
 					};
 				}),
 			} : {}),
-		};
+		}];
 	}
+};
+
+const describeJsonParseFailure = (rawContent: string) => {
+	const parseError = ['Failed to parse JSON.'];
+
+	// With certain providers (e.g. Joplin Cloud), long messages are truncated. Include this information in the error message so that
+	// the model knows to retry with a shorter message:
+	const suggestedRetryLengthLimit = 1000;
+	if (rawContent.startsWith('{') && rawContent.length > suggestedRetryLengthLimit) {
+		parseError.push(`It's likely that the tool call JSON is too long. Please try again with a message shorter than ${suggestedRetryLengthLimit} characters.`);
+	}
+
+	return parseError.join(' ');
 };
 
 export interface ChatRequestOptions {
 	signal?: AbortSignal;
+}
+
+export interface OpenAiChatResponse {
+	response: { status: number };
+	json: OpenAiResponse;
 }
 
 export default class OpenAiCompatibleProvider extends ChatProviderBase {
@@ -109,7 +161,7 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 
 		const body: Record<string, unknown> = {
 			model: this.model_,
-			messages: messages.map(convertMessage),
+			messages: messages.flatMap((message): unknown[] => convertMessage(message)),
 			stream: false,
 		};
 		if (options?.temperature !== undefined) body.temperature = options.temperature;
@@ -130,6 +182,14 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 		if (response.status === 400 && 'max_tokens' in body && /max_completion_tokens/i.test(errorMessage())) {
 			body.max_completion_tokens = body.max_tokens;
 			delete body.max_tokens;
+			({ response, json } = await doFetch());
+		}
+
+		// Reasoning models apply a reasoning_effort default server-side, which OpenAI then rejects
+		// alongside tools on /chat/completions. Opt out of the default to keep tools working.
+		if (response.status === 400 && 'tools' in body && /reasoning_effort/i.test(errorMessage())) {
+			logger.warn(`Model ${this.model_} rejected function tools with reasoning; retrying with reasoning disabled.`);
+			body.reasoning_effort = 'none';
 			({ response, json } = await doFetch());
 		}
 
@@ -157,8 +217,10 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 			);
 		}
 
-		const responseMessage = json.choices?.[0]?.message;
-		const content = responseMessage?.content ?? '';
+		const choice = json.choices?.[0];
+		const responseMessage = choice?.message;
+		const { text: content, reasoning: inlineReasoning } = extractReasoning(responseMessage?.content ?? '');
+		const reasoningText = responseMessage?.reasoning_content ?? responseMessage?.reasoning ?? (inlineReasoning || undefined);
 		// Some "OpenAI-compatible" providers (notably older Ollama versions)
 		// omit `usage` entirely. Default to zeros rather than throw.
 		const inputTokens = json.usage?.prompt_tokens ?? 0;
@@ -166,17 +228,36 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 
 		const toolCalls: ChatToolCall[] = (responseMessage?.tool_calls ?? []).map(call => {
 			if (!call.function) return null;
+
+			let args;
+			let parseError: string|null = null;
+			const argumentString = call.function.arguments;
+			try {
+				args = JSON.parse(argumentString);
+			} catch (error) {
+				args = {};
+				parseError = describeJsonParseFailure(argumentString);
+				logger.error('JSON parse failed', error, parseError);
+			}
+
 			return {
 				toolName: call.function.name,
 				callId: call.id,
-				arguments: JSON.parse(call.function.arguments),
+				arguments: args,
+				parseError,
 			};
 		}).filter(toolCall => !!toolCall);
 
-		return { text: content, toolCalls, usage: { inputTokens, outputTokens } };
+		return {
+			text: content,
+			toolCalls,
+			usage: { inputTokens, outputTokens },
+			finishReason: toChatFinishReason(choice?.finish_reason),
+			reasoningText,
+		};
 	}
 
-	protected async sendChatRequest(body: Record<string, unknown>, options: ChatRequestOptions) {
+	protected async sendChatRequest(body: Record<string, unknown>, options: ChatRequestOptions): Promise<OpenAiChatResponse> {
 		if (!this.baseUrl_) throw new JoplinError('OpenAI-compatible provider has no base URL configured', 'aiProviderNotConfigured');
 
 		const headers: Record<string, string> = { 'Content-Type': 'application/json' };

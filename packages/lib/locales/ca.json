@@ -2,9 +2,19 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"A «%s» li manca la propietat «%s»."
 	],
+	"%d card": [
+		"",
+		""
+	],
 	"%d day": [
 		"%d dia",
 		"%d dies"
+	],
+	"%d edit(s) applied, %d could not be placed automatically.": [
+		""
+	],
+	"%d edit(s) applied.": [
+		""
 	],
 	"%d GB": [
 		"%d GB"
@@ -36,6 +46,9 @@
 	],
 	"%d photo(s) taken": [
 		"%d fotos preses"
+	],
+	"%d sections found": [
+		""
 	],
 	"%s": [
 		"%s"
@@ -70,6 +83,9 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s added to toolbar": [
+		""
+	],
 	"%s cannot be greater than %s": [
 		"%s no pot ser més gran que %s"
 	],
@@ -79,8 +95,14 @@
 	"%s from %s": [
 		"%s de %s"
 	],
+	"%s input / %s output tokens used.": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s no està optimitzat per sincronitzar molts fitxers petits, de manera que la sincronització inicial serà lenta."
+	],
+	"%s moved up": [
+		""
 	],
 	"%s must be a valid whole number": [
 		"%s ha de ser un número enter vàlid"
@@ -131,6 +153,12 @@
 	"(%s)": [
 		"(%s)"
 	],
+	"(empty — double-click to edit)": [
+		""
+	],
+	"(empty)": [
+		""
+	],
 	"(In plugin: %s)": [
 		"(A l'extensió: %s)"
 	],
@@ -149,6 +177,9 @@
 	"(You may disable this prompt in the options)": [
 		"(Podeu desactivar aquesta sol·licitud a les opcions)"
 	],
+	"+ Group": [
+		""
+	],
 	"- Camera: to allow taking a picture and attaching it to a note.": [
 		"- Camera: per permetre fer una foto i adjuntar-la a una nota."
 	],
@@ -157,6 +188,9 @@
 	],
 	"- Storage: to allow attaching files to notes and to enable filesystem synchronisation.": [
 		"- Emmagatzematge: per permetre adjuntar fitxers a notes i permetre la sincronització del sistema de fitxers."
+	],
+	"14-day free trial. Cancel anytime during the trial and you won't be charged.": [
+		""
 	],
 	"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign or remove [tag] from [note], to list notes associated with [tag], or to list tags associated with [note]. The command `tag list` can be used to list all the tags (use -l for long option).": [
 		"<tag-command> pot ser \"add\", \"remove\", \"list\" o \"notetags\" per assignar o eliminar [tag] de [note], per llistar notes associades amb [tag], o per llistar etiquetes associades amb [note]. L'ordre `tag list`). es pot utilitzar per a llistar totes les etiquetes (utilitzeu -l per a l'opció llarga)."
@@ -176,6 +210,9 @@
 	"A new update (%s) is available": [
 		"Una nova actualització (%s) està disponible"
 	],
+	"A system-wide keyboard shortcut that toggles the Joplin window. Works even when Joplin is not focused. Example: CommandOrControl+Shift+J. Leave empty to disable.": [
+		""
+	],
 	"A3": [
 		"A3"
 	],
@@ -186,7 +223,7 @@
 		"A5"
 	],
 	"ABC musical notation: Options": [
-		""
+		"Notació musical ABC: Opcions"
 	],
 	"About": [
 		"Quant a"
@@ -221,6 +258,15 @@
 	"Access denied: Please re-enter your password and/or username": [
 		"S'ha denegat l'accés: torneu a introduir el nom d'usuari i/o la contrasenya"
 	],
+	"Access your notes from any web browser at %s.": [
+		""
+	],
+	"Accessible": [
+		""
+	],
+	"Accessible mode saves additional information, enabling creation of accessible PDFs. It increases database size by approximately 10-20 KB per page.": [
+		""
+	],
 	"Account": [
 		"Compte"
 	],
@@ -242,6 +288,9 @@
 	"Actual Size": [
 		"Mida real"
 	],
+	"Add a text card": [
+		""
+	],
 	"Add body": [
 		"Afegeix contingut"
 	],
@@ -250,6 +299,9 @@
 	],
 	"Add new": [
 		"Afegeix-ne un"
+	],
+	"Add note to whiteboard...": [
+		""
 	],
 	"Add or remove tags:": [
 		"Afegeix o suprimeix etiquetes:"
@@ -272,11 +324,12 @@
 	"Add to note": [
 		"Afegeix a la nota"
 	],
+	"Added %d word": [
+		"",
+		""
+	],
 	"Added new: %s": [
 		"S'ha afegit una nova: %s"
-	],
-	"Added tag: %s": [
-		"Etiqueta afegida: %s"
 	],
 	"Adds tag": [
 		"Afegeix una etiqueta"
@@ -296,6 +349,21 @@
 	"Advanced tools": [
 		"Opcions avançades"
 	],
+	"AI": [
+		""
+	],
+	"AI Chat": [
+		""
+	],
+	"AI features are disabled. Enable them in Settings → AI.": [
+		""
+	],
+	"AI is running in reduced-quality mode — monthly allowance exceeded. Credits replenish on a rolling 30-day basis, or you can": [
+		""
+	],
+	"AI usage has exceeded your monthly allowance — responses are using a reduced-quality model. Credits replenish on a rolling 30-day basis. Buy more at %s.": [
+		""
+	],
 	"all": [
 		"tot"
 	],
@@ -314,8 +382,29 @@
 	"All shared folders:": [
 		"Totes les carpetes compartides:"
 	],
+	"Allow editing tags on notes": [
+		""
+	],
+	"Allow editing the current note (chat panel only)": [
+		""
+	],
+	"Allow listing tags": [
+		""
+	],
+	"Allow reading images": [
+		""
+	],
+	"Allow remote AI providers": [
+		""
+	],
+	"Allow semantic search of notes": [
+		""
+	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		"Permet depurar connectors mòbils. Vegeu %s per a més detalls."
+	],
+	"Already have an account? Log in": [
+		""
 	],
 	"Also displays unset and hidden config variables.": [
 		"També mostra variables de configuració ocultes o sense definir."
@@ -347,9 +436,6 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"S'ha trobat un dibuix desat automàticament. Voleu adjuntar-ne una còpia a la nota?"
 	],
-	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
-		"S'ha produït un error en enviar la resposta. Això pot passar si l'aplicació està fora de línia o no es pot connectar al servidor.\nError: %s"
-	],
 	"An error occurred: %s": [
 		"S'ha produït un error: %s"
 	],
@@ -359,8 +445,14 @@
 	"Android API level: %d": [
 		"Nivell de l'API d'Android: %d"
 	],
+	"Anthropic": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		"Qualsevol correu electrònic enviat a aquesta adreça serà convertit en una nota i afegit a la vostra col·lecció. La nota es desarà a la llibreta de la safata d'entrada"
+	],
+	"API key": [
+		""
 	],
 	"Appearance": [
 		"Aspecte"
@@ -388,6 +480,15 @@
 	],
 	"Aritim Dark": [
 		"Aritim fosc"
+	],
+	"Arrow at target": [
+		""
+	],
+	"Ask about this note, or request a change…": [
+		""
+	],
+	"Ask about this note, or request changes. Select text in the editor first to scope the request to that selection.": [
+		""
 	],
 	"Associated tags:": [
 		"Etiquetes associades:"
@@ -428,6 +529,9 @@
 	"Attachments that could not be downloaded": [
 		"Adjunts que no s'han pogut descarregar"
 	],
+	"Attention: After resetting your password it will no longer be possible to decrypt any data encrypted with your current password. All encrypted shared notebooks will also be unshared, so please ask the notebook owner to share it again with you.": [
+		""
+	],
 	"Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s": [
 		"Atenció: si canvieu aquesta ubicació, assegureu-vos de copiar-hi tot el contingut abans de sincronitzar; en cas contrari, se suprimiran tots els fitxers. Consulteu les FAQ per a obtenir més detalls: %s"
 	],
@@ -442,6 +546,9 @@
 	],
 	"Auto": [
 		"Automàtic"
+	],
+	"Auto lock when switching note": [
+		""
 	],
 	"Auto-add disabled accounts for deletion": [
 		"Afegeix automàticament per a eliminar els comptes deshabilitats"
@@ -467,14 +574,23 @@
 	"Back": [
 		"Enrere"
 	],
+	"Back to %s": [
+		""
+	],
+	"Base URL": [
+		""
+	],
 	"Basic": [
 		"Bàsic"
 	],
 	"Beta": [
 		"Beta"
 	],
-	"Block code": [
+	"Billed annually (%s per user per year respectively).": [
 		""
+	],
+	"Block code": [
+		"Codi de bloc"
 	],
 	"Bold": [
 		"Negreta"
@@ -490,6 +606,9 @@
 	],
 	"Bulleted List": [
 		"Llista de pics"
+	],
+	"buy more credits": [
+		""
 	],
 	"by %s": [
 		"per %s"
@@ -527,8 +646,14 @@
 	"Cannot access %s": [
 		"No es pot accedir a %s"
 	],
+	"Cannot change a locked note while the session is locked": [
+		""
+	],
 	"Cannot change encrypted item": [
 		"No es pot canviar un element xifrat"
+	],
+	"Cannot convert read-only item: \"%s\"": [
+		"No es pot convertir l'element de només lectura: \"%s\""
 	],
 	"Cannot copy note to \"%s\" notebook": [
 		"No es pot copiar la nota a la llibreta «%s»"
@@ -572,6 +697,9 @@
 	"Case sensitive": [
 		"Distingeix entre majúscules i minúscules"
 	],
+	"Certain Markdown formatting is now rendered in the editor by default. For example, **bold** will appear as actual bold text. You can change this behaviour in the \"Editor\" section of Settings.": [
+		""
+	],
 	"Change application layout": [
 		"Canvia la disposició de l'aplicació"
 	],
@@ -589,6 +717,9 @@
 	],
 	"Characters excluding spaces": [
 		"Caràcters excloent espais"
+	],
+	"Chat provider": [
+		""
 	],
 	"Check": [
 		"Comprova"
@@ -615,7 +746,7 @@
 		"Verificant... Espereu."
 	],
 	"Chinese/Japanese/Korean characters": [
-		""
+		"Caràcters xinesos/japonesos/coreans"
 	],
 	"Choose an option": [
 		"Escolliu una opció"
@@ -632,11 +763,17 @@
 	"Clear search": [
 		"Esborra la cerques"
 	],
+	"Clears the console output.": [
+		""
+	],
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"Feu clic a \"%s\" per restaurar la nota. Es copiarà a la llibreta anomenada \"%s\". La versió actual de la nota no serà substituïda ni modificada."
 	],
 	"Click \"start\" to attach a new voice memo to the note.": [
 		"Feu clic a \"inicia\" per adjuntar una nova nota de veu a la nota."
+	],
+	"Click the eye icon in the toolbar to switch to the Markdown editor and fix the JSON manually.": [
+		""
 	],
 	"Click to add tags...": [
 		"Feu clic per a afegir etiquetes..."
@@ -711,7 +848,7 @@
 		"Ordre"
 	],
 	"COMMAND": [
-		""
+		"COMMAND"
 	],
 	"Command palette": [
 		"Paleta d'ordres"
@@ -752,8 +889,17 @@
 	"Configuration": [
 		"Configuració"
 	],
+	"Configured keyboard shortcuts:": [
+		"Dreceres de teclat configurades:"
+	],
 	"Configures the size of scrollbars used in the app.": [
 		"Configura la mida de les barres de desplaçament utilitzades a l'aplicació."
+	],
+	"Confirm": [
+		"Confirmació"
+	],
+	"Confirm credentials": [
+		""
 	],
 	"Confirm password cannot be empty": [
 		"El camp *Confirma la contrasenya* no pot ser buit"
@@ -800,6 +946,12 @@
 	],
 	"Convert it": [
 		"Converteix-lo"
+	],
+	"Convert this card into a Joplin note": [
+		""
+	],
+	"Convert to Markdown": [
+		"Converteix a Markdown"
 	],
 	"Convert to note": [
 		"Converteix a nota"
@@ -856,6 +1008,9 @@
 	"Could not connect to plugin repository.": [
 		"No s'ha pogut connectar al repositori d'extensions."
 	],
+	"Could not convert notes to Markdown: %s": [
+		"No s'han pogut convertir les notes a Markdown: %s"
+	],
 	"Could not export notes: %s": [
 		"No s'han pogut exportar les notes: %s"
 	],
@@ -885,6 +1040,9 @@
 	],
 	"Create a notebook": [
 		"Crear una llibreta"
+	],
+	"Create accessible document": [
+		""
 	],
 	"Create new notebook": [
 		"Crea una llibreta nova"
@@ -1021,6 +1179,9 @@
 	"Default title to use for documents created by the scanner.": [
 		"Títol per defecte que s'utilitzarà per als documents creats per l'escàner."
 	],
+	"Default view / edit state": [
+		""
+	],
 	"Default: %s": [
 		"Per defecte: %s"
 	],
@@ -1060,14 +1221,14 @@
 	"Delete profile \"%s\"": [
 		"Suprimeix el perfil \"%s\"?"
 	],
+	"Delete profile \"%s\"?\n\nAll data, including notes, notebooks and tags will be permanently deleted.": [
+		"Vols suprimir el perfil «%s»?\n\nTotes les dades, incloses les notes, les llibretes i les etiquetes s'eliminaran permanentment."
+	],
 	"Delete row": [
 		"Suprimeix la fila"
 	],
 	"Delete selected notes": [
 		"Suprimeix les notes seleccionades"
-	],
-	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
-		""
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Suprimir la llibreta de la safata d'entrada?\n\nSi suprimiu la llibreta de la safata d'entrada, és possible que es perdin els correus electrònics que s'hagin enviat recentment."
@@ -1175,7 +1336,7 @@
 		"Mostra la informació completa sobre la nota."
 	],
 	"Displays the configured keyboard shortcuts.": [
-		""
+		"Mostra les dreceres de teclat configurades."
 	],
 	"Displays the given note.": [
 		"Mostra la nota indicada."
@@ -1201,14 +1362,14 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"No perdeu les contrasenyes perquè, per motius de seguretat, és l'única forma de desxifrar les dades. Per habilitar el xifrat, introduïu la vostra contrasenya."
 	],
-	"Do you find the Joplin web app useful?": [
-		"Trobes útil l'aplicació web Joplin?"
-	],
 	"Document scanner: Title template": [
 		"Escàner de documents: plantilla de títol"
 	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
 		"No permetis que el destinatari compartit escrigui a la llibreta compartida. Vàlid només per a la subordre 'add'."
+	],
+	"Don't have an account yet?": [
+		""
 	],
 	"Don't show this message again": [
 		"No tornis a mostrar aquest missatge"
@@ -1219,11 +1380,20 @@
 	"Done": [
 		"Fet"
 	],
+	"Double tap to open this attachment. Long press to expand or collapse details.": [
+		""
+	],
 	"Download": [
 		"Baixa"
 	],
 	"Download and install the relevant extension for your browser:": [
 		"Descarregueu i instal·leu l'extensió adient per al vostre navegador:"
+	],
+	"Download it from GitHub Releases": [
+		""
+	],
+	"Download it from the Joplin Android repository": [
+		""
 	],
 	"Download it now": [
 		"Descarrega'l ara"
@@ -1248,6 +1418,9 @@
 	],
 	"Dracula": [
 		"Dràcula"
+	],
+	"Drag to move group": [
+		""
 	],
 	"Draw picture": [
 		"Dibuixa la imatge"
@@ -1309,6 +1482,9 @@
 	"Edit profile configuration...": [
 		"Edita la configuració del perfil."
 	],
+	"Edit tag": [
+		"Edita l'etiqueta"
+	],
 	"Editor": [
 		"Editor"
 	],
@@ -1354,6 +1530,9 @@
 	"Emails": [
 		"Correus electrònics"
 	],
+	"Embedding index": [
+		""
+	],
 	"emphasised text": [
 		"text ressaltat"
 	],
@@ -1375,6 +1554,9 @@
 	"Enable abbreviation syntax": [
 		"Activa la sintaxi d'abreviatures"
 	],
+	"Enable ABC musical notation support": [
+		"Activa la implementació de notació musical ABC"
+	],
 	"Enable audio player": [
 		"Habilita el reproductor d'àudio"
 	],
@@ -1386,6 +1568,9 @@
 	],
 	"Enable encryption": [
 		"Activa el xifratge"
+	],
+	"Enable external embeds (e.g. YouTube Videos)": [
+		""
 	],
 	"Enable file:// URLs for images and videos": [
 		"Activa els URL file:// per a imatges i vídeos"
@@ -1419,9 +1604,6 @@
 	],
 	"Enable note history": [
 		"Activa l'historial de notes"
-	],
-	"Enable optical character recognition (OCR)": [
-		"Activa el reconeixement òptic de caràcters (OCR)"
 	],
 	"Enable or disable plugins": [
 		"Activa o desactiva els connectors"
@@ -1468,6 +1650,9 @@
 	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
 		"Activa la substitució del patró Markdown a l'editor de text enriquit. Per exemple, quan està activat, escriure **negreta** crea text en negreta."
 	],
+	"Enables the default edit operations for notes with an open AI chat panel. When disabled, the chat panel can still read the open note. Does not apply to MCP.": [
+		""
+	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"Habilitar el xifrat significa que totes les notes i adjunts es tornaran a sincronitzar i s'enviaran de forma xifrada a la destinació de sincronització."
 	],
@@ -1476,6 +1661,9 @@
 	],
 	"Encrypted items cannot be modified": [
 		"Els elements xifrats no es poden modificar"
+	],
+	"Encrypting a note requires a note lock password, which has not yet been set. Set it up now?": [
+		""
 	],
 	"Encryption": [
 		"Xifratge"
@@ -1488,6 +1676,9 @@
 	],
 	"Encryption keys": [
 		"Claus de xifrat"
+	],
+	"Encryption was setup previously, but all keys have been disabled. To continue, please use the desktop app to enable a key.": [
+		""
 	],
 	"Encryption:": [
 		"Xifrat:"
@@ -1516,6 +1707,9 @@
 	"Enter the code:": [
 		"Introdueix el codi:"
 	],
+	"Enter the note lock password to unlock encrypted notes for this session.": [
+		""
+	],
 	"Entering selection mode": [
 		"Entrant al mode de selecció"
 	],
@@ -1533,6 +1727,9 @@
 	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"Error. Comproveu que l’URL, el nom d’usuari, la contrasenya, etc. siguin correctes i que el servei a sincronitzar sigui accessible. L'error reportat ha estat:"
+	],
+	"Error. The AI provider test failed:": [
+		""
 	],
 	"Error: %s": [
 		"Error: %s"
@@ -1609,6 +1806,9 @@
 	"Exports only the given notebook.": [
 		"Exporta només la llibreta indicada."
 	],
+	"Exposes Joplin notes to external AI applications (Claude Desktop, Cursor, etc.) via the Model Context Protocol. Requires the Web Clipper service to be running. Connected AI tools can read your note content; any text they retrieve may be sent to the external LLM provider those tools use.": [
+		""
+	],
 	"Fail-safe": [
 		"A prova d'errors"
 	],
@@ -1621,14 +1821,14 @@
 	"Failed to connect to your account. Please try again.": [
 		"No s'ha pogut connectar al compte. Si us plau, torneu-ho a provar."
 	],
+	"Failed to create accessible document: %s": [
+		""
+	],
 	"Fatal error:": [
 		"Error fatal:"
 	],
 	"Feature flags": [
 		"Interruptors de funcions"
-	],
-	"Feedback": [
-		"Comentaris"
 	],
 	"Fetched items: %d/%d.": [
 		"Elements obtinguts: %d/%d."
@@ -1644,6 +1844,9 @@
 	],
 	"Filter": [
 		"Filtre"
+	],
+	"Filtered by section [%s]": [
+		""
 	],
 	"Find": [
 		"Cercar"
@@ -1662,6 +1865,9 @@
 	],
 	"Fixing search index...": [
 		"Corregint l'índex de cerca..."
+	],
+	"Flip": [
+		""
 	],
 	"Focus": [
 		"Focus"
@@ -1721,9 +1927,6 @@
 		"Generant enllaç...",
 		"Generant enllaços..."
 	],
-	"Geolocation, spellcheck, editor toolbar, image resize": [
-		"Geolocalització, verificació ortogràfica, barra d'eines d'editors, redimensionament de la imatge"
-	],
 	"Get a quote": [
 		"Obtenir una cita"
 	],
@@ -1736,6 +1939,9 @@
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Obté o estableix un valor de configuració. Si no s'indica [value], mostrarà el valor de [name]. Si no s'indica ni [name] ni [value], es mostrarà un llistat amb la configuració actual."
 	],
+	"Global shortcut to show/hide Joplin": [
+		""
+	],
 	"Glossary:": [
 		"Glossari:"
 	],
@@ -1744,6 +1950,9 @@
 	],
 	"Go back": [
 		"Anar enrere"
+	],
+	"Go to end of note": [
+		""
 	],
 	"Go to Joplin Cloud profile": [
 		"Anar al perfil de Joplin Cloud"
@@ -1754,11 +1963,17 @@
 	"Go to source URL": [
 		"Anar a URL origen"
 	],
+	"Go to start of note": [
+		""
+	],
 	"Goto Anything...": [
 		"Anar a qualsevol cosa..."
 	],
 	"Grant authorisation": [
 		"Autoritza"
+	],
+	"Group": [
+		""
 	],
 	"Have you authorised the application login in the above URL?": [
 		"Heu autoritzat l'inici de sessió de l'aplicació a l'URL anterior?"
@@ -1835,6 +2050,9 @@
 	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
 		"Si un adjunt d'imatge està en la seva pròpia línia i seguit d'una línia en blanc, es mostrarà just a sota de la seva font Markdown."
 	],
+	"If enabled, opening an HTML note displays a prompt to convert the note to Markdown.": [
+		""
+	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"Si ja heu autoritzat, espereu que l'aplicació es sincronitzi amb Joplin Cloud."
 	],
@@ -1853,11 +2071,11 @@
 	"Import": [
 		"Importació"
 	],
+	"Import a note from a text file (%s). The note will be imported into notebook '%s'.": [
+		""
+	],
 	"Import and Export": [
 		"Importació i exportació"
-	],
-	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
-		"Ha fallat la importació. Assegureu-vos que s'ha seleccionat un fitxer JEX.\nDetalls: %s"
 	],
 	"Import from JEX": [
 		"Importa des de JEX"
@@ -1867,6 +2085,9 @@
 	],
 	"Import or export your data": [
 		"Importar o exportar les dades"
+	],
+	"Import...": [
+		"Importa..."
 	],
 	"Imported successfully!": [
 		"S'ha importat correctament!"
@@ -1928,6 +2149,15 @@
 	"Indent more": [
 		"Sagna més"
 	],
+	"Index notes for AI search": [
+		""
+	],
+	"Indexer:": [
+		""
+	],
+	"Indexing…": [
+		""
+	],
 	"Info": [
 		"Info"
 	],
@@ -1940,8 +2170,17 @@
 	"Insert": [
 		"Insereix"
 	],
+	"Insert column right": [
+		""
+	],
 	"Insert Hyperlink": [
 		"Introdueix un enllaç"
+	],
+	"Insert row above": [
+		""
+	],
+	"Insert row below": [
+		""
 	],
 	"Insert time": [
 		"Insereix el temps"
@@ -1982,6 +2221,9 @@
 	"Invalid password": [
 		"Contrasenya incorrecta"
 	],
+	"Invalid password. Please try again. If you have forgotten your password you will need to reset it.": [
+		""
+	],
 	"iOS version: %s": [
 		"versió iOS: %s"
 	],
@@ -1990,6 +2232,9 @@
 	],
 	"Item \"%s\" could not be downloaded: %s": [
 		"L'element \"%s\" no s'ha pogut descarregar: %s"
+	],
+	"Item upload will be disabled in %s.": [
+		""
 	],
 	"Items": [
 		"Elements"
@@ -2011,6 +2256,9 @@
 	],
 	"Joplin Cloud": [
 		"Joplin Cloud"
+	],
+	"Joplin Cloud AI requires Joplin Cloud sync. Pick a different provider or restore Joplin Cloud sync.": [
+		""
 	],
 	"Joplin Cloud Login": [
 		"Inici de sessió a Joplin Coud"
@@ -2038,6 +2286,9 @@
 	],
 	"Joplin Mobile": [
 		"Joplin Mòbil"
+	],
+	"Joplin needs your permission to access your %s account and to synchronise data with it.": [
+		""
 	],
 	"Joplin Server": [
 		"Servidor del Joplin"
@@ -2094,7 +2345,7 @@
 		"Clauer admès: %s"
 	],
 	"KEYS": [
-		""
+		"CLAUS"
 	],
 	"Keys that need upgrading": [
 		"Claus que requereixen actualització"
@@ -2194,6 +2445,12 @@
 	"Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at \"%s\" and resume the operation.": [
 		"El fitxer de bloqueig està ús. Si sabeu que no s'està executant cap sincronització ara mateix, podeu suprimir el fitxer de bloqueig a «%s» i reprendre l'operació."
 	],
+	"Locked notes are encrypted on this device and can only be read after entering your note lock password. The password is required again after locking or restarting Joplin.": [
+		""
+	],
+	"Locked notes cannot be opened in an external editor": [
+		""
+	],
 	"Log": [
 		"Registre"
 	],
@@ -2236,6 +2493,9 @@
 	"Manage shared notebooks": [
 		"Administrar llibretes compartides"
 	],
+	"Manage this server's license from the [admin dashboard](%s).": [
+		""
+	],
 	"Manage toolbar options": [
 		"Gestionar les opcions de la barra d'eines"
 	],
@@ -2243,7 +2503,7 @@
 		"Gestioneu les extensions"
 	],
 	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
-		""
+		"Gestiona els teus perfils. Pots canviar el nom o suprimir els perfils. El perfil actiu no es pot suprimir."
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Gestiona la configuració E2EE. Les ordres són `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, i `target-status`."
@@ -2305,6 +2565,9 @@
 	"Max Total Size": [
 		"Mida màxima total"
 	],
+	"MCP requires the Web Clipper service. Enable it in Settings → Web Clipper.": [
+		""
+	],
 	"Media player, math, diagrams, table of contents": [
 		"Reproductor multimèdia, matemàtiques, diagrames, taula de continguts"
 	],
@@ -2335,6 +2598,12 @@
 	"Mobile data - auto-sync disabled": [
 		"Dades mòbils - sincronització automàtica desactivada"
 	],
+	"Model": [
+		""
+	],
+	"Model:": [
+		""
+	],
 	"More info": [
 		"Més informació"
 	],
@@ -2350,6 +2619,9 @@
 	"Move %d note to notebook \"%s\"?": [
 		"Moure %d nota a la llibreta \"%s\"?",
 		"Moure %d notes a la llibreta \"%s\"?"
+	],
+	"Move %d notebooks to the trash?\n\nAll notes and sub-notebooks within these notebooks will also be moved to the trash.": [
+		"Vols moure %d llibretes a la paperera?\n\nTotes les notes i subllibretes d'aquestes llibretes també es mouran a la paperera."
 	],
 	"Move down": [
 		"Mou avall"
@@ -2423,6 +2695,9 @@
 	"New sub-notebook": [
 		"Noba subllibreta"
 	],
+	"New text card": [
+		""
+	],
 	"New to-do": [
 		"Llistat de tasques nou"
 	],
@@ -2458,6 +2733,18 @@
 	],
 	"No active notebook.": [
 		"No hi ha cap llibreta activa."
+	],
+	"No AI usage recorded yet.": [
+		""
+	],
+	"No arrow": [
+		""
+	],
+	"No colour": [
+		""
+	],
+	"No embedding model is installed. It is downloaded automatically on first use — check Settings → AI for progress.": [
+		""
 	],
 	"No new invitations": [
 		"No hi ha invitacions noves"
@@ -2502,6 +2789,9 @@
 		"No hi ha actualitzacions disponibles"
 	],
 	"No URL for SAML authentication set.": [
+		"No s'ha establert cap URL per a l'autenticació SAML."
+	],
+	"No valid notebook is available. Please create or select a notebook and try again.": [
 		""
 	],
 	"None": [
@@ -2509,6 +2799,9 @@
 	],
 	"Nord": [
 		"Nord"
+	],
+	"Normal": [
+		""
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"No esteu autenticats amb %s. Proporcioneu les credencials que falten."
@@ -2524,9 +2817,6 @@
 	],
 	"Not now": [
 		"No ara"
-	],
-	"Not useful": [
-		"No és útil"
 	],
 	"note": [
 		"nota"
@@ -2564,6 +2854,9 @@
 	"Note history has been deleted.": [
 		"S'ha suprimit l'historial de notes."
 	],
+	"Note indexing is turned off in Settings → AI.": [
+		""
+	],
 	"Note is not a to-do: \"%s\"": [
 		"La nota no és un llistat de tasques pendents: «%s»"
 	],
@@ -2575,6 +2868,9 @@
 	],
 	"Note list style": [
 		"Estil de llista de notes"
+	],
+	"Note lock password, auto lock": [
+		""
 	],
 	"Note not published: %s": [
 		"Nota no publicada: %s"
@@ -2633,11 +2929,23 @@
 	"Numbered List": [
 		"Llista numerada"
 	],
+	"Obsidian Vault": [
+		""
+	],
+	"OCR is not complete. Please wait for OCR to finish before creating an accessible document.": [
+		""
+	],
+	"OCR needs to run to generate an accessible document. This may take a moment. Would you like to continue?": [
+		""
+	],
 	"OCR: Clear cache and re-download language data files": [
 		"OCR: esborra la memòria cau i torna a descarregar fitxers de dades d'idioma"
 	],
 	"OCR: Language data URL or path": [
 		"OCR: URL o camí de dades de l'idioma"
+	],
+	"OCR: PDF processing mode": [
+		""
 	],
 	"OCR: Search in extracted content": [
 		"OCR: Cerca en el contingut extret"
@@ -2671,6 +2979,9 @@
 	],
 	"OneNote Notebook": [
 		"Llibreta del OneNote"
+	],
+	"Only do this if you've forgotten your current password. A new password will be created, and any notes locked with the old one will become permanently unreadable.": [
+		""
 	],
 	"Only one note can be printed at a time.": [
 		"Només es pot imprimir una nota alhora."
@@ -2715,7 +3026,7 @@
 		"Obre l'assistent de sincronització..."
 	],
 	"Open-source licences": [
-		""
+		"Llicències de codi obert"
 	],
 	"Open...": [
 		"Obre..."
@@ -2739,7 +3050,7 @@
 		"Opcions"
 	],
 	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
-		""
+		"Opcions que s'han d'utilitzar quan es renderitzi codi ABC. Ha de ser un objecte JSON5. La llista completa d'opcions està disponible a: %s"
 	],
 	"Ordered list": [
 		"Llista ordenada"
@@ -2817,8 +3128,14 @@
 	"Please confirm that you would like to re-encrypt your complete database.": [
 		"Confirmeu que voleu tornar a xifrar la vostra base de dades completa."
 	],
+	"Please disable users from the [admin dashboard](%s) to bring this server under the limit.": [
+		""
+	],
 	"Please enter your password in the master key list below before upgrading the key.": [
 		"Entreu la vostra contrasenya en la llista de claus mestres d'aquí a sota abans d'actualitzar la clau."
+	],
+	"Please make sure you remember your password. It cannot be recovered if lost, and any data encrypted with it will become inaccessible.": [
+		""
 	],
 	"Please note that if it is a large notebook, it may take a few minutes for all the notes to show up on the recipient's device.": [
 		"Tingueu en compte que si es tracta d'una llibreta gran, totes les notes poden tardar uns minuts a aparèixer al dispositiu del destinatari."
@@ -2846,6 +3163,9 @@
 	],
 	"Please specify the notebook where the notes should be imported to.": [
 		"Especifiqueu la llibreta on s'han d'importar les notes."
+	],
+	"Please update the license key from the [admin dashboard](%s).": [
+		""
 	],
 	"Please upgrade Joplin to version %s or later to use this plugin.": [
 		"Si us plau, actualitzeu Joplin a la versió %s o posterior per utilitzar aquest connector."
@@ -2949,6 +3269,9 @@
 	"Pro": [
 		"Pro"
 	],
+	"Pro 100 GB": [
+		""
+	],
 	"Process failed payment subscriptions": [
 		"Processa els pagaments de subscripcions fallits"
 	],
@@ -2969,6 +3292,9 @@
 	],
 	"Profile name": [
 		"Nom del perfil"
+	],
+	"Profile name cannot be empty": [
+		"El nom del perfil no pot estar buit"
 	],
 	"Profile name:": [
 		"Nom del perfil:"
@@ -3024,6 +3350,9 @@
 	"Quit": [
 		"Surt"
 	],
+	"Quit anyway": [
+		""
+	],
 	"Re-download model": [
 		"Torna a baixar el model"
 	],
@@ -3039,6 +3368,9 @@
 	"Re-upload local data to sync target": [
 		"Torna a pujar les dades locals per a sincronitzar la destinació"
 	],
+	"Read all tags": [
+		""
+	],
 	"Read more": [
 		"Llegeix més"
 	],
@@ -3050,6 +3382,9 @@
 	],
 	"Reading commands from standard input is only available in CLI mode.": [
 		"La lectura d'ordres des de l'entrada estàndard només està disponible en mode CLI."
+	],
+	"Reading this note requires the note lock password, which has not been set up on this device yet.": [
+		""
 	],
 	"Recipient has accepted the invitation": [
 		"El destinatari ha acceptat la invitació"
@@ -3102,6 +3437,9 @@
 	"Remove": [
 		"Elimina"
 	],
+	"Remove %d tags from all notes? This cannot be undone.": [
+		"Eliminar %d etiquetes de totes les notes? Això no es pot desfer."
+	],
 	"Remove %s": [
 		"Elimina %s"
 	],
@@ -3116,9 +3454,6 @@
 	],
 	"Removed %s from share.": [
 		"S'ha eliminat %s de la compartició."
-	],
-	"Removed tag: %s": [
-		"Etiqueta eliminada: %s"
 	],
 	"Rename": [
 		"Canvia el nom"
@@ -3176,6 +3511,15 @@
 	],
 	"Reports": [
 		"Informes"
+	],
+	"Required to use cloud-hosted AI models, including Joplin Cloud AI. When disabled, only on-device providers can be used.": [
+		""
+	],
+	"Reset": [
+		""
+	],
+	"Reset AI token usage counters?": [
+		""
 	],
 	"Reset application layout": [
 		"Reinicialitza la disposició de l'aplicació"
@@ -3248,6 +3592,9 @@
 	],
 	"Rich Text editor. Press Escape then Tab to escape focus.": [
 		"Editor de text enriquit. Premeu Esc i després Tab per a escapar del focus."
+	],
+	"Run OCR": [
+		""
 	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
 		"Executa les ordres contingudes al fitxer de text. Hi ha d'haver una ordre per línia."
@@ -3373,7 +3720,7 @@
 		"Selecciona la llibreta principal"
 	],
 	"Select the type of file to be imported:": [
-		""
+		"Selecciona el tipus de fitxer a importar:"
 	],
 	"Selected: %s": [
 		"Seleccionat: %s"
@@ -3386,6 +3733,12 @@
 	],
 	"Self-hosted": [
 		"Autohostatjat"
+	],
+	"Self-hosted instances of the Joplin web app cannot sync with Joplin Cloud. Open the official web app?": [
+		""
+	],
+	"Send": [
+		""
 	],
 	"Send bug report": [
 		"Enviar informe d'error"
@@ -3462,6 +3815,9 @@
 	"Show all": [
 		"Mostra-ho tot"
 	],
+	"Show checkbox completion chart in note list": [
+		""
+	],
 	"Show completed to-dos": [
 		"Mostra els llistats de tasques pendents finalitzats"
 	],
@@ -3470,6 +3826,9 @@
 	],
 	"Show disabled keys": [
 		"Mostra les claus deshabilitades"
+	],
+	"Show Joplin icon for note links": [
+		""
 	],
 	"Show monospace fonts only.": [
 		"Mostra només els tipus de lletra monoespai."
@@ -3492,6 +3851,9 @@
 	"Show/hide the sidebar": [
 		"Mostra/oculta la barra lateral"
 	],
+	"Showing all matching settings": [
+		""
+	],
 	"Shows notes for tag": [
 		"Mostra notes per a l'etiqueta"
 	],
@@ -3512,6 +3874,9 @@
 	],
 	"Size": [
 		"Mida"
+	],
+	"Size (smallest first)": [
+		""
 	],
 	"Skip this version": [
 		"Omet aquesta versió"
@@ -3549,6 +3914,9 @@
 	"Some items could not be synchronised. Please try to synchronise them first.": [
 		"Alguns elements no s'han pogut sincronitzar. Si us plau, intenteu sincronitzar-los primer."
 	],
+	"Something went wrong.": [
+		""
+	],
 	"Sort \"%s\" in ascending order": [
 		"Ordena «%s» en ordre ascendent"
 	],
@@ -3580,7 +3948,7 @@
 		"Font: "
 	],
 	"SPACE": [
-		""
+		"ESPAI"
 	],
 	"Spacer": [
 		"Espaiador"
@@ -3666,6 +4034,9 @@
 	"Success! Synchronisation configuration appears to be correct.": [
 		"Èxit! Sembla que la configuració de sincronització és correcta."
 	],
+	"Success! The AI provider responded:": [
+		""
+	],
 	"Suggestions": [
 		"Suggeriments"
 	],
@@ -3677,6 +4048,9 @@
 	],
 	"Swap line up": [
 		"Intercanvia la línia cap amunt"
+	],
+	"Swap source and target": [
+		""
 	],
 	"Switch between note and to-do type": [
 		"Alterna entre el tipus nota i tasques pendents"
@@ -3711,9 +4085,6 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Canvia a [notebook] - totes les operacions posteriors s'aplicaran en aquesta llibreta."
 	],
-	"Sync": [
-		"Sincronitza"
-	],
 	"Sync as many devices as you want": [
 		"Sincronitza tants dispositius com vulguis"
 	],
@@ -3737,6 +4108,9 @@
 	],
 	"Sync your notes": [
 		"Sincronitzeu les notes"
+	],
+	"Sync your notes with Joplin Cloud to access them on all your devices. Other sync options are also available.": [
+		""
 	],
 	"Sync, encryption, proxy": [
 		"Sincronització, xifratge, proxy"
@@ -3768,6 +4142,9 @@
 	"Synchronises with remote storage.": [
 		"Sincronitza amb un emmagatzemament remot."
 	],
+	"Synchronising remaining changes, please wait...": [
+		""
+	],
 	"Synchronising...": [
 		"Sincronitzant..."
 	],
@@ -3780,8 +4157,14 @@
 	"Tab moves focus": [
 		"El tab mou el focus"
 	],
+	"Table": [
+		"Taula"
+	],
 	"Tabloid": [
 		"Tabloide"
+	],
+	"Tag: %s": [
+		"Etiqueta: %s"
 	],
 	"Tagged: %d.": [
 		"Etiquetats: %d."
@@ -3789,11 +4172,11 @@
 	"Tags": [
 		"Etiquetes"
 	],
+	"Tags cannot be changed for locked notes while the session is locked": [
+		""
+	],
 	"Take photo": [
 		"Fes una foto"
-	],
-	"Take survey": [
-		"Fer enquesta"
 	],
 	"Task \"%s\" failed with error: %s": [
 		"La tasca \"%s\" ha fallat amb l'error: %s"
@@ -3813,11 +4196,11 @@
 	"Text editor command": [
 		"Ordre de l'editor de text"
 	],
-	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
-		"Gràcies pels comentaris!\nTens temps per fer una petita enquesta?"
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"El perfil actiu no es pot esborrar. Canvia a un perfil diferent i torna-ho a provar."
+	],
+	"The API key is missing. Set it in Settings → AI.": [
+		""
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
 		"L'aplicació es tancarà ara. Si us plau, torneu-la a executar per a completar el procés."
@@ -3849,9 +4232,6 @@
 	"The default encryption method has been changed, you should re-encrypt your data.": [
 		"El mètode de xifratge per defecte s'ha canviat, hauríeu de tornar a xifrar les vostres dades."
 	],
-	"The default profile cannot be deleted": [
-		"El perfil per defecte no es pot esborrar"
-	],
 	"The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.": [
 		"L'ordre de l'editor (que pot incloure arguments) que s'usarà per a obrir una nota. Si no se'n proporciona cap, es detectarà automàticament l'editor predeterminat."
 	],
@@ -3880,14 +4260,42 @@
 	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
 		"Sembla que l'editor Markdown antic ha fallat a causa d'una incompatibilitat amb un connector. Recomanem utilitzar el nou editor."
 	],
+	"The license for this server failed to refresh.": [
+		""
+	],
+	"The license key for this Joplin Server Business instance has expired and needs to be renewed.": [
+		""
+	],
+	"The license key for this Joplin Server Business instance has expired or is invalid. Uploading items has been disabled until the license is renewed.": [
+		""
+	],
 	"The master key has been upgraded successfully!": [
 		"La clau mestra s'ha actualitzat amb èxit!"
 	],
 	"The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
 		"Les claus mestres amb aquests ID s'usen per a xifrar alguns dels elements. Tot i això l'aplicació actualment no hi té accés. Probablement es baixaran via sincronització."
 	],
+	"The MCP server is disabled. Enable it in Settings → MCP.": [
+		""
+	],
+	"The model identifier to use, for example gpt-4o-mini or claude-3-5-sonnet-latest.": [
+		""
+	],
+	"The model name is missing. Set it in Settings → AI.": [
+		""
+	],
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"La nota \"%s\" s'ha restaurat correctament a la llibreta \"%s\"."
+	],
+	"The note changed while the request was running; edits were not applied. Try again.": [
+		""
+	],
+	"The note has been converted to Markdown and the original note has been moved to the trash": [
+		"La nota s'ha convertit a Markdown i la nota original s'ha traslladat a la paperera",
+		"Les notes s'han convertit a Markdown i les notes originals s'han mogut a la paperera"
+	],
+	"The note lock state cannot be changed from the command line": [
+		""
 	],
 	"The note was successfully moved to the trash.": [
 		"La nota s'ha traslladat amb èxit a la paperera.",
@@ -3902,8 +4310,17 @@
 	"The notes have been imported: %s": [
 		"Notes s'han importat: %s"
 	],
+	"The OpenAI-compatible API endpoint. For example, https://api.openai.com/v1 or http://localhost:11434/v1 for Ollama.": [
+		""
+	],
+	"The OpenAI-compatible provider needs a base URL. Set it in Settings → AI.": [
+		""
+	],
 	"The possible commands are:": [
 		"Les ordres possibles són:"
+	],
+	"The provider returned an empty response. Check that the base URL ends with /v1 and that a model is loaded.": [
+		""
 	],
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"El destinatari no s'ha pogut eliminar de la llista. Torneu-ho a provar.\n\nL'error era \"%s\""
@@ -3946,9 +4363,6 @@
 	],
 	"Theme": [
 		"Tema"
-	],
-	"Themes, editor font": [
-		"Temes, tipus de lletra de l'editor"
 	],
 	"There are currently no notes. Create one by clicking on the (+) button.": [
 		"Ara mateix no hi ha cap nota. Creeu-ne una fent clic en el botó (+)."
@@ -4004,6 +4418,13 @@
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Aquesta és una eina avançada per a mostrar els adjunts que estan enllaçats a les vostres notes. Tingueu precaució en suprimir-ne un, ja que després no es poden restaurar."
 	],
+	"This Joplin Server Business instance is only licensed for %d user.": [
+		"",
+		""
+	],
+	"This note could not be decrypted. If it was encrypted prior to a password reset, the contents are no longer recoverable.": [
+		""
+	],
 	"This note could not be deleted: %s": [
 		"Aquesta nota no s'ha pogut suprimir: %s",
 		"Aquestes notes no s'han pogut suprimir: %s"
@@ -4028,14 +4449,32 @@
 	"This note has no history": [
 		"Aquesta nota no té historial"
 	],
+	"This note is currently being saved. Please try again in a moment.": [
+		""
+	],
+	"This note is encrypted and cannot be used with AI Chat.": [
+		""
+	],
+	"This note is encrypted. Enter the note lock password to unlock encrypted notes for this session.": [
+		""
+	],
 	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
 		"Aquesta nota està en format HTML. Converteix-la a Markdown per editar-la més fàcilment."
+	],
+	"This notebook contains Windows-specific files. For maximum compatibility, consider importing the notebook from Windows.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		"Aquest connector no admet %s."
 	],
+	"This provider sends data off your device. Turn on \"Allow remote AI providers\" in Settings → AI.": [
+		""
+	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"Aquest editor de text enriquit té una sèrie de limitacions i es recomana ser conscient d'elles abans d'utilitzar-lo."
+	],
+	"This section opens in its own screen and is matched by section title.": [
+		""
 	],
 	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
 		"Aquest servei permet que l'extensió del navegador pugui comunicar-se amb el Joplin. En activar-la, el tallafoc us podria demanar  de donar permís al Joplin per a escoltar un port determinat."
@@ -4063,6 +4502,9 @@
 	],
 	"Title": [
 		"Títol"
+	],
+	"To access your recovery codes please enter an authentication code or your password.": [
+		""
 	],
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
 		"Per a permetre que el Joplin sincronitzi amb el Dropbox, seguiu les passes següents:"
@@ -4102,9 +4544,6 @@
 	],
 	"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`": [
 		"Per a reintentar el desxifratge d'aquests elements. Executa \"e2ee decrypt --retry-failed-items\""
-	],
-	"To switch the profile, the app is going to close and you will need to restart it.": [
-		"Per canviar de perfil, l'app es tancarà i hauràs de reiniciar-la."
 	],
 	"To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions": [
 		"Per a funcionar correctament, l'aplicació requereix els permisos següents. Habiliteu-los a la configuració del telèfon a Aplicacions > Joplin > Permisos"
@@ -4166,6 +4605,9 @@
 	"Toggle sort order field": [
 		"Canvia el camp d'ordenació"
 	],
+	"Toggle whiteboard / Markdown view": [
+		""
+	],
 	"Token has been copied to the clipboard!": [
 		"El testimoni s'ha copiat al porta-retalls!"
 	],
@@ -4174,6 +4616,9 @@
 	],
 	"Tools": [
 		"Eines"
+	],
+	"Tools and services to expose to AI. AI agents can use these tools either via the note chat panel or Joplin's MCP server (if enabled).": [
+		""
 	],
 	"Total Size": [
 		"Mida total"
@@ -4187,11 +4632,8 @@
 	"Try again": [
 		"Intenta-ho de nou"
 	],
-	"Try it now": [
-		"Proveu-ho ara"
-	],
 	"TYPE": [
-		""
+		"TIPUS"
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Escriviu «help [command]» per a més informació sobre l'ordre; o escriviu «help all» per a la informació d'ús completa."
@@ -4208,6 +4650,12 @@
 	"Type: %s.": [
 		"Tipus: %s."
 	],
+	"Typography, spellcheck, layout": [
+		""
+	],
+	"Unable to access the recording file.": [
+		""
+	],
 	"Unable to edit resource of type %s": [
 		"No s'ha pogut editar el recurs del tipus %s"
 	],
@@ -4216,6 +4664,9 @@
 	],
 	"Unable to share note data. Reason: %s": [
 		"No s'han pogut compartir les dades de la nota. Motiu: %s"
+	],
+	"Unavailable on this platform": [
+		""
 	],
 	"Unchecked": [
 		"Desmarcat"
@@ -4243,6 +4694,9 @@
 	],
 	"Unknown platform": [
 		"Plataforma desconeguda"
+	],
+	"Unlock": [
+		""
 	],
 	"Unordered list": [
 		"Llista no ordenada"
@@ -4274,14 +4728,23 @@
 	"Unsupported link or message: %s.\nError: %s": [
 		"Missatge o enllaç no suportat: %s"
 	],
+	"Unsupported public key format. Please check that Joplin is updated to the latest version and try again.": [
+		""
+	],
 	"Untitled": [
 		"Sense títol"
+	],
+	"Untitled whiteboard": [
+		""
 	],
 	"Update": [
 		"Actualització"
 	],
 	"Update available": [
 		"Actualització disponible"
+	],
+	"Update it from Google Play": [
+		""
 	],
 	"Update later": [
 		"Actualitzar més tard"
@@ -4322,6 +4785,9 @@
 	"Upgrade the sync target to the latest version.": [
 		"Actualitza la destinació de sincronització a la versió més recent."
 	],
+	"Upgrade to 100 GB": [
+		""
+	],
 	"Upload photo": [
 		"Pujar la foto"
 	],
@@ -4355,14 +4821,14 @@
 	"Use your biometrics to secure access to your application. You can always set it up later in Settings.": [
 		"Utilitza la teva biometria per assegurar l'accés a la teva aplicació. Sempre podeu configurar-lo més tard a Configuració."
 	],
+	"Used": [
+		""
+	],
 	"Used for most text in the markdown editor. If not found, a generic proportional (variable width) font is used.": [
 		"S'utilitza per a la majoria de text a l'editor Markdown. Si no es troba, s'utilitza un tipus de lletra genèric proporcional (amplada variable)."
 	],
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"S'utilitza quan es necessita un tipus de lletra d'amplada fixa per a mostrar text de manera llegible (p. ex. taules, caselles de selecció, codi). Si no es troba, s'utilitza un tipus de lletra genèric monoespai (amplada fixa)."
-	],
-	"Useful": [
-		"Útil"
 	],
 	"User deletions": [
 		"Supressions d'usuari"
@@ -4372,6 +4838,12 @@
 	],
 	"Valid": [
 		"Vàlid"
+	],
+	"Vector search is not available on this platform": [
+		""
+	],
+	"Vector search is unavailable on this platform (sqlite-vec extension not loaded).": [
+		""
 	],
 	"Verify your identity": [
 		"Verifica la teva identitat"
@@ -4469,8 +4941,14 @@
 	"When creating a new to-do:": [
 		"En crear una tasca nova:"
 	],
+	"When enabled, plugins and built-in features can use AI models to generate or analyse text.": [
+		""
+	],
 	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
 		"Quan està activat, sol·licita que les imatges de la nota es transcriguin amb un servei de transcripció al servidor de més qualitat. Requereix sincronització amb una còpia de l'aplicació d'escriptori."
+	],
+	"When enabled, tables are rendered as an interactive widget in the editor. Disable this if you prefer to edit tables as raw Markdown.": [
+		""
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"Quan estigui activada, l'aplicació escanejarà els adjunts i n'extraurà el text. Això us permetrà cercar text en aquests adjunts."
@@ -4514,11 +4992,17 @@
 	"You do not have any installed plugin.": [
 		"No teniu cap connector instal·lat."
 	],
+	"You have unsaved tag changes. Discard them?": [
+		""
+	],
 	"You may also type `status` for more information.": [
 		"També podeu escriure \"status\" per a obtenir més informació."
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"Podeu utilitzar l'eina següent per tornar a xifrar les vostres dades, per exemple si sabeu que algunes de les vostres notes estan xifrades amb un mètode de xifratge obsolet."
+	],
+	"You switched notes while the request was running; edits were not applied. Try again.": [
+		""
 	],
 	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
 		"No heu pogut connectar-vos a Joplin Cloud. Comproveu les vostres credencials i torneu-ho a provar. Error:"
@@ -4535,6 +5019,12 @@
 	"Your Joplin Cloud credentials are invalid, please login.": [
 		"Les vostres credencials de Joplin Cloud no són vàlides, si us plau, inicieu sessió."
 	],
+	"Your master password is used to protect sensitive information. In particular, it is used to encrypt your notes when end-to-end encryption (E2EE) is enabled, or to share and encrypt notes with someone who has E2EE enabled.": [
+		""
+	],
+	"Your note will be sent to the configured AI provider (%s).": [
+		""
+	],
 	"Your password is needed to decrypt some of your data.": [
 		"Fa falta la contrasenya per a desxifrar part de les dades."
 	],
@@ -4549,5 +5039,8 @@
 	],
 	"Zoom Out": [
 		"Allunyar"
+	],
+	"— now viewing: %s —": [
+		""
 	]
 }

@@ -12,6 +12,7 @@ import * as openNoteInNewWindow from './openNoteInNewWindow';
 import * as openPrimaryAppInstance from './openPrimaryAppInstance';
 import * as openProfileDirectory from './openProfileDirectory';
 import * as openSecondaryAppInstance from './openSecondaryAppInstance';
+import * as openSyncWizard from './openSyncWizard';
 import * as replaceMisspelling from './replaceMisspelling';
 import * as restoreNoteRevision from './restoreNoteRevision';
 import * as showProfileEditor from './showProfileEditor';
@@ -39,6 +40,7 @@ const index: any[] = [
 	openPrimaryAppInstance,
 	openProfileDirectory,
 	openSecondaryAppInstance,
+	openSyncWizard,
 	replaceMisspelling,
 	restoreNoteRevision,
 	showProfileEditor,

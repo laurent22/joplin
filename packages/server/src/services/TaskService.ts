@@ -80,6 +80,11 @@ export default class TaskService extends BaseService {
 		this.taskStateModels_ = taskStateDb ? newModelFactory(taskStateDb, taskStateDb, config) : models;
 	}
 
+	// Null when task state is managed through the main connection pool.
+	public get taskStateDb() {
+		return this.taskStateDb_;
+	}
+
 	public async destroy() {
 		this.taskServiceDestroyed_ = true;
 		for (const handle of this.scheduledHandles_) {

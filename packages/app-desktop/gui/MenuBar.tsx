@@ -13,6 +13,7 @@ import versionInfo, { PackageInfo } from '@joplin/lib/versionInfo';
 import { ImportModule } from '@joplin/lib/services/interop/Module';
 import InteropServiceHelper from '../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
 import { isContextMenuItemLocation, MenuItem, MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
 import menuCommandNames from './menuCommandNames';
@@ -31,6 +32,7 @@ import NavService from '@joplin/lib/services/NavService';
 import Logger from '@joplin/utils/Logger';
 import { ImportCommandOptions } from './WindowCommandsAndDialogs/commands/importFrom';
 import { FileSystemItem } from '@joplin/lib/services/interop/types';
+import { chatAvailability } from '@joplin/lib/services/ai/availability';
 
 const logger = Logger.create('MenuBar');
 
@@ -184,6 +186,7 @@ interface Props {
 	secondaryWindowFocused: boolean;
 	showMenuBar: boolean;
 	syncPending: boolean;
+	showAiChatMenuItem: boolean;
 }
 
 const commandNames: string[] = menuCommandNames();
@@ -531,6 +534,7 @@ function useMenu(props: Props) {
 			// the following menu items will be available for all OS under Tools
 			const toolsItemsAll = [
 				menuItemDic.newWhiteboard,
+				menuItemDic.addNoteToWhiteboard,
 				separator(),
 				{
 					label: _('Note attachments...'),
@@ -753,6 +757,7 @@ function useMenu(props: Props) {
 						menuItemDic.toggleSideBar,
 						shim.isMac() ? noItem : menuItemDic.toggleMenuBar,
 						menuItemDic.toggleNoteList,
+						{ ...menuItemDic.toggleAiChat, visible: props.showAiChatMenuItem },
 						menuItemDic.toggleVisiblePanes,
 						menuItemDic.toggleEditorPlugin,
 						menuItemDic.toggleEditors,
@@ -867,9 +872,16 @@ function useMenu(props: Props) {
 						menuItemDic.setTags,
 						menuItemDic.showShareNoteDialog,
 						menuItemDic.convertNoteToMarkdown,
+						...(isNoteLockEnabled() ? [
+							separator(),
+							menuItemDic.enableNoteEncryption,
+							menuItemDic.disableNoteEncryption,
+							menuItemDic.lockEncryptedNotes,
+						] : []),
 						separator(),
 						menuItemDic.showNoteProperties,
 						menuItemDic.showNoteContentProperties,
+						menuItemDic.revealInNotebook,
 						separator(),
 						menuItemDic.permanentlyDeleteNote,
 					],
@@ -1061,6 +1073,7 @@ function useMenu(props: Props) {
 		switchProfileMenuItems,
 		menuItemDic,
 		props.syncPending,
+		props.showAiChatMenuItem,
 	]);
 
 	useMenuStates(menu, props);
@@ -1148,6 +1161,7 @@ const mapStateToProps = (state: AppState): Partial<Props> => {
 		noteListRendererId: state.settings['notes.listRendererId'],
 		showMenuBar: state.settings.showMenuBar,
 		syncPending: state.syncPending,
+		showAiChatMenuItem: chatAvailability().available || !!state.settings['ai.chat.showToolbarButton'],
 	};
 };
 

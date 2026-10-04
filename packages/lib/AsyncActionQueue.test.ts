@@ -1,4 +1,5 @@
 import AsyncActionQueue from './AsyncActionQueue';
+import { runWithFakeTimers, withWarningSilenced } from './testing/test-utils';
 
 describe('AsyncActionQueue', () => {
 	beforeEach(() => {
@@ -50,6 +51,37 @@ describe('AsyncActionQueue', () => {
 			ranThird: false,
 			ranFourth: true,
 		});
+	});
+
+	test('should reject processAllNow when a task fails', async () => {
+		const queue = new AsyncActionQueue(100);
+		jest.useFakeTimers();
+		const error = new Error('Task failed');
+
+		await withWarningSilenced(/Task failed/, async () => {
+			queue.push(async () => {
+				throw error;
+			});
+
+			const processPromise = queue.processAllNow();
+			const rejectionExpectation = expect(processPromise).rejects.toBe(error);
+			await jest.runAllTimersAsync();
+			await rejectionExpectation;
+			expect(queue.isEmpty).toBe(true);
+		}, { requireWarning: true });
+	});
+
+	test('should handle failures when queue processing is not awaited', async () => {
+		await runWithFakeTimers(() => withWarningSilenced(/Task failed/, async () => {
+			const queue = new AsyncActionQueue(100);
+			const failingAction = jest.fn(async () => {
+				throw new Error('Task failed');
+			});
+			queue.push(failingAction);
+
+			await jest.runAllTimersAsync();
+			expect(failingAction).toHaveBeenCalledTimes(1);
+		}, { requireWarning: true }));
 	});
 
 	test.each([

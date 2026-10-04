@@ -23,7 +23,7 @@ const dateStringToTimestamp = (dateString: string) => {
 	return localTimestamp.getTime() + localTimestamp.getTimezoneOffset() * minutesToMilliseconds;
 };
 
-describe('services_SearchFilter', () => {
+describe('SearchFilter', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);

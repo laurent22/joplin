@@ -121,6 +121,7 @@ interface ExtractedNote extends NoteEntity {
 	tags?: string[];
 	title?: string;
 	bodyXml?: string;
+	evernoteId?: string;
 }
 
 // Those are the notes that have been parsed and saved to Joplin. We don't keep
@@ -272,6 +273,12 @@ interface NoteResourceRecognition {
 	objID?: string;
 }
 
+interface SaxParser {
+	line: number;
+	column: number;
+	resume: ()=> SaxParser;
+}
+
 const preProcessFile = async (filePath: string): Promise<string> => {
 	// Disabled pre-processing for now because it runs out of memory:
 	// https://github.com/laurent22/joplin/issues/5543
@@ -307,31 +314,60 @@ const preProcessFile = async (filePath: string): Promise<string> => {
 	// return newFilePath;
 };
 
-const isEvernoteUrl = (url: string) => {
-	return url.toLowerCase().startsWith('evernote://');
+// Evernote doesn't escape "&" in the "evernote.caption" fields. The parser
+// recovers from this on its own, but in strict mode it's fatal, so one stray
+// character would prevent the whole file from being imported.
+const recoverableParsingErrors = [
+	'Invalid character in entity name',
+	'Invalid character entity',
+];
+
+const isRecoverableParsingError = (error: Error) => {
+	return recoverableParsingErrors.some(m => error.message.includes(m));
 };
 
-const restoreNoteLinks = async (notes: SavedNote[], noteTitlesToIds: Record<string, string[]>, importOptions: ImportOptions) => {
+// An error the importer recovered from - the import still completed.
+export interface RecoverableError extends Error {
+	recoverable?: boolean;
+}
+
+export const isRecoverableError = (error: Error | string) => {
+	return typeof error !== 'string' && !!(error as RecoverableError).recoverable;
+};
+
+const isEvernoteUrl = (url: string) => {
+	url = url.toLowerCase();
+	return url.startsWith('evernote://') || url.startsWith('https://share.evernote.com/note/');
+};
+
+type NoteId = string;
+type OnLoadNoteIdsByTitle = (title: string)=> NoteId[]|Promise<NoteId[]>;
+
+export const restoreEnexNoteLinks = async (notes: AsyncIterable<SavedNote>, noteTitlesToIds: OnLoadNoteIdsByTitle, importOptions: ImportOptions) => {
 	// --------------------------------------------------------
 	// Convert the Evernote note links to Joplin note links. If
 	// we don't find a matching note, or if there are multiple
 	// matching notes, we leave the Evernote links as is.
 	// --------------------------------------------------------
 
-	for (const note of notes) {
+	const noteIdsWithUnresolvedLinks = [];
+	for await (const note of notes) {
 		const links = importOptions.outputFormat === 'html' ?
 			extractUrlsFromHtml(note.body) :
 			extractUrlsFromMarkdown(note.body);
 
 		let noteChanged = false;
+		let hasUnresolvedLink = false;
 
 		for (const link of links) {
 			if (!isEvernoteUrl(link.url)) continue;
 
-			const matchingNoteIds = noteTitlesToIds[link.title];
-			if (matchingNoteIds && matchingNoteIds.length === 1) {
+			const matchingNoteIds = await noteTitlesToIds(link.title);
+			if (matchingNoteIds.length === 1) {
 				note.body = note.body.replace(link.url, `:/${matchingNoteIds[0]}`);
 				noteChanged = true;
+			} else {
+				hasUnresolvedLink = true;
 			}
 		}
 
@@ -344,12 +380,18 @@ const restoreNoteLinks = async (notes: SavedNote[], noteTitlesToIds: Record<stri
 				autoTimestamp: false,
 			});
 		}
+
+		if (hasUnresolvedLink) {
+			noteIdsWithUnresolvedLinks.push(note.id);
+		}
 	}
+
+	return { noteIdsWithUnresolvedLinks };
 };
 
 interface ParseNotesResult {
 	savedNotes: SavedNote[];
-	noteTitlesToIds: Record<string, string[]>;
+	noteTitlesToIds: Map<string, string[]>;
 }
 
 const parseNotes = async (parentFolderId: string, filePath: string, importOptions: ImportOptions = null): Promise<ParseNotesResult> => {
@@ -402,9 +444,9 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 		let processingNotes = false;
 		const savedNotes: SavedNote[] = [];
 		const createdNoteIds: string[] = [];
-		const noteTitlesToIds: Record<string, string[]> = {};
+		const noteTitlesToIds = new Map<string, string[]>();
 
-		const createErrorWithNoteTitle = (fnThis: { _parser?: { line: number; column: number } } | null, error: Error) => {
+		const createErrorWithNoteTitle = (fnThis: { _parser?: SaxParser } | null, error: Error) => {
 			const line = [];
 
 			const parser = fnThis ? fnThis._parser : null;
@@ -424,7 +466,7 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 		};
 
 		stream.on('error', function(error: Error) {
-			importOptions.onError(createErrorWithNoteTitle(this as { _parser?: { line: number; column: number } }, error));
+			importOptions.onError(createErrorWithNoteTitle(this as { _parser?: SaxParser }, error));
 		});
 
 		function currentNodeName() {
@@ -495,8 +537,8 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 					const result = await saveNoteToStorage(note);
 
 					createdNoteIds.push(note.id);
-					if (!noteTitlesToIds[note.title]) noteTitlesToIds[note.title] = [];
-					noteTitlesToIds[note.title].push(note.id);
+					if (!noteTitlesToIds.has(note.title)) noteTitlesToIds.set(note.title, []);
+					noteTitlesToIds.get(note.title).push(note.id);
 					savedNotes.push({
 						id: note.id,
 						body: note.body,
@@ -517,8 +559,23 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 			return true;
 		}
 
-		saxStream.on('error', function(error: Error) {
-			importOptions.onError(createErrorWithNoteTitle(this as { _parser?: { line: number; column: number } }, error));
+		saxStream.on('error', function(error: RecoverableError) {
+			const parser = (this as { _parser?: SaxParser })._parser;
+			const canRecover = !!parser && isRecoverableParsingError(error);
+
+			// So that the caller can log it without reporting a failed import.
+			error.recoverable = canRecover;
+
+			importOptions.onError(createErrorWithNoteTitle(this as { _parser?: SaxParser }, error));
+
+			if (canRecover) {
+				// Node disconnects the source stream whenever the destination
+				// emits "error", so without piping it again the rest of the file
+				// - and the "end" event - would never be received.
+				parser.resume();
+				stream.pipe(saxStream);
+				return;
+			}
 
 			// We need to reject the promise here, or parsing will get stuck
 			// ("end" handler will never be called).
@@ -635,7 +692,7 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 				if (notes.length >= importOptions.batchSize) {
 					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 					processNotes().catch(error => {
-						importOptions.onError(createErrorWithNoteTitle(this as { _parser?: { line: number; column: number } }, error));
+						importOptions.onError(createErrorWithNoteTitle(this as { _parser?: SaxParser }, error));
 					});
 				}
 				note = null;
@@ -722,5 +779,18 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 	if (!('batchSize' in importOptions)) importOptions.batchSize = 10;
 
 	const result = await parseNotes(parentFolderId, filePath, importOptions);
-	await restoreNoteLinks(result.savedNotes, result.noteTitlesToIds, importOptions);
+
+	const noteIterator = (async function*() {
+		for (const note of result.savedNotes) {
+			yield note;
+		}
+	})();
+	const titleToIds = (title: string) => result.noteTitlesToIds.get(title) ?? [];
+
+	const { noteIdsWithUnresolvedLinks } = await restoreEnexNoteLinks(
+		noteIterator,
+		titleToIds,
+		importOptions,
+	);
+	return { noteIdsWithUnresolvedLinks, parentFolderId };
 }

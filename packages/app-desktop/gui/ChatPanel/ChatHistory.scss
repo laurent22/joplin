@@ -1,0 +1,141 @@
+@mixin chat-history-input {
+	box-sizing: border-box;
+	font: inherit;
+	color: var(--joplin-color);
+	background-color: var(--joplin-background-color);
+	border: 1px solid var(--joplin-divider-color);
+	border-radius: 4px;
+}
+
+.chat-history {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	right: 30px;
+	z-index: 10;
+	display: flex;
+	flex-direction: column;
+	max-width: 400px;
+	margin-left: auto;
+	padding: 6px 10px 10px;
+	font-weight: normal;
+	background-color: var(--joplin-background-color);
+	border-bottom: 1px solid var(--joplin-divider-color);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+	> .search {
+		flex-shrink: 0;
+	}
+}
+
+.conversation-search {
+	position: relative;
+	display: flex;
+	align-items: center;
+
+	> .icon {
+		position: absolute;
+		left: 8px;
+		color: var(--joplin-color-faded);
+		pointer-events: none;
+	}
+
+	> .field {
+		@include chat-history-input;
+		width: 100%;
+		padding: 6px 6px 6px 26px;
+	}
+}
+
+.conversation-list {
+	list-style: none;
+	margin: 6px 0 0;
+	padding: 0;
+	max-height: 200px;
+	overflow-y: auto;
+}
+
+.conversation-row {
+	display: flex;
+	align-items: center;
+	line-height: 16px;
+	cursor: pointer;
+
+	&.-current {
+		font-weight: bold;
+		background-color: var(--joplin-selected-color);
+	}
+
+	&:hover:not(.-current) {
+		background-color: var(--joplin-background-color-hover3);
+	}
+
+	> .open {
+		flex: 1;
+		min-width: 0;
+	}
+
+	> .title-input {
+		@include chat-history-input;
+		flex: 1;
+		min-width: 0;
+		margin: 6px 20px;
+		padding: 3px 4px;
+	}
+
+	> .actions {
+		flex-shrink: 0;
+		margin-right: 20px;
+	}
+
+	&:hover,
+	&:focus-within {
+		--chat-history-timestamp-display: none;
+	}
+
+	&:hover > .actions,
+	&:focus-within > .actions {
+		display: flex;
+	}
+}
+
+.conversation-link {
+	display: flex;
+	padding: 10px 20px;
+	gap: 18px;
+	text-align: left;
+	font: inherit;
+	color: inherit;
+	background: none;
+	border: none;
+	cursor: pointer;
+
+	> .title {
+		flex: 1;
+		min-width: 0;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	> .timestamp {
+		display: var(--chat-history-timestamp-display, initial);
+		flex-shrink: 0;
+		text-align: right;
+		color: var(--joplin-color-faded);
+	}
+}
+
+.conversation-actions {
+	display: none;
+	gap: 10px;
+	align-items: center;
+
+	> button {
+		display: flex;
+		color: var(--joplin-color3);
+		cursor: pointer;
+		font-size: 16px;
+		line-height: 1;
+	}
+}
