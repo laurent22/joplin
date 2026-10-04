@@ -18,7 +18,7 @@
   "author": "",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
-    "fs-extra": "11.3.5",
+    "fs-extra": "11.3.6",
     "gh-release-assets": "2.0.1",
     "node-fetch": "2.6.7",
     "source-map-support": "0.5.21",

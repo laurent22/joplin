@@ -101,6 +101,7 @@ export interface AppState extends State, AppWindowState {
 	layoutMoveMode: boolean;
 	startupPluginsLoaded: boolean;
 	modalOverlayMessage: string|null;
+	modalOverlayHasCloseButton: boolean;
 
 	// Extra reducer keys go here
 	mainLayout: LayoutItem;
@@ -145,6 +146,7 @@ export function createAppDefaultState(resourceEditWatcherDefaultState: Partial<A
 		startupPluginsLoaded: false,
 		isResettingLayout: false,
 		modalOverlayMessage: null,
+		modalOverlayHasCloseButton: false,
 		aiStatus: defaultAiStatus(),
 		...resourceEditWatcherDefaultState,
 	};
@@ -404,11 +406,15 @@ export default function(state: AppState, action: any) {
 		}
 
 		case 'SHOW_MODAL_MESSAGE':
-			newState = { ...newState, modalOverlayMessage: action.message };
+			newState = {
+				...newState,
+				modalOverlayMessage: action.message,
+				modalOverlayHasCloseButton: !!action.hasCloseButton,
+			};
 			break;
 
 		case 'HIDE_MODAL_MESSAGE':
-			newState = { ...newState, modalOverlayMessage: null };
+			newState = { ...newState, modalOverlayMessage: null, modalOverlayHasCloseButton: false };
 			break;
 
 		case 'NOTE_FILE_WATCHER_ADD':

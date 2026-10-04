@@ -256,7 +256,7 @@ const merge = (baseRaw: string, localRaw: string, remoteRaw: string, diffLines: 
 			}
 
 			const text = conflictPlaceholder(localText, remoteText);
-			sections.push({ text, type: 'conflict', localText, remoteText });
+			sections.push({ text, type: 'conflict', localText, remoteText, localLineCount: region.aContent.length, remoteLineCount: region.bContent.length });
 			mergedParts.push(text);
 		}
 	}

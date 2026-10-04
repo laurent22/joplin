@@ -52,7 +52,10 @@ export interface SaveOptions {
 	provisional?: boolean;
 	ignoreProvisionalFlag?: boolean;
 	dispatchUpdateAction?: boolean;
-	dispatchOptions?: { preserveSelection: boolean };
+	dispatchOptions?: {
+		preserveSelection?: boolean;
+		noteMovedToFolder?: boolean;
+	};
 	disableReadOnlyCheck?: boolean;
 	useNoteLock?: boolean;
 	// Encrypt with this key captured when the note was decrypted, instead of the live session key.
