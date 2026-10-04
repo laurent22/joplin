@@ -5,7 +5,7 @@ import EncryptionService from '../e2ee/EncryptionService';
 import NoteLockKey from '../noteLock/NoteLockKey';
 import NoteLockSession from '../noteLock/NoteLockSession';
 import NoteLockService from '../noteLock/NoteLockService';
-import { fetchSyncInfo, localSyncInfo, noteLockKeyConflict, saveLocalSyncInfo } from './syncInfoUtils';
+import { fetchSyncInfo, localSyncInfo, noteLockKeyConflict, onRevisionServiceSettingsChanged, saveLocalSyncInfo } from './syncInfoUtils';
 import { ErrorCode } from '../../errors';
 import NoteLockNote from '../noteLock/NoteLockNote';
 import { finishNoteLockKeyMigration, migrateLockedNotes } from '../noteLock/NoteLockKeyMigration';
@@ -394,6 +394,30 @@ describe('Synchronizer.noteLock', () => {
 		expect(NoteLockKey.instance().load()).toEqual(remoteKey);
 		await synchronizerStart(null, { throwOnError: true });
 		expect(await remoteNoteLockKeyId()).toBe(remoteKey.id);
+	});
+
+	it('should not write back a key that another device replaced after this sync fetched the target info', async () => {
+		await NoteLockKey.instance().create('111111');
+		await synchronizerStart();
+		const infoBeforeReset = await fileApi().get('info.json');
+
+		await switchToClient(2);
+		await synchronizerStart();
+		const resetKey = await NoteLockSession.instance().reset('222222');
+		await synchronizerStart();
+		const infoAfterReset = await fileApi().get('info.json');
+
+		// Client 1 reads the target before the reset lands, and has its own change to upload.
+		await switchToClient(1);
+		onRevisionServiceSettingsChanged('revisionService.ttlDays', 45);
+		await fileApi().put('info.json', infoBeforeReset);
+		duringTheLockedNotesCheck(() => fileApi().put('info.json', infoAfterReset));
+		await expect(synchronizerStart(null, { throwOnError: true })).rejects.toThrow('changed during the sync');
+		expect(await remoteNoteLockKeyId()).toBe(resetKey.id);
+
+		await synchronizerStart(null, { throwOnError: true });
+		expect(await remoteNoteLockKeyId()).toBe(resetKey.id);
+		expect(NoteLockKey.instance().load().id).toBe(resetKey.id);
 	});
 
 	it('should stop the sync when a note lock key has no sync migration id', async () => {

@@ -38,6 +38,7 @@ export interface SyncInfoValuePublicPrivateKeyPair {
 
 export interface MergeSyncInfosOptions {
 	resetPropagates?: boolean;
+	hasLocalLockedNotes?: boolean;
 }
 
 // The sync target's note lock key and sync migration id, parked while a sync is stopped on a conflict.
@@ -303,17 +304,20 @@ export function mergeSyncInfos(s1: SyncInfo, s2: SyncInfo, options: MergeSyncInf
 		}
 	}
 
-	// Same key: newest copy wins. Same lineage: a local reset propagates, else the remote key is adopted. Different
-	// lineage: checkNoteLockKeyConflict() already stopped the sync if a local note depends on the local key, so remote wins.
-	let noteLockKeySource = s2;
+	let noteLockKeySource: SyncInfo;
 	if (!s2.noteLockKey) {
 		noteLockKeySource = s1;
-	} else if (s1.noteLockKey) {
-		if (s1.noteLockKey.id === s2.noteLockKey.id) {
-			noteLockKeySource = (s1.noteLockKey.updated_time || 0) >= (s2.noteLockKey.updated_time || 0) ? s1 : s2;
-		} else if (s1.syncMigrationId === s2.syncMigrationId && options.resetPropagates) {
-			noteLockKeySource = s1;
-		}
+	} else if (!s1.noteLockKey) {
+		noteLockKeySource = s2;
+	} else if (s1.noteLockKey.id === s2.noteLockKey.id) {
+		noteLockKeySource = (s1.noteLockKey.updated_time || 0) >= (s2.noteLockKey.updated_time || 0) ? s1 : s2;
+	} else if (s1.syncMigrationId === s2.syncMigrationId) {
+		noteLockKeySource = options.resetPropagates ? s1 : s2;
+	} else if (!options.hasLocalLockedNotes) {
+		noteLockKeySource = s2;
+	} else {
+		// checkNoteLockKeyConflict() stops the sync before this point, so this only guards against a future caller skipping it.
+		throw new Error('Cannot merge a note lock key from a different lineage while local notes depend on the local key');
 	}
 	output.noteLockKey = noteLockKeySource.noteLockKey;
 	output.syncMigrationId = noteLockKeySource.syncMigrationId;
@@ -658,6 +662,11 @@ export const adoptNoteLockKeyConflict = () => {
 export const checkNoteLockKeyConflict = (local: SyncInfo, remote: SyncInfo, hasLocalLockedNotes: boolean, staleReset: boolean) => {
 	if (!noteLockKeyConflict()) {
 		const keysDiffer = !!local.noteLockKey && !!remote.noteLockKey && local.noteLockKey.id !== remote.noteLockKey.id;
+		// The scenarios where a conflict occurs are when a different device has set up note lock for the first time (noteLockKey
+		// and syncMigrationId both differ) and when both remote and local have reset the password at the point of syncing (which
+		// makes staleReset true). staleReset is false both when a local password reset should propagate and when only a remote
+		// password reset was made (which silently accepts the remote key), and syncMigrationId is what tells a password reset
+		// apart from a key created for the first time.
 		if (!keysDiffer || (local.syncMigrationId === remote.syncMigrationId && !staleReset) || !hasLocalLockedNotes) return;
 		const conflict: NoteLockKeyConflict = { noteLockKey: remote.noteLockKey, syncMigrationId: remote.syncMigrationId };
 		Setting.setValue(noteLockKeyConflictSettingKey, conflict);
@@ -667,12 +676,20 @@ export const checkNoteLockKeyConflict = (local: SyncInfo, remote: SyncInfo, hasL
 		: _('Synchronisation was stopped because a note lock key migration is required. Enable the note lock feature to migrate your locked notes.'), ErrorCode.NoteLockKeyConflict);
 };
 
+const sameNoteLockKey = (a: SyncInfo, b: SyncInfo) => {
+	return a.noteLockKey?.id === b.noteLockKey?.id && a.noteLockKey?.updated_time === b.noteLockKey?.updated_time && a.syncMigrationId === b.syncMigrationId;
+};
+
 // A reset, password change or migration that lands while a sync is in flight would be clobbered by the sync's
 // local save, so the sync stops instead and the next one starts from the new state.
 export const checkNoteLockKeyUnchanged = (snapshot: SyncInfo) => {
-	const current = localSyncInfo();
-	if (current.noteLockKey?.id === snapshot.noteLockKey?.id && current.noteLockKey?.updated_time === snapshot.noteLockKey?.updated_time && current.syncMigrationId === snapshot.syncMigrationId) return;
+	if (sameNoteLockKey(localSyncInfo(), snapshot)) return;
 	throw new Error(_('Synchronisation was stopped because the note lock key changed on this device during the sync. Please synchronise again.'));
+};
+
+export const checkRemoteNoteLockKeyUnchanged = (fetched: SyncInfo, latest: SyncInfo) => {
+	if (sameNoteLockKey(fetched, latest)) return;
+	throw new Error(_('Synchronisation was stopped because the note lock key on the sync target changed during the sync. Please synchronise again.'));
 };
 
 // Sync migration ids predate the release of the note lock feature, so a key without one comes from a

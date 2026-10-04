@@ -179,6 +179,13 @@ describe('syncInfoUtils', () => {
 		expect(merged.syncMigrationId).toBe(expected.syncMigrationId);
 	});
 
+	it('should refuse to merge a different lineage while local notes depend on the local key', () => {
+		const local = syncInfoWithNoteLockKey(noteLockKey('2', 300), 'L2');
+		const remote = syncInfoWithNoteLockKey(noteLockKey('1', 200), 'L1');
+
+		expect(() => mergeSyncInfos(local, remote, { hasLocalLockedNotes: true })).toThrow('different lineage');
+	});
+
 	it('should stop the sync and park the remote key when lineages differ and local notes are locked', () => {
 		const local = syncInfoWithNoteLockKey(noteLockKey('2', 300), 'L2');
 		const remote = syncInfoWithNoteLockKey(noteLockKey('1', 200), 'L1');

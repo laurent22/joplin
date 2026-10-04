@@ -25,7 +25,7 @@ import TaskQueue from './TaskQueue';
 import ItemUploader from './services/synchronizer/ItemUploader';
 import { FileApi, getSupportsDeltaWithItems, isLocalServer, PaginatedList, RemoteItem, enableEnhancedBasicDeltaAlgorithm } from './file-api';
 import JoplinDatabase from './JoplinDatabase';
-import { checkIfCanSync, fetchSyncInfo, checkSyncTargetIsValid, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyHasBeenUsed, SyncInfo, syncInfoEquals, uploadSyncInfo, checkNoteLockKeyConflict, checkNoteLockKeyMigrationId, checkNoteLockKeyUnchanged } from './services/synchronizer/syncInfoUtils';
+import { checkIfCanSync, fetchSyncInfo, checkSyncTargetIsValid, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyHasBeenUsed, SyncInfo, syncInfoEquals, uploadSyncInfo, checkNoteLockKeyConflict, checkNoteLockKeyMigrationId, checkNoteLockKeyUnchanged, checkRemoteNoteLockKeyUnchanged } from './services/synchronizer/syncInfoUtils';
 import { getMasterPassword, setupAndDisableEncryption, setupAndEnableEncryption } from './services/e2ee/utils';
 import { generateKeyPair } from './services/e2ee/ppk/ppk';
 import syncDebugLog from './services/synchronizer/syncDebugLog';
@@ -494,7 +494,9 @@ export default class Synchronizer {
 			this.api().setTempDirName(Dirnames.Temp);
 
 			try {
-				// Checked before anything is uploaded so a key without an id never reaches the target.
+				// Checked before anything is uploaded so a key without an id never reaches the target. The CLI cannot create or reset
+				// a note lock key or run a migration: it adopts the target's key, and a migration it would need (its locked notes
+				// meeting a different key, for example after switching the sync target) stops its sync. Revisit if it gains these.
 				checkNoteLockKeyMigrationId(localSyncInfo(), false);
 
 				let remoteInfo = await fetchSyncInfo(this.api());
@@ -542,15 +544,21 @@ export default class Synchronizer {
 
 				let reconciledNoteLockKeyId = localInfo.noteLockKey?.id;
 				if (!syncInfoEquals(localInfo, remoteInfo)) {
-					let newInfo = mergeSyncInfos(localInfo, remoteInfo, { resetPropagates });
+					// The merge works from localInfo, which a key change since it was read would make stale.
+					checkNoteLockKeyUnchanged(localInfo);
+					let newInfo = mergeSyncInfos(localInfo, remoteInfo, { resetPropagates, hasLocalLockedNotes: hasLockedNotes });
 					if (newInfo.activeMasterKeyId) newInfo = setMasterKeyHasBeenUsed(newInfo, newInfo.activeMasterKeyId);
 					const previousE2EE = localInfo.e2ee;
 					logger.info('Sync target info differs between local and remote - merging infos: ', newInfo.toObject());
 
 					await this.lockHandler().acquireLock(LockType.Exclusive, this.lockClientType(), this.clientId_, { clearExistingSyncLocksFromTheSameClient: true });
+					// Must stay immediately before the upload. Sync locks are disabled (the lock above does nothing), so another device can
+					// upload its own info.json after this sync fetched the target's, for example a password reset, which the upload below
+					// would revert to the old key.
+					checkRemoteNoteLockKeyUnchanged(remoteInfo, await fetchSyncInfo(this.api()));
 					await uploadSyncInfo(this.api(), newInfo);
-					// A reset, password change or migration done on this device during the upload would be overwritten by the save below,
-					// and a note locked meanwhile may depend on the local key that is about to be replaced.
+					// A reset or password change on this device during the upload would be overwritten by the save below, and a note
+					// locked meanwhile may depend on the local key that is about to be replaced.
 					checkNoteLockKeyUnchanged(localInfo);
 					if (localInfo.noteLockKey && newInfo.noteLockKey?.id !== localInfo.noteLockKey.id) {
 						checkNoteLockKeyConflict(localInfo, remoteInfo, await Note.hasLockedNotes(), staleReset);
