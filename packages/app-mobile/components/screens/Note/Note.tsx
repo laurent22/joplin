@@ -838,9 +838,10 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			} else {
 				this.setState({}, () => this.editorReloadComplete(refreshKey));
 			}
-		} finally {
+		} catch (error) {
 			this.reloadInProgress_ = false;
 			this.setState({ reloadInProgress: false });
+			throw error;
 		}
 	}
 
