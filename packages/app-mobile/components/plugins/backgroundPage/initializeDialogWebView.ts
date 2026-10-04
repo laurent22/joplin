@@ -20,6 +20,7 @@ const initializeDialogWebView = (messageChannelId: string) => {
 	const loadedPaths: Set<string> = new Set();
 	let maximumContentWidth = 0;
 	let resetContentWidthBaseline = true;
+	let lastViewportWidth = document.documentElement.clientWidth;
 	const contentObserver = new MutationObserver(() => {
 		resetContentWidthBaseline = true;
 	});
@@ -90,6 +91,10 @@ const initializeDialogWebView = (messageChannelId: string) => {
 
 			const element = document.getElementById('joplin-plugin-content') ?? document.body;
 			const viewportWidth = document.documentElement.clientWidth;
+			if (viewportWidth !== lastViewportWidth) {
+				resetContentWidthBaseline = true;
+				lastViewportWidth = viewportWidth;
+			}
 			const scrollbarWidth = Math.max(0, window.innerWidth - viewportWidth);
 			const contentWidth = element.clientWidth === viewportWidth ? element.clientWidth + scrollbarWidth : element.clientWidth;
 			maximumContentWidth = resetContentWidthBaseline ? contentWidth : Math.max(maximumContentWidth, contentWidth);
