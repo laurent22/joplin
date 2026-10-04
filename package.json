@@ -10,7 +10,7 @@
   },
   "engines": {
     "node": ">=22.19",
-    "yarn": "4.14.1"
+    "yarn": "4.16.0"
   },
   "scripts": {
     "buildApiDoc": "yarn workspace joplin start apidoc ../../readme/api/references/rest_api.md",
@@ -83,7 +83,7 @@
     "eslint": "9.39.4",
     "eslint-interactive": "14.0.0",
     "eslint-plugin-import": "2.32.0",
-    "eslint-plugin-jest": "29.15.2",
+    "eslint-plugin-jest": "29.15.4",
     "eslint-plugin-promise": "7.3.0",
     "eslint-plugin-react": "7.37.5",
     "execa": "5.1.1",

@@ -294,9 +294,16 @@ div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"] .wb-expander.wb-i
 		margin-left: auto;
 	}
 
+	.page-note:has(.with-tree),
+	.page-note:has(.with-tree) .main {
+		height: auto;
+		overflow: visible;
+	}
+
 	.published-note-layout.with-tree {
 		display: block;
 		position: relative;
+		overflow: visible;
 	}
 
 	.published-folder-sidebar {
