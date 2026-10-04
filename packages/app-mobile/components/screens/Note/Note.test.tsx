@@ -34,6 +34,11 @@ import setupGlobalStore from '../../../utils/testing/setupGlobalStore';
 import CommandService from '@joplin/lib/services/CommandService';
 import BackButtonService from '../../../services/BackButtonService';
 import shared from '@joplin/lib/components/shared/note-screen-shared';
+import useVisiblePluginEditorViewIds from '@joplin/lib/hooks/plugins/useVisiblePluginEditorViewIds';
+
+jest.mock('@joplin/lib/hooks/plugins/useVisiblePluginEditorViewIds', () => jest.fn((): string[] => []));
+
+const mockUseVisiblePluginEditorViewIds = useVisiblePluginEditorViewIds as jest.MockedFunction<typeof useVisiblePluginEditorViewIds>;
 
 jest.retryTimes(2);
 
@@ -41,6 +46,14 @@ interface WrapperProps {
 }
 
 let store: Store<AppState>;
+
+function deferred<T>() {
+	let resolve: (value: T)=> void;
+	const promise = new Promise<T>(resolvePromise => {
+		resolve = resolvePromise;
+	});
+	return { promise, resolve: resolve! };
+}
 
 const mockNavigation = { state: { } };
 const WrappedNoteScreen: React.FC<WrapperProps> = _props => {
@@ -203,6 +216,7 @@ describe('screens/Note/Note', () => {
 		// In order for note changes to be saved, note-screen-shared requires
 		// that at least one folder exist.
 		await Folder.save({ title: 'test', parent_id: '' });
+		mockUseVisiblePluginEditorViewIds.mockReturnValue([]);
 		jest.useRealTimers();
 	});
 
@@ -269,6 +283,45 @@ describe('screens/Note/Note', () => {
 		await waitForNoteToMatch(noteId, { title: 'Remote title' });
 		unmount();
 		await waitForNoteToMatch(noteId, { title: 'Remote title' });
+	});
+
+	it('should ignore header-menu saves during a reload when an editor plugin is visible', async () => {
+		const noteId = await openNewNote({ title: 'Original title', body: 'Original body' });
+		const { unmount } = render(<WrappedNoteScreen />);
+		const titleInput = await screen.findByDisplayValue('Original title');
+		await openNoteActionsMenu();
+
+		const originalReloadNote = shared.reloadNote;
+		const reloadStarted = deferred<void>();
+		const continueReload = deferred<void>();
+		const reloadSpy = jest.spyOn(shared, 'reloadNote').mockImplementation(async component => {
+			reloadStarted.resolve();
+			await continueReload.promise;
+			return originalReloadNote(component);
+		});
+
+		try {
+			await Note.save({ id: noteId, body: 'Remote body' });
+			mockUseVisiblePluginEditorViewIds.mockReturnValue(['test-editor-plugin']);
+
+			await act(async () => {
+				store.dispatch({ type: 'EDITOR_NOTE_NEEDS_RELOAD', noteId });
+				await reloadStarted.promise;
+			});
+			fireEvent.press(await screen.findByText('Convert to todo'));
+
+			// Give the save queue enough time to process any incorrectly scheduled action.
+			await act(async () => new Promise(resolve => setTimeout(resolve, 600)));
+			await waitForNoteToMatch(noteId, { body: 'Remote body', is_todo: 0 });
+
+			continueReload.resolve();
+			await waitFor(() => expect(titleInput).toBeEnabled());
+			await waitForNoteToMatch(noteId, { body: 'Remote body', is_todo: 0 });
+		} finally {
+			continueReload.resolve();
+			reloadSpy.mockRestore();
+			unmount();
+		}
 	});
 
 	it('changing the note body in the editor should update the note\'s body', async () => {

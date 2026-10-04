@@ -49,6 +49,10 @@ export interface SaveNoteOptions {
 	getEditorNoteReloadTimeRequest?: ()=> number;
 }
 
+export interface ScheduleSaveOptions {
+	editorPluginSave?: boolean;
+}
+
 export interface BaseState {
 	note: NoteLockNoteEntity;
 	lastSavedNote: NoteLockNoteEntity;
@@ -82,7 +86,7 @@ export interface BaseNoteScreenComponent<State extends BaseState = BaseState> {
 	// current state. Previously, the delay between calling setState(state) and
 	// this.state getting the new state value could cause the wrong state
 	// to be saved.
-	scheduleSave(currentState: State): void;
+	scheduleSave(currentState: State, options?: ScheduleSaveOptions): void;
 	scheduleFocusUpdate(): void;
 	attachFile(asset: AttachFileAsset, fileType: string | null): void;
 	lastLoadedNoteId_?: string;
@@ -96,7 +100,7 @@ interface Shared {
 	handleNoteDeletedWhileEditing_?: (note: NoteEntity, noteLockKey?: DecryptedNoteLockKey|null)=> Promise<NoteEntity>;
 	saveNoteButton_press?: (comp: BaseNoteScreenComponent, state: BaseState, folderId: string, options: SaveNoteOptions)=> Promise<void>;
 	saveOneProperty?: (comp: BaseNoteScreenComponent, name: string, value: unknown)=> void;
-	noteComponent_change?: (comp: BaseNoteScreenComponent, propName: string, propValue: unknown)=> void;
+	noteComponent_change?: (comp: BaseNoteScreenComponent, propName: string, propValue: unknown, scheduleSaveOptions?: ScheduleSaveOptions)=> void;
 	clearResourceCache?: ()=> void;
 	attachedResources?: (noteBody: string)=> Promise<AttachedResources>;
 	isModified?: (comp: BaseNoteScreenComponent)=> boolean;
@@ -305,7 +309,7 @@ shared.saveOneProperty = async function(comp: BaseNoteScreenComponent, name: str
 	});
 };
 
-shared.noteComponent_change = function(comp: BaseNoteScreenComponent, propName: string, propValue: unknown) {
+shared.noteComponent_change = function(comp: BaseNoteScreenComponent, propName: string, propValue: unknown, scheduleSaveOptions: ScheduleSaveOptions = {}) {
 	const newState: Partial<BaseState> = {};
 
 	const note = { ...comp.state.note };
@@ -313,7 +317,7 @@ shared.noteComponent_change = function(comp: BaseNoteScreenComponent, propName: 
 	newState.note = note;
 
 	comp.setState(newState);
-	comp.scheduleSave(newState as BaseState);
+	comp.scheduleSave(newState as BaseState, scheduleSaveOptions);
 };
 
 let resourceCache_: AttachedResources = {};

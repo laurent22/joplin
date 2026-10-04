@@ -31,7 +31,7 @@ import { reg } from '@joplin/lib/registry';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import { BaseScreenComponent } from '../../base-screen';
 import { themeStyle, editorFont } from '../../global-style';
-import shared, { BaseNoteScreenComponent, Props as BaseProps } from '@joplin/lib/components/shared/note-screen-shared';
+import shared, { BaseNoteScreenComponent, Props as BaseProps, ScheduleSaveOptions } from '@joplin/lib/components/shared/note-screen-shared';
 import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
 import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
 import NoteLockKey, { DecryptedNoteLockKey } from '@joplin/lib/services/noteLock/NoteLockKey';
@@ -205,7 +205,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	public dialogbox: any;
 	private commandRegistration_: RegisteredRuntime|null = null;
 	private editorPluginHandler_ = new EditorPluginHandler(PluginService.instance(), saveEvent => {
-		return shared.noteComponent_change(this, 'body', saveEvent.body);
+		return shared.noteComponent_change(this, 'body', saveEvent.body, { editorPluginSave: true });
 	});
 	private refreshKey: number | undefined;
 	private reloadInProgress_ = false;
@@ -828,14 +828,19 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 
 	private async reloadNoteAndUpdateRefreshKey() {
-		await shared.reloadNote(this);
+		try {
+			await shared.reloadNote(this);
 
-		const refreshKey = this.props.editorNoteReloadTimeRequest;
-		this.refreshKey = refreshKey;
-		if (this.useEditorBeta() && this.state.mode === 'edit' && !this.props.visibleEditorPluginIds.length) {
-			this.forceUpdate();
-		} else {
-			this.setState({}, () => this.editorReloadComplete(refreshKey));
+			const refreshKey = this.props.editorNoteReloadTimeRequest;
+			this.refreshKey = refreshKey;
+			if (this.useEditorBeta() && this.state.mode === 'edit' && !this.props.visibleEditorPluginIds.length) {
+				this.forceUpdate();
+			} else {
+				this.setState({}, () => this.editorReloadComplete(refreshKey));
+			}
+		} finally {
+			this.reloadInProgress_ = false;
+			this.setState({ reloadInProgress: false });
 		}
 	}
 
@@ -913,8 +918,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		return this.saveActionQueues_[noteId];
 	}
 
-	public scheduleSave(state: State) {
-		if (this.reloadInProgress_ && !this.props.visibleEditorPluginIds.length) return;
+	public scheduleSave(state: State, options: ScheduleSaveOptions = {}) {
+		if (this.reloadInProgress_ && !options.editorPluginSave) return;
 		const editorNoteReloadTimeRequest = this.props.editorNoteReloadTimeRequest;
 		this.saveActionQueue(state.note.id).push(this.makeSaveAction(state, editorNoteReloadTimeRequest));
 	}
