@@ -239,7 +239,7 @@
     "@huggingface/transformers": "4.2.0",
     "@joplin/onenote-converter": "~3.7",
     "@xyflow/react": "12.10.2",
-    "fs-extra": "11.3.5",
+    "fs-extra": "11.3.6",
     "keytar": "7.9.0",
     "onnxruntime-node": "1.26.0",
     "sqlite-vec": "0.1.9",

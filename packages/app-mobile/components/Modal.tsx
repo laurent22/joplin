@@ -26,6 +26,8 @@ export interface ModalElementProps {
 	// but can be `null` to prevent the default close behavior.
 	onClose: OnClose|null;
 	onShow?: OnShow;
+	// iOS only: Called once the modal has finished its dismissal transition
+	onDismissed?: ()=> void;
 	animationType?: 'fade'|'none';
 	// When false, render within the surrounding portal rather than creating a
 	// separate native/top-layer modal.
@@ -161,6 +163,7 @@ const ModalElement: React.FC<ModalElementProps> = ({
 	modalBackgroundStyle: extraModalBackgroundStyles,
 	dismissButtonStyle,
 	onClose,
+	onDismissed,
 	wrapContent,
 	useNativeModal = true,
 	...forwardedProps
@@ -181,6 +184,11 @@ const ModalElement: React.FC<ModalElementProps> = ({
 	const containerRef = useRef<View|null>(null);
 	containerRef.current = containerComponent;
 	const { onShouldBackgroundCaptureTouch, onBackgroundTouchFinished } = useBackgroundTouchListeners(onClose, containerRef);
+
+	const onDismiss = useCallback(() => {
+		onClose?.();
+		onDismissed?.();
+	}, [onClose, onDismissed]);
 
 	// A close button for accessibility tools. Since iOS accessibility focus order is based on the position
 	// of the element on the screen, the close button is placed after the modal content, rather than behind.
@@ -226,7 +234,7 @@ const ModalElement: React.FC<ModalElementProps> = ({
 				// Web:
 				onClose={onClose}
 				// iOS only: Called after closing
-				onDismiss={onClose}
+				onDismiss={onDismiss}
 				// Called before closing on Android and sometimes called before closing on iOS
 				onRequestClose={onClose}
 				{...forwardedProps}
