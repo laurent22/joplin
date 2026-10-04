@@ -291,7 +291,7 @@ const mapStateToProps = (state: AppState) => {
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
 		isSafeMode: state.settings.isSafeMode,
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
-		syncTargetAppMinVersion: syncInfo.appMinVersion,
+		syncTargetAppMinVersion: state.mustUpgradeAppMinVersion,
 		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
 		shouldSwitchToAppleSiliconVersion: shim.isAppleSilicon() && shim.isMac() && process.arch !== 'arm64',
 	};

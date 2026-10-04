@@ -115,6 +115,16 @@ function getIds(items: BaseItemEntity[], indexes: number[]|null = null) {
 }
 
 describe('reducer', () => {
+	test('should replace the minimum app version when the upgrade warning changes', () => {
+		let state = reducer(defaultState, { type: 'MUST_UPGRADE_APP', message: 'Upgrade', appMinVersion: '100.0.0' });
+		expect(state).toMatchObject({ mustUpgradeAppMinVersion: '100.0.0' });
+		state = reducer(state, { type: 'MUST_UPGRADE_APP', message: 'Upgrade', appMinVersion: '101.0.0' });
+		expect(state).toMatchObject({ mustUpgradeAppMinVersion: '101.0.0' });
+		state = reducer(state, { type: 'MUST_UPGRADE_APP', message: 'Upgrade' });
+		expect(state).toMatchObject({ mustUpgradeAppMinVersion: '' });
+		expect(state.mustUpgradeAppMessage).toBe('Upgrade');
+	});
+
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

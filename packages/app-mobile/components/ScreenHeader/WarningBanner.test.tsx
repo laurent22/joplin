@@ -11,6 +11,8 @@ import { Store } from 'redux';
 import createMockReduxStore from '../../utils/testing/createMockReduxStore';
 import setupGlobalStore from '../../utils/testing/setupGlobalStore';
 import MasterKey from '@joplin/lib/models/MasterKey';
+import shim from '@joplin/lib/shim';
+import { Platform } from 'react-native';
 
 interface WrapperProps {
 	store: Store<AppState>;
@@ -73,6 +75,22 @@ describe('WarningBanner', () => {
 		await switchClient(0);
 
 		jest.useFakeTimers();
+	});
+
+	test('should display the required remote version when release metadata cannot be loaded', async () => {
+		const platform = jest.replaceProperty(Platform, 'OS', 'android');
+		const fetch = jest.spyOn(shim, 'fetch').mockRejectedValue(new Error('Offline'));
+		try {
+			const { store } = createMockStore();
+			store.dispatch({ type: 'MUST_UPGRADE_APP', message: 'Upgrade to 100.0.0+', appMinVersion: '100.0.0' });
+			render(<WarningBannerWrapper store={store}/>);
+			await act(async () => { await Promise.resolve(); });
+			expect(fetch).toHaveBeenCalledWith('https://api.github.com/repos/laurent22/joplin-android/releases/tags/android-v100.0.0');
+			expect(screen.getByText(/upgrade your application to version 100\.0\.0/)).toBeVisible();
+		} finally {
+			fetch.mockRestore();
+			platform.restore();
+		}
 	});
 
 	test('the missing master key alert should link to the encryption config screen', async () => {

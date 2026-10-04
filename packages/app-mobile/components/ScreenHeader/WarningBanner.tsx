@@ -170,7 +170,7 @@ export default connect((state: AppState) => {
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
 		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
-		syncTargetAppMinVersion: syncInfo.appMinVersion,
+		syncTargetAppMinVersion: state.mustUpgradeAppMinVersion,
 		shareInvitations: state.shareService.shareInvitations,
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
 		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && !isSyncLoginRoute(state) && state.mustAuthenticate,

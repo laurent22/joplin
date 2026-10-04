@@ -6,10 +6,11 @@ import Note from '../../models/Note';
 import BaseItem from '../../models/BaseItem';
 import WelcomeUtils, { WelcomeAssetPlatform } from '../../WelcomeUtils';
 import { NoteEntity } from '../database/types';
-import { fetchSyncInfo, setAppMinVersion, uploadSyncInfo } from './syncInfoUtils';
+import { fetchSyncInfo, localSyncInfo, setAppMinVersion, uploadSyncInfo } from './syncInfoUtils';
 import { ErrorCode } from '../../errors';
 import Resource from '../../models/Resource';
 import { exists } from 'fs-extra';
+import reducer, { defaultState } from '../../reducer';
 
 describe('Synchronizer.basics', () => {
 
@@ -560,10 +561,16 @@ describe('Synchronizer.basics', () => {
 
 		remoteInfo.appMinVersion = '100.0.0';
 		await uploadSyncInfo(synchronizer().api(), remoteInfo);
+		const dispatch = jest.fn();
+		synchronizer().dispatch = dispatch;
 
 		await expectThrow(async () => synchronizerStart(1, {
 			throwOnError: true,
 		}), ErrorCode.MustUpgradeApp);
+
+		const action = dispatch.mock.calls.map(([action]) => action).find(action => action.type === 'MUST_UPGRADE_APP');
+		expect(reducer(defaultState, action)).toMatchObject({ mustUpgradeAppMinVersion: '100.0.0' });
+		expect(localSyncInfo().appMinVersion).toBe('3.7.0');
 	}));
 
 	it('should update the remote appMinVersion when synchronising', (async () => {

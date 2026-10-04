@@ -469,6 +469,7 @@ export default class Synchronizer {
 		let errorToThrow = null;
 		let syncLock = null;
 		let hasCaughtError = false;
+		let remoteAppMinVersion = '';
 
 		try {
 			// Before synchronising make sure all share_id properties are set
@@ -512,6 +513,7 @@ export default class Synchronizer {
 				await this.migrationHandler().checkCanSync(remoteInfo);
 
 				const appVersion = shim.appVersion();
+				remoteAppMinVersion = remoteInfo.appMinVersion;
 				if (appVersion !== 'unknown') checkIfCanSync(remoteInfo, appVersion);
 
 				let localInfo = await localSyncInfo();
@@ -1243,6 +1245,7 @@ export default class Synchronizer {
 				this.dispatch({
 					type: 'MUST_UPGRADE_APP',
 					message: error.message,
+					appMinVersion: remoteAppMinVersion,
 				});
 			}
 
