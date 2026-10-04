@@ -1,5 +1,12 @@
 # Joplin Android Changelog
 
+## [android-v3.7.11](https://github.com/laurent22/joplin/releases/tag/android-v3.7.11) - 2026-09-25T11:28:40Z
+
+- Fixed: Fix AI configuration test failing on reasoning models (#16594)
+- Fixed: Fix notes and sub-folders are still marked as published after being moved out of a published folder (#16648) (#16647 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix sync deadlock when Joplin Server rejects an item with HTTP 422 (#16544) (#16504)
+- Fixed: Fix table editor losing and mis-rendering inline markdown (#16632)
+
 ## [android-v3.7.10](https://github.com/laurent22/joplin/releases/tag/android-v3.7.10) - 2026-09-10T17:52:30Z
 
 - Fixed: Fix WebDAV sync error "Protocol https: not supported" on servers that redirect (#16488) (#16486)

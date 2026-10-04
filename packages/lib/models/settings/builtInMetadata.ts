@@ -771,6 +771,18 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 		},
 
+		// Not gated on `ai.enabled` since it only applies when chat is off.
+		'ai.chat.showToolbarButton': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			advanced: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop],
+			label: () => _('Show the AI Chat button in the note toolbar'),
+			storage: SettingStorage.File,
+		},
+
 		// Cumulative token counters for the currently configured provider.
 		// Reset whenever the user changes the active provider in settings —
 		// totals always reflect the provider in use.

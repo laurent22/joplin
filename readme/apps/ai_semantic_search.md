@@ -28,6 +28,11 @@ After the initial scan, new and edited notes are picked up within a few minutes.
 
 When enabled, semantic search results are included in Joplin's built-in search UI. Semantic search results are mixed with the default [full-text search matches](https://github.com/laurent22/joplin/blob/dev/readme/apps/search.md).
 
+Joplin's search panel will not use semantic search if:
+- Searching for item IDs (e.g. `ce0e738385b25927a716171e00d8ebcf`).
+- The query uses search filters (e.g. `title:"Title search"`) or [basic search](https://github.com/laurent22/joplin/blob/dev/readme/apps/search.md#supported-queries).
+- Semantic search is unsupported or isn't enabled in settings.
+
 Semantic search is also exposed to:
 
 - **Plugins** can call `joplin.ai.search()` to look up notes by meaning. The plugin's description tells you whether it uses this.

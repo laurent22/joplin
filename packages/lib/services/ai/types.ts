@@ -67,10 +67,18 @@ export interface ChatToolCall {
 	parseError: string|null;
 }
 
+export type ChatFinishReason = 'stop' | 'length' | 'tool_calls' | 'other';
+
 export interface ChatResult {
 	text: string;
 	toolCalls: ChatToolCall[];
 	usage: ChatUsage;
+	// 'length' means the output budget ran out, which is how a reasoning model
+	// with a low maxTokens returns empty text. Undefined if unreported.
+	finishReason?: ChatFinishReason;
+	// Model reasoning, from a dedicated provider field or extracted from inline
+	// markers. Kept separate so it doesn't pollute the assistant reply.
+	reasoningText?: string;
 	// Joplin Cloud degradation / budget signals. Populated only by the
 	// joplin-cloud provider; other providers leave them undefined. Consumed
 	// internally to drive the aiStatus Redux slice — plugins receive only

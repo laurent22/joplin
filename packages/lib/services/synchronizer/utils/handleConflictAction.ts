@@ -110,12 +110,14 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 			// Only the title and body are replaced, so fields such as user_updated_time stay
 			// consistent with the normal conflict path. The decrypted copy drops the cipher text
 			const remoteNote = decryptedRemoteNote;
+			// Ahead of the remote time so the merge uploads as a local change
+			const newUpdatedTime = Math.max(time.unixMs(), remoteNote.updated_time + 1);
 			const mergedNote: NoteEntity = {
 				...remoteNote,
 				title: merge.resolvedLocal.title,
 				body: merge.resolvedLocal.body,
-				// Ahead of the remote time so the merge uploads as a local change
-				updated_time: Math.max(time.unixMs(), remoteNote.updated_time + 1),
+				updated_time: newUpdatedTime,
+				user_updated_time: newUpdatedTime,
 			};
 			// Both sides now share the merged output, so it becomes the base for later conflicts
 			const mergedBase = {
@@ -156,12 +158,14 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 				const remoteUnchanged = merge.resolvedCurrent.title === remoteNote.title && merge.resolvedCurrent.body === remoteNote.body;
 
 				local = { ...local, title: merge.resolvedLocal.title, body: merge.resolvedLocal.body } as NoteEntity;
+				// Ahead of the remote time so the merged changes upload as a local change
+				const newUpdatedTime = Math.max(time.unixMs(), remoteNote.updated_time + 1);
 				remoteContent = {
 					...remoteNote,
 					title: merge.resolvedCurrent.title,
 					body: merge.resolvedCurrent.body,
-					// Ahead of the remote time so the merged changes upload as a local change
-					updated_time: remoteUnchanged ? remoteNote.updated_time : Math.max(time.unixMs(), remoteNote.updated_time + 1),
+					updated_time: remoteUnchanged ? remoteNote.updated_time : newUpdatedTime,
+					user_updated_time: remoteUnchanged ? remoteNote.user_updated_time : newUpdatedTime,
 				} as NoteEntity;
 			}
 
