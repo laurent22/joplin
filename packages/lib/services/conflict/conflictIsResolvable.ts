@@ -33,7 +33,7 @@ export const conflictNoteIsResolvable = (note: NoteEntity|null|undefined, origin
 	if (!note || !note.is_conflict || !note.conflict_original_id) return false;
 	if (!isConflictResolutionEnabled()) return false;
 	if (note.encryption_applied || note.is_locked) return false;
-	if (original?.is_locked) return false;
+	if (original?.encryption_applied || original?.is_locked) return false;
 	if (!isMarkdown(note)) return false;
 	return true;
 };
@@ -45,7 +45,6 @@ export default async (note: NoteEntity|null|undefined): Promise<{ resolvable: bo
 	if (!original) return { resolvable: false, original: null };
 
 	if (!conflictNoteIsResolvable(note, original)) return { resolvable: false, original };
-	if (original.encryption_applied) return { resolvable: false, original };
 	if (!isMarkdown(original)) return { resolvable: false, original };
 	if (original.deleted_time) return { resolvable: false, original };
 	if (isReadOnlyShare(original)) return { resolvable: false, original };
