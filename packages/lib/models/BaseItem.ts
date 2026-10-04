@@ -772,7 +772,7 @@ export default class BaseItem extends BaseModel {
 			// 'SELECT * FROM [ITEMS] items JOIN sync_items s ON s.item_id = items.id WHERE sync_target = ? AND'
 
 			let extraWhere: string[]|string = [];
-			if (className === 'Note') extraWhere.push('(is_conflict = 0 OR (conflict_original_id != "" AND share_id = ""))');
+			if (className === 'Note') extraWhere.push('(is_conflict = 0 OR (conflict_original_id != \'\' AND share_id = \'\'))');
 			if (className === 'Resource') extraWhere.push('encryption_blob_encrypted = 0');
 			if (ItemClass.encryptionSupported()) extraWhere.push('encryption_applied = 0');
 

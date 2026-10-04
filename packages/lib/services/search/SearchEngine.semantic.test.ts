@@ -36,4 +36,14 @@ describe('SearchEngine.semantic', () => {
 		const rows = await engine.search('body:letters letter letter');
 		expect(rows).toHaveLength(0);
 	});
+
+	it('should not use semantic search when searching for an item ID-like pattern', async () => {
+		const testUuid = '5d17d3649e0449209db61fdbf6b27d14';
+		await Note.save({ title: 'test', body: testUuid });
+
+		await updateSearchIndex();
+
+		expect(await engine.search(testUuid)).toHaveLength(1);
+		expect(await engine.search(testUuid.replace(/.$/, 'a'))).toHaveLength(0);
+	});
 });

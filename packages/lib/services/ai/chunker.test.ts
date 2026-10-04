@@ -1,3 +1,4 @@
+import uuid from '../../uuid';
 import { chunkText, defaultChunkOptions, cjkChunkOptions, optionsForText } from './chunker';
 
 describe('chunker', () => {
@@ -10,6 +11,11 @@ describe('chunker', () => {
 	it('returns the whole text as a single chunk when shorter than chunkSize', () => {
 		const body = 'A short note that fits in one chunk.';
 		expect(chunkText(body)).toEqual([body]);
+	});
+
+	it('removes item IDs from chunked text chunking', () => {
+		const body = `![image](:/${uuid.create()}), [link](:/${uuid.create()}), :/${uuid.create()}, and :/${uuid.create()}`;
+		expect(chunkText(body)).toEqual(['![image], [link], , and']);
 	});
 
 	it('produces overlapping chunks for long input', () => {

@@ -165,6 +165,18 @@ if [ "$RUN_TESTS" == "1" ]; then
 	if [ $testResult -ne 0 ]; then
 		exit $testResult
 	fi
+
+	# Run the test files changed by the pull request several times, to catch
+	# flaky tests before they are merged.
+	if [ "$IS_PULL_REQUEST" == "1" ]; then
+		echo "Step: Checking changed tests for flakiness..."
+
+		"$SCRIPT_DIR/repeat_changed_tests.sh" "$GITHUB_BASE_REF"
+		testResult=$?
+		if [ $testResult -ne 0 ]; then
+			exit $testResult
+		fi
+	fi
 fi
 
 # =============================================================================

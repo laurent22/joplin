@@ -96,6 +96,26 @@ export interface AlarmEntity {
   'trigger_time'?: number;
   'type_'?: number;
 }
+export interface ChatConversationEntity {
+  'created_time'?: number;
+  'id'?: string;
+  'title'?: string;
+  'updated_time'?: number;
+  'type_'?: number;
+}
+export interface ChatMessageEntity {
+  'conversation_id'?: string;
+  'created_time'?: number;
+  'hide'?: number;
+  'id'?: string;
+  'note_id'?: string;
+  'note_title'?: string;
+  'position'?: number;
+  'raw'?: string;
+  'role'?: string;
+  'text'?: string;
+  'type_'?: number;
+}
 export interface ConflictNoteStateEntity {
   'base_body'?: string;
   'base_title'?: string;
@@ -725,6 +745,26 @@ export const databaseSchema: DatabaseTables = {
 		remote_body: { type: 'string' },
 		remote_title: { type: 'string' },
 		remote_updated_time: { type: 'number' },
+		type_: { type: 'number' },
+	},
+	chat_conversations: {
+		created_time: { type: 'number' },
+		id: { type: 'string' },
+		title: { type: 'string' },
+		updated_time: { type: 'number' },
+		type_: { type: 'number' },
+	},
+	chat_messages: {
+		conversation_id: { type: 'string' },
+		created_time: { type: 'number' },
+		hide: { type: 'number' },
+		id: { type: 'string' },
+		note_id: { type: 'string' },
+		note_title: { type: 'string' },
+		position: { type: 'number' },
+		raw: { type: 'string' },
+		role: { type: 'string' },
+		text: { type: 'string' },
 		type_: { type: 'number' },
 	},
 };
