@@ -262,42 +262,6 @@ DESKTOP=${DESKTOP,,}  # convert to lower case
 
 echo 'Create Desktop icon...'
 
-# Detect distribution environment, and apply --no-sandbox fix
-SANDBOXPARAM=""
-# lsb_release isn't available on some platforms (e.g. opensuse)
-# The equivalent of lsb_release in OpenSuse is the file /usr/lib/os-release
-if command -v lsb_release &> /dev/null; then
-  DISTVER=$(lsb_release -is) && DISTVER=$DISTVER$(lsb_release -rs)
-  DISTCODENAME=$(lsb_release -cs)
-  DISTMAJOR=$(lsb_release -rs|cut -d. -f1)
-
-  #-----------------------------------------------------
-  # Check for "The SUID sandbox helper binary was found, but is not configured correctly" problem.
-  # It is present in Debian 1X. A (temporary) patch will be applied at .desktop file
-  # Linux Mint 4 Debbie is based on Debian 10 and requires the same param handling.
-  #
-  # TODO: Remove: This is likely no longer an issue. See https://issues.chromium.org/issues/40462640.
-  BAD_HELPER_BINARY=false
-  if [[ $DISTVER =~ Debian1. || ( "$DISTVER" = "Linuxmint4" && "$DISTCODENAME" = "debbie" ) || ( "$DISTVER" = "CentOS" && "$DISTMAJOR" =~ 6|7 ) ]]; then
-    BAD_HELPER_BINARY=true
-  fi
-
-  # Work around Ubuntu 23.10+'s restrictions on unprivileged user namespaces. Electron
-  # uses these to sandbox processes. Unfortunately, it doesn't look like we can get around this
-  # without writing the AppImage to a non-user-writable location (without invalidating other security
-  # controls). See https://discourse.joplinapp.org/t/possible-future-requirement-for-no-sandbox-flag-for-ubuntu-23-10/.
-  HAS_USERNS_RESTRICTIONS=false
-  if [[ "$DISTVER" =~ ^(Ubuntu|Tuxedo) && $DISTMAJOR -ge 23 ]]; then
-    HAS_USERNS_RESTRICTIONS=true
-  fi
-
-  if [[ $HAS_USERNS_RESTRICTIONS = true || $BAD_HELPER_BINARY = true ]]; then
-    SANDBOXPARAM="--no-sandbox"
-    print "${COLOR_YELLOW}WARNING${COLOR_RESET} Electron sandboxing disabled."
-    print "    See https://discourse.joplinapp.org/t/32160/5 for details."
-  fi
-fi
-
 # Initially only desktop environments that were confirmed to use desktop files stored in
 # `.local/share/desktop` had a desktop file created.
 # However some environments don't return a desktop BUT still support these desktop files
@@ -324,7 +288,7 @@ if [[ $DESKTOP =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.*|.*lxqt.*|.*unity.*|.*x-cin
 Encoding=UTF-8
 Name=Joplin
 Comment=Joplin for Desktop
-Exec=env APPIMAGELAUNCHER_DISABLE=TRUE "${INSTALL_DIR}/Joplin.AppImage" ${SANDBOXPARAM} %u
+Exec=env APPIMAGELAUNCHER_DISABLE=TRUE "${INSTALL_DIR}/Joplin.AppImage" %u
 Icon=joplin
 StartupWMClass=${STARTUP_WM_CLASS}
 Type=Application
