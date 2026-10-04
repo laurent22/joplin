@@ -203,14 +203,15 @@ describe('screens/NoteRevisionViewer', () => {
 		const note = await createNoteWithTestRevisions(3);
 		render(<WrappedRevisionViewerScreen noteId={note.id}/>);
 
-		const dropdown = screen.getByRole('button', { name: 'Select a revision...' });
-		fireEvent.press(dropdown);
+		// Opening the dropdown before the revisions have loaded leaves its list permanently
+		// empty, so retry the press until the items are there.
+		await waitFor(() => {
+			fireEvent.press(screen.getByHintText('Revision: Opens dropdown'));
+			expect(screen.getAllByRole('menuitem')).toHaveLength(3);
+		});
 
 		// Select the second revision
-		await waitFor(() => {
-			const firstRevision = screen.getAllByRole('menuitem')[1];
-			fireEvent.press(firstRevision);
-		});
+		fireEvent.press(screen.getAllByRole('menuitem')[1]);
 
 		await waitFor(async () => {
 			expect(await getRevisionViewerText()).toBe('Update 2');
