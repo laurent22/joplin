@@ -160,15 +160,18 @@ describe('NoteLockKeyMigration', () => {
 		expect(await bodyDecryptedWith(note.id, decryptedTargetKey)).toBe('one');
 	});
 
-	it('should keep locked notes closed only while a run goes', async () => {
+	it('should keep locked notes closed and refuse a password reset only while a run goes', async () => {
 		await Note.save({ title: 'one', body: 'one', is_locked: 1 }, { useNoteLock: true });
 		let unlockDuringRun: Promise<Error> = null;
+		let resetDuringRun: Promise<Error> = null;
 		await migrateLockedNotes(localPassword, targetPassword, () => {
 			expect(NoteLockSession.instance().isUnlocked()).toBe(false);
 			unlockDuringRun = NoteLockSession.instance().unlock(localPassword).then((): Error => null, (error: Error) => error);
+			resetDuringRun = NoteLockSession.instance().reset('333333').then((): Error => null, (error: Error) => error);
 		});
 
 		expect((await unlockDuringRun)?.message).toContain('note lock key migration is in progress');
+		expect((await resetDuringRun)?.message).toContain('cannot be reset while a note lock key migration is in progress');
 		await NoteLockSession.instance().unlock(localPassword);
 		expect(NoteLockSession.instance().isUnlocked()).toBe(true);
 	});

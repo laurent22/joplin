@@ -51,6 +51,8 @@ export default class NoteLockSession {
 	// Blocks unlock during rotation so the still-persisted old key can't be unlocked before the new one is saved.
 	public async reset(password: string) {
 		if (this.rotating_) throw new Error('A note lock key reset is already in progress');
+		// The migration would adopt the target key over the new one when it ends.
+		if (this.migrating_) throw new Error(_('The note lock password cannot be reset while a note lock key migration is in progress.'));
 		this.rotating_ = true;
 		this.lock();
 		try {
