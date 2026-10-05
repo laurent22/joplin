@@ -222,34 +222,39 @@ describe('Synchronizer.noteLock', () => {
 		expect((await NoteLockNote.decryptBody(await Note.load(note.id), key)).body).toBe('secret body');
 	});
 
-	it('should park the sync target key instead of dropping a local key that a note started depending on mid-sync', async () => {
+	it('should adopt the sync target key before the upload, so a note cannot be locked with the dropped key mid-sync', async () => {
 		Setting.setValue('featureFlag.noteLock', true);
 		const remoteKey = await NoteLockKey.instance().create('111111');
 		await synchronizerStart();
 
 		await switchToClient(2);
 		Setting.setValue('featureFlag.noteLock', true);
-		const localKey = await NoteLockKey.instance().create('222222');
+		await NoteLockKey.instance().create('222222');
 		await NoteLockSession.instance().unlock('222222');
 
-		// Locks a note with the local key while the info.json upload is in flight, after the conflict check passed.
+		// Tries to lock a note with the local key while the info.json upload is in flight.
 		const api = synchronizer().api();
 		const realPut = api.put.bind(api);
-		let lateNoteId = '';
+		let lateLockError: Error = null;
 		const putSpy = jest.spyOn(api, 'put').mockImplementation(async (path, content, options) => {
-			if (path === 'info.json' && !lateNoteId) lateNoteId = (await Note.save({ title: 'late', body: 'late body', is_locked: 1 }, { useNoteLock: true })).id;
+			if (path === 'info.json' && !lateLockError) {
+				try {
+					await Note.save({ title: 'late', body: 'late body', is_locked: 1 }, { useNoteLock: true });
+				} catch (error) {
+					lateLockError = error;
+				}
+			}
 			return realPut(path, content, options);
 		});
 		try {
-			await expect(synchronizerStart(null, { throwOnError: true })).rejects.toMatchObject({ code: ErrorCode.NoteLockKeyConflict });
+			await synchronizerStart(null, { throwOnError: true });
 		} finally {
 			putSpy.mockRestore();
 		}
 
-		expect(NoteLockKey.instance().load()).toEqual(localKey);
-		expect(noteLockKeyConflict()?.noteLockKey).toEqual(remoteKey);
-		const key = await NoteLockKey.instance().decrypt('222222');
-		expect((await NoteLockNote.decryptBody(await Note.load(lateNoteId), key)).body).toBe('late body');
+		expect(lateLockError?.message).toBe('Note lock session is locked');
+		expect(NoteLockKey.instance().load()).toEqual(remoteKey);
+		expect(noteLockKeyConflict()).toBeNull();
 	});
 
 	it('should keep a reset that lands mid-sync for the next sync instead of clearing its flag', async () => {

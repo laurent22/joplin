@@ -551,18 +551,23 @@ export default class Synchronizer {
 					const previousE2EE = localInfo.e2ee;
 					logger.info('Sync target info differs between local and remote - merging infos: ', newInfo.toObject());
 
+					// The checks above let the target key replace the local one, so it is adopted before the upload: a note locked
+					// from now on is encrypted with the key the target holds.
+					if (localInfo.noteLockKey && newInfo.noteLockKey?.id !== localInfo.noteLockKey.id) {
+						const adoptedInfo = localSyncInfo();
+						adoptedInfo.noteLockKey = localInfo.noteLockKey = newInfo.noteLockKey;
+						adoptedInfo.syncMigrationId = localInfo.syncMigrationId = newInfo.syncMigrationId;
+						saveLocalSyncInfo(adoptedInfo);
+					}
+
 					await this.lockHandler().acquireLock(LockType.Exclusive, this.lockClientType(), this.clientId_, { clearExistingSyncLocksFromTheSameClient: true });
 					// Must stay immediately before the upload. Sync locks are disabled (the lock above does nothing), so another device can
 					// upload its own info.json after this sync fetched the target's, for example a password reset, which the upload below
 					// would revert to the old key.
 					checkRemoteNoteLockKeyUnchanged(remoteInfo, await fetchSyncInfo(this.api()));
 					await uploadSyncInfo(this.api(), newInfo);
-					// A reset or password change on this device during the upload would be overwritten by the save below, and a note
-					// locked meanwhile may depend on the local key that is about to be replaced.
+					// A reset or password change on this device during the upload would be overwritten by the save below.
 					checkNoteLockKeyUnchanged(localInfo);
-					if (localInfo.noteLockKey && newInfo.noteLockKey?.id !== localInfo.noteLockKey.id) {
-						checkNoteLockKeyConflict(localInfo, remoteInfo, await Note.hasLockedNotes(), staleReset);
-					}
 					await saveLocalSyncInfo(newInfo);
 					reconciledNoteLockKeyId = newInfo.noteLockKey?.id;
 					await this.lockHandler().releaseLock(LockType.Exclusive, this.lockClientType(), this.clientId_);
