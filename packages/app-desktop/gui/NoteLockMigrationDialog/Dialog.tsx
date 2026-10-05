@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Dispatch } from 'redux';
 import { useCallback, useState } from 'react';
-import { _, _n } from '@joplin/lib/locale';
+import { _ } from '@joplin/lib/locale';
 import DialogButtonRow, { ClickEvent } from '../DialogButtonRow';
 import Dialog from '@joplin/lib/components/Dialog';
 import DialogTitle from '../DialogTitle';
 import LabelledPasswordInput from '../PasswordInput/LabelledPasswordInput';
-import { finishNoteLockKeyMigration, migrateLockedNotes } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
+import { finishNoteLockKeyMigration, startNoteLockKeyMigration } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
 import bridge from '../../services/bridge';
 
 interface Props {
@@ -18,7 +18,6 @@ export default function(props: Props) {
 	const [localPassword, setLocalPassword] = useState('');
 	const [targetPassword, setTargetPassword] = useState('');
 	const [migrating, setMigrating] = useState(false);
-	const [failedCount, setFailedCount] = useState(0);
 	const [errorMessage, setErrorMessage] = useState('');
 
 	const onClose = useCallback(() => {
@@ -44,7 +43,8 @@ export default function(props: Props) {
 
 		if (event.buttonName === 'skip') {
 			if (!bridge().showConfirmMessageBox(_('Notes still locked with the password of this device will become permanently unreadable. Continue without migrating them?'))) return;
-			await finishNoteLockKeyMigration(true);
+			finishNoteLockKeyMigration();
+			props.dispatch({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: null });
 			onClose();
 			return;
 		}
@@ -52,20 +52,14 @@ export default function(props: Props) {
 		if (event.buttonName === 'ok') {
 			setMigrating(true);
 			setErrorMessage('');
-			let remaining = 0;
 			try {
-				const result = await migrateLockedNotes(localPassword, targetPassword);
-				remaining = result.failed || await finishNoteLockKeyMigration(false);
+				await startNoteLockKeyMigration(localPassword, targetPassword, props.dispatch, onClose);
 			} catch (error) {
 				setErrorMessage(error.name === 'OperationError' ? _('Invalid password') : error.message);
 				setMigrating(false);
-				return;
 			}
-			setMigrating(false);
-			setFailedCount(remaining);
-			if (!remaining) onClose();
 		}
-	}, [localPassword, targetPassword, onClose]);
+	}, [localPassword, targetPassword, onClose, props.dispatch]);
 
 	return (
 		<Dialog onCancel={migrating ? undefined : onClose} className="note-lock-migration-dialog">
@@ -83,13 +77,12 @@ export default function(props: Props) {
 						value={targetPassword}
 						onChange={onTargetPasswordChange}
 					/>
-					{!!failedCount && <p className="error-message" role="alert">{_n('%d locked note could not be migrated. Please try again, or skip it to continue without it.', '%d locked notes could not be migrated. Please try again, or skip them to continue without them.', failedCount, failedCount)}</p>}
 					{!!errorMessage && <p className="error-message" role="alert">{errorMessage}</p>}
 				</div>
 				<DialogButtonRow
 					themeId={props.themeId}
 					onClick={onButtonRowClick}
-					okButtonLabel={failedCount ? _('Retry') : _('Migrate')}
+					okButtonLabel={_('Migrate')}
 					okButtonDisabled={!localPassword || !targetPassword || migrating}
 					cancelButtonDisabled={migrating}
 					customButtons={[{ name: 'skip', label: _('Skip'), disabled: migrating }]}

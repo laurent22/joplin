@@ -6,7 +6,7 @@ import checkForUpdates, { isReleaseVersion } from '../checkForUpdates';
 import bridge from '../services/bridge';
 import restart from '../services/restart';
 import invitationRespond from '@joplin/lib/services/share/invitationRespond';
-import { _ } from '@joplin/lib/locale';
+import { _, _n } from '@joplin/lib/locale';
 import { ShareInvitation } from '@joplin/lib/services/share/reducer';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
@@ -16,8 +16,8 @@ import { AppState } from '../app.reducer';
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
-import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
-import type { NoteLockKeyConflict } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import { noteLockKeyConflictFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import { NoteLockMigrationStatus } from '@joplin/lib/reducer';
 import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/config/shouldShowMissingPasswordWarning';
 import { connect } from 'react-redux';
 
@@ -36,6 +36,7 @@ interface Props {
 	hasDisabledSyncItems: boolean;
 	showMissingMasterKeyMessage: boolean;
 	showNoteLockKeyConflictMessage: boolean;
+	noteLockMigrationStatus: NoteLockMigrationStatus|null;
 	mustUpgradeAppMessage: string;
 	syncTargetAppMinVersion: string;
 	shouldSwitchToAppleSiliconVersion: boolean;
@@ -82,6 +83,13 @@ const WarningBanner: React.FC<Props> = props => {
 		props.dispatch({
 			type: 'DIALOG_OPEN',
 			name: 'noteLockMigration',
+		});
+	};
+
+	const onDismissNoteLockMigrationStatus = () => {
+		props.dispatch({
+			type: 'NOTE_LOCK_MIGRATION_STATUS_SET',
+			value: null,
 		});
 	};
 
@@ -151,6 +159,21 @@ const WarningBanner: React.FC<Props> = props => {
 			_('The synchronisation password is missing.'),
 			_('Set the password'),
 			onViewSyncSettingsScreen,
+		);
+	} else if (props.noteLockMigrationStatus?.running) {
+		msg = renderNotificationMessage(_('Re-encrypting your locked notes with the synced key. Migration is in progress...'));
+	} else if (props.noteLockMigrationStatus?.failed) {
+		const failed = props.noteLockMigrationStatus.failed;
+		msg = renderNotificationMessage(
+			_n('%d locked note could not be migrated.', '%d locked notes could not be migrated.', failed, failed),
+			_('Retry'),
+			onMigrateLockedNotes,
+		);
+	} else if (props.noteLockMigrationStatus) {
+		msg = renderNotificationMessage(
+			_('The migration of your locked notes has completed.'),
+			_('Dismiss'),
+			onDismissNoteLockMigrationStatus,
 		);
 	} else if (props.showNoteLockKeyConflictMessage) {
 		msg = renderNotificationMessage(
@@ -299,7 +322,8 @@ const mapStateToProps = (state: AppState) => {
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
 		hasDisabledEncryptionItems: state.hasDisabledEncryptionItems,
 		showMissingMasterKeyMessage: showMissingMasterKeyMessage(syncInfo, state.notLoadedMasterKeys),
-		showNoteLockKeyConflictMessage: isNoteLockEnabled() && !!(state.settings['noteLock.conflictNoteLockKey'] as Partial<NoteLockKeyConflict>)?.noteLockKey,
+		showNoteLockKeyConflictMessage: noteLockKeyConflictFromState(state),
+		noteLockMigrationStatus: state.noteLockMigrationStatus,
 		showNeedUpgradingMasterKeyMessage: showNeedUpgradingEnabledMasterKeyMessage,
 		showShouldReencryptMessage: state.settings['encryption.shouldReencrypt'] >= Setting.SHOULD_REENCRYPT_YES,
 		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,

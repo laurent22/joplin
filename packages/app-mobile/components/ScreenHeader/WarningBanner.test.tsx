@@ -149,6 +149,28 @@ describe('WarningBanner', () => {
 		expect(mock.getRouteName()).toBe('NoteLockMigration');
 	});
 
+	test('the note lock migration banner should follow the run and be dismissed once it has completed', () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		Setting.setValue('noteLock.conflictNoteLockKey', { noteLockKey: { id: 'sync-target-key' }, syncMigrationId: 'lineage' });
+		const mock = createMockStore();
+		const setStatus = (value: unknown) => act(() => {
+			mock.store.dispatch({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value });
+		});
+		render(<WarningBannerWrapper store={mock.store}/>);
+
+		setStatus({ running: true, failed: 0 });
+		expect(screen.getByText(/Migration is in progress/)).toBeVisible();
+		expect(screen.queryByText(/different note lock key/)).toBeNull();
+
+		setStatus({ running: false, failed: 2 });
+		fireEvent.press(screen.getByText(/2 locked notes could not be migrated/));
+		expect(mock.getRouteName()).toBe('NoteLockMigration');
+
+		setStatus({ running: false, failed: 0 });
+		fireEvent.press(screen.getByText(/has completed/));
+		expect(mock.store.getState().noteLockMigrationStatus).toBeNull();
+	});
+
 	test('invalid credentials banner for Joplin Cloud should link to a login screen', () => {
 		Setting.setValue('sync.target', 10);
 		const mock = createMockStore();

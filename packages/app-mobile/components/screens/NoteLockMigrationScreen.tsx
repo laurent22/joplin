@@ -4,9 +4,9 @@ import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { themeStyle } from '../global-style';
-import { _, _n } from '@joplin/lib/locale';
+import { _ } from '@joplin/lib/locale';
 import shim from '@joplin/lib/shim';
-import { finishNoteLockKeyMigration, migrateLockedNotes } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
+import { finishNoteLockKeyMigration, startNoteLockKeyMigration } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
 import ScreenHeader from '../ScreenHeader';
 import { PrimaryButton, SecondaryButton } from '../buttons';
 import { AppState } from '../../utils/types';
@@ -21,7 +21,6 @@ export const NoteLockMigrationScreenComponent: React.FC<Props> = props => {
 	const [localPassword, setLocalPassword] = useState('');
 	const [targetPassword, setTargetPassword] = useState('');
 	const [migrating, setMigrating] = useState(false);
-	const [failedCount, setFailedCount] = useState(0);
 	const [errorMessage, setErrorMessage] = useState('');
 
 	const theme = useMemo(() => themeStyle(props.themeId), [props.themeId]);
@@ -59,7 +58,7 @@ export const NoteLockMigrationScreenComponent: React.FC<Props> = props => {
 		});
 	}, [theme]);
 
-	// Leaving mid-run would let the migration finish and navigate from under whatever screen replaced this one.
+	// Leaving while the passwords are checked would let the run start and navigate from under whatever screen replaced this one.
 	useEffect(() => {
 		if (!migrating) return () => {};
 		const handler = () => true;
@@ -71,23 +70,18 @@ export const NoteLockMigrationScreenComponent: React.FC<Props> = props => {
 	const onMigrate = useCallback(async () => {
 		setMigrating(true);
 		setErrorMessage('');
-		let remaining = 0;
 		try {
-			const result = await migrateLockedNotes(localPassword, targetPassword);
-			remaining = result.failed || await finishNoteLockKeyMigration(false);
+			await startNoteLockKeyMigration(localPassword, targetPassword, props.dispatch, () => props.dispatch({ type: 'NAV_BACK' }));
 		} catch (error) {
 			setErrorMessage(error.name === 'OperationError' ? _('Invalid password') : error.message);
 			setMigrating(false);
-			return;
 		}
-		setMigrating(false);
-		setFailedCount(remaining);
-		if (!remaining) props.dispatch({ type: 'NAV_BACK' });
 	}, [localPassword, targetPassword, props.dispatch]);
 
 	const onSkip = useCallback(async () => {
 		if (!await shim.showConfirmationDialog(_('Notes still locked with the password of this device will become permanently unreadable. Continue without migrating them?'))) return;
-		await finishNoteLockKeyMigration(true);
+		finishNoteLockKeyMigration();
+		props.dispatch({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: null });
 		props.dispatch({ type: 'NAV_BACK' });
 	}, [props.dispatch]);
 
@@ -125,10 +119,9 @@ export const NoteLockMigrationScreenComponent: React.FC<Props> = props => {
 					value={targetPassword}
 					onChangeText={setTargetPassword}
 				/>
-				{!!failedCount && <Text style={styles.errorText} role='alert'>{_n('%d locked note could not be migrated. Please try again, or skip it to continue without it.', '%d locked notes could not be migrated. Please try again, or skip them to continue without them.', failedCount, failedCount)}</Text>}
 				{!!errorMessage && <Text style={styles.errorText} role='alert'>{errorMessage}</Text>}
 				<View style={styles.buttonContainer}>
-					<PrimaryButton onPress={onMigrate} disabled={!localPassword || !targetPassword || migrating}>{failedCount ? _('Retry') : _('Migrate')}</PrimaryButton>
+					<PrimaryButton onPress={onMigrate} disabled={!localPassword || !targetPassword || migrating}>{_('Migrate')}</PrimaryButton>
 					<SecondaryButton onPress={onSkip} disabled={migrating}>{_('Skip')}</SecondaryButton>
 				</View>
 			</View>

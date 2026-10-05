@@ -3,7 +3,7 @@ import { Store } from 'redux';
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
-import { finishNoteLockKeyMigration, migrateLockedNotes } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
+import { finishNoteLockKeyMigration, startNoteLockKeyMigration } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
 import { NoteLockMigrationScreenComponent } from './NoteLockMigrationScreen';
 import TestProviderStack from '../testing/TestProviderStack';
 import createMockReduxStore from '../../utils/testing/createMockReduxStore';
@@ -13,11 +13,11 @@ import { fireEvent, render, screen, waitFor } from '../../utils/testing/testingL
 import BackButtonService from '../../services/BackButtonService';
 
 jest.mock('@joplin/lib/services/noteLock/NoteLockKeyMigration', () => ({
-	migrateLockedNotes: jest.fn(),
+	startNoteLockKeyMigration: jest.fn(),
 	finishNoteLockKeyMigration: jest.fn(),
 }));
 
-const migrateMock = migrateLockedNotes as jest.Mock;
+const startMock = startNoteLockKeyMigration as jest.Mock;
 const finishMock = finishNoteLockKeyMigration as jest.Mock;
 
 let store: Store<AppState>;
@@ -40,49 +40,24 @@ describe('NoteLockMigrationScreen', () => {
 		store = createMockReduxStore();
 		setupGlobalStore(store);
 		jest.clearAllMocks();
-		finishMock.mockResolvedValue(0);
 	});
 	afterEach(() => {
 		screen.unmount();
 	});
 
-	test('should adopt the sync target key and leave once every note is migrated', async () => {
-		migrateMock.mockResolvedValue({ migrated: 2, skipped: 0, failed: 0 });
+	test('should go back once both passwords are accepted and leave the run to the banner', async () => {
+		startMock.mockImplementation(async (_local: string, _target: string, _dispatch: unknown, onStarted: ()=> void) => onStarted());
 		const dispatch = renderScreen();
 
 		fireEvent.press(screen.getByText('Migrate'));
 
-		await waitFor(() => expect(finishMock).toHaveBeenCalled());
-		expect(migrateMock).toHaveBeenCalledWith('local', 'target');
-		expect(dispatch).toHaveBeenCalledWith({ type: 'NAV_BACK' });
-	});
-
-	test('should keep the local key and offer a retry when notes fail to migrate', async () => {
-		migrateMock.mockResolvedValue({ migrated: 1, skipped: 0, failed: 2 });
-		const dispatch = renderScreen();
-
-		fireEvent.press(screen.getByText('Migrate'));
-
-		expect(await screen.findByRole('alert')).toHaveTextContent(/2 locked notes could not be migrated/);
-		expect(screen.getByText('Retry')).toBeVisible();
+		await waitFor(() => expect(dispatch).toHaveBeenCalledWith({ type: 'NAV_BACK' }));
+		expect(startMock).toHaveBeenCalledWith('local', 'target', dispatch, expect.any(Function));
 		expect(finishMock).not.toHaveBeenCalled();
-		expect(dispatch).not.toHaveBeenCalled();
 	});
 
-	test('should keep the local key and offer a retry when a note is still locked with it at the end', async () => {
-		migrateMock.mockResolvedValue({ migrated: 1, skipped: 0, failed: 0 });
-		finishMock.mockResolvedValue(1);
-		const dispatch = renderScreen();
-
-		fireEvent.press(screen.getByText('Migrate'));
-
-		expect(await screen.findByRole('alert')).toHaveTextContent(/1 locked note could not be migrated/);
-		expect(screen.getByText('Retry')).toBeVisible();
-		expect(dispatch).not.toHaveBeenCalled();
-	});
-
-	test('should block going back while the migration runs', async () => {
-		migrateMock.mockReturnValue(new Promise(() => {}));
+	test('should block going back while the passwords are checked', async () => {
+		startMock.mockReturnValue(new Promise(() => {}));
 		renderScreen();
 		expect(screen.getByLabelText('Back')).toBeVisible();
 
@@ -102,14 +77,14 @@ describe('NoteLockMigrationScreen', () => {
 		expect(screen.queryByText(/Press to migrate/)).toBeNull();
 	});
 
-	test('should report a wrong password without adopting anything', async () => {
-		migrateMock.mockRejectedValue(Object.assign(new Error('bad'), { name: 'OperationError' }));
-		renderScreen();
+	test('should report a wrong password and stay', async () => {
+		startMock.mockRejectedValue(Object.assign(new Error('bad'), { name: 'OperationError' }));
+		const dispatch = renderScreen();
 
 		fireEvent.press(screen.getByText('Migrate'));
 
 		expect(await screen.findByRole('alert')).toHaveTextContent('Invalid password');
-		expect(finishMock).not.toHaveBeenCalled();
+		expect(dispatch).not.toHaveBeenCalled();
 	});
 
 	test('should adopt the sync target key when skipping after the warning', async () => {
@@ -119,7 +94,8 @@ describe('NoteLockMigrationScreen', () => {
 		fireEvent.press(screen.getByText('Skip'));
 
 		await waitFor(() => expect(dispatch).toHaveBeenCalledWith({ type: 'NAV_BACK' }));
-		expect(finishMock).toHaveBeenCalledWith(true);
-		expect(migrateMock).not.toHaveBeenCalled();
+		expect(finishMock).toHaveBeenCalled();
+		expect(dispatch).toHaveBeenCalledWith({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: null });
+		expect(startMock).not.toHaveBeenCalled();
 	});
 });

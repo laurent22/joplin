@@ -1,6 +1,7 @@
 import NoteLockKey, { DecryptedNoteLockKey } from './NoteLockKey';
 import eventManager, { EventName } from '../../eventManager';
 import { noteLockKeyConflict } from '../synchronizer/syncInfoUtils';
+import { _ } from '../../locale';
 
 export default class NoteLockSession {
 
@@ -30,6 +31,7 @@ export default class NoteLockSession {
 	// check covers it.
 	public async unlock(password: string) {
 		if (this.rotating_) throw new Error('Cannot unlock: a note lock key reset is in progress');
+		if (noteLockKeyConflict()) throw new Error(_('This note cannot be read while a note lock key migration is in progress.'));
 		const generation = this.lockGeneration_;
 		const decrypted = await this.noteLockKey_.decrypt(password);
 		if (this.lockGeneration_ !== generation) throw new Error('Cannot unlock: the session was locked while unlocking');

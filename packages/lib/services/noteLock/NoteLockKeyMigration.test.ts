@@ -9,7 +9,7 @@ import NoteLockKey, { DecryptedNoteLockKey } from './NoteLockKey';
 import NoteLockNote from './NoteLockNote';
 import NoteLockService from './NoteLockService';
 import NoteLockSession from './NoteLockSession';
-import { finishNoteLockKeyMigration, migrateLockedNotes } from './NoteLockKeyMigration';
+import { finishNoteLockKeyMigration, migrateLockedNotes, startNoteLockKeyMigration } from './NoteLockKeyMigration';
 import eventManager, { EventName, NoteLockSessionChangeEvent } from '../../eventManager';
 
 const localPassword = '111111';
@@ -119,7 +119,7 @@ describe('NoteLockKeyMigration', () => {
 		eventManager.on(EventName.NoteLockSessionChange, listener);
 
 		try {
-			expect(await finishNoteLockKeyMigration(false)).toBe(0);
+			finishNoteLockKeyMigration();
 
 			// The lock is announced right away rather than on the next session check, so the UI follows.
 			expect(events).toEqual([{ unlocked: false }]);
@@ -134,34 +134,37 @@ describe('NoteLockKeyMigration', () => {
 		}
 	});
 
-	it('should not adopt the target key while a note is still locked with the local key', async () => {
-		await Note.save({ title: 'one', body: 'one', is_locked: 1 }, { useNoteLock: true });
-		await migrateLockedNotes(localPassword, targetPassword);
-		// An editor that still holds the local key saves after the migration passed its note.
-		const lateNote = await Note.save({ title: 'late', body: 'late', is_locked: 1 }, { useNoteLock: true });
+	it('should report a background run that starts once the passwords are accepted', async () => {
+		const note = await Note.save({ title: 'one', body: 'one', is_locked: 1 }, { useNoteLock: true });
+		const dispatch = jest.fn();
+		const onStarted = jest.fn();
 
-		expect(await finishNoteLockKeyMigration(false)).toBe(1);
-		expect(NoteLockKey.instance().load().id).toBe(decryptedLocalKey.id);
+		await expect(startNoteLockKeyMigration(localPassword, 'wrong', dispatch, onStarted)).rejects.toThrow();
+		expect(onStarted).not.toHaveBeenCalled();
+		expect(dispatch).not.toHaveBeenCalled();
+
+		const corruptNote = await Note.save({ title: 'corrupt', body: `${(await Note.load(note.id)).body.slice(0, -8)}xxxxxxxx`, is_locked: 1 });
+		await startNoteLockKeyMigration(localPassword, targetPassword, dispatch, onStarted);
+		expect(onStarted).toHaveBeenCalledTimes(1);
+		expect(dispatch.mock.calls).toEqual([
+			[{ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: { running: true, failed: 0 } }],
+			[{ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: { running: false, failed: 1 } }],
+		]);
 		expect(noteLockKeyConflict()).not.toBeNull();
 
-		expect(await migrateLockedNotes(localPassword, targetPassword)).toEqual({ migrated: 1, skipped: 0, failed: 0 });
-		expect(await finishNoteLockKeyMigration(false)).toBe(0);
+		await Note.delete(corruptNote.id);
+		dispatch.mockClear();
+		await startNoteLockKeyMigration(localPassword, targetPassword, dispatch, onStarted);
+		expect(dispatch).toHaveBeenLastCalledWith({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: { running: false, failed: 0 } });
 		expect(NoteLockKey.instance().load()).toEqual(targetKey);
-		expect(await bodyDecryptedWith(lateNote.id, decryptedTargetKey)).toBe('late');
-	});
-
-	it('should adopt the target key anyway when the loss is accepted', async () => {
-		await Note.save({ title: 'one', body: 'one', is_locked: 1 }, { useNoteLock: true });
-
-		expect(await finishNoteLockKeyMigration(true)).toBe(0);
-		expect(NoteLockKey.instance().load()).toEqual(targetKey);
+		expect(await bodyDecryptedWith(note.id, decryptedTargetKey)).toBe('one');
 	});
 
 	it('should refuse to migrate or finish without a parked key', async () => {
 		Setting.setValue('noteLock.conflictNoteLockKey', {});
 
 		await expect(migrateLockedNotes(localPassword, targetPassword)).rejects.toThrow('No note lock key conflict');
-		await expect(finishNoteLockKeyMigration(false)).rejects.toThrow('No note lock key conflict');
+		expect(() => finishNoteLockKeyMigration()).toThrow('No note lock key conflict');
 		expect(NoteLockKey.instance().load().id).toBe(decryptedLocalKey.id);
 	});
 });

@@ -1,4 +1,5 @@
 import Logger from '@joplin/utils/Logger';
+import { Dispatch } from 'redux';
 import Note from '../../models/Note';
 import EncryptionService from '../e2ee/EncryptionService';
 import { adoptNoteLockKeyConflict, noteLockKeyConflict } from '../synchronizer/syncInfoUtils';
@@ -17,7 +18,8 @@ export interface NoteLockKeyMigrationResult {
 
 // Re-encrypts the notes locked with the local key to the parked target key; notes already under it are left
 // alone, so a retry only touches the rest. The local key stays until finish, so an interrupted run loses nothing.
-export const migrateLockedNotes = async (localPassword: string, targetPassword: string) => {
+// onStarted runs once both passwords are accepted.
+export const migrateLockedNotes = async (localPassword: string, targetPassword: string, onStarted: ()=> void = null) => {
 	if (!isNoteLockEnabled()) throw new Error('Note lock is not enabled');
 	const conflict = noteLockKeyConflict();
 	if (!conflict) throw new Error('No note lock key conflict to migrate');
@@ -27,6 +29,7 @@ export const migrateLockedNotes = async (localPassword: string, targetPassword: 
 		id: conflict.noteLockKey.id,
 		plainText: await encryptionService.decryptMasterKeyContent(conflict.noteLockKey, targetPassword),
 	};
+	onStarted?.();
 
 	const result: NoteLockKeyMigrationResult = { migrated: 0, skipped: 0, failed: 0 };
 	for (const noteId of await Note.lockedNoteIds()) {
@@ -49,28 +52,20 @@ export const migrateLockedNotes = async (localPassword: string, targetPassword: 
 	return result;
 };
 
-const countNotesUnderKey = async (keyId: string) => {
-	const encryptionService = EncryptionService.instance();
-	let count = 0;
-	for (const noteId of await Note.lockedNoteIds()) {
-		const { body } = await Note.load(noteId, { fields: ['id', 'body'] });
-		try {
-			if ((await encryptionService.decodeHeaderString(body)).masterKeyId === keyId) count++;
-		} catch (error) {
-			logger.warn(`Could not read the key of note ${noteId}:`, error);
-		}
-	}
-	return count;
-};
-
-// Adopts the target key and lineage, unless a note is still locked with the local key (an editor can re-save one
-// after the migration passed it): then nothing is adopted and their count comes back, so the UI can offer a retry.
-export const finishNoteLockKeyMigration = async (acceptLoss: boolean) => {
-	if (!acceptLoss) {
-		const remaining = await countNotesUnderKey(NoteLockKey.instance().load()?.id);
-		if (remaining) return remaining;
-	}
+// The session is locked when the target key is parked and cannot be unlocked until it is adopted, so no locked note is
+// saved with the local key once a run starts, and after a run with no failures none is left under it.
+export const finishNoteLockKeyMigration = () => {
 	adoptNoteLockKeyConflict();
 	NoteLockSession.instance().lock();
-	return 0;
+};
+
+// Runs in the background once both passwords are accepted, so the app stays usable, and reports its progress for the
+// banners. A run with failures keeps the target key parked for a retry or a skip.
+export const startNoteLockKeyMigration = async (localPassword: string, targetPassword: string, dispatch: Dispatch, onStarted: ()=> void) => {
+	const result = await migrateLockedNotes(localPassword, targetPassword, () => {
+		onStarted();
+		dispatch({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: { running: true, failed: 0 } });
+	});
+	if (!result.failed) finishNoteLockKeyMigration();
+	dispatch({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: { running: false, failed: result.failed } });
 };

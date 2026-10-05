@@ -113,7 +113,7 @@ describe('Synchronizer.noteLock', () => {
 		}
 
 		expect(await migrateLockedNotes('222222', '333333')).toEqual({ migrated: 1, skipped: 0, failed: 0 });
-		await finishNoteLockKeyMigration(false);
+		finishNoteLockKeyMigration();
 		expect(Setting.value('noteLock.passwordReset')).toBe(false);
 		expect(Setting.value('noteLock.keyIdToReset')).toBe('');
 		await synchronizerStart(null, { throwOnError: true });
@@ -153,6 +153,7 @@ describe('Synchronizer.noteLock', () => {
 		const localKey = await NoteLockKey.instance().create('222222');
 		const localSyncMigrationId = localSyncInfo().syncMigrationId;
 		await Note.save({ title: 'locked', is_locked: 1 });
+		await NoteLockSession.instance().unlock('222222');
 
 		for (let i = 0; i < 2; i++) {
 			await expect(synchronizerStart(null, { throwOnError: true })).rejects.toMatchObject({ code: ErrorCode.NoteLockKeyConflict });
@@ -161,6 +162,9 @@ describe('Synchronizer.noteLock', () => {
 			expect(await remoteNoteLockKeyId()).toBe(remoteKey.id);
 			expect(Setting.value('noteLock.conflictNoteLockKey')).toEqual({ noteLockKey: remoteKey, syncMigrationId: remoteSyncMigrationId });
 		}
+
+		expect(NoteLockSession.instance().isUnlocked()).toBe(false);
+		await expect(NoteLockSession.instance().unlock('222222')).rejects.toThrow('note lock key migration is in progress');
 	});
 
 	it('should drop a local key that no note depends on and adopt the sync target key', async () => {
@@ -210,7 +214,7 @@ describe('Synchronizer.noteLock', () => {
 		await expect(synchronizerStart(null, { throwOnError: true })).rejects.toMatchObject({ code: ErrorCode.NoteLockKeyConflict });
 
 		expect(await migrateLockedNotes('222222', '111111')).toEqual({ migrated: 1, skipped: 0, failed: 0 });
-		await finishNoteLockKeyMigration(false);
+		finishNoteLockKeyMigration();
 		await synchronizerStart(null, { throwOnError: true });
 		expect(NoteLockKey.instance().load()).toEqual(remoteKey);
 		expect(localSyncInfo().syncMigrationId).toBe(remoteSyncMigrationId);
@@ -392,7 +396,7 @@ describe('Synchronizer.noteLock', () => {
 		await Note.save({ title: 'secret', body: 'secret body', is_locked: 1 }, { useNoteLock: true });
 		await expect(synchronizerStart(null, { throwOnError: true })).rejects.toMatchObject({ code: ErrorCode.NoteLockKeyConflict });
 		await migrateLockedNotes('222222', '111111');
-		duringTheLockedNotesCheck(() => finishNoteLockKeyMigration(false));
+		duringTheLockedNotesCheck(async () => finishNoteLockKeyMigration());
 
 		await expect(synchronizerStart(null, { throwOnError: true })).rejects.toThrow('changed on this device');
 		expect(noteLockKeyConflict()).toBeNull();

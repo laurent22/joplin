@@ -18,6 +18,7 @@ import ResourceService from './services/ResourceService';
 import RevisionService from './services/RevisionService';
 import isNoteLockEnabled from './services/noteLock/isNoteLockEnabled';
 import NoteLockNote from './services/noteLock/NoteLockNote';
+import NoteLockSession from './services/noteLock/NoteLockSession';
 import EncryptionService from './services/e2ee/EncryptionService';
 import JoplinError from './JoplinError';
 import ShareService from './services/share/ShareService';
@@ -619,6 +620,9 @@ export default class Synchronizer {
 				if (error.code === 'outdatedSyncTarget') {
 					Setting.setValue('sync.upgradeState', Setting.SYNC_UPGRADE_STATE_SHOULD_DO);
 				}
+				// Locked notes stay closed in every window until the migration adopts the target key, so none is saved
+				// with the local key after the migration has passed it.
+				if (error.code === ErrorCode.NoteLockKeyConflict) NoteLockSession.instance().lock();
 				throw error;
 			}
 

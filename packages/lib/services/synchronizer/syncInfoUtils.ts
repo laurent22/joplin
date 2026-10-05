@@ -643,6 +643,10 @@ export const noteLockKeyConflict = (): NoteLockKeyConflict | null => {
 	return conflict.noteLockKey ? conflict as NoteLockKeyConflict : null;
 };
 
+export const noteLockKeyConflictFromState = (state: State) => {
+	return isNoteLockEnabled() && !!(state.settings[noteLockKeyConflictSettingKey] as Partial<NoteLockKeyConflict>)?.noteLockKey;
+};
+
 // Replaces the local key and lineage with the sync target's, so callers migrate first or warn: notes still locked
 // with the local key become unreadable. A pending reset belonged to the dropped lineage, so it is cleared too.
 export const adoptNoteLockKeyConflict = () => {
