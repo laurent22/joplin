@@ -268,4 +268,29 @@ describe('renderTables', () => {
 		}
 	});
 
+	test.each([
+		{ key: 'Enter', isComposing: true },
+		{ key: 'Tab', isComposing: true },
+		{ key: 'Enter', isComposing: false },
+	])('pressing $key with isComposing=$isComposing should only update the table when not composing', async ({ key, isComposing }) => {
+		const initialMarkdown = '| a | b |\n|---|---|\n| x | y |';
+		const editor = await createEditor(initialMarkdown);
+		document.body.appendChild(editor.dom);
+
+		try {
+			const cell = findCellTextDivs(editor)[0];
+			focusCell(cell);
+			cell.textContent = 'pending';
+
+			const event = new KeyboardEvent('keydown', { key, isComposing, cancelable: true, bubbles: true });
+			cell.dispatchEvent(event);
+
+			expect(event.defaultPrevented).toBe(!isComposing);
+			expect(editor.state.doc.toString() === initialMarkdown).toBe(isComposing);
+			expect(findCellTextDivs(editor)[0] === cell).toBe(isComposing);
+		} finally {
+			editor.destroy();
+		}
+	});
+
 });

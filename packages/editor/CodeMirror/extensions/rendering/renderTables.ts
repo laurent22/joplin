@@ -464,6 +464,8 @@ class TableWidget extends WidgetType {
 			};
 
 			textDiv.onkeydown = (e) => {
+				if (isComposing || e.isComposing) return;
+
 				// Block newlines — not allowed in markdown table cells
 				if (e.key === 'Enter' && e.shiftKey) {
 					e.preventDefault();
