@@ -12613,7 +12613,7 @@ __metadata:
     "@react-native-community/cli": "npm:20.0.0"
     "@react-native-community/cli-platform-android": "npm:20.0.0"
     "@react-native-community/cli-platform-ios": "npm:20.0.0"
-    "@react-native-community/datetimepicker": "npm:8.6.0"
+    "@react-native-community/datetimepicker": "npm:9.1.0"
     "@react-native-community/geolocation": "npm:3.4.0"
     "@react-native-community/netinfo": "npm:12.0.1"
     "@react-native-community/push-notification-ios": "npm:1.12.0"
@@ -12788,7 +12788,7 @@ __metadata:
     jest-environment-jsdom: "npm:29.7.0"
     orderedmap: "npm:2.1.1"
     prosemirror-commands: "npm:1.7.1"
-    prosemirror-dropcursor: "npm:1.8.2"
+    prosemirror-dropcursor: "npm:1.8.3"
     prosemirror-example-setup: "npm:1.2.3"
     prosemirror-gapcursor: "npm:1.4.0"
     prosemirror-history: "npm:1.5.0"
@@ -13119,7 +13119,7 @@ __metadata:
     "@types/markdown-it": "npm:13.0.9"
     "@types/mustache": "npm:4.2.6"
     "@types/node": "npm:22.19.21"
-    "@types/nodemailer": "npm:6.4.24"
+    "@types/nodemailer": "npm:7.0.12"
     "@types/qrcode": "npm:1.5.6"
     "@types/uuid": "npm:11.0.0"
     "@types/yargs": "npm:17.0.35"
@@ -15990,9 +15990,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/datetimepicker@npm:8.6.0":
-  version: 8.6.0
-  resolution: "@react-native-community/datetimepicker@npm:8.6.0"
+"@react-native-community/datetimepicker@npm:9.1.0":
+  version: 9.1.0
+  resolution: "@react-native-community/datetimepicker@npm:9.1.0"
   dependencies:
     invariant: "npm:^2.2.4"
   peerDependencies:
@@ -16005,7 +16005,7 @@ __metadata:
       optional: true
     react-native-windows:
       optional: true
-  checksum: 10/8d287227ce68aa0a88475de96bd00c6084800d8662b97ebe8a0583bc36cf204ac2f7551bec926fba9b3163b94fc885b9c3049dd544172405aa6d7ffac49ecd7b
+  checksum: 10/b460e55422316e11b1999b0ddd1f2feb39a8f5c85b1ba5520d5c6630b2147e754a4e686ebc3adf44919bc849de85fe9379a4c4452596fea3e394fcb00b461052
   languageName: node
   linkType: hard
 
@@ -19189,12 +19189,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/nodemailer@npm:6.4.24":
-  version: 6.4.24
-  resolution: "@types/nodemailer@npm:6.4.24"
+"@types/nodemailer@npm:7.0.12":
+  version: 7.0.12
+  resolution: "@types/nodemailer@npm:7.0.12"
   dependencies:
     "@types/node": "npm:*"
-  checksum: 10/659be5cc6b379ba8d772d8117c67e5d401df97b729e22c41feb5f560637f704e1d6e56556055322dd9d24d91999be74197b11a83b90f14147ac5421d4f9ac1af
+  checksum: 10/8b5f0eaac68d2b054489a38bfb55a09c75c3ae66e355e624758dcbc88d5345d794691eccdabeb72aa737f7d13d7d74dfdd79f8786f55cd3388c1ec21292d9293
   languageName: node
   linkType: hard
 
@@ -48549,7 +48549,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prosemirror-dropcursor@npm:1.8.2, prosemirror-dropcursor@npm:^1.0.0":
+"prosemirror-dropcursor@npm:1.8.3":
+  version: 1.8.3
+  resolution: "prosemirror-dropcursor@npm:1.8.3"
+  dependencies:
+    prosemirror-state: "npm:^1.0.0"
+    prosemirror-transform: "npm:^1.1.0"
+    prosemirror-view: "npm:^1.1.0"
+  checksum: 10/184ffdcbbf7f3184f37bb8d02f77318f7c8cdd0c8f45346fc7cabc7cb0cad19f8fc76d892e25d00bf54e37e304ced57eecbc290b54d6c0b99e2d057c521440a9
+  languageName: node
+  linkType: hard
+
+"prosemirror-dropcursor@npm:^1.0.0":
   version: 1.8.2
   resolution: "prosemirror-dropcursor@npm:1.8.2"
   dependencies:
