@@ -153,7 +153,6 @@ describe('Synchronizer.noteLock', () => {
 		const localKey = await NoteLockKey.instance().create('222222');
 		const localSyncMigrationId = localSyncInfo().syncMigrationId;
 		await Note.save({ title: 'locked', is_locked: 1 });
-		await NoteLockSession.instance().unlock('222222');
 
 		for (let i = 0; i < 2; i++) {
 			await expect(synchronizerStart(null, { throwOnError: true })).rejects.toMatchObject({ code: ErrorCode.NoteLockKeyConflict });
@@ -162,9 +161,6 @@ describe('Synchronizer.noteLock', () => {
 			expect(await remoteNoteLockKeyId()).toBe(remoteKey.id);
 			expect(Setting.value('noteLock.conflictNoteLockKey')).toEqual({ noteLockKey: remoteKey, syncMigrationId: remoteSyncMigrationId });
 		}
-
-		expect(NoteLockSession.instance().isUnlocked()).toBe(false);
-		await expect(NoteLockSession.instance().unlock('222222')).rejects.toThrow('note lock key migration is in progress');
 	});
 
 	it('should drop a local key that no note depends on and adopt the sync target key', async () => {

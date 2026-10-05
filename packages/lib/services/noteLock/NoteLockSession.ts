@@ -10,6 +10,7 @@ export default class NoteLockSession {
 	private key_: DecryptedNoteLockKey = null;
 	private lockGeneration_ = 0;
 	private rotating_ = false;
+	private migrating_ = false;
 
 	private constructor(private noteLockKey_: NoteLockKey = NoteLockKey.instance()) {}
 
@@ -31,7 +32,7 @@ export default class NoteLockSession {
 	// check covers it.
 	public async unlock(password: string) {
 		if (this.rotating_) throw new Error('Cannot unlock: a note lock key reset is in progress');
-		if (noteLockKeyConflict()) throw new Error(_('This note cannot be read while a note lock key migration is in progress.'));
+		if (this.migrating_) throw new Error(_('This note cannot be read while a note lock key migration is in progress.'));
 		const generation = this.lockGeneration_;
 		const decrypted = await this.noteLockKey_.decrypt(password);
 		if (this.lockGeneration_ !== generation) throw new Error('Cannot unlock: the session was locked while unlocking');
@@ -58,6 +59,12 @@ export default class NoteLockSession {
 			this.lock();
 			this.rotating_ = false;
 		}
+	}
+
+	// Locked notes stay closed in every window while a migration run re-encrypts them.
+	public setMigrating(migrating: boolean) {
+		this.migrating_ = migrating;
+		if (migrating) this.lock();
 	}
 
 	private lockIfKeyChanged_() {

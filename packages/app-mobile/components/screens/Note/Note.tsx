@@ -35,7 +35,6 @@ import shared, { BaseNoteScreenComponent, Props as BaseProps } from '@joplin/lib
 import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
 import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
 import NoteLockKey, { DecryptedNoteLockKey } from '@joplin/lib/services/noteLock/NoteLockKey';
-import { noteLockKeyConflictFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import NoteLockNote from '@joplin/lib/services/noteLock/NoteLockNote';
 import { disableNoteLock, enableNoteLock } from '@joplin/lib/services/noteLock/setNoteLockState';
 import { ErrorCode } from '@joplin/lib/errors';
@@ -135,7 +134,7 @@ interface Props extends BaseProps {
 	canPublish: boolean;
 	noteVisiblePanes: string[];
 	noteLockSessionUnlocked: boolean;
-	noteLockMigrationRequired: boolean;
+	noteLockMigrationRunning: boolean;
 }
 
 interface ComponentProps extends Props {
@@ -1883,7 +1882,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				themeId={this.props.themeId}
 				hasNoteLockKey={!!NoteLockKey.instance().load()}
 				undecryptable={this.state.noteLockUndecryptable}
-				migrationRequired={this.props.noteLockMigrationRequired}
+				migrationRunning={this.props.noteLockMigrationRunning}
 			/>;
 		} else if (editorView) {
 			bodyComponent = renderPluginEditor();
@@ -2193,7 +2192,7 @@ const NoteScreen = connect((state: AppState) => {
 		useEditorBeta: !state.settings['editor.usePlainText'],
 		canPublish: whenClause.joplinServerConnected && !whenClause.inTrash,
 		noteLockSessionUnlocked: state.noteLockSessionUnlocked,
-		noteLockMigrationRequired: noteLockKeyConflictFromState(state),
+		noteLockMigrationRunning: !!state.noteLockMigrationStatus?.running,
 	};
 })(NoteScreenWrapper);
 

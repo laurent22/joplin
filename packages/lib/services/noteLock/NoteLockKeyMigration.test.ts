@@ -147,17 +147,30 @@ describe('NoteLockKeyMigration', () => {
 		await startNoteLockKeyMigration(localPassword, targetPassword, dispatch, onStarted);
 		expect(onStarted).toHaveBeenCalledTimes(1);
 		expect(dispatch.mock.calls).toEqual([
-			[{ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: { running: true, failed: 0 } }],
-			[{ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: { running: false, failed: 1 } }],
+			[{ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: { running: true, failed: 0, skipped: 0 } }],
+			[{ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: { running: false, failed: 1, skipped: 0 } }],
 		]);
 		expect(noteLockKeyConflict()).not.toBeNull();
 
 		await Note.delete(corruptNote.id);
 		dispatch.mockClear();
 		await startNoteLockKeyMigration(localPassword, targetPassword, dispatch, onStarted);
-		expect(dispatch).toHaveBeenLastCalledWith({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: { running: false, failed: 0 } });
+		expect(dispatch).toHaveBeenLastCalledWith({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: { running: false, failed: 0, skipped: 0 } });
 		expect(NoteLockKey.instance().load()).toEqual(targetKey);
 		expect(await bodyDecryptedWith(note.id, decryptedTargetKey)).toBe('one');
+	});
+
+	it('should keep locked notes closed only while a run goes', async () => {
+		await Note.save({ title: 'one', body: 'one', is_locked: 1 }, { useNoteLock: true });
+		let unlockDuringRun: Promise<Error> = null;
+		await migrateLockedNotes(localPassword, targetPassword, () => {
+			expect(NoteLockSession.instance().isUnlocked()).toBe(false);
+			unlockDuringRun = NoteLockSession.instance().unlock(localPassword).then((): Error => null, (error: Error) => error);
+		});
+
+		expect((await unlockDuringRun)?.message).toContain('note lock key migration is in progress');
+		await NoteLockSession.instance().unlock(localPassword);
+		expect(NoteLockSession.instance().isUnlocked()).toBe(true);
 	});
 
 	it('should refuse to migrate or finish without a parked key', async () => {

@@ -4,6 +4,7 @@ import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { themeStyle } from '../../global-style';
 import { _ } from '@joplin/lib/locale';
 import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
+import { noteLockKeyConflict } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import NavService from '@joplin/lib/services/NavService';
 import Icon from '../../Icon';
 import { PrimaryButton } from '../../buttons';
@@ -15,7 +16,7 @@ interface Props {
 	themeId: number;
 	hasNoteLockKey: boolean;
 	undecryptable?: boolean;
-	migrationRequired?: boolean;
+	migrationRunning?: boolean;
 	onUnlocked?: ()=> void;
 }
 
@@ -95,7 +96,7 @@ const NoteLockPanel = (props: Props) => {
 	}, [password, unlocking, props.onUnlocked]);
 
 	const renderForm = () => {
-		if (props.migrationRequired) {
+		if (props.migrationRunning || (props.undecryptable && noteLockKeyConflict())) {
 			return <Text style={styles.message}>{_('This note cannot be read while a note lock key migration is in progress.')}</Text>;
 		}
 

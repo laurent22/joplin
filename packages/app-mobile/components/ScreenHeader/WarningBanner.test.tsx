@@ -158,15 +158,16 @@ describe('WarningBanner', () => {
 		});
 		render(<WarningBannerWrapper store={mock.store}/>);
 
-		setStatus({ running: true, failed: 0 });
+		setStatus({ running: true, failed: 0, skipped: 0 });
 		expect(screen.getByText(/Migration is in progress/)).toBeVisible();
 		expect(screen.queryByText(/different note lock key/)).toBeNull();
 
-		setStatus({ running: false, failed: 2 });
+		setStatus({ running: false, failed: 2, skipped: 0 });
 		fireEvent.press(screen.getByText(/2 locked notes could not be migrated/));
 		expect(mock.getRouteName()).toBe('NoteLockMigration');
 
-		setStatus({ running: false, failed: 0 });
+		setStatus({ running: false, failed: 0, skipped: 1 });
+		expect(screen.getByText(/has completed.*1 locked note was skipped/)).toBeVisible();
 		fireEvent.press(screen.getByText(/has completed/));
 		expect(mock.store.getState().noteLockMigrationStatus).toBeNull();
 	});

@@ -94,6 +94,7 @@ export interface StateLastDeletion {
 export interface NoteLockMigrationStatus {
 	running: boolean;
 	failed: number;
+	skipped: number;
 }
 
 export type HighlightedWord = ComplexTerm|string;

@@ -31,7 +31,6 @@ import { itemIsReadOnly } from '@joplin/lib/models/utils/readOnly';
 import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
 import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
 import hasNoteLockKey from '../utils/hasNoteLockKey';
-import { noteLockKeyConflictFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import NoteLockPanel from './NoteLockPanel/NoteLockPanel';
 import { themeStyle } from '@joplin/lib/theme';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
@@ -782,7 +781,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 						noteTitle={lockedNoteMetadata.title}
 						hasNoteLockKey={props.hasNoteLockKey}
 						dispatch={props.dispatch}
-						migrationRequired={props.noteLockMigrationRequired}
+						migrationRunning={props.noteLockMigrationRunning}
 					/>
 				</div>
 			);
@@ -916,7 +915,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		whiteboardForceMarkdown: windowState.whiteboardForceMarkdown ?? {},
 		noteLockSessionUnlocked: state.noteLockSessionUnlocked,
 		hasNoteLockKey: hasNoteLockKey(state.settings['syncInfoCache']),
-		noteLockMigrationRequired: noteLockKeyConflictFromState(state),
+		noteLockMigrationRunning: !!state.noteLockMigrationStatus?.running,
 		editorNoteReloadTimeRequest: windowState.windowEditorNoteReloadTimeRequest,
 	};
 };

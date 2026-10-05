@@ -8,6 +8,7 @@ import { _, _n } from '@joplin/lib/locale';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
 import { localSyncInfoFromState, noteLockKeyConflictFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { NoteLockMigrationStatus } from '@joplin/lib/reducer';
+import { withSkippedCount } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
 import { Dispatch } from 'redux';
 import Setting from '@joplin/lib/models/Setting';
 import { ShareInvitation, ShareUserStatus } from '@joplin/lib/services/share/reducer';
@@ -133,10 +134,10 @@ const WarningBannerComponent: React.FC<Props> = props => {
 		if (migration?.running) {
 			warningComps.push(renderWarningBox('noteLockMigration', _('Re-encrypting your locked notes with the synced key. Migration is in progress...'), null));
 		} else if (migration?.failed) {
-			warningComps.push(renderWarningBox('noteLockMigration', _n('%d locked note could not be migrated. Press to retry.', '%d locked notes could not be migrated. Press to retry.', migration.failed, migration.failed), { screen: 'NoteLockMigration' }));
+			warningComps.push(renderWarningBox('noteLockMigration', `${withSkippedCount(_n('%d locked note could not be migrated.', '%d locked notes could not be migrated.', migration.failed, migration.failed), migration)} ${_('Press to retry.')}`, { screen: 'NoteLockMigration' }));
 		} else if (migration) {
 			const onDismiss = () => props.dispatch({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: null });
-			warningComps.push(renderWarningBox('noteLockMigration', _('The migration of your locked notes has completed. Press to dismiss.'), { onPress: onDismiss }));
+			warningComps.push(renderWarningBox('noteLockMigration', `${withSkippedCount(_('The migration of your locked notes has completed.'), migration)} ${_('Press to dismiss.')}`, { onPress: onDismiss }));
 		} else if (props.noteLockKeyConflict) {
 			warningComps.push(renderWarningBox('noteLockMigration', _('The sync target uses a different note lock key to the one on your device. Press to migrate your locked notes.'), { screen: 'NoteLockMigration' }));
 		}

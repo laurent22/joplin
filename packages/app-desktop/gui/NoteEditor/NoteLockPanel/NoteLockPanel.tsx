@@ -3,6 +3,7 @@ import { useCallback, useState } from 'react';
 import { Dispatch } from 'redux';
 import { _ } from '@joplin/lib/locale';
 import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
+import { noteLockKeyConflict } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import Button, { ButtonLevel } from '../../Button/Button';
 import LabelledPasswordInput from '../../PasswordInput/LabelledPasswordInput';
 
@@ -11,7 +12,7 @@ interface Props {
 	hasNoteLockKey: boolean;
 	dispatch: Dispatch;
 	undecryptable?: boolean;
-	migrationRequired?: boolean;
+	migrationRunning?: boolean;
 }
 
 export default function NoteLockPanel(props: Props) {
@@ -50,7 +51,7 @@ export default function NoteLockPanel(props: Props) {
 	}, [props.dispatch]);
 
 	const renderAction = () => {
-		if (props.migrationRequired) {
+		if (props.migrationRunning || (props.undecryptable && noteLockKeyConflict())) {
 			return <p className="message">{_('This note cannot be read while a note lock key migration is in progress.')}</p>;
 		}
 
