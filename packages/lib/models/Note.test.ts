@@ -378,6 +378,10 @@ describe('models/Note', () => {
 		await Note.save({ id: note.id, body: 'JLD01 shopping list' });
 		expect((await Note.load(note.id)).body).not.toBe('JLD01 shopping list');
 		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe('JLD01 shopping list');
+
+		// A save while sync still holds the row encrypted is encrypted too, in case decryption never runs.
+		await Note.save({ id: note.id, body: 'before decryption', encryption_applied: 1 });
+		expect((await Note.load(note.id)).body).not.toBe('before decryption');
 	});
 
 	it('should save a note object that the store has frozen', async () => {

@@ -957,9 +957,8 @@ export default class Note extends BaseItem {
 
 			// A partial ungated save with a plaintext body goes through the note lock path too, as a
 			// fallback so that a missed gate encrypts instead of leaking plaintext. Ciphertext bodies
-			// pass through untouched, and so does a row that sync still holds encrypted, since its
-			// empty body is not a note lock body yet.
-			if (!o.encryption_applied && (!!options?.useNoteLock || (o.is_locked === undefined && 'body' in o && !isValidNoteLockHeader(o.body)))) {
+			// pass through untouched.
+			if (!!options?.useNoteLock || (o.is_locked === undefined && 'body' in o && !isValidNoteLockHeader(o.body))) {
 				// The caller's note can be one the store has frozen, as when Note.duplicate saves it a second time.
 				o = { ...o };
 				if (o.is_locked === undefined && !isNew && oldNote) o.is_locked = oldNote.is_locked;
