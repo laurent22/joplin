@@ -756,6 +756,10 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 			sideMenuContent = <SideMenuContent/>;
 		}
 
+		const makeScreenWithProps = <Component extends React.ComponentType<Props>, Props> (
+			screen: Component, props: Props,
+		) => ({ screen, props });
+
 		const appNavInit = {
 			Notes: { screen: NotesScreen },
 			Note: { screen: NoteScreen },
@@ -763,8 +767,8 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 			Folder: { screen: FolderScreen },
 			OneDriveLogin: { screen: OneDriveLoginScreen },
 			DropboxLogin: { screen: DropboxLoginScreen },
-			JoplinCloudLogin: { screen: JoplinOAuthLoginScreen, props: { syncTargetId: 10 } },
-			JoplinServerLogin: { screen: JoplinOAuthLoginScreen, props: { syncTargetId: 9 } },
+			JoplinCloudLogin: makeScreenWithProps(JoplinOAuthLoginScreen, { syncTargetId: 10 }),
+			JoplinServerLogin: makeScreenWithProps(JoplinOAuthLoginScreen, { syncTargetId: 9 }),
 			JoplinServerSamlLogin: { screen: SsoLoginScreen(new SamlShared()) },
 			EncryptionConfig: { screen: EncryptionConfigScreen },
 			UpgradeSyncTarget: { screen: UpgradeSyncTargetScreen },

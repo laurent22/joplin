@@ -14,22 +14,10 @@ import { Theme } from '@joplin/lib/themes/type';
 import { useMemo } from 'react';
 import KeyboardAvoidingView from './KeyboardAvoidingView';
 
-interface ScreenDefaultProps {
-	navigation?: { state: Route };
-	themeId: number;
-	dispatch: Dispatch;
-}
-
-interface ScreenSpec<Props extends ScreenDefaultProps = ScreenDefaultProps> {
-	screen: ComponentType<Props>;
-	props: Partial<Props>;
-}
-
-export type Screens = Record<string, ScreenSpec>;
-
 interface Props {
 	route: Route;
-	screens: Screens;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Each screen has different props (themeId, dispatch, navigation, visible, ...); typing the union would force a refactor of every screen
+	screens: Record<string, { screen: ComponentType<any>; props?: any }>;
 	dispatch: Dispatch;
 	themeId: number;
 }
