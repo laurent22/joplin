@@ -33,7 +33,7 @@
     "@joplin/whisper-voice-typing": "~3.7",
     "@js-draw/material-icons": "1.33.0",
     "@react-native-clipboard/clipboard": "1.16.3",
-    "@react-native-community/datetimepicker": "8.6.0",
+    "@react-native-community/datetimepicker": "9.1.0",
     "@react-native-community/geolocation": "3.4.0",
     "@react-native-community/netinfo": "12.0.1",
     "@react-native-community/push-notification-ios": "1.12.0",
