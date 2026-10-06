@@ -66,7 +66,7 @@ export const reducer: Reducer<DefaultState, Action> = (state: DefaultState, acti
 			className: 'text',
 			message: () => _('You were unable to connect to %s. Please check your credentials and try again. Error:', state.syncTargetName),
 			active: 'ERROR',
-			next: 'COMPLETED',
+			next: 'LINK_USED',
 			errorMessage: action.payload,
 			syncTargetName: state.syncTargetName,
 		};
