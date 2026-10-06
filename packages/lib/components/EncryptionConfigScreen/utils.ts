@@ -3,7 +3,7 @@ import { _ } from '../../locale';
 import BaseItem, { EncryptedItemsStats } from '../../models/BaseItem';
 import useAsyncEffect, { AsyncEffectEvent } from '../../hooks/useAsyncEffect';
 import { MasterKeyEntity } from '../../services/e2ee/types';
-import { findMasterKeyPassword, getMasterPasswordStatus, loadMasterKeysFromSettings, masterPasswordIsValid, MasterPasswordStatus } from '../../services/e2ee/utils';
+import { findMasterKeyPassword, getMasterPasswordStatus, isKnownEncryptionMethod, loadMasterKeysFromSettings, masterPasswordIsValid, MasterPasswordStatus } from '../../services/e2ee/utils';
 import EncryptionService from '../../services/e2ee/EncryptionService';
 import { masterKeyEnabled, setMasterKeyEnabled } from '../../services/synchronizer/syncInfoUtils';
 import MasterKey from '../../models/MasterKey';
@@ -212,9 +212,27 @@ export const useNeedMasterPassword = (passwordChecks: PasswordChecks, masterKeys
 		const mk = masterKeys.find(mk => mk.id === mkId);
 		if (!mk) continue;
 		if (!masterKeyEnabled(mk)) continue;
-		if (!valid) return true;
+		if (!valid && isKnownEncryptionMethod(mk.encryption_method)) return true;
 	}
 	return false;
+};
+
+const useHasUnknownEncryptionMethodKeys = (masterKeys: MasterKeyEntity[]) => {
+	for (const mk of masterKeys) {
+		if (mk && masterKeyEnabled(mk) && !isKnownEncryptionMethod(mk.encryption_method)) {
+			return true;
+		}
+	}
+	return false;
+};
+
+export const useHasUnknownEncryptionMethodKeysMessage = (masterKeys: MasterKeyEntity[]) => {
+	const hasUnknownEncryptionMethodKeys = useHasUnknownEncryptionMethodKeys(masterKeys);
+	if (!hasUnknownEncryptionMethodKeys) return '';
+	return [
+		_('One or more encryption keys are stored in an unknown format.'),
+		_('These keys were most likely created by a newer version of Joplin. Please check that Joplin has been updated to the latest version.'),
+	].join('\n\n');
 };
 
 export const determineKeyPassword = (masterKeyId: string, masterPasswordKeys: PasswordChecks, masterPassword: string, passwords: Record<string, string>): string => {
