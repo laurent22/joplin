@@ -633,7 +633,7 @@ class Application extends BaseApplication {
 			}
 		});
 
-		addTask('app/complete pending Joplin Cloud auth', async () => {
+		addTask('app/complete pending Joplin Server/Cloud auth', async () => {
 			await completePendingAuthentication();
 		});
 

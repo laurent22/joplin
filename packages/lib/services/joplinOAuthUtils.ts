@@ -261,7 +261,7 @@ export const completePendingAuthentication = async () => {
 			syncTarget,
 		});
 		if (result && result.success) {
-			logger.info('Completed pending Joplin Cloud authentication');
+			logger.info('Completed pending Joplin Server/Cloud authentication');
 		}
 	} catch (error) {
 		logger.error('Could not complete pending authentication:', error);
