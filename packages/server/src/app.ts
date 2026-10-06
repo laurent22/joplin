@@ -95,15 +95,10 @@ async function getEnvFilePath(env: Env, argv: { envFile?: string }): Promise<str
 }
 
 const getCorsAllowedDomains = (envVariables: EnvVariables, env: Env) => {
-	const corsAllowedDomains = [
-		'https://joplinapp.org',
-
-		// Allows sync with the web version of Joplin
-		...envVariables.EXTRA_CORS_ALLOWED_DOMAINS
-			.split(',')
-			.map(domain => domain.trim())
-			.filter(domain => !!domain),
-	];
+	const corsAllowedDomains = envVariables.CORS_ALLOWED_DOMAINS
+		.split(',')
+		.map(domain => domain.trim())
+		.filter(domain => !!domain);
 
 	if (env === Env.Dev) {
 		// Stripe (dev)
