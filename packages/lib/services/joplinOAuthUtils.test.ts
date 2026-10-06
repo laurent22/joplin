@@ -1,7 +1,7 @@
 import Setting from '../models/Setting';
 import SyncTargetRegistry from '../SyncTargetRegistry';
-import { setupDatabase, switchClient, withWarningSilenced } from '../testing/test-utils';
-import { completePendingAuthentication } from './joplinOAuthUtils';
+import { mockFetch, setupDatabase, switchClient, withWarningSilenced } from '../testing/test-utils';
+import { completePendingAuthentication, fetchLoginUrl } from './joplinOAuthUtils';
 
 describe('joplinOAuthUtils', () => {
 	beforeEach(async () => {
@@ -23,5 +23,20 @@ describe('joplinOAuthUtils', () => {
 		}, { requireWarning: true });
 
 		expect(Setting.value(`sync.${syncTargetId}.pendingAuthData`)).toEqual({});
+	});
+
+	it('should not try to fetch a login URL for Joplin Cloud', async () => {
+		const syncTargetId = SyncTargetRegistry.nameToId('joplinCloud');
+		Setting.setValue('sync.target', syncTargetId);
+
+		const { reset } = mockFetch((_request) => {
+			throw new Error('Should not fetch');
+		});
+		try {
+			const url = await fetchLoginUrl(syncTargetId, Setting.value(`sync.${syncTargetId}.path`));
+			expect(url).toBe(Setting.value(`sync.${syncTargetId}.website`));
+		} finally {
+			reset();
+		}
 	});
 });
