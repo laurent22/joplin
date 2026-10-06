@@ -55,15 +55,14 @@ describe('Synchronizer.conflicts', () => {
 		const conflictedNotes = await Note.conflictedNotes();
 		expect(conflictedNotes.length).toBe(1);
 
-		// Other than the conflict metadata and parent ID, the conflicted and original note must be the
-		// same in every way, to make sure no data has been lost.
+		// Other than the id (since the conflicted note is a duplicate), and the is_conflict property
+		// the conflicted and original note must be the same in every way, to make sure no data has been lost.
 		const conflictedNote = conflictedNotes[0];
 		expect(conflictedNote.id === note2conf.id).toBe(false);
 		expect(conflictedNote.conflict_original_id).toBe(note2conf.id);
-		expect(conflictedNote.parent_id).toBe('');
 		for (const n in conflictedNote) {
 			if (!conflictedNote.hasOwnProperty(n)) continue;
-			if (n === 'id' || n === 'is_conflict' || n === 'conflict_original_id' || n === 'parent_id') continue;
+			if (n === 'id' || n === 'is_conflict' || n === 'conflict_original_id') continue;
 			expect((conflictedNote as Record<string, unknown>)[n]).toBe((note2conf as Record<string, unknown>)[n]);
 		}
 
