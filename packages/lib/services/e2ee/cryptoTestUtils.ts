@@ -127,7 +127,7 @@ const checkGenerateUuid = () => {
 	}
 
 	if (!uuid1.match(/^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}$/)) {
-		throw new Error(`Generated UUID does not match the expected patter. UUID: ${uuid1}`);
+		throw new Error(`Generated UUID does not match the expected pattern. UUID: ${uuid1}`);
 	}
 };
 
