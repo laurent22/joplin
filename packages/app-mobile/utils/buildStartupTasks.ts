@@ -484,7 +484,7 @@ const buildStartupTasks = (
 		setTimeout(() => {
 			// Schedule sync with a delay of 0 and wrap with the desired timeout, as shim.setTimeout may not fire on first run or after an upgrade
 			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-			void reg.scheduleSync(0, null, true).then(() => {
+			void reg.scheduleSync(0, null, true).finally(() => {
 				// Wait for the first sync before updating the notifications, since synchronisation
 				// might change the notifications.
 				void AlarmService.updateAllNotifications();

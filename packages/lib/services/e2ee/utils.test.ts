@@ -1,10 +1,11 @@
 import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, encryptionService, expectNotThrow, expectThrow, kvStore, msleep } from '../../testing/test-utils';
 import MasterKey from '../../models/MasterKey';
-import { activeMasterKeySanityCheck, migrateMasterPassword, migratePpk, resetMasterPassword, showMissingMasterKeyMessage, updateMasterPassword } from './utils';
+import { activeMasterKeySanityCheck, migrateMasterPassword, migratePpk, resetMasterPassword, showMissingMasterKeyMessage, showUnknownKeyFormatBanner, updateMasterPassword } from './utils';
 import { localSyncInfo, masterKeyById, masterKeyEnabled, saveLocalSyncInfo, setActiveMasterKeyId, setMasterKeyEnabled, setPpk } from '../synchronizer/syncInfoUtils';
 import Setting from '../../models/Setting';
 import { generateKeyPair, generateKeyPairWithAlgorithm, getPpkAlgorithm, ppkPasswordIsValid, testing__setPpkMigrations_ } from './ppk/ppk';
 import { PublicKeyAlgorithm } from './types';
+import { EncryptionMethod } from './EncryptionService';
 
 describe('e2ee/utils', () => {
 
@@ -41,6 +42,19 @@ describe('e2ee/utils', () => {
 		const syncInfo = localSyncInfo();
 		syncInfo.masterKeys = [];
 		expect(showMissingMasterKeyMessage(syncInfo, [mk1.id, mk2.id])).toBe(false);
+	});
+
+	it.each([
+		[EncryptionMethod.KeyV1, false],
+		[1234, true],
+		[{ toString: 'throws if converted to string with String(...)' }, true],
+	])('should decide whether to show the unknown key format banner (encryption method: %j, should show: %j)', async (encryptionMethod, shouldShow) => {
+		await MasterKey.save({
+			...await encryptionService().generateMasterKey('111111'),
+			encryption_method: encryptionMethod as unknown as number,
+		});
+
+		expect(showUnknownKeyFormatBanner(localSyncInfo())).toBe(shouldShow);
 	});
 
 	it('should do ppk migration', async () => {

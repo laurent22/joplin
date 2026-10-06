@@ -3,13 +3,15 @@ import BaseItem from '../../models/BaseItem';
 import MasterKey from '../../models/MasterKey';
 import Setting from '../../models/Setting';
 import { MasterKeyEntity } from './types';
-import EncryptionService from './EncryptionService';
+import EncryptionService, { EncryptionMethod } from './EncryptionService';
 import { getActiveMasterKey, getActiveMasterKeyId, localSyncInfo, masterKeyEnabled, saveLocalSyncInfo, setActiveMasterKeyId, setEncryptionEnabled, SyncInfo } from '../synchronizer/syncInfoUtils';
 import JoplinError from '../../JoplinError';
 import { generateKeyPair, pkReencryptPrivateKey, ppkPasswordIsValid, shouldUpdatePpk } from './ppk/ppk';
 import KvStore from '../KvStore';
 import Folder from '../../models/Folder';
 import ShareService from '../share/ShareService';
+import { hasOwnProperty } from '@joplin/utils/object';
+import { _ } from '../../locale';
 
 const logger = Logger.create('e2ee/utils');
 
@@ -135,6 +137,11 @@ export const migratePpk = async () => {
 	saveLocalSyncInfo(syncInfo);
 };
 
+export const isKnownEncryptionMethod = (method: EncryptionMethod|number) => {
+	if (typeof method !== 'number') return false;
+	return hasOwnProperty(EncryptionMethod, String(method));
+};
+
 // All master keys normally should be decrypted with the master password, however
 // previously any master key could be encrypted with any password, so to support
 // this legacy case, we first check if the MK decrypts with the master password.
@@ -202,8 +209,18 @@ export const activeMasterKeySanityCheck = () => {
 	setActiveMasterKeyId(latestMasterKey.id);
 };
 
+export const showUnknownKeyFormatBanner = (syncInfo: SyncInfo) => {
+	for (const masterKey of syncInfo.masterKeys) {
+		if (masterKeyEnabled(masterKey) && !isKnownEncryptionMethod(masterKey.encryption_method)) {
+			return true;
+		}
+	}
+	return false;
+};
+
 export function showMissingMasterKeyMessage(syncInfo: SyncInfo, notLoadedMasterKeys: string[]) {
 	if (!syncInfo.masterKeys.length) return false;
+	if (showUnknownKeyFormatBanner(syncInfo)) return false;
 
 	notLoadedMasterKeys = notLoadedMasterKeys.slice();
 
@@ -341,11 +358,17 @@ export enum MasterPasswordStatus {
 	NotSet = 2,
 	Invalid = 3,
 	Valid = 4,
+	Unsupported = 5,
 }
 
 export async function getMasterPasswordStatus(password: string = null): Promise<MasterPasswordStatus> {
 	password = password === null ? getMasterPassword(false) : password;
 	if (!password) return MasterPasswordStatus.NotSet;
+
+	const defaultKey = getDefaultMasterKey();
+	if (defaultKey && !isKnownEncryptionMethod(defaultKey.encryption_method)) {
+		return MasterPasswordStatus.Unsupported;
+	}
 
 	const isValid = await masterPasswordIsValid(password);
 	return isValid ? MasterPasswordStatus.Valid : MasterPasswordStatus.Invalid;
@@ -357,11 +380,12 @@ export async function checkHasMasterPasswordEncryptedData(syncInfo: SyncInfo = n
 }
 
 const masterPasswordStatusMessages = {
-	[MasterPasswordStatus.Unknown]: 'Checking...',
-	[MasterPasswordStatus.Loaded]: 'Loaded',
-	[MasterPasswordStatus.NotSet]: 'Not set',
-	[MasterPasswordStatus.Valid]: '✓ ' + 'Valid',
-	[MasterPasswordStatus.Invalid]: '❌ ' + 'Invalid',
+	[MasterPasswordStatus.Unknown]: _('Checking...'),
+	[MasterPasswordStatus.Loaded]: _('Loaded'),
+	[MasterPasswordStatus.NotSet]: _('Not set'),
+	[MasterPasswordStatus.Valid]: `✓ ${_('Valid')}`,
+	[MasterPasswordStatus.Invalid]: `❌ ${_('Invalid')}`,
+	[MasterPasswordStatus.Unsupported]: `❌ ${_('Unsupported key format')}`,
 };
 
 export function getMasterPasswordStatusMessage(status: MasterPasswordStatus): string {
