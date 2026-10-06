@@ -26,6 +26,7 @@ export interface View {
 	path: string;
 	layout?: string;
 	navbar?: boolean;
+	hideFooter?: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- View content is highly heterogeneous (each view contributes different fields); tightening propagates through every view consumer
 	content?: any;
 	partials?: string[];
@@ -300,6 +301,7 @@ export default class MustacheService {
 			cssFiles: cssFiles,
 			jsFiles: jsFiles,
 			navbar: view.navbar,
+			hideFooter: view.hideFooter,
 			sidebarMenu: view.sidebarMenu,
 			...view.content,
 		};
