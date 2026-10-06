@@ -1,0 +1,47 @@
+# Fixes the following error:
+# A problem occurred evaluating project ':react-native-rsa-native'.
+# > Could not find method jcenter() for arguments [] on repository container of type org.gradle.api.internal.artifacts.dsl.DefaultRepositoryHandler.
+#
+# See https://github.com/amitaymolko/react-native-rsa-native/issues/175
+diff --git a/android/bin/build.gradle b/android/bin/build.gradle
+index b5f54a631f4bed61973c77c2a6b27c5df0b26d17..28f38ca5966097f798f3f3607ded55dd4fe9b6d1 100644
+--- a/android/bin/build.gradle
++++ b/android/bin/build.gradle
+@@ -1,7 +1,6 @@
+ buildscript {
+     repositories {
+         maven { url "https://maven.google.com" }
+-        jcenter()
+         google()
+         maven {
+             url 'https://maven.google.com/'
+@@ -41,7 +40,7 @@ allprojects {
+     repositories {
+         mavenLocal()
+         maven { url "https://maven.google.com" }
+-        jcenter()
++        mavenCentral()
+         google()
+         maven {
+             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+diff --git a/android/build.gradle b/android/build.gradle
+index 82f60d3d862258e50023076b0db6e792bd2a2503..9e4606903f2dcf4ee7bb49dc878a080023ed314c 100644
+--- a/android/build.gradle
++++ b/android/build.gradle
+@@ -9,7 +9,6 @@ buildscript {
+     if (project == rootProject) {
+         repositories {
+             google()
+-            jcenter()
+             maven {
+                 url "https://maven.fabric.io/public"
+             }
+@@ -45,7 +44,7 @@ allprojects {
+     repositories {
+         mavenLocal()
+         google()
+-        jcenter()
++        mavenCentral()
+         maven {
+             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+             url "$rootDir/../node_modules/react-native/android"
