@@ -10,6 +10,7 @@ import SyncTargetRegistry from '../SyncTargetRegistry';
 import { isHttpOrHttpsUrl } from '@joplin/utils/url';
 import NavService from './NavService';
 import { SettingsMap } from '../components/shared/config/config-shared';
+import { substrWithEllipsis } from '../string-utils';
 
 const logger = Logger.create('joplinCloudUtils');
 
@@ -143,6 +144,12 @@ export const fetchLoginUrl = async (syncTargetId: number, apiBaseUrl: string) =>
 	if (response.status === 404) {
 		// The web_login_base_url API doesn't exist on older Joplin Server versions
 		return null;
+	}
+	if (!response.ok) {
+		const text = await response.text();
+		throw new Error(
+			`Failed to determine login URL (error ${response.status}): ${JSON.stringify(substrWithEllipsis(text, 0, 256))}`,
+		);
 	}
 
 	const json = await response.json();
