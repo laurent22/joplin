@@ -148,7 +148,7 @@ export const fetchLoginUrl = async (syncTargetId: number, apiBaseUrl: string) =>
 	if (!response.ok) {
 		const text = await response.text();
 		throw new Error(
-			`Failed to determine login URL (error ${response.status}): ${JSON.stringify(substrWithEllipsis(text, 0, 256))}`,
+			`Failed to determine login URL (error ${response.status}): ${JSON.stringify(substrWithEllipsis(text, 0, 128))}`,
 		);
 	}
 
