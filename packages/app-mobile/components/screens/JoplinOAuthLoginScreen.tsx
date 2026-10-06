@@ -112,6 +112,7 @@ const JoplinOAuthScreenComponent = (props: Props) => {
 				logger.error(error);
 				dispatch({ type: 'ERROR', payload: error.message });
 				clearInterval(interval);
+				setIntervalIdentifier(undefined);
 			}
 		}, 2 * 1000);
 
