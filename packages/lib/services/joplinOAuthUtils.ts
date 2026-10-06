@@ -181,7 +181,7 @@ export const openSyncSettings = () => {
 };
 
 interface CheckIfLoginWasSuccessfulOptions {
-	baseUrl: string;
+	apiBaseUrl: string;
 	applicationAuthId: string;
 	syncTarget: JoplinSyncTargetId;
 }
@@ -190,15 +190,15 @@ interface CheckIfLoginWasSuccessfulOptions {
 // after an error occurs. E.g.: if the function would throw an error while isWaitingResponse
 // was set to true the next time we call the function the value would still be true.
 // The closure function prevents that.
-export const checkIfLoginWasSuccessful = async ({ baseUrl, applicationAuthId, syncTarget }: CheckIfLoginWasSuccessfulOptions) => {
-	if (!isValidBaseUrl(baseUrl)) throw new Error('Invalid base URL');
+export const checkIfLoginWasSuccessful = async ({ apiBaseUrl, applicationAuthId, syncTarget }: CheckIfLoginWasSuccessfulOptions) => {
+	if (!isValidBaseUrl(apiBaseUrl)) throw new Error('Invalid base URL');
 
 	let isWaitingResponse = false;
 	const performLoginRequest = async () => {
 		if (isWaitingResponse) return undefined;
 		isWaitingResponse = true;
 
-		const applicationsUrl = `${normalizeBaseUrl(baseUrl)}/api/application_auth/${applicationAuthId}`;
+		const applicationsUrl = `${normalizeBaseUrl(apiBaseUrl)}/api/application_auth/${applicationAuthId}`;
 		const response = await shim.fetch(applicationsUrl, {
 			headers: {
 				'X-JOPLIN-CUSTOM-API-KEY': syncTarget === 10 ? Setting.value('sync.10.apiKey') : '',
@@ -222,7 +222,7 @@ export const checkIfLoginWasSuccessful = async ({ baseUrl, applicationAuthId, sy
 		}
 
 		Setting.setValue(`sync.${syncTarget}.password`, '');
-		Setting.setValue(`sync.${syncTarget}.authorizedForPath`, baseUrl);
+		Setting.setValue(`sync.${syncTarget}.authorizedForPath`, apiBaseUrl);
 		Setting.setValue(`sync.${syncTarget}.password`, jsonBody.password);
 		Setting.setValue(`sync.${syncTarget}.username`, jsonBody.id);
 
@@ -256,7 +256,7 @@ export const completePendingAuthentication = async () => {
 
 		const apiBaseUrl = normalizeBaseUrl(apiPath);
 		const result = await checkIfLoginWasSuccessful({
-			baseUrl: apiBaseUrl,
+			apiBaseUrl: apiBaseUrl,
 			applicationAuthId: pendingAuthData.appId,
 			syncTarget,
 		});

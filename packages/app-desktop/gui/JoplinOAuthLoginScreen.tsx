@@ -46,7 +46,7 @@ const JoplinOAuthScreenComponent = (props: Props) => {
 				const response = await checkIfLoginWasSuccessful({
 					applicationAuthId,
 					syncTarget: props.syncTargetId,
-					baseUrl: props.serverApi,
+					apiBaseUrl: props.serverApi,
 				});
 				if (response && response.success) {
 					dispatch({ type: 'COMPLETED' });

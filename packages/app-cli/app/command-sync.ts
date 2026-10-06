@@ -97,7 +97,7 @@ class Command extends BaseCommand {
 				try {
 					const response = await checkIfLoginWasSuccessful({
 						syncTarget: id,
-						baseUrl: Setting.value(`sync.${id}.path`),
+						apiBaseUrl: Setting.value(`sync.${id}.path`),
 						applicationAuthId,
 					});
 					if (response && response.success) {
