@@ -436,7 +436,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: '*',
 			type: SettingItemType.String,
 			public: false,
-			label: () => 'The sync.9.path used for application auth',
+			label: () => 'The URL that the current username/password are valid for. Prevents sending credentials to the wrong URL.',
 		},
 		'sync.9.preferPasswordAuth': {
 			value: false,
