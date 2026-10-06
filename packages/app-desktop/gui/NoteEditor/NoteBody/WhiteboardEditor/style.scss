@@ -236,7 +236,7 @@ $hover-bg: rgba(127, 127, 127, 0.12);
 		line-height: 1.4;
 		color: var(--joplin-color);
 
-		&.-deleted { color: var(--joplin-color-faded); font-style: italic; }
+		&.-deleted, &.-locked { color: var(--joplin-color-faded); font-style: italic; }
 		&.-url { word-break: break-all; }
 	}
 
