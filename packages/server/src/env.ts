@@ -60,8 +60,8 @@ const defaultEnvValues: EnvVariables = {
 	PRIVACY_URL: '',
 
 	// Comma-separated list of trusted domains that can access server API.
-	// For example, if hosting the Joplin web app on a custom domain,
-	// add the domain to this list to allow Joplin Server sync:
+	// Use this to grant the Joplin web app access to Joplin Server.
+	// Entries must be in <protocol>://<domain> form (no trailing slash).
 	CORS_ALLOWED_DOMAINS: 'https://joplinapp.org,https://app.joplincloud.com',
 
 	// ==================================================
