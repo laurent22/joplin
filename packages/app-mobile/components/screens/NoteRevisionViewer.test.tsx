@@ -3,7 +3,7 @@ import { Store } from 'redux';
 import { AppState } from '../../utils/types';
 import TestProviderStack from '../testing/TestProviderStack';
 import NoteRevisionViewer from './NoteRevisionViewer';
-import { setupDatabaseAndSynchronizer, switchClient, revisionService } from '@joplin/lib/testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, revisionService, noteLockCipherTextStandIn } from '@joplin/lib/testing/test-utils';
 import createMockReduxStore from '../../utils/testing/createMockReduxStore';
 import setupGlobalStore from '../../utils/testing/setupGlobalStore';
 import { fireEvent, render, screen, waitFor } from '../../utils/testing/testingLibrary';
@@ -103,7 +103,7 @@ describe('screens/NoteRevisionViewer', () => {
 
 	test('should gate an encrypted revision behind the unlock panel until the session is unlocked', async () => {
 		Setting.setValue('featureFlag.noteLock', true);
-		const note = await Note.save({ title: 'Note', body: 'enc(secret)', is_locked: 1, parent_id: '' });
+		const note = await Note.save({ title: 'Note', body: noteLockCipherTextStandIn(), is_locked: 1, parent_id: '' });
 		await createLockedRevision(note, 'Note', 'enc(secret)');
 		jest.spyOn(NoteLockKey.instance(), 'load').mockReturnValue({ id: 'key-id' });
 		jest.spyOn(NoteLockService, 'instance').mockReturnValue({
@@ -134,9 +134,10 @@ describe('screens/NoteRevisionViewer', () => {
 
 	test('should keep Restore disabled until the selected revision has been checked', async () => {
 		Setting.setValue('featureFlag.noteLock', true);
-		const note = await Note.save({ title: 'Note', body: 'enc(new)', is_locked: 1, parent_id: '' });
+		const newCipherText = noteLockCipherTextStandIn('new');
+		const note = await Note.save({ title: 'Note', body: newCipherText, is_locked: 1, parent_id: '' });
 		await createLockedRevision(note, 'Old', 'enc(old)', 60000);
-		await createLockedRevision(note, 'New', 'enc(new)');
+		await createLockedRevision(note, 'New', newCipherText);
 		jest.spyOn(NoteLockKey.instance(), 'load').mockReturnValue({ id: 'key-id' });
 		jest.spyOn(console, 'warn').mockImplementation(() => {});
 		// Each decrypt stays pending until the test settles it, so the state during a switch can be checked.
@@ -161,9 +162,9 @@ describe('screens/NoteRevisionViewer', () => {
 		const restoreDisabled = () => !!screen.getByRole('button', { name: 'Restore' }).props.accessibilityState?.disabled;
 		const undecryptableMessage = 'This note could not be unlocked. If it was locked prior to a password reset, the content is no longer recoverable.';
 
-		await selectRevision(0, 'enc(new)');
+		await selectRevision(0, newCipherText);
 		expect(restoreDisabled()).toBe(true);
-		pending['enc(new)'].resolve('new');
+		pending[newCipherText].resolve('new');
 		await waitFor(async () => {
 			expect(await getRevisionViewerText()).toBe('new');
 		});
@@ -177,10 +178,10 @@ describe('screens/NoteRevisionViewer', () => {
 		});
 		expect(restoreDisabled()).toBe(true);
 
-		await selectRevision(0, 'enc(new)');
+		await selectRevision(0, newCipherText);
 		expect(screen.queryByText(undecryptableMessage)).toBeNull();
 		expect(restoreDisabled()).toBe(true);
-		pending['enc(new)'].resolve('new');
+		pending[newCipherText].resolve('new');
 		await waitFor(async () => {
 			expect(await getRevisionViewerText()).toBe('new');
 		});
@@ -195,7 +196,7 @@ describe('screens/NoteRevisionViewer', () => {
 			expect(messageBoxSpy).toHaveBeenCalled();
 		}, { timeout: 10000 });
 		const restored = (await Note.all()).find(n => n.id !== note.id);
-		expect(restored).toMatchObject({ title: 'New', body: 'enc(new)', is_locked: 1 });
+		expect(restored).toMatchObject({ title: 'New', body: newCipherText, is_locked: 1 });
 		expect((await Folder.load(restored.parent_id)).title).toBe('Restored Notes');
 	});
 
