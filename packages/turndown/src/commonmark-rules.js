@@ -19,21 +19,18 @@ function attributesHtml(attributes, options = null) {
   return output.join(' ');
 }
 
-function escapeNonbreakingSpaces(content, pattern) {
-  // Replace each nonbreaking space matched by the pattern with &nbsp;. By default, the
-  // markdown renderer removes leading non-HTML-escaped nonbreaking spaces. However,
-  // because the space is nonbreaking, we want to keep it.
-  // \u00A0 is a nonbreaking space.
-  return content.replace(pattern, spaces => '&nbsp;'.repeat(spaces.length));
-}
-
 var rules = {}
 
 rules.paragraph = {
   filter: 'p',
 
   replacement: function (content, node, options) {
-    content = escapeNonbreakingSpaces(content, /^\u{00A0}/ug);
+    // If the line starts with a nonbreaking space, replace it. By default, the
+    // markdown renderer removes leading non-HTML-escaped nonbreaking spaces. However,
+    // because the space is nonbreaking, we want to keep it.
+    // \u00A0 is a nonbreaking space.
+    const leadingNonbreakingSpace = /^\u{00A0}/ug;
+    content = content.replace(leadingNonbreakingSpace, '&nbsp;');
 
     // Paragraphs that are truly empty (not even containing nonbreaking spaces)
     // take up by default no space. Output nothing.
@@ -81,7 +78,9 @@ rules.heading = {
   replacement: function (content, node, options) {
     var hLevel = Number(node.nodeName.charAt(1))
     var originalContentLength = content.length
-    content = escapeNonbreakingSpaces(content, /^\u{00A0}+$/u)
+    // The markdown renderer removes raw nonbreaking spaces, so an empty heading would be lost.
+    // Each space gets its own &nbsp; so the extra spaces the user typed are not removed.
+    content = content.replace(/^\u{00A0}+$/u, spaces => '&nbsp;'.repeat(spaces.length))
 
     if (options.headingStyle === 'setext' && hLevel < 3) {
       var underline = repeat((hLevel === 1 ? '=' : '-'), originalContentLength)
