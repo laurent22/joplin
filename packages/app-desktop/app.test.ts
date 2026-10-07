@@ -7,7 +7,9 @@ import { NoteEntity } from '@joplin/lib/services/database/types';
 import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
 import { setEncryptionEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { loadEncryptionMasterKey, setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
-import { readFile } from 'fs/promises';
+import waitFor from '@joplin/lib/testing/waitFor';
+import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
+import { appendFile, readFile } from 'fs/promises';
 import { TextEncoder as NodeTextEncoder } from 'util';
 import app from './app';
 
@@ -24,8 +26,8 @@ const mockBaseMiddleware = () => {
 	}, 'generalMiddleware').mockImplementation(async (_store, next, action) => next(action));
 };
 
-const createDesktopActionHandler = () => {
-	const middleware = app().generalMiddlewareFn()({ getState: jest.fn() });
+const createDesktopActionHandler = (watchedNoteFiles: string[] = []) => {
+	const middleware = app().generalMiddlewareFn()({ getState: () => ({ watchedNoteFiles }) });
 	return middleware(jest.fn());
 };
 
@@ -160,6 +162,33 @@ describe('app', () => {
 
 		expect(updateNoteFile).not.toHaveBeenCalled();
 		updateNoteFile.mockRestore();
+	});
+
+	test('should drop pending external edits when a synced note arrives locked', async () => {
+		const { originalNote, externalFilePath } = await startExternalEditing();
+		const lockedNote = await Note.save({
+			...originalNote,
+			body: 'Locked note ciphertext',
+			is_locked: 1,
+		}, { changeSource: ItemChange.SOURCE_SYNC });
+
+		await appendFile(externalFilePath, ' (plaintext edit)');
+		const changeEventQueue = (watcher as unknown as { changeEventQueue_: AsyncActionQueue<unknown> }).changeEventQueue_;
+		await waitFor(() => {
+			expect(changeEventQueue.isEmpty).toBe(false);
+		});
+
+		const handleDesktopAction = createDesktopActionHandler([originalNote.id]);
+		await handleDesktopAction({
+			type: 'NOTE_UPDATE_ONE',
+			changeSource: ItemChange.SOURCE_SYNC,
+			changedFields: ['body', 'is_locked'],
+			note: lockedNote,
+		});
+		await changeEventQueue.waitForAllDone();
+
+		expect(watcher.noteIsWatched(originalNote)).toBe(false);
+		expect((await Note.load(originalNote.id)).body).toBe('Locked note ciphertext');
 	});
 
 	test('should wait for a synced encrypted note to be decrypted before updating the external edit file', async () => {

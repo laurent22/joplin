@@ -21,7 +21,6 @@ import bridge from './services/bridge';
 import menuCommandNames from './gui/menuCommandNames';
 import ResourceService from '@joplin/lib/services/ResourceService';
 import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
-import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
 import appReducer, { createAppDefaultState } from './app.reducer';
 import Folder from '@joplin/lib/models/Folder';
 import Tag from '@joplin/lib/models/Tag';
@@ -169,9 +168,10 @@ class Application extends BaseApplication {
 		}
 
 		// Like a lock made on this device (see enableNoteEncryption), a lock that arrives with a sync ends the note's
-		// external editing, which the UI cannot stop for a locked note.
-		if (action.type === 'NOTE_UPDATE_ONE' && isNoteLockEnabled() && action.note.is_locked && store.getState().watchedNoteFiles.includes(action.note.id)) {
-			await ExternalEditWatcher.instance().stopWatching(action.note.id);
+		// external editing, which the UI cannot stop for a locked note. The lock is already saved here, so pending
+		// plaintext edits are dropped rather than saved over the ciphertext.
+		if (action.type === 'NOTE_UPDATE_ONE' && action.note.is_locked && store.getState().watchedNoteFiles.includes(action.note.id)) {
+			await ExternalEditWatcher.instance().stopWatching(action.note.id, false);
 		}
 
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'featureFlag.autoUpdaterServiceEnabled' || action.type === 'SETTING_UPDATE_ALL') {
