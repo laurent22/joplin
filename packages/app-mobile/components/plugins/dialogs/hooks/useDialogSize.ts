@@ -22,7 +22,7 @@ const useDialogSize = (props: Props) => {
 		}
 
 		while (!event.cancelled) {
-			const contentSize = await dialogControl.getContentSize();
+			const contentSize = await dialogControl.getContentSize(props.watchForSizeChanges);
 			if (event.cancelled) return;
 
 			const lastSize = lastSizeRef.current;
@@ -44,7 +44,7 @@ const useDialogSize = (props: Props) => {
 				}, 500);
 			});
 		}
-	}, [dialogControl, setDialogSize, webViewLoadCount]);
+	}, [dialogControl, setDialogSize, webViewLoadCount, props.watchForSizeChanges]);
 
 	return dialogSize;
 };
