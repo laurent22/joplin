@@ -50,7 +50,7 @@ const initializeDialogWebView = (messageChannelId: string) => {
 		contentResizeObserver = new ResizeObserver(() => {
 			if (observedElement === element) observedContentSize = measureContent(element);
 		});
-		contentResizeObserver.observe(element);
+		contentResizeObserver.observe(element, { box: 'border-box' });
 		window.addEventListener('pagehide', stopObservingContentSize);
 		pageHideListenerRegistered = true;
 	};

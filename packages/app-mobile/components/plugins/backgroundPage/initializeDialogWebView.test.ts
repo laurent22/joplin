@@ -90,7 +90,10 @@ describe('initializeDialogWebView', () => {
 		expect(MockResizeObserver.instances).toHaveLength(0);
 
 		await mockDialogApi.getContentSize(true);
-		expect(MockResizeObserver.instances[0].observe).toHaveBeenCalledWith(document.getElementById('joplin-plugin-content'));
+		expect(MockResizeObserver.instances[0].observe).toHaveBeenCalledWith(
+			document.getElementById('joplin-plugin-content'),
+			{ box: 'border-box' },
+		);
 
 		await mockDialogApi.getContentSize(false);
 		expect(MockResizeObserver.instances[0].disconnect).toHaveBeenCalledTimes(1);
