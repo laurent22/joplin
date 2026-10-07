@@ -22,7 +22,7 @@ const decryptKey = async (key: MasterKeyEntity, password: string): Promise<Decry
 
 // Encrypts outside the session so the fixture can use a key the session would refuse.
 const noteLockedWith = async (key: DecryptedNoteLockKey, body: string) => {
-	const cipherText = await encryptionService().encryptString(body, { masterKeyId: key.id, decryptedMasterKey: key.plainText });
+	const cipherText = await encryptionService().encryptString(body, { masterKeyId: key.id, decryptedMasterKey: key.plainText, isNoteLock: true });
 	return Note.save({ title: body, body: cipherText, is_locked: 1 });
 };
 

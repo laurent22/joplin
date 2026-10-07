@@ -38,7 +38,7 @@ export const migrateLockedNotes = async (localPassword: string, targetPassword: 
 		for (const noteId of await Note.lockedNoteIds()) {
 			try {
 				const { body } = await Note.load(noteId, { fields: ['id', 'body'] });
-				const header = await encryptionService.decodeHeaderString(body);
+				const header = await encryptionService.decodeHeaderString(body, true);
 				if (header.masterKeyId === targetKey.id) continue;
 				if (header.masterKeyId !== localKey.id) {
 					result.skipped++;
