@@ -193,6 +193,16 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 			({ response, json } = await doFetch());
 		}
 
+		// In thinking mode, DeepSeek rejects assistant tool calls it cannot find the reasoning for, such as
+		// the initial readNote call added by Joplin. An empty `reasoning_content` is accepted instead.
+		if (response.status === 400 && /reasoning_content/i.test(errorMessage())) {
+			logger.warn(`Model ${this.model_} requires reasoning_content on assistant messages; retrying with an empty one.`);
+			body.messages = (body.messages as Record<string, unknown>[]).map(message => {
+				return message.role === 'assistant' ? { reasoning_content: '', ...message } : message;
+			});
+			({ response, json } = await doFetch());
+		}
+
 		// Older OpenAI models might reject `response_format` json_schema (see https://stackoverflow.com/q/79039544).
 		// For compatibility, retry without response_format on failure:
 		if (response.status === 400 && 'response_format' in body && /json_schema|response_format/i.test(errorMessage())) {
