@@ -1,13 +1,15 @@
 import Logger from '@joplin/utils/Logger';
 import { Dispatch } from 'redux';
-import { _n } from '../../locale';
+import { _, _n } from '../../locale';
 import type { NoteLockMigrationStatus } from '../../reducer';
 import Note from '../../models/Note';
+import shim from '../../shim';
 import EncryptionService from '../e2ee/EncryptionService';
 import { adoptNoteLockKeyConflict, noteLockKeyConflict } from '../synchronizer/syncInfoUtils';
 import isNoteLockEnabled from './isNoteLockEnabled';
 import NoteLockKey, { DecryptedNoteLockKey } from './NoteLockKey';
 import NoteLockSession from './NoteLockSession';
+import { NoteLockNoteEntity } from './NoteLockNote';
 
 const logger = Logger.create('NoteLockKeyMigration');
 
@@ -32,6 +34,7 @@ export const migrateLockedNotes = async (localPassword: string, targetPassword: 
 		plainText: await encryptionService.decryptMasterKeyContent(conflict.noteLockKey, targetPassword),
 	};
 	const result: NoteLockKeyMigrationResult = { migrated: 0, skipped: 0, failed: 0 };
+	let featureTurnedOff = false;
 	NoteLockSession.instance().setMigrating(true);
 	try {
 		onStarted?.();
@@ -45,13 +48,19 @@ export const migrateLockedNotes = async (localPassword: string, targetPassword: 
 					continue;
 				}
 				const note = await Note.load(noteId, { useNoteLock: true, noteLockKey: localKey });
-				await Note.save(note, { useNoteLock: true, noteLockKey: targetKey });
+				const saved: NoteLockNoteEntity = await Note.save(note, { useNoteLock: true, noteLockKey: targetKey });
+				// With the feature turned off the save is ungated, so the note was not re-encrypted.
+				if (!saved.isDecrypted) {
+					featureTurnedOff = true;
+					break;
+				}
 				result.migrated++;
 			} catch (error) {
 				logger.warn(`Could not migrate note ${noteId}:`, error);
 				result.failed++;
 			}
 		}
+		if (featureTurnedOff) throw new Error(_('The note lock key migration was cancelled because the note lock feature was turned off.'));
 	} finally {
 		NoteLockSession.instance().setMigrating(false);
 	}
@@ -68,10 +77,21 @@ export const finishNoteLockKeyMigration = () => {
 // Runs in the background once both passwords are accepted, so the app stays usable, and reports its progress for the
 // banners. A run with failures keeps the target key parked for a retry or a skip.
 export const startNoteLockKeyMigration = async (localPassword: string, targetPassword: string, dispatch: Dispatch, onStarted: ()=> void) => {
-	const result = await migrateLockedNotes(localPassword, targetPassword, () => {
-		onStarted();
-		dispatch({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: { running: true, failed: 0, skipped: 0 } });
-	});
+	let started = false;
+	let result: NoteLockKeyMigrationResult;
+	try {
+		result = await migrateLockedNotes(localPassword, targetPassword, () => {
+			started = true;
+			onStarted();
+			dispatch({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: { running: true, failed: 0, skipped: 0 } });
+		});
+	} catch (error) {
+		// Before the start the dialog is still open to show the error, after it the dialog is gone.
+		if (!started) throw error;
+		dispatch({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: null });
+		await shim.showErrorDialog(error.message);
+		return;
+	}
 	if (!result.failed) finishNoteLockKeyMigration();
 	dispatch({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: { running: false, failed: result.failed, skipped: result.skipped } });
 };

@@ -11,6 +11,7 @@ import NoteLockService from './NoteLockService';
 import NoteLockSession from './NoteLockSession';
 import { finishNoteLockKeyMigration, migrateLockedNotes, startNoteLockKeyMigration } from './NoteLockKeyMigration';
 import eventManager, { EventName, NoteLockSessionChangeEvent } from '../../eventManager';
+import shim from '../../shim';
 
 const localPassword = '111111';
 const targetPassword = '222222';
@@ -158,6 +159,28 @@ describe('NoteLockKeyMigration', () => {
 		expect(dispatch).toHaveBeenLastCalledWith({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: { running: false, failed: 0, skipped: 0 } });
 		expect(NoteLockKey.instance().load()).toEqual(targetKey);
 		expect(await bodyDecryptedWith(note.id, decryptedTargetKey)).toBe('one');
+	});
+
+	it('should cancel a run with a popup when the feature flag is turned off during it', async () => {
+		await Note.save({ title: 'one', body: 'one', is_locked: 1 }, { useNoteLock: true });
+		const dispatch = jest.fn();
+		const showErrorDialog = jest.spyOn(shim, 'showErrorDialog').mockResolvedValue();
+		const save = Note.save.bind(Note);
+		const saveSpy = jest.spyOn(Note, 'save').mockImplementation((o, options) => {
+			Setting.setValue('featureFlag.noteLock', false);
+			return save(o, options);
+		});
+
+		try {
+			await startNoteLockKeyMigration(localPassword, targetPassword, dispatch, jest.fn());
+
+			expect(dispatch).toHaveBeenLastCalledWith({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: null });
+			expect(showErrorDialog).toHaveBeenCalledWith('The note lock key migration was cancelled because the note lock feature was turned off.');
+			expect(noteLockKeyConflict()).not.toBeNull();
+		} finally {
+			saveSpy.mockRestore();
+			showErrorDialog.mockRestore();
+		}
 	});
 
 	it('should keep locked notes closed and refuse a password reset only while a run goes', async () => {
