@@ -601,6 +601,8 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 	}
 
 	private async backButtonHandler() {
+		// Plugin dialogs use Paper's Modal, whose later hardwareBackPress listener runs first
+		// (React Native dispatches newest-first), so an open dialog consumes Back before this branch.
 		if (this.props.showPanelsDialog) {
 			await CommandService.instance().execute('dismissPluginPanels');
 			return true;
