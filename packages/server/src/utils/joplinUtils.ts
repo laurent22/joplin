@@ -390,7 +390,7 @@ async function renderNotePage(
 		title: `${substrWithEllipsis(title, 0, 100)} - ${config().appName}`,
 		titleOverride: true,
 		path: 'index/items/note',
-		hideFooter: true,
+		showFooter: false,
 		content: {
 			showFolderTree: !!folderTree,
 			folderTree,
