@@ -841,7 +841,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		} catch (error) {
 			this.reloadInProgress_ = false;
 			this.setState({ reloadInProgress: false });
-			throw error;
+			logger.error('Could not reload note:', error);
 		}
 	}
 

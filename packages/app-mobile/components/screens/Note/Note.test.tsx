@@ -35,6 +35,13 @@ import CommandService from '@joplin/lib/services/CommandService';
 import BackButtonService from '../../../services/BackButtonService';
 import shared from '@joplin/lib/components/shared/note-screen-shared';
 import useVisiblePluginEditorViewIds from '@joplin/lib/hooks/plugins/useVisiblePluginEditorViewIds';
+import mockPluginServiceSetup from '../../../utils/testing/mockPluginServiceSetup';
+import createTestPlugin from '@joplin/lib/testing/plugins/createTestPlugin';
+import PluginService from '@joplin/lib/services/plugins/PluginService';
+import JoplinViewsEditors from '@joplin/lib/services/plugins/api/JoplinViewsEditor';
+import WebviewController from '@joplin/lib/services/plugins/WebviewController';
+import getShownPluginEditorView from '@joplin/lib/services/plugins/utils/getShownPluginEditorView';
+import { defaultWindowId } from '@joplin/lib/reducer';
 
 jest.mock('@joplin/lib/hooks/plugins/useVisiblePluginEditorViewIds', () => jest.fn((): string[] => []));
 
@@ -203,6 +210,40 @@ const setupNoteWithPanes = async (panes: string[], noteTitle = 'Test note') => {
 	return renderResult;
 };
 
+const registerEditorPlugin = async () => {
+	const pluginId = 'org.joplinapp.editor-save-test';
+	mockPluginServiceSetup(store);
+	await createTestPlugin({
+		manifest_version: 1,
+		version: '0.1.0',
+		app_min_version: '2.3.4',
+		platforms: ['desktop', 'mobile'],
+		name: 'Editor save test',
+		id: pluginId,
+	});
+	const pluginService = PluginService.instance();
+	await pluginService.loadAndRunPlugins(
+		[`${Setting.value('pluginDir')}/${pluginId}.js`],
+		pluginService.unserializePluginSettings(Setting.value('plugins.states')),
+	);
+
+	const plugin = pluginService.pluginById(pluginId);
+	const editors = new JoplinViewsEditors(plugin, store);
+	let viewId = '';
+	await editors.register('test-editor', {
+		onSetup: async handle => {
+			viewId = handle;
+		},
+		onActivationCheck: async () => true,
+	});
+	const controller = plugin.viewController(viewId) as WebviewController;
+	controller.setActive(true);
+	await controller.setOpen(true);
+	mockUseVisiblePluginEditorViewIds.mockReturnValue([viewId]);
+
+	return { editors, pluginId, viewId };
+};
+
 describe('screens/Note/Note', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
@@ -321,6 +362,46 @@ describe('screens/Note/Note', () => {
 			continueReload.resolve();
 			reloadSpy.mockRestore();
 			unmount();
+		}
+	});
+
+	it('should save editor plugin changes during a reload', async () => {
+		const noteId = await openNewNote({ title: 'Original title', body: 'Original body' });
+		const { editors, pluginId, viewId } = await registerEditorPlugin();
+		expect(getShownPluginEditorView(store.getState().pluginService.plugins, defaultWindowId)).toMatchObject({
+			editorPlugin: { id: pluginId },
+			editorView: { id: viewId },
+		});
+
+		const { unmount } = render(<WrappedNoteScreen />);
+		const titleInput = await screen.findByDisplayValue('Original title');
+		await screen.findByTestId('joplin__PluginDialogWebView');
+
+		const originalReloadNote = shared.reloadNote;
+		const continueReload = deferred<void>();
+		const reloadSpy = jest.spyOn(shared, 'reloadNote').mockImplementation(async component => {
+			await continueReload.promise;
+			return originalReloadNote(component);
+		});
+
+		try {
+			await Note.save({ id: noteId, body: 'Remote body' });
+			await act(async () => {
+				store.dispatch({ type: 'EDITOR_NOTE_NEEDS_RELOAD', noteId });
+			});
+			await waitFor(() => expect(reloadSpy).toHaveBeenCalledTimes(1));
+
+			await act(() => editors.saveNote(viewId, { noteId, body: 'Plugin body' }));
+			await waitForNoteToMatch(noteId, { body: 'Plugin body' });
+
+			continueReload.resolve();
+			await waitFor(() => expect(titleInput).toBeEnabled());
+			await waitForNoteToMatch(noteId, { body: 'Plugin body' });
+		} finally {
+			continueReload.resolve();
+			reloadSpy.mockRestore();
+			unmount();
+			await PluginService.instance().unloadPlugin(pluginId);
 		}
 	});
 
