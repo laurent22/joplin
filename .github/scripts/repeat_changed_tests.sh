@@ -54,15 +54,17 @@ for package in $packages; do
 		continue
 	fi
 
-	# Paths must be relative to the package for `--runTestsByPath`.
-	packageTestFiles=$(echo "$testFiles" | grep -E "^packages/$package/" | sed -E "s|^packages/$package/||")
+	# Pass the file names without their extension: some packages run the
+	# TypeScript sources while others run the compiled files, and Jest matches
+	# these patterns against the full path either way.
+	packageTestNames=$(echo "$testFiles" | grep -E "^packages/$package/" | xargs -n 1 basename | sed -E 's#\.[a-z]+$##')
 
 	cd "$packageDir"
 	for i in $(seq 1 "$REPEAT_COUNT"); do
 		echo "Running $package tests - attempt $i/$REPEAT_COUNT..."
 
 		# shellcheck disable=SC2086
-		if ! yarn jest --runTestsByPath $packageTestFiles --forceExit; then
+		if ! yarn jest $packageTestNames --forceExit; then
 			echo "Tests failed on attempt $i/$REPEAT_COUNT in $package - they are flaky if earlier attempts passed"
 			exit 1
 		fi

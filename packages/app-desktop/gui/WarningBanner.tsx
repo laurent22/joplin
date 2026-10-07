@@ -15,7 +15,7 @@ import Logger from '@joplin/utils/Logger';
 import { AppState } from '../app.reducer';
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
-import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
+import { showMissingMasterKeyMessage, showUnknownKeyFormatBanner } from '@joplin/lib/services/e2ee/utils';
 import { noteLockKeyConflictFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { NoteLockMigrationStatus } from '@joplin/lib/reducer';
 import { withSkippedCount } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
@@ -35,6 +35,7 @@ interface Props {
 	processingShareInvitationResponse: boolean;
 	shareInvitations: ShareInvitation[];
 	hasDisabledSyncItems: boolean;
+	showUnknownKeyFormatMessage: boolean;
 	showMissingMasterKeyMessage: boolean;
 	showNoteLockKeyConflictMessage: boolean;
 	noteLockMigrationStatus: NoteLockMigrationStatus|null;
@@ -265,6 +266,12 @@ const WarningBanner: React.FC<Props> = props => {
 		} else {
 			msg = renderNotificationMessage(props.mustUpgradeAppMessage);
 		}
+	} else if (props.showUnknownKeyFormatMessage) {
+		msg = renderNotificationMessage(
+			_('One or more encryption keys are stored in an unknown format.'),
+			_('Manage'),
+			onViewEncryptionConfigScreen,
+		);
 	} else if (props.shouldSwitchToAppleSiliconVersion) {
 		msg = renderNotificationMessage(
 			_('You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.'),
@@ -323,6 +330,7 @@ const mapStateToProps = (state: AppState) => {
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
 		hasDisabledEncryptionItems: state.hasDisabledEncryptionItems,
 		showMissingMasterKeyMessage: showMissingMasterKeyMessage(syncInfo, state.notLoadedMasterKeys),
+		showUnknownKeyFormatMessage: showUnknownKeyFormatBanner(syncInfo),
 		showNoteLockKeyConflictMessage: noteLockKeyConflictFromState(state),
 		noteLockMigrationStatus: state.noteLockMigrationStatus,
 		showNeedUpgradingMasterKeyMessage: showNeedUpgradingEnabledMasterKeyMessage,

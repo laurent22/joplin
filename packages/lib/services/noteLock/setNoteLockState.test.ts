@@ -45,7 +45,7 @@ describe('setNoteLockState', () => {
 			expect((await Note.load(note.id)).is_locked).toBe(0);
 			expect((await Note.load(note.id)).body).toBe('secret');
 
-			await Note.save({ id: note.id, is_locked: 1 });
+			await Note.save({ ...await Note.load(note.id, { useNoteLock: true }), is_locked: 1 }, { useNoteLock: true });
 			await disableNoteLock(note.id);
 			expect(events[1]).toEqual({ noteId: note.id, isLocked: false });
 			expect((await Note.load(note.id)).is_locked).toBe(1);
@@ -60,19 +60,18 @@ describe('setNoteLockState', () => {
 
 		await expect(disableNoteLock(note.id)).rejects.toThrow('not locked');
 
-		await Note.save({ id: note.id, is_locked: 1 });
+		await Note.save({ ...await Note.load(note.id, { useNoteLock: true }), is_locked: 1 }, { useNoteLock: true });
 		await expect(enableNoteLock(note.id)).rejects.toThrow('already locked');
 	});
 
 	it('should fail closed when the session is locked', async () => {
 		await setUpUnlockedSession();
 		const note = await Note.save({ title: 'note', body: 'secret' });
+		const lockedNote = await Note.save({ title: 'locked note', body: 'secret', is_locked: 1 }, { useNoteLock: true });
 
 		NoteLockSession.instance().lock();
 		await expect(enableNoteLock(note.id)).rejects.toThrow();
-
-		await Note.save({ id: note.id, is_locked: 1 });
-		await expect(disableNoteLock(note.id)).rejects.toThrow();
+		await expect(disableNoteLock(lockedNote.id)).rejects.toThrow();
 	});
 
 	test.each([

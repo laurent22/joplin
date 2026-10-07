@@ -80,6 +80,7 @@ export default class NoteLockService {
 		return {
 			masterKeyId: key.id,
 			decryptedMasterKey: key.plainText,
+			isNoteLock: true,
 		};
 	}
 }

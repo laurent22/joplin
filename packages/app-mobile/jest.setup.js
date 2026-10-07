@@ -76,7 +76,7 @@ jest.mock('./components/CameraView/Camera', () => {
 // Tests run as iOS by default so this mock calls it too.
 jest.mock('react-native/Libraries/Modal/Modal', () => {
 	const React = require('react');
-	const MockModal = jest.requireActual('react-native/jest/mocks/Modal').default;
+	const MockModal = jest.requireActual('@react-native/jest-preset/jest/mocks/Modal').default;
 	const Modal = (props) => {
 		const wasVisibleRef = React.useRef(props.visible);
 		const onDismissRef = React.useRef(props.onDismiss);
@@ -153,12 +153,6 @@ jest.mock('react-native-zip-archive', () => {
 
 jest.mock('@react-native-documents/picker', () => ({ default: { } }));
 
-// This is one of the icon libraries that react-native-paper attempts to use.
-// Throwing an Error causes react-native-paper to select a different icon library
-// that better supports our automated testing environment.
-jest.doMock('@expo/vector-icons/MaterialCommunityIcons', () => {
-	throw new Error('Not supported in testing environments.');
-});
 
 const mockIconLibrary = (libraryName, exportName) => {
 	jest.doMock(libraryName, () => {

@@ -3,14 +3,13 @@ import { useState, useCallback, useMemo, useRef, RefObject, useLayoutEffect } fr
 import { FAB } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import { Dispatch } from 'redux';
-import { AccessibilityActionEvent, AccessibilityActionInfo, Platform, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { AccessibilityActionEvent, AccessibilityActionInfo, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { connect } from 'react-redux';
 import { MenuAlignment, MenuType } from '../BottomDrawer';
 import { Ionicons as Icon } from '@react-native-vector-icons/ionicons';
 import BottomDrawerMenu, { MenuOption } from '../BottomDrawerMenu';
 import { AppState } from '../../utils/types';
 import { themeStyle } from '../global-style';
-import useSafeAreaPadding from '../../utils/hooks/useSafeAreaPadding';
 
 type OnButtonPress = ()=> void;
 interface ButtonSpec {
@@ -50,22 +49,16 @@ const useIcon = (iconName: string) => {
 
 const useMenuMarginBottom = (buttonContainerRef: RefObject<View>, themeId: number) => {
 	const { height: windowHeight } = useWindowDimensions();
-	const safeAreaPadding = useSafeAreaPadding();
 	const [menuMarginBottom, setMenuMarginBottom] = useState(0);
 
 	const recomputeMargin = useCallback(() => {
 		const theme = themeStyle(themeId);
 
 		buttonContainerRef.current?.measure((_x, _y, _width, _height, _pageX, pageY) => {
-			// On Android, the safe area padding doesn't seem to be included in windowHeight,
-			// but **does** seem to be taken into account when determining absolute/relative positioning
-			// 2026-08-31: Android 15 and later seem to include safe area padding in windowHeight
-			const includeSafeArea = Platform.OS === 'android' && Platform.Version < 35;
-			const extraMargin = theme.marginBottom + (includeSafeArea ? safeAreaPadding.paddingBottom : 0);
-
+			const extraMargin = theme.marginBottom;
 			setMenuMarginBottom(windowHeight - pageY + extraMargin);
 		});
-	}, [windowHeight, buttonContainerRef, themeId, safeAreaPadding]);
+	}, [windowHeight, buttonContainerRef, themeId]);
 
 	useLayoutEffect(() => {
 		recomputeMargin();
