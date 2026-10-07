@@ -12687,7 +12687,7 @@ __metadata:
     react-native-popup-menu: "npm:0.17.0"
     react-native-quick-actions: "patch:react-native-quick-actions@npm%3A0.3.13#~/.yarn/patches/react-native-quick-actions-npm-0.3.13-eb0753e0b7.patch"
     react-native-quick-base64: "npm:3.0.1"
-    react-native-quick-crypto: "npm:1.1.4"
+    react-native-quick-crypto: "npm:1.1.6"
     react-native-rsa-native: "patch:react-native-rsa-native@npm%3A2.0.5#~/.yarn/patches/react-native-rsa-native-npm-2.0.5-4664e1ce79.patch"
     react-native-safe-area-context: "npm:5.8.0"
     react-native-share: "npm:12.3.1"
@@ -50420,9 +50420,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-quick-crypto@npm:1.1.4":
-  version: 1.1.4
-  resolution: "react-native-quick-crypto@npm:1.1.4"
+"react-native-quick-crypto@npm:1.1.6":
+  version: 1.1.6
+  resolution: "react-native-quick-crypto@npm:1.1.6"
   dependencies:
     "@craftzdog/react-native-buffer": "npm:^6.1.2"
     events: "npm:3.3.0"
@@ -50442,7 +50442,7 @@ __metadata:
       optional: true
     expo-build-properties:
       optional: true
-  checksum: 10/6151263a87937d80ccb45a9e885f17aaad92b38e331aa8a6441f8b1d85f179138b7481dc2d0587b5d097e0ff4af8c63753d4a0b14f8f438ce7b47a767a588515
+  checksum: 10/98e5e22b51037fe823d66e3e082c9d1b954deab93227c361177155dcd67781d7db7382ed1558657eaf460c6f0937e11b8c3e3d25983c5ea0d479c6c01690e2ce
   languageName: node
   linkType: hard
 
