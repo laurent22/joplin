@@ -135,6 +135,25 @@ describe('interop/InteropService_Exporter_Md', () => {
 		expect(exporter.context().notePaths[note1_2.id]).toBe('folder1/note1-1.md');
 	}));
 
+	it('should warn when a note title is truncated in the exported filename', async () => {
+		const longTitle = 'a'.repeat(51);
+		const longFolderTitle = 'b'.repeat(51);
+		const folder = await Folder.save({ title: longFolderTitle });
+		const note = await Note.save({ title: longTitle, parent_id: folder.id });
+
+		const result = await InteropService.instance().export({
+			path: exportDir(),
+			format: ExportModuleOutputFormat.Markdown,
+			sourceNoteIds: [note.id],
+		});
+
+		expect(result.warnings).toEqual([
+			`The notebook title "${longFolderTitle}" was truncated to "${'b'.repeat(50)}" in the exported folder name.`,
+			`The note title "${longTitle}" was truncated to "${'a'.repeat(50)}" in the exported file name.`,
+		]);
+		expect(await shim.fsDriver().exists(`${exportDir()}/${'b'.repeat(50)}/${'a'.repeat(50)}.md`)).toBe(true);
+	});
+
 	it('should not override existing files', (async () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
@@ -414,6 +433,32 @@ describe('interop/InteropService_Exporter_Md', () => {
 		const note_body = await shim.fsDriver().readFile(`${exportDir()}/testing/mynote.md`);
 		expect(note_body).toContain('[photo.jpg](../_resources/name%20with%20spaces.jpg)');
 	}));
+
+	it('should not add an empty-path warning when a resource cannot be exported', async () => {
+		const folder = await Folder.save({ title: 'folder' });
+		let note = await Note.save({ title: 'note', parent_id: folder.id });
+		note = await shim.attachFileToNote(note, `${supportDir}/photo.jpg`);
+		const resource = await Resource.load((await Note.linkedResourceIds(note.body))[0]);
+		const resourcePath = Resource.fullPath(resource);
+		await fs.remove(resourcePath);
+
+		const consoleErrorMock = jest.spyOn(console, 'error').mockImplementation(() => {});
+		let result;
+		try {
+			result = await InteropService.instance().export({
+				path: exportDir(),
+				format: ExportModuleOutputFormat.Markdown,
+			});
+		} finally {
+			consoleErrorMock.mockRestore();
+		}
+
+		expect(result.warnings).toHaveLength(1);
+		expect(result.warnings[0]).toContain(resource.id);
+		expect(result.warnings[0]).not.toContain('Path is empty');
+		const noteBody = await fs.readFile(`${exportDir()}/folder/note.md`, 'utf8');
+		expect(noteBody).toContain(resource.id);
+	});
 
 	it.each([
 		{ titles: ['folder:', 'folder?'], expectedPaths: ['folder_/note1.md', 'folder_-1/note2.md'], description: 'special characters' },

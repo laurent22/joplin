@@ -51,6 +51,24 @@ describe('interop/InteropService_Exporter_Md_frontmatter', () => {
 		expect(content).not.toContain('due');
 	}));
 
+	test('should warn when a note title is truncated in the exported filename', async () => {
+		const longTitle = 'a'.repeat(51);
+		const longFolderTitle = 'b'.repeat(51);
+		const folder = await Folder.save({ title: longFolderTitle });
+		await Note.save({ title: longTitle, parent_id: folder.id });
+
+		const result = await InteropService.instance().export({
+			path: exportDir(),
+			format: ExportModuleOutputFormat.MarkdownFrontMatter,
+		});
+
+		expect(result.warnings).toEqual([
+			`The notebook title "${longFolderTitle}" was truncated to "${'b'.repeat(50)}" in the exported folder name.`,
+			`The note title "${longTitle}" was truncated to "${'a'.repeat(50)}" in the exported file name.`,
+		]);
+		expect(await fs.pathExists(`${exportDir()}/${'b'.repeat(50)}/${'a'.repeat(50)}.md`)).toBe(true);
+	});
+
 	test('should export without additional quotes', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		await Note.save({ title: '-60', body: '**ma note**', parent_id: folder1.id });

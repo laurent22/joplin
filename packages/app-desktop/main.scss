@@ -134,6 +134,7 @@ a {
 		justify-content: flex-start;
 		max-height: calc(100vh - 80px);
 		min-width: min(600px, calc(100vw - 40px));
+		width: calc(100vw - 40px);
 	}
 }
 
