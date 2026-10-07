@@ -32,6 +32,7 @@ interface Props {
 	appDialogStates: AppStateDialog[];
 	pluginsLegacy: Record<string, { dialogOpen?: boolean; userData?: unknown }>;
 	modalMessage: string|null;
+	modalMessageHasCloseButton: boolean;
 
 	customCss: string;
 	editorNoteStatuses: EditorNoteStatuses;
@@ -127,7 +128,11 @@ const WindowCommandsAndDialogs: React.FC<Props> = props => {
 	return <>
 		<div ref={setReferenceElement}/>
 		{pluginDialog}
-		{props.modalMessage !== null ? <ModalMessageOverlay message={props.modalMessage}/> : null}
+		{props.modalMessage !== null ? <ModalMessageOverlay
+			message={props.modalMessage}
+			hasCloseButton={props.modalMessageHasCloseButton}
+			onClose={() => props.dispatch({ type: 'HIDE_MODAL_MESSAGE' })}
+		/> : null}
 		<PluginDialogs
 			themeId={props.themeId}
 			visibleDialogs={props.visibleDialogs}
@@ -210,5 +215,6 @@ export default connect((state: AppState, ownProps: ConnectProps) => {
 		editorNoteStatuses: state.editorNoteStatuses,
 		pluginsLegacy: state.pluginsLegacy,
 		modalMessage: state.modalOverlayMessage,
+		modalMessageHasCloseButton: state.modalOverlayHasCloseButton,
 	};
 })(WindowCommandsAndDialogs);
