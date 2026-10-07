@@ -154,6 +154,24 @@ describe('interop/InteropService_Exporter_Md', () => {
 		expect(await shim.fsDriver().exists(`${exportDir()}/${'b'.repeat(50)}/${'a'.repeat(50)}.md`)).toBe(true);
 	});
 
+	it('should not report title truncation for encrypted notes or notebooks', async () => {
+		const encryptedFolder = await Folder.save({ title: 'b'.repeat(51), encryption_applied: 1 });
+		const folder = await Folder.save({ title: 'folder' });
+		const encryptedNote = await Note.save({ title: 'a'.repeat(51), parent_id: folder.id, encryption_applied: 1 });
+
+		const result = await InteropService.instance().export({
+			path: exportDir(),
+			format: ExportModuleOutputFormat.Markdown,
+		});
+
+		expect(result.warnings).toHaveLength(2);
+		const warnings = result.warnings.join('\n');
+		expect(warnings).toContain(encryptedFolder.id);
+		expect(warnings).toContain(encryptedNote.id);
+		expect(warnings).toContain('currently encrypted');
+		expect(warnings).not.toContain('truncated');
+	});
+
 	it('should not override existing files', (async () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());

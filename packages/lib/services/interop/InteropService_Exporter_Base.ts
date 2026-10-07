@@ -10,6 +10,7 @@ import { _ } from '../../locale';
 import BaseModel from '../../BaseModel';
 
 interface ItemWithTitle {
+	encryption_applied?: number;
 	id?: string;
 	title?: string;
 	type_?: number;
@@ -46,6 +47,8 @@ export default class InteropService_Exporter_Base {
 	protected itemTitleToFilename_(item: ItemWithTitle) {
 		const title = item.title || '';
 		const filename = friendlySafeFilename(title);
+		if (item.encryption_applied) return filename;
+
 		const untruncatedFilename = friendlySafeFilename(title, title.length);
 		const warningKey = `${item.type_}:${item.id || title}`;
 
