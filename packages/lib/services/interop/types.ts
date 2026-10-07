@@ -88,7 +88,6 @@ export interface ExportOptions {
 
 export interface ImportExportResult {
 	warnings: string[];
-	lockedNotesSkipped?: number;
 }
 
 // These are the fields that will be included in an exported Md+Front Matter note

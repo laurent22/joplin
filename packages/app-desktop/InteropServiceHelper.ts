@@ -253,12 +253,10 @@ export default class InteropServiceHelper {
 		const service = InteropService.instance();
 		let keepModalOpen = false;
 
-		let lockedNotesSkipped = 0;
 		try {
 			const result = await service.export(exportOptions);
 			// eslint-disable-next-line no-console
 			console.info('Export result: ', result);
-			lockedNotesSkipped = result.lockedNotesSkipped ?? 0;
 			if (result.warnings.length) {
 				keepModalOpen = true;
 				const message = [_('Export completed, but some items were skipped because they have not been downloaded to this device or could not be exported:'), '', ...result.warnings].join('\n');
@@ -270,8 +268,6 @@ export default class InteropServiceHelper {
 		}
 
 		if (!keepModalOpen) void CommandService.instance().execute('hideModalMessage');
-
-		if (lockedNotesSkipped) bridge().showInfoMessageBox(_('%d locked note(s) could not be unlocked and were not exported.', lockedNotesSkipped));
 	}
 
 }

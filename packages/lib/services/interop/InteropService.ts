@@ -450,10 +450,7 @@ export default class InteropService {
 			}
 		}
 
-		if (lockedNotesSkipped) {
-			result.lockedNotesSkipped = lockedNotesSkipped;
-			result.warnings.push(`${lockedNotesSkipped} locked note(s) could not be unlocked and were not exported`);
-		}
+		if (lockedNotesSkipped) result.warnings.push(`${lockedNotesSkipped} locked note(s) could not be unlocked and were not exported`);
 
 		resourceIds = ArrayUtils.unique(resourceIds);
 

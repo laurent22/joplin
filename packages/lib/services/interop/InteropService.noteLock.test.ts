@@ -92,7 +92,7 @@ describe('InteropService.noteLock', () => {
 		expect(files.length).toBe(1);
 		const exported = await fs.readFile(`${exportDir()}/folder/${files[0]}`, 'utf-8');
 		expect(exported).toContain('secret text');
-		expect(result.lockedNotesSkipped).toBeUndefined();
+		expect(result.warnings).toEqual([]);
 		// The database row stays encrypted, only the exported copy is decrypted.
 		expect((await Note.load(note.id)).body).not.toContain('secret');
 	});
@@ -107,8 +107,7 @@ describe('InteropService.noteLock', () => {
 
 		const result = await InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Markdown });
 
-		expect(result.lockedNotesSkipped).toBe(1);
-		expect(result.warnings.length).toBe(1);
+		expect(result.warnings).toEqual(['1 locked note(s) could not be unlocked and were not exported']);
 		expect(await fs.readdir(`${exportDir()}/folder`)).toEqual(['plain.md']);
 	});
 
@@ -119,7 +118,7 @@ describe('InteropService.noteLock', () => {
 
 		const result = await InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Markdown });
 
-		expect(result.lockedNotesSkipped).toBe(1);
+		expect(result.warnings).toEqual(['1 locked note(s) could not be unlocked and were not exported']);
 	});
 
 	it.each([
