@@ -182,6 +182,8 @@ impl Renderer {
         extension: &str,
     ) -> Result<String> {
         let filename = filename_base.trim().replace("/", "_");
+        // Sanitize before shortening so removed characters don't use up the length limit
+        let filename = fs_driver().sanitize_file_name(&filename);
         let mut i = 0;
         let mut current_filename =
             fs_driver().sanitize_file_name(&build_file_name(&filename, "", extension));
@@ -231,5 +233,16 @@ mod tests {
             long_title_filename.len(),
             &long_title_filename[long_title_filename.len() - 10..]
         );
+    }
+
+    #[test]
+    fn should_keep_title_text_when_long_title_has_invalid_characters() {
+        let mut renderer = Renderer::new();
+
+        let filename = renderer
+            .title_to_unique_safe_filename("/out", &format!("{}Notes", "?".repeat(260)), ".html")
+            .unwrap();
+
+        assert_eq!(filename, "Notes.html");
     }
 }
