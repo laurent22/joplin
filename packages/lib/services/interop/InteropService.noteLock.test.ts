@@ -97,6 +97,33 @@ describe('InteropService.noteLock', () => {
 		expect((await Note.load(note.id)).body).not.toContain('secret');
 	});
 
+	it('should md export every locked note decrypted when the feature flag is turned off while queuing', async () => {
+		await setUpUnlockedSession();
+		const folder = await Folder.save({ title: 'folder' });
+		for (const title of ['one', 'two']) {
+			const note = await Note.save({ title, body: `secret ${title}`, parent_id: folder.id });
+			await lockNote(note.id);
+		}
+
+		const load = Note.load.bind(Note);
+		const spy = jest.spyOn(Note, 'load').mockImplementation((id, options) => {
+			Setting.setValue('featureFlag.noteLock', false);
+			return load(id, options);
+		});
+
+		try {
+			await InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Markdown });
+		} finally {
+			spy.mockRestore();
+		}
+
+		const files = await fs.readdir(`${exportDir()}/folder`);
+		expect(files.length).toBe(2);
+		for (const file of files) {
+			expect(await fs.readFile(`${exportDir()}/folder/${file}`, 'utf-8')).toContain('secret');
+		}
+	});
+
 	it('should skip and count locked notes when the session is locked', async () => {
 		await setUpUnlockedSession();
 		const folder = await Folder.save({ title: 'folder' });
@@ -174,6 +201,32 @@ describe('InteropService.noteLock', () => {
 		expect(imported.body).not.toContain('secret');
 		expect((await Note.load(imported.id, { useNoteLock: true })).body).toBe('secret old');
 		expect(result.warnings.length).toBe(0);
+	});
+
+	it('should cancel the import when the feature flag is turned off while a locked note is re-encrypted', async () => {
+		await setUpUnlockedSession('old password');
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'note', body: 'secret old', parent_id: folder.id });
+		await lockNote(note.id);
+		await InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Raw });
+
+		await rotateProfileKey('new password');
+
+		const save = Note.save.bind(Note);
+		const spy = jest.spyOn(Note, 'save').mockImplementation((o, options) => {
+			Setting.setValue('featureFlag.noteLock', false);
+			return save(o, options);
+		});
+
+		try {
+			await expect(InteropService.instance().import({
+				path: exportDir(),
+				format: 'raw',
+				onNoteLockKey: keyFile => NoteLockKey.instance().decrypt('old password', keyFile),
+			})).rejects.toThrow('The import was cancelled because the note lock feature was turned off.');
+		} finally {
+			spy.mockRestore();
+		}
 	});
 
 	it('should import foreign locked notes unchanged when no key handler is provided', async () => {

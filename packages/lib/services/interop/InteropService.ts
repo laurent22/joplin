@@ -405,6 +405,8 @@ export default class InteropService {
 		// Backups keep locked notes encrypted; every other format exports the decrypted content.
 		const keepsLockedNotes = options.format === ExportModuleOutputFormat.Raw || options.format === ExportModuleOutputFormat.Jex;
 		let lockedNotesSkipped = 0;
+		// Read once, so a feature flag change while queuing cannot write some locked notes as ciphertext.
+		const noteLockEnabled = isNoteLockEnabled();
 
 		// Recursively get all the folders that have valid parents
 		const folderIds = await Folder.childrenIds('');
@@ -431,7 +433,7 @@ export default class InteropService {
 				const noteId = noteIds[noteIndex];
 				if (sourceNoteIds.length && sourceNoteIds.indexOf(noteId) < 0) continue;
 				let note = await Note.load(noteId);
-				if (isNoteLockEnabled() && NoteLockNote.isLocked(note) && !keepsLockedNotes) {
+				if (noteLockEnabled && NoteLockNote.isLocked(note) && !keepsLockedNotes) {
 					const decrypted = await this.decryptedNoteForExport_(note);
 					if (!decrypted) {
 						lockedNotesSkipped++;
@@ -443,7 +445,7 @@ export default class InteropService {
 				exportedNoteIds.push(noteId);
 
 				// A locked note's body is ciphertext, so its resource ids come from the extracted list.
-				const rids = isNoteLockEnabled() && NoteLockNote.isLocked(note)
+				const rids = noteLockEnabled && NoteLockNote.isLocked(note)
 					? Note.unserializeExtractedResourceIds(note.extracted_resource_ids)
 					: await Note.linkedResourceIds(note.body);
 				resourceIds = resourceIds.concat(rids);
