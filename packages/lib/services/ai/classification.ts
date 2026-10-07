@@ -11,28 +11,63 @@ const loopbackSuffixes = ['.localhost'];
 
 // Dotted quad is enough because new URL() has already canonicalised octal, hex,
 // decimal and short forms - `http://2130706433/` arrives here as "127.0.0.1".
-const isLoopbackIpV4 = (host: string) => {
+const isPrivateNetworkIpV4 = (host: string) => {
 	const parts = host.split('.');
 	if (parts.length !== 4) return false;
 
 	const bytes = parts.map(p => (/^\d{1,3}$/.test(p) ? Number(p) : -1));
+
 	if (bytes.some(b => b < 0 || b > 255)) return false;
 
-	return bytes[0] === 127;
+	const [first, second] = bytes;
+
+	return (
+		first === 127 ||
+        first === 10 ||
+        (first === 172 && second >= 16 && second <= 31) ||
+        (first === 192 && second === 168) ||
+        (first === 169 && second === 254)
+	);
 };
 
-const isLoopbackIpV6 = (host: string) => {
-	// URL.hostname keeps the brackets around IPv6 literals.
-	const address = host.replace(/^\[/, '').replace(/\]$/, '');
-	return loopbackHosts.has(address);
+const isPrivateNetworkIpV6 = (host: string) => {
+	const address = host.replace(/^\[/, '').replace(/\]$/, '').toLowerCase();
+
+	if (address === '::1') return true;
+
+	if (address.startsWith('fc') || address.startsWith('fd')) return true;
+
+	if (
+		address.startsWith('fe8') ||
+        address.startsWith('fe9') ||
+        address.startsWith('fea') ||
+        address.startsWith('feb')
+	) {
+		return true;
+	}
+
+	return false;
+};
+
+const isInternalHostname = (host: string) => {
+	return (
+		host.endsWith('.internal') ||
+        host.endsWith('.home.arpa')
+	);
 };
 
 const isLoopbackHost = (host: string) => {
 	if (!host) return false;
 	if (loopbackHosts.has(host)) return true;
 	if (loopbackSuffixes.some(suffix => host === suffix.substring(1) || host.endsWith(suffix))) return true;
-	if (isLoopbackIpV4(host)) return true;
-	if (isLoopbackIpV6(host)) return true;
+	return false;
+};
+
+const isPrivateNetworkHost = (host: string) => {
+	if (isLoopbackHost(host)) return true;
+	if (isPrivateNetworkIpV4(host)) return true;
+	if (isPrivateNetworkIpV6(host)) return true;
+	if (isInternalHostname(host)) return true;
 	return false;
 };
 
@@ -52,7 +87,7 @@ const deriveClassification = (
 	if (providerType === 'anthropic') return 'remote';
 	if (providerType === 'joplin-cloud') return 'remote';
 	if (providerType === 'openai-compatible') {
-		return isLoopbackHost(hostFromBaseUrl(baseUrl)) ? 'local' : 'remote';
+		return isPrivateNetworkHost(hostFromBaseUrl(baseUrl)) ? 'local' : 'remote';
 	}
 	return 'remote';
 };
