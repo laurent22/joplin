@@ -274,6 +274,9 @@
 			toggle.classList.toggle('is-active', isOpen);
 			toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
 		});
+
+		const overlay = document.querySelector('.folder-tree-overlay');
+		if (overlay) overlay.addEventListener('click', () => toggle.click());
 	}
 
 	const initFolderTree = function() {
