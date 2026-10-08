@@ -168,7 +168,7 @@ export default class ClipperServer {
 					'Content-Type': contentType,
 					'Access-Control-Allow-Origin': '*',
 					'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
-					'Access-Control-Allow-Headers': 'X-Requested-With,content-type',
+					'Access-Control-Allow-Headers': 'X-Requested-With,content-type,Authorization',
 					...(additionalHeaders ? additionalHeaders : {}),
 				};
 				response.writeHead(code, headers);
@@ -228,7 +228,7 @@ export default class ClipperServer {
 
 			const execRequest = async (request: import('http').IncomingMessage, body = '', files: RequestFile[] = []) => {
 				try {
-					const response = await this.api_.route(request.method as Parameters<Api['route']>[0], url.pathname, url.query, body, files);
+					const response = await this.api_.route(request.method as Parameters<Api['route']>[0], url.pathname, url.query, body, files, request.headers);
 					writeResponse(200, response);
 				} catch (error) {
 					this.logger().error(error);

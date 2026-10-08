@@ -14,6 +14,7 @@ import route_revisions from './routes/revisions';
 import route_mcp from './routes/mcp';
 
 import { ltrimSlashes } from '../../path-utils';
+import type { IncomingHttpHeaders } from 'http';
 const md5 = require('md5');
 
 export enum RequestMethod {
@@ -60,6 +61,7 @@ export interface Request {
 	method: RequestMethod;
 	path: string;
 	query: RequestQuery;
+	headers: IncomingHttpHeaders;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Body is parsed lazily via bodyJson(); raw value is whatever the request supplied (string, Buffer, parsed object)
 	body: any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Cached parsed body shape varies per route (NoteEntity, FolderEntity, etc.)
@@ -178,7 +180,7 @@ export default class Api {
 
 	// Response can be any valid JSON object, so a string, and array or an object (key/value pairs).
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Body is per-route; the response shape is per-route (entity/list/null); the consumer narrows
-	public async route(method: RequestMethod, path: string, query: RequestQuery = null, body: any = null, files: RequestFile[] = null): Promise<any> {
+	public async route(method: RequestMethod, path: string, query: RequestQuery = null, body: any = null, files: RequestFile[] = null, headers: IncomingHttpHeaders = {}): Promise<any> {
 		if (!files) files = [];
 		if (!query) query = {};
 
@@ -210,6 +212,7 @@ export default class Api {
 			method,
 			path: ltrimSlashes(path),
 			query: query ? query : {},
+			headers,
 			body,
 			bodyJson_: null,
 			bodyJson: function(disallowedProperties: string[] = null) {
@@ -266,8 +269,12 @@ export default class Api {
 		// needed. This is for example when it is used as the plugin data API.
 		if (!this.token) return;
 
-		if (!request.query || !request.query.token) throw new ErrorForbidden('Missing "token" parameter');
-		if (request.query.token !== this.token) throw new ErrorForbidden('Invalid "token" parameter');
+		const authorization = request.headers.authorization;
+		const bearerMatch = typeof authorization === 'string' ? authorization.match(/^Bearer\s+(\S+)$/i) : null;
+		const token = bearerMatch ? bearerMatch[1] : request.query.token;
+
+		if (!token) throw new ErrorForbidden('Missing "token" parameter');
+		if (token !== this.token) throw new ErrorForbidden('Invalid "token" parameter');
 	}
 
 	private async execServiceActionFromRequest_(externalApi: Record<string, (args: Omit<Request, 'action'>)=> unknown>, request: Request) {

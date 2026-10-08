@@ -541,6 +541,47 @@ describe('services/rest/Api', () => {
 		expect(hasThrown).toBe(true);
 	}));
 
+	it('should accept Bearer tokens', async () => {
+		api = new Api('mytoken');
+
+		const response = await api.route(RequestMethod.GET, 'notes', null, null, null, {
+			authorization: 'Bearer mytoken',
+		});
+		expect(response.items.length).toBe(0);
+	});
+
+
+	it.each([
+		['Bearer mytoken', null],
+		['bearer mytoken', null],
+		['Basic ignored', 'mytoken'],
+		['Bearer', 'mytoken'],
+	])('should accept Bearer or query tokens with header %s', async (authorization, token) => {
+		api = new Api('mytoken');
+
+		const response = await api.route(RequestMethod.GET, 'notes', token ? { token } : null, null, null, {
+			authorization,
+		});
+		expect(response.items.length).toBe(0);
+	});
+
+	it('should prefer a valid Bearer token over an invalid query token', async () => {
+		api = new Api('mytoken');
+
+		const response = await api.route(RequestMethod.GET, 'notes', { token: 'wrong-token' }, null, null, {
+			authorization: 'Bearer mytoken',
+		});
+		expect(response.items.length).toBe(0);
+	});
+
+	it('should reject an invalid Bearer token even with a valid query token', async () => {
+		api = new Api('mytoken');
+
+		await expect(api.route(RequestMethod.GET, 'notes', { token: 'mytoken' }, null, null, {
+			authorization: 'Bearer wrong-token',
+		})).rejects.toMatchObject({ httpCode: 403 });
+	});
+
 	it('should add tags to notes', (async () => {
 		const tag = await Tag.save({ title: 'mon étiquette' });
 		const note = await Note.save({ title: 'ma note' });
