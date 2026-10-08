@@ -203,7 +203,7 @@ describe('InteropService.noteLock', () => {
 		expect(result.warnings.length).toBe(0);
 	});
 
-	it('should cancel the import when the feature flag is turned off while a locked note is re-encrypted', async () => {
+	it('should stop the import without writing plain text when the feature flag is turned off while a locked note is re-encrypted', async () => {
 		await setUpUnlockedSession('old password');
 		const folder = await Folder.save({ title: 'folder' });
 		const note = await Note.save({ title: 'note', body: 'secret old', parent_id: folder.id });
@@ -223,10 +223,11 @@ describe('InteropService.noteLock', () => {
 				path: exportDir(),
 				format: 'raw',
 				onNoteLockKey: keyFile => NoteLockKey.instance().decrypt('old password', keyFile),
-			})).rejects.toThrow('The import was cancelled because the note lock feature was turned off.');
+			})).rejects.toThrow('Locked notes cannot be saved while the note lock feature is turned off');
 		} finally {
 			spy.mockRestore();
 		}
+		expect((await Note.all()).filter(n => n.body.includes('secret'))).toEqual([]);
 	});
 
 	it('should import foreign locked notes unchanged when no key handler is provided', async () => {

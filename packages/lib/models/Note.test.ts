@@ -405,6 +405,24 @@ describe('models/Note', () => {
 		expect((await Note.load(note.id)).body).toBe('overwrite');
 	});
 
+	it('should refuse to save a decrypted locked note once the feature is disabled', async () => {
+		await NoteLockKey.instance().create('123456');
+		await NoteLockSession.instance().unlock('123456');
+		const note = await Note.save({ body: 'secret', is_locked: 1 }, { useNoteLock: true });
+		const lockedNote = await Note.load(note.id, { useNoteLock: true });
+		const unlockedNote = await Note.load((await Note.save({ body: 'plain' })).id, { useNoteLock: true });
+		const cipherText = (await Note.load(note.id)).body;
+
+		Setting.setValue('featureFlag.noteLock', false);
+		const error = 'Locked notes cannot be saved while the note lock feature is turned off';
+		await expect(Note.save({ ...lockedNote, body: 'edited' }, { useNoteLock: true })).rejects.toThrow(error);
+		await expect(Note.save({ id: note.id, body: 'edited', isDecrypted: true } as NoteEntity, { useNoteLock: true })).rejects.toThrow(error);
+		expect((await Note.load(note.id)).body).toBe(cipherText);
+
+		await Note.save({ ...unlockedNote, body: 'plain edited' }, { useNoteLock: true });
+		expect((await Note.load(unlockedNote.id)).body).toBe('plain edited');
+	});
+
 	it('should encrypt a gated save with a captured key while the session is locked, but not after a key rotation', async () => {
 		await NoteLockKey.instance().create('123456');
 		await NoteLockSession.instance().unlock('123456');

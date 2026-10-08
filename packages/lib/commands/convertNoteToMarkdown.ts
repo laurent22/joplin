@@ -67,7 +67,8 @@ export const runtime = (): CommandRuntime => {
 					note.markup_language = MarkupLanguage.Markdown;
 					note.updated_time = Date.now();
 
-					const toSave = { ...note, isDecrypted: true };
+					// Only a gated save needs the marker. With the feature turned off the body was never decrypted.
+					const toSave = { ...note, isDecrypted: isNoteLockEnabled() };
 					await Note.save(toSave, { autoTimestamp: false, useNoteLock: true, noteLockKey });
 					await Note.delete(backupNote.id, { toTrash: true });
 					processedCount ++;

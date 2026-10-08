@@ -10,7 +10,6 @@ import Note from '../../models/Note';
 import Tag from '../../models/Tag';
 const { sprintf } = require('sprintf-js');
 import shim from '../../shim';
-import { _ } from '../../locale';
 import { Stat } from '../../fs-driver-base';
 import { ResourceEntity } from '../database/types';
 import { MasterKeyEntity } from '../e2ee/types';
@@ -125,6 +124,8 @@ export default class InteropService_Importer_Raw extends InteropService_Importer
 							try {
 								const plainBody = await NoteLockService.withDecryptedKey(scoped => scoped.decryptString(item.body), importNoteLockKey);
 								item.body = await replaceLinkedItemIds(plainBody);
+								// Marked like a gated load, so a save after the feature is turned off fails instead of writing it as plain text.
+								item.isDecrypted = true;
 								useNoteLockSave = true;
 							} catch {
 								undecryptableNotes++;
@@ -172,8 +173,7 @@ export default class InteropService_Importer_Raw extends InteropService_Importer
 					continue;
 				}
 
-				const savedItem = await ItemClass.save(item, { isNew: true, autoTimestamp: false, useNoteLock: useNoteLockSave });
-				if (useNoteLockSave && !savedItem.isDecrypted) throw new Error(_('The import was cancelled because the note lock feature was turned off.'));
+				await ItemClass.save(item, { isNew: true, autoTimestamp: false, useNoteLock: useNoteLockSave });
 			} catch (error) {
 				if (error.code === 'malformedItem') {
 					result.warnings.push(sprintf('Skipped malformed item: %s: %s', stat.path, error.message));
