@@ -329,7 +329,7 @@ div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"] .wb-expander.wb-i
 		visibility: visible;
 	}
 
-	.published-note-layout:has(.is-open) .folder-tree-overlay {
+	.published-note-layout:has(.published-folder-sidebar.is-open) .folder-tree-overlay {
 		display: block;
 		position: fixed;
 		top: 0;
