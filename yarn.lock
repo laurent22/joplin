@@ -8100,17 +8100,17 @@ __metadata:
   linkType: hard
 
 "@crowdin/cli@npm:4":
-  version: 4.14.1
-  resolution: "@crowdin/cli@npm:4.14.1"
+  version: 4.15.1
+  resolution: "@crowdin/cli@npm:4.15.1"
   dependencies:
     command-exists-promise: "npm:^2.0.2"
     node-fetch: "npm:2.7.0"
     shelljs: "npm:^0.10.0"
-    tar: "npm:^7.5.2"
-    yauzl: "npm:^3.2.0"
+    tar: "npm:^7.5.21"
+    yauzl: "npm:^3.4.0"
   bin:
     crowdin: jdeploy-bundle/jdeploy.js
-  checksum: 10/ea45a7e6c7668cb4d8d3a08bfcba7988cccb2b52f815838f913c4ca50c0d2b9834a8e2ebaf476489c3e4e4731d8f7eb3f7f880b2452817b5126ae31013a86775
+  checksum: 10/3acde3cac1a59509fa2b9d1524e494227308985cbed822b01da8b3922cff4d35fd33d5aa13289a52c94cc10093c5120e9a8ce364d1d7090f745d71f992e60cf0
   languageName: node
   linkType: hard
 
@@ -56430,16 +56430,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tar@npm:^7.5.2":
-  version: 7.5.2
-  resolution: "tar@npm:7.5.2"
+"tar@npm:^7.5.21":
+  version: 7.5.22
+  resolution: "tar@npm:7.5.22"
   dependencies:
     "@isaacs/fs-minipass": "npm:^4.0.0"
     chownr: "npm:^3.0.0"
     minipass: "npm:^7.1.2"
     minizlib: "npm:^3.1.0"
     yallist: "npm:^5.0.0"
-  checksum: 10/dbad9c9a07863cd1bdf8801d563b3280aa7dd0f4a6cead779ff7516d148dc80b4c04639ba732d47f91f04002f57e8c3c6573a717d649daecaac74ce71daa7ad3
+  checksum: 10/129606384b3c895f422aaca48bf316357be6dc7aa35c1066c3f06c28acfff0be5b356e1b0a0be7c53a7a8945534ac06cec6d8e296d170d8a09c8bff67b29300e
   languageName: node
   linkType: hard
 
@@ -61540,12 +61540,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yauzl@npm:3.3.2":
-  version: 3.3.2
-  resolution: "yauzl@npm:3.3.2"
+"yauzl@npm:3.4.0":
+  version: 3.4.0
+  resolution: "yauzl@npm:3.4.0"
   dependencies:
     pend: "npm:~1.2.0"
-  checksum: 10/81a313d9a2fa65f72d4049ce22609227eccdf8676a95bddf7ad13cbf21f77819c3da1a872627cfcc8b85e4922336e4f3657322a168f5ee77bf850b6239538011
+  checksum: 10/76c1ca208478135dcd0b9f8baaa2e40a761652e0ec793c5a6bdeb973118f9720adc487f388e8394b4cfb73ae1976083ff58be4ea0ec60e060ffc9cf232db2c0a
   languageName: node
   linkType: hard
 
