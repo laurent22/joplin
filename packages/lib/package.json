@@ -41,7 +41,7 @@
     "react": "19.1.5",
     "react-dom": "19.1.5",
     "selfsigned": "5.5.0",
-    "sharp": "0.35.0",
+    "sharp": "0.35.3",
     "sqlite-vec": "0.1.9",
     "tesseract.js": "7.0.0",
     "typescript": "5.9.3"
