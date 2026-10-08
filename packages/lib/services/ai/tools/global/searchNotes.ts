@@ -3,13 +3,14 @@ import { NoteEntity } from '../../../database/types';
 import { _ } from '../../../../locale';
 import buildTool from '../utils/buildTool';
 import { ToolError } from '../types';
+import Note from '../../../../models/Note';
 
 interface Input {
 	query?: string;
 	limit?: number;
 }
 
-const fields = ['id', 'title', 'parent_id', 'updated_time', 'body'];
+const fields = ['id', 'title', 'parent_id', 'updated_time'];
 const defaultLimit = 20;
 const maxLimit = 100;
 const snippetChars = 240;
@@ -57,6 +58,10 @@ const tool = buildTool({
 		const limit = Math.min(Math.max(input.limit ?? defaultLimit, 1), maxLimit);
 		const { notes } = await SearchEngineUtils.notesForQuery(input.query, false, { fields });
 
+		const limitedNotes = notes.slice(0, limit);
+		const bodies = await Note.byIds(limitedNotes.map(n => n.id), { fields: ['id', 'body'] });
+		const bodyById = new Map(bodies.map(n => [n.id, n.body]));
+
 		// Pull keywords out of the query so we can anchor the snippet near a
 		// match. Filters like `notebook:"X"` aren't useful for that.
 		const keywords = input.query
@@ -65,12 +70,12 @@ const tool = buildTool({
 			.map(t => t.replace(/^["*]+|["*]+$/g, '').toLowerCase())
 			.filter(Boolean);
 
-		const results = notes.slice(0, limit).map((n: NoteEntity) => ({
+		const results = limitedNotes.map((n: NoteEntity) => ({
 			id: n.id,
 			title: n.title,
 			notebook_id: n.parent_id,
 			updated_time: n.updated_time,
-			snippet: makeSnippet(n.body ?? '', keywords),
+			snippet: makeSnippet(bodyById.get(n.id) ?? '', keywords),
 		}));
 
 		return { results, total: notes.length };
