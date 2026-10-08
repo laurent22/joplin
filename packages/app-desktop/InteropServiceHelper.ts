@@ -15,6 +15,7 @@ import { unlockNoteLockSession } from '@joplin/lib/services/noteLock/noteLockPro
 import noteLockPrompts from './utils/noteLockPrompts';
 import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
+import Folder from '@joplin/lib/models/Folder';
 import { friendlySafeFilename } from '@joplin/lib/path-utils';
 import time from '@joplin/lib/time';
 import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron';
@@ -199,8 +200,16 @@ export default class InteropServiceHelper {
 	}
 
 	// Decrypting exports need an unlocked session; skipping leaves the locked notes out.
-	public static async confirmLockedNoteExport(dispatch: Dispatch, noteIds: string[]) {
+	public static async confirmLockedNoteExport(dispatch: Dispatch, noteIds: string[], folderIds: string[] = null) {
 		if (!isNoteLockEnabled() || NoteLockSession.instance().isUnlocked()) return 'export';
+		if (!noteIds?.length && folderIds?.length) {
+			// Like the export itself, a notebook includes its sub-notebooks.
+			noteIds = [];
+			for (const folderId of folderIds) {
+				for (const id of [folderId, ...await Folder.childrenIds(folderId)]) noteIds.push(...await Folder.noteIds(id));
+			}
+			if (!noteIds.length) return 'export';
+		}
 		const hasLockedNotes = noteIds?.length ? await hasLockedNoteWhileSessionLocked(noteIds) : await Note.hasLockedNotes();
 		if (!hasLockedNotes) return 'export';
 
@@ -235,7 +244,7 @@ export default class InteropServiceHelper {
 
 		// Backups keep locked notes encrypted, so only the decrypting formats ask.
 		const isBackup = module.format === ExportModuleOutputFormat.Raw || module.format === ExportModuleOutputFormat.Jex;
-		if (!isBackup && await this.confirmLockedNoteExport(dispatch, options.sourceNoteIds) === 'cancel') return;
+		if (!isBackup && await this.confirmLockedNoteExport(dispatch, options.sourceNoteIds, options.sourceFolderIds) === 'cancel') return;
 
 		void CommandService.instance().execute('showModalMessage', _('Exporting to "%s" as "%s" format. Please wait...', path, module.format));
 
