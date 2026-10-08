@@ -54,8 +54,8 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 
 		// An older client drops is_locked when it edits a shared locked note: its change is discarded and the local version pushed back,
 		// ahead of the remote time. A read-only share rejects the push back, so there the lock is restored on the remote version and the
-		// normal conflict below keeps the local version.
-		if (remoteExists && (remoteContent as NoteEntity).is_locked === undefined && (local as NoteEntity).is_locked) {
+		// normal conflict below keeps the local version. Outside a share, only a bug could drop the lock, so the change is kept.
+		if (remoteExists && (remoteContent as NoteEntity).share_id && (remoteContent as NoteEntity).is_locked === undefined && (local as NoteEntity).is_locked) {
 			if (itemIsReadOnly) {
 				remoteContent = { ...remoteContent, is_locked: (local as NoteEntity).is_locked } as NoteEntity;
 			} else {

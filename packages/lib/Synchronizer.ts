@@ -1123,8 +1123,8 @@ export default class Synchronizer {
 								}
 							} else {
 								// An older client drops is_locked when it edits a shared locked note. Its change is discarded and the
-								// local version is pushed back, ahead of the remote time. is_locked is outside the E2EE payload.
-								if (content.type_ === BaseModel.TYPE_NOTE && content.is_locked === undefined && local?.is_locked) {
+								// local version is pushed back, ahead of the remote time. is_locked and share_id are outside the E2EE payload.
+								if (content.type_ === BaseModel.TYPE_NOTE && content.share_id && content.is_locked === undefined && local?.is_locked) {
 									const nextQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, BaseItem.remoteItemSyncTime(content.updated_time), null, remote.updated_time);
 									await ItemClass.save({ id: local.id, updated_time: content.updated_time + 1 }, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries });
 									continue;

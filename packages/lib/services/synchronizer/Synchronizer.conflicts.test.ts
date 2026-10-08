@@ -97,6 +97,21 @@ describe('Synchronizer.conflicts', () => {
 		expect(await BaseItem.unserialize(await fileApi().get(path))).toMatchObject({ title, is_locked: 1, body: 'JLD01cipher' });
 	}));
 
+	it.each([false, true])('should keep a remote change that drops the lock of a note outside a share (changed locally: %s)', (async (changedLocally) => {
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'Locked', body: 'JLD01cipher', is_locked: 1, parent_id: folder.id, updated_time: time.unixMs() - 60_000 }, { autoTimestamp: false });
+		await synchronizerStart();
+
+		const path = `${note.id}.md`;
+		const remote = (await fileApi().get(path)).replace('is_locked: 1\n', '').replace('JLD01cipher', 'edited without the lock').replace(/^updated_time: .*$/m, `updated_time: ${time.unixMsToIso(note.updated_time + 1000)}`);
+		await fileApi().put(path, remote);
+		if (changedLocally) await Note.save({ id: note.id, title: 'Renamed locally' });
+		await synchronizerStart();
+
+		const bodies = [(await Note.load(note.id)).body, ...(await Note.conflictedNotes()).map(n => n.body)];
+		expect(bodies).toContain('edited without the lock');
+	}));
+
 	it.each([
 		['an older client edits an unlocked note', 0, ''],
 		['another device removes the lock', 1, 'is_locked: 0\n'],
