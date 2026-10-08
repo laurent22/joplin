@@ -5,10 +5,10 @@ import { _ } from '@joplin/lib/locale';
 import time from '@joplin/lib/time';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
 import dialogs from '../dialogs';
-import { decryptedStatText, determineKeyPassword, dontReencryptData, enableEncryptionConfirmationMessages, onSavePasswordClick, onToggleEnabledClick, reencryptData, upgradeMasterKey, useInputPasswords, useNeedMasterPassword, usePasswordChecker, useStats, useToggleShowDisabledMasterKeys } from '@joplin/lib/components/EncryptionConfigScreen/utils';
+import { decryptedStatText, determineKeyPassword, dontReencryptData, enableEncryptionConfirmationMessages, onSavePasswordClick, onToggleEnabledClick, reencryptData, upgradeMasterKey, useHasUnknownEncryptionMethodKeysMessage, useInputPasswords, useNeedMasterPassword, usePasswordChecker, useStats, useToggleShowDisabledMasterKeys } from '@joplin/lib/components/EncryptionConfigScreen/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import { getEncryptionEnabled, localSyncInfoSelector, masterKeyEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import { getDefaultMasterKey, getMasterPasswordStatusMessage, masterPasswordIsValid, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
+import { getDefaultMasterKey, getMasterPasswordStatusMessage, isKnownEncryptionMethod, masterPasswordIsValid, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
 import Button, { ButtonLevel } from '../Button/Button';
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { connect } from 'react-redux';
@@ -76,6 +76,7 @@ export const EncryptionConfigScreen = (props: Props) => {
 	const { passwordChecks, masterPasswordKeys, masterPasswordStatus } = usePasswordChecker(props.masterKeys, props.activeMasterKeyId, props.masterPassword, props.passwords);
 	const { showDisabledMasterKeys, toggleShowDisabledMasterKeys } = useToggleShowDisabledMasterKeys();
 	const needMasterPassword = useNeedMasterPassword(passwordChecks, props.masterKeys);
+	const unknownEncryptionMethodMessage = useHasUnknownEncryptionMethodKeysMessage(props.masterKeys);
 
 	useEffect(() => {
 		const wasOpen = wasMasterPasswordDialogOpen.current;
@@ -173,6 +174,7 @@ export const EncryptionConfigScreen = (props: Props) => {
 		const password = inputPasswords[mk.id] ? inputPasswords[mk.id] : '';
 		const isActive = props.activeMasterKeyId === mk.id;
 		const activeIcon = isActive ? '✔' : '';
+		const knownKeyType = isKnownEncryptionMethod(mk.encryption_method);
 		const passwordOk = passwordChecks[mk.id] === true ? '✔' : '❌';
 
 		const renderPasswordInput = (masterKeyId: string) => {
@@ -207,7 +209,9 @@ export const EncryptionConfigScreen = (props: Props) => {
 				<td style={theme.textStyle}>{mk.id}<br/>{_('Source: ')}{mk.source_application}</td>
 				<td style={theme.textStyle}>{_('Created: ')}{time.formatMsToLocal(mk.created_time)}<br/>{_('Updated: ')}{time.formatMsToLocal(mk.updated_time)}</td>
 				{renderPasswordInput(mk.id)}
-				<td style={theme.textStyle}>{passwordOk}</td>
+				<td
+					style={theme.textStyle}
+				>{knownKeyType ? passwordOk : <span title={_('Unknown key format')}>❓</span>}</td>
 				<td style={theme.textStyle}>
 					<button style={theme.buttonStyle} onClick={() => onToggleEnabledClick(mk)}>{masterKeyEnabled(mk) ? _('Disable') : _('Enable')}</button>
 				</td>
@@ -456,7 +460,7 @@ export const EncryptionConfigScreen = (props: Props) => {
 		const buttonTitle = CommandService.instance().label('openMasterPasswordDialog');
 
 		const needPasswordMessage = !needMasterPassword ? null : (
-			<p className="needpassword">
+			<p className="warning">
 				{_('Your password is needed to decrypt some of your data.')}
 				<br/>
 				{_('Please click on "%s" to proceed, or set the passwords in the "%s" list below.', buttonTitle, _('Encryption keys'))}
@@ -468,12 +472,19 @@ export const EncryptionConfigScreen = (props: Props) => {
 			</p>
 		);
 
+		const needUpgradeAppMessage = !!unknownEncryptionMethodMessage && (
+			<p className='warning'>
+				{unknownEncryptionMethodMessage}
+			</p>
+		);
+
 		return (
 			<div className="section">
 				<div className="manage-password-section">
 					<h2>{_('Master password')}</h2>
 					<p className="status"><span>{_('Master password:')}</span>&nbsp;<span className="bold">{getMasterPasswordStatusMessage(masterPasswordStatus)}</span></p>
 					{needPasswordMessage}
+					{needUpgradeAppMessage}
 					<Button className="managebutton" level={needMasterPassword ? ButtonLevel.Primary : ButtonLevel.Secondary} onClick={onManageMasterPassword} title={buttonTitle} />
 				</div>
 			</div>

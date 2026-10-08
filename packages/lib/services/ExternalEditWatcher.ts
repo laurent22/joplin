@@ -37,6 +37,7 @@ export default class ExternalEditWatcher {
 	private lastNoteContentHash_: Map<ItemId, string> = new Map();
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See watcher_ above
 	private chokidar_: any = chokidar;
+	private watcherReady_: Promise<void> = null;
 
 	private static instance_: ExternalEditWatcher;
 
@@ -125,6 +126,10 @@ export default class ExternalEditWatcher {
 		if (!this.watcher_) {
 			this.watcher_ = this.chokidar_.watch(fileToWatch, {
 				useFsEvents: false,
+			});
+
+			this.watcherReady_ = new Promise<void>(resolve => {
+				this.watcher_.on('ready', () => resolve());
 			});
 
 			this.watcher_.on('all', async (event: string, path: string) => {
@@ -281,6 +286,10 @@ export default class ExternalEditWatcher {
 		if (!filePath) return;
 		this.watch(filePath);
 
+		// A save made before Chokidar's initial scan completes is folded into its "add" event,
+		// which we ignore, so the change would be lost.
+		await this.watcherReady_;
+
 		await openFileWithExternalEditor(filePath, this.bridge_());
 
 		this.dispatch({
@@ -319,6 +328,7 @@ export default class ExternalEditWatcher {
 
 		if (this.watcher_) this.watcher_.close();
 		this.watcher_ = null;
+		this.watcherReady_ = null;
 		this.skipNextChangeEvent_.clear();
 		this.lastNoteContentHash_.clear();
 		this.logger().info('ExternalEditWatcher: Stopped watching all files');

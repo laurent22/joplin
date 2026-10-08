@@ -39,7 +39,7 @@ jobs:
           cd ${GITHUB_WORKSPACE}/packages/app-desktop/
           bash ./integration-tests/run-ci.sh
       # See https://playwright.dev/docs/ci-intro#setting-up-github-actions
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         if: ${{ !cancelled() }}
         with:
           name: playwright-report-${{ matrix.os }}
@@ -47,7 +47,7 @@ jobs:
           retention-days: 7
   Mobile:
     if: github.repository == 'laurent22/joplin'
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
       - uses: actions/checkout@v6
       - name: Setup build environment

@@ -6,14 +6,21 @@ import { themeStyle } from '../global-style';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import { _ } from '@joplin/lib/locale';
 import time from '@joplin/lib/time';
-import { decryptedStatText, enableEncryptionConfirmationMessages, onSavePasswordClick, useInputMasterPassword, useInputPasswords, usePasswordChecker, useStats } from '@joplin/lib/components/EncryptionConfigScreen/utils';
+import { decryptedStatText, enableEncryptionConfirmationMessages, onSavePasswordClick, useHasUnknownEncryptionMethodKeysMessage, useInputMasterPassword, useInputPasswords, usePasswordChecker, useStats } from '@joplin/lib/components/EncryptionConfigScreen/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import { State } from '@joplin/lib/reducer';
 import { localSyncInfoSelector, masterKeyEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import { getDefaultMasterKey, setupAndDisableEncryption, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
+import { getDefaultMasterKey, getMasterPasswordStatusMessage, isKnownEncryptionMethod, setupAndDisableEncryption, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
 import { useMemo, useState } from 'react';
 import { Divider, List } from 'react-native-paper';
 import shim from '@joplin/lib/shim';
+
+const allMasterPasswordKeysStoredInUnknownFormat = (keyIds: string[], allKeys: MasterKeyEntity[]) => {
+	return keyIds.length > 0 && keyIds.every(id => {
+		const masterKey = allKeys.find(key => key.id === id);
+		return !!masterKey && !isKnownEncryptionMethod(masterKey.encryption_method);
+	});
+};
 
 interface Props {
 	themeId: number;
@@ -30,7 +37,7 @@ const EncryptionConfigScreen = (props: Props) => {
 	const [passwordPromptAnswer, setPasswordPromptAnswer] = useState('');
 	const [passwordPromptConfirmAnswer, setPasswordPromptConfirmAnswer] = useState('');
 	const stats = useStats();
-	const { passwordChecks, masterPasswordKeys } = usePasswordChecker(props.masterKeys, props.activeMasterKeyId, props.masterPassword, props.passwords);
+	const { passwordChecks, masterPasswordKeys, masterPasswordStatus } = usePasswordChecker(props.masterKeys, props.activeMasterKeyId, props.masterPassword, props.passwords);
 	const { inputPasswords, onInputPasswordChange } = useInputPasswords(props.passwords);
 	const { inputMasterPassword, onMasterPasswordSave, onMasterPasswordChange } = useInputMasterPassword(props.masterKeys, props.activeMasterKeyId);
 	const [showDisabledKeys, setShowDisabledKeys] = useState(false);
@@ -69,6 +76,27 @@ const EncryptionConfigScreen = (props: Props) => {
 				fontSize: theme.fontSize,
 				color: theme.color,
 			},
+			warningText: {
+				...theme.normalText,
+				color: theme.color,
+			},
+			warningTextBold: {
+				fontWeight: 'bold',
+			},
+			warningBox: {
+				marginBottom: theme.itemMarginBottom,
+				backgroundColor: theme.warningBackgroundColor,
+				paddingTop: 5,
+				paddingBottom: 5,
+				paddingLeft: 10,
+				paddingRight: 10,
+			},
+			masterPasswordLabel: {
+				...theme.normalText,
+				flex: 0,
+				flexBasis: 'auto',
+				marginRight: 5,
+			},
 			normalTextInput: {
 				margin: 10,
 				color: theme.color,
@@ -77,11 +105,15 @@ const EncryptionConfigScreen = (props: Props) => {
 			},
 			container: {
 				flex: 1,
+				flexBasis: 'auto',
 				padding: theme.margin,
 			},
 			disabledContainer: {
 				paddingLeft: theme.margin,
 				paddingRight: theme.margin,
+			},
+			unknownKeyFormatMessage: {
+				paddingTop: theme.margin,
 			},
 		});
 	}, [theme]);
@@ -141,6 +173,9 @@ const EncryptionConfigScreen = (props: Props) => {
 					accessibilityRole='header'
 				>{_('Master Key %s', mk.id.substr(0, 6))}</Text>
 				<Text style={styles.normalText}>{_('Created: %s', time.formatMsToLocal(mk.created_time))}</Text>
+				{!isKnownEncryptionMethod(mk.encryption_method) && (
+					<Text style={styles.normalText}>{_('Status: Unsupported key format')}</Text>
+				)}
 				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 					<Text style={{ flex: 0, fontSize: theme.fontSize, marginRight: 10, color: theme.color }}>{_('Password:')}</Text>
 					{renderPasswordInput(mk.id)}
@@ -255,11 +290,16 @@ const EncryptionConfigScreen = (props: Props) => {
 			borderBottomColor: theme.dividerColor,
 		};
 
-		if (passwordChecks['master']) {
+		if (
+			passwordChecks['master'] ||
+			allMasterPasswordKeysStoredInUnknownFormat(
+				Object.keys(masterPasswordKeys), props.masterKeys,
+			)
+		) {
 			return (
 				<View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-					<Text style={{ ...styles.normalText, flex: 0, marginRight: 5 }}>{_('Master password:')}</Text>
-					<Text style={{ ...styles.normalText, fontWeight: 'bold' }}>{_('Loaded')}</Text>
+					<Text style={styles.masterPasswordLabel}>{_('Master password:')}</Text>
+					<Text style={{ ...styles.normalText, fontWeight: 'bold' }}>{getMasterPasswordStatusMessage(masterPasswordStatus)}</Text>
 				</View>
 			);
 		} else {
@@ -360,22 +400,31 @@ const EncryptionConfigScreen = (props: Props) => {
 		</View>
 	</List.Accordion> : null;
 
+	const unknownKeyFormatText = useHasUnknownEncryptionMethodKeysMessage(props.masterKeys);
+	const unknownKeyFormatMessage = !!unknownKeyFormatText && <View style={styles.warningBox}>
+		<Text
+			style={styles.warningText}
+		><Text style={styles.warningTextBold}>{_('Warning: ')}</Text>{unknownKeyFormatText}</Text>
+	</View>;
+
 	return (
 		<View style={rootStyle}>
 			<ScreenHeader title={_('Encryption Config')} />
 			<ScrollView>
 				<View style={styles.container}>
-					<View style={{ backgroundColor: theme.warningBackgroundColor, paddingTop: 5, paddingBottom: 5, paddingLeft: 10, paddingRight: 10 }}>
-						<Text>{_('For more information about End-To-End Encryption (E2EE) and advice on how to enable it please check the documentation:')}</Text>
+					<View style={styles.warningBox}>
+						<Text style={styles.warningText}>{_('For more information about End-To-End Encryption (E2EE) and advice on how to enable it please check the documentation:')}</Text>
 						<TouchableOpacity
 							onPress={() => {
 								void Linking.openURL('https://joplinapp.org/help/apps/sync/e2ee');
 							}}
 							accessibilityRole='link'
 						>
-							<Text>https://joplinapp.org/help/apps/sync/e2ee</Text>
+							<Text style={styles.warningText}>https://joplinapp.org/help/apps/sync/e2ee</Text>
 						</TouchableOpacity>
 					</View>
+
+					{unknownKeyFormatMessage}
 
 					<Text
 						style={styles.titleText}

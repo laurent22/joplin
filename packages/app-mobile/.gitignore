@@ -53,6 +53,9 @@ yarn-error.log
 **/fastlane/screenshots
 **/fastlane/test_output
 
+# generated inline modules
+app/src/main/java/inline/
+
 # Bundle artifact
 *.jsbundle
 
