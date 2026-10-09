@@ -97,20 +97,38 @@ describe('InteropService.noteLock', () => {
 		expect((await Note.load(note.id)).body).not.toContain('secret');
 	});
 
-	it('should md export every locked note decrypted when the feature flag is turned off while queuing', async () => {
-		await setUpUnlockedSession();
-		const folder = await Folder.save({ title: 'folder' });
-		for (const title of ['one', 'two']) {
-			const note = await Note.save({ title, body: `secret ${title}`, parent_id: folder.id });
+	const saveLockedNotes = async (folderId: string, titles: string[]) => {
+		for (const title of titles) {
+			const note = await Note.save({ title, body: `secret ${title}`, parent_id: folderId });
 			await lockNote(note.id);
 		}
+	};
 
+	// Runs the action once, the first time a gated load or save starts.
+	const onFirstGatedCall = (method: 'load'|'save', action: ()=> void) => {
+		const original = (Note[method] as (...args: unknown[])=> Promise<unknown>).bind(Note);
+		let done = false;
+		return jest.spyOn(Note, method).mockImplementation(((...args: unknown[]) => {
+			if (!done && (args[1] as { useNoteLock?: boolean })?.useNoteLock) {
+				done = true;
+				action();
+			}
+			return original(...args);
+		}) as never);
+	};
+
+	it('should md export every locked note when the session is locked partway through', async () => {
+		await setUpUnlockedSession();
+		const folder = await Folder.save({ title: 'folder' });
+		await saveLockedNotes(folder.id, ['one', 'two']);
+
+		// Locks the session once the first note is done, as the second note starts loading.
 		const load = Note.load.bind(Note);
+		let plainLoads = 0;
 		const spy = jest.spyOn(Note, 'load').mockImplementation((id, options) => {
-			Setting.setValue('featureFlag.noteLock', false);
+			if (!options?.useNoteLock && ++plainLoads === 2) NoteLockSession.instance().lock();
 			return load(id, options);
 		});
-
 		try {
 			await InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Markdown });
 		} finally {
@@ -122,6 +140,23 @@ describe('InteropService.noteLock', () => {
 		for (const file of files) {
 			expect(await fs.readFile(`${exportDir()}/folder/${file}`, 'utf-8')).toContain('secret');
 		}
+	});
+
+	it('should skip locked notes rather than write their ciphertext when the feature flag is turned off partway through', async () => {
+		await setUpUnlockedSession();
+		const folder = await Folder.save({ title: 'folder' });
+		await saveLockedNotes(folder.id, ['one', 'two']);
+
+		const spy = onFirstGatedCall('load', () => Setting.setValue('featureFlag.noteLock', false));
+		let result;
+		try {
+			result = await InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Markdown });
+		} finally {
+			spy.mockRestore();
+		}
+
+		expect(await fs.pathExists(`${exportDir()}/folder`) ? await fs.readdir(`${exportDir()}/folder`) : []).toEqual([]);
+		expect(result.warnings).toEqual(['2 locked note(s) could not be unlocked and were not exported']);
 	});
 
 	it('should skip and count locked notes when the session is locked', async () => {
@@ -201,6 +236,32 @@ describe('InteropService.noteLock', () => {
 		expect(imported.body).not.toContain('secret');
 		expect((await Note.load(imported.id, { useNoteLock: true })).body).toBe('secret old');
 		expect(result.warnings.length).toBe(0);
+	});
+
+	it('should re-encrypt every imported locked note when the session is locked partway through', async () => {
+		await setUpUnlockedSession('old password');
+		const folder = await Folder.save({ title: 'folder' });
+		await saveLockedNotes(folder.id, ['one', 'two']);
+		await InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Raw });
+		const originalIds = (await Note.all()).map(n => n.id);
+
+		await rotateProfileKey('new password');
+
+		const spy = onFirstGatedCall('save', () => NoteLockSession.instance().lock());
+		try {
+			await InteropService.instance().import({
+				path: exportDir(),
+				format: 'raw',
+				onNoteLockKey: keyFile => NoteLockKey.instance().decrypt('old password', keyFile),
+			});
+		} finally {
+			spy.mockRestore();
+		}
+
+		await NoteLockSession.instance().unlock('new password');
+		const imported = (await Note.all()).filter(n => !originalIds.includes(n.id));
+		expect(imported.length).toBe(2);
+		for (const n of imported) expect((await Note.load(n.id, { useNoteLock: true })).body).toMatch(/^secret /);
 	});
 
 	it('should stop the import without writing plain text when the feature flag is turned off while a locked note is re-encrypted', async () => {

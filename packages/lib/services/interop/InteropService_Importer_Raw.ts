@@ -17,6 +17,7 @@ import { fileExtension } from '../../path-utils';
 import uuid from '../../uuid';
 import isNoteLockEnabled from '../noteLock/isNoteLockEnabled';
 import NoteLockService from '../noteLock/NoteLockService';
+import NoteLockSession from '../noteLock/NoteLockSession';
 import { DecryptedNoteLockKey, noteLockKeyFileName } from '../noteLock/NoteLockKey';
 
 export default class InteropService_Importer_Raw extends InteropService_Importer_Base {
@@ -50,6 +51,8 @@ export default class InteropService_Importer_Raw extends InteropService_Importer
 				importNoteLockKey = await this.options_.onNoteLockKey(keyFile);
 			}
 		}
+		// Captured once the prompts have unlocked the session, so locking it partway through does not fail the remaining notes.
+		const profileNoteLockKey = importNoteLockKey ? NoteLockSession.instance().decryptedKey() : null;
 
 		const folderExists = function(stats: Stat[], folderId: string) {
 			folderId = folderId.toLowerCase();
@@ -173,7 +176,7 @@ export default class InteropService_Importer_Raw extends InteropService_Importer
 					continue;
 				}
 
-				await ItemClass.save(item, { isNew: true, autoTimestamp: false, useNoteLock: useNoteLockSave });
+				await ItemClass.save(item, { isNew: true, autoTimestamp: false, useNoteLock: useNoteLockSave, noteLockKey: profileNoteLockKey });
 			} catch (error) {
 				if (error.code === 'malformedItem') {
 					result.warnings.push(sprintf('Skipped malformed item: %s: %s', stat.path, error.message));
