@@ -300,10 +300,11 @@ export default class ExternalEditWatcher {
 		this.logger().info(`ExternalEditWatcher: Started watching ${filePath}`);
 	}
 
-	public async stopWatching(noteId: string) {
+	// Without a flush, a pending change finds the file removed below and is dropped.
+	public async stopWatching(noteId: string, flushPendingChanges = true) {
 		if (!noteId) return;
 
-		await this.changeEventQueue_.processAllNow();
+		if (flushPendingChanges) await this.changeEventQueue_.processAllNow();
 
 		const filePath = this.noteIdToFilePath_(noteId);
 		if (this.watcher_) this.watcher_.unwatch(filePath);
