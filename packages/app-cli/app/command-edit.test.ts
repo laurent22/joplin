@@ -1,7 +1,7 @@
 import * as fs from 'fs-extra';
 import Note from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
-import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, noteLockCipherTextStandIn } from '@joplin/lib/testing/test-utils';
 import { setupCommandForTesting, setupApplication } from './utils/testUtils';
 const Command = require('./command-edit');
 
@@ -15,7 +15,7 @@ describe('command-edit', () => {
 
 	it('should refuse to edit a locked note without writing a temp file', async () => {
 		Setting.setValue('featureFlag.noteLock', true);
-		const note = await Note.save({ title: 'hello', body: 'ciphertext', is_locked: 1, parent_id: '' });
+		const note = await Note.save({ title: 'hello', body: noteLockCipherTextStandIn(), is_locked: 1, parent_id: '' });
 		const tempDir = Setting.value('tempDir');
 		await fs.ensureDir(tempDir);
 		const filesBefore = await fs.readdir(tempDir);

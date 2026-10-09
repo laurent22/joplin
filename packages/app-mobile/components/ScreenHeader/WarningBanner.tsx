@@ -5,7 +5,7 @@ import { Platform } from 'react-native';
 import { AppState } from '../../utils/types';
 import WarningBox, { WarningBoxTarget } from './WarningBox';
 import { _ } from '@joplin/lib/locale';
-import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
+import { showMissingMasterKeyMessage, showUnknownKeyFormatBanner } from '@joplin/lib/services/e2ee/utils';
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import Setting from '@joplin/lib/models/Setting';
 import { ShareInvitation, ShareUserStatus } from '@joplin/lib/services/share/reducer';
@@ -20,6 +20,7 @@ const logger = Logger.create('WarningBanner');
 interface Props {
 	themeId: number;
 	showMissingMasterKeyMessage: boolean;
+	showUnknownKeyFormatMessage: boolean;
 	hasDisabledSyncItems: boolean;
 	shouldUpgradeSyncTarget: boolean;
 	showShouldUpgradeSyncTargetMessage: boolean|undefined;
@@ -110,6 +111,11 @@ const WarningBannerComponent: React.FC<Props> = props => {
 	if (props.showMissingMasterKeyMessage) {
 		warningComps.push(renderWarningBox('missingDecryptionPassword', _('Press to set the decryption password.'), { screen: 'EncryptionConfig' }));
 	}
+	if (props.showUnknownKeyFormatMessage) {
+		warningComps.push(
+			renderWarningBox('unknownKeyFormat', _('One or more encryption keys are stored in an unknown format. Press for more info.'), { screen: 'EncryptionConfig' }),
+		);
+	}
 	if (props.hasDisabledSyncItems) {
 		warningComps.push(renderWarningBox('cannotSync', _('Some items cannot be synchronised. Press for more info.'), { screen: 'Status' }));
 	}
@@ -157,6 +163,10 @@ const isSyncLoginRoute = (state: AppState) => {
 	return false;
 };
 
+const isEncryptionConfigRoute = (state: AppState) => {
+	return state.route?.routeName === 'EncryptionConfig';
+};
+
 export default connect((state: AppState) => {
 	const syncInfo = localSyncInfoFromState(state);
 
@@ -166,7 +176,8 @@ export default connect((state: AppState) => {
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		selectedFolderId: state.selectedFolderId,
 		notesParentType: state.notesParentType,
-		showMissingMasterKeyMessage: showMissingMasterKeyMessage(syncInfo, state.notLoadedMasterKeys),
+		showMissingMasterKeyMessage: !isEncryptionConfigRoute(state) && showMissingMasterKeyMessage(syncInfo, state.notLoadedMasterKeys),
+		showUnknownKeyFormatMessage: !isEncryptionConfigRoute(state) && showUnknownKeyFormatBanner(syncInfo),
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
 		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,

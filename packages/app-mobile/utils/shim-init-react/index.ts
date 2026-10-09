@@ -3,7 +3,7 @@ import shimInitShared from './shimInitShared';
 import shim, { MobilePlatform } from '@joplin/lib/shim';
 const { GeolocationReact } = require('../geolocation-react.js');
 import RNFetchBlob from 'rn-fetch-blob';
-import { generateSecureRandom } from 'react-native-securerandom';
+import { randomBytes } from 'react-native-quick-crypto';
 import FsDriverRN from '../fs-driver/fs-driver-rn';
 import { Linking, Platform } from 'react-native';
 import crypto from '../../services/e2ee/crypto';
@@ -22,13 +22,19 @@ export default function shimInit() {
 	shim.crypto = crypto;
 
 	shim.randomBytes = async (count: number) => {
-		const randomBytes = await generateSecureRandom(count);
-		const temp = [];
-		for (const n in randomBytes) {
-			if (!randomBytes.hasOwnProperty(n)) continue;
-			temp.push(randomBytes[n]);
-		}
-		return temp;
+		return new Promise<number[]>((resolve, reject) => {
+			randomBytes(count, (error, buffer) => {
+				if (error) {
+					reject(error);
+					return;
+				}
+				const temp = [];
+				for (let i = 0; i < buffer.length; i++) {
+					temp.push(buffer[i]);
+				}
+				resolve(temp);
+			});
+		});
 	};
 
 	// This function can be used to debug "Network Request Failed" errors. It
