@@ -43,17 +43,24 @@ describe('buildConflictDocument', () => {
 		expect(document.regions.map(r => r.localText)).toEqual(['LOCAL A', 'LOCAL B']);
 	});
 
-	test('should handle a side that was deleted on the other version', () => {
-		const sections: MergedSection[] = [
-			{ text: 'x', type: 'conflict', localText: 'kept', remoteText: '', localLineCount: 1, remoteLineCount: 0 },
-			{ text: 'after', type: 'unchanged' },
-		];
+	const onlyMine: MergedSection = { text: 'x', type: 'conflict', localText: 'kept', remoteText: '', localLineCount: 1, remoteLineCount: 0 };
+	const before: MergedSection = { text: 'before', type: 'unchanged' };
+	const after: MergedSection = { text: 'after', type: 'unchanged' };
 
+	test.each([
+		['at the start', [onlyMine, after], 'after', 0, 'kept\n', 'kept\nafter'],
+		['between two lines', [before, onlyMine, after], 'before\nafter', 7, 'kept\n', 'before\nkept\nafter'],
+		['at the end', [before, onlyMine], 'before', 6, '\nkept', 'before\nkept'],
+		['as the whole note', [onlyMine], '', 0, 'kept', 'kept'],
+		['around a blank last line', [before, onlyMine, { text: '', type: 'unchanged' }, onlyMine], 'before\n', 7, 'kept\n\nkept', 'before\nkept\n\nkept'],
+	] as [string, MergedSection[], string, number, string, string][])('should insert a line only in my version as a whole line when it is %s', (_label, sections, text, from, localText, resolved) => {
 		const document = buildConflictDocument(sections);
+		const region = document.regions[0];
 
 		// Their version does not have that line, so the document does not either
-		expect(document.text).toBe('after');
-		expect(document.regions).toEqual([{ from: 0, to: 0, localText: 'kept', kind: ConflictRegionKind.OnlyMine }]);
+		expect(document.text).toBe(text);
+		expect(region).toEqual({ from, to: from, localText, kind: ConflictRegionKind.OnlyMine });
+		expect(text.slice(0, region.from) + region.localText + text.slice(region.to)).toBe(resolved);
 	});
 
 	test('should keep a blank line the other version added', () => {

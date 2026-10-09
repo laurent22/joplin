@@ -200,16 +200,20 @@ const buildDecorations = (doc: DecorationDoc, regions: ConflictRegion[]) => {
 		if (region.settled) continue;
 
 		const regionText = doc.sliceString(region.from, region.to);
-		const diff = wordDiff(region.localText, regionText);
+		const line = doc.lineAt(region.from);
+		const appendsLine = region.from === region.to && region.from > line.from && region.localText.startsWith('\n');
+		let shownText = region.localText;
+		if (appendsLine) shownText = shownText.slice(1);
+		else if (region.from === region.to) shownText = shownText.replace(/\n$/, '');
+		const diff = wordDiff(shownText, regionText);
 
 		if (!region.addedByThem) {
 			// Block widgets must be at a line boundary or else they split the line in two
-			const lineStart = doc.lineAt(region.from).from;
 			ranges.push(Decoration.widget({
-				widget: new LocalVersionWidget(region.id, region.localText, diff.local),
+				widget: new LocalVersionWidget(region.id, shownText, diff.local),
 				block: true,
-				side: -1,
-			}).range(lineStart));
+				side: appendsLine ? 1 : -1,
+			}).range(appendsLine ? line.to : line.from));
 		}
 
 		if (region.from < region.to) {

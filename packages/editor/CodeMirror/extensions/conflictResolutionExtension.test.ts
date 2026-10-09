@@ -525,9 +525,24 @@ describe('conflictResolutionExtension', () => {
 		expect(decoratedText(editor, 'cm-conflictLocalVersion')).toHaveLength(0);
 	});
 
+	test.each([
+		['before the next line', 11, 'only mine\n', 1, 'alpha line\nonly mine\nbravo line'],
+		['after the last line', 21, '\nonly mine', 2, 'alpha line\nbravo line\nonly mine'],
+	])('should show a line only in my version %s and insert it as its own line', async (_label, from, localText, widgetIndex, resolved) => {
+		const editor = await createEditor('alpha line\nbravo line', [{ from, to: from, localText }]);
+
+		const blocks = [...editor.contentDOM.children];
+		expect(blocks[widgetIndex].classList.contains('cm-conflictLocalVersion')).toBe(true);
+		expect(decoratedText(editor, 'cm-conflictLocalVersion-text')).toEqual(['only mine']);
+
+		clickUseThisVersion(editor, 0);
+
+		expect(editor.state.doc.toString()).toBe(resolved);
+	});
+
 	test('should keep a local-only widget hidden when it is the last thing in the note', async () => {
 		const editor = await createEditor('alpha line\nbravo line', [
-			{ from: 21, to: 21, localText: 'only mine at end\n' },
+			{ from: 21, to: 21, localText: '\nonly mine at end' },
 		]);
 		expect(decoratedText(editor, 'cm-conflictLocalVersion')).toHaveLength(1);
 
