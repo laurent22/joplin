@@ -20,6 +20,7 @@ import biometricAuthenticate from '../../biometrics/biometricAuthenticate';
 import configScreenStyles, { ConfigScreenStyles } from './configScreenStyles';
 import NoteExportButton, { exportButtonDescription, exportButtonDefaultTitle } from './NoteExportSection/NoteExportButton';
 import SettingsButton from './SettingsButton';
+import ClientCertificateButton, { clientCertificateButtonTitle, showClientCertificateButton } from './ClientCertificateButton';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { ReactElement, ReactNode } from 'react';
 import SectionHeader from './SectionHeader';
@@ -542,6 +543,18 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 		if (section.name === 'sync') {
 			addSettingButton('e2ee_config_button', _('Encryption Config'), this.e2eeConfig_);
+
+			const syncTargetId = settings['sync.target'];
+			if (showClientCertificateButton(syncTargetId)) {
+				addSettingComponent(
+					<ClientCertificateButton
+						key='client_certificate_button'
+						styles={this.styles()}
+						serverUrl={settings[`sync.${syncTargetId}.path`] ?? ''}
+					/>,
+					[clientCertificateButtonTitle(), 'mTLS'],
+				);
+			}
 		}
 
 		if (section.name === 'noteLock' && isNoteLockEnabled()) {

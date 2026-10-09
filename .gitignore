@@ -891,6 +891,7 @@ packages/app-mobile/components/plugins/dialogs/hooks/useWebViewSetup.js
 packages/app-mobile/components/plugins/types.js
 packages/app-mobile/components/plugins/utils/createOnLogHandler.js
 packages/app-mobile/components/plugins/utils/useOnDevPluginsUpdated.js
+packages/app-mobile/components/screens/ConfigScreen/ClientCertificateButton.js
 packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.js
 packages/app-mobile/components/screens/ConfigScreen/FileSystemPathSelector.js
 packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.js
@@ -1055,6 +1056,7 @@ packages/app-mobile/tools/uiTests.js
 packages/app-mobile/utils/ShareExtension.js
 packages/app-mobile/utils/ShareUtils.test.js
 packages/app-mobile/utils/ShareUtils.js
+packages/app-mobile/utils/TlsUtils.test.js
 packages/app-mobile/utils/TlsUtils.js
 packages/app-mobile/utils/appDefaultState.js
 packages/app-mobile/utils/appReducer.test.js

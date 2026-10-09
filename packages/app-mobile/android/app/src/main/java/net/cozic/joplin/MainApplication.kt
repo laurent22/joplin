@@ -10,8 +10,11 @@ import com.facebook.react.ReactNativeApplicationEntryPoint.loadReactNative
 import com.facebook.react.ReactHost
 import com.facebook.react.common.ReleaseLevel
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint
+import com.facebook.react.modules.network.OkHttpClientProvider
 import net.cozic.joplin.systeminfo.SystemInformationPackage
 import net.cozic.joplin.share.SharePackage
+import net.cozic.joplin.ssl.ClientCertificateHttpClientFactory
+import net.cozic.joplin.ssl.ClientCertificateKeyManager
 import net.cozic.joplin.ssl.SslPackage
 
 class MainApplication : Application(), ReactApplication {
@@ -36,6 +39,11 @@ class MainApplication : Application(), ReactApplication {
         } catch (e: IllegalArgumentException) {
             DefaultNewArchitectureEntryPoint.releaseLevel = ReleaseLevel.STABLE
         }
+        // Must happen before React Native creates its HTTP clients, so that fetch()
+        // and rn-fetch-blob can present the client certificate selected in the settings.
+        ClientCertificateKeyManager.initialize(this)
+        OkHttpClientProvider.setOkHttpClientFactory(ClientCertificateHttpClientFactory(this))
+
         loadReactNative(this)
         ApplicationLifecycleDispatcher.onApplicationCreate(this)
     }

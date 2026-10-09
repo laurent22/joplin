@@ -14,7 +14,7 @@ public class SslPackage implements ReactPackage {
     @NonNull
     @Override
     public List<NativeModule> createNativeModules(@NonNull ReactApplicationContext reactContext) {
-        return Collections.singletonList(new SslModule());
+        return Collections.singletonList(new SslModule(reactContext));
     }
 
     @NonNull
