@@ -183,13 +183,38 @@ describe('InteropService.noteLock', () => {
 		expect(result.warnings).toEqual(['1 locked note(s) could not be unlocked and were not exported']);
 	});
 
-	it.each([
-		{ label: 'no note is locked', flagEnabled: true, isLocked: 0 },
-		{ label: 'note lock is disabled', flagEnabled: false, isLocked: 1 },
-	])('should not write the key file when $label', async ({ flagEnabled, isLocked }) => {
-		Setting.setValue('featureFlag.noteLock', flagEnabled);
+	it('should not write the key file when no note is locked', async () => {
+		await setUpUnlockedSession();
 		const folder = await Folder.save({ title: 'folder' });
-		await Note.save({ title: 'note', body: 'plain body', parent_id: folder.id, is_locked: isLocked });
+		await Note.save({ title: 'note', body: 'plain body', parent_id: folder.id });
+
+		await InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Raw });
+
+		expect(await fs.pathExists(`${exportDir()}/${noteLockKeyFileName}`)).toBe(false);
+	});
+
+	it('should write the key file for a note locked with the profile key even with note lock disabled', async () => {
+		await setUpUnlockedSession();
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'note', body: 'secret', parent_id: folder.id });
+		await lockNote(note.id);
+
+		Setting.setValue('featureFlag.noteLock', false);
+		await InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Raw });
+
+		expect(JSON.parse(await fs.readFile(`${exportDir()}/${noteLockKeyFileName}`, 'utf-8')).id).toBe(NoteLockKey.instance().load().id);
+	});
+
+	it('should not write the key file when the locked notes use another key', async () => {
+		await setUpUnlockedSession();
+		const otherKey = await encryptionService().generateMasterKey('other');
+		const body = await encryptionService().encryptString('secret', {
+			masterKeyId: '0123456789abcdef0123456789abcdef',
+			decryptedMasterKey: await encryptionService().decryptMasterKeyContent(otherKey, 'other'),
+			isNoteLock: true,
+		});
+		const folder = await Folder.save({ title: 'folder' });
+		await Note.save({ title: 'note', body, parent_id: folder.id, is_locked: 1 });
 
 		await InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Raw });
 
@@ -204,11 +229,12 @@ describe('InteropService.noteLock', () => {
 		await lockNote(note.id);
 		await InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Raw });
 
-		await InteropService.instance().import({ path: exportDir(), format: 'raw' });
+		const result = await InteropService.instance().import({ path: exportDir(), format: 'raw' });
 
 		const imported = (await Note.all()).find(n => n.id !== note.id && !!n.is_locked);
 		expect(imported.body).not.toContain('secret');
 		expect((await Note.load(imported.id, { useNoteLock: true })).body).toContain('secret');
+		expect(result.warnings).toEqual([]);
 
 		// The extracted list follows the remapped resource id, so the resource stays associated.
 		const importedResourceIds = Note.unserializeExtractedResourceIds(imported.extracted_resource_ids);
@@ -300,11 +326,29 @@ describe('InteropService.noteLock', () => {
 
 		await rotateProfileKey('new password');
 
-		await InteropService.instance().import({ path: exportDir(), format: 'raw' });
+		const result = await InteropService.instance().import({ path: exportDir(), format: 'raw' });
 
 		const imported = (await Note.all()).find(n => n.id !== note.id && !!n.is_locked);
 		expect(imported.body).not.toContain('secret');
 		await expect(Note.load(imported.id, { useNoteLock: true })).rejects.toThrow();
+		expect(result.warnings).toEqual(['The locked notes in this backup have not been migrated to the current note lock key and will be unreadable']);
+	});
+
+	it('should warn when a backup with locked notes is imported without a handler into a profile with no note lock key', async () => {
+		await setUpUnlockedSession();
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'note', body: 'secret', parent_id: folder.id });
+		await lockNote(note.id);
+		await InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Raw });
+
+		await setupDatabaseAndSynchronizer(2);
+		await switchClient(2);
+		NoteLockSession.destroyInstance();
+		NoteLockKey.destroyInstance();
+		Setting.setValue('featureFlag.noteLock', true);
+		const result = await InteropService.instance().import({ path: exportDir(), format: 'raw' });
+
+		expect(result.warnings).toEqual(['The locked notes in this backup cannot be read, because no note lock key has been set up on this profile']);
 	});
 
 	it('should keep locked notes unchanged and warn when the provided key does not fit', async () => {

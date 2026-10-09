@@ -18,7 +18,7 @@ import uuid from '../../uuid';
 import isNoteLockEnabled from '../noteLock/isNoteLockEnabled';
 import NoteLockService from '../noteLock/NoteLockService';
 import NoteLockSession from '../noteLock/NoteLockSession';
-import { DecryptedNoteLockKey, noteLockKeyFileName } from '../noteLock/NoteLockKey';
+import NoteLockKey, { DecryptedNoteLockKey, noteLockKeyFileName } from '../noteLock/NoteLockKey';
 
 export default class InteropService_Importer_Raw extends InteropService_Importer_Base {
 	public async exec(result: ImportExportResult) {
@@ -47,8 +47,14 @@ export default class InteropService_Importer_Raw extends InteropService_Importer
 		let undecryptableNotes = 0;
 		if (isNoteLockEnabled() && await shim.fsDriver().exists(`${this.sourcePath_}/${noteLockKeyFileName}`)) {
 			const keyFile: MasterKeyEntity = JSON.parse(await shim.fsDriver().readFile(`${this.sourcePath_}/${noteLockKeyFileName}`));
+			const profileKeyId = NoteLockKey.instance().load()?.id;
 			if (keyFile?.id && this.options_.onNoteLockKey) {
 				importNoteLockKey = await this.options_.onNoteLockKey(keyFile);
+			} else if (keyFile?.id && !profileKeyId) {
+				// Without a handler, as for the CLI, nothing can update the notes.
+				result.warnings.push('The locked notes in this backup cannot be read, because no note lock key has been set up on this profile');
+			} else if (keyFile?.id && keyFile.id !== profileKeyId) {
+				result.warnings.push('The locked notes in this backup have not been migrated to the current note lock key and will be unreadable');
 			}
 		}
 		// Captured once the prompts have unlocked the session, so locking it partway through does not fail the remaining notes.

@@ -4,7 +4,7 @@ import BaseModel from '../../BaseModel';
 import { basename } from '../../path-utils';
 import shim from '../../shim';
 import { BaseItemEntity, NoteEntity, ResourceEntity } from '../database/types';
-import isNoteLockEnabled from '../noteLock/isNoteLockEnabled';
+import EncryptionService from '../e2ee/EncryptionService';
 import NoteLockNote from '../noteLock/NoteLockNote';
 import NoteLockKey, { noteLockKeyFileName } from '../noteLock/NoteLockKey';
 
@@ -22,8 +22,20 @@ export default class InteropService_Exporter_Raw extends InteropService_Exporter
 		await shim.fsDriver().mkdir(this.resourceDir_);
 	}
 
+	// Not behind the feature flag: importers that predate note lock ignore the key file. Only the profile's key can be exported,
+	// so notes locked with another key do not bring it in.
+	private async isLockedWithProfileKey_(note: NoteEntity) {
+		const keyId = NoteLockKey.instance().load()?.id;
+		if (!keyId || !NoteLockNote.isLocked(note)) return false;
+		try {
+			return (await EncryptionService.instance().decodeHeaderString(note.body, true)).masterKeyId === keyId;
+		} catch {
+			return false;
+		}
+	}
+
 	public async processItem(itemType: number, item: BaseItemEntity) {
-		if (itemType === BaseModel.TYPE_NOTE && isNoteLockEnabled() && NoteLockNote.isLocked(item as NoteEntity)) this.hasLockedNotes_ = true;
+		if (itemType === BaseModel.TYPE_NOTE && !this.hasLockedNotes_) this.hasLockedNotes_ = await this.isLockedWithProfileKey_(item as NoteEntity);
 		const ItemClass = BaseItem.getClassByItemType(itemType);
 		const serialized = await ItemClass.serialize(item);
 		const filePath = `${this.destDir_}/${ItemClass.systemPath(item)}`;
