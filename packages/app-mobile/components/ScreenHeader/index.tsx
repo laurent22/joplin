@@ -86,6 +86,7 @@ interface ScreenHeaderProps {
 
 	historyCanGoBack?: boolean;
 	showShouldUpgradeSyncTargetMessage?: boolean;
+	showNoteLockKeyConflictMessage?: boolean;
 
 	themeId: number;
 }
@@ -731,6 +732,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				</View>
 				<WarningBanner
 					showShouldUpgradeSyncTargetMessage={this.props.showShouldUpgradeSyncTargetMessage}
+					showNoteLockKeyConflictMessage={this.props.showNoteLockKeyConflictMessage}
 				/>
 			</View>
 		);

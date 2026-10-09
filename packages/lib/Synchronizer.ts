@@ -25,7 +25,7 @@ import TaskQueue from './TaskQueue';
 import ItemUploader from './services/synchronizer/ItemUploader';
 import { FileApi, getSupportsDeltaWithItems, isLocalServer, PaginatedList, RemoteItem, enableEnhancedBasicDeltaAlgorithm } from './file-api';
 import JoplinDatabase from './JoplinDatabase';
-import { checkIfCanSync, fetchSyncInfo, checkSyncTargetIsValid, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyHasBeenUsed, SyncInfo, syncInfoEquals, uploadSyncInfo } from './services/synchronizer/syncInfoUtils';
+import { checkIfCanSync, fetchSyncInfo, checkSyncTargetIsValid, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyHasBeenUsed, SyncInfo, syncInfoEquals, uploadSyncInfo, checkNoteLockKeyConflict, checkNoteLockKeyMigrationId, checkNoteLockKeyUnchanged, checkRemoteNoteLockKeyUnchanged } from './services/synchronizer/syncInfoUtils';
 import { getMasterPassword, setupAndDisableEncryption, setupAndEnableEncryption } from './services/e2ee/utils';
 import { generateKeyPair } from './services/e2ee/ppk/ppk';
 import syncDebugLog from './services/synchronizer/syncDebugLog';
@@ -494,6 +494,11 @@ export default class Synchronizer {
 			this.api().setTempDirName(Dirnames.Temp);
 
 			try {
+				// Checked before anything is uploaded so a key without an id never reaches the target. The CLI cannot create or reset
+				// a note lock key or run a migration: it adopts the target's key, and a migration it would need (its locked notes
+				// meeting a different key, for example after switching the sync target) stops its sync. Revisit if it gains these.
+				checkNoteLockKeyMigrationId(localSyncInfo(), false);
+
 				let remoteInfo = await fetchSyncInfo(this.api());
 				logger.info('Sync target remote info:', remoteInfo.filterSyncInfo());
 				eventManager.emit(EventName.SessionEstablished);
@@ -514,7 +519,10 @@ export default class Synchronizer {
 				const appVersion = shim.appVersion();
 				if (appVersion !== 'unknown') checkIfCanSync(remoteInfo, appVersion);
 
-				let localInfo = await localSyncInfo();
+				let localInfo = localSyncInfo();
+				// Read in the same tick as the key, so a reset landing mid-sync is seen whole or not at all.
+				const noteLockPasswordReset = Setting.value('noteLock.passwordReset');
+				const noteLockKeyIdToReset = Setting.value('noteLock.keyIdToReset');
 				logger.info('Sync target local info:', localInfo.filterSyncInfo());
 
 				localInfo = await this.setPpkIfNotExist(localInfo, remoteInfo);
@@ -523,18 +531,45 @@ export default class Synchronizer {
 					localInfo = setMasterKeyHasBeenUsed(localInfo, localInfo.activeMasterKeyId);
 				}
 
+				checkNoteLockKeyMigrationId(remoteInfo, true);
+				const hasLockedNotes = await Note.hasLockedNotes();
+				// A reset only overwrites the target key it replaced, so a target reset elsewhere since then wins.
+				const resetPropagates = noteLockPasswordReset && (!remoteInfo.noteLockKey || remoteInfo.noteLockKey.id === noteLockKeyIdToReset);
+				const staleReset = noteLockPasswordReset && !resetPropagates;
+				// Read again after the await: a migration may have finished meanwhile.
+				checkNoteLockKeyConflict(localSyncInfo(), remoteInfo, hasLockedNotes, staleReset);
+
 				// console.info('LOCAL', localInfo);
 				// console.info('REMOTE', remoteInfo);
 
+				let reconciledNoteLockKeyId = localInfo.noteLockKey?.id;
 				if (!syncInfoEquals(localInfo, remoteInfo)) {
-					let newInfo = mergeSyncInfos(localInfo, remoteInfo);
+					// The merge works from localInfo, which a key change since it was read would make stale.
+					checkNoteLockKeyUnchanged(localInfo);
+					let newInfo = mergeSyncInfos(localInfo, remoteInfo, { resetPropagates, hasLocalLockedNotes: hasLockedNotes });
 					if (newInfo.activeMasterKeyId) newInfo = setMasterKeyHasBeenUsed(newInfo, newInfo.activeMasterKeyId);
 					const previousE2EE = localInfo.e2ee;
 					logger.info('Sync target info differs between local and remote - merging infos: ', newInfo.toObject());
 
+					// The checks above let the target key replace the local one, so it is adopted before the upload: a note locked
+					// from now on is encrypted with the key the target holds.
+					if (localInfo.noteLockKey && newInfo.noteLockKey?.id !== localInfo.noteLockKey.id) {
+						const adoptedInfo = localSyncInfo();
+						adoptedInfo.noteLockKey = localInfo.noteLockKey = newInfo.noteLockKey;
+						adoptedInfo.syncMigrationId = localInfo.syncMigrationId = newInfo.syncMigrationId;
+						saveLocalSyncInfo(adoptedInfo);
+					}
+
 					await this.lockHandler().acquireLock(LockType.Exclusive, this.lockClientType(), this.clientId_, { clearExistingSyncLocksFromTheSameClient: true });
+					// Must stay immediately before the upload. Sync locks are disabled (the lock above does nothing), so another device can
+					// upload its own info.json after this sync fetched the target's, for example a password reset, which the upload below
+					// would revert to the old key.
+					checkRemoteNoteLockKeyUnchanged(remoteInfo, await fetchSyncInfo(this.api()));
 					await uploadSyncInfo(this.api(), newInfo);
+					// A reset or password change on this device during the upload would be overwritten by the save below.
+					checkNoteLockKeyUnchanged(localInfo);
 					await saveLocalSyncInfo(newInfo);
+					reconciledNoteLockKeyId = newInfo.noteLockKey?.id;
 					await this.lockHandler().releaseLock(LockType.Exclusive, this.lockClientType(), this.clientId_);
 
 					// console.info('NEW', newInfo);
@@ -562,6 +597,20 @@ export default class Synchronizer {
 					// Set it to remote anyway so that timestamps are the same
 					// Note: that's probably not needed anymore?
 					// await uploadSyncInfo(this.api(), remoteInfo);
+
+					// A reset that landed mid-sync keeps its flag for the next sync.
+					if (noteLockPasswordReset) checkNoteLockKeyUnchanged(localInfo);
+				}
+
+				// Either the reset key is on the target now or a different lineage replaced it, so the flag is spent. A reset
+				// that landed after the local save replaces the key the target holds now, so it keeps its flag.
+				if (noteLockPasswordReset) {
+					if (localSyncInfo().noteLockKey?.id === reconciledNoteLockKeyId) {
+						Setting.setValue('noteLock.passwordReset', false);
+						Setting.setValue('noteLock.keyIdToReset', '');
+					} else {
+						Setting.setValue('noteLock.keyIdToReset', reconciledNoteLockKeyId);
+					}
 				}
 			} catch (error) {
 				if (error.code === 403) {

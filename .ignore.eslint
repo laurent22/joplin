@@ -452,6 +452,8 @@ packages/app-desktop/gui/NoteListItem/utils/useRenderedNote.js
 packages/app-desktop/gui/NoteListItem/utils/useRootElement.test.js
 packages/app-desktop/gui/NoteListItem/utils/useRootElement.js
 packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.js
+packages/app-desktop/gui/NoteLockMigrationDialog/Dialog.test.js
+packages/app-desktop/gui/NoteLockMigrationDialog/Dialog.js
 packages/app-desktop/gui/NoteLockUnlockDialog/Dialog.js
 packages/app-desktop/gui/NotePropertiesDialog.js
 packages/app-desktop/gui/NoteRevisionViewer.js
@@ -975,6 +977,8 @@ packages/app-mobile/components/screens/Note/commands/insertDateTime.js
 packages/app-mobile/components/screens/Note/commands/setTags.js
 packages/app-mobile/components/screens/Note/commands/toggleVisiblePanes.js
 packages/app-mobile/components/screens/Note/types.js
+packages/app-mobile/components/screens/NoteLockMigrationScreen.test.js
+packages/app-mobile/components/screens/NoteLockMigrationScreen.js
 packages/app-mobile/components/screens/NoteRevisionViewer.test.js
 packages/app-mobile/components/screens/NoteRevisionViewer.js
 packages/app-mobile/components/screens/NoteTagsDialog.js
@@ -1829,6 +1833,8 @@ packages/lib/services/noteList/renderViewProps.test.js
 packages/lib/services/noteList/renderViewProps.js
 packages/lib/services/noteList/renderers.js
 packages/lib/services/noteLock/NoteLockKey.js
+packages/lib/services/noteLock/NoteLockKeyMigration.test.js
+packages/lib/services/noteLock/NoteLockKeyMigration.js
 packages/lib/services/noteLock/NoteLockNote.js
 packages/lib/services/noteLock/NoteLockService.test.js
 packages/lib/services/noteLock/NoteLockService.js
@@ -1990,6 +1996,7 @@ packages/lib/services/synchronizer/Synchronizer.baseFields.test.js
 packages/lib/services/synchronizer/Synchronizer.basics.test.js
 packages/lib/services/synchronizer/Synchronizer.conflicts.test.js
 packages/lib/services/synchronizer/Synchronizer.e2ee.test.js
+packages/lib/services/synchronizer/Synchronizer.noteLock.test.js
 packages/lib/services/synchronizer/Synchronizer.ppk.test.js
 packages/lib/services/synchronizer/Synchronizer.resources.test.js
 packages/lib/services/synchronizer/Synchronizer.revisions.test.js

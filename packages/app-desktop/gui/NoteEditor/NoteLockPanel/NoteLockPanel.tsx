@@ -11,6 +11,7 @@ interface Props {
 	hasNoteLockKey: boolean;
 	dispatch: Dispatch;
 	undecryptable?: boolean;
+	migrationRunning?: boolean;
 }
 
 export default function NoteLockPanel(props: Props) {
@@ -49,6 +50,10 @@ export default function NoteLockPanel(props: Props) {
 	}, [props.dispatch]);
 
 	const renderAction = () => {
+		if (props.migrationRunning) {
+			return <p className="message">{_('This note cannot be read while a note lock key migration is in progress.')}</p>;
+		}
+
 		if (props.undecryptable) {
 			return <p className="message">{_('This note could not be unlocked. If it was locked prior to a password reset, the content is no longer recoverable.')}</p>;
 		}
