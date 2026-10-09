@@ -83,6 +83,7 @@ packages/lib/welcomeAssets.js
 packages/editor/*/vendor/
 packages/plugins/**/api
 packages/plugins/**/dist
+packages/plugin-repo-cli/dist/
 packages/server/dist/
 packages/utils/dist/
 packages/transcribe/dist/
