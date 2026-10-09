@@ -54,10 +54,10 @@ const ConflictTitle: React.FC<Props> = ({ conflictTitle, disabled, resolvedTitle
 	const onCopy = useCallback(() => {
 		const input = resolvedInputRef.current;
 
-		if (input && document.execCommand) {
+		if (input?.ownerDocument.execCommand) {
 			focus('ConflictTitle::useThisTitle', input);
 			input.select();
-			if (document.execCommand('insertText', false, conflictTitle)) return;
+			if (input.ownerDocument.execCommand('insertText', false, conflictTitle)) return;
 		}
 
 		onResolvedTitleChange(conflictTitle);
