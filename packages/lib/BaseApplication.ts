@@ -107,6 +107,7 @@ export default class BaseApplication {
 	private scheduleAutoAddResourcesIID_: ReturnType<typeof shim.setTimeout> = null;
 	protected database_: JoplinDatabase = null;
 	private profileConfig_: ProfileConfig = null;
+	private refreshNotesEvent_ = { cancelled: false };
 
 	protected showStackTraces_ = false;
 	protected showPromptString_ = false;
@@ -226,6 +227,9 @@ export default class BaseApplication {
 	}
 
 	public async refreshNotes(state: State, useSelectedNoteId = false, noteHash = '') {
+		this.refreshNotesEvent_.cancelled = true;
+		const event = { cancelled: false };
+		this.refreshNotesEvent_ = event;
 		let parentType: string | number = state.notesParentType;
 		let parentId = null;
 
@@ -281,6 +285,8 @@ export default class BaseApplication {
 		// The active window may have changed while the note query was running. Applying this
 		// result to another window would replace its note list and selection with stale state.
 		if (this.store().getState().windowId !== state.windowId) return;
+
+		if (event.cancelled) return;
 
 		this.store().dispatch({
 			type: 'SET_HIGHLIGHTED',
@@ -494,6 +500,7 @@ export default class BaseApplication {
 
 		const previousState = store.getState() as State;
 		const result = next(action);
+		const activeWindowChanged = previousState.windowId !== store.getState().windowId;
 		let refreshNotes = false;
 		let doRefreshFolders: boolean | string = false;
 		let refreshNotesUseSelectedNoteId = false;
@@ -587,12 +594,14 @@ export default class BaseApplication {
 		// Switching windows can also change which note(s) and which note parent type is selected.
 		// Refreshing notes after switching windows helps ensure that the selected note/tags/other state
 		// is correct for the current window.
-		if (action.type === 'WINDOW_FOCUS' && action.lastWindowId !== action.windowId) {
+		if (activeWindowChanged) {
 			Setting.setValue('activeFolderId', newState.selectedFolderId);
 			Setting.setValue('notesParent', serializeNotesParent(getNotesParent(newState)));
-			this.currentFolder_ = newState.selectedFolderId ? await Folder.load(newState.selectedFolderId) : null;
+			const currentFolder = newState.selectedFolderId ? await Folder.load(newState.selectedFolderId) : null;
+			if (store.getState().windowId !== newState.windowId) return result;
+			this.currentFolder_ = currentFolder;
 			refreshNotes = true;
-			refreshNotesUseSelectedNoteId = true;
+			refreshNotesUseSelectedNoteId = action.type === 'WINDOW_FOCUS';
 		}
 
 		// Should refresh the notes when:
