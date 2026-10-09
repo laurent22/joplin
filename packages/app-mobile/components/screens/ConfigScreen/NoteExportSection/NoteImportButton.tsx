@@ -15,6 +15,7 @@ import Folder from '@joplin/lib/models/Folder';
 import { fileExtension } from '@joplin/lib/path-utils';
 import NavService from '@joplin/lib/services/NavService';
 import { NoteLockPrompts, promptForImportedNoteLockKey } from '@joplin/lib/services/noteLock/noteLockPrompts';
+import { ErrorCode } from '@joplin/lib/errors';
 import { DialogContext } from '../../../DialogManager';
 
 const logger = Logger.create('NoteImportButton');
@@ -111,6 +112,10 @@ const NoteImportButton: FunctionComponent<Props> = props => {
 			logger.info('Imported successfully');
 			return { success: true, warnings: status.warnings };
 		} catch (error) {
+			if (error.code === ErrorCode.Cancelled) {
+				logger.info('Canceled.');
+				return { success: false, warnings: [] };
+			}
 			logger.error('Import failed with error', error);
 			throw new Error(_('Import failed. Make sure a %s file was selected.\nDetails: %s', props.format, error.toString()));
 		}

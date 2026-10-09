@@ -16,6 +16,7 @@ import { Dispatch } from 'redux';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import { promptForImportedNoteLockKey } from '@joplin/lib/services/noteLock/noteLockPrompts';
 import noteLockPrompts from '../../../utils/noteLockPrompts';
+import { ErrorCode } from '@joplin/lib/errors';
 const packageInfo: PackageInfo = require('../../../packageInfo.js');
 
 const logger = Logger.create('importFrom');
@@ -166,8 +167,10 @@ export const runtime = (control: WindowControl): CommandRuntime => {
 				// eslint-disable-next-line no-console
 				console.info('Import result: ', result);
 			} catch (error) {
-				logger.error(error);
-				bridge().showErrorMessageBox(error.message);
+				if (error.code !== ErrorCode.Cancelled) {
+					logger.error(error);
+					bridge().showErrorMessageBox(error.message);
+				}
 			}
 
 			void CommandService.instance().execute('hideModalMessage');
