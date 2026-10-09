@@ -17,6 +17,14 @@ pub(crate) struct RenderedSection {
 }
 
 const ERRORS_NOTE_NAME: &str = "⚠️ Errors ⚠️";
+const MAX_FILE_NAME_BYTES: usize = 255;
+
+// Shortens only the title so the suffix and extension are never cut off
+fn build_file_name(title: &str, suffix: &str, extension: &str) -> String {
+    let max_title_bytes = MAX_FILE_NAME_BYTES.saturating_sub(suffix.len() + extension.len());
+    let end = title.floor_char_boundary(max_title_bytes);
+    format!("{}{}{}", &title[..end], suffix, extension)
+}
 
 impl Renderer {
     pub fn new() -> Self {
@@ -174,9 +182,11 @@ impl Renderer {
         extension: &str,
     ) -> Result<String> {
         let filename = filename_base.trim().replace("/", "_");
+        // Sanitize before shortening so removed characters don't use up the length limit
+        let filename = fs_driver().sanitize_file_name(&filename);
         let mut i = 0;
         let mut current_filename =
-            fs_driver().sanitize_file_name(&format!("{}{}", filename, extension));
+            fs_driver().sanitize_file_name(&build_file_name(&filename, "", extension));
 
         loop {
             let current_full_path = fs_driver().join(parent_dir, &current_filename);
@@ -186,10 +196,53 @@ impl Renderer {
             }
 
             i += 1;
-            current_filename =
-                fs_driver().sanitize_file_name(&format!("{}_{}{}", filename, i, extension));
+            current_filename = fs_driver().sanitize_file_name(&build_file_name(
+                &filename,
+                &format!("_{}", i),
+                extension,
+            ));
         }
 
         Ok(current_filename)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::Renderer;
+
+    const MAX_FILE_NAME_BYTES: usize = 255;
+
+    #[test]
+    fn should_keep_html_extension_when_title_is_longer_than_255_bytes() {
+        let mut renderer = Renderer::new();
+
+        let short_title_filename = renderer
+            .title_to_unique_safe_filename("/out", &"a".repeat(230), ".html")
+            .unwrap();
+        let long_title_filename = renderer
+            .title_to_unique_safe_filename("/out", &"a".repeat(260), ".html")
+            .unwrap();
+
+        assert!(short_title_filename.ends_with(".html"));
+        assert!(!long_title_filename.is_empty());
+        assert!(long_title_filename.len() <= MAX_FILE_NAME_BYTES);
+        assert!(
+            long_title_filename.ends_with(".html"),
+            "file name was cut and lost its extension: {} bytes, ends with {:?}",
+            long_title_filename.len(),
+            &long_title_filename[long_title_filename.len() - 10..]
+        );
+    }
+
+    #[test]
+    fn should_keep_title_text_when_long_title_has_invalid_characters() {
+        let mut renderer = Renderer::new();
+
+        let filename = renderer
+            .title_to_unique_safe_filename("/out", &format!("{}Notes", "?".repeat(260)), ".html")
+            .unwrap();
+
+        assert_eq!(filename, "Notes.html");
     }
 }
