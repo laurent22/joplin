@@ -77,9 +77,13 @@ rules.heading = {
 
   replacement: function (content, node, options) {
     var hLevel = Number(node.nodeName.charAt(1))
+    var originalContentLength = content.length
+    // The markdown renderer trims raw nonbreaking spaces at the start and end of a heading,
+    // so an empty heading would be lost. Escaping every one keeps all the spaces the user typed.
+    content = content.replace(/\u{00A0}/gu, '&nbsp;')
 
     if (options.headingStyle === 'setext' && hLevel < 3) {
-      var underline = repeat((hLevel === 1 ? '=' : '-'), content.length)
+      var underline = repeat((hLevel === 1 ? '=' : '-'), originalContentLength)
       return (
         '\n\n' + content + '\n' + underline + '\n\n'
       )
