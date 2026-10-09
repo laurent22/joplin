@@ -3065,7 +3065,7 @@ msgid ""
 "Enabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent encrypted to the sync target."
 msgstr ""
-"Hbilitar a criptografia significa que *todas* as suas notas e anexos serão "
+"Habilitar a criptografia significa que *todas* as suas notas e anexos serão "
 "ressincronizados e enviados com criptografia pra o alvo de sincronização."
 
 #: packages/lib/models/BaseItem.ts:960
@@ -3175,7 +3175,7 @@ msgstr "Erro"
 #: packages/app-cli/app/command-edit.ts:82
 #: packages/app-desktop/commands/startExternalEditing.ts:27
 msgid "Error opening note in editor: %s"
-msgstr "Erro ao abir a nota no editor: %s"
+msgstr "Erro ao abrir a nota no editor: %s"
 
 #: packages/app-mobile/components/CameraView/Camera/index.tsx:52
 msgid "Error starting camera: %s"
@@ -4205,7 +4205,7 @@ msgid ""
 "are corrupted or too large. These items will remain on the device but Joplin "
 "will no longer attempt to decrypt them."
 msgstr ""
-"O Joplin falhou ao tentar descriptografados estes múltiplos itens, "
+"O Joplin falhou ao tentar descriptografar estes múltiplos itens, "
 "possivelmente porque eles estão corrompidos ou são grandes demais. Esses "
 "itens permanecerão no dispositivo, porém o Joplin não vai mais tentar "
 "descriptografá-los."
@@ -4293,7 +4293,7 @@ msgid ""
 "Joplin's own sync service. Also gives access to Joplin-specific features "
 "such as publishing notes or collaborating on notebooks with others."
 msgstr ""
-"Serviço de sincronização próprio do Joplin. Fornece acesso a fucionalidades "
+"Serviço de sincronização próprio do Joplin. Fornece acesso a funcionalidades "
 "específicas como publicação de notas e colaboração de cadernos de notas com "
 "outras pessoas."
 
@@ -5219,7 +5219,7 @@ msgstr "Nota"
 
 #: packages/lib/models/settings/builtInMetadata.ts:2220
 msgid "Note area growth factor"
-msgstr "Fator de crescimento da area de notas"
+msgstr "Fator de crescimento da área de notas"
 
 #: packages/app-desktop/gui/Root.tsx:169
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:577
@@ -5809,7 +5809,7 @@ msgid ""
 "all the notes to show up on the recipient's device."
 msgstr ""
 "Por favor, note que se esse é um caderno grande, pode levar alguns minutos "
-"para todas as notas aprecerem no dispositivo do destinatário."
+"para todas as notas aparecerem no dispositivo do destinatário."
 
 #: packages/lib/onedrive-api-node-utils.ts:130
 msgid ""
@@ -6549,7 +6549,7 @@ msgstr "Tentar Todos de novo"
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:155
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/revealResourceFile.ts:8
 msgid "Reveal file in folder"
-msgstr "Mostrar aquivo na pasta"
+msgstr "Mostrar arquivo na pasta"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1481
 #, fuzzy
@@ -6629,7 +6629,7 @@ msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
 msgstr ""
-"Modo seguro está ativo. Renderização de notas e todos os puglins estão "
+"Modo seguro está ativo. Renderização de notas e todos os plugins estão "
 "temporariamente desativados."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:126
@@ -7471,7 +7471,7 @@ msgstr "Status de sincronização"
 #: packages/app-cli/app/command-sync.ts:40
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr ""
-"Sincronizar para destino fornecido (p padrão é o valor de configuração "
+"Sincronizar para destino fornecido (o padrão é o valor de configuração "
 "sync.target)"
 
 #: packages/lib/versionInfo.ts:100
@@ -7694,7 +7694,7 @@ msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
 msgstr ""
-"Os anexos não serão mais observados quando você mudar para uma notadiferente."
+"Os anexos não serão mais observados quando você mudar para uma nota diferente."
 
 #: packages/app-cli/app/app.ts:284
 msgid "The command \"%s\" is only available in GUI mode"
@@ -7957,7 +7957,7 @@ msgstr ""
 "O alvo de sincronia não pode ser alterado devido à seguinte razão: %s\n"
 "\n"
 "Se o problema não puder ser resolvido, você pode precisar de limpar seus "
-"dados antes, seguindo estas instruções::\n"
+"dados antes, seguindo estas instruções:\n"
 "\n"
 "%s"
 
@@ -8292,7 +8292,7 @@ msgid ""
 "enabling it your firewall may ask you to give permission to Joplin to listen "
 "to a particular port."
 msgstr ""
-"Este serviço permite a extensão do browser se comunicat com o Joplin. Quando "
+"Este serviço permite a extensão do browser se comunicar com o Joplin. Quando "
 "habilitar, talvez seu firewall peça que você conceda permissão ao Joplin "
 "para escutar determinada porta."
 
@@ -8659,7 +8659,7 @@ msgid ""
 "by exporting all your notes as JEX from the desktop application."
 msgstr ""
 "Desinstale e reinstale o aplicativo. Certifique-se de criar um backup "
-"primeiro, exportando todas as suas novas como JEX a partir da aplicação no "
+"primeiro, exportando todas as suas notas como JEX a partir da aplicação no "
 "Desktop."
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:13
@@ -9271,7 +9271,7 @@ msgid ""
 "to Joplin-specific features such as publishing notes or collaborating on "
 "notebooks with others."
 msgstr ""
-"Serviço de sincronização próprio do Joplin. Fornece acesso a fucionalidades "
+"Serviço de sincronização próprio do Joplin. Fornece acesso a funcionalidades "
 "específicas como publicação de notas e colaboração de cadernos de notas com "
 "outras pessoas."
 
