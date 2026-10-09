@@ -2384,11 +2384,8 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			advanced: true,
 		},
 
-		// Controls the new conflict resolution UI. It is hidden and turned off by
-		// default so the feature can be developed over multiple releases without
-		// affecting users. Make it public and enable it by default once it is ready.
 		'featureFlag.conflictResolution': {
-			value: true,
+			value: false,
 			type: SettingItemType.Bool,
 			public: true,
 			storage: SettingStorage.File,
