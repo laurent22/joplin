@@ -608,6 +608,11 @@ export default class Note extends BaseItem {
 		return r && r.total ? r.total : 0;
 	}
 
+	// Trashed and conflict notes count too: their content still depends on the note lock key.
+	public static async hasLockedNotes() {
+		return !!(await this.db().selectOne('SELECT 1 FROM notes WHERE is_locked = 1 LIMIT 1'));
+	}
+
 	public static unconflictedNotes() {
 		return this.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0');
 	}
@@ -951,6 +956,11 @@ export default class Note extends BaseItem {
 		// in the item_changes table
 		const oldNote = !isNew && o.id ? await Note.load(o.id) : null;
 		let plainTextBodyToReturn: string = null;
+		// With the feature turned off the note lock path below is skipped, so a decrypted body would be written over the
+		// ciphertext. The stored row decides for a partial save, which may not carry the lock state.
+		if (!isNoteLockEnabled() && (o as NoteLockNoteEntity).isDecrypted && (NoteLockNote.isLocked(o) || NoteLockNote.isLocked(oldNote))) {
+			throw new Error('Locked notes cannot be saved while the note lock feature is turned off');
+		}
 		if (isNoteLockEnabled()) {
 			if (!options?.useNoteLock && o.is_locked !== undefined && 'body' in o && !!(o as NoteLockNoteEntity).isDecrypted) throw new Error('Saves including both is_locked and body fields must be gated when the body was loaded using a gated load');
 			if (!isNew && o.is_locked !== undefined && !!o.is_locked !== !!oldNote?.is_locked && !('body' in o)) throw new Error('Saves that change is_locked must include the body field');

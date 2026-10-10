@@ -8,6 +8,11 @@ import Folder from '../../models/Folder';
 import NoteTag from '../../models/NoteTag';
 import Note from '../../models/Note';
 import * as ArrayUtils from '../../ArrayUtils';
+import isNoteLockEnabled from '../noteLock/isNoteLockEnabled';
+import NoteLockNote, { NoteLockNoteEntity } from '../noteLock/NoteLockNote';
+import { DecryptedNoteLockKey } from '../noteLock/NoteLockKey';
+import NoteLockSession from '../noteLock/NoteLockSession';
+import { NoteEntity } from '../database/types';
 import InteropService_Importer_Jex from './InteropService_Importer_Jex';
 import InteropService_Importer_Md from './InteropService_Importer_Md';
 import InteropService_Importer_Md_frontmatter from './InteropService_Importer_Md_frontmatter';
@@ -360,6 +365,19 @@ export default class InteropService {
 		}
 	}
 
+	private async decryptedNoteForExport_(noteId: string, noteLockKey: DecryptedNoteLockKey): Promise<NoteEntity|null> {
+		if (!noteLockKey) return null;
+		try {
+			const decrypted: NoteLockNoteEntity = await Note.load(noteId, { useNoteLock: true, noteLockKey });
+			// Without the marker the load was not gated, as when the feature is turned off midway, so the body is still ciphertext.
+			if (!decrypted.isDecrypted) return null;
+			delete decrypted.isDecrypted;
+			return { ...decrypted, is_locked: 0, extracted_resource_ids: '' };
+		} catch {
+			return null;
+		}
+	}
+
 	public async export(options: ExportOptions): Promise<ImportExportResult> {
 		options = {
 			format: ExportModuleOutputFormat.Jex,
@@ -387,6 +405,14 @@ export default class InteropService {
 
 		const exportedNoteIds = [];
 		let resourceIds: string[] = [];
+		// Backups keep locked notes encrypted; every other format exports the decrypted content.
+		const keepsLockedNotes = options.format === ExportModuleOutputFormat.Raw || options.format === ExportModuleOutputFormat.Jex;
+		let lockedNotesSkipped = 0;
+		// Read once, so enabling the feature partway through cannot leave the locked notes queued before it as ciphertext.
+		// Turning it off partway is caught by the gated load in decryptedNoteForExport_.
+		const noteLockEnabled = isNoteLockEnabled();
+		// Captured at the start, so locking the session partway through does not skip the remaining locked notes.
+		const noteLockKey = NoteLockSession.instance().isUnlocked() ? NoteLockSession.instance().decryptedKey() : null;
 
 		// Recursively get all the folders that have valid parents
 		const folderIds = await Folder.childrenIds('');
@@ -412,11 +438,22 @@ export default class InteropService {
 			for (let noteIndex = 0; noteIndex < noteIds.length; noteIndex++) {
 				const noteId = noteIds[noteIndex];
 				if (sourceNoteIds.length && sourceNoteIds.indexOf(noteId) < 0) continue;
-				const note = await Note.load(noteId);
+				let note = await Note.load(noteId);
+				if (noteLockEnabled && NoteLockNote.isLocked(note) && !keepsLockedNotes) {
+					const decrypted = await this.decryptedNoteForExport_(noteId, noteLockKey);
+					if (!decrypted) {
+						lockedNotesSkipped++;
+						continue;
+					}
+					note = decrypted;
+				}
 				await queueExportItem(BaseModel.TYPE_NOTE, note);
 				exportedNoteIds.push(noteId);
 
-				const rids = await Note.linkedResourceIds(note.body);
+				// A locked note's body is ciphertext, so its resource ids come from the extracted list.
+				const rids = noteLockEnabled && NoteLockNote.isLocked(note)
+					? Note.unserializeExtractedResourceIds(note.extracted_resource_ids)
+					: await Note.linkedResourceIds(note.body);
 				resourceIds = resourceIds.concat(rids);
 			}
 		}
@@ -512,6 +549,8 @@ export default class InteropService {
 
 		options.onProgress?.(ExportProgressState.Closing, null);
 		await exporter.close();
+
+		if (lockedNotesSkipped) result.warnings.push(`${lockedNotesSkipped} locked note(s) could not be unlocked and were not exported`);
 
 		return result;
 	}

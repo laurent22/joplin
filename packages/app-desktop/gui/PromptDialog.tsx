@@ -9,6 +9,7 @@ import Dialog from '@joplin/lib/components/Dialog';
 import { ChangeEvent } from 'react';
 import { formatDateTimeLocalToMs, isValidDate } from '@joplin/utils/time';
 import lightTheme from '@joplin/lib/themes/light';
+import PasswordInput from './PasswordInput/PasswordInput';
 
 interface Props {
 	themeId: number;
@@ -321,6 +322,8 @@ export default class PromptDialog extends React.Component<Props, any> {
 		} else if (this.props.inputType === 'dropdown') {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- makeAnimated's generic doesn't unify with react-select's expected SelectComponents shape
 			inputComp = <Select className="item-selector" onMenuOpen={this.select_menuOpen} onMenuClose={this.select_menuClose} styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} components={makeAnimated() as any} value={this.props.answer} defaultValue={this.props.defaultValue} isClearable={false} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={onKeyDown} />;
+		} else if (this.props.inputType === 'password') {
+			inputComp = <PasswordInput inputId='prompt-dialog-password' inputRef={this.answerInput_} value={this.state.answer} onChange={event => onChange(event)} onKeyDown={event => onKeyDown(event)} />;
 		} else {
 			inputComp = <input style={styles.input} ref={this.answerInput_} value={this.state.answer} type="text" onChange={event => onChange(event)} onKeyDown={event => onKeyDown(event)} />;
 		}
@@ -357,7 +360,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 
 		return (
 			<Dialog className='prompt-dialog' contentStyle={styles.dialog} onCancel={() => onClose(false, 'cancel')}>
-				<label style={styles.label}>{this.props.label ? this.props.label : ''}</label>
+				<label style={this.props.inputType === 'password' ? { ...styles.label, display: 'block', marginBottom: 10 } : styles.label}>{this.props.label ? this.props.label : ''}</label>
 				<div style={{ display: 'inline-block', color: 'black', backgroundColor: theme.backgroundColor }}>
 					{inputComp}
 					{descComp}

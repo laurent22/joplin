@@ -1,5 +1,7 @@
 import { FolderEntity } from '../database/types';
 import { PluginStates } from '../plugins/reducer';
+import { MasterKeyEntity } from '../e2ee/types';
+import { DecryptedNoteLockKey } from '../noteLock/NoteLockKey';
 
 export interface CustomImportContext {
 	sourcePath: string;
@@ -54,6 +56,10 @@ export interface ImportOptions {
 	xmlSerializer?: XMLSerializer;
 
 	defaultFolderTitle?: string;
+
+	// Called when a backup carries a note lock key. Return it decrypted to re-encrypt the imported
+	// locked notes for this profile, or null to import them unchanged.
+	onNoteLockKey?: (key: MasterKeyEntity)=> Promise<DecryptedNoteLockKey|null>;
 }
 
 export enum ExportProgressState {

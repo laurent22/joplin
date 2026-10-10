@@ -810,9 +810,9 @@ export default class EncryptionService {
 		return `${isNoteLock ? 'JLD' : 'JED'}01${encryptionMetadata}`;
 	}
 
-	public async decodeHeaderString(cipherText: string) {
+	public async decodeHeaderString(cipherText: string, isNoteLock = false) {
 		const source = this.stringReader_(cipherText);
-		return this.decodeHeaderSource_(source);
+		return this.decodeHeaderSource_(source, isNoteLock);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See encryptAbstract_ source/destination
