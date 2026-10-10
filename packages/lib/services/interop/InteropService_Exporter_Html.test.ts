@@ -63,6 +63,26 @@ describe('interop/InteropService_Exporter_Html', () => {
 		expect(files).toContain('note2.html');
 	}));
 
+	test('should warn when a note title is truncated in the exported filename', async () => {
+		const longTitle = 'a'.repeat(51);
+		const longFolderTitle = 'b'.repeat(51);
+		const folder = await Folder.save({ title: longFolderTitle });
+		await Note.save({ title: longTitle, parent_id: folder.id });
+		await Note.save({ title: 'short title', parent_id: folder.id });
+
+		const result = await InteropService.instance().export({
+			path: exportDir(),
+			format: ExportModuleOutputFormat.Html,
+			target: FileSystemItem.Directory,
+		});
+
+		expect(result.warnings).toEqual([
+			`The notebook title "${longFolderTitle}" was truncated to "${'b'.repeat(50)}" in the exported folder name.`,
+			`The note title "${longTitle}" was truncated to "${'a'.repeat(50)}" in the exported file name.`,
+		]);
+		expect(await fs.pathExists(`${exportDir()}/${'b'.repeat(50)}/${'a'.repeat(50)}.html`)).toBe(true);
+	});
+
 	test('should export plugin assets', (async () => {
 		const service = InteropService.instance();
 		const folder1 = await Folder.save({ title: 'folder1' });

@@ -450,9 +450,11 @@ export default class InteropService {
 		await exporter.init(exportPath, options);
 
 		const typeOrder = [BaseModel.TYPE_FOLDER, BaseModel.TYPE_RESOURCE, BaseModel.TYPE_NOTE, BaseModel.TYPE_TAG, BaseModel.TYPE_NOTE_TAG];
-		const context: { resourcePaths: Record<string, string>; destResourcePaths?: Record<string, string>; notePaths?: Record<string, string> } = {
+		const context: { resourcePaths: Record<string, string>; warnings: string[]; destResourcePaths?: Record<string, string>; notePaths?: Record<string, string> } = {
 			resourcePaths: {},
+			warnings: result.warnings,
 		};
+		exporter.updateContext(context);
 
 		// Prepare to process each type before starting any
 		// This will allow exporters to operate on the full context

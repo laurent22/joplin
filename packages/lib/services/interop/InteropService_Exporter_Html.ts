@@ -10,7 +10,7 @@ import { ExportOptions } from './types';
 import { NoteEntity, ResourceEntity, ResourceLocalStateEntity } from '../database/types';
 import { contentScriptsToRendererRules } from '../plugins/utils/loadContentScripts';
 import { ThemeStyle } from '../../theme';
-import { basename, friendlySafeFilename, rtrimSlashes, dirname } from '../../path-utils';
+import { basename, rtrimSlashes, dirname } from '../../path-utils';
 import packToWriter from '@joplin/htmlpack/packToWriter';
 const { themeStyle } = require('../../theme');
 import { escapeHtml } from '../../string-utils';
@@ -69,7 +69,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 				if (pathPart) {
 					output = `${pathPart}/${output}`;
 				} else {
-					output = `${friendlySafeFilename(item.title)}/${output}`;
+					output = `${this.itemTitleToFilename_(item)}/${output}`;
 					output = await shim.fsDriver().findUniqueFilename(output);
 				}
 			}
@@ -118,7 +118,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 			if (this.filePath_) {
 				noteFilePath = this.filePath_;
 			} else {
-				noteFilePath = `${dirPath}/${friendlySafeFilename(item.title)}.html`;
+				noteFilePath = `${dirPath}/${this.itemTitleToFilename_(item)}.html`;
 				noteFilePath = await shim.fsDriver().findUniqueFilename(noteFilePath);
 			}
 
