@@ -10,6 +10,7 @@
 # Renato Nunes Bastos <rnbastos@gmail.com>, 2023, 2024.
 # Gustavo Vianna França <gugvfranca@gmail.com>, 2025.
 # Renato Nunes Bastos <rnbastos@gmail.com>, 2026.
+# Miguel Lima <miguelsl2000@gmail.com>, 2026.
 #
 msgid ""
 msgstr ""
