@@ -98,4 +98,81 @@ describe('wordDiff', () => {
 		]);
 	});
 
+	test('should not highlight the padding that lines up table columns', () => {
+		const local = '| name | id  |\n| gun  | 789 |';
+		const remote = '| name | id                |\n| hot  | 789               |';
+
+		const diff = wordDiff(local, remote);
+
+		for (const segment of diff.local.concat(diff.remote)) {
+			if (segment.highlighted) expect(segment.text.trim()).not.toBe('');
+		}
+	});
+
+	test('should still highlight an alignment marker in a delimiter row', () => {
+		expect(highlightedText(wordDiff('| --- |', '| :-: |').remote)).toEqual([':', ':']);
+	});
+
+
+	test('should highlight only the changed cell when the columns are padded differently', () => {
+		const diff = wordDiff('| four   | 456 |', '| fives  | 456                |');
+
+		expect(highlightedText(diff.local)).toEqual(['four']);
+		expect(highlightedText(diff.remote)).toEqual(['fives']);
+	});
+
+	test('should not pair identical words that sit on different lines', () => {
+		const diff = wordDiff('hello - found\nworld', 'hello\nworld - jop');
+
+		expect(highlightedText(diff.local)).toEqual([' - found']);
+		expect(highlightedText(diff.remote)).toEqual([' - jop']);
+		expect(joined(diff.local)).toBe('hello - found\nworld');
+		expect(joined(diff.remote)).toBe('hello\nworld - jop');
+	});
+
+	test('should not pair words across lines when the sides have different line counts', () => {
+		const diff = wordDiff('hello - found\nworld', 'hello\nworld - jop\n');
+
+		expect(highlightedText(diff.local)).toEqual([' - found']);
+		expect(highlightedText(diff.remote)).toEqual([' - jop']);
+		expect(joined(diff.local)).toBe('hello - found\nworld');
+		expect(joined(diff.remote)).toBe('hello\nworld - jop\n');
+	});
+
+	test('should highlight a line that only one side has', () => {
+		const diff = wordDiff('a\nb', 'a\nb\nc');
+
+		expect(highlightedText(diff.local)).toEqual([]);
+		expect(highlightedText(diff.remote)).toEqual(['c']);
+		expect(joined(diff.local)).toBe('a\nb');
+		expect(joined(diff.remote)).toBe('a\nb\nc');
+	});
+
+	test('should highlight a rewritten line whole rather than word by word', () => {
+		const local = 'This is for example how the web clipper communicates with Joplin, and this is what you need';
+		const remote = 'Iam writing this local version here, to have only just yellow card';
+		const diff = wordDiff(local, remote);
+
+		expect(highlightedText(diff.local)).toEqual([local]);
+		expect(highlightedText(diff.remote)).toEqual([remote]);
+	});
+
+	test('should still highlight single words when most of the line matches', () => {
+		const diff = wordDiff('hello world this is a test of the system', 'hello world this is a demo of the system');
+
+		expect(highlightedText(diff.local)).toEqual(['test']);
+		expect(highlightedText(diff.remote)).toEqual(['demo']);
+	});
+
+	test('should handle a long single line without scanning back from each character', () => {
+		const local = `| ${'a'.repeat(40000)} | b |`;
+		const remote = `| ${'a'.repeat(40000)} | c |`;
+
+		const startTime = Date.now();
+		const diff = wordDiff(local, remote);
+		// raised it from 500 to 5000 as CI can be slow sometimes
+		expect(Date.now() - startTime).toBeLessThan(5000);
+		expect(diff.local.map(segment => segment.text).join('')).toBe(local);
+		expect(diff.remote.map(segment => segment.text).join('')).toBe(remote);
+	});
 });
