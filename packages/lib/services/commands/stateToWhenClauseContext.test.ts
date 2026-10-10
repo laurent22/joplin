@@ -54,10 +54,18 @@ describe('stateToWhenClauseContext', () => {
 			isLocked: 0,
 			expected: false,
 		},
-	])('should make the note read-only when $label', ({ noteLockSessionUnlocked, activeNoteIsUndecryptable, isLocked, expected }) => {
+		{
+			label: 'the decrypted note is inside a share',
+			noteLockSessionUnlocked: true,
+			activeNoteIsUndecryptable: false,
+			isLocked: 1,
+			shareId: 'share-1',
+			expected: true,
+		},
+	])('should make the note read-only when $label', ({ noteLockSessionUnlocked, activeNoteIsUndecryptable, isLocked, shareId, expected }) => {
 		const applicationState = buildState({
 			selectedNoteIds: ['1'],
-			notes: [{ id: '1', is_locked: isLocked, deleted_time: 0 }],
+			notes: [{ id: '1', is_locked: isLocked, share_id: shareId, deleted_time: 0 }],
 			noteLockSessionUnlocked,
 			activeNoteIsUndecryptable,
 		});

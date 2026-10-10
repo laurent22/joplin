@@ -34,6 +34,7 @@ import setupGlobalStore from '../../../utils/testing/setupGlobalStore';
 import CommandService from '@joplin/lib/services/CommandService';
 import BackButtonService from '../../../services/BackButtonService';
 import shared from '@joplin/lib/components/shared/note-screen-shared';
+import { DialogContext, DialogControl } from '../../DialogManager';
 
 jest.retryTimes(2);
 
@@ -330,6 +331,22 @@ describe('screens/Note/Note', () => {
 		Setting.setValue('featureFlag.noteLock', false);
 	});
 
+	it('should become read-only as soon as a note inside a share is locked', async () => {
+		await setupUnlockedNoteLock('123456');
+		const noteId = await openNewNote({ title: 'Shared then locked', body: 'plain', share_id: 'share-1' });
+		const { unmount } = render(<WrappedNoteScreen />);
+
+		expect(await screen.findByDisplayValue('Shared then locked')).not.toBeDisabled();
+		await act(async () => {
+			await enableNoteLock(noteId);
+		});
+
+		expect(screen.getByDisplayValue('Shared then locked')).toBeDisabled();
+
+		unmount();
+		Setting.setValue('featureFlag.noteLock', false);
+	});
+
 	it('should store the plaintext body again when the note lock is removed', async () => {
 		await setupUnlockedNoteLock('123456');
 		const noteId = await openNewNote({ title: 'To unlock', body: 'plain body' });
@@ -447,6 +464,72 @@ describe('screens/Note/Note', () => {
 			expect(await Note.load(noteId)).toBeUndefined();
 		});
 		expect(shim.showMessageBox).toHaveBeenCalled();
+
+		unmount();
+	});
+
+	it('should make a locked note inside a share read-only', async () => {
+		await openNewNote({ title: 'Locked in a share', body: 'plain', is_locked: 1, share_id: 'share-1' });
+		const { unmount } = render(<WrappedNoteScreen />);
+
+		const titleInput = await screen.findByDisplayValue('Locked in a share');
+		expect(titleInput).toBeDisabled();
+		expect(await screen.findByText('This note is read-only because it is locked and contained within a share. To enable editing, it must be moved outside of the share.')).toBeVisible();
+		expect(screen.getByHintText(/Selects a notebook/)).toBeVisible();
+
+		unmount();
+	});
+
+	it('should make a locked note editable as soon as it is moved out of a share', async () => {
+		const sharedFolder = await Folder.save({ title: 'Shared', share_id: 'share-1', parent_id: '' });
+		await Folder.save({ title: 'Outside the share', parent_id: '' });
+		await openNewNote({ title: 'Locked in a share', body: 'plain', is_locked: 1, share_id: 'share-1', parent_id: sharedFolder.id });
+		const { unmount } = render(<WrappedNoteScreen />);
+
+		expect(await screen.findByDisplayValue('Locked in a share')).toBeDisabled();
+		fireEvent.press(screen.getByHintText(/Selects a notebook/));
+		fireEvent.press(await screen.findByRole('menuitem', { name: 'Outside the share' }));
+
+		await waitFor(() => expect(screen.getByDisplayValue('Locked in a share')).not.toBeDisabled());
+		expect(screen.queryByText(/read-only because it is locked/)).toBeNull();
+
+		unmount();
+	});
+
+	it('should not tick the to-do checkbox of a locked note inside a share', async () => {
+		const noteId = await openNewNote({ title: 'Locked to-do', body: 'plain', is_todo: 1, is_locked: 1, share_id: 'share-1' });
+		const dialogs: Partial<DialogControl> = { error: jest.fn() };
+		const { unmount } = render(<DialogContext.Provider value={dialogs as DialogControl}><WrappedNoteScreen /></DialogContext.Provider>);
+
+		fireEvent.press(await screen.findByRole('checkbox'));
+
+		await waitFor(() => expect(dialogs.error).toHaveBeenCalledWith(expect.stringMatching(/read-only because it is locked/)));
+		expect(screen.getByRole('checkbox')).not.toBeChecked();
+		expect((await Note.load(noteId)).todo_completed).toBe(0);
+
+		unmount();
+	});
+
+	it('should hide the move picker for a locked note inside a read-only share', async () => {
+		const shareId = 'testShare';
+		await openNewNote({ title: 'Locked in a read-only share', body: 'plain', is_locked: 1, share_id: shareId });
+		const cleanup = simulateReadOnlyShareEnv(shareId, store);
+		const { unmount } = render(<WrappedNoteScreen />);
+
+		expect(await screen.findByDisplayValue('Locked in a read-only share')).toBeDisabled();
+		expect(screen.queryByHintText(/Selects a notebook/)).toBeNull();
+
+		act(() => cleanup());
+		unmount();
+	});
+
+	it('should show the unreadable share warning while the lock panel is showing', async () => {
+		await setupUndecryptableNote({ title: 'Locked in a share', body: 'secret', share_id: 'share-1' });
+		const { unmount } = render(<WrappedNoteScreen />);
+
+		expect(await screen.findByText('This note could not be unlocked. If it was locked prior to a password reset, the content is no longer recoverable.')).toBeVisible();
+		expect(screen.getByText('This note may not be readable because it is contained within a share.')).toBeVisible();
+		expect(screen.queryByText(/read-only because it is locked/)).toBeNull();
 
 		unmount();
 	});

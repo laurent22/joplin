@@ -52,6 +52,20 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 		// Reload the note, to ensure the latest version is used to create the conflict
 		local = await Note.load(local.id);
 
+		// An older client drops is_locked when it edits a shared locked note: its change is discarded and the local version pushed back,
+		// ahead of the remote time. A read-only share rejects the push back, so there the lock is restored on the remote version and the
+		// normal conflict below keeps the local version. Outside a share, only a bug could drop the lock, so the change is kept.
+		if (remoteExists && (remoteContent as NoteEntity).share_id && (remoteContent as NoteEntity).is_locked === undefined && (local as NoteEntity).is_locked) {
+			if (itemIsReadOnly) {
+				remoteContent = { ...remoteContent, is_locked: (local as NoteEntity).is_locked } as NoteEntity;
+			} else {
+				const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, BaseItem.remoteItemSyncTime(remoteSyncedTime), null, remoteSyncedTime);
+				const newUpdatedTime = Math.max(local.updated_time, remoteSyncedTime + 1);
+				await ItemClass.save({ id: local.id, updated_time: newUpdatedTime, user_updated_time: newUpdatedTime }, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries: syncTimeQueries });
+				return;
+			}
+		}
+
 		// ------------------------------------------------------------------------------
 		// First find out if the conflict matters. For example, if the conflict is on the title or body
 		// we want to preserve all the changes. If it's on todo_completed it doesn't really matter
