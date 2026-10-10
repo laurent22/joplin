@@ -78,6 +78,7 @@ describe('shares.link', () => {
 		expect(bodyHtml).toContain('rendered-md'); // Means we have the HTML body
 		expect(bodyHtml).toContain('Testing title'); // Means the note has been rendered
 		expect(bodyHtml).toContain('Testing body');
+		expect(bodyHtml).not.toContain('class="footer"');
 		expect(bodyHtml).toContain('<title>Testing title'); // Means the page title is set to the note title
 	});
 

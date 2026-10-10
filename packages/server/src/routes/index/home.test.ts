@@ -29,6 +29,7 @@ describe('index/home', () => {
 		await routeHandler(context);
 
 		expect((context.response.body as string).indexOf(user.email) >= 0).toBe(true);
+		expect(context.response.body as string).toContain('class="footer"');
 	});
 
 });

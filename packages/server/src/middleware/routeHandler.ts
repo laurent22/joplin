@@ -99,6 +99,7 @@ export default async function(ctx: AppContext) {
 			const view: View = {
 				name: 'error',
 				path: 'index/error',
+				showFooter: true,
 				content: {
 					error,
 					stack: config().showErrorStackTraces ? error.stack : '',
