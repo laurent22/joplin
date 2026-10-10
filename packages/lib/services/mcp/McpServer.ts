@@ -143,5 +143,5 @@ const serialisePayload = (payload: unknown): ToolContent => {
 			mimeType: payload.mimeType,
 		};
 	}
-	return textResponse(JSON.stringify(payload, null, 2));
+	return textResponse(JSON.stringify(payload));
 };
