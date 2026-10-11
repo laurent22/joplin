@@ -459,24 +459,30 @@ class AppComponent extends Component {
 
 		return (
 			<div className="App">
-				<div className="Controls">
-					<ul>
-						<li><a className="Button" href="#" onClick={this.clipSimplified_click} title={simplifiedPageButtonTooltip}>{simplifiedPageButtonLabel}</a></li>
-						<li><a className="Button" href="#" onClick={this.clipComplete_click}>Clip complete page (Markdown)</a></li>
-						<li><a className="Button" href="#" onClick={this.clipCompleteHtml_click}>Clip complete page (HTML)</a></li>
-						<li><a className="Button" href="#" onClick={this.clipSelection_click}>Clip selection</a></li>
-						<li><a className="Button" href="#" onClick={this.clipScreenshot_click}>Clip screenshot</a></li>
-						<li><a className="Button" href="#" onClick={this.clipUrl_click}>Clip URL</a></li>
-					</ul>
-				</div>
-				{ foldersComp() }
-				<div className="Tags">
-					<label>Tags:</label>
-					{tagsComp()}
-					<datalist id="tags">
-						{tagDataListOptions}
-					</datalist>
-				</div>
+				<fieldset className="Group">
+					<legend>Storage Location</legend>
+					{ foldersComp() }
+					<div className="Tags">
+						<label>Tags:</label>
+						{tagsComp()}
+						<datalist id="tags">
+							{tagDataListOptions}
+						</datalist>
+					</div>
+				</fieldset>
+				<fieldset className="Group">
+					<legend>Action</legend>
+					<div className="Controls">
+						<ul>
+							<li><a className="Button" href="#" onClick={this.clipSimplified_click} title={simplifiedPageButtonTooltip}>{simplifiedPageButtonLabel}</a></li>
+							<li><a className="Button" href="#" onClick={this.clipComplete_click}>Clip complete page (Markdown)</a></li>
+							<li><a className="Button" href="#" onClick={this.clipCompleteHtml_click}>Clip complete page (HTML)</a></li>
+							<li><a className="Button" href="#" onClick={this.clipSelection_click}>Clip selection</a></li>
+							<li><a className="Button" href="#" onClick={this.clipScreenshot_click}>Clip screenshot</a></li>
+							<li><a className="Button" href="#" onClick={this.clipUrl_click}>Clip URL</a></li>
+						</ul>
+					</div>
+				</fieldset>
 				{ warningComponent }
 				{ previewComponent }
 				{ openNewNoteButton() }

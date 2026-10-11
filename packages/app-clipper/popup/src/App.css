@@ -42,6 +42,19 @@ body {
 	opacity: .5;
 }
 
+.App .Group {
+	min-width: 0;
+	margin: 0 0 10px 0;
+	padding: 0 10px;
+	border: 1px solid #38668D;
+	border-radius: 3px;
+}
+
+.App .Group legend {
+	padding: 0 6px;
+	font-size: .8em;
+}
+
 .App .Controls {
 	flex: 0;
 }
