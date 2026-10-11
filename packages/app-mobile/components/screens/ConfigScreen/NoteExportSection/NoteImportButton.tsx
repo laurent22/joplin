@@ -13,7 +13,6 @@ import { Platform } from 'react-native';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import Folder from '@joplin/lib/models/Folder';
 import { fileExtension } from '@joplin/lib/path-utils';
-import NavService from '@joplin/lib/services/NavService';
 import { NoteLockPrompts, promptForImportedNoteLockKey } from '@joplin/lib/services/noteLock/noteLockPrompts';
 import { ErrorCode } from '@joplin/lib/errors';
 import { DialogContext } from '../../../DialogManager';
@@ -26,6 +25,8 @@ interface Props {
 	description: string;
 	format: string;
 	activeFolder?: FolderEntity;
+	// Navigating to the Config screen does nothing while it is already open, so the screen switches its own section.
+	onOpenNoteLockSetup: ()=> void;
 }
 
 export const importedFolderTitle = () => {
@@ -49,7 +50,7 @@ const NoteImportButton: FunctionComponent<Props> = props => {
 	const dialogs = useContext(DialogContext);
 	const noteLockPrompts: NoteLockPrompts = {
 		promptPassword: label => dialogs.promptForText(label, '', true),
-		goToNoteLockSetup: () => void NavService.go('Config', { sectionName: 'noteLock' }),
+		goToNoteLockSetup: props.onOpenNoteLockSetup,
 	};
 
 	const getTitle = (taskStatus: TaskStatus) => {

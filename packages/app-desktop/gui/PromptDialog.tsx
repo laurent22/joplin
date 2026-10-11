@@ -358,10 +358,12 @@ export default class PromptDialog extends React.Component<Props, any> {
 			);
 		}
 
+		// A password prompt puts its input below the label at a fixed width, shrinking with the window.
+		const isPassword = this.props.inputType === 'password';
 		return (
-			<Dialog className='prompt-dialog' contentStyle={styles.dialog} onCancel={() => onClose(false, 'cancel')}>
-				<label style={this.props.inputType === 'password' ? { ...styles.label, display: 'block', marginBottom: 10 } : styles.label}>{this.props.label ? this.props.label : ''}</label>
-				<div style={{ display: 'inline-block', color: 'black', backgroundColor: theme.backgroundColor }}>
+			<Dialog className='prompt-dialog' contentStyle={isPassword ? { width: 500, maxWidth: '90vw' } : styles.dialog} onCancel={() => onClose(false, 'cancel')}>
+				<label style={isPassword ? { ...styles.label, display: 'block', marginBottom: 10 } : styles.label}>{this.props.label ? this.props.label : ''}</label>
+				<div style={{ display: isPassword ? 'block' : 'inline-block', color: 'black', backgroundColor: theme.backgroundColor }}>
 					{inputComp}
 					{descComp}
 				</div>

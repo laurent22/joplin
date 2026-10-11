@@ -947,6 +947,8 @@ export default class Note extends BaseItem {
 	// before calling a gated save, but caution should be used if doing so, because if the body
 	// is ever not decrypted when doing so, it will cause the contents to be double encrypted,
 	// causing the plain text to become inaccessible in UI, with no automatic remedy available.
+	// It must also never be set to true without first checking that isNoteLockEnabled() is true,
+	// as a note marked decrypted is refused when the feature is turned off before the save.
 	public static async save(o: NoteEntity, options: SaveOptions = null): Promise<NoteEntity> {
 		const isNew = this.isNew(o, options);
 
