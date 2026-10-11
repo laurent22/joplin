@@ -1,5 +1,5 @@
 import { _internal, ChatCommands, runNoteChat } from './noteChat';
-import { ChatRole, ChatToolCall } from './types';
+import { ChatRole, ChatToolCall, ChatToolMessage } from './types';
 import { expectThrow, setupDatabase, switchClient, withWarningSilenced } from '../../testing/test-utils';
 import Setting from '../../models/Setting';
 import { NoteContext } from './tools/types';
@@ -156,6 +156,20 @@ describe('noteChat', () => {
 					}],
 				},
 			], 100);
+		}, 'aiNoteTooLarge');
+	});
+
+	test('assertWithinTokenBudget should count tool results once', async () => {
+		const toolResult = (content: string): ChatToolMessage => ({
+			role: ChatRole.Tool, content, toolName: 'editor_readNoteBody', toolCallId: 'call-1', userDescription: '', isEdit: false, isError: false,
+		});
+
+		// About 75 tokens
+		_internal.assertWithinTokenBudget([toolResult('Testing... '.repeat(27))], 100);
+
+		await expectThrow(async () => {
+			// About 125 tokens
+			_internal.assertWithinTokenBudget([toolResult('Testing... '.repeat(45))], 100);
 		}, 'aiNoteTooLarge');
 	});
 
