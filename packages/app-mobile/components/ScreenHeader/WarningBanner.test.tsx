@@ -1,10 +1,15 @@
 import * as React from 'react';
-import { WarningBannerComponent } from './WarningBanner';
+import WarningBanner, { WarningBannerComponent } from './WarningBanner';
 import Setting from '@joplin/lib/models/Setting';
 import NavService from '@joplin/lib/services/NavService';
 import { render, screen, userEvent } from '../../utils/testing/testingLibrary';
 import { ShareInvitation, ShareUserStatus } from '@joplin/lib/services/share/reducer';
 import makeShareInvitation from '@joplin/lib/testing/share/makeMockShareInvitation';
+import { setupDatabaseAndSynchronizer, switchClient, synchronizer, synchronizerStart } from '@joplin/lib/testing/test-utils';
+import { fetchSyncInfo, uploadSyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import TestProviderStack from '../testing/TestProviderStack';
+import createMockReduxStore from '../../utils/testing/createMockReduxStore';
+import setupGlobalStore from '../../utils/testing/setupGlobalStore';
 
 interface WrapperProps {
 	showMissingMasterKeyMessage?: boolean;
@@ -93,5 +98,23 @@ describe('WarningBanner', () => {
 
 		render(<WarningBannerWrapper shareInvitations={invitations} processingShareInvitationResponse={false}/>);
 		expect(screen.getByText(query)).toBeVisible();
+	});
+
+	test('should show the sync target minimum version in the upgrade app banner', async () => {
+		await setupDatabaseAndSynchronizer(0);
+		await switchClient(0);
+		await synchronizerStart();
+		const store = createMockReduxStore();
+		setupGlobalStore(store);
+
+		const remoteInfo = await fetchSyncInfo(synchronizer().api());
+		remoteInfo.appMinVersion = '3.9.0';
+		await uploadSyncInfo(synchronizer().api(), remoteInfo);
+
+		synchronizer().dispatch = store.dispatch;
+		await synchronizerStart();
+
+		render(<TestProviderStack store={store}><WarningBanner/></TestProviderStack>);
+		expect(screen.getByTestId('warning-box')).toHaveTextContent('In order to synchronise, Please upgrade your application to version 3.9.0: Update it from the App Store');
 	});
 });

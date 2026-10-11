@@ -1209,6 +1209,7 @@ export default class Synchronizer {
 				this.dispatch({
 					type: 'MUST_UPGRADE_APP',
 					message: error.message,
+					appMinVersion: error.details,
 				});
 			}
 
