@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useCallback, useMemo, useState } from 'react';
 import { PluginHtmlContents, PluginStates, ViewInfo } from '@joplin/lib/services/plugins/reducer';
-import { StyleSheet, View, useWindowDimensions } from 'react-native';
+import { Dimensions, StyleSheet, View, useWindowDimensions } from 'react-native';
 import usePlugin from '@joplin/lib/hooks/plugins/usePlugin';
 import { DialogContentSize, DialogWebViewApi } from '../types';
 import { Button } from 'react-native-paper';
@@ -12,6 +12,8 @@ import WebviewController, { ContainerType } from '@joplin/lib/services/plugins/W
 import { Theme } from '@joplin/lib/themes/type';
 import useDialogSize from './hooks/useDialogSize';
 import PluginUserWebView from './PluginUserWebView';
+import useKeyboardState from '../../../utils/hooks/useKeyboardState';
+import useSafeAreaPadding from '../../../utils/hooks/useSafeAreaPadding';
 
 interface Props {
 	themeId: number;
@@ -26,6 +28,8 @@ const useStyles = (
 	fitToContent: boolean,
 ) => {
 	const windowSize = useWindowDimensions();
+	const keyboardState = useKeyboardState();
+	const safeAreaPadding = useSafeAreaPadding();
 
 	return useMemo(() => {
 		const theme: Theme = themeStyle(themeId);
@@ -33,8 +37,28 @@ const useStyles = (
 		const useDialogSize = fitToContent && dialogContentSize;
 		const dialogHasLoaded = !!dialogContentSize;
 
-		const maxWidth = windowSize.width * 0.97;
-		const maxHeight = windowSize.height * 0.95;
+		const availableWidth = Math.max(
+			0,
+			windowSize.width - safeAreaPadding.paddingLeft - safeAreaPadding.paddingRight,
+		);
+		const maxWidth = availableWidth * 0.97;
+		// Opening the keyboard may resize the window fully, partially, or not at all.
+		// Use the smaller height so the dialog stays above any remaining keyboard
+		// overlap without deducting the keyboard twice.
+		const screenHeight = Dimensions.get('screen').height;
+		// Convert the screen-relative keyboard position to window coordinates. Cap the
+		// offset because the screen/window height difference may also include an IME resize.
+		const screenToWindowOffset = Math.min(
+			safeAreaPadding.paddingBottom,
+			Math.max(0, screenHeight - windowSize.height),
+		);
+		const keyboardTop = screenHeight - screenToWindowOffset - keyboardState.dockedKeyboardHeight;
+		const bottomPadding = safeAreaPadding.paddingBottom;
+		const availableHeight = Math.max(
+			0,
+			Math.min(windowSize.height, keyboardTop) - safeAreaPadding.paddingTop - bottomPadding,
+		);
+		const maxHeight = availableHeight * 0.97;
 		const dialogWidth = useDialogSize ? dialogContentSize.width : maxWidth;
 		const dialogHeight = useDialogSize ? dialogContentSize.height : maxHeight;
 
@@ -71,7 +95,7 @@ const useStyles = (
 				justifyContent: 'flex-end',
 			},
 		});
-	}, [themeId, dialogContentSize, fitToContent, windowSize.width, windowSize.height]);
+	}, [themeId, dialogContentSize, fitToContent, windowSize.width, windowSize.height, keyboardState.dockedKeyboardHeight, safeAreaPadding]);
 };
 
 const defaultButtonSpecs: ButtonSpec[] = [

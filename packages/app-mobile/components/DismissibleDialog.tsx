@@ -24,6 +24,8 @@ interface Props {
 	children: React.ReactNode;
 	heading?: string;
 	scrollOverflow?: boolean;
+	useNativeModal?: boolean;
+	inert?: boolean;
 
 	size: DialogVariant;
 }
@@ -124,15 +126,22 @@ const DismissibleDialog: React.FC<Props> = props => {
 	return (
 		<Modal
 			visible={props.visible}
-			onClose={props.onDismiss}
+			onClose={props.inert ? null : props.onDismiss}
 			containerStyle={styles.dialogContainer}
 			modalBackgroundStyle={styles.modalBackground}
-			backgroundColor={theme.backgroundColorTransparent2}
+			backgroundColor={props.inert ? 'transparent' : theme.backgroundColorTransparent2}
 			scrollOverflow={props.scrollOverflow}
 			// Allows the modal background to extend under the statusbar
 			statusBarTranslucent
+			useNativeModal={props.useNativeModal}
 		>
-			<Surface style={styles.dialogSurface} elevation={1}>
+			<Surface
+				style={styles.dialogSurface}
+				elevation={1}
+				pointerEvents={props.inert ? 'none' : 'auto'}
+				importantForAccessibility={props.inert ? 'no-hide-descendants' : 'auto'}
+				accessibilityElementsHidden={props.inert}
+			>
 				{closeButtonRow}
 				{props.children}
 			</Surface>
