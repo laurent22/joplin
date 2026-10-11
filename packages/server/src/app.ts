@@ -94,6 +94,23 @@ async function getEnvFilePath(env: Env, argv: { envFile?: string }): Promise<str
 	return '';
 }
 
+const getCorsAllowedDomains = (envVariables: EnvVariables, env: Env) => {
+	const corsAllowedDomains = envVariables.CORS_ALLOWED_DOMAINS
+		.split(',')
+		.map(domain => domain.trim())
+		.filter(domain => !!domain);
+
+	if (env === Env.Dev) {
+		// Stripe (dev)
+		corsAllowedDomains.push('http://localhost:8077');
+
+		// Web client (dev)
+		corsAllowedDomains.push('http://localhost:8088');
+	}
+
+	return corsAllowedDomains;
+};
+
 async function main() {
 	const { selectedCommand, argv: yargsArgv } = await setupCommands();
 
@@ -126,21 +143,8 @@ async function main() {
 	// loads the user, which is then used by notificationHandler. And finally
 	// routeHandler uses data from both previous middlewares. It would be good to
 	// layout these dependencies in code but not clear how to do this.
-	const corsAllowedDomains = [
-		'https://joplinapp.org',
 
-		// Allows sync with the web version of Joplin
-		'https://app.joplincloud.com',
-	];
-
-	if (env === Env.Dev) {
-		// Stripe (dev)
-		corsAllowedDomains.push('http://localhost:8077');
-
-		// Web client (dev)
-		corsAllowedDomains.push('http://localhost:8088');
-	}
-
+	const corsAllowedDomains = getCorsAllowedDomains(envVariables, env);
 	function acceptOrigin(origin: string): boolean {
 		// Origin can be string "null"
 		if (origin === 'null') return false;
