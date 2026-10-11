@@ -15,6 +15,7 @@ async function copyToDist(distDir: string) {
 	await copyDir(clipperDir, 'popup/build', distDir);
 	await copyDir(clipperDir, 'content_scripts', distDir);
 	await copyDir(clipperDir, 'icons', distDir);
+	await copyDir(clipperDir, 'options', distDir);
 	await copyDir(clipperDir, 'util', distDir);
 	await fs.copy(`${clipperDir}/service_worker.mjs`, `${distDir}/service_worker.mjs`);
 	await fs.copy(`${clipperDir}/manifest.json`, `${distDir}/manifest.json`);

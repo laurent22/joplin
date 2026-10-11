@@ -493,6 +493,20 @@
 
 	async function execCommand(command) {
 		const response = await prepareCommandResponse(command);
+
+		if (['simplifiedPageHtml', 'completePageHtml'].includes(command.name) && response.html) {
+			// The YouTube processing must never prevent the clip from being sent.
+			try {
+				const youtube = await window.processYoutubeClip(response.html);
+				response.html = youtube.html;
+				if (youtube.title) response.title = youtube.title;
+				response.image_sizes = { ...response.image_sizes, ...youtube.imageSizes };
+				if (youtube.warning) response.warning = [response.warning, youtube.warning].filter(Boolean).join(' ');
+			} catch (error) {
+				console.warn('jopext: Could not process the YouTube page', error);
+			}
+		}
+
 		browser_.runtime.sendMessage(response);
 	}
 

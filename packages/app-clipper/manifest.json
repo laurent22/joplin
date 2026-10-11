@@ -28,6 +28,10 @@
         "default_title": "Joplin Web Clipper",
         "default_popup": "popup/build/index.html"
     },
+    "options_ui": {
+        "page": "options/options.html",
+        "open_in_tab": true
+    },
     "commands": {
         "_execute_action": {
             "suggested_key": {

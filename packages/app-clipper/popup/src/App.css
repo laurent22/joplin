@@ -175,3 +175,8 @@ body {
 .App .StatusBar .ServerStatus .Help {
 	margin-left: 5px;
 }
+
+.App .StatusBar .SettingsLink {
+	flex: 0;
+	margin-left: 10px;
+}

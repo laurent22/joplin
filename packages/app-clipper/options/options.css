@@ -1,0 +1,71 @@
+body {
+	font-family: system-ui, sans-serif;
+	margin: 0;
+	padding: 16px;
+}
+
+.options {
+	max-width: 860px;
+}
+
+.title {
+	font-size: 1.3em;
+	margin: 0 0 16px;
+}
+
+.section {
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	padding: 8px 16px 12px;
+}
+
+.section-title {
+	font-size: 1.1em;
+	margin: 8px 0;
+}
+
+/* Labels on the left, controls in a column of their own on the right so that
+   checkboxes and the select box start at the same position. */
+.option {
+	display: grid;
+	grid-template-columns: 1fr 15em;
+	align-items: center;
+	column-gap: 16px;
+	padding: 6px 0;
+}
+
+.control {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.control input[type="checkbox"] {
+	margin: 0;
+}
+
+.status {
+	color: #2e7d32;
+	min-height: 1.2em;
+}
+
+.width-field {
+	display: inline-flex;
+	align-items: center;
+	gap: 2px;
+}
+
+.width-field[hidden] {
+	display: none;
+}
+
+.number {
+	width: 5em;
+}
+
+@media (max-width: 520px) {
+	.option {
+		grid-template-columns: 1fr;
+		row-gap: 4px;
+	}
+}

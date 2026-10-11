@@ -142,6 +142,11 @@ class AppComponent extends Component {
 			bridge().tabsCreate({ url: 'https://joplinapp.org/help/apps/clipper' });
 		};
 
+		this.settingsLink_click = (event) => {
+			event.preventDefault();
+			bridge().browser().runtime.openOptionsPage();
+		};
+
 		this.folderSelect_change = (event) => {
 			this.props.dispatch({
 				type: 'SELECTED_FOLDER_SET',
@@ -192,6 +197,7 @@ class AppComponent extends Component {
 			'/content_scripts/Readability.js',
 			'/content_scripts/Readability-readerable.js',
 			'/content_scripts/clipperUtils.js',
+			'/content_scripts/youtubeTranscript.js',
 			'/content_scripts/index.js',
 		]);
 	}
@@ -365,7 +371,7 @@ class AppComponent extends Component {
 
 			msg = `Service status: ${msg}`;
 
-			return <div className="StatusBar"><img alt={foundState} className="Led" src={led}/><span className="ServerStatus">{ msg }{ helpLink }</span></div>;
+			return <div className="StatusBar"><img alt={foundState} className="Led" src={led}/><span className="ServerStatus">{ msg }{ helpLink }</span><a className="SettingsLink" onClick={this.settingsLink_click} href="#">Settings</a></div>;
 		};
 
 		const foldersComp = () => {

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Joplin Web Clipper options</title>
+	<link rel="stylesheet" href="options.css">
+</head>
+<body>
+	<main class="options">
+		<h1 class="title">Joplin Web Clipper options</h1>
+		<section class="section">
+			<h2 class="section-title">YouTube</h2>
+			<div class="option">
+				<label class="label" for="only-video-content">Clip only the video's own content (no recommended videos or comments)</label>
+				<div class="control">
+					<input id="only-video-content" type="checkbox" data-setting="youtubeOnlyVideoContent">
+				</div>
+			</div>
+			<div class="option">
+				<label class="label" for="fetch-transcription">Fetch video transcription</label>
+				<div class="control">
+					<input id="fetch-transcription" type="checkbox" data-setting="youtubeFetchTranscription">
+				</div>
+			</div>
+			<div class="option">
+				<label class="label" for="thumbnail-width-mode">Video thumbnail width</label>
+				<div class="control">
+					<select id="thumbnail-width-mode" data-setting="youtubeThumbnailWidthMode">
+						<option value="percentage">Percentage</option>
+						<option value="absolute">Absolute</option>
+					</select>
+					<span class="width-field" data-show-for-mode="percentage">
+						<input type="number" class="number" min="1" max="100" step="1" aria-label="Thumbnail width in percent" data-setting="youtubeThumbnailWidthPercentage">%
+					</span>
+					<span class="width-field" data-show-for-mode="absolute" hidden>
+						<input type="number" class="number" min="1" max="4000" step="1" aria-label="Thumbnail width in pixels" data-setting="youtubeThumbnailWidthPixels">px
+					</span>
+				</div>
+			</div>
+		</section>
+		<p class="status" role="status" aria-live="polite"></p>
+	</main>
+	<script src="options.js"></script>
+</body>
+</html>
