@@ -133,6 +133,12 @@ const useSource = (props: UseSourceProps) => {
 				${rendererCss}
 				${markdownEditorCss}
 
+				body.rich-text-editor {
+					/* Zero the body padding to align the editor content with the note title */
+					padding-left: 0;
+					padding-right: 0;
+				}
+
 				/* Increase the size of the editor to make it easier to focus the editor. */
 				.prosemirror-editor {
 					min-height: 75vh;
@@ -142,6 +148,8 @@ const useSource = (props: UseSourceProps) => {
 			js: `
 				${rendererJs}
 				${markdownEditorJs}
+
+				document.body.classList.add('rich-text-editor');
 
 				if (!window.richTextEditorCreated) {
 					window.richTextEditorCreated = true;

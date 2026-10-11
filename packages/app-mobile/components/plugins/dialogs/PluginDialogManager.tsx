@@ -57,8 +57,8 @@ const PluginDialogManager: React.FC<Props> = props => {
 
 	return (
 		<>
+			<PluginPanelViewer inert={dialogs.length > 0}/>
 			{dialogs}
-			<PluginPanelViewer/>
 		</>
 	);
 };

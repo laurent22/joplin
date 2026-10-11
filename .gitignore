@@ -864,6 +864,7 @@ packages/app-mobile/components/plugins/PluginNotification.js
 packages/app-mobile/components/plugins/PluginRunner.js
 packages/app-mobile/components/plugins/PluginRunnerWebView.test.js
 packages/app-mobile/components/plugins/PluginRunnerWebView.js
+packages/app-mobile/components/plugins/backgroundPage/initializeDialogWebView.test.js
 packages/app-mobile/components/plugins/backgroundPage/initializeDialogWebView.js
 packages/app-mobile/components/plugins/backgroundPage/initializePluginBackgroundIframe.js
 packages/app-mobile/components/plugins/backgroundPage/pluginRunnerBackgroundPage.js
