@@ -187,6 +187,7 @@ async function main() {
 						name: 'error',
 						title: 'Error',
 						path: 'index/error',
+						showFooter: true,
 						content: { error },
 					});
 				} catch (anotherError) {
