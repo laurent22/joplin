@@ -117,7 +117,7 @@ async function main() {
 	console.info('Popup: Creating React app...');
 
 	ReactDOM.render(
-		<div style = {{ maxHeight: screen.height * 0.65, overflowY: 'scroll' }}>
+		<div style = {{ maxHeight: screen.height * 0.65, overflowY: 'auto' }}>
 			<Provider store={store}>
 				<App />
 			</Provider>

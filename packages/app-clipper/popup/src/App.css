@@ -17,6 +17,7 @@ body {
 	color: #c1e2ff;
 	padding: 10px;
 	box-sizing: border-box;
+	line-height: 1.6;
 }
 
 .App.Startup {
@@ -70,26 +71,56 @@ body {
 }
 
 .App a.Button {
-	background-color: #0269c2;
-	padding: 0 14px;
+	--button-top: #1a77c4;
+	--button-bottom: #035aa6;
+	--button-edge: #014a8a;
+	background: linear-gradient(var(--button-top), var(--button-bottom));
+	border: 1px solid var(--button-edge);
+	border-radius: 6px;
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25), 0 2px 0 var(--button-edge), 0 3px 5px rgba(0, 0, 0, .35);
+	box-sizing: border-box;
+	width: 75%;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 2px 14px 0;
 	display: flex;
 	flex: 1;
-	color: #eee;
-	font-weight: normal;
+	color: #fff;
+	font-weight: 600;
 	font-size: .8em;
+	line-height: 1;
 	cursor: pointer;
 	align-items: center;
-	min-height: 31px;
+	justify-content: center;
+	min-height: 28px;
 	text-decoration: none;
 }
 
 .App a.Button:hover,
 .App a.Button:focus {
-	background-color: #1E89E6;
+	--button-top: #2a8be0;
+	--button-bottom: #0a66b8;
+}
+
+.App a.Button:active {
+	transform: translateY(2px);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25);
 }
 
 .App .Controls a.Button {
-	margin-bottom: 10px;
+	margin-bottom: 6px;
+}
+
+.App a.Button.Confirm {
+	--button-top: #34853a;
+	--button-bottom: #25702a;
+	--button-edge: #1b5e20;
+}
+
+.App a.Button.Confirm:hover,
+.App a.Button.Confirm:focus {
+	--button-top: #3f9645;
+	--button-bottom: #2b8030;
 }
 
 .App .Preview {
@@ -104,9 +135,41 @@ body {
 	color: #38668D;
 }
 
+.App .Preview p {
+	margin: 0;
+}
+
+.App .PreviewTitle {
+	--label-width: 5em;
+	display: flex;
+	padding: 5px 11px;
+}
+
+.App .PreviewTitle label {
+	flex: 0 0 var(--label-width);
+	white-space: nowrap;
+}
+
 .App .Preview .Title {
-	flex: 0;
-	margin-bottom: 10px;
+	flex: 1;
+	min-width: 0;
+	min-height: 32px;
+	padding: 3px 6px;
+	box-sizing: border-box;
+	background-color: #fff;
+	border: 1px solid #767676;
+	border-radius: 3px;
+	color: #111;
+	font-family: inherit;
+	font-size: .8em;
+	resize: none;
+	overflow: hidden;
+}
+
+.App .Preview .Title:focus {
+	outline: none;
+	border-color: #1E89E6;
+	box-shadow: 0 0 0 2px #1E89E6;
 }
 
 .App .Preview .BodyWrapper {
@@ -132,17 +195,20 @@ body {
 
 .App .Folders,
 .App .Tags {
+	--label-width: 5em;
 	display: flex;
 	flex-direction: row;
 	align-items: top;
 	padding: 5px 0;
 }
 
-.App .Folders label,
-.App .Tags label {
-	flex: 0;
+.App .Folders label {
+	flex: 0 0 var(--label-width);
 	white-space: nowrap;
-	margin-right: .5em;
+}
+
+.App .Tags label {
+	white-space: nowrap;
 }
 
 .App .Folders select {
@@ -150,15 +216,149 @@ body {
 	width: 100%;
 }
 
-.App .Tags input {
-	display: inline-block;
+.App .TagInput {
 	flex: 1;
-	margin-bottom: .5em;
+	min-width: 0;
 }
 
-.App .ClearTagButton {
-	margin-left: .5em;
-	text-decoration: none;
+.App .TagInputSide {
+	flex: 0 0 var(--label-width);
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+.App .TagInputClear {
+	width: 32px;
+	height: 32px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	background: linear-gradient(#1a77c4, #035aa6);
+	border: 1px solid #014a8a;
+	border-radius: 6px;
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25), 0 2px 0 #014a8a, 0 3px 5px rgba(0, 0, 0, .35);
+	box-sizing: border-box;
+	color: #fff;
+	cursor: pointer;
+}
+
+.App .TagInputClear:hover:not(:disabled) {
+	background: linear-gradient(#2a8be0, #0a66b8);
+}
+
+.App .TagInputClear:active:not(:disabled) {
+	transform: translateY(2px);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25);
+}
+
+.App .TagInputClear:disabled {
+	opacity: .5;
+	cursor: default;
+}
+
+.App .TagInputField {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 4px;
+	min-height: 32px;
+	padding: 3px 6px;
+	box-sizing: border-box;
+	background-color: #fff;
+	border: 1px solid #767676;
+	border-radius: 3px;
+	cursor: text;
+}
+
+.App .TagInputField:focus-within {
+	border-color: #1E89E6;
+	box-shadow: 0 0 0 2px #1E89E6;
+}
+
+.App .TagInputField input {
+	flex: 1 1 80px;
+	min-width: 80px;
+	padding: 0;
+	background: none;
+	border: none;
+	outline: none;
+	color: #111;
+	font-size: .8em;
+}
+
+.App .TagChip {
+	display: inline-flex;
+	align-items: flex-start;
+	max-width: 100%;
+	box-sizing: border-box;
+	padding: 0 2px 0 10px;
+	background-color: #0269c2;
+	border-radius: 12px;
+	color: #eee;
+	font-size: .8em;
+	line-height: 24px;
+	cursor: default;
+}
+
+.App .TagChipTitle {
+	min-width: 0;
+	overflow-wrap: anywhere;
+}
+
+.App .TagChip button {
+	flex: 0;
+	padding: 0 6px;
+	background: none;
+	border: none;
+	color: inherit;
+	font-size: 1.2em;
+	line-height: 24px;
+	cursor: pointer;
+}
+
+.App .TagChip button:hover {
+	color: #fff;
+	background-color: rgba(255, 255, 255, .2);
+	border-radius: 12px;
+}
+
+.App .TagInputOptions {
+	max-height: 150px;
+	margin: 4px 0 0 0;
+	padding: 0;
+	overflow-y: auto;
+	list-style: none;
+	background-color: #fff;
+	border: 1px solid #767676;
+	border-radius: 3px;
+}
+
+.App .TagInputOptions li {
+	padding: 0 10px;
+	color: #111;
+	overflow-wrap: anywhere;
+	font-size: .8em;
+	line-height: 28px;
+	cursor: pointer;
+}
+
+.App .TagInputOptions li.New {
+	font-style: italic;
+}
+
+.App .TagInputOptions li.Active {
+	background-color: #0269c2;
+	color: #eee;
+}
+
+.App .Controls a.Button:focus-visible,
+.App .TagChip button:focus-visible {
+	outline: 2px solid #c1e2ff;
+	outline-offset: 1px;
 }
 
 .App .StatusBar {

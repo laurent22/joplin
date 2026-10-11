@@ -3,6 +3,7 @@ import './App.css';
 import led_red from './led_red.png';
 import led_green from './led_green.png';
 import led_orange from './led_orange.png';
+import TagInput from './TagInput';
 
 const { connect } = require('react-redux');
 const { bridge } = require('./bridge');
@@ -27,9 +28,22 @@ class PreviewComponent extends React.PureComponent {
 		super();
 
 		this.bodyRef = React.createRef();
+		this.titleRef = React.createRef();
+	}
+
+	resizeTitle() {
+		const title = this.titleRef.current;
+		if (!title) return;
+		title.style.height = 'auto';
+		title.style.height = `${title.scrollHeight + title.offsetHeight - title.clientHeight}px`;
+	}
+
+	componentDidUpdate() {
+		this.resizeTitle();
 	}
 
 	componentDidMount() {
+		this.resizeTitle();
 		if (!this.bodyRef.current) return;
 
 		// Because the text size is made twice smaller with CSS, we need
@@ -44,8 +58,18 @@ class PreviewComponent extends React.PureComponent {
 	render() {
 		return (
 			<div className="Preview">
-				<h2>Title:</h2>
-				<input className={'Title'} value={this.props.title} onChange={this.props.onTitleChange}/>
+				<div className="PreviewTitle">
+					<label htmlFor="clipTitle">Title</label>
+					<textarea
+						id="clipTitle"
+						ref={this.titleRef}
+						className="Title"
+						rows={1}
+						value={this.props.title}
+						onChange={this.props.onTitleChange}
+						onKeyDown={event => event.key === 'Enter' && event.preventDefault()}
+					/>
+				</div>
 				<p><span>Type:</span> {commandUserString(this.props.command)}</p>
 				<a className={'Confirm Button'} href="#" onClick={this.props.onConfirmClick}>Confirm</a>
 			</div>
@@ -62,6 +86,7 @@ class AppComponent extends Component {
 		this.state = ({
 			contentScriptLoaded: false,
 			selectedTags: [],
+			focusableActionIndex: 0,
 			contentScriptError: '',
 			newNoteId: null,
 		});
@@ -77,7 +102,8 @@ class AppComponent extends Component {
 		this.contentTitle_change = (event) => {
 			this.props.dispatch({
 				type: 'CLIPPED_CONTENT_TITLE_SET',
-				text: event.currentTarget.value,
+				// A note title is a single line, so pasted line breaks become spaces.
+				text: event.currentTarget.value.replace(/[\r\n]+/g, ' '),
 			});
 		};
 
@@ -154,40 +180,40 @@ class AppComponent extends Component {
 			});
 		};
 
-		this.tagCompChanged = this.tagCompChanged.bind(this);
-		this.onAddTagClick = this.onAddTagClick.bind(this);
-		this.onClearTagButtonClick = this.onClearTagButtonClick.bind(this);
-	}
+		this.selectedTags_change = (selectedTags) => {
+			this.setState({ selectedTags });
+			bridge().storageSet({ selectedTags });
+		};
 
-	onAddTagClick() {
-		const newTags = this.state.selectedTags.slice();
-		newTags.push('');
-		this.setState({ selectedTags: newTags });
-		this.focusNewTagInput_ = true;
-	}
+		// Only one action button is in the tab order, the arrow keys move between them.
+		this.actions_keyDown = (event) => {
+			const buttons = Array.from(event.currentTarget.querySelectorAll('a.Button'));
+			const index = buttons.indexOf(document.activeElement);
+			if (index < 0) return;
 
-	onClearTagButtonClick(event) {
-		const index = event.target.getAttribute('data-index');
-		const newTags = this.state.selectedTags.slice();
-		newTags.splice(index, 1);
-		this.setState({ selectedTags: newTags });
-	}
-
-	tagCompChanged(event) {
-		const index = Number(event.target.getAttribute('data-index'));
-		const value = event.target.value;
-
-		if (this.state.selectedTags.length <= index) {
-			const newTags = this.state.selectedTags.slice();
-			newTags.push(value);
-			this.setState({ selectedTags: newTags });
-		} else {
-			if (this.state.selectedTags[index] !== value) {
-				const newTags = this.state.selectedTags.slice();
-				newTags[index] = value;
-				this.setState({ selectedTags: newTags });
+			if (event.key === ' ') {
+				event.preventDefault();
+				buttons[index].click();
+				return;
 			}
-		}
+
+			const targets = {
+				ArrowDown: Math.min(index + 1, buttons.length - 1),
+				ArrowUp: Math.max(index - 1, 0),
+				Home: 0,
+				End: buttons.length - 1,
+			};
+			if (!(event.key in targets)) return;
+
+			event.preventDefault();
+			buttons[targets[event.key]].focus();
+		};
+
+		this.actions_focus = (event) => {
+			const buttons = Array.from(event.currentTarget.querySelectorAll('a.Button'));
+			const index = buttons.indexOf(event.target);
+			if (index >= 0 && index !== this.state.focusableActionIndex) this.setState({ focusableActionIndex: index });
+		};
 	}
 
 	async loadContentScripts() {
@@ -202,8 +228,18 @@ class AppComponent extends Component {
 		]);
 	}
 
+	async restoreSelectedTags() {
+		const stored = await bridge().storageGet(['selectedTags']);
+		if (!stored || !Array.isArray(stored.selectedTags)) return;
+
+		const selectedTags = stored.selectedTags.filter(tag => typeof tag === 'string');
+		// Tags the user already changed while this was loading win.
+		this.setState(state => (state.selectedTags.length ? null : { selectedTags }));
+	}
+
 	async componentDidMount() {
 		bridge().onReactAppStarts();
+		void this.restoreSelectedTags();
 
 		try {
 			await this.loadContentScripts();
@@ -394,34 +430,10 @@ class AppComponent extends Component {
 
 			return (
 				<div className="Folders">
-					<label>In notebook: </label>
+					<label>Notebook</label>
 					<select value={this.props.selectedFolderId || ''} onChange={this.folderSelect_change}>
 						{ optionComps }
 					</select>
-				</div>
-			);
-		};
-
-		const tagsComp = () => {
-			const comps = [];
-			for (let i = 0; i < this.state.selectedTags.length; i++) {
-				comps.push(<div key={i}>
-					<input
-						ref={`tagSelector${i}`}
-						data-index={i}
-						type="text"
-						list="tags"
-						value={this.state.selectedTags[i]}
-						onChange={this.tagCompChanged}
-						onInput={this.tagCompChanged}
-					/>
-					<a data-index={i} href="#" className="ClearTagButton" onClick={this.onClearTagButtonClick}>[x]</a>
-				</div>);
-			}
-			return (
-				<div>
-					{comps}
-					<a className="AddTagButton" href="#" onClick={this.onAddTagClick}>Add tag</a>
 				</div>
 			);
 		};
@@ -444,12 +456,6 @@ class AppComponent extends Component {
 			}
 		};
 
-		const tagDataListOptions = [];
-		for (let i = 0; i < this.props.tags.length; i++) {
-			const tag = this.props.tags[i];
-			tagDataListOptions.push(<option key={tag.id}>{tag.title}</option>);
-		}
-
 		let simplifiedPageButtonLabel = 'Clip simplified page';
 		let simplifiedPageButtonTooltip = '';
 		if (!this.props.isProbablyReaderable) {
@@ -457,29 +463,44 @@ class AppComponent extends Component {
 			simplifiedPageButtonTooltip = 'It might not be possible to create a good simplified version of this page.\nYou may want to clip the complete page instead.';
 		}
 
+		const actionButtons = [
+			{ label: simplifiedPageButtonLabel, tooltip: simplifiedPageButtonTooltip, onClick: this.clipSimplified_click },
+			{ label: 'Clip complete page (Markdown)', onClick: this.clipComplete_click },
+			{ label: 'Clip complete page (HTML)', onClick: this.clipCompleteHtml_click },
+			{ label: 'Clip selection', onClick: this.clipSelection_click },
+			{ label: 'Clip screenshot', onClick: this.clipScreenshot_click },
+			{ label: 'Clip URL', onClick: this.clipUrl_click },
+		];
+
 		return (
 			<div className="App">
 				<fieldset className="Group">
 					<legend>Storage Location</legend>
 					{ foldersComp() }
-					<div className="Tags">
-						<label>Tags:</label>
-						{tagsComp()}
-						<datalist id="tags">
-							{tagDataListOptions}
-						</datalist>
-					</div>
+					<TagInput
+						allTags={this.props.tags.map(tag => tag.title)}
+						selectedTags={this.state.selectedTags}
+						onChange={this.selectedTags_change}
+					/>
 				</fieldset>
 				<fieldset className="Group">
 					<legend>Action</legend>
 					<div className="Controls">
-						<ul>
-							<li><a className="Button" href="#" onClick={this.clipSimplified_click} title={simplifiedPageButtonTooltip}>{simplifiedPageButtonLabel}</a></li>
-							<li><a className="Button" href="#" onClick={this.clipComplete_click}>Clip complete page (Markdown)</a></li>
-							<li><a className="Button" href="#" onClick={this.clipCompleteHtml_click}>Clip complete page (HTML)</a></li>
-							<li><a className="Button" href="#" onClick={this.clipSelection_click}>Clip selection</a></li>
-							<li><a className="Button" href="#" onClick={this.clipScreenshot_click}>Clip screenshot</a></li>
-							<li><a className="Button" href="#" onClick={this.clipUrl_click}>Clip URL</a></li>
+						<ul role="toolbar" aria-orientation="vertical" aria-label="Action" onKeyDown={this.actions_keyDown} onFocus={this.actions_focus}>
+							{ actionButtons.map((button, index) => (
+								<li key={button.label} role="none">
+									<a
+										className="Button"
+										role="button"
+										href="#"
+										tabIndex={index === this.state.focusableActionIndex ? 0 : -1}
+										onClick={button.onClick}
+										title={button.tooltip}
+									>
+										{button.label}
+									</a>
+								</li>
+							)) }
 						</ul>
 					</div>
 				</fieldset>
