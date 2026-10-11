@@ -313,9 +313,14 @@ Component-specific classes
 	padding-bottom: 20px;
 }
 
-.master-password-dialog .dialog-root, .enable-encryption-dialog .dialog-root, .disable-encryption-dialog .dialog-root, .note-lock-migration-dialog .dialog-root {
+.master-password-dialog .dialog-root, .enable-encryption-dialog .dialog-root, .disable-encryption-dialog .dialog-root {
 	min-width: 500px;
 	max-width: 600px;
+}
+
+.note-lock-migration-dialog .dialog-root {
+	width: 500px;
+	max-width: 90vw;
 }
 
 .master-password-dialog .dialog-content, .enable-encryption-dialog .dialog-content, .disable-encryption-dialog .dialog-content {

@@ -9,7 +9,6 @@ import { adoptNoteLockKeyConflict, noteLockKeyConflict } from '../synchronizer/s
 import isNoteLockEnabled from './isNoteLockEnabled';
 import NoteLockKey, { DecryptedNoteLockKey } from './NoteLockKey';
 import NoteLockSession from './NoteLockSession';
-import { NoteLockNoteEntity } from './NoteLockNote';
 
 const logger = Logger.create('NoteLockKeyMigration');
 
@@ -34,7 +33,6 @@ export const migrateLockedNotes = async (localPassword: string, targetPassword: 
 		plainText: await encryptionService.decryptMasterKeyContent(conflict.noteLockKey, targetPassword),
 	};
 	const result: NoteLockKeyMigrationResult = { migrated: 0, skipped: 0, failed: 0 };
-	let featureTurnedOff = false;
 	NoteLockSession.instance().setMigrating(true);
 	try {
 		onStarted?.();
@@ -48,19 +46,15 @@ export const migrateLockedNotes = async (localPassword: string, targetPassword: 
 					continue;
 				}
 				const note = await Note.load(noteId, { useNoteLock: true, noteLockKey: localKey });
-				const saved: NoteLockNoteEntity = await Note.save(note, { useNoteLock: true, noteLockKey: targetKey });
-				// With the feature turned off the save is ungated, so the note was not re-encrypted.
-				if (!saved.isDecrypted) {
-					featureTurnedOff = true;
-					break;
-				}
+				await Note.save(note, { useNoteLock: true, noteLockKey: targetKey });
 				result.migrated++;
 			} catch (error) {
 				logger.warn(`Could not migrate note ${noteId}:`, error);
 				result.failed++;
 			}
+			// With the feature turned off the note was not re-encrypted, whether Note.save refused it or saved it ungated.
+			if (!isNoteLockEnabled()) throw new Error(_('The note lock key migration was cancelled because the note lock feature was turned off.'));
 		}
-		if (featureTurnedOff) throw new Error(_('The note lock key migration was cancelled because the note lock feature was turned off.'));
 	} finally {
 		NoteLockSession.instance().setMigrating(false);
 	}
