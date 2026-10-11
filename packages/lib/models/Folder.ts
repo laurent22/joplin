@@ -581,14 +581,17 @@ export default class Folder extends BaseItem {
 	}
 
 	public static async updateNoteShareIds() {
-		// Find all the notes where the share_id is not the same as the
-		// parent share_id because we only need to update those.
+		// Find notes whose share_id differs from the desired value. Conflict
+		// notes must remain outside the share so they can sync only between the
+		// current user's devices.
 		const rows = await this.db().selectAll(`
-			SELECT notes.id, folders.share_id, notes.parent_id
+			SELECT
+				notes.id,
+				CASE WHEN notes.is_conflict = 1 THEN '' ELSE folders.share_id END AS share_id,
+				notes.parent_id
 			FROM notes
 			LEFT JOIN folders ON notes.parent_id = folders.id
-			WHERE notes.share_id != folders.share_id
-			AND notes.is_conflict = 0
+			WHERE notes.share_id != CASE WHEN notes.is_conflict = 1 THEN '' ELSE folders.share_id END
 		`);
 
 		logger.debug('updateNoteShareIds: notes to update:', rows.length);

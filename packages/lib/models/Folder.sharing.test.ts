@@ -334,16 +334,20 @@ describe('models/Folder.sharing', () => {
 		expect(note4.share_id).toBe('');
 	}));
 
-	it('should not apply the share ID to new conflict notes', async () => {
+	it('should clear the share ID from conflict notes', async () => {
 		const folder = await Folder.save({ title: 'Shared folder', share_id: 'abcd1234' });
 		const note = await Note.save({ title: 'Note', parent_id: folder.id, share_id: folder.share_id });
-		const conflictNote = await Note.createConflictNote(note, ItemChange.SOURCE_SYNC);
+		const newConflictNote = await Note.createConflictNote(note, ItemChange.SOURCE_SYNC);
+		const existingConflictNote = await Note.createConflictNote(note, ItemChange.SOURCE_SYNC);
+		await Note.save({ id: existingConflictNote.id, share_id: folder.share_id });
 
-		expect(conflictNote.share_id).toBe('');
+		expect(newConflictNote.share_id).toBe('');
+		expect((await Note.load(existingConflictNote.id)).share_id).toBe(folder.share_id);
 
 		await Folder.updateAllShareIds(resourceService(), []);
 
-		expect((await Note.load(conflictNote.id)).share_id).toBe('');
+		expect((await Note.load(newConflictNote.id)).share_id).toBe('');
+		expect((await Note.load(existingConflictNote.id)).share_id).toBe('');
 	});
 
 	it('should remove the share ID when a note is moved in or out of shared folder', (async () => {
