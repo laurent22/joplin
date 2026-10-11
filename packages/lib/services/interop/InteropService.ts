@@ -440,6 +440,7 @@ export default class InteropService {
 				if (sourceNoteIds.length && sourceNoteIds.indexOf(noteId) < 0) continue;
 				let note = await Note.load(noteId);
 				if (noteLockEnabled && NoteLockNote.isLocked(note) && !keepsLockedNotes) {
+					if (options.skipLockedNotes) continue;
 					const decrypted = await this.decryptedNoteForExport_(noteId, noteLockKey);
 					if (!decrypted) {
 						lockedNotesSkipped++;

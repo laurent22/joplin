@@ -9,13 +9,10 @@ import { _ } from '@joplin/lib/locale';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import bridge from './services/bridge';
 import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
-import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
-import hasLockedNoteWhileSessionLocked from '@joplin/lib/services/noteLock/hasLockedNoteWhileSessionLocked';
 import { unlockNoteLockSession } from '@joplin/lib/services/noteLock/noteLockPrompts';
 import noteLockPrompts from './utils/noteLockPrompts';
 import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
-import Folder from '@joplin/lib/models/Folder';
 import { friendlySafeFilename } from '@joplin/lib/path-utils';
 import time from '@joplin/lib/time';
 import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron';
@@ -199,22 +196,22 @@ export default class InteropServiceHelper {
 		return `${filename}.${fileExtension}`;
 	}
 
-	// Decrypting exports need an unlocked session; skipping leaves the locked notes out.
+	// Decrypting exports write locked notes out as plain text, so the user is asked even with the session unlocked,
+	// which only skips the password.
 	public static async confirmLockedNoteExport(dispatch: Dispatch, noteIds: string[], folderIds: string[] = null) {
-		if (!isNoteLockEnabled() || NoteLockSession.instance().isUnlocked()) return 'export';
-		if (!noteIds?.length && folderIds?.length) {
-			// Like the export itself, a notebook includes its sub-notebooks.
-			noteIds = [];
-			for (const folderId of folderIds) {
-				for (const id of [folderId, ...await Folder.childrenIds(folderId)]) noteIds.push(...await Folder.noteIds(id));
-			}
-			if (!noteIds.length) return 'export';
+		if (!isNoteLockEnabled()) return 'export';
+		let hasLockedNotes = false;
+		if (noteIds?.length) {
+			hasLockedNotes = (await Note.byIds(noteIds, { fields: ['is_locked'] })).some(note => !!note.is_locked);
+		} else if (folderIds?.length) {
+			hasLockedNotes = await Note.hasLockedNoteInFolderTrees(folderIds);
+		} else {
+			hasLockedNotes = await Note.hasLockedNotes();
 		}
-		const hasLockedNotes = noteIds?.length ? await hasLockedNoteWhileSessionLocked(noteIds) : await Note.hasLockedNotes();
 		if (!hasLockedNotes) return 'export';
 
-		const answer = bridge().showMessageBox(_('Some notes are locked and this export format requires them to be unlocked. Would you like to unlock the session, or export without these notes?'), {
-			buttons: [_('Unlock'), _('Export without locked notes'), _('Cancel')],
+		const answer = bridge().showMessageBox(_('Some notes are locked and this export format requires them to be unlocked. Would you like to export these notes unprotected, or export without these notes?'), {
+			buttons: [_('Export unprotected'), _('Export without locked notes'), _('Cancel')],
 		});
 		if (answer === 1) return 'skipLocked';
 		if (answer === 0 && await unlockNoteLockSession(noteLockPrompts(dispatch))) return 'export';
@@ -244,7 +241,8 @@ export default class InteropServiceHelper {
 
 		// Backups keep locked notes encrypted, so only the decrypting formats ask.
 		const isBackup = module.format === ExportModuleOutputFormat.Raw || module.format === ExportModuleOutputFormat.Jex;
-		if (!isBackup && await this.confirmLockedNoteExport(dispatch, options.sourceNoteIds, options.sourceFolderIds) === 'cancel') return;
+		const lockedNoteChoice = isBackup ? 'export' : await this.confirmLockedNoteExport(dispatch, options.sourceNoteIds, options.sourceFolderIds);
+		if (lockedNoteChoice === 'cancel') return;
 
 		void CommandService.instance().execute('showModalMessage', _('Exporting to "%s" as "%s" format. Please wait...', path, module.format));
 
@@ -258,6 +256,7 @@ export default class InteropServiceHelper {
 		exportOptions.includeConflicts = !!options.includeConflicts;
 		if (options.sourceFolderIds) exportOptions.sourceFolderIds = options.sourceFolderIds;
 		if (options.sourceNoteIds) exportOptions.sourceNoteIds = options.sourceNoteIds;
+		exportOptions.skipLockedNotes = lockedNoteChoice === 'skipLocked';
 
 		const service = InteropService.instance();
 		let keepModalOpen = false;

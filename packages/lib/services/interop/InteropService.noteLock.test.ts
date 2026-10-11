@@ -173,6 +173,19 @@ describe('InteropService.noteLock', () => {
 		expect(await fs.readdir(`${exportDir()}/folder`)).toEqual(['plain.md']);
 	});
 
+	it('should leave locked notes out without a warning when asked to, even with the session unlocked', async () => {
+		await setUpUnlockedSession();
+		const folder = await Folder.save({ title: 'folder' });
+		await Note.save({ title: 'plain', body: 'plain text', parent_id: folder.id });
+		const locked = await Note.save({ title: 'locked', body: 'secret', parent_id: folder.id });
+		await lockNote(locked.id);
+
+		const result = await InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Markdown, skipLockedNotes: true });
+
+		expect(result.warnings).toEqual([]);
+		expect(await fs.readdir(`${exportDir()}/folder`)).toEqual(['plain.md']);
+	});
+
 	it('should skip a locked note whose content cannot be decrypted', async () => {
 		await setUpUnlockedSession();
 		const folder = await Folder.save({ title: 'folder' });

@@ -82,6 +82,8 @@ export interface ExportOptions {
 	customCss?: string;
 	packIntoSingleFile?: boolean;
 	shouldEmbedOnlyImages?: boolean;
+	// The user chose to export without the locked notes, so they are left out without a warning.
+	skipLockedNotes?: boolean;
 
 	onProgress?: OnExportProgressCallback;
 }

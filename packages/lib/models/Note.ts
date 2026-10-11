@@ -613,6 +613,39 @@ export default class Note extends BaseItem {
 		return !!(await this.db().selectOne('SELECT 1 FROM notes WHERE is_locked = 1 LIMIT 1'));
 	}
 
+	// Like the export of a notebook, the check includes its sub-notebooks.
+	public static async hasLockedNoteInFolderTrees(folderIds: string[]) {
+		if (!folderIds.length) return false;
+
+		const result = await this.db().selectOne(`
+			WITH RECURSIVE folder_tree(id) AS (
+				SELECT id
+				FROM folders
+				WHERE id IN (${this.escapeIdsForSql(folderIds)})
+
+				UNION
+
+				SELECT folder.id
+				FROM folders folder
+				INNER JOIN folder_tree parent
+					ON folder.parent_id = parent.id
+				WHERE folder.deleted_time = 0
+			)
+			SELECT EXISTS (
+				SELECT 1
+				FROM notes note
+				INNER JOIN folder_tree folder
+					ON note.parent_id = folder.id
+				WHERE note.is_locked = 1
+					AND note.is_conflict = 0
+					AND note.deleted_time = 0
+				LIMIT 1
+			) AS value
+		`);
+
+		return !!result.value;
+	}
+
 	public static unconflictedNotes() {
 		return this.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0');
 	}

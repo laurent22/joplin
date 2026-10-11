@@ -405,6 +405,20 @@ describe('models/Note', () => {
 		expect((await Note.load(note.id)).body).toBe('overwrite');
 	});
 
+	it('should find a locked note anywhere in a notebook tree', async () => {
+		const parent = await Folder.save({ title: 'parent' });
+		const child = await Folder.save({ title: 'child', parent_id: parent.id });
+		const other = await Folder.save({ title: 'other' });
+		await Note.save({ title: 'plain', body: 'plain', parent_id: parent.id });
+		await Note.save({ title: 'other plain', body: 'plain', parent_id: other.id });
+		const locked = await Note.save({ title: 'locked', body: 'JLD01cipher', parent_id: child.id });
+		await db().exec('UPDATE notes SET is_locked = 1 WHERE id = ?', [locked.id]);
+
+		expect(await Note.hasLockedNoteInFolderTrees([parent.id])).toBe(true);
+		expect(await Note.hasLockedNoteInFolderTrees([child.id])).toBe(true);
+		expect(await Note.hasLockedNoteInFolderTrees([other.id])).toBe(false);
+	});
+
 	it('should refuse to save a decrypted locked note once the feature is disabled', async () => {
 		await NoteLockKey.instance().create('123456');
 		await NoteLockSession.instance().unlock('123456');
