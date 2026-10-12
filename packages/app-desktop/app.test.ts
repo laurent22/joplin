@@ -89,9 +89,11 @@ describe('app', () => {
 
 		try {
 			const slowRefresh = app().refreshNotes(state);
-			await app().refreshNotes(state);
-			resolveSlowPreviews([{ id: 'slow-note' }]);
-			await slowRefresh;
+			const fastRefresh = (async () => {
+				await app().refreshNotes(state);
+				resolveSlowPreviews([{ id: 'slow-note' }]);
+			})();
+			await Promise.all([slowRefresh, fastRefresh]);
 
 			const noteUpdates = dispatch.mock.calls.map(call => call[0]).filter(action => action.type === 'NOTE_UPDATE_ALL');
 			expect(noteUpdates.map(action => action.notes)).toEqual([[{ id: 'fast-note' }]]);
