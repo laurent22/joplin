@@ -79,8 +79,10 @@ rules.heading = {
     var hLevel = Number(node.nodeName.charAt(1))
     var originalContentLength = content.length
     // The markdown renderer trims raw nonbreaking spaces at the start and end of a heading,
-    // so an empty heading would be lost. Escaping every one keeps all the spaces the user typed.
-    content = content.replace(/\u{00A0}/gu, '&nbsp;')
+    // so escape only those. Inside a code span, `&nbsp;` would be shown as literal text.
+    content = content
+      .replace(/^\u{00A0}+/u, s => '&nbsp;'.repeat(s.length))
+      .replace(/\u{00A0}+$/u, s => '&nbsp;'.repeat(s.length))
 
     if (options.headingStyle === 'setext' && hLevel < 3) {
       var underline = repeat((hLevel === 1 ? '=' : '-'), originalContentLength)
@@ -608,6 +610,14 @@ rules.code = {
     }
 
     content = content.replace(/\r?\n|\r/g, '')
+
+    // Nonbreaking spaces at the edges are already added outside the code by flankingWhitespace,
+    // so keeping them here would add one more on every save.
+    if (node.flankingWhitespace.leading) content = content.trimStart()
+    if (node.flankingWhitespace.trailing) content = content.trimEnd()
+    if (!content) {
+      return ''
+    }
 
     var extraSpace = /^`|^ .*?[^ ].* $|`$/.test(content) ? ' ' : ''
     var delimiter = '`'

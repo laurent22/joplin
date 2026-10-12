@@ -3,6 +3,7 @@ import * as os from 'os';
 import { readFile } from 'fs/promises';
 import { filename } from '@joplin/lib/path-utils';
 import HtmlToMd, { ParseOptions } from '@joplin/lib/HtmlToMd';
+import MdToHtml from '@joplin/renderer/MdToHtml';
 
 describe('HtmlToMd', () => {
 
@@ -127,6 +128,21 @@ describe('HtmlToMd', () => {
 
 		// Verify that a single blank line is preserved (not fully removed)
 		expect(collapsedResult).toContain('\n\n');
+	});
+
+	it.each([
+		['inline code ending with a space at the end of a heading', '<h2><code>npm</code> install&nbsp;<code>a&nbsp;</code></h2>'],
+		['a heading that only contains inline code with a space', '<h2><code>&nbsp;</code></h2>'],
+	])('should not change %s when the note is saved again', async (_title, html) => {
+		const htmlToMd = new HtmlToMd();
+		const mdToHtml = new MdToHtml();
+
+		// The Rich Text Editor saves the note, renders the saved Markdown when the note is opened again, then saves it again
+		const firstSave = htmlToMd.parse(html);
+		const reopened = await mdToHtml.render(firstSave, null, { bodyOnly: true });
+		const secondSave = htmlToMd.parse(reopened.html);
+
+		expect(secondSave).toBe(firstSave);
 	});
 
 });
