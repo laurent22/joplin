@@ -227,6 +227,9 @@ export default class BaseApplication {
 	}
 
 	public async refreshNotes(state: State, useSelectedNoteId = false, noteHash = '') {
+		// Return before cancelling so a refresh for an inactive window cannot cancel the active window refresh.
+		if (this.store().getState().windowId !== state.windowId) return;
+
 		this.refreshNotesEvent_.cancelled = true;
 		const event = { cancelled: false };
 		this.refreshNotesEvent_ = event;

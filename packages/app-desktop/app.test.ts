@@ -103,6 +103,24 @@ describe('app', () => {
 		}
 	});
 
+	test('should not let a refresh for an inactive window cancel the active window refresh', async () => {
+		const state = { ...defaultState, notesParentType: 'Folder', selectedFolderId: 'folder' } as State;
+		const dispatch = jest.fn();
+		const storeMock = jest.spyOn(app(), 'store').mockReturnValue({
+			dispatch,
+			getState: () => state,
+		} as unknown as ReturnType<ReturnType<typeof app>['store']>);
+		const previewsMock = jest.spyOn(Note, 'previews').mockResolvedValue([]);
+
+		try {
+			await Promise.all([app().refreshNotes(state), app().refreshNotes({ ...state, windowId: 'inactive-window' })]);
+			expect(dispatch).toHaveBeenCalledWith(expect.objectContaining({ type: 'NOTE_UPDATE_ALL' }));
+		} finally {
+			previewsMock.mockRestore();
+			storeMock.mockRestore();
+		}
+	});
+
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(0);
 		await switchClient(0);
