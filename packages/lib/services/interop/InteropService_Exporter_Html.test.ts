@@ -67,7 +67,8 @@ describe('interop/InteropService_Exporter_Html', () => {
 		const longTitle = 'a'.repeat(51);
 		const longFolderTitle = 'b'.repeat(51);
 		const folder = await Folder.save({ title: longFolderTitle });
-		await Note.save({ title: longTitle, parent_id: folder.id });
+		const note = await Note.save({ title: longTitle, parent_id: folder.id });
+		const duplicateNote = await Note.save({ title: longTitle, parent_id: folder.id });
 		await Note.save({ title: 'short title', parent_id: folder.id });
 
 		const result = await InteropService.instance().export({
@@ -77,10 +78,12 @@ describe('interop/InteropService_Exporter_Html', () => {
 		});
 
 		expect(result.warnings).toEqual([
-			`The notebook title "${longFolderTitle}" was truncated to "${'b'.repeat(50)}" in the exported folder name.`,
-			`The note title "${longTitle}" was truncated to "${'a'.repeat(50)}" in the exported file name.`,
+			`The notebook title "${longFolderTitle}" was truncated to "${'b'.repeat(50)}" in the exported folder name. Notebook ID: ${folder.id}`,
+			`The note title "${longTitle}" was truncated to "${'a'.repeat(50)}.html" in the exported file name. Note ID: ${note.id}`,
+			`The note title "${longTitle}" was truncated to "${'a'.repeat(50)} (1).html" in the exported file name. Note ID: ${duplicateNote.id}`,
 		]);
 		expect(await fs.pathExists(`${exportDir()}/${'b'.repeat(50)}/${'a'.repeat(50)}.html`)).toBe(true);
+		expect(await fs.pathExists(`${exportDir()}/${'b'.repeat(50)}/${'a'.repeat(50)} (1).html`)).toBe(true);
 	});
 
 	test('should export plugin assets', (async () => {

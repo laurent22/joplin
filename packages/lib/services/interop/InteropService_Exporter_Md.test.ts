@@ -139,19 +139,24 @@ describe('interop/InteropService_Exporter_Md', () => {
 		const longTitle = 'a'.repeat(51);
 		const longFolderTitle = 'b'.repeat(51);
 		const folder = await Folder.save({ title: longFolderTitle });
+		const duplicateFolder = await Folder.save({ title: longFolderTitle });
 		const note = await Note.save({ title: longTitle, parent_id: folder.id });
+		const duplicateNote = await Note.save({ title: longTitle, parent_id: folder.id });
 
 		const result = await InteropService.instance().export({
 			path: exportDir(),
 			format: ExportModuleOutputFormat.Markdown,
-			sourceNoteIds: [note.id],
 		});
 
 		expect(result.warnings).toEqual([
-			`The notebook title "${longFolderTitle}" was truncated to "${'b'.repeat(50)}" in the exported folder name.`,
-			`The note title "${longTitle}" was truncated to "${'a'.repeat(50)}" in the exported file name.`,
+			`The notebook title "${longFolderTitle}" was truncated to "${'b'.repeat(50)}" in the exported folder name. Notebook ID: ${folder.id}`,
+			`The notebook title "${longFolderTitle}" was truncated to "${'b'.repeat(50)}-1" in the exported folder name. Notebook ID: ${duplicateFolder.id}`,
+			`The note title "${longTitle}" was truncated to "${'a'.repeat(50)}.md" in the exported file name. Note ID: ${note.id}`,
+			`The note title "${longTitle}" was truncated to "${'a'.repeat(50)}-1.md" in the exported file name. Note ID: ${duplicateNote.id}`,
 		]);
 		expect(await shim.fsDriver().exists(`${exportDir()}/${'b'.repeat(50)}/${'a'.repeat(50)}.md`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${exportDir()}/${'b'.repeat(50)}/${'a'.repeat(50)}-1.md`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${exportDir()}/${'b'.repeat(50)}-1`)).toBe(true);
 	});
 
 	it('should not report title truncation for encrypted notes or notebooks', async () => {

@@ -33,7 +33,11 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 				if (pathPart) {
 					output = `${pathPart}/${output}`;
 				} else {
-					const folderName = this.folderPaths_.get(current.id) || this.itemTitleToFilename_(current);
+					let folderName = this.folderPaths_.get(current.id);
+					if (!folderName) {
+						folderName = friendlySafeFilename(current.title, null);
+						this.addTitleTruncationWarning_(current, folderName);
+					}
 					output = `${folderName}/${output}`;
 				}
 			}
@@ -96,10 +100,11 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 
 				const parentId = folder.parent_id || '';
 				if (!namesByParent[parentId]) namesByParent[parentId] = [];
-				const safeName = this.itemTitleToFilename_(folder);
+				const safeName = friendlySafeFilename(folder.title, null);
 				const fullPath = shim.fsDriver().resolve(this.destDir_, safeName);
 				const uniquePath = await shim.fsDriver().findUniqueFilename(fullPath, namesByParent[parentId], true);
 				const uniqueName = basename(uniquePath);
+				this.addTitleTruncationWarning_(folder, uniqueName);
 				namesByParent[parentId].push(uniquePath);
 				this.folderPaths_.set(folder.id, uniqueName);
 			}
@@ -121,8 +126,9 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 				if (!note) continue;
 
 				const ext = note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_HTML ? 'html' : 'md';
-				let notePath = `${await this.makeDirPath_(note)}${this.itemTitleToFilename_(note)}.${ext}`;
+				let notePath = `${await this.makeDirPath_(note)}${friendlySafeFilename(note.title, null)}.${ext}`;
 				notePath = await shim.fsDriver().findUniqueFilename(`${this.destDir_}/${notePath}`, Object.values(context.notePaths), true);
+				this.addTitleTruncationWarning_(note, basename(notePath));
 				context.notePaths[note.id] = notePath;
 			}
 

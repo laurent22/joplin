@@ -55,7 +55,7 @@ describe('interop/InteropService_Exporter_Md_frontmatter', () => {
 		const longTitle = 'a'.repeat(51);
 		const longFolderTitle = 'b'.repeat(51);
 		const folder = await Folder.save({ title: longFolderTitle });
-		await Note.save({ title: longTitle, parent_id: folder.id });
+		const note = await Note.save({ title: longTitle, parent_id: folder.id });
 
 		const result = await InteropService.instance().export({
 			path: exportDir(),
@@ -63,8 +63,8 @@ describe('interop/InteropService_Exporter_Md_frontmatter', () => {
 		});
 
 		expect(result.warnings).toEqual([
-			`The notebook title "${longFolderTitle}" was truncated to "${'b'.repeat(50)}" in the exported folder name.`,
-			`The note title "${longTitle}" was truncated to "${'a'.repeat(50)}" in the exported file name.`,
+			`The notebook title "${longFolderTitle}" was truncated to "${'b'.repeat(50)}" in the exported folder name. Notebook ID: ${folder.id}`,
+			`The note title "${longTitle}" was truncated to "${'a'.repeat(50)}.md" in the exported file name. Note ID: ${note.id}`,
 		]);
 		expect(await fs.pathExists(`${exportDir()}/${'b'.repeat(50)}/${'a'.repeat(50)}.md`)).toBe(true);
 	});

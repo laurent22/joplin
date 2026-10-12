@@ -44,23 +44,22 @@ export default class InteropService_Exporter_Base {
 		return this.context_;
 	}
 
-	protected itemTitleToFilename_(item: ItemWithTitle) {
+	protected addTitleTruncationWarning_(item: ItemWithTitle, exportedFilename: string) {
+		if (item.encryption_applied) return;
+
 		const title = item.title || '';
 		const filename = friendlySafeFilename(title);
-		if (item.encryption_applied) return filename;
-
 		const untruncatedFilename = friendlySafeFilename(title, title.length);
-		const warningKey = `${item.type_}:${item.id || title}`;
+		const itemId = item.id || title;
+		const warningKey = `${item.type_}:${itemId}`;
 
 		if (filename !== untruncatedFilename && !this.truncatedItemWarnings_.has(warningKey)) {
 			this.truncatedItemWarnings_.add(warningKey);
 			const warning = item.type_ === BaseModel.TYPE_FOLDER
-				? _('The notebook title "%s" was truncated to "%s" in the exported folder name.', title, filename)
-				: _('The note title "%s" was truncated to "%s" in the exported file name.', title, filename);
+				? _('The notebook title "%s" was truncated to "%s" in the exported folder name. Notebook ID: %s', title, exportedFilename, itemId)
+				: _('The note title "%s" was truncated to "%s" in the exported file name. Note ID: %s', title, exportedFilename, itemId);
 			this.context_.warnings?.push(warning);
 		}
-
-		return filename;
 	}
 
 	protected async temporaryDirectory_(createIt: boolean) {
