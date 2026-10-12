@@ -131,17 +131,17 @@ describe('HtmlToMd', () => {
 	});
 
 	it.each([
-		['inline code ending with a space at the end of a heading', '<h2><code>npm</code> install&nbsp;<code>a&nbsp;</code></h2>'],
-		['a heading that only contains inline code with a space', '<h2><code>&nbsp;</code></h2>'],
-	])('should not change %s when the note is saved again', async (_title, html) => {
+		['inline code ending with a space at the end of a heading', '<h2><code>npm</code> install&nbsp;<code>a&nbsp;</code></h2>', 'a\u00A0'],
+		['a heading that only contains inline code with a space', '<h2><code>&nbsp;</code></h2>', '\u00A0'],
+	])('should not change %s when the note is saved again', async (_title, html, codeText) => {
 		const htmlToMd = new HtmlToMd();
 		const mdToHtml = new MdToHtml();
 
-		// The Rich Text Editor saves the note, renders the saved Markdown when the note is opened again, then saves it again
 		const firstSave = htmlToMd.parse(html);
 		const reopened = await mdToHtml.render(firstSave, null, { bodyOnly: true });
 		const secondSave = htmlToMd.parse(reopened.html);
 
+		expect(reopened.html).toContain(`>${codeText}</code>`);
 		expect(secondSave).toBe(firstSave);
 	});
 

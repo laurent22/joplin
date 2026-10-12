@@ -611,14 +611,6 @@ rules.code = {
 
     content = content.replace(/\r?\n|\r/g, '')
 
-    // Nonbreaking spaces at the edges are already added outside the code by flankingWhitespace,
-    // so keeping them here would add one more on every save.
-    if (node.flankingWhitespace.leading) content = content.trimStart()
-    if (node.flankingWhitespace.trailing) content = content.trimEnd()
-    if (!content) {
-      return ''
-    }
-
     var extraSpace = /^`|^ .*?[^ ].* $|`$/.test(content) ? ' ' : ''
     var delimiter = '`'
     var matches = content.match(/`+/gm) || []
