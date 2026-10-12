@@ -161,7 +161,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 				const isLegacyEditorError = !!this.state.error.stack.includes('CodeMirror/v5');
 
 				return (
-					<div style={{ overflow: 'auto', fontFamily: 'sans-serif', padding: '5px 20px', background: 'white', color: 'black' }}>
+					<div className='error-boundary'>
 						<SwitchToNewEditorBanner isVisible={isLegacyEditorError} />
 						<h1>Error</h1>
 						{this.renderMessage()}
