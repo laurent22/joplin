@@ -9,6 +9,7 @@ export default function(name: string, title: string): View {
 		path: `${pathPrefix}/${name}`,
 		content: {},
 		navbar: true,
+		showFooter: true,
 		title: title,
 		jsFiles: [],
 		cssFiles: [],
