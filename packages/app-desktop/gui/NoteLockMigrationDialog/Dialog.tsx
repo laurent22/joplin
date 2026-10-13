@@ -67,16 +67,18 @@ export default function(props: Props) {
 				<DialogTitle title={_('Migrate locked notes')}/>
 				<div className="dialog-content">
 					<p>{_('The sync target uses a different note lock key to the one on your device. Your locked notes must be re-encrypted with the synced key before synchronisation can continue. Locked notes cannot be read while they are being migrated.')}</p>
-					<LabelledPasswordInput
-						labelText={_('Note lock password on this device')}
-						value={localPassword}
-						onChange={onLocalPasswordChange}
-					/>
-					<LabelledPasswordInput
-						labelText={_('Note lock password on the sync target')}
-						value={targetPassword}
-						onChange={onTargetPasswordChange}
-					/>
+					<div className="form">
+						<LabelledPasswordInput
+							labelText={_('Note lock password on this device')}
+							value={localPassword}
+							onChange={onLocalPasswordChange}
+						/>
+						<LabelledPasswordInput
+							labelText={_('Note lock password on the sync target')}
+							value={targetPassword}
+							onChange={onTargetPasswordChange}
+						/>
+					</div>
 					{!!errorMessage && <p className="error-message" role="alert">{errorMessage}</p>}
 				</div>
 				<DialogButtonRow

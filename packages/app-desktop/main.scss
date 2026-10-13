@@ -324,7 +324,7 @@ Component-specific classes
 	max-width: 100%;
 }
 
-.master-password-dialog .dialog-content, .enable-encryption-dialog .dialog-content, .disable-encryption-dialog .dialog-content {
+.master-password-dialog .dialog-content, .enable-encryption-dialog .dialog-content, .disable-encryption-dialog .dialog-content, .note-lock-migration-dialog .dialog-content {
 	background-color: var(--joplin-background-color3);
 	padding: 1em;
 	padding-bottom: 1px;
