@@ -602,7 +602,8 @@ describe('screens/Note/Note', () => {
 		unmount();
 	});
 
-	it('should make a locked note inside a share read-only', async () => {
+	it('should make a locked note inside a share read-only with the note lock feature turned off', async () => {
+		Setting.setValue('featureFlag.noteLock', false);
 		await openNewNote({ title: 'Locked in a share', body: 'plain', is_locked: 1, share_id: 'share-1' });
 		const { unmount } = render(<WrappedNoteScreen />);
 
