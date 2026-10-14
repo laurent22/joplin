@@ -1660,6 +1660,8 @@ packages/lib/services/ai/tools/types.js
 packages/lib/services/ai/tools/utils/applyNoteEdits.test.js
 packages/lib/services/ai/tools/utils/applyNoteEdits.js
 packages/lib/services/ai/tools/utils/buildTool.js
+packages/lib/services/ai/tools/utils/noteOutline.test.js
+packages/lib/services/ai/tools/utils/noteOutline.js
 packages/lib/services/ai/tools/utils/serializeToolOutput.js
 packages/lib/services/ai/tools/utils/settings.js
 packages/lib/services/ai/types.js

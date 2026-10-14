@@ -45,7 +45,7 @@ Tool handlers return their raw payload. The dispatcher JSON-serialises it into M
 |---|---|---|
 | `search_notes` | Keyword search (Joplin FTS syntax). Returns id, title, notebook id, updated time, and a snippet anchored on the match. | on |
 | `semantic_search_notes` | Vector search via the embeddings index. Returns ranked chunks with source note id and score. | on |
-| `read_note` | One note with notebook title, tag names, timestamps. Body supports `offset` / `max_chars` paging. | on |
+| `read_note` | One note with notebook title, tag names, timestamps. See [Reading long notes](#reading-long-notes). | on |
 | `list_notebooks` | Flat list of notebooks with `parent_id` and `note_count`. | on |
 | `list_tags` | Tags that have at least one attached note. | on |
 | `create_note` | Creates a note in the chosen notebook (default folder if omitted). | off |
@@ -55,6 +55,37 @@ Tool handlers return their raw payload. The dispatcher JSON-serialises it into M
 | `create_notebook` | Optionally nested under a parent. | off |
 
 Write tools default off so users grant write access deliberately.
+
+### Reading long notes
+
+`read_note` caps output at 8000 characters by default, since the model cannot know a note's size before asking. `outline` and `section` are mutually exclusive:
+
+| Params | Returns |
+|---|---|
+| none | Body, capped |
+| `outline: true` | Heading structure only, no body |
+| `section: "<addr>"` | That section, subsections included |
+
+The outline is one tab-separated line per heading:
+
+```
+path	chars	heading
+0	480	
+1	60	Joplin release process
+1.1	1600	Prerequisites
+1.2	12400	Desktop
+1.2.1	3600	Windows
+```
+
+`path` is positional and reflects nesting. Section `0` is the content before the first heading, omitted when empty; a note with no headings returns `0` alone, so the model reads its `chars` and falls back to paging.
+
+`section` takes a path (`"1.2.1"`) or heading text (`"Windows"`), which must match exactly one heading — several matches is an error listing the candidates, never an arbitrary pick. A section runs to the next heading of equal or higher level.
+
+Headings come from the app's markdown-it instance, so the outline matches the rendered note. Their whitespace is collapsed to single spaces, since newlines (multi-line setext headings) and tabs would break the line format; the `section` address is collapsed the same way, so a heading copied from the outline resolves.
+
+The outline is paged exactly like the body — `body`, `body_length`, `body_offset`, `body_returned_chars`, `has_more`, with `is_outline` marking the mode. It needs paging because long notes have outlines bigger than the body cap they replace, and sharing the body's units keeps `offset` meaning characters in both modes. It's text rather than JSON because JSON roughly doubles the tokens for the same information.
+
+Truncated responses include a message naming the alternatives, as `has_more` says output stopped but not what to do instead. `max_chars: 0` means no limit in both modes.
 
 ### Why purpose-built and not a Data API wrapper
 

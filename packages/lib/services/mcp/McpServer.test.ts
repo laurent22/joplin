@@ -203,6 +203,85 @@ describe('McpServer', () => {
 		expect(payload.has_more).toBe(true);
 	});
 
+	test('read_note caps the body by default and steers towards the outline', async () => {
+		const folder = await Folder.save({ title: 'F' });
+		const body = 'x'.repeat(10000);
+		const note = await Note.save({ title: 'Long', body, parent_id: folder.id });
+
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'read_note', arguments: { id: note.id } },
+		});
+		const payload = parseToolResult(response.result);
+		expect(payload.body.length).toBe(8000);
+		expect(payload.body_length).toBe(10000);
+		expect(payload.has_more).toBe(true);
+		expect(payload.truncation_message).toContain('8000 of 10000');
+		expect(payload.truncation_message).toContain('outline');
+	});
+
+	test('read_note returns the outline as pageable text', async () => {
+		const folder = await Folder.save({ title: 'F' });
+		const body = '# One\n\nabc\n\n## One A\n\ndef\n';
+		const note = await Note.save({ title: 'Structured', body, parent_id: folder.id });
+
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'read_note', arguments: { id: note.id, outline: true } },
+		});
+		const payload = parseToolResult(response.result);
+		expect(payload.is_outline).toBe(true);
+		expect(payload.body.split('\n')).toEqual([
+			'path\tchars\theading',
+			'1\t26\tOne',
+			'1.1\t14\tOne A',
+		]);
+
+		// The outline pages on characters, exactly like the body does.
+		const paged = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 2, method: 'tools/call',
+			params: { name: 'read_note', arguments: { id: note.id, outline: true, max_chars: 20 } },
+		});
+		const pagedPayload = parseToolResult(paged.result);
+		expect(pagedPayload.body.length).toBe(20);
+		expect(pagedPayload.has_more).toBe(true);
+		expect(pagedPayload.truncation_message).toContain('Outline truncated at 20');
+	});
+
+	test('read_note returns a single section and pages within it', async () => {
+		const folder = await Folder.save({ title: 'F' });
+		const body = '# One\n\nabc\n\n# Two\n\nsecond\n';
+		const note = await Note.save({ title: 'Structured', body, parent_id: folder.id });
+
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'read_note', arguments: { id: note.id, section: 'Two' } },
+		});
+		const payload = parseToolResult(response.result);
+		expect(payload.body).toBe('# Two\n\nsecond\n');
+		expect(payload.section_path).toBe('2');
+		expect(payload.section_heading).toBe('Two');
+
+		const paged = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 2, method: 'tools/call',
+			params: { name: 'read_note', arguments: { id: note.id, section: '2', offset: 7, max_chars: 3 } },
+		});
+		const pagedPayload = parseToolResult(paged.result);
+		expect(pagedPayload.body).toBe('sec');
+		expect(pagedPayload.has_more).toBe(true);
+	});
+
+	test('read_note rejects outline combined with section', async () => {
+		const folder = await Folder.save({ title: 'F' });
+		const note = await Note.save({ title: 'Structured', body: '# One\n', parent_id: folder.id });
+
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'read_note', arguments: { id: note.id, outline: true, section: '1' } },
+		});
+		expect(response.result.isError).toBe(true);
+	});
+
 	test('delete_note moves a note to trash', async () => {
 		const folder = await Folder.save({ title: 'F' });
 		const note = await Note.save({ title: 'Doomed', parent_id: folder.id });
