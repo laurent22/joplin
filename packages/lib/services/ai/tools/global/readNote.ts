@@ -1,10 +1,8 @@
-import Note from '../../../../models/Note';
-import Folder from '../../../../models/Folder';
-import Tag from '../../../../models/Tag';
 import { _ } from '../../../../locale';
 import buildTool from '../utils/buildTool';
 import { ToolError } from '../types';
 import { renderOutline, resolveSection } from '../utils/noteOutline';
+import loadNoteForReading from '../utils/loadNoteForReading';
 
 interface Input {
 	id?: string;
@@ -14,13 +12,14 @@ interface Input {
 	max_chars?: number;
 }
 
-const defaultMaxChars = 8000;
+export const defaultMaxChars = 8000;
 
 const tool = buildTool({
 	id: 'read_note',
 	userDescription: (_input, output) => _('Read note: %s', output.title ?? _('(untitled)')),
 	description: [
 		'Read a single note by id. Returns title, markdown body, notebook name, tags, and timestamps.',
+		'Use this for one note, or to read an outline, a section, or a further page of a note. To read several notes at once, such as search results, use read_notes instead of calling this repeatedly.',
 		'For long notes, call with outline: true to get the heading structure, then request a single section instead of the whole body.',
 		'For notes without headings, page through with offset and max_chars.',
 	].join(' '),
@@ -39,27 +38,10 @@ const tool = buildTool({
 		if (!input.id) throw new ToolError('Missing "id" parameter');
 		if (input.outline && input.section) throw new ToolError('"outline" and "section" cannot be used together');
 
-		const note = await Note.load(input.id);
-		if (!note || note.is_conflict || (note.deleted_time && note.deleted_time > 0)) {
-			throw new ToolError(`Note not found: ${input.id}`);
-		}
+		const loaded = await loadNoteForReading(input.id);
+		if (!loaded) throw new ToolError(`Note not found: ${input.id}`);
 
-		const folder = note.parent_id ? await Folder.load(note.parent_id) : null;
-		const tags = await Tag.tagsByNoteId(note.id);
-
-		const metadata = {
-			id: note.id,
-			title: note.title,
-			notebook_id: note.parent_id,
-			notebook_title: folder ? folder.title : null,
-			tags: tags.map(t => t.title),
-			is_todo: !!note.is_todo,
-			todo_completed: !!note.todo_completed,
-			created_time: note.created_time,
-			updated_time: note.updated_time,
-		};
-
-		const fullBody = note.body ?? '';
+		const { metadata, body: fullBody } = loaded;
 
 		// The outline is paged with the same offset / max_chars semantics as the
 		// body, so both go through one slicing path below.

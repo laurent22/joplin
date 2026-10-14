@@ -22,6 +22,7 @@ const tool = buildTool({
 		'Search notes. Returns a ranked list of matches with id, title, notebook id, updated_time, and a short snippet anchored on the keyword match. The snippet often answers the question without a follow-up read_note call.',
 		'',
 		'Results also report "section" (a path for read_note) and "section_heading" for the match. When the snippet is not enough, read that section rather than the whole note. Section "0" means the match is before the first heading, or the note has none. Both fields are absent when the query had no body keywords to locate — do not guess a section then.',
+		'To read several whole results, use read_notes in one call rather than read_note per result.',
 		'',
 		'The query supports plain keywords and Joplin search filters. Combine filters with spaces (AND); prefix with - to negate.',
 		'',

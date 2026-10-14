@@ -356,6 +356,65 @@ describe('McpServer', () => {
 		expect(pagedPayload.has_more).toBe(true);
 	});
 
+	test('read_notes returns several notes and reports unknown ids', async () => {
+		const folder = await Folder.save({ title: 'Work' });
+		const note1 = await Note.save({ title: 'One', body: 'First', parent_id: folder.id });
+		const note2 = await Note.save({ title: 'Two', body: 'Second', parent_id: folder.id });
+		const trashed = await Note.save({ title: 'Gone', parent_id: folder.id, deleted_time: Date.now() });
+		const missingId = 'a'.repeat(32);
+
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'read_notes', arguments: { ids: [note1.id, missingId, note2.id, trashed.id] } },
+		});
+		const payload = parseToolResult(response.result);
+		expect(payload.notes.map((n: { title: string }) => n.title)).toEqual(['One', 'Two']);
+		expect(payload.notes[0].body).toBe('First');
+		expect(payload.notes[0].notebook_title).toBe('Work');
+		expect(payload.not_found).toEqual([missingId, trashed.id]);
+		expect(payload.truncation_message).toBeUndefined();
+	});
+
+	test('read_notes shares the body budget across notes', async () => {
+		const folder = await Folder.save({ title: 'F' });
+		const short = await Note.save({ title: 'Short', body: 'x'.repeat(1000), parent_id: folder.id });
+		const long1 = await Note.save({ title: 'Long1', body: 'x'.repeat(10000), parent_id: folder.id });
+		const long2 = await Note.save({ title: 'Long2', body: 'x'.repeat(10000), parent_id: folder.id });
+
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'read_notes', arguments: { ids: [short.id, long1.id, long2.id] } },
+		});
+		const payload = parseToolResult(response.result);
+		const [shortResult, long1Result, long2Result] = payload.notes;
+		expect(shortResult.body.length).toBe(1000);
+		expect(shortResult.has_more).toBe(false);
+		expect(long1Result.body.length).toBe(3500);
+		expect(long1Result.body_length).toBe(10000);
+		expect(long1Result.has_more).toBe(true);
+		expect(long2Result.body.length).toBe(3500);
+		expect(payload.truncation_message).toContain('read_note');
+	});
+
+	test('read_notes rejects too many ids', async () => {
+		const ids = Array.from({ length: 21 }, (_v, i) => i.toString(16).padStart(32, '0'));
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'read_notes', arguments: { ids } },
+		});
+		expect(response.result.isError).toBe(true);
+	});
+
+	test('read_notes is governed by the read_note setting', async () => {
+		Setting.setValue('ai.tool.read_note.enabled', false);
+		const note = await Note.save({ title: 'N' });
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'read_notes', arguments: { ids: [note.id] } },
+		});
+		expect(response.result.isError).toBe(true);
+	});
+
 	test('read_note rejects outline combined with section', async () => {
 		const folder = await Folder.save({ title: 'F' });
 		const note = await Note.save({ title: 'Structured', body: '# One\n', parent_id: folder.id });
