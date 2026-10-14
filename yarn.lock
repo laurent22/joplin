@@ -12652,7 +12652,7 @@ __metadata:
     "@react-native-community/netinfo": "npm:12.0.1"
     "@react-native-community/push-notification-ios": "npm:1.12.0"
     "@react-native-documents/picker": "npm:12.0.1"
-    "@react-native-vector-icons/fontawesome5": "npm:12.4.0"
+    "@react-native-vector-icons/fontawesome5": "npm:13.0.0"
     "@react-native-vector-icons/get-image": "npm:12.3.0"
     "@react-native-vector-icons/ionicons": "npm:12.5.0"
     "@react-native-vector-icons/material-design-icons": "npm:12.5.0"
@@ -16119,15 +16119,41 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-vector-icons/fontawesome5@npm:12.4.0":
-  version: 12.4.0
-  resolution: "@react-native-vector-icons/fontawesome5@npm:12.4.0"
+"@react-native-vector-icons/common@npm:^13.0.0":
+  version: 13.0.3
+  resolution: "@react-native-vector-icons/common@npm:13.0.3"
   dependencies:
-    "@react-native-vector-icons/common": "npm:^12.4.2"
+    find-up: "npm:^8.0.0"
+    picocolors: "npm:^1.1.1"
+    plist: "npm:^3.1.0"
+  peerDependencies:
+    "@react-native-vector-icons/get-image": ^13.0.1
+    "@react-native/assets-registry": "*"
+    expo-font: "*"
+    react: "*"
+    react-native: "*"
+  peerDependenciesMeta:
+    "@react-native-vector-icons/get-image":
+      optional: true
+    "@react-native/assets-registry":
+      optional: true
+    expo-font:
+      optional: true
+  bin:
+    rnvi-update-plist: lib/commonjs/scripts/updatePlist.js
+  checksum: 10/35e95899ff0d01ccba351131c0d340f78591871c55cdcc0ed32405932c77cad76b47812241103940f3e91f0558d2270526a6aedaf7525e1c9cc74c389b2457f7
+  languageName: node
+  linkType: hard
+
+"@react-native-vector-icons/fontawesome5@npm:13.0.0":
+  version: 13.0.0
+  resolution: "@react-native-vector-icons/fontawesome5@npm:13.0.0"
+  dependencies:
+    "@react-native-vector-icons/common": "npm:^13.0.0"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/087dd587ba35a74034f2acaf3981c51474c340e9a6834a9e182fe78ee9604ee1aae196b0f6ebc8d0353b3ed96ed476806fbbfa14fea3e1aa0074ef31f5d3a580
+  checksum: 10/54eb966b508385a5906f5a560bb6a6c8490c440c414524b8f23b31768d626aeb31442f3a21ce5a0e46bbfd42760fe4d17d84e4890290d4a6597263e45862c9c8
   languageName: node
   linkType: hard
 
@@ -33038,6 +33064,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"find-up@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "find-up@npm:8.0.0"
+  dependencies:
+    locate-path: "npm:^8.0.0"
+    unicorn-magic: "npm:^0.3.0"
+  checksum: 10/0db90efb0543250e4239a299205389d490afffe178e8ed916d53100611faa69f9f3039b2dc951eb254f02ff4ac4c25bf6511c93c4c08f582b314b1aa776e4584
+  languageName: node
+  linkType: hard
+
 "findit@npm:^2.0.0":
   version: 2.0.0
   resolution: "findit@npm:2.0.0"
@@ -40635,6 +40671,15 @@ __metadata:
   dependencies:
     p-locate: "npm:^6.0.0"
   checksum: 10/1c6d269d4efec555937081be964e8a9b4a136319c79ca1d45ac6382212a8466113c75bd89e44521ca8ecd1c47fb08523b56eee5c0712bc7d14fec5f729deeb42
+  languageName: node
+  linkType: hard
+
+"locate-path@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "locate-path@npm:8.0.0"
+  dependencies:
+    p-locate: "npm:^6.0.0"
+  checksum: 10/9c8c1c0ace8dc496e916fadee5a7bcc6abf3a4a0952e25c6e7c8c4c8cd9f8f6e97e0ee5d303b61df1c13dce92b15aad60ce262aa4b728e617d1e03c196ea6a8a
   languageName: node
   linkType: hard
 
@@ -58594,6 +58639,13 @@ __metadata:
   version: 0.1.0
   resolution: "unicorn-magic@npm:0.1.0"
   checksum: 10/9b4d0e9809807823dc91d0920a4a4c0cff2de3ebc54ee87ac1ee9bc75eafd609b09d1f14495e0173aef26e01118706196b6ab06a75fe0841028b3983a8af313f
+  languageName: node
+  linkType: hard
+
+"unicorn-magic@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "unicorn-magic@npm:0.3.0"
+  checksum: 10/bdd7d7c522f9456f32a0b77af23f8854f9a7db846088c3868ec213f9550683ab6a2bdf3803577eacbafddb4e06900974385841ccb75338d17346ccef45f9cb01
   languageName: node
   linkType: hard
 
