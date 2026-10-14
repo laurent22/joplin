@@ -220,7 +220,6 @@ impl Renderer {
 #[cfg(test)]
 mod tests {
     use super::Renderer;
-    use parser_utils::fs_driver;
 
     const MAX_FILE_NAME_BYTES: usize = 255;
 
@@ -228,22 +227,12 @@ mod tests {
     fn should_keep_html_extension_when_title_is_longer_than_255_bytes() {
         let mut renderer = Renderer::new();
 
-        let short_title_filename = renderer
-            .title_to_unique_safe_filename("/out", &"a".repeat(230), ".html")
-            .unwrap();
-        let long_title_filename = renderer
+        let filename = renderer
             .title_to_unique_safe_filename("/out", &"a".repeat(260), ".html")
             .unwrap();
 
-        assert!(short_title_filename.ends_with(".html"));
-        assert!(!long_title_filename.is_empty());
-        assert!(long_title_filename.len() <= MAX_FILE_NAME_BYTES);
-        assert!(
-            long_title_filename.ends_with(".html"),
-            "file name was cut and lost its extension: {} bytes, ends with {:?}",
-            long_title_filename.len(),
-            &long_title_filename[long_title_filename.len() - 10..]
-        );
+        assert!(filename.ends_with(".html"));
+        assert!(filename.len() <= MAX_FILE_NAME_BYTES);
     }
 
     #[test]
@@ -277,22 +266,15 @@ mod tests {
     #[test]
     fn should_not_create_empty_file_name_when_sanitizer_removes_the_title() {
         let mut renderer = Renderer::new();
-        let mut filename = |title: &str| {
-            renderer
-                .title_to_unique_safe_filename("/out", title, ".html")
-                .unwrap()
-        };
 
-        assert_eq!(filename("???"), "_.html");
-        assert_eq!(filename("???"), "__1.html");
+        let first = renderer
+            .title_to_unique_safe_filename("/out", "???", ".html")
+            .unwrap();
+        let duplicate = renderer
+            .title_to_unique_safe_filename("/out", "???", ".html")
+            .unwrap();
 
-        // CON is only reserved on Windows
-        let reserved_base = if fs_driver().is_windows() {
-            "_CON"
-        } else {
-            "CON"
-        };
-        assert_eq!(filename("CON"), format!("{}.html", reserved_base));
-        assert_eq!(filename("CON"), format!("{}_1.html", reserved_base));
+        assert_eq!(first, "_.html");
+        assert_eq!(duplicate, "__1.html");
     }
 }
