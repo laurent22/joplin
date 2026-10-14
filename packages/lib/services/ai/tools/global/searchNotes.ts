@@ -3,6 +3,7 @@ import { NoteEntity } from '../../../database/types';
 import { _ } from '../../../../locale';
 import buildTool from '../utils/buildTool';
 import { ToolError } from '../types';
+import { noteSections } from '../utils/noteOutline';
 
 interface Input {
 	query?: string;
@@ -19,6 +20,8 @@ const tool = buildTool({
 	userDescription: (input: Input) => _('Searched for: %s', input.query || _('(empty)')),
 	description: [
 		'Search notes. Returns a ranked list of matches with id, title, notebook id, updated_time, and a short snippet anchored on the keyword match. The snippet often answers the question without a follow-up read_note call.',
+		'',
+		'Results also report "section" (a path for read_note) and "section_heading" for the match. When the snippet is not enough, read that section rather than the whole note. Section "0" means the match is before the first heading, or the note has none. Both fields are absent when the query had no body keywords to locate — do not guess a section then.',
 		'',
 		'The query supports plain keywords and Joplin search filters. Combine filters with spaces (AND); prefix with - to negate.',
 		'',
@@ -65,37 +68,61 @@ const tool = buildTool({
 			.map(t => t.replace(/^["*]+|["*]+$/g, '').toLowerCase())
 			.filter(Boolean);
 
-		const results = notes.slice(0, limit).map((n: NoteEntity) => ({
-			id: n.id,
-			title: n.title,
-			notebook_id: n.parent_id,
-			updated_time: n.updated_time,
-			snippet: makeSnippet(n.body ?? '', keywords),
-		}));
+		const results = notes.slice(0, limit).map((n: NoteEntity) => {
+			const body = n.body ?? '';
+			const anchor = findAnchor(body, keywords);
+			const section = matchSection(body, anchor);
+			return {
+				id: n.id,
+				title: n.title,
+				notebook_id: n.parent_id,
+				updated_time: n.updated_time,
+				snippet: makeSnippet(body, anchor),
+				...(section ? { section: section.path, section_heading: section.heading } : {}),
+			};
+		});
 
 		return { results, total: notes.length };
 	},
 });
 
-const makeSnippet = (body: string, keywords: string[]) => {
-	const normalised = body.replace(/\s+/g, ' ').trim();
-	if (!normalised) return '';
-	if (normalised.length <= snippetChars) return normalised;
-
-	let anchor = -1;
-	const lower = normalised.toLowerCase();
+// Anchors in the raw body, not a normalised copy: the offset is also used to
+// find the enclosing section, and normalising shifts it.
+const findAnchor = (body: string, keywords: string[]) => {
+	const lower = body.toLowerCase();
 	for (const kw of keywords) {
 		const i = lower.indexOf(kw);
-		if (i >= 0) { anchor = i; break; }
+		if (i >= 0) return i;
 	}
+	return -1;
+};
 
-	if (anchor < 0) return `${normalised.slice(0, snippetChars).trimEnd()}…`;
+const makeSnippet = (body: string, anchor: number) => {
+	if (!body.trim()) return '';
 
-	const start = Math.max(0, anchor - Math.floor(snippetChars / 3));
-	const end = Math.min(normalised.length, start + snippetChars);
-	const prefix = start > 0 ? '…' : '';
-	const suffix = end < normalised.length ? '…' : '';
-	return `${prefix}${normalised.slice(start, end).trim()}${suffix}`;
+	// Window is over-wide so collapsing whitespace still leaves enough characters.
+	const rawStart = anchor < 0 ? 0 : Math.max(0, anchor - Math.floor(snippetChars / 3));
+	const rawEnd = anchor < 0 ? body.length : Math.min(body.length, rawStart + snippetChars * 3);
+	const window = body.slice(rawStart, rawEnd).replace(/\s+/g, ' ').trim();
+
+	const truncated = window.length > snippetChars;
+	const text = truncated ? window.slice(0, snippetChars).trimEnd() : window;
+	const prefix = rawStart > 0 ? '…' : '';
+	const suffix = truncated || rawEnd < body.length ? '…' : '';
+	return `${prefix}${text}${suffix}`;
+};
+
+// Null when there is no match to locate: a filter-only query has nothing to
+// anchor on, and the section containing offset 0 is often the whole note.
+const matchSection = (body: string, anchor: number) => {
+	if (anchor < 0) return null;
+	const sections = noteSections(body);
+	// Nested sections follow their parent, so the last match is the most specific.
+	let match = sections[0];
+	for (const section of sections) {
+		if (anchor >= section.start && anchor < section.end) match = section;
+	}
+	return match;
 };
 
 export default tool;

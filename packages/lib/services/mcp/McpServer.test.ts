@@ -187,6 +187,91 @@ describe('McpServer', () => {
 		expect(payload.results[0].snippet.length).toBeLessThan(body.length);
 	});
 
+	test('search_notes returns the section enclosing the match', async () => {
+		const folder = await Folder.save({ title: 'F' });
+		const body = [
+			'Intro paragraph.',
+			'',
+			'# Desktop',
+			'',
+			'## Windows',
+			'',
+			`${'filler '.repeat(40)}`,
+			'',
+			'## macOS',
+			'',
+			'Signing uses a notarytool keychain profile.',
+			'',
+			'# Mobile',
+			'',
+			'Nothing here yet.',
+		].join('\n');
+		await Note.save({ title: 'Release', body, parent_id: folder.id });
+
+		SearchEngine.instance().setDb(db());
+		await SearchEngine.instance().syncTables();
+
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'search_notes', arguments: { query: 'notarytool' } },
+		});
+		const payload = parseToolResult(response.result);
+		expect(payload.results[0].section).toBe('1.2');
+		expect(payload.results[0].section_heading).toBe('macOS');
+		expect(payload.results[0].snippet).toMatch(/notarytool/);
+	});
+
+	test('search_notes reports section 0 for a match before the first heading', async () => {
+		const folder = await Folder.save({ title: 'F' });
+		const body = 'A preamble mentioning kangaroos.\n\n# Later\n\nOther text.\n';
+		await Note.save({ title: 'Preamble', body, parent_id: folder.id });
+
+		SearchEngine.instance().setDb(db());
+		await SearchEngine.instance().syncTables();
+
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'search_notes', arguments: { query: 'kangaroos' } },
+		});
+		const payload = parseToolResult(response.result);
+		expect(payload.results[0].section).toBe('0');
+		expect(payload.results[0].section_heading).toBe('');
+	});
+
+	test('search_notes omits the section when the query has no body keywords', async () => {
+		const folder = await Folder.save({ title: 'F' });
+		// Starts with a heading, so offset 0 falls inside a real section.
+		const body = '# Changelog\n\n## v1\n\nFirst release.\n';
+		await Note.save({ title: 'Changelog', body, parent_id: folder.id });
+
+		SearchEngine.instance().setDb(db());
+		await SearchEngine.instance().syncTables();
+
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'search_notes', arguments: { query: 'title:Changelog' } },
+		});
+		const payload = parseToolResult(response.result);
+		expect(payload.results.length).toBe(1);
+		expect(payload.results[0].section).toBeUndefined();
+		expect(payload.results[0].section_heading).toBeUndefined();
+	});
+
+	test('search_notes reports section 0 for a note without headings', async () => {
+		const folder = await Folder.save({ title: 'F' });
+		await Note.save({ title: 'Flat', body: 'Just a flat note about wombats.', parent_id: folder.id });
+
+		SearchEngine.instance().setDb(db());
+		await SearchEngine.instance().syncTables();
+
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'search_notes', arguments: { query: 'wombats' } },
+		});
+		const payload = parseToolResult(response.result);
+		expect(payload.results[0].section).toBe('0');
+	});
+
 	test('read_note pages the body when max_chars is set', async () => {
 		const folder = await Folder.save({ title: 'F' });
 		const body = '0123456789';
