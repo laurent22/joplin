@@ -23,6 +23,13 @@ import renderBlockImages from './extensions/rendering/renderBlockImages';
 const closingFencedBlock = StateField.define<boolean>({
 	create: () => false,
 	update: (_, tr) => {
+
+		// If the user has text highlighted, abort immediately and return false.// If the user has text highlighted, abort immediately and return false.
+		// fixes the triple backtick issue (check issue #16288)
+		if (!tr.state.selection.main.empty) {
+			return false;
+		}
+
 		const pos = tr.state.selection.main.from;
 		const textBefore = tr.state.doc.sliceString(Math.max(0, pos - 2), pos);
 		const backticksBefore = textBefore.length - textBefore.replace(/`+$/, '').length;
