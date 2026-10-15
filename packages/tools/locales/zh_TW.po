@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Darius Wong <dariusw0ng@duck.com>\n"
+"Last-Translator: Wei-Lun Li\n"
 "Language-Team: yaozeye <yaozeye@yaozeye.onmicrosoft.com>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
@@ -32,7 +32,7 @@ msgstr "- 儲存：允許將檔案附加到筆記並啟用檔案系統同步。"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:147
 msgid "— now viewing: %s —"
-msgstr ""
+msgstr "— 目前檢視：%s —"
 
 #: packages/lib/services/KeymapService.ts:350
 #: packages/lib/services/KeymapService.ts:356
@@ -44,18 +44,17 @@ msgid "(%s)"
 msgstr "(%s)"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:173
-#, fuzzy
 msgid "(Cancelled)"
-msgstr "取消"
+msgstr "（已取消）"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/TextNode.tsx:141
 msgid "(empty — double-click to edit)"
-msgstr ""
+msgstr "（空白 — 按兩下以編輯）"
 
 #: packages/lib/services/ai/tools/global/searchNotes.ts:19
 #: packages/lib/services/ai/tools/global/semanticSearchNotes.ts:16
 msgid "(empty)"
-msgstr ""
+msgstr "（空白）"
 
 #: packages/lib/services/plugins/api/JoplinViewsDialogs.ts:75
 msgid "(In plugin: %s)"
@@ -66,15 +65,13 @@ msgid "(level %d)"
 msgstr "(層級 %d)"
 
 #: packages/app-desktop/gui/ChatPanel/ChatMessageItem.tsx:60
-#, fuzzy
 msgid "(no message)"
-msgstr "延伸模組訊息"
+msgstr "（無訊息）"
 
 #: packages/lib/services/ai/tools/global/createNote.ts:16
 #: packages/lib/services/ai/tools/global/createNotebook.ts:13
-#, fuzzy
 msgid "(no title)"
-msgstr "筆記標題"
+msgstr "（無標題）"
 
 #: packages/lib/SyncTargetNone.ts:17
 msgid "(None)"
@@ -87,9 +84,8 @@ msgstr "(唯讀)"
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:147
 #: packages/lib/services/ai/tools/global/readImage.ts:35
 #: packages/lib/services/ai/tools/global/readNote.ts:18
-#, fuzzy
 msgid "(untitled)"
-msgstr "未命名"
+msgstr "（未命名）"
 
 #: packages/lib/models/settings/builtInMetadata.ts:64
 #: packages/lib/models/settings/builtInMetadata.ts:65
@@ -143,13 +139,12 @@ msgstr "&視窗"
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:506
 msgid "%d card"
 msgid_plural "%d cards"
-msgstr[0] ""
+msgstr[0] "%d 張卡片"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:479
-#, fuzzy
 msgid "%d connection"
 msgid_plural "%d connections"
-msgstr[0] "隱藏更多操作"
+msgstr[0] "%d 個連線"
 
 #: packages/lib/models/settings/builtInMetadata.ts:2154
 #: packages/lib/models/settings/builtInMetadata.ts:2529
@@ -159,11 +154,11 @@ msgstr[0] "%d 天"
 
 #: packages/app-desktop/gui/ChatPanel/ChatMessageItem.tsx:29
 msgid "%d edit(s) applied, %d could not be placed automatically."
-msgstr ""
+msgstr "已套用 %d 項編輯，%d 項無法自動放置。"
 
 #: packages/app-desktop/gui/ChatPanel/ChatMessageItem.tsx:27
 msgid "%d edit(s) applied."
-msgstr ""
+msgstr "已套用 %d 項編輯。"
 
 #: packages/lib/utils/joplinCloud/index.ts:279
 #: packages/lib/utils/joplinCloud/index.ts:280
@@ -208,10 +203,9 @@ msgid_plural "%d minutes"
 msgstr[0] "%d 分鐘"
 
 #: packages/app-desktop/gui/PublishFolderDialog.tsx:97
-#, fuzzy
 msgid "%d note in notebook"
 msgid_plural "%d notes in notebook"
-msgstr[0] "要將筆記 %d 移動到記事本「%s」嗎？"
+msgstr[0] "記事本中有 %d 則筆記"
 
 #: packages/app-cli/app/command-rmnote.ts:33
 msgid "%d note matches this pattern. Delete it?"
@@ -229,7 +223,7 @@ msgstr "拍攝了 %d 張照片"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:552
 msgid "%d sections found"
-msgstr ""
+msgstr "找到 %d 個區段"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:231
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:241
@@ -241,9 +235,8 @@ msgid "%s - Copy"
 msgstr "%s - 複本"
 
 #: packages/lib/services/commands/ToolbarButtonUtils.ts:64
-#, fuzzy
 msgid "%s (%s)"
-msgstr "%s %s (%s)"
+msgstr "%s（%s）"
 
 #: packages/lib/services/ReportService.ts:194
 msgid "%s (%s) could not be uploaded: %s"
@@ -259,9 +252,8 @@ msgid "%s (%s): %s"
 msgstr "%s (%s): %s"
 
 #: packages/lib/models/settings/builtInMetadata.ts:33
-#, fuzzy
 msgid "%s (Beta)"
-msgstr "測試"
+msgstr "%s（測試版）"
 
 #: packages/app-desktop/checkForUpdates.ts:110
 msgid "%s (pre-release)"
@@ -291,7 +283,7 @@ msgstr "%s = %s (%s)"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:280
 msgid "%s added to toolbar"
-msgstr ""
+msgstr "已將 %s 加入工具列"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ValidatedIntegerInput.tsx:32
 msgid "%s cannot be greater than %s"
@@ -307,7 +299,7 @@ msgstr "%s 自 %s"
 
 #: packages/lib/models/settings/builtInMetadata.ts:799
 msgid "%s input / %s output tokens used."
-msgstr ""
+msgstr "已使用 %s 個輸入 Token／%s 個輸出 Token。"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:292
 msgid ""
@@ -316,22 +308,20 @@ msgid ""
 msgstr "%s 沒有針對同步許多小文件進行優化，因此初始同步速度會比較慢。"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:221
-#, fuzzy
 msgid "%s moved down"
-msgstr "下移"
+msgstr "已將 %s 下移"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:215
 msgid "%s moved up"
-msgstr ""
+msgstr "已將 %s 上移"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ValidatedIntegerInput.tsx:26
 msgid "%s must be a valid whole number"
 msgstr "%s 必須為整數"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:209
-#, fuzzy
 msgid "%s removed from toolbar"
-msgstr "已由共享中移除 %s。"
+msgstr "已將 %s 從工具列移除"
 
 #: packages/app-mobile/components/plugins/dialogs/PluginPanelViewer.tsx:74
 msgid "%s tab opened"
@@ -365,12 +355,11 @@ msgstr "%s：缺少密碼。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:473
 msgid "+ Group"
-msgstr ""
+msgstr "+ 群組"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:472
-#, fuzzy
 msgid "+ Text"
-msgstr "格式化文字"
+msgstr "+ 文字"
 
 #: packages/app-cli/app/command-tag.ts:15
 msgid ""
@@ -394,7 +383,6 @@ msgstr ""
 "\"clear\" (將待辦事項轉換為筆記)。"
 
 #: packages/server/src/utils/time.ts:56
-#, fuzzy
 msgid "1 day"
 msgid_plural "%d days"
 msgstr[0] "%d 天"
@@ -402,7 +390,7 @@ msgstr[0] "%d 天"
 #: packages/lib/utils/joplinCloud/index.ts:732
 msgid ""
 "14-day free trial. Cancel anytime during the trial and you won't be charged."
-msgstr ""
+msgstr "14 天免費試用。試用期間隨時取消都不會收費。"
 
 #: packages/editor/ProseMirror/plugins/imagePlugin.ts:148
 msgid "A brief description of the image:"
@@ -424,7 +412,7 @@ msgid ""
 "A system-wide keyboard shortcut that toggles the Joplin window. Works even "
 "when Joplin is not focused. Example: CommandOrControl+Shift+J. Leave empty "
 "to disable."
-msgstr ""
+msgstr "用來切換 Joplin 視窗的系統全域快速鍵，即使 Joplin 不在前景也能使用。例如：CommandOrControl+Shift+J。留空以停用。"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1876
 msgid "A3"
@@ -494,18 +482,18 @@ msgstr "存取被拒絕：請重新輸入您的密碼和/或使用者名稱"
 
 #: packages/lib/utils/joplinCloud/index.ts:310
 msgid "Access your notes from any web browser at %s."
-msgstr ""
+msgstr "在 %s 使用任何網頁瀏覽器存取您的筆記。"
 
 #: packages/lib/models/settings/builtInMetadata.ts:589
 msgid "Accessible"
-msgstr ""
+msgstr "無障礙"
 
 #: packages/lib/models/settings/builtInMetadata.ts:586
 msgid ""
 "Accessible mode saves additional information, enabling creation of "
 "accessible PDFs. It increases database size by approximately 10-20 KB per "
 "page."
-msgstr ""
+msgstr "無障礙模式會儲存額外資訊，以便建立無障礙 PDF。每頁約會增加 10-20 KB 的資料庫大小。"
 
 #: packages/server/src/routes/admin/users.ts:159
 msgid "Account"
@@ -543,13 +531,12 @@ msgid "Actual Size"
 msgstr "實際大小"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:473
-#, fuzzy
 msgid "Add a group"
-msgstr "新增列"
+msgstr "新增群組"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:472
 msgid "Add a text card"
-msgstr ""
+msgstr "新增文字卡片"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1772
 msgid "Add body"
@@ -567,7 +554,7 @@ msgstr "新增"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addNoteToWhiteboard.ts:18
 msgid "Add note to whiteboard..."
-msgstr ""
+msgstr "將筆記加入白板..."
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/setTags.ts:52
 msgid "Add or remove tags:"
@@ -600,7 +587,7 @@ msgstr "加到筆記"
 #: packages/lib/services/ai/tools/buildEditorTools.ts:50
 msgid "Added %d word"
 msgid_plural "Added %d words"
-msgstr[0] ""
+msgstr[0] "已新增 %d 個字詞"
 
 #: packages/app-mobile/components/ComboBox.tsx:93
 msgid "Added new: %s"
@@ -608,7 +595,6 @@ msgstr "已新增：%s"
 
 #: packages/app-mobile/components/TagEditor.tsx:244
 #: packages/lib/services/ai/tools/global/manageTags.ts:21
-#, fuzzy
 msgid "Added tag: %s"
 msgid_plural "Added tags: %s"
 msgstr[0] "已新增標籤：%s"
@@ -640,35 +626,34 @@ msgstr "進階工具"
 
 #: packages/lib/models/Setting.ts:1374
 msgid "AI"
-msgstr ""
+msgstr "AI"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:438
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleAiChat.ts:22
 #: packages/app-desktop/utils/layout/layoutKeyToLabel.ts:9
 msgid "AI Chat"
-msgstr ""
+msgstr "AI 對話"
 
 #: packages/lib/services/ai/availability.ts:36
 #: packages/lib/services/ai/availability.ts:65
 msgid "AI features are disabled. Enable them in Settings → AI."
-msgstr ""
+msgstr "AI 功能已停用，請在「設定 → AI」中啟用。"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:24
-#, fuzzy
 msgid "AI is disabled"
-msgstr "隱藏已停用"
+msgstr "AI 已停用"
 
 #: packages/app-desktop/gui/AiDegradedNotice.tsx:15
 msgid ""
 "AI is running in reduced-quality mode — monthly allowance exceeded. Credits "
 "replenish on a rolling 30-day basis, or you can"
-msgstr ""
+msgstr "AI 正以降低品質的模式執行 — 已超出每月額度。點數會以 30 天為週期滾動補充，您也可以"
 
 #: packages/app-desktop/services/aiStatusBridge.ts:62
 msgid ""
 "AI usage has exceeded your monthly allowance — responses are using a reduced-"
 "quality model. Credits replenish on a rolling 30-day basis. Buy more at %s."
-msgstr ""
+msgstr "AI 用量已超出每月額度 — 目前改用品質較低的模型回應。點數會以 30 天為週期滾動補充。您可以在 %s 購買更多點數。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:18
 msgid "all"
@@ -690,13 +675,10 @@ msgid "All notes"
 msgstr "全部筆記"
 
 #: packages/app-mobile/components/screens/tags.tsx:176
-#, fuzzy
 msgid ""
 "All notes associated with this tag will remain, but the tag will be removed "
 "from all notes."
-msgstr ""
-"刪除標籤「%s」？\n"
-"這操作不會刪除筆記，只會移除筆記中的標籤。"
+msgstr "與此標籤相關的筆記都會保留，但所有筆記都會移除此標籤。"
 
 #: packages/lib/onedrive-api-node-utils.ts:58
 msgid "All potential ports are in use - please report the issue at %s"
@@ -707,63 +689,56 @@ msgid "All shared folders:"
 msgstr "所有共享資料夾："
 
 #: packages/lib/models/settings/builtInMetadata.ts:990
-#, fuzzy
 msgid "Allow creating notebooks"
-msgstr "新增記事本"
+msgstr "允許建立記事本"
 
 #: packages/lib/models/settings/builtInMetadata.ts:946
-#, fuzzy
 msgid "Allow creating notes"
-msgstr "正在建立筆記..."
+msgstr "允許建立筆記"
 
 #: packages/lib/models/settings/builtInMetadata.ts:979
 msgid "Allow editing tags on notes"
-msgstr ""
+msgstr "允許編輯筆記的標籤"
 
 #: packages/lib/models/settings/builtInMetadata.ts:879
 msgid "Allow editing the current note (chat panel only)"
-msgstr ""
+msgstr "允許編輯目前的筆記（僅限對話面板）"
 
 #: packages/lib/models/settings/builtInMetadata.ts:924
-#, fuzzy
 msgid "Allow listing notebooks"
-msgstr "同步發布已連結筆記"
+msgstr "允許列出記事本"
 
 #: packages/lib/models/settings/builtInMetadata.ts:935
 msgid "Allow listing tags"
-msgstr ""
+msgstr "允許列出標籤"
 
 #: packages/lib/models/settings/builtInMetadata.ts:913
 msgid "Allow reading images"
-msgstr ""
+msgstr "允許讀取圖片"
 
 #: packages/lib/models/settings/builtInMetadata.ts:902
-#, fuzzy
 msgid "Allow reading notes"
-msgstr "正在建立筆記..."
+msgstr "允許讀取筆記"
 
 #: packages/lib/models/settings/builtInMetadata.ts:674
 msgid "Allow remote AI providers"
-msgstr ""
+msgstr "允許遠端 AI 供應商"
 
 #: packages/lib/models/settings/builtInMetadata.ts:891
-#, fuzzy
 msgid "Allow searching notes"
-msgstr "同步發布已連結筆記"
+msgstr "允許搜尋筆記"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1001
 msgid "Allow semantic search of notes"
-msgstr ""
+msgstr "允許語意搜尋筆記"
 
 #: packages/lib/models/settings/builtInMetadata.ts:968
-#, fuzzy
 msgid "Allow trashing notes"
-msgstr "同步發布已連結筆記"
+msgstr "允許將筆記移至垃圾桶"
 
 #: packages/lib/models/settings/builtInMetadata.ts:957
-#, fuzzy
 msgid "Allow updating notes"
-msgstr "全部筆記"
+msgstr "允許更新筆記"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1433
 msgid "Allows debugging mobile plugins. See %s for details."
@@ -771,7 +746,7 @@ msgstr "允許對移動延伸模組進行偵錯。請參考%s以取得更多信�
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:267
 msgid "Already have an account? Log in"
-msgstr ""
+msgstr "已經有帳號了嗎？登入"
 
 #: packages/app-cli/app/command-config.ts:19
 msgid "Also displays unset and hidden config variables."
@@ -836,7 +811,7 @@ msgstr "安卓 API 版本: %d"
 
 #: packages/lib/models/settings/builtInMetadata.ts:701
 msgid "Anthropic"
-msgstr ""
+msgstr "Anthropic"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:48
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:24
@@ -849,7 +824,7 @@ msgstr ""
 
 #: packages/lib/models/settings/builtInMetadata.ts:738
 msgid "API key"
-msgstr ""
+msgstr "API 金鑰"
 
 #: packages/lib/models/Setting.ts:1358
 msgid "Appearance"
@@ -860,7 +835,6 @@ msgid "Application"
 msgstr "應用程式"
 
 #: packages/server/src/services/MustacheService.ts:153
-#, fuzzy
 msgid "Applications"
 msgstr "應用程式"
 
@@ -904,23 +878,22 @@ msgid "Aritim Dark"
 msgstr "暗黑 (Aritim)"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:483
-#, fuzzy
 msgid "Arrow at source"
-msgstr "前往來源網址"
+msgstr "箭頭位於來源端"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:482
 msgid "Arrow at target"
-msgstr ""
+msgstr "箭頭位於目標端"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:390
 msgid "Ask about this note, or request a change…"
-msgstr ""
+msgstr "詢問這則筆記的內容，或要求修改…"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:363
 msgid ""
 "Ask about this note, or request changes. Select text in the editor first to "
 "scope the request to that selection."
-msgstr ""
+msgstr "詢問這則筆記的內容，或要求修改。先在編輯器中選取文字，即可將要求限定在選取範圍內。"
 
 #: packages/app-mobile/components/TagEditor.tsx:188
 msgid "Associated tags:"
@@ -973,9 +946,8 @@ msgid "Attachment download behaviour"
 msgstr "附件下載動作"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:367
-#, fuzzy
 msgid "Attachment: %s. Size: %s"
-msgstr "附件衝突：「%s」"
+msgstr "附件：%s。大小：%s"
 
 #: packages/lib/services/ReportService.ts:313
 msgid "Attachments"
@@ -991,7 +963,7 @@ msgid ""
 "decrypt any data encrypted with your current password. All encrypted shared "
 "notebooks will also be unshared, so please ask the notebook owner to share "
 "it again with you."
-msgstr ""
+msgstr "注意：重設密碼後，將無法再解密任何以目前密碼加密的資料。所有加密的共享記事本也會取消共享，請聯絡記事本擁有者重新與您分享。"
 
 #: packages/lib/models/settings/builtInMetadata.ts:68
 msgid ""
@@ -1010,9 +982,8 @@ msgid ""
 msgstr "尚未完成驗證 (未收到身份驗證的令牌)。"
 
 #: packages/server/src/routes/index/applications.ts:32
-#, fuzzy
 msgid "Authorisation required"
-msgstr "授權令牌："
+msgstr "需要授權"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:159
 msgid "Authorisation token:"
@@ -1030,7 +1001,7 @@ msgstr "自動"
 
 #: packages/lib/models/settings/builtInMetadata.ts:2312
 msgid "Auto lock when switching note"
-msgstr ""
+msgstr "切換筆記時自動鎖定"
 
 #: packages/server/src/services/TaskService.ts:31
 msgid "Auto-add disabled accounts for deletion"
@@ -1061,9 +1032,8 @@ msgid "Automatically switch theme to match system theme"
 msgstr "自動切換以配合系統主題"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:411
-#, fuzzy
 msgid "Available"
-msgstr "可用更新"
+msgstr "可用"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:50
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:621
@@ -1077,11 +1047,11 @@ msgstr "返回"
 
 #: packages/lib/utils/joplinCloud/index.ts:449
 msgid "Back to %s"
-msgstr ""
+msgstr "返回 %s"
 
 #: packages/lib/models/settings/builtInMetadata.ts:725
 msgid "Base URL"
-msgstr ""
+msgstr "基礎 URL"
 
 #: packages/lib/utils/joplinCloud/index.ts:614
 msgid "Basic"
@@ -1092,13 +1062,12 @@ msgid "Beta"
 msgstr "測試"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:484
-#, fuzzy
 msgid "Bidirectional"
-msgstr "隱藏更多操作"
+msgstr "雙向"
 
 #: packages/lib/utils/joplinCloud/index.ts:604
 msgid "Billed annually (%s per user per year respectively)."
-msgstr ""
+msgstr "按年計費（分別為每位使用者每年 %s）。"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:122
 msgid "Block code"
@@ -1130,7 +1099,7 @@ msgstr "項目清單"
 
 #: packages/app-desktop/gui/AiDegradedNotice.tsx:20
 msgid "buy more credits"
-msgstr ""
+msgstr "購買更多點數"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:127
 msgid "by %s"
@@ -1222,24 +1191,22 @@ msgid "Cannot access %s"
 msgstr "無法存取 %s"
 
 #: packages/app-cli/app/base-command.ts:25
-#, fuzzy
 msgid "Cannot change a locked note"
-msgstr "無法更改已加密項目"
+msgstr "無法變更已鎖定的筆記"
 
 #: packages/app-desktop/gui/NoteListItem/NoteListItem.tsx:71
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:76
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleNoteType.ts:18
 msgid "Cannot change a locked note while the session is locked"
-msgstr ""
+msgstr "工作階段鎖定期間無法變更已鎖定的筆記"
 
 #: packages/app-cli/app/base-command.ts:24
 msgid "Cannot change encrypted item"
 msgstr "無法更改已加密項目"
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:39
-#, fuzzy
 msgid "Cannot convert locked note: \"%s\""
-msgstr "無法轉換唯讀項目：「%s」"
+msgstr "無法轉換已鎖定的筆記：「%s」"
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:51
 msgid "Cannot convert read-only item: \"%s\""
@@ -1254,9 +1221,8 @@ msgid "Cannot create a new note: %s"
 msgstr "無法建立新筆記：%s"
 
 #: packages/app-cli/app/command-cat.ts:28
-#, fuzzy
 msgid "Cannot display a locked note"
-msgstr "無法建立新筆記：%s"
+msgstr "無法顯示已鎖定的筆記"
 
 #: packages/app-cli/app/app.ts:81 packages/app-cli/app/command-attach.ts:21
 #: packages/app-cli/app/command-cat.ts:27 packages/app-cli/app/command-cp.ts:24
@@ -1328,9 +1294,8 @@ msgid ""
 msgstr "無法儲存 %s 「%s」，因為此舉將會超出當前帳號可使用的儲存空間 (%s)"
 
 #: packages/app-mobile/root.tsx:636
-#, fuzzy
 msgid "Cannot share"
-msgstr "可以分享"
+msgstr "無法分享"
 
 #: packages/lib/services/share/ShareService.ts:423
 msgid ""
@@ -1350,7 +1315,7 @@ msgid ""
 "Certain Markdown formatting is now rendered in the editor by default. For "
 "example, **bold** will appear as actual bold text. You can change this "
 "behaviour in the \"Editor\" section of Settings."
-msgstr ""
+msgstr "部分 Markdown 格式現在預設會直接在編輯器中呈現。例如 **粗體** 會顯示為實際的粗體文字。您可以在設定的「編輯器」區段中變更此行為。"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleLayoutMoveMode.ts:7
 msgid "Change application layout"
@@ -1361,15 +1326,13 @@ msgid "Change language"
 msgstr "更換語言"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:211
-#, fuzzy
 msgid "Change master password"
-msgstr "管理主密碼"
+msgstr "變更主密碼"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:130
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:140
-#, fuzzy
 msgid "Change note lock password"
-msgstr "管理主密碼"
+msgstr "變更筆記鎖定密碼"
 
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:124
 msgid "Change ratio"
@@ -1388,13 +1351,12 @@ msgid "Characters excluding spaces"
 msgstr "不含空格的字元"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:391
-#, fuzzy
 msgid "Chat message"
-msgstr "延伸模組訊息"
+msgstr "對話訊息"
 
 #: packages/lib/models/settings/builtInMetadata.ts:687
 msgid "Chat provider"
-msgstr ""
+msgstr "對話供應商"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:207
 msgid "Check"
@@ -1405,9 +1367,8 @@ msgid "Check elements to display in the toolbar"
 msgstr "檢查在工作列上顯示的元素"
 
 #: packages/app-desktop/gui/MainScreen.tsx:653
-#, fuzzy
 msgid "Check for updates"
-msgstr "檢查更新..."
+msgstr "檢查更新"
 
 #: packages/app-desktop/gui/MenuBar.tsx:598
 #: packages/app-desktop/gui/MenuBar.tsx:923
@@ -1424,9 +1385,8 @@ msgid "Checkbox"
 msgstr "核取方塊"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:5
-#, fuzzy
 msgid "Checkbox completion"
-msgstr "核取方塊清單"
+msgstr "核取方塊完成度"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2148
 msgid "Checkbox list"
@@ -1472,7 +1432,7 @@ msgstr "清除搜尋"
 
 #: packages/app-cli/app/command-clear.ts:11
 msgid "Clears the console output."
-msgstr ""
+msgstr "清除主控台輸出。"
 
 #: packages/lib/components/shared/NoteRevisionViewer/getHelpMessage.ts:5
 msgid ""
@@ -1490,7 +1450,7 @@ msgstr "按「開始」來附上新的錄音到此筆記。"
 msgid ""
 "Click the eye icon in the toolbar to switch to the Markdown editor and fix "
 "the JSON manually."
-msgstr ""
+msgstr "點選工具列中的眼睛圖示切換到 Markdown 編輯器，手動修正 JSON。"
 
 #: packages/app-desktop/gui/NoteEditor/StatusBar.tsx:79
 msgid "Click to add tags..."
@@ -1696,7 +1656,7 @@ msgstr "確認"
 
 #: packages/server/src/routes/index/recovery_codes.ts:28
 msgid "Confirm credentials"
-msgstr ""
+msgstr "確認認證資訊"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:163
 msgid "Confirm password cannot be empty"
@@ -1758,9 +1718,8 @@ msgid "Continue"
 msgstr "繼續"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:51
-#, fuzzy
 msgid "Continue?"
-msgstr "繼續"
+msgstr "要繼續嗎？"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:6
 msgid "Control character"
@@ -1772,7 +1731,7 @@ msgstr "轉換"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/TextNode.tsx:149
 msgid "Convert this card into a Joplin note"
-msgstr ""
+msgstr "將此卡片轉換為 Joplin 筆記"
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:21
 msgid "Convert to Markdown"
@@ -1791,9 +1750,8 @@ msgid "Converting speech to text..."
 msgstr "將語音轉換為文字..."
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:378
-#, fuzzy
 msgid "Copies a Markdown link to this attachment"
-msgstr "下載此附件時出現錯誤："
+msgstr "複製此附件的 Markdown 連結"
 
 #: packages/app-desktop/gui/MenuBar.tsx:565
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:52
@@ -1941,7 +1899,7 @@ msgstr "新增一本筆記簿"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:215
 msgid "Create accessible document"
-msgstr ""
+msgstr "建立無障礙文件"
 
 #: packages/app-mobile/components/FolderPicker.tsx:112
 msgid "Create new notebook"
@@ -1965,9 +1923,8 @@ msgid "Create user"
 msgstr "新增使用者"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newWhiteboard.ts:8
-#, fuzzy
 msgid "Create whiteboard"
-msgstr "新增記事本"
+msgstr "建立白板"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:15
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:77
@@ -1987,14 +1944,12 @@ msgid "Created locally"
 msgstr "已建立的本地項目"
 
 #: packages/lib/services/ai/tools/global/createNote.ts:16
-#, fuzzy
 msgid "Created note: %s"
-msgstr "新增筆記"
+msgstr "已建立筆記：%s"
 
 #: packages/lib/services/ai/tools/global/createNotebook.ts:13
-#, fuzzy
 msgid "Created notebook: %s"
-msgstr "新增記事本"
+msgstr "已建立記事本：%s"
 
 #: packages/lib/Synchronizer.ts:220
 msgid "Created remote items: %d."
@@ -2151,7 +2106,7 @@ msgstr "由掃描器自動建立檔案的預設標題。"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1681
 msgid "Default view / edit state"
-msgstr ""
+msgstr "預設檢視／編輯狀態"
 
 #: packages/app-cli/app/help-utils.ts:76
 msgid "Default: %s"
@@ -2175,9 +2130,8 @@ msgid "Delete"
 msgstr "刪除"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:389
-#, fuzzy
 msgid "Delete attachment"
-msgstr "刪除此附件「%s」？"
+msgstr "刪除附件"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:235
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:264
@@ -2248,9 +2202,8 @@ msgid "Delete selected notes"
 msgstr "刪除選定的筆記"
 
 #: packages/app-mobile/components/screens/tags.tsx:175
-#, fuzzy
 msgid "Delete tag \"%s\"?"
-msgstr "刪除延伸模組「%s」？"
+msgstr "要刪除標籤「%s」嗎？"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:38
 #: packages/app-mobile/components/side-menu-content.tsx:431
@@ -2284,9 +2237,8 @@ msgid "Deleted local items: %d."
 msgstr "已刪除的本地項目：%d 項。"
 
 #: packages/lib/services/ai/tools/global/deleteNote.ts:12
-#, fuzzy
 msgid "Deleted note"
-msgstr "刪除筆記"
+msgstr "已刪除筆記"
 
 #: packages/lib/Synchronizer.ts:223
 msgid "Deleted remote items: %d."
@@ -2313,9 +2265,8 @@ msgid "Deletes the notes without asking for confirmation."
 msgstr "刪除筆記時不要求確認。"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:390
-#, fuzzy
 msgid "Deletes this attachment"
-msgstr "刪除此附件「%s」？"
+msgstr "刪除此附件"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:580
 msgid "Deletion log"
@@ -2355,9 +2306,8 @@ msgid "Disable"
 msgstr "停用"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:175
-#, fuzzy
 msgid "Disable %s"
-msgstr "停用"
+msgstr "停用 %s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:409
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:427
@@ -2367,7 +2317,6 @@ msgid "Disable encryption"
 msgstr "停用加密"
 
 #: packages/lib/components/shared/NoteEditor/WarningBanner/useEditorTypeMigrationBanner.ts:24
-#, fuzzy
 msgid "Disable it"
 msgstr "停用"
 
@@ -2508,12 +2457,11 @@ msgstr "不允許共享的用戶編輯共享筆記簿。僅在「add」命令下
 
 #: packages/app-desktop/gui/JoplinCloudSignUpCallToAction.tsx:31
 msgid "Don't have an account yet?"
-msgstr ""
+msgstr "還沒有帳號嗎？"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:381
-#, fuzzy
 msgid "Don't show again"
-msgstr "不要再顯示此訊息"
+msgstr "不再顯示"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:811
 msgid "Don't show this message again"
@@ -2535,7 +2483,7 @@ msgstr "完成"
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:368
 msgid ""
 "Double tap to open this attachment. Long press to expand or collapse details."
-msgstr ""
+msgstr "點兩下以開啟此附件，長按可展開或收合詳細資訊。"
 
 #: packages/app-desktop/checkForUpdates.ts:116
 msgid "Download"
@@ -2548,11 +2496,11 @@ msgstr "下載並安裝瀏覽器延伸模組："
 #: packages/app-desktop/gui/MainScreen.tsx:641
 #: packages/app-desktop/gui/MainScreen.tsx:653
 msgid "Download it from GitHub Releases"
-msgstr ""
+msgstr "從 GitHub Releases 下載"
 
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:84
 msgid "Download it from the Joplin Android repository"
-msgstr ""
+msgstr "從 Joplin Android 儲存庫下載"
 
 #: packages/app-desktop/gui/MainScreen.tsx:669
 msgid "Download it now"
@@ -2584,9 +2532,8 @@ msgid "Downloading resources..."
 msgstr "正在下載資源檔案..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:14
-#, fuzzy
 msgid "Downloading…"
-msgstr "正在下載資源檔案"
+msgstr "正在下載…"
 
 #: packages/lib/models/settings/builtInMetadata.ts:78
 msgid "Dracula"
@@ -2594,7 +2541,7 @@ msgstr "德古拉紫"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/GroupNode.tsx:71
 msgid "Drag to move group"
-msgstr ""
+msgstr "拖曳以移動群組"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1355
 msgid "Draw picture"
@@ -2679,9 +2626,8 @@ msgid "Edit link"
 msgstr "編輯連結"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1685
-#, fuzzy
 msgid "Edit mode"
-msgstr "編輯筆記。"
+msgstr "編輯模式"
 
 #: packages/app-cli/app/command-edit.ts:17
 msgid "Edit note."
@@ -2705,9 +2651,8 @@ msgid "Edit tag"
 msgstr "編輯標籤"
 
 #: packages/app-mobile/components/screens/Note/commands/toggleVisiblePanes.ts:25
-#, fuzzy
 msgid "Editing"
-msgstr "編輯連結"
+msgstr "編輯中"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:153
 #: packages/app-desktop/utils/layout/layoutKeyToLabel.ts:8
@@ -2783,7 +2728,7 @@ msgstr "電子郵件"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:58
 msgid "Embedding index"
-msgstr ""
+msgstr "嵌入索引"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:194
 msgid "emphasised text"
@@ -2803,9 +2748,8 @@ msgid "Enable"
 msgstr "啟用"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:175
-#, fuzzy
 msgid "Enable %s"
-msgstr "啟用"
+msgstr "啟用 %s"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1502
 msgid "Enable ^sup^ syntax"
@@ -2832,9 +2776,8 @@ msgid "Enable ABC musical notation support"
 msgstr "啟用 ABC 記譜法"
 
 #: packages/lib/models/settings/builtInMetadata.ts:651
-#, fuzzy
 msgid "Enable AI features"
-msgstr "啟用軟中斷（soft breaks）"
+msgstr "啟用 AI 功能"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1495
 msgid "Enable audio player"
@@ -2857,7 +2800,7 @@ msgstr "啟用加密"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1508
 msgid "Enable external embeds (e.g. YouTube Videos)"
-msgstr ""
+msgstr "啟用外部嵌入內容（例如 YouTube 影片）"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1519
 msgid "Enable file:// URLs for images and videos"
@@ -2892,9 +2835,8 @@ msgid "Enable math expressions"
 msgstr "啟用數學表達式"
 
 #: packages/lib/models/settings/builtInMetadata.ts:662
-#, fuzzy
 msgid "Enable MCP server"
-msgstr "啟用 PDF 查看器"
+msgstr "啟用 MCP 伺服器"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1492
 msgid "Enable Mermaid diagrams support"
@@ -2979,7 +2921,7 @@ msgid ""
 "Enables the default edit operations for notes with an open AI chat panel. "
 "When disabled, the chat panel can still read the open note. Does not apply "
 "to MCP."
-msgstr ""
+msgstr "為開啟 AI 對話面板的筆記啟用預設的編輯操作。停用時，對話面板仍可讀取開啟中的筆記。不適用於 MCP。"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:52
 msgid ""
@@ -3001,7 +2943,7 @@ msgstr "無法修改已加密項目"
 msgid ""
 "Encrypting a note requires a note lock password, which has not yet been set. "
 "Set it up now?"
-msgstr ""
+msgstr "加密筆記需要筆記鎖定密碼，但目前尚未設定。要現在設定嗎？"
 
 #: packages/lib/models/Setting.ts:1366
 msgid "Encryption"
@@ -3026,7 +2968,7 @@ msgstr "加密密鑰"
 msgid ""
 "Encryption was setup previously, but all keys have been disabled. To "
 "continue, please use the desktop app to enable a key."
-msgstr ""
+msgstr "先前已設定加密，但所有金鑰都已停用。若要繼續，請使用桌面版應用程式啟用一組金鑰。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:438
 msgid "Encryption:"
@@ -3050,9 +2992,8 @@ msgid "Enter master password:"
 msgstr "輸入主密碼："
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:175
-#, fuzzy
 msgid "Enter new password"
-msgstr "輸入密碼"
+msgstr "輸入新密碼"
 
 #: packages/app-mobile/components/screens/folder.tsx:115
 msgid "Enter notebook title"
@@ -3074,7 +3015,7 @@ msgstr "請在此輸入驗證碼："
 #: packages/app-desktop/gui/NoteLockUnlockDialog/Dialog.tsx:68
 msgid ""
 "Enter the note lock password to unlock encrypted notes for this session."
-msgstr ""
+msgstr "輸入筆記鎖定密碼，以在本次工作階段中解鎖加密的筆記。"
 
 #: packages/app-mobile/components/NoteItem.tsx:156
 msgid "Entering selection mode"
@@ -3122,7 +3063,7 @@ msgstr ""
 
 #: packages/lib/components/shared/config/config-shared.ts:154
 msgid "Error. The AI provider test failed:"
-msgstr ""
+msgstr "錯誤。AI 供應商測試失敗："
 
 #: packages/app-mobile/components/screens/LogScreen.tsx:237
 msgid "Errors only"
@@ -3236,7 +3177,7 @@ msgid ""
 "etc.) via the Model Context Protocol. Requires the Web Clipper service to be "
 "running. Connected AI tools can read your note content; any text they "
 "retrieve may be sent to the external LLM provider those tools use."
-msgstr ""
+msgstr "透過 Model Context Protocol 將 Joplin 筆記開放給外部 AI 應用程式（Claude Desktop、Cursor 等）使用。需要執行網頁剪輯服務。已連接的 AI 工具可以讀取您的筆記內容，它們取得的任何文字都可能被傳送到這些工具所使用的外部 LLM 供應商。"
 
 #: packages/lib/models/settings/builtInMetadata.ts:2115
 msgid "Fail-safe"
@@ -3266,7 +3207,7 @@ msgstr "無法連結到你的賬户，請重試。"
 
 #: packages/app-desktop/commands/createAccessibleDocument.ts:75
 msgid "Failed to create accessible document: %s"
-msgstr ""
+msgstr "建立無障礙文件失敗：%s"
 
 #: packages/app-cli/app/main.js:107
 msgid "Fatal error:"
@@ -3304,7 +3245,7 @@ msgstr "篩選"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:556
 msgid "Filtered by section [%s]"
-msgstr ""
+msgstr "依區段篩選 [%s]"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:14
 msgid "Find"
@@ -3332,7 +3273,7 @@ msgstr "正在修正搜尋索引..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:486
 msgid "Flip"
-msgstr ""
+msgstr "翻轉"
 
 #: packages/app-desktop/gui/MenuBar.tsx:850
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.ts:9
@@ -3390,9 +3331,8 @@ msgid "Force path style"
 msgstr "使用路徑樣式存取 (Force path style)"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:147
-#, fuzzy
 msgid "Forgot password?"
-msgstr "顯示密碼"
+msgstr "忘記密碼？"
 
 #: packages/lib/commands/historyForward.ts:6
 msgid "Forward"
@@ -3430,9 +3370,8 @@ msgid_plural "Generating links..."
 msgstr[0] "正在建立連結..."
 
 #: packages/lib/models/Setting.ts:1411
-#, fuzzy
 msgid "Geolocation, image resize"
-msgstr "地理位置、拼字檢查、編輯器工具列、圖片大小調整"
+msgstr "地理位置、圖片大小調整"
 
 #: packages/lib/utils/joplinCloud/index.ts:727
 msgid "Get a quote"
@@ -3457,7 +3396,7 @@ msgstr ""
 
 #: packages/lib/models/settings/builtInMetadata.ts:1557
 msgid "Global shortcut to show/hide Joplin"
-msgstr ""
+msgstr "顯示／隱藏 Joplin 的全域快速鍵"
 
 #: packages/app-mobile/services/voiceTyping/whisper.ts:188
 msgid "Glossary:"
@@ -3473,7 +3412,7 @@ msgstr "返回"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:177
 msgid "Go to end of note"
-msgstr ""
+msgstr "跳至筆記結尾"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:44
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:59
@@ -3490,7 +3429,7 @@ msgstr "前往來源網址"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:172
 msgid "Go to start of note"
-msgstr ""
+msgstr "跳至筆記開頭"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/gotoAnything.ts:19
 #: packages/app-desktop/plugins/GotoAnything.tsx:790
@@ -3504,7 +3443,7 @@ msgstr "授權"
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/GroupNode.tsx:85
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/GroupNode.tsx:86
 msgid "Group"
-msgstr ""
+msgstr "群組"
 
 #: packages/app-cli/app/command-sync.ts:114
 msgid "Have you authorised the application login in the above URL?"
@@ -3627,7 +3566,7 @@ msgstr ""
 msgid ""
 "If enabled, opening an HTML note displays a prompt to convert the note to "
 "Markdown."
-msgstr ""
+msgstr "啟用後，開啟 HTML 筆記時會提示是否將筆記轉換為 Markdown。"
 
 #: packages/lib/services/joplinCloudUtils.ts:39
 msgid ""
@@ -3665,34 +3604,29 @@ msgstr "匯入"
 msgid ""
 "Import a note from a text file (%s). The note will be imported into notebook "
 "'%s'."
-msgstr ""
+msgstr "從文字檔（%s）匯入筆記。筆記將匯入記事本「%s」。"
 
 #: packages/lib/models/Setting.ts:1372
 msgid "Import and Export"
 msgstr "匯入與匯出"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.ts:114
-#, fuzzy
 msgid "Import anyway"
-msgstr "匯入"
+msgstr "仍要匯入"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:105
-#, fuzzy
 msgid ""
 "Import failed. Make sure a %s file was selected.\n"
 "Details: %s"
-msgstr ""
-"匯入失敗。請確保選擇了 JEX 文件。\n"
-"詳細：%s"
+msgstr "匯入失敗。請確認選擇的是 %s 檔案。\n詳細資訊：%s"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:593
 msgid "Import from JEX"
 msgstr "匯入JEX檔"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:599
-#, fuzzy
 msgid "Import from text file"
-msgstr "匯入JEX檔"
+msgstr "從文字檔匯入"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:594
 msgid "Import notes from a JEX (Joplin Export) file."
@@ -3707,9 +3641,8 @@ msgid "Import..."
 msgstr "匯入..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:28
-#, fuzzy
 msgid "Imported Notes"
-msgstr "已恢復的筆記"
+msgstr "已匯入的筆記"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:114
 msgid "Imported successfully!"
@@ -3778,30 +3711,26 @@ msgstr ""
 "重要提示：您只需要在一台設備上執行此操作一次。"
 
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:104
-#, fuzzy
 msgid "In order to synchronise, Please upgrade your application to version %s"
-msgstr "為了同步，請升級您的應用程式版本到 %s 以上"
+msgstr "若要同步，請將應用程式升級至 %s 版"
 
 #: packages/app-desktop/gui/MainScreen.tsx:655
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:74
-#, fuzzy
 msgid ""
 "In order to synchronise, Please upgrade your application to version %s: %s"
-msgstr "為了同步，請升級您的應用程式版本到 %s 以上"
+msgstr "若要同步，請將應用程式升級至 %s 版：%s"
 
 #: packages/app-desktop/gui/MainScreen.tsx:643
-#, fuzzy
 msgid ""
 "In order to synchronise, Please upgrade your application to version %s: %s "
 "or update it using your package manager"
-msgstr "為了同步，請升級您的應用程式版本到 %s 以上"
+msgstr "若要同步，請將應用程式升級至 %s 版：%s，或使用您的套件管理員更新"
 
 #: packages/app-desktop/gui/MainScreen.tsx:635
-#, fuzzy
 msgid ""
 "In order to synchronise, Please upgrade your application to version %s. "
 "Joplin could not check update information."
-msgstr "為了同步，請升級您的應用程式版本到 %s 以上"
+msgstr "若要同步，請將應用程式升級至 %s 版。Joplin 無法檢查更新資訊。"
 
 #: packages/lib/services/synchronizer/syncInfoUtils.ts:617
 msgid "In order to synchronise, please upgrade your application to version %s+"
@@ -3856,25 +3785,23 @@ msgstr "增加縮排"
 
 #: packages/lib/models/settings/builtInMetadata.ts:835
 msgid "Index notes for AI search"
-msgstr ""
+msgstr "為 AI 搜尋建立筆記索引"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:64
-#, fuzzy
 msgid "Indexed notes:"
-msgstr "減少縮排"
+msgstr "已建立索引的筆記："
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:62
 msgid "Indexer:"
-msgstr ""
+msgstr "索引器："
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:25
-#, fuzzy
 msgid "Indexing is disabled"
-msgstr "隱藏已停用"
+msgstr "索引已停用"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:23
 msgid "Indexing…"
-msgstr ""
+msgstr "正在建立索引…"
 
 #: packages/app-desktop/gui/PopupNotification/NotificationItem.tsx:22
 #: packages/app-mobile/components/DialogManager/hooks/useDialogControl.ts:21
@@ -3895,14 +3822,13 @@ msgstr "底線"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:33
 #: packages/editor/CodeMirror/extensions/rendering/renderTables.ts:713
-#, fuzzy
 msgid "Insert column left"
-msgstr "插入時間"
+msgstr "在左側插入欄"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:34
 #: packages/editor/CodeMirror/extensions/rendering/renderTables.ts:714
 msgid "Insert column right"
-msgstr ""
+msgstr "在右側插入欄"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:196
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/useEditorCommands.ts:84
@@ -3912,17 +3838,16 @@ msgstr "插入超連結"
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:31
 #: packages/editor/CodeMirror/extensions/rendering/renderTables.ts:711
 msgid "Insert row above"
-msgstr ""
+msgstr "在上方插入列"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:32
 #: packages/editor/CodeMirror/extensions/rendering/renderTables.ts:712
 msgid "Insert row below"
-msgstr ""
+msgstr "在下方插入列"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:188
-#, fuzzy
 msgid "Insert table"
-msgstr "插入時間"
+msgstr "插入表格"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:122
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:881
@@ -3992,12 +3917,11 @@ msgstr "無效的密碼"
 msgid ""
 "Invalid password. Please try again. If you have forgotten your password you "
 "will need to reset it."
-msgstr ""
+msgstr "密碼無效，請再試一次。如果忘記密碼，您需要重設密碼。"
 
 #: packages/lib/services/plugins/PluginService.ts:600
-#, fuzzy
 msgid "Invalid plugin manifest: %s"
-msgstr "無效的答案：%s"
+msgstr "無效的延伸模組資訊清單：%s"
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:24
 msgid "iOS version: %s"
@@ -4013,13 +3937,12 @@ msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "項目「%s」無法下載：%s"
 
 #: packages/server/src/middleware/notificationHandler.ts:91
-#, fuzzy
 msgid "Item upload has been disabled."
-msgstr "筆記已儲存完畢。"
+msgstr "項目上傳已停用。"
 
 #: packages/server/src/middleware/notificationHandler.ts:69
 msgid "Item upload will be disabled in %s."
-msgstr ""
+msgstr "項目上傳將在 %s 後停用。"
 
 #: packages/server/src/services/MustacheService.ts:161
 #: packages/server/src/services/MustacheService.ts:284
@@ -4055,16 +3978,15 @@ msgstr "Joplin Cloud"
 
 #: packages/lib/models/settings/builtInMetadata.ts:699
 #: packages/lib/utils/joplinCloud/index.ts:345
-#, fuzzy
 msgid "Joplin Cloud AI (beta)"
-msgstr "Joplin Cloud 信箱"
+msgstr "Joplin Cloud AI（測試版）"
 
 #: packages/lib/models/settings/builtInMetadata.ts:694
 #: packages/lib/services/ai/availability.ts:44
 msgid ""
 "Joplin Cloud AI requires Joplin Cloud sync. Pick a different provider or "
 "restore Joplin Cloud sync."
-msgstr ""
+msgstr "Joplin Cloud AI 需要使用 Joplin Cloud 同步。請選擇其他供應商，或恢復 Joplin Cloud 同步。"
 
 #: packages/app-desktop/gui/Root.tsx:165
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:149
@@ -4116,7 +4038,7 @@ msgstr "Joplin 行動版"
 msgid ""
 "Joplin needs your permission to access your %s account and to synchronise "
 "data with it."
-msgstr ""
+msgstr "Joplin 需要您的授權，才能存取您的 %s 帳號並與其同步資料。"
 
 #: packages/lib/SyncTargetJoplinServer.ts:64
 msgid "Joplin Server"
@@ -4161,9 +4083,8 @@ msgstr ""
 "用。"
 
 #: packages/lib/utils/joplinCloud/index.ts:309
-#, fuzzy
 msgid "Joplin Web App"
-msgstr "Joplin 桌面"
+msgstr "Joplin 網頁版"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:139
 msgid ""
@@ -4185,9 +4106,8 @@ msgstr ""
 "事本上協作。"
 
 #: packages/lib/components/shared/NoteEditor/WarningBanner/useEditorTypeMigrationBanner.ts:33
-#, fuzzy
 msgid "Keep it enabled"
-msgstr "Hermes 已啟用：%d"
+msgstr "保持啟用"
 
 #: packages/lib/models/settings/builtInMetadata.ts:2156
 msgid "Keep note history for"
@@ -4198,9 +4118,8 @@ msgid "Keep notes in the trash for"
 msgstr "將筆記保留在垃圾桶中"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:210
-#, fuzzy
 msgid "Key upgrade"
-msgstr "升級"
+msgstr "金鑰升級"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1909
 msgid "Keyboard Mode"
@@ -4252,9 +4171,8 @@ msgid "Last error: %s"
 msgstr "上次錯誤: %s"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1686
-#, fuzzy
 msgid "Last used"
-msgstr "新增使用者"
+msgstr "上次使用"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:439
 msgid "Later"
@@ -4337,9 +4255,8 @@ msgid "Link text"
 msgstr "連結文字"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:830
-#, fuzzy
 msgid "Link to note"
-msgstr "連結到筆記..."
+msgstr "連結到筆記"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/linkToNote.ts:13
 msgid "Link to note..."
@@ -4347,9 +4264,8 @@ msgstr "連結到筆記..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/FileNode.tsx:201
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/FileNode.tsx:209
-#, fuzzy
 msgid "Linked item"
-msgstr "清單項目"
+msgstr "已連結的項目"
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:179
 msgid "Links"
@@ -4374,18 +4290,16 @@ msgid "Loading..."
 msgstr "載入中..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/FileNode.tsx:210
-#, fuzzy
 msgid "Loading…"
-msgstr "載入中..."
+msgstr "載入中…"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:81
 msgid "Location"
 msgstr "地理位置"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/lockEncryptedNotes.ts:8
-#, fuzzy
 msgid "Lock encrypted notes"
-msgstr "無法更改已加密項目"
+msgstr "鎖定加密的筆記"
 
 #: packages/app-cli/app/command-sync.ts:152
 msgid ""
@@ -4396,20 +4310,19 @@ msgstr ""
 "鎖定中。如果您確知目前並非正在同步，可刪除在「%s」上的鎖定檔並繼續操作。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteLockPanel/NoteLockPanel.tsx:83
-#, fuzzy
 msgid "Locked note"
-msgstr "新增筆記"
+msgstr "已鎖定的筆記"
 
 #: packages/lib/models/Setting.ts:1390
 msgid ""
 "Locked notes are encrypted on this device and can only be read after "
 "entering your note lock password. The password is required again after "
 "locking or restarting Joplin."
-msgstr ""
+msgstr "已鎖定的筆記會在此裝置上加密，輸入筆記鎖定密碼後才能閱讀。鎖定或重新啟動 Joplin 後需要再次輸入密碼。"
 
 #: packages/app-desktop/commands/startExternalEditing.ts:24
 msgid "Locked notes cannot be opened in an external editor"
-msgstr ""
+msgstr "已鎖定的筆記無法使用外部編輯器開啟"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:579
 #: packages/app-mobile/components/screens/LogScreen.tsx:214
@@ -4453,9 +4366,8 @@ msgid "Make a donation"
 msgstr "捐助"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:370
-#, fuzzy
 msgid "Manage capabilities"
-msgstr "管理設定檔"
+msgstr "管理功能權限"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:238
 msgid "Manage master password"
@@ -4470,9 +4382,8 @@ msgid "Manage multiple users"
 msgstr "管理多個使用者"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:131
-#, fuzzy
 msgid "Manage password"
-msgstr "管理主密碼"
+msgstr "管理密碼"
 
 #: packages/app-desktop/commands/showProfileEditor.ts:6
 #: packages/app-desktop/gui/Root.tsx:170
@@ -4486,7 +4397,7 @@ msgstr "管理分享記事本"
 
 #: packages/server/src/middleware/notificationHandler.ts:116
 msgid "Manage this server's license from the [admin dashboard](%s)."
-msgstr ""
+msgstr "請在[管理員儀表板](%s)管理此伺服器的授權。"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:384
 msgid "Manage toolbar options"
@@ -4539,9 +4450,8 @@ msgid "Markdown editor: Highlight active line"
 msgstr "Markdown 編輯器：高亮正在編輯的一行"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1947
-#, fuzzy
 msgid "Markdown editor: Interactive table editing"
-msgstr "Markdown 編輯器：高亮正在編輯的一行"
+msgstr "Markdown 編輯器：互動式表格編輯"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1957
 msgid "Markdown editor: Render images"
@@ -4574,9 +4484,8 @@ msgid "Master password"
 msgstr "主密碼"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:230
-#, fuzzy
 msgid "Master password status:"
-msgstr "主密碼："
+msgstr "主密碼狀態："
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:475
 #: packages/app-mobile/components/screens/encryption-config.tsx:261
@@ -4610,7 +4519,7 @@ msgstr "最大總大小"
 #: packages/lib/services/ai/availability.ts:87
 msgid ""
 "MCP requires the Web Clipper service. Enable it in Settings → Web Clipper."
-msgstr ""
+msgstr "MCP 需要網頁剪輯服務，請在「設定 → 網頁剪輯」中啟用。"
 
 #: packages/lib/models/Setting.ts:1410
 msgid "Media player, math, diagrams, table of contents"
@@ -4654,11 +4563,11 @@ msgstr "行動網路 - 停用自動同步"
 
 #: packages/lib/models/settings/builtInMetadata.ts:749
 msgid "Model"
-msgstr ""
+msgstr "模型"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:60
 msgid "Model:"
-msgstr ""
+msgstr "模型："
 
 #: packages/app-desktop/gui/MainScreen.tsx:604
 msgid "More info"
@@ -4694,26 +4603,22 @@ msgstr ""
 "此記事本中的所有筆記和子記事本也將移動到垃圾桶。"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:259
-#, fuzzy
 msgid "Move %s down"
-msgstr "下移"
+msgstr "將 %s 下移"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:250
-#, fuzzy
 msgid "Move %s up"
-msgstr "上移"
+msgstr "將 %s 上移"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:37
 #: packages/editor/CodeMirror/extensions/rendering/renderTables.ts:720
-#, fuzzy
 msgid "Move column left"
-msgstr "左移"
+msgstr "欄左移"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:38
 #: packages/editor/CodeMirror/extensions/rendering/renderTables.ts:721
-#, fuzzy
 msgid "Move column right"
-msgstr "右移"
+msgstr "欄右移"
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:73
 msgid "Move down"
@@ -4742,15 +4647,13 @@ msgstr "右移"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:36
 #: packages/editor/CodeMirror/extensions/rendering/renderTables.ts:719
-#, fuzzy
 msgid "Move row down"
-msgstr "下移"
+msgstr "列下移"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:35
 #: packages/editor/CodeMirror/extensions/rendering/renderTables.ts:718
-#, fuzzy
 msgid "Move row up"
-msgstr "上移"
+msgstr "列上移"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.ts:16
 msgid "Move to notebook"
@@ -4794,9 +4697,8 @@ msgid "New drawing"
 msgstr "新繪畫"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:260
-#, fuzzy
 msgid "New group"
-msgstr "新設定檔"
+msgstr "新增群組"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:120
 msgid "New invitations"
@@ -4838,9 +4740,8 @@ msgid "New notebook title"
 msgstr "新記事本標題"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:170
-#, fuzzy
 msgid "New password"
-msgstr "顯示密碼"
+msgstr "新密碼"
 
 #: packages/app-mobile/setupQuickActions.ts:32
 msgid "New photo"
@@ -4856,7 +4757,7 @@ msgstr "新增子記事本"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:241
 msgid "New text card"
-msgstr ""
+msgstr "新增文字卡片"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:125
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:72
@@ -4919,37 +4820,34 @@ msgstr "無使用中的記事本。"
 
 #: packages/lib/models/settings/builtInMetadata.ts:798
 msgid "No AI usage recorded yet."
-msgstr ""
+msgstr "目前尚無 AI 用量紀錄。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:481
 msgid "No arrow"
-msgstr ""
+msgstr "無箭頭"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:332
-#, fuzzy
 msgid "No attachments match your search."
-msgstr "以下附件符合您的查詢："
+msgstr "沒有符合搜尋條件的附件。"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:333
-#, fuzzy
 msgid "No attachments!"
-msgstr "筆記附件"
+msgstr "沒有附件！"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:355
 msgid "No colour"
-msgstr ""
+msgstr "無顏色"
 
 #: packages/lib/services/ai/availability.ts:74
 msgid ""
 "No embedding model is installed. It is downloaded automatically on first use "
 "— check Settings → AI for progress."
-msgstr ""
+msgstr "尚未安裝嵌入模型。首次使用時會自動下載 — 請在「設定 → AI」查看進度。"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:538
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:552
-#, fuzzy
 msgid "No matching results"
-msgstr "查無資料"
+msgstr "沒有符合的結果"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:92
 msgid "No new invitations"
@@ -5017,7 +4915,7 @@ msgstr "未設定 SMAL 授權 URL。"
 msgid ""
 "No valid notebook is available. Please create or select a notebook and try "
 "again."
-msgstr ""
+msgstr "沒有可用的有效記事本。請建立或選擇記事本後再試一次。"
 
 #: packages/app-cli/app/command-share.ts:188
 #: packages/app-cli/app/command-share.ts:208
@@ -5031,7 +4929,7 @@ msgstr "北歐藍"
 
 #: packages/lib/models/settings/builtInMetadata.ts:588
 msgid "Normal"
-msgstr ""
+msgstr "一般"
 
 #: packages/app-cli/app/command-sync.ts:121
 msgid "Not authenticated with %s. Please provide any missing credentials."
@@ -5054,24 +4952,20 @@ msgid "Not now"
 msgstr "不要現在"
 
 #: packages/app-desktop/gui/PublishFolderDialog.tsx:96
-#, fuzzy
 msgid "Not published"
-msgstr "筆記未公布：%s"
+msgstr "未發布"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteLockConfig.tsx:142
-#, fuzzy
 msgid "Not set"
-msgstr "沒有用"
+msgstr "未設定"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:13
-#, fuzzy
 msgid "Not started"
-msgstr "尚未生成"
+msgstr "尚未開始"
 
 #: packages/server/src/routes/index/recovery_codes.ts:65
-#, fuzzy
 msgid "Not Used"
-msgstr "沒有用"
+msgstr "未使用"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:113
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
@@ -5132,7 +5026,7 @@ msgstr "已經刪除筆記記錄。"
 
 #: packages/lib/services/ai/availability.ts:68
 msgid "Note indexing is turned off in Settings → AI."
-msgstr ""
+msgstr "筆記索引已在「設定 → AI」中關閉。"
 
 #: packages/app-cli/app/command-done.ts:22
 msgid "Note is not a to-do: \"%s\""
@@ -5154,25 +5048,22 @@ msgid "Note list style"
 msgstr "筆記清單樣式"
 
 #: packages/lib/models/Setting.ts:1367
-#, fuzzy
 msgid "Note lock"
-msgstr "程式碼區塊"
+msgstr "筆記鎖定"
 
 #: packages/app-desktop/gui/NoteEditor/NoteLockPanel/NoteLockPanel.tsx:70
 #: packages/app-desktop/gui/NoteLockUnlockDialog/Dialog.tsx:70
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:558
-#, fuzzy
 msgid "Note lock password"
-msgstr "Nextcloud 密碼"
+msgstr "筆記鎖定密碼"
 
 #: packages/lib/models/Setting.ts:1407
 msgid "Note lock password, auto lock"
-msgstr ""
+msgstr "筆記鎖定密碼、自動鎖定"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteLockConfig.tsx:142
-#, fuzzy
 msgid "Note lock password:"
-msgstr "Nextcloud 密碼"
+msgstr "筆記鎖定密碼："
 
 #: packages/app-cli/app/command-unpublish.ts:35
 msgid "Note not published: %s"
@@ -5264,33 +5155,31 @@ msgstr "編號清單"
 
 #: packages/lib/services/interop/InteropService.ts:138
 msgid "Obsidian Vault"
-msgstr ""
+msgstr "Obsidian Vault"
 
 #: packages/app-desktop/commands/createAccessibleDocument.ts:57
-#, fuzzy
 msgid "OCR has been queued. Please wait for it to complete and then try again."
-msgstr "此項目當前已加密：%s \"%s\"。請等待所有項目解密後重試。"
+msgstr "OCR 已排入佇列，請等待完成後再試一次。"
 
 #: packages/app-desktop/commands/createAccessibleDocument.ts:33
 msgid ""
 "OCR is not complete. Please wait for OCR to finish before creating an "
 "accessible document."
-msgstr ""
+msgstr "OCR 尚未完成。請等待 OCR 完成後再建立無障礙文件。"
 
 #: packages/app-desktop/commands/createAccessibleDocument.ts:42
 msgid ""
 "OCR needs to run to generate an accessible document. This may take a moment. "
 "Would you like to continue?"
-msgstr ""
+msgstr "產生無障礙文件需要先執行 OCR，這可能需要一點時間。要繼續嗎？"
 
 #: packages/lib/models/settings/builtInMetadata.ts:632
 msgid "OCR: Clear cache and re-download language data files"
 msgstr "OCR：清理暫存及重新下載語言資料檔案"
 
 #: packages/lib/models/settings/builtInMetadata.ts:573
-#, fuzzy
 msgid "OCR: Enable optical character recognition"
-msgstr "啟用光學字符識別（OCR）"
+msgstr "OCR：啟用光學字元辨識"
 
 #: packages/lib/models/settings/builtInMetadata.ts:613
 msgid "OCR: Language data URL or path"
@@ -5298,7 +5187,7 @@ msgstr "OCR：語言資料 URL 或路徑"
 
 #: packages/lib/models/settings/builtInMetadata.ts:585
 msgid "OCR: PDF processing mode"
-msgstr ""
+msgstr "OCR：PDF 處理模式"
 
 #: packages/lib/models/settings/builtInMetadata.ts:642
 msgid "OCR: Search in extracted content"
@@ -5379,7 +5268,7 @@ msgid ""
 "Only do this if you've forgotten your current password. A new password will "
 "be created, and any notes locked with the old one will become permanently "
 "unreadable."
-msgstr ""
+msgstr "請只在忘記目前密碼時執行此操作。系統會建立新密碼，以舊密碼鎖定的筆記將永久無法讀取。"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/print.ts:18
 msgid "Only one note can be printed at a time."
@@ -5394,9 +5283,8 @@ msgid "Open %s"
 msgstr "開啟 %s"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:181
-#, fuzzy
 msgid "Open a note to start chatting."
-msgstr "輸入筆記標題以尋找筆記。"
+msgstr "開啟一則筆記即可開始對話。"
 
 #: packages/app-desktop/commands/startExternalEditing.ts:11
 msgid "Open in external editor"
@@ -5453,9 +5341,8 @@ msgid "Open..."
 msgstr "開啟..."
 
 #: packages/lib/models/settings/builtInMetadata.ts:700
-#, fuzzy
 msgid "OpenAI-compatible"
-msgstr "不相容"
+msgstr "與 OpenAI 相容"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:238
 msgid "Opening section %s"
@@ -5506,9 +5393,8 @@ msgid "Other applications..."
 msgstr "其他應用程式..."
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:363
-#, fuzzy
 msgid "Other sync options"
-msgstr "選擇一個選項"
+msgstr "其他同步選項"
 
 #: packages/app-cli/app/command-import.ts:30
 msgid "Output format: %s"
@@ -5544,9 +5430,8 @@ msgstr "密碼不能為空"
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:132
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:558
 #: packages/app-mobile/components/screens/ConfigScreen/NoteLockConfig.tsx:103
-#, fuzzy
 msgid "Password setup"
-msgstr "密碼"
+msgstr "設定密碼"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:367
 #: packages/app-mobile/components/screens/encryption-config.tsx:145
@@ -5557,9 +5442,8 @@ msgstr "密碼："
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:182
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:198
 #: packages/app-mobile/components/screens/ConfigScreen/NoteLockConfig.tsx:132
-#, fuzzy
 msgid "Passwords do not match"
-msgstr "密碼不相符！"
+msgstr "密碼不相符"
 
 #: packages/app-cli/app/command-e2ee.ts:100
 #: packages/app-mobile/components/screens/encryption-config.tsx:164
@@ -5574,9 +5458,8 @@ msgstr "貼上"
 
 #: packages/app-desktop/gui/NoteEditor/commands/pasteAsMarkdown.ts:11
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.ts:178
-#, fuzzy
 msgid "Paste as Markdown"
-msgstr "以 Markdown 編輯"
+msgstr "以 Markdown 貼上"
 
 #: packages/app-desktop/gui/NoteEditor/commands/pasteAsText.ts:7
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:280
@@ -5643,7 +5526,7 @@ msgstr "請確認您要重新加密完整資料庫。"
 msgid ""
 "Please disable users from the [admin dashboard](%s) to bring this server "
 "under the limit."
-msgstr ""
+msgstr "請在[管理員儀表板](%s)停用部分使用者，讓此伺服器回到限制以內。"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:227
 msgid ""
@@ -5657,7 +5540,7 @@ msgstr "在升級密鑰前，請在下面的主密鑰清單中輸入您的密碼
 msgid ""
 "Please make sure you remember your password. It cannot be recovered if lost, "
 "and any data encrypted with it will become inaccessible."
-msgstr ""
+msgstr "請務必記住您的密碼。密碼遺失後將無法復原，以該密碼加密的資料也將無法存取。"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:411
 msgid ""
@@ -5708,7 +5591,7 @@ msgstr "請指定要匯入的記事本。"
 
 #: packages/server/src/middleware/notificationHandler.ts:62
 msgid "Please update the license key from the [admin dashboard](%s)."
-msgstr ""
+msgstr "請在[管理員儀表板](%s)更新授權金鑰。"
 
 #: packages/lib/services/plugins/PluginService.ts:607
 msgid "Please upgrade Joplin to version %s or later to use this plugin."
@@ -5861,7 +5744,7 @@ msgstr "專業版"
 
 #: packages/lib/utils/joplinCloud/index.ts:660
 msgid "Pro 100 GB"
-msgstr ""
+msgstr "Pro 100 GB"
 
 #: packages/server/src/services/TaskService.ts:27
 msgid "Process failed payment subscriptions"
@@ -5910,9 +5793,8 @@ msgid "Profiles"
 msgstr "設定檔"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/TextNode.tsx:151
-#, fuzzy
 msgid "Promote to note"
-msgstr "轉換為筆記"
+msgstr "轉為筆記"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1473
 msgid "Properties"
@@ -5947,19 +5829,16 @@ msgid "Publish note..."
 msgstr "發佈筆記..."
 
 #: packages/app-desktop/gui/PublishFolderDialog.tsx:108
-#, fuzzy
 msgid "Publish notebook"
-msgstr "發布筆記"
+msgstr "發布記事本"
 
 #: packages/app-desktop/gui/PublishFolderDialog.tsx:91
-#, fuzzy
 msgid "Publish Notebook"
-msgstr "發布筆記"
+msgstr "發布記事本"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showPublishFolderDialog.ts:6
-#, fuzzy
 msgid "Publish notebook..."
-msgstr "發佈筆記..."
+msgstr "發布記事本..."
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:103
 msgid "Publish Notes"
@@ -5977,9 +5856,8 @@ msgstr "發佈 / 取消發佈"
 
 #: packages/app-desktop/gui/PublishFolderDialog.tsx:96
 #: packages/app-desktop/gui/Sidebar/listItemComponents/FolderItem.tsx:61
-#, fuzzy
 msgid "Published"
-msgstr "發布筆記"
+msgstr "已發布"
 
 #: packages/app-cli/app/command-publish.ts:60
 msgid "Published at URL: %s"
@@ -6002,7 +5880,7 @@ msgstr "離開"
 
 #: packages/app-desktop/gui/QuitSyncDialog.tsx:76
 msgid "Quit anyway"
-msgstr ""
+msgstr "仍要結束"
 
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:183
 msgid "Re-download model"
@@ -6026,12 +5904,11 @@ msgstr "重新上傳本地資料到同步目標上"
 
 #: packages/lib/services/ai/tools/global/listTags.ts:7
 msgid "Read all tags"
-msgstr ""
+msgstr "讀取所有標籤"
 
 #: packages/lib/services/ai/tools/global/readImage.ts:35
-#, fuzzy
 msgid "Read image: %s"
-msgstr "閱讀時間：%s 分鐘"
+msgstr "已讀取圖片：%s"
 
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:41
 msgid "Read more"
@@ -6042,19 +5919,16 @@ msgid "Read more about it"
 msgstr "瞭解更多"
 
 #: packages/lib/services/ai/tools/buildEditorTools.ts:209
-#, fuzzy
 msgid "Read note"
-msgstr "瞭解更多"
+msgstr "讀取筆記"
 
 #: packages/lib/services/ai/tools/global/readNote.ts:18
-#, fuzzy
 msgid "Read note: %s"
-msgstr "閱讀時間：%s 分鐘"
+msgstr "已讀取筆記：%s"
 
 #: packages/lib/services/ai/tools/global/listNotebooks.ts:8
-#, fuzzy
 msgid "Read notebooks"
-msgstr "重新命名記事本："
+msgstr "讀取記事本"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:169
 msgid "Read time: %s min"
@@ -6068,7 +5942,7 @@ msgstr "在標準輸入中讀取命令，僅在CLI模式中可用。"
 msgid ""
 "Reading this note requires the note lock password, which has not been set up "
 "on this device yet."
-msgstr ""
+msgstr "閱讀這則筆記需要筆記鎖定密碼，但此裝置上尚未設定。"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:344
 msgid "Recipient has accepted the invitation"
@@ -6166,10 +6040,9 @@ msgid "Remove this search from the sidebar?"
 msgstr "是否從側邊欄中刪除此搜索？"
 
 #: packages/lib/services/ai/tools/buildEditorTools.ts:51
-#, fuzzy
 msgid "Removed %d word"
 msgid_plural "Removed %d words"
-msgstr[0] "移除 %s"
+msgstr[0] "已移除 %d 個字詞"
 
 #: packages/app-cli/app/command-share.ts:112
 msgid "Removed %s from share."
@@ -6177,7 +6050,6 @@ msgstr "已由共享中移除 %s。"
 
 #: packages/app-mobile/components/TagEditor.tsx:258
 #: packages/lib/services/ai/tools/global/manageTags.ts:24
-#, fuzzy
 msgid "Removed tag: %s"
 msgid_plural "Removed tags: %s"
 msgstr[0] "已移除標籤：%s"
@@ -6212,9 +6084,8 @@ msgstr "換一組令牌"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:176
 #: packages/app-mobile/components/screens/ConfigScreen/NoteLockConfig.tsx:118
-#, fuzzy
 msgid "Repeat password"
-msgstr "重新輸入密碼"
+msgstr "再次輸入密碼"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:21
 msgid "replace"
@@ -6250,9 +6121,8 @@ msgid "replaced match on line $"
 msgstr "已經在行 $ 中取代符合"
 
 #: packages/lib/services/ai/tools/buildEditorTools.ts:62
-#, fuzzy
 msgid "Replaced selection"
-msgstr "取代全部"
+msgstr "已取代選取內容"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:160
 msgid "Report an issue"
@@ -6278,15 +6148,15 @@ msgstr "回報"
 msgid ""
 "Required to use cloud-hosted AI models, including Joplin Cloud AI. When "
 "disabled, only on-device providers can be used."
-msgstr ""
+msgstr "使用雲端 AI 模型（包括 Joplin Cloud AI）時必須啟用。停用時只能使用裝置上的供應商。"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:416
 msgid "Reset"
-msgstr ""
+msgstr "重設"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:140
 msgid "Reset AI token usage counters?"
-msgstr ""
+msgstr "要重設 AI Token 用量計數嗎？"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/resetLayout.ts:7
 msgid "Reset application layout"
@@ -6299,23 +6169,20 @@ msgid "Reset master password"
 msgstr "重設主密碼"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:125
-#, fuzzy
 msgid "Reset password"
-msgstr "重新輸入密碼"
+msgstr "重設密碼"
 
 #: packages/lib/models/settings/builtInMetadata.ts:794
-#, fuzzy
 msgid "Reset token usage"
-msgstr "換一組令牌"
+msgstr "重設 Token 用量"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1374
 msgid "Resize large images:"
 msgstr "調整大圖片大小："
 
 #: packages/app-desktop/commands/createAccessibleDocument.ts:21
-#, fuzzy
 msgid "Resource not found"
-msgstr "恢復筆記"
+msgstr "找不到資源"
 
 #: packages/app-cli/app/command-import.ts:56
 #: packages/app-desktop/gui/ImportScreen.tsx:101
@@ -6391,14 +6258,12 @@ msgid "Reveal file in folder"
 msgstr "在資料夾中顯示檔案"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1481
-#, fuzzy
 msgid "Reveal in notebook"
-msgstr "離開記事本"
+msgstr "在記事本中顯示"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1289
-#, fuzzy
 msgid "Reverse notebook sort order"
-msgstr "顛倒排列順序"
+msgstr "反轉記事本排序"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleNotesSortOrderReverse.ts:8
 #: packages/lib/models/settings/builtInMetadata.ts:1198
@@ -6429,7 +6294,7 @@ msgstr "格式化文字編輯器：按 Esc 後按 Tab去離開專注模式。"
 
 #: packages/app-desktop/commands/createAccessibleDocument.ts:43
 msgid "Run OCR"
-msgstr ""
+msgstr "執行 OCR"
 
 #: packages/app-cli/app/command-batch.ts:29
 msgid ""
@@ -6556,9 +6421,8 @@ msgid "Search in current note"
 msgstr "在目前筆記中搜尋"
 
 #: packages/app-mobile/components/screens/SearchScreen/index.tsx:109
-#, fuzzy
 msgid "Search notes, notebooks..."
-msgstr "分享記事本..."
+msgstr "搜尋筆記、記事本..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:548
 #: packages/app-desktop/plugins/GotoAnything.tsx:710
@@ -6566,9 +6430,8 @@ msgid "Search results"
 msgstr "搜尋結果"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:166
-#, fuzzy
 msgid "Search settings..."
-msgstr "搜尋標籤"
+msgstr "搜尋設定..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:202
 msgid "Search shown"
@@ -6595,9 +6458,8 @@ msgstr "搜尋..."
 
 #: packages/lib/services/ai/tools/global/searchNotes.ts:19
 #: packages/lib/services/ai/tools/global/semanticSearchNotes.ts:16
-#, fuzzy
 msgid "Searched for: %s"
-msgstr "來源格式：%s"
+msgstr "已搜尋：%s"
 
 #: packages/app-cli/app/command-search.ts:13
 msgid "Searches for the given <pattern> in all the notes."
@@ -6669,11 +6531,11 @@ msgstr "自行託管"
 msgid ""
 "Self-hosted instances of the Joplin web app cannot sync with Joplin Cloud. "
 "Open the official web app?"
-msgstr ""
+msgstr "自行架設的 Joplin 網頁版無法與 Joplin Cloud 同步。要開啟官方網頁版嗎？"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:410
 msgid "Send"
-msgstr ""
+msgstr "傳送"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.ts:159
 msgid "Send bug report"
@@ -6693,9 +6555,8 @@ msgid "Server is running on port %d"
 msgstr "伺服器在 %d 連接埠執行"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteLockConfig.tsx:142
-#, fuzzy
 msgid "Set"
-msgstr "選擇"
+msgstr "設定"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/editAlarm.ts:13
 #: packages/app-mobile/components/screens/Note/Note.tsx:1363
@@ -6719,9 +6580,8 @@ msgid "Set the password"
 msgstr "設置密碼"
 
 #: packages/app-desktop/gui/NoteEditor/NoteLockPanel/NoteLockPanel.tsx:60
-#, fuzzy
 msgid "Set up note lock"
-msgstr "選擇記事本"
+msgstr "設定筆記鎖定"
 
 #: packages/app-cli/app/command-set.ts:23
 msgid ""
@@ -6809,13 +6669,12 @@ msgid "Show all"
 msgstr "顯示全部"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:566
-#, fuzzy
 msgid "Show all results"
-msgstr "查無資料"
+msgstr "顯示所有結果"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1403
 msgid "Show checkbox completion chart in note list"
-msgstr ""
+msgstr "在筆記清單中顯示核取方塊完成度圖表"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1088
 msgid "Show completed to-dos"
@@ -6831,7 +6690,7 @@ msgstr "顯示已停用密鑰"
 
 #: packages/lib/models/settings/builtInMetadata.ts:2544
 msgid "Show Joplin icon for note links"
-msgstr ""
+msgstr "在筆記連結旁顯示 Joplin 圖示"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/FontSearch.tsx:51
 msgid "Show monospace fonts only."
@@ -6863,7 +6722,7 @@ msgstr "顯示 / 隱藏側邊欄"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:557
 msgid "Showing all matching settings"
-msgstr ""
+msgstr "顯示所有符合的設定"
 
 #: packages/app-mobile/components/screens/tags.tsx:68
 msgid "Shows notes for tag"
@@ -6899,13 +6758,12 @@ msgid "Size"
 msgstr "大小"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:34
-#, fuzzy
 msgid "Size (largest first)"
-msgstr "調整大圖片大小："
+msgstr "大小（由大到小）"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:34
 msgid "Size (smallest first)"
-msgstr ""
+msgstr "大小（由小到大）"
 
 #: packages/app-desktop/checkForUpdates.ts:116
 msgid "Skip this version"
@@ -6963,7 +6821,7 @@ msgstr "有些項目不能同步。請先嘗試同步這些項目。"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:308
 msgid "Something went wrong."
-msgstr ""
+msgstr "發生錯誤。"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:96
 msgid "Sort \"%s\" in ascending order"
@@ -6974,14 +6832,12 @@ msgid "Sort \"%s\" in descending order"
 msgstr "以降序排序「%s」"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:424
-#, fuzzy
 msgid "Sort by size"
-msgstr "卷軸大小"
+msgstr "依大小排序"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:424
-#, fuzzy
 msgid "Sort by title"
-msgstr "筆記標題"
+msgstr "依標題排序"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1266
 msgid "Sort notebooks by"
@@ -7052,9 +6908,8 @@ msgstr "啟動應用程式時最小化到系統匣"
 #: packages/lib/utils/joplinCloud/index.ts:675
 #: packages/lib/utils/joplinCloud/index.ts:698
 #: packages/lib/utils/joplinCloud/index.ts:720
-#, fuzzy
 msgid "Start free trial"
-msgstr "開始錄製"
+msgstr "開始免費試用"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:211
 msgid "Start recording"
@@ -7130,18 +6985,16 @@ msgid "Stop"
 msgstr "停止"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:403
-#, fuzzy
 msgid "Stop editing"
-msgstr "停止外部編輯"
+msgstr "停止編輯"
 
 #: packages/app-desktop/commands/stopExternalEditing.ts:8
 msgid "Stop external editing"
 msgstr "停止外部編輯"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:410
-#, fuzzy
 msgid "Stop generating"
-msgstr "停止外部編輯"
+msgstr "停止產生"
 
 #: packages/lib/utils/joplinCloud/index.ts:270
 msgid "Storage space"
@@ -7174,7 +7027,7 @@ msgstr "成功！同步設定看起來正確。"
 
 #: packages/lib/components/shared/config/config-shared.ts:151
 msgid "Success! The AI provider responded:"
-msgstr ""
+msgstr "成功！AI 供應商回應："
 
 #: packages/app-desktop/gui/InlineCombobox.tsx:185
 msgid "Suggestions"
@@ -7196,7 +7049,7 @@ msgstr "本行上移"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:486
 msgid "Swap source and target"
-msgstr ""
+msgstr "交換來源與目標"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleNoteType.ts:9
 msgid "Switch between note and to-do type"
@@ -7242,9 +7095,8 @@ msgid "Switch to to-do type"
 msgstr "切換為待辦事項"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:152
-#, fuzzy
 msgid "Switched notes: %s"
-msgstr "切換為筆記類別"
+msgstr "已切換筆記：%s"
 
 #: packages/app-cli/app/command-use.ts:13
 msgid ""
@@ -7257,9 +7109,8 @@ msgid "Sync as many devices as you want"
 msgstr "同步任意數量的設備"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:92
-#, fuzzy
 msgid "Sync report"
-msgstr "發送錯誤報告"
+msgstr "同步報告"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:578
 msgid "Sync Status"
@@ -7278,9 +7129,8 @@ msgid "Sync Target Upgrade"
 msgstr "同步目標升級"
 
 #: packages/lib/versionInfo.ts:104
-#, fuzzy
 msgid "Sync target: %s"
-msgstr "同步狀態"
+msgstr "同步目標：%s"
 
 #: packages/app-cli/app/command-sync.ts:40
 msgid "Sync to provided target (defaults to sync.target config value)"
@@ -7299,7 +7149,7 @@ msgstr "同步您的筆記"
 msgid ""
 "Sync your notes with Joplin Cloud to access them on all your devices. Other "
 "sync options are also available."
-msgstr ""
+msgstr "使用 Joplin Cloud 同步筆記，即可在所有裝置上存取。也提供其他同步選項。"
 
 #: packages/lib/models/Setting.ts:1406
 msgid "Sync, encryption, proxy"
@@ -7311,9 +7161,8 @@ msgid "Synchronisation"
 msgstr "顯示同步狀態"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:43
-#, fuzzy
 msgid "Synchronisation error"
-msgstr "顯示同步狀態"
+msgstr "同步錯誤"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1842
 msgid "Synchronisation interval"
@@ -7347,9 +7196,8 @@ msgid "Synchronise only over WiFi connection"
 msgstr "僅在 WiFi 環境下同步資料"
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:142
-#, fuzzy
 msgid "Synchronise with Joplin Cloud"
-msgstr "連結到 Joplin Cloud"
+msgstr "與 Joplin Cloud 同步"
 
 #: packages/app-cli/app/command-sync.ts:35
 msgid "Synchronises with remote storage."
@@ -7357,7 +7205,7 @@ msgstr "與遠端儲存設備同步。"
 
 #: packages/app-desktop/gui/QuitSyncDialog.tsx:75
 msgid "Synchronising remaining changes, please wait..."
-msgstr ""
+msgstr "正在同步剩餘的變更，請稍候..."
 
 #: packages/app-cli/app/command-publish.ts:55
 #: packages/app-cli/app/command-unpublish.ts:46
@@ -7383,24 +7231,20 @@ msgid "Table"
 msgstr "表格"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:198
-#, fuzzy
 msgid "Table: Add column"
-msgstr "新增欄"
+msgstr "表格：新增欄"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:193
-#, fuzzy
 msgid "Table: Add row"
-msgstr "新增列"
+msgstr "表格：新增列"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:208
-#, fuzzy
 msgid "Table: Delete column"
-msgstr "刪除欄"
+msgstr "表格：刪除欄"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:203
-#, fuzzy
 msgid "Table: Delete row"
-msgstr "刪除列"
+msgstr "表格：刪除列"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1878
 msgid "Tabloid"
@@ -7426,7 +7270,7 @@ msgstr "標籤"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/setTags.ts:26
 msgid "Tags cannot be changed for locked notes while the session is locked"
-msgstr ""
+msgstr "工作階段鎖定期間無法變更已鎖定筆記的標籤"
 
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:111
 #: packages/app-mobile/components/screens/Note/commands/attachFile.ts:96
@@ -7451,9 +7295,8 @@ msgid "Teams"
 msgstr "團隊"
 
 #: packages/lib/models/settings/builtInMetadata.ts:810
-#, fuzzy
 msgid "Test AI configuration"
-msgstr "設置"
+msgstr "測試 AI 設定"
 
 #: packages/lib/services/interop/InteropService.ts:147
 msgid "Text document"
@@ -7473,7 +7316,7 @@ msgstr "無法刪除目前的設定檔。切換至不同的設定檔並重試。
 #: packages/lib/services/ai/availability.ts:48
 #: packages/lib/services/ai/availability.ts:51
 msgid "The API key is missing. Set it in Settings → AI."
-msgstr ""
+msgstr "缺少 API 金鑰，請在「設定 → AI」中設定。"
 
 #: packages/app-desktop/bridge.ts:649
 msgid ""
@@ -7508,9 +7351,8 @@ msgid "The command \"%s\" is only available in GUI mode"
 msgstr "命令 \"%s\" 僅在 GUI 模式下可用"
 
 #: packages/server/src/middleware/notificationHandler.ts:43
-#, fuzzy
 msgid "The default admin password has not been changed! [Change it now](%s)"
-msgstr "預設的管理員密碼不安全並且尚未更改！[現在更改](%s)"
+msgstr "預設的管理員密碼尚未變更！[立即變更](%s)"
 
 #: packages/server/src/middleware/notificationHandler.ts:41
 msgid ""
@@ -7532,9 +7374,8 @@ msgstr "預設的加密方法已更改，您應該重新加密資料。"
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:209
 #: packages/app-mobile/components/ProfileSwitcher/utils/deleteProfile.ts:79
-#, fuzzy
 msgid "The default profile has been reset."
-msgstr "預設設定檔無法刪除"
+msgstr "預設設定檔已重設。"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1871
 msgid ""
@@ -7604,19 +7445,19 @@ msgstr "舊的 Markdown 編輯器與延伸模組發生衝突而出現問題。�
 
 #: packages/server/src/middleware/notificationHandler.ts:113
 msgid "The license for this server failed to refresh."
-msgstr ""
+msgstr "此伺服器的授權更新失敗。"
 
 #: packages/server/src/middleware/notificationHandler.ts:68
 msgid ""
 "The license key for this Joplin Server Business instance has expired and "
 "needs to be renewed."
-msgstr ""
+msgstr "此 Joplin Server Business 執行個體的授權金鑰已過期，需要續約。"
 
 #: packages/server/src/middleware/notificationHandler.ts:80
 msgid ""
 "The license key for this Joplin Server Business instance has expired or is "
 "invalid. Uploading items has been disabled until the license is renewed."
-msgstr ""
+msgstr "此 Joplin Server Business 執行個體的授權金鑰已過期或無效。在續約授權之前，項目上傳已停用。"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:236
 msgid "The master key has been upgraded successfully!"
@@ -7633,18 +7474,18 @@ msgstr ""
 
 #: packages/lib/services/ai/availability.ts:84
 msgid "The MCP server is disabled. Enable it in Settings → MCP."
-msgstr ""
+msgstr "MCP 伺服器已停用，請在「設定 → MCP」中啟用。"
 
 #: packages/lib/models/settings/builtInMetadata.ts:750
 msgid ""
 "The model identifier to use, for example gpt-4o-mini or claude-3-5-sonnet-"
 "latest."
-msgstr ""
+msgstr "要使用的模型識別碼，例如 gpt-4o-mini 或 claude-3-5-sonnet-latest。"
 
 #: packages/lib/services/ai/availability.ts:49
 #: packages/lib/services/ai/availability.ts:52
 msgid "The model name is missing. Set it in Settings → AI."
-msgstr ""
+msgstr "缺少模型名稱，請在「設定 → AI」中設定。"
 
 #: packages/lib/services/RevisionService.ts:291
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
@@ -7654,7 +7495,7 @@ msgstr "已成功將「%s」還原至「%s」記事本中。"
 msgid ""
 "The note changed while the request was running; edits were not applied. Try "
 "again."
-msgstr ""
+msgstr "要求執行期間筆記已變更，因此未套用編輯。請再試一次。"
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:82
 msgid ""
@@ -7666,18 +7507,15 @@ msgid_plural ""
 msgstr[0] "此筆記已經轉換為 Markdown ，原有的筆記已經移動到垃圾桶"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:211
-#, fuzzy
 msgid ""
 "The note lock key uses an out-dated encryption algorithm and it is "
 "recommended to upgrade it. The upgraded key will still be able to decrypt "
 "and encrypt your data as usual."
-msgstr ""
-"以下密鑰使用了過時的加密演算法，建議升級。升級後的主密鑰仍可照常加解密您的資"
-"料。"
+msgstr "筆記鎖定金鑰使用了過時的加密演算法，建議升級。升級後的金鑰仍可照常加密與解密您的資料。"
 
 #: packages/app-cli/app/command-set.ts:40
 msgid "The note lock state cannot be changed from the command line"
-msgstr ""
+msgstr "無法從命令列變更筆記的鎖定狀態"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:45
 msgid "The note was successfully moved to the trash."
@@ -7701,12 +7539,12 @@ msgstr "已匯入筆記：%s"
 msgid ""
 "The OpenAI-compatible API endpoint. For example, https://api.openai.com/v1 "
 "or http://localhost:11434/v1 for Ollama."
-msgstr ""
+msgstr "與 OpenAI 相容的 API 端點。例如 https://api.openai.com/v1，或 Ollama 使用的 http://localhost:11434/v1。"
 
 #: packages/lib/services/ai/availability.ts:47
 msgid ""
 "The OpenAI-compatible provider needs a base URL. Set it in Settings → AI."
-msgstr ""
+msgstr "與 OpenAI 相容的供應商需要基礎 URL，請在「設定 → AI」中設定。"
 
 #: packages/app-cli/app/command-help.ts:73
 msgid "The possible commands are:"
@@ -7716,7 +7554,7 @@ msgstr "可能的命令是："
 msgid ""
 "The provider returned an empty response. Check that the base URL ends with /"
 "v1 and that a model is loaded."
-msgstr ""
+msgstr "供應商傳回空白回應。請確認基礎 URL 以 /v1 結尾，且已載入模型。"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:275
 msgid ""
@@ -7807,9 +7645,8 @@ msgid "Theme"
 msgstr "界面主題"
 
 #: packages/lib/models/Setting.ts:1405
-#, fuzzy
 msgid "Themes, notebook sort order"
-msgstr "顛倒排列順序"
+msgstr "主題、記事本排序"
 
 #: packages/lib/components/shared/NoteList/getEmptyFolderMessage.ts:17
 msgid "There are currently no notes. Create one by clicking on the (+) button."
@@ -7907,18 +7744,16 @@ msgid ""
 msgstr "此舉動預設停用，如要使用本功能，您需要前往選項中啓用「啓用手寫轉錄」。"
 
 #: packages/app-desktop/commands/createAccessibleDocument.ts:28
-#, fuzzy
 msgid "This feature is only available for PDF files."
-msgstr "此功能僅限 Joplin Cloud 和 Joplin 伺服器使用。"
+msgstr "此功能僅適用於 PDF 檔案。"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:168
 msgid "This feature is only available on Joplin Cloud and Joplin Server."
 msgstr "此功能僅限 Joplin Cloud 和 Joplin 伺服器使用。"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:290
-#, fuzzy
 msgid "This file could not be opened: %s"
-msgstr "無法移動這些筆記：%s"
+msgstr "無法開啟此檔案：%s"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:180
 msgid "This image type is not supported by the recognition system."
@@ -7936,18 +7771,17 @@ msgstr "此為顯示筆記相關附件的進階工具，刪除後將無法復原
 msgid "This Joplin Server Business instance is only licensed for %d user."
 msgid_plural ""
 "This Joplin Server Business instance is only licensed for %d users."
-msgstr[0] ""
+msgstr[0] "此 Joplin Server Business 執行個體的授權僅限 %d 位使用者。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/FileNode.tsx:202
-#, fuzzy
 msgid "This linked item has been deleted."
-msgstr "已經刪除筆記記錄。"
+msgstr "此已連結的項目已被刪除。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteLockPanel/NoteLockPanel.tsx:53
 msgid ""
 "This note could not be decrypted. If it was encrypted prior to a password "
 "reset, the contents are no longer recoverable."
-msgstr ""
+msgstr "無法解密這則筆記。如果它是在重設密碼前加密的，內容已無法復原。"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:275
 msgid "This note could not be deleted: %s"
@@ -7986,17 +7820,17 @@ msgstr "此筆記沒有歷史紀錄"
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/disableNoteEncryption.ts:23
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/enableNoteEncryption.ts:28
 msgid "This note is currently being saved. Please try again in a moment."
-msgstr ""
+msgstr "這則筆記正在儲存中，請稍後再試。"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:350
 msgid "This note is encrypted and cannot be used with AI Chat."
-msgstr ""
+msgstr "這則筆記已加密，無法用於 AI 對話。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteLockPanel/NoteLockPanel.tsx:67
 msgid ""
 "This note is encrypted. Enter the note lock password to unlock encrypted "
 "notes for this session."
-msgstr ""
+msgstr "這則筆記已加密。輸入筆記鎖定密碼，以在本次工作階段中解鎖加密的筆記。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:807
 msgid ""
@@ -8007,7 +7841,7 @@ msgstr "此筆記屬 HTML 格式，轉格式為 Markdown 可使編輯更具效�
 msgid ""
 "This notebook contains Windows-specific files. For maximum compatibility, "
 "consider importing the notebook from Windows."
-msgstr ""
+msgstr "此記事本包含 Windows 專用的檔案。為了獲得最佳相容性，建議在 Windows 上匯入此記事本。"
 
 #: packages/lib/services/plugins/PluginService.ts:615
 msgid "This plugin doesn't support %s."
@@ -8017,7 +7851,7 @@ msgstr "此延伸模組不支援 %s。"
 msgid ""
 "This provider sends data off your device. Turn on \"Allow remote AI "
 "providers\" in Settings → AI."
-msgstr ""
+msgstr "此供應商會將資料傳送到您的裝置之外。請在「設定 → AI」中開啟「允許遠端 AI 供應商」。"
 
 #: packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.tsx:65
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:37
@@ -8028,7 +7862,7 @@ msgstr "這個編輯模式尚有許多限制，建議使用前先深入了解。
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:516
 msgid "This section opens in its own screen and is matched by section title."
-msgstr ""
+msgstr "此區段會在獨立畫面中開啟，並依區段標題比對。"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:144
 msgid ""
@@ -8044,9 +7878,8 @@ msgid "This subfolder of the trash has no notes."
 msgstr "垃圾桶裡的子資料夾沒有筆記。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardEditor.tsx:181
-#, fuzzy
 msgid "This whiteboard could not be loaded"
-msgstr "無法移動這些筆記：%s"
+msgstr "無法載入此白板"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1536
 msgid ""
@@ -8092,20 +7925,18 @@ msgid "Title"
 msgstr "標題"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:33
-#, fuzzy
 msgid "Title (A-Z)"
-msgstr "標題"
+msgstr "標題（A-Z）"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:33
-#, fuzzy
 msgid "Title (Z-A)"
-msgstr "標題"
+msgstr "標題（Z-A）"
 
 #: packages/server/src/routes/index/recovery_codes.ts:29
 msgid ""
 "To access your recovery codes please enter an authentication code or your "
 "password."
-msgstr ""
+msgstr "若要存取您的復原碼，請輸入驗證碼或您的密碼。"
 
 #: packages/app-cli/app/command-sync.ts:79
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:52
@@ -8172,9 +8003,8 @@ msgid ""
 msgstr "執行 `e2ee decrypt —retry-failed-items` 來嘗試再次解密這些項目"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:72
-#, fuzzy
 msgid "To switch the profile, the app is going to restart."
-msgstr "如要切換設定檔，應用程式將關閉，並且您需要重新啟動它。"
+msgstr "切換設定檔需要重新啟動應用程式。"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:628
 msgid ""
@@ -8197,9 +8027,8 @@ msgid "to-do: %s"
 msgstr "待辦事項：%s"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleAiChat.ts:10
-#, fuzzy
 msgid "Toggle AI Chat"
-msgstr "顯示 / 隱藏上方工具列"
+msgstr "切換 AI 對話"
 
 #: packages/lib/commands/toggleAllFolders.ts:8
 msgid "Toggle all notebooks"
@@ -8267,16 +8096,15 @@ msgstr "切換排序方式"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleWhiteboardEditor.ts:6
 msgid "Toggle whiteboard / Markdown view"
-msgstr ""
+msgstr "切換白板／Markdown 檢視"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:42
 msgid "Token has been copied to the clipboard!"
 msgstr "令牌已經被複製到剪貼簿！"
 
 #: packages/lib/services/ai/noteChat.ts:327
-#, fuzzy
 msgid "Tool not found: %s"
-msgstr "找不到：「%s」"
+msgstr "找不到工具：%s"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementToolbar.ts:8
 msgid "Toolbar"
@@ -8290,7 +8118,7 @@ msgstr "工具"
 msgid ""
 "Tools and services to expose to AI. AI agents can use these tools either via "
 "the note chat panel or Joplin's MCP server (if enabled)."
-msgstr ""
+msgstr "要開放給 AI 使用的工具與服務。AI 代理可以透過筆記對話面板或 Joplin 的 MCP 伺服器（如已啟用）使用這些工具。"
 
 #: packages/server/src/routes/admin/users.ts:167
 msgid "Total Size"
@@ -8344,11 +8172,11 @@ msgstr "類型：%s。"
 
 #: packages/lib/models/Setting.ts:1409
 msgid "Typography, spellcheck, layout"
-msgstr ""
+msgstr "排版、拼字檢查、版面配置"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:63
 msgid "Unable to access the recording file."
-msgstr ""
+msgstr "無法存取錄音檔案。"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1153
 msgid "Unable to edit resource of type %s"
@@ -8364,7 +8192,7 @@ msgstr "無法分享筆記資料。原因：%s"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:16
 msgid "Unavailable on this platform"
-msgstr ""
+msgstr "此平台無法使用"
 
 #: packages/app-mobile/components/Checkbox.tsx:51
 msgid "Unchecked"
@@ -8411,19 +8239,17 @@ msgid "Unknown platform"
 msgstr "未知的平台"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:42
-#, fuzzy
 msgid "Unknown size"
-msgstr "不明"
+msgstr "大小不明"
 
 #: packages/app-desktop/gui/NoteEditor/NoteLockPanel/NoteLockPanel.tsx:76
 #: packages/app-desktop/gui/NoteLockUnlockDialog/Dialog.tsx:79
 msgid "Unlock"
-msgstr ""
+msgstr "解鎖"
 
 #: packages/app-desktop/gui/NoteLockUnlockDialog/Dialog.tsx:66
-#, fuzzy
 msgid "Unlock encrypted notes"
-msgstr "無法更改已加密項目"
+msgstr "解鎖加密的筆記"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:107
 msgid "Unordered list"
@@ -8442,14 +8268,12 @@ msgid "Unpublish note"
 msgstr "未公布筆記"
 
 #: packages/app-desktop/gui/PublishFolderDialog.tsx:101
-#, fuzzy
 msgid "Unpublish notebook"
-msgstr "未公布筆記"
+msgstr "取消發布記事本"
 
 #: packages/app-cli/app/command-unpublish.ts:24
-#, fuzzy
 msgid "Unpublishes a note from Joplin Server or Joplin Cloud"
-msgstr "發佈筆記至 Joplin 伺服器或 Joplin Cloud"
+msgstr "從 Joplin 伺服器或 Joplin Cloud 取消發布筆記"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:431
 msgid "Unshare"
@@ -8468,9 +8292,8 @@ msgid ""
 msgstr "確定要停止共享嗎？此舉將會使共享對象無法再存取這份共享記事本。"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:79
-#, fuzzy
 msgid "Unsupported file extension. Expected: %s"
-msgstr "不支援的圖像類型：%s"
+msgstr "不支援的副檔名。預期：%s"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1012
 msgid "Unsupported image type: %s"
@@ -8493,7 +8316,7 @@ msgstr ""
 msgid ""
 "Unsupported public key format. Please check that Joplin is updated to the "
 "latest version and try again."
-msgstr ""
+msgstr "不支援的公開金鑰格式。請確認 Joplin 已更新至最新版本後再試一次。"
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:54
 #: packages/app-desktop/gui/ResourceScreen.tsx:127
@@ -8505,7 +8328,7 @@ msgstr "未命名"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newWhiteboard.ts:16
 msgid "Untitled whiteboard"
-msgstr ""
+msgstr "未命名白板"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:205
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:170
@@ -8518,12 +8341,11 @@ msgstr "可用更新"
 
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:91
 msgid "Update it from Google Play"
-msgstr ""
+msgstr "從 Google Play 更新"
 
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:99
-#, fuzzy
 msgid "Update it from the App Store"
-msgstr "從範本建立記事"
+msgstr "從 App Store 更新"
 
 #: packages/app-desktop/gui/UpdateNotification/UpdateNotification.tsx:53
 msgid "Update later"
@@ -8547,9 +8369,8 @@ msgid "Updated"
 msgstr "已更新"
 
 #: packages/lib/services/ai/tools/buildEditorTools.ts:60
-#, fuzzy
 msgid "Updated %s block"
-msgstr "已更新：%s"
+msgstr "已更新 %s 區塊"
 
 #: packages/lib/models/Folder.ts:56 packages/lib/models/Note.ts:80
 msgid "updated date"
@@ -8560,9 +8381,8 @@ msgid "Updated local items: %d."
 msgstr "已更新的本地項目: %d 項。"
 
 #: packages/lib/services/ai/tools/global/updateNote.ts:26
-#, fuzzy
 msgid "Updated note"
-msgstr "已更新："
+msgstr "已更新筆記"
 
 #: packages/lib/Synchronizer.ts:221
 msgid "Updated remote items: %d."
@@ -8591,9 +8411,8 @@ msgid "Upgrade"
 msgstr "升級"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:222
-#, fuzzy
 msgid "Upgrade key"
-msgstr "升級"
+msgstr "升級金鑰"
 
 #: packages/app-cli/app/command-sync.ts:41
 msgid "Upgrade the sync target to the latest version."
@@ -8601,7 +8420,7 @@ msgstr "升級同步目標到最新版本。"
 
 #: packages/lib/utils/joplinCloud/index.ts:443
 msgid "Upgrade to 100 GB"
-msgstr ""
+msgstr "升級至 100 GB"
 
 #: packages/app-mobile/components/CameraView/CameraView.web.tsx:45
 msgid "Upload photo"
@@ -8632,9 +8451,8 @@ msgstr ""
 "待辦事項), TITLE"
 
 #: packages/app-mobile/components/screens/Notes/Notes.tsx:113
-#, fuzzy
 msgid "Use own sort order"
-msgstr "切換目前的排序"
+msgstr "使用自訂排序"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.ts:185
 msgid "Use spell checker"
@@ -8672,7 +8490,7 @@ msgstr ""
 
 #: packages/server/src/routes/index/recovery_codes.ts:65
 msgid "Used"
-msgstr ""
+msgstr "已使用"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1669
 msgid ""
@@ -8708,13 +8526,13 @@ msgstr "有效的"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:26
 msgid "Vector search is not available on this platform"
-msgstr ""
+msgstr "此平台不支援向量搜尋"
 
 #: packages/lib/services/ai/availability.ts:71
 msgid ""
 "Vector search is unavailable on this platform (sqlite-vec extension not "
 "loaded)."
-msgstr ""
+msgstr "此平台無法使用向量搜尋（未載入 sqlite-vec 擴充功能）。"
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:9
 msgid "Verify your identity"
@@ -8725,9 +8543,8 @@ msgid "View"
 msgstr "檢視"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1684
-#, fuzzy
 msgid "View mode"
-msgstr "閱讀器"
+msgstr "檢視模式"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:198
 msgid "View OCR text"
@@ -8759,9 +8576,8 @@ msgid "Viewer font size"
 msgstr "閱讀器文字大小"
 
 #: packages/app-mobile/components/screens/Note/commands/toggleVisiblePanes.ts:25
-#, fuzzy
 msgid "Viewing"
-msgstr "檢視"
+msgstr "檢視中"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1914
 msgid "Vim"
@@ -8800,9 +8616,8 @@ msgstr "警告"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:160
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:50
-#, fuzzy
 msgid "Warning:"
-msgstr "警告"
+msgstr "警告："
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:319
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
@@ -8886,7 +8701,7 @@ msgstr "當新增待辦事項時："
 msgid ""
 "When enabled, plugins and built-in features can use AI models to generate or "
 "analyse text."
-msgstr ""
+msgstr "啟用後，延伸模組與內建功能可以使用 AI 模型產生或分析文字。"
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:167
 msgid ""
@@ -8901,7 +8716,7 @@ msgstr ""
 msgid ""
 "When enabled, tables are rendered as an interactive widget in the editor. "
 "Disable this if you prefer to edit tables as raw Markdown."
-msgstr ""
+msgstr "啟用後，表格會在編輯器中顯示為可互動的元件。如果您偏好以原始 Markdown 編輯表格，請停用此選項。"
 
 #: packages/lib/models/settings/builtInMetadata.ts:574
 msgid ""
@@ -8971,14 +8786,11 @@ msgstr ""
 "Silicon 編譯的版本以獲取最佳性能。"
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:137
-#, fuzzy
 msgid ""
 "You can synchronise your notes using Joplin Cloud, which also gives access "
 "to Joplin-specific features such as publishing notes or collaborating on "
 "notebooks with others."
-msgstr ""
-"Joplin 自己的同步服務。還可以使用 Joplin 的專屬功能，例如發布筆記或與他人在記"
-"事本上協作。"
+msgstr "您可以使用 Joplin Cloud 同步筆記，還能使用 Joplin 專屬功能，例如發布筆記或與他人在記事本上協作。"
 
 #: packages/app-mobile/components/NoteList.tsx:98
 msgid "You currently have no notebooks."
@@ -8990,7 +8802,7 @@ msgstr "您尚未安裝任何延伸模組。"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.tsx:63
 msgid "You have unsaved tag changes. Discard them?"
-msgstr ""
+msgstr "您有未儲存的標籤變更，要放棄嗎？"
 
 #: packages/app-cli/app/gui/NoteWidget.ts:58
 msgid "You may also type `status` for more information."
@@ -9008,7 +8820,7 @@ msgstr ""
 msgid ""
 "You switched notes while the request was running; edits were not applied. "
 "Try again."
-msgstr ""
+msgstr "要求執行期間您切換了筆記，因此未套用編輯。請再試一次。"
 
 #: packages/lib/services/joplinCloudUtils.ts:55
 msgid ""
@@ -9040,11 +8852,11 @@ msgid ""
 "particular, it is used to encrypt your notes when end-to-end encryption "
 "(E2EE) is enabled, or to share and encrypt notes with someone who has E2EE "
 "enabled."
-msgstr ""
+msgstr "您的主密碼用於保護敏感資訊，特別是在啟用端到端加密（E2EE）時加密您的筆記，或是與已啟用 E2EE 的人分享並加密筆記。"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:379
 msgid "Your note will be sent to the configured AI provider (%s)."
-msgstr ""
+msgstr "您的筆記將傳送到已設定的 AI 供應商（%s）。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:460
 msgid "Your password is needed to decrypt some of your data."
