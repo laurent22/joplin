@@ -1,6 +1,6 @@
 import { RefObject, useCallback } from 'react';
 import { Dispatch } from 'redux';
-import { FormNote, HtmlToMarkdownHandler, MarkupToHtmlHandler, ScrollOptions, MessageEvent, NoteBodyEditorRef } from './types';
+import { FormNote, HtmlToMarkdownHandler, MarkupToHtmlHandler, ScrollOptions, ScrollOptionTypes, MessageEvent, NoteBodyEditorRef } from './types';
 import contextMenu from './contextMenu';
 import CommandService from '@joplin/lib/services/CommandService';
 import PostMessageService from '@joplin/lib/services/PostMessageService';
@@ -8,6 +8,7 @@ import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import { reg } from '@joplin/lib/registry';
 import bridge from '../../../services/bridge';
 import { resolveContextMenuItemType } from './contextMenuUtils';
+import { parseResourceUrl } from '@joplin/lib/urlUtils';
 
 export default function useMessageHandler(
 	scrollWhenReadyRef: RefObject<ScrollOptions|null>,
@@ -74,6 +75,13 @@ export default function useMessageHandler(
 		} else if (msg === 'openPdfViewer') {
 			await CommandService.instance().execute('openPdfViewer', arg0.resourceId, arg0.pageNo);
 		} else {
+			// Selecting the note that is already open doesn't re-render it, so the hash would never be scrolled to.
+			const parsedUrl = parseResourceUrl(msg);
+			if (parsedUrl && parsedUrl.hash && parsedUrl.itemId === formNote.id) {
+				editorRef.current.scrollTo({ type: ScrollOptionTypes.Hash, value: parsedUrl.hash });
+				return;
+			}
+
 			await CommandService.instance().execute('openItem', msg);
 			// bridge().showErrorMessageBox(_('Unsupported link or message: %s', msg));
 		}
