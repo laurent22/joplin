@@ -23,11 +23,16 @@ const createTextAreaKeyListeners = () => {
 					focus('openEditDialog::dialogTextArea_keyDown', event.target);
 				});
 			}
+		} else if (event.key === 'Enter' && event.ctrlKey) {
+			// taboverride would insert a newline on Ctrl+Enter before the dialog reads the text to submit it
+			event.preventDefault();
+			taboverride.utils.removeListeners(event.currentTarget);
+			hasListeners = false;
 		}
 	};
 
 	const onKeyUp = (event: KeyboardEvent) => {
-		if (event.key === 'Tab' && !hasListeners) {
+		if ((event.key === 'Tab' || event.key === 'Enter') && !hasListeners) {
 			taboverride.utils.addListeners(event.currentTarget);
 			hasListeners = true;
 		}
