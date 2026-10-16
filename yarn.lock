@@ -12654,7 +12654,7 @@ __metadata:
     "@react-native-documents/picker": "npm:12.0.1"
     "@react-native-vector-icons/fontawesome5": "npm:13.1.2"
     "@react-native-vector-icons/get-image": "npm:12.3.0"
-    "@react-native-vector-icons/ionicons": "npm:13.0.0"
+    "@react-native-vector-icons/ionicons": "npm:13.1.2"
     "@react-native-vector-icons/material-design-icons": "npm:12.5.0"
     "@react-native-vector-icons/material-icons": "npm:12.5.0"
     "@react-native/babel-preset": "npm:0.86.3"
@@ -16119,7 +16119,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-vector-icons/common@npm:^13.0.0, @react-native-vector-icons/common@npm:^13.0.1":
+"@react-native-vector-icons/common@npm:^13.0.1":
   version: 13.0.3
   resolution: "@react-native-vector-icons/common@npm:13.0.3"
   dependencies:
@@ -16171,15 +16171,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-vector-icons/ionicons@npm:13.0.0":
-  version: 13.0.0
-  resolution: "@react-native-vector-icons/ionicons@npm:13.0.0"
+"@react-native-vector-icons/ionicons@npm:13.1.2":
+  version: 13.1.2
+  resolution: "@react-native-vector-icons/ionicons@npm:13.1.2"
   dependencies:
-    "@react-native-vector-icons/common": "npm:^13.0.0"
+    "@react-native-vector-icons/common": "npm:^13.0.1"
   peerDependencies:
+    "@expo/config-plugins": ">=10.0.0"
     react: "*"
     react-native: "*"
-  checksum: 10/2bf8d62cc86874b9349530ad6716497d6f8045affee9f4b0ce51a4569e892984cedb61e3fbd1e3e679dc9d5c47f34d3923f13e851a76936d48d4f4148fd8f59c
+  peerDependenciesMeta:
+    "@expo/config-plugins":
+      optional: true
+  checksum: 10/67cf5a9455b188fb67aab8e4065e7b823c3612e408d4cdd70f41fdd4aee3306a3ba943e12d56b6fca775bfb04aeeb70e49a5eb3194c21409a25d29a3885a5d99
   languageName: node
   linkType: hard
 

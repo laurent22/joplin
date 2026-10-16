@@ -333,10 +333,8 @@ describe('screens/Note/Note', () => {
 		await openNoteActionsMenu();
 
 		const originalReloadNote = shared.reloadNote;
-		const reloadStarted = deferred<void>();
 		const continueReload = deferred<void>();
 		const reloadSpy = jest.spyOn(shared, 'reloadNote').mockImplementation(async component => {
-			reloadStarted.resolve();
 			await continueReload.promise;
 			return originalReloadNote(component);
 		});
@@ -345,10 +343,12 @@ describe('screens/Note/Note', () => {
 			await Note.save({ id: noteId, body: 'Remote body' });
 			mockUseVisiblePluginEditorViewIds.mockReturnValue(['test-editor-plugin']);
 
+			// Awaiting an unbounded promise inside act() leaks an open act scope if the test times out,
+			// which breaks render() in the retries.
 			await act(async () => {
 				store.dispatch({ type: 'EDITOR_NOTE_NEEDS_RELOAD', noteId });
-				await reloadStarted.promise;
 			});
+			await waitFor(() => expect(reloadSpy).toHaveBeenCalledTimes(1));
 			fireEvent.press(await screen.findByText('Convert to todo'));
 
 			// Give the save queue enough time to process any incorrectly scheduled action.
