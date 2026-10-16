@@ -95,7 +95,7 @@
     "lerna": "3.22.1",
     "lint-staged": "16.4.0",
     "madge": "8.0.0",
-    "npm-package-json-lint": "10.0.0",
+    "npm-package-json-lint": "10.4.1",
     "typescript": "5.9.3"
   },
   "dependencies": {
