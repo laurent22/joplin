@@ -30,6 +30,7 @@ interface Props {
 	shareInvitations: ShareInvitation[];
 	processingShareInvitationResponse: boolean;
 	showInvalidJoplinCloudCredential: boolean;
+	noteLockBulkChangeRunning: boolean;
 }
 
 const androidGooglePlayUrl = 'https://play.google.com/store/apps/details?id=net.cozic.joplin';
@@ -132,6 +133,9 @@ const WarningBannerComponent: React.FC<Props> = props => {
 		const target = { screen: 'JoplinCloudLogin' };
 		warningComps.push(renderWarningBox('syncLogin', _('Your Joplin Cloud credentials are invalid, please login.'), target));
 	}
+	if (props.noteLockBulkChangeRunning) {
+		warningComps.push(renderWarningBox('noteLockBulkChange', _('Changing the note lock of your notes is in progress...'), null));
+	}
 
 	const shareInvitation = props.shareInvitations.find(inv => inv.status === ShareUserStatus.Waiting);
 	if (
@@ -185,5 +189,6 @@ export default connect((state: AppState) => {
 		shareInvitations: state.shareService.shareInvitations,
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
 		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && !isSyncLoginRoute(state) && state.mustAuthenticate,
+		noteLockBulkChangeRunning: state.noteLockBulkChangeRunning,
 	};
 })(WarningBannerComponent);

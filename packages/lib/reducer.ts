@@ -191,6 +191,7 @@ export interface State extends WindowState {
 	isInsertingNotes: boolean;
 	hasEncryptedItems: boolean;
 	noteLockSessionUnlocked: boolean;
+	noteLockBulkChangeRunning: boolean;
 	needApiAuth: boolean;
 	profileConfig: ProfileConfig;
 	noteListRendererIds: string[];
@@ -262,6 +263,7 @@ export const defaultState: State = {
 	isInsertingNotes: false,
 	hasEncryptedItems: false,
 	noteLockSessionUnlocked: false,
+	noteLockBulkChangeRunning: false,
 	needApiAuth: false,
 	profileConfig: null,
 	noteListRendererIds: getListRendererIds(),
@@ -1577,6 +1579,10 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'SET_NOTE_LOCK_SESSION_UNLOCKED':
 			draft.noteLockSessionUnlocked = action.value;
+			break;
+
+		case 'NOTE_LOCK_BULK_CHANGE_RUNNING_SET':
+			draft.noteLockBulkChangeRunning = action.value;
 			break;
 
 		case 'SET_ACTIVE_NOTE_IS_UNDECRYPTABLE':

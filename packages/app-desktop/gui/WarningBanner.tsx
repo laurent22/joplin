@@ -34,6 +34,7 @@ interface Props {
 	hasDisabledSyncItems: boolean;
 	showUnknownKeyFormatMessage: boolean;
 	showMissingMasterKeyMessage: boolean;
+	noteLockBulkChangeRunning: boolean;
 	mustUpgradeAppMessage: string;
 	syncTargetAppMinVersion: string;
 	shouldSwitchToAppleSiliconVersion: boolean;
@@ -143,6 +144,8 @@ const WarningBanner: React.FC<Props> = props => {
 			_('Set the password'),
 			onViewSyncSettingsScreen,
 		);
+	} else if (props.noteLockBulkChangeRunning) {
+		msg = renderNotificationMessage(_('Changing the note lock of your notes is in progress...'));
 	} else if (props.shouldUpgradeSyncTarget) {
 		msg = renderNotificationMessage(
 			_('The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.'),
@@ -298,6 +301,7 @@ const mapStateToProps = (state: AppState) => {
 		shareInvitations: state.shareService.shareInvitations,
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
 		isSafeMode: state.settings.isSafeMode,
+		noteLockBulkChangeRunning: state.noteLockBulkChangeRunning,
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
 		syncTargetAppMinVersion: syncInfo.appMinVersion,
 		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,

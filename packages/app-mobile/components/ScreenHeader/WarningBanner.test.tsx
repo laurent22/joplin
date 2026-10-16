@@ -154,4 +154,18 @@ describe('WarningBanner', () => {
 		// Should hide the warning banner
 		expect(screen.queryByRole('button', { name: buttonName })).toBeNull();
 	});
+
+	test('should show the bulk note lock banner only while the notes change', () => {
+		const mock = createMockStore();
+		render(<WarningBannerWrapper store={mock.store}/>);
+		const setRunning = (value: boolean) => act(() => {
+			mock.store.dispatch({ type: 'NOTE_LOCK_BULK_CHANGE_RUNNING_SET', value });
+		});
+
+		setRunning(true);
+		expect(screen.getByText('Changing the note lock of your notes is in progress...')).toBeVisible();
+
+		setRunning(false);
+		expect(screen.queryByText('Changing the note lock of your notes is in progress...')).toBeNull();
+	});
 });

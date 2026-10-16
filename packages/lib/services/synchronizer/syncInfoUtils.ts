@@ -35,6 +35,12 @@ export interface SyncInfoValuePublicPrivateKeyPair {
 	updatedTime: number;
 }
 
+// The sync target's note lock key and sync migration id, parked while a sync is stopped on a conflict.
+export interface NoteLockKeyConflict {
+	noteLockKey: MasterKeyEntity;
+	syncMigrationId: string;
+}
+
 // This should be set to the client version whenever we require all the clients to be at the same
 // version in order to synchronise. One example is when adding support for the trash feature - if an
 // old client that doesn't know about this feature synchronises data with a new client, the notes
@@ -603,6 +609,13 @@ export function setPpk(ppk: PublicPrivateKeyPair) {
 export function masterKeyById(id: string) {
 	return localSyncInfo().masterKeys.find(mk => mk.id === id);
 }
+
+const noteLockKeyConflictSettingKey = 'noteLock.conflictNoteLockKey';
+
+export const noteLockKeyConflict = (): NoteLockKeyConflict | null => {
+	const conflict = Setting.value(noteLockKeyConflictSettingKey) as Partial<NoteLockKeyConflict>;
+	return conflict.noteLockKey ? conflict as NoteLockKeyConflict : null;
+};
 
 export const checkIfCanSync = (s: SyncInfo, appVersion: string) => {
 	const isForwardCompatible = () => {
