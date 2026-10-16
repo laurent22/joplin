@@ -77,6 +77,52 @@ describe('app', () => {
 		}
 	});
 
+	test('should not apply a note refresh after a newer refresh has started', async () => {
+		const state = { ...defaultState, notesParentType: 'Folder', selectedFolderId: 'folder' } as State;
+		const dispatch = jest.fn();
+		const storeMock = jest.spyOn(app(), 'store').mockReturnValue({
+			dispatch,
+			getState: () => state,
+		} as unknown as ReturnType<ReturnType<typeof app>['store']>);
+		let resolveSlowPreviews: (notes: NoteEntity[])=> void = null;
+		const previewsMock = jest.spyOn(Note, 'previews')
+			.mockImplementationOnce(() => new Promise(resolve => { resolveSlowPreviews = resolve; }))
+			.mockResolvedValueOnce([{ id: 'fast-note' }]);
+
+		try {
+			const slowRefresh = app().refreshNotes(state);
+			const fastRefresh = (async () => {
+				await app().refreshNotes(state);
+				resolveSlowPreviews([{ id: 'slow-note' }]);
+			})();
+			await Promise.all([slowRefresh, fastRefresh]);
+
+			const noteUpdates = dispatch.mock.calls.map(call => call[0]).filter(action => action.type === 'NOTE_UPDATE_ALL');
+			expect(noteUpdates.map(action => action.notes)).toEqual([[{ id: 'fast-note' }]]);
+		} finally {
+			previewsMock.mockRestore();
+			storeMock.mockRestore();
+		}
+	});
+
+	test('should not let a refresh for an inactive window cancel the active window refresh', async () => {
+		const state = { ...defaultState, notesParentType: 'Folder', selectedFolderId: 'folder' } as State;
+		const dispatch = jest.fn();
+		const storeMock = jest.spyOn(app(), 'store').mockReturnValue({
+			dispatch,
+			getState: () => state,
+		} as unknown as ReturnType<ReturnType<typeof app>['store']>);
+		const previewsMock = jest.spyOn(Note, 'previews').mockResolvedValue([]);
+
+		try {
+			await Promise.all([app().refreshNotes(state), app().refreshNotes({ ...state, windowId: 'inactive-window' })]);
+			expect(dispatch).toHaveBeenCalledWith(expect.objectContaining({ type: 'NOTE_UPDATE_ALL' }));
+		} finally {
+			previewsMock.mockRestore();
+			storeMock.mockRestore();
+		}
+	});
+
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(0);
 		await switchClient(0);
