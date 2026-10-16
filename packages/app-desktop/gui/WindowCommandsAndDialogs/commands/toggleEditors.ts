@@ -22,6 +22,8 @@ export const runtime = (): CommandRuntime => {
 			Setting.setValue('editor.codeView', newValue);
 			context.dispatch({ type: 'EDITOR_CODE_VIEW_CHANGE', value: newValue });
 		},
-		enabledCondition: '!notesAreBeingSaved && oneNoteSelected',
+		// The conflict UI is Markdown only: the merge is drawn with CodeMirror
+		// decorations that the rich text editor cannot show
+		enabledCondition: '!notesAreBeingSaved && oneNoteSelected && !activeNoteIsConflict',
 	};
 };
