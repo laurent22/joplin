@@ -52,6 +52,10 @@ const markDecoration = Decoration.mark({
 	attributes: { class: 'cm-highlighted' },
 });
 
+const highlightedTextSelectionDecoration = Decoration.mark({
+	attributes: { class: 'cm-highlighted-selected' },
+});
+
 const blockQuoteDecoration = Decoration.line({
 	attributes: { class: 'cm-blockQuote' },
 });
@@ -200,6 +204,42 @@ const computeDecorations = (view: EditorView) => {
 		});
 	};
 
+	// Keep the selection visible by not painting the highlight background
+	// over selected text.
+	const addHighlightDecoration = (from: number, to: number) => {
+		let pos = from;
+
+		for (const selection of view.state.selection.ranges) {
+			if (selection.empty || selection.to <= pos || selection.from >= to) {
+				continue;
+			}
+
+			const selectedFrom = Math.max(pos, selection.from);
+			const selectedTo = Math.min(to, selection.to);
+
+			if (pos < selectedFrom) {
+				addDecorationToRange(pos, selectedFrom, markDecoration);
+			}
+
+			if (selectedFrom < selectedTo) {
+				addDecorationToRange(
+					selectedFrom,
+					selectedTo,
+					highlightedTextSelectionDecoration,
+				);
+			}
+
+			pos = selectedTo;
+			if (pos >= to) {
+				break;
+			}
+		}
+
+		if (pos < to) {
+			addDecorationToRange(pos, to, markDecoration);
+		}
+	};
+
 	for (const { from, to } of view.visibleRanges) {
 		ensureSyntaxTree(
 			view.state,
@@ -221,7 +261,12 @@ const computeDecorations = (view: EditorView) => {
 
 				if (nodeNameToMarkDecoration.hasOwnProperty(node.name)) {
 					const decoration = nodeNameToMarkDecoration[node.name];
-					addDecorationToRange(viewFrom, viewTo, decoration);
+
+					if (node.name === 'Highlight') {
+						addHighlightDecoration(viewFrom, viewTo);
+					} else {
+						addDecorationToRange(viewFrom, viewTo, decoration);
+					}
 				}
 
 				// Only certain block decorations will have differing first and last lines
@@ -268,7 +313,7 @@ const decoratorExtension = ViewPlugin.fromClass(class {
 	}
 
 	public update(viewUpdate: ViewUpdate) {
-		if (viewUpdate.docChanged || viewUpdate.viewportChanged) {
+		if (viewUpdate.docChanged || viewUpdate.viewportChanged || viewUpdate.selectionSet) {
 			this.decorations = computeDecorations(viewUpdate.view);
 		}
 	}
