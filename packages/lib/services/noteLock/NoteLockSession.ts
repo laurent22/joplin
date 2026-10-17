@@ -1,5 +1,7 @@
 import NoteLockKey, { DecryptedNoteLockKey } from './NoteLockKey';
 import eventManager, { EventName } from '../../eventManager';
+import { noteLockKeyConflict } from '../synchronizer/syncInfoUtils';
+import { _ } from '../../locale';
 
 export default class NoteLockSession {
 
@@ -8,6 +10,7 @@ export default class NoteLockSession {
 	private key_: DecryptedNoteLockKey = null;
 	private lockGeneration_ = 0;
 	private rotating_ = false;
+	private migrating_ = false;
 
 	private constructor(private noteLockKey_: NoteLockKey = NoteLockKey.instance()) {}
 
@@ -29,6 +32,7 @@ export default class NoteLockSession {
 	// check covers it.
 	public async unlock(password: string) {
 		if (this.rotating_) throw new Error('Cannot unlock: a note lock key reset is in progress');
+		if (this.migrating_) throw new Error(_('This note cannot be read while a note lock key migration is in progress.'));
 		const generation = this.lockGeneration_;
 		const decrypted = await this.noteLockKey_.decrypt(password);
 		if (this.lockGeneration_ !== generation) throw new Error('Cannot unlock: the session was locked while unlocking');
@@ -47,6 +51,8 @@ export default class NoteLockSession {
 	// Blocks unlock during rotation so the still-persisted old key can't be unlocked before the new one is saved.
 	public async reset(password: string) {
 		if (this.rotating_) throw new Error('A note lock key reset is already in progress');
+		// The migration would adopt the target key over the new one when it ends.
+		if (this.migrating_) throw new Error(_('The note lock password cannot be reset while a note lock key migration is in progress.'));
 		this.rotating_ = true;
 		this.lock();
 		try {
@@ -55,6 +61,12 @@ export default class NoteLockSession {
 			this.lock();
 			this.rotating_ = false;
 		}
+	}
+
+	// Locked notes stay closed in every window while a migration run re-encrypts them.
+	public setMigrating(migrating: boolean) {
+		this.migrating_ = migrating;
+		if (migrating) this.lock();
 	}
 
 	private lockIfKeyChanged_() {
@@ -76,7 +88,8 @@ export default class NoteLockSession {
 	}
 
 	// A lock clears key_ but not the persisted key, so this only fails on a real rotation, or one in progress.
+	// The key parked for migration is allowed too: migration re-encrypts to it before it is adopted.
 	public assertCanEncryptWith(keyId: string) {
-		if (this.rotating_ || this.noteLockKey_.load()?.id !== keyId) throw new Error('Note lock key changed during operation');
+		if (this.rotating_ || (this.noteLockKey_.load()?.id !== keyId && noteLockKeyConflict()?.noteLockKey.id !== keyId)) throw new Error('Note lock key changed during operation');
 	}
 }

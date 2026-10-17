@@ -17,7 +17,14 @@ interface ScreenTarget {
 	url?: undefined;
 }
 
-export type WarningBoxTarget = UrlTarget|ScreenTarget;
+interface CallbackTarget {
+	onPress: ()=> void;
+
+	url?: undefined;
+	screen?: undefined;
+}
+
+export type WarningBoxTarget = UrlTarget|ScreenTarget|CallbackTarget;
 
 interface Props {
 	themeId: number;
@@ -56,6 +63,8 @@ const WarningBox: React.FC<Props> = props => {
 		const isUrlTarget = (target: WarningBoxTarget): target is UrlTarget => !!target.url;
 		if (isUrlTarget(target)) {
 			void Linking.openURL(target.url);
+		} else if ('onPress' in target) {
+			target.onPress();
 		} else {
 			void NavService.go(target.screen, target.screenProps);
 		}
