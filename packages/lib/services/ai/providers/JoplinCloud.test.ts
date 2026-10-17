@@ -85,6 +85,22 @@ describe('ai/providers/JoplinCloud', () => {
 		expect(error.message).toMatch(/reached your AI usage budget/i);
 	});
 
+	it('should only use the Chat Completions API', async () => {
+		const urls: string[] = [];
+		const mock = mockFetch((request) => {
+			urls.push(request.url);
+			return new Response(request.url.endsWith('ai/chat/completions') ? '{ "choices": [] }' : '{ }', { status: 200 });
+		});
+		try {
+			await new JoplinCloudProvider().chat([]);
+		} finally {
+			mock.reset();
+		}
+
+		expect(urls.filter(url => url.endsWith('ai/chat/completions'))).toHaveLength(1);
+		expect(urls.filter(url => url.includes('responses'))).toHaveLength(0);
+	});
+
 	it('should retry rate-limited requests', async () => {
 		const { mock, requestCount } = mockRateLimitedChatApi();
 		try {

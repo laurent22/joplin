@@ -6,6 +6,8 @@ import { ChatFinishReason, ChatMessage, ChatOptions, ChatResult, ChatToolCall, P
 import ChatProviderBase from './ChatProviderBase';
 import { ToolSpec } from '../tools/types';
 import extractReasoning from '../utils/extractReasoning';
+import parseToolArguments from '../utils/parseToolArguments';
+import { fromResponsesJson, ResponsesApiResponse, toResponsesBody } from './openAiResponses';
 
 const logger = Logger.create('OpenAiCompatibleProvider');
 
@@ -118,19 +120,6 @@ const convertMessage = (message: ChatMessage) => {
 	}
 };
 
-const describeJsonParseFailure = (rawContent: string) => {
-	const parseError = ['Failed to parse JSON.'];
-
-	// With certain providers (e.g. Joplin Cloud), long messages are truncated. Include this information in the error message so that
-	// the model knows to retry with a shorter message:
-	const suggestedRetryLengthLimit = 1000;
-	if (rawContent.startsWith('{') && rawContent.length > suggestedRetryLengthLimit) {
-		parseError.push(`It's likely that the tool call JSON is too long. Please try again with a message shorter than ${suggestedRetryLengthLimit} characters.`);
-	}
-
-	return parseError.join(' ');
-};
-
 export interface ChatRequestOptions {
 	signal?: AbortSignal;
 }
@@ -140,6 +129,8 @@ export interface OpenAiChatResponse {
 	json: OpenAiResponse;
 }
 
+type ChatApi = 'responses' | 'chat-completions';
+
 export default class OpenAiCompatibleProvider extends ChatProviderBase {
 
 	public id = 'openai-compatible';
@@ -147,6 +138,7 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 	private baseUrl_: string;
 	private apiKey_: string;
 	private model_: string;
+	private api_: ChatApi|null = null;
 
 	public constructor(options: Options) {
 		super();
@@ -156,9 +148,54 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 		this.classification = options.classification;
 	}
 
+	protected canTryResponsesApi() {
+		return true;
+	}
+
 	protected async doChat(messages: ChatMessage[], options?: ChatOptions): Promise<ChatResult> {
 		if (!this.model_) throw new JoplinError('OpenAI-compatible provider has no model configured', 'aiProviderNotConfigured');
 
+		if (this.canTryResponsesApi() && this.api_ !== 'chat-completions') {
+			const result = await this.doResponsesChat(messages, options);
+			if (result) {
+				this.api_ = 'responses';
+				return result;
+			}
+			logger.info(`${this.baseUrl_}/responses returned 404. Using /chat/completions instead.`);
+		}
+
+		const chatCompletionsResult = await this.doChatCompletions(messages, options);
+		// Some servers like Ollama also return 404 when the model is not found so we only
+		// remember the fallback after /chat/completions works
+		this.api_ = 'chat-completions';
+		return chatCompletionsResult;
+	}
+
+	private async doResponsesChat(messages: ChatMessage[], options?: ChatOptions): Promise<ChatResult|null> {
+		const replayKey = `${this.baseUrl_}|${this.model_}`;
+		const body = toResponsesBody(this.model_, messages, options, replayKey);
+		const { status, json } = await this.sendResponsesRequest(body, { signal: options?.signal });
+
+		if (status === 404 && this.api_ === null) return null;
+
+		if (status >= 400) {
+			const detail = json?.error?.message ? `: ${json.error.message}` : '';
+			throw new JoplinError(`AI provider returned ${status}${detail}`, status);
+		}
+
+		if (!Array.isArray(json?.output)) throw this.badResponseShapeError();
+
+		return fromResponsesJson(json, replayKey);
+	}
+
+	private badResponseShapeError() {
+		return new JoplinError(
+			`AI provider returned an unexpected response shape. The base URL is likely wrong — for OpenAI, Ollama, and LM Studio the URL must end with "/v1" (got ${this.baseUrl_}).`,
+			'aiProviderBadResponse',
+		);
+	}
+
+	private async doChatCompletions(messages: ChatMessage[], options?: ChatOptions): Promise<ChatResult> {
 		const body: Record<string, unknown> = {
 			model: this.model_,
 			messages: messages.flatMap((message): unknown[] => convertMessage(message)),
@@ -210,12 +247,7 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 		// is wrong (e.g. user forgot the `/v1` suffix on a local server) — many
 		// such servers reply 200 with an empty body rather than 404. Surface
 		// this rather than returning an empty string the caller can't diagnose.
-		if (!Array.isArray(json.choices)) {
-			throw new JoplinError(
-				`AI provider returned an unexpected response shape. The base URL is likely wrong — for OpenAI, Ollama, and LM Studio the URL must end with "/v1" (got ${this.baseUrl_}).`,
-				'aiProviderBadResponse',
-			);
-		}
+		if (!Array.isArray(json.choices)) throw this.badResponseShapeError();
 
 		const choice = json.choices?.[0];
 		const responseMessage = choice?.message;
@@ -229,16 +261,7 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 		const toolCalls: ChatToolCall[] = (responseMessage?.tool_calls ?? []).map(call => {
 			if (!call.function) return null;
 
-			let args;
-			let parseError: string|null = null;
-			const argumentString = call.function.arguments;
-			try {
-				args = JSON.parse(argumentString);
-			} catch (error) {
-				args = {};
-				parseError = describeJsonParseFailure(argumentString);
-				logger.error('JSON parse failed', error, parseError);
-			}
+			const { args, parseError } = parseToolArguments(call.function.arguments);
 
 			return {
 				toolName: call.function.name,
@@ -257,29 +280,44 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 		};
 	}
 
-	protected async sendChatRequest(body: Record<string, unknown>, options: ChatRequestOptions): Promise<OpenAiChatResponse> {
+	private async post(path: string, body: Record<string, unknown>, options: ChatRequestOptions) {
 		if (!this.baseUrl_) throw new JoplinError('OpenAI-compatible provider has no base URL configured', 'aiProviderNotConfigured');
 
 		const headers: Record<string, string> = { 'Content-Type': 'application/json' };
 		if (this.apiKey_) headers['Authorization'] = `Bearer ${this.apiKey_}`;
 
-		const response = await shim.fetch(`${this.baseUrl_}/chat/completions`, {
+		const response = await shim.fetch(`${this.baseUrl_}${path}`, {
 			method: 'POST',
 			headers,
 			body: JSON.stringify(body),
 			signal: options.signal,
 		});
 
-		const text = await response.text();
+		return { status: response.status, text: await response.text() };
+	}
+
+	protected async sendChatRequest(body: Record<string, unknown>, options: ChatRequestOptions): Promise<OpenAiChatResponse> {
+		const { status, text } = await this.post('/chat/completions', body, options);
 		let json: OpenAiResponse;
 		try {
 			json = JSON.parse(text) as OpenAiResponse;
 		} catch {
-			throw new JoplinError(`AI provider returned non-JSON response: ${text.slice(0, 200)}`, response.status);
+			throw new JoplinError(`AI provider returned non-JSON response: ${text.slice(0, 200)}`, status);
 		}
 		return {
-			response: { status: response.status },
+			response: { status },
 			json,
 		};
+	}
+
+	private async sendResponsesRequest(body: Record<string, unknown>, options: ChatRequestOptions) {
+		const { status, text } = await this.post('/responses', body, options);
+		let json: ResponsesApiResponse|null = null;
+		try {
+			json = JSON.parse(text) as ResponsesApiResponse;
+		} catch {
+			if (status !== 404) throw new JoplinError(`AI provider returned non-JSON response: ${text.slice(0, 200)}`, status);
+		}
+		return { status, json };
 	}
 }
