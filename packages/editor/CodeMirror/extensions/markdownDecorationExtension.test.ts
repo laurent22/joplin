@@ -44,4 +44,27 @@ left    | right
 		expect(insertSpan).not.toBeNull();
 		expect(insertSpan?.textContent).toContain('inserted');
 	});
+	it('keeps selections visible within highlighted text', async () => {
+		const editorText = 'This is ==highlighted text==';
+		const highlightedText = 'highlighted';
+		const highlightStart = editorText.indexOf(highlightedText);
+		const editor = await createTestEditor(
+			editorText,
+			EditorSelection.cursor(0),
+			['Highlight'],
+			[decoratorExtension],
+		);
+
+		editor.dispatch({
+			selection: EditorSelection.range(
+				highlightStart,
+				highlightStart + highlightedText.length,
+			),
+		});
+
+		const selectedHighlight = editor.contentDOM.querySelector('.cm-highlighted-selected');
+		expect(selectedHighlight).not.toBeNull();
+		expect(selectedHighlight?.textContent).toBe(highlightedText);
+	});
+
 });
