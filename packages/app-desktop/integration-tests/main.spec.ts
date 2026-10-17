@@ -20,6 +20,26 @@ test.describe('main', () => {
 		await mainPage.waitFor();
 	});
 
+	test('application menu items should not share keyboard shortcuts', async ({ mainWindow, electronApp }) => {
+		await new MainScreen(mainWindow).setup();
+
+		// Hidden menu items still register their accelerators, so they are included.
+		const accelerators = await electronApp.evaluate(({ Menu }) => {
+			const result: string[] = [];
+			const addAccelerators = (menu: ReturnType<typeof Menu.getApplicationMenu>) => {
+				for (const item of menu?.items ?? []) {
+					if (item.accelerator) result.push(item.accelerator.toLowerCase());
+					addAccelerators(item.submenu ?? null);
+				}
+			};
+			addAccelerators(Menu.getApplicationMenu());
+			return result;
+		});
+
+		const duplicates = accelerators.filter((accelerator, index) => accelerators.indexOf(accelerator) !== index);
+		expect(duplicates).toEqual([]);
+	});
+
 	test('app should support French localization', async ({ mainWindow, electronApp }) => {
 		await setSettingValue(electronApp, mainWindow, 'locale', 'fr_FR');
 		// The "Notebooks" header should be localized
