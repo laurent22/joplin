@@ -839,10 +839,9 @@ function useMenu(props: Props) {
 						}, {
 							type: 'separator',
 							visible: shim.isMac(),
-						}, {
+						}, shim.isMac() ? {
 							role: 'togglefullscreen',
-							visible: shim.isMac(),
-						}],
+						} : noItem],
 				},
 				go: {
 					label: _('&Go'),
