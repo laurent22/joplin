@@ -24,7 +24,7 @@ export interface DialogControl {
 	info(message: string): Promise<void>;
 	error(message: string): Promise<void>;
 	prompt(title: string, message: string, buttons?: PromptButtonSpec[], options?: PromptOptions): void;
-	promptForText(message: string, initialValue?: string): Promise<string>;
+	promptForText(message: string, initialValue?: string, secureTextEntry?: boolean): Promise<string>;
 	showMenu<IdType>(title: string, choices: MenuChoice<IdType>[]): Promise<IdType>;
 }
 
@@ -48,6 +48,7 @@ export interface TextInputDialogData {
 	key: string;
 	message: string;
 	initialValue?: string;
+	secureTextEntry?: boolean;
 	onSubmit: (text: string)=> void;
 	onDismiss: ()=> void;
 }

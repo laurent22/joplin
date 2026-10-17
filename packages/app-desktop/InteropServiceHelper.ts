@@ -8,6 +8,9 @@ import { ExportModule } from '@joplin/lib/services/interop/Module';
 import { _ } from '@joplin/lib/locale';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import bridge from './services/bridge';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
+import { unlockNoteLockSession } from '@joplin/lib/services/noteLock/noteLockPrompts';
+import noteLockPrompts from './utils/noteLockPrompts';
 import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
 import { friendlySafeFilename } from '@joplin/lib/path-utils';
@@ -193,7 +196,29 @@ export default class InteropServiceHelper {
 		return `${filename}.${fileExtension}`;
 	}
 
-	public static async export(_dispatch: Dispatch, module: ExportModule, options: ExportNoteOptions = null) {
+	// Decrypting exports write locked notes out as plain text, so the user is asked even with the session unlocked,
+	// which only skips the password.
+	public static async confirmLockedNoteExport(dispatch: Dispatch, noteIds: string[], folderIds: string[] = null) {
+		if (!isNoteLockEnabled()) return 'export';
+		let hasLockedNotes = false;
+		if (noteIds?.length) {
+			hasLockedNotes = (await Note.byIds(noteIds, { fields: ['is_locked'] })).some(note => !!note.is_locked);
+		} else if (folderIds?.length) {
+			hasLockedNotes = await Note.hasLockedNoteInFolderTrees(folderIds);
+		} else {
+			hasLockedNotes = await Note.hasLockedNotes();
+		}
+		if (!hasLockedNotes) return 'export';
+
+		const answer = bridge().showMessageBox(_('Some notes are locked and this export format requires them to be unlocked. Would you like to export these notes unprotected, or export without these notes?'), {
+			buttons: [_('Export unprotected'), _('Export without locked notes'), _('Cancel')],
+		});
+		if (answer === 1) return 'skipLocked';
+		if (answer === 0 && await unlockNoteLockSession(noteLockPrompts(dispatch))) return 'export';
+		return 'cancel';
+	}
+
+	public static async export(dispatch: Dispatch, module: ExportModule, options: ExportNoteOptions = null) {
 		if (!options) options = {};
 
 		let path = null;
@@ -214,6 +239,11 @@ export default class InteropServiceHelper {
 
 		if (Array.isArray(path)) path = path[0];
 
+		// Backups keep locked notes encrypted, so only the decrypting formats ask.
+		const isBackup = module.format === ExportModuleOutputFormat.Raw || module.format === ExportModuleOutputFormat.Jex;
+		const lockedNoteChoice = isBackup ? 'export' : await this.confirmLockedNoteExport(dispatch, options.sourceNoteIds, options.sourceFolderIds);
+		if (lockedNoteChoice === 'cancel') return;
+
 		void CommandService.instance().execute('showModalMessage', _('Exporting to "%s" as "%s" format. Please wait...', path, module.format));
 
 		const exportOptions: ExportOptions = {};
@@ -226,6 +256,7 @@ export default class InteropServiceHelper {
 		exportOptions.includeConflicts = !!options.includeConflicts;
 		if (options.sourceFolderIds) exportOptions.sourceFolderIds = options.sourceFolderIds;
 		if (options.sourceNoteIds) exportOptions.sourceNoteIds = options.sourceNoteIds;
+		exportOptions.skipLockedNotes = lockedNoteChoice === 'skipLocked';
 
 		const service = InteropService.instance();
 		let keepModalOpen = false;
