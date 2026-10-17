@@ -39229,7 +39229,7 @@ __metadata:
     strip-ansi: "npm:6.0.1"
     tcp-port-used: "npm:1.0.3"
     temp: "npm:0.9.4"
-    terminal-kit: "npm:3.1.3"
+    terminal-kit: "npm:3.1.4"
     tkwidgets: "npm:0.5.27"
     typescript: "npm:5.9.3"
     url-parse: "npm:1.5.10"
@@ -56684,9 +56684,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"terminal-kit@npm:3.1.3":
-  version: 3.1.3
-  resolution: "terminal-kit@npm:3.1.3"
+"terminal-kit@npm:3.1.4":
+  version: 3.1.4
+  resolution: "terminal-kit@npm:3.1.4"
   dependencies:
     "@cronvel/get-pixels": "npm:^3.4.1"
     chroma-js: "npm:^2.4.2"
@@ -56696,7 +56696,7 @@ __metadata:
     seventh: "npm:^0.9.4"
     string-kit: "npm:^0.19.5"
     tree-kit: "npm:^0.8.10"
-  checksum: 10/18158a5cbe65be706b274bafedef2a7c5bc315befb41a37792a26ae56fa36cda5c8c8a7821075b743603b58dca04c6f765d0932ca542738e695227abdaba567c
+  checksum: 10/186ef544069127d865c2793a111298e213cac83db0c97ddff57b53b0f01f22b15ca3fc4850413a21f588c3407598764c9c343df4411100264a99a401fec7a648
   languageName: node
   linkType: hard
 
