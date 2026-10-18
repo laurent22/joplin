@@ -158,7 +158,7 @@ export function resourceBlobPath(resourceId: string): string {
 }
 
 export function isJoplinResourceBlobPath(path: string): boolean {
-	return path.indexOf(resourceDirName) === 0;
+	return path.indexOf(`${resourceDirName}/`) === 0;
 }
 
 const resolveUnsafeAssetPath = (relativeAssetPath: string) => {
