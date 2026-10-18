@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: wh201906 <wh201906@yandex.com>\n"
+"Last-Translator: Cappuccino <148667497+cat123go@users.noreply.github.com>\n"
 "Language-Team: zh_CN <clsty@celestialy.top>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
@@ -252,7 +252,7 @@ msgstr "%s (%s): %s"
 
 #: packages/lib/models/settings/builtInMetadata.ts:33
 msgid "%s (Beta)"
-msgstr "%s（Beta）"
+msgstr "%s（测试版）"
 
 #: packages/app-desktop/checkForUpdates.ts:110
 msgid "%s (pre-release)"
@@ -1051,11 +1051,11 @@ msgstr "基础 URL"
 
 #: packages/lib/utils/joplinCloud/index.ts:614
 msgid "Basic"
-msgstr "Basic"
+msgstr "基础版"
 
 #: packages/app-mobile/components/BetaChip.tsx:37
 msgid "Beta"
-msgstr "Beta"
+msgstr "测试版"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:484
 msgid "Bidirectional"
@@ -2284,7 +2284,7 @@ msgstr "详细内容"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:99
 msgid "Dev"
-msgstr "Dev"
+msgstr "开发版"
 
 #: packages/lib/versionInfo.ts:98
 msgid "Device: %s"
@@ -4792,7 +4792,7 @@ msgstr "Nextcloud 用户名"
 
 #: packages/lib/models/settings/builtInMetadata.ts:196
 msgid "Nextcloud WebDAV URL"
-msgstr "Nextcloud WebDAV URL"
+msgstr "Nextcloud WebDAV 地址"
 
 #: packages/lib/models/settings/builtInMetadata.ts:65
 msgid "no"
@@ -5733,11 +5733,11 @@ msgstr "隐私政策"
 
 #: packages/lib/utils/joplinCloud/index.ts:637
 msgid "Pro"
-msgstr "Pro"
+msgstr "专业版"
 
 #: packages/lib/utils/joplinCloud/index.ts:660
 msgid "Pro 100 GB"
-msgstr "Pro 100 GB"
+msgstr "专业版 100 GB"
 
 #: packages/server/src/services/TaskService.ts:27
 msgid "Process failed payment subscriptions"
@@ -6317,7 +6317,7 @@ msgstr "S3 密钥"
 
 #: packages/lib/models/settings/builtInMetadata.ts:288
 msgid "S3 URL"
-msgstr "S3 URL"
+msgstr "S3 地址"
 
 #: packages/app-desktop/gui/MainScreen.tsx:573
 msgid ""
@@ -8643,7 +8643,7 @@ msgstr "WebDAV 密码"
 
 #: packages/lib/models/settings/builtInMetadata.ts:231
 msgid "WebDAV URL"
-msgstr "WebDAV URL"
+msgstr "WebDAV 地址"
 
 #: packages/lib/models/settings/builtInMetadata.ts:243
 msgid "WebDAV username"
