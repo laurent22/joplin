@@ -9,7 +9,7 @@ import NoteLockKey, { DecryptedNoteLockKey } from './NoteLockKey';
 import NoteLockNote from './NoteLockNote';
 import NoteLockService from './NoteLockService';
 import NoteLockSession from './NoteLockSession';
-import { finishNoteLockKeyMigration, migrateLockedNotes, startNoteLockKeyMigration } from './NoteLockKeyMigration';
+import { confirmAndSkipNoteLockKeyMigration, finishNoteLockKeyMigration, migrateLockedNotes, startNoteLockKeyMigration } from './NoteLockKeyMigration';
 import eventManager, { EventName, NoteLockSessionChangeEvent } from '../../eventManager';
 import shim from '../../shim';
 
@@ -133,6 +133,18 @@ describe('NoteLockKeyMigration', () => {
 		} finally {
 			eventManager.off(EventName.NoteLockSessionChange, listener);
 		}
+	});
+
+	test.each([true, false])('should skip the migration only once the warning is confirmed (%s)', async (confirmed) => {
+		const showConfirmationDialog = jest.spyOn(shim, 'showConfirmationDialog').mockResolvedValue(confirmed);
+		const dispatch = jest.fn();
+
+		expect(await confirmAndSkipNoteLockKeyMigration(dispatch)).toBe(confirmed);
+
+		expect(showConfirmationDialog.mock.calls[0][0]).toContain('JEX backup');
+		expect(NoteLockKey.instance().load().id).toBe(confirmed ? targetKey.id : decryptedLocalKey.id);
+		expect(dispatch).toHaveBeenCalledTimes(confirmed ? 1 : 0);
+		showConfirmationDialog.mockRestore();
 	});
 
 	it('should report a background run that starts once the passwords are accepted', async () => {

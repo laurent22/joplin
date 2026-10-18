@@ -3,16 +3,11 @@ import * as ReactDom from 'react-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import shim from '@joplin/lib/shim';
 import NoteLockMigrationDialog from './Dialog';
-import { finishNoteLockKeyMigration, startNoteLockKeyMigration } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
+import { confirmAndSkipNoteLockKeyMigration, startNoteLockKeyMigration } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
 
 jest.mock('@joplin/lib/services/noteLock/NoteLockKeyMigration', () => ({
 	startNoteLockKeyMigration: jest.fn(),
-	finishNoteLockKeyMigration: jest.fn(),
-}));
-
-jest.mock('../../services/bridge', () => ({
-	__esModule: true,
-	default: () => ({ showConfirmMessageBox: jest.fn(() => true) }),
+	confirmAndSkipNoteLockKeyMigration: jest.fn(),
 }));
 
 // The dialog renders through a portal, jsdom has no modal dialog support, and DialogTitle relies on
@@ -23,7 +18,7 @@ HTMLDialogElement.prototype.showModal = function() { this.open = true; };
 HTMLDialogElement.prototype.close = function() { this.open = false; };
 
 const startMock = startNoteLockKeyMigration as jest.Mock;
-const finishMock = finishNoteLockKeyMigration as jest.Mock;
+const skipMock = confirmAndSkipNoteLockKeyMigration as jest.Mock;
 
 const renderDialog = () => {
 	const dispatch = jest.fn();
@@ -46,7 +41,7 @@ describe('NoteLockMigrationDialog/Dialog', () => {
 
 		await waitFor(() => expect(dispatch).toHaveBeenCalledWith({ type: 'DIALOG_CLOSE', name: 'noteLockMigration' }));
 		expect(startMock).toHaveBeenCalledWith('local', 'target', dispatch, expect.any(Function));
-		expect(finishMock).not.toHaveBeenCalled();
+		expect(skipMock).not.toHaveBeenCalled();
 	});
 
 	test('should report a wrong password and stay open', async () => {
@@ -59,14 +54,15 @@ describe('NoteLockMigrationDialog/Dialog', () => {
 		expect(dispatch).not.toHaveBeenCalled();
 	});
 
-	test('should adopt the sync target key when skipping after the warning', async () => {
+	test.each([true, false])('should close only once the skip is confirmed (%s)', async (confirmed) => {
+		skipMock.mockResolvedValue(confirmed);
 		const dispatch = renderDialog();
 
 		fireEvent.click(screen.getByText('Skip'));
 
-		await waitFor(() => expect(dispatch).toHaveBeenCalledWith({ type: 'DIALOG_CLOSE', name: 'noteLockMigration' }));
-		expect(finishMock).toHaveBeenCalled();
-		expect(dispatch).toHaveBeenCalledWith({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: null });
+		await waitFor(() => expect(skipMock).toHaveBeenCalledWith(dispatch));
+		if (confirmed) await waitFor(() => expect(dispatch).toHaveBeenCalledWith({ type: 'DIALOG_CLOSE', name: 'noteLockMigration' }));
+		else expect(dispatch).not.toHaveBeenCalled();
 		expect(startMock).not.toHaveBeenCalled();
 	});
 });

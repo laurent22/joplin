@@ -3,12 +3,13 @@ import { useState } from 'react';
 import { connect } from 'react-redux';
 import { Platform } from 'react-native';
 import { AppState } from '../../utils/types';
-import WarningBox, { WarningBoxTarget } from './WarningBox';
+import WarningBox, { WarningBoxAction, WarningBoxTarget } from './WarningBox';
+import NavService from '@joplin/lib/services/NavService';
 import { _, _n } from '@joplin/lib/locale';
 import { showMissingMasterKeyMessage, showUnknownKeyFormatBanner } from '@joplin/lib/services/e2ee/utils';
 import { localSyncInfoFromState, noteLockKeyConflictFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { NoteLockMigrationStatus } from '@joplin/lib/reducer';
-import { withSkippedCount } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
+import { confirmAndSkipNoteLockKeyMigration, withSkippedCount } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
 import { Dispatch } from 'redux';
 import Setting from '@joplin/lib/models/Setting';
 import { ShareInvitation, ShareUserStatus } from '@joplin/lib/services/share/reducer';
@@ -67,13 +68,14 @@ const WarningBannerComponent: React.FC<Props> = props => {
 		}
 	}, [props.mustUpgradeAppMessage, props.syncTargetAppMinVersion]);
 
-	const renderWarningBox = (key: string, message: string, target: WarningBoxTarget) => {
+	const renderWarningBox = (key: string, message: string, target: WarningBoxTarget, actions?: WarningBoxAction[]) => {
 		return <WarningBox
 			key={key}
 			themeId={props.themeId}
 			target={target}
 			message={message}
 			testID='warning-box'
+			actions={actions}
 		/>;
 	};
 
@@ -140,7 +142,10 @@ const WarningBannerComponent: React.FC<Props> = props => {
 		if (migration?.running) {
 			warningComps.push(renderWarningBox('noteLockMigration', _('Re-encrypting your locked notes with the synced key. Migration is in progress...'), null));
 		} else if (migration?.failed) {
-			warningComps.push(renderWarningBox('noteLockMigration', `${withSkippedCount(_n('%d locked note could not be migrated.', '%d locked notes could not be migrated.', migration.failed, migration.failed), migration)} ${_('Press to retry.')}`, { screen: 'NoteLockMigration' }));
+			warningComps.push(renderWarningBox('noteLockMigration', withSkippedCount(_n('%d locked note could not be migrated.', '%d locked notes could not be migrated.', migration.failed, migration.failed), migration), null, [
+				{ title: _('Retry'), onPress: () => void NavService.go('NoteLockMigration') },
+				{ title: _('Skip'), onPress: () => void confirmAndSkipNoteLockKeyMigration(props.dispatch) },
+			]));
 		} else if (migration) {
 			const onDismiss = () => props.dispatch({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: null });
 			warningComps.push(renderWarningBox('noteLockMigration', `${withSkippedCount(_('The migration of your locked notes has completed.'), migration)} ${_('Press to dismiss.')}`, { onPress: onDismiss }));

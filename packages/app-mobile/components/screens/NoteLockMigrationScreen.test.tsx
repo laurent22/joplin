@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { Store } from 'redux';
-import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
-import { finishNoteLockKeyMigration, startNoteLockKeyMigration } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
+import { confirmAndSkipNoteLockKeyMigration, startNoteLockKeyMigration } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
 import { NoteLockMigrationScreenComponent } from './NoteLockMigrationScreen';
 import TestProviderStack from '../testing/TestProviderStack';
 import createMockReduxStore from '../../utils/testing/createMockReduxStore';
@@ -14,11 +13,11 @@ import BackButtonService from '../../services/BackButtonService';
 
 jest.mock('@joplin/lib/services/noteLock/NoteLockKeyMigration', () => ({
 	startNoteLockKeyMigration: jest.fn(),
-	finishNoteLockKeyMigration: jest.fn(),
+	confirmAndSkipNoteLockKeyMigration: jest.fn(),
 }));
 
 const startMock = startNoteLockKeyMigration as jest.Mock;
-const finishMock = finishNoteLockKeyMigration as jest.Mock;
+const skipMock = confirmAndSkipNoteLockKeyMigration as jest.Mock;
 
 let store: Store<AppState>;
 const renderScreen = () => {
@@ -53,7 +52,7 @@ describe('NoteLockMigrationScreen', () => {
 
 		await waitFor(() => expect(dispatch).toHaveBeenCalledWith({ type: 'NAV_BACK' }));
 		expect(startMock).toHaveBeenCalledWith('local', 'target', dispatch, expect.any(Function));
-		expect(finishMock).not.toHaveBeenCalled();
+		expect(skipMock).not.toHaveBeenCalled();
 	});
 
 	test('should block going back while the passwords are checked', async () => {
@@ -87,15 +86,15 @@ describe('NoteLockMigrationScreen', () => {
 		expect(dispatch).not.toHaveBeenCalled();
 	});
 
-	test('should adopt the sync target key when skipping after the warning', async () => {
-		jest.spyOn(shim, 'showConfirmationDialog').mockResolvedValue(true);
+	test.each([true, false])('should leave the screen only once the skip is confirmed (%s)', async (confirmed) => {
+		skipMock.mockResolvedValue(confirmed);
 		const dispatch = renderScreen();
 
 		fireEvent.press(screen.getByText('Skip'));
 
-		await waitFor(() => expect(dispatch).toHaveBeenCalledWith({ type: 'NAV_BACK' }));
-		expect(finishMock).toHaveBeenCalled();
-		expect(dispatch).toHaveBeenCalledWith({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: null });
+		await waitFor(() => expect(skipMock).toHaveBeenCalledWith(dispatch));
+		if (confirmed) await waitFor(() => expect(dispatch).toHaveBeenCalledWith({ type: 'NAV_BACK' }));
+		else expect(dispatch).not.toHaveBeenCalled();
 		expect(startMock).not.toHaveBeenCalled();
 	});
 });

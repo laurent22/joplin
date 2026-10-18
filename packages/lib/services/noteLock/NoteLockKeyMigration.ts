@@ -68,6 +68,13 @@ export const finishNoteLockKeyMigration = () => {
 	NoteLockSession.instance().lock();
 };
 
+export const confirmAndSkipNoteLockKeyMigration = async (dispatch: Dispatch) => {
+	if (!await shim.showConfirmationDialog(_('Notes still locked with the password of this device will become permanently unreadable. It is recommended to first export all notes on this device as a JEX backup, which can be imported again later with that password. Continue without migrating them?'))) return false;
+	finishNoteLockKeyMigration();
+	dispatch({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: null });
+	return true;
+};
+
 // Runs in the background once both passwords are accepted, so the app stays usable, and reports its progress for the
 // banners. A run with failures keeps the target key parked for a retry or a skip.
 export const startNoteLockKeyMigration = async (localPassword: string, targetPassword: string, dispatch: Dispatch, onStarted: ()=> void) => {

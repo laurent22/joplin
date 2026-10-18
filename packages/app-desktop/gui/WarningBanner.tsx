@@ -18,7 +18,7 @@ import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import { showMissingMasterKeyMessage, showUnknownKeyFormatBanner } from '@joplin/lib/services/e2ee/utils';
 import { noteLockKeyConflictFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { NoteLockMigrationStatus } from '@joplin/lib/reducer';
-import { withSkippedCount } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
+import { confirmAndSkipNoteLockKeyMigration, withSkippedCount } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
 import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/config/shouldShowMissingPasswordWarning';
 import { connect } from 'react-redux';
 
@@ -170,6 +170,8 @@ const WarningBanner: React.FC<Props> = props => {
 			withSkippedCount(_n('%d locked note could not be migrated.', '%d locked notes could not be migrated.', failed, failed), props.noteLockMigrationStatus),
 			_('Retry'),
 			onMigrateLockedNotes,
+			_('Skip'),
+			() => void confirmAndSkipNoteLockKeyMigration(props.dispatch),
 		);
 	} else if (props.noteLockMigrationStatus) {
 		msg = renderNotificationMessage(

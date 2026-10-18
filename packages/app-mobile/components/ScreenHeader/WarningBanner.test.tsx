@@ -11,6 +11,7 @@ import { Store } from 'redux';
 import createMockReduxStore from '../../utils/testing/createMockReduxStore';
 import setupGlobalStore from '../../utils/testing/setupGlobalStore';
 import MasterKey from '@joplin/lib/models/MasterKey';
+import shim from '@joplin/lib/shim';
 
 interface WrapperProps {
 	store: Store<AppState>;
@@ -163,7 +164,12 @@ describe('WarningBanner', () => {
 		expect(screen.queryByText(/different note lock key/)).toBeNull();
 
 		setStatus({ running: false, failed: 2, skipped: 0 });
-		fireEvent.press(screen.getByText(/2 locked notes could not be migrated/));
+		expect(screen.getByText(/2 locked notes could not be migrated/)).toBeVisible();
+		const showConfirmationDialog = jest.spyOn(shim, 'showConfirmationDialog').mockResolvedValue(false);
+		fireEvent.press(screen.getByText('Skip'));
+		expect(showConfirmationDialog).toHaveBeenCalled();
+		showConfirmationDialog.mockRestore();
+		fireEvent.press(screen.getByText('Retry'));
 		expect(mock.getRouteName()).toBe('NoteLockMigration');
 
 		setStatus({ running: false, failed: 0, skipped: 1 });

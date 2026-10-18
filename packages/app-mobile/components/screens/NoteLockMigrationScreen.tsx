@@ -5,8 +5,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { themeStyle } from '../global-style';
 import { _ } from '@joplin/lib/locale';
-import shim from '@joplin/lib/shim';
-import { finishNoteLockKeyMigration, startNoteLockKeyMigration } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
+import { confirmAndSkipNoteLockKeyMigration, startNoteLockKeyMigration } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
 import ScreenHeader from '../ScreenHeader';
 import { PrimaryButton, SecondaryButton } from '../buttons';
 import { AppState } from '../../utils/types';
@@ -79,10 +78,7 @@ export const NoteLockMigrationScreenComponent: React.FC<Props> = props => {
 	}, [localPassword, targetPassword, props.dispatch]);
 
 	const onSkip = useCallback(async () => {
-		if (!await shim.showConfirmationDialog(_('Notes still locked with the password of this device will become permanently unreadable. Continue without migrating them?'))) return;
-		finishNoteLockKeyMigration();
-		props.dispatch({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: null });
-		props.dispatch({ type: 'NAV_BACK' });
+		if (await confirmAndSkipNoteLockKeyMigration(props.dispatch)) props.dispatch({ type: 'NAV_BACK' });
 	}, [props.dispatch]);
 
 	const localLabelId = 'note-lock-migration-local-password';

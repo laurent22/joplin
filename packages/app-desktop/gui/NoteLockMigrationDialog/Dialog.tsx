@@ -6,8 +6,7 @@ import DialogButtonRow, { ClickEvent } from '../DialogButtonRow';
 import Dialog from '@joplin/lib/components/Dialog';
 import DialogTitle from '../DialogTitle';
 import LabelledPasswordInput from '../PasswordInput/LabelledPasswordInput';
-import { finishNoteLockKeyMigration, startNoteLockKeyMigration } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
-import bridge from '../../services/bridge';
+import { confirmAndSkipNoteLockKeyMigration, startNoteLockKeyMigration } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
 
 interface Props {
 	themeId: number;
@@ -42,10 +41,7 @@ export default function(props: Props) {
 		}
 
 		if (event.buttonName === 'skip') {
-			if (!bridge().showConfirmMessageBox(_('Notes still locked with the password of this device will become permanently unreadable. Continue without migrating them?'))) return;
-			finishNoteLockKeyMigration();
-			props.dispatch({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: null });
-			onClose();
+			if (await confirmAndSkipNoteLockKeyMigration(props.dispatch)) onClose();
 			return;
 		}
 
