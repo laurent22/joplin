@@ -8879,6 +8879,485 @@ msgstr "放大"
 msgid "Zoom Out"
 msgstr "缩小"
 
+#: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:461
+msgid "(You can show it again from Settings → AI)"
+msgstr "（你可以稍后在“设置”→“AI”中重新显示它）"
+
+
+#: packages/lib/models/settings/builtInMetadata.ts:621
+msgid ""
+"Allows selecting specific attachments for higher-quality on-server OCR. "
+"When enabled, the right-click menu for an attachment includes an option to "
+"send an attachment to Joplin Cloud/Server for off-device processing.\n"
+"\n"
+"Experimental! It may not work at all. Requires Joplin Server or Cloud."
+msgstr ""
+"允许为附件选择更高质量的服务器端 OCR。启用后，附件右键菜单会提供将其发送到 Joplin Cloud/Server 进行离线处理的选项。\n"
+"\n"
+"实验性功能！它可能完全无法使用。需要 Joplin Server 或 Joplin Cloud。"
+
+
+#: packages/lib/models/settings/builtInMetadata.ts:2443
+msgid "Allows using semantic search from the search panel"
+msgstr "允许从搜索面板使用语义搜索"
+
+
+#: packages/lib/models/settings/builtInMetadata.ts:2355
+msgid "Auto relock when switching notes"
+msgstr "切换笔记时自动重新锁定"
+
+
+#: packages/lib/models/settings/builtInMetadata.ts:2343
+msgid "Automatically merge non-conflicting note changes"
+msgstr "自动合并不冲突的笔记更改"
+
+
+#: packages/lib/models/settings/builtInMetadata.ts:1861
+msgid "Automatically upload crash reports"
+msgstr "自动上传崩溃报告"
+
+
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:112
+#: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:118
+msgid "Blockquote"
+msgstr "引用块"
+
+
+#: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:552
+#: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:553
+msgid "Chat history"
+msgstr "聊天记录"
+
+
+#: packages/lib/services/e2ee/utils.ts:383
+msgid "Checking..."
+msgstr "正在检查……"
+
+
+#: packages/app-mobile/components/SideMenuContent/SideMenuItem.tsx:46
+msgid "Collapse %s"
+msgstr "折叠 %s"
+
+
+#: packages/lib/models/settings/builtInMetadata.ts:43
+msgid "Connect to %s"
+msgstr "连接到 %s"
+
+
+#: packages/lib/components/shared/config/config-shared.ts:141
+msgid ""
+"Connected successfully, but the model used its entire output budget on "
+"reasoning and returned no text."
+msgstr "连接成功，但模型将全部输出额度用于推理，未返回文本。"
+
+
+#: packages/app-desktop/gui/ChatPanel/ChatHistory.tsx:86
+msgid "Conversation title"
+msgstr "对话标题"
+
+
+#: packages/app-desktop/gui/ChatPanel/ChatHistory.tsx:71
+msgid "Conversations"
+msgstr "对话"
+
+
+#: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:417
+msgid "Could not delete conversation."
+msgstr "无法删除对话。"
+
+
+#: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:431
+msgid "Could not rename conversation."
+msgstr "无法重命名对话。"
+
+
+#: packages/app-mobile/components/screens/Note/NoteLockPanel.tsx:91
+msgid "Could not unlock. Please try again."
+msgstr "无法解锁。请重试。"
+
+
+#: packages/app-mobile/components/screens/Note/Note.tsx:968
+msgid "Could not update the note lock. Please try again."
+msgstr "无法更新笔记锁定。请重试。"
+
+
+#: packages/lib/models/settings/builtInMetadata.ts:1824
+msgid ""
+"CSS file support is provided for your convenience, but they are advanced "
+"settings, and styles you define may break from one version to the next. If "
+"you want to use them, please know that it might require regular development "
+"work from you to keep them working. The Joplin team cannot make a "
+"commitment to keep the application HTML structure stable."
+msgstr ""
+"CSS "
+"文件支持是为方便你自定义而提供的，但这些属于高级设置，你定义的样式可能会在版本升级后失效。如果你要使用它们，请注意可能需要持续维护才能保持有效。Jopl"
+"in 团队无法承诺保持应用 HTML 结构稳定。"
+
+
+#: packages/lib/models/settings/builtInMetadata.ts:1496
+msgid "Development plugins"
+msgstr "开发插件"
+
+
+#: packages/lib/models/settings/builtInMetadata.ts:2366
+msgid "Enable auto-updates"
+msgstr "启用自动更新"
+
+
+#: packages/lib/models/settings/builtInMetadata.ts:2379
+msgid "Enable keychain support"
+msgstr "启用密钥环支持"
+
+
+#: packages/lib/models/settings/builtInMetadata.ts:2045
+msgid ""
+"Enable the the legacy Markdown editor. Some plugins require this editor to "
+"function. However, it has accessibility issues and other plugins will not "
+"work."
+msgstr "启用旧版 Markdown 编辑器。部分插件需要此编辑器才能运行。不过，它存在无障碍问题，其他插件也无法正常工作。"
+
+
+#: packages/lib/models/settings/builtInMetadata.ts:2367
+msgid ""
+"Enable this feature to receive notifications about updates and install them "
+"instead of manually downloading them. Restart app to start receiving "
+"auto-updates."
+msgstr "启用此功能后，将收到更新通知，并可自动安装更新，无需手动下载。重启应用后开始接收自动更新。"
+
+
+#: packages/app-desktop/gui/NoteLockUnlockDialog/Dialog.tsx:68
+msgid "Enter your password to unlock your notes for this session."
+msgstr "输入密码，以在本次会话中解锁你的笔记。"
+
+
+#: packages/app-desktop/InteropServiceHelper.ts:239
+msgid ""
+"Export completed, but some items were skipped because they have not been "
+"downloaded to this device or could not be exported:"
+msgstr "导出已完成，但部分项目因尚未下载到此设备或无法导出而被跳过："
+
+
+#: packages/app-mobile/components/screens/ConfigScreen/SettingComponent.tsx:179
+msgid "Failed: %s"
+msgstr "失败：%s"
+
+
+#: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:215
+msgid ""
+"For better security, your note lock protection can be upgraded to a newer "
+"method. Enter your password to upgrade it. Your notes will keep locking and "
+"unlocking as usual."
+msgstr "为了更高的安全性，可以将笔记锁定保护升级到更新版本。请输入密码完成升级。你的笔记仍会照常锁定和解锁。"
+
+
+#: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:458
+msgid "Hide the AI Chat button"
+msgstr "隐藏 AI 聊天按钮"
+
+
+#: packages/lib/models/settings/builtInMetadata.ts:1848
+msgid ""
+"If the data on the sync target is correct but your local data is not, you "
+"can use this button to clear your local data and force re-downloading "
+"everything from the sync target. As your local data will be deleted first, "
+"it is recommended to export your data as JEX first. Application will have "
+"to be restarted"
+msgstr ""
+"如果同步目标上的数据正确，但本地数据不正确，可以使用此按钮清除本地数据，并强制从同步目标重新下载全部内容。由于本地数据会先被删除，建议先将数据导出为 "
+"JEX。之后需要重启应用"
+
+
+#: packages/lib/models/settings/builtInMetadata.ts:1837
+msgid ""
+"If the data on the sync target is incorrect or empty, you can use this "
+"button to force a re-upload of your data to the sync target. Application "
+"will have to be restarted"
+msgstr "如果同步目标上的数据不正确或为空，可以使用此按钮强制将你的数据重新上传到同步目标。之后需要重启应用"
+
+
+#: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:455
+msgid "If you do not want to use the AI features, you may hide the toolbar button:"
+msgstr "如果你不想使用 AI 功能，可以隐藏工具栏按钮："
+
+
+#: packages/lib/models/settings/builtInMetadata.ts:1862
+msgid ""
+"If you experience a crash, please enable this option to automatically send "
+"crash reports. You will need to restart the application for this change to "
+"take effect."
+msgstr "如果你遇到崩溃，请启用此选项以自动发送崩溃报告。需要重启应用后更改才会生效。"
+
+
+#: packages/lib/models/settings/builtInMetadata.ts:2311
+msgid ""
+"Important: This is a beta feature and it is not compatible with certain "
+"devices. If the app no longer starts after enabling this or is very slow to "
+"start, please uninstall and reinstall the app."
+msgstr "重要：这是测试版功能，与某些设备不兼容。如果启用后应用无法启动或启动非常慢，请卸载并重新安装应用。"
+
+
+#: packages/lib/models/settings/builtInMetadata.ts:2419
+msgid ""
+"Improves Rich Text Editor security by applying a strict content security "
+"policy to the Rich Text Editor's content."
+msgstr "通过为富文本编辑器的内容应用严格的内容安全策略来提升其安全性。"
+
+
+#: packages/lib/models/settings/builtInMetadata.ts:2431
+msgid "Improves the security of plugin WebViews. This may break some plugins."
+msgstr "提升插件 WebView 的安全性。这可能会导致部分插件失效。"
+
+
+#: packages/lib/models/settings/builtInMetadata.ts:2442
+msgid "Include semantic search results in the search panel"
+msgstr "在搜索面板中包含语义搜索结果"
+
+
+#: packages/app-mobile/components/NoteItem.tsx:243
+#: packages/lib/services/noteList/defaultLeftToRightListRenderer.ts:211
+#: packages/lib/services/noteList/defaultListRenderer.ts:232
+#: packages/lib/services/noteList/defaultMultiColumnsRenderer.ts:188
+msgid "Local only"
+msgstr "仅本地"
+
+
+#: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/enableNoteEncryption.ts:13
+#: packages/app-mobile/components/screens/Note/Note.tsx:1580
+#: packages/app-mobile/components/screens/Note/Note.tsx:974
+msgid "Lock this note"
+msgstr "锁定此笔记"
+
+
+#: packages/app-mobile/components/NoteItem.tsx:244
+#: packages/lib/services/noteList/defaultLeftToRightListRenderer.ts:209
+#: packages/lib/services/noteList/defaultListRenderer.ts:230
+#: packages/lib/services/noteList/defaultMultiColumnsRenderer.ts:186
+msgid "Locked"
+msgstr "已锁定"
+
+
+#: packages/lib/models/Setting.ts:1390
+msgid ""
+"Locked notes are specific notes that are encrypted on the device and "
+"protected by your note lock password. They can only be read after entering "
+"this password. The password is required again after relocking notes or "
+"restarting Joplin."
+msgstr "锁定笔记是在此设备上加密并受笔记锁定密码保护的特定笔记。只有在输入该密码后才能读取。重新锁定笔记或重启 Joplin 后，需要再次输入密码。"
+
+
+#: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/enableNoteEncryption.ts:33
+#: packages/app-mobile/components/screens/Note/Note.tsx:974
+msgid ""
+"Locking a note requires the note lock password, which has not been set up "
+"yet. Set it up now?"
+msgstr "锁定笔记需要笔记锁定密码，但尚未设置。现在设置吗？"
+
+
+#: packages/app-desktop/gui/WarningBanner.tsx:232
+msgid "Manage"
+msgstr "管理"
+
+
+#: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:532
+msgid "New chat"
+msgstr "新建对话"
+
+
+#: packages/lib/models/Setting.ts:1407
+msgid "Note lock password, auto relock"
+msgstr "笔记锁定密码、自动重新锁定"
+
+
+#: packages/app-desktop/gui/WarningBanner.tsx:231
+#: packages/lib/components/EncryptionConfigScreen/utils.ts:233
+msgid "One or more encryption keys are stored in an unknown format."
+msgstr "一个或多个加密密钥以未知格式存储。"
+
+
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:116
+msgid ""
+"One or more encryption keys are stored in an unknown format. Press for more "
+"info."
+msgstr "有一个或多个加密密钥以未知格式存储。点击了解更多信息。"
+
+
+#: packages/app-desktop/commands/openSyncWizard.ts:6
+msgid "Open sync wizard"
+msgstr "打开同步向导"
+
+
+#: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:130
+msgid ""
+"Please make sure you remember your password. It cannot be recovered if "
+"lost, and any locked notes will become inaccessible."
+msgstr "请务必记住你的密码。密码丢失后无法恢复，所有已锁定的笔记都将无法访问。"
+
+
+#: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:129
+#: packages/app-mobile/components/screens/ConfigScreen/NoteLockConfig.tsx:136
+msgid ""
+"Please make sure you remember your password. It cannot be recovered if "
+"lost, and any locked notes will become inaccessible. If you have already "
+"set up the note lock password on another device, there is no need to set it "
+"again, as the information required to access your locked notes is updated "
+"when you set up sync."
+msgstr ""
+"请务必记住你的密码。密码丢失后无法恢复，所有已锁定的笔记都将无法访问。如果你已在其他设备上设置笔记锁定密码，则无需再次设置，因为同步设置会更新访问已锁定"
+"笔记所需的信息。"
+
+
+#: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/lockEncryptedNotes.ts:8
+#: packages/app-mobile/components/screens/Note/Note.tsx:1603
+msgid "Relock all notes"
+msgstr "重新锁定所有笔记"
+
+
+#: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/disableNoteEncryption.ts:9
+#: packages/app-mobile/components/screens/Note/Note.tsx:1589
+msgid "Remove note lock"
+msgstr "移除笔记锁定"
+
+
+#: packages/lib/models/settings/builtInMetadata.ts:695
+msgid ""
+"Required to use cloud-hosted AI models, including Joplin Cloud AI. When "
+"disabled, only providers on your own device or private network can be used."
+msgstr "使用云端托管的 AI 模型（包括 Joplin Cloud AI）所必需。禁用后只能使用你自己的设备或专用网络上的提供方。"
+
+
+#: packages/app-desktop/gui/ChatPanel/ChatHistory.tsx:62
+#: packages/app-desktop/gui/ChatPanel/ChatHistory.tsx:63
+msgid "Search conversations"
+msgstr "搜索对话"
+
+
+#: packages/lib/models/settings/builtInMetadata.ts:2430
+msgid "Security: Improve plugin panel, editor, and dialog security"
+msgstr "安全：提升插件面板、编辑器和对话框的安全性"
+
+
+#: packages/lib/models/settings/builtInMetadata.ts:2418
+msgid "Security: Stronger security controls in the Rich Text Editor"
+msgstr "安全：增强富文本编辑器的安全控制"
+
+
+#: packages/lib/models/settings/builtInMetadata.ts:782
+msgid "Show the AI Chat button in the note toolbar"
+msgstr "在笔记工具栏中显示 AI 聊天按钮"
+
+
+#: packages/app-mobile/components/screens/encryption-config.tsx:177
+msgid "Status: Unsupported key format"
+msgstr "状态：不支持的密钥格式"
+
+
+#: packages/lib/commands/convertNoteToMarkdown.ts:84
+msgid ""
+"The note has been converted to Markdown and an HTML copy has been moved to "
+"the trash"
+msgid_plural ""
+"The notes have been converted to Markdown and HTML copies have been moved "
+"to the trash"
+msgstr[0] "这些笔记已转换为 Markdown，HTML 副本已移至回收站"
+
+
+#: packages/lib/models/settings/builtInMetadata.ts:1499
+msgid ""
+"The path to a plugin's development directory. When the plugin is rebuilt, "
+"Joplin reloads the plugin automatically."
+msgstr "插件开发目录的路径。插件重新构建后，Joplin 会自动重新加载该插件。"
+
+
+#: packages/lib/models/settings/builtInMetadata.ts:1337
+msgid ""
+"The plain text editor has various issues and is no longer supported. If you "
+"are having issues with the new editor however you can revert to the old one "
+"using this setting."
+msgstr "纯文本编辑器存在多种问题，且已不再受支持。如果你使用新编辑器遇到问题，可以通过此设置切换回旧编辑器。"
+
+
+#: packages/lib/components/EncryptionConfigScreen/utils.ts:234
+msgid ""
+"These keys were most likely created by a newer version of Joplin. Please "
+"check that Joplin has been updated to the latest version."
+msgstr "这些密钥很可能由较新版本的 Joplin 创建。请检查 Joplin 是否已更新到最新版本。"
+
+
+#: packages/lib/models/settings/builtInMetadata.ts:2380
+msgid "This is an experimental setting to enable keychain support on Linux"
+msgstr "这是一个实验性设置，用于在 Linux 上启用密钥环支持"
+
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/FileNode.tsx:228
+msgid ""
+"This linked item cannot be displayed because the note is locked and could "
+"not be unlocked"
+msgstr "由于笔记已锁定且无法解锁，无法显示此链接项目"
+
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/FileNode.tsx:227
+msgid ""
+"This linked item cannot be displayed because the note is locked. Unlock the "
+"session to view it"
+msgstr "由于笔记已锁定，无法显示此链接项目。请解锁当前会话后再查看"
+
+
+#: packages/app-desktop/gui/NoteEditor/NoteLockPanel/NoteLockPanel.tsx:53
+#: packages/app-mobile/components/screens/Note/NoteLockPanel.tsx:99
+msgid ""
+"This note could not be unlocked. If it was locked prior to a password "
+"reset, the content is no longer recoverable."
+msgstr "无法解锁此笔记。如果它是在重置密码之前锁定的，则其内容将无法恢复。"
+
+
+#: packages/app-desktop/gui/NoteEditor/NoteLockPanel/NoteLockPanel.tsx:67
+#: packages/app-mobile/components/screens/Note/NoteLockPanel.tsx:116
+msgid ""
+"This note is locked. Enter your password to unlock your notes for this "
+"session."
+msgstr "此笔记已锁定。输入密码，以在本次会话中解锁你的笔记。"
+
+
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:214
+msgid "Unknown key format"
+msgstr "未知密钥格式"
+
+
+#: packages/app-desktop/gui/NoteLockUnlockDialog/Dialog.tsx:66
+msgid "Unlock notes"
+msgstr "解锁笔记"
+
+
+#: packages/lib/services/e2ee/utils.ts:388
+msgid "Unsupported key format"
+msgstr "不支持的密钥格式"
+
+
+#: packages/lib/models/settings/builtInMetadata.ts:1336
+msgid "Use the plain text editor"
+msgstr "使用纯文本编辑器"
+
+
+#: packages/app-mobile/components/screens/encryption-config.tsx:407
+msgid "Warning: "
+msgstr "警告："
+
+
+#: packages/lib/models/settings/builtInMetadata.ts:2344
+msgid ""
+"When the same note is edited on two devices, changes made to different "
+"lines are usually merged automatically. In rare cases, automatic merging "
+"may result in duplicated content or formatting changes"
+msgstr "当同一篇笔记在两台设备上编辑时，对不同行所做的更改通常会自动合并。极少数情况下，自动合并可能产生重复内容或格式变化"
+
+
+#: packages/lib/models/settings/builtInMetadata.ts:1501
+msgid ""
+"You may add multiple plugin paths, each separated by a comma. You will need "
+"to restart the application for the changes to take effect."
+msgstr "你可以添加多个插件路径，路径之间用逗号分隔。需要重启应用后更改才会生效。"
+
+
 #~ msgid "Feedback"
 #~ msgstr "反馈"
 
