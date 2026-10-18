@@ -4453,7 +4453,7 @@ msgstr "Markdown 编辑器：渲染图像"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1937
 msgid "Markdown editor: Render markup in editor"
-msgstr "Markdown 编辑器：在编辑器中渲染标记"
+msgstr "Markdown 编辑器：在编辑器中显示渲染效果"
 
 #: packages/app-cli/app/command-done.ts:15
 msgid "Marks a to-do as done."
