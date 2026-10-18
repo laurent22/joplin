@@ -5,6 +5,7 @@ import OneDriveApi from './onedrive-api';
 
 import * as http from 'http';
 import * as urlParser from 'url';
+import { randomBytes } from 'crypto';
 const enableServerDestroy = require('server-destroy');
 
 interface DestroyableServer extends http.Server {
@@ -57,7 +58,8 @@ export class OneDriveApiNodeUtils {
 		const port = await findAvailablePort(require('tcp-port-used'), this.possibleOAuthDancePorts(), 0);
 		if (!port) throw new Error(_('All potential ports are in use - please report the issue at %s', 'https://github.com/laurent22/joplin'));
 
-		const authCodeUrl = this.api().authCodeUrl(`http://localhost:${port}`);
+		const state = randomBytes(32).toString('base64url');
+		const authCodeUrl = this.api().authCodeUrl(`http://localhost:${port}`, state);
 
 		return new Promise((resolve, reject) => {
 			this.oauthServer_ = http.createServer() as DestroyableServer;
@@ -91,6 +93,7 @@ export class OneDriveApiNodeUtils {
 				};
 
 				if (!query.code) return writeResponse(400, '"code" query parameter is missing');
+				if (query.state !== state) return writeResponse(400, '"state" query parameter is invalid');
 
 				this.api()
 					.execTokenRequest(query.code as string, `http://localhost:${port.toString()}`)
@@ -118,7 +121,7 @@ export class OneDriveApiNodeUtils {
 				}
 			});
 
-			this.oauthServer_.listen(port);
+			this.oauthServer_.listen(port, '127.0.0.1');
 
 			enableServerDestroy(this.oauthServer_);
 
