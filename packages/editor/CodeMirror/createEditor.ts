@@ -294,6 +294,27 @@ const createEditor = (
 							handlePasteEvent(event, view, props.onPasteFile);
 						}
 					},
+					copy: (event, view) => {
+						// Copy the selection from the document model instead of the DOM.
+						// The editor virtualizes rendering, so the DOM only contains a
+						// subset of the document — copying via the default DOM behaviour
+						// truncates long selections (notably on Android, where the system
+						// text-selection menu copies the visible DOM text).
+						// See https://github.com/laurent22/joplin/issues/16833
+						if (!(event instanceof ClipboardEvent)) {
+							return false;
+						}
+						const text = view.state.selection.ranges
+							.map(range => view.state.sliceDoc(range.from, range.to))
+							.filter(selected => !!selected)
+							.join('\n');
+						if (!text) {
+							return false;
+						}
+						event.clipboardData?.setData('text/plain', text);
+						event.preventDefault();
+						return true;
+					},
 					dragover: (event, _view) => {
 						if (props.onPasteFile && event.dataTransfer.files.length) {
 							event.preventDefault();
