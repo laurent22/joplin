@@ -543,6 +543,12 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 			});
 		});
 
+		// A new activity can remount this component with biometrics already done.
+		// Its share event may have arrived before the listener was attached.
+		if (this.props.biometricsDone) {
+			void this.handleShareData();
+		}
+
 		// Setting.setValue('encryption.masterPassword', 'WRONG');
 		// setTimeout(() => NavService.go('EncryptionConfig'), 2000);
 	}
