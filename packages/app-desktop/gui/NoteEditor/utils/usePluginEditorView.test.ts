@@ -90,4 +90,21 @@ describe('usePluginEditorView', () => {
 		}
 	});
 
+	test('should show no plugin editor while a conflict is being resolved', () => {
+		const pluginStates: PluginStates = {
+			'1': {
+				contentScripts: {},
+				id: '1',
+				views: {
+					'view-1': sampleView(),
+				},
+			},
+		};
+
+		const test = renderHook(() => usePluginEditorView(pluginStates, true));
+		expect(test.result.current.editorPlugin).toBe(null);
+		expect(test.result.current.editorView).toBe(null);
+		test.unmount();
+	});
+
 });

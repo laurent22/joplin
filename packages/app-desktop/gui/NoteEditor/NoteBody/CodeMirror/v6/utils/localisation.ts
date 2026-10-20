@@ -38,4 +38,9 @@ export default () => ({
 	'Move column right': _('Move column right'),
 	'Delete row': _('Delete row'),
 	'Delete column': _('Delete column'),
+
+	// Conflict resolution widgets. These keys must be kept in sync with the
+	// state.phrase() calls in packages/editor conflictResolutionExtension.ts.
+	'Use my version': _('Use my version'),
+	'Current version': _('Current version'),
 });
