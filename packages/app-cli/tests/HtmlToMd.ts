@@ -2,6 +2,7 @@ import shim from '@joplin/lib/shim';
 import * as os from 'os';
 import { readFile } from 'fs/promises';
 import { filename } from '@joplin/lib/path-utils';
+import { dirname } from 'path';
 import HtmlToMd, { ParseOptions } from '@joplin/lib/HtmlToMd';
 
 describe('HtmlToMd', () => {
@@ -127,6 +128,31 @@ describe('HtmlToMd', () => {
 
 		// Verify that a single blank line is preserved (not fully removed)
 		expect(collapsedResult).toContain('\n\n');
+	});
+
+	it('should not re-read the rows of a table for every row', async () => {
+		// Under domino, each access to `table.rows` walks the whole table, so reading it once per row made
+		// converting large tables quadratic: https://github.com/laurent22/joplin/issues/16894
+		const resolveFrom = (moduleName: string, fromPath: string) => require.resolve(moduleName, { paths: [dirname(fromPath)] });
+		const domino: { createDocument: (html: string)=> Document } = require(resolveFrom('@mixmark-io/domino', resolveFrom('@joplin/turndown', require.resolve('@joplin/lib/HtmlToMd'))));
+
+		const rowCount = 100;
+		const rows = Array.from({ length: rowCount }, (_, i) => `<tr><td>${i}</td><td>b</td><td>c</td></tr>`).join('');
+		const root = domino.createDocument(`<div><table><thead><tr><th>A</th><th>B</th><th>C</th></tr></thead><tbody>${rows}</tbody></table></div>`).querySelector('div');
+		// Turndown converts a clone of the element it's given, which wouldn't have the counter below
+		Object.defineProperty(root, 'cloneNode', { value: () => root });
+
+		const table = root.querySelector('table');
+		const getRows = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(table), 'rows').get;
+		let rowsReadCount = 0;
+		Object.defineProperty(table, 'rows', { get: () => {
+			rowsReadCount++;
+			return getRows.call(table);
+		} });
+
+		const markdown = new HtmlToMd().parse(root);
+		expect(markdown.split('\n')).toHaveLength(rowCount + 2);
+		expect(rowsReadCount).toBeLessThan(rowCount);
 	});
 
 });
