@@ -1,7 +1,7 @@
 import BaseApplication, { shouldPreserveSelectedNoteOnSmartFilterSelect } from '@joplin/lib/BaseApplication';
 import ItemChange from '@joplin/lib/models/ItemChange';
 import Note from '@joplin/lib/models/Note';
-import { defaultState, defaultWindowId, State } from '@joplin/lib/reducer';
+import reducer, { defaultState, defaultWindowId, State } from '@joplin/lib/reducer';
 import { ALL_NOTES_FILTER_ID } from '@joplin/lib/reserved-ids';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
@@ -118,6 +118,27 @@ describe('app', () => {
 		} finally {
 			previewsMock.mockRestore();
 			storeMock.mockRestore();
+		}
+	});
+
+	test.each([
+		['the active window', true, [[expect.objectContaining({ windowId: defaultWindowId }), false, '']]],
+		['a background window', false, []],
+	])('should only refresh notes when the active window is closed (closing %s)', async (_name, focusSecondaryWindow, expectedRefreshCalls) => {
+		let state = reducer(defaultState, { type: 'WINDOW_OPEN', windowId: 'secondary-window', folderId: 'folder', noteId: 'note' });
+		if (focusSecondaryWindow) state = reducer(state, { type: 'WINDOW_FOCUS', windowId: 'secondary-window' });
+		const store = { getState: () => state, dispatch: jest.fn() };
+		const next = (action: unknown) => { state = reducer(state, action); };
+		const refreshNotesMock = jest.spyOn(app(), 'refreshNotes').mockResolvedValue(undefined);
+		baseMiddlewareMock.mockRestore();
+
+		try {
+			await (BaseApplication.prototype as unknown as {
+				generalMiddleware: (store: unknown, next: (action: unknown)=> unknown, action: unknown)=> Promise<unknown>;
+			}).generalMiddleware.call(app(), store, next, { type: 'WINDOW_CLOSE', windowId: 'secondary-window' });
+			expect(refreshNotesMock.mock.calls).toEqual(expectedRefreshCalls);
+		} finally {
+			refreshNotesMock.mockRestore();
 		}
 	});
 
