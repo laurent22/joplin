@@ -4,6 +4,7 @@ import { readFile } from 'fs/promises';
 import { filename } from '@joplin/lib/path-utils';
 import { dirname } from 'path';
 import HtmlToMd, { ParseOptions } from '@joplin/lib/HtmlToMd';
+import MdToHtml from '@joplin/renderer/MdToHtml';
 
 describe('HtmlToMd', () => {
 
@@ -153,6 +154,21 @@ describe('HtmlToMd', () => {
 		const markdown = new HtmlToMd().parse(root);
 		expect(markdown.split('\n')).toHaveLength(rowCount + 2);
 		expect(rowsReadCount).toBeLessThan(rowCount);
+	});
+
+	it.each([
+		['inline code ending with a space at the end of a heading', '<h2><code>npm</code> install&nbsp;<code>a&nbsp;</code></h2>', 'a\u00A0'],
+		['a heading that only contains inline code with a space', '<h2><code>&nbsp;</code></h2>', '\u00A0'],
+	])('should not change %s when the note is saved again', async (_title, html, codeText) => {
+		const htmlToMd = new HtmlToMd();
+		const mdToHtml = new MdToHtml();
+
+		const firstSave = htmlToMd.parse(html);
+		const reopened = await mdToHtml.render(firstSave, null, { bodyOnly: true });
+		const secondSave = htmlToMd.parse(reopened.html);
+
+		expect(reopened.html).toContain(`>${codeText}</code>`);
+		expect(secondSave).toBe(firstSave);
 	});
 
 });
