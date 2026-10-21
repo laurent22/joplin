@@ -211,7 +211,11 @@ public class SharePackage implements ReactPackage {
                 // Read the start intent once per activity. A later onNewIntent may be
                 // followed by onHostResume, while a share after Back may create a new activity.
                 this.handledStartIntentActivity = currentActivity;
-                this.onNewIntent(currentActivity.getIntent());
+                Intent intent = currentActivity.getIntent();
+                // Recents can relaunch the original share intent, but it is not a new share.
+                if (intent != null && (intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0) {
+                    this.onNewIntent(intent);
+                }
             }
         }
 

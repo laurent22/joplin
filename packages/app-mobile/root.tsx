@@ -501,6 +501,11 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 		}
 
 		this.urlOpenListener_ = Linking.addEventListener('url', this.handleOpenURL_);
+		// A new activity can remount this component with biometrics already done.
+		// Its native share event may have arrived before the ShareExtension listener was attached.
+		if (this.props.biometricsDone) {
+			void this.handleShareData();
+		}
 
 		BackButtonService.initialize(this.backButtonHandler_);
 
@@ -542,12 +547,6 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 				visible: false,
 			});
 		});
-
-		// A new activity can remount this component with biometrics already done.
-		// Its share event may have arrived before the listener was attached.
-		if (this.props.biometricsDone) {
-			void this.handleShareData();
-		}
 
 		// Setting.setValue('encryption.masterPassword', 'WRONG');
 		// setTimeout(() => NavService.go('EncryptionConfig'), 2000);
