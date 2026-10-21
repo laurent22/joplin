@@ -138,8 +138,15 @@ describe('ai/providers/OpenAiCompatible', () => {
 		expect(result.reasoningText).toBe('Thinking...');
 	});
 
-	it('should fall back to Chat Completions once when the Responses API returns 404', async () => {
-		const requests = mockChatResponse({ content: 'OK' }, 'stop');
+	test.each([
+		['returns 404', () => new Response('404 page not found', { status: 404 })],
+		// Older LM Studio versions answer unknown endpoints like this
+		['returns 200 without output', () => jsonResponse({ error: 'Unexpected endpoint or method. (POST /v1/responses)' })],
+	])('should fall back to Chat Completions once when the Responses API %s', async (_label, responsesHandler) => {
+		const requests = mockOpenAiServer(baseUrl, {
+			'/responses': responsesHandler,
+			'/chat/completions': () => jsonResponse({ choices: [{ message: { content: 'OK' }, finish_reason: 'stop' }] }),
+		});
 		const provider = newProvider();
 		await provider.chat([{ role: ChatRole.User, content: 'Hello' }]);
 		const result = await provider.chat([{ role: ChatRole.User, content: 'Hello' }]);

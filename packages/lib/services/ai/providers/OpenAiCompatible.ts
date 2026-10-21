@@ -193,7 +193,11 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 			throw new JoplinError(`AI provider returned ${status}${detail}`, status);
 		}
 
-		if (!Array.isArray(json?.output)) throw this.badResponseShapeError();
+		if (!Array.isArray(json?.output)) {
+			// Older LM Studio versions return 200 with an error body for unknown endpoints
+			if (this.api_ === null) return null;
+			throw this.badResponseShapeError();
+		}
 
 		return fromResponsesJson(json, replayKey);
 	}
