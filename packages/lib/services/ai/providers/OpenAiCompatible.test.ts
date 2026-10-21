@@ -41,10 +41,10 @@ const weatherTool = {
 	inputSchema: { type: 'object', properties: { city: { type: 'string' } } },
 };
 
-const newProvider = (model = 'test-model') => {
+const newProvider = (model = 'test-model', apiKey = 'test-key') => {
 	return new OpenAiCompatibleProvider({
 		baseUrl,
-		apiKey: 'test-key',
+		apiKey,
 		model,
 		classification: 'local',
 	});
@@ -215,6 +215,21 @@ describe('ai/providers/OpenAiCompatible', () => {
 		});
 	});
 
+	it('should retry without the schema when the model rejects structured output', async () => {
+		const requests = mockOpenAiServer(baseUrl, {
+			'/responses': body => body.text
+				? jsonResponse({ error: { message: 'Invalid parameter: \'text.format\' of type \'json_schema\' is not supported with this model.' } }, 400)
+				: jsonResponse(responsesBody([messageItem('Hi!')])),
+		});
+		const result = await newProvider().chat([{ role: ChatRole.User, content: 'Hello' }], {
+			responseFormat: { type: 'json_schema', json_schema: { name: 'answer', strict: true, schema: { type: 'object' } } },
+		});
+
+		expect(requests.map(request => request.path)).toEqual(['/responses', '/responses']);
+		expect(requests[1].body.text).toBeUndefined();
+		expect(result.text).toBe('Hi!');
+	});
+
 	test.each([
 		[{ status: 'completed' }, 'stop'],
 		[{ status: 'incomplete', incomplete_details: { reason: 'max_output_tokens' } }, 'length'],
@@ -225,7 +240,7 @@ describe('ai/providers/OpenAiCompatible', () => {
 		expect(result.finishReason).toBe(expected);
 	});
 
-	it('should send reasoning back with the tool result to the same model only', async () => {
+	it('should send reasoning back with the tool result to the same model and API key only', async () => {
 		const requests = mockResponsesOutput([reasoningItem, functionCallItem]);
 		const provider = newProvider();
 		const firstResult = await provider.chat([{ role: ChatRole.User, content: 'Weather in Paris?' }], { tools: [weatherTool] });
@@ -244,11 +259,15 @@ describe('ai/providers/OpenAiCompatible', () => {
 		]);
 
 		await newProvider('other-model').chat(messages, { tools: [weatherTool] });
-		expect(requests[2].body.input).toEqual([
-			{ role: 'user', content: 'Weather in Paris?' },
-			{ type: 'function_call', call_id: 'call_1', name: 'get_weather', arguments: '{"city":"Paris"}' },
-			toolOutputItem,
-		]);
+		await newProvider('test-model', 'other-key').chat(messages, { tools: [weatherTool] });
+		expect(requests).toHaveLength(4);
+		for (const request of requests.slice(2)) {
+			expect(request.body.input).toEqual([
+				{ role: 'user', content: 'Weather in Paris?' },
+				{ type: 'function_call', call_id: 'call_1', name: 'get_weather', arguments: '{"city":"Paris"}' },
+				toolOutputItem,
+			]);
+		}
 	});
 
 	it('should send image tool results as images', async () => {

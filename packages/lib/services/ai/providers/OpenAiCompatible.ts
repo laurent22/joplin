@@ -8,6 +8,7 @@ import { ToolSpec } from '../tools/types';
 import extractReasoning from '../utils/extractReasoning';
 import parseToolArguments from '../utils/parseToolArguments';
 import { fromResponsesJson, ResponsesApiResponse, toResponsesBody } from './openAiResponses';
+const md5 = require('md5');
 
 const logger = Logger.create('OpenAiCompatibleProvider');
 
@@ -172,11 +173,20 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 	}
 
 	private async doResponsesChat(messages: ChatMessage[], options?: ChatOptions): Promise<ChatResult|null> {
-		const replayKey = `${this.baseUrl_}|${this.model_}`;
+		// Encrypted reasoning only works with the account that created it. The key is
+		// hashed because the replay key is saved with the chat history
+		const replayKey = `${this.baseUrl_}|${this.model_}|${md5(this.apiKey_)}`;
 		const body = toResponsesBody(this.model_, messages, options, replayKey);
-		const { status, json } = await this.sendResponsesRequest(body, { signal: options?.signal });
+		let { status, json } = await this.sendResponsesRequest(body, { signal: options?.signal });
 
 		if (status === 404 && this.api_ === null) return null;
+
+		// Same compatibility retry as `response_format` in doChatCompletions
+		if (status === 400 && 'text' in body && /json_schema|response_format/i.test(json?.error?.message ?? '')) {
+			logger.warn(`Model ${this.model_} rejected text.format; retrying without structured output schema.`);
+			delete body.text;
+			({ status, json } = await this.sendResponsesRequest(body, { signal: options?.signal }));
+		}
 
 		if (status >= 400) {
 			const detail = json?.error?.message ? `: ${json.error.message}` : '';
