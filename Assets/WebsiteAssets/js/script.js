@@ -3,11 +3,11 @@ const windowsArm64Enabled = false;
 
 async function getOs() {
 
-	// The macOS release is available for Intel and Apple silicon processors,
+	// The macOS release is available for Intel and Apple Silicon processors,
 	// and the only way to get that info is through this new
 	// `getHighEntropyValues` function (which is not available on all browsers).
-	// So here we either return "macOs" for Intel or "macOsM1" for Apple
-	// Silicon. If we don't know which it is, we return "macOsUndefined".
+	// So here we either return "macOsIntel" or "macOsAppleSilicon". If we don't
+	// know which it is, we return "macOsUndefined".
 	// https://stackoverflow.com/a/75177111/561309
 
 	if (navigator.appVersion.indexOf("Mac")!=-1) {
@@ -22,9 +22,9 @@ async function getOs() {
 		console.info('Got platform info:', platformInfo);
 
 		if (platformInfo.architecture === 'arm') {
-			return "macOsM1";
+			return "macOsAppleSilicon";
 		} else {
-			return "macOs";
+			return "macOsIntel";
 		}
 	}
 
@@ -101,8 +101,8 @@ async function setupDownloadPage() {
 			if (windowsArm64Enabled) downloadLinks['windowsArm64'] = href;
 		}
 		else if (href.indexOf('-Setup') > 0) downloadLinks['windows'] = href;
-		if (href.indexOf('.dmg') > 0) downloadLinks['macOs'] = href;
-		if (href.indexOf('arm64.DMG') > 0) downloadLinks['macOsM1'] = href;
+		if (href.indexOf('.dmg') > 0) downloadLinks['macOsIntel'] = href;
+		if (href.indexOf('arm64.DMG') > 0) downloadLinks['macOsAppleSilicon'] = href;
 		if (href.indexOf('.AppImage') > 0) downloadLinks['linux'] = href;
 	});
 
@@ -124,12 +124,12 @@ async function setupDownloadPage() {
 
 		if (os === 'macOsUndefined') {
 			// If we don't know which macOS version it is, we let the user choose.
-			$('.main-content .intro').html('<p class="macos-m1-info">The macOS release is available for Intel processors or for Apple Silicon (M1) processors. Please select your version:</p>');
-			const macOsLink = $('.download-link-macOs');
-			const macOsM1Link = $('.download-link-macOsM1');
-			$('.macos-m1-info').after('<p style="font-style: italic; font-size: .8em;">To find out what processor you have, click on the <b>Apple logo</b> in the macOS menu bar, choose <b>About This Mac</b> from the dropdown menu. If you have an Apple silicon it should say"Apple M1" under "Chip". Otherwise you have an Intel processor.</p>');
-			$('.macos-m1-info').after(macOsM1Link);
-			$('.macos-m1-info').after(macOsLink);
+			$('.main-content .intro').html('<p class="macos-arch-info">The macOS release is available for Apple Silicon or for Intel processors. Please select your version:</p>');
+			const macOsIntelLink = $('.download-link-macOsIntel');
+			const macOsAppleSiliconLink = $('.download-link-macOsAppleSilicon');
+			$('.macos-arch-info').after('<p style="font-style: italic; font-size: .8em;">To find out what processor you have, click on the <b>Apple logo</b> in the macOS menu bar, then choose <b>About This Mac</b> from the dropdown menu. If the <b>Chip</b> line mentions an Apple chip, such as "Apple M4", you have an Apple Silicon Mac. Otherwise you have an Intel processor.</p>');
+			$('.macos-arch-info').after(macOsIntelLink);
+			$('.macos-arch-info').after(macOsAppleSiliconLink);
 		} else if (!os || !downloadLinks[os]) {
 			// If we don't know, display the section to manually download the app
 			$('.page-download .get-it-desktop').show();

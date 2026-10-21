@@ -10,8 +10,8 @@ async function createDownloadButtonsHtml(readmeMd: string): Promise<Record<strin
 	const output: Record<string, string> = {};
 	output['windows'] = readmeMd.match(/(<a href=.*?Joplin-Setup-[\d.]+\.exe.*?<\/a>)/)[0];
 	if (windowsArm64Enabled) output['windowsArm64'] = readmeMd.match(/(<a href=.*?Joplin-Setup-[\d.]+-arm64\.exe.*?<\/a>)/)[0];
-	output['macOs'] = readmeMd.match(/(<a href=.*?Joplin-.*\.dmg.*?<\/a>)/)[0];
-	output['macOsM1'] = readmeMd.match(/(<a href=.*?Joplin-.*arm64\.DMG.*?<\/a>)/)[0];
+	output['macOsAppleSilicon'] = readmeMd.match(/(<a href=.*?Joplin-.*arm64\.DMG.*?<\/a>)/)[0];
+	output['macOsIntel'] = readmeMd.match(/(<a href=.*?Joplin-.*\.dmg.*?<\/a>)/)[0];
 	output['linux'] = readmeMd.match(/(<a href=.*?Joplin-.*\.AppImage.*?<\/a>)/)[0];
 	output['android'] = readmeMd.match(/(<a href='https:\/\/play.google.com\/store\/apps\/details\?id=net\.cozic\.joplin.*?<\/a>)/)[0];
 	output['ios'] = readmeMd.match(/(<a href='https:\/\/itunes\.apple\.com\/us\/app\/joplin\/id1315599797.*?<\/a>)/)[0];
@@ -32,8 +32,8 @@ export default async function updateDownloadPage(readmeMd: string = null) {
 	const desktopButtonsHtml = [
 		downloadButtonsHtml['windows'],
 		downloadButtonsHtml['windowsArm64'],
-		downloadButtonsHtml['macOs'],
-		downloadButtonsHtml['macOsM1'],
+		downloadButtonsHtml['macOsAppleSilicon'],
+		downloadButtonsHtml['macOsIntel'],
 		downloadButtonsHtml['linux'],
 	].filter(html => !!html);
 

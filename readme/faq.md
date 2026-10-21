@@ -137,7 +137,7 @@ In this case, [make sure you enter the correct WebDAV URL](https://github.com/la
 
 ## Why did my sync and encryption passwords disappear after updating Joplin?
 
-- With version 2.12, Joplin supports M1 Macs natively! As a result, upgrading Joplin on one of these systems causes Joplin to lose access to information stored by older versions of the app in the system keychain. This includes sync and encryption passwords.
+- With version 2.12, Joplin supports Apple Silicon Macs natively! As a result, upgrading Joplin on one of these systems causes Joplin to lose access to information stored by older versions of the app in the system keychain. This includes sync and encryption passwords.
 - Re-entering the passwords should fix related sync and encryption issues.
 
 ## How can I use self-signed SSL certificates on Android?

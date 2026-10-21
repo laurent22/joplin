@@ -53,6 +53,18 @@ describe('update-readme-download', () => {
 				true,
 				'https://objects.joplinusercontent.com/v2.11.11/JoplinPortable-arm64.exe',
 			],
+			[
+				createRelease('Joplin-2.11.11.dmg', 'https://github.com/laurent22/joplin/releases/download/v2.11.11/Joplin-2.11.11.dmg'),
+				OS.MacOsIntel,
+				false,
+				'https://objects.joplinusercontent.com/v2.11.11/Joplin-2.11.11.dmg',
+			],
+			[
+				createRelease('Joplin-2.11.11-arm64.DMG', 'https://github.com/laurent22/joplin/releases/download/v2.11.11/Joplin-2.11.11-arm64.DMG'),
+				OS.MacOsAppleSilicon,
+				false,
+				'https://objects.joplinusercontent.com/v2.11.11/Joplin-2.11.11-arm64.DMG',
+			],
 		];
 
 		for (const [release, os, portable, expected] of testCases) {
@@ -65,6 +77,11 @@ describe('update-readme-download', () => {
 		const arm64Release = createRelease('Joplin-Setup-2.11.11-arm64.exe', 'https://github.com/laurent22/joplin/releases/download/v2.11.11/Joplin-Setup-2.11.11-arm64.exe');
 		expect(() => downloadUrl(x64Release, OS.WindowsArm64, false)).toThrow();
 		expect(() => downloadUrl(arm64Release, OS.Windows, false)).toThrow();
+
+		const macOsIntelRelease = createRelease('Joplin-2.11.11.dmg', 'https://github.com/laurent22/joplin/releases/download/v2.11.11/Joplin-2.11.11.dmg');
+		const macOsAppleSiliconRelease = createRelease('Joplin-2.11.11-arm64.DMG', 'https://github.com/laurent22/joplin/releases/download/v2.11.11/Joplin-2.11.11-arm64.DMG');
+		expect(() => downloadUrl(macOsIntelRelease, OS.MacOsAppleSilicon, false)).toThrow();
+		expect(() => downloadUrl(macOsAppleSiliconRelease, OS.MacOsIntel, false)).toThrow();
 	});
 
 });
