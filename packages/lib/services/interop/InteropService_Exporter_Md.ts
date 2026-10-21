@@ -33,7 +33,11 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 				if (pathPart) {
 					output = `${pathPart}/${output}`;
 				} else {
-					const folderName = this.folderPaths_.get(current.id) || friendlySafeFilename(current.title, null);
+					let folderName = this.folderPaths_.get(current.id);
+					if (!folderName) {
+						folderName = friendlySafeFilename(current.title, null);
+						this.addTitleTruncationWarning_(current, folderName);
+					}
 					output = `${folderName}/${output}`;
 				}
 			}
@@ -74,7 +78,9 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 
 		for (let i = 0; i < linkedItemIds.length; i++) {
 			const id = linkedItemIds[i];
-			const itemPath = fn_createRelativePath(paths[id]);
+			const exportedPath = paths[id];
+			if (!exportedPath) continue;
+			const itemPath = fn_createRelativePath(exportedPath);
 			newBody = newBody.replace(new RegExp(`:/${id}`, 'g'), markdownUtils.escapeLinkUrl(itemPath));
 		}
 
@@ -98,6 +104,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 				const fullPath = shim.fsDriver().resolve(this.destDir_, safeName);
 				const uniquePath = await shim.fsDriver().findUniqueFilename(fullPath, namesByParent[parentId], true);
 				const uniqueName = basename(uniquePath);
+				this.addTitleTruncationWarning_(folder, uniqueName);
 				namesByParent[parentId].push(uniquePath);
 				this.folderPaths_.set(folder.id, uniqueName);
 			}
@@ -121,6 +128,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 				const ext = note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_HTML ? 'html' : 'md';
 				let notePath = `${await this.makeDirPath_(note)}${friendlySafeFilename(note.title, null)}.${ext}`;
 				notePath = await shim.fsDriver().findUniqueFilename(`${this.destDir_}/${notePath}`, Object.values(context.notePaths), true);
+				this.addTitleTruncationWarning_(note, basename(notePath));
 				context.notePaths[note.id] = notePath;
 			}
 

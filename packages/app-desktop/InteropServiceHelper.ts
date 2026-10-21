@@ -236,7 +236,13 @@ export default class InteropServiceHelper {
 			console.info('Export result: ', result);
 			if (result.warnings.length) {
 				keepModalOpen = true;
-				const message = [_('Export completed, but some items were skipped because they have not been downloaded to this device or could not be exported:'), '', ...result.warnings].join('\n');
+				const message = [
+					_('Completed with warnings:'),
+					'',
+					_('If any files are reported missing, download all relevant attachments to this device and try again.'),
+					'',
+					...result.warnings,
+				].join('\n');
 				void CommandService.instance().execute('showModalMessage', message, true);
 			}
 		} catch (error) {

@@ -12982,7 +12982,7 @@ __metadata:
     sqlite3: "npm:5.1.6"
     string-padding: "npm:1.0.2"
     string-to-stream: "npm:3.0.1"
-    tar: "npm:7.5.20"
+    tar: "npm:7.5.21"
     tcp-port-used: "npm:1.0.3"
     tesseract.js: "npm:7.0.0"
     typescript: "npm:5.9.3"
@@ -13175,7 +13175,7 @@ __metadata:
     ldapts: "npm:8.1.8"
     markdown-it: "npm:13.0.2"
     mustache: "npm:4.2.0"
-    node-cron: "npm:4.4.1"
+    node-cron: "npm:4.5.0"
     node-mocks-http: "npm:1.17.2"
     nodemailer: "npm:6.10.1"
     nodemon: "npm:3.1.14"
@@ -13237,7 +13237,7 @@ __metadata:
     relative: "npm:3.0.2"
     request: "npm:2.88.2"
     rss: "npm:1.2.2"
-    sass: "npm:1.101.3"
+    sass: "npm:1.101.6"
     sharp: "npm:0.35.0"
     source-map-support: "npm:0.5.21"
     sqlite3: "npm:5.1.6"
@@ -34637,10 +34637,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"globals@npm:17.6.0":
-  version: 17.6.0
-  resolution: "globals@npm:17.6.0"
-  checksum: 10/2bf0febf31c942edee6f4eca7e939a9c885f8ecfb767048b1c4dd2a32008d0ab136e6076665d76b44b29c2571bbbc1681371caab05fd8ee0067c7618e841b89d
+"globals@npm:17.7.0":
+  version: 17.7.0
+  resolution: "globals@npm:17.7.0"
+  checksum: 10/79304ccc4d2ca167ea15bdb25da346aa34ce3847b18fbd6c3cad182e152505305db3c9722fd5e292c62f6db97a8fa06e0c110a1e7703d7325498e5351d08cab4
   languageName: node
   linkType: hard
 
@@ -44717,10 +44717,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-cron@npm:4.4.1":
-  version: 4.4.1
-  resolution: "node-cron@npm:4.4.1"
-  checksum: 10/7c5b50e26757343eb9beb1bd3331bbf1e392ab1c031ff55ea4e65092e4be70eba7a550a4b0ff35f4ba0de3106bc550c673e045d392011cf50e7f8a1912b886ef
+"node-cron@npm:4.5.0":
+  version: 4.5.0
+  resolution: "node-cron@npm:4.5.0"
+  checksum: 10/3ee23107eb584448fe829fd6567902ee10a5da29777dd2425e9fbd85c5642bc57b22d742745d4a7d1534c7e6bfc288764887c608fa5d48f750e2e84c66ad5358
   languageName: node
   linkType: hard
 
@@ -52781,7 +52781,7 @@ __metadata:
     execa: "npm:5.1.1"
     fs-extra: "npm:11.3.6"
     glob: "npm:11.1.0"
-    globals: "npm:17.6.0"
+    globals: "npm:17.7.0"
     gulp: "npm:4.0.2"
     http-server: "npm:14.1.1"
     husky: "npm:9.1.7"
@@ -53073,9 +53073,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:1.101.3":
-  version: 1.101.3
-  resolution: "sass@npm:1.101.3"
+"sass@npm:1.101.6":
+  version: 1.101.6
+  resolution: "sass@npm:1.101.6"
   dependencies:
     "@parcel/watcher": "npm:^2.4.1"
     chokidar: "npm:^5.0.0"
@@ -53086,7 +53086,7 @@ __metadata:
       optional: true
   bin:
     sass: sass.js
-  checksum: 10/4ea02c7a989b480142ace9e22a0877a29cc61a6ecabfd50c44389cf665642ecd4a8c603d9f5f910840e134c716c83d2788cb01ed164fd8b01a32d7e4e5dfe17d
+  checksum: 10/0def94443acff67c0a3d6b124824f03d6f79b45476913eab0ada905e082d4e8140ec4c3e0c6ad04d054e1e599931b057fb6e9a0e718fd293e175184741c96f74
   languageName: node
   linkType: hard
 
@@ -56508,16 +56508,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tar@npm:7.5.20":
-  version: 7.5.20
-  resolution: "tar@npm:7.5.20"
+"tar@npm:7.5.21":
+  version: 7.5.21
+  resolution: "tar@npm:7.5.21"
   dependencies:
     "@isaacs/fs-minipass": "npm:^4.0.0"
     chownr: "npm:^3.0.0"
     minipass: "npm:^7.1.2"
     minizlib: "npm:^3.1.0"
     yallist: "npm:^5.0.0"
-  checksum: 10/90a0fe423ac921197ad5eefc5e5f7ad7f42b06e80444c8c347c1e4112384cbe9cb53ade3ef71748eed3684888756869c2aeef6b6303c766101f3217e254d4be9
+  checksum: 10/a1b7dcee15e4f7dbef7f07c3cf0fe946248efabd1cb029b54c698d817dfc2876c75bcaa164a12dd21191e385759ce3e37fea562cf4aabaa00984ef9ed3c48d17
   languageName: node
   linkType: hard
 
