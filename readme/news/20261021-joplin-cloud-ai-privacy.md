@@ -1,3 +1,7 @@
+---
+forum_url: https://discourse.joplinapp.org/t/51257
+---
+
 # How we protect your privacy with Joplin Cloud AI
 
 Joplin Cloud AI features work on your notes. Notes are often personal, so we've set up the AI service so that your content goes to as few places as possible and stays there for as short a time as possible.
