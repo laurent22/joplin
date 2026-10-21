@@ -44,10 +44,28 @@ const useScheduleSaveCallbacks = (props: Props) => {
 					note = await formNoteToNote(formNote);
 				}
 				logger.debug('Saving note...', isNoteLockEnabled() && note.is_locked ? note.id : note);
-				const savedNote = await Note.save(note, { changeId: `editorChange-${props.editorId}`, useNoteLock: true, noteLockKey: latestFormNote.noteLockKey });
+				// Save only editor-owned fields for existing notes. New notes
+				// still need their initial notebook assignment.
+				const noteToSave = note.id ? {
+					id: note.id, title: note.title, body: note.body,
+					is_locked: note.is_locked, isDecrypted: note.isDecrypted,
+				} : note;
+				const savedNote = await Note.save(noteToSave, {
+					changeId: `editorChange-${props.editorId}`,
+					useNoteLock: true,
+					noteLockKey: latestFormNote.noteLockKey,
+				});
 
 				props.setFormNote.current((prev: FormNote) => {
-					return { ...prev, user_updated_time: savedNote.user_updated_time, hasChanged: false };
+					if (prev.id !== savedNote.id) return prev;
+					return {
+						...prev,
+						parent_id: savedNote.parent_id,
+						deleted_time: savedNote.deleted_time,
+						is_conflict: savedNote.is_conflict,
+						user_updated_time: savedNote.user_updated_time,
+						hasChanged: false,
+					};
 				});
 
 				void ExternalEditWatcher.instance().updateNoteFile(savedNote);

@@ -1,8 +1,12 @@
 import Note from '@joplin/lib/models/Note';
+import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
+import Folder from '@joplin/lib/models/Folder';
 import Setting from '@joplin/lib/models/Setting';
 import { setupDatabaseAndSynchronizer, supportDir, switchClient, withWarningSilenced, noteLockCipherTextStandIn } from '@joplin/lib/testing/test-utils';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import useFormNote, { HookDependencies } from './useFormNote';
+import useScheduleSaveCallbacks from './useScheduleSaveCallbacks';
+import { defaultFormNote } from './types';
 import shim from '@joplin/lib/shim';
 import Resource from '@joplin/lib/models/Resource';
 import ItemChange from '@joplin/lib/models/ItemChange';
@@ -260,6 +264,128 @@ describe('useFormNote', () => {
 		});
 
 		formNote.unmount();
+	});
+
+	it('should not overwrite an externally moved note when saving dirty editor content', async () => {
+		const folderA = await Folder.save({ title: 'A' });
+		const folderB = await Folder.save({ title: 'B' });
+		const note = await Note.save({ title: 'Shopping list', body: 'Initial', parent_id: folderA.id });
+		const form = renderHook(props => useFormNote(props), {
+			initialProps: { ...defaultFormNoteProps, noteId: note.id },
+		});
+		await waitFor(() => expect(form.result.current.formNote.id).toBe(note.id));
+		act(() => form.result.current.setFormNote(previous => ({
+			...previous, body: 'Updated by editor', hasChanged: true,
+		})));
+
+		await act(async () => {
+			await Note.save({ id: note.id, parent_id: folderB.id });
+		});
+		const dirtyForm = form.result.current.formNote;
+		expect(dirtyForm.parent_id).toBe(folderA.id);
+		const saving = renderHook(() => useScheduleSaveCallbacks({
+			formNote: { current: dirtyForm },
+			setFormNote: { current: form.result.current.setFormNote },
+			editorId: 'editor',
+			editorRef: { current: null },
+			editorNoteReloadTimeRequest: 0,
+			dispatch: jest.fn(),
+		}));
+
+		await act(async () => {
+			await saving.result.current.scheduleSaveNote(dirtyForm);
+		});
+		expect(await Note.load(note.id)).toMatchObject({
+			parent_id: folderB.id, body: 'Updated by editor',
+		});
+		expect(form.result.current.formNote.parent_id).toBe(folderB.id);
+		saving.unmount();
+		form.unmount();
+	});
+
+	it('should preserve a move that occurs during the queued editor save', async () => {
+		const folderA = await Folder.save({ title: 'A' });
+		const folderB = await Folder.save({ title: 'B' });
+		const folderC = await Folder.save({ title: 'C' });
+		const note = await Note.save({ title: 'Shopping list', body: 'Initial', parent_id: folderA.id });
+		const form = renderHook(props => useFormNote(props), {
+			initialProps: { ...defaultFormNoteProps, noteId: note.id },
+		});
+		await waitFor(() => expect(form.result.current.formNote.id).toBe(note.id));
+		act(() => form.result.current.setFormNote(previous => ({
+			...previous, body: 'Queued editor text', hasChanged: true,
+		})));
+		const dirtyForm = form.result.current.formNote;
+		const saving = renderHook(() => useScheduleSaveCallbacks({
+			formNote: { current: dirtyForm },
+			setFormNote: { current: form.result.current.setFormNote },
+			editorId: 'editor',
+			editorRef: { current: null },
+			editorNoteReloadTimeRequest: 0,
+			dispatch: jest.fn(),
+		}));
+
+		await Note.save({ id: note.id, parent_id: folderB.id });
+		const dispatchOriginal = Note.dispatch;
+		const dispatchedActions: { type: string; changeId?: string; changedFields?: string[] }[] = [];
+		Note.dispatch = (action: { type: string; changeId?: string; changedFields?: string[] }) => {
+			dispatchedActions.push(action);
+			dispatchOriginal(action);
+		};
+		const originalSave = Note.save.bind(Note);
+		let movedDuringSave = false;
+		const saveSpy = jest.spyOn(Note, 'save').mockImplementation(async (noteUpdate, options) => {
+			if (!movedDuringSave && options?.changeId === 'editorChange-editor') {
+				movedDuringSave = true;
+				await originalSave({ id: note.id, parent_id: folderC.id });
+			}
+			return originalSave(noteUpdate, options);
+		});
+		try {
+			await act(async () => {
+				await saving.result.current.scheduleSaveNote(dirtyForm);
+			});
+		} finally {
+			saveSpy.mockRestore();
+			Note.dispatch = dispatchOriginal;
+			saving.unmount();
+		}
+		expect(movedDuringSave).toBe(true);
+		expect(await Note.load(note.id)).toMatchObject({
+			parent_id: folderC.id, body: 'Queued editor text',
+		});
+		expect(form.result.current.formNote.parent_id).toBe(folderC.id);
+		const editorUpdates = dispatchedActions.filter(action => (
+			action.type === 'NOTE_UPDATE_ONE' && action.changeId === 'editorChange-editor'
+		));
+		expect(editorUpdates).toHaveLength(1);
+		expect(editorUpdates[0].changedFields).not.toContain('parent_id');
+		form.unmount();
+	});
+
+	it('should keep the initial notebook when saving a newly created note', async () => {
+		const folder = await Folder.save({ title: 'New note notebook' });
+		const form = {
+			...defaultFormNote(), parent_id: folder.id, is_conflict: 0,
+			title: 'New note title', body: 'New note content',
+			saveActionQueue: new AsyncActionQueue(300),
+		};
+		const saving = renderHook(() => useScheduleSaveCallbacks({
+			formNote: { current: form },
+			setFormNote: { current: () => {} },
+			editorId: 'editor',
+			editorRef: { current: null },
+			editorNoteReloadTimeRequest: 0,
+			dispatch: jest.fn(),
+		}));
+		await act(async () => {
+			await saving.result.current.scheduleSaveNote(form);
+		});
+		const created = (await Note.all()).find(note => note.title === form.title);
+		expect(created).toMatchObject({
+			parent_id: folder.id, body: form.body,
+		});
+		saving.unmount();
 	});
 
 	it('should reload the note when it is changed outside of the editor', async () => {
