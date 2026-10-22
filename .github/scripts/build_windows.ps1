@@ -46,19 +46,23 @@ function Build-WindowsApp {
 
 	Install-WindowsDeps
 
+	# Targets are given as `target:arch` because `--arm64`/`--x64` don't override
+	# the per-target `arch` lists in package.json - the build would include every
+	# arch, all using this runner's native modules.
 	if ($env:PROCESSOR_ARCHITECTURE -eq 'ARM64') {
-		# NSIS gets an `-arm64` suffix on its own, but the portable name is fixed
-		# and the update metadata is `latest.yml` for every Windows arch. Both
-		# would clobber the x64 runner's artifacts.
+		# The installer and portable names have no arch suffix, and the update
+		# metadata is `latest.yml` for every Windows arch. All of them would
+		# clobber the x64 runner's artifacts.
 		# https://github.com/electron-userland/electron-builder/issues/6372
 		$archArgs = @(
-			'--arm64'
+			'--win', 'nsis:arm64', 'portable:arm64'
+			'-c.nsis.artifactName=${productName}-Setup-${version}-arm64.${ext}'
 			'-c.portable.artifactName=${productName}Portable-arm64.${ext}'
 			'-c.publish.provider=github'
 			'-c.publish.channel=latest-win-arm64'
 		)
 	} else {
-		$archArgs = @('--x64', '--ia32')
+		$archArgs = @('--win', 'nsis:x64', 'nsis:ia32', 'portable:x64', 'portable:ia32')
 	}
 
 	cd packages/app-desktop
