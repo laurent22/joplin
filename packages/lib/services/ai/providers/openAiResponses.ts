@@ -44,11 +44,11 @@ const convertMessage = (message: ChatMessage, replayKey: string): unknown[] => {
 		}];
 	}
 
-	const textItems = message.content || message.role !== ChatRole.Assistant ? [{ role: message.role, content: message.content }] : [];
-
 	if (message.responsesState?.key === replayKey) {
-		return [...textItems, ...message.responsesState.items];
+		return message.responsesState.items;
 	}
+
+	const textItems = message.content || message.role !== ChatRole.Assistant ? [{ role: message.role, content: message.content }] : [];
 
 	return [
 		...textItems,
@@ -107,7 +107,7 @@ export const fromResponsesJson = (json: ResponsesApiResponse, replayKey: string)
 		};
 	});
 
-	const replayItems = output.filter(item => item.type === 'reasoning' || item.type === 'function_call');
+	const replayItems = output.filter(item => item.type === 'reasoning' || item.type === 'message' || item.type === 'function_call');
 
 	return {
 		text,

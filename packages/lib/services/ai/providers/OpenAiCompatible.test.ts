@@ -247,8 +247,9 @@ describe('ai/providers/OpenAiCompatible', () => {
 		expect(result.finishReason).toBe(expected);
 	});
 
-	it('should send reasoning back with the tool result to the same model and API key only', async () => {
-		const requests = mockResponsesOutput([reasoningItem, functionCallItem]);
+	it('should send the output items back in their original order to the same model and API key only', async () => {
+		const textItem = messageItem('Let me check.');
+		const requests = mockResponsesOutput([reasoningItem, textItem, functionCallItem]);
 		const provider = newProvider();
 		const firstResult = await provider.chat([{ role: ChatRole.User, content: 'Weather in Paris?' }], { tools: [weatherTool] });
 
@@ -261,6 +262,7 @@ describe('ai/providers/OpenAiCompatible', () => {
 		expect(requests[1].body.input).toEqual([
 			{ role: 'user', content: 'Weather in Paris?' },
 			reasoningItem,
+			textItem,
 			functionCallItem,
 			toolOutputItem,
 		]);
@@ -271,6 +273,7 @@ describe('ai/providers/OpenAiCompatible', () => {
 		for (const request of requests.slice(2)) {
 			expect(request.body.input).toEqual([
 				{ role: 'user', content: 'Weather in Paris?' },
+				{ role: 'assistant', content: 'Let me check.' },
 				{ type: 'function_call', call_id: 'call_1', name: 'get_weather', arguments: '{"city":"Paris"}' },
 				toolOutputItem,
 			]);
