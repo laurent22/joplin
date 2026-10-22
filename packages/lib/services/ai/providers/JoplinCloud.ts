@@ -87,6 +87,10 @@ export default class JoplinCloudProvider extends OpenAiCompatibleProvider {
 		});
 	}
 
+	protected override canTryResponsesApi() {
+		return false;
+	}
+
 	private async api() {
 		// Fetch the API from the registry, rather than caching the API locally.
 		// This avoids authentication drift if the user changes the sync target credentials.

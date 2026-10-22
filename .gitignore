@@ -1640,8 +1640,10 @@ packages/lib/services/ai/providers/JoplinCloud.js
 packages/lib/services/ai/providers/OpenAiCompatible.test.js
 packages/lib/services/ai/providers/OpenAiCompatible.js
 packages/lib/services/ai/providers/TestProvider.js
+packages/lib/services/ai/providers/openAiResponses.js
 packages/lib/services/ai/testing/TestEmbeddingProvider.test.js
 packages/lib/services/ai/testing/TestEmbeddingProvider.js
+packages/lib/services/ai/testing/mockOpenAiServer.js
 packages/lib/services/ai/tools/ToolIndex.js
 packages/lib/services/ai/tools/buildEditorTools.js
 packages/lib/services/ai/tools/global/createNote.js
@@ -1670,6 +1672,7 @@ packages/lib/services/ai/types.js
 packages/lib/services/ai/utils/extractReasoning.test.js
 packages/lib/services/ai/utils/extractReasoning.js
 packages/lib/services/ai/utils/findFencedBlock.js
+packages/lib/services/ai/utils/parseToolArguments.js
 packages/lib/services/commands/MenuUtils.js
 packages/lib/services/commands/ToolbarButtonUtils.test.js
 packages/lib/services/commands/ToolbarButtonUtils.js
