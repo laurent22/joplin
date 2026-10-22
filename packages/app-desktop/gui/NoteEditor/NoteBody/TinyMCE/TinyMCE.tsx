@@ -787,7 +787,10 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 
 				setup: (editor: Editor) => {
 					editor.addCommand('joplinMath', async () => {
-						const katex = editor.selection.getContent();
+						// Use plain text so characters like "<", or ">" and & are not HTML-escaped, when passed to KateX.
+						const katex = editor.selection.getContent({
+							format: 'text',
+						});
 						const md = `$${katex}$`;
 
 						// Save and clear the selection -- when this command is activated by a text pattern,
