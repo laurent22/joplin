@@ -3,6 +3,9 @@ import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
 import { msleep, Second } from '@joplin/utils/time';
 import setSettingValue from './util/setSettingValue';
+import activateMainMenuItem from './util/activateMainMenuItem';
+import NoteEditorScreen from './models/NoteEditor/NoteEditorScreen';
+import type { Page } from '@playwright/test';
 
 test.describe('pluginApi', () => {
 	test('the editor.setText command should update the current note (use RTE: false)', async ({ startAppWithPlugins }) => {
@@ -120,6 +123,52 @@ test.describe('pluginApi', () => {
 
 		await mainScreen.goToAnything.runCommand(app, 'testShowToastNotification');
 		await expect(notificationLocator).toHaveCount(3);
+	});
+
+	test('should keep toast notifications in the window active when they were created', async ({ startAppWithPlugins }, testInfo) => {
+		test.setTimeout(120_000);
+		const { app, mainWindow } = await startAppWithPlugins(['resources/test-plugins/showToast.js']);
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('Toast window test');
+		const secondaryWindow = await mainScreen.openNewWindow(app);
+		await new NoteEditorScreen(secondaryWindow).waitFor();
+		const focusWindow = async (page: Page) => {
+			const nativeWindow = await app.browserWindow(page);
+			// eslint-disable-next-line no-restricted-properties -- This focuses a native Electron window, not a DOM element.
+			await nativeWindow.evaluate(window => window.focus());
+			await expect.poll(() => nativeWindow.evaluate(window => window.isFocused())).toBe(true);
+			await page.waitForFunction(() => document.hasFocus());
+		};
+		const showToast = async (page: Page) => {
+			await focusWindow(page);
+			await activateMainMenuItem(app, 'Goto Anything...');
+			const dialog = page.locator('.go-to-anything-dialog[open]');
+			const input = dialog.getByRole('textbox');
+			await input.fill(':testShowToastNotification');
+			await dialog.locator('.match-highlight').first().waitFor();
+			await input.press('Enter');
+			await expect(dialog).not.toBeAttached();
+		};
+		const message = 'Toast: This is a test info message.';
+		const mainToasts = mainWindow.getByRole('alert').filter({ hasText: message });
+		const secondaryToasts = secondaryWindow.getByRole('alert').filter({ hasText: message });
+		await showToast(mainWindow);
+		await expect(mainToasts).toHaveCount(1);
+		await expect(secondaryToasts).toHaveCount(0);
+		await focusWindow(secondaryWindow);
+		await expect(mainToasts).toHaveCount(1);
+		await expect(secondaryToasts).toHaveCount(0);
+		await showToast(secondaryWindow);
+		await expect(secondaryToasts).toHaveCount(1);
+		await expect(mainToasts).toHaveCount(1);
+		await showToast(secondaryWindow);
+		await expect(secondaryToasts).toHaveCount(2);
+		await expect(mainToasts).toHaveCount(1);
+		await focusWindow(mainWindow);
+		await expect(secondaryToasts).toHaveCount(2);
+		await expect(mainToasts).toHaveCount(1);
+		await testInfo.attach('main-window-toasts', { body: await mainWindow.screenshot(), contentType: 'image/png' });
+		await testInfo.attach('secondary-window-toasts', { body: await secondaryWindow.screenshot(), contentType: 'image/png' });
 	});
 
 	test('should be possible to switch between multiple editor plugins', async ({ startAppWithPlugins }) => {

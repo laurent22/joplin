@@ -3,6 +3,9 @@ import { createContext, useEffect, useMemo, useRef, useState } from 'react';
 import { NotificationType, PopupHandle, PopupControl as PopupManager } from './types';
 import { Hour, msleep } from '@joplin/utils/time';
 import shim from '@joplin/lib/shim';
+import { useStore } from 'react-redux';
+import { AppState } from '../../app.reducer';
+import { stateUtils } from '@joplin/lib/reducer';
 
 export const PopupNotificationContext = createContext<PopupManager|null>(null);
 export const VisibleNotificationsContext = createContext<PopupSpec[]>([]);
@@ -13,6 +16,7 @@ interface Props {
 
 interface PopupSpec {
 	key: string;
+	windowId: string;
 	dismissAt?: number;
 	dismissed: boolean;
 	type: NotificationType;
@@ -20,8 +24,21 @@ interface PopupSpec {
 }
 
 const PopupNotificationProvider: React.FC<Props> = props => {
+	const store = useStore<AppState>();
 	const [popupSpecs, setPopupSpecs] = useState<PopupSpec[]>([]);
 	const nextPopupKey = useRef(0);
+
+	useEffect(() => {
+		const removeClosedWindowPopups = () => {
+			const state = store.getState();
+			setPopupSpecs(popups => {
+				const remaining = popups.filter(popup => !!stateUtils.windowStateById(state, popup.windowId));
+				return remaining.length === popups.length ? popups : remaining;
+			});
+		};
+		removeClosedWindowPopups();
+		return store.subscribe(removeClosedWindowPopups);
+	}, [store]);
 
 	const popupManager = useMemo((): PopupManager => {
 		const removeOldPopups = () => {
@@ -78,6 +95,7 @@ const PopupNotificationProvider: React.FC<Props> = props => {
 				const key = `popup-${nextPopupKey.current++}`;
 				const newPopup: PopupSpec = {
 					key,
+					windowId: stateUtils.activeWindowId(store.getState()),
 					content,
 					type,
 					dismissed: false,
@@ -111,7 +129,7 @@ const PopupNotificationProvider: React.FC<Props> = props => {
 			},
 		};
 		return manager;
-	}, []);
+	}, [store]);
 
 	useEffect(() => {
 		const defaultShowToast = shim.showToast;

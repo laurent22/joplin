@@ -3,16 +3,17 @@ import { VisibleNotificationsContext } from './PopupNotificationProvider';
 import NotificationItem from './NotificationItem';
 import { useContext } from 'react';
 import { _ } from '@joplin/lib/locale';
+import { WindowIdContext } from '../NewWindowOrIFrame';
 
 interface Props {}
 
 // This component displays the popups managed by PopupNotificationContext.
-// This allows popups to be shown in multiple windows at the same time.
 const PopupNotificationList: React.FC<Props> = () => {
 	const popupSpecs = useContext(VisibleNotificationsContext);
+	const windowId = useContext(WindowIdContext);
 	const popups = [];
 	for (const spec of popupSpecs) {
-		if (spec.dismissed) continue;
+		if (spec.dismissed || spec.windowId !== windowId) continue;
 
 		popups.push(
 			<NotificationItem

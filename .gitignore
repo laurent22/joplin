@@ -441,6 +441,7 @@ packages/app-desktop/gui/PdfViewer.js
 packages/app-desktop/gui/PluginNotification/PluginNotification.js
 packages/app-desktop/gui/PopupNotification/NotificationItem.js
 packages/app-desktop/gui/PopupNotification/PopupNotificationList.js
+packages/app-desktop/gui/PopupNotification/PopupNotificationProvider.test.js
 packages/app-desktop/gui/PopupNotification/PopupNotificationProvider.js
 packages/app-desktop/gui/PopupNotification/types.js
 packages/app-desktop/gui/ProfileEditor.js
