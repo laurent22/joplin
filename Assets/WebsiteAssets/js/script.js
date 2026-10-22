@@ -153,7 +153,7 @@ const localePathOverrides = {
 };
 
 // List of supported language codes
-const supportedLanguages = ['fr', 'de', 'zh'];
+const supportedLanguages = ['fr', 'de', 'hr', 'zh'];
 
 function getLocalePath(langCode) {
 	const pathPrefix = localePathOverrides[langCode] || langCode;

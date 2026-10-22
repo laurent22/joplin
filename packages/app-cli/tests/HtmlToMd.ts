@@ -156,6 +156,16 @@ describe('HtmlToMd', () => {
 		expect(rowsReadCount).toBeLessThan(rowCount);
 	});
 
+	// Covers how newlines are carried between children when joining them, which was rewritten to fix
+	// https://github.com/laurent22/joplin/issues/16895
+	it.each([
+		['<ul><li>a</li><li></li><li>b</li></ul>', '- a\n\n- b'],
+		['<span><p>a</p></span>b', 'a\n\nb'],
+		['<pre><code><span>line 1</span>\n\n\n<span>line 2</span></code></pre>', '```\nline 1\n\n\nline 2\n```'],
+	])('should join the Markdown of child elements: %j', (html, expected) => {
+		expect(new HtmlToMd().parse(html)).toBe(expected);
+	});
+
 	it.each([
 		['inline code ending with a space at the end of a heading', '<h2><code>npm</code> install&nbsp;<code>a&nbsp;</code></h2>', 'a\u00A0'],
 		['a heading that only contains inline code with a space', '<h2><code>&nbsp;</code></h2>', '\u00A0'],
