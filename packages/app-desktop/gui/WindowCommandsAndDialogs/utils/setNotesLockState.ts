@@ -24,7 +24,10 @@ const setNotesLockState = async (context: DesktopCommandContext, target: BulkNot
 			if (context.state.watchedNoteFiles.includes(noteId)) await ExternalEditWatcher.instance().stopWatching(noteId);
 		}
 	};
-	await promptAndBulkSetNoteLockState(noteIds, isLocked, noteLockPrompts(context.dispatch), context.dispatch, isLocked ? stopExternalEdits : null);
+	await promptAndBulkSetNoteLockState(noteIds, isLocked, noteLockPrompts(context.dispatch), context.dispatch, {
+		wholeNotebook: !!target && !Array.isArray(target),
+		beforeChange: isLocked ? stopExternalEdits : null,
+	});
 };
 
 export default setNotesLockState;

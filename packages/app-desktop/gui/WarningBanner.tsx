@@ -145,7 +145,7 @@ const WarningBanner: React.FC<Props> = props => {
 			onViewSyncSettingsScreen,
 		);
 	} else if (props.noteLockBulkChangeRunning) {
-		msg = renderNotificationMessage(_('Changing the note lock of your notes is in progress...'));
+		msg = renderNotificationMessage(_('Applying note lock changes. Please wait…'));
 	} else if (props.shouldUpgradeSyncTarget) {
 		msg = renderNotificationMessage(
 			_('The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.'),

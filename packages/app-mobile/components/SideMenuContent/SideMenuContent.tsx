@@ -234,7 +234,7 @@ const SideMenuContentComponent = (props: Props) => {
 					title: isLocked ? _('Lock all notes') : _('Remove lock from all notes'),
 					icon: isLocked ? 'material lock-outline' : 'material lock-open-outline',
 					onPress: async () => {
-						await promptAndBulkSetNoteLockState(await folderTreeNoteIds(folder.id), isLocked, noteLockPrompts, props.dispatch);
+						await promptAndBulkSetNoteLockState(await folderTreeNoteIds(folder.id), isLocked, noteLockPrompts, props.dispatch, { wholeNotebook: true });
 					},
 				});
 				menuItems.push(noteLockButton(true), noteLockButton(false));

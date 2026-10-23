@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { _, _n } from '../../locale';
-import shim from '../../shim';
+import shim, { MessageBoxType } from '../../shim';
 import { ModelType } from '../../BaseModel';
 import BaseItem from '../../models/BaseItem';
 import ItemChange from '../../models/ItemChange';
@@ -38,6 +38,11 @@ const bulkSetNoteLockState = async (noteIds: string[], isLocked: boolean) => {
 	for (const noteId of noteIds) {
 		throwIfMigrationNeeded();
 		try {
+			// Checked before the body is decrypted, so a note locked with another key is skipped rather than failed.
+			if (isLocked && (await Note.load(noteId, { fields: ['id', 'is_locked'] }))?.is_locked) {
+				result.skipped++;
+				continue;
+			}
 			const note: NoteLockNoteEntity = await Note.load(noteId, { useNoteLock: true, noteLockKey });
 			if (!note || !!note.is_locked === isLocked || note.deleted_time || note.is_conflict || note.encryption_applied || itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, note as ItemSlice, Setting.value('sync.userId'), BaseItem.syncShareCache)) {
 				result.skipped++;
@@ -54,15 +59,21 @@ const bulkSetNoteLockState = async (noteIds: string[], isLocked: boolean) => {
 			result.failed++;
 		}
 		// With the feature turned off, Note.save refuses the change, so the remaining notes would all fail too.
-		if (!isNoteLockEnabled()) throw new Error(_('Changing the note lock was cancelled because the note lock feature was turned off.'));
+		if (!isNoteLockEnabled()) throw new Error(_('Note lock changes were cancelled because the note lock feature was disabled.'));
 	}
 	return result;
 };
 
 let running = false;
 
-// beforeChange runs once the session is unlocked, for the work that must happen just before the notes change.
-export const promptAndBulkSetNoteLockState = async (noteIds: string[], isLocked: boolean, prompts: NoteLockPrompts, dispatch: Dispatch, beforeChange: ()=> Promise<void> = null) => {
+interface BulkNoteLockOptions {
+	// A whole notebook can mix locked and unlocked notes, which a change by accident would lose, so it is confirmed first.
+	wholeNotebook?: boolean;
+	// Runs once the session is unlocked, for the work that must happen just before the notes change.
+	beforeChange?: ()=> Promise<void>;
+}
+
+export const promptAndBulkSetNoteLockState = async (noteIds: string[], isLocked: boolean, prompts: NoteLockPrompts, dispatch: Dispatch, options: BulkNoteLockOptions = {}) => {
 	if (running) {
 		await shim.showErrorDialog(_('Please wait until the current note lock change has finished.'));
 		return;
@@ -71,8 +82,14 @@ export const promptAndBulkSetNoteLockState = async (noteIds: string[], isLocked:
 	let message = '';
 	try {
 		throwIfMigrationNeeded();
+		if (options.wholeNotebook) {
+			const question = isLocked
+				? _('Are you sure you want to lock all notes in this notebook and its nested notebooks?')
+				: _('Are you sure you want to remove lock from all notes in this notebook and its nested notebooks?');
+			if (await shim.showMessageBox(question, { buttons: [_('Yes'), _('No')], type: MessageBoxType.Confirm, cancelId: 1 }) !== 0) return;
+		}
 		if (!await unlockNoteLockSession(prompts)) return;
-		await beforeChange?.();
+		await options.beforeChange?.();
 		dispatch({ type: 'NOTE_LOCK_BULK_CHANGE_RUNNING_SET', value: true });
 		const { failed } = await bulkSetNoteLockState(noteIds, isLocked);
 		if (failed) {

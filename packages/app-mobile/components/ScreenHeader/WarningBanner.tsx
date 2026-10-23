@@ -134,7 +134,7 @@ const WarningBannerComponent: React.FC<Props> = props => {
 		warningComps.push(renderWarningBox('syncLogin', _('Your Joplin Cloud credentials are invalid, please login.'), target));
 	}
 	if (props.noteLockBulkChangeRunning) {
-		warningComps.push(renderWarningBox('noteLockBulkChange', _('Changing the note lock of your notes is in progress...'), null));
+		warningComps.push(renderWarningBox('noteLockBulkChange', _('Applying note lock changes. Please wait…'), null));
 	}
 
 	const shareInvitation = props.shareInvitations.find(inv => inv.status === ShareUserStatus.Waiting);

@@ -2,7 +2,7 @@ import Setting from '../../models/Setting';
 import Note from '../../models/Note';
 import Folder from '../../models/Folder';
 import { NoteEntity } from '../database/types';
-import { encryptionService, setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv } from '../../testing/test-utils';
+import { db, encryptionService, setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv } from '../../testing/test-utils';
 import shim from '../../shim';
 import eventManager, { EventName } from '../../eventManager';
 import EncryptionService from '../e2ee/EncryptionService';
@@ -154,7 +154,7 @@ describe('bulkSetNoteLockState', () => {
 			return note;
 		});
 
-		await expect(bulkSetNoteLockState([note1.id, note2.id], isLocked)).rejects.toThrow('cancelled because the note lock feature was turned off');
+		await expect(bulkSetNoteLockState([note1.id, note2.id], isLocked)).rejects.toThrow('cancelled because the note lock feature was disabled');
 		jest.restoreAllMocks();
 		expect(await Note.load(note1.id)).toMatchObject({ is_locked: before.is_locked, body: before.body });
 		expect((await Note.load(note2.id)).is_locked).toBe(startLocked ? 1 : 0);
@@ -186,7 +186,7 @@ describe('bulkSetNoteLockState', () => {
 		const note = await Note.save({ title: 'one', body: 'secret' });
 		const beforeChange = jest.fn();
 
-		await promptAndBulkSetNoteLockState([note.id], true, { promptPassword: async () => null, goToNoteLockSetup: jest.fn() }, jest.fn(), beforeChange);
+		await promptAndBulkSetNoteLockState([note.id], true, { promptPassword: async () => null, goToNoteLockSetup: jest.fn() }, jest.fn(), { beforeChange });
 
 		expect((await Note.load(note.id)).is_locked).toBe(0);
 		expect(beforeChange).not.toHaveBeenCalled();
@@ -277,6 +277,48 @@ describe('bulkSetNoteLockState', () => {
 
 		expect((await Note.load(note1.id)).is_locked).toBe(1);
 		expect((await Note.load(note2.id)).is_locked).toBe(0);
+	});
+
+	it('should skip a note locked with another key when locking, and still lock the rest', async () => {
+		await setUpUnlockedSession();
+		const folder = await Folder.save({ title: 'folder' });
+		const otherKeyNote = await createLockedNote({ title: 'other key', body: 'secret', parent_id: folder.id });
+		// As after importing a locked note from another profile without updating it to this key.
+		await db().exec('UPDATE notes SET body = ? WHERE id = ?', ['JLD01undecryptable', otherKeyNote.id]);
+		const plainNote = await Note.save({ title: 'plain', body: 'plain body', parent_id: folder.id });
+
+		expect(await bulkSetNoteLockState(await folderTreeNoteIds(folder.id), true)).toEqual({ changed: 1, skipped: 1, failed: 0 });
+		expect((await Note.load(plainNote.id)).is_locked).toBe(1);
+		expect((await Note.load(otherKeyNote.id)).body).toBe('JLD01undecryptable');
+	});
+
+	test.each([
+		['Yes', 0, true],
+		['No', 1, false],
+	])('should lock a whole notebook only when %s is chosen in the confirmation', async (_answer, response, locked) => {
+		await NoteLockKey.instance().create('123456');
+		const note = await Note.save({ title: 'one', body: 'secret' });
+		const showMessageBox = jest.spyOn(shim, 'showMessageBox').mockResolvedValue(response);
+		const promptPassword = jest.fn(async () => '123456');
+
+		await promptAndBulkSetNoteLockState([note.id], true, { promptPassword, goToNoteLockSetup: jest.fn() }, jest.fn(), { wholeNotebook: true });
+
+		expect(showMessageBox.mock.calls[0][0]).toBe('Are you sure you want to lock all notes in this notebook and its nested notebooks?');
+		expect(showMessageBox.mock.calls[0][1].buttons).toEqual(['Yes', 'No']);
+		// The question comes before the password, so No asks for nothing.
+		expect(promptPassword).toHaveBeenCalledTimes(locked ? 1 : 0);
+		expect((await Note.load(note.id)).is_locked).toBe(locked ? 1 : 0);
+	});
+
+	it('should not ask for confirmation when the notes are a selection', async () => {
+		await setUpUnlockedSession();
+		const note = await Note.save({ title: 'one', body: 'secret' });
+		const showMessageBox = jest.spyOn(shim, 'showMessageBox');
+
+		await promptAndBulkSetNoteLockState([note.id], true, prompts, jest.fn());
+
+		expect(showMessageBox).not.toHaveBeenCalled();
+		expect((await Note.load(note.id)).is_locked).toBe(1);
 	});
 
 });

@@ -163,9 +163,9 @@ describe('WarningBanner', () => {
 		});
 
 		setRunning(true);
-		expect(screen.getByText('Changing the note lock of your notes is in progress...')).toBeVisible();
+		expect(screen.getByText('Applying note lock changes. Please wait…')).toBeVisible();
 
 		setRunning(false);
-		expect(screen.queryByText('Changing the note lock of your notes is in progress...')).toBeNull();
+		expect(screen.queryByText('Applying note lock changes. Please wait…')).toBeNull();
 	});
 });
