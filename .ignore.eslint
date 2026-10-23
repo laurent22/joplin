@@ -1951,6 +1951,7 @@ packages/lib/services/rest/utils/defaultAction.js
 packages/lib/services/rest/utils/defaultLoadOptions.js
 packages/lib/services/rest/utils/defaultSaveOptions.js
 packages/lib/services/rest/utils/errors.js
+packages/lib/services/rest/utils/lockedNoteBodies.js
 packages/lib/services/rest/utils/paginatedResults.js
 packages/lib/services/rest/utils/readonlyProperties.js
 packages/lib/services/rest/utils/requestFields.js

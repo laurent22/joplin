@@ -211,6 +211,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		scheduleSaveNote,
 		formNote,
 		effectiveNoteId,
+		noteIsLocked: isNoteLockEnabled() && !!props.notes.find(n => n.id === effectiveNoteId)?.is_locked,
 		shownEditorViewIds,
 		activeEditorView: editorView,
 		plugins: props.plugins,

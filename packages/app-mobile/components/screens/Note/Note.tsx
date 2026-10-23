@@ -663,6 +663,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		await this.editorPluginHandler_.emitActivationCheck({
 			noteId: this.props.noteId,
 			parentWindowId: defaultWindowId,
+			noteIsLocked: isNoteLockEnabled() && !!this.state.note.is_locked,
 		});
 
 		setTimeout(() => {
@@ -782,10 +783,12 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			}
 		}
 
-		if (prevProps.noteId && this.props.noteId && prevProps.noteId !== this.props.noteId) {
+		const lockStateChanged = isNoteLockEnabled() && !!prevState.note.is_locked !== !!this.state.note.is_locked;
+		if ((prevProps.noteId && this.props.noteId && prevProps.noteId !== this.props.noteId) || lockStateChanged) {
 			void this.editorPluginHandler_.emitActivationCheck({
 				noteId: this.props.noteId,
 				parentWindowId: defaultWindowId,
+				noteIsLocked: isNoteLockEnabled() && !!this.state.note.is_locked,
 			});
 		}
 
