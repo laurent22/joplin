@@ -84,7 +84,7 @@ class ResourceServer {
 			this.logger().error('Resource server:', error);
 		});
 
-		this.server_.listen(this.port_);
+		this.server_.listen(this.port_, '127.0.0.1');
 
 		enableServerDestroy(this.server_);
 

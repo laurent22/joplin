@@ -7,6 +7,7 @@ import Resource from '../models/Resource';
 import { FolderEntity, NoteEntity, ResourceEntity } from '../services/database/types';
 import ResourceService from '../services/ResourceService';
 import { StateShare } from '../services/share/reducer';
+import ItemChange from './ItemChange';
 
 const testImagePath = `${supportDir}/photo.jpg`;
 
@@ -332,6 +333,22 @@ describe('models/Folder.sharing', () => {
 		expect(note3.share_id).toBe('abcd1234');
 		expect(note4.share_id).toBe('');
 	}));
+
+	it('should clear the share ID from conflict notes', async () => {
+		const folder = await Folder.save({ title: 'Shared folder', share_id: 'abcd1234' });
+		const note = await Note.save({ title: 'Note', parent_id: folder.id, share_id: folder.share_id });
+		const newConflictNote = await Note.createConflictNote(note, ItemChange.SOURCE_SYNC);
+		const existingConflictNote = await Note.createConflictNote(note, ItemChange.SOURCE_SYNC);
+		await Note.save({ id: existingConflictNote.id, share_id: folder.share_id });
+
+		expect(newConflictNote.share_id).toBe('');
+		expect((await Note.load(existingConflictNote.id)).share_id).toBe(folder.share_id);
+
+		await Folder.updateAllShareIds(resourceService(), []);
+
+		expect((await Note.load(newConflictNote.id)).share_id).toBe('');
+		expect((await Note.load(existingConflictNote.id)).share_id).toBe('');
+	});
 
 	it('should remove the share ID when a note is moved in or out of shared folder', (async () => {
 		const folder1 = await createFolderTree('', [

@@ -5,11 +5,22 @@ import shim from '../../shim';
 import { type ExportMetadata } from './Module';
 import { BaseItemEntity, ResourceEntity } from '../database/types';
 import { ExportOptions } from './types';
+import { friendlySafeFilename } from '../../path-utils';
+import { _ } from '../../locale';
+import BaseModel from '../../BaseModel';
+
+interface ItemWithTitle {
+	encryption_applied?: number;
+	id?: string;
+	title?: string;
+	type_?: number;
+}
 
 export default class InteropService_Exporter_Base {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Context shape is exporter-specific (Html exporter has cssStrings/customAssets, Md exporter has noteTags/tagTitles, etc.) and used heterogeneously across subclasses
 	private context_: any = {};
 	private metadata_: ExportMetadata = null;
+	private truncatedItemWarnings_: Set<string> = new Set();
 
 	public async init(_destDir: string, _options: ExportOptions = {}) {}
 	public async prepareForProcessingItemType(_itemType: number, _itemsToExport: BaseItemEntity[]) {}
@@ -31,6 +42,24 @@ export default class InteropService_Exporter_Base {
 
 	public context() {
 		return this.context_;
+	}
+
+	protected addTitleTruncationWarning_(item: ItemWithTitle, exportedFilename: string) {
+		if (item.encryption_applied) return;
+
+		const title = item.title || '';
+		const filename = friendlySafeFilename(title);
+		const untruncatedFilename = friendlySafeFilename(title, title.length);
+		const itemId = item.id || title;
+		const warningKey = `${item.type_}:${itemId}`;
+
+		if (filename !== untruncatedFilename && !this.truncatedItemWarnings_.has(warningKey)) {
+			this.truncatedItemWarnings_.add(warningKey);
+			const warning = item.type_ === BaseModel.TYPE_FOLDER
+				? _('The notebook title "%s" was truncated to "%s" in the exported folder name. Notebook ID: %s', title, exportedFilename, itemId)
+				: _('The note title "%s" was truncated to "%s" in the exported file name. Note ID: %s', title, exportedFilename, itemId);
+			this.context_.warnings?.push(warning);
+		}
 	}
 
 	protected async temporaryDirectory_(createIt: boolean) {
