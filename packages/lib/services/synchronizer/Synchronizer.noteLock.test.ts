@@ -24,6 +24,8 @@ const switchToClient = async (id: number) => {
 
 const remoteNoteLockKeyId = async () => (await fetchSyncInfo(fileApi())).noteLockKey?.id;
 
+const decryptedRemoteKey = async (key: MasterKeyEntity) => ({ id: key.id, plainText: await encryptionService().decryptMasterKeyContent(key, '111111') });
+
 // Lands the action inside the running sync, after it took its local snapshot and before the conflict check.
 const duringTheLockedNotesCheck = (action: ()=> Promise<unknown>) => {
 	const realHasLockedNotes = Note.hasLockedNotes.bind(Note);
@@ -112,7 +114,7 @@ describe('Synchronizer.noteLock', () => {
 			expect(Setting.value('noteLock.conflictNoteLockKey').noteLockKey).toEqual(winningKey);
 		}
 
-		expect(await migrateLockedNotes('222222', '333333')).toEqual({ migrated: 1, skipped: 0, failed: 0 });
+		expect(await migrateLockedNotes('222222', '333333')).toEqual({ migrated: 1, skipped: 0, failed: 0, awaitingDecryption: 0 });
 		finishNoteLockKeyMigration();
 		expect(Setting.value('noteLock.passwordReset')).toBe(false);
 		expect(Setting.value('noteLock.keyIdToReset')).toBe('');
@@ -209,7 +211,7 @@ describe('Synchronizer.noteLock', () => {
 		const note = await Note.save({ title: 'secret', body: 'secret body', is_locked: 1 }, { useNoteLock: true });
 		await expect(synchronizerStart(null, { throwOnError: true })).rejects.toMatchObject({ code: ErrorCode.NoteLockKeyConflict });
 
-		expect(await migrateLockedNotes('222222', '111111')).toEqual({ migrated: 1, skipped: 0, failed: 0 });
+		expect(await migrateLockedNotes('222222', '111111')).toEqual({ migrated: 1, skipped: 0, failed: 0, awaitingDecryption: 0 });
 		finishNoteLockKeyMigration();
 		await synchronizerStart(null, { throwOnError: true });
 		expect(NoteLockKey.instance().load()).toEqual(remoteKey);
@@ -439,4 +441,53 @@ describe('Synchronizer.noteLock', () => {
 		saveLocalSyncInfo(localInfo);
 		await expect(synchronizerStart(null, { throwOnError: true })).rejects.toThrow('migration ID');
 	});
+	// Sets up client 2 with a locked note and a conflict parked against client 1's key on the sync target.
+	const parkConflictOnClient2 = async () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		const remoteKey = await NoteLockKey.instance().create('111111');
+		await synchronizerStart();
+
+		await switchToClient(2);
+		Setting.setValue('featureFlag.noteLock', true);
+		const localKey = await NoteLockKey.instance().create('222222');
+		await NoteLockSession.instance().unlock('222222');
+		const note = await Note.save({ title: 'secret', body: 'secret body', is_locked: 1 }, { useNoteLock: true });
+		await expect(synchronizerStart(null, { throwOnError: true })).rejects.toMatchObject({ code: ErrorCode.NoteLockKeyConflict });
+		expect(noteLockKeyConflict()?.noteLockKey.id).toBe(remoteKey.id);
+		return { remoteKey, localKey, note };
+	};
+
+	it('should sync again when the sync target no longer conflicts, for example after switching to an empty one', async () => {
+		const { localKey } = await parkConflictOnClient2();
+
+		await fileApi().clearRoot();
+		await synchronizerStart(null, { throwOnError: true });
+
+		expect(noteLockKeyConflict()).toBeNull();
+		expect(NoteLockKey.instance().load()).toEqual(localKey);
+		expect(await remoteNoteLockKeyId()).toBe(localKey.id);
+	});
+
+	it('should keep the parked key once a migration has moved notes to it, even if the sync target changes', async () => {
+		const { remoteKey, note } = await parkConflictOnClient2();
+		const partner = await Note.save({ title: 'partner', body: 'partner body', is_locked: 1 }, { useNoteLock: true });
+		// The first note moves, the second fails, so the run stops halfway with a note already under the parked key.
+		const save = Note.save.bind(Note);
+		const spy = jest.spyOn(Note, 'save').mockImplementation(async (n, options) => {
+			if (n.id === partner.id) throw new Error('simulated failure');
+			return save(n, options);
+		});
+		try {
+			expect(await migrateLockedNotes('222222', '111111')).toMatchObject({ migrated: 1, failed: 1 });
+		} finally {
+			spy.mockRestore();
+		}
+
+		await fileApi().clearRoot();
+		await expect(synchronizerStart(null, { throwOnError: true })).rejects.toMatchObject({ code: ErrorCode.NoteLockKeyConflict });
+		expect(noteLockKeyConflict()?.noteLockKey.id).toBe(remoteKey.id);
+		const key = await decryptedRemoteKey(remoteKey);
+		expect((await NoteLockNote.decryptBody(await Note.load(note.id), key)).body).toBe('secret body');
+	});
+
 });

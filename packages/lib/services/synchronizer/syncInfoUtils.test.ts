@@ -205,14 +205,35 @@ describe('syncInfoUtils', () => {
 		expect(Setting.value('noteLock.conflictNoteLockKey')).toEqual({});
 	});
 
-	it('should keep rejecting syncs while a conflict key is parked', () => {
+	it('should keep rejecting syncs while notes depend on the parked key', () => {
 		const parked = { noteLockKey: noteLockKey('1', 200), syncMigrationId: 'L1' };
 		Setting.setValue('noteLock.conflictNoteLockKey', parked);
 		const local = syncInfoWithNoteLockKey(noteLockKey('3', 300), 'L3');
 		const remote = syncInfoWithNoteLockKey(noteLockKey('3', 300), 'L3');
 
-		expect(() => checkNoteLockKeyConflict(local, remote, false, false)).toThrow(expect.objectContaining({ code: ErrorCode.NoteLockKeyConflict }));
+		expect(() => checkNoteLockKeyConflict(local, remote, false, false, true)).toThrow(expect.objectContaining({ code: ErrorCode.NoteLockKeyConflict }));
 		expect(Setting.value('noteLock.conflictNoteLockKey')).toEqual(parked);
+	});
+
+	test.each([
+		['the sync target has no key', null],
+		['the sync target has the local key', noteLockKey('3', 300)],
+	])('should drop a parked key that no note depends on when %s', (_description, remoteKey) => {
+		Setting.setValue('noteLock.conflictNoteLockKey', { noteLockKey: noteLockKey('1', 200), syncMigrationId: 'L1' });
+		const local = syncInfoWithNoteLockKey(noteLockKey('3', 300), 'L3');
+		const remote = syncInfoWithNoteLockKey(remoteKey, remoteKey ? 'L3' : '');
+
+		expect(() => checkNoteLockKeyConflict(local, remote, true, false)).not.toThrow();
+		expect(Setting.value('noteLock.conflictNoteLockKey')).toEqual({});
+	});
+
+	it('should park the new sync target key when it changed and no note depends on the old one', () => {
+		Setting.setValue('noteLock.conflictNoteLockKey', { noteLockKey: noteLockKey('1', 200), syncMigrationId: 'L1' });
+		const local = syncInfoWithNoteLockKey(noteLockKey('3', 300), 'L3');
+		const remote = syncInfoWithNoteLockKey(noteLockKey('4', 400), 'L4');
+
+		expect(() => checkNoteLockKeyConflict(local, remote, true, false)).toThrow(expect.objectContaining({ code: ErrorCode.NoteLockKeyConflict }));
+		expect(Setting.value('noteLock.conflictNoteLockKey')).toEqual({ noteLockKey: remote.noteLockKey, syncMigrationId: 'L4' });
 	});
 
 	test.each([

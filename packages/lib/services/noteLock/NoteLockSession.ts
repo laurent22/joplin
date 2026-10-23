@@ -69,6 +69,10 @@ export default class NoteLockSession {
 		if (migrating) this.lock();
 	}
 
+	public isMigrating() {
+		return this.migrating_;
+	}
+
 	private lockIfKeyChanged_() {
 		if (this.key_ && this.key_.id !== this.noteLockKey_.load()?.id) this.lock();
 	}

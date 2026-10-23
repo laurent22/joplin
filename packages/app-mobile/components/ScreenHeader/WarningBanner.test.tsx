@@ -165,10 +165,10 @@ describe('WarningBanner', () => {
 
 		setStatus({ running: false, failed: 2, skipped: 0 });
 		expect(screen.getByText(/2 locked notes could not be migrated/)).toBeVisible();
-		const showConfirmationDialog = jest.spyOn(shim, 'showConfirmationDialog').mockResolvedValue(false);
+		const showMessageBox = jest.spyOn(shim, 'showMessageBox').mockResolvedValue(1);
 		fireEvent.press(screen.getByText('Skip'));
-		expect(showConfirmationDialog).toHaveBeenCalled();
-		showConfirmationDialog.mockRestore();
+		expect(showMessageBox).toHaveBeenCalled();
+		showMessageBox.mockRestore();
 		fireEvent.press(screen.getByText('Retry'));
 		expect(mock.getRouteName()).toBe('NoteLockMigration');
 

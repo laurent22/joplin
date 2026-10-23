@@ -663,17 +663,25 @@ export const adoptNoteLockKeyConflict = () => {
 
 // Different lineages with local notes depending on the local key stop the sync: the remote key is parked for the
 // migration and keeps rejecting syncs until resolved. A stale reset (another device reset first) counts as a different lineage.
-export const checkNoteLockKeyConflict = (local: SyncInfo, remote: SyncInfo, hasLocalLockedNotes: boolean, staleReset: boolean) => {
-	if (!noteLockKeyConflict()) {
+// A parked key is checked again against the current target, for example after switching to another sync target, unless a
+// migration is running or has already moved notes to it (parkedKeyInUse), since those notes need it.
+export const checkNoteLockKeyConflict = (local: SyncInfo, remote: SyncInfo, hasLocalLockedNotes: boolean, staleReset: boolean, parkedKeyInUse = false) => {
+	const parked = noteLockKeyConflict();
+	if (!parked || !parkedKeyInUse) {
 		const keysDiffer = !!local.noteLockKey && !!remote.noteLockKey && local.noteLockKey.id !== remote.noteLockKey.id;
 		// The scenarios where a conflict occurs are when a different device has set up note lock for the first time (noteLockKey
 		// and syncMigrationId both differ) and when both remote and local have reset the password at the point of syncing (which
 		// makes staleReset true). staleReset is false both when a local password reset should propagate and when only a remote
 		// password reset was made (which silently accepts the remote key), and syncMigrationId is what tells a password reset
 		// apart from a key created for the first time.
-		if (!keysDiffer || (local.syncMigrationId === remote.syncMigrationId && !staleReset) || !hasLocalLockedNotes) return;
+		if (!keysDiffer || (local.syncMigrationId === remote.syncMigrationId && !staleReset) || !hasLocalLockedNotes) {
+			if (parked) Setting.setValue(noteLockKeyConflictSettingKey, {});
+			return;
+		}
 		const conflict: NoteLockKeyConflict = { noteLockKey: remote.noteLockKey, syncMigrationId: remote.syncMigrationId };
-		Setting.setValue(noteLockKeyConflictSettingKey, conflict);
+		if (!parked || parked.syncMigrationId !== conflict.syncMigrationId || parked.noteLockKey.id !== conflict.noteLockKey.id || parked.noteLockKey.updated_time !== conflict.noteLockKey.updated_time) {
+			Setting.setValue(noteLockKeyConflictSettingKey, conflict);
+		}
 	}
 	throw new JoplinError(isNoteLockEnabled()
 		? _('Synchronisation was stopped because the sync target uses a different note lock key to the one on your device. Your locked notes must be migrated to the synced key before synchronisation can continue.')

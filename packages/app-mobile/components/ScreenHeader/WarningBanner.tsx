@@ -5,11 +5,11 @@ import { Platform } from 'react-native';
 import { AppState } from '../../utils/types';
 import WarningBox, { WarningBoxAction, WarningBoxTarget } from './WarningBox';
 import NavService from '@joplin/lib/services/NavService';
-import { _, _n } from '@joplin/lib/locale';
+import { _ } from '@joplin/lib/locale';
 import { showMissingMasterKeyMessage, showUnknownKeyFormatBanner } from '@joplin/lib/services/e2ee/utils';
 import { localSyncInfoFromState, noteLockKeyConflictFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { NoteLockMigrationStatus } from '@joplin/lib/reducer';
-import { confirmAndSkipNoteLockKeyMigration, withSkippedCount } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
+import { confirmAndSkipNoteLockKeyMigration, notMigratedMessage, withSkippedCount } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
 import { Dispatch } from 'redux';
 import Setting from '@joplin/lib/models/Setting';
 import { ShareInvitation, ShareUserStatus } from '@joplin/lib/services/share/reducer';
@@ -141,8 +141,8 @@ const WarningBannerComponent: React.FC<Props> = props => {
 	if (props.showNoteLockKeyConflictMessage !== false) {
 		if (migration?.running) {
 			warningComps.push(renderWarningBox('noteLockMigration', _('Re-encrypting your locked notes with the synced key. Migration is in progress...'), null));
-		} else if (migration?.failed) {
-			warningComps.push(renderWarningBox('noteLockMigration', withSkippedCount(_n('%d locked note could not be migrated.', '%d locked notes could not be migrated.', migration.failed, migration.failed), migration), null, [
+		} else if (migration?.failed || migration?.awaitingDecryption) {
+			warningComps.push(renderWarningBox('noteLockMigration', notMigratedMessage(migration), null, [
 				{ title: _('Retry'), onPress: () => void NavService.go('NoteLockMigration') },
 				{ title: _('Skip'), onPress: () => void confirmAndSkipNoteLockKeyMigration(props.dispatch) },
 			]));

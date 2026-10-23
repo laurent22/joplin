@@ -25,7 +25,9 @@ import TaskQueue from './TaskQueue';
 import ItemUploader from './services/synchronizer/ItemUploader';
 import { FileApi, getSupportsDeltaWithItems, isLocalServer, PaginatedList, RemoteItem, enableEnhancedBasicDeltaAlgorithm } from './file-api';
 import JoplinDatabase from './JoplinDatabase';
-import { checkIfCanSync, fetchSyncInfo, checkSyncTargetIsValid, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyHasBeenUsed, SyncInfo, syncInfoEquals, uploadSyncInfo, checkNoteLockKeyConflict, checkNoteLockKeyMigrationId, checkNoteLockKeyUnchanged, checkRemoteNoteLockKeyUnchanged } from './services/synchronizer/syncInfoUtils';
+import { parkedNoteLockKeyInUse } from './services/noteLock/NoteLockKeyMigration';
+import NoteLockSession from './services/noteLock/NoteLockSession';
+import { checkIfCanSync, fetchSyncInfo, checkSyncTargetIsValid, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyHasBeenUsed, SyncInfo, syncInfoEquals, uploadSyncInfo, checkNoteLockKeyConflict, checkNoteLockKeyMigrationId, checkNoteLockKeyUnchanged, checkRemoteNoteLockKeyUnchanged, noteLockKeyConflict } from './services/synchronizer/syncInfoUtils';
 import { getMasterPassword, setupAndDisableEncryption, setupAndEnableEncryption } from './services/e2ee/utils';
 import { generateKeyPair } from './services/e2ee/ppk/ppk';
 import syncDebugLog from './services/synchronizer/syncDebugLog';
@@ -536,8 +538,13 @@ export default class Synchronizer {
 				// A reset only overwrites the target key it replaced, so a target reset elsewhere since then wins.
 				const resetPropagates = noteLockPasswordReset && (!remoteInfo.noteLockKey || remoteInfo.noteLockKey.id === noteLockKeyIdToReset);
 				const staleReset = noteLockPasswordReset && !resetPropagates;
-				// Read again after the await: a migration may have finished meanwhile.
-				checkNoteLockKeyConflict(localSyncInfo(), remoteInfo, hasLockedNotes, staleReset);
+				const notesUseParkedKey = await parkedNoteLockKeyInUse();
+				const hadParkedKey = !!noteLockKeyConflict();
+				// Read again after the await: a migration may have finished meanwhile. A running one is checked in the same tick
+				// as the conflict, so it cannot start in between.
+				checkNoteLockKeyConflict(localSyncInfo(), remoteInfo, hasLockedNotes, staleReset, notesUseParkedKey || NoteLockSession.instance().isMigrating());
+				// The target no longer conflicts, so a banner left by an earlier run with nothing moved has nothing to retry.
+				if (hadParkedKey) this.dispatch({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: null });
 
 				// console.info('LOCAL', localInfo);
 				// console.info('REMOTE', remoteInfo);
@@ -609,7 +616,7 @@ export default class Synchronizer {
 						Setting.setValue('noteLock.passwordReset', false);
 						Setting.setValue('noteLock.keyIdToReset', '');
 					} else {
-						Setting.setValue('noteLock.keyIdToReset', reconciledNoteLockKeyId);
+						Setting.setValue('noteLock.keyIdToReset', reconciledNoteLockKeyId ?? '');
 					}
 				}
 			} catch (error) {

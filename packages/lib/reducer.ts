@@ -95,6 +95,7 @@ export interface NoteLockMigrationStatus {
 	running: boolean;
 	failed: number;
 	skipped: number;
+	awaitingDecryption: number;
 }
 
 export type HighlightedWord = ComplexTerm|string;

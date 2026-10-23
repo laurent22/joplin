@@ -1,7 +1,7 @@
 import Setting from '../../models/Setting';
 import Note from '../../models/Note';
 import uuid from '../../uuid';
-import { afterAllCleanUp, encryptionService, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
+import { afterAllCleanUp, db, encryptionService, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import EncryptionService from '../e2ee/EncryptionService';
 import { MasterKeyEntity } from '../e2ee/types';
 import { localSyncInfo, noteLockKeyConflict } from '../synchronizer/syncInfoUtils';
@@ -9,7 +9,7 @@ import NoteLockKey, { DecryptedNoteLockKey } from './NoteLockKey';
 import NoteLockNote from './NoteLockNote';
 import NoteLockService from './NoteLockService';
 import NoteLockSession from './NoteLockSession';
-import { confirmAndSkipNoteLockKeyMigration, finishNoteLockKeyMigration, migrateLockedNotes, startNoteLockKeyMigration } from './NoteLockKeyMigration';
+import { confirmAndSkipNoteLockKeyMigration, finishNoteLockKeyMigration, migrateLockedNotes, notMigratedMessage, startNoteLockKeyMigration } from './NoteLockKeyMigration';
 import eventManager, { EventName, NoteLockSessionChangeEvent } from '../../eventManager';
 import shim from '../../shim';
 
@@ -70,7 +70,7 @@ describe('NoteLockKeyMigration', () => {
 
 		const result = await migrateLockedNotes(localPassword, targetPassword);
 
-		expect(result).toEqual({ migrated: 2, skipped: 1, failed: 1 });
+		expect(result).toEqual({ migrated: 2, skipped: 1, failed: 1, awaitingDecryption: 0 });
 		expect(await bodyDecryptedWith(note1.id, decryptedTargetKey)).toBe('one');
 		expect(await bodyDecryptedWith(note2.id, decryptedTargetKey)).toBe('two');
 		expect((await Note.load(staleNote.id)).body).toBe(staleNote.body);
@@ -88,7 +88,7 @@ describe('NoteLockKeyMigration', () => {
 		await migrateLockedNotes(localPassword, targetPassword);
 		const bodiesAfterFirstRun = await storedBodies();
 
-		expect(await migrateLockedNotes(localPassword, targetPassword)).toEqual({ migrated: 0, skipped: 1, failed: 0 });
+		expect(await migrateLockedNotes(localPassword, targetPassword)).toEqual({ migrated: 0, skipped: 1, failed: 0, awaitingDecryption: 0 });
 		expect(await storedBodies()).toEqual(bodiesAfterFirstRun);
 	});
 
@@ -164,15 +164,15 @@ describe('NoteLockKeyMigration', () => {
 		await startNoteLockKeyMigration(localPassword, targetPassword, dispatch, onStarted);
 		expect(onStarted).toHaveBeenCalledTimes(1);
 		expect(dispatch.mock.calls).toEqual([
-			[{ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: { running: true, failed: 0, skipped: 0 } }],
-			[{ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: { running: false, failed: 1, skipped: 0 } }],
+			[{ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: { running: true, failed: 0, skipped: 0, awaitingDecryption: 0 } }],
+			[{ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: { running: false, failed: 1, skipped: 0, awaitingDecryption: 0 } }],
 		]);
 		expect(noteLockKeyConflict()).not.toBeNull();
 
 		await Note.delete(corruptNote.id);
 		dispatch.mockClear();
 		await startNoteLockKeyMigration(localPassword, targetPassword, dispatch, onStarted);
-		expect(dispatch).toHaveBeenLastCalledWith({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: { running: false, failed: 0, skipped: 0 } });
+		expect(dispatch).toHaveBeenLastCalledWith({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: { running: false, failed: 0, skipped: 0, awaitingDecryption: 0 } });
 		expect(NoteLockKey.instance().load()).toEqual(targetKey);
 		expect(await bodyDecryptedWith(note.id, decryptedTargetKey)).toBe('one');
 	});
@@ -222,4 +222,30 @@ describe('NoteLockKeyMigration', () => {
 		expect(() => finishNoteLockKeyMigration()).toThrow('No note lock key conflict');
 		expect(NoteLockKey.instance().load().id).toBe(decryptedLocalKey.id);
 	});
+	it('should keep the date a note was last changed by the user', async () => {
+		const note = await Note.save({ title: 'one', body: 'one', is_locked: 1 }, { useNoteLock: true });
+		await db().exec('UPDATE notes SET user_updated_time = 1000, updated_time = 1000 WHERE id = ?', [note.id]);
+
+		expect(await migrateLockedNotes(localPassword, targetPassword)).toEqual({ migrated: 1, skipped: 0, failed: 0, awaitingDecryption: 0 });
+
+		const migrated = await Note.load(note.id);
+		expect(migrated.user_updated_time).toBe(1000);
+		// Still moves, so the re-encrypted note is synced.
+		expect(migrated.updated_time).toBeGreaterThan(1000);
+	});
+
+	it('should leave a note still waiting for sync decryption for a retry and not finish the migration', async () => {
+		const waiting = await Note.save({ title: 'waiting', body: 'waiting', is_locked: 1 }, { useNoteLock: true });
+		// What sync leaves until the decryption worker has run: is_locked stays readable, the body is not there yet.
+		await db().exec('UPDATE notes SET encryption_applied = 1, body = \'\' WHERE id = ?', [waiting.id]);
+		const dispatch = jest.fn();
+
+		await startNoteLockKeyMigration(localPassword, targetPassword, dispatch, jest.fn());
+
+		const status = { running: false, failed: 0, skipped: 0, awaitingDecryption: 1 };
+		expect(dispatch).toHaveBeenLastCalledWith({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: status });
+		expect(noteLockKeyConflict()).not.toBeNull();
+		expect(notMigratedMessage(status)).toBe('1 locked note is still waiting to be decrypted and was not migrated yet.');
+	});
+
 });
