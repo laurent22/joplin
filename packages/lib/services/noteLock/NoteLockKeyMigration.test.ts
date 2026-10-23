@@ -135,16 +135,20 @@ describe('NoteLockKeyMigration', () => {
 		}
 	});
 
-	test.each([true, false])('should skip the migration only once the warning is confirmed (%s)', async (confirmed) => {
-		const showConfirmationDialog = jest.spyOn(shim, 'showConfirmationDialog').mockResolvedValue(confirmed);
+	test.each([
+		['Yes', 0, true],
+		['No', 1, false],
+	])('should skip the migration only when Yes is chosen in the warning (answer: %s)', async (_answer, response, skipped) => {
+		const showMessageBox = jest.spyOn(shim, 'showMessageBox').mockResolvedValue(response);
 		const dispatch = jest.fn();
 
-		expect(await confirmAndSkipNoteLockKeyMigration(dispatch)).toBe(confirmed);
+		expect(await confirmAndSkipNoteLockKeyMigration(dispatch)).toBe(skipped);
 
-		expect(showConfirmationDialog.mock.calls[0][0]).toContain('JEX backup');
-		expect(NoteLockKey.instance().load().id).toBe(confirmed ? targetKey.id : decryptedLocalKey.id);
-		expect(dispatch).toHaveBeenCalledTimes(confirmed ? 1 : 0);
-		showConfirmationDialog.mockRestore();
+		expect(showMessageBox.mock.calls[0][0]).toContain('JEX backup');
+		expect(showMessageBox.mock.calls[0][1].buttons).toEqual(['Yes', 'No']);
+		expect(NoteLockKey.instance().load().id).toBe(skipped ? targetKey.id : decryptedLocalKey.id);
+		expect(dispatch).toHaveBeenCalledTimes(skipped ? 1 : 0);
+		showMessageBox.mockRestore();
 	});
 
 	it('should report a background run that starts once the passwords are accepted', async () => {

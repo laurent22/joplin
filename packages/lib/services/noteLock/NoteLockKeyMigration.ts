@@ -3,7 +3,7 @@ import { Dispatch } from 'redux';
 import { _, _n } from '../../locale';
 import type { NoteLockMigrationStatus } from '../../reducer';
 import Note from '../../models/Note';
-import shim from '../../shim';
+import shim, { MessageBoxType } from '../../shim';
 import EncryptionService from '../e2ee/EncryptionService';
 import { adoptNoteLockKeyConflict, noteLockKeyConflict } from '../synchronizer/syncInfoUtils';
 import isNoteLockEnabled from './isNoteLockEnabled';
@@ -69,7 +69,7 @@ export const finishNoteLockKeyMigration = () => {
 };
 
 export const confirmAndSkipNoteLockKeyMigration = async (dispatch: Dispatch) => {
-	if (!await shim.showConfirmationDialog(_('Notes still locked with the password of this device will become permanently unreadable. It is recommended to first export all notes on this device as a JEX backup, which can be imported again later with that password. Continue without migrating them?'))) return false;
+	if (await shim.showMessageBox(_('Warning: Notes still locked with the current note lock key will become permanently unreadable. Before continuing, it is recommended to first export all notes on this device as a JEX backup, which can be imported again later if the correct password is used. Are you sure you want to continue without migrating the remaining notes?'), { buttons: [_('Yes'), _('No')], type: MessageBoxType.Confirm, cancelId: 1 }) !== 0) return false;
 	finishNoteLockKeyMigration();
 	dispatch({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: null });
 	return true;
