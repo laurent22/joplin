@@ -26,9 +26,6 @@ export const runtime = (comp: WindowControl): CommandRuntime => {
 					if (!noteIds.length) return;
 				}
 
-				noteIds = await InteropServiceHelper.withoutUndecryptableNotes(noteIds);
-				if (!noteIds.length) return;
-
 				let path = null;
 				if (noteIds.length === 1) {
 					path = await bridge().showSaveDialog({
