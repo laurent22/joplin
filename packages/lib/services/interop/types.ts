@@ -84,6 +84,9 @@ export interface ExportOptions {
 	shouldEmbedOnlyImages?: boolean;
 	// The user chose to export without the locked notes, so they are left out without a warning.
 	skipLockedNotes?: boolean;
+	// Locked notes are left out with a warning unless this is set, so only an export the user confirmed writes them as
+	// plain text, and the export commands plugins can run do not.
+	decryptLockedNotes?: boolean;
 
 	onProgress?: OnExportProgressCallback;
 }

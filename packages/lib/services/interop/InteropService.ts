@@ -405,7 +405,7 @@ export default class InteropService {
 
 		const exportedNoteIds = [];
 		let resourceIds: string[] = [];
-		// Backups keep locked notes encrypted; every other format exports the decrypted content.
+		// Backups keep locked notes encrypted; other formats export them decrypted only when decryptLockedNotes is set.
 		const keepsLockedNotes = options.format === ExportModuleOutputFormat.Raw || options.format === ExportModuleOutputFormat.Jex;
 		let lockedNotesSkipped = 0;
 		// Read once, so enabling the feature partway through cannot leave the locked notes queued before it as ciphertext.
@@ -441,7 +441,7 @@ export default class InteropService {
 				let note = await Note.load(noteId);
 				if (noteLockEnabled && NoteLockNote.isLocked(note) && !keepsLockedNotes) {
 					if (options.skipLockedNotes) continue;
-					const decrypted = await this.decryptedNoteForExport_(noteId, noteLockKey);
+					const decrypted = options.decryptLockedNotes ? await this.decryptedNoteForExport_(noteId, noteLockKey) : null;
 					if (!decrypted) {
 						lockedNotesSkipped++;
 						continue;

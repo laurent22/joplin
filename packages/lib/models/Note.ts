@@ -608,11 +608,6 @@ export default class Note extends BaseItem {
 		return r && r.total ? r.total : 0;
 	}
 
-	// Trashed and conflict notes count too: their content still depends on the note lock key.
-	public static async hasLockedNotes() {
-		return !!(await this.db().selectOne('SELECT 1 FROM notes WHERE is_locked = 1 LIMIT 1'));
-	}
-
 	// Like the export of a notebook, the check includes its sub-notebooks.
 	public static async hasLockedNoteInFolderTrees(folderIds: string[]) {
 		if (!folderIds.length) return false;
