@@ -45,6 +45,7 @@ export interface WhenClauseContext {
 	noteIsLocked: boolean;
 	noteLockContentUnavailable: boolean;
 	noteLockSessionUnlocked: boolean;
+	noteLockMigrationRunning: boolean;
 	noteIsMarkdown: boolean;
 	noteIsReadOnly: boolean;
 	noteIsReadOnlyShare: boolean;
@@ -129,6 +130,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 		noteIsLocked,
 		noteLockContentUnavailable,
 		noteLockSessionUnlocked: state.noteLockSessionUnlocked,
+		noteLockMigrationRunning: !!state.noteLockMigrationStatus?.running,
 		noteIsReadOnly: noteLockContentUnavailable || noteIsReadOnlyShare || noteIsLockedInShare(selectedNote),
 		noteIsReadOnlyShare,
 		noteIsDeleted: selectedNote ? !!selectedNote.deleted_time : false,
