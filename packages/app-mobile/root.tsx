@@ -100,6 +100,7 @@ import { setDispatch } from './services/profiles';
 import { ReactNode } from 'react';
 import autodetectTheme, { onSystemColorSchemeChange } from './utils/autodetectTheme';
 import PluginRunnerWebView from './components/plugins/PluginRunnerWebView';
+import CommandService from '@joplin/lib/services/CommandService';
 import { refreshFolders, scheduleRefreshFolders } from '@joplin/lib/folders-screen-utils';
 import ShareManager from './components/screens/ShareManager';
 import { setDateFormat, setTimeFormat, setTimeLocale } from '@joplin/utils/time';
@@ -311,6 +312,7 @@ interface AppComponentProps {
 	disableSideMenuGestures: boolean;
 	historyCanGoBack: boolean;
 	showSideMenu: boolean;
+	showPanelsDialog: boolean;
 	noteSelectionEnabled: boolean;
 	syncStarted: boolean;
 }
@@ -600,6 +602,13 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 	}
 
 	private async backButtonHandler() {
+		// Plugin dialogs use Paper's Modal, whose later hardwareBackPress listener runs first
+		// (React Native dispatches newest-first), so an open dialog consumes Back before this branch.
+		if (this.props.showPanelsDialog) {
+			await CommandService.instance().execute('dismissPluginPanels');
+			return true;
+		}
+
 		if (this.props.noteSelectionEnabled) {
 			this.props.dispatch({ type: 'NOTE_SELECTION_END' });
 			return true;
@@ -783,7 +792,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 
 
 		// const statusBarStyle = theme.appearance === 'light-content';
-		const statusBarStyle = 'light-content';
+		const statusBarStyle = theme.appearance === ThemeAppearance.Light ? 'dark-content' : 'light-content';
 
 		const shouldShowMainContent = !biometricsEnabled(this.state.sensorInfo) || this.props.biometricsDone;
 
@@ -795,7 +804,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 		const mainContent = (
 			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 				<View style={{ flexGrow: 1, flexShrink: 1, flexBasis: '100%' }}>
-					<SafeAreaView style={{ flex: 1 }} titleBarUnderlayColor={theme.backgroundColor2}>
+					<SafeAreaView style={{ flex: 1 }} titleBarUnderlayColor={theme.backgroundColor}>
 						<SideMenu
 							menu={sideMenuContent}
 							toleranceX={4}
@@ -892,6 +901,7 @@ const mapStateToProps = (state: AppState) => {
 	return {
 		historyCanGoBack: state.historyCanGoBack,
 		showSideMenu: state.showSideMenu,
+		showPanelsDialog: state.showPanelsDialog,
 		syncStarted: state.syncStarted,
 		appState: state.appState,
 		noteSelectionEnabled: state.noteSelectionEnabled,

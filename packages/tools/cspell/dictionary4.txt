@@ -373,4 +373,6 @@ timepage
 todoist
 twodo
 Gemma
+untruncated
 instr
+Hrvatski

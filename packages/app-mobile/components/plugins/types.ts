@@ -61,5 +61,5 @@ export interface DialogWebViewApi {
 
 	setThemeCss: (css: string)=> Promise<void>;
 	getFormData: ()=> Promise<SerializableData>;
-	getContentSize: ()=> Promise<DialogContentSize>;
+	getContentSize: (watchForSizeChanges?: boolean)=> Promise<DialogContentSize>;
 }

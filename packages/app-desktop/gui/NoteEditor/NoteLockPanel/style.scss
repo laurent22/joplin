@@ -45,3 +45,18 @@
 	color: var(--joplin-color-error);
 	margin: 0 0 12px 0;
 }
+
+.note-lock-panel.-in-share {
+	box-sizing: border-box;
+	padding-bottom: 0;
+}
+
+.note-lock-panel.-in-share > .icon {
+	margin-top: auto;
+}
+
+.note-lock-panel > .banner {
+	align-self: stretch;
+	margin: auto calc(-1 * var(--joplin-main-padding)) 5px;
+	text-align: left;
+}
