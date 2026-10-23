@@ -86,7 +86,7 @@ describe('InteropService.noteLock', () => {
 		const note = await Note.save({ title: 'locked note', body: 'secret text', parent_id: folder.id });
 		await lockNote(note.id);
 
-		const result = await InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Markdown });
+		const result = await InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Markdown, decryptLockedNotes: true });
 
 		const files = await fs.readdir(`${exportDir()}/folder`);
 		expect(files.length).toBe(1);
@@ -130,7 +130,7 @@ describe('InteropService.noteLock', () => {
 			return load(id, options);
 		});
 		try {
-			await InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Markdown });
+			await InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Markdown, decryptLockedNotes: true });
 		} finally {
 			spy.mockRestore();
 		}
@@ -150,7 +150,7 @@ describe('InteropService.noteLock', () => {
 		const spy = onFirstGatedCall('load', () => Setting.setValue('featureFlag.noteLock', false));
 		let result;
 		try {
-			result = await InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Markdown });
+			result = await InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Markdown, decryptLockedNotes: true });
 		} finally {
 			spy.mockRestore();
 		}
@@ -167,7 +167,7 @@ describe('InteropService.noteLock', () => {
 		await lockNote(locked.id);
 		NoteLockSession.instance().lock();
 
-		const result = await InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Markdown });
+		const result = await InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Markdown, decryptLockedNotes: true });
 
 		expect(result.warnings).toEqual(['1 locked note(s) could not be unlocked and were not exported']);
 		expect(await fs.readdir(`${exportDir()}/folder`)).toEqual(['plain.md']);
@@ -186,12 +186,26 @@ describe('InteropService.noteLock', () => {
 		expect(await fs.readdir(`${exportDir()}/folder`)).toEqual(['plain.md']);
 	});
 
+	it('should not decrypt locked notes for a caller that did not ask, even with the session unlocked', async () => {
+		await setUpUnlockedSession();
+		const folder = await Folder.save({ title: 'folder' });
+		await Note.save({ title: 'plain', body: 'plain text', parent_id: folder.id });
+		const locked = await Note.save({ title: 'locked', body: 'secret', parent_id: folder.id });
+		await lockNote(locked.id);
+
+		// As the exportFolders command does when a plugin runs it.
+		const result = await InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Markdown });
+
+		expect(result.warnings).toEqual(['1 locked note(s) could not be unlocked and were not exported']);
+		expect(await fs.readdir(`${exportDir()}/folder`)).toEqual(['plain.md']);
+	});
+
 	it('should skip a locked note whose content cannot be decrypted', async () => {
 		await setUpUnlockedSession();
 		const folder = await Folder.save({ title: 'folder' });
 		await Note.save({ title: 'broken', body: 'not ciphertext', parent_id: folder.id, is_locked: 1 });
 
-		const result = await InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Markdown });
+		const result = await InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Markdown, decryptLockedNotes: true });
 
 		expect(result.warnings).toEqual(['1 locked note(s) could not be unlocked and were not exported']);
 	});

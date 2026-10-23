@@ -608,11 +608,6 @@ export default class Note extends BaseItem {
 		return r && r.total ? r.total : 0;
 	}
 
-	// Trashed and conflict notes count too: their content still depends on the note lock key.
-	public static async hasLockedNotes() {
-		return !!(await this.db().selectOne('SELECT 1 FROM notes WHERE is_locked = 1 LIMIT 1'));
-	}
-
 	// Like the export of a notebook, the check includes its sub-notebooks.
 	public static async hasLockedNoteInFolderTrees(folderIds: string[]) {
 		if (!folderIds.length) return false;
@@ -783,16 +778,25 @@ export default class Note extends BaseItem {
 		const Folder = this.getClass<typeof FolderClass>('Folder');
 		if (folderId === Folder.conflictFolderId()) throw new Error(_('Cannot move note to "%s" notebook', Folder.conflictFolderTitle()));
 
+		const targetFolder = await Folder.load(folderId, {
+			fields: ['id', 'share_id'],
+		});
+
 		// When moving a note to a different folder, the user timestamp is not
 		// updated. However updated_time is updated so that the note can be
 		// synced later on.
 		//
 		// We also reset deleted_time, so that if a deleted note is moved to
 		// that folder it is restored. If it wasn't deleted, it does nothing.
+		//
+		// The share_id is also updated to match that of the parent, to give
+		// immediate feedback when a locked note is moved into or out of a
+		// share.
 
 		const modifiedNote: NoteEntity = {
 			id: noteId,
 			parent_id: folderId,
+			share_id: targetFolder?.share_id ?? '',
 			is_conflict: 0,
 			conflict_original_id: '',
 			deleted_time: 0,

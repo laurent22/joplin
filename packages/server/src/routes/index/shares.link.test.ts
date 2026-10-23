@@ -78,7 +78,25 @@ describe('shares.link', () => {
 		expect(bodyHtml).toContain('rendered-md'); // Means we have the HTML body
 		expect(bodyHtml).toContain('Testing title'); // Means the note has been rendered
 		expect(bodyHtml).toContain('Testing body');
+		expect(bodyHtml).not.toContain('class="footer"');
 		expect(bodyHtml).toContain('<title>Testing title'); // Means the page title is set to the note title
+	});
+
+	test('should not display a locked note', async () => {
+		const { session } = await createUserAndSession();
+
+		const noteItem = await createNote(session.id, {
+			title: 'Locked',
+			body: 'JLD01cipher',
+			is_locked: 1,
+		});
+
+		const share = await postApi<Share>(session.id, 'shares', {
+			type: ShareType.Note,
+			note_id: noteItem.jop_id,
+		});
+
+		await expectHttpError(async () => getShareContent(share.id), ErrorForbidden.httpCode);
 	});
 
 	test('should load plugins', async () => {

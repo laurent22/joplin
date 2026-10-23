@@ -158,7 +158,7 @@ export function resourceBlobPath(resourceId: string): string {
 }
 
 export function isJoplinResourceBlobPath(path: string): boolean {
-	return path.indexOf(resourceDirName) === 0;
+	return path.indexOf(`${resourceDirName}/`) === 0;
 }
 
 const resolveUnsafeAssetPath = (relativeAssetPath: string) => {
@@ -250,6 +250,8 @@ async function renderNote(
 	bannerInfo: BannerInfo,
 	folderTree: RenderedFolderTree = null,
 ): Promise<FileViewerResponse> {
+	if (note.is_locked) throw new ErrorForbidden('The note cannot be displayed because it is locked');
+
 	const markupToHtml = new MarkupToHtml({
 		ResourceModel: Resource as OptionsResourceModel,
 	});
@@ -390,6 +392,7 @@ async function renderNotePage(
 		title: `${substrWithEllipsis(title, 0, 100)} - ${config().appName}`,
 		titleOverride: true,
 		path: 'index/items/note',
+		showFooter: false,
 		content: {
 			showFolderTree: !!folderTree,
 			folderTree,

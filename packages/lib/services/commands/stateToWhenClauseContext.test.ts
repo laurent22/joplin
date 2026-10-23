@@ -4,7 +4,8 @@ import { FolderEntity, NoteEntity } from '../database/types';
 import { getTrashFolderId } from '../trash';
 import stateToWhenClauseContext from './stateToWhenClauseContext';
 
-jest.mock('../noteLock/isNoteLockEnabled', () => () => true);
+let mockNoteLockEnabled = true;
+jest.mock('../noteLock/isNoteLockEnabled', () => () => mockNoteLockEnabled);
 
 interface StateOptions {
 	folders: FolderEntity[];
@@ -54,10 +55,18 @@ describe('stateToWhenClauseContext', () => {
 			isLocked: 0,
 			expected: false,
 		},
-	])('should make the note read-only when $label', ({ noteLockSessionUnlocked, activeNoteIsUndecryptable, isLocked, expected }) => {
+		{
+			label: 'the decrypted note is inside a share',
+			noteLockSessionUnlocked: true,
+			activeNoteIsUndecryptable: false,
+			isLocked: 1,
+			shareId: 'share-1',
+			expected: true,
+		},
+	])('should make the note read-only when $label', ({ noteLockSessionUnlocked, activeNoteIsUndecryptable, isLocked, shareId, expected }) => {
 		const applicationState = buildState({
 			selectedNoteIds: ['1'],
-			notes: [{ id: '1', is_locked: isLocked, deleted_time: 0 }],
+			notes: [{ id: '1', is_locked: isLocked, share_id: shareId, deleted_time: 0 }],
 			noteLockSessionUnlocked,
 			activeNoteIsUndecryptable,
 		});
@@ -65,6 +74,21 @@ describe('stateToWhenClauseContext', () => {
 
 		expect(resultingState.noteIsReadOnly).toBe(expected);
 		expect(resultingState.noteIsReadOnlyShare).toBe(false);
+	});
+
+	it('should make a locked note inside a share read-only with the note lock feature turned off', () => {
+		mockNoteLockEnabled = false;
+		try {
+			const applicationState = buildState({
+				selectedNoteIds: ['1'],
+				notes: [{ id: '1', is_locked: 1, share_id: 'share-1', deleted_time: 0 }],
+				noteLockSessionUnlocked: false,
+			});
+
+			expect(stateToWhenClauseContext(applicationState).noteIsReadOnly).toBe(true);
+		} finally {
+			mockNoteLockEnabled = true;
+		}
 	});
 
 	it('should be in trash if selected note has been deleted and selected folder is trash', async () => {

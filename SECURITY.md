@@ -15,21 +15,11 @@ For general opinions on what makes an app more or less secure, please use the fo
 
 ## Rules for reporting
 
-Due to the large number of LLM-generated security reports, we have to put a number of rules in place. These reports are often barely reviewed by the person posting them, which makes us waste time on findings that do not hold up.
+Joplin is maintained by a small team, and we receive a high volume of reports that have not been verified by the person submitting them. Reviewing and reproducing an unverified finding takes us as long as a real one, so we need a few rules to keep the process workable for everyone.
 
-It appears that a number of "security researchers" are not really that, and are simply trying to score as many CVEs as possible by posting to as many open source projects as possible, to see what sticks.
+- **Two active reports per person.** If you have more than two open at once, we may close them all, and we may block the account.
 
-As a result:
-
-- We only accept up to **2 active reports per person**.
-
-- If you post more, we may block your account and close all your reports.
-
-- **Check your report before submitting it.** In particular, verify that the issue is still present in the latest version, and that you have actually executed the steps your conclusion depends on. If you submit a report that turns out to be bogus, we may permanently block your account.
-
-- **We no longer credit reporters in the changelog.** The bulk of the work is on our side - reviewing the report, reproducing the issue, fixing it, testing it, and releasing a patch. Copying and pasting LLM output is quick.
-
-A report based on an LLM analysis is fine, as long as you have verified it yourself first.
+- **Verify your report before submitting it.** Confirm that the issue is still present in the latest version, and that you have actually carried out the steps your conclusion relies on. Repeatedly submitting findings that do not hold up may result in a permanent block.
 
 ## Areas outside Joplin's Threat Model
 

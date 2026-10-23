@@ -25,8 +25,9 @@ export default class InteropService_Exporter_Raw extends InteropService_Exporter
 	// Not behind the feature flag: importers that predate note lock ignore the key file. Only the profile's key can be exported,
 	// so notes locked with another key do not bring it in.
 	private async isLockedWithProfileKey_(note: NoteEntity) {
+		if (!NoteLockNote.isLocked(note)) return false;
 		const keyId = NoteLockKey.instance().load()?.id;
-		if (!keyId || !NoteLockNote.isLocked(note)) return false;
+		if (!keyId) return false;
 		try {
 			return (await EncryptionService.instance().decodeHeaderString(note.body, true)).masterKeyId === keyId;
 		} catch {
