@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
+import shim from '../../../shim';
+const { useCallback, useEffect, useState } = shim.react();
 
 export enum ActionMode {
 	Collapsed = 'collapsed',
