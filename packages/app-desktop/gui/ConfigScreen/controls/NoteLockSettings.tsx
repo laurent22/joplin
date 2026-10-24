@@ -9,7 +9,7 @@ import { SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import LabelledPasswordInput from '../../PasswordInput/LabelledPasswordInput';
 import Button, { ButtonLevel } from '../../Button/Button';
 import { AppState } from '../../../app.reducer';
-import useNoteLockMode, { ActionMode } from './useNoteLockMode';
+import useNoteLockMode, { ActionMode } from '@joplin/lib/components/shared/config/useNoteLockMode';
 
 interface Props {
 	hasNoteLockKey: boolean;

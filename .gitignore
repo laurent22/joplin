@@ -223,7 +223,6 @@ packages/app-desktop/gui/ConfigScreen/controls/ToggleAdvancedSettingsButton.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js
-packages/app-desktop/gui/ConfigScreen/controls/useNoteLockMode.js
 packages/app-desktop/gui/ConfigScreen/searchHighlight.test.js
 packages/app-desktop/gui/ConfigScreen/searchHighlight.js
 packages/app-desktop/gui/ConfigScreen/types.js
@@ -1443,6 +1442,7 @@ packages/lib/components/shared/config/plugins/useOnInstallHandler.test.js
 packages/lib/components/shared/config/plugins/useOnInstallHandler.js
 packages/lib/components/shared/config/shouldShowMissingPasswordWarning.test.js
 packages/lib/components/shared/config/shouldShowMissingPasswordWarning.js
+packages/lib/components/shared/config/useNoteLockMode.js
 packages/lib/components/shared/dropbox-login-shared.js
 packages/lib/components/shared/note-screen-shared.test.js
 packages/lib/components/shared/note-screen-shared.js
