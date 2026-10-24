@@ -4,6 +4,7 @@ import { ErrorForbidden } from './errors';
 import { escapeHtml } from './htmlUtils';
 import { bodyFields, isApiRequest } from './requestUtils';
 import { AppContext } from './types';
+import { TokenPurpose } from '../models/TokenModel';
 
 interface BodyWithCsrfToken {
 	_csrf: string;
@@ -22,11 +23,11 @@ export async function csrfCheck(ctx: AppContext, isPublicRoute: boolean) {
 	if (!fields._csrf) throw new ErrorForbidden('CSRF token is missing');
 	if (Array.isArray(fields._csrf)) throw new Error('Multiple CSRF tokens inside the form!');
 
-	if (!(await ctx.joplin.models.token().isValid(userId, fields._csrf))) {
+	if (!(await ctx.joplin.models.token().isValid(userId, fields._csrf, TokenPurpose.Csrf))) {
 		throw new ErrorForbidden(`Invalid CSRF token: ${fields._csrf}`);
 	}
 
-	await ctx.joplin.models.token().deleteByValue(userId, fields._csrf);
+	await ctx.joplin.models.token().deleteByValue(userId, fields._csrf, TokenPurpose.Csrf);
 }
 
 export async function createCsrfToken(models: Models, user: User, throwOnError = true) {
@@ -34,7 +35,7 @@ export async function createCsrfToken(models: Models, user: User, throwOnError =
 		if (!throwOnError) return '';
 		throw new Error('Cannot create CSRF token without a user');
 	}
-	return models.token().generate(user.id);
+	return models.token().generate(user.id, TokenPurpose.Csrf);
 }
 
 export async function createCsrfTokenFromContext(ctx: AppContext, throwOnError = true) {

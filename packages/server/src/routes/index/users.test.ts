@@ -423,7 +423,7 @@ describe('index/users', () => {
 			password: uuidgen(),
 		});
 
-		const csrfToken = await models().token().generate(user.id);
+		const csrfToken = await models().token().generate(user.id, TokenPurpose.Csrf);
 
 		const newPassword = uuidgen();
 		const context = await execRequestC('', 'POST', `users/${user.id}/confirm`, {

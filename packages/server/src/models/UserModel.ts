@@ -611,7 +611,7 @@ export default class UserModel extends BaseModel<User> {
 			await this.models().user().save({ id: user.id, password: fields.password });
 			await this.models().session().deleteByUserId(user.id);
 			await this.models().application().deleteByUserId(user.id);
-			await this.models().token().deleteByValue(user.id, token);
+			await this.models().token().deleteByValue(user.id, token, TokenPurpose.PasswordReset);
 		}, 'UserModel::resetPassword');
 	}
 

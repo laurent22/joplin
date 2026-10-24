@@ -566,8 +566,8 @@ describe('UserModel', () => {
 		});
 		const ctx = await koaAppContext();
 
-		// A CSRF or confirmation token has no purpose and must be rejected here.
-		const genericToken = await models().token().generate(user.id);
+		// A token minted for another purpose must be rejected here.
+		const genericToken = await models().token().generate(user.id, TokenPurpose.Csrf);
 
 		await expectHttpError(async () => {
 			await models().user().resetPassword(genericToken, { password: '222222', password2: '222222' });
@@ -580,6 +580,19 @@ describe('UserModel', () => {
 		const resetToken = await models().token().generate(user.id, TokenPurpose.PasswordReset);
 		await models().user().resetPassword(resetToken, { password: '222222', password2: '222222' });
 		expect(await models().user().login('test@example.com', '222222', ctx.joplin.services)).toBeTruthy();
+	});
+
+	test('should consume the token when resetting a password', async () => {
+		const user = await models().user().save({
+			email: 'test@example.com',
+			password: '111111',
+		});
+
+		const token = await models().token().generate(user.id, TokenPurpose.PasswordReset);
+		await models().user().resetPassword(token, { password: '222222', password2: '222222' });
+
+		// Otherwise the reset link could be used again until the token expires.
+		expect(await models().token().isValid(user.id, token, TokenPurpose.PasswordReset)).toBe(false);
 	});
 
 	test('should not log in an user using a email/password combo when the local auth is disabled', async () => {
