@@ -78,6 +78,16 @@ router.patch('api/users/:id', async (path: SubPath, ctx: AppContext) => {
 		id: user.id,
 	};
 	await ctx.joplin.models.user().checkIfAllowed(ctx.joplin.owner, AclAction.Update, postedUser);
+
+	// A non-admin changing their own email must confirm it from the new
+	// address, as they would from the profile page. Otherwise the account
+	// could be moved to an attacker-controlled address with no trace and no
+	// notice to the original one.
+	if (!ctx.joplin.owner.is_admin && postedUser.email && postedUser.email !== user.email) {
+		await ctx.joplin.models.user().initiateEmailChange(user.id, postedUser.email);
+		delete postedUser.email;
+	}
+
 	await ctx.joplin.models.user().save({ id: user.id, ...postedUser });
 });
 

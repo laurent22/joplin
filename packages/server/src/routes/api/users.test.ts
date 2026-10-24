@@ -112,4 +112,39 @@ describe('api/users', () => {
 		expect(reloadedUser.full_name).toBe('New Name');
 	});
 
+	test('should not change the email of a non-admin until it is confirmed', async () => {
+		const { session, user } = await createUserAndSession(1, false);
+
+		await patchApi(session.id, `users/${user.id}`, {
+			email: 'new-email@example.com',
+			full_name: 'New Name',
+		});
+
+		// The address is only stored as pending, and the other properties are
+		// still saved.
+		const reloadedUser = await models().user().load(user.id);
+		expect(reloadedUser.email).toBe(user.email);
+		expect(reloadedUser.full_name).toBe('New Name');
+		expect(await models().keyValue().value(`newEmail::${user.id}`)).toBe('new-email@example.com');
+
+		// The new address is asked to confirm, and the previous one is told
+		// about the change.
+		const emails = await models().email().all();
+		expect(emails.find(e => e.recipient_email === 'new-email@example.com')).toBeTruthy();
+		expect(emails.find(e => e.recipient_email === user.email)).toBeTruthy();
+	});
+
+	test('should let an admin change an email directly', async () => {
+		const { session: adminSession } = await createUserAndSession(1, true);
+		const { user } = await createUserAndSession(2);
+
+		await patchApi(adminSession.id, `users/${user.id}`, {
+			email: 'new-email@example.com',
+		});
+
+		const reloadedUser = await models().user().load(user.id);
+		expect(reloadedUser.email).toBe('new-email@example.com');
+		expect(await models().keyValue().value(`newEmail::${user.id}`)).toBeFalsy();
+	});
+
 });
