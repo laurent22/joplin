@@ -4,10 +4,10 @@ import { uuidgen } from '../utils/uuid';
 import BaseModel from './BaseModel';
 
 // A token minted for one purpose must not be accepted for another - e.g. a CSRF
-// or confirmation token (both purpose-less) must not be usable to reset a
-// password.
+// token must not be usable to confirm an account or to reset a password.
 export enum TokenPurpose {
 	PasswordReset = 'password_reset',
+	AccountConfirmation = 'account_confirmation',
 }
 
 export default class TokenModel extends BaseModel<Token> {
@@ -41,16 +41,17 @@ export default class TokenModel extends BaseModel<Token> {
 		return token.value;
 	}
 
-	public async checkToken(userId: string, tokenValue: string): Promise<void> {
-		if (!(await this.isValid(userId, tokenValue))) throw new ErrorForbidden('Invalid or expired token');
+	public async checkToken(userId: string, tokenValue: string, purpose = ''): Promise<void> {
+		if (!(await this.isValid(userId, tokenValue, purpose))) throw new ErrorForbidden('Invalid or expired token');
 	}
 
-	private async byUser(userId: string, tokenValue: string): Promise<Token> {
+	private async byUser(userId: string, tokenValue: string, purpose = ''): Promise<Token> {
 		return this
 			.db(this.tableName)
 			.select(['id'])
 			.where('user_id', '=', userId)
 			.where('value', '=', tokenValue)
+			.where('purpose', '=', purpose)
 			.first();
 	}
 
@@ -71,8 +72,8 @@ export default class TokenModel extends BaseModel<Token> {
 		return user;
 	}
 
-	public async isValid(userId: string, tokenValue: string): Promise<boolean> {
-		const token = await this.byUser(userId, tokenValue);
+	public async isValid(userId: string, tokenValue: string, purpose = ''): Promise<boolean> {
+		const token = await this.byUser(userId, tokenValue, purpose);
 		return !!token;
 	}
 
@@ -81,8 +82,8 @@ export default class TokenModel extends BaseModel<Token> {
 		await this.db(this.tableName).where('created_time', '<', cutOffDate).delete();
 	}
 
-	public async deleteByValue(userId: Uuid, value: string) {
-		const token = await this.byUser(userId, value);
+	public async deleteByValue(userId: Uuid, value: string, purpose = '') {
+		const token = await this.byUser(userId, value, purpose);
 		if (token) await this.delete(token.id);
 	}
 

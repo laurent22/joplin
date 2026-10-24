@@ -8,6 +8,7 @@ import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndS
 import { uuidgen } from '@joplin/lib/uuid';
 import config from '../../config';
 import { AccountType } from '../../models/UserModel';
+import { TokenPurpose } from '../../models/TokenModel';
 
 async function postUser(sessionId: string, email: string, password: string = null, props: Partial<User> = null): Promise<User> {
 	password = password === null ? uuidgen() : password;
@@ -147,7 +148,7 @@ describe('index/users', () => {
 		expect(user1.email_confirmed).toBe(1);
 
 		// Check that the token is valid
-		expect(await models().token().isValid(user1.id, token)).toBe(true);
+		expect(await models().token().isValid(user1.id, token, TokenPurpose.AccountConfirmation)).toBe(true);
 
 		// Check that we can't set the password without the token
 		{
@@ -194,7 +195,7 @@ describe('index/users', () => {
 		expect(user1.email_confirmed).toBe(1);
 
 		// Check that the token has been cleared
-		expect(await models().token().isValid(user1.id, token)).toBe(false);
+		expect(await models().token().isValid(user1.id, token, TokenPurpose.AccountConfirmation)).toBe(false);
 
 		// Check that a notification has been created
 		const notification = (await models().notification().all())[0];
@@ -247,7 +248,7 @@ describe('index/users', () => {
 		expect(user1.email_confirmed).toBe(1);
 
 		// Check that the token has been cleared
-		expect(await models().token().isValid(user1.id, token)).toBe(false);
+		expect(await models().token().isValid(user1.id, token, TokenPurpose.AccountConfirmation)).toBe(false);
 
 		// Check that a notification has been created
 		const notification = (await models().notification().all())[0];

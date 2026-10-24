@@ -501,7 +501,7 @@ export default class UserModel extends BaseModel<User> {
 	}
 
 	public async processEmailConfirmation(userId: Uuid, token: string, beforeChangingEmailHandler: (newEmail: string)=> Promise<void>) {
-		await this.models().token().checkToken(userId, token);
+		await this.models().token().checkToken(userId, token, TokenPurpose.AccountConfirmation);
 		const user = await this.models().user().load(userId);
 		if (!user) throw new ErrorNotFound('No such user');
 
@@ -559,7 +559,7 @@ export default class UserModel extends BaseModel<User> {
 	}
 
 	public async sendAccountConfirmationEmail(user: User) {
-		const validationToken = await this.models().token().generate(user.id);
+		const validationToken = await this.models().token().generate(user.id, TokenPurpose.AccountConfirmation);
 		const url = encodeURI(confirmUrl(user.id, validationToken));
 
 		await this.models().email().push({
@@ -569,7 +569,7 @@ export default class UserModel extends BaseModel<User> {
 	}
 
 	public async sendChangeEmailConfirmationEmail(recipientEmail: string, user: User) {
-		const validationToken = await this.models().token().generate(user.id);
+		const validationToken = await this.models().token().generate(user.id, TokenPurpose.AccountConfirmation);
 		const url = encodeURI(confirmUrl(user.id, validationToken));
 
 		await this.models().email().push({
