@@ -17,13 +17,26 @@ interface ScreenTarget {
 	url?: undefined;
 }
 
-export type WarningBoxTarget = UrlTarget|ScreenTarget;
+interface CallbackTarget {
+	onPress: ()=> void;
+
+	url?: undefined;
+	screen?: undefined;
+}
+
+export type WarningBoxTarget = UrlTarget|ScreenTarget|CallbackTarget;
+
+export interface WarningBoxAction {
+	title: string;
+	onPress: ()=> void;
+}
 
 interface Props {
 	themeId: number;
 	target: WarningBoxTarget;
 	message: string;
 	testID?: string;
+	actions?: WarningBoxAction[];
 }
 
 const useStyles = (themeId: number) => {
@@ -38,6 +51,12 @@ const useStyles = (themeId: number) => {
 			text: {
 				flex: 1,
 				color: 'black',
+			},
+			actionText: {
+				color: 'black',
+				fontWeight: 'bold',
+				textDecorationLine: 'underline',
+				marginLeft: theme.marginLeft,
 			},
 		});
 	}, [themeId]);
@@ -56,6 +75,8 @@ const WarningBox: React.FC<Props> = props => {
 		const isUrlTarget = (target: WarningBoxTarget): target is UrlTarget => !!target.url;
 		if (isUrlTarget(target)) {
 			void Linking.openURL(target.url);
+		} else if ('onPress' in target) {
+			target.onPress();
 		} else {
 			void NavService.go(target.screen, target.screenProps);
 		}
@@ -63,6 +84,18 @@ const WarningBox: React.FC<Props> = props => {
 
 	const hasTarget = !!propsRef.current.target;
 	const bannerContent = <Text style={styles.text}>{props.message}</Text>;
+	if (props.actions) {
+		return (
+			<View style={styles.container} testID={props.testID}>
+				{bannerContent}
+				{props.actions.map(action => (
+					<TouchableOpacity key={action.title} onPress={action.onPress} accessibilityRole='button'>
+						<Text style={styles.actionText}>{action.title}</Text>
+					</TouchableOpacity>
+				))}
+			</View>
+		);
+	}
 	if (hasTarget) {
 		return (
 			<TouchableOpacity

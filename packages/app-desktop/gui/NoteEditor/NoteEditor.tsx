@@ -787,6 +787,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 						noteTitle={lockedNoteMetadata.title}
 						hasNoteLockKey={props.hasNoteLockKey}
 						dispatch={props.dispatch}
+						migrationRunning={props.noteLockMigrationRunning}
 						lockedInShare={noteIsLockedInShare(lockedNoteMetadata)}
 					/>
 				</div>
@@ -921,6 +922,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		whiteboardForceMarkdown: windowState.whiteboardForceMarkdown ?? {},
 		noteLockSessionUnlocked: state.noteLockSessionUnlocked,
 		hasNoteLockKey: hasNoteLockKey(state.settings['syncInfoCache']),
+		noteLockMigrationRunning: !!state.noteLockMigrationStatus?.running,
 		editorNoteReloadTimeRequest: windowState.windowEditorNoteReloadTimeRequest,
 	};
 };

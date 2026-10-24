@@ -39,6 +39,7 @@ import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
 import NoteLockKey, { DecryptedNoteLockKey } from '@joplin/lib/services/noteLock/NoteLockKey';
 import NoteLockNote from '@joplin/lib/services/noteLock/NoteLockNote';
 import { disableNoteLock, enableNoteLock } from '@joplin/lib/services/noteLock/setNoteLockState';
+import { ErrorCode } from '@joplin/lib/errors';
 import eventManager, { EventName, NoteLockNoteStateChangeEvent } from '@joplin/lib/eventManager';
 import NoteLockPanel from './NoteLockPanel';
 import DismissibleDialog, { DialogVariant } from '../../DismissibleDialog';
@@ -135,6 +136,7 @@ interface Props extends BaseProps {
 	canPublish: boolean;
 	noteVisiblePanes: string[];
 	noteLockSessionUnlocked: boolean;
+	noteLockMigrationRunning: boolean;
 }
 
 interface ComponentProps extends Props {
@@ -974,7 +976,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			}
 		} catch (error) {
 			reg.logger().warn('Could not change the note lock state:', error);
-			await this.props.dialogs.error(_('Could not update the note lock. Please try again.'));
+			await this.props.dialogs.error(error.code === ErrorCode.NoteLockKeyConflict ? error.message : _('Could not update the note lock. Please try again.'));
 		}
 	}
 
@@ -1459,7 +1461,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 		const pluginCommands = pluginUtils.commandNamesFromViews(this.props.plugins, 'noteToolbar');
 
-		const cacheKey = md5([isTodo, isSaved, pluginCommands.join(','), readOnly, this.state.mode, isCodeView, note.is_locked, this.props.noteLockSessionUnlocked, !!this.state.noteLockKey, this.state.noteLockUndecryptable].join('_'));
+		const cacheKey = md5([isTodo, isSaved, pluginCommands.join(','), readOnly, this.state.mode, isCodeView, note.is_locked, this.props.noteLockSessionUnlocked, !!this.state.noteLockKey, this.state.noteLockUndecryptable, this.props.noteLockMigrationRunning].join('_'));
 		if (!this.menuOptionsCache_) this.menuOptionsCache_ = {};
 
 		if (this.menuOptionsCache_[cacheKey]) return this.menuOptionsCache_[cacheKey];
@@ -1591,7 +1593,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					onPress: () => {
 						this.enableNoteEncryption_onPress();
 					},
-					disabled: readOnly,
+					disabled: readOnly || this.props.noteLockMigrationRunning,
 				});
 			} else {
 				output.push({
@@ -1923,6 +1925,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				themeId={this.props.themeId}
 				hasNoteLockKey={!!NoteLockKey.instance().load()}
 				undecryptable={this.state.noteLockUndecryptable}
+				migrationRunning={this.props.noteLockMigrationRunning}
 			/>;
 		} else if (editorView) {
 			bodyComponent = renderPluginEditor();
@@ -2238,6 +2241,7 @@ const NoteScreen = connect((state: AppState) => {
 		useEditorBeta: !state.settings['editor.usePlainText'],
 		canPublish: whenClause.joplinServerConnected && !whenClause.inTrash,
 		noteLockSessionUnlocked: state.noteLockSessionUnlocked,
+		noteLockMigrationRunning: !!state.noteLockMigrationStatus?.running,
 	};
 })(NoteScreenWrapper);
 
