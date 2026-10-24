@@ -1,6 +1,7 @@
 import { Share, ShareType, ShareUserStatus } from '../../services/database/types';
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createItemTree, createFolder } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createItemTree, createFolder, expectHttpError } from '../../utils/testing/testUtils';
 import { postApi, getApi } from '../../utils/testing/apiUtils';
+import { ErrorBadRequest, ErrorForbidden } from '../../utils/errors';
 import { shareWithUserAndAccept } from '../../utils/testing/shareApiUtils';
 import { PaginatedResults } from '../../models/utils/pagination';
 
@@ -85,6 +86,61 @@ describe('shares', () => {
 		const result = await getApi<Share>('', `shares/${share.id}`);
 		expect(result.id).toBe(share.id);
 		expect(result.type).toBe(ShareType.PublishedFolder);
+	});
+
+	test('should not reveal whether an email has an account', async () => {
+		const { session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+		const { user: user3 } = await createUserAndSession(3);
+
+		await createFolder(session1.id, { id: '000000000000000000000000000000F1', title: 'My Folder' });
+		const share = await postApi<Share>(session1.id, 'shares', {
+			folder_id: '000000000000000000000000000000F1',
+		});
+
+		const postRecipient = async (email: string) => {
+			try {
+				await postApi(session2.id, `shares/${share.id}/users`, { email });
+			} catch (error) {
+				// The message carries the whole response, including a stack
+				// trace that refers to this test, so compare the reported
+				// error only.
+				return { httpCode: error.httpCode, error: JSON.parse(error.message.slice(error.message.indexOf('{'))).body.error };
+			}
+			throw new Error('Should have thrown');
+		};
+
+		// A user who does not own the share must get the same answer whether
+		// or not the address exists, otherwise the end point can be used to
+		// find out which addresses are registered.
+		const existing = await postRecipient(user3.email);
+		const unknown = await postRecipient('does-not-exist@example.com');
+
+		expect(existing.httpCode).toBe(ErrorForbidden.httpCode);
+		expect(unknown).toEqual(existing);
+	});
+
+	test('should not add recipients to a note share', async () => {
+		const { session, user } = await createUserAndSession(1);
+		const { user: user2 } = await createUserAndSession(2);
+
+		await createItemTree(user.id, '', {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+			},
+		});
+
+		const share = await postApi<Share>(session.id, 'shares', {
+			note_id: '00000000000000000000000000000001',
+		});
+
+		// Only a shared notebook can have recipients - the apps never add them
+		// to a note or published folder share.
+		await expectHttpError(async () => postApi(session.id, `shares/${share.id}/users`, {
+			email: user2.email,
+		}), ErrorBadRequest.httpCode);
+
+		expect((await models().shareUser().byShareId(share.id, null)).length).toBe(0);
 	});
 
 });
