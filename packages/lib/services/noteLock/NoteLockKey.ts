@@ -8,6 +8,9 @@ export interface DecryptedNoteLockKey {
 	plainText: string;
 }
 
+// Importers that predate note lock skip this file, since they only read .md files.
+export const noteLockKeyFileName = 'note_lock_key.json';
+
 export default class NoteLockKey {
 
 	public static instance_: NoteLockKey = null;
@@ -77,8 +80,8 @@ export default class NoteLockKey {
 		return this.changePassword(password, password);
 	}
 
-	public async decrypt(password: string): Promise<DecryptedNoteLockKey> {
-		const key = this.load();
+	public async decrypt(password: string, key: MasterKeyEntity = null): Promise<DecryptedNoteLockKey> {
+		if (!key) key = this.load();
 		if (!key) throw new Error('Note lock key has not been created');
 		if (!key.id) throw new Error('Note lock key does not have an ID');
 

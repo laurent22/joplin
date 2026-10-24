@@ -476,6 +476,9 @@ describe('screens/Note/Note', () => {
 		});
 
 		expect(screen.getByDisplayValue('Shared then locked')).toBeDisabled();
+		await act(() => waitForWithRealTimers(async () => {
+			expect((await Note.load(noteId)).is_locked).toBe(1);
+		}));
 
 		unmount();
 		Setting.setValue('featureFlag.noteLock', false);
