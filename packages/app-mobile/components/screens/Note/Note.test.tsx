@@ -406,6 +406,30 @@ describe('screens/Note/Note', () => {
 		}
 	});
 
+	it('should not show an editor plugin for a locked note', async () => {
+		await setupUnlockedNoteLock('123456');
+		const noteId = await openNewNote({ title: 'To lock', body: 'plain' });
+		const { pluginId, viewId } = await registerEditorPlugin();
+		const shownEditorView = () => getShownPluginEditorView(store.getState().pluginService.plugins, defaultWindowId).editorView;
+
+		const { unmount } = render(<WrappedNoteScreen />);
+		await screen.findByTestId('joplin__PluginDialogWebView');
+		await act(() => enableNoteLock(noteId));
+		await waitFor(() => expect(shownEditorView()).toBeNull());
+		await waitForNoteToMatch(noteId, { is_locked: 1 });
+		unmount();
+
+		// Opening a note that is already locked.
+		(PluginService.instance().pluginById(pluginId).viewController(viewId) as WebviewController).setActive(true);
+		expect(shownEditorView()).toMatchObject({ id: viewId });
+		const { unmount: unmountLocked } = render(<WrappedNoteScreen />);
+		await waitFor(() => expect(shownEditorView()).toBeNull());
+
+		unmountLocked();
+		await PluginService.instance().unloadPlugin(pluginId);
+		Setting.setValue('featureFlag.noteLock', false);
+	});
+
 	it('changing the note body in the editor should update the note\'s body', async () => {
 		const defaultBody = 'Change me!';
 		const noteId = await openNewNote({ title: 'Unchanged title', body: defaultBody });

@@ -12,6 +12,7 @@ import { setupDatabaseAndSynchronizer, switchClient, noteLockCipherTextStandIn }
 import Revision from '../../../models/Revision';
 import { ModelType } from '../../../BaseModel';
 import { NoteEntity } from '../../database/types';
+import { lockedNoteBodyPlaceholder } from '../../noteLock/NoteLockNote';
 const md5 = require('md5');
 
 const imagePath = `${__dirname}/../../../images/SideMenuHeader.png`;
@@ -241,11 +242,10 @@ describe('routes/notes', () => {
 		const note = await Note.save({ title: 'locked', body: noteLockCipherTextStandIn(), is_locked: 1 });
 
 		const metadata = await api.route(RequestMethod.GET, `notes/${note.id}`);
-		expect(metadata.id).toBe(note.id);
-		// The guard only fires on a requested body, so it relies on the default fields not including one.
-		expect('body' in metadata).toBe(false);
-		await expect(api.route(RequestMethod.GET, `notes/${note.id}`, { fields: 'id,body' })).rejects.toThrow('locked note');
-		await expect(api.route(RequestMethod.GET, `notes/${note.id}`, { fields: 'id,BODY' })).rejects.toThrow('locked note');
+		expect(metadata).toEqual({ id: note.id, parent_id: '', title: 'locked', deleted_time: 0, type_: ModelType.Note });
+		expect(await api.route(RequestMethod.GET, `notes/${note.id}`, { fields: 'id,body' })).toEqual({ id: note.id, body: lockedNoteBodyPlaceholder, type_: ModelType.Note });
+		expect((await api.route(RequestMethod.GET, `notes/${note.id}`, { fields: 'id,BODY' })).BODY).toBe(lockedNoteBodyPlaceholder);
+		expect((await api.route(RequestMethod.GET, `notes/${note.id}`, { fields: '*' })).body).toBe(lockedNoteBodyPlaceholder);
 		await expect(api.route(RequestMethod.GET, `notes/${note.id}/resources`)).rejects.toThrow('locked note');
 
 		const renamed = await api.route(RequestMethod.PUT, `notes/${note.id}`, null, JSON.stringify({ title: 'renamed' }));
@@ -269,7 +269,7 @@ describe('routes/notes', () => {
 		expect((await Note.load(note.id)).is_locked).toBe(startLocked);
 	});
 
-	test('should exclude locked notes from collection responses', async () => {
+	test('should list locked notes with a placeholder body', async () => {
 		Setting.setValue('featureFlag.noteLock', true);
 		const api = new Api();
 		const folder = await Folder.save({ title: 'folder' });
@@ -281,11 +281,15 @@ describe('routes/notes', () => {
 
 		for (const path of ['notes', `folders/${folder.id}/notes`, `tags/${tag.id}/notes`]) {
 			const response = await api.route(RequestMethod.GET, path, { fields: 'id,body' });
-			expect(response.items.map((n: NoteEntity) => n.id)).toEqual([plain.id]);
+			expect(response.items).toHaveLength(2);
+			expect(response.items).toContainEqual({ id: locked.id, body: lockedNoteBodyPlaceholder });
+			expect(response.items).toContainEqual({ id: plain.id, body: 'text' });
+			const withLockState = await api.route(RequestMethod.GET, path, { fields: 'id,body,is_locked' });
+			expect(withLockState.items).toContainEqual({ id: locked.id, body: lockedNoteBodyPlaceholder, is_locked: 1 });
 		}
 
 		Setting.setValue('featureFlag.noteLock', false);
-		expect((await api.route(RequestMethod.GET, 'notes')).items.length).toBe(2);
+		expect((await api.route(RequestMethod.GET, 'notes', { fields: 'id,body' })).items.find((n: NoteEntity) => n.id === locked.id).body).toBe(noteLockCipherTextStandIn());
 	});
 
 	test('should not restrict locked notes when note lock is disabled', async () => {

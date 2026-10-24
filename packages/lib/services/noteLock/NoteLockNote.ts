@@ -6,6 +6,9 @@ import type { DecryptedNoteLockKey } from './NoteLockKey';
 // generated NoteEntity type.
 export type NoteLockNoteEntity = NoteEntity & { isDecrypted?: boolean };
 
+// Shown by the API and the CLI in place of a locked note's body, since they load notes without the gate.
+export const lockedNoteBodyPlaceholder = 'The content of this note is locked';
+
 export default class NoteLockNote {
 
 	public static isLocked(note: NoteEntity): boolean {
