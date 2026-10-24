@@ -148,15 +148,13 @@ describe('InteropService.noteLock', () => {
 		await saveLockedNotes(folder.id, ['one', 'two']);
 
 		const spy = onFirstGatedCall('load', () => Setting.setValue('featureFlag.noteLock', false));
-		let result;
 		try {
-			result = await InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Markdown, decryptLockedNotes: true });
+			await expect(InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Markdown, decryptLockedNotes: true })).rejects.toThrow('2 locked notes could not be unlocked and were not exported.');
 		} finally {
 			spy.mockRestore();
 		}
 
 		expect(await fs.pathExists(`${exportDir()}/folder`) ? await fs.readdir(`${exportDir()}/folder`) : []).toEqual([]);
-		expect(result.warnings).toEqual(['2 locked note(s) could not be unlocked and were not exported']);
 	});
 
 	it('should skip and count locked notes when the session is locked', async () => {
@@ -205,9 +203,7 @@ describe('InteropService.noteLock', () => {
 		const folder = await Folder.save({ title: 'folder' });
 		await Note.save({ title: 'broken', body: 'not ciphertext', parent_id: folder.id, is_locked: 1 });
 
-		const result = await InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Markdown, decryptLockedNotes: true });
-
-		expect(result.warnings).toEqual(['1 locked note(s) could not be unlocked and were not exported']);
+		await expect(InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Markdown, decryptLockedNotes: true })).rejects.toThrow('1 locked note could not be unlocked and was not exported.');
 	});
 
 	it('should not write the key file when no note is locked', async () => {

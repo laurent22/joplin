@@ -1,6 +1,6 @@
 import { ModuleType, FileSystemItem, ImportModuleOutputFormat, ImportOptions, ExportOptions, ImportExportResult, ExportProgressState, ExportModuleOutputFormat } from './types';
 import shim from '../../shim';
-import { _ } from '../../locale';
+import { _, _n } from '../../locale';
 import BaseItem from '../../models/BaseItem';
 import BaseModel, { ModelType } from '../../BaseModel';
 import Resource from '../../models/Resource';
@@ -457,6 +457,11 @@ export default class InteropService {
 					: await Note.linkedResourceIds(note.body);
 				resourceIds = resourceIds.concat(rids);
 			}
+		}
+
+		// Nothing would be written, so a single-file export would otherwise fail on the file it never wrote.
+		if (lockedNotesSkipped && !exportedNoteIds.length) {
+			throw new Error(_n('%d locked note could not be unlocked and was not exported.', '%d locked notes could not be unlocked and were not exported.', lockedNotesSkipped, lockedNotesSkipped));
 		}
 
 		resourceIds = ArrayUtils.unique(resourceIds);

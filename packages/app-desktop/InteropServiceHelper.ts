@@ -5,12 +5,10 @@ import shim from '@joplin/lib/shim';
 import { ExportModuleOutputFormat, ExportOptions, FileSystemItem } from '@joplin/lib/services/interop/types';
 import { ExportModule } from '@joplin/lib/services/interop/Module';
 
-import { _, _n } from '@joplin/lib/locale';
+import { _ } from '@joplin/lib/locale';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import bridge from './services/bridge';
 import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
-import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
-import { NoteLockNoteEntity } from '@joplin/lib/services/noteLock/NoteLockNote';
 import { unlockNoteLockSession } from '@joplin/lib/services/noteLock/noteLockPrompts';
 import noteLockPrompts from './utils/noteLockPrompts';
 import Setting from '@joplin/lib/models/Setting';
@@ -224,22 +222,6 @@ export default class InteropServiceHelper {
 		return 'cancel';
 	}
 
-	// A locked note the session key cannot open would export nothing, so it is left out with a message rather than
-	// failing with a missing file.
-	public static async withoutUndecryptableNotes(noteIds: string[]) {
-		if (!isNoteLockEnabled() || !NoteLockSession.instance().isUnlocked()) return noteIds;
-		const noteLockKey = NoteLockSession.instance().decryptedKey();
-		const undecryptableIds: string[] = [];
-		for (const note of await Note.byIds(noteIds, { fields: ['id', 'is_locked'] })) {
-			if (!note.is_locked) continue;
-			const decrypted: NoteLockNoteEntity = await Note.load(note.id, { useNoteLock: true, noteLockKey }).catch((): null => null);
-			if (!decrypted?.isDecrypted) undecryptableIds.push(note.id);
-		}
-		if (!undecryptableIds.length) return noteIds;
-		bridge().showErrorMessageBox(_n('%d locked note could not be unlocked and will not be exported.', '%d locked notes could not be unlocked and will not be exported.', undecryptableIds.length, undecryptableIds.length));
-		return noteIds.filter(id => !undecryptableIds.includes(id));
-	}
-
 	public static async export(dispatch: Dispatch, module: ExportModule, options: ExportNoteOptions = null) {
 		if (!options) options = {};
 
@@ -268,12 +250,8 @@ export default class InteropServiceHelper {
 
 		let sourceNoteIds = options.sourceNoteIds;
 		// A selection left with no note would make a single-file export fail on the file it never wrote.
-		if (sourceNoteIds?.length && !isBackup) {
-			if (lockedNoteChoice === 'skipLocked') {
-				sourceNoteIds = (await Note.byIds(sourceNoteIds, { fields: ['id', 'is_locked'] })).filter(note => !note.is_locked).map(note => note.id);
-			} else {
-				sourceNoteIds = await this.withoutUndecryptableNotes(sourceNoteIds);
-			}
+		if (sourceNoteIds?.length && lockedNoteChoice === 'skipLocked') {
+			sourceNoteIds = (await Note.byIds(sourceNoteIds, { fields: ['id', 'is_locked'] })).filter(note => !note.is_locked).map(note => note.id);
 			if (!sourceNoteIds.length) return;
 		}
 
