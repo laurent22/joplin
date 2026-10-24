@@ -2,15 +2,16 @@ body {
 	margin: 0;
 	padding: 0;
 	font-family: sans-serif;
-	/* Unitless, so it follows .App's 16px rather than the browser's default font size (#16887) */
-	line-height: 2;
+	/* What 2em gave at the default 16px. A fixed value, so a larger browser font size doesn't
+	   make every row taller and push the Confirm button out of the popup (#16887) */
+	line-height: 32px;
 }
 
 .App {
 	width: 400px;
 	
 	overflow-x: hidden;
-	overflow-y: auto;
+	overflow-y: hidden;
 	display: flex;
 	flex-direction: column;
 	background-color: #162b3d;
