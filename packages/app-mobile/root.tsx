@@ -504,6 +504,11 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 		}
 
 		this.urlOpenListener_ = Linking.addEventListener('url', this.handleOpenURL_);
+		// A new activity can remount this component with biometrics already done.
+		// Its native share event may have arrived before the ShareExtension listener was attached.
+		if (this.props.biometricsDone) {
+			void this.handleShareData();
+		}
 
 		BackButtonService.initialize(this.backButtonHandler_);
 
