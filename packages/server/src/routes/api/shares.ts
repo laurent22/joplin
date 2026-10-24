@@ -62,11 +62,18 @@ router.post('api/shares/:id/users', async (path: SubPath, ctx: AppContext) => {
 	}
 
 	const fields = await bodyFields(ctx.req) as UserInput;
-	const user = await ctx.joplin.models.user().loadByEmail(fields.email);
-	if (!user) throw new ErrorNotFound('User not found');
-
 	const masterKey = fields.master_key || '';
 	const shareId = path.id;
+
+	// Check that the caller owns the share before looking up the email,
+	// otherwise the end point reports whether any given address has an account.
+	const share = await ctx.joplin.models.share().load(shareId);
+	if (!share) throw new ErrorNotFound(`No such share: ${shareId}`);
+	await ctx.joplin.models.share().checkIfAllowed(ctx.joplin.owner, AclAction.Read, share);
+	if (share.type !== ShareType.Folder) throw new ErrorBadRequest('Only a shared notebook can have recipients');
+
+	const user = await ctx.joplin.models.user().loadByEmail(fields.email);
+	if (!user) throw new ErrorNotFound('User not found');
 
 	await ctx.joplin.models.shareUser().checkIfAllowed(ctx.joplin.owner, AclAction.Create, {
 		share_id: shareId,
