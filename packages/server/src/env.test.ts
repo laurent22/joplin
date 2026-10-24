@@ -33,6 +33,19 @@ describe('env', () => {
 		expect(result.ACCOUNT_TYPES_ENABLED).toBe(true);
 	});
 
+	it('should parse task schedules', async () => {
+		expect(parseEnv({}).PROCESS_SHARES_SCHEDULE).toBe('PT10S');
+		expect(parseEnv({}).PROCESS_EMAILS_SCHEDULE).toBe('* * * * *');
+
+		const result = parseEnv({
+			PROCESS_SHARES_SCHEDULE: 'PT60S',
+			PROCESS_EMAILS_SCHEDULE: '0 * * * *',
+		});
+
+		expect(result.PROCESS_SHARES_SCHEDULE).toBe('PT60S');
+		expect(result.PROCESS_EMAILS_SCHEDULE).toBe('0 * * * *');
+	});
+
 	it('should overrides default values', async () => {
 		expect(parseEnv({}).POSTGRES_USER).toBe('joplin');
 		expect(parseEnv({}, { POSTGRES_USER: 'other' }).POSTGRES_USER).toBe('other');

@@ -159,6 +159,26 @@ docker logs --follow CONTAINER
 docker compose --file docker-compose.server.yml logs
 ```
 
+## Configuring task schedules
+
+Some background tasks accept a schedule via an environment variable. The value
+can be a cron expression or an ISO 8601 duration:
+
+- `PROCESS_SHARES_SCHEDULE` (default `PT10S`) — how often shared items are
+  processed.
+- `PROCESS_EMAILS_SCHEDULE` (default `* * * * *`) — how often the email queue
+  is processed.
+
+For example, to process shared items once a minute:
+
+```conf
+PROCESS_SHARES_SCHEDULE=PT1M
+```
+
+Note that `ProcessShares` runs frequently by default so that shared items are
+updated quickly. Increase the interval only if you don't use sharing, or if
+slower propagation is acceptable.
+
 # Setup for development
 
 ## Setup up the database

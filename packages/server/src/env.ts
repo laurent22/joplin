@@ -24,6 +24,8 @@ const defaultEnvValues: EnvVariables = {
 	RUNNING_IN_DOCKER: false,
 	HEARTBEAT_MESSAGE_SCHEDULE: '* * * * *',
 	DELETE_EXPIRED_SESSIONS_SCHEDULE: '0 */6 * * *',
+	PROCESS_SHARES_SCHEDULE: 'PT10S',
+	PROCESS_EMAILS_SCHEDULE: '* * * * *',
 	LOG_LEVEL: 'info',
 
 	// The admin panel is accessible only if this is an admin instance.
@@ -207,6 +209,8 @@ export interface EnvVariables {
 	RUNNING_IN_DOCKER: boolean;
 	HEARTBEAT_MESSAGE_SCHEDULE: string;
 	DELETE_EXPIRED_SESSIONS_SCHEDULE: string;
+	PROCESS_SHARES_SCHEDULE: string;
+	PROCESS_EMAILS_SCHEDULE: string;
 	LOG_LEVEL: string;
 
 	MAX_TIME_DRIFT: number;

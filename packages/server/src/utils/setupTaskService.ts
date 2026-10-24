@@ -73,14 +73,14 @@ export default async function(env: Env, models: Models, config: Config, services
 		{
 			id: TaskId.ProcessShares,
 			description: taskIdToLabel(TaskId.ProcessShares),
-			schedule: 'PT10S',
+			schedule: config.PROCESS_SHARES_SCHEDULE,
 			run: (models: Models) => models.share().updateSharedItems3(),
 		},
 
 		{
 			id: TaskId.ProcessEmails,
 			description: taskIdToLabel(TaskId.ProcessEmails),
-			schedule: '* * * * *',
+			schedule: config.PROCESS_EMAILS_SCHEDULE,
 			run: (_models: Models, services: Services) => services.email.runMaintenance(),
 		},
 
