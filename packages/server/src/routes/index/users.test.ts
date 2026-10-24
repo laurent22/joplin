@@ -399,4 +399,39 @@ describe('index/users', () => {
 			expect(upgradeButton.textContent).toMatch(upgradeButtonText);
 		}
 	});
+
+	test('should not allow setting the password of an account that already has one', async () => {
+		const { user } = await createUserAndSession(1);
+		const token = await models().token().generate(user.id, TokenPurpose.AccountConfirmation);
+
+		const newPassword = uuidgen();
+		const context = await execRequestC('', 'POST', `users/${user.id}/confirm`, {
+			password: newPassword,
+			password2: newPassword,
+			token,
+		});
+
+		expect(cookieGet(context, 'sessionId')).toBeFalsy();
+		expect(await models().user().login(user.email, newPassword, context.joplin.services)).toBeFalsy();
+	});
+
+	test('should not accept a CSRF token to confirm an account', async () => {
+		const user = await models().user().save({
+			email: 'user1@localhost',
+			must_set_password: 1,
+			email_confirmed: 0,
+			password: uuidgen(),
+		});
+
+		const csrfToken = await models().token().generate(user.id);
+
+		const newPassword = uuidgen();
+		const context = await execRequestC('', 'POST', `users/${user.id}/confirm`, {
+			password: newPassword,
+			password2: newPassword,
+			token: csrfToken,
+		});
+
+		expect(cookieGet(context, 'sessionId')).toBeFalsy();
+	});
 });

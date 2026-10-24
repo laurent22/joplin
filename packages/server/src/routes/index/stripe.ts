@@ -17,6 +17,7 @@ import { confirmUrl } from '../../utils/urlUtils';
 import { msleep } from '../../utils/time';
 import { IncomingMessage } from 'http';
 import { ErrorTaskInProgress } from '../../models/StripeEventModel';
+import { TokenPurpose } from '../../models/TokenModel';
 
 const logger = Logger.create('index/stripe');
 
@@ -410,7 +411,16 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 			if (!userEmail) throw new Error(`Could not find email from checkout session: ${JSON.stringify(checkoutSession)}`);
 			const user = await waitForUserCreation(models, userEmail);
 			if (!user) throw new Error(`Could not find user from checkout session: ${JSON.stringify(checkoutSession)}`);
-			const validationToken = await ctx.joplin.models.token().generate(user.id);
+
+			// Anyone can complete a checkout using someone else's email
+			// address, so this end point must not hand out a confirmation
+			// token for an account that already exists - that would allow
+			// taking it over. Only an account awaiting its initial password,
+			// which is one this checkout has just created, may be confirmed
+			// here. Existing subscribers are simply sent to the login page.
+			if (!user.must_set_password) return redirect(ctx, `${globalConfig().baseUrl}/login`);
+
+			const validationToken = await ctx.joplin.models.token().generate(user.id, TokenPurpose.AccountConfirmation);
 			const redirectUrl = encodeURI(confirmUrl(user.id, validationToken, false));
 			return redirect(ctx, redirectUrl);
 		} catch (error) {

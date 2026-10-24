@@ -20,6 +20,7 @@ import { userFlagToString } from '../../models/UserFlagModel';
 import { stopImpersonating } from '../admin/utils/users/impersonate';
 import { _ } from '@joplin/lib/locale';
 import { getIsMFAEnabled } from '../../models/utils/user';
+import { TokenPurpose } from '../../models/TokenModel';
 
 export interface CheckRepeatPasswordInput {
 	password: string;
@@ -185,7 +186,7 @@ router.get('users/:id/confirm', async (path: SubPath, ctx: AppContext, error: Er
 
 		return view;
 	} else {
-		await models.token().deleteByValue(userId, token);
+		await models.token().deleteByValue(userId, token, TokenPurpose.AccountConfirmation);
 		await models.notification().add(userId, NotificationKey.EmailConfirmed);
 
 		if (ctx.joplin.owner) {
@@ -207,12 +208,22 @@ router.post('users/:id/confirm', async (path: SubPath, ctx: AppContext) => {
 
 	try {
 		const fields = await bodyFields<SetPasswordFormData>(ctx.req);
-		await ctx.joplin.models.token().checkToken(userId, fields.token);
+		await ctx.joplin.models.token().checkToken(userId, fields.token, TokenPurpose.AccountConfirmation);
+
+		// Only an account that has never had a password set can get one from
+		// this end point. Otherwise a confirmation token - which can be
+		// obtained for any email address via the Stripe checkout flow - would
+		// be enough to take over an established account. To change a known
+		// password use the profile page; to replace a forgotten one use the
+		// password reset flow.
+		const user = await ctx.joplin.models.user().load(userId);
+		if (!user) throw new ErrorNotFound(`No such user: ${userId}`);
+		if (!user.must_set_password) throw new ErrorForbidden('This account already has a password. Please login, or use the password reset form.');
 
 		const password = checkRepeatPassword(fields, true);
 
 		await ctx.joplin.models.user().save({ id: userId, password, must_set_password: 0 });
-		await ctx.joplin.models.token().deleteByValue(userId, fields.token);
+		await ctx.joplin.models.token().deleteByValue(userId, fields.token, TokenPurpose.AccountConfirmation);
 
 		const session = await ctx.joplin.models.session().createUserSession(userId);
 		cookieSet(ctx, 'sessionId', session.id);
