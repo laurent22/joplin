@@ -162,6 +162,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		builtInEditorVisible,
 		editorId,
 		noteLockSessionUnlocked: props.noteLockSessionUnlocked,
+		noteLockEnabled: props.noteLockEnabled,
 		onDecryptFailedChange,
 		onReloadInProgressChange,
 		editorNoteReloadTimeRequest: props.editorNoteReloadTimeRequest,
@@ -921,6 +922,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		showNoteLinkIcon: state.settings['notes.showNoteLinkIcon'],
 		whiteboardForceMarkdown: windowState.whiteboardForceMarkdown ?? {},
 		noteLockSessionUnlocked: state.noteLockSessionUnlocked,
+		noteLockEnabled: state.settings['featureFlag.noteLock'],
 		hasNoteLockKey: hasNoteLockKey(state.settings['syncInfoCache']),
 		editorNoteReloadTimeRequest: windowState.windowEditorNoteReloadTimeRequest,
 	};
