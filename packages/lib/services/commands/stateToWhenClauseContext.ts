@@ -4,7 +4,7 @@ import Folder from '../../models/Folder';
 import MarkupToHtml from '@joplin/renderer/MarkupToHtml';
 import { isFolderPublished, isRootSharedFolder, isSharedFolderOwner } from '../share/reducer';
 import { NoteEntity } from '../database/types';
-import { itemIsReadOnlySync, ItemSlice } from '../../models/utils/readOnly';
+import { itemIsReadOnlySync, ItemSlice, noteIsLockedInShare } from '../../models/utils/readOnly';
 import ItemChange from '../../models/ItemChange';
 import { getTrashFolderId } from '../trash';
 import getActivePluginEditorView from '../plugins/utils/getActivePluginEditorView';
@@ -45,6 +45,7 @@ export interface WhenClauseContext {
 	noteIsLocked: boolean;
 	noteLockContentUnavailable: boolean;
 	noteLockSessionUnlocked: boolean;
+	noteLockMigrationRunning: boolean;
 	noteIsMarkdown: boolean;
 	noteIsReadOnly: boolean;
 	noteIsReadOnlyShare: boolean;
@@ -129,7 +130,8 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 		noteIsLocked,
 		noteLockContentUnavailable,
 		noteLockSessionUnlocked: state.noteLockSessionUnlocked,
-		noteIsReadOnly: noteLockContentUnavailable || noteIsReadOnlyShare,
+		noteLockMigrationRunning: !!state.noteLockMigrationStatus?.running,
+		noteIsReadOnly: noteLockContentUnavailable || noteIsReadOnlyShare || noteIsLockedInShare(selectedNote),
 		noteIsReadOnlyShare,
 		noteIsDeleted: selectedNote ? !!selectedNote.deleted_time : false,
 

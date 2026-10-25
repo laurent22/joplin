@@ -451,6 +451,8 @@ packages/app-desktop/gui/NoteListItem/utils/useRenderedNote.js
 packages/app-desktop/gui/NoteListItem/utils/useRootElement.test.js
 packages/app-desktop/gui/NoteListItem/utils/useRootElement.js
 packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.js
+packages/app-desktop/gui/NoteLockMigrationDialog/Dialog.test.js
+packages/app-desktop/gui/NoteLockMigrationDialog/Dialog.js
 packages/app-desktop/gui/NoteLockUnlockDialog/Dialog.js
 packages/app-desktop/gui/NotePropertiesDialog.js
 packages/app-desktop/gui/NoteRevisionViewer.js
@@ -737,6 +739,7 @@ packages/app-desktop/utils/initializeNetworkConnectionAttemptTimeout.js
 packages/app-desktop/utils/isSafeToOpen.test.js
 packages/app-desktop/utils/isSafeToOpen.js
 packages/app-desktop/utils/layout/layoutKeyToLabel.js
+packages/app-desktop/utils/noteLockPrompts.js
 packages/app-desktop/utils/restartInSafeModeFromMain.test.js
 packages/app-desktop/utils/restartInSafeModeFromMain.js
 packages/app-desktop/utils/sourceMapSetup.js
@@ -975,6 +978,8 @@ packages/app-mobile/components/screens/Note/commands/insertDateTime.js
 packages/app-mobile/components/screens/Note/commands/setTags.js
 packages/app-mobile/components/screens/Note/commands/toggleVisiblePanes.js
 packages/app-mobile/components/screens/Note/types.js
+packages/app-mobile/components/screens/NoteLockMigrationScreen.test.js
+packages/app-mobile/components/screens/NoteLockMigrationScreen.js
 packages/app-mobile/components/screens/NoteRevisionViewer.test.js
 packages/app-mobile/components/screens/NoteRevisionViewer.js
 packages/app-mobile/components/screens/NoteTagsDialog.js
@@ -1771,6 +1776,7 @@ packages/lib/services/e2ee/ppk/webCrypto/buildRsaCryptoProvider.js
 packages/lib/services/e2ee/types.js
 packages/lib/services/e2ee/utils.test.js
 packages/lib/services/e2ee/utils.js
+packages/lib/services/interop/InteropService.noteLock.test.js
 packages/lib/services/interop/InteropService.test.js
 packages/lib/services/interop/InteropService.js
 packages/lib/services/interop/InteropService_Exporter_Base.js
@@ -1830,6 +1836,8 @@ packages/lib/services/noteList/renderViewProps.test.js
 packages/lib/services/noteList/renderViewProps.js
 packages/lib/services/noteList/renderers.js
 packages/lib/services/noteLock/NoteLockKey.js
+packages/lib/services/noteLock/NoteLockKeyMigration.test.js
+packages/lib/services/noteLock/NoteLockKeyMigration.js
 packages/lib/services/noteLock/NoteLockNote.js
 packages/lib/services/noteLock/NoteLockService.test.js
 packages/lib/services/noteLock/NoteLockService.js
@@ -1837,6 +1845,8 @@ packages/lib/services/noteLock/NoteLockSession.test.js
 packages/lib/services/noteLock/NoteLockSession.js
 packages/lib/services/noteLock/hasLockedNoteWhileSessionLocked.js
 packages/lib/services/noteLock/isNoteLockEnabled.js
+packages/lib/services/noteLock/noteLockPrompts.test.js
+packages/lib/services/noteLock/noteLockPrompts.js
 packages/lib/services/noteLock/setNoteLockState.test.js
 packages/lib/services/noteLock/setNoteLockState.js
 packages/lib/services/ocr/OcrDriverBase.js
@@ -1991,6 +2001,7 @@ packages/lib/services/synchronizer/Synchronizer.baseFields.test.js
 packages/lib/services/synchronizer/Synchronizer.basics.test.js
 packages/lib/services/synchronizer/Synchronizer.conflicts.test.js
 packages/lib/services/synchronizer/Synchronizer.e2ee.test.js
+packages/lib/services/synchronizer/Synchronizer.noteLock.test.js
 packages/lib/services/synchronizer/Synchronizer.ppk.test.js
 packages/lib/services/synchronizer/Synchronizer.resources.test.js
 packages/lib/services/synchronizer/Synchronizer.revisions.test.js

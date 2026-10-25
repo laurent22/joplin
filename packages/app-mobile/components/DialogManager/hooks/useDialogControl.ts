@@ -92,7 +92,7 @@ const useDialogControl = (setPromptDialogs: SetPromptDialogs) => {
 					});
 				});
 			},
-			promptForText: (message: string, initialValue?: string) => {
+			promptForText: (message: string, initialValue?: string, secureTextEntry?: boolean) => {
 				return new Promise<string|null>((resolve) => {
 					const dismiss = () => {
 						onDismiss(dialog);
@@ -103,6 +103,7 @@ const useDialogControl = (setPromptDialogs: SetPromptDialogs) => {
 						key: `prompt-dialog-${nextDialogIdRef.current++}`,
 						message,
 						initialValue,
+						secureTextEntry,
 						onSubmit: (text) => {
 							resolve(text);
 							dismiss();

@@ -4,6 +4,7 @@ import { Dispatch } from 'redux';
 import SyncWizardDialog from '../../SyncWizard/Dialog';
 import MasterPasswordDialog from '../../MasterPasswordDialog/Dialog';
 import NoteLockUnlockDialog from '../../NoteLockUnlockDialog/Dialog';
+import NoteLockMigrationDialog from '../../NoteLockMigrationDialog/Dialog';
 import EditFolderDialog from '../../EditFolderDialog/Dialog';
 import PdfViewer from '../../PdfViewer';
 
@@ -37,6 +38,13 @@ const appDialogs: Record<string, RegisteredDialog> = {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See RegisteredDialog.render
 		render: (props: RegisteredDialogProps, customProps: any) => {
 			return <NoteLockUnlockDialog key={props.key} dispatch={props.dispatch} themeId={props.themeId} {...customProps}/>;
+		},
+	},
+
+	noteLockMigration: {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See RegisteredDialog.render
+		render: (props: RegisteredDialogProps, customProps: any) => {
+			return <NoteLockMigrationDialog key={props.key} dispatch={props.dispatch} themeId={props.themeId} {...customProps}/>;
 		},
 	},
 
