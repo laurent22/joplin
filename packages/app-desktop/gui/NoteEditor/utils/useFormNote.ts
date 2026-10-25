@@ -190,12 +190,13 @@ const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: 
 	}, [noteLockSessionUnlocked, prevNoteLockSessionUnlocked, noteId, formNoteRef, refreshFormNote]);
 
 	// Turning note lock off or on changes how a locked note loads, so reload it rather than keep a
-	// plaintext body that would then be saved without encryption.
+	// plaintext body that would then be saved without encryption, or a blank editor where the
+	// unlock panel was.
 	useEffect(() => {
-		if (prevNoteLockEnabled !== noteLockEnabled && formNoteRef.current.is_locked) {
+		if (prevNoteLockEnabled !== noteLockEnabled && (formNoteRef.current.is_locked || formNoteRef.current.id !== noteId)) {
 			refreshFormNote();
 		}
-	}, [noteLockEnabled, prevNoteLockEnabled, formNoteRef, refreshFormNote]);
+	}, [noteLockEnabled, prevNoteLockEnabled, noteId, formNoteRef, refreshFormNote]);
 
 
 	useEffect(() => {
