@@ -6,6 +6,7 @@ import { Hour } from '../utils/time';
 import { isValidMFACode } from '../utils/crypto';
 import { getIsMFAEnabled } from './utils/user';
 import { Services } from '../services/types';
+import { limiterLoginAccountBruteForce } from '../utils/request/limiterAccountBruteForce';
 
 export const defaultSessionTtl = 12 * Hour;
 
@@ -46,20 +47,33 @@ export default class SessionModel extends BaseModel<Session> {
 	}
 
 	private async authenticateUser(email: string, password: string, services: Services, mfaCode?: string, recoveryCode?: string) {
-		const user = await this.models().user().login(email, password, services);
-		if (!user) throw new ErrorForbidden('Invalid email or password', { details: { email } });
+		// Counted per account rather than per IP: the request-rate limiter on
+		// the routes only sees one address at a time, so it cannot stop an
+		// attacker who either spreads attempts across addresses or paces them
+		// below the limit.
+		await limiterLoginAccountBruteForce.check(email);
 
-		if (getIsMFAEnabled(user)) {
-			if (!mfaCode && !recoveryCode) throw new ErrorForbidden('Invalid authentication code', { details: { mfaCode } });
+		try {
+			const user = await this.models().user().login(email, password, services);
+			if (!user) throw new ErrorForbidden('Invalid email or password', { details: { email } });
 
-			if (mfaCode) {
-				const isValidCode = await isValidMFACode(user.totp_secret, mfaCode);
-				if (!isValidCode) throw new ErrorForbidden('Invalid authentication code', { details: { mfaCode } });
-			} else if (recoveryCode) {
-				await this.models().recoveryCode().verify(user.id, recoveryCode);
+			if (getIsMFAEnabled(user)) {
+				if (!mfaCode && !recoveryCode) throw new ErrorForbidden('Invalid authentication code', { details: { mfaCode } });
+
+				if (mfaCode) {
+					const isValidCode = await isValidMFACode(user.totp_secret, mfaCode);
+					if (!isValidCode) throw new ErrorForbidden('Invalid authentication code', { details: { mfaCode } });
+				} else if (recoveryCode) {
+					await this.models().recoveryCode().verify(user.id, recoveryCode);
+				}
 			}
+
+			await limiterLoginAccountBruteForce.onSuccess(email);
+			return this.createUserSession(user.id);
+		} catch (error) {
+			await limiterLoginAccountBruteForce.onFailure(email);
+			throw error;
 		}
-		return this.createUserSession(user.id);
 	}
 
 	public async authenticateApplication(id: string, password: string) {
