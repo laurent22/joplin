@@ -1,5 +1,7 @@
-import { expectThrow } from '../../utils/testing/testUtils';
+import { expectHttpError, expectThrow } from '../../utils/testing/testUtils';
 import { defaultPagination, Pagination, createPaginationLinks, requestPagination, PaginationOrderDir } from './pagination';
+import { ErrorBadRequest } from '../../utils/errors';
+import { encodeBase64 } from '../../utils/base64';
 
 describe('pagination', () => {
 
@@ -67,6 +69,38 @@ describe('pagination', () => {
 		await expectThrow(async () => requestPagination({ order_dir: 'ASC' }));
 		await expectThrow(async () => requestPagination({ order_dir: 'DESC' }));
 		await expectThrow(async () => requestPagination({ page: 0 }));
+	});
+
+	test.each([
+		'title; DROP TABLE items',
+		'items.title',
+		'1',
+		'',
+		'title ASC',
+		'count(*)',
+	])('should reject an order_by that is not a column name: %s', async (orderBy) => {
+		// The field ends up as a column name in the query, so anything that
+		// could not be one must be reported as a bad request rather than
+		// reaching the database.
+		await expectHttpError(async () => requestPagination({ order_by: orderBy }), ErrorBadRequest.httpCode);
+	});
+
+	test.each([
+		['not base64 at all', 'Invalid cursor'],
+		[encodeBase64('{ not json'), 'Invalid cursor'],
+		[encodeBase64(JSON.stringify({ limit: -1, page: 1, order: [] })), 'Limit out of bond: -1'],
+		[encodeBase64(JSON.stringify({ limit: 10, page: 1, order: [{ by: 'title; DROP TABLE items', dir: 'asc' }] })), 'Invalid order_by'],
+		[encodeBase64(JSON.stringify({ limit: 10, page: 1 })), 'Invalid order parameter'],
+	])('should reject a malformed cursor: %s', async (cursor) => {
+		// The cursor is supplied by the client, so it cannot be trusted just
+		// because the server issued one earlier.
+		await expectHttpError(async () => requestPagination({ cursor }), ErrorBadRequest.httpCode);
+	});
+
+	test('should accept a cursor the server issued', async () => {
+		const cursor = encodeBase64(JSON.stringify(defaultPagination()));
+		const p = requestPagination({ cursor });
+		expect(p.page).toBe(defaultPagination().page + 1);
 	});
 
 	test('should create page link logic', async () => {
