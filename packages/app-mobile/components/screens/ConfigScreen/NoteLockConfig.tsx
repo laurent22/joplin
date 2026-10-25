@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { themeStyle } from '../../global-style';
@@ -8,7 +8,7 @@ import shim from '@joplin/lib/shim';
 import NoteLockKey from '@joplin/lib/services/noteLock/NoteLockKey';
 import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
 import { SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import useNoteLockMode, { ActionMode } from '@joplin/lib/components/shared/config/useNoteLockMode';
+import useNoteLockMode, { ActionMode, noteLockPasswordErrorMessage } from '@joplin/lib/components/shared/config/useNoteLockMode';
 import { PrimaryButton, SecondaryButton } from '../../buttons';
 import { State } from '@joplin/lib/reducer';
 
@@ -30,8 +30,15 @@ const NoteLockConfig = (props: Props) => {
 		setPasswordRepeat,
 		error,
 		setError,
+		saving,
+		setSaving,
+		passwordMismatch,
+		canSave,
+		forgotPasswordDescription,
+		resetPasswordTitle,
+		passwordReminder,
+		title,
 	} = useNoteLockMode(hasKey);
-	const [saving, setSaving] = useState(false);
 
 	const theme = useMemo(() => themeStyle(props.themeId), [props.themeId]);
 
@@ -81,11 +88,6 @@ const NoteLockConfig = (props: Props) => {
 		});
 	}, [theme]);
 
-	const passwordMismatch = !!passwordRepeat && password !== passwordRepeat;
-	const canSave = !!password && !!passwordRepeat && !passwordMismatch && !saving && (mode !== ActionMode.Change || !!currentPassword);
-
-	const forgotPasswordDescription = _('Only do this if you\'ve forgotten your current password. A new password will be created, and any notes locked with the old one will become permanently unreadable.');
-
 	const onSave = useCallback(async () => {
 		if (!canSave) return;
 		if (mode === ActionMode.Reset && !await shim.showConfirmationDialog(`${_('Warning:')} ${forgotPasswordDescription}\n\n${_('Continue?')}`)) return;
@@ -102,12 +104,11 @@ const NoteLockConfig = (props: Props) => {
 			}
 			onModeChange(ActionMode.Collapsed);
 		} catch (error) {
-			// WebCrypto reports a wrong current password as a generic OperationError.
-			setError(error.name === 'OperationError' ? _('Invalid password') : error.message);
+			setError(noteLockPasswordErrorMessage(error));
 		} finally {
 			setSaving(false);
 		}
-	}, [canSave, mode, password, currentPassword, forgotPasswordDescription, onModeChange, setError]);
+	}, [canSave, mode, password, currentPassword, forgotPasswordDescription, onModeChange, setError, setSaving]);
 
 	const onCurrentPasswordChange = useCallback((value: string) => {
 		setCurrentPassword(value);
@@ -123,6 +124,18 @@ const NoteLockConfig = (props: Props) => {
 		setPasswordRepeat(value);
 		setError('');
 	}, [setPasswordRepeat, setError]);
+
+	const onChangePasswordPress = useCallback(() => {
+		onModeChange(ActionMode.Change);
+	}, [onModeChange]);
+
+	const onForgotPasswordPress = useCallback(() => {
+		onModeChange(ActionMode.Reset);
+	}, [onModeChange]);
+
+	const onCancelPress = useCallback(() => {
+		onModeChange(ActionMode.Collapsed);
+	}, [onModeChange]);
 
 	const renderPasswordInput = (labelId: string, label: string, value: string, onChange: (value: string)=> void, isNewPassword: boolean) => {
 		return <>
@@ -146,27 +159,16 @@ const NoteLockConfig = (props: Props) => {
 	const renderManageButtons = () => {
 		return (
 			<View>
-				<Text style={styles.titleText} accessibilityRole='header'>{_('Manage password')}</Text>
-				<SecondaryButton style={styles.button} onPress={() => onModeChange(ActionMode.Change)}>{_('Change note lock password')}</SecondaryButton>
-				<SecondaryButton style={styles.button} onPress={() => onModeChange(ActionMode.Reset)}>{_('Forgot password?')}</SecondaryButton>
+				<SecondaryButton style={styles.button} onPress={onChangePasswordPress}>{_('Change note lock password')}</SecondaryButton>
+				<SecondaryButton style={styles.button} onPress={onForgotPasswordPress}>{_('Forgot password?')}</SecondaryButton>
 				<Text style={styles.normalText}>{forgotPasswordDescription}</Text>
 			</View>
 		);
 	};
 
 	const renderPasswordForm = () => {
-		const resetPasswordTitle = `⚠️ ${_('Reset password')} ⚠️`;
-		let title = _('Password setup');
-		if (mode === ActionMode.Change) title = _('Change note lock password');
-		if (mode === ActionMode.Reset) title = resetPasswordTitle;
-		// The sync advice only applies to a first setup, where there may be nothing to lose yet.
-		const passwordReminder = mode === ActionMode.Create ?
-			_('Please make sure you remember your password. It cannot be recovered if lost, and any locked notes will become inaccessible. If you have already set up the note lock password on another device, there is no need to set it again, as the information required to access your locked notes is updated when you set up sync.') :
-			_('Please make sure you remember your password. It cannot be recovered if lost, and any locked notes will become inaccessible.');
-
 		return (
 			<View>
-				<Text style={styles.titleText} accessibilityRole='header'>{title}</Text>
 				{mode === ActionMode.Reset ? <Text style={styles.errorText}><Text style={styles.boldText}>{_('Warning:')}</Text> {forgotPasswordDescription}</Text> : null}
 				{mode === ActionMode.Change ? renderPasswordInput('note-lock-current-password', _('Current password'), currentPassword, onCurrentPasswordChange, false) : null}
 				{renderPasswordInput('note-lock-password', mode === ActionMode.Create ? _('Password') : _('New password'), password, onPasswordChange, true)}
@@ -176,7 +178,7 @@ const NoteLockConfig = (props: Props) => {
 				{mode === ActionMode.Reset ?
 					<SecondaryButton style={styles.button} disabled={!canSave} onPress={onSave}>{resetPasswordTitle}</SecondaryButton> :
 					<PrimaryButton style={styles.button} disabled={!canSave} onPress={onSave}>{_('Save')}</PrimaryButton>}
-				{mode !== ActionMode.Create ? <SecondaryButton disabled={saving} onPress={() => onModeChange(ActionMode.Collapsed)}>{_('Cancel')}</SecondaryButton> : null}
+				{mode !== ActionMode.Create ? <SecondaryButton disabled={saving} onPress={onCancelPress}>{_('Cancel')}</SecondaryButton> : null}
 				<Text style={styles.reminderText}>{passwordReminder}</Text>
 			</View>
 		);
@@ -185,6 +187,7 @@ const NoteLockConfig = (props: Props) => {
 	return (
 		<View style={styles.container}>
 			<Text style={styles.normalText}><Text style={styles.boldText}>{_('Note lock password:')}</Text> {hasKey ? _('Set') : _('Not set')}</Text>
+			<Text style={styles.titleText} accessibilityRole='header'>{title}</Text>
 			{mode === ActionMode.Collapsed ? renderManageButtons() : renderPasswordForm()}
 		</View>
 	);
