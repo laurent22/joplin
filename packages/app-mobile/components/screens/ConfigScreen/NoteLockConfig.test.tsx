@@ -75,11 +75,14 @@ describe('NoteLockConfig', () => {
 		expect(await screen.findByText('Manage password')).toBeVisible();
 	});
 
-	test('should report a wrong current password and keep the form', async () => {
+	const webCryptoError = new Error('The operation failed');
+	webCryptoError.name = 'OperationError';
+	// What the native crypto on Android throws for a wrong password.
+	const nativeCryptoError = new Error('Authentication failed! Error: Cipher.final(...): Cipher final failed');
+
+	test.each([webCryptoError, nativeCryptoError])('should report a wrong current password and keep the form (%s)', async (wrongPasswordError) => {
 		seedKey();
-		const operationError = new Error('The operation failed');
-		operationError.name = 'OperationError';
-		jest.spyOn(NoteLockKey.instance(), 'changePassword').mockRejectedValue(operationError);
+		jest.spyOn(NoteLockKey.instance(), 'changePassword').mockRejectedValue(wrongPasswordError);
 		render(<WrappedNoteLockConfig/>);
 
 		fireEvent.press(screen.getByText('Change note lock password'));
