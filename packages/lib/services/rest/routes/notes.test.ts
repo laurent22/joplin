@@ -235,7 +235,7 @@ describe('routes/notes', () => {
 		expect(await Revision.load(revision.id)).toBeFalsy();
 	});
 
-	test('should fail closed on locked note bodies', async () => {
+	test('should return a placeholder body for locked notes and refuse to modify it', async () => {
 		Setting.setValue('featureFlag.noteLock', true);
 		const api = new Api();
 		// A JLD-prefixed body passes the save path untouched, standing in for real ciphertext.

@@ -20,8 +20,8 @@ export interface UpdateEvent {
 interface EmitActivationCheckOptions {
 	noteId: string;
 	parentWindowId: string;
-	// Editor plugins read and save notes through the data API, which only has a placeholder body for
-	// a locked note, so no editor plugin is activated for one.
+	// Editor plugins typically read the note through the data API, which only has a placeholder body
+	// for a locked note, so no editor plugin is activated for one.
 	noteIsLocked: boolean;
 }
 

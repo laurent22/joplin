@@ -14,6 +14,10 @@ describe('command-cat', () => {
 		await setupApplication();
 	});
 
+	afterEach(() => {
+		jest.restoreAllMocks();
+	});
+
 	it('should display a locked note with a placeholder body', async () => {
 		Setting.setValue('featureFlag.noteLock', true);
 		const note = await Note.save({ title: 'hello', body: noteLockCipherTextStandIn(), is_locked: 1, parent_id: '' });
