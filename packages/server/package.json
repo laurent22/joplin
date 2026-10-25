@@ -1,6 +1,6 @@
 {
   "name": "@joplin/server",
-  "version": "3.7.2",
+  "version": "3.7.3",
   "private": true,
   "scripts": {
     "start-dev": "yarn build && JOPLIN_IS_TESTING=1 nodemon --config nodemon.json --ext ts,js,mustache,css,tsx dist/index.js --env dev",
@@ -39,7 +39,7 @@
     "fs-extra": "11.3.6",
     "html-entities": "1.4.0",
     "jquery": "3.7.1",
-    "knex": "3.2.10",
+    "knex": "3.3.0",
     "koa": "2.16.4",
     "ldapts": "8.1.8",
     "markdown-it": "13.0.2",

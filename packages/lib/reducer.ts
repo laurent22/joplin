@@ -90,6 +90,14 @@ export interface StateLastDeletion {
 	timestamp: number;
 }
 
+// The background note lock key migration, kept after it ends until its banner is dismissed.
+export interface NoteLockMigrationStatus {
+	running: boolean;
+	failed: number;
+	skipped: number;
+	awaitingDecryption: number;
+}
+
 export type HighlightedWord = ComplexTerm|string;
 
 export interface WindowState {
@@ -192,6 +200,7 @@ export interface State extends WindowState {
 	hasEncryptedItems: boolean;
 	noteLockSessionUnlocked: boolean;
 	noteLockBulkChangeRunning: boolean;
+	noteLockMigrationStatus: NoteLockMigrationStatus|null;
 	needApiAuth: boolean;
 	profileConfig: ProfileConfig;
 	noteListRendererIds: string[];
@@ -264,6 +273,7 @@ export const defaultState: State = {
 	hasEncryptedItems: false,
 	noteLockSessionUnlocked: false,
 	noteLockBulkChangeRunning: false,
+	noteLockMigrationStatus: null,
 	needApiAuth: false,
 	profileConfig: null,
 	noteListRendererIds: getListRendererIds(),
@@ -1583,6 +1593,10 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'NOTE_LOCK_BULK_CHANGE_RUNNING_SET':
 			draft.noteLockBulkChangeRunning = action.value;
+			break;
+
+		case 'NOTE_LOCK_MIGRATION_STATUS_SET':
+			draft.noteLockMigrationStatus = action.value;
 			break;
 
 		case 'SET_ACTIVE_NOTE_IS_UNDECRYPTABLE':

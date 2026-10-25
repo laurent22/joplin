@@ -2358,6 +2358,18 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 		},
 
+		'noteLock.passwordReset': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: false,
+		},
+
+		'noteLock.keyIdToReset': {
+			value: '',
+			type: SettingItemType.String,
+			public: false,
+		},
+
 		'noteLock.conflictNoteLockKey': {
 			value: {} as Partial<NoteLockKeyConflict>,
 			type: SettingItemType.Object,
