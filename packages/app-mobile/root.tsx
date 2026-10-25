@@ -9,6 +9,7 @@ import time from '@joplin/lib/time';
 import Logger from '@joplin/utils/Logger';
 import NoteScreen from './components/screens/Note/Note';
 import UpgradeSyncTargetScreen from './components/screens/UpgradeSyncTargetScreen';
+import NoteLockMigrationScreen from './components/screens/NoteLockMigrationScreen';
 import Setting, { } from '@joplin/lib/models/Setting';
 import PoorManIntervals from '@joplin/lib/PoorManIntervals';
 import { NotesParent, serializeNotesParent } from '@joplin/lib/reducer';
@@ -503,6 +504,11 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 		}
 
 		this.urlOpenListener_ = Linking.addEventListener('url', this.handleOpenURL_);
+		// A new activity can remount this component with biometrics already done.
+		// Its native share event may have arrived before the ShareExtension listener was attached.
+		if (this.props.biometricsDone) {
+			void this.handleShareData();
+		}
 
 		BackButtonService.initialize(this.backButtonHandler_);
 
@@ -776,6 +782,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 			JoplinServerSamlLogin: { screen: SsoLoginScreen(new SamlShared()) },
 			EncryptionConfig: { screen: EncryptionConfigScreen },
 			UpgradeSyncTarget: { screen: UpgradeSyncTargetScreen },
+			NoteLockMigration: { screen: NoteLockMigrationScreen },
 			ShareManager: { screen: ShareManager },
 			ProfileSwitcher: { screen: ProfileSwitcher },
 			ProfileEditor: { screen: ProfileEditor },
