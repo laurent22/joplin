@@ -76,6 +76,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Option+Cmd+N', command: 'openNoteInNewWindow' },
 		{ accelerator: 'Ctrl+M', command: 'toggleTabMovesFocus' },
 		{ accelerator: 'Shift+Option+L', command: 'linkToNote' },
+		{ accelerator: 'Shift+Option+R', command: 'linkToAttachment' },
 	],
 	default: [
 		{ accelerator: 'Ctrl+N', command: 'newNote' },
@@ -134,6 +135,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Ctrl+Alt+N', command: 'openNoteInNewWindow' },
 		{ accelerator: 'Ctrl+M', command: 'toggleTabMovesFocus' },
 		{ accelerator: 'Shift+Alt+L', command: 'linkToNote' },
+		{ accelerator: 'Shift+Alt+R', command: 'linkToAttachment' },
 	],
 };
 

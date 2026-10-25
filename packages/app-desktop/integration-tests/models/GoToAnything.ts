@@ -47,6 +47,12 @@ export default class GoToAnything {
 		return this.waitFor();
 	}
 
+	public async openLinkToAttachment(electronApp: ElectronApplication) {
+		await this.mainScreen.waitFor();
+		await activateMainMenuItem(electronApp, 'Link to attachment...');
+		return this.waitFor();
+	}
+
 	public resultLocator(resultText: string|RegExp) {
 		return this.containerLocator.getByRole('option', { name: resultText });
 	}

@@ -48,12 +48,14 @@ interface GotoAnythingSearchResult {
 //   featured GotoAnything.
 //
 // - TitleOnly: Search in note titles only.
+// - AttachmentOnly: Search in attachment titles and IDs only.
 //
 // These different modes can be set from the `gotoAnything` command.
 
 export enum Mode {
 	Default = 0,
 	TitleOnly,
+	AttachmentOnly,
 }
 
 export interface UserDataCallbackEvent {
@@ -61,7 +63,7 @@ export interface UserDataCallbackEvent {
 	item: NoteEntity | FolderEntity | ResourceEntity | TagEntity;
 }
 
-export type UserDataCallbackResolve = (event: UserDataCallbackEvent)=> void;
+export type UserDataCallbackResolve = (event: UserDataCallbackEvent|null)=> void;
 export type UserDataCallbackReject = (error: Error)=> void;
 export interface UserDataCallback {
 	resolve: UserDataCallbackResolve;
@@ -196,7 +198,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 		this.listItem_onMouseMove = this.listItem_onMouseMove.bind(this);
 		this.helpButton_onClick = this.helpButton_onClick.bind(this);
 
-		if (startString) this.scheduleListUpdate();
+		if (startString || this.mode_ === Mode.AttachmentOnly) this.scheduleListUpdate();
 	}
 
 	public style() {
@@ -276,6 +278,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 	}
 
 	private modalLayer_onDismiss = () => {
+		this.userCallback_?.resolve(null);
 		this.props.dispatch({
 			pluginName: PLUGIN_NAME,
 			type: 'PLUGINLEGACY_DIALOG_SET',
@@ -320,7 +323,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 	public async updateList() {
 		let resultsInBody = false;
 
-		if (!this.state.query) {
+		if (!this.state.query && this.mode_ !== Mode.AttachmentOnly) {
 			this.setState({ results: [], keywords: [] });
 		} else {
 			let results: GotoAnythingSearchResult[] = [];
@@ -329,7 +332,19 @@ class DialogComponent extends React.PureComponent<Props, State> {
 			let keywords = null;
 			let commandArgs: string[] = [];
 
-			if (this.state.query.indexOf(':') === 0) { // COMMANDS
+			if (this.mode_ === Mode.AttachmentOnly) {
+				listType = ModelType.Resource;
+				searchQuery = this.state.query.trim();
+				keywords = [searchQuery];
+				const { items } = await Resource.noteResources({ searchQuery, limit: 100 });
+				results = items.map(resource => ({
+					...resource,
+					id: resource.id,
+					title: resource.title || resource.id,
+					parent_id: '',
+					fields: ['title', 'id'],
+				}));
+			} else if (this.state.query.indexOf(':') === 0) { // COMMANDS
 				const commandQuery = this.parseCommandQuery(this.state.query.substr(1));
 
 				listType = BaseModel.TYPE_COMMAND;
@@ -719,6 +734,8 @@ class DialogComponent extends React.PureComponent<Props, State> {
 	private helpText() {
 		if (this.mode_ === Mode.TitleOnly) {
 			return _('Type a note title to search for it.');
+		} else if (this.mode_ === Mode.AttachmentOnly) {
+			return _('Type an attachment name or ID to search for it.');
 		} else {
 			return _('Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.');
 		}

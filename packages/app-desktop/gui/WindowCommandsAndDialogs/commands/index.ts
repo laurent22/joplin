@@ -13,6 +13,7 @@ import * as globalUndo from './globalUndo';
 import * as gotoAnything from './gotoAnything';
 import * as hideModalMessage from './hideModalMessage';
 import * as importFrom from './importFrom';
+import * as linkToAttachment from './linkToAttachment';
 import * as linkToNote from './linkToNote';
 import * as lockEncryptedNotes from './lockEncryptedNotes';
 import * as moveToFolder from './moveToFolder';
@@ -74,6 +75,7 @@ const index: any[] = [
 	gotoAnything,
 	hideModalMessage,
 	importFrom,
+	linkToAttachment,
 	linkToNote,
 	lockEncryptedNotes,
 	moveToFolder,

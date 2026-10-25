@@ -78,6 +78,7 @@ export default function() {
 		'editor.tableDeleteRow',
 		'editor.tableDeleteColumn',
 		'linkToNote',
+		'linkToAttachment',
 		'exportDeletionLog',
 		'toggleSafeMode',
 		'showShareNoteDialog',

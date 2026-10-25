@@ -2,6 +2,8 @@
 import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
 import { Locator } from '@playwright/test';
+import { join } from 'path';
+import setFilePickerResponse from './util/setFilePickerResponse';
 
 test.describe('goToAnything', () => {
 	test('clicking outside of go to anything should close it', async ({ electronApp, mainWindow }) => {
@@ -114,6 +116,33 @@ test.describe('goToAnything', () => {
 
 			// Should have added the link
 			await mainScreen.noteEditor.expectToHaveText(/\[Target note\]/);
+		});
+
+		test(`should be possible to insert attachment links (activate with click: ${activateWithClick})`, async ({ electronApp, mainWindow }) => {
+			const mainScreen = await new MainScreen(mainWindow).setup();
+			await mainScreen.createNewNote('Attachment source');
+			const noteEditor = mainScreen.noteEditor;
+			await noteEditor.showMarkdownEditor();
+			await setFilePickerResponse(electronApp, [join(__dirname, 'resources', 'test-file.txt')]);
+			await noteEditor.attachFileButton.click();
+			await noteEditor.expectToHaveText(/\[test-file\.txt\]/);
+			await mainScreen.createNewNote('Test note');
+
+			const goToAnything = mainScreen.goToAnything;
+			await goToAnything.openLinkToAttachment(electronApp);
+
+			const result = goToAnything.resultLocator('test-file.txt');
+			await goToAnything.searchForWithRetry('test-file', result);
+
+			await expect(result).toBeAttached();
+			if (activateWithClick) {
+				await result.click();
+			} else {
+				await mainWindow.keyboard.press('Enter');
+			}
+			await goToAnything.expectToBeClosed();
+
+			await noteEditor.expectToHaveText(/\[test-file\.txt\]/);
 		});
 	}
 });
