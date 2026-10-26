@@ -2,14 +2,14 @@ body {
 	margin: 0;
 	padding: 0;
 	font-family: sans-serif;
-	line-height: 2em;
+	line-height: 1.4;
 }
 
 .App {
 	width: 400px;
 	
 	overflow-x: hidden;
-	overflow-y: hidden;
+	overflow-y: auto;
 	display: flex;
 	flex-direction: column;
 	background-color: #162b3d;
