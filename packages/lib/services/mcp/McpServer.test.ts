@@ -2,6 +2,8 @@ import Setting from '../../models/Setting';
 import Note from '../../models/Note';
 import Folder from '../../models/Folder';
 import Tag from '../../models/Tag';
+import NoteEmbedding from '../../models/NoteEmbedding';
+import ItemChange from '../../models/ItemChange';
 import SearchEngine from '../search/SearchEngine';
 import { db, setupDatabaseAndSynchronizer, supportDir, switchClient, withWarningSilenced } from '../../testing/test-utils';
 import McpServer from './McpServer';
@@ -546,6 +548,183 @@ describe('McpServer', () => {
 		});
 		expect(response.result.isError).toBe(true);
 		expect(response.result.content[0].text).toMatch(/embedding|AI/);
+	});
+
+	// Hand-crafted unit vectors so similarity is deterministic: the source's first
+	// chunk matches chunk 1 of "near", its second chunk matches "other", and
+	// "unrelated" matches neither.
+	const seedRelatedNotes = async () => {
+		const folder1 = await Folder.save({ title: 'F1' });
+		const folder2 = await Folder.save({ title: 'F2' });
+		const source = await Note.save({ title: 'Source', parent_id: folder1.id });
+		const near = await Note.save({ title: 'Near', parent_id: folder1.id });
+		const other = await Note.save({ title: 'Other', parent_id: folder2.id });
+		const unrelated = await Note.save({ title: 'Unrelated', parent_id: folder1.id });
+		// saveChunks reads back last_insert_rowid(), which pending ItemChange inserts can overwrite.
+		await ItemChange.waitForAllSaved();
+		await NoteEmbedding.saveChunks(source.id, 'test-model', [
+			{ chunkIndex: 0, chunkText: 'source 0', vector: [1, 0, 0, 0] },
+			{ chunkIndex: 1, chunkText: 'source 1', vector: [0, 1, 0, 0] },
+		]);
+		await NoteEmbedding.saveChunks(near.id, 'test-model', [
+			{ chunkIndex: 0, chunkText: 'near 0', vector: [0, 0, 1, 0] },
+			{ chunkIndex: 1, chunkText: 'near 1', vector: [0.96, 0.28, 0, 0] },
+		]);
+		await NoteEmbedding.saveChunks(other.id, 'test-model', [
+			{ chunkIndex: 0, chunkText: 'other 0', vector: [0.28, 0.96, 0, 0] },
+		]);
+		await NoteEmbedding.saveChunks(unrelated.id, 'test-model', [
+			{ chunkIndex: 0, chunkText: 'unrelated 0', vector: [0, 0, 0, 1] },
+		]);
+		return { folder1, source, near, other };
+	};
+
+	test('related_notes returns the best chunk of each related note, excluding the source', async () => {
+		if (!db(1).sqliteVecAvailable()) return;
+		// note_embeddings isn't reset by test-utils — start clean.
+		await NoteEmbedding.clearAll();
+		const { folder1, source, near, other } = await seedRelatedNotes();
+
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'related_notes', arguments: { id: source.id } },
+		});
+		const payload = parseToolResult(response.result);
+		expect(payload.results.map((r: { note_id: string }) => r.note_id).sort()).toEqual([near.id, other.id].sort());
+		const nearResult = payload.results.find((r: { note_id: string }) => r.note_id === near.id);
+		expect(nearResult).toMatchObject({ title: 'Near', notebook_id: folder1.id, chunk_index: 1, chunk_text: 'near 1', score: 0.96 });
+
+		const scoped = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'related_notes', arguments: { id: source.id, notebook_id: folder1.id } },
+		});
+		expect(parseToolResult(scoped.result).results.map((r: { note_id: string }) => r.note_id)).toEqual([near.id]);
+	});
+
+	test('related_notes searches with at most 10 vectors of a long note, keeping the first and last chunk', async () => {
+		if (!db(1).sqliteVecAvailable()) return;
+		await NoteEmbedding.clearAll();
+		const source = await Note.save({ title: 'Long' });
+		await ItemChange.waitForAllSaved();
+		const chunkCount = 15;
+		await NoteEmbedding.saveChunks(source.id, 'test-model', Array.from({ length: chunkCount }, (_, i) => ({
+			chunkIndex: i,
+			chunkText: `long ${i}`,
+			vector: i === 0 ? [1, 0, 0, 0] : i === chunkCount - 1 ? [0, 1, 0, 0] : [0, 0, 1, 0],
+		})));
+
+		const similaritySearch = jest.spyOn(NoteEmbedding, 'similaritySearch');
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'related_notes', arguments: { id: source.id } },
+		});
+		expect(response.result.isError).toBeFalsy();
+		expect(similaritySearch).toHaveBeenCalledTimes(10);
+		expect(similaritySearch.mock.calls[0][0]).toEqual([1, 0, 0, 0]);
+		expect(similaritySearch.mock.calls[9][0]).toEqual([0, 1, 0, 0]);
+		similaritySearch.mockRestore();
+	});
+
+	test.each([
+		['without a scope', false, ['Max health diary', 'Pet insurance claim for Max']],
+		['with a notebook scope', true, ['Pet insurance claim for Max']],
+	])('related_notes is not crowded out by a note with many close chunks, %s', async (_case, scoped, expected) => {
+		if (!db(1).sqliteVecAvailable()) return;
+		await NoteEmbedding.clearAll();
+		const pets = await Folder.save({ title: 'Pets' });
+		const journal = await Folder.save({ title: 'Journal' });
+		const source = await Note.save({ title: 'Max dental cleaning', parent_id: pets.id });
+		const diary = await Note.save({ title: 'Max health diary', parent_id: journal.id });
+		const insurance = await Note.save({ title: 'Pet insurance claim for Max', parent_id: pets.id });
+		await ItemChange.waitForAllSaved();
+		await NoteEmbedding.saveChunks(source.id, 'test-model', [{ chunkIndex: 0, chunkText: 'dental cleaning', vector: [1, 0, 0, 0] }]);
+		await NoteEmbedding.saveChunks(diary.id, 'test-model', Array.from({ length: 50 }, (_, i) => ({
+			chunkIndex: i,
+			chunkText: `diary entry ${i}`,
+			vector: [0.96, 0.28, 0, 0],
+		})));
+		await NoteEmbedding.saveChunks(insurance.id, 'test-model', [{ chunkIndex: 0, chunkText: 'insurance claim', vector: [0.936, 0, 0.352, 0] }]);
+
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'related_notes', arguments: { id: source.id, notebook_id: scoped ? pets.id : undefined } },
+		});
+		expect(parseToolResult(response.result).results.map((r: { title: string }) => r.title)).toEqual(expected);
+	});
+
+	test('related_notes works on a source note with more chunks than the KNN k limit', async () => {
+		if (!db(1).sqliteVecAvailable()) return;
+		await NoteEmbedding.clearAll();
+		const work = await Folder.save({ title: 'Work' });
+		const source = await Note.save({ title: 'IT support ticket log', parent_id: work.id });
+		const other = await Note.save({ title: 'Printer setup', parent_id: work.id });
+		await ItemChange.waitForAllSaved();
+		// sqlite-vec allows at most k = 4096.
+		await NoteEmbedding.saveChunks(source.id, 'test-model', Array.from({ length: 4100 }, (_, i) => ({
+			chunkIndex: i,
+			chunkText: `ticket ${i}`,
+			vector: [1, 0, 0, 0],
+		})));
+		await NoteEmbedding.saveChunks(other.id, 'test-model', [{ chunkIndex: 0, chunkText: 'printer', vector: [0.96, 0.28, 0, 0] }]);
+
+		for (const notebookId of [undefined, work.id]) {
+			const response = await McpServer.instance().handleRequest({
+				jsonrpc: '2.0', id: 1, method: 'tools/call',
+				params: { name: 'related_notes', arguments: { id: source.id, notebook_id: notebookId } },
+			});
+			expect(response.result.isError).toBeFalsy();
+			expect(parseToolResult(response.result).results.map((r: { note_id: string }) => r.note_id)).toEqual([other.id]);
+		}
+	});
+
+	test('related_notes is governed by the semantic_search_notes setting', async () => {
+		Setting.setValue('ai.tool.semantic_search_notes.enabled', false);
+		const note = await Note.save({ title: 'N' });
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'related_notes', arguments: { id: note.id } },
+		});
+		expect(response.result.isError).toBe(true);
+		expect(response.result.content[0].text).toMatch(/is disabled/);
+	});
+
+	const relatedNotesErrorCases: [string, ()=> Promise<string>, RegExp][] = [
+		['vector search is unavailable', async () => {
+			jest.spyOn(NoteEmbedding, 'vectorSearchAvailable').mockReturnValueOnce(false);
+			return (await Note.save({ title: 'N' })).id;
+		}, /not supported on this platform/],
+		['nothing is indexed', async () => (await Note.save({ title: 'N' })).id, /embeddings are not enabled/],
+		['the note is not indexed yet', async () => {
+			await seedRelatedNotes();
+			return (await Note.save({ title: 'New' })).id;
+		}, /not indexed yet/],
+		['the note has chunks but no vectors', async () => {
+			const { source } = await seedRelatedNotes();
+			await db(1).exec('DELETE FROM note_embeddings_vec WHERE rowid IN (SELECT id FROM note_embeddings_meta WHERE note_id = ?)', [source.id]);
+			return source.id;
+		}, /not indexed yet/],
+	];
+
+	test.each(relatedNotesErrorCases)('related_notes returns a clear error when %s', async (_case, setup, expected) => {
+		if (!db(1).sqliteVecAvailable()) return;
+		await NoteEmbedding.clearAll();
+		const id = await setup();
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'related_notes', arguments: { id } },
+		});
+		expect(response.result.isError).toBe(true);
+		expect(response.result.content[0].text).toMatch(expected);
+	});
+
+	test('related_notes rejects an invalid relevance', async () => {
+		const note = await Note.save({ title: 'N' });
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'related_notes', arguments: { id: note.id, relevance: 'Strict' } },
+		});
+		expect(response.result.isError).toBe(true);
+		expect(response.result.content[0].text).toMatch(/Invalid "relevance"/);
 	});
 
 	test('create_note creates a note in the chosen notebook', async () => {

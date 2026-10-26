@@ -17,6 +17,7 @@ const tool = buildTool({
 	description: [
 		'Semantic search across notes using the local embeddings index.',
 		'Use this when the user asks by meaning rather than exact words — for example "the note about pet sitters for my dog" rather than "pet sitter".',
+		'To find notes similar to a note you already have, use related_notes instead.',
 		'Falls back with a clear error if AI embeddings are not enabled in Settings → AI.',
 		'',
 		'Results are ranked chunks (not whole notes), each with the source note id, the chunk text that matched, and a similarity score. Use read_note on the note id to get full context, or read_notes for several notes at once.',
