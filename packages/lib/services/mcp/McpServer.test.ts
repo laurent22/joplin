@@ -579,7 +579,7 @@ describe('McpServer', () => {
 		return { folder1, source, near, other };
 	};
 
-	test('related_notes returns the best chunk of each related note, excluding the source', async () => {
+	test('should return the best chunk of each related note from related_notes, excluding the source', async () => {
 		if (!db(1).sqliteVecAvailable()) return;
 		// note_embeddings isn't reset by test-utils — start clean.
 		await NoteEmbedding.clearAll();
@@ -601,7 +601,7 @@ describe('McpServer', () => {
 		expect(parseToolResult(scoped.result).results.map((r: { note_id: string }) => r.note_id)).toEqual([near.id]);
 	});
 
-	test('related_notes searches with at most 10 vectors of a long note, keeping the first and last chunk', async () => {
+	test('should search with at most 10 vectors of a long note in related_notes, keeping the first and last chunk', async () => {
 		if (!db(1).sqliteVecAvailable()) return;
 		await NoteEmbedding.clearAll();
 		const source = await Note.save({ title: 'Long' });
@@ -628,7 +628,7 @@ describe('McpServer', () => {
 	test.each([
 		['without a scope', false, ['Max health diary', 'Pet insurance claim for Max']],
 		['with a notebook scope', true, ['Pet insurance claim for Max']],
-	])('related_notes is not crowded out by a note with many close chunks, %s', async (_case, scoped, expected) => {
+	])('should not let a note with many close chunks crowd out other related_notes results, %s', async (_case, scoped, expected) => {
 		if (!db(1).sqliteVecAvailable()) return;
 		await NoteEmbedding.clearAll();
 		const pets = await Folder.save({ title: 'Pets' });
@@ -652,7 +652,7 @@ describe('McpServer', () => {
 		expect(parseToolResult(response.result).results.map((r: { title: string }) => r.title)).toEqual(expected);
 	});
 
-	test('related_notes works on a source note with more chunks than the KNN k limit', async () => {
+	test('should return related_notes for a source note with more chunks than the KNN k limit', async () => {
 		if (!db(1).sqliteVecAvailable()) return;
 		await NoteEmbedding.clearAll();
 		const work = await Folder.save({ title: 'Work' });
@@ -677,7 +677,7 @@ describe('McpServer', () => {
 		}
 	});
 
-	test('related_notes is governed by the semantic_search_notes setting', async () => {
+	test('should disable related_notes when the semantic_search_notes setting is off', async () => {
 		Setting.setValue('ai.tool.semantic_search_notes.enabled', false);
 		const note = await Note.save({ title: 'N' });
 		const response = await McpServer.instance().handleRequest({
@@ -705,7 +705,7 @@ describe('McpServer', () => {
 		}, /not indexed yet/],
 	];
 
-	test.each(relatedNotesErrorCases)('related_notes returns a clear error when %s', async (_case, setup, expected) => {
+	test.each(relatedNotesErrorCases)('should return a clear related_notes error when %s', async (_case, setup, expected) => {
 		if (!db(1).sqliteVecAvailable()) return;
 		await NoteEmbedding.clearAll();
 		const id = await setup();
@@ -717,7 +717,7 @@ describe('McpServer', () => {
 		expect(response.result.content[0].text).toMatch(expected);
 	});
 
-	test('related_notes rejects an invalid relevance', async () => {
+	test('should reject an invalid relevance in related_notes', async () => {
 		const note = await Note.save({ title: 'N' });
 		const response = await McpServer.instance().handleRequest({
 			jsonrpc: '2.0', id: 1, method: 'tools/call',
