@@ -3,6 +3,7 @@ import { TouchableOpacity, TouchableWithoutFeedback, Text, Modal, View, LayoutRe
 import { ReactElement, useCallback, useMemo, useRef, useState } from 'react';
 import { _ } from '@joplin/lib/locale';
 import useSafeAreaPadding from '../utils/hooks/useSafeAreaPadding';
+import Icon from './Icon';
 
 type ValueType = string;
 export interface DropdownListItem {
@@ -156,13 +157,11 @@ const Dropdown: React.FC<DropdownProps> = props => {
 					<Text ellipsizeMode="tail" numberOfLines={1} style={styles.header}>
 						{headerLabel}
 					</Text>
-					<Text
+					<Icon
+						name='ionicon chevron-down'
 						style={styles.headerArrow}
-						aria-hidden={true}
-						importantForAccessibility='no'
-						accessibilityElementsHidden={true}
-						accessibilityRole='image'
-					>{'▼'}</Text>
+						accessibilityLabel={null}
+					/>
 				</TouchableOpacity>
 				{listVisible ? null : props.coverableChildrenRight}
 			</View>
@@ -315,7 +314,9 @@ const useStyles = ({ itemCount, headerLayout, itemStyle, itemWrapperStyle, itemL
 				flex: 1,
 			},
 			headerArrow: {
-				...(headerStyle ?? {}),
+				color: (headerStyle as TextStyle)?.color,
+				fontSize: 16,
+				marginStart: 6,
 				flex: 0,
 			},
 		});
