@@ -73,7 +73,7 @@ export const NoteLockMigrationScreenComponent: React.FC<Props> = props => {
 		try {
 			await startNoteLockKeyMigration(localPassword, targetPassword, props.dispatch, () => props.dispatch({ type: 'NAV_BACK' }));
 		} catch (error) {
-			setErrorMessage(noteLockPasswordErrorMessage(error));
+			setErrorMessage(noteLockPasswordErrorMessage(error, true));
 			setMigrating(false);
 		}
 	}, [localPassword, targetPassword, props.dispatch]);

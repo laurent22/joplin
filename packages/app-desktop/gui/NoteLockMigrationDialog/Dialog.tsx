@@ -52,7 +52,7 @@ export default function(props: Props) {
 			try {
 				await startNoteLockKeyMigration(localPassword, targetPassword, props.dispatch, onClose);
 			} catch (error) {
-				setErrorMessage(noteLockPasswordErrorMessage(error));
+				setErrorMessage(noteLockPasswordErrorMessage(error, true));
 				setMigrating(false);
 			}
 		}
