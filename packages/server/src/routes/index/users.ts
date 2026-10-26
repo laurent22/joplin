@@ -219,6 +219,8 @@ router.post('users/:id/confirm', async (path: SubPath, ctx: AppContext) => {
 		const user = await ctx.joplin.models.user().load(userId);
 		if (!user) throw new ErrorNotFound(`No such user: ${userId}`);
 		if (!user.must_set_password) throw new ErrorForbidden('This account already has a password. Please login, or use the password reset form.');
+		// The session below is created without asking for the MFA code
+		if (getIsMFAEnabled(user)) throw new ErrorForbidden('This account has multi-factor authentication enabled. Please use the password reset form.');
 
 		const password = checkRepeatPassword(fields, true);
 

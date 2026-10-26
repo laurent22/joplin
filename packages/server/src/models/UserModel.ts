@@ -881,6 +881,9 @@ export default class UserModel extends BaseModel<User> {
 				if (!options.skipValidation) this.validatePassword(user.password);
 				user.password = await hashPassword(user.password);
 			}
+
+			// A stale flag would let an account confirmation token replace this password
+			if (!isNew && !('must_set_password' in user)) user.must_set_password = 0;
 		}
 
 		return this.withTransaction(async () => {

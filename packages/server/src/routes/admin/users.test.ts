@@ -233,6 +233,17 @@ describe('admin/users', () => {
 		await expectHttpError(async () => execRequest(adminSession.id, 'POST', `admin/users/${admin.id}`, { disable_button: true }), ErrorForbidden.httpCode);
 	});
 
+	test('should send a password reset email, and keep must_set_password off, for an account that has a password', async () => {
+		const { session: adminSession } = await createUserAndSession(1, true);
+		const { user } = await createUserAndSession(2);
+
+		await execRequest(adminSession.id, 'POST', `admin/users/${user.id}`, { send_account_confirmation_email: true });
+
+		expect((await models().user().load(user.id)).must_set_password).toBe(0);
+		const emails = (await models().email().all()).filter(e => e.recipient_id === user.id);
+		expect(emails.some(e => e.body.includes('/password/reset?token='))).toBe(true);
+	});
+
 	test('should delete all applications when changing password to enforce user login', async () => {
 		const { user, session } = await createUserAndSession(1);
 

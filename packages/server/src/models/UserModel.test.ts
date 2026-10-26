@@ -8,6 +8,7 @@ import { failedPaymentFinalAccount, failedPaymentWarningInterval } from './Subsc
 import { stripePortalUrl } from '../utils/urlUtils';
 import { Day } from '../utils/time';
 import config from '../config';
+import { uuidgen } from '@joplin/lib/uuid';
 
 describe('UserModel', () => {
 
@@ -93,6 +94,12 @@ describe('UserModel', () => {
 		expect(email.sent_success).toBe(0);
 		expect(email.sent_time).toBe(0);
 		expect(email.error).toBe('');
+	});
+
+	test('should clear must_set_password when a password is set', async () => {
+		const user = await models().user().save({ email: 'user1@localhost', password: uuidgen(), must_set_password: 1 });
+		await models().user().save({ id: user.id, password: uuidgen() });
+		expect((await models().user().load(user.id)).must_set_password).toBe(0);
 	});
 
 	test('should send a beta reminder email', async () => {

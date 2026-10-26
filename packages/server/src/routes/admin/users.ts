@@ -376,8 +376,13 @@ router.post('admin/users', async (path: SubPath, ctx: AppContext) => {
 			await models.userFlag().toggle(user.id, UserFlagType.ManuallyDisabled, !fields.restore_button);
 		} else if (fields.send_account_confirmation_email) {
 			const user = await models.user().load(path.id);
-			await models.user().save({ id: user.id, must_set_password: 1 });
-			await models.user().sendAccountConfirmationEmail(user);
+			// Never put an account that has a password back into "must set password": a confirmation token
+			// would then be enough to replace that password.
+			if (user.must_set_password) {
+				await models.user().sendAccountConfirmationEmail(user);
+			} else {
+				await models.user().sendResetPasswordEmail(user.email);
+			}
 		} else if (fields.impersonate_button) {
 			await startImpersonating(ctx, userId, ctx.URL.href);
 			return redirect(ctx, config().baseUrl);

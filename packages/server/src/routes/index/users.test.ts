@@ -400,8 +400,15 @@ describe('index/users', () => {
 		}
 	});
 
-	test('should not allow setting the password of an account that already has one', async () => {
-		const { user } = await createUserAndSession(1);
+	test.each([
+		['already has a password', async () => (await createUserAndSession(1)).user],
+		['has MFA enabled', async () => {
+			const user = await models().user().save({ email: 'user1@localhost', must_set_password: 1, password: uuidgen() });
+			await models().user().save({ id: user.id, totp_secret: 'encrypted-secret' });
+			return user;
+		}],
+	])('should not allow setting the password of an account that %s', async (_case, createUser) => {
+		const user = await createUser();
 		const token = await models().token().generate(user.id, TokenPurpose.AccountConfirmation);
 
 		const newPassword = uuidgen();
