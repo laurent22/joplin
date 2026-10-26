@@ -12651,7 +12651,7 @@ __metadata:
     "@react-native-community/geolocation": "npm:3.4.0"
     "@react-native-community/netinfo": "npm:12.0.1"
     "@react-native-community/push-notification-ios": "npm:1.12.0"
-    "@react-native-documents/picker": "npm:12.0.1"
+    "@react-native-documents/picker": "npm:12.0.2"
     "@react-native-vector-icons/fontawesome5": "npm:13.1.2"
     "@react-native-vector-icons/get-image": "npm:13.0.0"
     "@react-native-vector-icons/ionicons": "npm:13.1.2"
@@ -16089,13 +16089,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-documents/picker@npm:12.0.1":
-  version: 12.0.1
-  resolution: "@react-native-documents/picker@npm:12.0.1"
+"@react-native-documents/picker@npm:12.0.2":
+  version: 12.0.2
+  resolution: "@react-native-documents/picker@npm:12.0.2"
   peerDependencies:
     react: "*"
     react-native: ">=0.79.0"
-  checksum: 10/5d915828a2baade9b476589738c2dc4ac192b4444006e198e15676e952991bdbf472163bb739592abf581fb7402a193c9cc49319fa986fb7fd6434aaae3a3a68
+  checksum: 10/b525403dc90465fbf4c879f30fdde6e9f5208a4d075a4c7af2ab1f0724f1ad314faf4795fc1f89bb171978695f66ac00eeda3f562bc89320ecc189a5e84f0832
   languageName: node
   linkType: hard
 
