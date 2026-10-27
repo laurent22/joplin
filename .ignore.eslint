@@ -564,6 +564,7 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/index.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/linkToNote.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/lockEncryptedNotes.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/commands/lockNotes.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newFolder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newNote.test.js
@@ -579,6 +580,7 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openNote.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openPdfViewer.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openTag.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/print.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/commands/removeNoteLockFromNotes.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameFolder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameTag.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/resetLayout.js
@@ -612,6 +614,7 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleWhiteboardEdito
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/utils/canUseNativeUndo.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/types.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/utils/appDialogs.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/utils/setNotesLockState.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/utils/showFolderPicker.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/utils/usePrintToCallback.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/utils/useSyncDialogState.js
@@ -1843,6 +1846,8 @@ packages/lib/services/noteLock/NoteLockService.test.js
 packages/lib/services/noteLock/NoteLockService.js
 packages/lib/services/noteLock/NoteLockSession.test.js
 packages/lib/services/noteLock/NoteLockSession.js
+packages/lib/services/noteLock/bulkSetNoteLockState.test.js
+packages/lib/services/noteLock/bulkSetNoteLockState.js
 packages/lib/services/noteLock/hasLockedNoteWhileSessionLocked.js
 packages/lib/services/noteLock/isNoteLockEnabled.js
 packages/lib/services/noteLock/noteLockPrompts.test.js

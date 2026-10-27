@@ -32,6 +32,7 @@ import { focus } from '@joplin/lib/utils/focusHandler';
 import shim from '@joplin/lib/shim';
 import useOnItemClick from './useOnItemClick';
 import { ShareType, StateShare } from '@joplin/lib/services/share/reducer';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
 
 const Menu = bridge().Menu;
 const MenuItem: typeof MenuItemType = bridge().MenuItem;
@@ -272,6 +273,12 @@ const useOnRenderItem = (props: Props) => {
 						type: 'checkbox',
 						checked: PerFolderSortOrderService.isSet(itemId),
 					}));
+				}
+
+				if (isNoteLockEnabled()) {
+					// Read-only notes are skipped, so the items stay enabled whatever the selected notes are.
+					menu.append(new MenuItem({ ...menuUtils.commandToStatefulMenuItem('lockNotes', { folderId: itemId }), label: _('Lock all notes'), enabled: true }));
+					menu.append(new MenuItem({ ...menuUtils.commandToStatefulMenuItem('removeNoteLockFromNotes', { folderId: itemId }), label: _('Remove lock from all notes'), enabled: true }));
 				}
 			}
 

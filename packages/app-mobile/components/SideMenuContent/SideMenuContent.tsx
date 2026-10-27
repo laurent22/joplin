@@ -28,6 +28,10 @@ import { ALL_NOTES_FILTER_ID } from '@joplin/lib/reserved-ids';
 import SidebarIcon from './SidebarIcon';
 import SideMenuItem, { ToggleState } from './SideMenuItem';
 import BottomPanelActions from './BottomPanelActions';
+import NavService from '@joplin/lib/services/NavService';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
+import { NoteLockPrompts } from '@joplin/lib/services/noteLock/noteLockPrompts';
+import { folderTreeNoteIds, promptAndBulkSetNoteLockState } from '@joplin/lib/services/noteLock/bulkSetNoteLockState';
 
 interface Props {
 	syncStarted: boolean;
@@ -217,7 +221,25 @@ const SideMenuContentComponent = (props: Props) => {
 				},
 			};
 
-			menuItems.push(editButton, deleteButton);
+			menuItems.push(editButton);
+			if (isNoteLockEnabled()) {
+				const noteLockPrompts: NoteLockPrompts = {
+					promptPassword: label => dialogs.promptForText(label, '', true),
+					goToNoteLockSetup: () => {
+						props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+						void NavService.go('Config', { sectionName: 'noteLock' });
+					},
+				};
+				const noteLockButton = (isLocked: boolean): MenuOption => ({
+					title: isLocked ? _('Lock all notes') : _('Remove lock from all notes'),
+					icon: isLocked ? 'material lock-outline' : 'material lock-open-outline',
+					onPress: async () => {
+						await promptAndBulkSetNoteLockState(await folderTreeNoteIds(folder.id), isLocked, noteLockPrompts, props.dispatch, { wholeNotebook: true });
+					},
+				});
+				menuItems.push(noteLockButton(true), noteLockButton(false));
+			}
+			menuItems.push(deleteButton);
 		}
 
 		setFolderMenuOptions(menuItems);
