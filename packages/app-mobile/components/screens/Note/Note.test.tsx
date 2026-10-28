@@ -847,7 +847,7 @@ describe('screens/Note/Note', () => {
 	it('should not tick the to-do checkbox of a locked note inside a share', async () => {
 		const noteId = await openNewNote({ title: 'Locked to-do', body: 'plain', is_todo: 1, is_locked: 1, share_id: 'share-1' });
 		const dialogs: Partial<DialogControl> = { error: jest.fn() };
-		const { unmount } = render(<DialogContext.Provider value={dialogs as DialogControl}><WrappedNoteScreen /></DialogContext.Provider>);
+		const { unmount } = render(<WrappedNoteScreen dialogs={dialogs as DialogControl}/>);
 
 		fireEvent.press(await screen.findByRole('checkbox'));
 
