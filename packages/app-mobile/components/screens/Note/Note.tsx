@@ -1366,7 +1366,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			// A txt extension is automatically appended to the title when shared to a file via this route
 			await Share.share({
 				message: shareText,
-				title: noteToShare.id ?? uuid.create(),
+				title: friendlySafeFilename(noteToShare.title),
 			});
 		}
 	}

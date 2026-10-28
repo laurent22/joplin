@@ -318,8 +318,8 @@ describe('screens/Note/Note', () => {
 			unmount();
 		});
 
-		it('shares a short note as plain text', async () => {
-			const noteId = await openNewNote({ title: 'Share test', body: 'Short **body**' });
+		it('shares a short note as plain text with a safe title', async () => {
+			await openNewNote({ title: 'Short / note?', body: 'Short **body**' });
 			const { dialogs } = makeShareDialogs('plainText');
 			const nativeShare = jest.spyOn(Share, 'share').mockResolvedValue({ action: Share.sharedAction });
 			const exportHtml = jest.spyOn(InteropService.instance(), 'export').mockResolvedValue({ warnings: [] });
@@ -330,8 +330,8 @@ describe('screens/Note/Note', () => {
 
 			await waitFor(() => {
 				expect(nativeShare).toHaveBeenCalledWith({
-					message: 'Share test\n\nShort **body**',
-					title: noteId,
+					message: 'Short / note?\n\nShort **body**',
+					title: 'Short _ note_',
 				});
 			});
 			expect(exportHtml).not.toHaveBeenCalled();
