@@ -38,7 +38,7 @@ import { DialogContext, DialogControl } from '../../DialogManager';
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import { ExportModuleOutputFormat } from '@joplin/lib/services/interop/types';
 import shareFile from '../../../utils/shareFile';
-import { dirname } from 'path';
+import { basename, dirname } from 'path';
 
 jest.mock('../../../utils/shareFile', () => jest.fn().mockResolvedValue(undefined));
 
@@ -282,6 +282,22 @@ describe('screens/Note/Note', () => {
 			});
 			expect(exportHtml).not.toHaveBeenCalled();
 			expect(shareFile).not.toHaveBeenCalled();
+			unmount();
+		});
+
+		it('shares a long plain-text note with a safe note-title filename', async () => {
+			await openNewNote({ title: 'Long / note?', body: 'x'.repeat(100001) });
+			const { dialogs } = makeShareDialogs('plainText');
+			const nativeShare = jest.spyOn(Share, 'share').mockResolvedValue({ action: Share.sharedAction });
+			const { unmount } = render(<WrappedNoteScreen dialogs={dialogs}/>);
+
+			await openNoteActionsMenu();
+			fireEvent.press(await screen.findByText('Share'));
+
+			await waitFor(() => expect(shareFile).toHaveBeenCalledWith(expect.any(String), 'text/plain'));
+			const filePath = jest.mocked(shareFile).mock.calls[0][0];
+			expect(basename(filePath)).toBe('Long _ note_.md');
+			expect(nativeShare).not.toHaveBeenCalled();
 			unmount();
 		});
 
