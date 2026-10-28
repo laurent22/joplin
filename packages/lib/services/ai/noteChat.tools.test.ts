@@ -6,6 +6,7 @@ import Note from '../../models/Note';
 import Tag from '../../models/Tag';
 import { NoteEntity } from '../database/types';
 import { NoteContext, ToolDefinition } from './tools/types';
+import mockOpenAiServer, { jsonResponse } from './testing/mockOpenAiServer';
 
 const runChatForNote = (note: NoteEntity, history: ChatMessage[], message: string) => {
 	const getContext = async () => {
@@ -116,5 +117,31 @@ describe('noteChat.tools', () => {
 		const infoMessage = messages.find(message => message.role === ChatRole.Tool && message.toolName === 'manage_tags');
 		expect(infoMessage).toBeTruthy();
 		expect(infoMessage.content).toContain('Tool `manage_tags` is disabled in Joplin\'s settings');
+	});
+
+	test('should keep the model reasoning between the requests of a tool loop', async () => {
+		const baseUrl = 'http://localhost:1234/v1';
+		Setting.setValue('ai.chat.providerType', 'openai-compatible');
+		Setting.setValue('ai.chat.baseUrl', baseUrl);
+		Setting.setValue('ai.chat.model', 'test-model');
+
+		const reasoningItem = { type: 'reasoning', id: 'rs_1', summary: [{ type: 'summary_text', text: 'Thinking...' }], encrypted_content: 'encrypted' };
+		const functionCallItem = { type: 'function_call', id: 'fc_1', call_id: 'call_1', name: 'editor_readNoteBody', arguments: '{}' };
+		const requests = mockOpenAiServer(baseUrl, {
+			'/responses': () => {
+				const output = requests.length === 1 ? [reasoningItem, functionCallItem] : [{ type: 'message', content: [{ type: 'output_text', text: 'Done' }] }];
+				return jsonResponse({ status: 'completed', output });
+			},
+		});
+
+		try {
+			const note = await Note.save({ title: 'test' });
+			await runChatForNote(note, [{ role: ChatRole.User, content: 'testing' }], 'Read the note');
+		} finally {
+			jest.restoreAllMocks();
+		}
+
+		expect(requests).toHaveLength(2);
+		expect(requests[1].body.input).toEqual(expect.arrayContaining([reasoningItem, functionCallItem]));
 	});
 });
