@@ -387,6 +387,9 @@ export default class InteropService {
 		const exportPath = options.path ? options.path : null;
 		let sourceFolderIds = options.sourceFolderIds ? options.sourceFolderIds : [];
 		const sourceNoteIds = options.sourceNoteIds ? options.sourceNoteIds : [];
+		if (options.sourceNote && sourceNoteIds.length > 1) {
+			throw new Error(_('Cannot export more than one note when a source note is provided.'));
+		}
 		const result: ImportExportResult = { warnings: [] };
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- itemsToExport is consumed by exporter.prepareForProcessingItemType (typed BaseItemEntity[]); the actual values are { type, itemOrId } structurally — narrowing here would force changing the exporter signature
 		const itemsToExport: any[] = [];

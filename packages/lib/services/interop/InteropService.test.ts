@@ -365,6 +365,18 @@ describe('InteropService', () => {
 		expect(folder2.title).toBe('test');
 	}));
 
+	it('should reject multiple source note IDs with a note snapshot', (async () => {
+		const folder = await Folder.save({ title: 'folder' });
+		const firstNote = await Note.save({ title: 'first', parent_id: folder.id });
+		const secondNote = await Note.save({ title: 'second', parent_id: folder.id });
+
+		await expect(InteropService.instance().export({
+			path: `${exportDir()}/multiple-notes.jex`,
+			sourceNoteIds: [firstNote.id, secondNote.id],
+			sourceNote: await Note.load(firstNote.id),
+		})).rejects.toThrow('Cannot export more than one note when a source note is provided.');
+	}));
+
 	it('should export and import single folders', (async () => {
 		const service = InteropService.instance();
 		const filePath = `${exportDir()}/test.jex`;

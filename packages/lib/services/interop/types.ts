@@ -75,7 +75,7 @@ export interface ExportOptions {
 	path?: string;
 	sourceFolderIds?: string[];
 	sourceNoteIds?: string[];
-	// Use the current state of a single note instead of loading its saved version.
+	// Can be specified to use the current state of a single note instead of loading its saved version.
 	sourceNote?: NoteEntity;
 	// modulePath?: string;
 	target?: FileSystemItem;
