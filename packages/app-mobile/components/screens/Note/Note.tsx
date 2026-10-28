@@ -85,7 +85,7 @@ import useVisiblePluginEditorViewIds from '@joplin/lib/hooks/plugins/useVisibleP
 import { SelectionRange } from '../../../contentScripts/markdownEditorBundle/types';
 import { EditorType } from '../../NoteEditor/types';
 import { IconButton } from 'react-native-paper';
-import { makeShareCacheDirectory, writeTextToCacheFile } from '../../../utils/ShareUtils';
+import { makeIsolatedShareCacheDirectory, writeTextToCacheFile } from '../../../utils/ShareUtils';
 import shareFile from '../../../utils/shareFile';
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import { ExportModuleOutputFormat, FileSystemItem } from '@joplin/lib/services/interop/types';
@@ -1301,8 +1301,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			const savedNote = await Note.load(noteId);
 			if (!savedNote) throw new Error(_('Cannot find the note to share.'));
 
-			shareDir = `${await makeShareCacheDirectory()}/${uuid.create()}`;
-			await shim.fsDriver().mkdir(shareDir);
+			shareDir = await makeIsolatedShareCacheDirectory();
 			const fileToShare = `${shareDir}/${friendlySafeFilename(savedNote.title)}.html`;
 
 			const exportResult = await InteropService.instance().export({
