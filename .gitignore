@@ -1654,6 +1654,7 @@ packages/lib/services/ai/tools/global/manageTags.js
 packages/lib/services/ai/tools/global/readImage.js
 packages/lib/services/ai/tools/global/readNote.js
 packages/lib/services/ai/tools/global/readNotes.js
+packages/lib/services/ai/tools/global/relatedNotes.js
 packages/lib/services/ai/tools/global/searchNotes.js
 packages/lib/services/ai/tools/global/semanticSearchNotes.js
 packages/lib/services/ai/tools/global/updateNote.js

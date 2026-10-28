@@ -45,6 +45,7 @@ Tool handlers return their raw payload. The dispatcher JSON-serialises it into M
 |---|---|---|
 | `search_notes` | Keyword search (Joplin FTS syntax). Returns id, title, notebook id, updated time, a snippet anchored on the match, and the match's enclosing section. | on |
 | `semantic_search_notes` | Vector search via the embeddings index. Returns ranked chunks with source note id and score. | on |
+| `related_notes` | Notes similar in meaning to a given note. See [Related notes](#related-notes). Shares the `semantic_search_notes` setting. | off |
 | `read_note` | One note with notebook title, tag names, timestamps. See [Reading long notes](#reading-long-notes). | on |
 | `read_notes` | Up to 20 notes in one call. See [Reading several notes](#reading-several-notes). Shares the `read_note` setting. | on |
 | `list_notebooks` | Flat list of notebooks with `parent_id` and `note_count`. | on |
@@ -93,6 +94,14 @@ Truncated responses include a message naming the alternatives, as `has_more` say
 `read_notes(ids)` saves a round trip per search result. Unresolved ids go in `not_found` rather than failing the call.
 
 The bodies share one 8000-character budget, so 10 notes don't cost 10× the context. Short notes take what they need and the rest is split over the longer ones; truncated notes have `has_more: true` and are followed up with `read_note`. More than 20 ids is an error, since a tiny share per note is worse than making the model pick.
+
+### Related notes
+
+`related_notes(id)` returns notes close in meaning to a note. It uses the stored vectors of the note so no embedding provider is needed. At most 10 vectors are used and they are spread over the note.
+
+The source note is never returned and each note shows once with its best chunk. Results have the same fields as `semantic_search_notes` and take the same `relevance`, `notebook_id` and `tag_id`.
+
+Errors are checked in this order: unsupported platform then embeddings not enabled then note not indexed yet.
 
 ### Search results carry their section
 

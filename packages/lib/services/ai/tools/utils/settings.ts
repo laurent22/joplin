@@ -5,6 +5,7 @@ import { isEditorToolCall } from '../buildEditorTools';
 // Tools that grant the same access as another tool share its setting.
 const sharedSettingToolIds: Record<string, string> = {
 	read_notes: 'read_note',
+	related_notes: 'semantic_search_notes',
 };
 
 export const toolSettingKey = (toolId: string) => (
