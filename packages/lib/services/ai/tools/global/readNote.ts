@@ -1,63 +1,83 @@
-import Note from '../../../../models/Note';
-import Folder from '../../../../models/Folder';
-import Tag from '../../../../models/Tag';
 import { _ } from '../../../../locale';
 import buildTool from '../utils/buildTool';
 import { ToolError } from '../types';
+import { renderOutline, resolveSection } from '../utils/noteOutline';
+import loadNoteForReading from '../utils/loadNoteForReading';
 
 interface Input {
 	id?: string;
+	outline?: boolean;
+	section?: string;
 	offset?: number;
 	max_chars?: number;
 }
 
-const defaultMaxChars = 0;
+export const defaultMaxChars = 8000;
 
 const tool = buildTool({
 	id: 'read_note',
 	userDescription: (_input, output) => _('Read note: %s', output.title ?? _('(untitled)')),
-	description: 'Read a single note by id. Returns title, markdown body, notebook name, tags, and timestamps. For very long notes, use offset and max_chars to page through the body.',
+	description: [
+		'Read a single note by id. Returns title, markdown body, notebook name, tags, and timestamps.',
+		'Use this for one note, or to read an outline, a section, or a further page of a note. To read several notes at once, such as search results, use read_notes instead of calling this repeatedly.',
+		'For long notes, call with outline: true to get the heading structure, then request a single section instead of the whole body.',
+		'For notes without headings, page through with offset and max_chars.',
+	].join(' '),
 	inputSchema: {
 		type: 'object',
 		properties: {
 			id: { type: 'string', description: 'The note id (32-character hex).' },
-			offset: { type: 'integer', description: 'Byte offset into the body to start at. Defaults to 0.', minimum: 0 },
-			max_chars: { type: 'integer', description: 'Maximum characters of body to return. Omit or set to 0 for the full body.', minimum: 0 },
+			outline: { type: 'boolean', description: 'Return the heading structure instead of the body, as tab-separated "path chars heading" lines. Cannot be used with "section".' },
+			section: { type: 'string', description: 'Return only this section, addressed either by positional path from the outline ("1.2.3") or by heading text ("Flatpak"), which must match exactly one heading. The section includes its subsections.' },
+			offset: { type: 'integer', description: 'Character offset into the body to start at, or into the section when "section" is set. Defaults to 0.', minimum: 0 },
+			max_chars: { type: 'integer', description: `Maximum characters of body to return. Defaults to ${defaultMaxChars}. Set to 0 for no limit.`, minimum: 0 },
 		},
 		required: ['id'],
 	},
 	handler: async (input: Input) => {
 		if (!input.id) throw new ToolError('Missing "id" parameter');
+		if (input.outline && input.section) throw new ToolError('"outline" and "section" cannot be used together');
 
-		const note = await Note.load(input.id);
-		if (!note || note.is_conflict || (note.deleted_time && note.deleted_time > 0)) {
-			throw new ToolError(`Note not found: ${input.id}`);
+		const loaded = await loadNoteForReading(input.id);
+		if (!loaded) throw new ToolError(`Note not found: ${input.id}`);
+
+		const { metadata, body: fullBody } = loaded;
+
+		// The outline is paged with the same offset / max_chars semantics as the
+		// body, so both go through one slicing path below.
+		let content = fullBody;
+		let sectionPath: string|null = null;
+		let sectionHeading: string|null = null;
+
+		if (input.outline) {
+			content = renderOutline(fullBody);
+		} else if (input.section) {
+			const resolution = resolveSection(fullBody, input.section);
+			if (!resolution.section) throw new ToolError(resolution.error);
+			content = fullBody.slice(resolution.section.start, resolution.section.end);
+			sectionPath = resolution.section.path;
+			sectionHeading = resolution.section.heading;
 		}
 
-		const folder = note.parent_id ? await Folder.load(note.parent_id) : null;
-		const tags = await Tag.tagsByNoteId(note.id);
-
-		const fullBody = note.body ?? '';
 		const offset = Math.max(0, input.offset ?? 0);
 		const maxChars = Math.max(0, input.max_chars ?? defaultMaxChars);
-		const end = maxChars > 0 ? Math.min(fullBody.length, offset + maxChars) : fullBody.length;
-		const body = fullBody.slice(offset, end);
+		const end = maxChars > 0 ? Math.min(content.length, offset + maxChars) : content.length;
+		const body = content.slice(offset, end);
+		const hasMore = end < content.length;
+		const truncationAdvice = input.outline ?
+			`Outline truncated at ${body.length} of ${content.length} chars. Read a single section, or page through the outline with offset.` :
+			`Body truncated at ${body.length} of ${content.length} chars. Call with outline: true to see the heading structure and read a single section, or page with offset.`;
 
 		return {
-			id: note.id,
-			title: note.title,
+			...metadata,
 			body,
-			body_length: fullBody.length,
+			body_length: content.length,
 			body_offset: offset,
 			body_returned_chars: body.length,
-			has_more: end < fullBody.length,
-			notebook_id: note.parent_id,
-			notebook_title: folder ? folder.title : null,
-			tags: tags.map(t => t.title),
-			is_todo: !!note.is_todo,
-			todo_completed: !!note.todo_completed,
-			created_time: note.created_time,
-			updated_time: note.updated_time,
+			has_more: hasMore,
+			...(input.outline ? { is_outline: true } : {}),
+			...(sectionPath ? { section_path: sectionPath, section_heading: sectionHeading } : {}),
+			...(hasMore ? { truncation_message: truncationAdvice } : {}),
 		};
 	},
 });

@@ -37,16 +37,21 @@ describe('AiService', () => {
 		['http://0177.0.0.1:11434/v1', 'local'],
 		['http://2130706433:11434/v1', 'local'],
 		['http://127.1:11434/v1', 'local'],
-		// LAN and internal-only hosts are off-device, so they need consent.
-		['http://10.0.0.5:11434/v1', 'remote'],
-		['http://172.16.3.9:11434/v1', 'remote'],
-		['http://192.168.1.50:11434/v1', 'remote'],
-		['http://169.254.1.1:11434/v1', 'remote'],
-		['http://ollama.internal:11434/v1', 'remote'],
-		['http://ollama.home.arpa:11434/v1', 'remote'],
-		['http://[fd12:3456::1]:11434/v1', 'remote'],
-		['http://[fe80::1]:11434/v1', 'remote'],
+		// LAN and internal-only hosts stay within the user's private network.
+		['http://10.0.0.5:11434/v1', 'local'],
+		['http://172.16.3.9:11434/v1', 'local'],
+		['http://192.168.1.50:11434/v1', 'local'],
+		['http://169.254.1.1:11434/v1', 'local'],
+		['http://ollama.internal:11434/v1', 'local'],
+		['http://ollama.home.arpa:11434/v1', 'local'],
+		['http://[fd12:3456::1]:11434/v1', 'local'],
+		['http://[fe80::1]:11434/v1', 'local'],
+		// 172.15 and 172.32 are outside the 172.16/12 block.
+		['http://172.15.0.1:11434/v1', 'remote'],
+		['http://172.32.0.1:11434/v1', 'remote'],
+		// mDNS can resolve .local to any machine on an untrusted network.
 		['http://ollama.local:11434/v1', 'remote'],
+		// Site-local, deprecated by RFC 3879 and not treated as private.
 		['http://[fec0::1]:11434/v1', 'remote'],
 		// Leading zero makes this octal, so it resolves to the public 8.0.0.5.
 		['http://010.0.0.5:11434/v1', 'remote'],

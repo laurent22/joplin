@@ -2,8 +2,8 @@
  * @jest-environment jsdom
  */
 
-import { createEventHandlingListeners, Options } from './createEventHandlingAttrs';
-import { describe, beforeAll, it, jest, expect } from '@jest/globals';
+import createEventHandlingAttrs, { createEventHandlingListeners, Options } from './createEventHandlingAttrs';
+import { describe, beforeAll, it, jest, expect, test } from '@jest/globals';
 
 describe('createEventHandlingAttrs', () => {
 	let lastMessage: string|undefined = undefined;
@@ -87,5 +87,26 @@ describe('createEventHandlingAttrs', () => {
 
 		// Message handler should not have been called.
 		expect(lastMessage).toBe('');
+	});
+
+	test.each([
+		'&quot;',
+		'&#x22;',
+		'&#34;',
+	])('should not allow an entity sequence in the click action to break out of the attribute (case %#)', (entity) => {
+		const options: Options = {
+			enableLongPress: true,
+			postMessageSyntax: 'postMessageFn',
+			enableEditPopup: false,
+		};
+		const clickAction = `postMessageFn("joplin://resourceid#${entity});canary=1;//")`;
+		const attrs = createEventHandlingAttrs('resourceid', options, clickAction);
+
+		const container = document.createElement('div');
+		container.innerHTML = `<a ${attrs}>link</a>`;
+		const onclick = container.querySelector('a').getAttribute('onclick');
+
+		expect(onclick).not.toContain('");canary=1');
+		expect(onclick).toContain(entity);
 	});
 });

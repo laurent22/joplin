@@ -1,6 +1,7 @@
 import searchNotes from './searchNotes';
 import semanticSearchNotes from './semanticSearchNotes';
 import readNote from './readNote';
+import readNotes from './readNotes';
 import listNotebooks from './listNotebooks';
 import listTags from './listTags';
 import createNote from './createNote';
@@ -14,6 +15,7 @@ export default [
 	searchNotes,
 	semanticSearchNotes,
 	readNote,
+	readNotes,
 	listNotebooks,
 	listTags,
 	createNote,
