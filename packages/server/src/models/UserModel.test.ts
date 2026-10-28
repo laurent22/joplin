@@ -95,6 +95,16 @@ describe('UserModel', () => {
 		expect(email.error).toBe('');
 	});
 
+	test.each([
+		[1, true],
+		[0, false],
+	])('should mention MFA in the welcome email only if the MFA feature is enabled (MFA_ENABLED=%s)', async (mfaEnabled, expected) => {
+		config().MFA_ENABLED = mfaEnabled;
+		await createUserAndSession(1);
+		const email = (await models().email().all()).pop();
+		expect(email.body.includes('multi-factor authentication')).toBe(expected);
+	});
+
 	test('should send a beta reminder email', async () => {
 		stripeConfig().enabled = true;
 		const { user: user1 } = await createUserAndSession(1, false, { email: 'toto@example.com' });
