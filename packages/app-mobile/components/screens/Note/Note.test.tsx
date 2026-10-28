@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { describe, it, beforeEach } from '@jest/globals';
+import { describe, it, beforeEach, afterEach } from '@jest/globals';
 import { act, fireEvent, render, screen, userEvent, waitFor } from '../../../utils/testing/testingLibrary';
 
 import NoteScreen from './Note';
@@ -23,7 +23,7 @@ import { ModelType } from '@joplin/lib/BaseModel';
 import ItemChange from '@joplin/lib/models/ItemChange';
 import { getDisplayParentId } from '@joplin/lib/services/trash';
 import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly';
-import { LayoutChangeEvent } from 'react-native';
+import { LayoutChangeEvent, Share } from 'react-native';
 import shim from '@joplin/lib/shim';
 import getWebViewWindowById from '../../../utils/testing/getWebViewWindowById';
 import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
@@ -34,10 +34,18 @@ import setupGlobalStore from '../../../utils/testing/setupGlobalStore';
 import CommandService from '@joplin/lib/services/CommandService';
 import BackButtonService from '../../../services/BackButtonService';
 import shared from '@joplin/lib/components/shared/note-screen-shared';
+import { DialogContext, DialogControl } from '../../DialogManager';
+import InteropService from '@joplin/lib/services/interop/InteropService';
+import { ExportModuleOutputFormat } from '@joplin/lib/services/interop/types';
+import shareFile from '../../../utils/shareFile';
+import { dirname } from 'path';
+
+jest.mock('../../../utils/shareFile', () => jest.fn().mockResolvedValue(undefined));
 
 jest.retryTimes(2);
 
 interface WrapperProps {
+	dialogs?: DialogControl;
 }
 
 let store: Store<AppState>;
@@ -45,8 +53,15 @@ let store: Store<AppState>;
 const mockNavigation = { state: { } };
 const WrappedNoteScreen: React.FC<WrapperProps> = _props => {
 	return <TestProviderStack store={store}>
-		<NoteScreen navigation={mockNavigation}/>
+		<DialogContext.Provider value={_props.dialogs ?? null}>
+			<NoteScreen navigation={mockNavigation}/>
+		</DialogContext.Provider>
 	</TestProviderStack>;
+};
+
+const makeShareDialogs = (choice: 'plainText'|'html'|'cancel') => {
+	const showMenu = jest.fn(async () => choice);
+	return { dialogs: { showMenu } as unknown as DialogControl, showMenu };
 };
 
 const getNoteViewerDom = async () => {
@@ -217,6 +232,112 @@ describe('screens/Note/Note', () => {
 		expect(renderedNote.querySelector('h1')).toMatchObject({ textContent: 'Testing...' });
 
 		unmount();
+	});
+
+	describe('sharing a note', () => {
+		afterEach(() => {
+			jest.restoreAllMocks();
+			jest.mocked(shareFile).mockClear();
+		});
+
+		it('offers plain text and HTML, and does not share when cancelled', async () => {
+			await openNewNote({ title: 'Share test', body: 'Short **body**' });
+			const { dialogs, showMenu } = makeShareDialogs('cancel');
+			const nativeShare = jest.spyOn(Share, 'share').mockResolvedValue({ action: Share.sharedAction });
+			const exportHtml = jest.spyOn(InteropService.instance(), 'export').mockResolvedValue({ warnings: [] });
+			const { unmount } = render(<WrappedNoteScreen dialogs={dialogs}/>);
+
+			await openNoteActionsMenu();
+			fireEvent.press(await screen.findByText('Share'));
+
+			await waitFor(() => {
+				expect(showMenu).toHaveBeenCalledWith('Choose an option', expect.arrayContaining([
+					expect.objectContaining({ text: 'Plain text', id: 'plainText' }),
+					expect.objectContaining({ text: 'HTML', id: 'html' }),
+					expect.objectContaining({ text: 'Cancel', id: 'cancel' }),
+				]));
+			});
+			await act(async () => {});
+			expect(nativeShare).not.toHaveBeenCalled();
+			expect(exportHtml).not.toHaveBeenCalled();
+			expect(shareFile).not.toHaveBeenCalled();
+			unmount();
+		});
+
+		it('shares a short note as plain text', async () => {
+			const noteId = await openNewNote({ title: 'Share test', body: 'Short **body**' });
+			const { dialogs } = makeShareDialogs('plainText');
+			const nativeShare = jest.spyOn(Share, 'share').mockResolvedValue({ action: Share.sharedAction });
+			const exportHtml = jest.spyOn(InteropService.instance(), 'export').mockResolvedValue({ warnings: [] });
+			const { unmount } = render(<WrappedNoteScreen dialogs={dialogs}/>);
+
+			await openNoteActionsMenu();
+			fireEvent.press(await screen.findByText('Share'));
+
+			await waitFor(() => {
+				expect(nativeShare).toHaveBeenCalledWith({
+					message: 'Share test\n\nShort **body**',
+					title: noteId,
+				});
+			});
+			expect(exportHtml).not.toHaveBeenCalled();
+			expect(shareFile).not.toHaveBeenCalled();
+			unmount();
+		});
+
+		it('exports and shares a short note as HTML', async () => {
+			const noteId = await openNewNote({ title: 'Share test', body: 'Short **body**' });
+			const { dialogs } = makeShareDialogs('html');
+			const nativeShare = jest.spyOn(Share, 'share').mockResolvedValue({ action: Share.sharedAction });
+			const exportHtml = jest.spyOn(InteropService.instance(), 'export').mockResolvedValue({ warnings: [] });
+			const removeFile = jest.spyOn(shim.fsDriver(), 'remove');
+			const { unmount } = render(<WrappedNoteScreen dialogs={dialogs}/>);
+
+			await openNoteActionsMenu();
+			fireEvent.press(await screen.findByText('Share'));
+
+			await waitFor(() => {
+				expect(exportHtml).toHaveBeenCalledWith(expect.objectContaining({
+					format: ExportModuleOutputFormat.Html,
+					sourceNoteIds: [noteId],
+					sourceNote: expect.objectContaining({ id: noteId, title: 'Share test', body: 'Short **body**' }),
+				}));
+				expect(shareFile).toHaveBeenCalledWith(expect.any(String), 'text/html');
+			});
+			const exportPath = exportHtml.mock.calls[0][0].path;
+			await waitFor(() => expect(removeFile).toHaveBeenCalledWith(dirname(exportPath)));
+			expect(nativeShare).not.toHaveBeenCalled();
+			unmount();
+		});
+
+		it('shares decrypted HTML for a locked note', async () => {
+			await setupUnlockedNoteLock('123456');
+			const body = 'Secret **body**';
+			const noteId = await openNewNote({ title: 'Locked share', body });
+			const lockedNote = { ...await Note.load(noteId, { useNoteLock: true }), is_locked: 1, isDecrypted: true };
+			await Note.save(lockedNote, { useNoteLock: true });
+			store.dispatch({ type: 'SET_NOTE_LOCK_SESSION_UNLOCKED', value: true });
+			expect((await Note.load(noteId)).body).not.toContain(body);
+
+			const { dialogs } = makeShareDialogs('html');
+			const exportHtml = jest.spyOn(InteropService.instance(), 'export').mockResolvedValue({ warnings: [] });
+			const { unmount } = render(<WrappedNoteScreen dialogs={dialogs}/>);
+			try {
+				await getNoteViewerDom();
+				await openNoteActionsMenu();
+				fireEvent.press(await screen.findByText('Share'));
+
+				await waitFor(() => {
+					expect(exportHtml).toHaveBeenCalledWith(expect.objectContaining({
+						sourceNote: expect.objectContaining({ id: noteId, body }),
+					}));
+					expect(shareFile).toHaveBeenCalledWith(expect.any(String), 'text/html');
+				});
+			} finally {
+				unmount();
+				Setting.setValue('featureFlag.noteLock', false);
+			}
+		});
 	});
 
 	it('changing the note title input should update the note\'s title', async () => {

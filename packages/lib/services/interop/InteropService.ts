@@ -192,7 +192,7 @@ export default class InteropService {
 					target: FileSystemItem.File,
 					isNoteArchive: false,
 					description: _('HTML File'),
-					supportsMobile: false,
+					supportsMobile: true,
 				}, () => new InteropService_Exporter_Html()),
 
 				makeExportModule({
@@ -412,7 +412,7 @@ export default class InteropService {
 			for (let noteIndex = 0; noteIndex < noteIds.length; noteIndex++) {
 				const noteId = noteIds[noteIndex];
 				if (sourceNoteIds.length && sourceNoteIds.indexOf(noteId) < 0) continue;
-				const note = await Note.load(noteId);
+				const note = options.sourceNote?.id === noteId ? options.sourceNote : await Note.load(noteId);
 				await queueExportItem(BaseModel.TYPE_NOTE, note);
 				exportedNoteIds.push(noteId);
 

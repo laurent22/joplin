@@ -1,4 +1,4 @@
-import { FolderEntity } from '../database/types';
+import { FolderEntity, NoteEntity } from '../database/types';
 import { PluginStates } from '../plugins/reducer';
 
 export interface CustomImportContext {
@@ -69,6 +69,8 @@ export interface ExportOptions {
 	path?: string;
 	sourceFolderIds?: string[];
 	sourceNoteIds?: string[];
+	// Use the current state of a single note instead of loading its saved version.
+	sourceNote?: NoteEntity;
 	// modulePath?: string;
 	target?: FileSystemItem;
 	includeConflicts?: boolean;

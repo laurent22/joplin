@@ -8,7 +8,7 @@ import { tempFilePath } from '../../testing/test-utils';
 import { ContentScriptType } from '../../services/plugins/api/types';
 import { ExportModuleOutputFormat, FileSystemItem } from './types';
 import { readFile } from 'fs/promises';
-import shim from '../../shim';
+import shim, { MobilePlatform } from '../../shim';
 
 async function recreateExportDir() {
 	const dir = exportDir();
@@ -38,6 +38,38 @@ describe('interop/InteropService_Exporter_Html', () => {
 
 		const content = await fs.readFile(filePath, 'utf8');
 		expect(content).toContain('<strong>ma note</strong>');
+	}));
+
+	test('should export a note snapshot as self-contained HTML on mobile', (async () => {
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'Snapshot note', body: 'Database-only body', parent_id: folder.id });
+		const imagePath = tempFilePath('png');
+		await fs.writeFile(imagePath, Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/lXcAAAAASUVORK5CYII=', 'base64'));
+		const image = await shim.createResourceFromPath(imagePath);
+		const snapshotBody = `Snapshot-only body\n\n![Image](:/${image.id})`;
+		const filePath = `${exportDir()}/snapshot.html`;
+		const sourceNote = { ...await Note.load(note.id), body: snapshotBody };
+
+		const mobilePlatform = jest.spyOn(shim, 'mobilePlatform').mockReturnValue(MobilePlatform.Ios);
+		try {
+			await InteropService.instance().export({
+				path: filePath,
+				format: ExportModuleOutputFormat.Html,
+				target: FileSystemItem.File,
+				sourceNoteIds: [note.id],
+				sourceNote,
+				packIntoSingleFile: true,
+			});
+		} finally {
+			mobilePlatform.mockRestore();
+		}
+
+		const html = await fs.readFile(filePath, 'utf8');
+		expect(html).toContain('Snapshot-only body');
+		expect(html).not.toContain('Database-only body');
+		expect(html).toContain('data:image/png;base64,');
+		expect(await fs.pathExists(`${exportDir()}/_resources`)).toBe(false);
+		expect(await Note.load(note.id)).toMatchObject({ body: 'Database-only body' });
 	}));
 
 	test('should export HTML directory', (async () => {

@@ -5,7 +5,7 @@ import shim from '@joplin/lib/shim';
 // when refactoring this name, make sure to refactor the `SharePackage.java` (in android) as well
 const DIR_NAME = 'sharedFiles';
 
-const makeShareCacheDirectory = async () => {
+export const makeShareCacheDirectory = async () => {
 	const targetDir = `${shim.fsDriver().getCacheDirectoryPath()}/${DIR_NAME}`;
 	await shim.fsDriver().mkdir(targetDir);
 

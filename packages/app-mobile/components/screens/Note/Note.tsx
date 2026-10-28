@@ -20,7 +20,7 @@ const md5 = require('md5');
 import BackButtonService from '../../../services/BackButtonService';
 import NavService, { OnNavigateCallback as OnNavigateCallback } from '@joplin/lib/services/NavService';
 import { ModelType } from '@joplin/lib/BaseModel';
-import { fileExtension, safeFileExtension } from '@joplin/lib/path-utils';
+import { fileExtension, friendlySafeFilename, safeFileExtension } from '@joplin/lib/path-utils';
 import * as mimeUtils from '@joplin/lib/mime-utils';
 import ScreenHeader, { FolderPickerOptions, MenuOption, ViewToggleButtonMode } from '../../ScreenHeader';
 import NoteTagsDialog from '../NoteTagsDialog';
@@ -82,8 +82,10 @@ import useVisiblePluginEditorViewIds from '@joplin/lib/hooks/plugins/useVisibleP
 import { SelectionRange } from '../../../contentScripts/markdownEditorBundle/types';
 import { EditorType } from '../../NoteEditor/types';
 import { IconButton } from 'react-native-paper';
-import { writeTextToCacheFile } from '../../../utils/ShareUtils';
+import { makeShareCacheDirectory, writeTextToCacheFile } from '../../../utils/ShareUtils';
 import shareFile from '../../../utils/shareFile';
+import InteropService from '@joplin/lib/services/interop/InteropService';
+import { ExportModuleOutputFormat, FileSystemItem } from '@joplin/lib/services/interop/types';
 import NotePositionService from '@joplin/lib/services/NotePositionService';
 import useKeyboardState from '../../../utils/hooks/useKeyboardState';
 import VoiceTyping from '../../../services/voiceTyping/VoiceTyping';
@@ -1273,12 +1275,58 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		this.scheduleSave({ ...this.state, note: newNote });
 	}
 
+	private async shareHtmlFile(noteToShare: NoteEntity) {
+		let shareDir: string = null;
+		try {
+			// A newly created note may not be in the database yet. The exporter needs its ID
+			// to find the note in its folder.
+			if (!noteToShare.id || !(await Note.load(noteToShare.id))) {
+				await this.saveNoteButton_press();
+				noteToShare = this.state.note;
+			}
+
+			shareDir = `${await makeShareCacheDirectory()}/${uuid.create()}`;
+			await shim.fsDriver().mkdir(shareDir);
+			const fileToShare = `${shareDir}/${friendlySafeFilename(noteToShare.title)}.html`;
+
+			await InteropService.instance().export({
+				path: fileToShare,
+				format: ExportModuleOutputFormat.Html,
+				target: FileSystemItem.File,
+				sourceNoteIds: [noteToShare.id],
+				sourceNote: noteToShare,
+				plugins: this.props.plugins,
+				packIntoSingleFile: true,
+			});
+			await shareFile(fileToShare, 'text/html');
+		} catch (e) {
+			logger.error('Unable to share note as HTML:', e);
+			void shim.showErrorDialog(_('Unable to share note data. Reason: %s', e.toString()));
+		} finally {
+			if (shareDir) await shim.fsDriver().remove(shareDir);
+		}
+	}
+
 	private async share_onPress() {
+		const shareFormat = await this.props.dialogs.showMenu<'plainText'|'html'|'cancel'>(
+			_('Choose an option'), [
+				{ text: _('Plain text'), id: 'plainText' },
+				{ text: _('HTML'), id: 'html' },
+				{ text: _('Cancel'), id: 'cancel', style: 'cancel' },
+			],
+		);
+		if (shareFormat === 'cancel') return;
+
 		let noteToShare = this.state.note;
 		if (isNoteLockEnabled() && NoteLockNote.isLocked(noteToShare)) {
 			// The state note may hold the encrypted body, so the shared contents come from a gated load.
 			noteToShare = await Note.load(noteToShare.id, { useNoteLock: true });
 		}
+		if (shareFormat === 'html') {
+			await this.shareHtmlFile(noteToShare);
+			return;
+		}
+
 		const shareText = `${noteToShare.title}\n\n${noteToShare.body}`;
 		const filename = noteToShare.id ?? uuid.create();
 
