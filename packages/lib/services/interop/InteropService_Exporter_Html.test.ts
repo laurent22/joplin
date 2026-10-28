@@ -1,8 +1,13 @@
 import InteropService from '../../services/interop/InteropService';
 import { PluginStates } from '../../services/plugins/reducer';
-import { setupDatabaseAndSynchronizer, switchClient, exportDir } from '../../testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, exportDir, encryptionService } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
+import Setting from '../../models/Setting';
+import EncryptionService from '../e2ee/EncryptionService';
+import NoteLockKey from '../noteLock/NoteLockKey';
+import NoteLockService from '../noteLock/NoteLockService';
+import NoteLockSession from '../noteLock/NoteLockSession';
 import * as fs from 'fs-extra';
 import { tempFilePath } from '../../testing/test-utils';
 import { ContentScriptType } from '../../services/plugins/api/types';
@@ -40,15 +45,14 @@ describe('interop/InteropService_Exporter_Html', () => {
 		expect(content).toContain('<strong>ma note</strong>');
 	}));
 
-	test('should export a note snapshot as self-contained HTML on mobile', (async () => {
+	test('should export a saved note as self-contained HTML on mobile', (async () => {
 		const folder = await Folder.save({ title: 'folder' });
-		const note = await Note.save({ title: 'Snapshot note', body: 'Database-only body', parent_id: folder.id });
 		const imagePath = tempFilePath('png');
 		await fs.writeFile(imagePath, Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/lXcAAAAASUVORK5CYII=', 'base64'));
 		const image = await shim.createResourceFromPath(imagePath);
-		const snapshotBody = `Snapshot-only body\n\n![Image](:/${image.id})`;
-		const filePath = `${exportDir()}/snapshot.html`;
-		const sourceNote = { ...await Note.load(note.id), body: snapshotBody };
+		const body = `Saved body\n\n![Image](:/${image.id})`;
+		const note = await Note.save({ title: 'Note with image', body, parent_id: folder.id });
+		const filePath = `${exportDir()}/single-note.html`;
 
 		const mobilePlatform = jest.spyOn(shim, 'mobilePlatform').mockReturnValue(MobilePlatform.Ios);
 		try {
@@ -57,7 +61,6 @@ describe('interop/InteropService_Exporter_Html', () => {
 				format: ExportModuleOutputFormat.Html,
 				target: FileSystemItem.File,
 				sourceNoteIds: [note.id],
-				sourceNote,
 				packIntoSingleFile: true,
 			});
 		} finally {
@@ -65,12 +68,54 @@ describe('interop/InteropService_Exporter_Html', () => {
 		}
 
 		const html = await fs.readFile(filePath, 'utf8');
-		expect(html).toContain('Snapshot-only body');
-		expect(html).not.toContain('Database-only body');
+		expect(html).toContain('Saved body');
 		expect(html).toContain('data:image/png;base64,');
 		expect(await fs.pathExists(`${exportDir()}/_resources`)).toBe(false);
-		expect(await Note.load(note.id)).toMatchObject({ body: 'Database-only body' });
 	}));
+
+	test('should export a saved locked note as decrypted HTML on mobile', async () => {
+		NoteLockService.destroyInstance();
+		NoteLockSession.destroyInstance();
+		NoteLockKey.destroyInstance();
+		EncryptionService.instance_ = encryptionService();
+		Setting.setValue('featureFlag.noteLock', true);
+
+		try {
+			await NoteLockKey.instance().create('123456');
+			await NoteLockSession.instance().unlock('123456');
+			const folder = await Folder.save({ title: 'folder' });
+			const note = await Note.save({ title: 'Locked note', body: 'Saved secret', parent_id: folder.id });
+			const toLock = { ...await Note.load(note.id, { useNoteLock: true }), is_locked: 1, isDecrypted: true };
+			await Note.save(toLock, { useNoteLock: true });
+
+			const encryptedNote = await Note.load(note.id);
+			expect(encryptedNote.body).not.toContain('Saved secret');
+			const filePath = `${exportDir()}/locked-note.html`;
+
+			const mobilePlatform = jest.spyOn(shim, 'mobilePlatform').mockReturnValue(MobilePlatform.Ios);
+			try {
+				await InteropService.instance().export({
+					path: filePath,
+					format: ExportModuleOutputFormat.Html,
+					target: FileSystemItem.File,
+					sourceNoteIds: [note.id],
+					decryptLockedNotes: true,
+				});
+			} finally {
+				mobilePlatform.mockRestore();
+			}
+
+			const html = await fs.readFile(filePath, 'utf8');
+			expect(html).toContain('Saved secret');
+			expect(html).not.toContain(encryptedNote.body);
+			expect((await Note.load(note.id)).body).toBe(encryptedNote.body);
+		} finally {
+			Setting.setValue('featureFlag.noteLock', false);
+			NoteLockSession.destroyInstance();
+			NoteLockService.destroyInstance();
+			NoteLockKey.destroyInstance();
+		}
+	});
 
 	test('should export HTML directory', (async () => {
 		const service = InteropService.instance();

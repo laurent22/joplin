@@ -1292,26 +1292,25 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		this.scheduleSave({ ...this.state, note: newNote });
 	}
 
-	private async shareHtmlFile(noteToShare: NoteEntity) {
+	private async shareHtmlFile() {
 		let shareDir: string = null;
 		try {
-			// A newly created note may not be in the database yet. The exporter needs its ID
-			// to find the note in its folder.
-			if (!noteToShare.id || !(await Note.load(noteToShare.id))) {
-				await this.saveNoteButton_press();
-				noteToShare = this.state.note;
-			}
+			const noteId = this.state.note?.id || this.props.noteId;
+			if (!noteId) throw new Error(_('Cannot find the note to share.'));
+			await this.saveActionQueue(noteId).processAllNow();
+			const savedNote = await Note.load(noteId);
+			if (!savedNote) throw new Error(_('Cannot find the note to share.'));
 
 			shareDir = `${await makeShareCacheDirectory()}/${uuid.create()}`;
 			await shim.fsDriver().mkdir(shareDir);
-			const fileToShare = `${shareDir}/${friendlySafeFilename(noteToShare.title)}.html`;
+			const fileToShare = `${shareDir}/${friendlySafeFilename(savedNote.title)}.html`;
 
 			await InteropService.instance().export({
 				path: fileToShare,
 				format: ExportModuleOutputFormat.Html,
 				target: FileSystemItem.File,
-				sourceNoteIds: [noteToShare.id],
-				sourceNote: noteToShare,
+				sourceNoteIds: [savedNote.id],
+				decryptLockedNotes: true,
 				plugins: this.props.plugins,
 				packIntoSingleFile: true,
 			});
@@ -1333,17 +1332,16 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			],
 		);
 		if (shareFormat === 'cancel') return;
+		if (shareFormat === 'html') {
+			await this.shareHtmlFile();
+			return;
+		}
 
 		let noteToShare = this.state.note;
 		if (isNoteLockEnabled() && NoteLockNote.isLocked(noteToShare)) {
 			// The state note may hold the encrypted body, so the shared contents come from a gated load.
 			noteToShare = await Note.load(noteToShare.id, { useNoteLock: true });
 		}
-		if (shareFormat === 'html') {
-			await this.shareHtmlFile(noteToShare);
-			return;
-		}
-
 		const shareText = `${noteToShare.title}\n\n${noteToShare.body}`;
 
 		if (shareText.length > 100000) {

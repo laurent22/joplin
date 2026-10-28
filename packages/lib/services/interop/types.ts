@@ -1,4 +1,4 @@
-import { FolderEntity, NoteEntity } from '../database/types';
+import { FolderEntity } from '../database/types';
 import { PluginStates } from '../plugins/reducer';
 import { MasterKeyEntity } from '../e2ee/types';
 import { DecryptedNoteLockKey } from '../noteLock/NoteLockKey';
@@ -75,8 +75,6 @@ export interface ExportOptions {
 	path?: string;
 	sourceFolderIds?: string[];
 	sourceNoteIds?: string[];
-	// Can be specified to use the current state of a single note instead of loading its saved version.
-	sourceNote?: NoteEntity;
 	// modulePath?: string;
 	target?: FileSystemItem;
 	includeConflicts?: boolean;

@@ -355,26 +355,31 @@ describe('screens/Note/Note', () => {
 			unmount();
 		});
 
-		it('exports and shares a short note as HTML', async () => {
+		it('drains pending edits before exporting and sharing a short note as HTML', async () => {
 			const noteId = await openNewNote({ title: 'Share test', body: 'Short **body**' });
 			const { dialogs } = makeShareDialogs('html');
 			const nativeShare = jest.spyOn(Share, 'share').mockResolvedValue({ action: Share.sharedAction });
-			const exportHtml = jest.spyOn(InteropService.instance(), 'export').mockResolvedValue({ warnings: [] });
+			const exportHtml = jest.spyOn(InteropService.instance(), 'export').mockImplementation(async () => {
+				expect(await Note.load(noteId)).toMatchObject({ title: 'Edited / title?', body: 'Short **body**' });
+				return { warnings: [] };
+			});
 			const removeFile = jest.spyOn(shim.fsDriver(), 'remove');
 			const { unmount } = render(<WrappedNoteScreen dialogs={dialogs}/>);
 
 			await openNoteActionsMenu();
+			fireEvent.changeText(await screen.findByDisplayValue('Share test'), 'Edited / title?');
 			fireEvent.press(await screen.findByText('Share'));
 
 			await waitFor(() => {
 				expect(exportHtml).toHaveBeenCalledWith(expect.objectContaining({
 					format: ExportModuleOutputFormat.Html,
 					sourceNoteIds: [noteId],
-					sourceNote: expect.objectContaining({ id: noteId, title: 'Share test', body: 'Short **body**' }),
+					decryptLockedNotes: true,
 				}));
 				expect(shareFile).toHaveBeenCalledWith(expect.any(String), 'text/html');
 			});
 			const exportPath = exportHtml.mock.calls[0][0].path;
+			expect(basename(exportPath)).toBe('Edited _ title_.html');
 			await waitFor(() => expect(removeFile).toHaveBeenCalledWith(dirname(exportPath)));
 			expect(nativeShare).not.toHaveBeenCalled();
 			unmount();
@@ -399,7 +404,8 @@ describe('screens/Note/Note', () => {
 
 				await waitFor(() => {
 					expect(exportHtml).toHaveBeenCalledWith(expect.objectContaining({
-						sourceNote: expect.objectContaining({ id: noteId, body }),
+						sourceNoteIds: [noteId],
+						decryptLockedNotes: true,
 					}));
 					expect(shareFile).toHaveBeenCalledWith(expect.any(String), 'text/html');
 				});
