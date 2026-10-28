@@ -1305,7 +1305,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			await shim.fsDriver().mkdir(shareDir);
 			const fileToShare = `${shareDir}/${friendlySafeFilename(savedNote.title)}.html`;
 
-			await InteropService.instance().export({
+			const exportResult = await InteropService.instance().export({
 				path: fileToShare,
 				format: ExportModuleOutputFormat.Html,
 				target: FileSystemItem.File,
@@ -1315,6 +1315,15 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				plugins: this.props.plugins,
 				packIntoSingleFile: true,
 			});
+			if (exportResult.warnings.length) {
+				const shouldShare = await new Promise<boolean>(resolve => {
+					this.props.dialogs.prompt('', _('Some content may be missing from the note. Do you still want to share it?'), [
+						{ text: _('No'), style: 'cancel', onPress: () => resolve(false) },
+						{ text: _('Yes'), onPress: () => resolve(true) },
+					], { onDismiss: () => resolve(false) });
+				});
+				if (!shouldShare) return;
+			}
 			await shareFile(fileToShare, 'text/html');
 		} catch (e) {
 			logger.error('Unable to share note as HTML:', e);

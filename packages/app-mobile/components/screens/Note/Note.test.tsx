@@ -294,6 +294,32 @@ describe('screens/Note/Note', () => {
 			jest.mocked(shareFile).mockClear();
 		});
 
+		const openHtmlShareWithWarnings = async () => {
+			await openNewNote({ title: 'Share warning', body: 'Body with missing content' });
+			const { dialogs } = makeShareDialogs('html');
+			const prompt = jest.fn((..._args: Parameters<DialogControl['prompt']>) => {});
+			dialogs.prompt = prompt;
+			const exportHtml = jest.spyOn(InteropService.instance(), 'export').mockResolvedValue({ warnings: ['Missing resource'] });
+			const removeFile = jest.spyOn(shim.fsDriver(), 'remove');
+			const { unmount } = render(<WrappedNoteScreen dialogs={dialogs}/>);
+
+			await openNoteActionsMenu();
+			fireEvent.press(await screen.findByText('Share'));
+			await waitFor(() => expect(prompt).toHaveBeenCalledWith(
+				'',
+				'Some content may be missing from the note. Do you still want to share it?',
+				expect.arrayContaining([
+					expect.objectContaining({ text: 'No', style: 'cancel' }),
+					expect.objectContaining({ text: 'Yes' }),
+				]),
+				expect.objectContaining({ onDismiss: expect.any(Function) }),
+			));
+			expect(shareFile).not.toHaveBeenCalled();
+			const [, , buttons, options] = prompt.mock.calls[0];
+			const shareDir = dirname(exportHtml.mock.calls[0][0].path);
+			return { buttons, options, removeFile, shareDir, unmount };
+		};
+
 		it('offers plain text and HTML, and does not share when cancelled', async () => {
 			await openNewNote({ title: 'Share test', body: 'Short **body**' });
 			const { dialogs, showMenu } = makeShareDialogs('cancel');
@@ -382,6 +408,30 @@ describe('screens/Note/Note', () => {
 			expect(basename(exportPath)).toBe('Edited _ title_.html');
 			await waitFor(() => expect(removeFile).toHaveBeenCalledWith(dirname(exportPath)));
 			expect(nativeShare).not.toHaveBeenCalled();
+			unmount();
+		});
+
+		it('shares HTML after accepting export warnings', async () => {
+			const { buttons, removeFile, shareDir, unmount } = await openHtmlShareWithWarnings();
+			await act(async () => { buttons.find(button => button.text === 'Yes').onPress(); });
+			await waitFor(() => expect(shareFile).toHaveBeenCalledWith(expect.any(String), 'text/html'));
+			await waitFor(() => expect(removeFile).toHaveBeenCalledWith(shareDir));
+			unmount();
+		});
+
+		it('does not share HTML after declining export warnings', async () => {
+			const { buttons, removeFile, shareDir, unmount } = await openHtmlShareWithWarnings();
+			await act(async () => { buttons.find(button => button.text === 'No').onPress(); });
+			await waitFor(() => expect(removeFile).toHaveBeenCalledWith(shareDir));
+			expect(shareFile).not.toHaveBeenCalled();
+			unmount();
+		});
+
+		it('does not share HTML when the export warning prompt is dismissed', async () => {
+			const { options, removeFile, shareDir, unmount } = await openHtmlShareWithWarnings();
+			await act(async () => { options.onDismiss(); });
+			await waitFor(() => expect(removeFile).toHaveBeenCalledWith(shareDir));
+			expect(shareFile).not.toHaveBeenCalled();
 			unmount();
 		});
 
