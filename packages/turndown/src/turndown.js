@@ -196,7 +196,11 @@ TurndownService.prototype = {
 function process (parentNode, escapeContent = 'auto') {
   if (this.options.disableEscapeContent) escapeContent = false;
 
-  let output = '';
+  // Same result as calling join() per child, but join() re-copies the whole output each time, which is quadratic for
+  // elements with many children: https://github.com/laurent22/joplin/issues/16895
+  const isCode = parentNode.isCode === true;
+  const parts = [];
+  let trailingNewlines = 0;
   let previousNode = null;
 
   for (let node of parentNode.childNodes) {
@@ -217,11 +221,24 @@ function process (parentNode, escapeContent = 'auto') {
       replacement = replacementForNode.call(this, node, previousNode);
     }
 
-    output = join(output, replacement, parentNode.isCode);
+    if (isCode) {
+      parts.push(replacement);
+    } else {
+      const content = trimLeadingNewlines(replacement);
+      const separator = '\n\n'.substring(0, Math.max(trailingNewlines, replacement.length - content.length));
+      if (content) {
+        const trimmedContent = trimTrailingNewlines(content);
+        parts.push(separator, trimmedContent);
+        trailingNewlines = content.length - trimmedContent.length;
+      } else {
+        trailingNewlines = separator.length;
+      }
+    }
     previousNode = node;
   }
 
-  return output;
+  if (!isCode) parts.push('\n'.repeat(trailingNewlines));
+  return parts.join('');
 }
 
 /**

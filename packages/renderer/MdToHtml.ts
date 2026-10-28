@@ -9,6 +9,7 @@ import { FsDriver, ItemIdToUrlHandler, MarkupRenderer, OptionsResourceModel, Ren
 import hljs from './highlight';
 // Use a require() to support bundling on mobile:
 import MarkdownIt = require('markdown-it');
+import type Token = require('markdown-it/lib/token');
 
 import { AllHtmlEntities as Entities } from 'html-entities';
 const htmlentities = new Entities().encode;
@@ -78,6 +79,11 @@ const plugins: RendererPlugins = {
 function slugify(s: string): string {
 	return uslug(s);
 }
+
+const removeEmptyHeadingId = (token: Token, { title }: { title: string }) => {
+	if (title.trim()) return;
+	token.attrs = token.attrs.filter(([name]) => name !== 'id');
+};
 
 // Share across all instances of MdToHtml
 const inMemoryCache = new InMemoryCache(20);
@@ -619,7 +625,7 @@ export default class MdToHtml implements MarkupRenderer {
 			});
 		}
 
-		loadPlugin(markdownItAnchor, { slugify: slugify });
+		loadPlugin(markdownItAnchor, { slugify: slugify, callback: removeEmptyHeadingId });
 
 		for (const key in plugins) {
 			if (this.pluginEnabled(key)) {

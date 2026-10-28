@@ -1,13 +1,15 @@
 import BaseApplication, { shouldPreserveSelectedNoteOnSmartFilterSelect } from '@joplin/lib/BaseApplication';
 import ItemChange from '@joplin/lib/models/ItemChange';
 import Note from '@joplin/lib/models/Note';
-import { defaultState, defaultWindowId, State } from '@joplin/lib/reducer';
+import reducer, { defaultState, defaultWindowId, State } from '@joplin/lib/reducer';
 import { ALL_NOTES_FILTER_ID } from '@joplin/lib/reserved-ids';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
 import { setEncryptionEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { loadEncryptionMasterKey, setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
-import { readFile } from 'fs/promises';
+import waitFor from '@joplin/lib/testing/waitFor';
+import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
+import { appendFile, readFile } from 'fs/promises';
 import { TextEncoder as NodeTextEncoder } from 'util';
 import app from './app';
 
@@ -24,8 +26,8 @@ const mockBaseMiddleware = () => {
 	}, 'generalMiddleware').mockImplementation(async (_store, next, action) => next(action));
 };
 
-const createDesktopActionHandler = () => {
-	const middleware = app().generalMiddlewareFn()({ getState: jest.fn() });
+const createDesktopActionHandler = (watchedNoteFiles: string[] = []) => {
+	const middleware = app().generalMiddlewareFn()({ getState: () => ({ watchedNoteFiles }) });
 	return middleware(jest.fn());
 };
 
@@ -72,6 +74,73 @@ describe('app', () => {
 		} finally {
 			previewsMock.mockRestore();
 			storeMock.mockRestore();
+		}
+	});
+
+	test('should not apply a note refresh after a newer refresh has started', async () => {
+		const state = { ...defaultState, notesParentType: 'Folder', selectedFolderId: 'folder' } as State;
+		const dispatch = jest.fn();
+		const storeMock = jest.spyOn(app(), 'store').mockReturnValue({
+			dispatch,
+			getState: () => state,
+		} as unknown as ReturnType<ReturnType<typeof app>['store']>);
+		let resolveSlowPreviews: (notes: NoteEntity[])=> void = null;
+		const previewsMock = jest.spyOn(Note, 'previews')
+			.mockImplementationOnce(() => new Promise(resolve => { resolveSlowPreviews = resolve; }))
+			.mockResolvedValueOnce([{ id: 'fast-note' }]);
+
+		try {
+			const slowRefresh = app().refreshNotes(state);
+			const fastRefresh = (async () => {
+				await app().refreshNotes(state);
+				resolveSlowPreviews([{ id: 'slow-note' }]);
+			})();
+			await Promise.all([slowRefresh, fastRefresh]);
+
+			const noteUpdates = dispatch.mock.calls.map(call => call[0]).filter(action => action.type === 'NOTE_UPDATE_ALL');
+			expect(noteUpdates.map(action => action.notes)).toEqual([[{ id: 'fast-note' }]]);
+		} finally {
+			previewsMock.mockRestore();
+			storeMock.mockRestore();
+		}
+	});
+
+	test('should not let a refresh for an inactive window cancel the active window refresh', async () => {
+		const state = { ...defaultState, notesParentType: 'Folder', selectedFolderId: 'folder' } as State;
+		const dispatch = jest.fn();
+		const storeMock = jest.spyOn(app(), 'store').mockReturnValue({
+			dispatch,
+			getState: () => state,
+		} as unknown as ReturnType<ReturnType<typeof app>['store']>);
+		const previewsMock = jest.spyOn(Note, 'previews').mockResolvedValue([]);
+
+		try {
+			await Promise.all([app().refreshNotes(state), app().refreshNotes({ ...state, windowId: 'inactive-window' })]);
+			expect(dispatch).toHaveBeenCalledWith(expect.objectContaining({ type: 'NOTE_UPDATE_ALL' }));
+		} finally {
+			previewsMock.mockRestore();
+			storeMock.mockRestore();
+		}
+	});
+
+	test.each([
+		['the active window', true, [[expect.objectContaining({ windowId: defaultWindowId }), false, '']]],
+		['a background window', false, []],
+	])('should only refresh notes when the active window is closed (closing %s)', async (_name, focusSecondaryWindow, expectedRefreshCalls) => {
+		let state = reducer(defaultState, { type: 'WINDOW_OPEN', windowId: 'secondary-window', folderId: 'folder', noteId: 'note' });
+		if (focusSecondaryWindow) state = reducer(state, { type: 'WINDOW_FOCUS', windowId: 'secondary-window' });
+		const store = { getState: () => state, dispatch: jest.fn() };
+		const next = (action: unknown) => { state = reducer(state, action); };
+		const refreshNotesMock = jest.spyOn(app(), 'refreshNotes').mockResolvedValue(undefined);
+		baseMiddlewareMock.mockRestore();
+
+		try {
+			await (BaseApplication.prototype as unknown as {
+				generalMiddleware: (store: unknown, next: (action: unknown)=> unknown, action: unknown)=> Promise<unknown>;
+			}).generalMiddleware.call(app(), store, next, { type: 'WINDOW_CLOSE', windowId: 'secondary-window' });
+			expect(refreshNotesMock.mock.calls).toEqual(expectedRefreshCalls);
+		} finally {
+			refreshNotesMock.mockRestore();
 		}
 	});
 
@@ -160,6 +229,33 @@ describe('app', () => {
 
 		expect(updateNoteFile).not.toHaveBeenCalled();
 		updateNoteFile.mockRestore();
+	});
+
+	test('should drop pending external edits when a synced note arrives locked', async () => {
+		const { originalNote, externalFilePath } = await startExternalEditing();
+		const lockedNote = await Note.save({
+			...originalNote,
+			body: 'Locked note ciphertext',
+			is_locked: 1,
+		}, { changeSource: ItemChange.SOURCE_SYNC });
+
+		await appendFile(externalFilePath, ' (plaintext edit)');
+		const changeEventQueue = (watcher as unknown as { changeEventQueue_: AsyncActionQueue<unknown> }).changeEventQueue_;
+		await waitFor(() => {
+			expect(changeEventQueue.isEmpty).toBe(false);
+		});
+
+		const handleDesktopAction = createDesktopActionHandler([originalNote.id]);
+		await handleDesktopAction({
+			type: 'NOTE_UPDATE_ONE',
+			changeSource: ItemChange.SOURCE_SYNC,
+			changedFields: ['body', 'is_locked'],
+			note: lockedNote,
+		});
+		await changeEventQueue.waitForAllDone();
+
+		expect(watcher.noteIsWatched(originalNote)).toBe(false);
+		expect((await Note.load(originalNote.id)).body).toBe('Locked note ciphertext');
 	});
 
 	test('should wait for a synced encrypted note to be decrypted before updating the external edit file', async () => {

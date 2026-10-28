@@ -3,10 +3,14 @@ import { useState } from 'react';
 import { connect } from 'react-redux';
 import { Platform } from 'react-native';
 import { AppState } from '../../utils/types';
-import WarningBox, { WarningBoxTarget } from './WarningBox';
+import WarningBox, { WarningBoxAction, WarningBoxTarget } from './WarningBox';
+import NavService from '@joplin/lib/services/NavService';
 import { _ } from '@joplin/lib/locale';
 import { showMissingMasterKeyMessage, showUnknownKeyFormatBanner } from '@joplin/lib/services/e2ee/utils';
-import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import { localSyncInfoFromState, noteLockKeyConflictFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import { NoteLockMigrationStatus } from '@joplin/lib/reducer';
+import { confirmAndSkipNoteLockKeyMigration, notMigratedMessage, withSkippedCount } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
+import { Dispatch } from 'redux';
 import Setting from '@joplin/lib/models/Setting';
 import { ShareInvitation, ShareUserStatus } from '@joplin/lib/services/share/reducer';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
@@ -30,6 +34,10 @@ interface Props {
 	shareInvitations: ShareInvitation[];
 	processingShareInvitationResponse: boolean;
 	showInvalidJoplinCloudCredential: boolean;
+	noteLockKeyConflict: boolean;
+	showNoteLockKeyConflictMessage: boolean|undefined;
+	noteLockMigrationStatus: NoteLockMigrationStatus|null;
+	dispatch: Dispatch;
 }
 
 const androidGooglePlayUrl = 'https://play.google.com/store/apps/details?id=net.cozic.joplin';
@@ -60,13 +68,14 @@ const WarningBannerComponent: React.FC<Props> = props => {
 		}
 	}, [props.mustUpgradeAppMessage, props.syncTargetAppMinVersion]);
 
-	const renderWarningBox = (key: string, message: string, target: WarningBoxTarget) => {
+	const renderWarningBox = (key: string, message: string, target: WarningBoxTarget, actions?: WarningBoxAction[]) => {
 		return <WarningBox
 			key={key}
 			themeId={props.themeId}
 			target={target}
 			message={message}
 			testID='warning-box'
+			actions={actions}
 		/>;
 	};
 
@@ -128,6 +137,22 @@ const WarningBannerComponent: React.FC<Props> = props => {
 	if (props.hasDisabledEncryptionItems) {
 		warningComps.push(renderWarningBox('cannotDecrypt', _('Some items cannot be decrypted.'), { screen: 'Status' }));
 	}
+	const migration = props.noteLockMigrationStatus;
+	if (props.showNoteLockKeyConflictMessage !== false) {
+		if (migration?.running) {
+			warningComps.push(renderWarningBox('noteLockMigration', _('Re-encrypting your locked notes with the synced key. Migration is in progress...'), null));
+		} else if (migration?.failed || migration?.awaitingDecryption) {
+			warningComps.push(renderWarningBox('noteLockMigration', notMigratedMessage(migration), null, [
+				{ title: _('Retry'), onPress: () => void NavService.go('NoteLockMigration') },
+				{ title: _('Skip'), onPress: () => void confirmAndSkipNoteLockKeyMigration(props.dispatch) },
+			]));
+		} else if (migration) {
+			const onDismiss = () => props.dispatch({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: null });
+			warningComps.push(renderWarningBox('noteLockMigration', `${withSkippedCount(_('The migration of your locked notes has completed.'), migration)} ${_('Press to dismiss.')}`, { onPress: onDismiss }));
+		} else if (props.noteLockKeyConflict) {
+			warningComps.push(renderWarningBox('noteLockMigration', _('The sync target uses a different note lock key to the one on your device. Press to migrate your locked notes.'), { screen: 'NoteLockMigration' }));
+		}
+	}
 	if (props.showInvalidJoplinCloudCredential) {
 		const target = { screen: 'JoplinCloudLogin' };
 		warningComps.push(renderWarningBox('syncLogin', _('Your Joplin Cloud credentials are invalid, please login.'), target));
@@ -185,5 +210,7 @@ export default connect((state: AppState) => {
 		shareInvitations: state.shareService.shareInvitations,
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
 		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && !isSyncLoginRoute(state) && state.mustAuthenticate,
+		noteLockKeyConflict: noteLockKeyConflictFromState(state),
+		noteLockMigrationStatus: state.noteLockMigrationStatus,
 	};
 })(WarningBannerComponent);

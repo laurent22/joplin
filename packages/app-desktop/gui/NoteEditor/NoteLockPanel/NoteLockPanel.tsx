@@ -11,6 +11,8 @@ interface Props {
 	hasNoteLockKey: boolean;
 	dispatch: Dispatch;
 	undecryptable?: boolean;
+	migrationRunning?: boolean;
+	lockedInShare?: boolean;
 }
 
 export default function NoteLockPanel(props: Props) {
@@ -49,6 +51,10 @@ export default function NoteLockPanel(props: Props) {
 	}, [props.dispatch]);
 
 	const renderAction = () => {
+		if (props.migrationRunning) {
+			return <p className="message">{_('This note cannot be read while a note lock key migration is in progress.')}</p>;
+		}
+
 		if (props.undecryptable) {
 			return <p className="message">{_('This note could not be unlocked. If it was locked prior to a password reset, the content is no longer recoverable.')}</p>;
 		}
@@ -79,10 +85,11 @@ export default function NoteLockPanel(props: Props) {
 	};
 
 	return (
-		<div className="note-lock-panel">
+		<div className={`note-lock-panel ${props.lockedInShare ? '-in-share' : ''}`}>
 			<i className="icon fas fa-lock" role="img" aria-label={_('Locked note')}></i>
 			<h2 className="title">{props.noteTitle}</h2>
 			{renderAction()}
+			{props.lockedInShare ? <div className="warning-banner banner">{_('This note may not be readable because it is contained within a share.')}</div> : null}
 		</div>
 	);
 }

@@ -65,6 +65,6 @@ export const runtime = (): CommandRuntime => {
 				bridge().showErrorMessageBox(error.message);
 			}
 		},
-		enabledCondition: 'oneNoteSelected && !noteIsLocked && !noteIsReadOnly && !noteIsDeleted && !inTrash && !inConflictFolder',
+		enabledCondition: 'oneNoteSelected && !noteIsLocked && !noteIsReadOnly && !noteIsDeleted && !inTrash && !inConflictFolder && !noteLockMigrationRunning',
 	};
 };

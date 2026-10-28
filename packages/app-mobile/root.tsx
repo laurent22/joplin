@@ -9,6 +9,7 @@ import time from '@joplin/lib/time';
 import Logger from '@joplin/utils/Logger';
 import NoteScreen from './components/screens/Note/Note';
 import UpgradeSyncTargetScreen from './components/screens/UpgradeSyncTargetScreen';
+import NoteLockMigrationScreen from './components/screens/NoteLockMigrationScreen';
 import Setting, { } from '@joplin/lib/models/Setting';
 import PoorManIntervals from '@joplin/lib/PoorManIntervals';
 import { NotesParent, serializeNotesParent } from '@joplin/lib/reducer';
@@ -99,6 +100,7 @@ import { setDispatch } from './services/profiles';
 import { ReactNode } from 'react';
 import autodetectTheme, { onSystemColorSchemeChange } from './utils/autodetectTheme';
 import PluginRunnerWebView from './components/plugins/PluginRunnerWebView';
+import CommandService from '@joplin/lib/services/CommandService';
 import { refreshFolders, scheduleRefreshFolders } from '@joplin/lib/folders-screen-utils';
 import ShareManager from './components/screens/ShareManager';
 import { setDateFormat, setTimeFormat, setTimeLocale } from '@joplin/utils/time';
@@ -310,6 +312,7 @@ interface AppComponentProps {
 	disableSideMenuGestures: boolean;
 	historyCanGoBack: boolean;
 	showSideMenu: boolean;
+	showPanelsDialog: boolean;
 	noteSelectionEnabled: boolean;
 	syncStarted: boolean;
 }
@@ -501,6 +504,11 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 		}
 
 		this.urlOpenListener_ = Linking.addEventListener('url', this.handleOpenURL_);
+		// A new activity can remount this component with biometrics already done.
+		// Its native share event may have arrived before the ShareExtension listener was attached.
+		if (this.props.biometricsDone) {
+			void this.handleShareData();
+		}
 
 		BackButtonService.initialize(this.backButtonHandler_);
 
@@ -599,6 +607,13 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 	}
 
 	private async backButtonHandler() {
+		// Plugin dialogs use Paper's Modal, whose later hardwareBackPress listener runs first
+		// (React Native dispatches newest-first), so an open dialog consumes Back before this branch.
+		if (this.props.showPanelsDialog) {
+			await CommandService.instance().execute('dismissPluginPanels');
+			return true;
+		}
+
 		if (this.props.noteSelectionEnabled) {
 			this.props.dispatch({ type: 'NOTE_SELECTION_END' });
 			return true;
@@ -767,6 +782,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 			JoplinServerSamlLogin: { screen: SsoLoginScreen(new SamlShared()) },
 			EncryptionConfig: { screen: EncryptionConfigScreen },
 			UpgradeSyncTarget: { screen: UpgradeSyncTargetScreen },
+			NoteLockMigration: { screen: NoteLockMigrationScreen },
 			ShareManager: { screen: ShareManager },
 			ProfileSwitcher: { screen: ProfileSwitcher },
 			ProfileEditor: { screen: ProfileEditor },
@@ -890,6 +906,7 @@ const mapStateToProps = (state: AppState) => {
 	return {
 		historyCanGoBack: state.historyCanGoBack,
 		showSideMenu: state.showSideMenu,
+		showPanelsDialog: state.showPanelsDialog,
 		syncStarted: state.syncStarted,
 		appState: state.appState,
 		noteSelectionEnabled: state.noteSelectionEnabled,
