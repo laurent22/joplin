@@ -1310,6 +1310,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				format: ExportModuleOutputFormat.Html,
 				target: FileSystemItem.File,
 				sourceNoteIds: [savedNote.id],
+				includeConflicts: true,
 				decryptLockedNotes: true,
 				plugins: this.props.plugins,
 				packIntoSingleFile: true,

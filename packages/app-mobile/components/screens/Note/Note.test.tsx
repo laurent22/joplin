@@ -385,6 +385,25 @@ describe('screens/Note/Note', () => {
 			unmount();
 		});
 
+		it('includes a conflict note when sharing it as HTML', async () => {
+			const noteId = await openNewNote({ title: 'Conflict share', body: 'Conflict body', is_conflict: 1 });
+			const { dialogs } = makeShareDialogs('html');
+			const exportHtml = jest.spyOn(InteropService.instance(), 'export').mockResolvedValue({ warnings: [] });
+			const { unmount } = render(<WrappedNoteScreen dialogs={dialogs}/>);
+
+			await openNoteActionsMenu();
+			fireEvent.press(await screen.findByText('Share'));
+
+			await waitFor(() => {
+				expect(exportHtml).toHaveBeenCalledWith(expect.objectContaining({
+					sourceNoteIds: [noteId],
+					includeConflicts: true,
+				}));
+				expect(shareFile).toHaveBeenCalledWith(expect.any(String), 'text/html');
+			});
+			unmount();
+		});
+
 		it('shares decrypted HTML for a locked note', async () => {
 			await setupUnlockedNoteLock('123456');
 			const body = 'Secret **body**';

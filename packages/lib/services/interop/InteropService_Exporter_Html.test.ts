@@ -73,6 +73,26 @@ describe('interop/InteropService_Exporter_Html', () => {
 		expect(await fs.pathExists(`${exportDir()}/_resources`)).toBe(false);
 	}));
 
+	test('should export a selected conflict note as HTML', async () => {
+		const folder = await Folder.save({ title: 'folder' });
+		const conflictNote = await Note.save({ title: 'Conflict note', body: 'Conflict body', parent_id: folder.id, is_conflict: 1 });
+		await Note.save({ title: 'Other note', body: 'Other body', parent_id: folder.id });
+		const filePath = `${exportDir()}/conflict-note.html`;
+
+		await InteropService.instance().export({
+			path: filePath,
+			format: ExportModuleOutputFormat.Html,
+			target: FileSystemItem.File,
+			sourceNoteIds: [conflictNote.id],
+			includeConflicts: true,
+			packIntoSingleFile: true,
+		});
+
+		const html = await fs.readFile(filePath, 'utf8');
+		expect(html).toContain('Conflict body');
+		expect(html).not.toContain('Other body');
+	});
+
 	test('should export a saved locked note as decrypted HTML on mobile', async () => {
 		NoteLockService.destroyInstance();
 		NoteLockSession.destroyInstance();
