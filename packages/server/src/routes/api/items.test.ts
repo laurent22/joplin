@@ -6,7 +6,7 @@ import { Item } from '../../services/database/types';
 import { PaginatedItems, SaveFromRawContentResult } from '../../models/ItemModel';
 import { shareFolderWithUser } from '../../utils/testing/shareApiUtils';
 import { resourceBlobPath } from '../../utils/joplinUtils';
-import { ErrorForbidden, ErrorPayloadTooLarge } from '../../utils/errors';
+import { ErrorForbidden, ErrorPayloadTooLarge, ErrorUnprocessableEntity } from '../../utils/errors';
 import { PaginatedResults } from '../../models/utils/pagination';
 import { makeNoteSerializedBody } from '../../utils/testing/serializedItems';
 
@@ -289,6 +289,33 @@ describe('api/items', () => {
 
 		const item = await models().item().loadByName(user1.id, resourceBlobPath('000000000000000000000000000000E1'));
 		expect(item.jop_share_id).toBe(share.id);
+	});
+
+	test('should only associate resource blobs with a share via share_id', async () => {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+
+		await createItem(session1.id, 'root:/info.json:', 'victim');
+
+		const { share } = await shareFolderWithUser(session2.id, session1.id, '000000000000000000000000000000F1', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [],
+			},
+		]);
+
+		await expectHttpError(
+			async () => putApi(session2.id, 'items/root:/info.json:/content', {}, { query: { share_id: share.id } }),
+			ErrorUnprocessableEntity.httpCode,
+		);
+
+		expect(await models().item().loadByName(user2.id, 'info.json')).toBeFalsy();
+
+		await models().share().updateSharedItems3();
+
+		const items = await models().item().loadByNames(user1.id, ['info.json']);
+		expect(items.length).toBe(1);
+		expect(items[0].owner_id).toBe(user1.id);
 	});
 
 	test('should not upload or download items if the account is disabled', async () => {

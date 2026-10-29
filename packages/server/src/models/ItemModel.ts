@@ -704,7 +704,12 @@ export default class ItemModel extends BaseModel<Item> {
 
 					if (existingItem) item.id = existingItem.id;
 
-					if (options.shareId) item.jop_share_id = options.shareId;
+					if (options.shareId) {
+						// Shared items are propagated to every participant, so a shared info.json (or other file) would
+						// shadow the participant's own copy. Joplin items carry their share_id in their content instead.
+						if (!isJoplinResourceBlobPath(rawItem.name)) throw new ErrorUnprocessableEntity(`Only resource blobs can be associated with a share via share_id: ${rawItem.name}`);
+						item.jop_share_id = options.shareId;
+					}
 
 					// Check if the user is allowed to create an item here - in
 					// particular it would be disabled if the user has only
