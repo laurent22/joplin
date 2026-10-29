@@ -8,7 +8,7 @@ import { shareFolderWithUser } from '../../utils/testing/shareApiUtils';
 import { resourceBlobPath } from '../../utils/joplinUtils';
 import { ErrorForbidden, ErrorPayloadTooLarge, ErrorUnprocessableEntity } from '../../utils/errors';
 import { PaginatedResults } from '../../models/utils/pagination';
-import { makeNoteSerializedBody } from '../../utils/testing/serializedItems';
+import { makeFolderSerializedBody, makeNoteSerializedBody } from '../../utils/testing/serializedItems';
 
 describe('api/items', () => {
 
@@ -70,6 +70,7 @@ describe('api/items', () => {
 
 		const newParentId = '000000000000000000000000000000F2';
 		const tempFilePath = await makeTempFileWithContent(makeNoteSerializedBody({
+			id: noteId,
 			parent_id: newParentId,
 			title: 'new title',
 		}));
@@ -316,6 +317,23 @@ describe('api/items', () => {
 		const items = await models().item().loadByNames(user1.id, ['info.json']);
 		expect(items.length).toBe(1);
 		expect(items[0].owner_id).toBe(user1.id);
+	});
+
+	test('should not save a Joplin item whose id does not match its name, or whose type changes', async () => {
+		const { session } = await createUserAndSession(1);
+		const itemId = '00000000000000000000000000000001';
+
+		await expectHttpError(
+			async () => createItem(session.id, `root:/${itemId}.md:`, makeNoteSerializedBody({ id: '00000000000000000000000000000002' })),
+			ErrorUnprocessableEntity.httpCode,
+		);
+
+		await createItem(session.id, `root:/${itemId}.md:`, makeFolderSerializedBody({ id: itemId }));
+
+		await expectHttpError(
+			async () => createItem(session.id, `root:/${itemId}.md:`, makeNoteSerializedBody({ id: itemId })),
+			ErrorUnprocessableEntity.httpCode,
+		);
 	});
 
 	test('should not upload or download items if the account is disabled', async () => {

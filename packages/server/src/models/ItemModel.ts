@@ -626,6 +626,7 @@ export default class ItemModel extends BaseModel<Item> {
 			name: string;
 			owner_id: string;
 			jop_share_id: string;
+			jop_type: ModelType;
 		}
 
 		return this.withTransaction(async () => {
@@ -677,6 +678,11 @@ export default class ItemModel extends BaseModel<Item> {
 								throw new ErrorUnprocessableEntity(`Item ${rawItem.name} cannot be saved because its ${k} contains a null byte`);
 							}
 						}
+
+						// Clients save a downloaded item under the id in its content, so an item whose content
+						// id differs from its name would overwrite another item on other share participants' devices
+						if (rawItem.name !== `${joplinItem.id}.md`) throw new ErrorUnprocessableEntity(`Item ${rawItem.name} cannot be saved because its id does not match its name: ${joplinItem.id}`);
+						if (existingItem && existingItem.jop_type && existingItem.jop_type !== joplinItem.type_) throw new ErrorUnprocessableEntity(`Item ${rawItem.name} cannot change its type`);
 
 						isNote = joplinItem.type_ === ModelType.Note;
 						resourceIds = isNote ? linkedResourceIds(joplinItem.body) : [];
