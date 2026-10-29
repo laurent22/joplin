@@ -346,7 +346,7 @@ const mapStateToProps = (state: AppState) => {
 		isSafeMode: state.settings.isSafeMode,
 		noteLockBulkChangeRunning: state.noteLockBulkChangeRunning,
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
-		syncTargetAppMinVersion: syncInfo.appMinVersion,
+		syncTargetAppMinVersion: state.mustUpgradeAppMinVersion,
 		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
 		shouldSwitchToAppleSiliconVersion: shim.isAppleSilicon() && shim.isMac() && process.arch !== 'arm64',
 	};

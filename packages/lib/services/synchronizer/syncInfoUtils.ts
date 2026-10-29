@@ -723,6 +723,6 @@ export const checkIfCanSync = (s: SyncInfo, appVersion: string) => {
 	};
 
 	if (compareVersions(appVersion, s.appMinVersion) < 0 && !isForwardCompatible()) {
-		throw new JoplinError(_('In order to synchronise, please upgrade your application to version %s+', s.appMinVersion), ErrorCode.MustUpgradeApp);
+		throw new JoplinError(_('In order to synchronise, please upgrade your application to version %s+', s.appMinVersion), ErrorCode.MustUpgradeApp, s.appMinVersion);
 	}
 };

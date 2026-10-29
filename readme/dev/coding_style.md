@@ -149,6 +149,22 @@ const GRAVITY_ACCEL = 9.8;
 const gravityAccel = 9.8;
 ```
 
+### Prefer positive names for booleans
+
+When possible, use positive names for booleans to avoid double negatives.
+
+**BAD:**
+```ts
+const isHidden = true;
+const isDisabled = true;
+```
+
+**Good:**
+```ts
+const isShown = true;
+const isEnabled = true;
+```
+
 ### Declare variables just before their usage
 
 **BAD:**

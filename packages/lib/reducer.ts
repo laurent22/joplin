@@ -208,6 +208,7 @@ export interface State extends WindowState {
 	lastDeletion: StateLastDeletion;
 	lastDeletionNotificationTime: number;
 	mustUpgradeAppMessage: string;
+	mustUpgradeAppMinVersion: string;
 	mustAuthenticate: boolean;
 	toast: Toast | null;
 	editorNoteReloadTimeRequest: number;
@@ -285,6 +286,7 @@ export const defaultState: State = {
 	},
 	lastDeletionNotificationTime: 0,
 	mustUpgradeAppMessage: '',
+	mustUpgradeAppMinVersion: '',
 	mustAuthenticate: false,
 	editorNoteReloadTimeRequest: 0,
 	allowSelectionInOtherFolders: false,
@@ -1676,6 +1678,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'MUST_UPGRADE_APP':
 			draft.mustUpgradeAppMessage = action.message;
+			draft.mustUpgradeAppMinVersion = action.appMinVersion;
 			break;
 
 		case 'MUST_AUTHENTICATE':
