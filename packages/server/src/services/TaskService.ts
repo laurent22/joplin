@@ -36,6 +36,7 @@ export const taskIdToLabel = (taskId: TaskId): string => {
 		[TaskId.DeleteOldEvents]: 'Delete old events',
 		[TaskId.DeleteExpiredAuthCodes]: 'Delete expired authentication codes',
 		[TaskId.DeleteArchivedBackups]: 'Delete archived account backups',
+		[TaskId.HandleMfaReminderEmails]: 'Process MFA reminder emails',
 	};
 
 	const s = strings[taskId];

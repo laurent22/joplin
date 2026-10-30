@@ -10,9 +10,7 @@ interface TemplateView {
 export default (view: TemplateView): EmailSubjectBody => {
 	const mfaMessage = config().MFA_ENABLED ? `
 
-Once your account is set up, we recommend enabling multi-factor authentication (MFA) from [your profile page](${markdownUtils.escapeLinkUrl(profileUrl())}).
-
-With MFA enabled, a leaked password is not enough to sign in to your account.` : '';
+Protect your account with multi-factor authentication (MFA): even if someone gets your password, they won’t be able to sign in. You can turn it on from [your profile page](${markdownUtils.escapeLinkUrl(profileUrl())}).` : '';
 
 	return {
 		subject: `Your new ${config().appName} account is almost ready to use`,

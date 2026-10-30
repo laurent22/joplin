@@ -7,7 +7,7 @@ import { mfaPromptDismissedKey } from './home';
 
 const hasMfaPrompt = async (sessionId: string) => {
 	const response: string = await execRequest(sessionId, 'GET', 'home');
-	return response.includes('Enable multi-factor authentication');
+	return response.includes('Turn on multi-factor authentication');
 };
 
 describe('index/home', () => {
