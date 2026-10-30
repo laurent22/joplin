@@ -120,6 +120,28 @@ describe('shares', () => {
 		expect(unknown).toEqual(existing);
 	});
 
+	test.each([
+		['note', { note_id: '00000000000000000000000000000001' }],
+		['notebook', { folder_id: '000000000000000000000000000000F1', type: ShareType.PublishedFolder }],
+	])('should email the owner when a %s is published', async (itemType, input) => {
+		const { session, user } = await createUserAndSession(1);
+
+		await createItemTree(user.id, '', {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+			},
+		});
+
+		const share = await postApi<Share>(session.id, 'shares', input);
+		await postApi<Share>(session.id, 'shares', input);
+
+		const emails = (await models().email().all()).filter(e => e.subject.includes('was published'));
+		expect(emails.length).toBe(1);
+		expect(emails[0].recipient_id).toBe(user.id);
+		expect(emails[0].subject).toContain(itemType);
+		expect(emails[0].body).toContain(share.id);
+	});
+
 	test('should not add recipients to a note share', async () => {
 		const { session, user } = await createUserAndSession(1);
 		const { user: user2 } = await createUserAndSession(2);

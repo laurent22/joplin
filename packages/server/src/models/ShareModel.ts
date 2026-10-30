@@ -1,14 +1,15 @@
 import { resourceBlobPath } from '../utils/joplinUtils';
-import { Change2 as Change, ChangeType, Item, Share, ShareType, ShareUserStatus, User, Uuid } from '../services/database/types';
+import { Change2 as Change, ChangeType, EmailSender, Item, Share, ShareType, ShareUserStatus, User, Uuid } from '../services/database/types';
 import { unique } from '../utils/array';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from '../utils/errors';
-import { setQueryParameters } from '../utils/urlUtils';
+import { forgotPasswordUrl, setQueryParameters } from '../utils/urlUtils';
 import BaseModel, { AclAction, DeleteOptions, LoadOptions, ValidateOptions } from './BaseModel';
 import { userIdFromUserContentUrl } from '../utils/routeUtils';
 import { getCanShareFolder } from './utils/user';
 import { isUniqueConstraintError } from '../db';
 import Logger from '@joplin/utils/Logger';
-import { PerformanceTimer } from '../utils/time';
+import { formatDateOnServer, PerformanceTimer } from '../utils/time';
+import itemPublishedTemplate from '../views/emails/itemPublishedTemplate';
 
 const logger = Logger.create('ShareModel');
 
@@ -664,7 +665,9 @@ export default class ShareModel extends BaseModel<Share> {
 		};
 
 		await this.checkIfAllowed(owner, AclAction.Create, shareToSave);
-		return this.save(shareToSave);
+		const share = await this.save(shareToSave);
+		await this.sendPublishedNotification(owner, share, 'notebook');
+		return share;
 	}
 
 	public async shareNote(owner: User, noteId: string, masterKeyId: string, recursive: boolean): Promise<Share> {
@@ -688,7 +691,26 @@ export default class ShareModel extends BaseModel<Share> {
 
 		await this.checkIfAllowed(owner, AclAction.Create, shareToSave);
 
-		return this.save(shareToSave);
+		const share = await this.save(shareToSave);
+		await this.sendPublishedNotification(owner, share, 'note');
+		return share;
+	}
+
+	// Anyone holding a session can publish the account's notes, and the owner's apps then upload them unencrypted, so
+	// the owner is told about every new publication
+	private async sendPublishedNotification(owner: User, share: Share, itemType: 'note' | 'notebook') {
+		await this.models().email().push({
+			...itemPublishedTemplate({
+				itemType,
+				publishedUrl: this.shareUrl(owner.id, share.id),
+				publishTime: formatDateOnServer(Date.now()),
+				changePasswordUrl: forgotPasswordUrl(),
+			}),
+			recipient_email: owner.email,
+			recipient_name: owner.full_name || '',
+			recipient_id: owner.id,
+			sender_id: EmailSender.NoReply,
+		});
 	}
 
 	public async delete(id: string | string[], options: DeleteOptions = {}): Promise<void> {
