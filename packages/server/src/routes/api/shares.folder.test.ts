@@ -4,7 +4,7 @@ import { postApi, patchApi, getApi, deleteApi } from '../../utils/testing/apiUti
 import { PaginatedDeltaChanges } from '../../models/ChangeModel/ChangeModel';
 import { inviteUserToShare, shareFolderWithUser } from '../../utils/testing/shareApiUtils';
 import { msleep } from '../../utils/time';
-import { ErrorForbidden, ErrorNotFound } from '../../utils/errors';
+import { ErrorCode, ErrorForbidden, ErrorNotFound } from '../../utils/errors';
 import { resourceBlobPath, serializeJoplinItem, unserializeJoplinItem } from '../../utils/joplinUtils';
 import { PaginatedItems } from '../../models/ItemModel';
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
@@ -297,7 +297,7 @@ describe('shares.folder', () => {
 		const { session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
 
-		const { item: rootFolderItem } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F2', [
+		const { item: rootFolderItem, share } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F2', [
 			{
 				id: '000000000000000000000000000000F2',
 				children: [
@@ -311,10 +311,38 @@ describe('shares.folder', () => {
 		await updateFolder(session2.id, {
 			id: '000000000000000000000000000000F2',
 			title: 'update from session 2',
+			share_id: share.id,
 		});
 
 		const rootFolder = await models().item().loadAsJoplinItem<FolderEntity>(rootFolderItem.id);
 		expect(rootFolder.title).toBe('update from session 2');
+	});
+
+	test('should not let a recipient take ownership of the root folder by uploading it without a share_id', async () => {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+
+		const { share, item: rootFolderItem } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [],
+			},
+		]);
+
+		// Simulates a recipient client that already had its own unshared copy of the folder, with the same ID, from a
+		// previous sync target
+		await expectHttpError(async () => updateFolder(session2.id, {
+			id: '000000000000000000000000000000F1',
+			title: 'stale copy from recipient',
+			share_id: '',
+		}), ErrorForbidden.httpCode, ErrorCode.IsReadOnly);
+
+		await models().share().updateSharedItems3();
+
+		const rootFolder = await models().item().load(rootFolderItem.id);
+		expect(rootFolder.owner_id).toBe(user1.id);
+		expect(rootFolder.jop_share_id).toBe(share.id);
+		expect(await models().userItem().byUserAndItemId(user1.id, rootFolderItem.id)).toBeTruthy();
 	});
 
 	test('should update share status when note parent changes', async () => {

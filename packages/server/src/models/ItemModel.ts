@@ -141,6 +141,15 @@ export default class ItemModel extends BaseModel<Item> {
 		}
 	}
 
+	// A recipient uploading a stale copy of a share's root folder (e.g. from a previous sync target), or moving it to
+	// another share, would otherwise take it away from the owner. `IsReadOnly` makes the client revert to the server version.
+	private async checkCanChangeRootFolderShare(user: User, itemId: Uuid, previousShareId: Uuid) {
+		if (!previousShareId) return;
+		const share = await this.models().share().load(previousShareId, { fields: ['owner_id', 'item_id'] });
+		if (!share || share.item_id !== itemId || share.owner_id === user.id) return;
+		throw new ErrorForbidden('Only the share owner can change the share of its root folder', { code: ErrorCode.IsReadOnly });
+	}
+
 	public fromApiInput(item: Item): Item {
 		const output: Item = {};
 
@@ -738,7 +747,10 @@ export default class ItemModel extends BaseModel<Item> {
 						await this.checkIfAllowed(user, AclAction.Create, itemToCheck);
 					} else {
 						const newShareId = item.jop_share_id || '';
-						if (previousShareId !== newShareId) await this.checkIfAllowed(user, AclAction.Update, itemToCheck);
+						if (previousShareId !== newShareId) {
+							await this.checkIfAllowed(user, AclAction.Update, itemToCheck);
+							await this.checkCanChangeRootFolderShare(user, existingItem.id, previousShareId);
+						}
 					}
 
 					await this.models().user().checkMaxItemSizeLimit(user, rawItem.body, item, joplinItem);
