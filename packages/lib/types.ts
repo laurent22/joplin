@@ -28,6 +28,8 @@ export type FetchBlobOptions = {
 	ignoreTlsErrors?: boolean;
 	headers?: Record<string, string>;
 	downloadController?: DownloadHandler;
+	// Only allows connections to public internet addresses, on every redirect too. Only supported on Node.
+	publicNetworkOnly?: boolean;
 	// Defaults to true, only respected on mobile:
 	overwrite?: boolean;
 };

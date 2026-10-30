@@ -2104,6 +2104,8 @@ packages/lib/utils/joplinCloud/types.js
 packages/lib/utils/markupLanguageUtils.js
 packages/lib/utils/prefixWithHttps.js
 packages/lib/utils/processStartFlags.js
+packages/lib/utils/publicNetworkOnly.test.js
+packages/lib/utils/publicNetworkOnly.js
 packages/lib/utils/replaceUnsupportedCharacters.test.js
 packages/lib/utils/replaceUnsupportedCharacters.js
 packages/lib/utils/resolvePathWithinDir.test.js
