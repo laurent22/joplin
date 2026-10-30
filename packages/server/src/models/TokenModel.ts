@@ -12,6 +12,7 @@ export enum TokenPurpose {
 	PasswordReset = 'password_reset',
 	AccountConfirmation = 'account_confirmation',
 	TeamInvitation = 'team_invitation',
+	EmailChange = 'email_change',
 }
 
 export default class TokenModel extends BaseModel<Token> {
@@ -80,6 +81,10 @@ export default class TokenModel extends BaseModel<Token> {
 	public async deleteByValue(userId: Uuid, value: string, purpose: TokenPurpose) {
 		const token = await this.byUser(userId, value, purpose);
 		if (token) await this.delete(token.id);
+	}
+
+	public async deleteByUserAndPurpose(userId: Uuid, purpose: TokenPurpose) {
+		await this.db(this.tableName).where('user_id', '=', userId).where('purpose', '=', purpose).delete();
 	}
 
 	public async allByUserId(userId: Uuid): Promise<Token[]> {

@@ -501,15 +501,23 @@ export default class UserModel extends BaseModel<User> {
 	}
 
 	public async processEmailConfirmation(userId: Uuid, token: string, beforeChangingEmailHandler: (newEmail: string)=> Promise<void>) {
-		await this.models().token().checkToken(userId, token, TokenPurpose.AccountConfirmation);
-		const user = await this.models().user().load(userId);
-		if (!user) throw new ErrorNotFound('No such user');
+		// Only the token sent to the new address can complete an email change. An account confirmation token can be
+		// sent to the account's current address, so it only confirms that address.
+		if (await this.models().token().isValid(userId, token, TokenPurpose.EmailChange)) {
+			const user = await this.models().user().load(userId);
+			if (!user) throw new ErrorNotFound('No such user');
 
-		const newEmail = await this.models().keyValue().value<string>(`newEmail::${userId}`);
-		if (newEmail) {
+			const newEmail = await this.models().keyValue().value<string>(`newEmail::${userId}`);
+			if (!newEmail) throw new ErrorNotFound('No pending email change');
+
 			await beforeChangingEmailHandler(newEmail);
 			await this.completeEmailChange(user);
+			await this.models().token().deleteByValue(userId, token, TokenPurpose.EmailChange);
 		} else {
+			await this.models().token().checkToken(userId, token, TokenPurpose.AccountConfirmation);
+			const user = await this.models().user().load(userId);
+			if (!user) throw new ErrorNotFound('No such user');
+
 			await this.confirmEmail(user);
 		}
 	}
@@ -569,7 +577,9 @@ export default class UserModel extends BaseModel<User> {
 	}
 
 	public async sendChangeEmailConfirmationEmail(recipientEmail: string, user: User) {
-		const validationToken = await this.models().token().generate(user.id, TokenPurpose.AccountConfirmation);
+		// Tokens sent for an earlier change went to a different address, so they must not complete this one
+		await this.models().token().deleteByUserAndPurpose(user.id, TokenPurpose.EmailChange);
+		const validationToken = await this.models().token().generate(user.id, TokenPurpose.EmailChange);
 		const url = encodeURI(confirmUrl(user.id, validationToken));
 
 		await this.models().email().push({

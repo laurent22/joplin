@@ -276,7 +276,8 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 				await models.application().deleteByUserId(userToSave.id);
 			}
 		} else if (fields.send_account_confirmation_email) {
-			await models.user().sendAccountConfirmationEmail(user);
+			// Sent to the stored address, never to the one in the form, as the token confirms whichever address receives it
+			if (!owner.email_confirmed) await models.user().sendAccountConfirmationEmail(owner);
 		} else if (fields.stop_impersonate_button) {
 			const returnUrl = await stopImpersonating(ctx);
 			return redirect(ctx, returnUrl ? returnUrl : config().baseUrl);

@@ -33,7 +33,7 @@ async function postUser(sessionId: string, email: string, password: string = nul
 	return context.response.body;
 }
 
-async function patchUser(sessionId: string, user: Partial<User> & Record<string, unknown>, url = ''): Promise<User> {
+async function patchUser(sessionId: string, user: Partial<User> & Record<string, unknown>, url = '', button = 'post_button'): Promise<User> {
 	const context = await koaAppContext({
 		sessionId: sessionId,
 		request: {
@@ -41,7 +41,7 @@ async function patchUser(sessionId: string, user: Partial<User> & Record<string,
 			url: url ? url : '/users',
 			body: {
 				...user,
-				post_button: true,
+				[button]: true,
 			},
 		},
 	});
@@ -267,7 +267,7 @@ describe('index/users', () => {
 		expect((await models().user().load(user.id)).email).toBe('user1@localhost');
 
 		// Grab the confirmation URL
-		const email = (await models().email().all()).find(e => e.recipient_id === user.id);
+		const email = (await models().email().all()).find(e => e.recipient_email === 'changed@example.com');
 		const [, path, , token] = email.body.match(/\/(users\/.*)(\?token=)(.{32})/);
 
 		await execRequest('', 'GET', path, null, { query: { token } });
@@ -280,6 +280,33 @@ describe('index/users', () => {
 		expect(keys[0].value).toBe('user1@localhost'); // The old email has been saved
 
 		await expectThrow(async () => execRequest('', 'GET', path, null, { query: { token } }));
+	});
+
+	test('should only complete an email change with the token sent to the new address', async () => {
+		const { user, session } = await createUserAndSession();
+		await models().user().save({ id: user.id, email_confirmed: 0 });
+
+		const confirmationLink = async (recipientEmail: string) => {
+			const email = (await models().email().all()).find(e => e.recipient_email === recipientEmail && e.body.includes('?token='));
+			const [, path, , token] = email.body.match(/\/(users\/.*)(\?token=)(.{32})/);
+			return { path, token };
+		};
+
+		await patchUser(session.id, { id: user.id, email: 'attacker@example.com' }, '/users/me');
+		const earlierChange = await confirmationLink('attacker@example.com');
+		await patchUser(session.id, { id: user.id, email: 'victim@example.com' }, '/users/me');
+
+		await patchUser(session.id, { id: user.id, email: 'attacker-inbox@example.com' }, '/users/me', 'send_account_confirmation_email');
+		expect((await models().email().all()).find(e => e.recipient_email === 'attacker-inbox@example.com')).toBeFalsy();
+
+		await expectThrow(async () => execRequest('', 'GET', earlierChange.path, null, { query: { token: earlierChange.token } }));
+
+		const accountConfirmation = await confirmationLink('user1@localhost');
+		await execRequest('', 'GET', accountConfirmation.path, null, { query: { token: accountConfirmation.token } });
+
+		const reloadedUser = await models().user().load(user.id);
+		expect(reloadedUser.email).toBe('user1@localhost');
+		expect(reloadedUser.email_confirmed).toBe(1);
 	});
 
 	test('should not change non-whitelisted properties', async () => {
