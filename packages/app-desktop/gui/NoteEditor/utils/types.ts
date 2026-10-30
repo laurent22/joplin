@@ -75,6 +75,7 @@ export interface NoteEditorProps {
 	showNoteLinkIcon: boolean;
 	whiteboardForceMarkdown: Record<string, boolean>;
 	noteLockSessionUnlocked: boolean;
+	noteLockEnabled: boolean;
 	hasNoteLockKey: boolean;
 	noteLockMigrationRunning: boolean;
 	editorNoteReloadTimeRequest: number;

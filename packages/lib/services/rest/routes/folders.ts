@@ -2,11 +2,12 @@
 import { Request, RequestMethod } from '../Api';
 import defaultAction from '../utils/defaultAction';
 import paginatedResults from '../utils/paginatedResults';
-import BaseModel from '../../../BaseModel';
+import BaseModel, { ModelType } from '../../../BaseModel';
 import requestFields from '../utils/requestFields';
 import Folder from '../../../models/Folder';
 import { allForDisplay } from '../../../folders-screen-utils';
 import isNoteLockEnabled from '../../noteLock/isNoteLockEnabled';
+import lockedNoteBodies from '../utils/lockedNoteBodies';
 const { ErrorNotFound } = require('../utils/errors');
 
 export default async function(request: Request, id: string = null, link: string = null) {
@@ -29,9 +30,10 @@ export default async function(request: Request, id: string = null, link: string 
 		if (link && link === 'notes') {
 			const folder = await Folder.load(id);
 			if (!folder) throw new ErrorNotFound();
-			let sql = includeDeleted ? 'parent_id = ?' : 'parent_id = ? AND deleted_time = 0';
-			if (isNoteLockEnabled()) sql += ' AND is_locked = 0';
-			return paginatedResults(BaseModel.TYPE_NOTE, request, { sql, params: [folder.id] });
+			const sql = includeDeleted ? 'parent_id = ?' : 'parent_id = ? AND deleted_time = 0';
+			const lockedBodies = isNoteLockEnabled() ? lockedNoteBodies(request, ModelType.Note) : null;
+			const page = await paginatedResults(BaseModel.TYPE_NOTE, lockedBodies?.request ?? request, { sql, params: [folder.id] });
+			return lockedBodies ? lockedBodies.replacePage(page) : page;
 		} else if (link) {
 			throw new ErrorNotFound();
 		}

@@ -35,6 +35,7 @@ export interface HookDependencies {
 	onAfterLoad(event: OnLoadEvent): void;
 	builtInEditorVisible: boolean;
 	noteLockSessionUnlocked: boolean;
+	noteLockEnabled?: boolean;
 	onDecryptFailedChange(value: boolean): void;
 	onReloadInProgressChange?(value: boolean): void;
 	editorNoteReloadTimeRequest?: number;
@@ -97,7 +98,7 @@ const loadNoteForForm = async (noteId: string): Promise<{ note: NoteEntity|null;
 };
 
 type InitNoteStateCallback = (note: NoteEntity, isNew: boolean, force?: boolean)=> Promise<FormNote>;
-const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: string, noteId: string, initNoteState: InitNoteStateCallback, clearFormNote: ()=> void, builtInEditorVisible: boolean, noteLockSessionUnlocked: boolean, setDecryptFailed: (value: boolean)=> void, setLoadBlocked: (value: boolean)=> void, onReloadInProgressChange: (value: boolean)=> void, editorNoteReloadTimeRequest: number) => {
+const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: string, noteId: string, initNoteState: InitNoteStateCallback, clearFormNote: ()=> void, builtInEditorVisible: boolean, noteLockSessionUnlocked: boolean, noteLockEnabled: boolean, setDecryptFailed: (value: boolean)=> void, setLoadBlocked: (value: boolean)=> void, onReloadInProgressChange: (value: boolean)=> void, editorNoteReloadTimeRequest: number) => {
 	// Increasing the value of this counter cancels any ongoing note refreshes and starts
 	// a new refresh.
 	const [formNoteRefreshRequest, setFormNoteRefreshRequest] = useState({ counter: 0, force: false });
@@ -105,6 +106,7 @@ const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: 
 	const prevBuiltInEditorVisible = usePrevious<boolean>(builtInEditorVisible);
 	// Seeded because usePrevious defaults to null, which would read as a session change on mount.
 	const prevNoteLockSessionUnlocked = usePrevious<boolean>(noteLockSessionUnlocked, noteLockSessionUnlocked);
+	const prevNoteLockEnabled = usePrevious<boolean>(noteLockEnabled, noteLockEnabled);
 
 	useQueuedAsyncEffect(async (event) => {
 		if (event.cancelled) return;
@@ -187,6 +189,15 @@ const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: 
 		}
 	}, [noteLockSessionUnlocked, prevNoteLockSessionUnlocked, noteId, formNoteRef, refreshFormNote]);
 
+	// Turning note lock off or on changes how a locked note loads, so reload it rather than keep a
+	// plaintext body that would then be saved without encryption, or a blank editor where the
+	// unlock panel was.
+	useEffect(() => {
+		if (prevNoteLockEnabled !== noteLockEnabled && (formNoteRef.current.is_locked || formNoteRef.current.id !== noteId)) {
+			refreshFormNote();
+		}
+	}, [noteLockEnabled, prevNoteLockEnabled, noteId, formNoteRef, refreshFormNote]);
+
 
 	useEffect(() => {
 		if (!noteId) return ()=>{};
@@ -216,7 +227,7 @@ const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: 
 
 export default function useFormNote(dependencies: HookDependencies) {
 	const {
-		noteId, isProvisional, titleInputRef, editorRef, onBeforeLoad, onAfterLoad, builtInEditorVisible, editorId, noteLockSessionUnlocked, onDecryptFailedChange,
+		noteId, isProvisional, titleInputRef, editorRef, onBeforeLoad, onAfterLoad, builtInEditorVisible, editorId, noteLockSessionUnlocked, noteLockEnabled, onDecryptFailedChange,
 	} = dependencies;
 	const onReloadInProgressChange = dependencies.onReloadInProgressChange ?? (() => {});
 	const editorNoteReloadTimeRequest = dependencies.editorNoteReloadTimeRequest ?? 0;
@@ -307,7 +318,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 		setFormNote(formNoteRef.current);
 	}, []);
 
-	useRefreshFormNoteOnChange(formNoteRef, editorId, noteId, initNoteState, clearFormNote, builtInEditorVisible, noteLockSessionUnlocked, setDecryptFailed, setLoadBlocked, onReloadInProgressChange, editorNoteReloadTimeRequest);
+	useRefreshFormNoteOnChange(formNoteRef, editorId, noteId, initNoteState, clearFormNote, builtInEditorVisible, noteLockSessionUnlocked, noteLockEnabled, setDecryptFailed, setLoadBlocked, onReloadInProgressChange, editorNoteReloadTimeRequest);
 
 	useEffect(() => {
 		if (!noteId) {

@@ -26,9 +26,9 @@ const { mimeTypeFromHeaders } = require('../../../net-utils');
 import { fileExtension, safeFileExtension, safeFilename, filename } from '../../../path-utils';
 import { MarkupToHtml } from '@joplin/renderer';
 const { ErrorNotFound, ErrorForbidden } = require('../utils/errors');
-import requestFields from '../utils/requestFields';
 import isNoteLockEnabled from '../../noteLock/isNoteLockEnabled';
 import NoteLockNote from '../../noteLock/NoteLockNote';
+import lockedNoteBodies from '../utils/lockedNoteBodies';
 import { fileUriToPath } from '@joplin/utils/url';
 import { NoteEntity, ResourceEntity } from '../../database/types';
 import { DownloadController } from '../../../downloadController';
@@ -490,20 +490,13 @@ export default async function(request: Request, id: string = null, link: string 
 			throw new ErrorNotFound();
 		}
 
-		if (isNoteLockEnabled() && id) {
-			// SQLite column names are case-insensitive.
-			const fields = requestFields(request, BaseModel.TYPE_NOTE).map((f: string) => f.toLowerCase());
-			if (fields.includes('body') || fields.includes('*')) {
-				const note = await Note.load(id, { fields: ['is_locked'] });
-				if (NoteLockNote.isLocked(note)) throw new ErrorForbidden('The body of a locked note cannot be read through the API');
-			}
-		}
-
 		const sql: string[] = [];
 		if (request.query.include_deleted !== '1') sql.push('deleted_time = 0');
 		if (request.query.include_conflicts !== '1') sql.push('is_conflict = 0');
-		if (isNoteLockEnabled()) sql.push('is_locked = 0');
-		return defaultAction(BaseModel.TYPE_NOTE, request, id, link, null, { sql: sql.join(' AND ') });
+		const lockedBodies = isNoteLockEnabled() ? lockedNoteBodies(request, ModelType.Note) : null;
+		const result = await defaultAction(BaseModel.TYPE_NOTE, lockedBodies?.request ?? request, id, link, null, { sql: sql.join(' AND ') });
+		if (!lockedBodies) return result;
+		return id ? lockedBodies.replace(result) : lockedBodies.replacePage(result);
 	}
 
 	if (request.method === RequestMethod.POST) {
