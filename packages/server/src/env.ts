@@ -16,6 +16,7 @@ const defaultEnvValues: EnvVariables = {
 
 	APP_NAME: 'Joplin Server',
 	APP_PORT: 22300,
+	APP_SOCKET: '',
 	SIGNUP_ENABLED: false,
 	TERMS_ENABLED: false,
 	ACCOUNT_TYPES_ENABLED: false,
@@ -199,6 +200,7 @@ const defaultEnvValues: EnvVariables = {
 export interface EnvVariables {
 	APP_NAME: string;
 	APP_PORT: number;
+	APP_SOCKET: string;
 	SIGNUP_ENABLED: boolean;
 	TERMS_ENABLED: boolean;
 	ACCOUNT_TYPES_ENABLED: boolean;

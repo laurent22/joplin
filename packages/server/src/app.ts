@@ -385,7 +385,7 @@ async function main() {
 
 		appLogger().info(`Call this for testing: \`curl ${config().apiBaseUrl}/api/ping\``);
 
-		app.listen(config().port);
+		app.listen(config().APP_SOCKET || config().port);
 	}
 
 	if (runCommandAndExitApp) process.exit(0);
