@@ -43,6 +43,7 @@ import ctrlClickLinksExtension from './extensions/links/ctrlClickLinksExtension'
 import { RenderedContentContext } from './extensions/rendering/types';
 import ctrlClickCheckboxExtension from './extensions/ctrlClickCheckboxExtension';
 import editorSettingsExtension, { setEditorSettingsEffect } from './extensions/editorSettingsExtension';
+import spellCheckRefreshExtension from './extensions/spellCheckRefreshExtension';
 
 // Newer versions of CodeMirror by default use Chrome's EditContext API.
 // While this might be stable enough for desktop use, it causes significant
@@ -317,6 +318,7 @@ const createEditor = (
 				overwriteModeExtension,
 				ctrlKeyStateClassExtension,
 				editorSettingsExtension(settings),
+				spellCheckRefreshExtension,
 
 				selectedNoteIdExtension,
 

@@ -37,6 +37,8 @@ const useSyncEditorValue = ({ content, visiblePanes, onMessage, editorRef, noteI
 				// Only reset history when switching notes to allow, e.g., undoing changes made from another
 				// window.
 				editorRef.current?.clearHistory();
+
+				editorRef.current?.refreshSpellCheck?.();
 			}
 			lastNoteIdRef.current = noteId;
 

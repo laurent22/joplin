@@ -17,6 +17,7 @@ import { resetImageResourceEffect } from './extensions/rendering/renderBlockImag
 import Logger from '@joplin/utils/Logger';
 import { searchChangeSourceEffect } from './extensions/searchExtension';
 import cutOrCopyText, { ClipboardAction } from './editorCommands/cutOrCopyText';
+import { refreshSpellCheck } from './extensions/spellCheckRefreshExtension';
 
 const logger = Logger.create('CodeMirrorControl');
 
@@ -181,6 +182,10 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 
 	public updateSettings(newSettings: EditorSettings) {
 		this._callbacks.onSettingsChange(newSettings);
+	}
+
+	public refreshSpellCheck() {
+		refreshSpellCheck(this.editor);
 	}
 
 	public getSearchState(): SearchState {
