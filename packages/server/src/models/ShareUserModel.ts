@@ -1,5 +1,5 @@
 import { Item, Share, ShareType, ShareUser, ShareUserStatus, User, Uuid } from '../services/database/types';
-import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from '../utils/errors';
+import { ErrorBadRequest, ErrorConflict, ErrorForbidden, ErrorNotFound } from '../utils/errors';
 import BaseModel, { AclAction, DeleteOptions } from './BaseModel';
 import { getCanReceiveFolder } from './utils/user';
 
@@ -132,6 +132,11 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 
 		return this.withTransaction<Item>(async () => {
 			if (status === ShareUserStatus.Accepted) {
+				// The shared folder's items would otherwise be added under the user's own folder of the same name
+				const rootItem = await this.models().item().load(share.item_id, { fields: ['id', 'name'] });
+				const sameNameItems = rootItem ? await this.models().item().loadByNames(userId, [rootItem.name], { fields: ['id'] }) : [];
+				if (sameNameItems.some(i => i.id !== rootItem.id)) throw new ErrorConflict('This notebook cannot be accepted because you already have a notebook with the same ID. This can happen if this notebook was previously synchronised with your account.');
+
 				await this.models().share().createSharedFolderUserItems(shareId, userId);
 			}
 

@@ -623,7 +623,7 @@ export default class ShareModel extends BaseModel<Share> {
 	// however can be called after a user accept a share, or to correct share
 	// errors, but re-assigning all items to a user.
 	public async createSharedFolderUserItems(shareId: Uuid, userId: Uuid) {
-		const query = this.models().item().byShareIdQuery(shareId, { fields: ['id', 'name'] });
+		const query = this.models().item().byShareIdQuery(shareId, { fields: ['id', 'name', 'owner_id'] });
 		await this.models().userItem().addMulti(
 			// Don't throw if a (user_id, item_id) pair already exists to avoid race conditions.
 			userId, query, { ignoreAlreadyExists: true },

@@ -1,10 +1,10 @@
 import { ChangeType, Session, Share, ShareType, ShareUser, ShareUserStatus } from '../../services/database/types';
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createNote, createFolder, updateItem, createItemTree, updateNote, expectHttpError, createResource, expectNotThrow, updateFolder, db } from '../../utils/testing/testUtils';
-import { postApi, patchApi, getApi, deleteApi } from '../../utils/testing/apiUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createNote, createFolder, updateItem, createItemTree, updateNote, expectHttpError, createResource, expectNotThrow, updateFolder, db, createItem } from '../../utils/testing/testUtils';
+import { postApi, patchApi, getApi, deleteApi, putApi } from '../../utils/testing/apiUtils';
 import { PaginatedDeltaChanges } from '../../models/ChangeModel/ChangeModel';
 import { inviteUserToShare, shareFolderWithUser } from '../../utils/testing/shareApiUtils';
 import { msleep } from '../../utils/time';
-import { ErrorCode, ErrorForbidden, ErrorNotFound } from '../../utils/errors';
+import { ErrorCode, ErrorConflict, ErrorForbidden, ErrorNotFound } from '../../utils/errors';
 import { resourceBlobPath, serializeJoplinItem, unserializeJoplinItem } from '../../utils/joplinUtils';
 import { PaginatedItems } from '../../models/ItemModel';
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
@@ -343,6 +343,56 @@ describe('shares.folder', () => {
 		expect(rootFolder.owner_id).toBe(user1.id);
 		expect(rootFolder.jop_share_id).toBe(share.id);
 		expect(await models().userItem().byUserAndItemId(user1.id, rootFolderItem.id)).toBeTruthy();
+	});
+
+	test('should not accept a share whose root folder has the same name as one of the recipient items', async () => {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+
+		await createFolder(session1.id, { id: '000000000000000000000000000000F1', title: 'private folder' });
+
+		const { shareUser } = await shareFolderWithUser(session2.id, session1.id, '000000000000000000000000000000F1', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [{ id: '00000000000000000000000000000001' }],
+			},
+		], false);
+
+		await expectHttpError(async () => patchApi(session1.id, `share_users/${shareUser.id}`, { status: ShareUserStatus.Accepted }), ErrorConflict.httpCode);
+
+		const items = await models().item().loadByNames(user1.id, ['000000000000000000000000000000F1.md', '00000000000000000000000000000001.md']);
+		expect(items.map(i => i.owner_id)).toEqual([user1.id]);
+	});
+
+	test.each([
+		{
+			name: '00000000000000000000000000000001.md',
+			recipientContent: makeNoteSerializedBody({ id: '00000000000000000000000000000001', parent_id: '000000000000000000000000000000F2' }),
+			upload: (sessionId: string, shareId: string) => createNote(sessionId, { id: '00000000000000000000000000000001', parent_id: '000000000000000000000000000000F1', share_id: shareId }),
+		},
+		{
+			name: '.resource/000000000000000000000000000000E1',
+			recipientContent: 'private attachment',
+			upload: (sessionId: string, shareId: string) => putApi(sessionId, 'items/root:/.resource/000000000000000000000000000000E1:/content', {}, { query: { share_id: shareId } }),
+		},
+	])('should not add a shared item with the same name as one of the recipient items: $name', async ({ name, recipientContent, upload }) => {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+
+		const { share } = await shareFolderWithUser(session2.id, session1.id, '000000000000000000000000000000F1', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [],
+			},
+		]);
+
+		await createItem(session1.id, `root:/${name}:`, recipientContent);
+		await upload(session2.id, share.id);
+		await models().share().updateSharedItems3();
+
+		const items = await models().item().loadByNames(user1.id, [name]);
+		expect(items.length).toBe(1);
+		expect(items[0].owner_id).toBe(user1.id);
 	});
 
 	test('should update share status when note parent changes', async () => {
