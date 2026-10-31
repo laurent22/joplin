@@ -256,12 +256,18 @@ describe('index/users', () => {
 		expect(notification.key).toBe(NotificationKey.EmailConfirmed);
 	});
 
-	test('should allow changing an email', async () => {
-		const { user, session } = await createUserAndSession();
+	test('should allow changing an email, together with the password', async () => {
+		const { user, session, password } = await createUserAndSession();
+		const newPassword = uuidgen();
+
+		await expectHttpError(async () => patchUser(session.id, { id: user.id, email: 'changed@example.com' }, '/users/me'), ErrorUnprocessableEntity.httpCode);
 
 		await patchUser(session.id, {
 			id: user.id,
 			email: 'changed@example.com',
+			password: newPassword,
+			password2: newPassword,
+			current_password: password,
 		}, '/users/me');
 
 		// It's not immediately changed
@@ -284,7 +290,7 @@ describe('index/users', () => {
 	});
 
 	test('should only complete an email change with the token sent to the new address', async () => {
-		const { user, session } = await createUserAndSession();
+		const { user, session, password } = await createUserAndSession();
 		await models().user().save({ id: user.id, email_confirmed: 0 });
 
 		const confirmationLink = async (recipientEmail: string) => {
@@ -293,9 +299,9 @@ describe('index/users', () => {
 			return { path, token };
 		};
 
-		await patchUser(session.id, { id: user.id, email: 'attacker@example.com' }, '/users/me');
+		await patchUser(session.id, { id: user.id, email: 'attacker@example.com', current_password: password }, '/users/me');
 		const earlierChange = await confirmationLink('attacker@example.com');
-		await patchUser(session.id, { id: user.id, email: 'victim@example.com' }, '/users/me');
+		await patchUser(session.id, { id: user.id, email: 'victim@example.com', current_password: password }, '/users/me');
 
 		await patchUser(session.id, { id: user.id, email: 'attacker-inbox@example.com' }, '/users/me', 'send_account_confirmation_email');
 		expect((await models().email().all()).find(e => e.recipient_email === 'attacker-inbox@example.com')).toBeFalsy();

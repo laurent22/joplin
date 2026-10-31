@@ -604,6 +604,8 @@ describe('UserModel', () => {
 
 	test('should cancel pending email changes and outstanding tokens when the password is reset', async () => {
 		const user = await models().user().save({ email: 'test@example.com', password: '111111' });
+		const welcomeEmail = (await models().email().all()).find(e => e.recipient_email === 'test@example.com');
+		const welcomeToken = welcomeEmail.body.match(/\?token=(.{32})/)[1];
 
 		await models().user().initiateEmailChange(user.id, 'attacker@example.com');
 		const changeEmail = (await models().email().all()).find(e => e.recipient_email === 'attacker@example.com');
@@ -617,6 +619,7 @@ describe('UserModel', () => {
 		expect((await models().user().load(user.id)).email).toBe('test@example.com');
 		expect(await models().keyValue().value(`newEmail::${user.id}`)).toBeFalsy();
 		expect(await models().token().isValid(user.id, otherResetToken, TokenPurpose.PasswordReset)).toBe(false);
+		expect(await models().token().isValid(user.id, welcomeToken, TokenPurpose.AccountConfirmation)).toBe(true);
 	});
 
 	test('should not log in an user using a email/password combo when the local auth is disabled', async () => {

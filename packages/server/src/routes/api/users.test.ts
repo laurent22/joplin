@@ -128,11 +128,14 @@ describe('api/users', () => {
 	});
 
 	test('should not change the email of a non-admin until it is confirmed', async () => {
-		const { session, user } = await createUserAndSession(1, false);
+		const { session, user, password } = await createUserAndSession(1, false);
+
+		await expectHttpError(async () => patchApi(session.id, `users/${user.id}`, { email: 'new-email@example.com' }), ErrorUnprocessableEntity.httpCode);
 
 		await patchApi(session.id, `users/${user.id}`, {
 			email: 'new-email@example.com',
 			full_name: 'New Name',
+			current_password: password,
 		});
 
 		// The address is only stored as pending, and the other properties are

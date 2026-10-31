@@ -80,18 +80,18 @@ router.patch('api/users/:id', async (path: SubPath, ctx: AppContext) => {
 	};
 	await ctx.joplin.models.user().checkIfAllowed(ctx.joplin.owner, AclAction.Update, postedUser);
 
-	if (!ctx.joplin.owner.is_admin && postedUser.password) await ctx.joplin.models.user().checkCurrentPassword(user.id, fields.current_password);
-
 	// A non-admin changing their own email must confirm it from the new
 	// address, as they would from the profile page. Otherwise the account
 	// could be moved to an attacker-controlled address with no trace and no
 	// notice to the original one.
-	if (!ctx.joplin.owner.is_admin && postedUser.email && postedUser.email !== user.email) {
-		await ctx.joplin.models.user().initiateEmailChange(user.id, postedUser.email);
-		delete postedUser.email;
-	}
+	const newEmail = !ctx.joplin.owner.is_admin && postedUser.email && postedUser.email !== user.email ? postedUser.email : '';
+	if (!ctx.joplin.owner.is_admin && (postedUser.password || newEmail)) await ctx.joplin.models.user().checkCurrentPassword(user.id, fields.current_password, ctx.joplin.services);
 
+	if (newEmail) delete postedUser.email;
 	await ctx.joplin.models.user().save({ id: user.id, ...postedUser });
+
+	// After saving, since a password change cancels any pending email change
+	if (newEmail) await ctx.joplin.models.user().initiateEmailChange(user.id, newEmail);
 
 	// As on the profile page, other sessions and applications must not survive a password change
 	if (postedUser.password) {

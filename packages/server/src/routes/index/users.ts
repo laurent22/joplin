@@ -262,14 +262,14 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 		if (fields.post_button) {
 			const userToSave: User = models.user().fromApiInput(user);
 			await models.user().checkIfAllowed(owner, AclAction.Update, userToSave);
-			if (userToSave.password) await models.user().checkCurrentPassword(owner.id, fields.current_password);
+			const newEmail = userToSave.email && userToSave.email !== owner.email ? userToSave.email : '';
+			if (userToSave.password || newEmail) await models.user().checkCurrentPassword(owner.id, fields.current_password, ctx.joplin.services);
 
-			if (userToSave.email && userToSave.email !== owner.email) {
-				await models.user().initiateEmailChange(owner.id, userToSave.email);
-				delete userToSave.email;
-			}
-
+			if (newEmail) delete userToSave.email;
 			await models.user().save(userToSave, { isNew: false });
+
+			// After saving, since a password change cancels any pending email change
+			if (newEmail) await models.user().initiateEmailChange(owner.id, newEmail);
 
 			// When changing the password, we also clear all session IDs for
 			// that user, except the current one (otherwise they would be

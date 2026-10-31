@@ -93,7 +93,7 @@ router.post('mfa/:id', async (path: SubPath, ctx: AppContext) => {
 	const fields = await bodyFields<Enable2FaFormData>(ctx.req);
 
 	try {
-		await ctx.joplin.models.user().checkCurrentPassword(owner.id, fields.password);
+		await ctx.joplin.models.user().checkCurrentPassword(owner.id, fields.password, ctx.joplin.services);
 	} catch (error) {
 		return internalRedirect(path, ctx, router, 'mfa/:id', fields, error);
 	}

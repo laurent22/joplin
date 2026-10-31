@@ -895,14 +895,16 @@ export default class UserModel extends BaseModel<User> {
 
 			// A stale flag would let an account confirmation token replace this password
 			if (!isNew && !('must_set_password' in user)) user.must_set_password = 0;
-
-			// Changing the password is how an owner recovers their account, so nothing that someone else may have set up
-			// while they had access must survive it, such as a reset link or a pending email change to their address
-			if (!isNew) await this.cancelPendingAccountChanges(user.id);
 		}
+
+		const passwordChanged = !isNew && !!user.password;
 
 		return this.withTransaction(async () => {
 			const savedUser = await super.save(user, options);
+
+			// Changing the password is how an owner recovers their account, so nothing that someone else may have set up
+			// while they had access must survive it, such as a reset link or a pending email change to their address
+			if (passwordChanged) await this.cancelPendingAccountChanges(savedUser.id);
 
 			if (isNew && (object.email_confirmed !== 1 || object.must_set_password !== 0)) {
 				await this.sendAccountConfirmationEmail(savedUser);
@@ -934,13 +936,15 @@ export default class UserModel extends BaseModel<User> {
 
 	// Changing a credential requires the current password, so that a session alone (a stolen cookie, or an authorised
 	// app) cannot lock the owner out. It is as useful for guessing the password as login is, so it shares its limiter.
-	public async checkCurrentPassword(userId: Uuid, password: string) {
-		const user = await this.load(userId, { fields: ['email', 'password'] });
+	public async checkCurrentPassword(userId: Uuid, password: string, services: Services) {
+		const user = await this.load(userId, { fields: ['email'] });
 		if (!user) throw new ErrorNotFound(`No such user: ${userId}`);
 
 		await limiterLoginAccountBruteForce.check(user.email);
 
-		if (!password || !(await checkPassword(password, user.password))) {
+		// Through login() so that LDAP accounts are checked against the directory rather than a stale local copy
+		const loggedInUser = password ? await this.login(user.email, password, services) : null;
+		if (!loggedInUser || loggedInUser.id !== userId) {
 			await limiterLoginAccountBruteForce.onFailure(user.email);
 			throw new ErrorUnprocessableEntity('The current password is incorrect');
 		}
@@ -948,9 +952,11 @@ export default class UserModel extends BaseModel<User> {
 		await limiterLoginAccountBruteForce.onSuccess(user.email);
 	}
 
+	// Account confirmation tokens are kept: they can only confirm the current address, and a new account's welcome email
+	// must still work after its password has been set
 	private async cancelPendingAccountChanges(userId: Uuid) {
 		await this.models().keyValue().deleteValue(`newEmail::${userId}`);
-		for (const purpose of [TokenPurpose.PasswordReset, TokenPurpose.AccountConfirmation, TokenPurpose.EmailChange]) {
+		for (const purpose of [TokenPurpose.PasswordReset, TokenPurpose.EmailChange]) {
 			await this.models().token().deleteByUserAndPurpose(userId, purpose);
 		}
 	}
