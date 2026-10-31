@@ -137,7 +137,7 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		await this.deleteBy({ byShareId: shareId, byUserId: userId });
 	}
 
-	private async itemIdsByName(userId: Uuid, names: string[]) {
+	public async itemIdsByName(userId: Uuid, names: string[]) {
 		const output = new Map<string, Uuid>();
 		for (let i = 0; i < names.length; i += 500) {
 			const items = await this.models().item().loadByNames(userId, names.slice(i, i + 500), { fields: ['id', 'name'] });

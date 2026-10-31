@@ -132,10 +132,13 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 
 		return this.withTransaction<Item>(async () => {
 			if (status === ShareUserStatus.Accepted) {
-				// The shared folder's items would otherwise be added under the user's own folder of the same name
-				const rootItem = await this.models().item().load(share.item_id, { fields: ['id', 'name'] });
-				const sameNameItems = rootItem ? await this.models().item().loadByNames(userId, [rootItem.name], { fields: ['id'] }) : [];
-				if (sameNameItems.some(i => i.id !== rootItem.id)) throw new ErrorConflict('This notebook cannot be accepted because you already have a notebook with the same ID. This can happen if this notebook was previously synchronised with your account.');
+				// Items with the same name as one of the user's own are not added (see UserItemModel.addMulti), so they would
+				// silently diverge from the shared ones. Refuse instead, so that the user knows.
+				const shareItems = await this.models().item().byShareId(shareId, { fields: ['id', 'name'] });
+				const userItemIdsByName = await this.models().userItem().itemIdsByName(userId, shareItems.map(i => i.name));
+				if (shareItems.some(i => userItemIdsByName.has(i.name) && userItemIdsByName.get(i.name) !== i.id)) {
+					throw new ErrorConflict('This notebook cannot be accepted because your account already contains a copy of it, or of some of its notes. This can happen if it was previously synchronised with your account. To accept it, first permanently delete that copy (delete it, then empty the trash) and synchronise.');
+				}
 
 				await this.models().share().createSharedFolderUserItems(shareId, userId);
 			}

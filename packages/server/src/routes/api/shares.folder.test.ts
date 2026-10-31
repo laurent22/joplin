@@ -345,11 +345,18 @@ describe('shares.folder', () => {
 		expect(await models().userItem().byUserAndItemId(user1.id, rootFolderItem.id)).toBeTruthy();
 	});
 
-	test('should not accept a share whose root folder has the same name as one of the recipient items', async () => {
+	test.each([
+		['its root folder', '000000000000000000000000000000F1'],
+		['one of its notes', '00000000000000000000000000000001'],
+	])('should not accept a share if %s has the same name as one of the recipient items', async (_case, collidingId) => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
 
-		await createFolder(session1.id, { id: '000000000000000000000000000000F1', title: 'private folder' });
+		if (collidingId.endsWith('F1')) {
+			await createFolder(session1.id, { id: collidingId, title: 'private folder' });
+		} else {
+			await createNote(session1.id, { id: collidingId, parent_id: '000000000000000000000000000000F2' });
+		}
 
 		const { shareUser } = await shareFolderWithUser(session2.id, session1.id, '000000000000000000000000000000F1', [
 			{
@@ -361,7 +368,8 @@ describe('shares.folder', () => {
 		await expectHttpError(async () => patchApi(session1.id, `share_users/${shareUser.id}`, { status: ShareUserStatus.Accepted }), ErrorConflict.httpCode);
 
 		const items = await models().item().loadByNames(user1.id, ['000000000000000000000000000000F1.md', '00000000000000000000000000000001.md']);
-		expect(items.map(i => i.owner_id)).toEqual([user1.id]);
+		expect(items.map(i => i.id)).toEqual([(await models().item().loadByName(user1.id, `${collidingId}.md`)).id]);
+		expect(items[0].owner_id).toBe(user1.id);
 	});
 
 	test.each([
