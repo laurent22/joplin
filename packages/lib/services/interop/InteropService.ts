@@ -197,7 +197,7 @@ export default class InteropService {
 					target: FileSystemItem.File,
 					isNoteArchive: false,
 					description: _('HTML File'),
-					supportsMobile: false,
+					supportsMobile: true,
 				}, () => new InteropService_Exporter_Html()),
 
 				makeExportModule({

@@ -1,6 +1,7 @@
 import Resource from '@joplin/lib/models/Resource';
 import { ResourceEntity } from '@joplin/lib/services/database/types';
 import shim from '@joplin/lib/shim';
+import uuid from '@joplin/lib/uuid';
 
 // when refactoring this name, make sure to refactor the `SharePackage.java` (in android) as well
 const DIR_NAME = 'sharedFiles';
@@ -9,6 +10,14 @@ const makeShareCacheDirectory = async () => {
 	const targetDir = `${shim.fsDriver().getCacheDirectoryPath()}/${DIR_NAME}`;
 	await shim.fsDriver().mkdir(targetDir);
 
+	return targetDir;
+};
+
+export const makeIsolatedShareCacheDirectory = async () => {
+	// HTML export creates temporary resource and plugin asset folders beside the output file.
+	// A separate directory keeps them isolated from other shares and allows one-step cleanup.
+	const targetDir = `${await makeShareCacheDirectory()}/${uuid.create()}`;
+	await shim.fsDriver().mkdir(targetDir);
 	return targetDir;
 };
 

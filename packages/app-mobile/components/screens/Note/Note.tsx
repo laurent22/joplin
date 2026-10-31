@@ -22,7 +22,7 @@ const md5 = require('md5');
 import BackButtonService from '../../../services/BackButtonService';
 import NavService, { OnNavigateCallback as OnNavigateCallback } from '@joplin/lib/services/NavService';
 import { ModelType } from '@joplin/lib/BaseModel';
-import { fileExtension, safeFileExtension } from '@joplin/lib/path-utils';
+import { fileExtension, friendlySafeFilename, safeFileExtension } from '@joplin/lib/path-utils';
 import * as mimeUtils from '@joplin/lib/mime-utils';
 import ScreenHeader, { FolderPickerOptions, MenuOption, ViewToggleButtonMode } from '../../ScreenHeader';
 import NoteTagsDialog from '../NoteTagsDialog';
@@ -85,8 +85,10 @@ import useVisiblePluginEditorViewIds from '@joplin/lib/hooks/plugins/useVisibleP
 import { SelectionRange } from '../../../contentScripts/markdownEditorBundle/types';
 import { EditorType } from '../../NoteEditor/types';
 import { IconButton } from 'react-native-paper';
-import { writeTextToCacheFile } from '../../../utils/ShareUtils';
+import { makeIsolatedShareCacheDirectory, writeTextToCacheFile } from '../../../utils/ShareUtils';
 import shareFile from '../../../utils/shareFile';
+import InteropService from '@joplin/lib/services/interop/InteropService';
+import { ExportModuleOutputFormat, FileSystemItem } from '@joplin/lib/services/interop/types';
 import NotePositionService from '@joplin/lib/services/NotePositionService';
 import useKeyboardState from '../../../utils/hooks/useKeyboardState';
 import VoiceTyping from '../../../services/voiceTyping/VoiceTyping';
@@ -1290,14 +1292,67 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		this.scheduleSave({ ...this.state, note: newNote });
 	}
 
+	private async shareHtmlFile() {
+		let shareDir: string = null;
+		try {
+			const noteId = this.state.note?.id || this.props.noteId;
+			if (!noteId) throw new Error(_('Cannot find the note to share.'));
+			await this.saveActionQueue(noteId).processAllNow();
+			const savedNote = await Note.load(noteId);
+			if (!savedNote) throw new Error(_('Cannot find the note to share.'));
+
+			shareDir = await makeIsolatedShareCacheDirectory();
+			const fileToShare = `${shareDir}/${friendlySafeFilename(savedNote.title)}.html`;
+
+			const exportResult = await InteropService.instance().export({
+				path: fileToShare,
+				format: ExportModuleOutputFormat.Html,
+				target: FileSystemItem.File,
+				sourceNoteIds: [savedNote.id],
+				includeConflicts: true,
+				decryptLockedNotes: true,
+				plugins: this.props.plugins,
+				packIntoSingleFile: true,
+			});
+			if (exportResult.warnings.length) {
+				const shouldShare = await new Promise<boolean>(resolve => {
+					this.props.dialogs.prompt('', _('Some content may be missing from the note. Do you still want to share it?'), [
+						{ text: _('No'), style: 'cancel', onPress: () => resolve(false) },
+						{ text: _('Yes'), onPress: () => resolve(true) },
+					], { onDismiss: () => resolve(false) });
+				});
+				if (!shouldShare) return;
+			}
+			await shareFile(fileToShare, 'text/html');
+		} catch (e) {
+			logger.error('Unable to share note as HTML:', e);
+			void shim.showErrorDialog(_('Unable to share note data. Reason: %s', e.toString()));
+		} finally {
+			if (shareDir) await shim.fsDriver().remove(shareDir);
+		}
+	}
+
 	private async share_onPress() {
+		const shareFormat = await this.props.dialogs.showMenu<'plainText'|'html'|'cancel'>(
+			_('Choose an option'), [
+				{ text: _('Plain text'), id: 'plainText' },
+				{ text: _('HTML'), id: 'html' },
+				{ text: _('Cancel'), id: 'cancel', style: 'cancel' },
+			],
+		);
+		if (shareFormat === 'cancel') return;
+		if (shareFormat === 'html') {
+			await this.shareHtmlFile();
+			return;
+		}
+
 		let noteToShare = this.state.note;
 		if (isNoteLockEnabled() && NoteLockNote.isLocked(noteToShare)) {
 			// The state note may hold the encrypted body, so the shared contents come from a gated load.
 			noteToShare = await Note.load(noteToShare.id, { useNoteLock: true });
 		}
 		const shareText = `${noteToShare.title}\n\n${noteToShare.body}`;
-		const filename = noteToShare.id ?? uuid.create();
+		const filename = friendlySafeFilename(noteToShare.title);
 
 		if (shareText.length > 100000) {
 			let fileToShare;
