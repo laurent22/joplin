@@ -319,7 +319,8 @@ function NoteEditorContent(props: NoteEditorProps) {
 			setTitleHasBeenManuallyChanged(true);
 		}
 
-		if (isNewNote && !titleHasBeenManuallyChanged && field === 'body') {
+		// Skip whiteboards because their body starts with ```jsoncanvas and the title would become "jsoncanvas"
+		if (isNewNote && !titleHasBeenManuallyChanged && field === 'body' && !hasWhiteboardFence(value)) {
 			// TODO: Handle HTML/Markdown format
 			newNote.title = Note.defaultTitle(value);
 		}
