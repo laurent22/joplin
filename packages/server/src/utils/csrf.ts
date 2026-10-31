@@ -6,6 +6,9 @@ import { bodyFields, isApiRequest } from './requestUtils';
 import { AppContext } from './types';
 import { TokenPurpose } from '../models/TokenModel';
 import config from '../config';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('csrf');
 
 interface BodyWithCsrfToken {
 	_csrf: string;
@@ -35,14 +38,15 @@ export async function csrfCheck(ctx: AppContext, isPublicRoute: boolean) {
 // website could sign its visitors in to an account of its choosing, and an app they then connect would sync into it.
 export function checkNotCrossSiteRequest(ctx: AppContext) {
 	const fetchSite = ctx.headers['sec-fetch-site'] as string;
-	if (fetchSite) {
-		if (!['same-origin', 'none'].includes(fetchSite)) throw new ErrorForbidden('Cross-site requests are not allowed');
-		return;
-	}
+	const origin = ctx.headers['origin'] as string;
 
 	// Browsers that predate Sec-Fetch-Site still send Origin on cross-site form submissions
-	const origin = ctx.headers['origin'] as string;
-	if (origin && origin !== new URL(config().baseUrl).origin) throw new ErrorForbidden('Cross-site requests are not allowed');
+	const isCrossSite = fetchSite ? !['same-origin', 'none'].includes(fetchSite) : !!origin && origin !== new URL(config().baseUrl).origin;
+	if (!isCrossSite) return;
+
+	// A base URL that does not match the address users open (e.g. http vs https) also ends up here
+	logger.warn(`Rejected cross-site request to ${ctx.path}: Sec-Fetch-Site: ${fetchSite}, Origin: ${origin}, base URL: ${config().baseUrl}`);
+	throw new ErrorForbidden('Cross-site requests are not allowed');
 }
 
 export async function createCsrfToken(models: Models, user: User, throwOnError = true) {
