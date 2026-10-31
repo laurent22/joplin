@@ -895,6 +895,10 @@ export default class UserModel extends BaseModel<User> {
 
 			// A stale flag would let an account confirmation token replace this password
 			if (!isNew && !('must_set_password' in user)) user.must_set_password = 0;
+
+			// Changing the password is how an owner recovers their account, so nothing that someone else may have set up
+			// while they had access must survive it, such as a reset link or a pending email change to their address
+			if (!isNew) await this.cancelPendingAccountChanges(user.id);
 		}
 
 		return this.withTransaction(async () => {
@@ -942,6 +946,13 @@ export default class UserModel extends BaseModel<User> {
 		}
 
 		await limiterLoginAccountBruteForce.onSuccess(user.email);
+	}
+
+	private async cancelPendingAccountChanges(userId: Uuid) {
+		await this.models().keyValue().deleteValue(`newEmail::${userId}`);
+		for (const purpose of [TokenPurpose.PasswordReset, TokenPurpose.AccountConfirmation, TokenPurpose.EmailChange]) {
+			await this.models().token().deleteByUserAndPurpose(userId, purpose);
+		}
 	}
 
 	public async isPasswordValid(userId: Uuid, password: string) {
