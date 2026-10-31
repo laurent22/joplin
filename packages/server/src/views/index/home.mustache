@@ -7,6 +7,14 @@
 	</div>
 {{/showBetaMessage}}
 
+{{#showMfaPrompt}}
+	<form method="post" action="{{{global.baseUrl}}}/home" class="notification is-info content pr-6">
+		{{{csrfTag}}}
+		<button type="submit" class="delete" title="Dismiss"></button>
+		<p>Add an extra layer of security to your account. <a href="{{{global.baseUrl}}}/mfa/me">Turn on multi-factor authentication</a>.</p>
+	</form>
+{{/showMfaPrompt}}
+
 {{> joplinServerBusinessPromo}}
 
 <h2 class="title">Welcome to {{syncTargetName}}</h2>

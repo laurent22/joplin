@@ -146,6 +146,7 @@ export enum TaskId {
 	DeleteOldEvents,
 	DeleteExpiredAuthCodes,
 	DeleteArchivedBackups,
+	HandleMfaReminderEmails,
 }
 
 // AUTO-GENERATED-TYPES
