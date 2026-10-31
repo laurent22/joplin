@@ -49,6 +49,7 @@ router.get('mfa/:id', async (path: SubPath, ctx: AppContext, fields: Enable2FaFo
 	if (isMFAEnabled) {
 		content.title = 'Disable multi-factor authentication';
 		content.buttonTitle = 'Disable MFA';
+		content.error = error;
 
 	} else {
 		let secretEncoded = fields?.totpSecret;
@@ -91,15 +92,19 @@ router.post('mfa/:id', async (path: SubPath, ctx: AppContext) => {
 
 	const fields = await bodyFields<Enable2FaFormData>(ctx.req);
 
+	try {
+		await ctx.joplin.models.user().checkCurrentPassword(owner.id, fields.password);
+	} catch (error) {
+		return internalRedirect(path, ctx, router, 'mfa/:id', fields, error);
+	}
+
 	if (fields.formType === 'disableMFA') {
-		const passwordIsValid = await ctx.joplin.models.user().isPasswordValid(owner.id, fields.password);
-		if (!passwordIsValid) {
-			return redirect(ctx, profileUrl());
-		}
 		await ctx.joplin.models.user().disableMFA(owner.id);
 
 		return redirect(ctx, profileUrl());
 	} else {
+		// Replacing the secret would let a session holder lock the owner out, so it must be disabled first
+		if (getIsMFAEnabled(owner)) throw new ErrorForbidden('Multi-factor authentication is already enabled. Disable it first to set it up again.');
 
 		const isVerified = checkConsecutiveMFACodes(fields.totpSecret, fields.confirmCode, fields.confirmCode2);
 

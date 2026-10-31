@@ -1,7 +1,8 @@
 import { User } from '../../services/database/types';
 import { deleteApi, getApi, patchApi, postApi } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, expectHttpError } from '../../utils/testing/testUtils';
-import { ErrorForbidden } from '../../utils/errors';
+import { ErrorForbidden, ErrorUnprocessableEntity } from '../../utils/errors';
+import { uuidgen } from '@joplin/lib/uuid';
 
 describe('api/users', () => {
 
@@ -110,6 +111,20 @@ describe('api/users', () => {
 
 		const reloadedUser = await models().user().load(user.id);
 		expect(reloadedUser.full_name).toBe('New Name');
+	});
+
+	test('should only change the password with the current password, and revoke other sessions', async () => {
+		const { session, user, password } = await createUserAndSession(1, false);
+		const otherSession = await models().session().createUserSession(user.id);
+		const newPassword = uuidgen();
+
+		await expectHttpError(async () => patchApi(session.id, `users/${user.id}`, { password: newPassword }), ErrorUnprocessableEntity.httpCode);
+		expect(await models().user().isPasswordValid(user.id, newPassword)).toBe(false);
+
+		await patchApi(session.id, `users/${user.id}`, { password: newPassword, current_password: password });
+		expect(await models().user().isPasswordValid(user.id, newPassword)).toBe(true);
+		expect(await models().session().load(otherSession.id)).toBeFalsy();
+		expect(await models().session().load(session.id)).toBeTruthy();
 	});
 
 	test('should not change the email of a non-admin until it is confirmed', async () => {

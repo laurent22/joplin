@@ -39,6 +39,9 @@ const recoveryCodeAuthView = async (ctx: AppContext, error?: Error) => {
 router.post('recovery_codes', async (_path: SubPath, ctx: AppContext) => {
 	const owner = ctx.joplin.owner;
 
+	const fields = await bodyFields<{ password: string }>(ctx.req);
+	await ctx.joplin.models.user().checkCurrentPassword(owner.id, fields.password);
+
 	await ctx.joplin.models.recoveryCode().regenerate(owner.id);
 
 	const recoveryCodeAccessKey = await ctx.joplin.models.recoveryCode().saveRecoveryCodeAccessKey(owner.id);

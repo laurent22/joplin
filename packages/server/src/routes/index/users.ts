@@ -55,6 +55,7 @@ function makeUser(userId: Uuid, fields: Record<string, unknown>): User {
 interface FormFields {
 	id: Uuid;
 	post_button: string;
+	current_password: string;
 	update_subscription_basic_button: string;
 	update_subscription_pro_button: string;
 	stop_impersonate_button: string;
@@ -260,6 +261,7 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 		if (fields.post_button) {
 			const userToSave: User = models.user().fromApiInput(user);
 			await models.user().checkIfAllowed(owner, AclAction.Update, userToSave);
+			if (userToSave.password) await models.user().checkCurrentPassword(owner.id, fields.current_password);
 
 			if (userToSave.email && userToSave.email !== owner.email) {
 				await models.user().initiateEmailChange(owner.id, userToSave.email);

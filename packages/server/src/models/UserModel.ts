@@ -1,6 +1,7 @@
 import BaseModel, { AclAction, LoadOptions, SaveOptions, ValidateOptions } from './BaseModel';
 import { EmailSender, Item, NotificationLevel, Subscription, User, UserFlagType, Uuid } from '../services/database/types';
 import { isHashedPassword, hashPassword, checkPassword } from '../utils/auth';
+import { limiterLoginAccountBruteForce } from '../utils/request/limiterAccountBruteForce';
 import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge, ErrorNotFound, ErrorBadRequest } from '../utils/errors';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { _ } from '@joplin/lib/locale';
@@ -925,6 +926,22 @@ export default class UserModel extends BaseModel<User> {
 
 	public async disableMFA(userId: Uuid) {
 		await this.save({ id: userId, totp_secret: '' });
+	}
+
+	// Changing a credential requires the current password, so that a session alone (a stolen cookie, or an authorised
+	// app) cannot lock the owner out. It is as useful for guessing the password as login is, so it shares its limiter.
+	public async checkCurrentPassword(userId: Uuid, password: string) {
+		const user = await this.load(userId, { fields: ['email', 'password'] });
+		if (!user) throw new ErrorNotFound(`No such user: ${userId}`);
+
+		await limiterLoginAccountBruteForce.check(user.email);
+
+		if (!password || !(await checkPassword(password, user.password))) {
+			await limiterLoginAccountBruteForce.onFailure(user.email);
+			throw new ErrorUnprocessableEntity('The current password is incorrect');
+		}
+
+		await limiterLoginAccountBruteForce.onSuccess(user.email);
 	}
 
 	public async isPasswordValid(userId: Uuid, password: string) {

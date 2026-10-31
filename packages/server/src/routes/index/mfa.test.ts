@@ -2,7 +2,7 @@ import { execRequest } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, expectHttpError } from '../../utils/testing/testUtils';
 import { totp } from 'otplib';
 import * as crypto from '../../utils/crypto';
-import { ErrorBadRequest } from '../../utils/errors';
+import { ErrorForbidden, ErrorUnprocessableEntity } from '../../utils/errors';
 
 describe('index/mfa', () => {
 
@@ -36,7 +36,7 @@ describe('index/mfa', () => {
 	});
 
 	test('should be able to register MFA', async () => {
-		const { session, user } = await createUserAndSession(1, true);
+		const { session, user, password } = await createUserAndSession(1, true);
 
 		const totpCheck = jest.spyOn(totp, 'check');
 		totpCheck.mockReturnValue(true);
@@ -44,7 +44,7 @@ describe('index/mfa', () => {
 		const cryptoEncrypt = jest.spyOn(crypto, 'encryptMFASecret');
 		cryptoEncrypt.mockReturnValue('encrypt-totp-secret');
 
-		await execRequest(session.id, 'POST', 'mfa/me', { totpSecret: 'totp-secret-in-base-32', confirmCode: '0123456' }, null);
+		await execRequest(session.id, 'POST', 'mfa/me', { totpSecret: 'totp-secret-in-base-32', confirmCode: '0123456', password }, null);
 		expect((await models().user().load(user.id)).totp_secret).toBe('encrypt-totp-secret');
 	});
 
@@ -62,18 +62,18 @@ describe('index/mfa', () => {
 	});
 
 	test('should not save totp_secret if totp check is invalid', async () => {
-		const { session, user } = await createUserAndSession(1, true);
+		const { session, user, password } = await createUserAndSession(1, true);
 
 		const totpCheck = jest.spyOn(totp, 'check');
 		totpCheck.mockReturnValue(false);
 
-		await expectHttpError(async () => await execRequest(session.id, 'POST', 'mfa/me', { totpSecret: 'totp-secret-in-base-32', confirmCode: '0123456' }, null), 403);
+		await expectHttpError(async () => await execRequest(session.id, 'POST', 'mfa/me', { totpSecret: 'totp-secret-in-base-32', confirmCode: '0123456', password }, null), 403);
 
 		expect((await models().user().load(user.id)).totp_secret).toBe('');
 	});
 
 	test('should create recovery codes when MFA is enabled', async () => {
-		const { session, user } = await createUserAndSession(1, true);
+		const { session, user, password } = await createUserAndSession(1, true);
 
 		const totpCheck = jest.spyOn(totp, 'check');
 		totpCheck.mockReturnValue(true);
@@ -81,25 +81,44 @@ describe('index/mfa', () => {
 		const cryptoEncrypt = jest.spyOn(crypto, 'encryptMFASecret');
 		cryptoEncrypt.mockReturnValue('encrypt-totp-secret');
 
-		await execRequest(session.id, 'POST', 'mfa/me', { totpSecret: 'totp-secret-in-base-32', confirmCode: '0123456' }, null);
+		await execRequest(session.id, 'POST', 'mfa/me', { totpSecret: 'totp-secret-in-base-32', confirmCode: '0123456', password }, null);
 
 		const recoveryCodes = await models().recoveryCode().loadByUserId(user.id);
 
 		expect(recoveryCodes.length).toBe(10);
 	});
 
-	test('should throw Bad Request error if password is empty when MFA is being disabled', async () => {
+	test('should not disable MFA if the password is empty', async () => {
 		const { session, user } = await createUserAndSession(1, true);
 
 		await models().user().enableMFA(user.id, 'totp-secret', session.id);
 
 		await expectHttpError(
 			async () => execRequest(session.id, 'POST', 'mfa/me', { formType: 'disableMFA', password: undefined }, null),
-			ErrorBadRequest.httpCode,
+			ErrorUnprocessableEntity.httpCode,
 		);
 
 		const dbUser = await models().user().load(user.id, { fields: ['totp_secret'] });
 		expect(dbUser.totp_secret).not.toBe('');
+	});
+
+	test.each([
+		['without the password', false, ErrorUnprocessableEntity.httpCode],
+		['when MFA is already enabled', true, ErrorForbidden.httpCode],
+	])('should not enable MFA %s', async (_case, alreadyEnabled, expectedHttpCode) => {
+		const { session, user, password } = await createUserAndSession(1, true);
+		if (alreadyEnabled) await models().user().enableMFA(user.id, 'totp-secret', session.id);
+		const totpSecretBefore = (await models().user().load(user.id, { fields: ['totp_secret'] })).totp_secret;
+
+		jest.spyOn(totp, 'check').mockReturnValue(true);
+
+		await expectHttpError(async () => execRequest(session.id, 'POST', 'mfa/me', {
+			totpSecret: 'other-totp-secret',
+			confirmCode: '0123456',
+			password: alreadyEnabled ? password : undefined,
+		}, null), expectedHttpCode);
+
+		expect((await models().user().load(user.id, { fields: ['totp_secret'] })).totp_secret).toBe(totpSecretBefore);
 	});
 
 });

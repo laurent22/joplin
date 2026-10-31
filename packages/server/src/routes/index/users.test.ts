@@ -2,7 +2,7 @@ import { User } from '../../services/database/types';
 import routeHandler from '../../middleware/routeHandler';
 import { NotificationKey } from '../../models/NotificationModel';
 import { cookieGet } from '../../utils/cookies';
-import { ErrorForbidden } from '../../utils/errors';
+import { ErrorForbidden, ErrorUnprocessableEntity } from '../../utils/errors';
 import { execRequest, execRequestC } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, parseHtml, checkContextError, expectHttpError, expectThrow, createSubscription } from '../../utils/testing/testUtils';
 import { uuidgen } from '@joplin/lib/uuid';
@@ -101,13 +101,14 @@ describe('index/users', () => {
 	});
 
 	test('should change the password', async () => {
-		const { user, session } = await createUserAndSession(1, true);
+		const { user, session, password: currentPassword } = await createUserAndSession(1, true);
 		const context = await koaAppContext({ sessionId: session.id });
 
 		const userModel = models().user();
 
 		const password = uuidgen();
-		await patchUser(session.id, { id: user.id, password: password, password2: password });
+		await expectHttpError(async () => patchUser(session.id, { id: user.id, password: password, password2: password }, '/users/me'), ErrorUnprocessableEntity.httpCode);
+		await patchUser(session.id, { id: user.id, password: password, password2: password, current_password: currentPassword });
 		const modUser = await userModel.login('user1@localhost', password, context.joplin.services);
 		expect(!!modUser).toBe(true);
 		expect(modUser.id).toBe(user.id);
@@ -355,7 +356,7 @@ describe('index/users', () => {
 		expect(await models().session().count()).toBe(3);
 
 		const newPassword = uuidgen();
-		await patchUser(session.id, { id: user.id, password: newPassword, password2: newPassword });
+		await patchUser(session.id, { id: user.id, password: newPassword, password2: newPassword, current_password: password });
 
 		const sessions = await models().session().all();
 		expect(sessions.length).toBe(1);
@@ -363,7 +364,7 @@ describe('index/users', () => {
 	});
 
 	test('should delete all applications when changing the password', async () => {
-		const { user, session } = await createUserAndSession(1, true);
+		const { user, session, password } = await createUserAndSession(1, true);
 
 		await models().application().createPreLoginRecord('random-string', '');
 		await models().application().onAuthorizeUse('random-string', user.id);
@@ -374,7 +375,7 @@ describe('index/users', () => {
 		expect(await models().application().count()).toBe(2);
 
 		const newPassword = uuidgen();
-		await patchUser(session.id, { id: user.id, password: newPassword, password2: newPassword });
+		await patchUser(session.id, { id: user.id, password: newPassword, password2: newPassword, current_password: password });
 
 		expect(await models().application().count()).toBe(0);
 	});

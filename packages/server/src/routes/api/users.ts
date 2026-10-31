@@ -1,5 +1,5 @@
 import { User } from '../../services/database/types';
-import { bodyFields } from '../../utils/requestUtils';
+import { bodyFields, contextSessionId } from '../../utils/requestUtils';
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
@@ -73,11 +73,14 @@ router.del('api/users/:id', async (path: SubPath, ctx: AppContext) => {
 
 router.patch('api/users/:id', async (path: SubPath, ctx: AppContext) => {
 	const user = await fetchUser(path, ctx);
+	const fields = await bodyFields<Partial<User> & { current_password?: string }>(ctx.req);
 	const postedUser = {
-		...await postedUserFromContext(ctx),
+		...ctx.joplin.models.user().fromApiInput(fields),
 		id: user.id,
 	};
 	await ctx.joplin.models.user().checkIfAllowed(ctx.joplin.owner, AclAction.Update, postedUser);
+
+	if (!ctx.joplin.owner.is_admin && postedUser.password) await ctx.joplin.models.user().checkCurrentPassword(user.id, fields.current_password);
 
 	// A non-admin changing their own email must confirm it from the new
 	// address, as they would from the profile page. Otherwise the account
@@ -89,6 +92,12 @@ router.patch('api/users/:id', async (path: SubPath, ctx: AppContext) => {
 	}
 
 	await ctx.joplin.models.user().save({ id: user.id, ...postedUser });
+
+	// As on the profile page, other sessions and applications must not survive a password change
+	if (postedUser.password) {
+		await ctx.joplin.models.session().deleteByUserId(user.id, user.id === ctx.joplin.owner.id ? contextSessionId(ctx) : '');
+		await ctx.joplin.models.application().deleteByUserId(user.id);
+	}
 });
 
 export default router;
