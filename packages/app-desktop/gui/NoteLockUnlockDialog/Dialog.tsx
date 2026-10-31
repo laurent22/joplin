@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Dispatch } from 'redux';
 import { useCallback, useState } from 'react';
 import { _ } from '@joplin/lib/locale';
+import { noteLockPasswordErrorMessage } from '@joplin/lib/components/shared/config/useNoteLockMode';
 import DialogButtonRow, { ClickEvent } from '../DialogButtonRow';
 import Dialog from '@joplin/lib/components/Dialog';
 import DialogTitle from '../DialogTitle';
@@ -47,8 +48,7 @@ export default function(props: Props) {
 			try {
 				await NoteLockSession.instance().unlock(password);
 			} catch (error) {
-				// WebCrypto reports a wrong password as a generic OperationError.
-				setErrorMessage(error.name === 'OperationError' ? _('Invalid password') : error.message);
+				setErrorMessage(noteLockPasswordErrorMessage(error));
 				setUnlocking(false);
 				return;
 			}
