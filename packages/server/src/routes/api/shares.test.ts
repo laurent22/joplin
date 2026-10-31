@@ -129,16 +129,25 @@ describe('shares', () => {
 		await createItemTree(user.id, '', {
 			'000000000000000000000000000000F1': {
 				'00000000000000000000000000000001': null,
+				'00000000000000000000000000000002': null,
 			},
 		});
 
-		const share = await postApi<Share>(session.id, 'shares', input);
-		await postApi<Share>(session.id, 'shares', input);
+		// Within the same minute, as when several selected notes are published at once
+		const dateNow = jest.spyOn(Date, 'now').mockReturnValue(Date.now());
+		let share: Share;
+		try {
+			share = await postApi<Share>(session.id, 'shares', input);
+			await postApi<Share>(session.id, 'shares', input);
+			await postApi<Share>(session.id, 'shares', { note_id: '00000000000000000000000000000002' });
+		} finally {
+			dateNow.mockRestore();
+		}
 
 		const emails = (await models().email().all()).filter(e => e.subject.includes('was published'));
 		expect(emails.length).toBe(1);
 		expect(emails[0].recipient_id).toBe(user.id);
-		expect(emails[0].subject).toContain(itemType);
+		expect(emails[0].body).toContain(`A ${itemType} was published`);
 		expect(emails[0].body).toContain(share.id);
 	});
 

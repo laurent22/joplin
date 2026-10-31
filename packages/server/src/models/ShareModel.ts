@@ -8,7 +8,7 @@ import { userIdFromUserContentUrl } from '../utils/routeUtils';
 import { getCanShareFolder } from './utils/user';
 import { isUniqueConstraintError } from '../db';
 import Logger from '@joplin/utils/Logger';
-import { formatDateOnServer, PerformanceTimer } from '../utils/time';
+import { formatDateOnServer, Minute, PerformanceTimer } from '../utils/time';
 import itemPublishedTemplate from '../views/emails/itemPublishedTemplate';
 
 const logger = Logger.create('ShareModel');
@@ -700,6 +700,8 @@ export default class ShareModel extends BaseModel<Share> {
 	// the owner is told about every new publication
 	private async sendPublishedNotification(owner: User, share: Share, itemType: 'note' | 'notebook') {
 		await this.models().email().push({
+			// The apps publish several selected notes one at a time, so this sends at most one email per minute
+			key: `itemPublished::${Math.floor(Date.now() / Minute)}`,
 			...itemPublishedTemplate({
 				itemType,
 				publishedUrl: this.shareUrl(owner.id, share.id),
