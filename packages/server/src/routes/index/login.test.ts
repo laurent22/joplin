@@ -4,12 +4,14 @@ import { cookieDelete, cookieGet } from '../../utils/cookies';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, models, parseHtml, createUser } from '../../utils/testing/testUtils';
 import { AppContext } from '../../utils/types';
 import * as crypto from '../../utils/crypto';
+import config from '../../config';
 
-async function doLogin(email: string, password: string): Promise<AppContext> {
+async function doLogin(email: string, password: string, headers: Record<string, string> = {}): Promise<AppContext> {
 	const context = await koaAppContext({
 		request: {
 			method: 'POST',
 			url: '/login',
+			headers,
 			body: {
 				email: email,
 				password: password,
@@ -80,6 +82,18 @@ describe('login', () => {
 		const sessionId = cookieGet(context, 'sessionId');
 		const session: Session = await models().session().load(sessionId);
 		expect(session.user_id).toBe(user.id);
+	});
+
+	test.each([
+		['a cross-site request', () => ({ 'sec-fetch-site': 'cross-site' }), false],
+		['a same-site request', () => ({ 'sec-fetch-site': 'same-site' }), false],
+		['another origin', () => ({ origin: 'https://attacker.example' }), false],
+		['a same-origin request', () => ({ 'sec-fetch-site': 'same-origin' }), true],
+		['the server origin', () => ({ origin: new URL(config().baseUrl).origin }), true],
+	])('should only log in from the server\'s own login page: %s', async (_label, headers, shouldLogIn) => {
+		const user = await createUser(1);
+		const context = await doLogin(user.email, '123456', headers());
+		expect(!!cookieGet(context, 'sessionId')).toBe(shouldLogIn);
 	});
 
 	test('should not login with invalid credentials', async () => {

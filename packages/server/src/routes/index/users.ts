@@ -13,7 +13,7 @@ import { NotificationKey } from '../../models/NotificationModel';
 import { accountTypeOptions, accountTypeToString, getNextSubscriptionPlan } from '../../models/UserModel';
 import { confirmUrl, stripePortalUrl } from '../../utils/urlUtils';
 import { initStripe, updateCustomerEmail } from '../../utils/stripe';
-import { createCsrfTag } from '../../utils/csrf';
+import { checkNotCrossSiteRequest, createCsrfTag } from '../../utils/csrf';
 import { formatDateTime } from '../../utils/time';
 import { cookieSet } from '../../utils/cookies';
 import { userFlagToString } from '../../models/UserFlagModel';
@@ -205,6 +205,7 @@ interface SetPasswordFormData {
 }
 
 router.post('users/:id/confirm', async (path: SubPath, ctx: AppContext) => {
+	checkNotCrossSiteRequest(ctx);
 	const userId = path.id;
 
 	try {

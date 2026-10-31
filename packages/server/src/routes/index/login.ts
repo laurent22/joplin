@@ -11,6 +11,7 @@ import { cookieSet } from '../../utils/cookies';
 import { adminDashboardUrl, applicationsConfirmUrl, homeUrl } from '../../utils/urlUtils';
 import { generateRedirectHtml } from '../../utils/saml';
 import { ErrorForbidden } from '../../utils/errors';
+import { checkNotCrossSiteRequest } from '../../utils/csrf';
 
 type LoginViewContentOptions = {
 	showMfaCodeInput: boolean;
@@ -106,6 +107,7 @@ router.get('login/:id', async (path: SubPath, ctx: AppContext) => {
 });
 
 router.post('login', async (path: SubPath, ctx: AppContext) => {
+	checkNotCrossSiteRequest(ctx);
 	await limiterLoginBruteForce(userIp(ctx));
 
 	const body = await formParse(ctx.req);

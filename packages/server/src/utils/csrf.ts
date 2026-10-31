@@ -5,6 +5,7 @@ import { escapeHtml } from './htmlUtils';
 import { bodyFields, isApiRequest } from './requestUtils';
 import { AppContext } from './types';
 import { TokenPurpose } from '../models/TokenModel';
+import config from '../config';
 
 interface BodyWithCsrfToken {
 	_csrf: string;
@@ -28,6 +29,20 @@ export async function csrfCheck(ctx: AppContext, isPublicRoute: boolean) {
 	}
 
 	await ctx.joplin.models.token().deleteByValue(userId, fields._csrf, TokenPurpose.Csrf);
+}
+
+// Public forms that sign the browser in cannot have a CSRF token, as there is no session yet. Without this check, any
+// website could sign its visitors in to an account of its choosing, and an app they then connect would sync into it.
+export function checkNotCrossSiteRequest(ctx: AppContext) {
+	const fetchSite = ctx.headers['sec-fetch-site'] as string;
+	if (fetchSite) {
+		if (!['same-origin', 'none'].includes(fetchSite)) throw new ErrorForbidden('Cross-site requests are not allowed');
+		return;
+	}
+
+	// Browsers that predate Sec-Fetch-Site still send Origin on cross-site form submissions
+	const origin = ctx.headers['origin'] as string;
+	if (origin && origin !== new URL(config().baseUrl).origin) throw new ErrorForbidden('Cross-site requests are not allowed');
 }
 
 export async function createCsrfToken(models: Models, user: User, throwOnError = true) {
