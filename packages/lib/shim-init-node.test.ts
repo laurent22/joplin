@@ -88,6 +88,25 @@ describe('shim-init-node', () => {
 		}
 	});
 
+	test('fetchBlob should abort a download that is slow but never idle long enough to time out', async () => {
+		await using httpServer = await createLocalhostServer((req, res) => {
+			res.writeHead(200, { 'content-type': 'text/plain' });
+			const interval = setInterval(() => res.write('.'), 50);
+			req.socket.on('close', () => clearInterval(interval));
+		}, { https: false });
+
+		const tempDir = await createTempDir();
+		try {
+			const path = join(tempDir, 'test.txt');
+			const startTime = Date.now();
+			await expect(shim.fetchBlob(`${httpServer.baseUrl}/file.txt`, { path, timeout: 1000, signal: AbortSignal.timeout(300) })).rejects.toThrow();
+			expect(Date.now() - startTime).toBeLessThan(1000);
+			expect(await pathExists(path)).toBe(false);
+		} finally {
+			await remove(tempDir);
+		}
+	});
+
 	test.each([
 		200,
 		// Should still download the file even for error responses.

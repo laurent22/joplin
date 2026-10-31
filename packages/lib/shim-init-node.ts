@@ -575,7 +575,7 @@ function shimInit(options: ShimInitOptions = null) {
 				method: method,
 				headers: new Headers(headers),
 				dispatcher,
-				signal: abortController.signal,
+				signal: options.signal ? AbortSignal.any([abortController.signal, options.signal]) : abortController.signal,
 			});
 			try {
 				const response = await fetch(requestOptions);
