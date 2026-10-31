@@ -1,12 +1,13 @@
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, koaAppContext, expectThrow, expectHttpError } from '../utils/testing/testUtils';
 import { defaultSessionTtl } from './SessionModel';
 import { Services } from '../services/types';
-import { ErrorTooManyRequests } from '../utils/errors';
+import { ErrorForbidden, ErrorTooManyRequests } from '../utils/errors';
 import { limiterLoginAccountBruteForce } from '../utils/request/limiterAccountBruteForce';
 
-const failLogin = async (email: string, services: Services, times: number) => {
+// Each attempt uses a different password, as the same rejected password is only counted once
+const failLogin = async (email: string, services: Services, times: number, passwordPrefix = 'wrong-password') => {
 	for (let i = 0; i < times; i++) {
-		await expectThrow(async () => models().session().authenticate(email, 'wrong-password', services, ''));
+		await expectThrow(async () => models().session().authenticate(email, `${passwordPrefix}-${i}`, services, ''));
 	}
 };
 
@@ -104,8 +105,33 @@ describe('SessionModel', () => {
 
 		// Having logged in, the user is not penalised for the earlier
 		// mistakes.
-		await failLogin(user.email, services, 9);
+		await failLogin(user.email, services, 9, 'other-wrong-password');
 		expect(await models().session().authenticate(user.email, password, services, '')).toBeTruthy();
+	});
+
+	test.each([
+		['the same outdated password, as a device that was not updated after a password change does', async (email: string, services: Services) => {
+			await expectThrow(async () => models().session().authenticate(email, 'outdated-password', services, ''));
+		}],
+		['the correct password without an MFA code, as the API does', async (email: string, services: Services, password: string) => {
+			await expectThrow(async () => models().session().authenticate(email, password, services, null));
+		}],
+		['an error that is not a rejected credential', async (email: string, services: Services) => {
+			const login = jest.spyOn(models().user(), 'login').mockRejectedValueOnce(new Error('Database timeout'));
+			await expectThrow(async () => models().session().authenticate(email, 'any-password', services, ''));
+			login.mockRestore();
+		}],
+	])('should not count %s', async (_case, attempt) => {
+		process.env.JOPLIN_TEST_ACCOUNT_LIMITER = '1';
+
+		const { user, password } = await createUserAndSession(1);
+		await models().user().save({ id: user.id, totp_secret: 'mfa-is-enabled' });
+		const services = (await koaAppContext()).joplin.services;
+
+		for (let i = 0; i < 20; i++) await attempt(user.email, services, password);
+
+		// Not blocked: still refused for the missing MFA code, rather than as rate limiting
+		await expectHttpError(async () => models().session().authenticate(user.email, password, services, ''), ErrorForbidden.httpCode);
 	});
 
 });

@@ -1,9 +1,12 @@
 import { RateLimiterMemory, RateLimiterRes } from 'rate-limiter-flexible';
+import { createHmac, randomBytes } from 'crypto';
 import { ErrorTooManyRequests } from '../errors';
 
 export interface AccountBruteForceLimiter {
 	check: (key: string)=> Promise<void>;
-	onFailure: (key: string)=> Promise<void>;
+	// `attempt` is the rejected credential. The same one is only counted once per window, since repeating it is what a
+	// device with an outdated password does, while guessing needs different ones.
+	onFailure: (key: string, attempt: string)=> Promise<void>;
 	onSuccess: (key: string)=> Promise<void>;
 	// For tests only - the counts are in memory and otherwise persist for the
 	// lifetime of the process.
@@ -24,13 +27,21 @@ export default (maxFailures: number, durationSeconds: number, errorMessage: stri
 		duration: durationSeconds,
 	});
 
+	const newSeenAttempts = () => new RateLimiterMemory({ points: 1, duration: durationSeconds });
+	let seenAttempts = newSeenAttempts();
+
+	// Only a keyed hash of each attempt is kept, and the key never leaves the process
+	const attemptHashKey = randomBytes(32);
+	const attemptHash = (key: string, attempt: string) => createHmac('sha256', attemptHashKey).update(`${key}\n${attempt}`).digest('hex');
+
 	const isTesting = () => process.env.JOPLIN_IS_TESTING === '1' && process.env.JOPLIN_TEST_ACCOUNT_LIMITER !== '1';
 
+	// Only needed by reset() in tests. Outside tests it would keep every submitted key for the lifetime of the process.
 	const trackedKeys = new Set<string>();
 
 	const normalise = (key: string) => {
 		const output = (key || '').trim().toLowerCase();
-		trackedKeys.add(output);
+		if (process.env.JOPLIN_IS_TESTING === '1') trackedKeys.add(output);
 		return output;
 	};
 
@@ -44,11 +55,16 @@ export default (maxFailures: number, durationSeconds: number, errorMessage: stri
 			}
 		},
 
-		onFailure: async (key: string) => {
+		onFailure: async (key: string, attempt: string) => {
 			if (isTesting()) return;
 
+			const normalisedKey = normalise(key);
+			const hash = attemptHash(normalisedKey, attempt || '');
+			if (await seenAttempts.get(hash)) return;
+			await seenAttempts.set(hash, 1, durationSeconds);
+
 			try {
-				await limiter.consume(normalise(key));
+				await limiter.consume(normalisedKey);
 			} catch (error) {
 				// Consuming the last point rejects, but the caller is already
 				// reporting an authentication failure, so the block applies to
@@ -66,6 +82,7 @@ export default (maxFailures: number, durationSeconds: number, errorMessage: stri
 		reset: async () => {
 			for (const key of trackedKeys) await limiter.delete(key);
 			trackedKeys.clear();
+			seenAttempts = newSeenAttempts();
 		},
 	};
 };

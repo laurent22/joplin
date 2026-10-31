@@ -945,7 +945,7 @@ export default class UserModel extends BaseModel<User> {
 		// Through login() so that LDAP accounts are checked against the directory rather than a stale local copy
 		const loggedInUser = password ? await this.login(user.email, password, services) : null;
 		if (!loggedInUser || loggedInUser.id !== userId) {
-			await limiterLoginAccountBruteForce.onFailure(user.email);
+			await limiterLoginAccountBruteForce.onFailure(user.email, `password:${password || ''}`);
 			throw new ErrorUnprocessableEntity('The current password is incorrect');
 		}
 

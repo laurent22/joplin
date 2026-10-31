@@ -53,27 +53,34 @@ export default class SessionModel extends BaseModel<Session> {
 		// below the limit.
 		await limiterLoginAccountBruteForce.check(email);
 
-		try {
-			const user = await this.models().user().login(email, password, services);
-			if (!user) throw new ErrorForbidden('Invalid email or password', { details: { email } });
+		// Only rejected credentials are counted: a database or LDAP error is not a guess, and neither is a correct
+		// password sent without an MFA code (the API never sends one)
+		const user = await this.models().user().login(email, password, services);
+		if (!user) {
+			await limiterLoginAccountBruteForce.onFailure(email, `password:${password}`);
+			throw new ErrorForbidden('Invalid email or password', { details: { email } });
+		}
 
-			if (getIsMFAEnabled(user)) {
-				if (!mfaCode && !recoveryCode) throw new ErrorForbidden('Invalid authentication code', { details: { mfaCode } });
+		if (getIsMFAEnabled(user)) {
+			if (!mfaCode && !recoveryCode) throw new ErrorForbidden('Invalid authentication code', { details: { mfaCode } });
 
-				if (mfaCode) {
-					const isValidCode = await isValidMFACode(user.totp_secret, mfaCode);
-					if (!isValidCode) throw new ErrorForbidden('Invalid authentication code', { details: { mfaCode } });
-				} else if (recoveryCode) {
+			if (mfaCode) {
+				if (!(await isValidMFACode(user.totp_secret, mfaCode))) {
+					await limiterLoginAccountBruteForce.onFailure(email, `mfa:${mfaCode}`);
+					throw new ErrorForbidden('Invalid authentication code', { details: { mfaCode } });
+				}
+			} else {
+				try {
 					await this.models().recoveryCode().verify(user.id, recoveryCode);
+				} catch (error) {
+					if (error instanceof ErrorForbidden) await limiterLoginAccountBruteForce.onFailure(email, `recovery:${recoveryCode}`);
+					throw error;
 				}
 			}
-
-			await limiterLoginAccountBruteForce.onSuccess(email);
-			return this.createUserSession(user.id);
-		} catch (error) {
-			await limiterLoginAccountBruteForce.onFailure(email);
-			throw error;
 		}
+
+		await limiterLoginAccountBruteForce.onSuccess(email);
+		return this.createUserSession(user.id);
 	}
 
 	public async authenticateApplication(id: string, password: string) {
