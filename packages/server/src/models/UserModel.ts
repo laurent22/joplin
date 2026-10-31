@@ -663,7 +663,7 @@ export default class UserModel extends BaseModel<User> {
 			.db(this.tableName)
 			.select(['id', 'email', 'full_name'])
 			.where({ enabled: 1, email_confirmed: 1, totp_secret: '' })
-			.whereBetween('created_time', [Date.now() - 4 * Day, Date.now() - 3 * Day]);
+			.whereBetween('created_time', [Date.now() - 30 * Day, Date.now() - 3 * Day]);
 
 		for (const user of users) {
 			await this.models().email().push({

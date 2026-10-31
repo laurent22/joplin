@@ -105,20 +105,24 @@ describe('UserModel', () => {
 		expect(email.body.includes('multi-factor authentication')).toBe(expected);
 	});
 
-	test('should send the MFA reminder email once, only to users without MFA created 3 days ago', async () => {
+	test('should send the MFA reminder email once, only to users without MFA created 3 to 30 days ago', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 		const { user: user2 } = await createUserAndSession(2);
 		const { user: user3 } = await createUserAndSession(3);
+		const { user: user4 } = await createUserAndSession(4);
+		const { user: user5 } = await createUserAndSession(5);
 
 		await models().user().save({ id: user1.id, created_time: Date.now() - 3 * Day, email_confirmed: 1 });
 		await models().user().save({ id: user2.id, created_time: Date.now() - 3 * Day, email_confirmed: 1, totp_secret: 'encrypted-totp-secret' });
 		await models().user().save({ id: user3.id, created_time: Date.now() - 2 * Day, email_confirmed: 1 });
+		await models().user().save({ id: user4.id, created_time: Date.now() - 5 * Day, email_confirmed: 1 });
+		await models().user().save({ id: user5.id, created_time: Date.now() - 31 * Day, email_confirmed: 1 });
 
 		await models().user().handleMfaReminderEmails();
 		await models().user().handleMfaReminderEmails();
 
 		const emails = (await models().email().all()).filter(email => email.key === 'mfaReminder');
-		expect(emails.map(email => email.recipient_id)).toEqual([user1.id]);
+		expect(emails.map(email => email.recipient_id).sort()).toEqual([user1.id, user4.id].sort());
 	});
 
 	test('should send a beta reminder email', async () => {
