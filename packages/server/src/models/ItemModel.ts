@@ -141,13 +141,14 @@ export default class ItemModel extends BaseModel<Item> {
 		}
 	}
 
-	// A recipient uploading a stale copy of a share's root folder (e.g. from a previous sync target), or moving it to
-	// another share, would otherwise take it away from the owner. `IsReadOnly` makes the client revert to the server version.
-	private async checkCanChangeRootFolderShare(user: User, itemId: Uuid, previousShareId: Uuid) {
+	// A recipient uploading a stale copy of a share's root folder (e.g. from a previous sync target), moving it to another
+	// share, or moving it inside another folder (which makes the owner's client unshare it) would otherwise take it away
+	// from the owner. `IsReadOnly` makes the client revert to the server version.
+	private async checkCanChangeShareRootFolder(user: User, itemId: Uuid, previousShareId: Uuid) {
 		if (!previousShareId) return;
 		const share = await this.models().share().load(previousShareId, { fields: ['owner_id', 'item_id'] });
 		if (!share || share.item_id !== itemId || share.owner_id === user.id) return;
-		throw new ErrorForbidden('Only the share owner can change the share of its root folder', { code: ErrorCode.IsReadOnly });
+		throw new ErrorForbidden('Only the share owner can move or unshare its root folder', { code: ErrorCode.IsReadOnly });
 	}
 
 	public fromApiInput(item: Item): Item {
@@ -636,6 +637,7 @@ export default class ItemModel extends BaseModel<Item> {
 			owner_id: string;
 			jop_share_id: string;
 			jop_type: ModelType;
+			jop_parent_id: string;
 		}
 
 		return this.withTransaction(async () => {
@@ -747,10 +749,11 @@ export default class ItemModel extends BaseModel<Item> {
 						await this.checkIfAllowed(user, AclAction.Create, itemToCheck);
 					} else {
 						const newShareId = item.jop_share_id || '';
-						if (previousShareId !== newShareId) {
-							await this.checkIfAllowed(user, AclAction.Update, itemToCheck);
-							await this.checkCanChangeRootFolderShare(user, existingItem.id, previousShareId);
-						}
+						const parentChanged = isJoplinItem && (item.jop_parent_id || '') !== (existingItem.jop_parent_id || '');
+						if (previousShareId !== newShareId) await this.checkIfAllowed(user, AclAction.Update, itemToCheck);
+						// Share roots are folders, which saves a share lookup for every note that is moved
+						const isFolder = existingItem.jop_type === ModelType.Folder;
+						if (isFolder && (previousShareId !== newShareId || parentChanged)) await this.checkCanChangeShareRootFolder(user, existingItem.id, previousShareId);
 					}
 
 					await this.models().user().checkMaxItemSizeLimit(user, rawItem.body, item, joplinItem);
