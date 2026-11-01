@@ -21,6 +21,8 @@ export interface LayoutItem {
 	resizableBottom?: boolean;
 	visible?: boolean;
 	context?: Record<string, unknown>;
+	// Absorbs remaining space in its container, regardless of position.
+	flexible?: boolean;
 }
 
 export const tempContainerPrefix = 'tempContainer-';

@@ -10,7 +10,7 @@ import Logger from '@joplin/utils/Logger';
 import getPathToExecutable7Zip from '../../utils/7zip/getPathToExecutable7Zip';
 import getAssetPath from '../../utils/getAssetPath';
 // import BackOffHandler from './BackOffHandler';
-const ipcRenderer = require('electron').ipcRenderer;
+import { ipcRenderer } from 'electron';
 
 const logger = Logger.create('PluginRunner');
 

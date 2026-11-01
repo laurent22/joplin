@@ -49,6 +49,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Shift+Cmd+O', command: 'focusElementToolbar' },
 		{ accelerator: 'Option+Cmd+S', command: 'toggleSideBar' },
 		{ accelerator: 'Option+Cmd+L', command: 'toggleNoteList' },
+		{ accelerator: 'Shift+Cmd+I', command: 'toggleAiChat' },
 		{ accelerator: 'Cmd+L', command: 'toggleVisiblePanes' },
 		{ accelerator: 'Option+Cmd+V', command: 'toggleEditorPlugin' },
 		{ accelerator: 'Option+Cmd+E', command: 'toggleEditors' },
@@ -103,6 +104,9 @@ const defaultKeymapItems = {
 		{ accelerator: 'Ctrl+Shift+O', command: 'focusElementToolbar' },
 		{ accelerator: 'F10', command: 'toggleSideBar' },
 		{ accelerator: 'Ctrl+Shift+M', command: 'toggleMenuBar' },
+		// Avoid Ctrl+Shift+I: it's Electron's default DevTools accelerator on
+		// Linux/Windows, so binding to it would shadow developer tools.
+		{ accelerator: 'Ctrl+Alt+I', command: 'toggleAiChat' },
 		{ accelerator: 'F11', command: 'toggleNoteList' },
 		{ accelerator: 'Ctrl+L', command: 'toggleVisiblePanes' },
 		{ accelerator: 'Alt+Ctrl+V', command: 'toggleEditorPlugin' },

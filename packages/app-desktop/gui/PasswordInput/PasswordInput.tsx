@@ -8,6 +8,8 @@ interface Props {
 	value: string;
 	inputId: string;
 	onChange: ChangeEventHandler;
+	onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
+	inputRef?: React.Ref<HTMLInputElement>;
 
 	'aria-invalid'?: boolean;
 	'aria-errormessage'?: string;
@@ -34,8 +36,10 @@ const PasswordInput = (props: Props) => {
 				type={inputType}
 				value={props.value}
 				onChange={props.onChange}
+				onKeyDown={props.onKeyDown}
+				ref={props.inputRef}
 			/>
-			<button onClick={onShowPassword} className="showpasswordbutton">
+			<button type="button" onClick={onShowPassword} className="showpasswordbutton">
 				<i className={icon} role='img' aria-label={title} title={title}></i>
 			</button>
 		</div>

@@ -21,11 +21,35 @@ interface KatexMacro {
 	numArgs: number;
 }
 
+interface KatexTrustContext {
+	command: string;
+	url?: string;
+	protocol?: string;
+}
+
+type KatexStrict = boolean | 'error' | 'warn' | 'ignore' | ((errorCode: string, errorMsg: string)=> 'error' | 'warn' | 'ignore');
+
 interface KatexOptions {
 	macros?: Record<string, string | KatexMacro>;
 	displayMode?: boolean;
-	trust?: boolean;
+	trust?: boolean | ((context: KatexTrustContext)=> boolean);
+	strict?: KatexStrict;
 }
+
+// KaTeX's `\href` and `\url` commands accept arbitrary URLs when trust is
+// `true`, including `file://` and UNC paths that bypass Joplin's link
+// allowlist. Restrict to the same schemes accepted by htmlUtils.isAcceptedUrl
+// for regular Markdown links. https://github.com/laurent22/joplin/security
+const isTrustedKatexContext = (context: KatexTrustContext): boolean => {
+	if (context.command !== '\\href' && context.command !== '\\url') return false;
+	const url = (context.url || '').toLowerCase();
+	return url.startsWith('https://')
+		|| url.startsWith('http://')
+		|| url.startsWith('mailto:')
+		|| url.startsWith('joplin://')
+		|| /^#[a-zA-Z0-9-]+$/.test(url)
+		|| /^:\/[0-9a-zA-Z]{32}(\/.*)?$/.test(url);
+};
 
 function stringifyKatexOptions(options: KatexOptions) {
 	if (!options) return '';
@@ -330,7 +354,13 @@ export default {
 
 		const katexOptions: KatexOptions = {};
 		katexOptions.macros = options.context.userData.__katex.macros as KatexOptions['macros'];
-		katexOptions.trust = true;
+		katexOptions.trust = isTrustedKatexContext;
+		// Callers can pass `plugins: { katex: { strict: 'ignore' } }` via
+		// RenderOptions to silence KaTeX's console warnings for LaTeX-
+		// incompatible input (e.g. U+00A0 pasted from email/Word). Output
+		// is unchanged — only the warning stream is suppressed.
+		const strict = (options as unknown as { strict?: KatexStrict }).strict;
+		if (strict !== undefined) katexOptions.strict = strict;
 
 		// When targeting inline math, the `containerTag` should be a `span` to prevent issues
 		// with converting back to Markdown from the Rich Text Editor:

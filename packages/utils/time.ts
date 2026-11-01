@@ -3,15 +3,16 @@
 // added here, and should be based on dayjs (not moment)
 // -----------------------------------------------------------------------------------------------
 
-import type * as dayjsImport from 'dayjs';
-import * as dayJsUtc from 'dayjs/plugin/utc';
+import type dayjsImport from 'dayjs';
+import dayJsUtc from 'dayjs/plugin/utc';
+
 // A require() is needed here for this to work in React Native.
 const dayjs: typeof dayjsImport = require('dayjs');
 
 // Separating this into a type import and a require seems to be necessary to support mobile:
 // - import = require syntax doesn't work when bundling
 // - import * as dayJsRelativeTimeType causes a runtime error.
-import type * as dayJsRelativeTimeType from 'dayjs/plugin/relativeTime';
+import type dayJsRelativeTimeType from 'dayjs/plugin/relativeTime';
 const dayJsRelativeTime: typeof dayJsRelativeTimeType = require('dayjs/plugin/relativeTime');
 
 const supportedLocales: Record<string, unknown> = {
@@ -108,6 +109,17 @@ export const formatMsToRelative = (ms: number) => {
 	if (!d.isValid()) return 'Invalid date';
 
 	return d.fromNow(false);
+};
+
+export const formatMsToRelativeTime = (ms: number) => {
+	const date = dayjs(ms);
+	if (!date.isValid()) return 'Invalid date';
+
+	const elapsed = Math.max(0, Date.now() - ms);
+	if (elapsed < Minute) return `${Math.floor(elapsed / Second)}s`;
+	if (elapsed < Hour) return `${Math.floor(elapsed / Minute)}m`;
+	if (elapsed < Day) return `${Math.floor(elapsed / Hour)}h`;
+	return `${Math.floor(elapsed / Day)}d`;
 };
 
 const joplinLocaleToDayJsLocale = (locale: string) => {

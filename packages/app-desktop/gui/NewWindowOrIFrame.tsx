@@ -12,6 +12,7 @@ import { SecondaryWindowApi } from '../utils/window/types';
 export const WindowIdContext = createContext(defaultWindowId);
 
 type OnCloseCallback = ()=> void;
+type OnSetWindowCallback = (window: Window)=> void;
 
 export enum WindowMode {
 	Iframe, NewWindow,
@@ -25,6 +26,7 @@ interface Props {
 	mode: WindowMode;
 	windowId: string;
 	onClose: OnCloseCallback;
+	onWindow: OnSetWindowCallback;
 }
 
 const useDocument = (
@@ -146,6 +148,15 @@ const NewWindowOrIFrame: React.FC<Props> = props => {
 			electronWindow.onSetWindowId(props.windowId);
 		}
 	}, [doc, props.windowId]);
+
+	const onWindowRef = useRef(props.onWindow);
+	onWindowRef.current = props.onWindow;
+	useEffect(() => {
+		const win = doc?.defaultView;
+		if (win && onWindowRef.current) {
+			onWindowRef.current(win);
+		}
+	}, [doc]);
 
 	const parentNode = loaded ? doc?.body : null;
 	const wrappedChildren = <WindowIdContext.Provider value={props.windowId}>{props.children}</WindowIdContext.Provider>;

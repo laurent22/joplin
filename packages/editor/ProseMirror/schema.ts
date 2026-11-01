@@ -211,6 +211,23 @@ const marks = {
 			return result;
 		},
 	},
+	backgroundColor: {
+		inclusive: false,
+		parseDOM: [{
+			style: 'background-color',
+			getAttrs: (styleValue: string) => {
+				return { backgroundColor: styleValue };
+			},
+		}],
+		attrs: {
+			backgroundColor: { validate: 'string' },
+		},
+		toDOM: node => {
+			const result = document.createElement('span');
+			result.style.backgroundColor = node.attrs.backgroundColor;
+			return result;
+		},
+	},
 	link: {
 		attrs: {
 			href: { validate: 'string' },

@@ -24,6 +24,7 @@ const createChangeAndRevision = async (note: NoteEntity, parentRevId: string = n
 		item_type: BaseModel.TYPE_NOTE,
 		item_id: note.id,
 		item_updated_time: note.updated_time,
+		encryption_applied: 0,
 	};
 
 	if (!parentRev) {
@@ -47,6 +48,19 @@ describe('models/Revision', () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 		jest.useFakeTimers({ advanceTimers: true });
+	});
+
+	it('should add lock defaults for old sync revisions', () => {
+		expect(Revision.filter({
+			is_locked: undefined,
+		})).toMatchObject({
+			is_locked: 0,
+		});
+		expect(Revision.filter({
+			is_locked: null,
+		})).toMatchObject({
+			is_locked: 0,
+		});
 	});
 
 	it('should create patches of text and apply it', (async () => {
@@ -361,5 +375,39 @@ describe('models/Revision', () => {
 		const remainingRevs = await Revision.allByType(BaseModel.TYPE_NOTE, note.id);
 		expect(remainingRevs.length).toBe(3);
 	}));
+
+	// cSpell:disable
+	test('mergeDiffs should stop traversal when parent_id is not set', (async () => {
+		const note = await Note.save({ title: 'test', body: testBody });
+
+		// Prove a broken revision state causes duplication in the evaluated revision, if a middle revision is rebased, but the parent_id
+		// still matches an existing revision
+		const rev1 = await createChangeAndRevision(note); // testa
+		const rev2 = await createChangeAndRevision(note); // testaa
+		const rev3 = await createChangeAndRevision(note); // testaaa
+
+		const mergedRev2 = await Revision.mergeDiffs(rev2, [rev1, rev2]);
+		expect(mergedRev2.title).toBe('testaa');
+
+		// Do not save - update in memory only for the assertion
+		rev2.title_diff = Revision.createTextPatch('', mergedRev2.title);
+		rev2.body_diff = Revision.createTextPatch('', mergedRev2.body);
+
+		const mergedRev3 = await Revision.mergeDiffs(rev3, [rev1, rev2, rev3]);
+		expect(mergedRev3.title).toBe('testaatestaa');
+
+		// Merge the middle revision using the real revision cleaning logic, but verify the end revision is not broken when evaluated, if the
+		// older revision is still available when merging the revision chain
+		const ttl = (1 * oneDayMs) + halfDayMs; // Delete rev 1
+		await Revision.deleteOldRevisions(ttl);
+		const newRev2 = await Revision.load(rev2.id);
+		const newMergedRev3 = await Revision.mergeDiffs(rev3, [rev1, newRev2, rev3]);
+
+		expect(newMergedRev3.title).toBe('testaaa');
+		expect(newRev2.title_diff).toBe(rev2.title_diff);
+		expect(newRev2.body_diff).toBe(rev2.body_diff);
+		expect(newRev2.parent_id).toBe('');
+	}));
+	// cSpell:enable
 
 });

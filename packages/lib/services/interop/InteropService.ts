@@ -1,6 +1,6 @@
 import { ModuleType, FileSystemItem, ImportModuleOutputFormat, ImportOptions, ExportOptions, ImportExportResult, ExportProgressState, ExportModuleOutputFormat } from './types';
 import shim from '../../shim';
-import { _ } from '../../locale';
+import { _, _n } from '../../locale';
 import BaseItem from '../../models/BaseItem';
 import BaseModel, { ModelType } from '../../BaseModel';
 import Resource from '../../models/Resource';
@@ -8,9 +8,15 @@ import Folder from '../../models/Folder';
 import NoteTag from '../../models/NoteTag';
 import Note from '../../models/Note';
 import * as ArrayUtils from '../../ArrayUtils';
+import isNoteLockEnabled from '../noteLock/isNoteLockEnabled';
+import NoteLockNote, { NoteLockNoteEntity } from '../noteLock/NoteLockNote';
+import { DecryptedNoteLockKey } from '../noteLock/NoteLockKey';
+import NoteLockSession from '../noteLock/NoteLockSession';
+import { NoteEntity } from '../database/types';
 import InteropService_Importer_Jex from './InteropService_Importer_Jex';
 import InteropService_Importer_Md from './InteropService_Importer_Md';
 import InteropService_Importer_Md_frontmatter from './InteropService_Importer_Md_frontmatter';
+import InteropService_Importer_Obsidian from './InteropService_Importer_Obsidian';
 import InteropService_Importer_Raw from './InteropService_Importer_Raw';
 import InteropService_Exporter_Jex from './InteropService_Exporter_Jex';
 import InteropService_Exporter_Raw from './InteropService_Exporter_Raw';
@@ -24,7 +30,7 @@ import InteropService_Importer_EnexToHtml from './InteropService_Importer_EnexTo
 import InteropService_Importer_EnexToMd from './InteropService_Importer_EnexToMd';
 import InteropService_Importer_OneNote from './InteropService_Importer_OneNote';
 const { sprintf } = require('sprintf-js');
-const { fileExtension } = require('../../path-utils');
+import { fileExtension } from '../../path-utils';
 import { EventEmitter } from 'events';
 
 export default class InteropService {
@@ -130,6 +136,15 @@ export default class InteropService {
 				}, () => new InteropService_Importer_Md_frontmatter()),
 
 				makeImportModule({
+					format: 'obsidian',
+					fileExtensions: ['md'],
+					sources: [FileSystemItem.Directory],
+					isNoteArchive: false,
+					description: _('Obsidian Vault'),
+					supportsMobile: true,
+				}, () => new InteropService_Importer_Obsidian()),
+
+				makeImportModule({
 					format: 'txt',
 					fileExtensions: ['txt'],
 					sources: [FileSystemItem.File, FileSystemItem.Directory],
@@ -145,7 +160,7 @@ export default class InteropService {
 						'onepkg',
 					],
 					sources: [FileSystemItem.File],
-					isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
+					isNoteArchive: true, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
 					description: _('OneNote Notebook'),
 				}, () => new InteropService_Importer_OneNote()),
 			];
@@ -350,6 +365,19 @@ export default class InteropService {
 		}
 	}
 
+	private async decryptedNoteForExport_(noteId: string, noteLockKey: DecryptedNoteLockKey): Promise<NoteEntity|null> {
+		if (!noteLockKey) return null;
+		try {
+			const decrypted: NoteLockNoteEntity = await Note.load(noteId, { useNoteLock: true, noteLockKey });
+			// Without the marker the load was not gated, as when the feature is turned off midway, so the body is still ciphertext.
+			if (!decrypted.isDecrypted) return null;
+			delete decrypted.isDecrypted;
+			return { ...decrypted, is_locked: 0, extracted_resource_ids: '' };
+		} catch {
+			return null;
+		}
+	}
+
 	public async export(options: ExportOptions): Promise<ImportExportResult> {
 		options = {
 			format: ExportModuleOutputFormat.Jex,
@@ -377,6 +405,14 @@ export default class InteropService {
 
 		const exportedNoteIds = [];
 		let resourceIds: string[] = [];
+		// Backups keep locked notes encrypted; other formats export them decrypted only when decryptLockedNotes is set.
+		const keepsLockedNotes = options.format === ExportModuleOutputFormat.Raw || options.format === ExportModuleOutputFormat.Jex;
+		let lockedNotesSkipped = 0;
+		// Read once, so enabling the feature partway through cannot leave the locked notes queued before it as ciphertext.
+		// Turning it off partway is caught by the gated load in decryptedNoteForExport_.
+		const noteLockEnabled = isNoteLockEnabled();
+		// Captured at the start, so locking the session partway through does not skip the remaining locked notes.
+		const noteLockKey = NoteLockSession.instance().isUnlocked() ? NoteLockSession.instance().decryptedKey() : null;
 
 		// Recursively get all the folders that have valid parents
 		const folderIds = await Folder.childrenIds('');
@@ -402,13 +438,30 @@ export default class InteropService {
 			for (let noteIndex = 0; noteIndex < noteIds.length; noteIndex++) {
 				const noteId = noteIds[noteIndex];
 				if (sourceNoteIds.length && sourceNoteIds.indexOf(noteId) < 0) continue;
-				const note = await Note.load(noteId);
+				let note = await Note.load(noteId);
+				if (noteLockEnabled && NoteLockNote.isLocked(note) && !keepsLockedNotes) {
+					if (options.skipLockedNotes) continue;
+					const decrypted = options.decryptLockedNotes ? await this.decryptedNoteForExport_(noteId, noteLockKey) : null;
+					if (!decrypted) {
+						lockedNotesSkipped++;
+						continue;
+					}
+					note = decrypted;
+				}
 				await queueExportItem(BaseModel.TYPE_NOTE, note);
 				exportedNoteIds.push(noteId);
 
-				const rids = await Note.linkedResourceIds(note.body);
+				// A locked note's body is ciphertext, so its resource ids come from the extracted list.
+				const rids = noteLockEnabled && NoteLockNote.isLocked(note)
+					? Note.unserializeExtractedResourceIds(note.extracted_resource_ids)
+					: await Note.linkedResourceIds(note.body);
 				resourceIds = resourceIds.concat(rids);
 			}
+		}
+
+		// Nothing would be written, so a single-file export would otherwise fail on the file it never wrote.
+		if (lockedNotesSkipped && !exportedNoteIds.length) {
+			throw new Error(_n('%d locked note could not be unlocked and was not exported.', '%d locked notes could not be unlocked and were not exported.', lockedNotesSkipped, lockedNotesSkipped));
 		}
 
 		resourceIds = ArrayUtils.unique(resourceIds);
@@ -440,9 +493,11 @@ export default class InteropService {
 		await exporter.init(exportPath, options);
 
 		const typeOrder = [BaseModel.TYPE_FOLDER, BaseModel.TYPE_RESOURCE, BaseModel.TYPE_NOTE, BaseModel.TYPE_TAG, BaseModel.TYPE_NOTE_TAG];
-		const context: { resourcePaths: Record<string, string>; destResourcePaths?: Record<string, string>; notePaths?: Record<string, string> } = {
+		const context: { resourcePaths: Record<string, string>; warnings: string[]; destResourcePaths?: Record<string, string>; notePaths?: Record<string, string> } = {
 			resourcePaths: {},
+			warnings: result.warnings,
 		};
+		exporter.updateContext(context);
 
 		// Prepare to process each type before starting any
 		// This will allow exporters to operate on the full context
@@ -502,6 +557,8 @@ export default class InteropService {
 
 		options.onProgress?.(ExportProgressState.Closing, null);
 		await exporter.close();
+
+		if (lockedNotesSkipped) result.warnings.push(`${lockedNotesSkipped} locked note(s) could not be unlocked and were not exported`);
 
 		return result;
 	}

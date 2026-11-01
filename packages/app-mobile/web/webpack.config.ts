@@ -68,6 +68,8 @@ const buildSharedConfig = (hotReload: boolean): webpack.Configuration => {
 				'react-native$': 'react-native-web',
 				'crypto': path.resolve(__dirname, 'mocks/nodeCrypto.js'),
 
+				'@joplin/mobile-config': path.resolve(__dirname, '../config/config.default.js'),
+
 				// Map some modules that don't work on web to the empty dictionary.
 				'react-native-fingerprint-scanner': emptyLibraryMock,
 				'@joplin/react-native-saf-x': emptyLibraryMock,
@@ -81,7 +83,9 @@ const buildSharedConfig = (hotReload: boolean): webpack.Configuration => {
 				'expo-camera': emptyLibraryMock,
 				'expo-image-manipulator': emptyLibraryMock,
 				'react-native-nitro-modules': emptyLibraryMock,
+				// Force react-native-paper to use the correct icon library
 				'react-native-vector-icons/MaterialCommunityIcons': throwOnLoadLibraryMock,
+				'@expo/vector-icons/MaterialCommunityIcons': throwOnLoadLibraryMock,
 
 				// Workaround for applying serviceworker types to a single file.
 				// See https://joshuatz.com/posts/2021/strongly-typed-service-workers/.

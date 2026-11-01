@@ -119,4 +119,19 @@ describe('ToolbarButtonUtils', () => {
 			{ type: 'button', name: 'invisibleUnlessTrashSelected' },
 		]);
 	});
+
+	test('should support overriding the enabled state of individual buttons', () => {
+		const utils = new ToolbarButtonUtils(CommandService.instance());
+		const buttons = utils.commandsToToolbarButtons(
+			['newNote', 'testCommand2'],
+			stateToWhenClauseContext(defaultState),
+			null,
+			{ newNote: { enabled: false } },
+		);
+
+		expect(buttons).toMatchObject([
+			{ name: 'newNote', enabled: false },
+			{ name: 'testCommand2', enabled: true },
+		]);
+	});
 });

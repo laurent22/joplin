@@ -5,6 +5,7 @@ import type FsDriverBase from './fs-driver-base';
 import type FileApiDriverLocal from './file-api-driver-local';
 import type { Crypto } from './services/e2ee/types';
 import type { MarkupLanguage } from '@joplin/renderer';
+import { FetchBlobOptions } from './types';
 
 export interface CreateResourceFromPathOptions {
 	resizeLargeImages?: 'always' | 'never' | 'ask';
@@ -39,6 +40,7 @@ export interface FetchOptions {
 	headers?: Record<string, string>;
 	body?: string;
 	agent?: unknown;
+	signal?: AbortSignal;
 }
 
 interface AttachFileToNoteOptions {
@@ -78,6 +80,17 @@ export enum MobilePlatform {
 	Web = 'web',
 }
 
+export type SetClientCertificateOptions = {
+	certPath: string;
+	keyPath: string;
+	keyPassword: string;
+	domains: string[];
+};
+
+export interface HttpAgentOptions {
+	timeout?: number;
+}
+
 let isTestingEnv_ = false;
 
 // We need to ensure that there's only one instance of React being used by all
@@ -101,6 +114,10 @@ let react_: typeof React = null;
 let reactDom_: typeof ReactDom = null;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- node sqlite driver is set per-platform (better-sqlite3, react-native sqlite, etc.); accessed structurally
 let nodeSqlite_: any = null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- sqlite-vec is only bundled with desktop; null on platforms that don't ship it
+let sqliteVec_: any = null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- onnxruntime-node is only bundled with desktop; null on platforms (mobile/CLI/web) that don't ship it
+let onnxRuntime_: any = null;
 
 const shim = {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Geolocation API differs across platforms (browser Geolocation, RN Geolocation module); accessed structurally
@@ -111,8 +128,6 @@ const shim = {
 	fsDriver_: null as any,
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- http agent set per-platform (node https.Agent, RN noop); accessed structurally
 	httpAgent_: null as any,
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- proxy agent set per-platform; accessed structurally
-	proxyAgent: null as any,
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See electronBridge_
 	electronBridge: (): any => {
@@ -281,6 +296,10 @@ const shim = {
 		// Code: ETIMEDOUT
 		if (error.code === 'ETIMEDOUT') return true;
 
+		// Failure to establish a connection
+		// See https://undici.nodejs.org/api/Errors#class-connecttimeouterror
+		if (error.code === 'UND_ERR_CONNECT_TIMEOUT') return true;
+
 		// ECONNREFUSED is generally temporary
 		if (error.code === 'ECONNREFUSED') return true;
 
@@ -372,7 +391,7 @@ const shim = {
 		throw new Error('Not implemented: stringByteLength');
 	},
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- node implementation accepts a Setting class argument; lib references it as a generic Function
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- node implementation accepts a Setting class argument; lib references it as a generic Function
 	detectAndSetLocale: null as Function,
 
 	attachFileToNote: async (_note: NoteEntity, _filePath: string, _options?: AttachFileToNoteOptions): Promise<NoteEntity> => {
@@ -394,7 +413,7 @@ const shim = {
 	},
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- options flow into FetchBlobOptions; return shape varies (node fetch Response vs RN blob)
-	fetchBlob: function(_url: string, _options: any = null): any {
+	fetchBlob: function(_url: string, _options: FetchBlobOptions = null): any {
 		throw new Error('Not implemented: fetchBlob');
 	},
 
@@ -426,7 +445,7 @@ const shim = {
 	},
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See httpAgent_ above
-	httpAgent: (_url: string): any => {
+	httpAgent: (_url: string, _options?: HttpAgentOptions): any => {
 		throw new Error('Not implemented: httpAgent');
 	},
 
@@ -482,7 +501,7 @@ const shim = {
 		throw new Error('Not implemented');
 	},
 
-	restartApp: (): void => {
+	restartApp: (): void|Promise<void> => {
 		throw new Error('Not implemented');
 	},
 
@@ -533,6 +552,31 @@ const shim = {
 	nodeSqlite: () => {
 		if (!nodeSqlite_) throw new Error('Trying to access nodeSqlite before it has been set!!!');
 		return nodeSqlite_;
+	},
+
+	// sqlite-vec is only bundled with the desktop app. Other platforms (CLI,
+	// mobile, web) leave it unset and the embeddings index gracefully reports
+	// itself as unavailable rather than crashing.
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See sqliteVec_
+	setSqliteVec: (sqliteVec: any) => {
+		sqliteVec_ = sqliteVec;
+	},
+
+	sqliteVec: () => {
+		return sqliteVec_;
+	},
+
+	// onnxruntime-node powers the bundled local embedding model. Only the
+	// desktop app installs it; other platforms (CLI, mobile, web) leave it
+	// unset and the embedding indexer reports the local provider as
+	// unavailable rather than crashing.
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See onnxRuntime_
+	setOnnxRuntime: (onnxRuntime: any) => {
+		onnxRuntime_ = onnxRuntime;
+	},
+
+	onnxRuntime: () => {
+		return onnxRuntime_;
 	},
 
 	setReact: (react: typeof React) => {

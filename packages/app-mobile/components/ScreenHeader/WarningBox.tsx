@@ -1,14 +1,42 @@
 import * as React from 'react';
-import { useMemo, useCallback } from 'react';
-import { TouchableOpacity, StyleSheet, Text } from 'react-native';
+import { useMemo, useCallback, useRef } from 'react';
+import { TouchableOpacity, StyleSheet, Text, Linking, View } from 'react-native';
 import { themeStyle } from '../global-style';
 import NavService from '@joplin/lib/services/NavService';
 
+interface UrlTarget {
+	url: string;
+
+	screen?: undefined;
+}
+
+interface ScreenTarget {
+	screen: string;
+	screenProps?: Record<string, unknown>;
+
+	url?: undefined;
+}
+
+interface CallbackTarget {
+	onPress: ()=> void;
+
+	url?: undefined;
+	screen?: undefined;
+}
+
+export type WarningBoxTarget = UrlTarget|ScreenTarget|CallbackTarget;
+
+export interface WarningBoxAction {
+	title: string;
+	onPress: ()=> void;
+}
+
 interface Props {
 	themeId: number;
-	targetScreen: string;
+	target: WarningBoxTarget;
 	message: string;
 	testID?: string;
+	actions?: WarningBoxAction[];
 }
 
 const useStyles = (themeId: number) => {
@@ -24,6 +52,12 @@ const useStyles = (themeId: number) => {
 				flex: 1,
 				color: 'black',
 			},
+			actionText: {
+				color: 'black',
+				fontWeight: 'bold',
+				textDecorationLine: 'underline',
+				marginLeft: theme.marginLeft,
+			},
 		});
 	}, [themeId]);
 };
@@ -31,21 +65,59 @@ const useStyles = (themeId: number) => {
 const WarningBox: React.FC<Props> = props => {
 	const styles = useStyles(props.themeId);
 
-	const onPress = useCallback(() => {
-		void NavService.go(props.targetScreen);
-	}, [props.targetScreen]);
+	const propsRef = useRef(props);
+	propsRef.current = props;
 
-	return (
-		<TouchableOpacity
-			style={styles.container}
-			onPress={onPress}
-			activeOpacity={0.8}
-			accessibilityRole='button'
-			testID={props.testID}
-		>
-			<Text style={styles.text}>{props.message}</Text>
-		</TouchableOpacity>
-	);
+	const onPress = useCallback(() => {
+		const target = propsRef.current.target;
+		if (!target) return;
+
+		const isUrlTarget = (target: WarningBoxTarget): target is UrlTarget => !!target.url;
+		if (isUrlTarget(target)) {
+			void Linking.openURL(target.url);
+		} else if ('onPress' in target) {
+			target.onPress();
+		} else {
+			void NavService.go(target.screen, target.screenProps);
+		}
+	}, []);
+
+	const hasTarget = !!propsRef.current.target;
+	const bannerContent = <Text style={styles.text}>{props.message}</Text>;
+	if (props.actions) {
+		return (
+			<View style={styles.container} testID={props.testID}>
+				{bannerContent}
+				{props.actions.map(action => (
+					<TouchableOpacity key={action.title} onPress={action.onPress} accessibilityRole='button'>
+						<Text style={styles.actionText}>{action.title}</Text>
+					</TouchableOpacity>
+				))}
+			</View>
+		);
+	}
+	if (hasTarget) {
+		return (
+			<TouchableOpacity
+				style={styles.container}
+				onPress={onPress}
+				activeOpacity={0.8}
+				accessibilityRole={'button'}
+				testID={props.testID}
+			>
+				{bannerContent}
+			</TouchableOpacity>
+		);
+	} else {
+		return (
+			<View
+				style={styles.container}
+				testID={props.testID}
+			>
+				{bannerContent}
+			</View>
+		);
+	}
 };
 
 export default WarningBox;

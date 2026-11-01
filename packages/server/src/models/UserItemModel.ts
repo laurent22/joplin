@@ -9,6 +9,15 @@ import { isUniqueConstraintError } from '../db';
 
 const logger = Logger.create('UserItemModel');
 
+// addMulti can process a whole notebook at once, so item IDs are only ever logged
+// as a sample.
+const maxLoggedItemIds = 20;
+
+const itemIdSample = (itemIds: Uuid[]) => {
+	const sample = itemIds.slice(0, maxLoggedItemIds).join(', ');
+	return itemIds.length > maxLoggedItemIds ? `${sample}, ... (${itemIds.length - maxLoggedItemIds} more)` : sample;
+};
+
 interface DeleteByShare {
 	id: Uuid;
 	owner_id: Uuid;
@@ -142,9 +151,21 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		perfTimer.push('Main');
 
 		const items: Item[] = Array.isArray(itemsQuery) ? itemsQuery : await itemsQuery.whereNotIn('id', this.db('user_items').select('item_id').where('user_id', '=', userId));
-		if (!items.length) return;
+
+		// Callers such as ShareModel::createSharedFolderUserItems only call this after
+		// determining that items are missing, so selecting nothing means the caller's view
+		// and this query disagree. Log it to tell that case apart from a failing insert.
+		if (!items.length) {
+			logger.info(`addMulti: No item to add for user ${userId} (caller passed ${Array.isArray(itemsQuery) ? 'an array' : 'a query'})`);
+			perfTimer.pop();
+			return;
+		}
+
+		logger.info(`addMulti: Adding ${items.length} items for user ${userId}: ${itemIdSample(items.map(i => i.id))}`);
 
 		perfTimer.push(`Processing ${items.length} items`);
+
+		const skippedItemIds: Uuid[] = [];
 
 		for (const item of items) {
 			if (!('name' in item) || !('id' in item)) throw new Error('item.id and item.name must be set');
@@ -171,8 +192,13 @@ export default class UserItemModel extends BaseModel<UserItem> {
 					if (!options.ignoreAlreadyExists || !isUniqueConstraintError(error)) {
 						throw error;
 					}
+					skippedItemIds.push(item.id);
 				}
 			}, 'UserItemModel::addMulti');
+		}
+
+		if (skippedItemIds.length) {
+			logger.info(`addMulti: Skipped ${skippedItemIds.length} already existing user items for user ${userId}: ${itemIdSample(skippedItemIds)}`);
 		}
 
 		perfTimer.pop();

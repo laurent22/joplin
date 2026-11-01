@@ -1,4 +1,4 @@
-const fastDeepEqual = require('fast-deep-equal');
+import fastDeepEqual = require('fast-deep-equal');
 import { EventEmitter } from 'events';
 import type { State as AppState } from './reducer';
 import { ModelType } from './BaseModel';
@@ -21,9 +21,11 @@ export enum EventName {
 	NoteResourceIndexed = 'noteResourceIndexed',
 	WindowOpen = 'windowOpen',
 	WindowClose = 'windowClose',
+	NoteLockSessionChange = 'noteLockSessionChange',
+	NoteLockNoteStateChange = 'noteLockNoteStateChange',
 }
 
-interface ItemChangeEvent {
+export interface ItemChangeEvent {
 	itemType: ModelType;
 	itemId: string;
 	// Passing a changeId to Note.save causes that changeId to be included
@@ -66,6 +68,15 @@ export interface WindowCloseEvent {
 	windowId: string;
 }
 
+export interface NoteLockSessionChangeEvent {
+	unlocked: boolean;
+}
+
+export interface NoteLockNoteStateChangeEvent {
+	noteId: string;
+	isLocked: boolean;
+}
+
 type EventArgs = {
 	[EventName.ResourceCreate]: [];
 	[EventName.ResourceChange]: [ResourceChangeEvent];
@@ -83,6 +94,8 @@ type EventArgs = {
 	[EventName.NoteResourceIndexed]: [];
 	[EventName.WindowOpen]: [WindowOpenEvent];
 	[EventName.WindowClose]: [WindowCloseEvent];
+	[EventName.NoteLockSessionChange]: [NoteLockSessionChangeEvent];
+	[EventName.NoteLockNoteStateChange]: [NoteLockNoteStateChangeEvent];
 };
 
 type EventListenerCallbacks = {

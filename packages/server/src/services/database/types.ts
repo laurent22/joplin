@@ -33,6 +33,12 @@ export enum EventType {
 	TaskCompleted = 2,
 }
 
+export enum StripeEventStatus {
+	InProgress = 1,
+	Success = 2,
+	Errored = 3,
+}
+
 export enum BackupItemType {
 	UserAccount = 1,
 }
@@ -86,6 +92,7 @@ export const getDefaultValue = (tableName: string, colName: string): string|numb
 export enum ShareType {
 	Note = 1, // When a note is shared via a public link
 	Folder = 3, // When a complete folder is shared with another Joplin Server user
+	PublishedFolder = 4, // When a folder is shared via a public link
 }
 
 export enum ShareUserStatus {
@@ -230,6 +237,7 @@ export interface Token extends WithDates {
 	id?: number;
 	value?: string;
 	user_id?: Uuid;
+	purpose?: string;
 }
 
 export interface Subscription {
@@ -242,6 +250,9 @@ export interface Subscription {
 	updated_time?: string;
 	created_time?: string;
 	is_deleted?: number;
+	trial_end?: number;
+	current_period_end?: number;
+	source?: string;
 }
 
 export interface UserFlag extends WithDates {
@@ -375,6 +386,11 @@ export interface Change2 extends WithDates, WithUuid {
 	type?: ChangeType;
 }
 
+export interface StripeEvent extends WithDates, WithUuid {
+	stripe_id?: Uuid;
+	status?: StripeEventStatus;
+}
+
 export const databaseSchema: DatabaseTables = {
 	sessions: {
 		id: { type: 'string', defaultValue: null },
@@ -473,6 +489,7 @@ export const databaseSchema: DatabaseTables = {
 		id: { type: 'number', defaultValue: null },
 		value: { type: 'string', defaultValue: null },
 		user_id: { type: 'string', defaultValue: '' },
+		purpose: { type: 'string', defaultValue: '' },
 		updated_time: { type: 'string', defaultValue: null },
 		created_time: { type: 'string', defaultValue: null },
 	},
@@ -486,6 +503,9 @@ export const databaseSchema: DatabaseTables = {
 		updated_time: { type: 'string', defaultValue: null },
 		created_time: { type: 'string', defaultValue: null },
 		is_deleted: { type: 'number', defaultValue: 0 },
+		trial_end: { type: 'string', defaultValue: 0 },
+		current_period_end: { type: 'string', defaultValue: 0 },
+		source: { type: 'string', defaultValue: '' },
 	},
 	user_flags: {
 		id: { type: 'number', defaultValue: null },
@@ -624,6 +644,13 @@ export const databaseSchema: DatabaseTables = {
 		type: { type: 'number', defaultValue: null },
 		updated_time: { type: 'string', defaultValue: null },
 		created_time: { type: 'string', defaultValue: null },
+	},
+	stripe_events: {
+		id: { type: 'string', defaultValue: null },
+		stripe_id: { type: 'string', defaultValue: null },
+		created_time: { type: 'string', defaultValue: null },
+		updated_time: { type: 'string', defaultValue: null },
+		status: { type: 'number', defaultValue: null },
 	},
 };
 // AUTO-GENERATED-TYPES

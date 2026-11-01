@@ -15,14 +15,14 @@
   },
   "dependencies": {
     "@joplin/utils": "~3.7",
-    "dotenv": "17.2.4",
+    "dotenv": "17.4.2",
     "file-type": "16.5.4",
-    "fs-extra": "11.3.3",
-    "knex": "3.1.0",
-    "koa": "2.16.3",
+    "fs-extra": "11.3.6",
+    "knex": "3.3.0",
+    "koa": "2.16.4",
     "koa-body": "6.0.1",
     "pg-boss": "10.4.2",
-    "sharp": "0.34.5",
+    "sharp": "0.35.0",
     "sqlite3": "5.1.6"
   },
   "devDependencies": {

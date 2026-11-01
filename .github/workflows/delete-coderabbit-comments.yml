@@ -35,7 +35,7 @@ jobs:
       - name: Generate GitHub App token
         if: steps.check-secrets.outputs.available == 'true'
         id: app-token
-        uses: actions/create-github-app-token@v2
+        uses: actions/create-github-app-token@v3
         with:
           app-id: ${{ secrets.CODERABBIT_CLEANUP_APP_ID }}
           private-key: ${{ secrets.CODERABBIT_CLEANUP_APP_PRIVATE_KEY }}

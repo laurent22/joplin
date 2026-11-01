@@ -10,11 +10,14 @@ import { _ } from '@joplin/lib/locale';
 import getAssetPath from '../utils/getAssetPath';
 import { toForwardSlashes } from '@joplin/utils/path';
 
+interface IpcMessageEvent {
+	channel?: string;
+	args?: unknown[];
+}
+
 interface Props {
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onDomReady: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onIpcMessage: Function;
+	onDomReady: (event: Event)=> void;
+	onIpcMessage: (event: IpcMessageEvent)=> void;
 	viewerStyle: React.CSSProperties;
 	contentMaxWidth?: number;
 	themeId: number;
@@ -32,6 +35,7 @@ export interface NoteViewerControl {
 	focusLine(editorLine: number): void;
 	focus(): void;
 	hasFocus(): boolean;
+	stopMediaPlayback(): void;
 }
 
 const usePluginMessageResponder = (webviewRef: RefObject<HTMLIFrameElement>) => {
@@ -140,6 +144,10 @@ const NoteTextViewer = forwardRef((props: Props, ref: ForwardedRef<NoteViewerCon
 				if (channel === 'setMarkers') {
 					win.postMessage({ target: 'webview', name: 'setMarkers', data: { keywords: arg0, options: arg1 } }, '*');
 				}
+
+				if (channel === 'stopMediaPlayback') {
+					win.postMessage({ target: 'webview', name: 'stopMediaPlayback', data: {} }, '*');
+				}
 			},
 			focus: () => {
 				if (webviewRef.current) {
@@ -165,6 +173,9 @@ const NoteTextViewer = forwardRef((props: Props, ref: ForwardedRef<NoteViewerCon
 					}, 100);
 				}
 			},
+			stopMediaPlayback: () => {
+				result.send('stopMediaPlayback');
+			},
 		};
 		return result;
 	}, [parentDoc]);
@@ -177,7 +188,8 @@ const NoteTextViewer = forwardRef((props: Props, ref: ForwardedRef<NoteViewerCon
 
 	const webview_ipcMessageRef = useRef<EventListener>(null);
 	webview_ipcMessageRef.current = (event: Event) => {
-		if (props.onIpcMessage) props.onIpcMessage(event);
+		// The webview 'ipc-message' event carries channel/args, though it is statically typed as a bare Event here.
+		if (props.onIpcMessage) props.onIpcMessage(event as IpcMessageEvent);
 	};
 
 	const webview_loadRef = useRef<EventListener>(null);

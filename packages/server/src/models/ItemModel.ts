@@ -1,5 +1,5 @@
 import BaseModel, { SaveOptions, LoadOptions, DeleteOptions as BaseDeleteOptions, ValidateOptions, AclAction } from './BaseModel';
-import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType, User, UserItem } from '../services/database/types';
+import { ItemType, databaseSchema, Uuid, Item, ShareType, ShareUserStatus, Share, ChangeType, User, UserItem } from '../services/database/types';
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 import { isJoplinItemName, isJoplinResourceBlobPath, linkedResourceIds, serializeJoplinItem, unserializeJoplinItem } from '../utils/joplinUtils';
 import { ModelType } from '@joplin/lib/BaseModel';
@@ -135,7 +135,7 @@ export default class ItemModel extends BaseModel<Item> {
 			} else {
 				if (share.owner_id !== user.id) {
 					const shareUser = await this.models().shareUser().byShareAndUserId(share.id, user.id);
-					if (!shareUser) throw new ErrorForbidden('user has no access to this share');
+					if (!shareUser || shareUser.status !== ShareUserStatus.Accepted) throw new ErrorForbidden('user has no access to this share');
 				}
 			}
 		}
@@ -250,6 +250,26 @@ export default class ItemModel extends BaseModel<Item> {
 	public async loadByJopId(userId: Uuid, jopId: string, options: ItemLoadOptions = {}): Promise<Item> {
 		const items = await this.loadByJopIds(userId, [jopId], options);
 		return items.length ? items[0] : null;
+	}
+
+	public async loadByJopParentId(userId: Uuid | Uuid[], parentId: string, options: ItemLoadOptions = {}): Promise<Item[]> {
+		const userIds = Array.isArray(userId) ? userId : [userId];
+		if (!userIds.length) return [];
+
+		const rows: Item[] = await this
+			.db('user_items')
+			.leftJoin('items', 'items.id', 'user_items.item_id')
+			.distinct(this.selectFields(options, null, 'items', ['items.content_size']))
+			.whereIn('user_items.user_id', userIds)
+			.where('items.jop_parent_id', '=', parentId);
+
+		if (options.withContent) {
+			for (const row of rows) {
+				row.content = await this.storageDriverRead(row.id, row.content_size, { models: this.models() });
+			}
+		}
+
+		return rows;
 	}
 
 	public async loadByNames(userId: Uuid | Uuid[], names: string[], options: ItemLoadOptions = {}): Promise<Item[]> {
@@ -567,6 +587,12 @@ export default class ItemModel extends BaseModel<Item> {
 		item.type_ = itemRow.jop_type;
 		item.encryption_applied = itemRow.jop_encryption_applied;
 		item.updated_time = itemRow.jop_updated_time;
+
+		// Old notes and folders have no deleted_time in their content, so
+		// default it to 0 here
+		if ((item.type_ === ModelType.Note || item.type_ === ModelType.Folder) && item.deleted_time === undefined) {
+			item.deleted_time = 0;
+		}
 
 		return item;
 	}
@@ -1039,11 +1065,21 @@ export default class ItemModel extends BaseModel<Item> {
 	// items, so a simple processing task like this one is sufficient for now
 	// but it would be nice to get to the bottom of this bug.
 	public processOrphanedItems = async (options: ProcessOrphanedItemsOptions = {}) => {
-		// Process in batches to avoid long-running transactions that can timeout
-		// and poison the connection pool.
-		const batchSize = options.batchSize ?? 100;
+		// The obvious query here is `items LEFT JOIN user_items WHERE
+		// user_items.id IS NULL LIMIT N` (or the equivalent NOT EXISTS).
+		// That times out on busy instances: orphans are ~0.0008% of items, so
+		// Postgres has to scan most of the table to find a single batch, and
+		// the statement timeout fires before it returns anything.
+		//
+		// Instead we walk `items` by primary key in fixed-size windows. Each
+		// window is two cheap indexed queries: fetch the next N items by id,
+		// then look up which of those ids exist in user_items. The orphan
+		// filter happens in TS. Per-query cost is bounded by the window size,
+		// not by the table size, so no statement can blow past the timeout.
+		const batchSize = options.batchSize ?? 10000;
 		let batchNum = 0;
 		let totalProcessed = 0;
+		let lastId = '';
 
 		modelLogger.info(`processOrphanedItems: Starting with batchSize=${batchSize}`);
 
@@ -1051,24 +1087,38 @@ export default class ItemModel extends BaseModel<Item> {
 			batchNum++;
 			const batchStartTime = Date.now();
 
-			// Find items that have no corresponding entry in user_items.
-			// NOT EXISTS is used instead of LEFT JOIN for performance as it
-			// allows Postgres to short-circuit on the first match per item.
-			const orphanedItems: Item[] = await this.db(this.tableName)
+			const windowItems: Item[] = await this.db(this.tableName)
 				.select(['items.id', 'items.name', 'items.owner_id'])
-				.whereNotExists(
-					this.db('user_items')
-						.select(this.db.raw('1'))
-						.whereRaw('user_items.item_id = items.id'),
-				)
+				.where('items.id', '>', lastId)
+				.orderBy('items.id')
 				.limit(batchSize);
 
-			if (!orphanedItems.length) {
+			if (!windowItems.length) {
 				modelLogger.info(`processOrphanedItems: Completed. Total items processed: ${totalProcessed}`);
 				break;
 			}
 
+			// Advance the cursor by the window boundary, not by orphans found,
+			// so that windows with zero orphans still make progress.
+			lastId = windowItems[windowItems.length - 1].id;
+
+			const windowItemIds = windowItems.map(i => i.id);
+			const existingUserItems = await this.db('user_items')
+				.select('item_id')
+				.whereIn('item_id', windowItemIds);
+			const userItemIds = new Set(existingUserItems.map(u => u.item_id));
+			const orphanedItems = windowItems.filter(i => !userItemIds.has(i.id));
+
+			if (!orphanedItems.length) {
+				const batchDuration = Date.now() - batchStartTime;
+				modelLogger.info(`processOrphanedItems: Batch ${batchNum} - No orphans in window of ${windowItems.length} items (${batchDuration}ms)`);
+				continue;
+			}
+
 			modelLogger.info(`processOrphanedItems: Batch ${batchNum} - Found ${orphanedItems.length} orphaned items`);
+			for (const o of orphanedItems) {
+				modelLogger.info(`OrphanTrace: found orphan item=${o.id} owner=${o.owner_id} name=${o.name}`);
+			}
 
 			const userIds: string[] = unique(orphanedItems.map(i => i.owner_id));
 			const users = await this.models().user().loadByIds(userIds, { fields: ['id'] });
@@ -1113,7 +1163,7 @@ export default class ItemModel extends BaseModel<Item> {
 		if (!userId) throw new Error('userId is required');
 
 		item = { ... item };
-		const isNew = await this.isNew(item, options);
+		let isNew = await this.isNew(item, options);
 
 		let previousItem: ChangePreviousItem = null;
 		let previousName: string|null = null;
@@ -1136,12 +1186,31 @@ export default class ItemModel extends BaseModel<Item> {
 		}
 
 		return this.withTransaction(async () => {
+			// Savepoint needed because on Postgres a failed statement aborts the whole
+			// transaction, and we recover from the unique constraint error below.
+			const savePoint = await this.setSavePoint();
+
 			try {
 				item = await super.save(item, options);
+				await this.releaseSavePoint(savePoint);
 			} catch (error) {
+				await this.rollbackSavePoint(savePoint);
+
 				if (isUniqueConstraintError(error)) {
-					modelLogger.error(`Unique constraint error on item: ${JSON.stringify({ id: item.id, name: item.name, jop_id: item.jop_id, owner_id: item.owner_id })}`, error);
-					throw new ErrorConflict(`This item is already present and cannot be added again: ${item.name}`);
+					// The item was created by a concurrent request - typically a client
+					// retrying an upload that is still being processed. Save it as an update
+					// so that the retry is not treated as an error.
+					const existingItem = await this.loadByName(item.owner_id || userId, item.name, { fields: ['id'] });
+
+					if (!existingItem) {
+						modelLogger.error(`Unique constraint error on item, but the item could not be found: ${JSON.stringify({ id: item.id, name: item.name, jop_id: item.jop_id, owner_id: item.owner_id })}`, error);
+						throw new ErrorConflict(`This item is already present and cannot be added again: ${item.name}`);
+					}
+
+					modelLogger.info(`Item was created by a concurrent request - updating it instead: ${JSON.stringify({ name: item.name, jop_id: item.jop_id, owner_id: item.owner_id })}`);
+
+					isNew = false;
+					item = await super.save({ ...item, id: existingItem.id }, { ...options, isNew: false });
 				} else {
 					throw error;
 				}

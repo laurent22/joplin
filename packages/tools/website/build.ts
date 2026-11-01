@@ -38,9 +38,9 @@ const enGbLocale: Locale = {
 	hreflang: defaultEnglishLocale.hreflang,
 };
 
-const glob = require('glob');
-const path = require('path');
-const md5File = require('md5-file');
+import * as glob from 'glob';
+import * as path from 'path';
+import md5File = require('md5-file');
 const docDir = `${dirname(dirname(dirname(dirname(__dirname))))}/joplin-website/docs`;
 
 if (!pathExistsSync(docDir)) throw new Error(`"docs" directory does not exist - create it first. At: ${docDir}`);

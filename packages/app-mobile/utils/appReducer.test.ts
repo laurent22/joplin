@@ -1,5 +1,6 @@
 import appReducer from './appReducer';
 import appDefaultState, { DEFAULT_ROUTE } from './appDefaultState';
+import Folder from '@joplin/lib/models/Folder';
 
 const notesRoute = { type: 'NAV_GO', routeName: 'Notes', folderId: 'folder1' };
 const settingsRoute = { type: 'NAV_GO', routeName: 'Config' };
@@ -41,6 +42,25 @@ describe('appReducer', () => {
 		state = appReducer(state, settingsRoute);
 
 		// Go back
+		state = appReducer(state, { type: 'NAV_BACK' });
+
+		expect(state.route).toEqual(DEFAULT_ROUTE);
+	});
+
+	test('removes the conflicts folder from navigation when it disappears', () => {
+		const conflictFolderId = Folder.conflictFolderId();
+		let state = appReducer({
+			...appDefaultState,
+			folders: [{ ...Folder.conflictFolder(), id: conflictFolderId }],
+		}, {
+			type: 'NAV_GO',
+			routeName: 'Notes',
+			folderId: conflictFolderId,
+			clearHistory: true,
+		});
+
+		state = appReducer(state, { type: 'FOLDER_UPDATE_ALL', items: [] });
+		state = appReducer(state, settingsRoute);
 		state = appReducer(state, { type: 'NAV_BACK' });
 
 		expect(state.route).toEqual(DEFAULT_ROUTE);

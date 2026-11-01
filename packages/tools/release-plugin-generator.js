@@ -1,5 +1,5 @@
 const { execCommandVerbose, rootDir, gitPullTry, setPackagePrivateField } = require('./tool-utils.js');
-const { yarnVersionPatch } = require('@joplin/utils/version');
+const { versionPatch } = require('@joplin/utils/version');
 
 const genDir = `${rootDir}/packages/generator-joplin`;
 
@@ -12,7 +12,7 @@ async function main() {
 
 	await gitPullTry();
 
-	const version = await yarnVersionPatch();
+	const version = await versionPatch();
 	const tagName = `plugin-generator-${version}`;
 
 	console.info(`New version number: ${version}`);

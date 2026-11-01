@@ -13,6 +13,11 @@ import { fetchSyncInfo, getEncryptionEnabled, localSyncInfo, setEncryptionEnable
 import { loadMasterKeysFromSettings, setupAndDisableEncryption, setupAndEnableEncryption } from '../e2ee/utils';
 import { remoteNotesAndFolders } from '../../testing/test-utils-synchronizer';
 import { EncryptionMethod } from '../e2ee/EncryptionService';
+import { NoteEntity } from '../database/types';
+import NoteLockKey from '../noteLock/NoteLockKey';
+import NoteLockSession from '../noteLock/NoteLockSession';
+import NoteLockService from '../noteLock/NoteLockService';
+import EncryptionService from '../e2ee/EncryptionService';
 
 let insideBeforeEach = false;
 
@@ -78,12 +83,46 @@ describe('Synchronizer.e2ee', () => {
 		expect(!folder1_2.encryption_cipher_text).toBe(true);
 	}));
 
+	it('should push back a locked note still awaiting decryption when an older client drops its lock inside a share', (async () => {
+		setEncryptionEnabled(true);
+		const masterKey = await loadEncryptionMasterKey();
+		const folder = await Folder.save({ title: 'folder' });
+		// Dated in the past, as is the older client's edit below, so the sync time cap does not hold back the push back.
+		const note = await Note.save({ title: 'Locked', body: 'JLD01cipher', is_locked: 1, parent_id: folder.id, updated_time: time.unixMs() - 60_000 }, { autoTimestamp: false });
+		await synchronizerStart();
+		// An older client's edit knows no is_locked, inside the encrypted payload as well as on the envelope.
+		const oldClientNote = (await Note.serialize({ ...await Note.load(note.id), body: 'edited on an old client', share_id: 'share-1' })).replace('is_locked: 1\n', '');
+		const oldClientCipherText = await encryptionService().encryptString(oldClientNote);
+
+		// This client has not entered its master key yet, so it only holds placeholders.
+		await switchClient(2);
+		await synchronizerStart();
+		expect(await Note.load(note.id)).toMatchObject({ is_locked: 1, encryption_applied: 1 });
+
+		const path = `${note.id}.md`;
+		const remote = (await fileApi().get(path)).replace('share_id: \n', 'share_id: share-1\n').replace('is_locked: 1\n', '').replace(/^encryption_cipher_text: .*$/m, `encryption_cipher_text: ${oldClientCipherText}`).replace(/^updated_time: .*$/m, `updated_time: ${time.unixMsToIso(note.updated_time + 1000)}`);
+		await fileApi().put(path, remote);
+		await synchronizerStart();
+
+		expect((await Note.conflictedNotes()).length).toBe(0);
+		expect(await Note.load(note.id)).toMatchObject({ is_locked: 1, encryption_applied: 1 });
+
+		// The placeholder is uploaded once decrypted, which keeps its time ahead of the remote one.
+		await encryptionService().loadMasterKey(await MasterKey.load(masterKey.id), '123456', true);
+		await decryptionWorker().start();
+		expect(await Note.load(note.id)).toMatchObject({ body: 'JLD01cipher', is_locked: 1, encryption_applied: 0 });
+		expect((await Note.all()).length).toBe(1);
+		await synchronizerStart();
+		expect(await BaseItem.unserialize(await fileApi().get(path))).toMatchObject({ is_locked: 1 });
+	}));
+
 	it('should not encrypt structural properties', (async () => {
 		setEncryptionEnabled(true);
 		await loadEncryptionMasterKey();
 		const folder1 = await Folder.save({});
 		const folder2 = await Folder.save({});
-		const note1 = await Note.save({ parent_id: folder1.id });
+		const extractedResourceIds = '06894e83b8f84d3d8cbe0f1587f9e226';
+		const note1 = await Note.save({ parent_id: folder1.id, is_locked: 1, extracted_resource_ids: extractedResourceIds });
 		const note2 = await Note.save({ parent_id: folder2.id });
 
 		await Folder.delete(folder2.id, { toTrash: true, deleteChildren: true });
@@ -95,6 +134,46 @@ describe('Synchronizer.e2ee', () => {
 		expect(remoteItems.find(i => i.id === folder2.id).deleted_time).toBeGreaterThan(0);
 		expect(remoteItems.find(i => i.id === note1.id).deleted_time).toBe(0);
 		expect(remoteItems.find(i => i.id === note2.id).deleted_time).toBeGreaterThan(0);
+		const remoteNote1 = remoteItems.find((item): item is NoteEntity => item.id === note1.id);
+		expect(remoteNote1.is_locked).toBe(1);
+		expect(remoteNote1.extracted_resource_ids).toBe(extractedResourceIds);
+	}));
+
+	it('should store a downloaded locked note while the note lock session is locked', (async () => {
+		// The note lock singletons bind to the current client's encryption service, like in Note.test.
+		const bindNoteLockToClient = () => {
+			NoteLockKey.destroyInstance();
+			NoteLockSession.destroyInstance();
+			NoteLockService.destroyInstance();
+			EncryptionService.instance_ = encryptionService();
+		};
+		Setting.setValue('featureFlag.noteLock', true);
+		setEncryptionEnabled(true);
+		await loadEncryptionMasterKey();
+		bindNoteLockToClient();
+		await NoteLockKey.instance().create('654321');
+		await NoteLockSession.instance().unlock('654321');
+		const note = await Note.save({ title: 'Locked', body: 'secret', is_locked: 1 }, { useNoteLock: true });
+		NoteLockSession.instance().lock();
+		await synchronizerStart();
+
+		await switchClient(2);
+		bindNoteLockToClient();
+		Setting.setValue('featureFlag.noteLock', true);
+		await synchronizerStart();
+		// The encrypted placeholder lands even though no note lock key is available yet.
+		expect(await Note.load(note.id)).toMatchObject({ encryption_applied: 1, is_locked: 1, body: '' });
+
+		const masterKey = (await MasterKey.all())[0];
+		Setting.setObjectValue('encryption.passwordCache', masterKey.id, '123456');
+		await loadMasterKeysFromSettings(encryptionService());
+		await decryptionWorker().start();
+		expect((await Note.load(note.id)).encryption_applied).toBe(0);
+
+		await NoteLockSession.instance().unlock('654321');
+		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe('secret');
+		NoteLockSession.instance().lock();
+		Setting.setValue('featureFlag.noteLock', false);
 	}));
 
 	it('should mark the key has having been used when synchronising the first time', (async () => {

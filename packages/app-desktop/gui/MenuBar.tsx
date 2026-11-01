@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
+import { Dispatch } from 'redux';
 import { AppState } from '../app.reducer';
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import { defaultWindowId, stateUtils } from '@joplin/lib/reducer';
@@ -12,6 +13,7 @@ import versionInfo, { PackageInfo } from '@joplin/lib/versionInfo';
 import { ImportModule } from '@joplin/lib/services/interop/Module';
 import InteropServiceHelper from '../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
 import { isContextMenuItemLocation, MenuItem, MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
 import menuCommandNames from './menuCommandNames';
@@ -30,11 +32,12 @@ import NavService from '@joplin/lib/services/NavService';
 import Logger from '@joplin/utils/Logger';
 import { ImportCommandOptions } from './WindowCommandsAndDialogs/commands/importFrom';
 import { FileSystemItem } from '@joplin/lib/services/interop/types';
+import { chatAvailability } from '@joplin/lib/services/ai/availability';
 
 const logger = Logger.create('MenuBar');
 
 const packageInfo: PackageInfo = require('../packageInfo.js');
-const { clipboard } = require('electron');
+import { clipboard } from 'electron';
 const Menu = bridge().Menu;
 
 const menuUtils = new MenuUtils(CommandService.instance());
@@ -65,8 +68,7 @@ function getPluginCommandNames(plugins: PluginStates): string[] {
 	return output;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-function createPluginMenuTree(label: string, menuItems: MenuItem[], onMenuItemClick: Function) {
+function createPluginMenuTree(label: string, menuItems: MenuItem[], onMenuItemClick: (commandName: string)=> void) {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron MenuItemConstructorOptions has heterogeneous shapes (submenu/role/type/click vary by item kind); the menu structure is built dynamically
 	const output: any = {
 		label: label,
@@ -152,8 +154,7 @@ const useNoteListMenuItems = (noteListRendererIds: string[]) => {
 };
 
 interface Props {
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron MenuItemConstructorOptions has heterogeneous shapes (submenu/role/type/click vary by item kind); the menu structure is built dynamically
 	menuItemProps: any;
 	mainScreenVisible: boolean;
@@ -185,6 +186,7 @@ interface Props {
 	secondaryWindowFocused: boolean;
 	showMenuBar: boolean;
 	syncPending: boolean;
+	showAiChatMenuItem: boolean;
 }
 
 const commandNames: string[] = menuCommandNames();
@@ -532,6 +534,7 @@ function useMenu(props: Props) {
 			// the following menu items will be available for all OS under Tools
 			const toolsItemsAll = [
 				menuItemDic.newWhiteboard,
+				menuItemDic.addNoteToWhiteboard,
 				separator(),
 				{
 					label: _('Note attachments...'),
@@ -754,6 +757,7 @@ function useMenu(props: Props) {
 						menuItemDic.toggleSideBar,
 						shim.isMac() ? noItem : menuItemDic.toggleMenuBar,
 						menuItemDic.toggleNoteList,
+						{ ...menuItemDic.toggleAiChat, visible: props.showAiChatMenuItem },
 						menuItemDic.toggleVisiblePanes,
 						menuItemDic.toggleEditorPlugin,
 						menuItemDic.toggleEditors,
@@ -864,12 +868,20 @@ function useMenu(props: Props) {
 						menuItemDic.openNoteInNewWindow,
 						menuItemDic.toggleExternalEditing,
 						separator(),
+						menuItemDic.linkToNote,
 						menuItemDic.setTags,
 						menuItemDic.showShareNoteDialog,
 						menuItemDic.convertNoteToMarkdown,
+						...(isNoteLockEnabled() ? [
+							separator(),
+							menuItemDic.enableNoteEncryption,
+							menuItemDic.disableNoteEncryption,
+							menuItemDic.lockEncryptedNotes,
+						] : []),
 						separator(),
 						menuItemDic.showNoteProperties,
 						menuItemDic.showNoteContentProperties,
+						menuItemDic.revealInNotebook,
 						separator(),
 						menuItemDic.permanentlyDeleteNote,
 					],
@@ -974,7 +986,6 @@ function useMenu(props: Props) {
 
 			rootMenus.go.submenu.push(menuItemDic.gotoAnything);
 			rootMenus.tools.submenu.push(menuItemDic.commandPalette);
-			rootMenus.tools.submenu.push(menuItemDic.linkToNote);
 			rootMenus.tools.submenu.push(menuItemDic.openMasterPasswordDialog);
 
 			for (const view of props.pluginMenuItems) {
@@ -1062,6 +1073,7 @@ function useMenu(props: Props) {
 		switchProfileMenuItems,
 		menuItemDic,
 		props.syncPending,
+		props.showAiChatMenuItem,
 	]);
 
 	useMenuStates(menu, props);
@@ -1149,6 +1161,7 @@ const mapStateToProps = (state: AppState): Partial<Props> => {
 		noteListRendererId: state.settings['notes.listRendererId'],
 		showMenuBar: state.settings.showMenuBar,
 		syncPending: state.syncPending,
+		showAiChatMenuItem: chatAvailability().available || !!state.settings['ai.chat.showToolbarButton'],
 	};
 };
 

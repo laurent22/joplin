@@ -1,5 +1,4 @@
 import { createServer, IncomingMessage, ServerResponse } from 'http';
-import fetch from 'node-fetch';
 import { Server } from 'http';
 import Logger, { LoggerWrapper } from './Logger';
 import { pathExists } from 'fs-extra';

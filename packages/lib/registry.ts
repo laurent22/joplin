@@ -4,12 +4,12 @@ import Setting from './models/Setting';
 import shim from './shim';
 import SyncTargetRegistry from './SyncTargetRegistry';
 import { AnyAction, Dispatch } from 'redux';
-import Synchronizer from './Synchronizer';
+import Synchronizer, { SyncStartOptions } from './Synchronizer';
+import BaseSyncTarget from './BaseSyncTarget';
 
 class Registry {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Heterogeneous: each sync target subclass adds methods (e.g. OneDrive .api(), JoplinServer .driver()) accessed by callers
-	private syncTargets_: any = {};
+	private syncTargets_: Record<number, BaseSyncTarget> = {};
 	private logger_: Logger = null;
 	private schedSyncCalls_: boolean[] = [];
 	private waitForReSyncCalls_: boolean[] = [];
@@ -113,8 +113,7 @@ class Registry {
 		}
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- syncOptions passes through to Synchronizer.start(options: any); tightening would diverge from the underlying signature
-	public scheduleSync = async (delay: number = null, syncOptions: any = null, doWifiConnectionCheck = false) => {
+	public scheduleSync = async (delay: number = null, syncOptions: SyncStartOptions = null, doWifiConnectionCheck = false) => {
 		this.schedSyncCalls_.push(true);
 
 		try {

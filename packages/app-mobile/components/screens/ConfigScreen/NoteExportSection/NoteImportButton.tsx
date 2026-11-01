@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/utils/Logger';
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useContext } from 'react';
 import { join, basename } from 'path';
 import { ConfigScreenStyles } from '../configScreenStyles';
 import InteropService from '@joplin/lib/services/interop/InteropService';
@@ -12,6 +12,10 @@ import TaskButton, { OnProgressCallback, SetAfterCompleteListenerCallback, TaskS
 import { Platform } from 'react-native';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import Folder from '@joplin/lib/models/Folder';
+import { fileExtension } from '@joplin/lib/path-utils';
+import { NoteLockPrompts, promptForImportedNoteLockKey } from '@joplin/lib/services/noteLock/noteLockPrompts';
+import { ErrorCode } from '@joplin/lib/errors';
+import { DialogContext } from '../../../DialogManager';
 
 const logger = Logger.create('NoteImportButton');
 
@@ -21,11 +25,15 @@ interface Props {
 	description: string;
 	format: string;
 	activeFolder?: FolderEntity;
+	// Navigating to the Config screen does nothing while it is already open, so the screen switches its own section.
+	onOpenNoteLockSetup: ()=> void;
 }
 
 export const importedFolderTitle = () => {
 	return _('Imported Notes');
 };
+
+export const textImportExtensions = ['md', 'markdown', 'txt', 'html'];
 
 const importedFolder = async () => {
 	let folder = await Folder.loadByFields({
@@ -39,6 +47,12 @@ const importedFolder = async () => {
 };
 
 const NoteImportButton: FunctionComponent<Props> = props => {
+	const dialogs = useContext(DialogContext);
+	const noteLockPrompts: NoteLockPrompts = {
+		promptPassword: label => dialogs.promptForText(label, '', true),
+		goToNoteLockSetup: props.onOpenNoteLockSetup,
+	};
+
 	const getTitle = (taskStatus: TaskStatus) => {
 		if (taskStatus === TaskStatus.InProgress) {
 			return _('Importing...');
@@ -64,8 +78,17 @@ const NoteImportButton: FunctionComponent<Props> = props => {
 			default: sourceFileUri,
 			ios: decodeURIComponent(sourceFileUri),
 		});
+
+		let validExtensions = ['jex'];
+		if (props.format === 'txt') validExtensions = textImportExtensions;
+
 		// importFiles[0].fileName can be null on iOS
 		const sourceFileName = importFiles[0].fileName ?? basename(sourceFilePath);
+		const extension = fileExtension(sourceFileName).toLowerCase();
+
+		if (!validExtensions.includes(extension)) {
+			throw new Error(_('Unsupported file extension. Expected: %s', validExtensions.join(', ')));
+		}
 
 		const importTargetPath = join(await makeImportExportCacheDirectory(), sourceFileName);
 		setAfterCompleteListener(async (_success: boolean) => {
@@ -84,11 +107,16 @@ const NoteImportButton: FunctionComponent<Props> = props => {
 				path: importTargetPath,
 				format: props.format,
 				destinationFolderId: activeFolderId,
+				onNoteLockKey: backupKey => promptForImportedNoteLockKey(backupKey, noteLockPrompts),
 			});
 
 			logger.info('Imported successfully');
 			return { success: true, warnings: status.warnings };
 		} catch (error) {
+			if (error.code === ErrorCode.Cancelled) {
+				logger.info('Canceled.');
+				return { success: false, warnings: [] };
+			}
 			logger.error('Import failed with error', error);
 			throw new Error(_('Import failed. Make sure a %s file was selected.\nDetails: %s', props.format, error.toString()));
 		}

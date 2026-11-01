@@ -4,6 +4,7 @@ import type Token = require('markdown-it/lib/token');
 import type Renderer = require('markdown-it/lib/renderer');
 
 const fountain = require('../../vendor/fountain.min.js');
+import htmlUtils from '../../htmlUtils';
 
 const pluginAssets = function(theme: RendererTheme) {
 	return [
@@ -143,13 +144,14 @@ function renderFountainScript(markdownIt: MarkdownIt, content: string) {
 		`;
 	}
 
+	const contentHtml = result.html.script;
 	return `
 		<!-- joplin-metadata-print-title = false -->
 		<div class="fountain joplin-editable">
 			<pre class="joplin-source" hidden data-joplin-language="fountain" data-joplin-source-open="\`\`\`fountain&#10;" data-joplin-source-close="&#10;\`\`\`&#10;">${markdownIt.utils.escapeHtml(content)}</pre>
-			${titlePageHtml}
+			${htmlUtils.sanitizeHtml(titlePageHtml)}
 			<div class="page">
-				${result.html.script}
+				${htmlUtils.sanitizeHtml(contentHtml)}
 			</div>
 		</div>
 	`;

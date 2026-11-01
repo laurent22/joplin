@@ -1,0 +1,37 @@
+
+.inline-markdown {
+	position: relative;
+
+	// Ensure images don't overflow the container
+	img {
+		max-width: 100%;
+	}
+
+	// Decrease space between paragraphs to better fit
+	p {
+		margin-bottom: var(--joplin-margin);
+	}
+	// Avoid a large space at the end of the chat bubble after
+	// the last paragraph
+	p:last-child {
+		margin-bottom: 0;
+	}
+
+	ul, ol {
+		padding-left: var(--joplin-margin);
+	}
+
+	pre {
+		white-space: pre;
+		white-space: pre-wrap;
+		overflow-wrap: break-word;
+
+		span {
+			font-family: inherit;
+		}
+	}
+
+	.mermaid-export-graph {
+		display: none;
+	}
+}

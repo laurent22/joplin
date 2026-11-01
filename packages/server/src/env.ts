@@ -32,6 +32,8 @@ const defaultEnvValues: EnvVariables = {
 	IS_ADMIN_INSTANCE: true,
 	INSTANCE_NAME: '',
 
+	DEFAULT_ADMIN_PASSWORD: 'admin',
+
 	// Maximum allowed drift between NTP time and server time. A few
 	// milliseconds is normally not an issue unless many clients are modifying
 	// the same note at the exact same time. But past a certain limit, it might
@@ -56,6 +58,11 @@ const defaultEnvValues: EnvVariables = {
 	JOPLINAPP_BASE_URL: 'https://joplinapp.org',
 	TERMS_URL: '',
 	PRIVACY_URL: '',
+
+	// Comma-separated list of trusted domains that can access server API.
+	// Use this to grant the Joplin web app access to Joplin Server.
+	// Entries must be in <protocol>://<domain> form (no trailing slash).
+	CORS_ALLOWED_DOMAINS: 'https://joplinapp.org,https://app.joplincloud.com',
 
 	// ==================================================
 	// Database config
@@ -213,6 +220,9 @@ export interface EnvVariables {
 	JOPLINAPP_BASE_URL: string;
 	TERMS_URL: string;
 	PRIVACY_URL: string;
+	CORS_ALLOWED_DOMAINS: string;
+
+	DEFAULT_ADMIN_PASSWORD: string;
 
 	DB_CLIENT: string;
 	DB_SLOW_QUERY_LOG_ENABLED: boolean;

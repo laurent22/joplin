@@ -43,6 +43,7 @@ const prepareViewProps = async (
 	noteTags: TagEntity[],
 	folder: FolderEntity | null,
 	itemIndex: number,
+	noteIsPublished = false,
 ) => {
 	const output: {
 		note?: Record<string, unknown> & { folder?: Record<string, unknown> };
@@ -60,6 +61,8 @@ const prepareViewProps = async (
 				output.note.titleHtml = noteTitleHtml;
 			} else if (dep === 'note.isWatched') {
 				output.note[propName] = noteIsWatched;
+			} else if (dep === 'note.is_published') {
+				output.note[propName] = noteIsPublished;
 			} else if (dep === 'note.tags') {
 				output.note[propName] = noteTags;
 			} else if (dep === 'note.folder.title') {

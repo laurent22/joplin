@@ -9,6 +9,8 @@ import loadStorageDriver from './items/storage/loadStorageDriver';
 import { ErrorPayloadTooLarge, ErrorUnprocessableEntity } from '../utils/errors';
 import { makeNoteSerializedBody } from '../utils/testing/serializedItems';
 import { isSqlite } from '../db';
+import { ModelType } from '@joplin/lib/BaseModel';
+import { Item } from '../services/database/types';
 
 describe('ItemModel', () => {
 
@@ -644,6 +646,43 @@ describe('ItemModel', () => {
 		})()).rejects.toThrow();
 
 		await models().item().delete('00000000000000000000000000000003', { allowNoOp: true });
+	});
+
+	test('itemToJoplinItem should default deleted_time to 0 when the item content has none', async () => {
+		const makeRow = (content: object): Item => ({
+			jop_type: ModelType.Note,
+			content: Buffer.from(JSON.stringify(content)),
+		});
+
+		const oldNote = models().item().itemToJoplinItem(makeRow({ type_: ModelType.Note, title: 'Ping' }));
+		expect(oldNote.deleted_time).toBe(0);
+
+		const trashedNote = models().item().itemToJoplinItem(makeRow({ type_: ModelType.Note, title: 'Ping', deleted_time: 123 }));
+		expect(trashedNote.deleted_time).toBe(123);
+	});
+
+	test('should update the item when it was created by a concurrent request', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+
+		// Simulates a client retrying an upload while the original request is still being
+		// processed: the item does not exist when the caller checks for it, but does by the
+		// time it is inserted.
+		await models().item().saveForUser(user1.id, {
+			name: 'test.txt',
+			content: Buffer.from('original'),
+		});
+
+		const savedItem = await models().item().saveForUser(user1.id, {
+			name: 'test.txt',
+			content: Buffer.from('retried'),
+		});
+
+		const allItems = await models().item().all();
+		expect(allItems.length).toBe(1);
+		expect(savedItem.id).toBe(allItems[0].id);
+
+		const content = await models().item().loadWithContent(savedItem.id);
+		expect(content.content.toString()).toBe('retried');
 	});
 
 });

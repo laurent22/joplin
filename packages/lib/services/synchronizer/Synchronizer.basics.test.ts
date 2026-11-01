@@ -69,6 +69,9 @@ describe('Synchronizer.basics', () => {
 
 		await switchClient(2);
 
+		const dispatchC2 = jest.fn();
+		synchronizer(2).dispatch = dispatchC2;
+
 		await synchronizerStart();
 
 		await sleep(0.1);
@@ -80,9 +83,22 @@ describe('Synchronizer.basics', () => {
 
 		await synchronizerStart();
 
+		expect(dispatchC2).not.toHaveBeenCalledWith({
+			type: 'EDITOR_NOTE_NEEDS_RELOAD',
+			noteId: note1.id,
+		});
+
 		await switchClient(1);
 
+		const dispatchC1 = jest.fn();
+		synchronizer(1).dispatch = dispatchC1;
+
 		await synchronizerStart();
+
+		expect(dispatchC1).toHaveBeenCalledWith({
+			type: 'EDITOR_NOTE_NEEDS_RELOAD',
+			noteId: note1.id,
+		});
 
 		const all = await allNotesFolders();
 
@@ -562,7 +578,7 @@ describe('Synchronizer.basics', () => {
 		// Then after sync, appMinVersion should be the same as that client version
 		const remoteInfoAfter = await fetchSyncInfo(synchronizer().api());
 
-		expect(remoteInfoBefore.appMinVersion).toBe('3.0.0');
+		expect(remoteInfoBefore.appMinVersion).toBe('3.7.0');
 		expect(remoteInfoAfter.appMinVersion).toBe('100.0.0');
 
 		// Now simulates synchronising with an older client version. In that case, it should not be

@@ -1,4 +1,4 @@
-const open = require('open');
+import open = require('open');
 interface LinkStoreEntry {
 	link: string;
 	noteX: number;
@@ -137,7 +137,7 @@ class LinkSelector {
 		if (textWidget.noteId !== this.noteId_) return;
 		if (textWidget.renderedText_ !== this.renderedText_) return;
 		if (textWidget.scrollTop_ !== this.scrollTop_) return;
-		open(this.linkStore_[this.currentLinkIndex_].link);
+		void open(this.linkStore_[this.currentLinkIndex_].link);
 	}
 }
 

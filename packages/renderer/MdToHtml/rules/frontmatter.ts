@@ -1,4 +1,4 @@
-import type * as MarkdownIt from 'markdown-it';
+import type MarkdownIt from 'markdown-it';
 import type * as StateBlock from 'markdown-it/lib/rules_block/state_block';
 import hljs from '../../highlight';
 

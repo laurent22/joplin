@@ -10,7 +10,7 @@ import { AppState } from '../utils/types';
 import getEmptyFolderMessage from '@joplin/lib/components/shared/NoteList/getEmptyFolderMessage';
 import Folder from '@joplin/lib/models/Folder';
 
-const { _ } = require('@joplin/lib/locale');
+import { _ } from '@joplin/lib/locale';
 import NoteItem from './NoteItem';
 import { themeStyle } from './global-style';
 
@@ -90,7 +90,7 @@ class NoteListComponent extends Component<NoteListProps> {
 			return <FlatList
 				ref={ref => { this.rootRef_ = ref; }}
 				data={this.props.items}
-				renderItem={({ item }) => <NoteItem note={item} />}
+				renderItem={({ item, index }) => <NoteItem note={item} index={index} />}
 				keyExtractor={item => item.id}
 			/>;
 		} else {

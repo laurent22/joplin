@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Dispatch } from 'redux';
 import { useCallback, useState, useEffect, useMemo } from 'react';
 import { _ } from '@joplin/lib/locale';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
@@ -16,8 +17,7 @@ import time from '@joplin/lib/time';
 
 interface Props {
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 }
 
 enum Mode {
@@ -46,7 +46,7 @@ export default function(props: Props) {
 		if ([MasterPasswordStatus.NotSet, MasterPasswordStatus.Invalid].includes(status)) return false;
 		if (mode === Mode.Reset) return false;
 		return true;
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
+
 	}, [status, mode]);
 
 	const onClose = useCallback(() => {
@@ -104,18 +104,15 @@ export default function(props: Props) {
 		return !hasMasterPasswordEncryptedData;
 	}, [mode, showCurrentPassword, hasMasterPasswordEncryptedData]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- PasswordInput's ChangeEventHandler is typed as a custom {value} event but the runtime hands a React.ChangeEvent through
-	const onCurrentPasswordChange = useCallback((event: any) => {
+	const onCurrentPasswordChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
 		setCurrentPassword(event.target.value);
 	}, []);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Same as onCurrentPasswordChange
-	const onPasswordChange1 = useCallback((event: any) => {
+	const onPasswordChange1 = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
 		setPassword1(event.target.value);
 	}, []);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Same as onCurrentPasswordChange
-	const onPasswordChange2 = useCallback((event: any) => {
+	const onPasswordChange2 = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
 		setPassword2(event.target.value);
 	}, []);
 

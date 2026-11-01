@@ -1,7 +1,7 @@
 // Allows displaying error stack traces with TypeScript file paths
 require('source-map-support').install();
 
-import * as Koa from 'koa';
+import Koa from 'koa';
 import * as fs from 'fs-extra';
 import Logger, { LogLevel, LoggerWrapper, TargetType } from '@joplin/utils/Logger';
 import config, { fullVersionString, initConfig, runningInDocker } from './config';
@@ -36,9 +36,9 @@ interface Argv {
 	envFile?: string;
 }
 
-const nodeSqlite = require('sqlite3');
+import * as nodeSqlite from 'sqlite3';
+import { shimInit } from '@joplin/lib/shim-init-node';
 const cors = require('@koa/cors');
-const { shimInit } = require('@joplin/lib/shim-init-node.js');
 shimInit({ nodeSqlite });
 
 const defaultEnvVariables: Record<Env, Partial<EnvVariables>> = {
@@ -94,6 +94,23 @@ async function getEnvFilePath(env: Env, argv: { envFile?: string }): Promise<str
 	return '';
 }
 
+const getCorsAllowedDomains = (envVariables: EnvVariables, env: Env) => {
+	const corsAllowedDomains = envVariables.CORS_ALLOWED_DOMAINS
+		.split(',')
+		.map(domain => domain.trim())
+		.filter(domain => !!domain);
+
+	if (env === Env.Dev) {
+		// Stripe (dev)
+		corsAllowedDomains.push('http://localhost:8077');
+
+		// Web client (dev)
+		corsAllowedDomains.push('http://localhost:8088');
+	}
+
+	return corsAllowedDomains;
+};
+
 async function main() {
 	const { selectedCommand, argv: yargsArgv } = await setupCommands();
 
@@ -126,21 +143,8 @@ async function main() {
 	// loads the user, which is then used by notificationHandler. And finally
 	// routeHandler uses data from both previous middlewares. It would be good to
 	// layout these dependencies in code but not clear how to do this.
-	const corsAllowedDomains = [
-		'https://joplinapp.org',
 
-		// Allows sync with the web version of Joplin
-		'https://app.joplincloud.com',
-	];
-
-	if (env === Env.Dev) {
-		// Stripe (dev)
-		corsAllowedDomains.push('http://localhost:8077');
-
-		// Web client (dev)
-		corsAllowedDomains.push('http://localhost:8088');
-	}
-
+	const corsAllowedDomains = getCorsAllowedDomains(envVariables, env);
 	function acceptOrigin(origin: string): boolean {
 		// Origin can be string "null"
 		if (origin === 'null') return false;
@@ -170,7 +174,11 @@ async function main() {
 		} catch (error) {
 			ctx.status = error.httpCode || 500;
 
-			appLogger().error(`Middleware error on ${ctx.path}:`, error);
+			if (ctx.status >= 500) {
+				appLogger().error(`Middleware error on ${ctx.path}:`, error);
+			} else {
+				appLogger().info(`Middleware error on ${ctx.path}:`, error);
+			}
 
 			const responseFormat = routeResponseFormat(ctx);
 
@@ -183,6 +191,7 @@ async function main() {
 						name: 'error',
 						title: 'Error',
 						path: 'index/error',
+						showFooter: true,
 						content: { error },
 					});
 				} catch (anotherError) {

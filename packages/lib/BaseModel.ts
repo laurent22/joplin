@@ -6,7 +6,7 @@ import { LoadOptions, SaveOptions } from './models/utils/types';
 import ActionLogger, { ItemActionType as ItemActionType } from './utils/ActionLogger';
 import { BaseItemEntity, SqlQuery } from './services/database/types';
 import uuid from './uuid';
-const Mutex = require('async-mutex').Mutex;
+import { Mutex } from 'async-mutex';
 
 // New code should make use of this enum
 export enum ModelType {
@@ -26,6 +26,10 @@ export enum ModelType {
 	Migration = 14,
 	SmartFilter = 15,
 	Command = 16,
+	NoteEmbedding = 17,
+	ConflictNoteState = 18,
+	ChatConversation = 19,
+	ChatMessage = 20,
 }
 
 export interface SearchOptions {
@@ -86,6 +90,10 @@ class BaseModel {
 		['TYPE_MIGRATION', ModelType.Migration],
 		['TYPE_SMART_FILTER', ModelType.SmartFilter],
 		['TYPE_COMMAND', ModelType.Command],
+		['TYPE_NOTE_EMBEDDING', ModelType.NoteEmbedding],
+		['TYPE_CONFLICT_NOTE_STATE', ModelType.ConflictNoteState],
+		['TYPE_CHAT_CONVERSATION', ModelType.ChatConversation],
+		['TYPE_CHAT_MESSAGE', ModelType.ChatMessage],
 	];
 
 	private static uuidGenerator: ()=> string = uuid.create;
@@ -106,8 +114,12 @@ class BaseModel {
 	public static TYPE_MIGRATION = ModelType.Migration;
 	public static TYPE_SMART_FILTER = ModelType.SmartFilter;
 	public static TYPE_COMMAND = ModelType.Command;
+	public static TYPE_NOTE_EMBEDDING = ModelType.NoteEmbedding;
+	public static TYPE_CONFLICT_NOTE_STATE = ModelType.ConflictNoteState;
+	public static TYPE_CHAT_CONVERSATION = ModelType.ChatConversation;
+	public static TYPE_CHAT_MESSAGE = ModelType.ChatMessage;
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Set by the app to redux dispatch; per-app action types diverge so the function is typed loosely here
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Set by the app to redux dispatch; per-app action types diverge so the function is typed loosely here
 	public static dispatch: Function = function() {};
 	private static saveMutexes_: Record<string, { acquire: ()=> Promise<()=> void> }> = {};
 
@@ -638,41 +650,43 @@ class BaseModel {
 
 		const mutexRelease = await this.saveMutex(o).acquire();
 
-		options = this.modOptions(options);
-		const isNew = this.isNew(o, options);
-		options.isNew = isNew;
-
-		// Diff saving is an optimisation which takes a new version of the item and an old one,
-		// do a diff and save only this diff. IMPORTANT: When using this make sure that both
-		// models have been normalised using ItemClass.filter()
-		const isDiffSaving = options && options.oldItem && !options.isNew;
-
-		if (isDiffSaving) {
-			const newObject = BaseModel.diffObjects(options.oldItem, o);
-			newObject.type_ = o.type_;
-			newObject.id = o.id;
-			o = newObject;
-		}
-
-		o = this.filter(o);
-
-		if (options.userSideValidation) {
-			this.userSideValidation(o);
-		}
-
-		let queries = [];
-		const saveQuery = this.saveQuery(o, options);
-		const modelId = saveQuery.id;
-
-		queries.push(saveQuery);
-
-		if (options.nextQueries && options.nextQueries.length) {
-			queries = queries.concat(options.nextQueries);
-		}
-
 		let output = null;
 
+		// The try must cover everything after the mutex acquire: a throw from userSideValidation
+		// or saveQuery would otherwise leak the mutex and hang every later save of the same item.
 		try {
+			options = this.modOptions(options);
+			const isNew = this.isNew(o, options);
+			options.isNew = isNew;
+
+			// Diff saving is an optimisation which takes a new version of the item and an old one,
+			// do a diff and save only this diff. IMPORTANT: When using this make sure that both
+			// models have been normalised using ItemClass.filter()
+			const isDiffSaving = options && options.oldItem && !options.isNew;
+
+			if (isDiffSaving) {
+				const newObject = BaseModel.diffObjects(options.oldItem, o);
+				newObject.type_ = o.type_;
+				newObject.id = o.id;
+				o = newObject;
+			}
+
+			o = this.filter(o);
+
+			if (options.userSideValidation) {
+				this.userSideValidation(o);
+			}
+
+			let queries = [];
+			const saveQuery = this.saveQuery(o, options);
+			const modelId = saveQuery.id;
+
+			queries.push(saveQuery);
+
+			if (options.nextQueries && options.nextQueries.length) {
+				queries = queries.concat(options.nextQueries);
+			}
+
 			await this.db().transactionExecBatch(queries);
 
 			o = { ...o };
@@ -723,6 +737,9 @@ class BaseModel {
 		if (!model) return model;
 
 		const output = { ...model };
+		if (this.hasField('is_locked') && output.hasOwnProperty('is_locked') && (output.is_locked === null || output.is_locked === undefined)) output.is_locked = 0;
+		if (this.hasField('extracted_resource_ids') && output.hasOwnProperty('extracted_resource_ids') && (output.extracted_resource_ids === null || output.extracted_resource_ids === undefined)) output.extracted_resource_ids = '';
+
 		for (const n in output) {
 			if (!output.hasOwnProperty(n)) continue;
 

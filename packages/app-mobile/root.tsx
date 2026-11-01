@@ -9,6 +9,7 @@ import time from '@joplin/lib/time';
 import Logger from '@joplin/utils/Logger';
 import NoteScreen from './components/screens/Note/Note';
 import UpgradeSyncTargetScreen from './components/screens/UpgradeSyncTargetScreen';
+import NoteLockMigrationScreen from './components/screens/NoteLockMigrationScreen';
 import Setting, { } from '@joplin/lib/models/Setting';
 import PoorManIntervals from '@joplin/lib/PoorManIntervals';
 import { NotesParent, serializeNotesParent } from '@joplin/lib/reducer';
@@ -33,7 +34,7 @@ interface DropdownAlertData {
 	resolve?: (_value: DropdownAlertData)=> void;
 }
 import SafeAreaView from './components/SafeAreaView';
-const { connect, Provider } = require('react-redux');
+import { connect, Provider } from 'react-redux';
 import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 import BackButtonService, { BackButtonHandler } from './services/BackButtonService';
 import NavService from '@joplin/lib/services/NavService';
@@ -54,7 +55,7 @@ import EncryptionConfigScreen from './components/screens/encryption-config';
 import DropboxLoginScreen from './components/screens/dropbox-login.js';
 import { MenuProvider } from 'react-native-popup-menu';
 import SideMenu, { SideMenuPosition } from './components/SideMenu';
-import SideMenuContent from './components/side-menu-content';
+import SideMenuContent from './components/SideMenuContent/SideMenuContent';
 import SideMenuContentNote, { SideMenuContentOptions } from './components/SideMenuContentNote';
 import { reg } from '@joplin/lib/registry';
 import { defaultState } from '@joplin/lib/reducer';
@@ -63,9 +64,9 @@ import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import { themeStyle } from './components/global-style';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import SyncTargetFilesystem from '@joplin/lib/SyncTargetFilesystem';
-const SyncTargetNextcloud = require('@joplin/lib/SyncTargetNextcloud.js');
-const SyncTargetWebDAV = require('@joplin/lib/SyncTargetWebDAV.js');
-const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox.js');
+import SyncTargetNextcloud from '@joplin/lib/SyncTargetNextcloud';
+import SyncTargetWebDAV from '@joplin/lib/SyncTargetWebDAV';
+import SyncTargetDropbox from '@joplin/lib/SyncTargetDropbox';
 const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
 import SyncTargetJoplinServerSAML from '@joplin/lib/SyncTargetJoplinServerSAML';
 import BiometricPopup from './components/biometrics/BiometricPopup';
@@ -99,6 +100,7 @@ import { setDispatch } from './services/profiles';
 import { ReactNode } from 'react';
 import autodetectTheme, { onSystemColorSchemeChange } from './utils/autodetectTheme';
 import PluginRunnerWebView from './components/plugins/PluginRunnerWebView';
+import CommandService from '@joplin/lib/services/CommandService';
 import { refreshFolders, scheduleRefreshFolders } from '@joplin/lib/folders-screen-utils';
 import ShareManager from './components/screens/ShareManager';
 import { setDateFormat, setTimeFormat, setTimeLocale } from '@joplin/utils/time';
@@ -229,10 +231,24 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 			Setting.setValue('activeFolderId', newState.selectedFolderId);
 		}
 
-		const notesParent: NotesParent = {
-			type: action.smartFilterId ? 'SmartFilter' : 'Folder',
-			selectedItemId: action.smartFilterId ? action.smartFilterId : newState.selectedFolderId,
-		};
+		let notesParent: NotesParent;
+		if (action.smartFilterId) {
+			notesParent = {
+				type: 'SmartFilter',
+				selectedItemId: action.smartFilterId,
+			};
+		} else if (action.tagId) {
+			notesParent = {
+				type: 'Tag',
+				selectedItemId: action.tagId,
+			};
+		} else {
+			notesParent = {
+				type: 'Folder',
+				selectedItemId: newState.selectedFolderId,
+			};
+		}
+
 		Setting.setValue('notesParent', serializeNotesParent(notesParent));
 	}
 
@@ -296,6 +312,7 @@ interface AppComponentProps {
 	disableSideMenuGestures: boolean;
 	historyCanGoBack: boolean;
 	showSideMenu: boolean;
+	showPanelsDialog: boolean;
 	noteSelectionEnabled: boolean;
 	syncStarted: boolean;
 }
@@ -487,6 +504,11 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 		}
 
 		this.urlOpenListener_ = Linking.addEventListener('url', this.handleOpenURL_);
+		// A new activity can remount this component with biometrics already done.
+		// Its native share event may have arrived before the ShareExtension listener was attached.
+		if (this.props.biometricsDone) {
+			void this.handleShareData();
+		}
 
 		BackButtonService.initialize(this.backButtonHandler_);
 
@@ -585,6 +607,13 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 	}
 
 	private async backButtonHandler() {
+		// Plugin dialogs use Paper's Modal, whose later hardwareBackPress listener runs first
+		// (React Native dispatches newest-first), so an open dialog consumes Back before this branch.
+		if (this.props.showPanelsDialog) {
+			await CommandService.instance().execute('dismissPluginPanels');
+			return true;
+		}
+
 		if (this.props.noteSelectionEnabled) {
 			this.props.dispatch({ type: 'NOTE_SELECTION_END' });
 			return true;
@@ -727,14 +756,17 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 		let sideMenuContent: ReactNode = null;
 		let menuPosition = SideMenuPosition.Left;
 		let disableSideMenuGestures = true;
+		let disableSideMenuOpenGesture = false;
 
 		if (this.props.routeName === 'Note') {
 			sideMenuContent = <SideMenuContentNote options={this.props.noteSideMenuOptions}/>;
 			menuPosition = SideMenuPosition.Right;
 			disableSideMenuGestures = this.props.disableSideMenuGestures;
+			// Opening the properties menu requires using the kebab menu, as open gestures would interfere with horizontally scrollable content in notes
+			disableSideMenuOpenGesture = true;
 		} else if (this.props.routeName === 'Notes') {
 			sideMenuContent = <SideMenuContent/>;
-			disableSideMenuGestures = false;
+			disableSideMenuGestures = this.props.noteSelectionEnabled;
 		} else {
 			sideMenuContent = <SideMenuContent/>;
 		}
@@ -750,6 +782,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 			JoplinServerSamlLogin: { screen: SsoLoginScreen(new SamlShared()) },
 			EncryptionConfig: { screen: EncryptionConfigScreen },
 			UpgradeSyncTarget: { screen: UpgradeSyncTargetScreen },
+			NoteLockMigration: { screen: NoteLockMigrationScreen },
 			ShareManager: { screen: ShareManager },
 			ProfileSwitcher: { screen: ProfileSwitcher },
 			ProfileEditor: { screen: ProfileEditor },
@@ -764,7 +797,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 
 
 		// const statusBarStyle = theme.appearance === 'light-content';
-		const statusBarStyle = 'light-content';
+		const statusBarStyle = theme.appearance === ThemeAppearance.Light ? 'dark-content' : 'light-content';
 
 		const shouldShowMainContent = !biometricsEnabled(this.state.sensorInfo) || this.props.biometricsDone;
 
@@ -773,27 +806,20 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 		logger.info('root.biometrics: shouldShowMainContent', shouldShowMainContent);
 		logger.info('root.biometrics: this.state.sensorInfo', this.state.sensorInfo);
 
-		// The right sidemenu can be difficult to close due to a bug in the sidemenu
-		// library (right sidemenus can't be swiped closed).
-		//
-		// Additionally, it can interfere with scrolling in the note viewer, so we use
-		// a smaller edge hit width.
-		const menuEdgeHitWidth = menuPosition === 'right' ? 20 : 30;
-
 		const mainContent = (
 			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 				<View style={{ flexGrow: 1, flexShrink: 1, flexBasis: '100%' }}>
-					<SafeAreaView style={{ flex: 1 }} titleBarUnderlayColor={theme.backgroundColor2}>
+					<SafeAreaView style={{ flex: 1 }} titleBarUnderlayColor={theme.backgroundColor}>
 						<SideMenu
 							menu={sideMenuContent}
-							edgeHitWidth={menuEdgeHitWidth}
 							toleranceX={4}
-							toleranceY={20}
+							minHorizontalSwipe={10}
 							openMenuOffset={this.state.sideMenuWidth}
 							menuPosition={menuPosition}
 							onChange={this.sideMenu_change}
 							isOpen={this.props.showSideMenu}
 							disableGestures={disableSideMenuGestures}
+							disableOpenGesture={disableSideMenuOpenGesture}
 						>
 							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 								{ shouldShowMainContent && <AppNav screens={appNavInit} dispatch={this.props.dispatch} /> }
@@ -823,13 +849,16 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 						version: 3,
 						colors: {
 							...paperTheme.colors,
+
+							primary: theme.backgroundColor5,
+							onPrimary: theme.color5,
+							secondary: theme.backgroundColor4Dimmed,
+							onSecondary: theme.color4,
+
 							onPrimaryContainer: theme.color5,
 							primaryContainer: theme.backgroundColor5,
 
 							outline: theme.codeBorderColor,
-
-							primary: theme.color4,
-							onPrimary: theme.backgroundColor4,
 
 							background: theme.backgroundColor,
 
@@ -877,6 +906,7 @@ const mapStateToProps = (state: AppState) => {
 	return {
 		historyCanGoBack: state.historyCanGoBack,
 		showSideMenu: state.showSideMenu,
+		showPanelsDialog: state.showPanelsDialog,
 		syncStarted: state.syncStarted,
 		appState: state.appState,
 		noteSelectionEnabled: state.noteSelectionEnabled,

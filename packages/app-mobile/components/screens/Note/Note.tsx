@@ -6,22 +6,25 @@ import UndoRedoService from '@joplin/lib/services/UndoRedoService';
 import NoteBodyViewer from '../../NoteBodyViewer/NoteBodyViewer';
 import checkPermissions from '../../../utils/checkPermissions';
 import NoteEditor from '../../NoteEditor/NoteEditor';
+import { EditorControl } from '../../NoteEditor/types';
 import * as React from 'react';
-import { Keyboard, View, TextInput, StyleSheet, Linking, Share, NativeSyntheticEvent, useWindowDimensions } from 'react-native';
+import { Keyboard, View, TextInput, StyleSheet, Linking, Share, NativeSyntheticEvent, useWindowDimensions, Text } from 'react-native';
 import { Platform, PermissionsAndroid } from 'react-native';
 import { connect } from 'react-redux';
 import Note from '@joplin/lib/models/Note';
 import BaseItem from '@joplin/lib/models/BaseItem';
+import ItemChange from '@joplin/lib/models/ItemChange';
+import { itemIsReadOnlySync, ItemSlice, noteIsLockedInShare } from '@joplin/lib/models/utils/readOnly';
 import Resource from '@joplin/lib/models/Resource';
 import Folder from '@joplin/lib/models/Folder';
-const Clipboard = require('@react-native-clipboard/clipboard').default;
+import Clipboard from '@react-native-clipboard/clipboard';
 const md5 = require('md5');
 import BackButtonService from '../../../services/BackButtonService';
 import NavService, { OnNavigateCallback as OnNavigateCallback } from '@joplin/lib/services/NavService';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { fileExtension, safeFileExtension } from '@joplin/lib/path-utils';
 import * as mimeUtils from '@joplin/lib/mime-utils';
-import ScreenHeader, { FolderPickerOptions, MenuOptionType, ViewToggleButtonMode } from '../../ScreenHeader';
+import ScreenHeader, { FolderPickerOptions, MenuOption, ViewToggleButtonMode } from '../../ScreenHeader';
 import NoteTagsDialog from '../NoteTagsDialog';
 import time from '@joplin/lib/time';
 import Checkbox from '../../Checkbox';
@@ -30,7 +33,16 @@ import { reg } from '@joplin/lib/registry';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import { BaseScreenComponent } from '../../base-screen';
 import { themeStyle, editorFont } from '../../global-style';
-import shared, { BaseNoteScreenComponent, Props as BaseProps } from '@joplin/lib/components/shared/note-screen-shared';
+import shared, { BaseNoteScreenComponent, Props as BaseProps, ScheduleSaveOptions } from '@joplin/lib/components/shared/note-screen-shared';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
+import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
+import NoteLockKey, { DecryptedNoteLockKey } from '@joplin/lib/services/noteLock/NoteLockKey';
+import NoteLockNote from '@joplin/lib/services/noteLock/NoteLockNote';
+import { disableNoteLock, enableNoteLock } from '@joplin/lib/services/noteLock/setNoteLockState';
+import { ErrorCode } from '@joplin/lib/errors';
+import eventManager, { EventName, NoteLockNoteStateChangeEvent } from '@joplin/lib/eventManager';
+import NoteLockPanel from './NoteLockPanel';
+import DismissibleDialog, { DialogVariant } from '../../DismissibleDialog';
 import SelectDateTimeDialog from '../../SelectDateTimeDialog';
 import ShareExtension from '../../../utils/ShareExtension.js';
 import { FolderEntity, NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
@@ -48,7 +60,7 @@ import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import { getDisplayParentTitle } from '@joplin/lib/services/trash';
 import { PluginHtmlContents, PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import debounce from '../../../utils/debounce';
-import { focus } from '@joplin/lib/utils/focusHandler';
+import { blur, focus } from '@joplin/lib/utils/focusHandler';
 import CommandService, { RegisteredRuntime } from '@joplin/lib/services/CommandService';
 import { ResourceInfo } from '../../NoteBodyViewer/hooks/useRerenderHandler';
 import getImageDimensions from '../../../utils/image/getImageDimensions';
@@ -68,7 +80,7 @@ import SpeechToTextBanner from '../../voiceTyping/SpeechToTextBanner';
 import CameraView from '../../CameraView/CameraView';
 import ShareNoteDialog from '../ShareNoteDialog';
 import stateToWhenClauseContext from '../../../services/commands/stateToWhenClauseContext';
-import { defaultWindowId } from '@joplin/lib/reducer';
+import { defaultWindowId, HighlightedWord } from '@joplin/lib/reducer';
 import useVisiblePluginEditorViewIds from '@joplin/lib/hooks/plugins/useVisiblePluginEditorViewIds';
 import { SelectionRange } from '../../../contentScripts/markdownEditorBundle/types';
 import { EditorType } from '../../NoteEditor/types';
@@ -82,7 +94,8 @@ import useDebounced from '../../../utils/hooks/useDebounced';
 import { Second } from '@joplin/utils/time';
 import TextWrapCalculator from '../Notes/TextWrapCalculator';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
-const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
+import { ALL_NOTES_FILTER_ID } from '@joplin/lib/reserved-ids';
+import { MenuOptionStyle, MenuOptionButton } from '../../BottomDrawerMenu';
 
 const emptyArray: never[] = [];
 
@@ -115,13 +128,15 @@ interface Props extends BaseProps {
 	showSideMenu: boolean;
 	searchQuery: string;
 	ftsEnabled: number;
-	highlightedWords: string[];
+	highlightedWords: HighlightedWord[];
 	noteHash: string;
 	toolbarEnabled: boolean;
 	pluginHtmlContents: PluginHtmlContents;
 	editorNoteReloadTimeRequest: number;
 	canPublish: boolean;
 	noteVisiblePanes: string[];
+	noteLockSessionUnlocked: boolean;
+	noteLockMigrationRunning: boolean;
 }
 
 interface ComponentProps extends Props {
@@ -152,6 +167,11 @@ interface State {
 	noteResources: Record<string, ResourceInfo>;
 	newAndNoTitleChangeNoteId: boolean|null;
 	noteLastLoadTime: number;
+	noteLockKey: DecryptedNoteLockKey|null;
+	noteLockUndecryptable: boolean;
+	noteLockUnlockPromptVisible: boolean;
+	todoCheckboxKey: number;
+	reloadInProgress: boolean;
 
 	undoRedoButtonState: {
 		canUndo: boolean;
@@ -174,8 +194,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	private saveActionQueues_: Record<string, AsyncActionQueue>;
 	private doFocusUpdate_: boolean;
 	private styles_: Record<string, ReturnType<typeof StyleSheet.create>>;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- editorRef can be a Markdown, RichText, or NoteBody viewer; each exposes a different command surface. Typing as the union would force narrowing at every call site.
-	private editorRef: any;
+	private editorRef: RefObject<EditorControl>;
 	private titleTextFieldRef: RefObject<TextInput>;
 	private navHandler: OnNavigateCallback;
 	private backHandler: ()=> Promise<boolean>;
@@ -183,17 +202,17 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	private noteTagDialog_closeRequested: ()=> void;
 	private refreshResource: (resource: ResourceEntity, noteBody?: string)=> Promise<void>;
 	private selection: SelectionRange;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Cached menu option entries are heterogeneous (different command types and option shapes)
-	private menuOptionsCache_: Record<string, any>;
+	private menuOptionsCache_: Record<string, MenuOption[]>;
 	private focusUpdateIID_: ReturnType<typeof setTimeout> | null;
 	private folderPickerOptions_: FolderPickerOptions;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- dialogbox is the react-native-dialogbox ref; the library ships no types
 	public dialogbox: any;
 	private commandRegistration_: RegisteredRuntime|null = null;
 	private editorPluginHandler_ = new EditorPluginHandler(PluginService.instance(), saveEvent => {
-		return shared.noteComponent_change(this, 'body', saveEvent.body);
+		return shared.noteComponent_change(this, 'body', saveEvent.body, { editorPluginSave: true });
 	});
 	private refreshKey: number | undefined;
+	private reloadInProgress_ = false;
 
 	public static navigationOptions(): { header: null } {
 		return { header: null };
@@ -226,6 +245,11 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			imageEditorResourceFilepath: null,
 			newAndNoTitleChangeNoteId: null,
 			noteLastLoadTime: Date.now(),
+			noteLockKey: null,
+			noteLockUndecryptable: false,
+			noteLockUnlockPromptVisible: false,
+			todoCheckboxKey: 0,
+			reloadInProgress: false,
 
 			undoRedoButtonState: {
 				canUndo: false,
@@ -517,6 +541,13 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				borderColor: theme.dividerColor,
 				color: theme.urlColor,
 			},
+			lockedInShareBanner: {
+				backgroundColor: theme.warningBackgroundColor,
+				color: theme.color,
+				paddingLeft: theme.marginLeft,
+				paddingRight: theme.marginRight,
+				paddingVertical: 8,
+			},
 		};
 
 		styles.noteBodyViewerPreview = {
@@ -532,13 +563,24 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			flexDirection: 'row',
 			flexBasis: 'auto',
 			paddingLeft: theme.marginLeft,
-			borderBottomColor: theme.dividerColor,
-			borderBottomWidth: 1,
+			paddingRight: theme.marginRight,
 			maxHeight: '40%',
+
+			// Prevents the title/content divider overlaying the title's focus indicator on web:
+			zIndex: 1,
 		};
 
 		styles.titleContainerTodo = { ...styles.titleContainer };
 		styles.titleContainerTodo.paddingLeft = 0;
+
+		styles.titleDivider = {
+			flex: 0,
+			height: 0,
+			marginLeft: theme.marginLeft,
+			marginRight: theme.marginRight,
+			borderBottomColor: theme.dividerColor,
+			borderBottomWidth: 1,
+		};
 
 		styles.titleTextInput = {
 			flex: 1,
@@ -547,8 +589,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			color: theme.color,
 			fontWeight: 'bold',
 			fontSize: theme.fontSize,
-			paddingTop: 10, // Added for iOS (Not needed for Android??)
-			paddingBottom: 10, // Added for iOS (Not needed for Android??)
+			paddingTop: theme.marginTop,
+			paddingBottom: theme.marginBottom,
 		};
 
 		this.styles_[cacheKey] = StyleSheet.create(styles);
@@ -571,6 +613,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					{
 						buttons: [_('Yes'), _('No')],
 						title: _('Save geolocation?'),
+						cancelId: 1,
 					},
 				);
 				return result === yesIndex;
@@ -592,6 +635,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 		shared.clearResourceCache();
 		shared.installResourceHandling(this.refreshResource);
+
+		if (isNoteLockEnabled()) eventManager.on(EventName.NoteLockNoteStateChange, this.noteLockNoteStateChange_);
 
 		await shared.initState(this);
 
@@ -620,6 +665,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		await this.editorPluginHandler_.emitActivationCheck({
 			noteId: this.props.noteId,
 			parentWindowId: defaultWindowId,
+			noteIsLocked: isNoteLockEnabled() && !!this.state.note.is_locked,
 		});
 
 		setTimeout(() => {
@@ -640,6 +686,14 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		if (this.doFocusUpdate_) {
 			this.doFocusUpdate_ = false;
 			this.scheduleFocusUpdate();
+		}
+
+		if (isNoteLockEnabled() && prevState.noteLockUndecryptable !== this.state.noteLockUndecryptable) {
+			this.props.dispatch({
+				type: 'SET_ACTIVE_NOTE_IS_UNDECRYPTABLE',
+				value: this.state.noteLockUndecryptable,
+				windowId: this.props.windowId,
+			});
 		}
 
 		if (prevProps.showSideMenu !== this.props.showSideMenu && this.props.showSideMenu) {
@@ -705,9 +759,14 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		const editorPluginIdsChanged = this.props.visibleEditorPluginIds !== prevProps.visibleEditorPluginIds;
 		if (editorPluginIdsChanged || this.props.editorNoteReloadTimeRequest !== prevProps.editorNoteReloadTimeRequest) {
 			const { editorPlugin } = getShownPluginEditorView(this.props.plugins, this.props.windowId);
-			const explicitReloadRequired = !editorPlugin && this.props.editorNoteReloadTimeRequest > this.state.noteLastLoadTime;
+			const explicitReloadRequired = this.props.editorNoteReloadTimeRequest > this.state.noteLastLoadTime;
 
 			if (explicitReloadRequired) {
+				this.reloadInProgress_ = true;
+				Keyboard.dismiss();
+				this.editorRef.current?.hideKeyboard();
+				blur('Note::reload', this.titleTextFieldRef.current);
+				this.setState({ reloadInProgress: true });
 				void this.reloadNoteAndUpdateRefreshKey();
 			}
 
@@ -726,15 +785,23 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			}
 		}
 
-		if (prevProps.noteId && this.props.noteId && prevProps.noteId !== this.props.noteId) {
+		const lockStateChanged = isNoteLockEnabled() && !!prevState.note.is_locked !== !!this.state.note.is_locked;
+		if ((prevProps.noteId && this.props.noteId && prevProps.noteId !== this.props.noteId) || lockStateChanged) {
 			void this.editorPluginHandler_.emitActivationCheck({
 				noteId: this.props.noteId,
 				parentWindowId: defaultWindowId,
+				noteIsLocked: isNoteLockEnabled() && !!this.state.note.is_locked,
 			});
 		}
 
 		if (prevState.note.body !== this.state.note.body) {
 			this.emitEditorPluginUpdate_();
+		}
+
+		// Unlocking loads the note the panel was blocking; locking drops its plaintext. Unsaved
+		// changes (e.g. a just-enabled lock state) keep the editor and their pending save.
+		if (isNoteLockEnabled() && prevProps.noteLockSessionUnlocked !== this.props.noteLockSessionUnlocked && this.state.note?.is_locked && !this.isModified()) {
+			void this.reloadNoteAndUpdateRefreshKey();
 		}
 
 		if (prevState.multiline !== this.state.multiline && this.titleTextFieldRef.current) {
@@ -748,7 +815,15 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 		shared.uninstallResourceHandling(this.refreshResource);
 
-		void this.saveActionQueue(this.state.note.id).processAllNow();
+		if (isNoteLockEnabled()) eventManager.off(EventName.NoteLockNoteStateChange, this.noteLockNoteStateChange_);
+
+		void (async () => {
+			await this.saveActionQueue(this.state.note.id).processAllNow();
+			// Auto lock only after the queue drains, so a pending locked-note save can still encrypt.
+			if (isNoteLockEnabled() && Setting.value('noteLock.lockOnNoteSwitch')) {
+				NoteLockSession.instance().lock();
+			}
+		})();
 
 		// It cannot theoretically be undefined, since componentDidMount should always be called before
 		// componentWillUnmount, but with React Native the impossible often becomes possible.
@@ -757,6 +832,20 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		this.commandRegistration_?.deregister();
 		this.commandRegistration_ = null;
 
+		if (isNoteLockEnabled() && this.state.noteLockUndecryptable) {
+			// The screen remounts per note id, so the next note never dispatches the clear itself.
+			this.props.dispatch({
+				type: 'SET_ACTIVE_NOTE_IS_UNDECRYPTABLE',
+				value: false,
+				windowId: this.props.windowId,
+			});
+		}
+
+		if (this.focusUpdateIID_) {
+			shim.clearInterval(this.focusUpdateIID_);
+			this.focusUpdateIID_ = null;
+		}
+
 		this.props.dispatch({
 			type: 'SET_NOTE_EDITOR_VISIBLE',
 			visible: false,
@@ -764,11 +853,31 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 
 	private async reloadNoteAndUpdateRefreshKey() {
-		await shared.reloadNote(this);
-		this.refreshKey = this.props.editorNoteReloadTimeRequest;
+		try {
+			await shared.reloadNote(this);
+
+			const refreshKey = this.props.editorNoteReloadTimeRequest;
+			this.refreshKey = refreshKey;
+			if (this.useEditorBeta() && this.state.mode === 'edit' && !this.props.visibleEditorPluginIds.length) {
+				this.forceUpdate();
+			} else {
+				this.setState({}, () => this.editorReloadComplete(refreshKey));
+			}
+		} catch (error) {
+			this.reloadInProgress_ = false;
+			this.setState({ reloadInProgress: false });
+			logger.error('Could not reload note:', error);
+		}
 	}
 
+	private editorReloadComplete = (refreshKey: number|undefined) => {
+		if (!this.reloadInProgress_ || refreshKey !== this.props.editorNoteReloadTimeRequest) return;
+		this.reloadInProgress_ = false;
+		this.setState({ reloadInProgress: false });
+	};
+
 	private title_changeText(text: string) {
+		if (this.reloadInProgress_) return;
 		let newText = text;
 		newText = text.replace(/(\r\n|\n|\r)/gm, ' ');
 		shared.noteComponent_change(this, 'title', newText);
@@ -783,6 +892,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 
 	private onPlainEditorTextChange = (text: string) => {
+		if (this.reloadInProgress_) return;
 		if (!this.undoRedoService_.canUndo) {
 			this.undoRedoService_.push(this.undoState());
 		} else {
@@ -796,9 +906,15 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	// and updating this.state.note immediately causes slow rerenders.
 	//
 	// See https://github.com/laurent22/joplin/issues/10130
-	private onMarkdownEditorTextChange = debounce((event: EditorChangeEvent) => {
+	private debouncedMarkdownEditorTextChange_ = debounce((event: EditorChangeEvent, reloadRequest: number) => {
+		if (this.reloadInProgress_ || reloadRequest !== this.props.editorNoteReloadTimeRequest) return;
 		shared.noteComponent_change(this, 'body', event.value);
 	}, 100);
+
+	private onMarkdownEditorTextChange = (event: EditorChangeEvent) => {
+		if (this.reloadInProgress_) return;
+		this.debouncedMarkdownEditorTextChange_(event, this.props.editorNoteReloadTimeRequest);
+	};
 
 	private onPlainEditorSelectionChange = (event: NativeSyntheticEvent<{ selection: SelectionRange }>) => {
 		this.selection = event.nativeEvent.selection;
@@ -812,9 +928,12 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		);
 	};
 
-	public makeSaveAction(state: State) {
+	public makeSaveAction(state: State, editorNoteReloadTimeRequest: number) {
 		return async () => {
-			return shared.saveNoteButton_press(this, state, null, null);
+			return shared.saveNoteButton_press(this, state, null, {
+				editorNoteReloadTimeRequest,
+				getEditorNoteReloadTimeRequest: () => this.props.editorNoteReloadTimeRequest,
+			});
 		};
 	}
 
@@ -825,8 +944,10 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		return this.saveActionQueues_[noteId];
 	}
 
-	public scheduleSave(state: State) {
-		this.saveActionQueue(state.note.id).push(this.makeSaveAction(state));
+	public scheduleSave(state: State, options: ScheduleSaveOptions = {}) {
+		if (this.reloadInProgress_ && !options.editorPluginSave) return;
+		const editorNoteReloadTimeRequest = this.props.editorNoteReloadTimeRequest;
+		this.saveActionQueue(state.note.id).push(this.makeSaveAction(state, editorNoteReloadTimeRequest));
 	}
 
 	private async saveNoteButton_press(folderId: string = null) {
@@ -838,6 +959,58 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	public async saveOneProperty(name: string, value: unknown) {
 		await shared.saveOneProperty(this, name, value);
 	}
+
+	private noteLockNoteStateChange_ = (event: NoteLockNoteStateChangeEvent) => {
+		if (event.noteId !== this.state.note?.id) return;
+		// The key is captured like on a gated load, so pending saves can encrypt after the session locks.
+		const noteLockKey = event.isLocked && NoteLockSession.instance().isUnlocked() ? NoteLockSession.instance().decryptedKey() : null;
+		// The state note came from a gated load, so the marker stays true even when disabling.
+		const newNote = { ...this.state.note, is_locked: event.isLocked ? 1 : 0, isDecrypted: true };
+		this.setState({ note: newNote, noteLockKey });
+		this.scheduleSave({ ...this.state, note: newNote, noteLockKey });
+	};
+
+	private async setNoteLockState_(enable: boolean) {
+		try {
+			if (enable) {
+				await enableNoteLock(this.state.note.id);
+			} else {
+				await disableNoteLock(this.state.note.id);
+			}
+		} catch (error) {
+			reg.logger().warn('Could not change the note lock state:', error);
+			await this.props.dialogs.error(error.code === ErrorCode.NoteLockKeyConflict ? error.message : _('Could not update the note lock. Please try again.'));
+		}
+	}
+
+	private enableNoteEncryption_onPress = () => {
+		if (!NoteLockKey.instance().load()) {
+			this.props.dialogs.prompt(_('Lock this note'), _('Locking a note requires the note lock password, which has not been set up yet. Set it up now?'), [
+				{ text: _('No'), style: 'cancel' },
+				{ text: _('Yes'), onPress: () => void NavService.go('Config', { sectionName: 'noteLock' }) },
+			]);
+			return;
+		}
+		if (!NoteLockSession.instance().isUnlocked()) {
+			// Enabling is completed by enableNoteEncryptionUnlockCallback once the panel unlocks.
+			this.setState({ noteLockUnlockPromptVisible: true });
+			return;
+		}
+		void this.setNoteLockState_(true);
+	};
+
+	private disableNoteEncryption_onPress = () => {
+		void this.setNoteLockState_(false);
+	};
+
+	private enableNoteEncryptionUnlockCallback = () => {
+		this.setState({ noteLockUnlockPromptVisible: false });
+		void this.setNoteLockState_(true);
+	};
+
+	private noteLockUnlockPrompt_close = () => {
+		this.setState({ noteLockUnlockPromptVisible: false });
+	};
 
 	public async resizeImage(localFilePath: string, targetPath: string, mimeType: string) {
 		const maxSize = Resource.IMAGE_MAX_DIMENSION;
@@ -1121,8 +1294,13 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 
 	private async share_onPress() {
-		const shareText = `${this.state.note.title}\n\n${this.state.note.body}`;
-		const filename = this.state.note.id ?? uuid.create();
+		let noteToShare = this.state.note;
+		if (isNoteLockEnabled() && NoteLockNote.isLocked(noteToShare)) {
+			// The state note may hold the encrypted body, so the shared contents come from a gated load.
+			noteToShare = await Note.load(noteToShare.id, { useNoteLock: true });
+		}
+		const shareText = `${noteToShare.title}\n\n${noteToShare.body}`;
+		const filename = noteToShare.id ?? uuid.create();
 
 		if (shareText.length > 100000) {
 			let fileToShare;
@@ -1280,18 +1458,18 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		const note = this.state.note;
 		const isTodo = note && !!note.is_todo;
 		const isSaved = note && note.id;
-		const readOnly = this.state.readOnly;
+		const readOnly = this.isReadOnly();
 		const isDeleted = !!this.state.note.deleted_time;
 		const isCodeView = this.props.editorType === EditorType.Markdown;
 
 		const pluginCommands = pluginUtils.commandNamesFromViews(this.props.plugins, 'noteToolbar');
 
-		const cacheKey = md5([isTodo, isSaved, pluginCommands.join(','), readOnly, this.state.mode, isCodeView].join('_'));
+		const cacheKey = md5([isTodo, isSaved, pluginCommands.join(','), readOnly, this.state.mode, isCodeView, note.is_locked, this.props.noteLockSessionUnlocked, !!this.state.noteLockKey, this.state.noteLockUndecryptable, this.props.noteLockMigrationRunning].join('_'));
 		if (!this.menuOptionsCache_) this.menuOptionsCache_ = {};
 
 		if (this.menuOptionsCache_[cacheKey]) return this.menuOptionsCache_[cacheKey];
 
-		const output: MenuOptionType[] = [];
+		const output: MenuOption[] = [];
 
 		// The file attachment modules only work in Android >= 5 (Version 21)
 		// https://github.com/react-community/react-native-image-picker/issues/606
@@ -1305,6 +1483,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		if (canAttachPicture) {
 			output.push({
 				title: _('Attach...'),
+				icon: 'material paperclip',
 				onPress: () => this.onAttach(),
 				disabled: readOnly,
 			});
@@ -1314,6 +1493,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			title: _('Draw picture'),
 			onPress: () => this.drawPicture_onPress(),
 			disabled: readOnly,
+			icon: 'material draw',
 		});
 
 		if (isTodo) {
@@ -1323,6 +1503,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					this.setState({ alarmDialogShown: true });
 				},
 				disabled: readOnly,
+				icon: 'material bell-outline',
 			});
 		}
 
@@ -1330,16 +1511,18 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		if (shareSupported) {
 			output.push({
 				title: _('Share'),
+				icon: 'material share-outline',
 				onPress: () => {
 					void this.share_onPress();
 				},
-				disabled: readOnly,
+				disabled: readOnly || (isNoteLockEnabled() && !!note.is_locked && (!this.props.noteLockSessionUnlocked || !this.state.noteLockKey)),
 			});
 		}
 
 		if (VoiceTyping.supported()) {
 			output.push({
 				title: _('Voice typing...'),
+				icon: 'material microphone-outline',
 				onPress: () => {
 					// this.voiceRecording_onPress();
 					this.setState({ showSpeechToTextDialog: true });
@@ -1350,26 +1533,34 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 		const commandService = CommandService.instance();
 		const whenContext = commandService.currentWhenClauseContext();
-		const addButtonFromCommand = (commandName: string, title?: string) => {
+
+
+		const addButtonFromCommand = (commandName: string, overrides: Partial<MenuOptionButton> = {}) => {
 			if (commandName === '-') {
 				output.push({ isDivider: true });
 			} else {
 				output.push({
-					title: title ?? commandService.description(commandName),
+					isDivider: false,
+					title: commandService.description(commandName),
+					icon: commandService.iconName(commandName),
 					onPress: async () => {
 						void commandService.execute(commandName);
 					},
 					disabled: !commandService.isEnabled(commandName, whenContext),
+					...overrides,
 				});
 			}
 		};
 
 		if (isSaved && !isDeleted) {
-			addButtonFromCommand('setTags');
+			// The when-clause context lags the local undecryptable state by a render and the menu
+			// is cached, so that one input is patched from the component's own state.
+			addButtonFromCommand('setTags', { icon: 'material tag-outline', disabled: !commandService.isEnabled('setTags', whenContext) || (isNoteLockEnabled() && this.state.noteLockUndecryptable) });
 		}
 
 		output.push({
 			title: isTodo ? _('Convert to note') : _('Convert to todo'),
+			icon: isTodo ? 'material file-document-outline' : 'material file-send-outline',
 			onPress: () => {
 				this.toggleIsTodo_onPress();
 			},
@@ -1379,6 +1570,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		if (isSaved && !isDeleted) {
 			output.push({
 				title: _('Copy Markdown link'),
+				icon: 'material content-copy',
 				onPress: () => {
 					this.copyMarkdownLink_onPress();
 				},
@@ -1388,6 +1580,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			if (Platform.OS !== 'web') {
 				output.push({
 					title: _('Copy external link'),
+					icon: 'material content-copy',
 					onPress: () => {
 						this.copyExternalLink_onPress();
 					},
@@ -1395,33 +1588,89 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			}
 		}
 
-		output.push({
-			title: _('Properties'),
-			onPress: () => {
-				this.properties_onPress();
-			},
-		});
+		if (isNoteLockEnabled() && isSaved && !isDeleted && !note.is_conflict) {
+			if (!note.is_locked) {
+				output.push({
+					title: _('Lock this note'),
+					icon: 'material lock-plus-outline',
+					onPress: () => {
+						this.enableNoteEncryption_onPress();
+					},
+					disabled: readOnly || this.props.noteLockMigrationRunning,
+				});
+			} else {
+				output.push({
+					title: _('Remove note lock'),
+					icon: 'material lock-off-outline',
+					onPress: () => {
+						this.disableNoteEncryption_onPress();
+					},
+					disabled: readOnly || !this.props.noteLockSessionUnlocked,
+				});
+			}
+		}
+
+		// Relocking applies to the session rather than the open note, so it stays available
+		// whichever note is being viewed.
+		if (isNoteLockEnabled()) {
+			output.push({
+				title: _('Relock all notes'),
+				icon: 'material lock-outline',
+				onPress: () => {
+					void (async () => {
+						// Lock only after the queue drains, so a pending save cannot leave the note
+						// visible because it still counted as modified.
+						await this.saveActionQueue(this.state.note.id).processAllNow();
+						NoteLockSession.instance().lock();
+					})();
+				},
+				disabled: !this.props.noteLockSessionUnlocked,
+			});
+		}
 
 		if (this.state.mode === 'edit') {
 			const newCodeView = !isCodeView;
 			output.push({
 				title: newCodeView ? _('Edit as Markdown') : _('Edit as Rich Text'),
+				icon: newCodeView ? 'material file-edit-outline' : 'material file-edit',
 				onPress: () => {
 					Setting.setValue('editor.codeView', newCodeView);
 				},
 			});
 		}
 
+		if (pluginCommands.length) {
+			output.push({ isDivider: true });
+
+			for (const commandName of pluginCommands) {
+				addButtonFromCommand(commandName);
+			}
+		}
+
+		output.push({ isDivider: true });
+
+		output.push({
+			title: _('Properties'),
+			icon: 'material information-outline',
+			onPress: () => {
+				this.properties_onPress();
+			},
+		});
+
 		output.push({
 			title: _('Reveal in notebook'),
+			icon: 'material folder-file-outline',
 			onPress: () => {
 				this.revealInNotebook_onPress();
 			},
 		});
 
+		output.push({ isDivider: true });
+
 		if (isDeleted) {
 			output.push({
 				title: _('Restore'),
+				icon: 'material delete-off-outline',
 				onPress: async () => {
 					await restoreItems(ModelType.Note, [this.state.note.id]);
 					this.props.dispatch({
@@ -1433,17 +1682,9 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		}
 
 		if (whenContext.inTrash) {
-			addButtonFromCommand('permanentlyDeleteNote');
+			addButtonFromCommand('permanentlyDeleteNote', { icon: 'material delete-outline', style: MenuOptionStyle.Destructive });
 		} else {
-			addButtonFromCommand('deleteNote', _('Delete'));
-		}
-
-		if (pluginCommands.length) {
-			output.push({ isDivider: true });
-
-			for (const commandName of pluginCommands) {
-				addButtonFromCommand(commandName);
-			}
+			addButtonFromCommand('deleteNote', { title: _('Delete'), icon: 'material delete-outline', style: MenuOptionStyle.Destructive });
 		}
 
 		this.menuOptionsCache_ = {};
@@ -1453,6 +1694,17 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 
 	private async todoCheckbox_change(checked: boolean) {
+		if (this.lockedInShare()) {
+			this.setState(state => ({ todoCheckboxKey: state.todoCheckboxKey + 1 }));
+			await this.props.dialogs.error(_('This note is read-only because it is locked and contained within a share. To enable editing, it must be moved outside of the share.'));
+			return;
+		}
+		if (isNoteLockEnabled() && NoteLockNote.isLocked(this.state.note) && !this.props.noteLockSessionUnlocked) {
+			// The checkbox keeps its own checked state, so a remount reverts the tick.
+			this.setState(state => ({ todoCheckboxKey: state.todoCheckboxKey + 1 }));
+			await this.props.dialogs.error(_('Cannot change a locked note while the session is locked'));
+			return;
+		}
 		await this.saveOneProperty('todo_completed', checked ? time.unixMs() : 0);
 	}
 
@@ -1509,11 +1761,12 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		if (isProvisionalNote) {
 			await this.saveNoteButton_press(itemValue);
 		} else {
-			await Note.moveToFolder(
+			const movedNote = await Note.moveToFolder(
 				note.id,
 				itemValue,
 				{ dispatchOptions: { preserveSelection: true } },
 			);
+			note.share_id = movedNote.share_id;
 		}
 
 		note.parent_id = itemValue;
@@ -1527,9 +1780,19 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		});
 	}
 
+	private lockedInShare() {
+		return noteIsLockedInShare(this.state.note);
+	}
+
+	// state.readOnly is only refreshed by a reload, so a note locked in a share, or moved out of it, is covered by the live note.
+	private isReadOnly() {
+		return this.state.readOnly || this.lockedInShare();
+	}
+
 	public folderPickerOptions() {
 		const options = {
-			visible: !this.state.readOnly,
+			// Moving the note out of the share is how a locked note becomes editable again, when the share allows it.
+			visible: !this.state.readOnly || (this.lockedInShare() && !itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, this.state.note as ItemSlice, Setting.value('sync.userId'), BaseItem.syncShareCache)),
 			disabled: false,
 			selectedFolderId: this.state.folder ? this.state.folder.id : null,
 			onValueChange: this.folderPickerOptions_valueChanged,
@@ -1654,9 +1917,20 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			// available space.
 			&& !this.titleTextFieldRef.current?.isFocused();
 
+		// Unsaved changes keep the editor rather than the panel - their save re-encrypts with the
+		// captured key. An undecryptable note has no plaintext to edit, so it always keeps the panel.
+		const noteLockPanelVisible = isNoteLockEnabled() && !!note.is_locked && (!this.props.noteLockSessionUnlocked || !this.state.noteLockKey) && (!this.isModified() || this.state.noteLockUndecryptable);
+
 		let bodyComponent = null;
 
-		if (editorView) {
+		if (noteLockPanelVisible) {
+			bodyComponent = <NoteLockPanel
+				themeId={this.props.themeId}
+				hasNoteLockKey={!!NoteLockKey.instance().load()}
+				undecryptable={this.state.noteLockUndecryptable}
+				migrationRunning={this.props.noteLockMigrationRunning}
+			/>;
+		} else if (editorView) {
 			bodyComponent = renderPluginEditor();
 		} else {
 			if (this.state.mode === 'view') {
@@ -1706,10 +1980,10 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 							onChangeText={this.onPlainEditorTextChange}
 							onSelectionChange={this.onPlainEditorSelectionChange}
 							blurOnSubmit={false}
-							selectionColor={theme.textSelectionColor}
 							keyboardAppearance={theme.keyboardAppearance}
 							placeholder={_('Add body')}
 							placeholderTextColor={theme.colorFaded}
+							editable={!this.isReadOnly() && !this.state.reloadInProgress}
 							// need some extra padding for iOS so that the keyboard won't cover last line of the note
 							// see https://github.com/laurent22/joplin/issues/3607
 							// Property is gone as of RN 0.72?
@@ -1735,7 +2009,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 						onSearchVisibleChange={this.onSearchVisibleChange_}
 						onAttach={this.onAttach}
 						noteResources={this.state.noteResources}
-						readOnly={this.state.readOnly}
+						readOnly={this.isReadOnly() || this.state.reloadInProgress}
 						plugins={this.props.plugins}
 						style={{
 							...editorStyle,
@@ -1754,14 +2028,11 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 						mode={this.props.editorType}
 						refreshKey={this.refreshKey}
+						onLoadEnd={() => this.editorReloadComplete(this.refreshKey)}
 					/>;
 				}
 			}
 		}
-
-		// Save button is not really needed anymore with the improved save logic
-		const showSaveButton = false; // this.state.mode === 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
-		const saveButtonDisabled = true;// !this.isModified();
 
 		const titleContainerStyle = isTodo ? this.styles().titleContainerTodo : this.styles().titleContainer;
 
@@ -1780,7 +2051,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				style={{ width: 30, height: 30, alignSelf: 'center' }}
 			/>;
 
-		const titleComp = (
+		const titleComp = <>
 			<View
 				style={titleContainerStyle}
 				onLayout={(e) => {
@@ -1805,7 +2076,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					updateState={textWrapCalculator_updateState}
 					readOnly={false}
 				/>
-				{isTodo && <Checkbox style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />}
+				{isTodo && <Checkbox key={this.state.todoCheckboxKey} style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />}
 				<TextInput
 					key={this.state.multiline ? 'multiLine' : 'singleLine'}
 					ref={this.titleTextFieldRef}
@@ -1814,17 +2085,17 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					style={this.styles().titleTextInput}
 					value={note.title}
 					onChangeText={this.title_changeText}
-					selectionColor={theme.textSelectionColor}
 					keyboardAppearance={theme.keyboardAppearance}
 					placeholder={_('Add title')}
 					placeholderTextColor={theme.colorFaded}
-					editable={!this.state.readOnly}
+					editable={!this.isReadOnly() && !this.state.reloadInProgress}
 					multiline={this.state.multiline}
 					submitBehavior = "blurAndSubmit"
 				/>
 				{ titleToggleButton }
 			</View>
-		);
+			<View style={this.styles().titleDivider}/>
+		</>;
 
 		const noteTagDialog = !this.state.noteTagDialogShown ? null : <NoteTagsDialog onCloseRequested={this.noteTagDialog_closeRequested} />;
 
@@ -1851,16 +2122,17 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		const { editorPlugin: activeEditorPlugin } = getActivePluginEditorView(this.props.plugins, this.props.windowId);
 
 		let viewEditToggleMode = this.state.mode === 'edit' ? ViewToggleButtonMode.ShowViewer : ViewToggleButtonMode.ShowEditor;
-		if (!this.state.note || this.state.note.deleted_time > 0 || editorView) {
+		if (!this.state.note || this.state.note.deleted_time > 0 || editorView || noteLockPanelVisible) {
 			viewEditToggleMode = ViewToggleButtonMode.Hidden;
 		}
+
+		const lockedInShareBanner = this.lockedInShare() ? (
+			<Text style={this.styles().lockedInShareBanner}>{noteLockPanelVisible ? _('This note may not be readable because it is contained within a share.') : _('This note is read-only because it is locked and contained within a share. To enable editing, it must be moved outside of the share.')}</Text>
+		) : null;
 
 		const header = <ScreenHeader
 			folderPickerOptions={this.folderPickerOptions()}
 			menuOptions={this.menuOptions()}
-			showSaveButton={showSaveButton}
-			saveButtonDisabled={saveButtonDisabled}
-			onSaveButtonPress={this.saveNoteButton_press}
 			showSideMenuButton={false}
 			showSearchButton={false}
 			showUndoButton={(this.state.undoRedoButtonState.canUndo || this.state.undoRedoButtonState.canRedo) && this.state.mode === 'edit'}
@@ -1878,6 +2150,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			<View style={this.rootStyle(this.props.themeId).root}>
 				{!increaseSpaceForEditor && header}
 				{!increaseSpaceForEditor && titleComp}
+				{lockedInShareBanner}
 				{bodyComponent}
 				{renderVoiceTypingDialogs()}
 
@@ -1889,6 +2162,20 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					visible={this.state.publishDialogShown}
 					onClose={this.onPublishDialogClose_}
 				/>
+				{this.state.noteLockUnlockPromptVisible && (
+					<DismissibleDialog
+						themeId={this.props.themeId}
+						visible={true}
+						onDismiss={this.noteLockUnlockPrompt_close}
+						size={DialogVariant.SmallResize}
+					>
+						<NoteLockPanel
+							themeId={this.props.themeId}
+							hasNoteLockKey={true}
+							onUnlocked={this.enableNoteEncryptionUnlockCallback}
+						/>
+					</DismissibleDialog>
+				)}
 			</View>
 		);
 	}
@@ -1956,6 +2243,8 @@ const NoteScreen = connect((state: AppState) => {
 		// confusing.
 		useEditorBeta: !state.settings['editor.usePlainText'],
 		canPublish: whenClause.joplinServerConnected && !whenClause.inTrash,
+		noteLockSessionUnlocked: state.noteLockSessionUnlocked,
+		noteLockMigrationRunning: !!state.noteLockMigrationStatus?.running,
 	};
 })(NoteScreenWrapper);
 

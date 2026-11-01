@@ -41,12 +41,30 @@ describe('update-readme-download', () => {
 				true,
 				'https://objects.joplinusercontent.com/v2.11.11/JoplinPortable.exe',
 			],
+			[
+				createRelease('Joplin-Setup-2.11.11-arm64.exe', 'https://github.com/laurent22/joplin/releases/download/v2.11.11/Joplin-Setup-2.11.11-arm64.exe'),
+				OS.WindowsArm64,
+				false,
+				'https://objects.joplinusercontent.com/v2.11.11/Joplin-Setup-2.11.11-arm64.exe',
+			],
+			[
+				createRelease('JoplinPortable-arm64.exe', 'https://github.com/laurent22/joplin/releases/download/v2.11.11/JoplinPortable-arm64.exe'),
+				OS.WindowsArm64,
+				true,
+				'https://objects.joplinusercontent.com/v2.11.11/JoplinPortable-arm64.exe',
+			],
 		];
 
 		for (const [release, os, portable, expected] of testCases) {
 			const actual = downloadUrl(release, os, portable);
 			expect(actual).toBe(expected);
 		}
+
+		// Neither architecture should fall back to the other's build.
+		const x64Release = createRelease('Joplin-Setup-2.11.11.exe', 'https://github.com/laurent22/joplin/releases/download/v2.11.11/Joplin-Setup-2.11.11.exe');
+		const arm64Release = createRelease('Joplin-Setup-2.11.11-arm64.exe', 'https://github.com/laurent22/joplin/releases/download/v2.11.11/Joplin-Setup-2.11.11-arm64.exe');
+		expect(() => downloadUrl(x64Release, OS.WindowsArm64, false)).toThrow();
+		expect(() => downloadUrl(arm64Release, OS.Windows, false)).toThrow();
 	});
 
 });

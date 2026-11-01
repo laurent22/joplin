@@ -1,4 +1,5 @@
 import InteropService from '@joplin/lib/services/interop/InteropService';
+import { Dispatch } from 'redux';
 import CommandService from '@joplin/lib/services/CommandService';
 import shim from '@joplin/lib/shim';
 import { ExportModuleOutputFormat, ExportOptions, FileSystemItem } from '@joplin/lib/services/interop/types';
@@ -7,13 +8,17 @@ import { ExportModule } from '@joplin/lib/services/interop/Module';
 import { _ } from '@joplin/lib/locale';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import bridge from './services/bridge';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
+import { unlockNoteLockSession } from '@joplin/lib/services/noteLock/noteLockPrompts';
+import noteLockPrompts from './utils/noteLockPrompts';
 import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
-const { friendlySafeFilename } = require('@joplin/lib/path-utils');
+import Folder from '@joplin/lib/models/Folder';
+import { friendlySafeFilename } from '@joplin/lib/path-utils';
 import time from '@joplin/lib/time';
 import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron';
 const md5 = require('md5');
-const url = require('url');
+import * as url from 'url';
 
 interface ExportNoteOptions {
 	customCss?: string;
@@ -35,6 +40,8 @@ export default class InteropServiceHelper {
 			format: ExportModuleOutputFormat.Html,
 			target: FileSystemItem.File,
 			sourceNoteIds: [noteId],
+			// The PDF export and printing ask first.
+			decryptLockedNotes: true,
 			customCss: '', ...exportOptions };
 
 		const service = InteropService.instance();
@@ -192,8 +199,30 @@ export default class InteropServiceHelper {
 		return `${filename}.${fileExtension}`;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public static async export(_dispatch: Function, module: ExportModule, options: ExportNoteOptions = null) {
+	// Decrypting exports write locked notes out as plain text, so the user is asked even with the session unlocked,
+	// which only skips the password.
+	public static async confirmLockedNoteExport(dispatch: Dispatch, noteIds: string[], folderIds: string[] = null) {
+		if (!isNoteLockEnabled()) return 'export';
+		let hasLockedNotes = false;
+		if (noteIds?.length) {
+			hasLockedNotes = (await Note.byIds(noteIds, { fields: ['is_locked'] })).some(note => !!note.is_locked);
+		} else if (folderIds?.length) {
+			hasLockedNotes = await Note.hasLockedNoteInFolderTrees(folderIds);
+		} else {
+			// Same scope as the export of everything: notebooks not in the trash.
+			hasLockedNotes = await Note.hasLockedNoteInFolderTrees(await Folder.childrenIds(''));
+		}
+		if (!hasLockedNotes) return 'export';
+
+		const answer = bridge().showMessageBox(_('Some notes are locked and this export format requires them to be unlocked. Would you like to export these notes unprotected, or export without these notes?'), {
+			buttons: [_('Export unprotected'), _('Export without locked notes'), _('Cancel')],
+		});
+		if (answer === 1) return 'skipLocked';
+		if (answer === 0 && await unlockNoteLockSession(noteLockPrompts(dispatch))) return 'export';
+		return 'cancel';
+	}
+
+	public static async export(dispatch: Dispatch, module: ExportModule, options: ExportNoteOptions = null) {
 		if (!options) options = {};
 
 		let path = null;
@@ -214,6 +243,18 @@ export default class InteropServiceHelper {
 
 		if (Array.isArray(path)) path = path[0];
 
+		// Backups keep locked notes encrypted, so only the decrypting formats ask.
+		const isBackup = module.format === ExportModuleOutputFormat.Raw || module.format === ExportModuleOutputFormat.Jex;
+		const lockedNoteChoice = isBackup ? 'export' : await this.confirmLockedNoteExport(dispatch, options.sourceNoteIds, options.sourceFolderIds);
+		if (lockedNoteChoice === 'cancel') return;
+
+		let sourceNoteIds = options.sourceNoteIds;
+		// A selection left with no note would make a single-file export fail on the file it never wrote.
+		if (sourceNoteIds?.length && lockedNoteChoice === 'skipLocked') {
+			sourceNoteIds = (await Note.byIds(sourceNoteIds, { fields: ['id', 'is_locked'] })).filter(note => !note.is_locked).map(note => note.id);
+			if (!sourceNoteIds.length) return;
+		}
+
 		void CommandService.instance().execute('showModalMessage', _('Exporting to "%s" as "%s" format. Please wait...', path, module.format));
 
 		const exportOptions: ExportOptions = {};
@@ -225,20 +266,34 @@ export default class InteropServiceHelper {
 		exportOptions.target = module.target;
 		exportOptions.includeConflicts = !!options.includeConflicts;
 		if (options.sourceFolderIds) exportOptions.sourceFolderIds = options.sourceFolderIds;
-		if (options.sourceNoteIds) exportOptions.sourceNoteIds = options.sourceNoteIds;
+		if (sourceNoteIds) exportOptions.sourceNoteIds = sourceNoteIds;
+		exportOptions.skipLockedNotes = lockedNoteChoice === 'skipLocked';
+		exportOptions.decryptLockedNotes = lockedNoteChoice === 'export';
 
 		const service = InteropService.instance();
+		let keepModalOpen = false;
 
 		try {
 			const result = await service.export(exportOptions);
 			// eslint-disable-next-line no-console
 			console.info('Export result: ', result);
+			if (result.warnings.length) {
+				keepModalOpen = true;
+				const message = [
+					_('Completed with warnings:'),
+					'',
+					_('If any files are reported missing, download all relevant attachments to this device and try again.'),
+					'',
+					...result.warnings,
+				].join('\n');
+				void CommandService.instance().execute('showModalMessage', message, true);
+			}
 		} catch (error) {
 			console.error(error);
 			bridge().showErrorMessageBox(_('Could not export notes: %s', error.message));
 		}
 
-		void CommandService.instance().execute('hideModalMessage');
+		if (!keepModalOpen) void CommandService.instance().execute('hideModalMessage');
 	}
 
 }

@@ -11,7 +11,7 @@ import ResourceLocalState from './ResourceLocalState';
 import * as pathUtils from '../path-utils';
 import { safeFilename } from '../path-utils';
 import * as mime from '../mime-utils';
-const { FsDriverDummy } = require('../fs-driver-dummy.js');
+import FsDriverDummy from '../fs-driver-dummy';
 import JoplinError from '../JoplinError';
 import itemCanBeEncrypted from './utils/itemCanBeEncrypted';
 import { getEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';

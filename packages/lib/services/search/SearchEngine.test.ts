@@ -56,7 +56,7 @@ let engine: SearchEngine = null;
 // 	return scores;
 // };
 
-describe('services/SearchEngine', () => {
+describe('SearchEngine', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
@@ -71,10 +71,12 @@ describe('services/SearchEngine', () => {
 
 		const n1 = await Note.save({ title: 'a' });
 		const n2 = await Note.save({ title: 'b' });
+		await Note.save({ title: 'locked', is_locked: 1 });
 		await engine.syncTables();
 		rows = await engine.search('a');
 		expect(rows.length).toBe(1);
 		expect(rows[0].title).toBe('a');
+		expect(await engine.search('locked')).toEqual([]);
 
 		await Note.delete(n1.id);
 		await engine.syncTables();
@@ -99,6 +101,14 @@ describe('services/SearchEngine', () => {
 		await engine.syncTables();
 		rows = await engine.search('c');
 		expect(rows.length).toBe(1);
+
+		await Note.save({ id: n2.id, is_locked: 1 });
+		await engine.syncTables();
+		expect(await engine.search('c')).toEqual([]);
+
+		await Note.save({ id: n2.id, is_locked: 0 });
+		await engine.syncTables();
+		expect((await engine.search('c')).length).toBe(1);
 	}));
 
 	it('should, after initial indexing, save the last change ID', (async () => {
@@ -629,5 +639,20 @@ describe('services/SearchEngine', () => {
 			{ type: 'regex', value: 'query*', scriptType: 'en' },
 		] as (ComplexTerm | string)[];
 		expect(engine.createQueryFromTerms(terms)).toBe('hello world test query*');
+	});
+
+	test('queryTermToRegex should support anchoring to word boundaries', () => {
+		const matchAnchoredTerm = (term: string, text: string) => {
+			const regex = engine.queryTermToRegex(term, { anchorToWordBoundary: true });
+			const matches = text.matchAll(new RegExp(regex, 'ig'));
+			const result = [];
+			for (const match of matches) {
+				result.push(match[0]);
+			}
+			return result;
+		};
+
+		expect(matchAnchoredTerm('test', 'testing')).toEqual([]);
+		expect(matchAnchoredTerm('test', 'test...')).toEqual(['test']);
 	});
 });

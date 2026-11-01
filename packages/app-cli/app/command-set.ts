@@ -4,6 +4,7 @@ import { _ } from '@joplin/lib/locale';
 import { ModelType } from '@joplin/lib/BaseModel';
 import Database from '@joplin/lib/database';
 import Note from '@joplin/lib/models/Note';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
 
 class Command extends BaseCommand {
 	public override usage() {
@@ -33,6 +34,11 @@ class Command extends BaseCommand {
 
 		for (let i = 0; i < notes.length; i++) {
 			this.encryptionCheck(notes[i]);
+
+			// Enabling the lock here would only fail deep inside the gated save, so refuse it outright.
+			if (isNoteLockEnabled() && propName === 'is_locked') {
+				throw new Error(_('The note lock state cannot be changed from the command line'));
+			}
 
 			const timestamp = Date.now();
 

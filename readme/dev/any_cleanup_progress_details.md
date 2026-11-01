@@ -960,3 +960,33 @@ The remaining `any` annotations cluster into a handful of structural reasons tha
 
 All `yarn tsc --noEmit` and `yarn linter-ci packages/lib/` runs pass for every batch commit.
 
+## Multiple packages - June 2026
+
+Migrated several `any` types that weren't migrated before. Some of these required changes spanning multiple packages and were previously left aside for this reason. Others were missed during the previous migrations.
+
+The common technique was to tighten the type at its **definition** (the source) so that callers' documented skips cascade away too. The changes, by package:
+
+`packages/lib`
+- `Synchronizer.ts` — added exported `SyncStartOptions`, `SyncContext` and `ProgressReport`; typed `start(options)`. Cascaded to `registry.ts` (`scheduleSync`), `app-cli/command-sync.ts` and `testing/test-utils.ts`.
+- `models/BaseItem.ts` — `encryptionService_` / `revisionService_` typed via `import type` of `EncryptionService` / `RevisionService` (a value import would re-create the runtime cycle those services have with `BaseItem`).
+- `models/Setting.ts` — `CacheItem` made generic (`CacheItem<T>`) with `loadOne<T>` returning the precise per-key value; `formatValue` / `valueToString` params → `unknown`; `SettingItem.value` → `unknown`; `keychainService_` → `import type KeychainService`.
+- `reducer.ts` — `State.syncReport` → `ProgressReport` (cascaded to `app-desktop/gui/Sidebar` and `app-mobile/side-menu-content`); `State.sharedData` → `SharedData` (exported from `note-screen-shared.ts`). Removing `sharedData: any` un-poisoned `State[keyof State]` and surfaced a previously-masked dynamic-key access in `handleItemDelete`, fixed with a localized cast.
+
+`packages/utils`
+- `Logger.ts` — `TargetOptions.database` → a minimal structural `LoggerDatabase` interface (the concrete `Database` lives in `@joplin/lib`, which depends on this package, so it cannot be imported); added exported `LogEntry` and typed `lastEntries()`. Cascaded to `app-mobile/LogScreen.tsx` (removed a duplicate `LogEntry` and a cast) and `exportDebugReport.ts`.
+
+`packages/app-cli`
+- `app/app.ts` — `commands_` / `activeCommand_` → `BaseCommand`; `commandMetadata_` → `Record<string, ReturnType<BaseCommand['metadata']>>`; the redux dispatch callback now infers from `Dispatch`. `gui_` left `any` (the GUI is the untyped `app-gui.js`). `autocompletion.ts` gained one localized cast for `base-command`'s loose `options` element.
+
+`packages/app-mobile`
+- `utils/types.ts` — `AppState.route` → `Route` (the `Route` interface was moved here from `appReducer.ts` and shared); `noteSideMenuOptions` → `SideMenuContentOptions`.
+- `utils/appReducer.ts` — the nav-history helpers (`removeAdjacent*`, `removeLatestFolderIfSelected`) → `Route[]` / `Route`.
+- `components/app-nav.tsx` — `Props.route` → the shared `Route`.
+- `components/screens/Note/Note.tsx` — `menuOptionsCache_` → `Record<string, MenuOptionType[]>`; `editorRef` → `RefObject<EditorControl>` (it only ever attaches to `NoteEditor`, whose handle is `EditorControl`).
+
+`packages/app-desktop`
+- `gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx` — `pluginAssets` → `RenderResultPluginAsset[]`.
+
+Genuinely-untyped boundaries were left as `any` with accurate reasons: the `app-gui.js` GUI handle, the `react-native-dialogbox` ref, mixed React-Native style records, the heterogeneous reducer `action` union, the per-screen `ComponentType<any>`, and the TinyMCE editor / event types that are looser than the published `@types/tinymce`.
+
+One pre-existing inconsistency was uncovered and left for separate follow-up: `app-mobile`'s `ShareExtension.SharedData` declares `resources: string[]`, but the lib consumer reads each resource as a `SharedResource` object — the two same-named types should be reconciled after verifying the native share payload.

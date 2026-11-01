@@ -32,7 +32,7 @@ const clearChanges = () => {
 	return truncateTables(db(), ['changes', 'changes_2']);
 };
 
-describe('ChangeModel/index', () => {
+describe('ChangeModel', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('ChangeModel');

@@ -5,7 +5,7 @@ import { _ } from '@joplin/lib/locale';
 import { filename, basename } from '@joplin/lib/path-utils';
 import importEnex from '@joplin/lib/import-enex';
 import { AppState } from '../app.reducer';
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 
 interface Props {
 	filePath: string;

@@ -1,7 +1,6 @@
 import { Link } from './types';
-
-const Entities = require('html-entities').AllHtmlEntities;
-const htmlparser2 = require('@joplin/fork-htmlparser2');
+import { AllHtmlEntities as Entities } from 'html-entities';
+import * as htmlparser2 from '@joplin/fork-htmlparser2';
 
 const selfClosingElements = [
 	'area',

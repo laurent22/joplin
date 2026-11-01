@@ -28,6 +28,7 @@ export const separatorItem: SeparatorItem = {
 };
 
 export type ToolbarItem = ToolbarButtonInfo|SeparatorItem;
+export type ToolbarButtonOverride = Pick<ToolbarButtonInfo, 'enabled'>;
 
 interface ToolbarButtonCacheItem {
 	info: ToolbarButtonInfo;
@@ -50,8 +51,8 @@ export default class ToolbarButtonUtils {
 		return this.service_;
 	}
 
-	private commandToToolbarButton(commandName: string, whenClauseContext: WhenClauseContext, keymapService: KeymapService | null): ToolbarButtonInfo {
-		const newEnabled = this.service.isEnabled(commandName, whenClauseContext);
+	private commandToToolbarButton(commandName: string, whenClauseContext: WhenClauseContext, keymapService: KeymapService | null, override?: ToolbarButtonOverride): ToolbarButtonInfo {
+		const newEnabled = override?.enabled ?? this.service.isEnabled(commandName, whenClauseContext);
 		const newVisible = this.service.isVisible(commandName, whenClauseContext);
 		const newTitle = this.service.title(commandName);
 		const newIcon = this.service.iconName(commandName);
@@ -102,7 +103,7 @@ export default class ToolbarButtonUtils {
 	// the output also won't change. Invididual toolbarButtonInfo also won't changed
 	// if the state they use hasn't changed. This is to avoid useless renders of the toolbars.
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- WhenClauseContext can be partial in tests
-	public commandsToToolbarButtons(commandNames: string[], whenClauseContext: any, keymapService: (KeymapService | null) = null): ToolbarItem[] {
+	public commandsToToolbarButtons(commandNames: string[], whenClauseContext: any, keymapService: (KeymapService | null) = null, overrides: Record<string, ToolbarButtonOverride> = {}): ToolbarItem[] {
 		const output: ToolbarItem[] = [];
 
 		for (const commandName of commandNames) {
@@ -115,7 +116,7 @@ export default class ToolbarButtonUtils {
 			}
 
 			try {
-				const button = this.commandToToolbarButton(commandName, whenClauseContext, keymapService);
+				const button = this.commandToToolbarButton(commandName, whenClauseContext, keymapService, overrides[commandName]);
 				if (button.visible) {
 					output.push(button);
 				}

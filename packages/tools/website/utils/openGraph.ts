@@ -1,7 +1,7 @@
 import { MarkupLanguage, MarkupToHtml } from '@joplin/renderer';
 import { readmeFileTitleAndBody, replaceGitHubByWebsiteLinks } from './parser';
 import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
-const { substrWithEllipsis } = require('@joplin/lib/string-utils');
+import { substrWithEllipsis } from '@joplin/lib/string-utils';
 
 export interface OpenGraphTags {
 	title: string;

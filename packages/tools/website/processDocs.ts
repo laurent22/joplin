@@ -2,7 +2,7 @@
 
 import { execCommand, getRootDir } from '@joplin/utils';
 import { readFile, readdir, stat, writeFile } from 'fs/promises';
-import * as MarkdownIt from 'markdown-it';
+import MarkdownIt from 'markdown-it';
 import { htmlentities, isSelfClosingTag } from '@joplin/utils/html';
 import { compileWithFrontMatter, stripOffFrontMatter } from './utils/frontMatter';
 import StateCore = require('markdown-it/lib/rules_core/state_core');
@@ -15,10 +15,10 @@ import { chdir } from 'process';
 import yargs = require('yargs');
 import { extractOpenGraphTags } from './utils/openGraph';
 
-const md5File = require('md5-file');
-const htmlparser2 = require('@joplin/fork-htmlparser2');
-const styleToJs = require('style-to-js').default;
-const crypto = require('crypto');
+import md5File = require('md5-file');
+import * as htmlparser2 from '@joplin/fork-htmlparser2';
+import styleToJs = require('style-to-js');
+import * as crypto from 'crypto';
 
 interface Config {
 	baseUrl: string;

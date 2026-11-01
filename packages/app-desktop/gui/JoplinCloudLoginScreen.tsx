@@ -14,7 +14,7 @@ import JoplinCloudSignUpCallToAction from './JoplinCloudSignUpCallToAction';
 import bridge from '../services/bridge';
 
 const logger = Logger.create('JoplinCloudLoginScreen');
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 
 interface Props {
 	dispatch: Dispatch;
@@ -108,7 +108,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 					) : null}
 				</p>
 				{state.active === 'LINK_USED' ? <div className="loading-animation" /> : null}
-				<JoplinCloudSignUpCallToAction />
+				{state.active !== 'COMPLETED' ? <JoplinCloudSignUpCallToAction source='desktop-login-screen' withLeadIn={true} /> : null}
 			</div>
 			<ButtonBar onCancelClick={() => props.dispatch({ type: 'NAV_BACK' })} />
 		</div>

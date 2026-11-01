@@ -21,11 +21,12 @@ import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import { Dispatch } from 'redux';
 import WarningBanner from './WarningBanner';
 
-import Menu, { MenuOptionType } from './Menu';
 import shim from '@joplin/lib/shim';
 import CommandService from '@joplin/lib/services/CommandService';
 import Icon from '../Icon';
-export { MenuOptionType };
+import Menu from './Menu';
+import { MenuOption, MenuOptionStyle } from '../BottomDrawerMenu';
+export { MenuOption, MenuOptionStyle };
 
 // Rather than applying a padding to the whole bar, it is applied to each
 // individual component (button, picker, etc.) so that the touchable areas
@@ -58,7 +59,7 @@ interface ScreenHeaderProps {
 	showUndoButton: boolean;
 	undoButtonDisabled?: boolean;
 	showRedoButton: boolean;
-	menuOptions: MenuOptionType[];
+	menuOptions: MenuOption[];
 	title?: string|null;
 	folders: FolderEntity[];
 	folderPickerOptions?: FolderPickerOptions;
@@ -85,6 +86,7 @@ interface ScreenHeaderProps {
 
 	historyCanGoBack?: boolean;
 	showShouldUpgradeSyncTargetMessage?: boolean;
+	showNoteLockKeyConflictMessage?: boolean;
 
 	themeId: number;
 }
@@ -113,22 +115,21 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			innerContainer: {
 				flexDirection: 'row',
 				alignItems: 'center',
-				backgroundColor: theme.backgroundColor2,
-				shadowColor: '#000000',
-				elevation: 5,
+				backgroundColor: theme.backgroundColor,
+				borderBottomColor: theme.dividerColor,
+				borderBottomWidth: 1,
+				// 2026-08-28: Including a fully transparent shadow avoids a crash on iOS when opening settings:
+				shadowColor: '#000',
+				shadowOpacity: 0,
 			},
-			// A small border above the header: Covers the part of the shadow that would otherwise
-			// be shown above the header on Android.
-			aboveHeader: {
-				backgroundColor: theme.backgroundColor2,
-				paddingBottom: 6,
-				marginTop: -6,
-				zIndex: 2,
+			folderPicker: {
+				marginRight: theme.marginMedium,
+				fontSize: theme.fontSizeLarger,
 			},
 			sideMenuButton: {
 				flex: 1,
 				alignItems: 'center',
-				backgroundColor: theme.backgroundColor2,
+				backgroundColor: theme.backgroundColor,
 				paddingLeft: theme.marginLeft,
 				paddingRight: 5,
 				marginRight: 2,
@@ -137,7 +138,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			},
 			iconButton: {
 				flex: 1,
-				backgroundColor: theme.backgroundColor2,
+				backgroundColor: theme.backgroundColor,
 				paddingLeft: 10,
 				paddingRight: 10,
 				paddingTop: PADDING_V,
@@ -152,61 +153,60 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				minHeight: 40,
 
 				borderWidth: 1,
-				borderColor: theme.colorBright2,
+				borderColor: theme.color,
 				borderRadius: 4,
 				marginRight: 8,
 			},
 			saveButtonText: {
 				textAlignVertical: 'center',
-				color: theme.colorBright2,
+				color: theme.color,
 				fontWeight: 'bold',
 			},
 			savedButtonIcon: {
+				...theme.icon,
 				fontSize: 20,
-				color: theme.colorBright2,
 				width: 18,
 				height: 18,
 			},
 			saveButtonIcon: {
 				...theme.icon,
 				fontSize: 25,
-				color: theme.colorBright2,
 			},
 			contextMenuTrigger: {
 				fontSize: 30,
 				paddingLeft: 5,
 				paddingRight: theme.marginRight,
-				color: theme.color2,
+				color: theme.color,
 				fontWeight: 'bold',
 			},
 			titleText: {
 				flex: 1,
 				textAlignVertical: 'center',
 				marginLeft: 10,
-				color: theme.colorBright2,
+				color: theme.color,
 				fontWeight: 'bold',
-				fontSize: theme.fontSize,
+				fontSize: theme.fontSizeLarger,
 				paddingTop: 15,
 				paddingBottom: 15,
 			},
 			viewToggleButton: {
 				flex: 1,
-				backgroundColor: theme.backgroundColor2,
-				paddingLeft: 22,
+				backgroundColor: theme.backgroundColor,
+				paddingLeft: 10,
 				paddingRight: 10,
 				paddingTop: PADDING_V,
 				paddingBottom: PADDING_V,
 			},
 			viewToggleIcon: {
 				fontSize: 27,
-				color: theme.colorBright2,
+				color: theme.color,
 				flex: 1,
 				textAlignVertical: 'center',
 			},
 		};
 
 
-		const topIcon: TextStyle = { ...theme.icon, flex: 1, textAlignVertical: 'center', color: theme.colorBright2 };
+		const topIcon: TextStyle = { ...theme.icon, flex: 1, textAlignVertical: 'center', color: theme.color };
 		styleObject.topIcon = topIcon;
 
 		styleObject.backButton = { ...styleObject.iconButton };
@@ -552,33 +552,29 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					themeId={themeId}
 
 					description={_('Sort notes by')}
-					iconName='ionicon filter-outline'
+					iconName='ionicon filter'
 					contentWrapperStyle={styles.iconButton}
 					iconStyle={styles.topIcon}
 				/>
 			);
 		}
 
-		const menuOptions: MenuOptionType[] = [...this.props.menuOptions];
+		const menuOptions: MenuOption[] = [...this.props.menuOptions];
 
 		const selectedFolder = this.props.notesParentType === 'Folder' ? Folder.byId(this.props.folders, this.props.selectedFolderId) : null;
 		const selectedFolderInTrash = itemIsInTrash(selectedFolder);
 
-		if (!this.props.noteSelectionEnabled) {
-			if (menuOptions.length) {
-				menuOptions.push({ isDivider: true });
-			}
-		} else {
+		if (this.props.noteSelectionEnabled) {
 			menuOptions.push({
 				key: 'delete',
 				title: _('Delete'),
-				onPress: this.deleteButton_press,
+				onPress: () => this.deleteButton_press(),
 			});
 
 			menuOptions.push({
 				key: 'duplicate',
 				title: _('Duplicate'),
-				onPress: this.duplicateButton_press,
+				onPress: () => this.duplicateButton_press(),
 			});
 		}
 
@@ -592,7 +588,9 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					<FolderPicker
 						themeId={themeId}
 						disabled={disabled}
+						headerStyle={this.styles().folderPicker}
 						selectedFolderId={'selectedFolderId' in folderPickerOptions ? folderPickerOptions.selectedFolderId : null}
+						darkText
 						onValueChange={async (folderId) => {
 							// If onValueChange is specified, use this as a callback, otherwise do the default
 							// which is to take the selectedNoteIds from the state and move them to the
@@ -712,7 +710,6 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 		return (
 			<View style={this.styles().outerContainer}>
-				<View style={this.styles().aboveHeader}/>
 				<View style={this.styles().innerContainer}>
 					{zeroWidthSpacer}
 					{sideMenuComp}
@@ -735,6 +732,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				</View>
 				<WarningBanner
 					showShouldUpgradeSyncTargetMessage={this.props.showShouldUpgradeSyncTargetMessage}
+					showNoteLockKeyConflictMessage={this.props.showNoteLockKeyConflictMessage}
 				/>
 			</View>
 		);

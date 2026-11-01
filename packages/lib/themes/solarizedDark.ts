@@ -25,6 +25,7 @@ const theme: Theme = {
 	color3: '#93a1a1',
 
 	backgroundColor4: '#073642',
+	backgroundColor4Dimmed: '#073642',
 	color4: '#93a1a1',
 
 	raisedBackgroundColor: '#073642',

@@ -23,9 +23,12 @@ const urlUtils = require('../../../urlUtils.js');
 import * as ArrayUtils from '../../../ArrayUtils';
 import Logger from '@joplin/utils/Logger';
 const { mimeTypeFromHeaders } = require('../../../net-utils');
-const { fileExtension, safeFileExtension, safeFilename, filename } = require('../../../path-utils');
-const { MarkupToHtml } = require('@joplin/renderer');
-const { ErrorNotFound } = require('../utils/errors');
+import { fileExtension, safeFileExtension, safeFilename, filename } from '../../../path-utils';
+import { MarkupToHtml } from '@joplin/renderer';
+const { ErrorNotFound, ErrorForbidden } = require('../utils/errors');
+import isNoteLockEnabled from '../../noteLock/isNoteLockEnabled';
+import NoteLockNote from '../../noteLock/NoteLockNote';
+import lockedNoteBodies from '../utils/lockedNoteBodies';
 import { fileUriToPath } from '@joplin/utils/url';
 import { NoteEntity, ResourceEntity } from '../../database/types';
 import { DownloadController } from '../../../downloadController';
@@ -286,7 +289,10 @@ export async function downloadMediaFile(url: string, fetchOptions?: FetchOptions
 		}
 		return newMediaPath ?? mediaPath;
 	} catch (error) {
-		logger.warn(`Cannot download image at ${url}`, error);
+		// Clipped pages regularly contain images that cannot be downloaded - dead tracking
+		// pixels, expired links, etc. There's nothing to be done about it, and the note is
+		// still created without them, so this is not logged as a warning.
+		logger.info(`Cannot download image at ${url}`, error);
 		return '';
 	}
 }
@@ -471,6 +477,8 @@ export default async function(request: Request, id: string = null, link: string 
 		} else if (link && link === 'resources') {
 			const note = await Note.load(id);
 			if (!note) throw new ErrorNotFound();
+			// linkedResourceIds parses the body, which is ciphertext for a locked note.
+			if (isNoteLockEnabled() && NoteLockNote.isLocked(note)) throw new ErrorForbidden('The resources of a locked note cannot be listed through the API');
 			const resourceIds = await Note.linkedResourceIds(note.body);
 			const output = [];
 			const loadOptions = defaultLoadOptions(request, BaseModel.TYPE_RESOURCE);
@@ -485,7 +493,10 @@ export default async function(request: Request, id: string = null, link: string 
 		const sql: string[] = [];
 		if (request.query.include_deleted !== '1') sql.push('deleted_time = 0');
 		if (request.query.include_conflicts !== '1') sql.push('is_conflict = 0');
-		return defaultAction(BaseModel.TYPE_NOTE, request, id, link, null, { sql: sql.join(' AND ') });
+		const lockedBodies = isNoteLockEnabled() ? lockedNoteBodies(request, ModelType.Note) : null;
+		const result = await defaultAction(BaseModel.TYPE_NOTE, lockedBodies?.request ?? request, id, link, null, { sql: sql.join(' AND ') });
+		if (!lockedBodies) return result;
+		return id ? lockedBodies.replace(result) : lockedBodies.replacePage(result);
 	}
 
 	if (request.method === RequestMethod.POST) {
@@ -539,6 +550,13 @@ export default async function(request: Request, id: string = null, link: string 
 		const timestamp = Date.now();
 
 		const newProps = request.bodyJson(readonlyProperties('PUT'));
+
+		if (isNoteLockEnabled()) {
+			// Compare through the model's own coercion: Number() reads "1foo" as NaN, but the save path stores it as 1.
+			if ('is_locked' in newProps && !!Note.filter({ is_locked: newProps.is_locked }).is_locked !== !!note.is_locked) throw new ErrorForbidden('The note lock state cannot be changed through the API');
+			if (NoteLockNote.isLocked(note) && 'body' in newProps) throw new ErrorForbidden('The body of a locked note cannot be modified through the API');
+		}
+
 		if (!('user_updated_time' in newProps)) newProps.user_updated_time = timestamp;
 
 		let newNote = {
@@ -551,12 +569,20 @@ export default async function(request: Request, id: string = null, link: string 
 
 		BaseModel.dispatch({
 			type: 'EDITOR_NOTE_NEEDS_RELOAD',
+			noteId: id,
 		});
 
 		const requestNote = JSON.parse(request.body);
 		if (requestNote.tags || requestNote.tags === '') {
 			const tagTitles = requestNote.tags.split(',');
 			await Tag.setNoteTagsByTitles(id, tagTitles);
+		}
+
+		if (isNoteLockEnabled() && NoteLockNote.isLocked(newNote)) {
+			// The response would otherwise return the ciphertext body that GET refuses to serve. Copied
+			// rather than deleted in place, since Note.save has already dispatched this object.
+			newNote = { ...newNote };
+			delete newNote.body;
 		}
 
 		return newNote;

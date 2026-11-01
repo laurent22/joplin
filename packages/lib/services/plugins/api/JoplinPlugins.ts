@@ -84,9 +84,9 @@ export default class JoplinPlugins {
 	/**
 	 * @deprecated Use joplin.require()
 	 */
-	public require(_path: string): unknown {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: returns whatever native module the plugin requires; concretely replaced inside the sandbox
+	public require(_path: string): any {
 		// Just a stub. Implementation has to be done within plugin process, in plugin_index.js
-		return undefined;
 	}
 
 }

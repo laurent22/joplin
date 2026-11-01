@@ -10,10 +10,26 @@ import Setting from '@joplin/lib/models/Setting';
 import { PackageInfo } from '@joplin/lib/versionInfo';
 import shim from '@joplin/lib/shim';
 import { ImportModule } from '@joplin/lib/services/interop/Module';
+import { isRecoverableError } from '@joplin/lib/import-enex';
 import Logger from '@joplin/utils/Logger';
+import { Dispatch } from 'redux';
+import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
+import { promptForImportedNoteLockKey } from '@joplin/lib/services/noteLock/noteLockPrompts';
+import noteLockPrompts from '../../../utils/noteLockPrompts';
+import { ErrorCode } from '@joplin/lib/errors';
 const packageInfo: PackageInfo = require('../../../packageInfo.js');
 
 const logger = Logger.create('importFrom');
+
+const makeImportNoteLockKeyHandler = (modalMessage: string, dispatch: Dispatch) => async (backupKey: MasterKeyEntity) => {
+	// The password prompts are DOM dialogs and would render behind the import modal overlay.
+	void CommandService.instance().execute('hideModalMessage');
+	try {
+		return await promptForImportedNoteLockKey(backupKey, noteLockPrompts(dispatch));
+	} finally {
+		void CommandService.instance().execute('showModalMessage', modalMessage);
+	}
+};
 
 export const declaration: CommandDeclaration = {
 	name: 'importFrom',
@@ -106,6 +122,19 @@ export const runtime = (control: WindowControl): CommandRuntime => {
 				};
 			}
 
+			if (options.importFormat === 'one' && !shim.isWindows()) {
+				const response = bridge().showMessageBox(
+					_('This notebook contains Windows-specific files. For maximum compatibility, consider importing the notebook from Windows.'),
+					{
+						type: 'warning',
+						buttons: [_('Import anyway'), _('Cancel')],
+						defaultId: 0,
+						cancelId: 1,
+					},
+				);
+				if (response === 1) return null;
+			}
+
 			const modalMessage = _('Importing from "%s" as "%s" format. Please wait...', sourcePath, options.importFormat);
 			void CommandService.instance().execute('showModalMessage', modalMessage);
 
@@ -123,10 +152,13 @@ export const runtime = (control: WindowControl): CommandRuntime => {
 					void CommandService.instance().execute('showModalMessage', `${modalMessage}\n\n${statusStrings.join('\n')}`);
 				},
 				onError: (error: string|Error) => {
-					errors.push(error);
+					// Recovered errors are logged but not reported, since the
+					// notes were imported successfully anyway.
+					if (!isRecoverableError(error)) errors.push(error);
 					console.warn(error);
 				},
 				destinationFolderId: options.destinationFolderId,
+				onNoteLockKey: makeImportNoteLockKeyHandler(modalMessage, context.dispatch),
 			};
 
 			const service = InteropService.instance();
@@ -135,8 +167,10 @@ export const runtime = (control: WindowControl): CommandRuntime => {
 				// eslint-disable-next-line no-console
 				console.info('Import result: ', result);
 			} catch (error) {
-				logger.error(error);
-				bridge().showErrorMessageBox(error.message);
+				if (error.code !== ErrorCode.Cancelled) {
+					logger.error(error);
+					bridge().showErrorMessageBox(error.message);
+				}
 			}
 
 			void CommandService.instance().execute('hideModalMessage');

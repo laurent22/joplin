@@ -2,7 +2,7 @@ import { LinkRenderingType } from '../MdToHtml';
 import { ItemIdToUrlHandler, OptionsResourceModel, ResourceEntity, ResourceInfos } from '../types';
 import * as utils from '../utils';
 import createEventHandlingAttrs from './createEventHandlingAttrs';
-const Entities = require('html-entities').AllHtmlEntities;
+import { AllHtmlEntities as Entities } from 'html-entities';
 const htmlentities = new Entities().encode;
 const urlUtils = require('../urlUtils.js');
 const { getClassNameForMimeType } = require('font-awesome-filetypes');

@@ -46,7 +46,7 @@ const registerSecondaryRuntime = (service: CommandService, commandName: string, 
 	return service.registerRuntime(commandName, runtime, true);
 };
 
-describe('services_CommandService', () => {
+describe('CommandService', () => {
 
 	beforeEach(async () => {
 		KeymapService.destroyInstance();

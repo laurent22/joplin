@@ -7,12 +7,18 @@ const React = shim.react();
 const { useEffect, useRef, useState } = shim.react();
 
 type OnCancelListener = ()=> void;
+
+// Closes made by the app, not the user, so the close event must not report them as a cancel.
+const removedReturnValue = 'removed-from-dom';
+const hiddenReturnValue = 'hidden';
 type OnShowListener = ()=> void;
+type OnBeforeShowListener = (dialog: HTMLDialogElement)=> void;
 
 interface Props {
 	className?: string;
 	onCancel?: OnCancelListener;
 	onShow?: OnShowListener;
+	onBeforeShow?: OnBeforeShowListener;
 	contentStyle?: CSSProperties;
 	open?: boolean;
 	preventAutoCloseOnCancel?: boolean;
@@ -38,17 +44,22 @@ const Dialog: FC<Props> = props => {
 
 	const [contentRendered, setContentRendered] = useState(false);
 
+	const propsRef = useRef(props);
+	propsRef.current = props;
+
 	useEffect(() => {
 		if (!dialogElement || !contentRendered) return;
 
 		const open = props.open ?? true;
 		if (!dialogElement.open && open) {
+			propsRef.current.onBeforeShow?.(dialogElement);
 			dialogElement.showModal();
-			props.onShow?.();
+			propsRef.current.onShow?.();
 		} else if (dialogElement.open && !open) {
-			dialogElement.close();
+			// The close event fires later, when a dialog shown next may already own onCancel.
+			dialogElement.close(hiddenReturnValue);
 		}
-	}, [dialogElement, contentRendered, props.open, props.onShow]);
+	}, [dialogElement, contentRendered, props.open]);
 
 	useEffect(() => {
 		if (!dialogElement) return;
@@ -162,9 +173,11 @@ const useDialogElement = (containerDocument: Document, onCancel: undefined|OnCan
 			}
 		});
 
-		const removedReturnValue = 'removed-from-dom';
 		dialog.addEventListener('close', () => {
-			const closedByCancel = dialog.returnValue !== removedReturnValue;
+			const closedByCancel = dialog.returnValue !== removedReturnValue && dialog.returnValue !== hiddenReturnValue;
+			// A cancel leaves the return value as it was, so it is cleared here rather than on show, which can
+			// happen before this event arrives.
+			dialog.returnValue = '';
 			if (closedByCancel) {
 				if (!preventAutoCloseOnCancel || !skipCloseCancelRef.current) {
 					onCancelRef.current?.();

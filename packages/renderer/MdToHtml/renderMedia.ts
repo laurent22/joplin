@@ -2,7 +2,7 @@ import { Link } from '../MdToHtml';
 import { toForwardSlashes } from '@joplin/utils/path';
 import { LinkIndexes } from './rules/link_close';
 import { RendererTheme } from '../types';
-const Entities = require('html-entities').AllHtmlEntities;
+import { AllHtmlEntities as Entities } from 'html-entities';
 const htmlentities = new Entities().encode;
 
 export interface Options {

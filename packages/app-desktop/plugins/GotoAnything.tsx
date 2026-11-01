@@ -1,8 +1,9 @@
 import * as React from 'react';
+import { Dispatch } from 'redux';
 import { AppState } from '../app.reducer';
 import CommandService, { SearchResult as CommandSearchResult } from '@joplin/lib/services/CommandService';
 import KeymapService from '@joplin/lib/services/KeymapService';
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 import { _ } from '@joplin/lib/locale';
 import { themeStyle } from '@joplin/lib/theme';
 import SearchEngine, { ComplexTerm } from '@joplin/lib/services/search/SearchEngine';
@@ -23,6 +24,7 @@ import Resource from '@joplin/lib/models/Resource';
 import { FolderEntity, NoteEntity, ResourceEntity, TagEntity } from '@joplin/lib/services/database/types';
 import Dialog from '@joplin/lib/components/Dialog';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
+import { PluginManifest } from '@joplin/lib/services/PluginManager';
 
 const logger = Logger.create('GotoAnything');
 
@@ -70,12 +72,12 @@ export interface GotoAnythingUserData {
 	startString?: string;
 	mode?: Mode;
 	callback?: UserDataCallback;
+	alwaysShowHelp?: boolean;
 }
 
 interface Props {
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 	folders: FolderEntity[];
 	showCompletedTodos: boolean;
 	userData: GotoAnythingUserData;
@@ -132,10 +134,9 @@ const itemListId = 'goto-anything-item-list';
 
 class GotoAnything {
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public dispatch: Function;
+	public dispatch: Dispatch;
 	public static Dialog: React.ComponentType<Props>;
-	public static manifest: { name: string; menuItems: { id: string; name?: string; parent?: string; label?: string; accelerator?: ()=> string; screens?: string[]; userData?: { startString?: string } }[] };
+	public static manifest: PluginManifest;
 
 	public onTrigger(event: { userData: GotoAnythingUserData }) {
 		this.dispatch({
@@ -158,6 +159,8 @@ class DialogComponent extends React.PureComponent<Props, State> {
 	private markupToHtml_: MarkupToHtml;
 	private userCallback_: UserDataCallback|null = null;
 	private mode_: Mode;
+	private alwaysShowHelp_: boolean;
+	private lastMouseCoords_: { x: number; y: number } | null = null;
 
 	public constructor(props: Props) {
 		super(props);
@@ -168,6 +171,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 		this.listUpdateQueue_ = new AsyncActionQueue(100);
 
 		this.mode_ = props?.userData?.mode ? props.userData.mode : Mode.Default;
+		this.alwaysShowHelp_ = !!props?.userData?.alwaysShowHelp;
 
 		this.state = {
 			query: startString,
@@ -189,6 +193,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 		this.input_onKeyDown = this.input_onKeyDown.bind(this);
 		this.renderItem = this.renderItem.bind(this);
 		this.listItem_onClick = this.listItem_onClick.bind(this);
+		this.listItem_onMouseMove = this.listItem_onMouseMove.bind(this);
 		this.helpButton_onClick = this.helpButton_onClick.bind(this);
 
 		if (startString) this.scheduleListUpdate();
@@ -517,8 +522,14 @@ class DialogComponent extends React.PureComponent<Props, State> {
 
 		if (item.type === BaseModel.TYPE_COMMAND) {
 			logger.info('gotoItem: execute command', item);
-			void CommandService.instance().execute(item.id, ...item.commandArgs);
-			void focusEditorIfEditorCommand(item.id, CommandService.instance());
+			// Defer so the close above renders before the command runs — otherwise
+			// commands that reopen the dialog (e.g. linkToNote) get batched with the
+			// close, the dialog never remounts, and its constructor-read userData is
+			// stale. See https://github.com/laurent22/joplin/issues/15780
+			setTimeout(() => {
+				void CommandService.instance().execute(item.id, ...item.commandArgs);
+				void focusEditorIfEditorCommand(item.id, CommandService.instance());
+			}, 0);
 			return;
 		}
 
@@ -566,6 +577,21 @@ class DialogComponent extends React.PureComponent<Props, State> {
 		void this.gotoItem(this.selectedItem(targetResultId));
 	}
 
+	private listItem_onMouseMove(event: React.MouseEvent<HTMLDivElement>) {
+		// Only update selection when the mouse actually moves. Without this, a stationary
+		// cursor over a row that gets re-mounted (e.g. after keyboard navigation re-renders
+		// the list) would steal the keyboard selection.
+		if (this.lastMouseCoords_ && this.lastMouseCoords_.x === event.clientX && this.lastMouseCoords_.y === event.clientY) {
+			return;
+		}
+		this.lastMouseCoords_ = { x: event.clientX, y: event.clientY };
+
+		const targetResultId = event.currentTarget.getAttribute('id');
+		if (targetResultId && targetResultId !== this.state.selectedItemId) {
+			this.setState({ selectedItemId: targetResultId });
+		}
+	}
+
 	public renderItem(item: GotoAnythingSearchResult, index: number) {
 		const theme = themeStyle(this.props.themeId);
 		const style = this.style();
@@ -597,6 +623,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 				className={isSelected ? 'selected' : null}
 				style={rowStyle}
 				onClick={this.listItem_onClick}
+				onMouseMove={this.listItem_onMouseMove}
 
 				data-id={item.id}
 				data-parent-id={item.parent_id}
@@ -706,7 +733,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 				aria-live='polite'
 				id={helpTextId}
 				style={style.help}
-				hidden={!this.state.showHelp}
+				hidden={!this.alwaysShowHelp_ && !this.state.showHelp}
 			>{this.helpText()}</div>
 		);
 
@@ -728,11 +755,11 @@ class DialogComponent extends React.PureComponent<Props, State> {
 						aria-controls={itemListId}
 						aria-activedescendant={this.state.selectedItemId}
 					/>
-					<HelpButton
+					{this.alwaysShowHelp_ ? null : <HelpButton
 						onClick={this.helpButton_onClick}
 						aria-controls={helpTextId}
 						aria-expanded={this.state.showHelp}
-					/>
+					/>}
 				</div>
 				{this.renderList()}
 			</Dialog>

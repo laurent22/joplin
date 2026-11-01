@@ -29,12 +29,18 @@ const registerEditorPlugin = async (editorViewId) => {
 			);
 
 			let noteId;
-			await editors.onUpdate(viewHandle, event => {
+			// The note ID is exposed in the DOM so tests can wait for the first update.
+			await editors.onUpdate(viewHandle, async event => {
 				noteId = event.noteId;
+				await editors.setHtml(
+					viewHandle,
+					`<code>Loaded!</code><code id="note-id">${noteId}</code>`,
+				);
 			});
 
-			saveCallbacks.push(() => {
-				void editors.saveNote(viewHandle, {
+			saveCallbacks.push(async () => {
+				if (!noteId) throw new Error('saveNote called before the first onUpdate event');
+				await editors.saveNote(viewHandle, {
 					noteId,
 					body: `Changed by ${editorViewId}`,
 				});
@@ -53,7 +59,7 @@ const registerEditorPlugin = async (editorViewId) => {
 		iconName: 'fas fa-music',
 		execute: async () => {
 			for (const saveCallback of saveCallbacks) {
-				saveCallback();
+				await saveCallback();
 			}
 		},
 	});

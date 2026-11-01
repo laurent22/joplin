@@ -13,7 +13,7 @@ import { ThemeStyle } from '../../theme';
 import { basename, friendlySafeFilename, rtrimSlashes, dirname } from '../../path-utils';
 import packToWriter from '@joplin/htmlpack/packToWriter';
 const { themeStyle } = require('../../theme');
-const { escapeHtml } = require('../../string-utils.js');
+import { escapeHtml } from '../../string-utils';
 import { assetsToHeaders } from '@joplin/renderer';
 import getPluginSettingValue from '../plugins/utils/getPluginSettingValue';
 import { LinkRenderingType } from '@joplin/renderer/MdToHtml';
@@ -71,6 +71,8 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 				} else {
 					output = `${friendlySafeFilename(item.title)}/${output}`;
 					output = await shim.fsDriver().findUniqueFilename(output);
+					const [exportedFolderName] = output.split(/[/\\]/, 1);
+					this.addTitleTruncationWarning_(item, exportedFolderName);
 				}
 			}
 			if (!item.parent_id) return output;
@@ -120,6 +122,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 			} else {
 				noteFilePath = `${dirPath}/${friendlySafeFilename(item.title)}.html`;
 				noteFilePath = await shim.fsDriver().findUniqueFilename(noteFilePath);
+				this.addTitleTruncationWarning_(item, basename(noteFilePath));
 			}
 
 			const bodyMd = await this.processNoteResources_(item);

@@ -1,8 +1,7 @@
 let eventHandlerIndex_ = 1;
 
 export interface EventHandlers {
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	[key: string]: Function;
+	[key: string]: (...args: unknown[])=> unknown;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Recursive walker over heterogeneous plugin-API arguments; tightening to `unknown` forces type-narrow casts at every branch and at every recursive call site

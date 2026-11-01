@@ -1,4 +1,5 @@
 import InMemoryCache from './InMemoryCache';
+import defaultNoteStyle from './defaultNoteStyle';
 import noteStyle from './noteStyle';
 import { fileExtension } from '@joplin/utils/path';
 import setupLinkify from './MdToHtml/setupLinkify';
@@ -8,8 +9,9 @@ import { FsDriver, ItemIdToUrlHandler, MarkupRenderer, OptionsResourceModel, Ren
 import hljs from './highlight';
 // Use a require() to support bundling on mobile:
 import MarkdownIt = require('markdown-it');
+import type Token = require('markdown-it/lib/token');
 
-const Entities = require('html-entities').AllHtmlEntities;
+import { AllHtmlEntities as Entities } from 'html-entities';
 const htmlentities = new Entities().encode;
 const md5 = require('md5');
 
@@ -73,11 +75,15 @@ const plugins: RendererPlugins = {
 	toc: { module: require('markdown-it-toc-done-right'), options: { listType: 'ul', slugify: slugify, uniqueSlugStartIndex: 2 } },
 	expand_tabs: { module: require('markdown-it-expand-tabs'), options: { tabWidth: 4 } },
 };
-const defaultNoteStyle = require('./defaultNoteStyle');
 
 function slugify(s: string): string {
 	return uslug(s);
 }
+
+const removeEmptyHeadingId = (token: Token, { title }: { title: string }) => {
+	if (title.trim()) return;
+	token.attrs = token.attrs.filter(([name]) => name !== 'id');
+};
 
 // Share across all instances of MdToHtml
 const inMemoryCache = new InMemoryCache(20);
@@ -619,7 +625,7 @@ export default class MdToHtml implements MarkupRenderer {
 			});
 		}
 
-		loadPlugin(markdownItAnchor, { slugify: slugify });
+		loadPlugin(markdownItAnchor, { slugify: slugify, callback: removeEmptyHeadingId });
 
 		for (const key in plugins) {
 			if (this.pluginEnabled(key)) {

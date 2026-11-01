@@ -9,7 +9,7 @@ import { join } from 'path';
 import uuid, { uuidgen } from '@joplin/lib/uuid';
 import { hasProtocol } from '@joplin/utils/url';
 import { fileExtension } from '@joplin/utils/path';
-const { clipboard, nativeImage } = require('electron');
+import { clipboard, nativeImage } from 'electron';
 const packageInfo = require('../../packageInfo');
 
 interface Components {

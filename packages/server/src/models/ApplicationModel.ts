@@ -47,6 +47,7 @@ const getPlatform = (platform: string) => {
 	if (ApplicationPlatform.MacOs === platformAsInt) return ApplicationPlatform.MacOs;
 	if (ApplicationPlatform.Android === platformAsInt) return ApplicationPlatform.Android;
 	if (ApplicationPlatform.Ios === platformAsInt) return ApplicationPlatform.Ios;
+	if (ApplicationPlatform.Web === platformAsInt) return ApplicationPlatform.Web;
 	return ApplicationPlatform.Unknown;
 };
 
@@ -234,6 +235,7 @@ export default class ApplicationModel extends BaseModel<Application> {
 		if (ApplicationPlatform.MacOs === platform) return 'MacOS';
 		if (ApplicationPlatform.Android === platform) return 'Android';
 		if (ApplicationPlatform.Ios === platform) return 'iOS';
+		if (ApplicationPlatform.Web === platform) return 'Web';
 		return 'Unknown';
 	}
 

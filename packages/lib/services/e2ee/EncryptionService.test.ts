@@ -4,12 +4,12 @@ import Note from '../../models/Note';
 import Setting from '../../models/Setting';
 import BaseItem from '../../models/BaseItem';
 import MasterKey from '../../models/MasterKey';
-import EncryptionService, { EncryptionMethod } from './EncryptionService';
+import EncryptionService, { EncryptionMethod, isValidNoteLockHeader } from './EncryptionService';
 import { setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 
 let service: EncryptionService = null;
 
-describe('services_EncryptionService', () => {
+describe('EncryptionService', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
@@ -25,8 +25,8 @@ describe('services_EncryptionService', () => {
 			masterKeyId: '01234568abcdefgh01234568abcdefgh',
 		};
 
-		const encodedHeader = service.encodeHeader_(header);
-		const decodedHeader = service.decodeHeaderBytes_(encodedHeader);
+		const encodedHeader = service.encodeHeader_(header, false);
+		const decodedHeader = service.decodeHeaderBytes_(encodedHeader, false);
 		delete decodedHeader.length;
 
 		expect(objectsEqual(header, decodedHeader)).toBe(true);
@@ -160,6 +160,27 @@ describe('services_EncryptionService', () => {
 		const plainText2 = await service.decryptString(cipherText2);
 
 		expect(plainText2 === veryLongSecret).toBe(true);
+	}));
+
+	it('should encrypt and decrypt with a supplied decrypted master key', (async () => {
+		let masterKey = await service.generateMasterKey('123456');
+		masterKey = await MasterKey.save(masterKey);
+		const decryptedMasterKey = await service.decryptMasterKeyContent(masterKey, '123456');
+		const options = {
+			masterKeyId: masterKey.id,
+			decryptedMasterKey,
+		};
+
+		expect(service.loadedMasterKeysCount()).toBe(0);
+
+		const cipherText = await service.encryptString('some secret', options);
+		expect(await service.decryptString(cipherText, options)).toBe('some secret');
+		expect(service.loadedMasterKeysCount()).toBe(0);
+
+		await expect(service.decryptString(cipherText, {
+			...options,
+			masterKeyId: '01234568abcdefgh01234568abcdefgh',
+		})).rejects.toThrow('Supplied master key ID does not match encrypted content');
 	}));
 
 	it('should decrypt various encryption methods', (async () => {
@@ -342,6 +363,21 @@ describe('services_EncryptionService', () => {
 		const plainText = await service.decryptString(cipherText);
 		expect(plainText).toBe('🐶🐶🐶'.substr(0, 5));
 	}));
+
+	it('should only treat a complete note lock header as ciphertext', async () => {
+		let masterKey = await service.generateMasterKey('123456');
+		masterKey = await MasterKey.save(masterKey);
+		await service.loadMasterKey(masterKey, '123456', true);
+		expect(isValidNoteLockHeader(await service.encryptString('some text', { masterKeyId: masterKey.id, isNoteLock: true }))).toBe(true);
+
+		const header = service.encodeHeader_({ encryptionMethod: EncryptionMethod.StringV1, masterKeyId: '0123456789abcdef0123456789abcdef' }, true);
+		expect(isValidNoteLockHeader(`${header}{"payload":1}`)).toBe(true);
+		// A later header version may use a larger metadata size
+		expect(isValidNoteLockHeader(`JLD02000028${'a'.repeat(40)}{"payload":1}`)).toBe(true);
+		for (const text of ['JLD01 my shopping list', 'JLD99abc', header.replace('JLD', 'JED'), header.slice(0, -1), 'JLD01000001a - [ ] plain text', 'JLD02000004abcd{"payload":1}', 'JLD02000004abc', 'JLD01000000', null, '']) {
+			expect(isValidNoteLockHeader(text)).toBe(false);
+		}
+	});
 
 	it('should check if a master key is loaded', (async () => {
 		let masterKey = await service.generateMasterKey('123456');

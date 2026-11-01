@@ -12,6 +12,7 @@ import useOnShareLinkClick from '@joplin/lib/components/shared/ShareNoteDialog/u
 import onUnshareNoteClick from '@joplin/lib/components/shared/ShareNoteDialog/onUnshareNoteClick';
 import useShareStatusMessage from '@joplin/lib/components/shared/ShareNoteDialog/useShareStatusMessage';
 import useEncryptionWarningMessage from '@joplin/lib/components/shared/ShareNoteDialog/useEncryptionWarningMessage';
+import useIsPublished from '@joplin/lib/components/shared/ShareNoteDialog/useIsPublished';
 import { SharingStatus } from '@joplin/lib/components/shared/ShareNoteDialog/types';
 import { AppState } from '../../utils/types';
 import { connect } from 'react-redux';
@@ -54,6 +55,7 @@ const useStyles = (themeId: number) => {
 		});
 	}, [themeId]);
 };
+type Styles = ReturnType<typeof useStyles>;
 
 interface UnpublishProps {
 	note: NoteEntity;
@@ -79,6 +81,27 @@ const UnpublishButton: React.FC<UnpublishProps> = ({ note, onUnpublishStart }) =
 		icon='share-off'
 		onPress={onPress}
 	>{_('Unpublish')}</Button>;
+};
+
+interface NoteItemProps {
+	note: NoteEntity;
+	shares: StateShare[];
+	onUnpublishStart: ()=> void;
+	styles: Styles;
+}
+
+const NoteItem: React.FC<NoteItemProps> = ({ note, shares, onUnpublishStart, styles }) => {
+	const published = useIsPublished(note, shares);
+
+	const unshareButton = published ? (
+		<UnpublishButton note={note} onUnpublishStart={onUnpublishStart}/>
+	) : null;
+
+	return (
+		<View key={note.id} style={styles.noteItem}>
+			<Text style={styles.noteTitle}>{note.title}</Text>{unshareButton}
+		</View>
+	);
 };
 
 const ShareNoteDialogContent: React.FC<Props> = ({
@@ -120,22 +143,18 @@ const ShareNoteDialogContent: React.FC<Props> = ({
 
 	const styles = useStyles(themeId);
 
-	const renderNote = (note: NoteEntity) => {
-		const unshareButton = shares.find(s => s.note_id === note.id) ? (
-			<UnpublishButton note={note} onUnpublishStart={onUnpublishStart}/>
-		) : null;
-
-		return (
-			<View key={note.id} style={styles.noteItem}>
-				<Text style={styles.noteTitle}>{note.title}</Text>{unshareButton}
-			</View>
-		);
-	};
-
 	const renderNoteList = (notes: NoteEntity[]) => {
 		const noteComps = [];
 		for (const note of notes) {
-			noteComps.push(renderNote(note));
+			noteComps.push(
+				<NoteItem
+					key={`note-${note.id}`}
+					note={note}
+					shares={shares}
+					onUnpublishStart={onUnpublishStart}
+					styles={styles}
+				/>,
+			);
 		}
 		return <View>{noteComps}</View>;
 	};

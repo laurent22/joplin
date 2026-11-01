@@ -57,6 +57,7 @@ const setEnableUnresponsiveCheck = (enabled: boolean) => {
 
 interface NoteMetadata {
 	created: Date;
+	order?: number;
 	updated: Date;
 	// Saving the title in the metadata allows using special characters not supported by the file
 	// system in imported note titles (e.g. "/")
@@ -174,8 +175,10 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		logger.info('Importing HTML into Joplin');
 		const importer = new OneNoteHtmlImporter(fileToMetadata);
 		importer.setMetadata({ fileExtensions: ['html'] });
-		await importer.init(tempOutputDirectory, {
+		await importer.init(outputDirectory2, {
 			...this.options_,
+			destinationFolder: null,
+			destinationFolderId: null,
 			format: 'html',
 			outputFormat: ImportModuleOutputFormat.Html,
 		});
@@ -272,9 +275,19 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 
 				return new Date(timeSeconds * 1000);
 			};
+			const parseOrderMeta = (selector: string) => {
+				const element = dom.querySelector<HTMLMetaElement>(selector);
+				if (!element) return undefined;
+
+				const orderIndex = Number(element.content);
+				if (!Number.isInteger(orderIndex) || orderIndex < 0) return undefined;
+
+				return -orderIndex;
+			};
 
 			return {
 				created: parseTimestampMeta('meta[name="X-Created-Time"]'),
+				order: parseOrderMeta('meta[name="X-OneNote-Order"]'),
 				updated: parseTimestampMeta('meta[name="X-Updated-Time"]'),
 				title: dom.title,
 			};
@@ -346,6 +359,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			// ID mappings and other metadata (unused at this stage of the import process)
 			// Remove leading space to avoid unnecessary blank lines in test snapshots
 			{ selector: 'meta[name="X-Original-Page-Id"]', preprocess: removeLeadingSpace },
+			{ selector: 'meta[name="X-OneNote-Order"]', preprocess: removeLeadingSpace },
 			{ selector: 'meta[name="X-Created-Time"]', preprocess: removeLeadingSpace },
 			{ selector: 'meta[name="X-Updated-Time"]', preprocess: removeLeadingSpace },
 
@@ -623,6 +637,7 @@ class OneNoteHtmlImporter extends InteropService_Importer_Md {
 
 					user_updated_time: metadata.updated.getTime(),
 					user_created_time: metadata.created.getTime(),
+					order: metadata.order ?? note.order,
 					title: metadata.title || note.title,
 				};
 

@@ -21,6 +21,7 @@ interface Props {
 	pluginHtmlContents: PluginHtmlContents;
 	pluginStates: PluginStates;
 	visible: boolean;
+	inert?: boolean;
 }
 
 
@@ -166,6 +167,8 @@ const PluginPanelViewer: React.FC<Props> = props => {
 				visible={props.visible}
 				size={DialogVariant.Large}
 				onDismiss={onClose}
+				useNativeModal={false}
+				inert={props.inert}
 			>
 				{renderTabContent()}
 				{renderTabSelector()}

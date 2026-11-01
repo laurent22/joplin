@@ -16,6 +16,8 @@ import { KB } from '@joplin/utils/bytes';
 import { defaultWindowId } from '@joplin/lib/reducer';
 import { execCommand } from '@joplin/utils';
 
+const allowedExternalProtocols = ['http:', 'https:', 'mailto:', 'joplin:'];
+
 interface LastSelectedPath {
 	file: string;
 	directory: string;
@@ -235,11 +237,9 @@ export class Bridge {
 			if (registered) {
 				this.registeredGlobalHotkey_ = accelerator;
 			} else {
-				// eslint-disable-next-line no-console
 				console.warn(`Bridge: Failed to register global shortcut: ${accelerator}`);
 			}
 		} catch (error) {
-			// eslint-disable-next-line no-console
 			console.error(`Bridge: Error registering global shortcut "${accelerator}":`, error);
 		}
 	}
@@ -249,7 +249,7 @@ export class Bridge {
 			try {
 				globalShortcut.unregister(this.registeredGlobalHotkey_);
 			} catch (error) {
-				// eslint-disable-next-line no-console
+
 				console.warn('Bridge: Error removing global shortcut:', error);
 			}
 			this.registeredGlobalHotkey_ = '';
@@ -318,8 +318,7 @@ export class Bridge {
 	// Perhaps the easiest would be to patch electron-context-menu to
 	// support the renderer process again. Or possibly revert to an old
 	// version of electron-context-menu.
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public setupContextMenu(_spellCheckerMenuItemsHandler: Function) {
+	public setupContextMenu(_spellCheckerMenuItemsHandler: (misspelledWord: string, dictionarySuggestions: string[])=> void) {
 		require('./services/electron-context-menu')({
 			allWindows: [this.mainWindow()],
 
@@ -498,6 +497,12 @@ export class Bridge {
 		if (protocol === 'file:') {
 			await this.openItem(url);
 		} else {
+			// Some callers pass untrusted note content, and this reaches the OS
+			// URI dispatcher, where a dangerous scheme handler can mean RCE.
+			if (!allowedExternalProtocols.includes(protocol)) {
+				console.warn(`Bridge: openExternal: rejected URL with disallowed scheme "${protocol}"`);
+				return;
+			}
 			return shell.openExternal(url);
 		}
 	}

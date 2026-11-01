@@ -56,7 +56,7 @@ export default class Server {
 			this.serverUrl_ = `${this.serverUrl_}/`;
 		}
 
-		const mainEntrypoint = join(serverDir, 'dist', 'app.js');
+		const mainEntrypoint = join(serverDir, 'dist', 'index.js');
 		if (!config.useRunningServer) {
 			this.server_ = execa.node(mainEntrypoint, [
 				'--env', 'dev',

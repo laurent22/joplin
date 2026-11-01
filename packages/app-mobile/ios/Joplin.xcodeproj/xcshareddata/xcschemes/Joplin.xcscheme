@@ -27,14 +27,33 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
+            BuildableName = "Joplin.app"
+            BlueprintName = "Joplin"
+            ReferencedContainer = "container:Joplin.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <Testables>
          <TestableReference
-            skipped = "NO">
+            skipped = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
                BuildableName = "JoplinTests.xctest"
                BlueprintName = "JoplinTests"
+               ReferencedContainer = "container:Joplin.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3C39DC082FC7808F0058D1C4"
+               BuildableName = "JoplinUITests.xctest"
+               BlueprintName = "JoplinUITests"
                ReferencedContainer = "container:Joplin.xcodeproj">
             </BuildableReference>
          </TestableReference>

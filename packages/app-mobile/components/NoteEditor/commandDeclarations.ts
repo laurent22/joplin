@@ -3,6 +3,7 @@ import { _ } from '@joplin/lib/locale';
 import { CommandDeclaration } from '@joplin/lib/services/CommandService';
 
 const markdownEditorOnlyCommands = [
+	EditorCommandType.ToggleBlockQuote,
 	EditorCommandType.DuplicateLine,
 	EditorCommandType.SortSelectedLines,
 	EditorCommandType.SwapLineUp,
@@ -111,6 +112,11 @@ const declarations: CommandDeclaration[] = [
 		name: EditorCommandType.ToggleCheckList,
 		label: () => _('Task list'),
 		iconName: 'material format-list-checks',
+	},
+	{
+		name: `editor.${EditorCommandType.ToggleBlockQuote}`,
+		label: () => _('Blockquote'),
+		iconName: 'material format-quote-close',
 	},
 	{
 		name: `editor.${EditorCommandType.InsertTable}`,

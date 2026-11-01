@@ -172,30 +172,33 @@ elif [[ $ARCHITECTURE =~ .*i386.*|.*i686.* ]]; then
 fi
 
 #-----------------------------------------------------
-print "Checking dependencies..."
-## Check if libfuse2 is present.
-if [[ $(command -v ldconfig) ]]; then
-  LIBFUSE=$(ldconfig -p | grep "libfuse.so.2" || echo '')
-fi
-if [[ $LIBFUSE == "" ]]; then
-  LIBFUSE=$(find /lib /usr/lib /lib64 /usr/lib64 /usr/local/lib -name "libfuse.so.2" 2>/dev/null | grep "libfuse.so.2" || echo '')
-fi
-if [[ $LIBFUSE == "" ]]; then
-  print "${COLOR_RED}Error: Can't get libfuse2 on system, please install libfuse2${COLOR_RESET}"
-  print "See https://joplinapp.org/help/faq/#desktop-application-will-not-launch-on-linux and https://github.com/AppImage/AppImageKit/wiki/FUSE for more information"
-  exit 1
-fi
-
-#-----------------------------------------------------
-# Download Joplin
-#-----------------------------------------------------
-
 # Get the latest version to download
 if [[ "$INCLUDE_PRE_RELEASE" == true ]]; then
   RELEASE_VERSION=$($DL - "https://api.github.com/repos/laurent22/joplin/releases" | grep -Po '"tag_name": ?"v\K.*?(?=")' | sort -rV | head -1)
 else
   RELEASE_VERSION=$($DL - "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": ?"v\K.*?(?=")')
 fi
+
+#-----------------------------------------------------
+print "Checking dependencies..."
+## Check for libfuse2 for Joplin versions lesser than 3.7.10, which transitioned to a new AppImage runtime without libfuse2 dependency
+if [[ $(compareVersions "$RELEASE_VERSION" "3.7.10") -lt 0 ]]; then
+  if [[ $(command -v ldconfig) ]]; then
+    LIBFUSE=$(ldconfig -p | grep "libfuse.so.2" || echo '')
+  fi
+  if [[ $LIBFUSE == "" ]]; then
+    LIBFUSE=$(find /lib /usr/lib /lib64 /usr/lib64 /usr/local/lib -name "libfuse.so.2" 2>/dev/null | grep "libfuse.so.2" || echo '')
+  fi
+  if [[ $LIBFUSE == "" ]]; then
+    print "${COLOR_RED}Error: Can't get libfuse2 on system, please install libfuse2${COLOR_RESET}"
+    print "See https://joplinapp.org/help/faq/#desktop-application-will-not-launch-on-linux and https://github.com/AppImage/AppImageKit/wiki/FUSE for more information"
+    exit 1
+  fi
+fi
+
+#-----------------------------------------------------
+# Download Joplin
+#-----------------------------------------------------
 
 # Check if it's in the latest version
 if [[ -e "${INSTALL_DIR}/VERSION" ]]; then
@@ -259,42 +262,6 @@ DESKTOP=${DESKTOP,,}  # convert to lower case
 
 echo 'Create Desktop icon...'
 
-# Detect distribution environment, and apply --no-sandbox fix
-SANDBOXPARAM=""
-# lsb_release isn't available on some platforms (e.g. opensuse)
-# The equivalent of lsb_release in OpenSuse is the file /usr/lib/os-release
-if command -v lsb_release &> /dev/null; then
-  DISTVER=$(lsb_release -is) && DISTVER=$DISTVER$(lsb_release -rs)
-  DISTCODENAME=$(lsb_release -cs)
-  DISTMAJOR=$(lsb_release -rs|cut -d. -f1)
-
-  #-----------------------------------------------------
-  # Check for "The SUID sandbox helper binary was found, but is not configured correctly" problem.
-  # It is present in Debian 1X. A (temporary) patch will be applied at .desktop file
-  # Linux Mint 4 Debbie is based on Debian 10 and requires the same param handling.
-  #
-  # TODO: Remove: This is likely no longer an issue. See https://issues.chromium.org/issues/40462640.
-  BAD_HELPER_BINARY=false
-  if [[ $DISTVER =~ Debian1. || ( "$DISTVER" = "Linuxmint4" && "$DISTCODENAME" = "debbie" ) || ( "$DISTVER" = "CentOS" && "$DISTMAJOR" =~ 6|7 ) ]]; then
-    BAD_HELPER_BINARY=true
-  fi
-
-  # Work around Ubuntu 23.10+'s restrictions on unprivileged user namespaces. Electron
-  # uses these to sandbox processes. Unfortunately, it doesn't look like we can get around this
-  # without writing the AppImage to a non-user-writable location (without invalidating other security
-  # controls). See https://discourse.joplinapp.org/t/possible-future-requirement-for-no-sandbox-flag-for-ubuntu-23-10/.
-  HAS_USERNS_RESTRICTIONS=false
-  if [[ "$DISTVER" =~ ^(Ubuntu|Tuxedo) && $DISTMAJOR -ge 23 ]]; then
-    HAS_USERNS_RESTRICTIONS=true
-  fi
-
-  if [[ $HAS_USERNS_RESTRICTIONS = true || $BAD_HELPER_BINARY = true ]]; then
-    SANDBOXPARAM="--no-sandbox"
-    print "${COLOR_YELLOW}WARNING${COLOR_RESET} Electron sandboxing disabled."
-    print "    See https://discourse.joplinapp.org/t/32160/5 for details."
-  fi
-fi
-
 # Initially only desktop environments that were confirmed to use desktop files stored in
 # `.local/share/desktop` had a desktop file created.
 # However some environments don't return a desktop BUT still support these desktop files
@@ -307,13 +274,7 @@ if [[ $DESKTOP =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.*|.*lxqt.*|.*unity.*|.*x-cin
   DATA_HOME=${XDG_DATA_HOME:-~/.local/share}
   DESKTOP_FILE_LOCATION="$DATA_HOME/applications"
 
-  # Only later versions of Joplin default to Wayland
-  IS_WAYLAND_BY_DEFAULT=$(compareVersions "$RELEASE_VERSION" "3.5.6")
-  # Joplin has a different startup WM class on Wayland and X11:
-  STARTUP_WM_CLASS=Joplin
-  if [[ $XDG_SESSION_TYPE != "x11" && $IS_WAYLAND_BY_DEFAULT == "1" ]]; then
-    STARTUP_WM_CLASS=@joplin/app-desktop
-  fi
+  STARTUP_WM_CLASS=appimagekit-joplin
 
   # Only delete the desktop file if it will be replaced
   rm -f "$DESKTOP_FILE_LOCATION/appimagekit-joplin.desktop"
@@ -327,10 +288,8 @@ if [[ $DESKTOP =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.*|.*lxqt.*|.*unity.*|.*x-cin
 Encoding=UTF-8
 Name=Joplin
 Comment=Joplin for Desktop
-Exec=env APPIMAGELAUNCHER_DISABLE=TRUE "${INSTALL_DIR}/Joplin.AppImage" ${SANDBOXPARAM} %u
+Exec=env APPIMAGELAUNCHER_DISABLE=TRUE "${INSTALL_DIR}/Joplin.AppImage" %u
 Icon=joplin
-# This will be different between Wayland and X11. On Wayland, the startup
-# WM class is "@joplin/app-desktop". On X11, it's "Joplin".
 StartupWMClass=${STARTUP_WM_CLASS}
 Type=Application
 Categories=Office;

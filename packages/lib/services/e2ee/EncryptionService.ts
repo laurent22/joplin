@@ -7,7 +7,7 @@ import BaseItem from '../../models/BaseItem';
 import JoplinError from '../../JoplinError';
 import { getActiveMasterKeyId, setActiveMasterKeyId } from '../synchronizer/syncInfoUtils';
 import PerformanceLogger from '../../PerformanceLogger';
-const { padLeft } = require('../../string-utils.js');
+import { padLeft } from '../../string-utils';
 
 const logger = Logger.create('EncryptionService');
 const perfLogger = PerformanceLogger.create();
@@ -18,10 +18,33 @@ function hexPad(s: string, length: number) {
 	return padLeft(s, length, '0');
 }
 
-export function isValidHeaderIdentifier(id: string, ignoreTooLongLength = false) {
+export function isValidHeaderIdentifier(id: string, ignoreTooLongLength = false, isNoteLock = false) {
 	if (!id) return false;
 	if (!ignoreTooLongLength && id.length !== 5) return false;
-	return /JED\d\d/.test(id);
+	return isNoteLock ? /JLD\d\d/.test(id) : /JED\d\d/.test(id);
+}
+
+// Version 1 has fixed-size metadata, later versions use the size in the header. The key id is
+// deliberately not compared, so data locked under another key is not encrypted a second time.
+export function isValidNoteLockHeader(text: string) {
+	if (typeof text !== 'string') return false;
+
+	const identifierSize = 5;
+	const metadataSizeFieldSize = 6;
+	const identifier = text.substring(0, identifierSize);
+	if (!isValidHeaderIdentifier(identifier, false, true)) return false;
+
+	const metadataSizeHex = text.substring(identifierSize, identifierSize + metadataSizeFieldSize);
+	if (!/^[0-9a-f]{6}$/.test(metadataSizeHex)) return false;
+
+	const metadataSize = parseInt(metadataSizeHex, 16);
+	const maximumMetadataSize = 1024;
+	if (!metadataSize || metadataSize > maximumMetadataSize) return false;
+	// Avoids validating a very short header, in case of a very specific combination of the first few characters
+	if (metadataSize < 34 || (identifier === 'JLD01' && metadataSize !== 34)) return false;
+
+	const metadata = text.substring(identifierSize + metadataSizeFieldSize, identifierSize + metadataSizeFieldSize + metadataSize);
+	return metadata.length === metadataSize && /^[0-9a-f]+$/.test(metadata);
 }
 
 interface DecryptedMasterKey {
@@ -53,6 +76,8 @@ export interface EncryptOptions {
 	onProgress?: (event: { doneSize: number })=> void;
 	encryptionHandler?: EncryptionCustomHandler;
 	masterKeyId?: string;
+	decryptedMasterKey?: string;
+	isNoteLock?: boolean;
 }
 
 type GetPasswordCallback = ()=> string|Promise<string>;
@@ -261,7 +286,10 @@ export default class EncryptionService {
 	}
 
 	public masterKeysThatNeedUpgrading(masterKeys: MasterKeyEntity[]) {
-		return MasterKey.allWithoutEncryptionMethod(masterKeys, [this.defaultMasterKeyEncryptionMethod_, EncryptionMethod.Custom]);
+		const keysWithNonDefaultMethods = MasterKey.allWithoutEncryptionMethod(masterKeys, [
+			this.defaultMasterKeyEncryptionMethod_, EncryptionMethod.Custom,
+		]);
+		return keysWithNonDefaultMethods.filter(key => key.encryption_method in EncryptionMethod);
 	}
 
 	public async reencryptMasterKey(model: MasterKeyEntity, decryptionPassword: string, encryptionPassword: string, decryptOptions: EncryptOptions = null, encryptOptions: EncryptOptions = null): Promise<MasterKeyEntity> {
@@ -581,7 +609,7 @@ export default class EncryptionService {
 
 		const method = options.encryptionMethod;
 		const masterKeyId = options.masterKeyId ? options.masterKeyId : this.activeMasterKeyId();
-		const masterKeyPlainText = (await this.loadedMasterKey(masterKeyId)).plainText;
+		const masterKeyPlainText = await this.masterKeyPlainText_(masterKeyId, options);
 		const chunkSize = this.chunkSize(method);
 		const crypto = shim.crypto;
 
@@ -590,7 +618,7 @@ export default class EncryptionService {
 			masterKeyId: masterKeyId,
 		};
 
-		await destination.append(this.encodeHeader_(header));
+		await destination.append(this.encodeHeader_(header, options.isNoteLock));
 
 		let doneSize = 0;
 
@@ -617,8 +645,8 @@ export default class EncryptionService {
 	private async decryptAbstract_(source: any, destination: any, options: EncryptOptions = null) {
 		if (!options) options = {};
 
-		const header = await this.decodeHeaderSource_(source) as { encryptionMethod: number; masterKeyId: string };
-		const masterKeyPlainText = (await this.loadedMasterKey(header.masterKeyId)).plainText;
+		const header = await this.decodeHeaderSource_(source, options.isNoteLock) as { encryptionMethod: number; masterKeyId: string };
+		const masterKeyPlainText = await this.masterKeyPlainText_(header.masterKeyId, options);
 
 		let doneSize = 0;
 
@@ -639,6 +667,14 @@ export default class EncryptionService {
 			const plainText = await this.decrypt(header.encryptionMethod, masterKeyPlainText, block);
 			await destination.append(plainText);
 		}
+	}
+
+	private async masterKeyPlainText_(masterKeyId: string, options: EncryptOptions) {
+		if (options.decryptedMasterKey !== undefined) {
+			if (options.masterKeyId !== masterKeyId) throw new Error(`Supplied master key ID does not match encrypted content: ${masterKeyId}`);
+			return options.decryptedMasterKey;
+		}
+		return (await this.loadedMasterKey(masterKeyId)).plainText;
 	}
 
 	private stringReader_(string: string, sync = false) {
@@ -763,7 +799,7 @@ export default class EncryptionService {
 		return r;
 	}
 
-	public encodeHeader_(header: { encryptionMethod: number; masterKeyId: string }) {
+	public encodeHeader_(header: { encryptionMethod: number; masterKeyId: string }, isNoteLock: boolean) {
 		// Sanity check
 		if (header.masterKeyId.length !== 32) throw new Error(`Invalid master key ID size: ${header.masterKeyId}`);
 
@@ -771,30 +807,30 @@ export default class EncryptionService {
 		encryptionMetadata += padLeft(header.encryptionMethod.toString(16), 2, '0');
 		encryptionMetadata += header.masterKeyId;
 		encryptionMetadata = padLeft(encryptionMetadata.length.toString(16), 6, '0') + encryptionMetadata;
-		return `JED01${encryptionMetadata}`;
+		return `${isNoteLock ? 'JLD' : 'JED'}01${encryptionMetadata}`;
 	}
 
-	public async decodeHeaderString(cipherText: string) {
+	public async decodeHeaderString(cipherText: string, isNoteLock = false) {
 		const source = this.stringReader_(cipherText);
-		return this.decodeHeaderSource_(source);
+		return this.decodeHeaderSource_(source, isNoteLock);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See encryptAbstract_ source/destination
-	private async decodeHeaderSource_(source: any) {
+	private async decodeHeaderSource_(source: any, isNoteLock = false) {
 		const identifier = await source.read(5);
-		if (!isValidHeaderIdentifier(identifier)) throw new JoplinError(`Invalid encryption identifier. Data is not actually encrypted? ID was: ${identifier}`, 'invalidIdentifier');
+		if (!isValidHeaderIdentifier(identifier, false, isNoteLock)) throw new JoplinError(`Invalid encryption identifier. Data is not actually encrypted? ID was: ${identifier}`, 'invalidIdentifier');
 		const mdSizeHex = await source.read(6);
 		const mdSize = parseInt(mdSizeHex, 16);
 		if (isNaN(mdSize) || !mdSize) throw new Error(`Invalid header metadata size: ${mdSizeHex}`);
 		const md = await source.read(parseInt(mdSizeHex, 16));
-		return this.decodeHeaderBytes_(identifier + mdSizeHex + md);
+		return this.decodeHeaderBytes_(identifier + mdSizeHex + md, isNoteLock);
 	}
 
-	public decodeHeaderBytes_(headerHexaBytes: string) {
+	public decodeHeaderBytes_(headerHexaBytes: string, isNoteLock: boolean) {
 		const reader = this.stringReader_(headerHexaBytes, true) as { read: (size: number)=> string };
 		const identifier = reader.read(3);
 		const version = parseInt(reader.read(2), 16);
-		if (identifier !== 'JED') throw new Error(`Invalid header (missing identifier): ${headerHexaBytes.substr(0, 64)}`);
+		if (identifier !== (isNoteLock ? 'JLD' : 'JED')) throw new Error(`Invalid header (missing identifier): ${headerHexaBytes.substr(0, 64)}`);
 		const template = this.headerTemplate(version);
 
 		parseInt(reader.read(6), 16); // Read the size and move the reader pointer forward

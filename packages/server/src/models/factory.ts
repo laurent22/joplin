@@ -79,6 +79,7 @@ import BackupItemModel from './BackupItemModel';
 import TaskStateModel from './TaskStateModel';
 import ApplicationModel from './ApplicationModel';
 import RecoveryCodeModel from './RecoveryCodeModel';
+import StripeEventModel from './StripeEventModel';
 
 export type NewModelFactoryHandler = (db: DbConnection)=> Models;
 
@@ -126,6 +127,10 @@ export class Models {
 
 	public apiClient() {
 		return new ApiClientModel(this.db_, this.dbSlave_, this.newModelFactory, this.config_);
+	}
+
+	public stripeEvent() {
+		return new StripeEventModel(this.db_, this.dbSlave_, this.newModelFactory, this.config_);
 	}
 
 	public session() {

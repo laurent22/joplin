@@ -7,8 +7,9 @@ import replaceFormatCharacters from './replaceFormatCharacters';
 import replaceInlineHtml from './replaceInlineHtml';
 import renderTables from './renderTables';
 import replaceLinks from './replaceLinks';
+import { RenderedContentContext } from './types';
 
-export default (tableEditingEnabled = true) => {
+export default (context: RenderedContentContext, tableEditingEnabled = true) => {
 	return [
 		replaceCheckboxes,
 		replaceBulletLists,
@@ -18,6 +19,6 @@ export default (tableEditingEnabled = true) => {
 		replaceDividers,
 		addFormattingClasses,
 		replaceInlineHtml,
-		...(tableEditingEnabled ? [renderTables] : []),
+		...(tableEditingEnabled ? [renderTables(context)] : []),
 	];
 };

@@ -19,6 +19,8 @@ export default class SpellCheckerService {
 
 	public async initialize(driver: SpellCheckerServiceDriverBase) {
 		this.driver_ = driver;
+		this.driver_.initialize();
+
 		this.latestSelectedLanguages_ = await this.loadLatestSelectedLanguages();
 		this.setupDefaultLanguage();
 		this.applyStateToDriver();

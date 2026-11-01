@@ -32,3 +32,12 @@ docker manifest annotate $SERVER_REPOSITORY:$VERSION $SERVER_REPOSITORY:arm64-$V
 docker manifest annotate $SERVER_REPOSITORY:$VERSION $SERVER_REPOSITORY:amd64-$VERSION --arch amd64
 
 docker manifest push $SERVER_REPOSITORY:$VERSION
+
+docker manifest create $SERVER_REPOSITORY:latest \
+	$SERVER_REPOSITORY:arm64-$VERSION \
+	$SERVER_REPOSITORY:amd64-$VERSION
+
+docker manifest annotate $SERVER_REPOSITORY:latest $SERVER_REPOSITORY:arm64-$VERSION --arch arm64
+docker manifest annotate $SERVER_REPOSITORY:latest $SERVER_REPOSITORY:amd64-$VERSION --arch amd64
+
+docker manifest push $SERVER_REPOSITORY:latest

@@ -1,4 +1,5 @@
 import ShareExtension, { SharedData } from './ShareExtension';
+import { Dispatch } from 'redux';
 import shim from '@joplin/lib/shim';
 
 import Note from '@joplin/lib/models/Note';
@@ -8,8 +9,7 @@ import { ToastAndroid } from 'react-native';
 import { PermissionsAndroid } from 'react-native';
 import { Platform } from 'react-native';
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-export default async (sharedData: SharedData, folderId: string, dispatch: Function) => {
+export default async (sharedData: SharedData, folderId: string, dispatch: Dispatch) => {
 
 	if (!!sharedData.resources && sharedData.resources.length > 0) {
 		// No need to check permissions for iOS, the files are already in the shared container

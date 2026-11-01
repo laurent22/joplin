@@ -4,7 +4,7 @@ import shim from '../../shim';
 import { ViewHandle } from './utils/createViewHandle';
 import { ContentScriptType } from './api/types';
 import Logger from '@joplin/utils/Logger';
-const EventEmitter = require('events');
+import { EventEmitter } from 'events';
 
 const logger = Logger.create('Plugin');
 
@@ -33,7 +33,7 @@ export default class Plugin {
 	private viewControllers_: ViewControllers = {};
 	private contentScripts_: ContentScripts = {};
 	private dispatch_: PluginDispatchCallback;
-	private eventEmitter_: InstanceType<typeof EventEmitter>;
+	private eventEmitter_: EventEmitter;
 	private devMode_ = false;
 	private builtIn_ = false;
 	private messageListener_: MessageListenerCallback = null;
@@ -120,13 +120,11 @@ export default class Plugin {
 		this.hasErrors_ = hasErrors;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public on(eventName: string, callback: Function) {
+	public on(eventName: string, callback: (...args: unknown[])=> void) {
 		return this.eventEmitter_.on(eventName, callback);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public off(eventName: string, callback: Function) {
+	public off(eventName: string, callback: (...args: unknown[])=> void) {
 		return this.eventEmitter_.removeListener(eventName, callback);
 	}
 

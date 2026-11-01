@@ -1,6 +1,6 @@
-import Setting, { AppType, SettingMetadataSection, SettingSectionSource, type SettingsRecord } from '../../../models/Setting';
+import Setting, { AppType, SettingItem, SettingMetadataSection, SettingSectionSource, SettingValueType, SyncStartupOperation, type SettingsRecord } from '../../../models/Setting';
 import SyncTargetRegistry from '../../../SyncTargetRegistry';
-const { _ } = require('../../../locale');
+import { _ } from '../../../locale';
 import { createSelector } from 'reselect';
 import Logger from '@joplin/utils/Logger';
 
@@ -8,13 +8,19 @@ import { type ReactNode } from 'react';
 import { type Registry } from '../../../registry';
 import settingValidations from '../../../models/settings/settingValidations';
 import { convertValuesToFunctions } from '../../../ObjectUtils';
+import aiSettingsTransition from '../../../services/ai/aiSettingsTransition';
+import { ChatRole } from '../../../services/ai/types';
+import { openLoginScreen as openJoplinOAuthLogin } from '../../../services/joplinCloudUtils';
+import shim from '../../../shim';
+import CommandService from '../../../services/CommandService';
 
 const logger = Logger.create('config-shared');
 
-type SettingsMap = Partial<SettingsRecord> & Record<string, unknown>;
+export type SettingsMap = Partial<SettingsRecord>;
 
-interface ConfigScreenState {
+export interface ConfigScreenState {
 	checkSyncConfigResult: { ok: boolean; errorMessage: string }|'checking'|null;
+	checkAiConfigResult: { ok: boolean; message: string }|'checking'|null;
 	settings: SettingsMap;
 	changedSettingKeys: string[];
 	showAdvancedSettings: boolean;
@@ -24,6 +30,7 @@ interface ConfigScreenState {
 
 export const defaultScreenState: ConfigScreenState = {
 	checkSyncConfigResult: null,
+	checkAiConfigResult: null,
 	settings: {},
 	changedSettingKeys: [],
 	showAdvancedSettings: false,
@@ -39,6 +46,7 @@ interface ConfigScreenComponent {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mirrors React.Component.setState signature (Pick<S, K> etc.); a narrower local type breaks subclass assignment of `this` to ConfigScreenComponent
 	setState(callbackOrNew: any, callback?: ()=> void): void;
+	setSettingValue<Key extends string>(key: Key, value: SettingValueType<Key>): void;
 }
 
 interface SettingsSavedEvent {
@@ -108,6 +116,60 @@ export const checkSyncConfigMessages = (comp: ConfigScreenComponent) => {
 	return output;
 };
 
+export const checkAiConfig = async (comp: ConfigScreenComponent) => {
+	// Pending edits aren't persisted until Apply, so flush first — otherwise
+	// the test runs against the previously-saved provider config. saveSettings
+	// returns false when validation fails; bail out in that case so the user
+	// sees the validation message instead of a misleading AI error.
+	const saved = await saveSettings(comp);
+	if (!saved) return;
+
+	comp.setState({ checkAiConfigResult: 'checking' });
+	try {
+		const { default: AiService } = await import('../../../services/ai/AiService');
+		// Reasoning models spend hundreds of tokens before emitting any content,
+		// so a small budget returns empty text with finish_reason "length".
+		const result = await AiService.instance().chat([
+			{ role: ChatRole.System, content: 'Keep replies brief, but non-empty.' },
+			{ role: ChatRole.User, content: 'Reply with the single word OK.' },
+		], { maxTokens: 512 });
+		const text = (result.text || '').trim();
+		if (!text) {
+			// Truncation or a reasoning trace means the model was reached, so the
+			// base URL, key and model name are all fine.
+			if (result.finishReason === 'length' || result.reasoningText) {
+				comp.setState({ checkAiConfigResult: { ok: true, message: _('Connected successfully, but the model used its entire output budget on reasoning and returned no text.') } });
+			} else {
+				comp.setState({ checkAiConfigResult: { ok: false, message: _('The provider returned an empty response. Check that the base URL ends with /v1 and that a model is loaded.') } });
+			}
+		} else {
+			comp.setState({ checkAiConfigResult: { ok: true, message: text } });
+		}
+	} catch (error) {
+		// Log the full error to the console — the user-facing status only shows
+		// the short message, but the dev tools console gets the stack trace too.
+		logger.warn('AI configuration test failed:', error);
+		comp.setState({ checkAiConfigResult: { ok: false, message: error.message } });
+	}
+};
+
+export const checkAiConfigMessages = (comp: ConfigScreenComponent) => {
+	const result = comp.state.checkAiConfigResult;
+	const output: string[] = [];
+
+	if (result === 'checking') {
+		output.push(_('Checking... Please wait.'));
+	} else if (result && result.ok) {
+		output.push(_('Success! The AI provider responded:'));
+		output.push(result.message);
+	} else if (result && !result.ok) {
+		output.push(_('Error. The AI provider test failed:'));
+		output.push(result.message);
+	}
+
+	return output;
+};
+
 export const updateSettingValue = (comp: ConfigScreenComponent, key: string, value: unknown, callback?: ()=> void) => {
 	if (!callback) callback = () => {};
 
@@ -129,6 +191,26 @@ export const updateSettingValue = (comp: ConfigScreenComponent, key: string, val
 		const changedSettingKeys = state.changedSettingKeys.slice();
 		settings[key] = Setting.formatValue(key, value);
 		if (changedSettingKeys.indexOf(key) < 0) changedSettingKeys.push(key);
+
+		// Live AI first-enable default: when the user ticks `ai.enabled` and
+		// they're on Joplin Cloud sync, pre-select Joplin Cloud AI in the
+		// form so the change is visible immediately (the same logic runs at
+		// save-time too, but applying it here makes the UI reflect it before
+		// the user clicks Apply). Read sync.target and configured from the
+		// pending form state with a fallback to the persisted value, so the
+		// hook reacts to changes the user has made in the same session but
+		// not yet applied.
+		const pendingSyncTarget = 'sync.target' in settings ? settings['sync.target'] : Setting.value('sync.target');
+		const pendingConfigured = 'ai.chat.providerType.configured' in settings ? settings['ai.chat.providerType.configured'] : Setting.value('ai.chat.providerType.configured');
+		if (
+			key === 'ai.enabled'
+			&& settings['ai.enabled'] === true
+			&& !pendingConfigured
+			&& pendingSyncTarget === SyncTargetRegistry.nameToId('joplinCloud')
+		) {
+			settings['ai.chat.providerType'] = 'joplin-cloud';
+			if (changedSettingKeys.indexOf('ai.chat.providerType') < 0) changedSettingKeys.push('ai.chat.providerType');
+		}
 
 		return {
 			settings: settings,
@@ -161,9 +243,11 @@ export const saveSettings = async (comp: ConfigScreenComponent) => {
 		return false;
 	}
 
+	aiSettingsTransition({ changedKeys: savedSettingKeys, settings: comp.state.settings });
+
 	for (const key in comp.state.settings) {
 		if (!comp.state.settings.hasOwnProperty(key)) continue;
-		if (comp.state.changedSettingKeys.indexOf(key) < 0) continue;
+		if (savedSettingKeys.indexOf(key) < 0) continue;
 		Setting.setValue(key, comp.state.settings[key]);
 	}
 
@@ -299,4 +383,45 @@ export const settingsToComponents2 = (
 	}
 
 	return sectionComps;
+};
+
+export const restartMessage = () => _('The application must be restarted for these changes to take effect.');
+
+export const onSettingButtonPress = async (comp: ConfigScreenComponent, metadata: SettingItem) => {
+	const key = metadata.key;
+
+	if (key === 'sync.10.connect') {
+		await openJoplinOAuthLogin();
+	} else if (key === 'sync.clearLocalSyncStateButton') {
+		if (!await shim.showConfirmationDialog('This cannot be undone. Do you want to continue?')) return;
+		Setting.setValue('sync.startupOperation', SyncStartupOperation.ClearLocalSyncState);
+		await Setting.saveAll();
+		await shim.restartApp();
+	} else if (key === 'sync.clearLocalDataButton') {
+		if (!await shim.showConfirmationDialog('This cannot be undone. Do you want to continue?')) return;
+		Setting.setValue('sync.startupOperation', SyncStartupOperation.ClearLocalData);
+		await Setting.saveAll();
+		await shim.restartApp();
+	} else if (key === 'ocr.clearLanguageDataCacheButton') {
+		if (!await shim.showConfirmationDialog(restartMessage())) return;
+		Setting.setValue('ocr.clearLanguageDataCache', true);
+		await Setting.saveAll();
+		await shim.restartApp();
+	} else if (key === 'ai.usage.resetButton') {
+		if (!await shim.showConfirmationDialog(_('Reset AI token usage counters?'))) return;
+		Setting.setValue('ai.usage.inputTokens', 0);
+		Setting.setValue('ai.usage.outputTokens', 0);
+		await Setting.saveAll();
+	} else if (key === 'ai.chat.testButton') {
+		await checkAiConfig(comp);
+	} else if (key === 'sync.openSyncWizard') {
+		await CommandService.instance().execute('openSyncWizard');
+	} else {
+		const metadata = Setting.settingMetadata(key);
+		if (metadata.onClick) {
+			await metadata.onClick();
+		} else {
+			throw new Error(`Unhandled key: ${key}`);
+		}
+	}
 };

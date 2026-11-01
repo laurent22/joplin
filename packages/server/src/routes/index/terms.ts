@@ -13,8 +13,7 @@ router.get('terms', async (_path: SubPath, _ctx: AppContext) => {
 
 Welcome to our website. If you continue to browse and use this website, you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our privacy policy govern JOPLIN’s relationship with you in relation to this website. JOPLIN is the owner of this website, Joplin Cloud. If you disagree with any part of these terms and conditions, please do not use our website.
 
-The term ‘Joplin Cloud’ or ‘us’ or ‘we’ refers to the owner of the website whose registered office is 3 Place Simone Veil, CS 20739
-54064 Nancy. SIREN: RCS Nancy 919 395 087. The term ‘you’ refers to the user or viewer of our website.
+The term ‘Joplin Cloud’ or ‘us’ or ‘we’ refers to the owner of the website whose registered office is 23 rue Saint Guillaume, 22000 Saint-Brieuc. SIREN: RCS Nancy 919 395 087. The term ‘you’ refers to the user or viewer of our website.
 
 The use of this website is subject to the following terms of use:
 

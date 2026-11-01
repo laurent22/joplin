@@ -7,14 +7,21 @@ import useItemElement from './utils/useItemElement';
 import { ItemEventHandlers, OnInputChange } from './utils/types';
 import Note from '@joplin/lib/models/Note';
 import { NoteEntity } from '@joplin/lib/services/database/types';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
+import NoteLockNote from '@joplin/lib/services/noteLock/NoteLockNote';
+import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
+import { noteIsLockedInShare } from '@joplin/lib/models/utils/readOnly';
+import bridge from '../../services/bridge';
+import { _ } from '@joplin/lib/locale';
 import useRenderedNote from './utils/useRenderedNote';
 import { Dispatch } from 'redux';
 import getNoteElementIdFromJoplinId from './utils/getNoteElementIdFromJoplinId';
+import { HighlightedWord } from '@joplin/lib/reducer';
 
 interface NoteItemProps {
 	dragIndex: number;
 	flow: ItemFlow;
-	highlightedWords: string[];
+	highlightedWords: HighlightedWord[];
 	index: number;
 	isProvisional: boolean;
 	itemSize: Size;
@@ -28,6 +35,7 @@ interface NoteItemProps {
 	style: CSSProperties;
 	note: NoteEntity;
 	isWatched: boolean;
+	isPublished: boolean;
 
 	isSelected: boolean;
 	tabIndex: number;
@@ -56,6 +64,20 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 		};
 
 		if (changeEvent.elementId === 'todo-checkbox') {
+			const lockState = await Note.load(changeEvent.noteId, { fields: ['is_locked', 'share_id'] });
+			if (noteIsLockedInShare(lockState)) {
+				event.target.checked = !changeEvent.value;
+				bridge().showErrorMessageBox(_('This note is read-only because it is locked and contained within a share. To enable editing, it must be moved outside of the share.'));
+				return;
+			}
+			if (isNoteLockEnabled()) {
+				if (NoteLockNote.isLocked(lockState) && !NoteLockSession.instance().isUnlocked()) {
+					// event.currentTarget is already cleared here, after the await - target is the same input
+					event.target.checked = !changeEvent.value;
+					bridge().showErrorMessageBox(_('Cannot change a locked note while the session is locked'));
+					return;
+				}
+			}
 			await Note.save({
 				id: changeEvent.noteId,
 				todo_completed: changeEvent.value ? Date.now() : 0,
@@ -69,9 +91,11 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 
 	const rootElement = useRootElement(elementId);
 
-	const renderedNote = useRenderedNote(props.note, props.isSelected, props.isWatched, props.listRenderer, props.highlightedWords, props.index, props.columns);
+	const renderedNote = useRenderedNote(props.note, props.isSelected, props.isWatched, props.isPublished, props.listRenderer, props.highlightedWords, props.index, props.columns);
 
 	const itemEventHandlers = useMemo((): ItemEventHandlers => ({ onInputChange, onClick: null }), [onInputChange]);
+
+	const displayTitle = useMemo(() => Note.displayTitle(props.note), [props.note]);
 
 	useItemElement(
 		rootElement,
@@ -84,6 +108,7 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 		props.onDoubleClick,
 		props.flow,
 		itemEventHandlers,
+		displayTitle,
 	);
 
 

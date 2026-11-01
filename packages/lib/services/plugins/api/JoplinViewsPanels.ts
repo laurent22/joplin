@@ -103,7 +103,8 @@ export default class JoplinViewsPanels {
 	 *
 	 * It is particularly useful when the webview needs to react to events emitted by the plugin or the joplin api.
 	 */
-	public postMessage(handle: ViewHandle, message: unknown): void {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: messages exchanged with webview can be of any serialisable type
+	public postMessage(handle: ViewHandle, message: any): void {
 		return this.controller(handle).postMessage(message);
 	}
 

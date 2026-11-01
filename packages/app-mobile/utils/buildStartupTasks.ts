@@ -1,5 +1,6 @@
 import PluginAssetsLoader from '../PluginAssetsLoader';
 import AlarmService from '@joplin/lib/services/AlarmService';
+import eventManager, { EventName, NoteLockSessionChangeEvent } from '@joplin/lib/eventManager';
 import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
 import BaseModel from '@joplin/lib/BaseModel';
 import BaseService from '@joplin/lib/services/BaseService';
@@ -16,7 +17,7 @@ import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import { completePendingAuthentication } from '@joplin/lib/services/joplinCloudUtils';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 import initProfile from '@joplin/lib/services/profileConfig/initProfile';
-const VersionInfo = require('react-native-version-info').default;
+import VersionInfo from 'react-native-version-info';
 const AlarmServiceDriver = require('../services/AlarmServiceDriver').default;
 import NavService from '@joplin/lib/services/NavService';
 import { Dispatch, Store } from 'redux';
@@ -40,9 +41,9 @@ import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import WelcomeUtils from '@joplin/lib/WelcomeUtils';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import SyncTargetFilesystem from '@joplin/lib/SyncTargetFilesystem';
-const SyncTargetNextcloud = require('@joplin/lib/SyncTargetNextcloud.js');
-const SyncTargetWebDAV = require('@joplin/lib/SyncTargetWebDAV.js');
-const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox.js');
+import SyncTargetNextcloud from '@joplin/lib/SyncTargetNextcloud';
+import SyncTargetWebDAV from '@joplin/lib/SyncTargetWebDAV';
+import SyncTargetDropbox from '@joplin/lib/SyncTargetDropbox';
 const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
 import SyncTargetJoplinServerSAML from '@joplin/lib/SyncTargetJoplinServerSAML';
 import initLib from '@joplin/lib/initLib';
@@ -50,6 +51,8 @@ import initLib from '@joplin/lib/initLib';
 import SyncTargetNone from '@joplin/lib/SyncTargetNone';
 
 const logger = Logger.create('buildStartupTasks');
+
+let noteLockSessionChangeListener_: ((event: NoteLockSessionChangeEvent)=> void)|null = null;
 
 SyncTargetRegistry.addClass(SyncTargetNone);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
@@ -94,6 +97,8 @@ import { Platform } from 'react-native';
 import VoiceTyping from '../services/voiceTyping/VoiceTyping';
 import whisper from '../services/voiceTyping/whisper';
 import PerFolderSortOrderService from '@joplin/lib/services/sortOrder/PerFolderSortOrderService';
+import getConflictFolderId from '@joplin/lib/models/utils/getConflictFolderId';
+const mobileConfig = require('@joplin/mobile-config').default;
 
 
 function resourceFetcher_downloadComplete(event: { id: string; encrypted: boolean }) {
@@ -184,6 +189,7 @@ const buildStartupTasks = (
 		Setting.setConstant('sync.9.apiKey', '');
 		Setting.setConstant('sync.10.apiKey', '');
 		Setting.setConstant('sync.11.apiKey', '');
+		Setting.setConstant('isJoplinCloudWebApp', Platform.OS === 'web' && location.origin === 'https://app.joplincloud.com');
 	});
 	addTask('buildStartupTasks/make resource directory', async () => {
 		await shim.fsDriver().mkdir(Setting.value('resourceDir'));
@@ -345,6 +351,18 @@ const buildStartupTasks = (
 		await loadMasterKeysFromSettings(EncryptionService.instance());
 		DecryptionWorker.instance().on('resourceMetadataButNotBlobDecrypted', decryptionWorker_resourceMetadataButNotBlobDecrypted);
 	});
+	addTask('buildStartupTasks/listen for note lock session events', async () => {
+		// Startup can run again (e.g. on profile switch) while eventManager survives it, so the
+		// previous run's listener is dropped to keep the dispatch single-fire.
+		if (noteLockSessionChangeListener_) eventManager.off(EventName.NoteLockSessionChange, noteLockSessionChangeListener_);
+		noteLockSessionChangeListener_ = (event) => {
+			dispatch({
+				type: 'SET_NOTE_LOCK_SESSION_UNLOCKED',
+				value: event.unlocked,
+			});
+		};
+		eventManager.on(EventName.NoteLockSessionChange, noteLockSessionChangeListener_);
+	});
 	addTask('buildStartupTasks/set up sharing', async () => {
 		await ShareService.instance().initialize(store, EncryptionService.instance());
 	});
@@ -390,10 +408,35 @@ const buildStartupTasks = (
 	addTask('buildStartupTasks/go: initial route', async () => {
 		const folder = await getInitialActiveFolder();
 
-		const notesParent = parseNotesParent(Setting.value('notesParent'), Setting.value('activeFolderId'));
+		const getNotesParent = async () => {
+			const notesParent = parseNotesParent(Setting.value('notesParent'), Setting.value('activeFolderId'));
+			if (notesParent.type === 'Tag' && !(await Tag.load(notesParent.selectedItemId))) {
+				return null;
+			}
+			return notesParent;
+		};
 
-		if (notesParent && notesParent.type === 'SmartFilter') {
+		const notesParent = await getNotesParent();
+
+		// Do not navigate to the conflicts folder if stored, because it has special behaviour and will disappear when the last note
+		// is removed from it, without being purged from notesParent and activeFolderId
+		const conflictFolderId = getConflictFolderId();
+		if (notesParent?.selectedItemId === conflictFolderId || folder?.id === conflictFolderId) {
 			dispatch(DEFAULT_ROUTE);
+		} else if (notesParent && notesParent.type === 'SmartFilter') {
+			dispatch({
+				type: 'NAV_GO',
+				routeName: 'Notes',
+				smartFilterId: notesParent.selectedItemId,
+				clearHistory: true,
+			});
+		} else if (notesParent && notesParent.type === 'Tag') {
+			dispatch({
+				type: 'NAV_GO',
+				routeName: 'Notes',
+				tagId: notesParent.selectedItemId,
+				clearHistory: true,
+			});
 		} else if (!folder) {
 			dispatch(DEFAULT_ROUTE);
 		} else {
@@ -401,6 +444,7 @@ const buildStartupTasks = (
 				type: 'NAV_GO',
 				routeName: 'Notes',
 				folderId: folder.id,
+				clearHistory: true,
 			});
 		}
 	});
@@ -440,7 +484,7 @@ const buildStartupTasks = (
 		setTimeout(() => {
 			// Schedule sync with a delay of 0 and wrap with the desired timeout, as shim.setTimeout may not fire on first run or after an upgrade
 			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-			void reg.scheduleSync(0, null, true).then(() => {
+			void reg.scheduleSync(0, null, true).finally(() => {
 				// Wait for the first sync before updating the notifications, since synchronisation
 				// might change the notifications.
 				void AlarmService.updateAllNotifications();
@@ -482,7 +526,7 @@ const buildStartupTasks = (
 		// call will throw an error, alerting us of the issue. Otherwise it will
 		// just print some messages in the console.
 		// ----------------------------------------------------------------------------
-		if (Setting.value('env') === 'dev') {
+		if (mobileConfig.runStartupTests()) {
 			await runRsaIntegrationTests();
 			await runCryptoIntegrationTests();
 			await runOnDeviceFsDriverTests();

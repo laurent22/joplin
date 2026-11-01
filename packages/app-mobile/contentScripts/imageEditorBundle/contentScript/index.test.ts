@@ -48,7 +48,7 @@ const createEditorWithCallbacks = (callbacks: Partial<MainProcessApi>) => {
 	return createJsDrawEditor(allCallbacks, toolbarState, locale, localizations, editorOptions);
 };
 
-describe('imageEditor/contentScript/index', () => {
+describe('contentScript/index', () => {
 	it('should trigger autosave callback every few minutes', async () => {
 		let calledAutosaveCount = 0;
 

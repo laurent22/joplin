@@ -14,6 +14,12 @@ export default class SpellCheckerServiceDriverNative extends SpellCheckerService
 		return bridge().mainWindow().webContents.session;
 	}
 
+	public initialize() {
+		// Workaround: With Electron 42 on Linux, it's necessary to initialize the spellchecker with an empty set of
+		// languages. Without this, the spellchecker ignores the default provided languages.
+		this.setLanguages([]);
+	}
+
 	public get availableLanguages(): string[] {
 		return this.session().availableSpellCheckerLanguages;
 	}

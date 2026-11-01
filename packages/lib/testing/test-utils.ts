@@ -18,7 +18,7 @@ import OneDriveApi from '../onedrive-api';
 import SyncTargetOneDrive from '../SyncTargetOneDrive';
 import JoplinDatabase from '../JoplinDatabase';
 import * as fs from 'fs-extra';
-const { DatabaseDriverNode } = require('../database-driver-node.js');
+import { DatabaseDriverNode } from '../database-driver-node';
 import Folder from '../models/Folder';
 import Note from '../models/Note';
 import ItemChange from '../models/ItemChange';
@@ -33,16 +33,16 @@ const FileApiDriverMemory = require('../file-api-driver-memory').default;
 import FileApiDriverLocal from '../file-api-driver-local';
 const { FileApiDriverWebDav } = require('../file-api-driver-webdav.js');
 const { FileApiDriverDropbox } = require('../file-api-driver-dropbox.js');
-const { FileApiDriverOneDrive } = require('../file-api-driver-onedrive.js');
+import FileApiDriverOneDrive from '../file-api-driver-onedrive';
 import SyncTargetRegistry from '../SyncTargetRegistry';
-const SyncTargetMemory = require('../SyncTargetMemory.js');
+import SyncTargetMemory from '../SyncTargetMemory';
 import SyncTargetFilesystem from '../SyncTargetFilesystem';
-const SyncTargetNextcloud = require('../SyncTargetNextcloud.js');
-const SyncTargetDropbox = require('../SyncTargetDropbox.js');
+import SyncTargetNextcloud from '../SyncTargetNextcloud';
+import SyncTargetDropbox from '../SyncTargetDropbox';
 const SyncTargetAmazonS3 = require('../SyncTargetAmazonS3.js');
-const SyncTargetWebDAV = require('../SyncTargetWebDAV.js');
+import SyncTargetWebDAV from '../SyncTargetWebDAV';
 import SyncTargetJoplinServer from '../SyncTargetJoplinServer';
-import EncryptionService from '../services/e2ee/EncryptionService';
+import EncryptionService, { EncryptionMethod } from '../services/e2ee/EncryptionService';
 import DecryptionWorker from '../services/DecryptionWorker';
 import RevisionService from '../services/RevisionService';
 import ResourceFetcher from '../services/ResourceFetcher';
@@ -55,7 +55,7 @@ import SyncTargetJoplinCloud from '../SyncTargetJoplinCloud';
 import KeychainService from '../services/keychain/KeychainService';
 import { loadKeychainServiceAndSettings } from '../services/SettingUtils';
 import { setActiveMasterKeyId, setEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
-import Synchronizer from '../Synchronizer';
+import Synchronizer, { SyncStartOptions } from '../Synchronizer';
 import SyncTargetNone from '../SyncTargetNone';
 import { setRSA } from '../services/e2ee/ppk/ppk';
 const md5 = require('md5');
@@ -72,6 +72,8 @@ import { dirname } from '@joplin/utils/path';
 import SyncTargetJoplinServerSAML from '../SyncTargetJoplinServerSAML';
 import { MarkupLanguage } from '@joplin/renderer';
 import SearchEngine from '../services/search/SearchEngine';
+import { getCACertificates } from 'node:tls';
+import setExtraRootCertificates from '../utils/tls/setExtraRootCertificates';
 
 // Each suite has its own separate data and temp directory so that multiple
 // suites can be run at the same time. suiteName is what is used to
@@ -322,6 +324,8 @@ async function clearDatabase(id: number = null) {
 	await ItemChange.waitForAllSaved();
 
 	const tableNames = [
+		'chat_conversations',
+		'chat_messages',
 		'deleted_items',
 		'folders',
 		'item_changes',
@@ -528,8 +532,7 @@ function synchronizer(id: number = null) {
 // This is like calling synchronizer.start() but it handles the
 // complexity of passing around the sync context depending on
 // the client.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Synchronizer.start takes any options; tightening here would diverge from lib
-async function synchronizerStart(id: number = null, extraOptions: any = null) {
+async function synchronizerStart(id: number = null, extraOptions: SyncStartOptions = null) {
 	if (id === null) id = currentClient_;
 
 	const contextKey = `sync.${syncTargetId()}.context`;
@@ -789,6 +792,16 @@ async function expectNotThrow(asyncFn: ()=> Promise<unknown>) {
 		expect(thrownError.message).toBe('');
 	} else {
 		expect(true).toBe(true);
+	}
+}
+
+// For code paths that a test deliberately makes fail, so that the expected warnings or errors don't clutter the output
+async function withLogLevel<T>(level: LogLevel, callback: ()=> Promise<T>) {
+	const previousLevel = Logger.globalLogger.setLevel(level);
+	try {
+		return await callback();
+	} finally {
+		Logger.globalLogger.setLevel(previousLevel);
 	}
 }
 
@@ -1116,6 +1129,9 @@ export const newOcrService = () => {
 	return new OcrService([driver]);
 };
 
+// A body the note lock header check accepts, for locked fixtures that are never unlocked.
+export const noteLockCipherTextStandIn = (payload = 'ciphertext') => `${encryptionService().encodeHeader_({ encryptionMethod: EncryptionMethod.StringV1, masterKeyId: '0'.repeat(32) }, true)}${payload}`;
+
 export const mockMobilePlatform = (platform: MobilePlatform) => {
 	const originalMobilePlatform = shim.mobilePlatform;
 	const originalIsNode = shim.isNode;
@@ -1186,9 +1202,45 @@ export const mockFetch = (requestHandler: MockFetchRequestHandler) => {
 	};
 };
 
-export const withWarningSilenced = async <T> (warningRegex: RegExp, task: ()=> Promise<T>): Promise<T> => {
+export const withExtraRootCa = async <T> (caPemData: string, task: ()=> Promise<T>) => {
+	const trustedCas = getCACertificates();
+	try {
+		await setExtraRootCertificates([...trustedCas, caPemData].map(cert => ({ pem: cert })));
+
+		await task();
+	} finally {
+		await setExtraRootCertificates(trustedCas.map(cert => ({ pem: cert })));
+	}
+};
+
+interface WithWarningSilencedOptions {
+	requireWarning: boolean;
+}
+
+export const withWarningSilenced = async <T> (
+	warningRegex: RegExp, task: ()=> Promise<T>, { requireWarning }: WithWarningSilencedOptions = { requireWarning: false },
+): Promise<T> => {
 	type MockSlice = { mockRestore(): void };
 	const mocks: MockSlice[] = [];
+	const warnings: string[] = [];
+
+	const removeMocks = () => {
+		for (const mock of mocks) {
+			mock.mockRestore();
+		}
+	};
+
+	const applyMocks = () => {
+		mockConsoleFunction('warn');
+		mockConsoleFunction('error');
+	};
+
+	// Log an error without recursively calling the mock:
+	const logError = (...args: unknown[]) => {
+		removeMocks();
+		console.error(...args);
+		applyMocks();
+	};
 
 	const mockConsoleFunction = (key: 'warn'|'error') => {
 		const mock = jest.spyOn(console, key);
@@ -1198,24 +1250,25 @@ export const withWarningSilenced = async <T> (warningRegex: RegExp, task: ()=> P
 		// shows how to use .spyOn to hide warnings
 		mock.mockImplementation((message?: unknown, ...args: unknown[]) => {
 			const fullMessage = [message, ...args].join(' ');
+			warnings.push(fullMessage);
 			if (!fullMessage.match(warningRegex)) {
-				// Avoid recursively calling the mock:
-				mock.mockRestore();
-
-				console.error(`Unexpected warning: ${message}\nNote: Further warnings will not be silenced.`, ...args);
+				logError(`Unexpected warning: ${message}`, ...args);
 			}
 		});
 	};
 
 	try {
-		mockConsoleFunction('warn');
-		mockConsoleFunction('error');
-		return await task();
-	} finally {
-		for (const mock of mocks) {
-			mock.mockRestore();
+		applyMocks();
+		const result = await task();
+
+		if (requireWarning) {
+			expect(warnings).toContainEqual(expect.stringMatching(warningRegex));
 		}
+
+		return result;
+	} finally {
+		removeMocks();
 	}
 };
 
-export { supportDir, createNoteAndResource, createTempFile, createTestShareData, simulateReadOnlyShareEnv, waitForFolderCount, afterAllCleanUp, exportDir, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
+export { supportDir, withLogLevel, createNoteAndResource, createTempFile, createTestShareData, simulateReadOnlyShareEnv, waitForFolderCount, afterAllCleanUp, exportDir, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };

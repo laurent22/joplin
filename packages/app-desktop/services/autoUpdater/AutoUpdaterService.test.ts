@@ -2,6 +2,7 @@ import { LoggerWrapper } from '@joplin/utils/Logger';
 import { releases3 } from '../../utils/checkForUpdatesUtilsTestData';
 import AutoUpdaterService from './AutoUpdaterService';
 import { BrowserWindow } from 'electron';
+import { autoUpdater } from 'electron-updater';
 
 jest.mock('electron', () => ({
 	BrowserWindow: jest.fn(),
@@ -34,6 +35,41 @@ describe('AutoUpdaterService', () => {
 		) as jest.Mock;
 	});
 
+	// electron-updater rebuilds the file name from the channel, so a wrong
+	// channel would silently fetch the x64 metadata on an arm64 machine.
+	test.each([
+		['win32', 'arm64', 'latest-win-arm64'],
+		['win32', 'x64', 'latest'],
+		['darwin', 'arm64', 'latest'],
+	])('should set the update channel for %s %s', async (platform, arch, expectedChannel) => {
+		// releases3 predates the Windows arm64 build, so add its asset.
+		const releases = JSON.parse(JSON.stringify(releases3));
+		releases[0].assets.push({
+			name: 'latest-win-arm64.yml',
+			browser_download_url: 'https://github.com/laurent22/joplin/releases/download/v3.1.3/latest-win-arm64.yml',
+		});
+		global.fetch = jest.fn(() => Promise.resolve({
+			ok: true,
+			json: () => Promise.resolve(releases),
+		})) as jest.Mock;
+
+		const originalPlatform = process.platform;
+		const originalArch = process.arch;
+		Object.defineProperty(process, 'platform', { value: platform, configurable: true });
+		Object.defineProperty(process, 'arch', { value: arch, configurable: true });
+
+		try {
+			await service.checkForUpdates(true);
+		} finally {
+			Object.defineProperty(process, 'platform', { value: originalPlatform, configurable: true });
+			Object.defineProperty(process, 'arch', { value: originalArch, configurable: true });
+		}
+
+		expect(autoUpdater.setFeedURL).toHaveBeenCalledWith(
+			expect.objectContaining({ channel: expectedChannel }),
+		);
+	});
+
 	it('should correctly fetch and process the latest prerelease', async () => {
 		const release = await service.fetchLatestRelease(true);
 		expect(release).toBeDefined();
@@ -58,6 +94,14 @@ describe('AutoUpdaterService', () => {
 		expect(release).toBeDefined();
 		const url = service.getDownloadUrlForPlatform(release, 'win32', 'x64');
 		expect(url).toBe('https://github.com/laurent22/joplin/releases/download/v3.1.3/latest.yml');
+	});
+
+	it('should return the correct download URL for Windows arm64', async () => {
+		const release = await service.fetchLatestRelease(true);
+		expect(release).toBeDefined();
+		const url = 'https://github.com/laurent22/joplin/releases/download/v3.1.3/latest-win-arm64.yml';
+		release.assets.push({ name: 'latest-win-arm64.yml', browser_download_url: url });
+		expect(service.getDownloadUrlForPlatform(release, 'win32', 'arm64')).toBe(url);
 	});
 
 	it('should return the correct download URL for Mac x64', async () => {

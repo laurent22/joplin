@@ -1,11 +1,11 @@
 import buildAll from './commands/buildAll';
 import editPatch from './commands/editPatch';
+import * as yargs from 'yargs';
 import { Argv, ArgumentsCamelCase } from 'yargs';
-const yargs = require('yargs');
 
 
 const build = () => {
-	// eslint-disable-next-line no-unused-expressions -- Old code before rule was applied
+	// eslint-disable-next-line no-unused-expressions, @typescript-eslint/no-floating-promises -- Old code before rule was applied
 	yargs
 		.usage('$0 <cmd> [args]')
 		.command('build <outputDir>', 'build all', (yargs: Argv) => {

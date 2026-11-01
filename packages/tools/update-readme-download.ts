@@ -11,10 +11,15 @@ async function msleep(ms: number) {
 	});
 }
 
+// Set to true once a Windows ARM64 build is published in a release. The
+// website's client-side copy of this is in Assets/WebsiteAssets/js/script.js.
+export const windowsArm64Enabled = false;
+
 export enum OS {
 	MacOs = 'macos',
 	MacOsM1 = 'macosm1',
 	Windows = 'windows',
+	WindowsArm64 = 'windows-arm64',
 	Android = 'android',
 	Android32 = 'android32',
 	Linux = 'linux',
@@ -36,6 +41,14 @@ export const downloadUrl = (release: GitHubRelease, os: OS, portable = false) =>
 			return asset.browser_download_url.replace(githubUrl, joplinDomain);
 		} else if (ext === 'dmg' && os === OS.MacOs) {
 			return asset.browser_download_url.replace(githubUrl, joplinDomain);
+		}
+
+		if (ext === 'exe' && os === OS.WindowsArm64) {
+			if (portable) {
+				if (name === 'JoplinPortable-arm64.exe') return asset.browser_download_url.replace(githubUrl, joplinDomain);
+			} else {
+				if (name.match(/^Joplin-Setup-[\d.]+-arm64\.exe$/)) return asset.browser_download_url.replace(githubUrl, joplinDomain);
+			}
 		}
 
 		if (ext === 'exe' && os === OS.Windows) {
@@ -88,12 +101,14 @@ async function main(argv: string[]) {
 
 	const androidUrl = downloadUrl(androidRelease, OS.Android);
 	const winUrl = downloadUrl(release, OS.Windows);
+	const winArm64Url = windowsArm64Enabled ? downloadUrl(release, OS.WindowsArm64) : null;
 	const winPortableUrl = downloadUrl(release, OS.Windows, true);
 	const macOsUrl = downloadUrl(release, OS.MacOs);
 	const macOsM1Url = downloadUrl(release, OS.MacOsM1);
 	const linuxUrl = downloadUrl(release, OS.Linux);
 
 	console.info('Windows: ', winUrl);
+	console.info('Windows ARM64: ', winArm64Url);
 	console.info('Windows Portable: ', winPortableUrl);
 	console.info('macOS: ', macOsUrl);
 	console.info('macOSM1: ', macOsM1Url);
@@ -102,7 +117,9 @@ async function main(argv: string[]) {
 
 	let content = readmeContent();
 
-	if (winUrl) content = content.replace(/(https:\/\/objects.joplinusercontent.com\/v\d+\.\d+\.\d+\/Joplin-Setup-.*?\.exe)/, winUrl);
+	// Must run before the x64 replacement, which would otherwise match it.
+	if (winArm64Url) content = content.replace(/(https:\/\/objects.joplinusercontent.com\/v\d+\.\d+\.\d+\/Joplin-Setup-[\d.]+-arm64\.exe)/, winArm64Url);
+	if (winUrl) content = content.replace(/(https:\/\/objects.joplinusercontent.com\/v\d+\.\d+\.\d+\/Joplin-Setup-[\d.]+\.exe)/, winUrl);
 	if (winPortableUrl) content = content.replace(/(https:\/\/objects.joplinusercontent.com\/v\d+\.\d+\.\d+\/JoplinPortable.exe)/, winPortableUrl);
 	if (macOsUrl) content = content.replace(/(https:\/\/objects.joplinusercontent.com\/v\d+\.\d+\.\d+\/Joplin-.*?\.dmg)/, macOsUrl);
 	if (macOsM1Url) content = content.replace(/(https:\/\/objects.joplinusercontent.com\/v\d+\.\d+\.\d+\/Joplin-.*?arm64\.DMG)/, macOsM1Url);
