@@ -663,7 +663,8 @@ export default class UserModel extends BaseModel<User> {
 			.db(this.tableName)
 			.select(['id', 'email', 'full_name'])
 			.where({ enabled: 1, email_confirmed: 1, totp_secret: '' })
-			.where('created_time', '<=', Date.now() - 3 * Day);
+			.where('created_time', '<=', Date.now() - 3 * Day)
+			.whereNotIn('id', this.db('emails').select('recipient_id').where('key', 'mfaReminder'));
 
 		for (const user of users) {
 			await this.models().email().push({
