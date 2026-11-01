@@ -1,8 +1,6 @@
 import { PassThrough } from 'stream';
 import { IncomingMessage } from 'http';
-import { writeFile, pathExists } from 'fs-extra';
-import { tmpdir } from 'os';
-import { join } from 'path';
+import { pathExists } from 'fs-extra';
 import { formParse, removeUploadedFiles } from './requestUtils';
 import { ErrorPayloadTooLarge } from './errors';
 import { MB } from './bytes';
@@ -25,14 +23,23 @@ describe('requestUtils', () => {
 		await expect(promise).rejects.toMatchObject({ httpCode: ErrorPayloadTooLarge.httpCode });
 	});
 
-	test('should remove uploaded files', async () => {
-		const filePath = join(tmpdir(), `upload-test-${Date.now()}`);
-		await writeFile(filePath, 'uploaded');
-		const req = Object.assign(makeRequest({}), { __parsed: { fields: {}, files: { file: { filepath: filePath } } } });
+	test('should remove all uploaded files, including several with the same field name', async () => {
+		const boundary = 'test-boundary';
+		const part = (n: number) => `--${boundary}\r\nContent-Disposition: form-data; name="file"; filename="f${n}.txt"\r\nContent-Type: text/plain\r\n\r\ncontent ${n}\r\n`;
+		const body = `${part(1)}${part(2)}--${boundary}--\r\n`;
+		const req = makeRequest({ 'content-type': `multipart/form-data; boundary=${boundary}`, 'content-length': `${Buffer.byteLength(body)}` });
+
+		const promise = formParse(req);
+		req.end(body);
+		await promise;
+
+		const filePaths = (req as unknown as { __uploadedFilePaths: string[] }).__uploadedFilePaths;
+		expect(filePaths.length).toBe(2);
+		for (const filePath of filePaths) expect(await pathExists(filePath)).toBe(true);
 
 		await removeUploadedFiles(req);
 
-		expect(await pathExists(filePath)).toBe(false);
+		for (const filePath of filePaths) expect(await pathExists(filePath)).toBe(false);
 	});
 
 });

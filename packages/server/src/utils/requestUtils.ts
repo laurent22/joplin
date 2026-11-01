@@ -76,7 +76,8 @@ export async function formParse(request: IncomingMessage): Promise<FormParseResu
 
 	// JSON and urlencoded bodies are buffered in memory in full, so they are capped. Uploaded items are streamed to a
 	// file instead, and batch uploads are at most 1 MB of content.
-	const isBufferedBody = /json|urlencoded/i.test(req.headers['content-type']);
+	const mediaType = (req.headers['content-type'] || '').split(';')[0].trim().toLowerCase();
+	const isBufferedBody = /json|urlencoded/.test(mediaType);
 	if (isBufferedBody && Number(req.headers['content-length']) > maxBufferedBodySize) {
 		throw new ErrorPayloadTooLarge(`Request body is over the limit (${maxBufferedBodySize} bytes)`);
 	}
@@ -123,6 +124,14 @@ export async function formParse(request: IncomingMessage): Promise<FormParseResu
 				});
 			};
 
+			// Formidable only returns the last file of each field name, so files are tracked as they are created, for
+			// removeUploadedFiles()
+			const uploadedFilePaths: string[] = [];
+			(req as IncomingMessage & { __uploadedFilePaths?: string[] }).__uploadedFilePaths = uploadedFilePaths;
+			form.on('fileBegin', (_name: string, file: { filepath: string }) => {
+				uploadedFilePaths.push(file.filepath);
+			});
+
 			form.parse(req, (error: Error, fields: Fields, files: Files) => {
 				if (promiseCompleted) return;
 				promiseCompleted = true;
@@ -157,10 +166,9 @@ export async function formParse(request: IncomingMessage): Promise<FormParseResu
 }
 
 // Formidable keeps uploaded files in the temp directory, and most routes have no use for them once the request is done
-export const removeUploadedFiles = async (req: IncomingMessage & { __parsed?: FormParseResult }) => {
-	const files = req.__parsed?.files ?? {};
-	for (const file of Object.values(files) as { filepath?: string }[]) {
-		if (file?.filepath) await safeRemove(file.filepath);
+export const removeUploadedFiles = async (req: IncomingMessage & { __uploadedFilePaths?: string[] }) => {
+	for (const filePath of req.__uploadedFilePaths ?? []) {
+		await safeRemove(filePath);
 	}
 };
 
