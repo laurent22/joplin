@@ -150,7 +150,9 @@ export function headerSessionId(headers: Record<string, string | string[]>): str
 export function contextSessionId(ctx: AppContext, throwIfNotFound = true): string {
 	if (ctx.headers['x-api-auth']) return ctx.headers['x-api-auth'] as string;
 
-	const id = cookieGet(ctx, 'sessionId');
+	// The API is not CSRF-protected, so it must not accept the cookie the browser sends on its own. Otherwise a script on
+	// a same-site page, such as a published note on a sibling subdomain, could act as whoever is logged in.
+	const id = isApiRequest(ctx) ? '' : cookieGet(ctx, 'sessionId');
 	if (!id && throwIfNotFound) throw new ErrorForbidden('Invalid or missing session');
 	return id;
 }

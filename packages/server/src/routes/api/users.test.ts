@@ -1,6 +1,7 @@
 import { User } from '../../services/database/types';
 import { deleteApi, getApi, patchApi, postApi } from '../../utils/testing/apiUtils';
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, expectHttpError } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, expectHttpError, koaAppContext } from '../../utils/testing/testUtils';
+import ownerHandler from '../../middleware/ownerHandler';
 import { ErrorForbidden, ErrorUnprocessableEntity } from '../../utils/errors';
 import { uuidgen } from '@joplin/lib/uuid';
 
@@ -16,6 +17,20 @@ describe('api/users', () => {
 
 	beforeEach(async () => {
 		await beforeEachDb();
+	});
+
+	test.each([
+		['an API request with the X-API-AUTH header', '/api/users/me', true, true],
+		['an API request with only the session cookie', '/api/users/me', false, false],
+		['a web request with only the session cookie', '/home', false, true],
+	])('should resolve the session for %s', async (_case, url, withHeader, expectOwner) => {
+		const { session } = await createUserAndSession(1);
+		const context = await koaAppContext({ sessionId: session.id, request: { method: 'GET', url } });
+		if (!withHeader) delete context.headers['x-api-auth'];
+		context.joplin.owner = null;
+
+		await ownerHandler(context, async () => {});
+		expect(!!context.joplin.owner).toBe(expectOwner);
 	});
 
 	test('should create a user', async () => {
