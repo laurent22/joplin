@@ -602,6 +602,16 @@ describe('UserModel', () => {
 		expect(await models().token().isValid(user.id, token, TokenPurpose.PasswordReset)).toBe(false);
 	});
 
+	test('should reject a password that is too long before checking its strength', async () => {
+		const user = await models().user().save({ email: 'test@example.com', password: '111111' });
+		const token = await models().token().generate(user.id, TokenPurpose.PasswordReset);
+		const password = 'a'.repeat(20000);
+
+		const error = await checkThrowAsync(async () => models().user().resetPassword(token, { password, password2: password }));
+		expect(error.httpCode).toBe(ErrorUnprocessableEntity.httpCode);
+		expect(error.message).toContain('cannot be longer than');
+	});
+
 	test('should cancel pending email changes and outstanding tokens when the password is reset', async () => {
 		const user = await models().user().save({ email: 'test@example.com', password: '111111' });
 		const welcomeEmail = (await models().email().all()).find(e => e.recipient_email === 'test@example.com');

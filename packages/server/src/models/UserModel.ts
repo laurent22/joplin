@@ -192,6 +192,8 @@ export const getNextSubscriptionPlan = (accountType: AccountType) => {
 	return { upgradeTo, downgradeTo };
 };
 
+const maxPasswordLength = 256;
+
 export default class UserModel extends BaseModel<User> {
 	private mfaEncryptionKey_: string = null;
 	private authCodeTtl = 600000; // 10 minutes
@@ -446,7 +448,8 @@ export default class UserModel extends BaseModel<User> {
 	private validatePassword(password: string) {
 		if (this.env === Env.Dev) return;
 
-		const result = zxcvbn(password);
+		// zxcvbn gets much slower as the input grows, and only the start of a password matters for its strength
+		const result = zxcvbn(password.slice(0, 100));
 		if (result.score < 3) {
 			let msg: string[] = [result.feedback.warning];
 			if (result.feedback.suggestions) {
@@ -889,6 +892,8 @@ export default class UserModel extends BaseModel<User> {
 					// generating a bcrypt hash for each user is slow.
 				}
 			} else {
+				// Before any processing, since checking a long enough password can block the server for minutes
+				if (user.password.length > maxPasswordLength) throw new ErrorUnprocessableEntity(`The password cannot be longer than ${maxPasswordLength} characters`);
 				if (!options.skipValidation) this.validatePassword(user.password);
 				user.password = await hashPassword(user.password);
 			}
