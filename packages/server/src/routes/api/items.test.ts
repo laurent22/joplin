@@ -6,7 +6,7 @@ import { Item } from '../../services/database/types';
 import { PaginatedItems, SaveFromRawContentResult } from '../../models/ItemModel';
 import { shareFolderWithUser } from '../../utils/testing/shareApiUtils';
 import { resourceBlobPath } from '../../utils/joplinUtils';
-import { ErrorForbidden, ErrorPayloadTooLarge, ErrorUnprocessableEntity } from '../../utils/errors';
+import { ErrorBadRequest, ErrorForbidden, ErrorPayloadTooLarge, ErrorUnprocessableEntity } from '../../utils/errors';
 import { PaginatedResults } from '../../models/utils/pagination';
 import { makeFolderSerializedBody, makeNoteSerializedBody } from '../../utils/testing/serializedItems';
 
@@ -188,6 +188,20 @@ describe('api/items', () => {
 
 		expect(Object.keys(result.items).length).toBe(2);
 		expect(Object.keys(result.items).sort()).toEqual(['00000000000000000000000000000001.md', '00000000000000000000000000000002.md']);
+	});
+
+	test.each([
+		['a body that is not a string', { items: [{ name: 'a.txt', body: { length: 300000000 } }] }, ErrorBadRequest.httpCode],
+		['items that are not an array', { items: { length: 300000000 } }, ErrorBadRequest.httpCode],
+		['bodies over the size limit', { items: [{ name: 'a.txt', body: 'x'.repeat(600 * 1024) }, { name: 'b.txt', body: 'x'.repeat(600 * 1024) }] }, ErrorPayloadTooLarge.httpCode],
+	])('should reject a batch upload with %s before allocating anything', async (_case, body, expectedHttpCode) => {
+		const { session } = await createUserAndSession(1, false);
+		const bufferFrom = jest.spyOn(Buffer, 'from');
+
+		await expectHttpError(async () => putApi(session.id, 'batch_items', body), expectedHttpCode);
+		expect(bufferFrom).not.toHaveBeenCalled();
+
+		bufferFrom.mockRestore();
 	});
 
 	test('should report errors when batch uploading', async () => {
