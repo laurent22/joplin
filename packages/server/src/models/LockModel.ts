@@ -5,6 +5,8 @@ import { Value } from './KeyValueModel';
 import { ErrorConflict, ErrorUnprocessableEntity, ErrorCode } from '../utils/errors';
 import { uuidgen } from '@joplin/lib/uuid';
 
+const maxLocksPerUser = 50;
+
 export default class LockModel extends BaseModel<Lock> {
 
 	private lockTtl_: number = defaultLockTtl;
@@ -30,7 +32,8 @@ export default class LockModel extends BaseModel<Lock> {
 	protected async validate(lock: Lock): Promise<Lock> {
 		if (![LockType.Sync, LockType.Exclusive].includes(lock.type)) throw new ErrorUnprocessableEntity(`Invalid lock type: ${lock.type}`);
 		if (![LockClientType.Desktop, LockClientType.Mobile, LockClientType.Cli].includes(lock.clientType)) throw new ErrorUnprocessableEntity(`Invalid lock client type: ${lock.clientType}`);
-		if (lock.clientId.length > 64) throw new ErrorUnprocessableEntity(`Invalid client ID length: ${lock.clientId}`);
+		// Clients send a 32-character hex id. Anything else (e.g. an array with a length) would be stored as is.
+		if (typeof lock.clientId !== 'string' || !/^[A-Za-z0-9-]{1,64}$/.test(lock.clientId)) throw new ErrorUnprocessableEntity('Invalid client ID');
 		return lock;
 	}
 
@@ -72,6 +75,9 @@ export default class LockModel extends BaseModel<Lock> {
 
 				locks = locks.map(l => l.id === syncLock.id ? output : l);
 			} else {
+				// The locks are stored outside the storage quota and reloaded on every request
+				if (locks.length >= maxLocksPerUser) throw new ErrorConflict(`Cannot acquire lock because there are already ${locks.length} active locks`);
+
 				output = {
 					id: uuidgen(),
 					type: LockType.Sync,
