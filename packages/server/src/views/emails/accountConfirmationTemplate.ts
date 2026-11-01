@@ -1,16 +1,14 @@
 import markdownUtils from '@joplin/lib/markdownUtils';
 import config from '../../config';
 import { EmailSubjectBody } from '../../models/EmailModel';
-import { profileUrl } from '../../utils/urlUtils';
+import { mfaMessage } from './mfaReminderTemplate';
 
 interface TemplateView {
 	url: string;
 }
 
 export default (view: TemplateView): EmailSubjectBody => {
-	const mfaMessage = config().MFA_ENABLED ? `
-
-Protect your account with multi-factor authentication (MFA): even if someone gets your password, they won’t be able to sign in. You can turn it on from [your profile page](${markdownUtils.escapeLinkUrl(profileUrl())}).` : '';
+	const mfaParagraph = config().MFA_ENABLED ? `\n\n${mfaMessage()}` : '';
 
 	return {
 		subject: `Your new ${config().appName} account is almost ready to use`,
@@ -18,7 +16,7 @@ Protect your account with multi-factor authentication (MFA): even if someone get
 
 Please click on the following link to finish setting up your account:
 
-[Complete your account](${markdownUtils.escapeLinkUrl(view.url)})${mfaMessage}
+[Complete your account](${markdownUtils.escapeLinkUrl(view.url)})${mfaParagraph}
 
 `.trim(),
 	};
