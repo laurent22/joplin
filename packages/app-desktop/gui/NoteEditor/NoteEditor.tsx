@@ -115,8 +115,8 @@ function NoteEditorContent(props: NoteEditorProps) {
 		setShowRevisions(false);
 	}, [saveNoteIfWillChange]);
 
-	const formNote_afterLoad = useCallback(async () => {
-		setTitleHasBeenManuallyChanged(false);
+	const formNote_afterLoad = useCallback(async (event: OnLoadEvent) => {
+		setTitleHasBeenManuallyChanged(!!event.formNote?.title);
 	}, []);
 
 	const effectiveNoteId = useEffectiveNoteId(props);
@@ -319,8 +319,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 			setTitleHasBeenManuallyChanged(true);
 		}
 
-		// Skip whiteboards because their body starts with ```jsoncanvas and the title would become "jsoncanvas"
-		if (isNewNote && !titleHasBeenManuallyChanged && field === 'body' && !hasWhiteboardFence(value)) {
+		if (isNewNote && !titleHasBeenManuallyChanged && field === 'body') {
 			// TODO: Handle HTML/Markdown format
 			newNote.title = Note.defaultTitle(value);
 		}
