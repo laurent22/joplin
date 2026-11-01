@@ -12726,7 +12726,7 @@ __metadata:
     react-native-quick-base64: "npm:3.0.1"
     react-native-quick-crypto: "npm:1.1.4"
     react-native-rsa-native: "patch:react-native-rsa-native@npm%3A2.0.5#~/.yarn/patches/react-native-rsa-native-npm-2.0.5-4664e1ce79.patch"
-    react-native-safe-area-context: "npm:5.8.0"
+    react-native-safe-area-context: "npm:5.8.1"
     react-native-share: "npm:12.3.1"
     react-native-svg: "npm:15.15.5"
     react-native-url-polyfill: "npm:2.0.0"
@@ -50500,13 +50500,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-safe-area-context@npm:5.8.0":
-  version: 5.8.0
-  resolution: "react-native-safe-area-context@npm:5.8.0"
+"react-native-safe-area-context@npm:5.8.1":
+  version: 5.8.1
+  resolution: "react-native-safe-area-context@npm:5.8.1"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/d4f526a98110f88ba9f5dfe6d6bda2c26b86404b2d29a6571931a1f02a531f565a2fd58d20b4ac70c1fa37c00ad6a72332fb0a463e27262c4ff1d1dfb694af7c
+  checksum: 10/2ea47449420a1d89354648bc0cec7e93d9dc7fc577321781126d4f274a13d8dc94a09be78454f3720d54f90511d4ff9e8412bb81e2aed71f135a80bbf9ed0e63
   languageName: node
   linkType: hard
 
