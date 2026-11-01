@@ -9,7 +9,8 @@ export default async function(ctx: AppContext, next: KoaNext): Promise<void> {
 
 	if (isAdminRequest(ctx)) {
 		if (!config().IS_ADMIN_INSTANCE) throw new ErrorForbidden();
-		if (!owner || !owner.is_admin) throw new ErrorForbidden();
+		// Disabling is the only way the admin UI offers to revoke another admin
+		if (!owner || !owner.is_admin || !owner.enabled) throw new ErrorForbidden();
 	}
 
 	// This can happen if an instance is switched from admin to non-admin. In

@@ -374,6 +374,12 @@ router.post('admin/users', async (path: SubPath, ctx: AppContext) => {
 			const user = await models.user().load(path.id);
 			await models.user().checkIfAllowed(owner, AclAction.Delete, user);
 			await models.userFlag().toggle(user.id, UserFlagType.ManuallyDisabled, !fields.restore_button);
+
+			// Otherwise the account keeps its open sessions and authorised apps
+			if (fields.disable_button) {
+				await models.session().deleteByUserId(user.id);
+				await models.application().deleteByUserId(user.id);
+			}
 		} else if (fields.send_account_confirmation_email) {
 			const user = await models.user().load(path.id);
 			// Never put an account that has a password back into "must set password": a confirmation token
@@ -406,6 +412,9 @@ router.post('admin/users', async (path: SubPath, ctx: AppContext) => {
 
 			await models.notification().addInfo(owner.id, `User ${user.email} has been scheduled for deletion on ${formatDateTime(deletionDate)}. [View deletion list](${adminUserDeletionsUrl()})`);
 		} else if (fields.delete_user_flags) {
+			// Otherwise a disabled admin could re-enable their own account
+			if (userId === owner.id) throw new ErrorForbidden('You cannot remove flags from your own account');
+
 			const userFlagTypes: UserFlagType[] = [];
 			for (const key of Object.keys(fields)) {
 				if (key.startsWith('user_flag_')) {
