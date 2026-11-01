@@ -82,6 +82,33 @@ describe('SessionModel', () => {
 		await expectHttpError(async () => models().session().authenticate(user.email, password, services, ''), ErrorTooManyRequests.httpCode);
 	});
 
+	test('should count concurrent attempts before letting more through', async () => {
+		process.env.JOPLIN_TEST_ACCOUNT_LIMITER = '1';
+
+		const { user, password } = await createUserAndSession(1);
+		const services = (await koaAppContext()).joplin.services;
+
+		const passwords = [...Array(15)].map((_, i) => `wrong-password-${i}`).concat(password);
+		const results = await Promise.allSettled(passwords.map(p => models().session().authenticate(user.email, p, services, '')));
+
+		const httpCodes = results.map(r => r.status === 'rejected' ? r.reason.httpCode : 200);
+		expect(httpCodes).toEqual([...Array(10).fill(ErrorForbidden.httpCode), ...Array(6).fill(ErrorTooManyRequests.httpCode)]);
+	});
+
+	test('should unblock the account when the password is reset', async () => {
+		process.env.JOPLIN_TEST_ACCOUNT_LIMITER = '1';
+
+		const { user } = await createUserAndSession(1);
+		const services = (await koaAppContext()).joplin.services;
+
+		await failLogin(user.email, services, 10);
+
+		const url = await models().user().generateLinkForPasswordReset(user.id);
+		await models().user().resetPassword(url.split('?token=')[1], { password: 'correct-horse-battery-staple', password2: 'correct-horse-battery-staple' });
+
+		expect(await models().session().authenticate(user.email, 'correct-horse-battery-staple', services, '')).toBeTruthy();
+	});
+
 	test('should not block other accounts', async () => {
 		process.env.JOPLIN_TEST_ACCOUNT_LIMITER = '1';
 

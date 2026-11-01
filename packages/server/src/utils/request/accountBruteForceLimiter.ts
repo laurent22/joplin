@@ -1,9 +1,14 @@
 import { RateLimiterMemory, RateLimiterRes } from 'rate-limiter-flexible';
 import { createHmac, randomBytes } from 'crypto';
 import { ErrorTooManyRequests } from '../errors';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('accountBruteForceLimiter');
 
 export interface AccountBruteForceLimiter {
-	check: (key: string)=> Promise<void>;
+	// Refuses if the account is blocked, otherwise runs `attempt`. Attempts on one account run one at a time, so that
+	// concurrent guesses cannot all get past the check before the first of them is counted.
+	run: <T>(key: string, attempt: ()=> Promise<T>)=> Promise<T>;
 	// `attempt` is the rejected credential. The same one is only counted once per window, since repeating it is what a
 	// device with an outdated password does, while guessing needs different ones.
 	onFailure: (key: string, attempt: string)=> Promise<void>;
@@ -45,13 +50,35 @@ export default (maxFailures: number, durationSeconds: number, errorMessage: stri
 		return output;
 	};
 
-	return {
-		check: async (key: string) => {
-			if (isTesting()) return;
+	const check = async (normalisedKey: string) => {
+		if (isTesting()) return;
 
-			const result = await limiter.get(normalise(key));
-			if (result && result.remainingPoints <= 0) {
-				throw new ErrorTooManyRequests(`${errorMessage}. Please try again in ${Math.ceil(result.msBeforeNext / 1000)} seconds.`, result.msBeforeNext);
+		const result = await limiter.get(normalisedKey);
+		if (result && result.remainingPoints <= 0) {
+			throw new ErrorTooManyRequests(`${errorMessage}. Please try again in ${Math.ceil(result.msBeforeNext / 1000)} seconds.`, result.msBeforeNext);
+		}
+	};
+
+	const pendingAttempts = new Map<string, Promise<unknown>>();
+
+	return {
+		run: async <T>(key: string, attempt: ()=> Promise<T>) => {
+			const normalisedKey = normalise(key);
+
+			const previous = pendingAttempts.get(normalisedKey);
+			const current = (async () => {
+				try {
+					await previous;
+				} catch { /* reported to its own caller */ }
+				await check(normalisedKey);
+				return attempt();
+			})();
+			pendingAttempts.set(normalisedKey, current);
+
+			try {
+				return await current;
+			} finally {
+				if (pendingAttempts.get(normalisedKey) === current) pendingAttempts.delete(normalisedKey);
 			}
 		},
 
@@ -64,7 +91,8 @@ export default (maxFailures: number, durationSeconds: number, errorMessage: stri
 			await seenAttempts.set(hash, 1, durationSeconds);
 
 			try {
-				await limiter.consume(normalisedKey);
+				const result = await limiter.consume(normalisedKey);
+				if (result.remainingPoints <= 0) logger.warn(`${errorMessage}: ${normalisedKey} is blocked for ${Math.ceil(result.msBeforeNext / 1000)} seconds`);
 			} catch (error) {
 				// Consuming the last point rejects, but the caller is already
 				// reporting an authentication failure, so the block applies to

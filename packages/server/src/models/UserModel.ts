@@ -627,6 +627,10 @@ export default class UserModel extends BaseModel<User> {
 			await this.models().application().deleteByUserId(user.id);
 			await this.models().token().deleteByValue(user.id, token, TokenPurpose.PasswordReset);
 		}, 'UserModel::resetPassword');
+
+		// Anyone can block logins to an account by sending wrong passwords, and the reset link proves at least as much as
+		// the password, so it lets the owner back in
+		await limiterLoginAccountBruteForce.onSuccess(user.email);
 	}
 
 	public async handleBetaUserEmails() {
@@ -945,16 +949,16 @@ export default class UserModel extends BaseModel<User> {
 		const user = await this.load(userId, { fields: ['email'] });
 		if (!user) throw new ErrorNotFound(`No such user: ${userId}`);
 
-		await limiterLoginAccountBruteForce.check(user.email);
+		await limiterLoginAccountBruteForce.run(user.email, async () => {
+			// Through login() so that LDAP accounts are checked against the directory rather than a stale local copy
+			const loggedInUser = password ? await this.login(user.email, password, services) : null;
+			if (!loggedInUser || loggedInUser.id !== userId) {
+				await limiterLoginAccountBruteForce.onFailure(user.email, `password:${password || ''}`);
+				throw new ErrorUnprocessableEntity('The current password is incorrect');
+			}
 
-		// Through login() so that LDAP accounts are checked against the directory rather than a stale local copy
-		const loggedInUser = password ? await this.login(user.email, password, services) : null;
-		if (!loggedInUser || loggedInUser.id !== userId) {
-			await limiterLoginAccountBruteForce.onFailure(user.email, `password:${password || ''}`);
-			throw new ErrorUnprocessableEntity('The current password is incorrect');
-		}
-
-		await limiterLoginAccountBruteForce.onSuccess(user.email);
+			await limiterLoginAccountBruteForce.onSuccess(user.email);
+		});
 	}
 
 	// Account confirmation tokens are kept: they can only confirm the current address, and a new account's welcome email

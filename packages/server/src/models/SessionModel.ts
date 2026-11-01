@@ -51,8 +51,10 @@ export default class SessionModel extends BaseModel<Session> {
 		// the routes only sees one address at a time, so it cannot stop an
 		// attacker who either spreads attempts across addresses or paces them
 		// below the limit.
-		await limiterLoginAccountBruteForce.check(email);
+		return limiterLoginAccountBruteForce.run(email, () => this.checkUserCredentials(email, password, services, mfaCode, recoveryCode));
+	}
 
+	private async checkUserCredentials(email: string, password: string, services: Services, mfaCode?: string, recoveryCode?: string) {
 		// Only rejected credentials are counted: a database or LDAP error is not a guess, and neither is a correct
 		// password sent without an MFA code (the API never sends one)
 		const user = await this.models().user().login(email, password, services);
