@@ -75,7 +75,7 @@
     "follow-redirects": "1.16.0",
     "fs-extra": "11.3.6",
     "html-entities": "1.4.0",
-    "html-minifier": "4.0.0",
+    "html-minifier": "patch:html-minifier@npm%3A4.0.0#~/.yarn/patches/html-minifier-npm-4.0.0-2c414aaddf.patch",
     "image-data-uri": "2.0.1",
     "immer": "9.0.21",
     "js-yaml": "4.3.1",

@@ -12953,7 +12953,7 @@ __metadata:
     follow-redirects: "npm:1.16.0"
     fs-extra: "npm:11.3.6"
     html-entities: "npm:1.4.0"
-    html-minifier: "npm:4.0.0"
+    html-minifier: "patch:html-minifier@npm%3A4.0.0#~/.yarn/patches/html-minifier-npm-4.0.0-2c414aaddf.patch"
     image-data-uri: "npm:2.0.1"
     immer: "npm:9.0.21"
     jest: "npm:29.7.0"
@@ -35829,6 +35829,23 @@ __metadata:
   bin:
     html-minifier: ./cli.js
   checksum: 10/a1a49ee78a41eb3232f7aa51be25092d7634548e8996577b2bdab22dc9ac736594d35aab7fdf81fb5a0da11f7bc688f500c297b24fd312d48c0ce8739ed4f06f
+  languageName: node
+  linkType: hard
+
+"html-minifier@patch:html-minifier@npm%3A4.0.0#~/.yarn/patches/html-minifier-npm-4.0.0-2c414aaddf.patch":
+  version: 4.0.0
+  resolution: "html-minifier@patch:html-minifier@npm%3A4.0.0#~/.yarn/patches/html-minifier-npm-4.0.0-2c414aaddf.patch::version=4.0.0&hash=58143e"
+  dependencies:
+    camel-case: "npm:^3.0.0"
+    clean-css: "npm:^4.2.1"
+    commander: "npm:^2.19.0"
+    he: "npm:^1.2.0"
+    param-case: "npm:^2.1.1"
+    relateurl: "npm:^0.2.7"
+    uglify-js: "npm:^3.5.1"
+  bin:
+    html-minifier: ./cli.js
+  checksum: 10/68f9df60d1cb282d35fc675285b46745eb81007b023c7d5c741e7f6bfe6db4ec656ac1951a36219a09b6d8d26ccafd5607de6edcc8918259009eb3059a8f038d
   languageName: node
   linkType: hard
 
