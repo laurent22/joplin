@@ -29,6 +29,14 @@ describe('htmlUtils', () => {
 		}
 	});
 
+	it.each([
+		'<img src="x" a="" =b="x onerror=alert(1) c">',
+		'<img src="x" a =b="x onerror=alert(1) c">',
+		'<div><img src="x" a="" =b="x onerror=alert(1) c"></div>',
+	])('should not let an invalid attribute name bring in an event handler: %s', (html) => {
+		expect(htmlUtils.sanitizeHtml(html)).not.toContain('onerror');
+	});
+
 	test('should extract the HTML body', () => {
 		const testCases: [string, string][] = [
 			[

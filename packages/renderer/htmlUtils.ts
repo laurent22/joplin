@@ -35,17 +35,19 @@ interface SanitizeHtmlOptions {
 	allowedFilePrefixes?: string[];
 }
 
+// htmlparser2 accepts attribute names that browsers parse differently, such as one starting with "=". Together with a
+// value-less attribute before it (`a =b="x onerror=..."`), the browser would see an attribute the sanitiser never did.
+const validAttributeName = /^[a-zA-Z_:][-a-zA-Z0-9_:.]*$/;
+
 export const attributesHtml = (attr: Record<string, string>) => {
 	const output = [];
 
 	for (const n in attr) {
 		if (!attr.hasOwnProperty(n)) continue;
+		if (!validAttributeName.test(n)) continue;
 
-		if (!attr[n]) {
-			output.push(n);
-		} else {
-			output.push(`${n}="${htmlentities(attr[n])}"`);
-		}
+		// Always with a value, even an empty one, so that nothing that follows can be read as this attribute's value
+		output.push(`${n}="${htmlentities(attr[n] || '')}"`);
 	}
 
 	return output.join(' ');
