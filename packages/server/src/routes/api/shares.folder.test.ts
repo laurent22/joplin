@@ -403,6 +403,23 @@ describe('shares.folder', () => {
 		expect(items[0].owner_id).toBe(user1.id);
 	});
 
+	test('should not accept or list an invitation from a disabled account', async () => {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+
+		const { shareUser } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [{ id: '00000000000000000000000000000001' }],
+			},
+		], false);
+
+		await models().user().save({ id: user1.id, enabled: 0 });
+
+		await expectHttpError(async () => patchApi(session2.id, `share_users/${shareUser.id}`, { status: ShareUserStatus.Accepted }), ErrorForbidden.httpCode);
+		expect((await getApi<PaginatedItems>(session2.id, 'share_users')).items.length).toBe(0);
+	});
+
 	test('should update share status when note parent changes', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);

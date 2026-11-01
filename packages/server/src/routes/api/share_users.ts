@@ -5,6 +5,7 @@ import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { AclAction } from '../../models/BaseModel';
+import { ShareUserStatus } from '../../services/database/types';
 
 const router = new Router(RouteType.Api);
 
@@ -39,6 +40,8 @@ router.get('api/share_users', async (_path: SubPath, ctx: AppContext) => {
 	for (const su of shareUsers) {
 		const share = await ctx.joplin.models.share().load(su.share_id);
 		const sharer = await ctx.joplin.models.user().load(share.owner_id);
+		// They cannot be accepted (see ShareUserModel.setStatus)
+		if (su.status === ShareUserStatus.Waiting && !sharer.enabled) continue;
 
 		items.push({
 			id: su.id,

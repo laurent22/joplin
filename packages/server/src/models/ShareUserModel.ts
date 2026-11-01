@@ -132,6 +132,10 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 
 		return this.withTransaction<Item>(async () => {
 			if (status === ShareUserStatus.Accepted) {
+				// The items that a disabled account planted in its share would otherwise still be delivered
+				const shareOwner = await this.models().user().load(share.owner_id, { fields: ['enabled'] });
+				if (!shareOwner?.enabled) throw new ErrorForbidden('This invitation can no longer be accepted, because the account that sent it is disabled.');
+
 				// Items with the same name as one of the user's own are not added (see UserItemModel.addMulti), so they would
 				// silently diverge from the shared ones. Refuse instead, so that the user knows.
 				const shareItems = await this.models().item().byShareId(shareId, { fields: ['id', 'name'] });
