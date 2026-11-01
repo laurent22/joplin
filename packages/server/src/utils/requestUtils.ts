@@ -1,10 +1,14 @@
 import { cookieGet } from './cookies';
-import { ErrorForbidden } from './errors';
+import { ErrorForbidden, ErrorPayloadTooLarge } from './errors';
 import { AppContext } from './types';
 import formidable from 'formidable';
 import { Fields, Files } from 'formidable';
 import { IncomingMessage } from 'http';
 import { uuidgen } from './uuid';
+import { safeRemove } from './fileUtils';
+import { MB } from './bytes';
+
+const maxBufferedBodySize = 10 * MB;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Many route handlers read fields without narrowing (e.g. `body.fields.email`); tightening to `unknown` propagates casts through every handler
 export type BodyFields = Record<string, any>;
@@ -70,6 +74,13 @@ export async function formParse(request: IncomingMessage): Promise<FormParseResu
 
 	const isFormContentType = req.headers['content-type'] === 'application/x-www-form-urlencoded' || req.headers['content-type'].startsWith('multipart/form-data');
 
+	// JSON and urlencoded bodies are buffered in memory in full, so they are capped. Uploaded items are streamed to a
+	// file instead, and batch uploads are at most 1 MB of content.
+	const isBufferedBody = /json|urlencoded/i.test(req.headers['content-type']);
+	if (isBufferedBody && Number(req.headers['content-length']) > maxBufferedBodySize) {
+		throw new ErrorPayloadTooLarge(`Request body is over the limit (${maxBufferedBodySize} bytes)`);
+	}
+
 	// Note that for Formidable to work, the content-type must be set in the
 	// headers
 	return new Promise<FormParseResult>((resolve, reject) => {
@@ -98,6 +109,20 @@ export async function formParse(request: IncomingMessage): Promise<FormParseResu
 				reject(wrapped);
 			});
 
+			// Content-Length can be missing (chunked encoding), so the bytes received are counted too. Added after
+			// form.parse(), since the listener starts the data flowing.
+			const limitBufferedBody = () => {
+				if (!isBufferedBody) return;
+				let receivedBytes = 0;
+				req.on('data', (chunk: Buffer) => {
+					receivedBytes += chunk.length;
+					if (receivedBytes <= maxBufferedBodySize || promiseCompleted) return;
+					promiseCompleted = true;
+					reject(new ErrorPayloadTooLarge(`Request body is over the limit (${maxBufferedBodySize} bytes)`));
+					req.destroy();
+				});
+			};
+
 			form.parse(req, (error: Error, fields: Fields, files: Files) => {
 				if (promiseCompleted) return;
 				promiseCompleted = true;
@@ -119,6 +144,8 @@ export async function formParse(request: IncomingMessage): Promise<FormParseResu
 				};
 				resolve(req.__parsed);
 			});
+
+			limitBufferedBody();
 		} catch (error) {
 			if (promiseCompleted) return;
 			promiseCompleted = true;
@@ -128,6 +155,14 @@ export async function formParse(request: IncomingMessage): Promise<FormParseResu
 		}
 	});
 }
+
+// Formidable keeps uploaded files in the temp directory, and most routes have no use for them once the request is done
+export const removeUploadedFiles = async (req: IncomingMessage & { __parsed?: FormParseResult }) => {
+	const files = req.__parsed?.files ?? {};
+	for (const file of Object.values(files) as { filepath?: string }[]) {
+		if (file?.filepath) await safeRemove(file.filepath);
+	}
+};
 
 export async function bodyFields<T>(req: IncomingMessage/* , filter:string[] = null*/): Promise<T> {
 	const form = await formParse(req);
