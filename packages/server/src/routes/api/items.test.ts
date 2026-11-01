@@ -204,6 +204,15 @@ describe('api/items', () => {
 		bufferFrom.mockRestore();
 	});
 
+	test('should accept a batch that is within the limit as the client counts it, in characters', async () => {
+		const { session } = await createUserAndSession(1, false);
+		// 1.2 MB in UTF-8, but 400K characters, which is what the client's 1 MB batch limit counts
+		const body = '\u4E2D'.repeat(400 * 1024);
+
+		const result = await putApi<Record<string, SaveFromRawContentResult>>(session.id, 'batch_items', { items: [{ name: 'test.txt', body }] });
+		expect(result['items']['test.txt'].error).toBeFalsy();
+	});
+
 	test('should report errors when batch uploading', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1, false);
 
