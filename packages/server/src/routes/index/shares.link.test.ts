@@ -1,9 +1,10 @@
 import { Share, ShareType } from '../../services/database/types';
 import routeHandler from '../../middleware/routeHandler';
+import ItemModel from '../../models/ItemModel';
 import { ErrorForbidden, ErrorNotFound } from '../../utils/errors';
 import { postApi } from '../../utils/testing/apiUtils';
 import { testImageBuffer } from '../../utils/testing/fileApiUtils';
-import { beforeAllDb, afterAllTests, parseHtml, beforeEachDb, createUserAndSession, koaAppContext, checkContextError, expectNotThrow, createNote, createItem, models, expectHttpError, createResource, createFolder } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, parseHtml, beforeEachDb, createUserAndSession, koaAppContext, checkContextError, expectNotThrow, createNote, createItem, models, expectHttpError, createResource, createFolder, updateNote } from '../../utils/testing/testUtils';
 
 const resourceSize = 2720;
 
@@ -344,6 +345,68 @@ describe('shares.link', () => {
 		expect(bodyHtml).toContain('folder-tree-data');
 		expect(bodyHtml).toContain('My Notebook');
 		expect(bodyHtml).toContain('My Note');
+	});
+
+	test('should load the published folder contents only when they have changed', async () => {
+		const { session } = await createUserAndSession();
+
+		await createFolder(session.id, { id: '000000000000000000000000000000F1', title: 'My Notebook' });
+		await createNote(session.id, { id: '00000000000000000000000000000001', parent_id: '000000000000000000000000000000F1', title: 'First title' });
+
+		const share = await postApi<Share>(session.id, 'shares', {
+			folder_id: '000000000000000000000000000000F1',
+			type: ShareType.PublishedFolder,
+		});
+
+		const loadWithContent = jest.spyOn(ItemModel.prototype, 'loadWithContent');
+		const now = jest.spyOn(Date, 'now');
+		try {
+			expect(await getShareContent(share.id)).toContain('First title');
+			loadWithContent.mockClear();
+
+			// Only the shared folder item itself is loaded again
+			expect(await getShareContent(share.id)).toContain('First title');
+			expect(loadWithContent).toHaveBeenCalledTimes(1);
+
+			await updateNote(session.id, { id: '00000000000000000000000000000001', parent_id: '000000000000000000000000000000F1', title: 'Second title' });
+			const later = Date.now() + 60 * 1000;
+			now.mockReturnValue(later);
+
+			expect(await getShareContent(share.id)).toContain('Second title');
+		} finally {
+			loadWithContent.mockRestore();
+			now.mockRestore();
+		}
+	});
+
+	test('should shorten long note titles in the published folder tree', async () => {
+		const { session } = await createUserAndSession();
+
+		await createFolder(session.id, { id: '000000000000000000000000000000F1', title: 'My Notebook' });
+		await createNote(session.id, { id: '00000000000000000000000000000001', parent_id: '000000000000000000000000000000F1', title: `start${'x'.repeat(1000)}` });
+
+		const share = await postApi<Share>(session.id, 'shares', {
+			folder_id: '000000000000000000000000000000F1',
+			type: ShareType.PublishedFolder,
+		});
+
+		const bodyHtml = await getShareContent(share.id) as string;
+		expect(bodyHtml).toContain(`start${'x'.repeat(192)}...`);
+		expect(bodyHtml).not.toContain('x'.repeat(196));
+	});
+
+	test('should display a published folder whose sub-folder is also its parent', async () => {
+		const { session } = await createUserAndSession();
+
+		await createFolder(session.id, { id: '000000000000000000000000000000F1', parent_id: '000000000000000000000000000000F2', title: 'My Notebook' });
+		await createFolder(session.id, { id: '000000000000000000000000000000F2', parent_id: '000000000000000000000000000000F1', title: 'Sub-notebook' });
+
+		const share = await postApi<Share>(session.id, 'shares', {
+			folder_id: '000000000000000000000000000000F1',
+			type: ShareType.PublishedFolder,
+		});
+
+		expect(await getShareContent(share.id)).toContain('Sub-notebook');
 	});
 
 	test('should display a note inside a published folder', async () => {
