@@ -2,7 +2,11 @@ import { execRequest } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, expectHttpError } from '../../utils/testing/testUtils';
 import { totp } from 'otplib';
 import * as crypto from '../../utils/crypto';
-import { ErrorForbidden, ErrorUnprocessableEntity } from '../../utils/errors';
+import { ErrorBadRequest, ErrorForbidden, ErrorUnprocessableEntity } from '../../utils/errors';
+
+// Secrets in the format the server generates: 32 base 32 characters
+const validTotpSecret = 'A'.repeat(32);
+const otherValidTotpSecret = 'B'.repeat(32);
 
 describe('index/mfa', () => {
 
@@ -44,7 +48,7 @@ describe('index/mfa', () => {
 		const cryptoEncrypt = jest.spyOn(crypto, 'encryptMFASecret');
 		cryptoEncrypt.mockReturnValue('encrypt-totp-secret');
 
-		await execRequest(session.id, 'POST', 'mfa/me', { totpSecret: 'totp-secret-in-base-32', confirmCode: '0123456', password }, null);
+		await execRequest(session.id, 'POST', 'mfa/me', { totpSecret: validTotpSecret, confirmCode: '012345', confirmCode2: '012345', password }, null);
 		expect((await models().user().load(user.id)).totp_secret).toBe('encrypt-totp-secret');
 	});
 
@@ -55,9 +59,9 @@ describe('index/mfa', () => {
 		totpCheck.mockReturnValue(false);
 
 		try {
-			await execRequest(session.id, 'POST', 'mfa/me', { totpSecret: 'totp-secret-in-base-32', confirmCode: '0123456' }, null);
+			await execRequest(session.id, 'POST', 'mfa/me', { totpSecret: validTotpSecret, confirmCode: '012345', confirmCode2: '012345' }, null);
 		} catch (error) {
-			expect(error.toString().includes('totp-secret-in-base-32')).toBe(true);
+			expect(error.toString().includes(validTotpSecret)).toBe(true);
 		}
 	});
 
@@ -67,7 +71,7 @@ describe('index/mfa', () => {
 		const totpCheck = jest.spyOn(totp, 'check');
 		totpCheck.mockReturnValue(false);
 
-		await expectHttpError(async () => await execRequest(session.id, 'POST', 'mfa/me', { totpSecret: 'totp-secret-in-base-32', confirmCode: '0123456', password }, null), 403);
+		await expectHttpError(async () => await execRequest(session.id, 'POST', 'mfa/me', { totpSecret: validTotpSecret, confirmCode: '012345', confirmCode2: '012345', password }, null), 403);
 
 		expect((await models().user().load(user.id)).totp_secret).toBe('');
 	});
@@ -81,11 +85,22 @@ describe('index/mfa', () => {
 		const cryptoEncrypt = jest.spyOn(crypto, 'encryptMFASecret');
 		cryptoEncrypt.mockReturnValue('encrypt-totp-secret');
 
-		await execRequest(session.id, 'POST', 'mfa/me', { totpSecret: 'totp-secret-in-base-32', confirmCode: '0123456', password }, null);
+		await execRequest(session.id, 'POST', 'mfa/me', { totpSecret: validTotpSecret, confirmCode: '012345', confirmCode2: '012345', password }, null);
 
 		const recoveryCodes = await models().recoveryCode().loadByUserId(user.id);
 
 		expect(recoveryCodes.length).toBe(10);
+	});
+
+	test.each([
+		['a number instead of a secret', { totpSecret: 300000000, confirmCode: '012345', confirmCode2: '012345' }],
+		['a secret in the wrong format', { totpSecret: 'not-base-32', confirmCode: '012345', confirmCode2: '012345' }],
+		['codes in the wrong format', { totpSecret: validTotpSecret, confirmCode: '12', confirmCode2: { a: 1 } }],
+	])('should reject %s when enabling MFA', async (_case, fields) => {
+		const { session, user, password } = await createUserAndSession(1, true);
+
+		await expectHttpError(async () => execRequest(session.id, 'POST', 'mfa/me', { ...fields, password }, null), ErrorBadRequest.httpCode);
+		expect((await models().user().load(user.id)).totp_secret).toBe('');
 	});
 
 	test('should not disable MFA if the password is empty', async () => {
@@ -113,8 +128,8 @@ describe('index/mfa', () => {
 		jest.spyOn(totp, 'check').mockReturnValue(true);
 
 		await expectHttpError(async () => execRequest(session.id, 'POST', 'mfa/me', {
-			totpSecret: 'other-totp-secret',
-			confirmCode: '0123456',
+			totpSecret: otherValidTotpSecret,
+			confirmCode: '012345', confirmCode2: '012345',
 			password: alreadyEnabled ? password : undefined,
 		}, null), expectedHttpCode);
 
