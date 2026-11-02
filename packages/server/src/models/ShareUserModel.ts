@@ -3,6 +3,8 @@ import { ErrorBadRequest, ErrorConflict, ErrorForbidden, ErrorNotFound } from '.
 import BaseModel, { AclAction, DeleteOptions } from './BaseModel';
 import { getCanReceiveFolder } from './utils/user';
 
+export const confirmEmailMessage = (action: string) => `Please confirm your email address before ${action}. A confirmation link was sent to your email address, and you can send it again from your profile page.`;
+
 export default class ShareUserModel extends BaseModel<ShareUser> {
 
 	public get tableName(): string {
@@ -12,6 +14,9 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 	// The checks that do not depend on the recipient. They must be done before the recipient's email is looked up, so
 	// that an invitation that cannot be sent anyway does not reveal whether an address has an account.
 	public async checkCanInvite(user: User, resource: ShareUser) {
+		// Otherwise anyone could share notebooks under an address they do not own, such as one typed in at checkout
+		if (!user.email_confirmed) throw new ErrorForbidden(confirmEmailMessage('sharing a notebook'));
+
 		const share = await this.models().share().load(resource.share_id);
 		if (!share || share.owner_id !== user.id) throw new ErrorForbidden('no access to the share object');
 	}

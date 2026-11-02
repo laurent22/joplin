@@ -1,4 +1,4 @@
-import { ErrorBadRequest, ErrorNotFound } from '../../utils/errors';
+import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from '../../utils/errors';
 import { bodyFields } from '../../utils/requestUtils';
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
@@ -6,6 +6,7 @@ import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { AclAction } from '../../models/BaseModel';
 import { ShareUserStatus } from '../../services/database/types';
+import { confirmEmailMessage } from '../../models/ShareUserModel';
 
 const router = new Router(RouteType.Api);
 
@@ -19,6 +20,8 @@ router.patch('api/share_users/:id', async (path: SubPath, ctx: AppContext) => {
 	const body = await bodyFields<{ status?: number }>(ctx.req);
 
 	if ('status' in body) {
+		// Otherwise notebooks shared with an address would go to whoever registered it first
+		if (body.status === ShareUserStatus.Accepted && !ctx.joplin.owner.email_confirmed) throw new ErrorForbidden(confirmEmailMessage('accepting a shared notebook'));
 		return shareUserModel.setStatus(shareUser.share_id, shareUser.user_id, body.status);
 	} else {
 		throw new ErrorBadRequest('Only setting status is supported');

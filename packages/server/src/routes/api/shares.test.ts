@@ -1,6 +1,6 @@
-import { Share, ShareType, ShareUserStatus } from '../../services/database/types';
+import { Share, ShareType, ShareUser, ShareUserStatus } from '../../services/database/types';
 import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createItemTree, createFolder, expectHttpError } from '../../utils/testing/testUtils';
-import { postApi, getApi } from '../../utils/testing/apiUtils';
+import { postApi, getApi, patchApi } from '../../utils/testing/apiUtils';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound, ErrorTooManyRequests } from '../../utils/errors';
 import { shareWithUserAndAccept } from '../../utils/testing/shareApiUtils';
 import { PaginatedResults } from '../../models/utils/pagination';
@@ -121,6 +121,27 @@ describe('shares', () => {
 		// or not the address exists, otherwise the end point can be used to
 		// find out which addresses are registered.
 		await expectSameAnswer(session2.id, {});
+	});
+
+	test('should require a confirmed email to invite someone or to accept an invitation', async () => {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+
+		await createFolder(session1.id, { id: '000000000000000000000000000000F1', title: 'My Folder' });
+		const share = await postApi<Share>(session1.id, 'shares', { folder_id: '000000000000000000000000000000F1' });
+
+		await models().user().save({ id: user1.id, email_confirmed: 0 });
+		await expectHttpError(async () => postApi(session1.id, `shares/${share.id}/users`, { email: user2.email }), ErrorForbidden.httpCode);
+
+		await models().user().save({ id: user1.id, email_confirmed: 1 });
+		const shareUser = await postApi<ShareUser>(session1.id, `shares/${share.id}/users`, { email: user2.email });
+
+		await models().user().save({ id: user2.id, email_confirmed: 0 });
+		await expectHttpError(async () => patchApi(session2.id, `share_users/${shareUser.id}`, { status: ShareUserStatus.Accepted }), ErrorForbidden.httpCode);
+
+		await models().user().save({ id: user2.id, email_confirmed: 1 });
+		await patchApi(session2.id, `share_users/${shareUser.id}`, { status: ShareUserStatus.Accepted });
+		expect((await models().shareUser().load(shareUser.id)).status).toBe(ShareUserStatus.Accepted);
 	});
 
 	test('should limit the number of invitations an account can send', async () => {
