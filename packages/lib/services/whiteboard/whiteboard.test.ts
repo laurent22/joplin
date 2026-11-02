@@ -38,6 +38,14 @@ describe('whiteboard', () => {
 		expect(hasWhiteboardFence('# title\n\n```jsoncanvas\n{}\n```\n')).toBe(true);
 	});
 
+	test('should quickly find no fence in a body with many openers and no closer', () => {
+		const body = '```jsoncanvas\n'.repeat(100_000);
+		const startTime = Date.now();
+		expect(hasWhiteboardFence(body)).toBe(false);
+		expect(parseWhiteboard(body).prefix).toBe(body);
+		expect(Date.now() - startTime).toBeLessThan(1000);
+	});
+
 	test('returns empty canvas with hasCanvas=false when fence content is invalid JSON', () => {
 		const body = '```jsoncanvas\nthis is not json\n```';
 		const result = parseWhiteboard(body);
