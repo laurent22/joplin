@@ -6,6 +6,7 @@ import { PostBindingContext } from 'samlify/types/src/entity';
 import { _ } from '@joplin/lib/locale';
 import { SamlRelayState } from './types';
 import { User } from '../services/database/types';
+import { ErrorForbidden } from './errors';
 
 const checkIfSamlIsEnabled = () => {
 	if (!config().saml.enabled) {
@@ -28,6 +29,40 @@ export const getIdentityProvider = async () => {
 	return IdentityProvider({
 		metadata: await readFile(config().saml.identityProviderConfigFile),
 	});
+};
+
+export interface LoginResponseExtract {
+	audience?: string | string[];
+	response?: { id?: string; destination?: string };
+	conditions?: { notOnOrAfter?: string };
+}
+
+type ServiceProviderInstance = Awaited<ReturnType<typeof getServiceProvider>>;
+
+// Response ID => time until which the response is valid
+const usedLoginResponses = new Map<string, number>();
+const maxUsedLoginResponses = 100_000;
+
+// samlify checks the signature, the issuer and the validity window of a response, but not that it was issued for this
+// server, which an identity provider shared with other applications also does for them, nor that it is used only once.
+export const checkLoginResponse = (serviceProvider: ServiceProviderInstance, extract: LoginResponseExtract, now = Date.now()) => {
+	const audiences = Array.isArray(extract.audience) ? extract.audience : [extract.audience];
+	if (!audiences.includes(serviceProvider.entityMeta.getEntityID())) throw new ErrorForbidden('This SAML response was issued for another application');
+
+	const destination = extract.response?.destination;
+	if (destination && destination !== serviceProvider.entityMeta.getAssertionConsumerService('post')) throw new ErrorForbidden('This SAML response was sent to another address');
+
+	const notOnOrAfter = Date.parse(extract.conditions?.notOnOrAfter || '');
+	const responseId = extract.response?.id;
+	if (isNaN(notOnOrAfter) || !responseId) throw new ErrorForbidden('This SAML response has no expiry time or ID');
+
+	for (const [id, expiryTime] of usedLoginResponses) {
+		if (expiryTime > now && usedLoginResponses.size <= maxUsedLoginResponses) break;
+		usedLoginResponses.delete(id);
+	}
+
+	if (usedLoginResponses.has(responseId)) throw new ErrorForbidden('This SAML response has already been used');
+	usedLoginResponses.set(responseId, notOnOrAfter);
 };
 
 export const setupSamlAuthentication = () => {

@@ -1,8 +1,11 @@
 import { writeFile, remove } from 'fs-extra';
 import { createTempDir } from '@joplin/lib/testing/test-utils';
 import config from '../config';
-import { getLoginRequest } from './saml';
-import { afterAllTests, beforeAllDb, beforeEachDb } from './testing/testUtils';
+import { checkLoginResponse, getLoginRequest, getServiceProvider, LoginResponseExtract } from './saml';
+import { ErrorBadRequest, ErrorForbidden, ErrorTooManyRequests } from './errors';
+import { afterAllTests, beforeAllDb, beforeEachDb, expectHttpError, koaAppContext, models } from './testing/testUtils';
+import { getApi } from './testing/apiUtils';
+import { countLoginCodeFailure } from './request/limiterLoginCodeFailures';
 import { SamlRelayState } from './types';
 
 describe('saml', () => {
@@ -87,5 +90,54 @@ describe('saml', () => {
 
 		expect(loginRequest.entityEndpoint).toBe('http://localhost:7000/saml/sso');
 		expect(loginRequest.relayState).toBe(relayState);
+	});
+
+	const validLoginResponse = (id: string): LoginResponseExtract => ({
+		audience: 'Joplin',
+		response: { id, destination: 'http://localhost:22300/api/saml' },
+		conditions: { notOnOrAfter: new Date(Date.now() + 5 * 60 * 1000).toISOString() },
+	});
+
+	it('should accept a login response only once', async () => {
+		const serviceProvider = await getServiceProvider();
+		const response = validLoginResponse('response-1');
+
+		expect(() => checkLoginResponse(serviceProvider, response)).not.toThrow();
+		expect(() => checkLoginResponse(serviceProvider, response)).toThrow(ErrorForbidden);
+	});
+
+	it.each([
+		['issued for another application', { audience: 'wiki' }],
+		['sent to another address', { response: { id: 'response-2', destination: 'https://wiki.example.com/saml' } }],
+		['without an expiry time', { conditions: {} }],
+		['without an ID', { response: { destination: 'http://localhost:22300/api/saml' } }],
+	])('should refuse a login response %s', async (_case, change: LoginResponseExtract) => {
+		const serviceProvider = await getServiceProvider();
+		expect(() => checkLoginResponse(serviceProvider, { ...validLoginResponse('response-3'), ...change })).toThrow(ErrorForbidden);
+	});
+
+	it('should stop accepting login codes after too many failures across the server', async () => {
+		process.env.JOPLIN_TEST_ACCOUNT_ACTION_LIMITERS = '1';
+
+		try {
+			const user = await models().user().ssoLogin('saml-user@example.com', 'SAML User', (await koaAppContext()).joplin.services);
+			const newCode = async () => {
+				await models().user().generateSsoCode(user);
+				return user.sso_auth_code;
+			};
+
+			const session = await getApi<{ user_id: string }>('', `login_with_code/${await newCode()}`);
+			expect(session.user_id).toBe(user.id);
+
+			const code = await newCode();
+
+			for (let i = 0; i < 999; i++) await countLoginCodeFailure();
+			await expectHttpError(async () => getApi('', 'login_with_code/000000000'), ErrorBadRequest.httpCode);
+
+			// Even a valid code is refused, as it could otherwise be found by guessing from many addresses
+			await expectHttpError(async () => getApi('', `login_with_code/${code}`), ErrorTooManyRequests.httpCode);
+		} finally {
+			delete process.env.JOPLIN_TEST_ACCOUNT_ACTION_LIMITERS;
+		}
 	});
 });
