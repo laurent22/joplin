@@ -1,7 +1,7 @@
 import { Share, ShareType, ShareUserStatus } from '../../services/database/types';
 import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createItemTree, createFolder, expectHttpError } from '../../utils/testing/testUtils';
 import { postApi, getApi } from '../../utils/testing/apiUtils';
-import { ErrorBadRequest, ErrorForbidden } from '../../utils/errors';
+import { ErrorBadRequest, ErrorForbidden, ErrorNotFound, ErrorTooManyRequests } from '../../utils/errors';
 import { shareWithUserAndAccept } from '../../utils/testing/shareApiUtils';
 import { PaginatedResults } from '../../models/utils/pagination';
 
@@ -98,9 +98,9 @@ describe('shares', () => {
 			folder_id: '000000000000000000000000000000F1',
 		});
 
-		const postRecipient = async (email: string) => {
+		const postRecipient = async (sessionId: string, fields: Record<string, unknown>) => {
 			try {
-				await postApi(session2.id, `shares/${share.id}/users`, { email });
+				await postApi(sessionId, `shares/${share.id}/users`, fields);
 			} catch (error) {
 				// The message carries the whole response, including a stack
 				// trace that refers to this test, so compare the reported
@@ -110,14 +110,38 @@ describe('shares', () => {
 			throw new Error('Should have thrown');
 		};
 
+		const expectSameAnswer = async (sessionId: string, fields: Record<string, unknown>) => {
+			const existing = await postRecipient(sessionId, { ...fields, email: user3.email });
+			const unknown = await postRecipient(sessionId, { ...fields, email: 'does-not-exist@example.com' });
+			expect(existing.httpCode).toBe(ErrorForbidden.httpCode);
+			expect(unknown).toEqual(existing);
+		};
+
 		// A user who does not own the share must get the same answer whether
 		// or not the address exists, otherwise the end point can be used to
 		// find out which addresses are registered.
-		const existing = await postRecipient(user3.email);
-		const unknown = await postRecipient('does-not-exist@example.com');
+		await expectSameAnswer(session2.id, {});
+	});
 
-		expect(existing.httpCode).toBe(ErrorForbidden.httpCode);
-		expect(unknown).toEqual(existing);
+	test('should limit the number of invitations an account can send', async () => {
+		process.env.JOPLIN_TEST_SHARE_INVITATION_LIMITER = '1';
+
+		try {
+			const { session } = await createUserAndSession(1);
+
+			await createFolder(session.id, { id: '000000000000000000000000000000F1', title: 'My Folder' });
+			const share = await postApi<Share>(session.id, 'shares', {
+				folder_id: '000000000000000000000000000000F1',
+			});
+
+			for (let i = 0; i < 50; i++) {
+				await expectHttpError(async () => postApi(session.id, `shares/${share.id}/users`, { email: `unknown-${i}@example.com` }), ErrorNotFound.httpCode);
+			}
+
+			await expectHttpError(async () => postApi(session.id, `shares/${share.id}/users`, { email: 'unknown-50@example.com' }), ErrorTooManyRequests.httpCode);
+		} finally {
+			delete process.env.JOPLIN_TEST_SHARE_INVITATION_LIMITER;
+		}
 	});
 
 	test.each([

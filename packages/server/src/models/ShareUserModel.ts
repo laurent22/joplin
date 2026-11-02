@@ -9,14 +9,22 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 		return 'share_users';
 	}
 
+	// The checks that do not depend on the recipient. They must be done before the recipient's email is looked up, so
+	// that an invitation that cannot be sent anyway does not reveal whether an address has an account.
+	public async checkCanInvite(user: User, resource: ShareUser) {
+		const share = await this.models().share().load(resource.share_id);
+		if (!share || share.owner_id !== user.id) throw new ErrorForbidden('no access to the share object');
+	}
+
 	public async checkIfAllowed(user: User, action: AclAction, resource: ShareUser = null): Promise<void> {
 		if (action === AclAction.Create) {
+			await this.checkCanInvite(user, resource);
+
 			const recipient = await this.models().user().load(resource.user_id, { fields: ['account_type', 'can_receive_folder', 'enabled'] });
 			if (!recipient.enabled) throw new ErrorForbidden('the recipient account is disabled');
 			if (!getCanReceiveFolder(recipient)) throw new ErrorForbidden('The sharing feature is not enabled for the recipient account');
 
 			const share = await this.models().share().load(resource.share_id);
-			if (share.owner_id !== user.id) throw new ErrorForbidden('no access to the share object');
 			if (share.owner_id === resource.user_id) throw new ErrorForbidden('cannot share an item with yourself');
 
 			const existingShareUser = await this.byShareAndUserId(share.id, resource.user_id);
