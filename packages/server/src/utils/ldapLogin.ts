@@ -22,7 +22,8 @@ export default async function ldapLogin(email: string, password: string, user: U
 
 	logger.info(`Starting authentication with Server ${host}`);
 
-	if (password === '') {
+	// A bind with a DN and no password is an unauthenticated bind, which some directories accept
+	if (typeof password !== 'string' || !password) {
 		throw new ErrorForbidden('no password entered');
 	}
 

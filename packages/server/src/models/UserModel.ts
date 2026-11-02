@@ -237,6 +237,13 @@ export default class UserModel extends BaseModel<User> {
 			return null;
 		}
 
+		// Without a password, the directory would receive an unauthenticated bind, which Active Directory accepts by
+		// default, and checking it against a hash would throw for a registered email only
+		if (typeof password !== 'string' || !password) {
+			await checkPassword('', await dummyPasswordHash());
+			return null;
+		}
+
 		const user = await this.loadByEmail(email);
 
 		// The directory decides which of its entries matches an email, and its users may be able to edit theirs, so it

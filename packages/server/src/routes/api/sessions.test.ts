@@ -254,6 +254,20 @@ describe('api/sessions', () => {
 		}
 	});
 
+	test('should refuse a login without a password before trying the directory or the local password', async () => {
+		(ldapLogin as jest.Mock).mockResolvedValue(null);
+		const { user } = await createUserAndSession(1, false);
+		enableLdap();
+		(ldapLogin as jest.Mock).mockClear();
+
+		// The same answer for a registered email and an unknown one
+		for (const email of [user.email, 'unknown@example.com']) {
+			expect((await postSession(email, undefined)).response.status).toBe(403);
+			expect((await postSession(email, '')).response.status).toBe(403);
+		}
+		expect(ldapLogin).not.toHaveBeenCalled();
+	});
+
 	test('should not login if ldapLogin returns ForbiddenError', async () => {
 
 		config().ldap[0] = {
