@@ -10,7 +10,7 @@ import limiterLoginBruteForce from '../../utils/request/limiterLoginBruteForce';
 import { cookieSet } from '../../utils/cookies';
 import { adminDashboardUrl, applicationsConfirmUrl, homeUrl } from '../../utils/urlUtils';
 import { generateRedirectHtml } from '../../utils/saml';
-import { ErrorCode, ErrorForbidden } from '../../utils/errors';
+import { ErrorCode, ErrorForbidden, ErrorTooManyRequests } from '../../utils/errors';
 import { checkNotCrossSiteRequest } from '../../utils/csrf';
 
 type LoginViewContentOptions = {
@@ -126,10 +126,14 @@ router.post('login', async (path: SubPath, ctx: AppContext) => {
 			return internalRedirect(path, ctx, router, 'login', body.fields, { showMfaCodeInput: true });
 		}
 
+		// A blocked account can still be logged in to with its password and an MFA code. The field is shown for any
+		// blocked account, since showing it only for those with MFA would tell which ones have it.
+		const isBlocked = error instanceof ErrorTooManyRequests;
+
 		return makeView(
 			error,
 			{ email: body.fields.email, password: body.fields.password, applicationAuthId: body.fields.applicationAuthId },
-			{ showMfaCodeInput: Boolean(body.fields.mfaCode), showRecoveryCodeInput: Boolean(body.fields.recoveryCode) },
+			{ showMfaCodeInput: Boolean(body.fields.mfaCode) || (isBlocked && !body.fields.recoveryCode), showRecoveryCodeInput: Boolean(body.fields.recoveryCode) },
 		);
 	}
 });
