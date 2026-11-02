@@ -246,6 +246,56 @@ describe('shares.link', () => {
 		await expectHttpError(async () => getShareContent(share.id), ErrorNotFound.httpCode);
 	});
 
+	test('should not list items from another share in a published notebook', async () => {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+
+		const { share: otherShare } = await shareFolderWithUser(session2.id, session1.id, '000000000000000000000000000000F2', [
+			{ id: '000000000000000000000000000000F2', children: [] },
+		]);
+
+		await createFolder(session1.id, { id: '000000000000000000000000000000F1', title: 'My Notebook' });
+		await createNote(session1.id, { id: '00000000000000000000000000000001', parent_id: '000000000000000000000000000000F1', title: 'Owner note' });
+
+		const share = await postApi<Share>(session1.id, 'shares', {
+			folder_id: '000000000000000000000000000000F1',
+			type: ShareType.PublishedFolder,
+		});
+
+		await createNote(session2.id, { id: '00000000000000000000000000000009', parent_id: '000000000000000000000000000000F1', share_id: otherShare.id, title: 'Planted note' });
+		await models().share().updateSharedItems3();
+		expect(await models().item().loadByJopId(user1.id, '00000000000000000000000000000009')).toBeTruthy();
+
+		const bodyHtml = await getShareContent(share.id) as string;
+		expect(bodyHtml).toContain('Owner note');
+		expect(bodyHtml).not.toContain('Planted note');
+		expect(await getShareContent(share.id, { note_id: '00000000000000000000000000000009' })).not.toContain('Planted note');
+	});
+
+	test('should list items added by other members when the published notebook is shared', async () => {
+		const { session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+
+		const { share: folderShare } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [{ id: '00000000000000000000000000000001', title: 'Owner note' }],
+			},
+		]);
+
+		const share = await postApi<Share>(session1.id, 'shares', {
+			folder_id: '000000000000000000000000000000F1',
+			type: ShareType.PublishedFolder,
+		});
+
+		await createNote(session2.id, { id: '00000000000000000000000000000002', parent_id: '000000000000000000000000000000F1', share_id: folderShare.id, title: 'Member note' });
+		await models().share().updateSharedItems3();
+
+		const bodyHtml = await getShareContent(share.id) as string;
+		expect(bodyHtml).toContain('Owner note');
+		expect(bodyHtml).toContain('Member note');
+	});
+
 	test('should not let another account add links to a published note by uploading an item with a linked id', async () => {
 		const { session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);

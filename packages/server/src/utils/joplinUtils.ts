@@ -350,16 +350,19 @@ const maxFolderTreeTitleLength = 200;
 const folderTreeCheckInterval = 10 * 1000;
 const maxFolderTreeItems = 10000;
 
-const loadFolderTreeMetadata = async (ownerId: Uuid, rootFolderId: string) => {
-	const visitedFolderIds = new Set([rootFolderId]);
+const loadFolderTreeMetadata = async (ownerId: Uuid, rootFolderItem: Item) => {
+	const visitedFolderIds = new Set([rootFolderItem.jop_id]);
 	let itemCount = 0;
 
 	const loadChildren = async (parentId: string): Promise<FolderTreeMetadata[]> => {
-		const children = await models_.item().loadByJopParentId(ownerId, parentId, { fields: ['id', 'jop_id', 'jop_type', 'updated_time'] });
+		const children = await models_.item().loadByJopParentId(ownerId, parentId, { fields: ['id', 'jop_id', 'jop_type', 'jop_share_id', 'updated_time'] });
 		const output: FolderTreeMetadata[] = [];
 
 		for (const child of children) {
 			if (child.jop_type !== ModelType.Folder && child.jop_type !== ModelType.Note) continue;
+			// The parent id is set by whoever uploads the item, so someone sharing another notebook with the publisher
+			// could otherwise add items to the published notebook
+			if ((child.jop_share_id || '') !== (rootFolderItem.jop_share_id || '')) continue;
 			if (itemCount >= maxFolderTreeItems) break;
 			itemCount++;
 
@@ -378,7 +381,7 @@ const loadFolderTreeMetadata = async (ownerId: Uuid, rootFolderId: string) => {
 		return output;
 	};
 
-	return loadChildren(rootFolderId);
+	return loadChildren(rootFolderItem.jop_id);
 };
 
 const folderTreeFingerprint = (rootFolderItem: Item, nodes: FolderTreeMetadata[]) => {
@@ -444,10 +447,10 @@ async function buildFolderTree(share: Share, folderId: string, activeNoteId = ''
 	let tree = folderTreeCache.get(share.id);
 
 	if (!tree || Date.now() - tree.checkedTime > folderTreeCheckInterval) {
-		const rootFolderItem = await models_.item().loadByJopId(share.owner_id, folderId, { fields: ['id', 'jop_id', 'updated_time'] });
+		const rootFolderItem = await models_.item().loadByJopId(share.owner_id, folderId, { fields: ['id', 'jop_id', 'jop_share_id', 'updated_time'] });
 		if (!rootFolderItem) throw new ErrorNotFound(`No such folder: ${folderId}`);
 
-		const nodes = await loadFolderTreeMetadata(share.owner_id, folderId);
+		const nodes = await loadFolderTreeMetadata(share.owner_id, rootFolderItem);
 		const fingerprint = folderTreeFingerprint(rootFolderItem, nodes);
 
 		if (tree && tree.fingerprint === fingerprint) {
