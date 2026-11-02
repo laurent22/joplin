@@ -165,6 +165,25 @@ describe('SessionModel', () => {
 		}
 	});
 
+	test('should count a repeated MFA code each time, as it is a new guess once the code has changed', async () => {
+		process.env.JOPLIN_TEST_ACCOUNT_LIMITER = '1';
+
+		const { user, password } = await createUserAndSession(1);
+		await models().user().save({ id: user.id, totp_secret: 'mfa-is-enabled' });
+		const services = (await koaAppContext()).joplin.services;
+		const isValidMfaCode = jest.spyOn(crypto, 'isValidMFACode').mockImplementation((_secret, code) => code === '123456');
+
+		try {
+			for (let i = 0; i < 10; i++) {
+				await expectThrow(async () => models().session().authenticate(user.email, password, services, '000000'));
+			}
+
+			await expectHttpError(async () => models().session().authenticate(user.email, password, services, '123456'), ErrorTooManyRequests.httpCode);
+		} finally {
+			isValidMfaCode.mockRestore();
+		}
+	});
+
 	test('should not block other accounts', async () => {
 		process.env.JOPLIN_TEST_ACCOUNT_LIMITER = '1';
 

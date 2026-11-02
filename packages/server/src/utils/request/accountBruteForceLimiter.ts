@@ -11,6 +11,8 @@ interface RunOptions {
 
 interface FailureOptions {
 	isSecondFactor?: boolean;
+	// For a code that changes over time, such as a TOTP code, a repeated attempt is a new guess
+	countRepeats?: boolean;
 }
 
 export interface AccountBruteForceLimiter {
@@ -119,9 +121,11 @@ export default (maxFailures: number, durationSeconds: number, errorMessage: stri
 			if (isTesting()) return;
 
 			const normalisedKey = normalise(key);
-			const hash = attemptHash(normalisedKey, attempt || '');
-			if (await seenAttempts.get(hash)) return;
-			await seenAttempts.set(hash, 1, durationSeconds);
+			if (!options.countRepeats) {
+				const hash = attemptHash(normalisedKey, attempt || '');
+				if (await seenAttempts.get(hash)) return;
+				await seenAttempts.set(hash, 1, durationSeconds);
+			}
 
 			const result = await consume(limiter, normalisedKey);
 			if (result.remainingPoints === 0 && result.consumedPoints === maxFailures) logger.warn(`${errorMessage}: ${normalisedKey} is blocked for ${Math.ceil(result.msBeforeNext / 1000)} seconds`);

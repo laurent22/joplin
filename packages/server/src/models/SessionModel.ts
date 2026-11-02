@@ -77,7 +77,7 @@ export default class SessionModel extends BaseModel<Session> {
 
 			if (mfaCode) {
 				if (!(await isValidMFACode(user.totp_secret, mfaCode))) {
-					await limiterLoginAccountBruteForce.onFailure(email, `mfa:${mfaCode}`, { isSecondFactor: true });
+					await limiterLoginAccountBruteForce.onFailure(email, `mfa:${mfaCode}`, { isSecondFactor: true, countRepeats: true });
 					throw blockedError || new ErrorForbidden('Invalid authentication code', { details: { mfaCode } });
 				}
 			} else {
