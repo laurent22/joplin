@@ -7,6 +7,7 @@ import { _ } from '@joplin/lib/locale';
 import { ImportModuleOutputFormat, ImportOptions } from '@joplin/lib/services/interop/types';
 import { unique } from '@joplin/lib/array';
 import Folder from '@joplin/lib/models/Folder';
+import { isRecoverableError } from '@joplin/lib/import-enex';
 
 class Command extends BaseCommand {
 	public override usage() {
@@ -60,6 +61,11 @@ class Command extends BaseCommand {
 		};
 
 		importOptions.onError = error => {
+			if (isRecoverableError(error)) {
+				this.logger().warn(error);
+				return;
+			}
+
 			const s = error.stack ? error.stack : error.toString();
 			this.stdout(s);
 		};
