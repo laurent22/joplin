@@ -318,6 +318,25 @@ describe('shares.folder', () => {
 		expect(rootFolder.title).toBe('update from session 2');
 	});
 
+	test('should only let the share owner move the root folder into another folder', async () => {
+		const { session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+
+		const { share, item: rootFolderItem } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [],
+			},
+		]);
+
+		await createFolder(session2.id, { id: '000000000000000000000000000000F2', title: 'Recipient folder' });
+		const rootFolder = await models().item().loadAsJoplinItem<FolderEntity>(rootFolderItem.id);
+
+		// Moving it would make the owner's client unshare it
+		await expectHttpError(async () => updateFolder(session2.id, { ...rootFolder, parent_id: '000000000000000000000000000000F2', share_id: share.id }), ErrorForbidden.httpCode, ErrorCode.IsReadOnly);
+		expect((await models().item().loadAsJoplinItem<FolderEntity>(rootFolderItem.id)).parent_id).toBe('');
+	});
+
 	test('should not let a recipient take ownership of the root folder by uploading it without a share_id', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
