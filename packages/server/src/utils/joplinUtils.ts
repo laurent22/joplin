@@ -301,6 +301,10 @@ async function renderNote(
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- markupToHtml.render's RenderOptions is loosely typed in @joplin/renderer; tightening would require updating the renderer package
 	const renderOptions: any = {
+		// Not used by the renderer, but part of the key of its own cache, which would otherwise return the HTML of a note
+		// rendered for another share, with links to that share
+		shareId: share.id,
+
 		resources: resourceInfos,
 
 		itemIdToUrl: (itemId: Uuid) => {
@@ -387,6 +391,11 @@ interface FolderTreeItemInfo {
 	jopUpdatedTime: number;
 }
 
+interface FolderTreeRefreshResult {
+	tree?: CachedFolderTree;
+	error?: Error;
+}
+
 interface CachedFolderTree {
 	fingerprint: string;
 	checkedTime: number;
@@ -402,13 +411,16 @@ interface CachedFolderTree {
 const folderTreeCache = new Map<string, CachedFolderTree>();
 let folderTreeCacheLength = 0;
 const folderTreeItemInfos = new Map<Uuid, FolderTreeItemInfo>();
-const folderTreeRefreshes = new Map<string, Promise<CachedFolderTree>>();
+const folderTreeRefreshes = new Map<string, Promise<FolderTreeRefreshResult>>();
+const runningFolderTreeRefreshesByOwner = new Map<Uuid, number>();
 let runningFolderTreeRefreshes = 0;
-const waitingFolderTreeRefreshes: (()=> void)[] = [];
+const waitingFolderTreeRefreshes: { ownerId: Uuid; start: ()=> void }[] = [];
 const maxFolderTreeCacheLength = 50_000_000;
 const maxCachedFolderTrees = 1000;
 const maxCachedFolderTreeItemInfos = 100_000;
 const maxRunningFolderTreeRefreshes = 4;
+const maxRunningFolderTreeRefreshesPerOwner = 1;
+const maxFolderTreeStaleness = 60 * 1000;
 const maxFolderTreeTitleLength = 200;
 const folderTreeCheckInterval = 10 * 1000;
 const maxFolderTreeItems = 10000;
@@ -547,60 +559,100 @@ const refreshFolderTree = async (share: Share, folderId: string, tree: CachedFol
 	return buildCachedFolderTree(share, rootFolderItem, nodes, fingerprint, checkedTime);
 };
 
-const withFolderTreeRefreshSlot = async <T>(refresh: ()=> Promise<T>) => {
-	if (runningFolderTreeRefreshes < maxRunningFolderTreeRefreshes) {
-		runningFolderTreeRefreshes++;
+const canStartFolderTreeRefresh = (ownerId: Uuid) => {
+	return runningFolderTreeRefreshes < maxRunningFolderTreeRefreshes && (runningFolderTreeRefreshesByOwner.get(ownerId) || 0) < maxRunningFolderTreeRefreshesPerOwner;
+};
+
+const changeRunningFolderTreeRefreshes = (ownerId: Uuid, change: number) => {
+	runningFolderTreeRefreshes += change;
+	const ownerCount = (runningFolderTreeRefreshesByOwner.get(ownerId) || 0) + change;
+	if (ownerCount) {
+		runningFolderTreeRefreshesByOwner.set(ownerId, ownerCount);
+	} else {
+		runningFolderTreeRefreshesByOwner.delete(ownerId);
+	}
+};
+
+// Only a few refreshes run at a time, and only one per owner, so that one account with many large or deeply nested
+// published notebooks cannot hold up those of everyone else
+export const withFolderTreeRefreshSlot = async <T>(ownerId: Uuid, refresh: ()=> Promise<T>) => {
+	if (canStartFolderTreeRefresh(ownerId)) {
+		changeRunningFolderTreeRefreshes(ownerId, 1);
 	} else {
 		await new Promise<void>(resolve => {
-			waitingFolderTreeRefreshes.push(resolve);
+			waitingFolderTreeRefreshes.push({ ownerId, start: resolve });
 		});
 	}
 
 	try {
 		return await refresh();
 	} finally {
-		const next = waitingFolderTreeRefreshes.shift();
-		if (next) {
-			next();
-		} else {
-			runningFolderTreeRefreshes--;
+		changeRunningFolderTreeRefreshes(ownerId, -1);
+
+		for (let i = 0; i < waitingFolderTreeRefreshes.length; i++) {
+			const waiting = waitingFolderTreeRefreshes[i];
+			if (!canStartFolderTreeRefresh(waiting.ownerId)) continue;
+			waitingFolderTreeRefreshes.splice(i, 1);
+			i--;
+			changeRunningFolderTreeRefreshes(waiting.ownerId, 1);
+			waiting.start();
 		}
 	}
+};
+
+const cacheFolderTree = (shareId: string, tree: CachedFolderTree) => {
+	const previous = folderTreeCache.get(shareId);
+	if (previous) {
+		folderTreeCache.delete(shareId);
+		folderTreeCacheLength -= previous.sourceJson.length;
+	}
+	folderTreeCache.set(shareId, tree);
+	folderTreeCacheLength += tree.sourceJson.length;
+
+	for (const [oldestShareId, oldestTree] of folderTreeCache) {
+		const isFull = folderTreeCacheLength > maxFolderTreeCacheLength || folderTreeCache.size > maxCachedFolderTrees;
+		if (!isFull || oldestShareId === shareId) break;
+		folderTreeCache.delete(oldestShareId);
+		folderTreeCacheLength -= oldestTree.sourceJson.length;
+	}
+};
+
+// Never rejects, so that a refresh that nobody waits for does not leave an unhandled rejection
+const startFolderTreeRefresh = (share: Share, folderId: string, previousTree: CachedFolderTree | undefined) => {
+	let refresh = folderTreeRefreshes.get(share.id);
+	if (refresh) return refresh;
+
+	refresh = (async () => {
+		try {
+			const tree = await withFolderTreeRefreshSlot(share.owner_id, () => refreshFolderTree(share, folderId, previousTree));
+			cacheFolderTree(share.id, tree);
+			return { tree };
+		} catch (error) {
+			return { error };
+		} finally {
+			folderTreeRefreshes.delete(share.id);
+		}
+	})();
+	folderTreeRefreshes.set(share.id, refresh);
+	return refresh;
 };
 
 async function buildFolderTree(share: Share, folderId: string, activeNoteId = ''): Promise<RenderedFolderTree> {
 	let tree = folderTreeCache.get(share.id);
 
 	if (!tree || Date.now() - tree.checkedTime > folderTreeCheckInterval) {
-		let refresh = folderTreeRefreshes.get(share.id);
-		if (!refresh) {
-			const previousTree = tree;
-			refresh = (async () => {
-				try {
-					return await withFolderTreeRefreshSlot(() => refreshFolderTree(share, folderId, previousTree));
-				} finally {
-					folderTreeRefreshes.delete(share.id);
-				}
-			})();
-			folderTreeRefreshes.set(share.id, refresh);
+		const refresh = startFolderTreeRefresh(share, folderId, tree);
+
+		// A cached tree is served while it is refreshed, unless it is old enough that serving it would keep showing
+		// notes that are no longer published
+		if (!tree || Date.now() - tree.checkedTime > maxFolderTreeStaleness) {
+			const result = await refresh;
+			if (result.error) throw result.error;
+			tree = result.tree;
 		}
-		tree = await refresh;
 	}
 
-	const previous = folderTreeCache.get(share.id);
-	if (previous) {
-		folderTreeCache.delete(share.id);
-		folderTreeCacheLength -= previous.sourceJson.length;
-	}
-	folderTreeCache.set(share.id, tree);
-	folderTreeCacheLength += tree.sourceJson.length;
-
-	for (const [shareId, oldestTree] of folderTreeCache) {
-		const isFull = folderTreeCacheLength > maxFolderTreeCacheLength || folderTreeCache.size > maxCachedFolderTrees;
-		if (!isFull || shareId === share.id) break;
-		folderTreeCache.delete(shareId);
-		folderTreeCacheLength -= oldestTree.sourceJson.length;
-	}
+	cacheFolderTree(share.id, tree);
 
 	const activeKey = activeNoteId && tree.allowedNoteIds.has(activeNoteId) ? activeNoteId : '';
 

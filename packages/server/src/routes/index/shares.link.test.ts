@@ -6,7 +6,7 @@ import { postApi } from '../../utils/testing/apiUtils';
 import { testImageBuffer } from '../../utils/testing/fileApiUtils';
 import { shareFolderWithUser } from '../../utils/testing/shareApiUtils';
 import { beforeAllDb, afterAllTests, parseHtml, beforeEachDb, createUserAndSession, koaAppContext, checkContextError, expectNotThrow, createNote, createItem, models, expectHttpError, createResource, createFolder, updateNote, updateItem } from '../../utils/testing/testUtils';
-import { makeFolderSerializedBody } from '../../utils/testing/serializedItems';
+import { makeFolderSerializedBody, makeNoteSerializedBody } from '../../utils/testing/serializedItems';
 import { MarkupToHtml } from '@joplin/renderer';
 
 const resourceSize = 2720;
@@ -565,6 +565,55 @@ describe('shares.link', () => {
 		} finally {
 			loadByJopParentId.mockRestore();
 		}
+	});
+
+	test('should serve a cached published folder while it is being refreshed', async () => {
+		const { session } = await createUserAndSession();
+
+		await createFolder(session.id, { id: '000000000000000000000000000000F1', title: 'My Notebook' });
+		await createNote(session.id, { id: '00000000000000000000000000000001', parent_id: '000000000000000000000000000000F1', title: 'First title' });
+
+		const share = await postApi<Share>(session.id, 'shares', {
+			folder_id: '000000000000000000000000000000F1',
+			type: ShareType.PublishedFolder,
+		});
+
+		expect(await getShareContent(share.id)).toContain('First title');
+
+		// The refresh is held up, as by other refreshes that are slow
+		let releaseRefresh: ()=> void = null;
+		const refreshBlocked = new Promise<void>(resolve => {
+			releaseRefresh = resolve;
+		});
+		const loadByJopParentId = ItemModel.prototype.loadByJopParentId;
+		const loadChildren = jest.spyOn(ItemModel.prototype, 'loadByJopParentId').mockImplementation(async function(this: ItemModel, ...args: Parameters<ItemModel['loadByJopParentId']>) {
+			await refreshBlocked;
+			return loadByJopParentId.apply(this, args);
+		});
+		const now = jest.spyOn(Date, 'now').mockReturnValue(Date.now() + 30 * 1000);
+
+		try {
+			expect(await getShareContent(share.id)).toContain('First title');
+		} finally {
+			releaseRefresh();
+			loadChildren.mockRestore();
+			now.mockRestore();
+		}
+	});
+
+	test('should link to the attachments of an HTML note through the share it is viewed from', async () => {
+		const { session } = await createUserAndSession();
+
+		await createFolder(session.id, { id: '000000000000000000000000000000F1', title: 'My Notebook' });
+		const resource = await createResource(session.id, { id: '000000000000000000000000000000E1', mime: 'image/png', file_extension: 'png' }, 'test');
+		const noteBody = makeNoteSerializedBody({ id: '00000000000000000000000000000001', parent_id: '000000000000000000000000000000F1', body: `<img src=":/${resource.jop_id}"/>` }).replace('markup_language: 1', 'markup_language: 2');
+		await createItem(session.id, 'root:/00000000000000000000000000000001.md:', noteBody);
+
+		const folderShare = await postApi<Share>(session.id, 'shares', { folder_id: '000000000000000000000000000000F1', type: ShareType.PublishedFolder });
+		const noteShare = await postApi<Share>(session.id, 'shares', { note_id: '00000000000000000000000000000001', type: ShareType.Note });
+
+		expect(await getShareContent(folderShare.id, { note_id: '00000000000000000000000000000001' })).toContain(`shares/${folderShare.id}?resource_id=${resource.jop_id}`);
+		expect(await getShareContent(noteShare.id)).toContain(`shares/${noteShare.id}?resource_id=${resource.jop_id}`);
 	});
 
 	test('should shorten long note titles in the published folder tree', async () => {
