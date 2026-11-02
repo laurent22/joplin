@@ -1,7 +1,7 @@
 import BaseModel from './BaseModel';
 import { User, Session, Uuid } from '../services/database/types';
 import { uuidgen } from '../utils/uuid';
-import { ErrorCode, ErrorForbidden } from '../utils/errors';
+import { ErrorCode, ErrorForbidden, ErrorTooManyRequests } from '../utils/errors';
 import { Hour } from '../utils/time';
 import { isValidMFACode } from '../utils/crypto';
 import { getIsMFAEnabled } from './utils/user';
@@ -50,35 +50,47 @@ export default class SessionModel extends BaseModel<Session> {
 		// Counted per account rather than per IP: the request-rate limiter on
 		// the routes only sees one address at a time, so it cannot stop an
 		// attacker who either spreads attempts across addresses or paces them
-		// below the limit.
-		return limiterLoginAccountBruteForce.run(email, () => this.checkUserCredentials(email, password, services, mfaCode, recoveryCode));
+		// below the limit. Anyone who knows the email can block the account
+		// this way, so an attempt with an MFA or recovery code still goes
+		// through, and only succeeds with the password and a valid code.
+		return limiterLoginAccountBruteForce.run(
+			email,
+			blockedError => this.checkUserCredentials(email, password, services, mfaCode, recoveryCode, blockedError),
+			{ canBypassBlock: !!(mfaCode || recoveryCode) },
+		);
 	}
 
-	private async checkUserCredentials(email: string, password: string, services: Services, mfaCode?: string, recoveryCode?: string) {
+	// When `blockedError` is set, the account is blocked, and any failure is reported with it, so that an attempt on a
+	// blocked account does not tell whether the password was right.
+	private async checkUserCredentials(email: string, password: string, services: Services, mfaCode: string, recoveryCode: string, blockedError: ErrorTooManyRequests | null) {
 		// Only rejected credentials are counted: a database or LDAP error is not a guess, and neither is a correct
 		// password sent without an MFA code (the API never sends one)
 		const user = await this.models().user().login(email, password, services);
 		if (!user) {
 			await limiterLoginAccountBruteForce.onFailure(email, `password:${password}`);
-			throw new ErrorForbidden('Invalid email or password', { details: { email } });
+			throw blockedError || new ErrorForbidden('Invalid email or password', { details: { email } });
 		}
 
 		if (getIsMFAEnabled(user)) {
 			if (!mfaCode && !recoveryCode) throw new ErrorForbidden('Invalid authentication code', { details: { mfaCode }, code: ErrorCode.MfaCodeRequired });
+			if (blockedError && !(await limiterLoginAccountBruteForce.canTrySecondFactor(email))) throw blockedError;
 
 			if (mfaCode) {
 				if (!(await isValidMFACode(user.totp_secret, mfaCode))) {
-					await limiterLoginAccountBruteForce.onFailure(email, `mfa:${mfaCode}`);
-					throw new ErrorForbidden('Invalid authentication code', { details: { mfaCode } });
+					await limiterLoginAccountBruteForce.onFailure(email, `mfa:${mfaCode}`, { isSecondFactor: true });
+					throw blockedError || new ErrorForbidden('Invalid authentication code', { details: { mfaCode } });
 				}
 			} else {
 				try {
 					await this.models().recoveryCode().verify(user.id, recoveryCode);
 				} catch (error) {
-					if (error instanceof ErrorForbidden) await limiterLoginAccountBruteForce.onFailure(email, `recovery:${recoveryCode}`);
-					throw error;
+					if (!(error instanceof ErrorForbidden)) throw error;
+					await limiterLoginAccountBruteForce.onFailure(email, `recovery:${recoveryCode}`, { isSecondFactor: true });
+					throw blockedError || error;
 				}
 			}
+		} else if (blockedError) {
+			throw blockedError;
 		}
 
 		await limiterLoginAccountBruteForce.onSuccess(email);

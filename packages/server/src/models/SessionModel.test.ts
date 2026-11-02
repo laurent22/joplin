@@ -3,6 +3,7 @@ import { defaultSessionTtl } from './SessionModel';
 import { Services } from '../services/types';
 import { ErrorForbidden, ErrorTooManyRequests } from '../utils/errors';
 import { limiterLoginAccountBruteForce } from '../utils/request/limiterAccountBruteForce';
+import * as crypto from '../utils/crypto';
 
 // Each attempt uses a different password, as the same rejected password is only counted once
 const failLogin = async (email: string, services: Services, times: number, passwordPrefix = 'wrong-password') => {
@@ -110,12 +111,57 @@ describe('SessionModel', () => {
 		const url = await models().user().generateLinkForPasswordReset(user.id);
 		await models().user().resetPassword(url.split('?token=')[1], { password: 'correct-horse-battery-staple', password2: 'correct-horse-battery-staple' });
 
-		// With MFA the account stays blocked, so the login is refused as rate limiting before the code is checked
-		const login = async () => models().session().authenticate(user.email, 'correct-horse-battery-staple', services, withMfa ? '123456' : '');
+		// With MFA the account stays blocked, so the login is refused as rate limiting rather than asking for the code
+		const login = async () => models().session().authenticate(user.email, 'correct-horse-battery-staple', services, '');
 		if (withMfa) {
 			await expectHttpError(login, ErrorTooManyRequests.httpCode);
 		} else {
 			expect(await login()).toBeTruthy();
+		}
+	});
+
+	test('should let the owner of a blocked account log in with their password and a valid MFA code', async () => {
+		process.env.JOPLIN_TEST_ACCOUNT_LIMITER = '1';
+
+		const { user, password } = await createUserAndSession(1);
+		const { user: userWithoutMfa, password: passwordWithoutMfa } = await createUserAndSession(2);
+		await models().user().save({ id: user.id, totp_secret: 'mfa-is-enabled' });
+		const services = (await koaAppContext()).joplin.services;
+		const isValidMfaCode = jest.spyOn(crypto, 'isValidMFACode').mockImplementation((_secret, code) => code === '123456');
+
+		try {
+			// Blocked by someone who only knows the email addresses
+			await failLogin(user.email, services, 10);
+			await failLogin(userWithoutMfa.email, services, 10);
+
+			// While blocked, any failure is reported as rate limiting, so that it does not tell whether the password was
+			// right, and a code is no help without MFA
+			await expectHttpError(async () => models().session().authenticate(user.email, 'wrong-password', services, '123456'), ErrorTooManyRequests.httpCode);
+			await expectHttpError(async () => models().session().authenticate(user.email, password, services, '000000'), ErrorTooManyRequests.httpCode);
+			await expectHttpError(async () => models().session().authenticate(userWithoutMfa.email, passwordWithoutMfa, services, '123456'), ErrorTooManyRequests.httpCode);
+
+			expect(await models().session().authenticate(user.email, password, services, '123456')).toBeTruthy();
+		} finally {
+			isValidMfaCode.mockRestore();
+		}
+	});
+
+	test('should still limit MFA codes from someone who knows the password', async () => {
+		process.env.JOPLIN_TEST_ACCOUNT_LIMITER = '1';
+
+		const { user, password } = await createUserAndSession(1);
+		await models().user().save({ id: user.id, totp_secret: 'mfa-is-enabled' });
+		const services = (await koaAppContext()).joplin.services;
+		const isValidMfaCode = jest.spyOn(crypto, 'isValidMFACode').mockImplementation((_secret, code) => code === '123456');
+
+		try {
+			for (let i = 0; i < 10; i++) {
+				await expectThrow(async () => models().session().authenticate(user.email, password, services, `00000${i}`));
+			}
+
+			await expectHttpError(async () => models().session().authenticate(user.email, password, services, '123456'), ErrorTooManyRequests.httpCode);
+		} finally {
+			isValidMfaCode.mockRestore();
 		}
 	});
 

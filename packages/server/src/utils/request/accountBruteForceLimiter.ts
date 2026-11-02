@@ -5,13 +5,26 @@ import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('accountBruteForceLimiter');
 
+interface RunOptions {
+	canBypassBlock?: boolean;
+}
+
+interface FailureOptions {
+	isSecondFactor?: boolean;
+}
+
 export interface AccountBruteForceLimiter {
 	// Refuses if the account is blocked, otherwise runs `attempt`. Attempts on one account run one at a time, so that
-	// concurrent guesses cannot all get past the check before the first of them is counted.
-	run: <T>(key: string, attempt: ()=> Promise<T>)=> Promise<T>;
+	// concurrent guesses cannot all get past the check before the first of them is counted. With `canBypassBlock`,
+	// `attempt` also runs when the account is blocked, and receives the error to throw unless it fully succeeds.
+	run: <T>(key: string, attempt: (blockedError: ErrorTooManyRequests | null)=> Promise<T>, options?: RunOptions)=> Promise<T>;
 	// `attempt` is the rejected credential. The same one is only counted once per window, since repeating it is what a
-	// device with an outdated password does, while guessing needs different ones.
-	onFailure: (key: string, attempt: string)=> Promise<void>;
+	// device with an outdated password does, while guessing needs different ones. A rejected second factor, such as an
+	// MFA code, is also counted separately, see canTrySecondFactor().
+	onFailure: (key: string, attempt: string, options?: FailureOptions)=> Promise<void>;
+	// Whether a second factor may still be tried while the account is blocked. Only someone who knows the password can
+	// use up this count, so a stranger who blocks the account cannot stop the owner from logging in with MFA.
+	canTrySecondFactor: (key: string)=> Promise<boolean>;
 	onSuccess: (key: string)=> Promise<void>;
 	// For tests only - the counts are in memory and otherwise persist for the
 	// lifetime of the process.
@@ -28,6 +41,11 @@ export interface AccountBruteForceLimiter {
 // and a successful login clears the count.
 export default (maxFailures: number, durationSeconds: number, errorMessage: string): AccountBruteForceLimiter => {
 	const limiter = new RateLimiterMemory({
+		points: maxFailures,
+		duration: durationSeconds,
+	});
+
+	const secondFactorLimiter = new RateLimiterMemory({
 		points: maxFailures,
 		duration: durationSeconds,
 	});
@@ -50,19 +68,33 @@ export default (maxFailures: number, durationSeconds: number, errorMessage: stri
 		return output;
 	};
 
-	const check = async (normalisedKey: string) => {
-		if (isTesting()) return;
+	const blockedError = async (normalisedKey: string) => {
+		if (isTesting()) return null;
 
 		const result = await limiter.get(normalisedKey);
 		if (result && result.remainingPoints <= 0) {
-			throw new ErrorTooManyRequests(`${errorMessage}. Please try again in ${Math.ceil(result.msBeforeNext / 1000)} seconds.`, result.msBeforeNext);
+			return new ErrorTooManyRequests(`${errorMessage}. Please try again in ${Math.ceil(result.msBeforeNext / 1000)} seconds.`, result.msBeforeNext);
+		}
+		return null;
+	};
+
+	const consume = async (rateLimiter: RateLimiterMemory, normalisedKey: string) => {
+		try {
+			return await rateLimiter.consume(normalisedKey);
+		} catch (error) {
+			// Consuming the last point rejects, but the caller is already
+			// reporting an authentication failure, so the block applies to
+			// the next attempt rather than this one.
+			const result = error as RateLimiterRes;
+			if (result.msBeforeNext === undefined) throw error;
+			return result;
 		}
 	};
 
 	const pendingAttempts = new Map<string, Promise<unknown>>();
 
 	return {
-		run: async <T>(key: string, attempt: ()=> Promise<T>) => {
+		run: async <T>(key: string, attempt: (blockedError: ErrorTooManyRequests | null)=> Promise<T>, options: RunOptions = {}) => {
 			const normalisedKey = normalise(key);
 
 			const previous = pendingAttempts.get(normalisedKey);
@@ -70,8 +102,9 @@ export default (maxFailures: number, durationSeconds: number, errorMessage: stri
 				try {
 					await previous;
 				} catch { /* reported to its own caller */ }
-				await check(normalisedKey);
-				return attempt();
+				const blocked = await blockedError(normalisedKey);
+				if (blocked && !options.canBypassBlock) throw blocked;
+				return attempt(blocked);
 			})();
 			pendingAttempts.set(normalisedKey, current);
 
@@ -82,7 +115,7 @@ export default (maxFailures: number, durationSeconds: number, errorMessage: stri
 			}
 		},
 
-		onFailure: async (key: string, attempt: string) => {
+		onFailure: async (key: string, attempt: string, options: FailureOptions = {}) => {
 			if (isTesting()) return;
 
 			const normalisedKey = normalise(key);
@@ -90,25 +123,29 @@ export default (maxFailures: number, durationSeconds: number, errorMessage: stri
 			if (await seenAttempts.get(hash)) return;
 			await seenAttempts.set(hash, 1, durationSeconds);
 
-			try {
-				const result = await limiter.consume(normalisedKey);
-				if (result.remainingPoints <= 0) logger.warn(`${errorMessage}: ${normalisedKey} is blocked for ${Math.ceil(result.msBeforeNext / 1000)} seconds`);
-			} catch (error) {
-				// Consuming the last point rejects, but the caller is already
-				// reporting an authentication failure, so the block applies to
-				// the next attempt rather than this one.
-				const result = error as RateLimiterRes;
-				if (result.msBeforeNext === undefined) throw error;
-			}
+			const result = await consume(limiter, normalisedKey);
+			if (result.remainingPoints === 0 && result.consumedPoints === maxFailures) logger.warn(`${errorMessage}: ${normalisedKey} is blocked for ${Math.ceil(result.msBeforeNext / 1000)} seconds`);
+			if (options.isSecondFactor) await consume(secondFactorLimiter, normalisedKey);
+		},
+
+		canTrySecondFactor: async (key: string) => {
+			if (isTesting()) return true;
+			const result = await secondFactorLimiter.get(normalise(key));
+			return !result || result.remainingPoints > 0;
 		},
 
 		onSuccess: async (key: string) => {
 			if (isTesting()) return;
-			await limiter.delete(normalise(key));
+			const normalisedKey = normalise(key);
+			await limiter.delete(normalisedKey);
+			await secondFactorLimiter.delete(normalisedKey);
 		},
 
 		reset: async () => {
-			for (const key of trackedKeys) await limiter.delete(key);
+			for (const key of trackedKeys) {
+				await limiter.delete(key);
+				await secondFactorLimiter.delete(key);
+			}
 			trackedKeys.clear();
 			seenAttempts = newSeenAttempts();
 		},
