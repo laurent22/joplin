@@ -262,7 +262,7 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 		if (fields.post_button) {
 			const userToSave: User = models.user().fromApiInput(user);
 			await models.user().checkIfAllowed(owner, AclAction.Update, userToSave);
-			const newEmail = userToSave.email && userToSave.email !== owner.email ? userToSave.email : '';
+			const newEmail = userToSave.email ? await models.user().newEmailToConfirm(owner, userToSave.email) : '';
 			if (userToSave.password || newEmail) await models.user().checkCurrentPassword(owner.id, fields.current_password, ctx.joplin.services);
 
 			if (newEmail) delete userToSave.email;

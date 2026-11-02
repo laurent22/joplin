@@ -87,7 +87,7 @@ router.patch('api/users/:id', async (path: SubPath, ctx: AppContext) => {
 	// address, as they would from the profile page. Otherwise the account
 	// could be moved to an attacker-controlled address with no trace and no
 	// notice to the original one.
-	const newEmail = !ctx.joplin.owner.is_admin && postedUser.email && postedUser.email !== user.email ? postedUser.email : '';
+	const newEmail = !ctx.joplin.owner.is_admin && postedUser.email ? await ctx.joplin.models.user().newEmailToConfirm(user, postedUser.email) : '';
 	if (!ctx.joplin.owner.is_admin && (postedUser.password || newEmail)) await ctx.joplin.models.user().checkCurrentPassword(user.id, fields.current_password, ctx.joplin.services);
 
 	if (newEmail) delete postedUser.email;

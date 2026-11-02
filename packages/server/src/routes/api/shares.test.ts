@@ -124,7 +124,7 @@ describe('shares', () => {
 	});
 
 	test('should limit the number of invitations an account can send', async () => {
-		process.env.JOPLIN_TEST_SHARE_INVITATION_LIMITER = '1';
+		process.env.JOPLIN_TEST_ACCOUNT_ACTION_LIMITERS = '1';
 
 		try {
 			const { session } = await createUserAndSession(1);
@@ -140,7 +140,7 @@ describe('shares', () => {
 
 			await expectHttpError(async () => postApi(session.id, `shares/${share.id}/users`, { email: 'unknown-50@example.com' }), ErrorTooManyRequests.httpCode);
 		} finally {
-			delete process.env.JOPLIN_TEST_SHARE_INVITATION_LIMITER;
+			delete process.env.JOPLIN_TEST_ACCOUNT_ACTION_LIMITERS;
 		}
 	});
 

@@ -30,7 +30,8 @@ import changeEmailConfirmationTemplate from '../views/emails/changeEmailConfirma
 import changeEmailNotificationTemplate from '../views/emails/changeEmailNotificationTemplate';
 import { NotificationKey } from './NotificationModel';
 import prettyBytes = require('pretty-bytes');
-import { validateEmail } from '../utils/validation';
+import { isValidEmailRecipient, validateEmail } from '../utils/validation';
+import limiterEmailChanges from '../utils/request/limiterEmailChanges';
 import { EmailSubjectBody } from './EmailModel';
 import { Config, Env, LdapConfig } from '../utils/types';
 import { DbConnection } from '../db';
@@ -538,7 +539,18 @@ export default class UserModel extends BaseModel<User> {
 		}
 	}
 
+	// Returns the address to send a confirmation to, or an empty string if it is the current one. Called before saving
+	// the rest of the profile, so that a refused address does not leave the profile half saved.
+	public async newEmailToConfirm(user: User, email: string) {
+		const newEmail = this.formatValues({ email }).email;
+		if (newEmail === user.email) return '';
+		if (!isValidEmailRecipient(newEmail)) throw new ErrorUnprocessableEntity('Invalid email address');
+		await limiterEmailChanges(user.id);
+		return newEmail;
+	}
+
 	public async initiateEmailChange(userId: Uuid, newEmail: string) {
+		if (!isValidEmailRecipient(newEmail)) throw new ErrorUnprocessableEntity('Invalid email address');
 		const beforeSaveUser = await this.models().user().load(userId);
 
 		await this.models().notification().add(userId, NotificationKey.Any, NotificationLevel.Important, 'A confirmation email has been sent to your new address. Please follow the link in that email to confirm. Your email will only be updated after that.');

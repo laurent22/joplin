@@ -2,7 +2,7 @@ import { User } from '../../services/database/types';
 import { deleteApi, getApi, patchApi, postApi } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, expectHttpError, koaAppContext } from '../../utils/testing/testUtils';
 import ownerHandler from '../../middleware/ownerHandler';
-import { ErrorForbidden, ErrorUnprocessableEntity } from '../../utils/errors';
+import { ErrorForbidden, ErrorTooManyRequests, ErrorUnprocessableEntity } from '../../utils/errors';
 import { uuidgen } from '@joplin/lib/uuid';
 
 describe('api/users', () => {
@@ -173,6 +173,40 @@ describe('api/users', () => {
 		const emails = await models().email().all();
 		expect(emails.find(e => e.recipient_email === 'new-email@example.com')).toBeTruthy();
 		expect(emails.find(e => e.recipient_email === user.email)).toBeTruthy();
+	});
+
+	test.each([
+		'first@example.com, second@example.com',
+		'first@example.com;second@example.com',
+		'first@example.com second@example.com',
+		'Name <first@example.com>',
+		`${'a'.repeat(250)}@example.com`,
+	])('should refuse to change the email to %s before saving anything', async (email) => {
+		const { session, user, password } = await createUserAndSession(1, false);
+
+		await expectHttpError(async () => patchApi(session.id, `users/${user.id}`, {
+			email,
+			full_name: 'New Name',
+			current_password: password,
+		}), ErrorUnprocessableEntity.httpCode);
+
+		expect((await models().user().load(user.id)).full_name).not.toBe('New Name');
+		expect(await models().keyValue().value(`newEmail::${user.id}`)).toBeFalsy();
+		expect((await models().email().all()).filter(e => e.recipient_email !== user.email)).toEqual([]);
+	});
+
+	test('should limit the number of email changes', async () => {
+		process.env.JOPLIN_TEST_ACCOUNT_ACTION_LIMITERS = '1';
+
+		try {
+			const { session, user, password } = await createUserAndSession(1, false);
+			const changeEmail = async (index: number) => patchApi(session.id, `users/${user.id}`, { email: `new-email-${index}@example.com`, current_password: password });
+
+			for (let i = 0; i < 3; i++) await changeEmail(i);
+			await expectHttpError(async () => changeEmail(3), ErrorTooManyRequests.httpCode);
+		} finally {
+			delete process.env.JOPLIN_TEST_ACCOUNT_ACTION_LIMITERS;
+		}
 	});
 
 	test('should let an admin change an email directly', async () => {
