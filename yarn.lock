@@ -13182,7 +13182,7 @@ __metadata:
     ldapts: "npm:8.1.8"
     markdown-it: "npm:13.0.2"
     mustache: "npm:4.2.0"
-    node-cron: "npm:4.5.0"
+    node-cron: "npm:4.6.0"
     node-mocks-http: "npm:1.17.2"
     nodemailer: "npm:6.10.1"
     nodemon: "npm:3.1.14"
@@ -44649,10 +44649,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-cron@npm:4.5.0":
-  version: 4.5.0
-  resolution: "node-cron@npm:4.5.0"
-  checksum: 10/3ee23107eb584448fe829fd6567902ee10a5da29777dd2425e9fbd85c5642bc57b22d742745d4a7d1534c7e6bfc288764887c608fa5d48f750e2e84c66ad5358
+"node-cron@npm:4.6.0":
+  version: 4.6.0
+  resolution: "node-cron@npm:4.6.0"
+  checksum: 10/87a996b7aa69886bc2e5e9b922ab5edb195b7e21808a22b65cf8c268c90f9002038b74ffef9372ac4f0d499991e0180a887a92444310c3e9d0498c277daa5b89
   languageName: node
   linkType: hard
 
