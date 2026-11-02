@@ -5,7 +5,8 @@ import { ErrorForbidden, ErrorNotFound } from '../../utils/errors';
 import { postApi } from '../../utils/testing/apiUtils';
 import { testImageBuffer } from '../../utils/testing/fileApiUtils';
 import { shareFolderWithUser } from '../../utils/testing/shareApiUtils';
-import { beforeAllDb, afterAllTests, parseHtml, beforeEachDb, createUserAndSession, koaAppContext, checkContextError, expectNotThrow, createNote, createItem, models, expectHttpError, createResource, createFolder, updateNote } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, parseHtml, beforeEachDb, createUserAndSession, koaAppContext, checkContextError, expectNotThrow, createNote, createItem, models, expectHttpError, createResource, createFolder, updateNote, updateItem } from '../../utils/testing/testUtils';
+import { makeFolderSerializedBody } from '../../utils/testing/serializedItems';
 
 const resourceSize = 2720;
 
@@ -459,6 +460,7 @@ describe('shares.link', () => {
 
 		await createFolder(session.id, { id: '000000000000000000000000000000F1', title: 'My Notebook' });
 		await createNote(session.id, { id: '00000000000000000000000000000001', parent_id: '000000000000000000000000000000F1', title: 'First title' });
+		await createNote(session.id, { id: '00000000000000000000000000000002', parent_id: '000000000000000000000000000000F1', title: 'Other note' });
 
 		const share = await postApi<Share>(session.id, 'shares', {
 			folder_id: '000000000000000000000000000000F1',
@@ -478,11 +480,59 @@ describe('shares.link', () => {
 			await updateNote(session.id, { id: '00000000000000000000000000000001', parent_id: '000000000000000000000000000000F1', title: 'Second title' });
 			const later = Date.now() + 60 * 1000;
 			now.mockReturnValue(later);
+			loadWithContent.mockClear();
 
+			// The shared folder item, and only the note that changed
 			expect(await getShareContent(share.id)).toContain('Second title');
+			expect(loadWithContent).toHaveBeenCalledTimes(2);
 		} finally {
 			loadWithContent.mockRestore();
 			now.mockRestore();
+		}
+	});
+
+	test('should build a published folder once for concurrent requests', async () => {
+		const { session } = await createUserAndSession();
+
+		await createFolder(session.id, { id: '000000000000000000000000000000F1', title: 'My Notebook' });
+		await createNote(session.id, { id: '00000000000000000000000000000001', parent_id: '000000000000000000000000000000F1', title: 'My Note' });
+
+		const share = await postApi<Share>(session.id, 'shares', {
+			folder_id: '000000000000000000000000000000F1',
+			type: ShareType.PublishedFolder,
+		});
+
+		const loadWithContent = jest.spyOn(ItemModel.prototype, 'loadWithContent');
+		try {
+			await Promise.all([getShareContent(share.id), getShareContent(share.id), getShareContent(share.id)]);
+
+			// Each request loads the shared folder item, and the tree is built once, from the folder and its note
+			expect(loadWithContent).toHaveBeenCalledTimes(5);
+		} finally {
+			loadWithContent.mockRestore();
+		}
+	});
+
+	test('should refuse a published folder in the trash without loading its contents', async () => {
+		const { session } = await createUserAndSession();
+
+		await createFolder(session.id, { id: '000000000000000000000000000000F1', title: 'My Notebook' });
+		await createNote(session.id, { id: '00000000000000000000000000000001', parent_id: '000000000000000000000000000000F1', title: 'My Note' });
+
+		const share = await postApi<Share>(session.id, 'shares', {
+			folder_id: '000000000000000000000000000000F1',
+			type: ShareType.PublishedFolder,
+		});
+
+		const trashedFolder = makeFolderSerializedBody({ id: '000000000000000000000000000000F1', title: 'My Notebook' }).replace('deleted_time: 0', `deleted_time: ${Date.now()}`);
+		await updateItem(session.id, 'root:/000000000000000000000000000000F1.md:', trashedFolder);
+
+		const loadByJopParentId = jest.spyOn(ItemModel.prototype, 'loadByJopParentId');
+		try {
+			await expectHttpError(async () => getShareContent(share.id), ErrorNotFound.httpCode);
+			expect(loadByJopParentId).not.toHaveBeenCalled();
+		} finally {
+			loadByJopParentId.mockRestore();
 		}
 	});
 

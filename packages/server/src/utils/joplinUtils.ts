@@ -331,6 +331,13 @@ interface FolderTreeMetadata {
 	children: FolderTreeMetadata[];
 }
 
+interface FolderTreeItemInfo {
+	updatedTime: number;
+	title: string;
+	inTrash: boolean;
+	jopUpdatedTime: number;
+}
+
 interface CachedFolderTree {
 	fingerprint: string;
 	checkedTime: number;
@@ -340,12 +347,19 @@ interface CachedFolderTree {
 }
 
 // A published notebook's titles are only in its items' contents, which can add up to gigabytes, and the tree is needed
-// by every anonymous request for the page and each of its images. So it is built once, loading one item at a time, and
-// rebuilt only when one of its items has changed.
+// by every anonymous request for the page and each of its images. So it is built once, and rebuilt only when one of its
+// items has changed, loading only the items that changed, one at a time. An account can publish more notebooks than fit
+// in the cache, so only a few are refreshed at a time.
 const folderTreeCache = new Map<string, CachedFolderTree>();
 let folderTreeCacheLength = 0;
+const folderTreeItemInfos = new Map<Uuid, FolderTreeItemInfo>();
+const folderTreeRefreshes = new Map<string, Promise<CachedFolderTree>>();
+let runningFolderTreeRefreshes = 0;
+const waitingFolderTreeRefreshes: (()=> void)[] = [];
 const maxFolderTreeCacheLength = 50_000_000;
 const maxCachedFolderTrees = 1000;
+const maxCachedFolderTreeItemInfos = 100_000;
+const maxRunningFolderTreeRefreshes = 4;
 const maxFolderTreeTitleLength = 200;
 const folderTreeCheckInterval = 10 * 1000;
 const maxFolderTreeItems = 10000;
@@ -387,22 +401,49 @@ const loadFolderTreeMetadata = async (ownerId: Uuid, rootFolderItem: Item) => {
 const folderTreeFingerprint = (rootFolderItem: Item, nodes: FolderTreeMetadata[]) => {
 	const hash = createHash('sha256');
 	const add = (item: Item) => hash.update(`${item.id}:${item.updated_time}\n`);
-	const addNodes = (nodes: FolderTreeMetadata[]) => {
-		for (const node of nodes) {
-			add(node.item);
-			addNodes(node.children);
-		}
-	};
 	add(rootFolderItem);
-	addNodes(nodes);
+
+	// Folders can be nested deeper than the call stack allows
+	const stack = nodes.slice().reverse();
+	while (stack.length) {
+		const node = stack.pop();
+		add(node.item);
+		for (let i = node.children.length - 1; i >= 0; i--) stack.push(node.children[i]);
+	}
+
 	return hash.digest('hex');
 };
 
-const buildCachedFolderTree = async (share: Share, rootFolderItem: Item, nodes: FolderTreeMetadata[], fingerprint: string): Promise<CachedFolderTree> => {
-	const loadJoplinItem = async (item: Item) => models_.item().itemToJoplinItem(await models_.item().loadWithContent(item.id));
+const loadFolderTreeItemInfo = async (item: Item) => {
+	let info = folderTreeItemInfos.get(item.id);
 
-	const rootFolder = await loadJoplinItem(rootFolderItem);
-	if (itemIsInTrash(rootFolder)) throw new ErrorNotFound(`No such folder: ${rootFolder.id}`);
+	if (!info || info.updatedTime !== item.updated_time) {
+		// It may have been deleted since the tree metadata was loaded
+		const itemWithContent = await models_.item().loadWithContent(item.id);
+		if (!itemWithContent) return null;
+
+		const jopItem = models_.item().itemToJoplinItem(itemWithContent);
+		info = {
+			updatedTime: itemWithContent.updated_time,
+			title: substrWithEllipsis(jopItem.title || '', 0, maxFolderTreeTitleLength),
+			inTrash: itemIsInTrash(jopItem),
+			jopUpdatedTime: jopItem.updated_time,
+		};
+	}
+
+	folderTreeItemInfos.delete(item.id);
+	folderTreeItemInfos.set(item.id, info);
+	for (const oldestItemId of folderTreeItemInfos.keys()) {
+		if (folderTreeItemInfos.size <= maxCachedFolderTreeItemInfos) break;
+		folderTreeItemInfos.delete(oldestItemId);
+	}
+
+	return info;
+};
+
+const buildCachedFolderTree = async (share: Share, rootFolderItem: Item, nodes: FolderTreeMetadata[], fingerprint: string, checkedTime: number): Promise<CachedFolderTree> => {
+	const rootInfo = await loadFolderTreeItemInfo(rootFolderItem);
+	if (!rootInfo || rootInfo.inTrash) throw new ErrorNotFound(`No such folder: ${rootFolderItem.jop_id}`);
 
 	const allowedNoteIds = new Set<string>();
 
@@ -410,23 +451,23 @@ const buildCachedFolderTree = async (share: Share, rootFolderItem: Item, nodes: 
 		const output: TreeSourceNode[] = [];
 
 		for (const node of nodes) {
-			const childJopItem = await loadJoplinItem(node.item);
-			if (itemIsInTrash(childJopItem)) continue;
+			const info = await loadFolderTreeItemInfo(node.item);
+			if (!info || info.inTrash) continue;
 
 			if (node.item.jop_type === ModelType.Folder) {
 				output.push({
-					title: substrWithEllipsis(childJopItem.title || '', 0, maxFolderTreeTitleLength),
-					key: childJopItem.id,
+					title: info.title,
+					key: node.item.jop_id,
 					folder: true,
 					expanded: true,
 					children: await buildNodes(node.children),
 				});
 			} else {
-				allowedNoteIds.add(childJopItem.id);
+				allowedNoteIds.add(node.item.jop_id);
 				output.push({
-					title: substrWithEllipsis(childJopItem.title || '', 0, maxFolderTreeTitleLength),
-					key: childJopItem.id,
-					url: models_.share().shareUrl(share.owner_id, share.id, { note_id: childJopItem.id, t: childJopItem.updated_time }),
+					title: info.title,
+					key: node.item.jop_id,
+					url: models_.share().shareUrl(share.owner_id, share.id, { note_id: node.item.jop_id, t: info.jopUpdatedTime }),
 				});
 			}
 		}
@@ -436,28 +477,65 @@ const buildCachedFolderTree = async (share: Share, rootFolderItem: Item, nodes: 
 
 	return {
 		fingerprint,
-		checkedTime: Date.now(),
-		rootTitle: substrWithEllipsis(rootFolder.title || '', 0, maxFolderTreeTitleLength),
+		checkedTime,
+		rootTitle: rootInfo.title,
 		sourceJson: JSON.stringify(await buildNodes(nodes)),
 		allowedNoteIds,
 	};
+};
+
+const refreshFolderTree = async (share: Share, folderId: string, tree: CachedFolderTree | undefined) => {
+	// Changes made during the refresh are picked up by the next one
+	const checkedTime = Date.now();
+
+	const rootFolderItem = await models_.item().loadByJopId(share.owner_id, folderId, { fields: ['id', 'jop_id', 'jop_share_id', 'updated_time'] });
+	if (!rootFolderItem) throw new ErrorNotFound(`No such folder: ${folderId}`);
+
+	const nodes = await loadFolderTreeMetadata(share.owner_id, rootFolderItem);
+	const fingerprint = folderTreeFingerprint(rootFolderItem, nodes);
+
+	if (tree && tree.fingerprint === fingerprint) return { ...tree, checkedTime };
+	return buildCachedFolderTree(share, rootFolderItem, nodes, fingerprint, checkedTime);
+};
+
+const withFolderTreeRefreshSlot = async <T>(refresh: ()=> Promise<T>) => {
+	if (runningFolderTreeRefreshes < maxRunningFolderTreeRefreshes) {
+		runningFolderTreeRefreshes++;
+	} else {
+		await new Promise<void>(resolve => {
+			waitingFolderTreeRefreshes.push(resolve);
+		});
+	}
+
+	try {
+		return await refresh();
+	} finally {
+		const next = waitingFolderTreeRefreshes.shift();
+		if (next) {
+			next();
+		} else {
+			runningFolderTreeRefreshes--;
+		}
+	}
 };
 
 async function buildFolderTree(share: Share, folderId: string, activeNoteId = ''): Promise<RenderedFolderTree> {
 	let tree = folderTreeCache.get(share.id);
 
 	if (!tree || Date.now() - tree.checkedTime > folderTreeCheckInterval) {
-		const rootFolderItem = await models_.item().loadByJopId(share.owner_id, folderId, { fields: ['id', 'jop_id', 'jop_share_id', 'updated_time'] });
-		if (!rootFolderItem) throw new ErrorNotFound(`No such folder: ${folderId}`);
-
-		const nodes = await loadFolderTreeMetadata(share.owner_id, rootFolderItem);
-		const fingerprint = folderTreeFingerprint(rootFolderItem, nodes);
-
-		if (tree && tree.fingerprint === fingerprint) {
-			tree.checkedTime = Date.now();
-		} else {
-			tree = await buildCachedFolderTree(share, rootFolderItem, nodes, fingerprint);
+		let refresh = folderTreeRefreshes.get(share.id);
+		if (!refresh) {
+			const previousTree = tree;
+			refresh = (async () => {
+				try {
+					return await withFolderTreeRefreshSlot(() => refreshFolderTree(share, folderId, previousTree));
+				} finally {
+					folderTreeRefreshes.delete(share.id);
+				}
+			})();
+			folderTreeRefreshes.set(share.id, refresh);
 		}
+		tree = await refresh;
 	}
 
 	const previous = folderTreeCache.get(share.id);
@@ -578,6 +656,9 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 	const bannerInfo = getDefaultBannerInfo();
 
 	if (item.jop_type === ModelType.Folder) {
+		// Checked before building the tree, which would otherwise be walked on every request only to be refused
+		if (itemIsInTrash(models_.item().itemToJoplinItem(item))) throw new ErrorNotFound(`No such folder: ${item.jop_id}`);
+
 		const folderTree = await buildFolderTree(share, item.jop_id, query.note_id || '');
 
 		if (!query.note_id) {
