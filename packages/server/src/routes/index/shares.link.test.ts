@@ -4,6 +4,7 @@ import ItemModel from '../../models/ItemModel';
 import { ErrorForbidden, ErrorNotFound } from '../../utils/errors';
 import { postApi } from '../../utils/testing/apiUtils';
 import { testImageBuffer } from '../../utils/testing/fileApiUtils';
+import { shareFolderWithUser } from '../../utils/testing/shareApiUtils';
 import { beforeAllDb, afterAllTests, parseHtml, beforeEachDb, createUserAndSession, koaAppContext, checkContextError, expectNotThrow, createNote, createItem, models, expectHttpError, createResource, createFolder, updateNote } from '../../utils/testing/testUtils';
 
 const resourceSize = 2720;
@@ -214,6 +215,35 @@ describe('shares.link', () => {
 		await expectNotThrow(async () => getShareContent(share.id, { note_id: '00000000000000000000000000000001' }));
 		await expectHttpError(async () => getShareContent(share.id, { note_id: '000000000000000000000000000000C5' }), ErrorNotFound.httpCode);
 		await expectHttpError(async () => getShareContent(share.id, { note_id: '000000000000000000000000000000E2' }), ErrorNotFound.httpCode);
+	});
+
+	test('should stop serving a note published by a participant once they are removed from the shared notebook', async () => {
+		const { session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+
+		const { shareUser } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [
+					{
+						id: '00000000000000000000000000000001',
+						title: 'Owner note',
+					},
+				],
+			},
+		]);
+
+		const share = await postApi<Share>(session2.id, 'shares', {
+			type: ShareType.Note,
+			note_id: '00000000000000000000000000000001',
+		});
+
+		expect(await getShareContent(share.id)).toContain('Owner note');
+
+		await models().shareUser().delete(shareUser.id);
+		await models().share().updateSharedItems3();
+
+		await expectHttpError(async () => getShareContent(share.id), ErrorNotFound.httpCode);
 	});
 
 	test('should not let another account add links to a published note by uploading an item with a linked id', async () => {
