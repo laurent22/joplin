@@ -2056,6 +2056,8 @@ packages/lib/urlUtils.js
 packages/lib/utils/ActionLogger.test.js
 packages/lib/utils/ActionLogger.js
 packages/lib/utils/attachedResources.js
+packages/lib/utils/compactCss.test.js
+packages/lib/utils/compactCss.js
 packages/lib/utils/credentialFiles.js
 packages/lib/utils/dom/makeSandboxedIframe.js
 packages/lib/utils/focusHandler.js

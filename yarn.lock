@@ -12993,7 +12993,6 @@ __metadata:
     tcp-port-used: "npm:1.0.3"
     tesseract.js: "npm:7.0.0"
     typescript: "npm:5.9.3"
-    uglifycss: "npm:0.0.29"
     undici: "npm:8.10.0"
     url-parse: "npm:1.5.10"
     uuid: "npm:11.1.1"
@@ -58335,15 +58334,6 @@ __metadata:
   bin:
     uglifyjs: bin/uglifyjs
   checksum: 10/4c0b800e0ff192079d2c3ce8414fd3b656a570028c7c79af5c29c53d5c532b68bbcae4ad47307f89c2ee124d11826fff7a136b59d5c5bb18422bcdf5568afe1e
-  languageName: node
-  linkType: hard
-
-"uglifycss@npm:0.0.29":
-  version: 0.0.29
-  resolution: "uglifycss@npm:0.0.29"
-  bin:
-    uglifycss: ./uglifycss
-  checksum: 10/6304fc0f36c3b656d3b87265b6738daf0663aceb4d614fa0c8214ec77ca333f4ab3dc540399531a1bcb5d5fe606c84ca33dc738e0bf74c46c0e086451ea8678d
   languageName: node
   linkType: hard
 
