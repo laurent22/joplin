@@ -1,4 +1,5 @@
 import Note from '../../models/Note';
+import Folder from '../../models/Folder';
 import ConflictNoteState from '../../models/ConflictNoteState';
 import Logger from '@joplin/utils/Logger';
 
@@ -49,6 +50,12 @@ export default async (conflictNoteId: string): Promise<KeepResult> => {
 
 	const original = await Note.load(note.conflict_original_id);
 	if (!original) return { status: KeepStatus.Unavailable, noteId: '' };
+
+	const folder = await Folder.load(original.parent_id);
+	if (!folder) return { status: KeepStatus.Unavailable, noteId: '' };
+	if (original.deleted_time || folder.deleted_time) {
+		return { status: KeepStatus.CannotWrite, noteId: conflictNoteId, reason: 'trashed' };
+	}
 
 	const baseTitle = note.title ?? '';
 	const taken = await Note.titlesLike(`${escapeForLike(baseTitle)} (${suffix}%`);

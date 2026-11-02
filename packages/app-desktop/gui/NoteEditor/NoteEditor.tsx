@@ -271,7 +271,9 @@ function NoteEditorContent(props: NoteEditorProps) {
 
 			if (result.status !== KeepStatus.Ok) {
 				logger.warn('Could not keep the conflict note', note.id, result.status, result.reason);
-				bridge().showErrorMessageBox(_('This note could not be kept. It may have been deleted or changed elsewhere.'));
+				bridge().showErrorMessageBox(result.reason === 'trashed'
+					? trashedConflictMessage()
+					: _('This note could not be kept. It may have been deleted or changed elsewhere.'));
 				return;
 			}
 

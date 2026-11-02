@@ -93,6 +93,24 @@ describe('keepConflictCopy', () => {
 		expect((await keepConflictCopy(note.id)).status).toBe(KeepStatus.Unavailable);
 	});
 
+	test.each([
+		['the original', false],
+		['its notebook', true],
+	])('should not keep the note when %s is in the trash', async (_name, trashFolder) => {
+		const { folder, original, conflictNote } = await createConflict();
+		if (trashFolder) {
+			await Folder.delete(folder.id, { toTrash: true });
+		} else {
+			await Note.delete(original.id, { toTrash: true });
+		}
+
+		const result = await keepConflictCopy(conflictNote.id);
+
+		expect(result.status).toBe(KeepStatus.CannotWrite);
+		expect(result.reason).toBe('trashed');
+		expect((await Note.load(conflictNote.id)).is_conflict).toBe(1);
+	});
+
 	test('should report a conflict whose original is gone', async () => {
 		const { original, conflictNote } = await createConflict();
 		await Note.delete(original.id, { toTrash: false });
