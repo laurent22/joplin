@@ -405,6 +405,38 @@ describe('models/Note', () => {
 		expect((await Note.load(note.id)).body).toBe('overwrite');
 	});
 
+	it('should find a locked note anywhere in a notebook tree', async () => {
+		const parent = await Folder.save({ title: 'parent' });
+		const child = await Folder.save({ title: 'child', parent_id: parent.id });
+		const other = await Folder.save({ title: 'other' });
+		await Note.save({ title: 'plain', body: 'plain', parent_id: parent.id });
+		await Note.save({ title: 'other plain', body: 'plain', parent_id: other.id });
+		const locked = await Note.save({ title: 'locked', body: 'JLD01cipher', parent_id: child.id });
+		await db().exec('UPDATE notes SET is_locked = 1 WHERE id = ?', [locked.id]);
+
+		expect(await Note.hasLockedNoteInFolderTrees([parent.id])).toBe(true);
+		expect(await Note.hasLockedNoteInFolderTrees([child.id])).toBe(true);
+		expect(await Note.hasLockedNoteInFolderTrees([other.id])).toBe(false);
+	});
+
+	it('should refuse to save a decrypted locked note once the feature is disabled', async () => {
+		await NoteLockKey.instance().create('123456');
+		await NoteLockSession.instance().unlock('123456');
+		const note = await Note.save({ body: 'secret', is_locked: 1 }, { useNoteLock: true });
+		const lockedNote = await Note.load(note.id, { useNoteLock: true });
+		const unlockedNote = await Note.load((await Note.save({ body: 'plain' })).id, { useNoteLock: true });
+		const cipherText = (await Note.load(note.id)).body;
+
+		Setting.setValue('featureFlag.noteLock', false);
+		const error = 'Locked notes cannot be saved while the note lock feature is turned off';
+		await expect(Note.save({ ...lockedNote, body: 'edited' }, { useNoteLock: true })).rejects.toThrow(error);
+		await expect(Note.save({ id: note.id, body: 'edited', isDecrypted: true } as NoteEntity, { useNoteLock: true })).rejects.toThrow(error);
+		expect((await Note.load(note.id)).body).toBe(cipherText);
+
+		await Note.save({ ...unlockedNote, body: 'plain edited' }, { useNoteLock: true });
+		expect((await Note.load(unlockedNote.id)).body).toBe('plain edited');
+	});
+
 	it('should encrypt a gated save with a captured key while the session is locked, but not after a key rotation', async () => {
 		await NoteLockKey.instance().create('123456');
 		await NoteLockSession.instance().unlock('123456');
@@ -801,6 +833,18 @@ describe('models/Note', () => {
 		expect(movedNote.parent_id).toBe(targetFolder.id);
 		expect(movedNote.is_conflict).toBe(0);
 		expect(movedNote.conflict_original_id).toBe('');
+	}));
+
+	it('should take the share_id of the target folder when moving a note', (async () => {
+		const sharedFolder = await Folder.save({ title: 'Shared', share_id: 'share-1' });
+		const folder = await Folder.save({ title: 'Folder' });
+		const note = await Note.save({ title: 'note', parent_id: sharedFolder.id, share_id: 'share-1' });
+
+		await Note.moveToFolder(note.id, folder.id);
+		expect((await Note.load(note.id)).share_id).toBe('');
+
+		await Note.moveToFolder(note.id, sharedFolder.id);
+		expect((await Note.load(note.id)).share_id).toBe('share-1');
 	}));
 
 	function testResourceReplacement(body: string, pathsToTry: string[], expected: string) {

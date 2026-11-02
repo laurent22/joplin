@@ -7,6 +7,10 @@ const React = shim.react();
 const { useEffect, useRef, useState } = shim.react();
 
 type OnCancelListener = ()=> void;
+
+// Closes made by the app, not the user, so the close event must not report them as a cancel.
+const removedReturnValue = 'removed-from-dom';
+const hiddenReturnValue = 'hidden';
 type OnShowListener = ()=> void;
 type OnBeforeShowListener = (dialog: HTMLDialogElement)=> void;
 
@@ -52,7 +56,8 @@ const Dialog: FC<Props> = props => {
 			dialogElement.showModal();
 			propsRef.current.onShow?.();
 		} else if (dialogElement.open && !open) {
-			dialogElement.close();
+			// The close event fires later, when a dialog shown next may already own onCancel.
+			dialogElement.close(hiddenReturnValue);
 		}
 	}, [dialogElement, contentRendered, props.open]);
 
@@ -168,9 +173,11 @@ const useDialogElement = (containerDocument: Document, onCancel: undefined|OnCan
 			}
 		});
 
-		const removedReturnValue = 'removed-from-dom';
 		dialog.addEventListener('close', () => {
-			const closedByCancel = dialog.returnValue !== removedReturnValue;
+			const closedByCancel = dialog.returnValue !== removedReturnValue && dialog.returnValue !== hiddenReturnValue;
+			// A cancel leaves the return value as it was, so it is cleared here rather than on show, which can
+			// happen before this event arrives.
+			dialog.returnValue = '';
 			if (closedByCancel) {
 				if (!preventAutoCloseOnCancel || !skipCloseCancelRef.current) {
 					onCancelRef.current?.();

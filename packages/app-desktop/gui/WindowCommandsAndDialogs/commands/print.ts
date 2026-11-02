@@ -2,6 +2,7 @@ import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/
 import { _ } from '@joplin/lib/locale';
 import { WindowControl } from '../utils/useWindowControl';
 import bridge from '../../../services/bridge';
+import InteropServiceHelper from '../../../InteropServiceHelper';
 
 export const declaration: CommandDeclaration = {
 	name: 'print',
@@ -16,6 +17,8 @@ export const runtime = (comp: WindowControl): CommandRuntime => {
 
 			try {
 				if (noteIds.length !== 1) throw new Error(_('Only one note can be printed at a time.'));
+				// A plugin can run this with any note, so a locked one is only printed once the user agrees, as for the PDF export.
+				if (await InteropServiceHelper.confirmLockedNoteExport(context.dispatch, noteIds) !== 'export') return;
 				await comp.printTo('printer', { noteId: noteIds[0] });
 			} catch (error) {
 				bridge().showErrorMessageBox(error.message);

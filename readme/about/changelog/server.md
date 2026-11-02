@@ -1,5 +1,25 @@
 # Joplin Server Changelog
 
+## [server-v3.7.3](https://github.com/laurent22/joplin/releases/tag/server-v3.7.3) - 2026-10-23T10:33:53Z
+
+- New: Add rate limiting to the signup and password reset endpoints (#16467)
+- Improved: Accessibility: Associate labels with controls on the "Your Profile" page (#16588 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Allow syncing with a web app instance hosted on a custom domain (#16760 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Do not log failed image downloads as warnings (#16493)
+- Improved: Do not log invalid requests as errors (#16492)
+- Improved: Handle locked notes inside shared notebooks (#16579) (#16336 by [@keshav0479](https://github.com/keshav0479))
+- Improved: Only record changes for resource blobs under the .resource/ directory (4724e3c)
+- Improved: Pin Node version to 24.22.1 (23c85cd)
+- Improved: Published notebook notes cannot be scrolled down on Android browsers (#16702) (#16669 by [@Rygaa](https://github.com/Rygaa))
+- Improved: Published notebook sidebar has no overlay on small screens (#16798) (#16795 by [@Rygaa](https://github.com/Rygaa))
+- Improved: Restore footer (#16763) (#16757 by [@Rygaa](https://github.com/Rygaa))
+- Improved: Updated packages adm-zip (v0.5.18), fs-extra (v11.3.6), tar (v7.5.19)
+- Fixed: Applications tab: Fix web app is marked as "unknown" (#16478 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix Stripe subscription item being located by position instead of price (ef70b72)
+- Fixed: Fix account not being created when the Stripe customer has no name (#16557)
+- Fixed: Fix notification read-state being updatable by non-owner (#16466)
+- Fixed: Fixes sync errors when an upload is retried (#16491)
+
 ## [server-v3.7.2](https://github.com/laurent22/joplin/releases/tag/server-v3.7.2) - 2026-09-07T16:29:45Z
 
 - New: Add OrphanTrace logging to investigate orphaned items bug (#15709)

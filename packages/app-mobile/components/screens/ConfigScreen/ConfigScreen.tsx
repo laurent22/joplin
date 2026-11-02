@@ -583,7 +583,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			const importJexLabel = () => _('Import from JEX');
 			const importJexDescription = () => _('Import notes from a JEX (Joplin Export) file.');
 			addSettingComponent(
-				<NoteImportButton key='import_as_jex_button' styles={this.styles()} defaultTitle={importJexLabel()} description={importJexDescription()} format='jex' />,
+				<NoteImportButton key='import_as_jex_button' styles={this.styles()} defaultTitle={importJexLabel()} description={importJexDescription()} format='jex' onOpenNoteLockSetup={() => this.onJumpToSection_('noteLock')} />,
 				[importJexLabel(), importJexDescription()],
 			);
 			const importTxtLabel = () => _('Import from text file');
@@ -593,7 +593,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				return _('Import a note from a text file (%s). The note will be imported into notebook \'%s\'.', textImportExtensions.join(', '), substrWithEllipsis(folderTitle, 0, 32));
 			};
 			addSettingComponent(
-				<NoteImportButton key='import_as_txt_button' styles={this.styles()} defaultTitle={importTxtLabel()} description={importTxtDescription()} format='txt' activeFolder={this.state.activeFolder} />,
+				<NoteImportButton key='import_as_txt_button' styles={this.styles()} defaultTitle={importTxtLabel()} description={importTxtDescription()} format='txt' activeFolder={this.state.activeFolder} onOpenNoteLockSetup={() => this.onJumpToSection_('noteLock')} />,
 				[importTxtLabel(), importTxtDescription()],
 			);
 			addSettingComponent(

@@ -5,6 +5,7 @@ import Setting from '../../../models/Setting';
 import BaseModel from '../../../BaseModel';
 import { setupDatabaseAndSynchronizer, switchClient, noteLockCipherTextStandIn } from '../../../testing/test-utils';
 import { RevisionEntity } from '../../database/types';
+import { lockedNoteBodyPlaceholder } from '../../noteLock/NoteLockNote';
 
 const createNoteAndRevision = async (isLocked: number) => {
 	// A JLD-prefixed body passes the save path untouched, standing in for real ciphertext.
@@ -29,12 +30,14 @@ describe('routes/revisions', () => {
 		await switchClient(1);
 	});
 
-	test('should block load and save of a locked revision', async () => {
+	test('should load a locked revision with a placeholder body and block its save', async () => {
 		Setting.setValue('featureFlag.noteLock', true);
 		const api = new Api();
 		const { revision } = await createNoteAndRevision(1);
 
-		await expect(api.route(RequestMethod.GET, `revisions/${revision.id}`)).rejects.toThrow('locked revision');
+		const loaded = await api.route(RequestMethod.GET, `revisions/${revision.id}`, { fields: 'id,body_diff' });
+		expect(Revision.applyTextPatch('', loaded.body_diff)).toBe(lockedNoteBodyPlaceholder);
+		expect('is_locked' in loaded).toBe(false);
 		await expect(api.route(RequestMethod.PUT, `revisions/${revision.id}`, null, JSON.stringify({ title_diff: '[]' }))).rejects.toThrow('locked revision');
 
 		expect(await Revision.load(revision.id)).toBeTruthy();
@@ -49,17 +52,16 @@ describe('routes/revisions', () => {
 		expect(await Revision.load(revision.id)).toBeFalsy();
 	});
 
-	test('should exclude the revisions of locked notes from the collection response', async () => {
+	test('should list the revisions of locked notes with a placeholder body', async () => {
 		Setting.setValue('featureFlag.noteLock', true);
 		const api = new Api();
-		await createNoteAndRevision(1);
+		const { revision: lockedRevision } = await createNoteAndRevision(1);
 		const { revision: plainRevision } = await createNoteAndRevision(0);
 
-		const response = await api.route(RequestMethod.GET, 'revisions');
-		expect(response.items.map((r: RevisionEntity) => r.id)).toEqual([plainRevision.id]);
-
-		Setting.setValue('featureFlag.noteLock', false);
-		expect((await api.route(RequestMethod.GET, 'revisions')).items.length).toBe(2);
+		const response = await api.route(RequestMethod.GET, 'revisions', { fields: 'id,body_diff' });
+		const bodyDiffs = new Map(response.items.map((r: RevisionEntity) => [r.id, r.body_diff]));
+		expect(Revision.applyTextPatch('', bodyDiffs.get(lockedRevision.id) as string)).toBe(lockedNoteBodyPlaceholder);
+		expect(bodyDiffs.get(plainRevision.id)).toBe('[]');
 	});
 
 	test.each([

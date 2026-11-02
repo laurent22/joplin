@@ -120,17 +120,25 @@ describe('ReportService', () => {
 			is_conflict: 1,
 			deleted_time: Date.now(),
 		});
-		await Note.save({
-			title: 'Shared conflict',
+		const conflictWithStaleShareId = await Note.save({
+			title: 'Conflict with stale share ID',
 			is_conflict: 1,
 			conflict_original_id: originalNote.id,
 			share_id: 'share-id',
 		});
 
+		// While the conflict has a share ID, it is excluded from sync. This prevents
+		// it from being sent to share recipients or rejected by a read-only share.
+		const statusBeforeShareIdUpdate = await new ReportService().syncStatus(syncTargetId());
+		expect(statusBeforeShareIdUpdate.items.Note).toEqual({ total: 2, synced: 0 });
+
 		await synchronizerStart();
 
+		// Synchronisation clears the stale share ID, keeping the conflict private to
+		// the current account while allowing it to sync between that account's devices.
+		expect((await Note.load(conflictWithStaleShareId.id)).share_id).toBe('');
 		const status = await new ReportService().syncStatus(syncTargetId());
-		expect(status.items.Note).toEqual({ total: 2, synced: 2 });
+		expect(status.items.Note).toEqual({ total: 3, synced: 3 });
 		expect(status.conflicted.total).toBe(3);
 		expect(status.total.synced).toBe(status.total.total);
 	});

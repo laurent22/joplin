@@ -187,6 +187,91 @@ describe('McpServer', () => {
 		expect(payload.results[0].snippet.length).toBeLessThan(body.length);
 	});
 
+	test('search_notes returns the section enclosing the match', async () => {
+		const folder = await Folder.save({ title: 'F' });
+		const body = [
+			'Intro paragraph.',
+			'',
+			'# Desktop',
+			'',
+			'## Windows',
+			'',
+			`${'filler '.repeat(40)}`,
+			'',
+			'## macOS',
+			'',
+			'Signing uses a notarytool keychain profile.',
+			'',
+			'# Mobile',
+			'',
+			'Nothing here yet.',
+		].join('\n');
+		await Note.save({ title: 'Release', body, parent_id: folder.id });
+
+		SearchEngine.instance().setDb(db());
+		await SearchEngine.instance().syncTables();
+
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'search_notes', arguments: { query: 'notarytool' } },
+		});
+		const payload = parseToolResult(response.result);
+		expect(payload.results[0].section).toBe('1.2');
+		expect(payload.results[0].section_heading).toBe('macOS');
+		expect(payload.results[0].snippet).toMatch(/notarytool/);
+	});
+
+	test('search_notes reports section 0 for a match before the first heading', async () => {
+		const folder = await Folder.save({ title: 'F' });
+		const body = 'A preamble mentioning kangaroos.\n\n# Later\n\nOther text.\n';
+		await Note.save({ title: 'Preamble', body, parent_id: folder.id });
+
+		SearchEngine.instance().setDb(db());
+		await SearchEngine.instance().syncTables();
+
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'search_notes', arguments: { query: 'kangaroos' } },
+		});
+		const payload = parseToolResult(response.result);
+		expect(payload.results[0].section).toBe('0');
+		expect(payload.results[0].section_heading).toBe('');
+	});
+
+	test('search_notes omits the section when the query has no body keywords', async () => {
+		const folder = await Folder.save({ title: 'F' });
+		// Starts with a heading, so offset 0 falls inside a real section.
+		const body = '# Changelog\n\n## v1\n\nFirst release.\n';
+		await Note.save({ title: 'Changelog', body, parent_id: folder.id });
+
+		SearchEngine.instance().setDb(db());
+		await SearchEngine.instance().syncTables();
+
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'search_notes', arguments: { query: 'title:Changelog' } },
+		});
+		const payload = parseToolResult(response.result);
+		expect(payload.results.length).toBe(1);
+		expect(payload.results[0].section).toBeUndefined();
+		expect(payload.results[0].section_heading).toBeUndefined();
+	});
+
+	test('search_notes reports section 0 for a note without headings', async () => {
+		const folder = await Folder.save({ title: 'F' });
+		await Note.save({ title: 'Flat', body: 'Just a flat note about wombats.', parent_id: folder.id });
+
+		SearchEngine.instance().setDb(db());
+		await SearchEngine.instance().syncTables();
+
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'search_notes', arguments: { query: 'wombats' } },
+		});
+		const payload = parseToolResult(response.result);
+		expect(payload.results[0].section).toBe('0');
+	});
+
 	test('read_note pages the body when max_chars is set', async () => {
 		const folder = await Folder.save({ title: 'F' });
 		const body = '0123456789';
@@ -201,6 +286,144 @@ describe('McpServer', () => {
 		expect(payload.body_offset).toBe(2);
 		expect(payload.body_length).toBe(10);
 		expect(payload.has_more).toBe(true);
+	});
+
+	test('read_note caps the body by default and steers towards the outline', async () => {
+		const folder = await Folder.save({ title: 'F' });
+		const body = 'x'.repeat(10000);
+		const note = await Note.save({ title: 'Long', body, parent_id: folder.id });
+
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'read_note', arguments: { id: note.id } },
+		});
+		const payload = parseToolResult(response.result);
+		expect(payload.body.length).toBe(8000);
+		expect(payload.body_length).toBe(10000);
+		expect(payload.has_more).toBe(true);
+		expect(payload.truncation_message).toContain('8000 of 10000');
+		expect(payload.truncation_message).toContain('outline');
+	});
+
+	test('read_note returns the outline as pageable text', async () => {
+		const folder = await Folder.save({ title: 'F' });
+		const body = '# One\n\nabc\n\n## One A\n\ndef\n';
+		const note = await Note.save({ title: 'Structured', body, parent_id: folder.id });
+
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'read_note', arguments: { id: note.id, outline: true } },
+		});
+		const payload = parseToolResult(response.result);
+		expect(payload.is_outline).toBe(true);
+		expect(payload.body.split('\n')).toEqual([
+			'path\tchars\theading',
+			'1\t26\tOne',
+			'1.1\t14\tOne A',
+		]);
+
+		// The outline pages on characters, exactly like the body does.
+		const paged = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 2, method: 'tools/call',
+			params: { name: 'read_note', arguments: { id: note.id, outline: true, max_chars: 20 } },
+		});
+		const pagedPayload = parseToolResult(paged.result);
+		expect(pagedPayload.body.length).toBe(20);
+		expect(pagedPayload.has_more).toBe(true);
+		expect(pagedPayload.truncation_message).toContain('Outline truncated at 20');
+	});
+
+	test('read_note returns a single section and pages within it', async () => {
+		const folder = await Folder.save({ title: 'F' });
+		const body = '# One\n\nabc\n\n# Two\n\nsecond\n';
+		const note = await Note.save({ title: 'Structured', body, parent_id: folder.id });
+
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'read_note', arguments: { id: note.id, section: 'Two' } },
+		});
+		const payload = parseToolResult(response.result);
+		expect(payload.body).toBe('# Two\n\nsecond\n');
+		expect(payload.section_path).toBe('2');
+		expect(payload.section_heading).toBe('Two');
+
+		const paged = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 2, method: 'tools/call',
+			params: { name: 'read_note', arguments: { id: note.id, section: '2', offset: 7, max_chars: 3 } },
+		});
+		const pagedPayload = parseToolResult(paged.result);
+		expect(pagedPayload.body).toBe('sec');
+		expect(pagedPayload.has_more).toBe(true);
+	});
+
+	test('read_notes returns several notes and reports unknown ids', async () => {
+		const folder = await Folder.save({ title: 'Work' });
+		const note1 = await Note.save({ title: 'One', body: 'First', parent_id: folder.id });
+		const note2 = await Note.save({ title: 'Two', body: 'Second', parent_id: folder.id });
+		const trashed = await Note.save({ title: 'Gone', parent_id: folder.id, deleted_time: Date.now() });
+		const missingId = 'a'.repeat(32);
+
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'read_notes', arguments: { ids: [note1.id, missingId, note2.id, trashed.id] } },
+		});
+		const payload = parseToolResult(response.result);
+		expect(payload.notes.map((n: { title: string }) => n.title)).toEqual(['One', 'Two']);
+		expect(payload.notes[0].body).toBe('First');
+		expect(payload.notes[0].notebook_title).toBe('Work');
+		expect(payload.not_found).toEqual([missingId, trashed.id]);
+		expect(payload.truncation_message).toBeUndefined();
+	});
+
+	test('read_notes shares the body budget across notes', async () => {
+		const folder = await Folder.save({ title: 'F' });
+		const short = await Note.save({ title: 'Short', body: 'x'.repeat(1000), parent_id: folder.id });
+		const long1 = await Note.save({ title: 'Long1', body: 'x'.repeat(10000), parent_id: folder.id });
+		const long2 = await Note.save({ title: 'Long2', body: 'x'.repeat(10000), parent_id: folder.id });
+
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'read_notes', arguments: { ids: [short.id, long1.id, long2.id] } },
+		});
+		const payload = parseToolResult(response.result);
+		const [shortResult, long1Result, long2Result] = payload.notes;
+		expect(shortResult.body.length).toBe(1000);
+		expect(shortResult.has_more).toBe(false);
+		expect(long1Result.body.length).toBe(3500);
+		expect(long1Result.body_length).toBe(10000);
+		expect(long1Result.has_more).toBe(true);
+		expect(long2Result.body.length).toBe(3500);
+		expect(payload.truncation_message).toContain('read_note');
+	});
+
+	test('read_notes rejects too many ids', async () => {
+		const ids = Array.from({ length: 21 }, (_v, i) => i.toString(16).padStart(32, '0'));
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'read_notes', arguments: { ids } },
+		});
+		expect(response.result.isError).toBe(true);
+	});
+
+	test('read_notes is governed by the read_note setting', async () => {
+		Setting.setValue('ai.tool.read_note.enabled', false);
+		const note = await Note.save({ title: 'N' });
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'read_notes', arguments: { ids: [note.id] } },
+		});
+		expect(response.result.isError).toBe(true);
+	});
+
+	test('read_note rejects outline combined with section', async () => {
+		const folder = await Folder.save({ title: 'F' });
+		const note = await Note.save({ title: 'Structured', body: '# One\n', parent_id: folder.id });
+
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'read_note', arguments: { id: note.id, outline: true, section: '1' } },
+		});
+		expect(response.result.isError).toBe(true);
 	});
 
 	test('delete_note moves a note to trash', async () => {

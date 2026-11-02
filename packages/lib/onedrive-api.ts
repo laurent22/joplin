@@ -92,14 +92,15 @@ export default class OneDriveApi {
 		return `${r.parentReference.path}/${r.name}`;
 	}
 
-	public authCodeUrl(redirectUri: string) {
-		const query = {
+	public authCodeUrl(redirectUri: string, state: string | null = null) {
+		const query: Record<string, string> = {
 			client_id: this.clientId_,
 			scope: 'files.readwrite offline_access sites.readwrite.all',
 			response_type: 'code',
 			redirect_uri: redirectUri,
 			prompt: 'login',
 		};
+		if (state) query.state = state;
 		return `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?${stringify(query)}`;
 	}
 

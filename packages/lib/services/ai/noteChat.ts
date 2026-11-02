@@ -241,9 +241,6 @@ const assertWithinTokenBudget = (history: ChatMessage[], budget: number) => {
 		if (message.role === ChatRole.Assistant) {
 			totalTokens += estimateToolCallTokens(message.toolCalls ?? []);
 		}
-		if (message.role === ChatRole.Tool) {
-			totalTokens += estimateTokens(message.content);
-		}
 	}
 
 	if (totalTokens > budget) {

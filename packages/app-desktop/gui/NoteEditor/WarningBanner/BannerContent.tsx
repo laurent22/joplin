@@ -17,7 +17,7 @@ const BannerContent: React.FC<Props> = props => {
 
 	return <div className='warning-banner'>
 		{props.children}
-		{ props.onAccept ? <>&nbsp;&nbsp;<a onClick={props.onAccept} className='warning-banner-link' href="#">[ {props.acceptMessage} ]</a></> : null }
+		{ props.acceptMessage ? <>&nbsp;&nbsp;<a onClick={props.onAccept} className='warning-banner-link' href="#">[ {props.acceptMessage} ]</a></> : null }
 		&nbsp;&nbsp;{ props.onDismiss ? <a onClick={props.onDismiss} className='warning-banner-link' href="#">[ {props.dismissMessage ?? _('Dismiss')} ]</a> : null }
 	</div>;
 };

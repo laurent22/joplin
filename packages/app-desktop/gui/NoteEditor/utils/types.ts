@@ -76,7 +76,9 @@ export interface NoteEditorProps {
 	showNoteLinkIcon: boolean;
 	whiteboardForceMarkdown: Record<string, boolean>;
 	noteLockSessionUnlocked: boolean;
+	noteLockEnabled: boolean;
 	hasNoteLockKey: boolean;
+	noteLockMigrationRunning: boolean;
 	editorNoteReloadTimeRequest: number;
 }
 
@@ -172,6 +174,7 @@ export interface FormNote {
 	title: string;
 	body: string;
 	parent_id: string;
+	share_id: string;
 	is_todo: number;
 	is_conflict?: number;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Editor-specific content shape (e.g. TinyMCE retains the raw editor object here); per-editor type
@@ -225,6 +228,7 @@ export function defaultFormNote(): FormNote {
 	return {
 		id: '',
 		parent_id: '',
+		share_id: '',
 		deleted_time: 0,
 		title: '',
 		body: '',

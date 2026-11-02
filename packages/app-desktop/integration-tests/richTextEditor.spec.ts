@@ -329,6 +329,49 @@ test.describe('richTextEditor', () => {
 		await expect(editorBody).toHaveText('Unsaved text');
 	});
 
+	test('should not drop empty lines made by pressing Enter at the start of a heading', async ({ mainWindow }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('Other note');
+		await mainScreen.createNewNote('Heading note');
+		const otherNoteHeader = mainScreen.noteList.getNoteItemByTitle('Other note');
+		const headingNoteHeader = mainScreen.noteList.getNoteItemByTitle('Heading note');
+		const editor = mainScreen.noteEditor;
+
+		const markdownEditor = await editor.showMarkdownEditor();
+		await markdownEditor.typeText('Text above');
+		await markdownEditor.pressKey('Enter');
+		await markdownEditor.pressKey('Enter');
+		await markdownEditor.typeText('## Heading');
+
+		const richTextEditor = await editor.showRichTextEditor();
+		const headings = richTextEditor.content.locator('h2');
+		await expect(headings).toHaveCount(1);
+
+		await headings.getByText('Heading').click();
+		await mainWindow.keyboard.press('Home');
+		await mainWindow.keyboard.press('Enter');
+		await mainWindow.keyboard.press('Enter');
+		await expect(headings).toHaveCount(3);
+
+		const switchToOtherNoteAndBack = async (expectedText: string) => {
+			await otherNoteHeader.click();
+			await expect(editor.noteTitleInput).toHaveValue('Other note');
+			await headingNoteHeader.click();
+			await expect(editor.noteTitleInput).toHaveValue('Heading note');
+			await expect(richTextEditor.body).toContainText(expectedText);
+		};
+
+		await switchToOtherNoteAndBack('Text above');
+		await expect(headings).toHaveCount(3);
+
+		// Saving again after the note was reloaded from Markdown, when the empty headings can get an id
+		await richTextEditor.content.getByText('Text above').click();
+		await mainWindow.keyboard.press('End');
+		await mainWindow.keyboard.type('!');
+		await switchToOtherNoteAndBack('Text above!');
+		await expect(headings).toHaveCount(3);
+	});
+
 	test('should highlight search matches', async ({ mainWindow }) => {
 		const mainScreen = await new MainScreen(mainWindow).setup();
 		await mainScreen.createNewNote('Testing');

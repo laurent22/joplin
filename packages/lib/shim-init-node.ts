@@ -565,8 +565,8 @@ function shimInit(options: ShimInitOptions = null) {
 		const doFetchOperation = async () => {
 			const agent: Agent = shim.httpAgent(url, options);
 			const dispatcher = agent.compose([
+				// No decompress interceptor: fetch() already decodes gzip/br/deflate, and the interceptor is experimental
 				interceptors.redirect({ maxRedirections: options.maxRedirects }),
-				interceptors.decompress(),
 			]);
 
 			const abortController = new AbortController();

@@ -10,6 +10,7 @@ enum PromptInputType {
 	Datetime = 'datetime',
 	Tags = 'tags',
 	Text = 'text',
+	Password = 'password',
 }
 
 interface PromptConfig {

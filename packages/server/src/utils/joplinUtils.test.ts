@@ -1,6 +1,6 @@
 import { basename } from '@joplin/utils/path';
 import { Item } from '../services/database/types';
-import { itemIsEncrypted, localFileFromUrl } from './joplinUtils';
+import { isJoplinResourceBlobPath, itemIsEncrypted, localFileFromUrl } from './joplinUtils';
 import { expectThrow } from './testing/testUtils';
 
 describe('joplinUtils', () => {
@@ -38,5 +38,13 @@ describe('joplinUtils', () => {
 		const resolvedPath = await localFileFromUrl(url);
 		// Should resolve to the same file
 		expect(basename(resolvedPath)).toBe(basename(url));
+	});
+
+	it.each([
+		['.resource/0123456789abcdef0123456789abcdef', true],
+		['.resourceX/0123456789abcdef0123456789abcdef.md', false],
+		['.resource', false],
+	])('should detect resource blob paths: %s', (path, expected) => {
+		expect(isJoplinResourceBlobPath(path)).toBe(expected);
 	});
 });

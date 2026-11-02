@@ -10,7 +10,7 @@ import { ModelType } from '../BaseModel';
 import ItemChange from '../models/ItemChange';
 import Setting from '../models/Setting';
 import isNoteLockEnabled from '../services/noteLock/isNoteLockEnabled';
-import NoteLockNote from '../services/noteLock/NoteLockNote';
+import NoteLockNote, { NoteLockNoteEntity } from '../services/noteLock/NoteLockNote';
 import NoteLockSession from '../services/noteLock/NoteLockSession';
 import Logger from '@joplin/utils/Logger';
 
@@ -50,11 +50,9 @@ export const runtime = (): CommandRuntime => {
 					if (await itemIsReadOnly(Note, ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, note.id, Setting.value('sync.userId'), context.state.shareService)) {
 						throw new Error(_('Cannot convert read-only item: "%s"', note.title));
 					}
-					const noteIsLocked = isNoteLockEnabled() && NoteLockNote.isLocked(note);
-
-					// A locked note converts through a full gated load and save, so the body is
+					// Every note converts through a full gated load and save, so a locked body is
 					// decrypted for the conversion and the converted note is encrypted again.
-					const sourceNote = noteIsLocked ? await Note.load(note.id, { useNoteLock: true, noteLockKey }) : note;
+					const sourceNote: NoteLockNoteEntity = await Note.load(note.id, { useNoteLock: true, noteLockKey });
 					const markdownBody = await convertHtmlToMarkdown().execute(context, sourceNote.body);
 					const backupNote = await Note.duplicate(note.id, {
 						changes: {
@@ -67,7 +65,7 @@ export const runtime = (): CommandRuntime => {
 					note.markup_language = MarkupLanguage.Markdown;
 					note.updated_time = Date.now();
 
-					const toSave = { ...note, isDecrypted: true };
+					const toSave = { ...note, isDecrypted: sourceNote.isDecrypted };
 					await Note.save(toSave, { autoTimestamp: false, useNoteLock: true, noteLockKey });
 					await Note.delete(backupNote.id, { toTrash: true });
 					processedCount ++;

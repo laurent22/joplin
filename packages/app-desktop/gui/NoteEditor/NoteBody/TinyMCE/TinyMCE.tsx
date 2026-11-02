@@ -733,10 +733,10 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 				noneditable_class: 'joplin-editable', // Can be a regex too
 				iframe_aria_text: _('Rich Text editor. Press Escape then Tab to escape focus.'),
 
-				// #p: Pad empty paragraphs with &nbsp; to prevent them from being removed.
+				// #p, #h1-#h6: Pad empty paragraphs and headings with &nbsp; to prevent them from being removed.
 				// *[*]: Allow all elements and attributes -- we already filter in sanitize_html
 				// See https://www.tiny.cloud/docs/configure/content-filtering/#controlcharacters
-				valid_elements: '#p,*[*]',
+				valid_elements: '#p,#h1[*],#h2[*],#h3[*],#h4[*],#h5[*],#h6[*],*[*]',
 
 				menubar: false,
 				relative_urls: false,

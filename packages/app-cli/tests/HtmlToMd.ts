@@ -2,7 +2,9 @@ import shim from '@joplin/lib/shim';
 import * as os from 'os';
 import { readFile } from 'fs/promises';
 import { filename } from '@joplin/lib/path-utils';
+import { dirname } from 'path';
 import HtmlToMd, { ParseOptions } from '@joplin/lib/HtmlToMd';
+import MdToHtml from '@joplin/renderer/MdToHtml';
 
 describe('HtmlToMd', () => {
 
@@ -127,6 +129,56 @@ describe('HtmlToMd', () => {
 
 		// Verify that a single blank line is preserved (not fully removed)
 		expect(collapsedResult).toContain('\n\n');
+	});
+
+	it('should not re-read the rows of a table for every row', async () => {
+		// Under domino, each access to `table.rows` walks the whole table, so reading it once per row made
+		// converting large tables quadratic: https://github.com/laurent22/joplin/issues/16894
+		const resolveFrom = (moduleName: string, fromPath: string) => require.resolve(moduleName, { paths: [dirname(fromPath)] });
+		const domino: { createDocument: (html: string)=> Document } = require(resolveFrom('@mixmark-io/domino', resolveFrom('@joplin/turndown', require.resolve('@joplin/lib/HtmlToMd'))));
+
+		const rowCount = 100;
+		const rows = Array.from({ length: rowCount }, (_, i) => `<tr><td>${i}</td><td>b</td><td>c</td></tr>`).join('');
+		const root = domino.createDocument(`<div><table><thead><tr><th>A</th><th>B</th><th>C</th></tr></thead><tbody>${rows}</tbody></table></div>`).querySelector('div');
+		// Turndown converts a clone of the element it's given, which wouldn't have the counter below
+		Object.defineProperty(root, 'cloneNode', { value: () => root });
+
+		const table = root.querySelector('table');
+		const getRows = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(table), 'rows').get;
+		let rowsReadCount = 0;
+		Object.defineProperty(table, 'rows', { get: () => {
+			rowsReadCount++;
+			return getRows.call(table);
+		} });
+
+		const markdown = new HtmlToMd().parse(root);
+		expect(markdown.split('\n')).toHaveLength(rowCount + 2);
+		expect(rowsReadCount).toBeLessThan(rowCount);
+	});
+
+	// Covers how newlines are carried between children when joining them, which was rewritten to fix
+	// https://github.com/laurent22/joplin/issues/16895
+	it.each([
+		['<ul><li>a</li><li></li><li>b</li></ul>', '- a\n\n- b'],
+		['<span><p>a</p></span>b', 'a\n\nb'],
+		['<pre><code><span>line 1</span>\n\n\n<span>line 2</span></code></pre>', '```\nline 1\n\n\nline 2\n```'],
+	])('should join the Markdown of child elements: %j', (html, expected) => {
+		expect(new HtmlToMd().parse(html)).toBe(expected);
+	});
+
+	it.each([
+		['inline code ending with a space at the end of a heading', '<h2><code>npm</code> install&nbsp;<code>a&nbsp;</code></h2>', 'a\u00A0'],
+		['a heading that only contains inline code with a space', '<h2><code>&nbsp;</code></h2>', '\u00A0'],
+	])('should not change %s when the note is saved again', async (_title, html, codeText) => {
+		const htmlToMd = new HtmlToMd();
+		const mdToHtml = new MdToHtml();
+
+		const firstSave = htmlToMd.parse(html);
+		const reopened = await mdToHtml.render(firstSave, null, { bodyOnly: true });
+		const secondSave = htmlToMd.parse(reopened.html);
+
+		expect(reopened.html).toContain(`>${codeText}</code>`);
+		expect(secondSave).toBe(firstSave);
 	});
 
 });

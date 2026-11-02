@@ -67,7 +67,22 @@ const uiTests = async () => {
 		], { env });
 	};
 
-	await runUiTests();
+	// On CI, the test runner sometimes fails to bootstrap ("Early unexpected exit"), which
+	// -retry-tests-on-failure does not cover since no test ever started. Retrying the whole
+	// xcodebuild invocation, after resetting the simulators, works around it.
+	const maxAttempts = 3;
+	for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+		try {
+			await runUiTests();
+			return;
+		} catch (error) {
+			if (attempt === maxAttempts) throw error;
+
+			console.warn(`UI tests failed (attempt ${attempt} of ${maxAttempts}), retrying...`);
+			await execCommand(['xcrun', 'simctl', 'shutdown', 'all'], { quiet: true });
+			await execCommand(['xcrun', 'simctl', 'erase', 'all'], { quiet: true });
+		}
+	}
 };
 
 export default uiTests;

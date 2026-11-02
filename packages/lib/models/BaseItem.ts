@@ -640,6 +640,9 @@ export default class BaseItem extends BaseModel {
 		const ItemClass = this.itemClass(output.type_);
 		output = ItemClass.removeUnknownFields(output);
 
+		// Joplin Server re-serialises a missing is_locked as an empty value. Drop it so that sync still sees it as not set.
+		if (output.is_locked === '') delete output.is_locked;
+
 		// Reject any field that could be used to escape the resource directory
 		// when concatenated into a file path (resourceFullPath uses raw string
 		// concat on id and file_extension). The id format is universally a 32

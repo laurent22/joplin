@@ -21,6 +21,9 @@ interface EmitActivationCheckOptions {
 	noteId: string;
 	parentWindowId: string;
 	isCancelled?: ()=> boolean;
+	// Editor plugins typically read the note through the data API, which only has a placeholder body
+	// for a locked note, so no editor plugin is activated for one.
+	noteIsLocked: boolean;
 }
 
 interface SaveNoteEvent {
@@ -83,7 +86,7 @@ export default class {
 		}
 	}
 
-	public async emitActivationCheck({ noteId, parentWindowId, isCancelled }: EmitActivationCheckOptions) {
+	public async emitActivationCheck({ noteId, parentWindowId, isCancelled, noteIsLocked }: EmitActivationCheckOptions) {
 		let filterObject: EditorActivationCheckFilterObject = {
 			activatedEditors: [],
 			effectiveNoteId: noteId,
@@ -98,7 +101,7 @@ export default class {
 		for (const editor of filterObject.activatedEditors) {
 			const controller = this.pluginService_.pluginById(editor.pluginId).viewController(editor.viewId) as WebviewController;
 			if (controller.parentWindowId === parentWindowId) {
-				controller.setActive(editor.isActive);
+				controller.setActive(editor.isActive && !noteIsLocked);
 			}
 		}
 	}

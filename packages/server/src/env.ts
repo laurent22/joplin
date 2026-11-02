@@ -59,6 +59,11 @@ const defaultEnvValues: EnvVariables = {
 	TERMS_URL: '',
 	PRIVACY_URL: '',
 
+	// Comma-separated list of trusted domains that can access server API.
+	// Use this to grant the Joplin web app access to Joplin Server.
+	// Entries must be in <protocol>://<domain> form (no trailing slash).
+	CORS_ALLOWED_DOMAINS: 'https://joplinapp.org,https://app.joplincloud.com',
+
 	// ==================================================
 	// Database config
 	// ==================================================
@@ -215,6 +220,7 @@ export interface EnvVariables {
 	JOPLINAPP_BASE_URL: string;
 	TERMS_URL: string;
 	PRIVACY_URL: string;
+	CORS_ALLOWED_DOMAINS: string;
 
 	DEFAULT_ADMIN_PASSWORD: string;
 
