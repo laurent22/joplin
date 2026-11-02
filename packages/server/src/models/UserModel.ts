@@ -629,8 +629,9 @@ export default class UserModel extends BaseModel<User> {
 		}, 'UserModel::resetPassword');
 
 		// Anyone can block logins to an account by sending wrong passwords, and the reset link proves at least as much as
-		// the password, so it lets the owner back in
-		await limiterLoginAccountBruteForce.onSuccess(user.email);
+		// the password, so it lets the owner back in. Not with MFA: the count includes wrong MFA codes, which someone
+		// who controls the inbox could otherwise guess 10 at a time between resets.
+		if (!getIsMFAEnabled(user)) await limiterLoginAccountBruteForce.onSuccess(user.email);
 	}
 
 	public async handleBetaUserEmails() {

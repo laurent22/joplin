@@ -95,10 +95,14 @@ describe('SessionModel', () => {
 		expect(httpCodes).toEqual([...Array(10).fill(ErrorForbidden.httpCode), ...Array(6).fill(ErrorTooManyRequests.httpCode)]);
 	});
 
-	test('should unblock the account when the password is reset', async () => {
+	test.each([
+		[false, 'unblock'],
+		[true, 'not unblock'],
+	])('when the password is reset, with MFA = %s, should %s the account', async (withMfa) => {
 		process.env.JOPLIN_TEST_ACCOUNT_LIMITER = '1';
 
 		const { user } = await createUserAndSession(1);
+		if (withMfa) await models().user().save({ id: user.id, totp_secret: 'mfa-is-enabled' });
 		const services = (await koaAppContext()).joplin.services;
 
 		await failLogin(user.email, services, 10);
@@ -106,7 +110,13 @@ describe('SessionModel', () => {
 		const url = await models().user().generateLinkForPasswordReset(user.id);
 		await models().user().resetPassword(url.split('?token=')[1], { password: 'correct-horse-battery-staple', password2: 'correct-horse-battery-staple' });
 
-		expect(await models().session().authenticate(user.email, 'correct-horse-battery-staple', services, '')).toBeTruthy();
+		// With MFA the account stays blocked, so the login is refused as rate limiting before the code is checked
+		const login = async () => models().session().authenticate(user.email, 'correct-horse-battery-staple', services, withMfa ? '123456' : '');
+		if (withMfa) {
+			await expectHttpError(login, ErrorTooManyRequests.httpCode);
+		} else {
+			expect(await login()).toBeTruthy();
+		}
 	});
 
 	test('should not block other accounts', async () => {
