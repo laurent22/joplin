@@ -323,7 +323,7 @@ export default class ItemModel extends BaseModel<Item> {
 		const items: Item[] = await this
 			.db('user_items')
 			.leftJoin('items', 'items.id', 'user_items.item_id')
-			.select(fields)
+			.distinct(fields)
 			.whereIn('items.id', ids);
 
 		const promises: Promise<Buffer>[] = [];
