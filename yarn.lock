@@ -12953,7 +12953,7 @@ __metadata:
     follow-redirects: "npm:1.16.0"
     fs-extra: "npm:11.3.6"
     html-entities: "npm:1.4.0"
-    html-minifier: "patch:html-minifier@npm%3A4.0.0#~/.yarn/patches/html-minifier-npm-4.0.0-2c414aaddf.patch"
+    html-minifier: "npm:4.0.0"
     image-data-uri: "npm:2.0.1"
     immer: "npm:9.0.21"
     jest: "npm:29.7.0"
