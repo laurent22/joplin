@@ -1,7 +1,7 @@
 import BaseModel from './BaseModel';
 import { User, Session, Uuid } from '../services/database/types';
 import { uuidgen } from '../utils/uuid';
-import { ErrorForbidden } from '../utils/errors';
+import { ErrorCode, ErrorForbidden } from '../utils/errors';
 import { Hour } from '../utils/time';
 import { isValidMFACode } from '../utils/crypto';
 import { getIsMFAEnabled } from './utils/user';
@@ -64,7 +64,7 @@ export default class SessionModel extends BaseModel<Session> {
 		}
 
 		if (getIsMFAEnabled(user)) {
-			if (!mfaCode && !recoveryCode) throw new ErrorForbidden('Invalid authentication code', { details: { mfaCode } });
+			if (!mfaCode && !recoveryCode) throw new ErrorForbidden('Invalid authentication code', { details: { mfaCode }, code: ErrorCode.MfaCodeRequired });
 
 			if (mfaCode) {
 				if (!(await isValidMFACode(user.totp_secret, mfaCode))) {

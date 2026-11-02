@@ -1,6 +1,7 @@
 import BaseModel, { AclAction, LoadOptions, SaveOptions, ValidateOptions } from './BaseModel';
 import { EmailSender, Item, NotificationLevel, Subscription, User, UserFlagType, Uuid } from '../services/database/types';
 import { isHashedPassword, hashPassword, checkPassword } from '../utils/auth';
+import { randomBytes } from 'crypto';
 import { limiterLoginAccountBruteForce } from '../utils/request/limiterAccountBruteForce';
 import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge, ErrorNotFound, ErrorBadRequest } from '../utils/errors';
 import { ModelType } from '@joplin/lib/BaseModel';
@@ -45,6 +46,13 @@ import { Services } from '../services/types';
 export { AccountType };
 
 const logger = Logger.create('UserModel');
+
+let dummyPasswordHash_: string = null;
+
+const dummyPasswordHash = async () => {
+	if (!dummyPasswordHash_) dummyPasswordHash_ = await hashPassword(randomBytes(32).toString('hex'));
+	return dummyPasswordHash_;
+};
 
 interface UserEmailDetails {
 	sender_id: EmailSender;
@@ -243,7 +251,11 @@ export default class UserModel extends BaseModel<User> {
 			}
 		}
 
-		if (!user || user.is_external) return null;
+		if (!user || user.is_external) {
+			// So that the response takes as long as for a registered email, which would otherwise reveal the difference
+			await checkPassword(password || '', await dummyPasswordHash());
+			return null;
+		}
 		if (!(await checkPassword(password, user.password))) return null;
 		return user;
 	}

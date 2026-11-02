@@ -10,7 +10,7 @@ import limiterLoginBruteForce from '../../utils/request/limiterLoginBruteForce';
 import { cookieSet } from '../../utils/cookies';
 import { adminDashboardUrl, applicationsConfirmUrl, homeUrl } from '../../utils/urlUtils';
 import { generateRedirectHtml } from '../../utils/saml';
-import { ErrorForbidden } from '../../utils/errors';
+import { ErrorCode, ErrorForbidden } from '../../utils/errors';
 import { checkNotCrossSiteRequest } from '../../utils/csrf';
 
 type LoginViewContentOptions = {
@@ -113,16 +113,6 @@ router.post('login', async (path: SubPath, ctx: AppContext) => {
 	const body = await formParse(ctx.req);
 
 	try {
-		// Non-existent users may be created by session().authenticate in some setups -- we need to allow
-		// non-existent users here.
-		const hasMFAEnabled = await ctx.joplin.models.user().hasMFAEnabled(
-			body.fields.email, { requireUserExists: false },
-		);
-
-		if (hasMFAEnabled && (!body.fields.mfaCode && !body.fields.recoveryCode)) {
-			return internalRedirect(path, ctx, router, 'login', body.fields, { showMfaCodeInput: true });
-		}
-
 		const session = await ctx.joplin.models.session().authenticate(
 			body.fields.email, body.fields.password, ctx.joplin.services, body.fields.mfaCode, body.fields.recoveryCode,
 		);
@@ -131,6 +121,11 @@ router.post('login', async (path: SubPath, ctx: AppContext) => {
 
 		return redirect(ctx, getRedirectUrl(owner.is_admin, body.fields.applicationAuthId));
 	} catch (error) {
+		// Only raised once the password has been checked, so that the form does not reveal which accounts have MFA
+		if (error.code === ErrorCode.MfaCodeRequired) {
+			return internalRedirect(path, ctx, router, 'login', body.fields, { showMfaCodeInput: true });
+		}
+
 		return makeView(
 			error,
 			{ email: body.fields.email, password: body.fields.password, applicationAuthId: body.fields.applicationAuthId },

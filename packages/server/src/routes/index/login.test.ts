@@ -161,6 +161,10 @@ describe('login', () => {
 		const context = await doLogin(user.email, '123456');
 
 		expect(context.response.body.toString().includes('<label class="label">Authentication code</label>')).toBe(true);
+
+		// Otherwise anyone could find out which accounts have MFA
+		const wrongPasswordContext = await doLogin(user.email, 'wrong-password');
+		expect(wrongPasswordContext.response.body.toString().includes('<label class="label">Authentication code</label>')).toBe(false);
 	});
 
 	test('should populate the email and password input fields with sent values if user has MFA enabled', async () => {

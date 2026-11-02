@@ -9,6 +9,7 @@ import { stripePortalUrl } from '../utils/urlUtils';
 import { Day } from '../utils/time';
 import config from '../config';
 import { uuidgen } from '@joplin/lib/uuid';
+import * as auth from '../utils/auth';
 
 describe('UserModel', () => {
 
@@ -635,10 +636,14 @@ describe('UserModel', () => {
 	test('should not log in an user using a email/password combo when the local auth is disabled', async () => {
 		config().LOCAL_AUTH_ENABLED = false;
 
-		const user = await createUser();
-		const ctx = await koaAppContext();
+		try {
+			const user = await createUser();
+			const ctx = await koaAppContext();
 
-		expect(await models().user().login(user.email, '123456', ctx.joplin.services)).toBe(null);
+			expect(await models().user().login(user.email, '123456', ctx.joplin.services)).toBe(null);
+		} finally {
+			config().LOCAL_AUTH_ENABLED = true;
+		}
 	});
 
 	test('should not change user properties managed by SAML', async () => {
@@ -736,6 +741,20 @@ describe('UserModel', () => {
 		await expectHttpError(async () => {
 			await models().user().hasMFAEnabled('no-exist@localhost', { requireUserExists: true });
 		}, 403);
+	});
+
+	test('should check a password even when there is no such user, so that it takes as long', async () => {
+		const { user } = await createUserAndSession(1);
+		const services = (await koaAppContext()).joplin.services;
+		const checkPassword = jest.spyOn(auth, 'checkPassword');
+
+		try {
+			expect(await models().user().login('no-such-user@localhost', 'any-password', services)).toBe(null);
+			expect(await models().user().login(user.email, 'wrong-password', services)).toBe(null);
+			expect(checkPassword).toHaveBeenCalledTimes(2);
+		} finally {
+			checkPassword.mockRestore();
+		}
 	});
 
 	test('should return the number of enabled non-admin users from enabledUserCount', async () => {
