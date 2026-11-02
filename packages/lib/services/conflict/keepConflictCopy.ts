@@ -62,10 +62,15 @@ export default async (conflictNoteId: string): Promise<KeepResult> => {
 			is_conflict: 0,
 			conflict_original_id: '',
 		});
-		await ConflictNoteState.deleteByNoteIds([note.id]);
 	} catch (error) {
 		logger.warn('Could not keep the conflict note', conflictNoteId, error);
 		return { status: KeepStatus.CannotWrite, noteId: conflictNoteId, reason: error.message };
+	}
+
+	try {
+		await ConflictNoteState.deleteByNoteIds([note.id]);
+	} catch (error) {
+		logger.warn('Could not delete the conflict state of the kept note', note.id, error);
 	}
 
 	return { status: KeepStatus.Ok, noteId: note.id, title };
