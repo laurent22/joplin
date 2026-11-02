@@ -162,7 +162,6 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 				this.api_ = 'responses';
 				return result;
 			}
-			logger.info(`${this.baseUrl_}/responses returned 404. Using /chat/completions instead.`);
 		}
 
 		const chatCompletionsResult = await this.doChatCompletions(messages, options);
@@ -179,7 +178,10 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 		const body = toResponsesBody(this.model_, messages, options, replayKey);
 		let { status, json } = await this.sendResponsesRequest(body, { signal: options?.signal });
 
-		if (status === 404 && this.api_ === null) return null;
+		if (status === 404 && this.api_ === null) {
+			logger.info(`${this.baseUrl_}/responses returned 404. Using /chat/completions instead.`);
+			return null;
+		}
 
 		// Same compatibility retry as `response_format` in doChatCompletions
 		if (status === 400 && 'text' in body && /json_schema|response_format/i.test(json?.error?.message ?? '')) {
@@ -195,7 +197,10 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 
 		if (!Array.isArray(json?.output)) {
 			// Older LM Studio versions return 200 with an error body for unknown endpoints
-			if (this.api_ === null) return null;
+			if (this.api_ === null) {
+				logger.info(`${this.baseUrl_}/responses returned ${status} with no output. Using /chat/completions instead.`);
+				return null;
+			}
 			throw this.badResponseShapeError();
 		}
 
