@@ -10072,6 +10072,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@electron/notarize@npm:3.1.1":
+  version: 3.1.1
+  resolution: "@electron/notarize@npm:3.1.1"
+  dependencies:
+    debug: "npm:^4.4.0"
+    promise-retry: "npm:^2.0.1"
+  checksum: 10/7539f5db1d12758c56edabcbad4c3b748505cf72bdb2770c70ab88e52481cc3b737df6bd0edb60122debebd30a63c6c686cc51c19802ae61762f6c438e88dece
+  languageName: node
+  linkType: hard
+
 "@electron/osx-sign@npm:1.3.3":
   version: 1.3.3
   resolution: "@electron/osx-sign@npm:1.3.3"
@@ -12542,7 +12552,7 @@ __metadata:
   dependencies:
     7zip-bin: "npm:5.2.0"
     "@axe-core/playwright": "npm:4.12.1"
-    "@electron/notarize": "npm:2.5.0"
+    "@electron/notarize": "npm:3.1.1"
     "@electron/rebuild": "npm:4.1.0"
     "@electron/remote": "npm:2.1.3"
     "@fortawesome/fontawesome-free": "npm:5.15.4"
