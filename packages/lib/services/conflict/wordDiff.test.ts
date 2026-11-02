@@ -165,13 +165,12 @@ describe('wordDiff', () => {
 	});
 
 	test('should handle a long single line without scanning back from each character', () => {
-		const local = `| ${'a'.repeat(40000)} | b |`;
-		const remote = `| ${'a'.repeat(40000)} | c |`;
+		const local = `| ${'a'.repeat(200000)} | b |`;
+		const remote = `| ${'c'.repeat(200000)} | d |`;
 
 		const startTime = Date.now();
 		const diff = wordDiff(local, remote);
-		// raised it from 500 to 5000 as CI can be slow sometimes
-		expect(Date.now() - startTime).toBeLessThan(5000);
+		expect(Date.now() - startTime).toBeLessThan(1000);
 		expect(diff.local.map(segment => segment.text).join('')).toBe(local);
 		expect(diff.remote.map(segment => segment.text).join('')).toBe(remote);
 	});
