@@ -138,6 +138,10 @@ function NoteEditorContent(props: NoteEditorProps) {
 	// The resolution UI needs the Markdown editor, so it replaces plugin editors and whiteboards
 	const conflictRestrictsEditor = props.conflictIsInView && (!conflictChecked || noteHasConflict);
 	const conflictBlocksPlugins = props.conflictIsInView && conflictChecked && noteHasConflict;
+	// The merge extension is only built for CodeMirror 6
+	const bodyEditor = conflictRestrictsEditor && props.bodyEditor !== NoteBodyEditorType.PlainText ? NoteBodyEditorType.CodeMirror6 : props.bodyEditor;
+	// The resolution UI needs only editor
+	const noteVisiblePanes = conflictRestrictsEditor ? ['editor'] : props.noteVisiblePanes;
 	const { editorPlugin, editorView } = usePluginEditorView(props.plugins, conflictRestrictsEditor);
 	const builtInEditorVisible = !editorPlugin;
 	const windowId = useContext(WindowIdContext);
@@ -224,7 +228,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 	const formNoteFolder = useFolder({ folderId: formNote.parent_id });
 
 	const isConflictNote = conflictRestrictsEditor
-		&& props.bodyEditor === NoteBodyEditorType.CodeMirror6;
+		&& bodyEditor === NoteBodyEditorType.CodeMirror6;
 
 	const onConflictReload = useCallback(() => {
 		reloadConflict();
@@ -570,7 +574,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		noteId: formNote.id,
 		selectedNoteHash: props.selectedNoteHash,
 		editorRef,
-		editorName: props.bodyEditor,
+		editorName: bodyEditor,
 	});
 	const onMessage = useMessageHandler(scrollWhenReadyRef, clearScrollWhenReady, windowId, editorRef, setLocalSearchResultCount, props.dispatch, formNote, htmlToMarkdown, markupToHtml);
 
@@ -696,7 +700,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		setShowLocalSearch,
 		useLocalSearch: showLocalSearch,
 		searchMarkers: searchMarkers,
-		visiblePanes: props.noteVisiblePanes || ['editor', 'viewer'],
+		visiblePanes: noteVisiblePanes || ['editor', 'viewer'],
 		keyboardMode: Setting.value('editor.keyboardMode'),
 		enableTextPatterns: Setting.value('editor.enableTextPatterns'),
 		tabMovesFocus: props.tabMovesFocus,
@@ -756,16 +760,16 @@ function NoteEditorContent(props: NoteEditorProps) {
 	if (useWhiteboardEditor) {
 		editor = <WhiteboardEditor key={formNote.id} {...editorProps}/>;
 	} else if (builtInEditorVisible) {
-		if (props.bodyEditor === 'TinyMCE') {
+		if (bodyEditor === 'TinyMCE') {
 			editor = <TinyMCE {...editorProps}/>;
-		} else if (props.bodyEditor === 'PlainText') {
+		} else if (bodyEditor === 'PlainText') {
 			editor = <PlainEditor {...editorProps}/>;
-		} else if (props.bodyEditor === 'CodeMirror5') {
+		} else if (bodyEditor === 'CodeMirror5') {
 			editor = <CodeMirror5 {...editorProps}/>;
-		} else if (props.bodyEditor === 'CodeMirror6') {
+		} else if (bodyEditor === 'CodeMirror6') {
 			editor = <CodeMirror6 {...editorProps}/>;
 		} else {
-			throw new Error(`Invalid editor: ${props.bodyEditor}`);
+			throw new Error(`Invalid editor: ${bodyEditor}`);
 		}
 	}
 
@@ -845,8 +849,8 @@ function NoteEditorContent(props: NoteEditorProps) {
 				onNext={localSearch_next}
 				onPrevious={localSearch_previous}
 				onClose={localSearch_close}
-				visiblePanes={props.noteVisiblePanes}
-				editorType={props.bodyEditor}
+				visiblePanes={noteVisiblePanes}
+				editorType={bodyEditor}
 			/>
 		);
 	}
@@ -1023,7 +1027,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 					setTagsToolbarButtonInfo={props.setTagsToolbarButtonInfo}
 					selectedNoteTags={props.selectedNoteTags}
 				/>
-				<WarningBanner bodyEditor={props.bodyEditor} lockedInShare={lockedInShare}/>
+				<WarningBanner bodyEditor={bodyEditor} lockedInShare={lockedInShare}/>
 			</div>
 		</div>
 	);
@@ -1060,8 +1064,6 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 	let bodyEditor = windowState.editorCodeView ? NoteBodyEditorType.CodeMirror6 : NoteBodyEditorType.TinyMce;
 	if (state.settings.isSafeMode) {
 		bodyEditor = NoteBodyEditorType.PlainText;
-	} else if (conflictIsInView && windowState.activeNoteIsConflict) {
-		bodyEditor = NoteBodyEditorType.CodeMirror6;
 	} else if (windowState.editorCodeView && state.settings['editor.legacyMarkdown']) {
 		bodyEditor = NoteBodyEditorType.CodeMirror5;
 	}
@@ -1085,7 +1087,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		searches: state.searches,
 		selectedSearchId: windowState.selectedSearchId,
 		customCss: state.customViewerCss,
-		noteVisiblePanes: conflictIsInView && windowState.activeNoteIsConflict ? ['editor'] : windowState.noteVisiblePanes,
+		noteVisiblePanes: windowState.noteVisiblePanes,
 		watchedResources: windowState.watchedResources,
 		// For now, only the main window has search UI. Show the same search markers in all
 		// windows:
