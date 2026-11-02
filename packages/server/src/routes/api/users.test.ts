@@ -1,6 +1,6 @@
 import { User } from '../../services/database/types';
 import { deleteApi, getApi, patchApi, postApi } from '../../utils/testing/apiUtils';
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, expectHttpError, koaAppContext } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, expectHttpError, expectThrow, koaAppContext } from '../../utils/testing/testUtils';
 import ownerHandler from '../../middleware/ownerHandler';
 import { ErrorForbidden, ErrorTooManyRequests, ErrorUnprocessableEntity } from '../../utils/errors';
 import { uuidgen } from '@joplin/lib/uuid';
@@ -201,6 +201,11 @@ describe('api/users', () => {
 		try {
 			const { session, user, password } = await createUserAndSession(1, false);
 			const changeEmail = async (index: number) => patchApi(session.id, `users/${user.id}`, { email: `new-email-${index}@example.com`, current_password: password });
+
+			// Attempts with a wrong current password are not counted
+			for (let i = 0; i < 3; i++) {
+				await expectThrow(async () => patchApi(session.id, `users/${user.id}`, { email: `typo-${i}@example.com`, current_password: 'wrong-password' }));
+			}
 
 			for (let i = 0; i < 3; i++) await changeEmail(i);
 			await expectHttpError(async () => changeEmail(3), ErrorTooManyRequests.httpCode);

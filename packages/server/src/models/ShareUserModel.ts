@@ -2,6 +2,10 @@ import { Item, Share, ShareType, ShareUser, ShareUserStatus, User, Uuid } from '
 import { ErrorBadRequest, ErrorConflict, ErrorForbidden, ErrorNotFound } from '../utils/errors';
 import BaseModel, { AclAction, DeleteOptions } from './BaseModel';
 import { getCanReceiveFolder } from './utils/user';
+import config from '../config';
+
+// Without a mailer, which self-hosted servers often do not set up, an address cannot be confirmed
+export const needsEmailConfirmation = (user: User) => config().mailer.enabled && !user.email_confirmed;
 
 export const confirmEmailMessage = (action: string) => `Please confirm your email address before ${action}. A confirmation link was sent to your email address, and you can send it again from your profile page.`;
 
@@ -15,7 +19,7 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 	// that an invitation that cannot be sent anyway does not reveal whether an address has an account.
 	public async checkCanInvite(user: User, resource: ShareUser) {
 		// Otherwise anyone could share notebooks under an address they do not own, such as one typed in at checkout
-		if (!user.email_confirmed) throw new ErrorForbidden(confirmEmailMessage('sharing a notebook'));
+		if (needsEmailConfirmation(user)) throw new ErrorForbidden(confirmEmailMessage('sharing a notebook'));
 
 		const share = await this.models().share().load(resource.share_id);
 		if (!share || share.owner_id !== user.id) throw new ErrorForbidden('no access to the share object');

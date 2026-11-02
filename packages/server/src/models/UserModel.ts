@@ -240,8 +240,9 @@ export default class UserModel extends BaseModel<User> {
 		const user = await this.loadByEmail(email);
 
 		// The directory decides which of its entries matches an email, and its users may be able to edit theirs, so it
-		// never logs in to an admin account, which keeps using its local password
-		const ldapConfigs = user?.is_admin ? [] : this.ldapConfig_;
+		// never logs in to a local admin account, which keeps using its local password. A directory account that is
+		// made an admin keeps logging in through the directory.
+		const ldapConfigs = user?.is_admin && !user.is_external ? [] : this.ldapConfig_;
 
 		for (const config of ldapConfigs) {
 			if (config.enabled) {
@@ -255,13 +256,15 @@ export default class UserModel extends BaseModel<User> {
 
 					// From now on the account is managed by the directory. Its local password, which may be an old copy of
 					// the directory password or one set by someone else, stops working.
-					await this.save({ id: user.id, is_external: 1, password: randomBytes(32).toString('hex') }, { skipValidation: true });
+					await this.save({ id: user.id, is_external: 1, email_confirmed: 1, password: randomBytes(32).toString('hex') }, { skipValidation: true });
 					return this.load(user.id);
 				}
 			}
 		}
 
-		if (!user || user.is_external) {
+		// An external account can only log in through the directory or SAML while either is enabled. Once they are turned
+		// off, it logs in with a local password, which can be set with a password reset.
+		if (!user || (user.is_external && this.isUsingExternalAuth_)) {
 			// So that the response takes as long as for a registered email, which would otherwise reveal the difference
 			await checkPassword(password || '', await dummyPasswordHash());
 			return null;
@@ -554,12 +557,14 @@ export default class UserModel extends BaseModel<User> {
 		const newEmail = this.formatValues({ email }).email;
 		if (newEmail === user.email) return '';
 		if (!isValidEmailRecipient(newEmail)) throw new ErrorUnprocessableEntity('Invalid email address');
-		await limiterEmailChanges(user.id);
+		// Only counted by initiateEmailChange(), once the current password has been checked
+		await limiterEmailChanges.check(user.id);
 		return newEmail;
 	}
 
 	public async initiateEmailChange(userId: Uuid, newEmail: string) {
 		if (!isValidEmailRecipient(newEmail)) throw new ErrorUnprocessableEntity('Invalid email address');
+		await limiterEmailChanges(userId);
 		const beforeSaveUser = await this.models().user().load(userId);
 
 		await this.models().notification().add(userId, NotificationKey.Any, NotificationLevel.Important, 'A confirmation email has been sent to your new address. Please follow the link in that email to confirm. Your email will only be updated after that.');

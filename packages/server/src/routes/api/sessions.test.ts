@@ -9,6 +9,7 @@ import { ErrorForbidden } from '../../utils/errors';
 jest.mock('../../utils/ldapLogin');
 
 const enableLdap = () => {
+	config().LDAP_1_ENABLED = true;
 	config().ldap[0] = {
 		enabled: true,
 		userCreation: true,
@@ -224,6 +225,33 @@ describe('api/sessions', () => {
 		expect((await postSession(user.email, 'directory-password')).response.status).toBe(403);
 		expect(ldapLogin).not.toHaveBeenCalled();
 		expect((await postSession(user.email, password)).response.status).toBe(200);
+	});
+
+	test('should let LDAP log in to an admin account managed by the directory', async () => {
+		const { user } = await createUserAndSession(1, true);
+		await models().user().save({ id: user.id, is_external: 1 }, { skipValidation: true });
+		enableLdap();
+		(ldapLogin as jest.Mock).mockResolvedValue(user);
+
+		expect((await postSession(user.email, 'directory-password')).response.status).toBe(200);
+	});
+
+	test('should let an account managed by the directory log in with a local password once LDAP is turned off', async () => {
+		// Before creating the user, since an earlier test may have left LDAP enabled
+		(ldapLogin as jest.Mock).mockResolvedValue(null);
+		const { user, password } = await createUserAndSession(1, false);
+		await models().user().save({ id: user.id, is_external: 1 }, { skipValidation: true });
+		enableLdap();
+
+		expect((await postSession(user.email, password)).response.status).toBe(403);
+
+		config().LDAP_1_ENABLED = false;
+		config().ldap[0].enabled = false;
+		try {
+			expect((await postSession(user.email, password)).response.status).toBe(200);
+		} finally {
+			enableLdap();
+		}
 	});
 
 	test('should not login if ldapLogin returns ForbiddenError', async () => {
