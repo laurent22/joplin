@@ -92,28 +92,33 @@ describe('saml', () => {
 		expect(loginRequest.relayState).toBe(relayState);
 	});
 
-	const validLoginResponse = (id: string): LoginResponseExtract => ({
+	const validLoginResponse = (sessionIndex: string): LoginResponseExtract => ({
 		audience: 'Joplin',
-		response: { id, destination: 'http://localhost:22300/api/saml' },
-		conditions: { notOnOrAfter: new Date(Date.now() + 5 * 60 * 1000).toISOString() },
+		response: { id: `response-${sessionIndex}`, destination: 'http://localhost:22300/api/saml' },
+		conditions: { notBefore: new Date().toISOString(), notOnOrAfter: new Date(Date.now() + 5 * 60 * 1000).toISOString() },
+		issuer: 'saml-idp',
+		nameID: 'user@example.com',
+		sessionIndex: { sessionIndex },
+		attributes: { email: 'user@example.com' },
 	});
 
-	it('should accept a login response only once', async () => {
+	it('should accept a signed assertion only once, even in a response with a different ID', async () => {
 		const serviceProvider = await getServiceProvider();
-		const response = validLoginResponse('response-1');
+		const response = validLoginResponse('session-1');
 
 		expect(() => checkLoginResponse(serviceProvider, response)).not.toThrow();
-		expect(() => checkLoginResponse(serviceProvider, response)).toThrow(ErrorForbidden);
+		// When only the assertion is signed, the response ID can be changed without invalidating the signature
+		expect(() => checkLoginResponse(serviceProvider, { ...response, response: { id: 'changed-id' } })).toThrow(ErrorForbidden);
+		expect(() => checkLoginResponse(serviceProvider, validLoginResponse('session-2'))).not.toThrow();
 	});
 
 	it.each([
 		['issued for another application', { audience: 'wiki' }],
-		['sent to another address', { response: { id: 'response-2', destination: 'https://wiki.example.com/saml' } }],
+		['sent to another address', { response: { id: 'response-x', destination: 'https://wiki.example.com/saml' } }],
 		['without an expiry time', { conditions: {} }],
-		['without an ID', { response: { destination: 'http://localhost:22300/api/saml' } }],
 	])('should refuse a login response %s', async (_case, change: LoginResponseExtract) => {
 		const serviceProvider = await getServiceProvider();
-		expect(() => checkLoginResponse(serviceProvider, { ...validLoginResponse('response-3'), ...change })).toThrow(ErrorForbidden);
+		expect(() => checkLoginResponse(serviceProvider, { ...validLoginResponse('session-3'), ...change })).toThrow(ErrorForbidden);
 	});
 
 	it('should stop accepting login codes after too many failures across the server', async () => {
