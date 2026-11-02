@@ -18,7 +18,7 @@ import { itemIsInTrash } from '@joplin/lib/services/trash';
 import { formatDateTime } from './time';
 import { ErrorForbidden, ErrorNotFound } from './errors';
 import { MarkupToHtml } from '@joplin/renderer';
-import { OptionsResourceModel } from '@joplin/renderer/types';
+import { OptionsResourceModel, RenderResult } from '@joplin/renderer/types';
 import { isValidHeaderIdentifier } from '@joplin/lib/services/e2ee/EncryptionService';
 import { DatabaseDriverNode } from '@joplin/lib/database-driver-node';
 import { themeStyle } from '@joplin/lib/theme';
@@ -243,6 +243,46 @@ async function renderResource(userId: string, resourceId: string, item: Item, co
 	};
 }
 
+interface CachedRenderedNote {
+	result: RenderResult;
+	length: number;
+}
+
+// Anyone can publish a note that is slow to render, and it can then be requested anonymously in a loop, so the rendered
+// markup is cached by everything it depends on. Size-limited the same way as the folder tree cache.
+const renderedNoteCache = new Map<string, CachedRenderedNote>();
+let renderedNoteCacheLength = 0;
+const maxRenderedNoteCacheLength = 50_000_000;
+const maxCachedRenderedNotes = 10000;
+const maxCachedRenderedNoteLength = 5_000_000;
+
+const getCachedRenderedNote = (key: string) => {
+	const cached = renderedNoteCache.get(key);
+	if (!cached) return null;
+	renderedNoteCache.delete(key);
+	renderedNoteCache.set(key, cached);
+	return cached.result;
+};
+
+const cacheRenderedNote = (key: string, result: RenderResult) => {
+	const length = result.html.length + result.cssStrings.join('').length + JSON.stringify(result.pluginAssets).length;
+	if (length > maxCachedRenderedNoteLength) return;
+
+	const previous = renderedNoteCache.get(key);
+	if (previous) {
+		renderedNoteCache.delete(key);
+		renderedNoteCacheLength -= previous.length;
+	}
+	renderedNoteCache.set(key, { result, length });
+	renderedNoteCacheLength += length;
+
+	for (const [oldestKey, oldest] of renderedNoteCache) {
+		if (renderedNoteCacheLength <= maxRenderedNoteCacheLength && renderedNoteCache.size <= maxCachedRenderedNotes) break;
+		renderedNoteCache.delete(oldestKey);
+		renderedNoteCacheLength -= oldest.length;
+	}
+};
+
 async function renderNote(
 	share: Share,
 	note: NoteEntity,
@@ -255,6 +295,8 @@ async function renderNote(
 
 	const markupToHtml = new MarkupToHtml({
 		ResourceModel: Resource as OptionsResourceModel,
+		// Off by default in the apps, and its smart quotes are slow to render on some inputs
+		pluginOptions: { typographer: { enabled: false } },
 	});
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- markupToHtml.render's RenderOptions is loosely typed in @joplin/renderer; tightening would require updating the renderer package
@@ -304,7 +346,14 @@ async function renderNote(
 	};
 
 	try {
-		const result = await markupToHtml.render(note.markup_language, note.body, themeStyle(Setting.THEME_LIGHT), renderOptions);
+		const linkedItems = Object.values(linkedItemInfos).map(info => info.item);
+		const cacheKey = createHash('sha256').update(JSON.stringify([share.id, !!folderTree, note.id, note.markup_language, note.body, linkedItems])).digest('hex');
+
+		let result = getCachedRenderedNote(cacheKey);
+		if (!result) {
+			result = await markupToHtml.render(note.markup_language, note.body, themeStyle(Setting.THEME_LIGHT), renderOptions);
+			cacheRenderedNote(cacheKey, result);
+		}
 
 		return renderNotePage(
 			note.title,

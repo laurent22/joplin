@@ -7,6 +7,7 @@ import { testImageBuffer } from '../../utils/testing/fileApiUtils';
 import { shareFolderWithUser } from '../../utils/testing/shareApiUtils';
 import { beforeAllDb, afterAllTests, parseHtml, beforeEachDb, createUserAndSession, koaAppContext, checkContextError, expectNotThrow, createNote, createItem, models, expectHttpError, createResource, createFolder, updateNote, updateItem } from '../../utils/testing/testUtils';
 import { makeFolderSerializedBody } from '../../utils/testing/serializedItems';
+import { MarkupToHtml } from '@joplin/renderer';
 
 const resourceSize = 2720;
 
@@ -83,6 +84,36 @@ describe('shares.link', () => {
 		expect(bodyHtml).toContain('Testing body');
 		expect(bodyHtml).not.toContain('class="footer"');
 		expect(bodyHtml).toContain('<title>Testing title'); // Means the page title is set to the note title
+	});
+
+	test('should render a published note once until it changes, without typographer', async () => {
+		const { session } = await createUserAndSession();
+
+		const noteItem = await createNote(session.id, {
+			id: '00000000000000000000000000000001',
+			body: 'Some "quoted" text',
+		});
+
+		const share = await postApi<Share>(session.id, 'shares', {
+			type: ShareType.Note,
+			note_id: noteItem.jop_id,
+		});
+
+		const render = jest.spyOn(MarkupToHtml.prototype, 'render');
+		try {
+			const bodyHtml = await getShareContent(share.id) as string;
+			expect(bodyHtml).toContain('quoted');
+			expect(bodyHtml).not.toContain('\u201c');
+
+			await getShareContent(share.id);
+			expect(render).toHaveBeenCalledTimes(1);
+
+			await updateNote(session.id, { id: '00000000000000000000000000000001', body: 'Changed body' });
+			expect(await getShareContent(share.id)).toContain('Changed body');
+			expect(render).toHaveBeenCalledTimes(2);
+		} finally {
+			render.mockRestore();
+		}
 	});
 
 	test('should not display a locked note', async () => {
