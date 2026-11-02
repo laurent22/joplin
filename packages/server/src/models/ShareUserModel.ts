@@ -139,6 +139,9 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 	}
 
 	public async setStatus(shareId: Uuid, userId: Uuid, status: ShareUserStatus): Promise<Item> {
+		// The checks below compare it with the status values, which a string would get past
+		if (typeof status !== 'number') throw new ErrorBadRequest(`Invalid status: ${status}`);
+
 		const shareUser = await this.byShareAndUserId(shareId, userId);
 		if (!shareUser) throw new ErrorNotFound(`Item has not been shared with this user: ${shareId} / ${userId}`);
 

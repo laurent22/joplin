@@ -20,9 +20,13 @@ router.patch('api/share_users/:id', async (path: SubPath, ctx: AppContext) => {
 	const body = await bodyFields<{ status?: number }>(ctx.req);
 
 	if ('status' in body) {
+		// Converted, so that a value such as "1" cannot get past the checks below and in setStatus()
+		const status = Number(body.status);
+		if (status !== ShareUserStatus.Accepted && status !== ShareUserStatus.Rejected) throw new ErrorBadRequest(`Invalid status: ${body.status}`);
+
 		// Otherwise notebooks shared with an address would go to whoever registered it first
-		if (body.status === ShareUserStatus.Accepted && needsEmailConfirmation(ctx.joplin.owner)) throw new ErrorForbidden(confirmEmailMessage('accepting a shared notebook'));
-		return shareUserModel.setStatus(shareUser.share_id, shareUser.user_id, body.status);
+		if (status === ShareUserStatus.Accepted && needsEmailConfirmation(ctx.joplin.owner)) throw new ErrorForbidden(confirmEmailMessage('accepting a shared notebook'));
+		return shareUserModel.setStatus(shareUser.share_id, shareUser.user_id, status);
 	} else {
 		throw new ErrorBadRequest('Only setting status is supported');
 	}

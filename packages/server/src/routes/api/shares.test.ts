@@ -124,6 +124,22 @@ describe('shares', () => {
 		await expectSameAnswer(session2.id, {});
 	});
 
+	test('should apply the same checks whatever the type of the status used to accept an invitation', async () => {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+
+		await createFolder(session1.id, { id: '000000000000000000000000000000F1', title: 'My Folder' });
+		const share = await postApi<Share>(session1.id, 'shares', { folder_id: '000000000000000000000000000000F1' });
+		const shareUser = await postApi<ShareUser>(session1.id, `shares/${share.id}/users`, { email: user2.email });
+
+		await expectHttpError(async () => patchApi(session2.id, `share_users/${shareUser.id}`, { status: 'accepted' }), ErrorBadRequest.httpCode);
+
+		// An invitation from an account that has since been disabled cannot be accepted, including with a string status
+		await models().user().save({ id: user1.id, enabled: 0 });
+		await expectHttpError(async () => patchApi(session2.id, `share_users/${shareUser.id}`, { status: '1' }), ErrorForbidden.httpCode);
+		expect((await models().shareUser().load(shareUser.id)).status).toBe(ShareUserStatus.Waiting);
+	});
+
 	test('should require a confirmed email to invite someone or to accept an invitation', async () => {
 		// Only when emails are sent, as the address can be confirmed only then
 		const mailerEnabled = config().mailer.enabled;
