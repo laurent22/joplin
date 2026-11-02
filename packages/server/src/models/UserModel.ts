@@ -239,7 +239,11 @@ export default class UserModel extends BaseModel<User> {
 
 		const user = await this.loadByEmail(email);
 
-		for (const config of this.ldapConfig_) {
+		// The directory decides which of its entries matches an email, and its users may be able to edit theirs, so it
+		// never logs in to an admin account, which keeps using its local password
+		const ldapConfigs = user?.is_admin ? [] : this.ldapConfig_;
+
+		for (const config of ldapConfigs) {
 			if (config.enabled) {
 				const ldapUser = await ldapLogin(email, password, user, config);
 				if (ldapUser && !user) {
@@ -247,7 +251,12 @@ export default class UserModel extends BaseModel<User> {
 					return savedUser;
 				}
 				if (ldapUser && user) {
-					return ldapUser;
+					if (user.is_external) return user;
+
+					// From now on the account is managed by the directory. Its local password, which may be an old copy of
+					// the directory password or one set by someone else, stops working.
+					await this.save({ id: user.id, is_external: 1, password: randomBytes(32).toString('hex') }, { skipValidation: true });
+					return this.load(user.id);
 				}
 			}
 		}
