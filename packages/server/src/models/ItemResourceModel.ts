@@ -69,7 +69,9 @@ export default class ItemResourceModel extends BaseModel<ItemResource> {
 		return this.models().item().loadByNames(userIds, resourceBlobNames, options);
 	}
 
-	public async itemTree(rootItemId: Uuid, rootJopId: string, currentItemIds: string[] = []): Promise<TreeItem> {
+	// Only the user's own items are included: jop_id is not unique across accounts, so another account could otherwise
+	// add links to the tree by uploading an item with the same jop_id as a linked item.
+	public async itemTree(userId: Uuid, rootItemId: Uuid, rootJopId: string, currentItemIds: string[] = []): Promise<TreeItem> {
 		interface Row {
 			id: Uuid;
 			jop_id: string;
@@ -77,9 +79,12 @@ export default class ItemResourceModel extends BaseModel<ItemResource> {
 
 		const rows: Row[] = await this
 			.db('item_resources')
-			.leftJoin('items', 'item_resources.resource_id', 'items.jop_id')
+			.innerJoin('items', 'item_resources.resource_id', 'items.jop_id')
+			.innerJoin('user_items', 'user_items.item_id', 'items.id')
 			.select('items.id', 'items.jop_id')
-			.where('item_resources.item_id', '=', rootItemId);
+			.where('item_resources.item_id', '=', rootItemId)
+			.where('user_items.user_id', '=', userId)
+			.orderBy('item_resources.id');
 
 		const output: TreeItem[] = [];
 
@@ -91,7 +96,7 @@ export default class ItemResourceModel extends BaseModel<ItemResource> {
 			currentItemIds.push(rootJopId);
 
 			for (const row of rows) {
-				const subTree = await this.itemTree(row.id, row.jop_id, currentItemIds);
+				const subTree = await this.itemTree(userId, row.id, row.jop_id, currentItemIds);
 
 				output.push({
 					item_id: row.id,

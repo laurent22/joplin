@@ -216,6 +216,33 @@ describe('shares.link', () => {
 		await expectHttpError(async () => getShareContent(share.id, { note_id: '000000000000000000000000000000E2' }), ErrorNotFound.httpCode);
 	});
 
+	test('should not let another account add links to a published note by uploading an item with a linked id', async () => {
+		const { session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+
+		const privateResource = await createResource(session1.id, { id: '000000000000000000000000000000E1' }, 'private');
+		const privateNote = await createNote(session1.id, { id: '000000000000000000000000000000C1' });
+
+		const rootNote = await createNote(session1.id, {
+			id: '00000000000000000000000000000001',
+			body: '[](:/000000000000000000000000000000C9)',
+		});
+
+		const share = await postApi<Share>(session1.id, 'shares', {
+			type: ShareType.Note,
+			note_id: rootNote.jop_id,
+			recursive: 1,
+		});
+
+		await createNote(session2.id, {
+			id: '000000000000000000000000000000C9',
+			body: `![](:/${privateResource.jop_id}) [](:/${privateNote.jop_id})`,
+		});
+
+		await expectHttpError(async () => getShareContent(share.id, { resource_id: privateResource.jop_id }), ErrorNotFound.httpCode);
+		await expectHttpError(async () => getShareContent(share.id, { note_id: privateNote.jop_id }), ErrorNotFound.httpCode);
+	});
+
 	test('should not share linked notes if the "recursive" field is not set', async () => {
 		const { session } = await createUserAndSession();
 

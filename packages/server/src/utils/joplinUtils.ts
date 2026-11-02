@@ -16,7 +16,7 @@ import ItemModel from '../models/ItemModel';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { itemIsInTrash } from '@joplin/lib/services/trash';
 import { formatDateTime } from './time';
-import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from './errors';
+import { ErrorForbidden, ErrorNotFound } from './errors';
 import { MarkupToHtml } from '@joplin/renderer';
 import { OptionsResourceModel } from '@joplin/renderer/types';
 import { isValidHeaderIdentifier } from '@joplin/lib/services/e2ee/EncryptionService';
@@ -550,7 +550,7 @@ const findParentNote = async (itemTree: TreeItem, resourceId: string) => {
 	};
 
 	const result = find_(itemTree, itemTree.children, resourceId);
-	if (!result) throw new ErrorBadRequest(`Cannot find parent of ${resourceId}`);
+	if (!result) throw new ErrorNotFound(`Resource "${resourceId}" does not belong to this share`);
 
 	const item = await models_.item().loadWithContent(result.item_id);
 	if (!item) throw new ErrorNotFound(`Cannot load item with ID ${result.item_id}`);
@@ -632,7 +632,7 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 	const rootNote: NoteEntity = models_.item().itemToJoplinItem(item);
 	if (itemIsInTrash(rootNote)) throw new ErrorNotFound(`No such note: ${rootNote.id}`);
 
-	const itemTree = await models_.itemResource().itemTree(item.id, rootNote.id);
+	const itemTree = await models_.itemResource().itemTree(userId, item.id, rootNote.id);
 
 	let linkedItemInfos: LinkedItemInfos = {};
 	let resourceInfos: ResourceInfos = {};
