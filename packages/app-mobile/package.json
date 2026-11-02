@@ -78,7 +78,7 @@
     "react-native-quick-base64": "3.0.1",
     "react-native-quick-crypto": "1.1.4",
     "react-native-rsa-native": "patch:react-native-rsa-native@npm%3A2.0.5#~/.yarn/patches/react-native-rsa-native-npm-2.0.5-4664e1ce79.patch",
-    "react-native-safe-area-context": "5.8.0",
+    "react-native-safe-area-context": "5.8.1",
     "react-native-share": "12.3.1",
     "react-native-svg": "15.15.5",
     "react-native-url-polyfill": "2.0.0",
