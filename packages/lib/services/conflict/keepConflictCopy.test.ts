@@ -1,6 +1,7 @@
 import { setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import Note from '../../models/Note';
 import Folder from '../../models/Folder';
+import ConflictNoteState from '../../models/ConflictNoteState';
 import keepConflictCopy, { KeepStatus, titleForCopy } from './keepConflictCopy';
 
 const createConflict = async (title = 'Title') => {
@@ -33,6 +34,7 @@ describe('keepConflictCopy', () => {
 
 	test('should keep the note beside the original and clear the conflict', async () => {
 		const { folder, conflictNote } = await createConflict();
+		await ConflictNoteState.save({ note_id: conflictNote.id, base_body: 'base', base_title: 'Title' });
 
 		const result = await keepConflictCopy(conflictNote.id);
 		const kept = await Note.load(conflictNote.id);
@@ -42,6 +44,7 @@ describe('keepConflictCopy', () => {
 		expect(kept.is_conflict).toBe(0);
 		expect(kept.conflict_original_id).toBe('');
 		expect(kept.parent_id).toBe(folder.id);
+		expect(await ConflictNoteState.byNoteId(conflictNote.id)).toBeFalsy();
 	});
 
 	test('should leave the original untouched', async () => {

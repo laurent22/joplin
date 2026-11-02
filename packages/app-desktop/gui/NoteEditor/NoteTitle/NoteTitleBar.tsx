@@ -72,6 +72,8 @@ const useReselectHandlers = () => {
 
 	const onTitleFocus: React.FocusEventHandler<HTMLInputElement> = useCallback((event) => {
 		const titleElement = event.currentTarget;
+		// By default, focusing the note title bar can cause its content to become selected. We override
+		// this with a more reasonable default:
 		if (titleElement.selectionStart === 0 && titleElement.selectionEnd === titleElement.value.length) {
 			if (lastTitleValue.current !== titleElement.value) {
 				titleElement.selectionStart = titleElement.value.length;
@@ -94,6 +96,8 @@ export default function NoteTitleBar(props: Props) {
 		const isNavigationShortcut = (event.key === 'ArrowDown' && selectionAtEnd) || (event.key === 'Enter' && !event.shiftKey);
 		const composing = event.nativeEvent.isComposing;
 
+		// Don't change focus if the navigation shortcut is fired during composition. See
+		// https://github.com/laurent22/joplin/issues/11485.
 		if (!composing && isNavigationShortcut) {
 			event.preventDefault();
 			const moveCursorToStart = event.key === 'ArrowDown';

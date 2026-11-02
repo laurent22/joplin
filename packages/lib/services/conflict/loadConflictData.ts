@@ -10,7 +10,6 @@ export enum ConflictDataStatus {
 export interface ConflictData {
 	status: ConflictDataStatus;
 	sections: MergedSection[];
-	mergedText: string;
 	remoteUpdatedTime: number;
 	localTitle: string;
 	remoteTitle: string;
@@ -21,7 +20,6 @@ const unavailable = (): ConflictData => {
 	return {
 		status: ConflictDataStatus.Unavailable,
 		sections: [],
-		mergedText: '',
 		remoteUpdatedTime: 0,
 		localTitle: '',
 		remoteTitle: '',
@@ -49,7 +47,6 @@ export default async (noteId: string): Promise<ConflictData> => {
 	return {
 		status: ConflictDataStatus.Ok,
 		sections: merged.sections,
-		mergedText: merged.mergedText,
 		remoteUpdatedTime: remoteNote.updated_time,
 		localTitle,
 		remoteTitle,

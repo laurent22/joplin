@@ -1,4 +1,5 @@
 import Note from '../../models/Note';
+import ConflictNoteState from '../../models/ConflictNoteState';
 import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('keepConflictCopy');
@@ -61,6 +62,7 @@ export default async (conflictNoteId: string): Promise<KeepResult> => {
 			is_conflict: 0,
 			conflict_original_id: '',
 		});
+		await ConflictNoteState.deleteByNoteIds([note.id]);
 	} catch (error) {
 		logger.warn('Could not keep the conflict note', conflictNoteId, error);
 		return { status: KeepStatus.CannotWrite, noteId: conflictNoteId, reason: error.message };
