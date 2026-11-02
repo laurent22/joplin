@@ -265,6 +265,8 @@ function NoteEditorContent(props: NoteEditorProps) {
 			const note = formNoteRef.current;
 			if (!bridge().showConfirmMessageBox(_('Keep both versions as separate notes?'), { buttons: [_('Keep both'), _('Cancel')] })) return;
 
+			await note.saveActionQueue?.waitForAllDone();
+
 			const result = await keepConflictCopy(note.id);
 
 			if (result.status !== KeepStatus.Ok) {
