@@ -1,5 +1,5 @@
 import { User } from '../../services/database/types';
-import { bodyFields, contextSessionId } from '../../utils/requestUtils';
+import { bodyFields, contextSessionId, ownerRequired } from '../../utils/requestUtils';
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
@@ -8,6 +8,7 @@ import { ErrorNotFound } from '../../utils/errors';
 import { AclAction } from '../../models/BaseModel';
 import { uuidgen } from '../../utils/uuid';
 import checkCanCreateUser from '../utils/checkCanCreateUser';
+import limiterShareInvitations from '../../utils/request/limiterShareInvitations';
 
 const router = new Router(RouteType.Api);
 
@@ -27,10 +28,12 @@ router.get('api/users/:id', async (path: SubPath, ctx: AppContext) => {
 	return ctx.joplin.models.user().toApiOutput(user);
 });
 
-router.publicSchemas.push('api/users/:id/public_key');
-
-// "id" in this case is actually the email address
+// "id" in this case is actually the email address. Only needed to invite someone to an encrypted shared notebook, so it
+// requires a session and counts as an invitation, as it reveals whether the address has an account.
 router.get('api/users/:id/public_key', async (path: SubPath, ctx: AppContext) => {
+	ownerRequired(ctx);
+	await limiterShareInvitations(ctx.joplin.owner.id);
+
 	const user = await ctx.joplin.models.user().loadByEmail(path.id);
 	if (!user) return ''; // Don't throw an error to prevent polling the end point
 

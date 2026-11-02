@@ -76,6 +76,14 @@ describe('api/users', () => {
 		expect(fetchedUser.email).toBe(user.email);
 	});
 
+	test('should only give the public key of a user to a logged in user', async () => {
+		const { session } = await createUserAndSession(1);
+		const path = `users/${encodeURIComponent('someone@example.com')}/public_key`;
+
+		await expectHttpError(async () => getApi('', path), ErrorForbidden.httpCode);
+		expect(await getApi(session.id, path)).toBe('');
+	});
+
 	test('should delete a user', async () => {
 		const { session: adminSession } = await createUserAndSession(1, true);
 		const { user } = await createUserAndSession(2);
