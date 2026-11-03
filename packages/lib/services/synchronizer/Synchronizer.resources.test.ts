@@ -281,7 +281,9 @@ describe('Synchronizer.resources', () => {
 		// Simulate a resource uploaded by a client that predates blob_updated_time
 		const metadataPath = `${resource.id}.md`;
 		const metadata = await fileApi().get(metadataPath);
-		await fileApi().put(metadataPath, metadata.replace(/^blob_updated_time: .*\n/m, ''));
+		const newMetadata = metadata.replace(/^blob_updated_time: .*\n/m, '');
+		expect(newMetadata).not.toContain('blob_updated_time');
+		await fileApi().put(metadataPath, newMetadata);
 
 		await msleep(10);
 		await switchClient(2);
