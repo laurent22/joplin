@@ -7,7 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: genneko <genneko217@gmail.com>\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: akiratamcat <akiratamcat@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
 "MIME-Version: 1.0\n"
@@ -694,7 +696,7 @@ msgstr "AI チャット"
 #: packages/lib/services/ai/availability.ts:36
 #: packages/lib/services/ai/availability.ts:65
 msgid "AI features are disabled. Enable them in Settings → AI."
-msgstr "AI 機能はオフになっています。［設定］→［AI］で有効にしてください。"
+msgstr "AI 機能はオフになっています。 [設定] → [AI] で有効にしてください。"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:24
 msgid "AI is disabled"
@@ -1545,7 +1547,7 @@ msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
-"\"%s\"をクリックすると復元を行います。復元されるノートは\"%s\"というノート"
+"\"%s\" をクリックすると復元を行います。復元されるノートは \"%s\" というノート"
 "ブックにコピーされます。現在のバージョンのノートの置換や変更は行われません。"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:247
@@ -3976,8 +3978,8 @@ msgid ""
 "In order to synchronise, Please upgrade your application to version %s. "
 "Joplin could not check update information."
 msgstr ""
-"同期を行うには、アプリケーションをバージョン %s にアップグレードしてくださ"
-"い。Joplin は更新情報を確認できませんでした。"
+"同期するには、アプリケーションをバージョン %s にアップグレードしてください。"
+"Joplin は更新情報を確認できませんでした。"
 
 #: packages/lib/services/synchronizer/syncInfoUtils.ts:726
 msgid "In order to synchronise, please upgrade your application to version %s+"
@@ -9088,9 +9090,8 @@ msgid "Unpublish note"
 msgstr "ノートの公開を停止"
 
 #: packages/app-desktop/gui/PublishFolderDialog.tsx:101
-#, fuzzy
 msgid "Unpublish notebook"
-msgstr "ノートの公開を停止"
+msgstr "ノートブックの公開を解除"
 
 #: packages/app-cli/app/command-unpublish.ts:24
 msgid "Unpublishes a note from Joplin Server or Joplin Cloud"
@@ -9172,7 +9173,7 @@ msgstr "アップデートがあります"
 
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:101
 msgid "Update it from Google Play"
-msgstr ""
+msgstr "Google Play からアプリを更新してください"
 
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:109
 msgid "Update it from the App Store"
@@ -9252,7 +9253,7 @@ msgstr "同期先を最新バージョンにアップグレード。"
 
 #: packages/lib/utils/joplinCloud/index.ts:448
 msgid "Upgrade to 100 GB"
-msgstr ""
+msgstr "100GBへアップグレード"
 
 #: packages/app-mobile/components/CameraView/CameraView.web.tsx:45
 msgid "Upload photo"
