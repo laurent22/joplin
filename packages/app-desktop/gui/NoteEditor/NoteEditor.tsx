@@ -115,8 +115,8 @@ function NoteEditorContent(props: NoteEditorProps) {
 		setShowRevisions(false);
 	}, [saveNoteIfWillChange]);
 
-	const formNote_afterLoad = useCallback(async () => {
-		setTitleHasBeenManuallyChanged(false);
+	const formNote_afterLoad = useCallback(async (event: OnLoadEvent) => {
+		setTitleHasBeenManuallyChanged(!!event.formNote?.title);
 	}, []);
 
 	const effectiveNoteId = useEffectiveNoteId(props);
