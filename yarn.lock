@@ -12870,7 +12870,7 @@ __metadata:
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
     orderedmap: "npm:2.1.1"
-    prosemirror-commands: "npm:1.7.1"
+    prosemirror-commands: "npm:1.7.2"
     prosemirror-dropcursor: "npm:1.8.3"
     prosemirror-example-setup: "npm:1.2.3"
     prosemirror-gapcursor: "npm:1.4.0"
@@ -49036,7 +49036,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prosemirror-commands@npm:1.7.1, prosemirror-commands@npm:^1.0.0":
+"prosemirror-commands@npm:1.7.2":
+  version: 1.7.2
+  resolution: "prosemirror-commands@npm:1.7.2"
+  dependencies:
+    prosemirror-model: "npm:^1.0.0"
+    prosemirror-state: "npm:^1.0.0"
+    prosemirror-transform: "npm:^1.10.2"
+  checksum: 10/12e5dcc6885214a3a15adad0182967a50e3775174ee6553b8aea32f48f669263c2936841581ceb4f416fcacd8cb22eb03a6d370d091f5e803442cc0751ff7fa7
+  languageName: node
+  linkType: hard
+
+"prosemirror-commands@npm:^1.0.0":
   version: 1.7.1
   resolution: "prosemirror-commands@npm:1.7.1"
   dependencies:
