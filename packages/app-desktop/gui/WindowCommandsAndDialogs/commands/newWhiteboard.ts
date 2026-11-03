@@ -13,7 +13,7 @@ export const runtime = (): CommandRuntime => {
 	return {
 		execute: async (_context: CommandContext, title?: string) => {
 			await createNoteInActiveFolder({
-				title: title || _('Untitled whiteboard'),
+				title: title || _('New whiteboard'),
 				body: newWhiteboardBody(),
 				// A whiteboard isn't a place-stamped capture; skip the
 				// reverse-geocode lookup that fires for ordinary new notes.
