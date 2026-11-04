@@ -45,7 +45,7 @@
     "@react-native-vector-icons/material-icons": "12.5.0",
     "assert-browserify": "2.0.0",
     "buffer": "6.0.3",
-    "color": "3.2.1",
+    "color": "5.0.3",
     "constants-browserify": "1.0.0",
     "crypto-browserify": "3.12.1",
     "deprecated-react-native-prop-types": "5.0.0",
