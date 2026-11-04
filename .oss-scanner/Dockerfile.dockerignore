@@ -1,0 +1,2 @@
+# Overrides the root .dockerignore, which is for the server image and excludes the apps.
+**/node_modules
