@@ -154,6 +154,7 @@
 		"@react-native/babel-preset",
 		"nitrogen",
 		"react-native-nitro-modules",
+		"xcodeproj",
 
 		// We currently don't have automated tests that verify that the
 		// sidemenus work correctly in the mobile app. Because an update to
