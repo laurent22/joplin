@@ -26,7 +26,6 @@ import { Day } from '../utils/time';
 import paymentFailedAccountDisabledTemplate from '../views/emails/paymentFailedAccountDisabledTemplate';
 import changeEmailConfirmationTemplate from '../views/emails/changeEmailConfirmationTemplate';
 import changeEmailNotificationTemplate from '../views/emails/changeEmailNotificationTemplate';
-import mfaReminderTemplate from '../views/emails/mfaReminderTemplate';
 import { NotificationKey } from './NotificationModel';
 import prettyBytes = require('pretty-bytes');
 import { validateEmail } from '../utils/validation';
@@ -655,23 +654,6 @@ export default class UserModel extends BaseModel<User> {
 			if (remainingDays <= 0) {
 				await this.models().userFlag().add(user.id, UserFlagType.AccountWithoutSubscription);
 			}
-		}
-	}
-
-	public async handleMfaReminderEmails() {
-		const users: User[] = await this
-			.db(this.tableName)
-			.select(['id', 'email', 'full_name'])
-			.where({ enabled: 1, email_confirmed: 1, totp_secret: '' })
-			.where('created_time', '<=', Date.now() - 3 * Day)
-			.whereNotIn('id', this.db('emails').select('recipient_id').where('key', 'mfaReminder'));
-
-		for (const user of users) {
-			await this.models().email().push({
-				...mfaReminderTemplate(),
-				...this.userEmailDetails(user),
-				key: 'mfaReminder',
-			});
 		}
 	}
 

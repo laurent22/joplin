@@ -133,15 +133,6 @@ export default async function(env: Env, models: Models, config: Config, services
 		});
 	}
 
-	if (config.MFA_ENABLED) {
-		tasks.push({
-			id: TaskId.HandleMfaReminderEmails,
-			description: taskIdToLabel(TaskId.HandleMfaReminderEmails),
-			schedule: '0 12 * * *',
-			run: (models: Models) => models.user().handleMfaReminderEmails(),
-		});
-	}
-
 	if (config.isJoplinCloud) {
 		tasks = tasks.concat([
 			{
