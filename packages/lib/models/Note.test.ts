@@ -1,5 +1,5 @@
 import Setting from './Setting';
-import BaseModel from '../BaseModel';
+import BaseModel, { ModelType } from '../BaseModel';
 import shim from '../shim';
 import markdownUtils from '../markdownUtils';
 import { sortedIds, createNTestNotes, expectThrow, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, supportDir, expectNotThrow, simulateReadOnlyShareEnv, msleep, db, encryptionService, revisionService } from '../testing/test-utils';
@@ -18,6 +18,7 @@ import { serializeWhiteboard } from '../services/whiteboard/serialize';
 import { Canvas } from '../services/whiteboard/jsoncanvas';
 import SearchEngine from '../services/search/SearchEngine';
 import { getTrashFolderId } from '../services/trash';
+import restoreItems from '../services/trash/restoreItems';
 import getConflictFolderId from './utils/getConflictFolderId';
 import Revision from './Revision';
 import RevisionService from '../services/RevisionService';
@@ -1091,5 +1092,22 @@ describe('models/Note', () => {
 		})).map(n => n.id);
 
 		expect(allInFolder1).toEqual([note1.id]);
+	});
+
+	test('trashed to-dos should not need an alarm until they are restored', async () => {
+		const folder = await Folder.save({ title: 'folder' });
+		const todo = await Note.save({ title: 'todo', parent_id: folder.id, is_todo: 1, todo_due: Date.now() + 60 * 60 * 1000 });
+		const dueNoteIds = async () => (await Note.dueNotes()).map(n => n.id);
+
+		expect(Note.needAlarm(await Note.load(todo.id))).toBe(true);
+		expect(await dueNoteIds()).toEqual([todo.id]);
+
+		await Note.delete(todo.id, { toTrash: true });
+		expect(Note.needAlarm(await Note.load(todo.id))).toBe(false);
+		expect(await dueNoteIds()).toEqual([]);
+
+		await restoreItems(ModelType.Note, [todo.id]);
+		expect(Note.needAlarm(await Note.load(todo.id))).toBe(true);
+		expect(await dueNoteIds()).toEqual([todo.id]);
 	});
 });

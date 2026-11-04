@@ -1216,11 +1216,11 @@ export default class Note extends BaseItem {
 	}
 
 	public static dueNotes() {
-		return this.modelSelectAll('SELECT id, title, body, is_todo, todo_due, todo_completed, is_conflict FROM notes WHERE is_conflict = 0 AND is_todo = 1 AND todo_completed = 0 AND todo_due > ?', [time.unixMs()]);
+		return this.modelSelectAll('SELECT id, title, body, is_todo, todo_due, todo_completed, is_conflict FROM notes WHERE is_conflict = 0 AND is_todo = 1 AND todo_completed = 0 AND deleted_time = 0 AND todo_due > ?', [time.unixMs()]);
 	}
 
 	public static needAlarm(note: NoteEntity) {
-		return note.is_todo && !note.todo_completed && note.todo_due >= time.unixMs() && !note.is_conflict;
+		return note.is_todo && !note.todo_completed && note.todo_due >= time.unixMs() && !note.is_conflict && !note.deleted_time;
 	}
 
 	public static dueDateObject(note: NoteEntity) {
