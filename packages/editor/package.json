@@ -46,7 +46,7 @@
     "@replit/codemirror-vim": "6.2.1",
     "dompurify": "3.4.13",
     "orderedmap": "2.1.1",
-    "prosemirror-commands": "1.7.1",
+    "prosemirror-commands": "1.7.2",
     "prosemirror-dropcursor": "1.8.3",
     "prosemirror-example-setup": "1.2.3",
     "prosemirror-gapcursor": "1.4.0",
