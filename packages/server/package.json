@@ -37,7 +37,7 @@
     "dayjs": "1.11.21",
     "formidable": "2.1.2",
     "fs-extra": "11.3.6",
-    "html-entities": "1.4.0",
+    "html-entities": "2.6.0",
     "jquery": "3.7.1",
     "knex": "3.3.0",
     "koa": "2.16.4",
