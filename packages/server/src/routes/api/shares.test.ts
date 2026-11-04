@@ -211,7 +211,7 @@ describe('shares', () => {
 	test.each([
 		['note', { note_id: '00000000000000000000000000000001' }],
 		['notebook', { folder_id: '000000000000000000000000000000F1', type: ShareType.PublishedFolder }],
-	])('should email the owner when a %s is published', async (itemType, input) => {
+	])('should email the owner when an encrypted %s is published', async (itemType, input) => {
 		const { session, user } = await createUserAndSession(1);
 
 		await createItemTree(user.id, '', {
@@ -220,6 +220,17 @@ describe('shares', () => {
 				'00000000000000000000000000000002': null,
 			},
 		});
+
+		const publishedEmails = async () => (await models().email().all()).filter(e => e.subject.includes('was published'));
+
+		const unencryptedShare = await postApi<Share>(session.id, 'shares', input);
+		expect(await publishedEmails()).toHaveLength(0);
+		await models().share().delete(unencryptedShare.id);
+
+		for (const jopId of ['000000000000000000000000000000F1', '00000000000000000000000000000001', '00000000000000000000000000000002']) {
+			const item = await models().item().loadByJopId(user.id, jopId);
+			await models().item().saveForUser(user.id, { id: item.id, jop_encryption_applied: 1 });
+		}
 
 		// Within the same minute, as when several selected notes are published at once
 		const dateNow = jest.spyOn(Date, 'now').mockReturnValue(Date.now());
@@ -232,7 +243,7 @@ describe('shares', () => {
 			dateNow.mockRestore();
 		}
 
-		const emails = (await models().email().all()).filter(e => e.subject.includes('was published'));
+		const emails = await publishedEmails();
 		expect(emails.length).toBe(1);
 		expect(emails[0].recipient_id).toBe(user.id);
 		expect(emails[0].body).toContain(`A ${itemType} was published`);

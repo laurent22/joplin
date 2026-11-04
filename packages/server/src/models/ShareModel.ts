@@ -666,7 +666,7 @@ export default class ShareModel extends BaseModel<Share> {
 
 		await this.checkIfAllowed(owner, AclAction.Create, shareToSave);
 		const share = await this.save(shareToSave);
-		await this.sendPublishedNotification(owner, share, 'notebook');
+		await this.sendPublishedNotification(owner, share, folderItem, 'notebook');
 		return share;
 	}
 
@@ -692,13 +692,16 @@ export default class ShareModel extends BaseModel<Share> {
 		await this.checkIfAllowed(owner, AclAction.Create, shareToSave);
 
 		const share = await this.save(shareToSave);
-		await this.sendPublishedNotification(owner, share, 'note');
+		await this.sendPublishedNotification(owner, share, noteItem, 'note');
 		return share;
 	}
 
 	// Anyone holding a session can publish the account's notes, and the owner's apps then upload them unencrypted, so
-	// the owner is told about every new publication
-	private async sendPublishedNotification(owner: User, share: Share, itemType: 'note' | 'notebook') {
+	// the owner of encrypted notes is told about every new publication. Without encryption, that session can already
+	// read the notes, and emailing every publication only taught people to ignore the email.
+	private async sendPublishedNotification(owner: User, share: Share, item: Item, itemType: 'note' | 'notebook') {
+		if (!item.jop_encryption_applied) return;
+
 		await this.models().email().push({
 			// The apps publish several selected notes one at a time, so this sends at most one email per minute
 			key: `itemPublished::${Math.floor(Date.now() / Minute)}`,
