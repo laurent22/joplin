@@ -1,3 +1,7 @@
+---
+forum_url: https://discourse.joplinapp.org/t/51403
+---
+
 # A full security review of Joplin Server and Joplin Cloud
 
 October 2026 has been nicknamed "Black October": within weeks, critical vulnerabilities were disclosed in widely used open source software such as PHP, Node.js and GitLab, many of them found with the help of AI and exploited within a day. The same tools that help defenders find bugs now help attackers find them, and Joplin's code is public. The responsible thing to do was to get there first.
