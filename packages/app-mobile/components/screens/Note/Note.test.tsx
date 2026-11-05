@@ -49,7 +49,7 @@ import shareFile from '../../../utils/shareFile';
 import { basename, dirname } from 'path';
 
 jest.mock('@joplin/lib/hooks/plugins/useVisiblePluginEditorViewIds', () => jest.fn((): string[] => []));
-jest.mock('../../../utils/shareFile', () => jest.fn().mockResolvedValue(true));
+jest.mock('../../../utils/shareFile', () => jest.fn().mockResolvedValue(undefined));
 
 const mockUseVisiblePluginEditorViewIds = useVisiblePluginEditorViewIds as jest.MockedFunction<typeof useVisiblePluginEditorViewIds>;
 
@@ -435,20 +435,6 @@ describe('screens/Note/Note', () => {
 
 			await act(async () => { exportFinished.resolve(undefined); });
 			expect(shareFile).not.toHaveBeenCalled();
-			await waitFor(() => expect(removeFile).toHaveBeenCalledWith(dirname(exportHtml.mock.calls[0][0].path)));
-			unmount();
-		});
-
-		it('removes the HTML export when the share sheet is cancelled', async () => {
-			await openNewNote({ title: 'Cancelled share', body: 'Body' });
-			const { dialogs } = makeShareDialogs('html');
-			const exportHtml = jest.spyOn(InteropService.instance(), 'export').mockResolvedValue({ warnings: [] });
-			const removeFile = jest.spyOn(shim.fsDriver(), 'remove');
-			jest.mocked(shareFile).mockResolvedValueOnce(false);
-			const { unmount } = render(<WrappedNoteScreen dialogs={dialogs}/>);
-
-			await openNoteActionsMenu();
-			fireEvent.press(await screen.findByText('Share'));
 			await waitFor(() => expect(removeFile).toHaveBeenCalledWith(dirname(exportHtml.mock.calls[0][0].path)));
 			unmount();
 		});

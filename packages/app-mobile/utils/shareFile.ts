@@ -2,7 +2,7 @@ import shim from '@joplin/lib/shim';
 import { basename } from '@joplin/utils/path';
 import Share from 'react-native-share';
 
-const shareFile = async (path: string, mime: string): Promise<boolean> => {
+const shareFile = async (path: string, mime: string) => {
 	if (shim.mobilePlatform() === 'web') {
 		const downloadLink = document.createElement('a');
 
@@ -21,15 +21,13 @@ const shareFile = async (path: string, mime: string): Promise<boolean> => {
 		shim.setTimeout(() => {
 			URL.revokeObjectURL(downloadUrl);
 		}, 10000);
-		return true;
 	} else {
-		const result = await Share.open({
+		await Share.open({
 			type: mime,
 			filename: basename(path),
 			url: `file://${path}`,
 			failOnCancel: false,
 		});
-		return result.success;
 	}
 };
 

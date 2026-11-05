@@ -1317,7 +1317,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		this.exportTask_ = task;
 		this.setState({ exportInProgress: true });
 		let shareDir: string = null;
-		let sharedSuccessfully = false;
+		let shareCallReturned = false;
 		try {
 			const noteId = this.state.note?.id || this.props.noteId;
 			if (!noteId) throw new Error(_('Cannot find the note to share.'));
@@ -1354,7 +1354,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			}
 			if (task.cancelled) return;
 			this.exportTask_ = null;
-			sharedSuccessfully = await shareFile(fileToShare, 'text/html');
+			await shareFile(fileToShare, 'text/html');
+			shareCallReturned = true;
 		} catch (e) {
 			if (!task.cancelled) {
 				logger.error('Unable to share note as HTML:', e);
@@ -1366,7 +1367,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				this.setState({ exportInProgress: false });
 			}
 			// The recipient may read the file after shareFile returns. clearSharedFilesCache removes it on the next app startup.
-			if (shareDir && !sharedSuccessfully) await shim.fsDriver().remove(shareDir);
+			if (shareDir && !shareCallReturned) await shim.fsDriver().remove(shareDir);
 		}
 	}
 
