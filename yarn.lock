@@ -13317,7 +13317,7 @@ __metadata:
     jest-expect-message: "npm:1.1.3"
     knex: "npm:3.3.0"
     koa: "npm:2.16.4"
-    koa-body: "npm:6.0.1"
+    koa-body: "npm:7.0.1"
     pg-boss: "npm:10.4.2"
     sharp: "npm:0.35.0"
     sqlite3: "npm:5.1.6"
@@ -14788,6 +14788,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@noble/hashes@npm:^1.1.5":
+  version: 1.8.0
+  resolution: "@noble/hashes@npm:1.8.0"
+  checksum: 10/474b7f56bc6fb2d5b3a42132561e221b0ea4f91e590f4655312ca13667840896b34195e2b53b7f097ec080a1fdd3b58d902c2a8d0fbdf51d2e238b53808a177e
+  languageName: node
+  linkType: hard
+
 "@noble/hashes@npm:^2.2.0":
   version: 2.2.0
   resolution: "@noble/hashes@npm:2.2.0"
@@ -15178,6 +15185,15 @@ __metadata:
     "@otplib/plugin-crypto": "npm:^12.0.1"
     "@otplib/plugin-thirty-two": "npm:^12.0.1"
   checksum: 10/367cb09397e617c21ec748d54e920ab43f1c5dfba70cbfd88edf73aecca399cf0c09fefe32518f79c7ee8a06e7058d14b200da378cc7d46af3cac4e22a153e2f
+  languageName: node
+  linkType: hard
+
+"@paralleldrive/cuid2@npm:^2.2.2":
+  version: 2.3.1
+  resolution: "@paralleldrive/cuid2@npm:2.3.1"
+  dependencies:
+    "@noble/hashes": "npm:^1.1.5"
+  checksum: 10/08687b891dfdad44f13a2c69232e95ca27efffc8b376587c2b89114b100a505808e7af5fbb51c3103053c637a6604f5987afa3ee8b4e1ba4c38742ebd47b4a84
   languageName: node
   linkType: hard
 
@@ -18358,7 +18374,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/co-body@npm:^6.1.0":
+"@types/co-body@npm:^6.1.3":
   version: 6.1.3
   resolution: "@types/co-body@npm:6.1.3"
   dependencies:
@@ -18858,12 +18874,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/formidable@npm:2.0.6, @types/formidable@npm:^2.0.5":
+"@types/formidable@npm:2.0.6":
   version: 2.0.6
   resolution: "@types/formidable@npm:2.0.6"
   dependencies:
     "@types/node": "npm:*"
   checksum: 10/808a9bc11276e3bd44a8b9d20f4d567ef0e452dcff7fa6ce2575b769bab049ccc4225d02ddd80f0f4de34aa2d2e7242e036bc547811667868860e8dc632d8b16
+  languageName: node
+  linkType: hard
+
+"@types/formidable@npm:^3.4.6":
+  version: 3.5.1
+  resolution: "@types/formidable@npm:3.5.1"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10/4d693f89a3b0d5f45cc71d71f1b1b963e38c736a7264eb795fa4cb63cec06893da5ce9e7652ccd99e711ddcbc2ec6c4a489377a3dd6fda9d20f48337ef211644
   languageName: node
   linkType: hard
 
@@ -18979,6 +19004,13 @@ __metadata:
   version: 1.8.1
   resolution: "@types/http-errors@npm:1.8.1"
   checksum: 10/f0710ea284a7eb5584c5e324b1dc810bc971e1adc94deff63a0c434a8a75adc020487e3e6d511cd82cef101bbcf090b8f56995c143d123e0c374dc0f61be3a61
+  languageName: node
+  linkType: hard
+
+"@types/http-errors@npm:^2":
+  version: 2.0.5
+  resolution: "@types/http-errors@npm:2.0.5"
+  checksum: 10/a88da669366bc483e8f3b3eb3d34ada5f8d13eeeef851b1204d77e2ba6fc42aba4566d877cca5c095204a3f4349b87fe397e3e21288837bdd945dd514120755b
   languageName: node
   linkType: hard
 
@@ -19174,7 +19206,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/koa@npm:2.15.0, @types/koa@npm:^2.13.5":
+"@types/koa@npm:2.15.0":
   version: 2.15.0
   resolution: "@types/koa@npm:2.15.0"
   dependencies:
@@ -19187,6 +19219,22 @@ __metadata:
     "@types/koa-compose": "npm:*"
     "@types/node": "npm:*"
   checksum: 10/2be9dff1ef66bf15b037386c188893761a8fb46390a5e1d2a2031d9e1ba4473e40ddfbd625980a504bd804d7148b3e230c18e240503f33eac3b6e5e830645d30
+  languageName: node
+  linkType: hard
+
+"@types/koa@npm:^3.0.0":
+  version: 3.0.3
+  resolution: "@types/koa@npm:3.0.3"
+  dependencies:
+    "@types/accepts": "npm:*"
+    "@types/content-disposition": "npm:*"
+    "@types/cookies": "npm:*"
+    "@types/http-assert": "npm:*"
+    "@types/http-errors": "npm:^2"
+    "@types/keygrip": "npm:*"
+    "@types/koa-compose": "npm:*"
+    "@types/node": "npm:*"
+  checksum: 10/0ad2edb8e958f9eaf6c4a448e43d687e0f84f167aa6ce79e0f14bc0708732a8b62390ceff383b7391469ed4b003e1053e1699520ec89117c88e89499773767db
   languageName: node
   linkType: hard
 
@@ -25661,7 +25709,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"co-body@npm:^6.1.0":
+"co-body@npm:^6.2.0":
   version: 6.2.0
   resolution: "co-body@npm:6.2.0"
   dependencies:
@@ -33314,6 +33362,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"formidable@npm:^3.5.4":
+  version: 3.5.4
+  resolution: "formidable@npm:3.5.4"
+  dependencies:
+    "@paralleldrive/cuid2": "npm:^2.2.2"
+    dezalgo: "npm:^1.0.4"
+    once: "npm:^1.4.0"
+  checksum: 10/4645e6ce3d8bbefd3dd873dcd6211362da3bf8a04c8426d7f454c238be0142975f02e5bdbc792fdbd2be493fdcf5442fe01d9a246bd8c3fd8e779738290cc630
+  languageName: node
+  linkType: hard
+
 "formidable@patch:formidable@npm%3A2.1.2#~/.yarn/patches/formidable-npm-2.1.2-40ba18d67f.patch":
   version: 2.1.2
   resolution: "formidable@patch:formidable@npm%3A2.1.2#~/.yarn/patches/formidable-npm-2.1.2-40ba18d67f.patch::version=2.1.2&hash=f39b0e"
@@ -39742,17 +39801,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"koa-body@npm:6.0.1":
-  version: 6.0.1
-  resolution: "koa-body@npm:6.0.1"
+"koa-body@npm:7.0.1":
+  version: 7.0.1
+  resolution: "koa-body@npm:7.0.1"
   dependencies:
-    "@types/co-body": "npm:^6.1.0"
-    "@types/formidable": "npm:^2.0.5"
-    "@types/koa": "npm:^2.13.5"
-    co-body: "npm:^6.1.0"
-    formidable: "npm:^2.0.1"
-    zod: "npm:^3.19.1"
-  checksum: 10/d241d4d228117da43ccd485babe9f8e221188360faef93f936f85ced03d8df900b1bd3af0f2e26b8e514f66361373078ef8501b50089b20e19c578566d25a239
+    "@types/co-body": "npm:^6.1.3"
+    "@types/formidable": "npm:^3.4.6"
+    "@types/koa": "npm:^3.0.0"
+    co-body: "npm:^6.2.0"
+    formidable: "npm:^3.5.4"
+    type-fest: "npm:^5.3.1"
+    zod: "npm:^4.1.12"
+  checksum: 10/c4c253ce22de9378eab8757510c4f4b9d958396aba3d615b5b20e16696aa5e1e2d7764fd2a1de20d110d9000df996c0b5326d4f6c51001ccabf1aa986a5198ef
   languageName: node
   linkType: hard
 
@@ -57681,6 +57741,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"type-fest@npm:^5.3.1":
+  version: 5.10.0
+  resolution: "type-fest@npm:5.10.0"
+  dependencies:
+    tagged-tag: "npm:^1.0.0"
+  checksum: 10/299a575a3d2bbc74f70da508629c448806dd5c51cbd2c5adf05b1755636f9f3b12c803b2c52c0eac561d4472ddc5e8ab42b88954cb238b101c9d4595906aea7f
+  languageName: node
+  linkType: hard
+
 "type-fest@npm:^5.8.0":
   version: 5.8.0
   resolution: "type-fest@npm:5.8.0"
@@ -61343,17 +61412,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^3.19.1":
-  version: 3.25.55
-  resolution: "zod@npm:3.25.55"
-  checksum: 10/1f86d370730fc1eed10fe584079bfebd0008303722f2da21057d493e784b42f0b1edbac028b5a788e2e04bd31da070eac8e8d5f237ec968bc2a6aa30985fa9d6
-  languageName: node
-  linkType: hard
-
 "zod@npm:^3.25.76":
   version: 3.25.76
   resolution: "zod@npm:3.25.76"
   checksum: 10/f0c963ec40cd96858451d1690404d603d36507c1fc9682f2dae59ab38b578687d542708a7fdbf645f77926f78c9ed558f57c3d3aa226c285f798df0c4da16995
+  languageName: node
+  linkType: hard
+
+"zod@npm:^4.1.12":
+  version: 4.6.7
+  resolution: "zod@npm:4.6.7"
+  checksum: 10/3ca8b8d6bb401538e59504c543db629ea7beaa775e504c3f22269b406fdffbf1431c856d59a597bf66d8487e4d2be12b03a55d76fc2c63d9f046eae1ca173bca
   languageName: node
   linkType: hard
 
