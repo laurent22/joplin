@@ -1342,7 +1342,6 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				packIntoSingleFile: true,
 			});
 			if (task.cancelled) return;
-			this.exportTask_ = null;
 			this.setState({ exportInProgress: false });
 			if (exportResult.warnings.length) {
 				const shouldShare = await new Promise<boolean>(resolve => {
@@ -1353,6 +1352,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				});
 				if (!shouldShare) return;
 			}
+			if (task.cancelled) return;
+			this.exportTask_ = null;
 			sharedSuccessfully = await shareFile(fileToShare, 'text/html');
 		} catch (e) {
 			if (!task.cancelled) {

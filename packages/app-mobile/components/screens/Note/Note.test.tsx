@@ -462,6 +462,14 @@ describe('screens/Note/Note', () => {
 			unmount();
 		});
 
+		it('does not share HTML when the note screen unmounts while export warnings are shown', async () => {
+			const { buttons, removeFile, shareDir, unmount } = await openHtmlShareWithWarnings();
+			unmount();
+			await act(async () => { buttons.find(button => button.text === 'Yes').onPress(); });
+			await waitFor(() => expect(removeFile).toHaveBeenCalledWith(shareDir));
+			expect(shareFile).not.toHaveBeenCalled();
+		});
+
 		it('does not share HTML after declining export warnings', async () => {
 			const { buttons, removeFile, shareDir, unmount } = await openHtmlShareWithWarnings();
 			await act(async () => { buttons.find(button => button.text === 'No').onPress(); });
