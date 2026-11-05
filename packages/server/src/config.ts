@@ -223,7 +223,9 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		apiBaseUrl,
 		userContentBaseUrl: env.USER_CONTENT_BASE_URL ? env.USER_CONTENT_BASE_URL : baseUrl,
 		joplinAppBaseUrl: env.JOPLINAPP_BASE_URL,
-		signupEnabled: env.SIGNUP_ENABLED,
+		// With SAML or LDAP, someone could otherwise register a directory user's address before they do, and they would
+		// then log in to that account
+		signupEnabled: env.SIGNUP_ENABLED && !isUsingExternalAuth(env),
 		termsEnabled: env.TERMS_ENABLED,
 		accountTypesEnabled: env.ACCOUNT_TYPES_ENABLED,
 		supportEmail,

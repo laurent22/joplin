@@ -14,11 +14,9 @@ export default (view: TemplateView): EmailSubjectBody => {
 
 Your multi-factor authentication recovery codes were viewed on ${view.accessTime}.
 
-If this was you, no further action is required.
+If this was you, no further action is needed.
 
-If this was **not** you, your account may be compromised. [Click on this link to change your password](${markdownUtils.escapeLinkUrl(view.changePasswordUrl)})
-
-Joplin Cloud Team
+If this wasn't you, someone might be using your account. Please [change your password](${markdownUtils.escapeLinkUrl(view.changePasswordUrl)}).
 `.trim(),
 	};
 };

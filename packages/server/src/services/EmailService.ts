@@ -8,6 +8,7 @@ import { errorToString } from '../utils/errors';
 import { markdownBodyToHtml, markdownBodyToPlainText } from './email/utils';
 import { MailerSecurity } from '../env';
 import { senderInfo } from '../models/utils/email';
+import { isValidEmailRecipient } from '../utils/validation';
 
 const logger = Logger.create('EmailService');
 
@@ -78,20 +79,24 @@ export default class EmailService extends BaseService {
 			for (const email of emails) {
 				const sender = senderInfo(email.sender_id);
 
-				const mailOptions: Mail.Options = {
-					from: this.formatNameAndEmail(sender.email, sender.name),
-					to: this.formatNameAndEmail(email.recipient_email, email.recipient_name),
-					subject: email.subject,
-					text: markdownBodyToPlainText(email.body),
-					html: markdownBodyToHtml(email.body),
-				};
-
 				const emailToSave: Email = {
 					id: email.id,
 					sent_time: Date.now(),
 				};
 
 				try {
+					// Checked here, rather than when formatting the address, so that only this email fails. A list of
+					// addresses would otherwise be sent to every one of them.
+					if (!isValidEmailRecipient(email.recipient_email)) throw new Error(`Invalid recipient: ${email.recipient_email.substring(0, 100)}`);
+
+					const mailOptions: Mail.Options = {
+						from: this.formatNameAndEmail(sender.email, sender.name),
+						to: this.formatNameAndEmail(email.recipient_email, email.recipient_name),
+						subject: email.subject,
+						text: markdownBodyToPlainText(email.body),
+						html: markdownBodyToHtml(email.body),
+					};
+
 					await transport.sendMail(mailOptions);
 					emailToSave.sent_success = 1;
 					emailToSave.error = '';

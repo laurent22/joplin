@@ -1,0 +1,44 @@
+diff --git a/src/htmlminifier.js b/src/htmlminifier.js
+index d7efa99148a2123dfd02fc0aa095763df35fa2ff..1ee8f1576cd5a3aa9d611a6f763b3fdca47e989c 100644
+--- a/src/htmlminifier.js
++++ b/src/htmlminifier.js
+@@ -1305,23 +1305,22 @@ function joinResultSegments(results, options, restoreCustom, restoreIgnore) {
+   var maxLineLength = options.maxLineLength;
+   if (maxLineLength) {
+     var line = '', lines = [];
+-    while (results.length) {
+-      var len = line.length;
+-      var end = results[0].indexOf('\n');
+-      if (end < 0) {
+-        line += restoreIgnore(restoreCustom(results.shift()));
+-      }
+-      else {
+-        line += restoreIgnore(restoreCustom(results[0].slice(0, end)));
+-        results[0] = results[0].slice(end + 1);
+-      }
+-      if (len > 0 && line.length > maxLineLength) {
+-        lines.push(line.slice(0, len));
+-        line = line.slice(len);
+-      }
+-      else if (end >= 0) {
+-        lines.push(line);
+-        line = '';
++    // Joplin: the original shift()s the results and re-slices the current one at each newline, which is quadratic in
++    // the output size. Same logic, walking each result's newline-separated parts by index instead.
++    for (var resultIndex = 0; resultIndex < results.length; resultIndex++) {
++      var parts = results[resultIndex].split('\n');
++      for (var partIndex = 0; partIndex < parts.length; partIndex++) {
++        var len = line.length;
++        var endsWithNewline = partIndex < parts.length - 1;
++        line += restoreIgnore(restoreCustom(parts[partIndex]));
++        if (len > 0 && line.length > maxLineLength) {
++          lines.push(line.slice(0, len));
++          line = line.slice(len);
++        }
++        else if (endsWithNewline) {
++          lines.push(line);
++          line = '';
++        }
+       }
+     }
+     if (line) {

@@ -137,8 +137,17 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		await this.deleteBy({ byShareId: shareId, byUserId: userId });
 	}
 
+	public async itemIdsByName(userId: Uuid, names: string[]) {
+		const output = new Map<string, Uuid>();
+		for (let i = 0; i < names.length; i += 500) {
+			const items = await this.models().item().loadByNames(userId, names.slice(i, i + 500), { fields: ['id', 'name'] });
+			for (const item of items) output.set(item.name, item.id);
+		}
+		return output;
+	}
+
 	public async add(userId: Uuid, itemId: Uuid, options: UserItemSaveOptions = {}): Promise<void> {
-		const item = await this.models().item().load(itemId, { fields: ['id', 'name'] });
+		const item = await this.models().item().load(itemId, { fields: ['id', 'name', 'owner_id'] });
 		if (!item) {
 			throw new ErrorNotFound(`No such item: ${itemId}`);
 		}
@@ -166,9 +175,20 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		perfTimer.push(`Processing ${items.length} items`);
 
 		const skippedItemIds: Uuid[] = [];
+		const nameTakenItemIds: Uuid[] = [];
+		const itemIdsByName = await this.itemIdsByName(userId, items.filter(i => i.owner_id !== userId).map(i => i.name));
 
 		for (const item of items) {
-			if (!('name' in item) || !('id' in item)) throw new Error('item.id and item.name must be set');
+			if (!('name' in item) || !('id' in item) || !('owner_id' in item)) throw new Error('item.id, item.name and item.owner_id must be set');
+
+			// Items are looked up by name, so a shared item with the same name as another item in this user's account
+			// would make those lookups pick either one, and the user's own uploads could go to the other user's item
+			const nameTakenBy = itemIdsByName.get(item.name);
+			if (item.owner_id !== userId && nameTakenBy && nameTakenBy !== item.id) {
+				nameTakenItemIds.push(item.id);
+				continue;
+			}
+			itemIdsByName.set(item.name, item.id);
 
 			await this.withTransaction(async () => {
 				try {
@@ -199,6 +219,10 @@ export default class UserItemModel extends BaseModel<UserItem> {
 
 		if (skippedItemIds.length) {
 			logger.info(`addMulti: Skipped ${skippedItemIds.length} already existing user items for user ${userId}: ${itemIdSample(skippedItemIds)}`);
+		}
+
+		if (nameTakenItemIds.length) {
+			logger.warn(`addMulti: Skipped ${nameTakenItemIds.length} items for user ${userId} because the user already has a different item with the same name: ${itemIdSample(nameTakenItemIds)}`);
 		}
 
 		perfTimer.pop();

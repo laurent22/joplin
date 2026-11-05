@@ -91,4 +91,19 @@ describe('LockModel', () => {
 		jest.useRealTimers();
 	});
 
+	test.each([
+		['an array', ['a', 'b']],
+		['an object with a length', { length: 10 }],
+		['a string with unexpected characters', 'a_b'],
+	])('should reject a client ID that is %s', async (_case, clientId) => {
+		const { user } = await createUserAndSession(1);
+		await expectHttpError(async () => models().lock().acquireLock(user.id, LockType.Sync, LockClientType.Desktop, clientId as unknown as string), ErrorUnprocessableEntity.httpCode);
+	});
+
+	test('should limit the number of sync locks per user', async () => {
+		const { user } = await createUserAndSession(1);
+		for (let i = 0; i < 50; i++) await models().lock().acquireLock(user.id, LockType.Sync, LockClientType.Desktop, `client${i}`);
+		await expectHttpError(async () => models().lock().acquireLock(user.id, LockType.Sync, LockClientType.Desktop, 'client50'), ErrorConflict.httpCode);
+	});
+
 });

@@ -1,7 +1,7 @@
 import { shimInit } from './shim-init-node';
 import shim from './shim';
 import { createTempDir, setupDatabaseAndSynchronizer, supportDir, withExtraRootCa } from './testing/test-utils';
-import { copyFile, readFile, remove } from 'fs-extra';
+import { copyFile, pathExists, readFile, remove } from 'fs-extra';
 import createLocalhostServer from './testing/createLocalhostServer';
 import { join } from 'path';
 
@@ -63,6 +63,48 @@ describe('shim-init-node', () => {
 			expect(response.status).toBe(200);
 			expect(await response.text()).toBe('test!');
 		});
+	});
+
+	test.each([
+		'localhost',
+		'127.0.0.1',
+	])('fetchBlob should not connect to a non-public address when publicNetworkOnly is set: %s', async (host) => {
+		await using httpServer = await createLocalhostServer((_req, res) => {
+			res.writeHead(200, { 'content-type': 'text/plain' });
+			res.end('Internal content');
+		}, { https: false });
+
+		const tempDir = await createTempDir();
+		try {
+			const path = join(tempDir, 'test.txt');
+			const url = `${httpServer.baseUrl.replace('localhost', host)}/file.txt`;
+			await expect(shim.fetchBlob(url, { path, publicNetworkOnly: true })).rejects.toThrow('Only public network addresses');
+			expect(await pathExists(path)).toBe(false);
+
+			await shim.fetchBlob(`${httpServer.baseUrl}/file.txt`, { path });
+			expect(await readFile(path, 'utf-8')).toBe('Internal content');
+		} finally {
+			await remove(tempDir);
+		}
+	});
+
+	test('fetchBlob should abort a download that is slow but never idle long enough to time out', async () => {
+		await using httpServer = await createLocalhostServer((req, res) => {
+			res.writeHead(200, { 'content-type': 'text/plain' });
+			const interval = setInterval(() => res.write('.'), 50);
+			req.socket.on('close', () => clearInterval(interval));
+		}, { https: false });
+
+		const tempDir = await createTempDir();
+		try {
+			const path = join(tempDir, 'test.txt');
+			const startTime = Date.now();
+			await expect(shim.fetchBlob(`${httpServer.baseUrl}/file.txt`, { path, timeout: 1000, signal: AbortSignal.timeout(300) })).rejects.toThrow();
+			expect(Date.now() - startTime).toBeLessThan(1000);
+			expect(await pathExists(path)).toBe(false);
+		} finally {
+			await remove(tempDir);
+		}
 	});
 
 	test.each([

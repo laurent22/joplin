@@ -102,7 +102,7 @@ export interface ResourceFromPath extends DownloadedMediaFile {
 }
 
 
-async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> {
+async function requestNoteToNote(requestNote: RequestNote, fetchOptions?: FetchOptions): Promise<NoteEntity> {
 	const output: NoteEntity = {
 		title: requestNote.title ? requestNote.title : '',
 		body: requestNote.body ? requestNote.body : '',
@@ -114,7 +114,7 @@ async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> 
 
 	if (requestNote.body_html) {
 		if (requestNote.convert_to === 'html') {
-			const style = await buildNoteStyleSheet(requestNote.stylesheets);
+			const style = await buildNoteStyleSheet(requestNote.stylesheets, fetchOptions);
 
 			const minifyOptions = {
 				// Remove all spaces and, especially, newlines from tag attributes, as that would
@@ -187,7 +187,7 @@ async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> 
 	return output;
 }
 
-async function buildNoteStyleSheet(stylesheets: Stylesheet[]) {
+async function buildNoteStyleSheet(stylesheets: Stylesheet[], fetchOptions?: FetchOptions) {
 	if (!stylesheets) return [];
 
 	const output = [];
@@ -198,7 +198,7 @@ async function buildNoteStyleSheet(stylesheets: Stylesheet[]) {
 		} else if (stylesheet.type === 'url') {
 			try {
 				const tempPath = `${Setting.value('tempDir')}/${md5(`${Math.random()}_${Date.now()}`)}.css`;
-				await shim.fetchBlob(stylesheet.value, { path: tempPath, maxRetry: 1 });
+				await shim.fetchBlob(stylesheet.value, { path: tempPath, maxRetry: 1, ...fetchOptions });
 				const text = await shim.fsDriver().readFile(tempPath);
 				output.push(text);
 				await shim.fsDriver().remove(tempPath);
@@ -440,7 +440,7 @@ export const extractNoteFromHTML = async (
 	fetchOptions?: FetchOptions,
 	allowedProtocols?: string[],
 ) => {
-	const note = await requestNoteToNote(requestNote);
+	const note = await requestNoteToNote(requestNote, fetchOptions);
 
 	const mediaUrls = extractMediaUrls(note.markup_language, note.body);
 

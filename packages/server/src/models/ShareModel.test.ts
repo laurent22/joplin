@@ -3,6 +3,7 @@ import { ErrorBadRequest, ErrorNotFound } from '../utils/errors';
 import { Change2, ChangeType, ShareType } from '../services/database/types';
 import { inviteUserToShare, shareFolderWithUser, shareWithUserAndAccept, updateItemShareId } from '../utils/testing/shareApiUtils';
 import { withWarningSilenced } from '@joplin/lib/testing/test-utils';
+import { createNanoForInboxEmail } from '@joplin/lib/uuid';
 
 // Goes through the process of:
 // 1. Creating two users/sessions
@@ -358,6 +359,22 @@ describe('ShareModel', () => {
 
 
 
+
+	test('should not derive share ids or inbox addresses from Math.random', async () => {
+		const { user, session } = await createUserAndSession(1);
+		await createNote(session.id, { id: '00000000000000000000000000000001' });
+		await createNote(session.id, { id: '00000000000000000000000000000002' });
+
+		const random = jest.spyOn(Math, 'random').mockReturnValue(0.5);
+		try {
+			const share1 = await models().share().shareNote(user, '00000000000000000000000000000001', '', false);
+			const share2 = await models().share().shareNote(user, '00000000000000000000000000000002', '', false);
+			expect(share1.id).not.toBe(share2.id);
+			expect(createNanoForInboxEmail()).not.toBe(createNanoForInboxEmail());
+		} finally {
+			random.mockRestore();
+		}
+	});
 
 	test('should create a published folder share', async () => {
 		const { user, session } = await createUserAndSession(1);

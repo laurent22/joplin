@@ -1,17 +1,21 @@
 import { ErrorBadRequest, ErrorNotFound } from '../../utils/errors';
-import { Share, ShareType } from '../../services/database/types';
+import { Share, ShareType, ShareUser } from '../../services/database/types';
 import { bodyFields, ownerRequired } from '../../utils/requestUtils';
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { AclAction } from '../../models/BaseModel';
+import limiterShareInvitations from '../../utils/request/limiterShareInvitations';
+import Logger from '@joplin/utils/Logger';
 
 interface ShareApiInput extends Share {
 	folder_id?: string;
 	note_id?: string;
 	recursive?: number;
 }
+
+const logger = Logger.create('api/shares');
 
 const router = new Router(RouteType.Api);
 
@@ -62,17 +66,32 @@ router.post('api/shares/:id/users', async (path: SubPath, ctx: AppContext) => {
 	}
 
 	const fields = await bodyFields(ctx.req) as UserInput;
-	const user = await ctx.joplin.models.user().loadByEmail(fields.email);
-	if (!user) throw new ErrorNotFound('User not found');
-
 	const masterKey = fields.master_key || '';
 	const shareId = path.id;
 
-	await ctx.joplin.models.shareUser().checkIfAllowed(ctx.joplin.owner, AclAction.Create, {
+	// Check that the caller owns the share before looking up the email,
+	// otherwise the end point reports whether any given address has an account.
+	const share = await ctx.joplin.models.share().load(shareId);
+	if (!share) throw new ErrorNotFound(`No such share: ${shareId}`);
+	await ctx.joplin.models.share().checkIfAllowed(ctx.joplin.owner, AclAction.Read, share);
+	if (share.type !== ShareType.Folder) throw new ErrorBadRequest('Only a shared notebook can have recipients');
+
+	const checkResource: ShareUser = {
 		share_id: shareId,
-		user_id: user.id,
 		master_key: masterKey,
-	});
+	};
+
+	await ctx.joplin.models.shareUser().checkCanInvite(ctx.joplin.owner, checkResource);
+	await limiterShareInvitations(ctx.joplin.owner.id);
+
+	const user = await ctx.joplin.models.user().loadByEmail(fields.email);
+	if (!user) {
+		logger.info(`Share ${shareId}: invitation from ${ctx.joplin.owner.id} to an address without an account`);
+		throw new ErrorNotFound('User not found');
+	}
+
+	checkResource.user_id = user.id;
+	await ctx.joplin.models.shareUser().checkIfAllowed(ctx.joplin.owner, AclAction.Create, checkResource);
 
 	return ctx.joplin.models.shareUser().addByEmail(shareId, user.email, masterKey);
 });

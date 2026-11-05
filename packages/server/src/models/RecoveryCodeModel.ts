@@ -9,6 +9,7 @@ import { forgotPasswordUrl } from '../utils/urlUtils';
 import { formatDateOnServer } from '../utils/time';
 import { DbConnection } from '../db';
 import { NewModelFactoryHandler } from './factory';
+import { Services } from '../services/types';
 import { Config } from '../utils/types';
 
 type RecoveryCodeAccess = {
@@ -98,13 +99,11 @@ export default class RecoveryCodeModel extends BaseModel<RecoveryCode> {
 		}, 'RecoveryCode::verify');
 	}
 
-	public async checkCredentials(userId: Uuid, password?: string, mfaCode?: string) {
+	public async checkCredentials(userId: Uuid, password: string, mfaCode: string, services: Services) {
 		const user = await this.models().user().load(userId, { fields: ['totp_secret'] });
 
-		if (password) {
-			const isPasswordValid = await this.models().user().isPasswordValid(userId, password);
-			if (isPasswordValid) return;
-		}
+		// Through the same per-account limiter as login, otherwise this page would allow guessing the password faster
+		if (password) return this.models().user().checkCurrentPassword(userId, password, services);
 
 		if (mfaCode) {
 			const isMfaCodeValid = await isValidMFACode(user.totp_secret, mfaCode);

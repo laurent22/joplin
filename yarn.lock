@@ -35669,6 +35669,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"html-minifier@patch:html-minifier@npm%3A4.0.0#~/.yarn/patches/html-minifier-npm-4.0.0-2c414aaddf.patch":
+  version: 4.0.0
+  resolution: "html-minifier@patch:html-minifier@npm%3A4.0.0#~/.yarn/patches/html-minifier-npm-4.0.0-2c414aaddf.patch::version=4.0.0&hash=58143e"
+  dependencies:
+    camel-case: "npm:^3.0.0"
+    clean-css: "npm:^4.2.1"
+    commander: "npm:^2.19.0"
+    he: "npm:^1.2.0"
+    param-case: "npm:^2.1.1"
+    relateurl: "npm:^0.2.7"
+    uglify-js: "npm:^3.5.1"
+  bin:
+    html-minifier: ./cli.js
+  checksum: 10/68f9df60d1cb282d35fc675285b46745eb81007b023c7d5c741e7f6bfe6db4ec656ac1951a36219a09b6d8d26ccafd5607de6edcc8918259009eb3059a8f038d
+  languageName: node
+  linkType: hard
+
 "html-tags@npm:^3.2.0, html-tags@npm:^3.3.1":
   version: 3.3.1
   resolution: "html-tags@npm:3.3.1"

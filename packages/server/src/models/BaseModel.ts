@@ -1,7 +1,7 @@
 import { WithDates, WithUuid, databaseSchema, ItemType, Uuid, User } from '../services/database/types';
 import { DbConnection, QueryContext } from '../db';
 import TransactionHandler from '../utils/TransactionHandler';
-import { uuidgen } from '@joplin/lib/uuid';
+import { uuidgen } from '../utils/uuid';
 import { ErrorUnprocessableEntity, ErrorBadRequest } from '../utils/errors';
 import { Models, NewModelFactoryHandler } from './factory';
 import { Config, Env } from '../utils/types';
