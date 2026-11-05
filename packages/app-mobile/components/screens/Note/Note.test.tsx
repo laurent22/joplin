@@ -49,7 +49,7 @@ import shareFile from '../../../utils/shareFile';
 import { basename, dirname } from 'path';
 
 jest.mock('@joplin/lib/hooks/plugins/useVisiblePluginEditorViewIds', () => jest.fn((): string[] => []));
-jest.mock('../../../utils/shareFile', () => jest.fn().mockResolvedValue(undefined));
+jest.mock('../../../utils/shareFile', () => jest.fn().mockResolvedValue(true));
 
 const mockUseVisiblePluginEditorViewIds = useVisiblePluginEditorViewIds as jest.MockedFunction<typeof useVisiblePluginEditorViewIds>;
 
@@ -406,7 +406,8 @@ describe('screens/Note/Note', () => {
 			});
 			const exportPath = exportHtml.mock.calls[0][0].path;
 			expect(basename(exportPath)).toBe('Edited _ title_.html');
-			await waitFor(() => expect(removeFile).toHaveBeenCalledWith(dirname(exportPath)));
+			await act(async () => {});
+			expect(removeFile).not.toHaveBeenCalledWith(dirname(exportPath));
 			expect(screen.queryByText('Exporting...')).toBeNull();
 			expect(nativeShare).not.toHaveBeenCalled();
 			unmount();
@@ -438,11 +439,26 @@ describe('screens/Note/Note', () => {
 			unmount();
 		});
 
+		it('removes the HTML export when the share sheet is cancelled', async () => {
+			await openNewNote({ title: 'Cancelled share', body: 'Body' });
+			const { dialogs } = makeShareDialogs('html');
+			const exportHtml = jest.spyOn(InteropService.instance(), 'export').mockResolvedValue({ warnings: [] });
+			const removeFile = jest.spyOn(shim.fsDriver(), 'remove');
+			jest.mocked(shareFile).mockResolvedValueOnce(false);
+			const { unmount } = render(<WrappedNoteScreen dialogs={dialogs}/>);
+
+			await openNoteActionsMenu();
+			fireEvent.press(await screen.findByText('Share'));
+			await waitFor(() => expect(removeFile).toHaveBeenCalledWith(dirname(exportHtml.mock.calls[0][0].path)));
+			unmount();
+		});
+
 		it('shares HTML after accepting export warnings', async () => {
 			const { buttons, removeFile, shareDir, unmount } = await openHtmlShareWithWarnings();
 			await act(async () => { buttons.find(button => button.text === 'Yes').onPress(); });
 			await waitFor(() => expect(shareFile).toHaveBeenCalledWith(expect.any(String), 'text/html'));
-			await waitFor(() => expect(removeFile).toHaveBeenCalledWith(shareDir));
+			await act(async () => {});
+			expect(removeFile).not.toHaveBeenCalledWith(shareDir);
 			unmount();
 		});
 
