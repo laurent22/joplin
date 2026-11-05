@@ -84,7 +84,7 @@ import { defaultWindowId, HighlightedWord } from '@joplin/lib/reducer';
 import useVisiblePluginEditorViewIds from '@joplin/lib/hooks/plugins/useVisiblePluginEditorViewIds';
 import { SelectionRange } from '../../../contentScripts/markdownEditorBundle/types';
 import { EditorType } from '../../NoteEditor/types';
-import { IconButton } from 'react-native-paper';
+import { Button, IconButton, Portal, ProgressBar } from 'react-native-paper';
 import { makeIsolatedShareCacheDirectory, writeTextToCacheFile } from '../../../utils/ShareUtils';
 import shareFile from '../../../utils/shareFile';
 import InteropService from '@joplin/lib/services/interop/InteropService';
@@ -184,9 +184,11 @@ interface State {
 	multiline: boolean;
 	showMultilineToggle: boolean | null;
 	titleContainerWidth: number;
+	exportInProgress: boolean;
 }
 
 type ScrollEventSlice = { fraction: number };
+type ExportTask = { cancelled: boolean };
 
 class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> implements BaseNoteScreenComponent<State> {
 	// This isn't in this.state because we don't want changing scroll to trigger
@@ -215,6 +217,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	});
 	private refreshKey: number | undefined;
 	private reloadInProgress_ = false;
+	private exportTask_: ExportTask|null = null;
 
 	public static navigationOptions(): { header: null } {
 		return { header: null };
@@ -262,6 +265,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			multiline: false,
 			showMultilineToggle: null,
 			titleContainerWidth: 0,
+			exportInProgress: false,
 		};
 
 		const initialScroll = NotePositionService.instance().getScrollPercent(props.noteId, defaultWindowId);
@@ -543,6 +547,13 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				borderColor: theme.dividerColor,
 				color: theme.urlColor,
 			},
+			exportProgressBar: {
+				marginTop: theme.margin,
+			},
+			exportDialogActions: {
+				alignItems: 'flex-end',
+				marginTop: theme.margin,
+			},
 			lockedInShareBanner: {
 				backgroundColor: theme.warningBackgroundColor,
 				color: theme.color,
@@ -809,6 +820,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 
 	public componentWillUnmount() {
+		if (this.exportTask_) this.exportTask_.cancelled = true;
+		this.exportTask_ = null;
 		BackButtonService.removeHandler(this.backHandler);
 		NavService.removeHandler(this.navHandler);
 
@@ -1292,16 +1305,29 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		this.scheduleSave({ ...this.state, note: newNote });
 	}
 
+	private cancelExport = (task: ExportTask|null) => {
+		if (!task || this.exportTask_ !== task || task.cancelled) return;
+		// The export can finish in the background; its result is discarded below.
+		task.cancelled = true;
+		this.setState({ exportInProgress: false });
+	};
+
 	private async shareHtmlFile() {
+		const task: ExportTask = { cancelled: false };
+		this.exportTask_ = task;
+		this.setState({ exportInProgress: true });
 		let shareDir: string = null;
 		try {
 			const noteId = this.state.note?.id || this.props.noteId;
 			if (!noteId) throw new Error(_('Cannot find the note to share.'));
 			await this.saveActionQueue(noteId).processAllNow();
+			if (task.cancelled) return;
 			const savedNote = await Note.load(noteId);
+			if (task.cancelled) return;
 			if (!savedNote) throw new Error(_('Cannot find the note to share.'));
 
 			shareDir = await makeIsolatedShareCacheDirectory();
+			if (task.cancelled) return;
 			const fileToShare = `${shareDir}/${friendlySafeFilename(savedNote.title)}.html`;
 
 			const exportResult = await InteropService.instance().export({
@@ -1314,6 +1340,9 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				plugins: this.props.plugins,
 				packIntoSingleFile: true,
 			});
+			if (task.cancelled) return;
+			this.exportTask_ = null;
+			this.setState({ exportInProgress: false });
 			if (exportResult.warnings.length) {
 				const shouldShare = await new Promise<boolean>(resolve => {
 					this.props.dialogs.prompt('', _('Some content may be missing from the note. Do you still want to share it?'), [
@@ -1325,9 +1354,15 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			}
 			await shareFile(fileToShare, 'text/html');
 		} catch (e) {
-			logger.error('Unable to share note as HTML:', e);
-			void shim.showErrorDialog(_('Unable to share note data. Reason: %s', e.toString()));
+			if (!task.cancelled) {
+				logger.error('Unable to share note as HTML:', e);
+				void shim.showErrorDialog(_('Unable to share note data. Reason: %s', e.toString()));
+			}
 		} finally {
+			if (this.exportTask_ === task) {
+				this.exportTask_ = null;
+				this.setState({ exportInProgress: false });
+			}
 			if (shareDir) await shim.fsDriver().remove(shareDir);
 		}
 	}
@@ -2198,6 +2233,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			title={getDisplayParentTitle(this.state.note, this.state.folder)}
 		/>;
 
+		const exportTask = this.exportTask_;
 		return (
 			<View style={this.rootStyle(this.props.themeId).root}>
 				{!increaseSpaceForEditor && header}
@@ -2214,6 +2250,21 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					visible={this.state.publishDialogShown}
 					onClose={this.onPublishDialogClose_}
 				/>
+				<Portal>
+					<DismissibleDialog
+						themeId={this.props.themeId}
+						visible={this.state.exportInProgress}
+						onDismiss={() => this.cancelExport(exportTask)}
+						heading={_('Exporting...')}
+						size={DialogVariant.SmallResize}
+						useNativeModal={false}
+					>
+						<ProgressBar indeterminate visible accessibilityLabel={_('Exporting...')} style={this.styles().exportProgressBar}/>
+						<View style={this.styles().exportDialogActions}>
+							<Button onPress={() => this.cancelExport(exportTask)}>{_('Cancel')}</Button>
+						</View>
+					</DismissibleDialog>
+				</Portal>
 				{this.state.noteLockUnlockPromptVisible && (
 					<DismissibleDialog
 						themeId={this.props.themeId}

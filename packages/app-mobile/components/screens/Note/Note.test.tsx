@@ -407,7 +407,34 @@ describe('screens/Note/Note', () => {
 			const exportPath = exportHtml.mock.calls[0][0].path;
 			expect(basename(exportPath)).toBe('Edited _ title_.html');
 			await waitFor(() => expect(removeFile).toHaveBeenCalledWith(dirname(exportPath)));
+			expect(screen.queryByText('Exporting...')).toBeNull();
 			expect(nativeShare).not.toHaveBeenCalled();
+			unmount();
+		});
+
+		it('shows export progress and cancels HTML sharing', async () => {
+			await openNewNote({ title: 'Slow export', body: 'A linked attachment' });
+			const { dialogs } = makeShareDialogs('html');
+			const exportFinished = deferred<void>();
+			const exportHtml = jest.spyOn(InteropService.instance(), 'export').mockImplementation(async () => {
+				await exportFinished.promise;
+				return { warnings: [] };
+			});
+			const removeFile = jest.spyOn(shim.fsDriver(), 'remove');
+			const { unmount } = render(<WrappedNoteScreen dialogs={dialogs}/>);
+
+			await openNoteActionsMenu();
+			fireEvent.press(await screen.findByText('Share'));
+			await waitFor(() => expect(exportHtml).toHaveBeenCalled());
+			expect(await screen.findByText('Exporting...')).toBeVisible();
+
+			fireEvent.press(await screen.findByText('Cancel'));
+			await waitFor(() => expect(screen.queryByText('Exporting...')).toBeNull());
+			expect(shareFile).not.toHaveBeenCalled();
+
+			await act(async () => { exportFinished.resolve(undefined); });
+			expect(shareFile).not.toHaveBeenCalled();
+			await waitFor(() => expect(removeFile).toHaveBeenCalledWith(dirname(exportHtml.mock.calls[0][0].path)));
 			unmount();
 		});
 
