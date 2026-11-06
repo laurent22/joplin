@@ -1,19 +1,18 @@
 import { Dispatch } from 'redux';
+import Logger from '@joplin/utils/Logger';
 import { _, _n } from '../../locale';
 import shim, { MessageBoxType } from '../../shim';
-import { ModelType } from '../../BaseModel';
-import BaseItem from '../../models/BaseItem';
-import ItemChange from '../../models/ItemChange';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
-import Setting from '../../models/Setting';
-import { itemIsReadOnlySync, ItemSlice } from '../../models/utils/readOnly';
 import eventManager, { EventName } from '../../eventManager';
 import { noteLockKeyConflict } from '../synchronizer/syncInfoUtils';
 import isNoteLockEnabled from './isNoteLockEnabled';
 import NoteLockSession from './NoteLockSession';
 import { NoteLockNoteEntity } from './NoteLockNote';
 import { NoteLockPrompts, unlockNoteLockSession } from './noteLockPrompts';
+import { noteLockChangeBlockedReason, validationFields } from './setNoteLockState';
+
+const logger = Logger.create('bulkSetNoteLockState');
 
 export const folderTreeNoteIds = async (folderId: string) => {
 	const folderIds = [folderId].concat((await Folder.allChildrenFolders(folderId)).map(folder => folder.id));
@@ -38,16 +37,13 @@ const bulkSetNoteLockState = async (noteIds: string[], isLocked: boolean) => {
 	for (const noteId of noteIds) {
 		throwIfMigrationNeeded();
 		try {
-			// Checked before the body is decrypted, so a note locked with another key is skipped rather than failed.
-			if (isLocked && (await Note.load(noteId, { fields: ['id', 'is_locked'] }))?.is_locked) {
+			// Checked before the body is decrypted, so a blocked note, or one locked with another key, is skipped rather than failed.
+			const noteInfo = await Note.load(noteId, { fields: [...validationFields, 'encryption_applied'] });
+			if (!noteInfo || !!noteInfo.is_locked === isLocked || noteInfo.encryption_applied || noteLockChangeBlockedReason(noteInfo)) {
 				result.skipped++;
 				continue;
 			}
 			const note: NoteLockNoteEntity = await Note.load(noteId, { useNoteLock: true, noteLockKey });
-			if (!note || !!note.is_locked === isLocked || note.deleted_time || note.is_conflict || note.encryption_applied || itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, note as ItemSlice, Setting.value('sync.userId'), BaseItem.syncShareCache)) {
-				result.skipped++;
-				continue;
-			}
 			// Without the marker the load was not gated, as when the feature is turned off during it, so the body
 			// would be saved back under the wrong lock state.
 			if (!note.isDecrypted) throw new Error('The note was loaded without the note lock gate');
@@ -55,7 +51,8 @@ const bulkSetNoteLockState = async (noteIds: string[], isLocked: boolean) => {
 			await Note.save({ ...note, is_locked: isLocked ? 1 : 0 }, { useNoteLock: true, noteLockKey, userSideValidation: true });
 			eventManager.emit(EventName.NoteLockNoteStateChange, { noteId, isLocked });
 			result.changed++;
-		} catch {
+		} catch (error) {
+			logger.warn(`Could not change the note lock of note ${noteId}:`, error);
 			result.failed++;
 		}
 		// With the feature turned off, Note.save refuses the change, so the remaining notes would all fail too.

@@ -292,6 +292,19 @@ describe('bulkSetNoteLockState', () => {
 		expect((await Note.load(otherKeyNote.id)).body).toBe('JLD01undecryptable');
 	});
 
+	it('should skip a note locked with another key in a read-only share when removing the lock', async () => {
+		await setUpUnlockedSession();
+		const sharedNote = await createLockedNote({ title: 'shared', body: 'secret', share_id: 'share-1' });
+		// As for a note locked by the share owner, which this key cannot decrypt.
+		await db().exec('UPDATE notes SET body = ? WHERE id = ?', ['JLD01undecryptable', sharedNote.id]);
+		const cleanup = simulateReadOnlyShareEnv('share-1');
+		try {
+			expect(await bulkSetNoteLockState([sharedNote.id], false)).toEqual({ changed: 0, skipped: 1, failed: 0 });
+		} finally {
+			cleanup();
+		}
+	});
+
 	test.each([
 		['Yes', 0, true],
 		['No', 1, false],
