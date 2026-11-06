@@ -255,13 +255,17 @@ export default class FsDriverRN extends FsDriverBase {
 	// Requires that the file already exists.
 	// TODO: Update for compatibility with fs-driver-node's appendFile (which does not
 	//       require that the file exists).
-	public appendFile(path: string, content: string, rawEncoding = 'base64') {
+	public async appendFile(path: string, content: string, rawEncoding = 'base64'): Promise<void> {
 		const encoding = normalizeEncoding(rawEncoding);
 
 		if (isScopedUri(path)) {
-			return this.appendSafFile_(path, content, encoding);
+			await this.appendSafFile_(path, content, encoding);
+		} else if (encoding === SupportedEncoding.Utf8) {
+			// RNFS base64-encodes UTF-8 text before passing it to native code. RNFetchBlob accepts it directly.
+			await RNFetchBlob.fs.appendFile(path, content, encoding);
+		} else {
+			await RNFS.appendFile(path, content, encoding);
 		}
-		return RNFS.appendFile(path, content, encoding);
 	}
 
 	// Encoding can be either "utf8", "utf-8", or "base64"
