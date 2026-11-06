@@ -1,6 +1,6 @@
 import { CipherAlgorithm, CryptoBuffer, Digest, MasterKeyEntity } from './types';
 import Logger from '@joplin/utils/Logger';
-import shim from '../../shim';
+import shim, { MobilePlatform } from '../../shim';
 import Setting from '../../models/Setting';
 import MasterKey from '../../models/MasterKey';
 import BaseItem from '../../models/BaseItem';
@@ -13,6 +13,7 @@ const logger = Logger.create('EncryptionService');
 const perfLogger = PerformanceLogger.create();
 
 const emptyUint8Array = new Uint8Array(0);
+const fileFrameWaitInterval = 8;
 
 function hexPad(s: string, length: number) {
 	return padLeft(s, length, '0');
@@ -604,7 +605,7 @@ export default class EncryptionService {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- source/destination are duck-typed readers/writers (stringReader_/stringWriter_/fileReader_/fileWriter_) with a small structural API; passing the union here would require touching all four call sites
-	private async encryptAbstract_(source: any, destination: any, options: EncryptOptions = null) {
+	private async encryptAbstract_(source: any, destination: any, options: EncryptOptions = null, isFile = false) {
 		options = { encryptionMethod: this.defaultEncryptionMethod(), ...options };
 
 		const method = options.encryptionMethod;
@@ -612,6 +613,8 @@ export default class EncryptionService {
 		const masterKeyPlainText = await this.masterKeyPlainText_(masterKeyId, options);
 		const chunkSize = this.chunkSize(method);
 		const crypto = shim.crypto;
+		const frameWaitInterval = isFile && method === EncryptionMethod.FileV1 && shim.mobilePlatform() !== MobilePlatform.None ? fileFrameWaitInterval : 1;
+		let blockIndex = 0;
 
 		const header = {
 			encryptionMethod: method,
@@ -629,24 +632,27 @@ export default class EncryptionService {
 			doneSize += chunkSize;
 			if (options.onProgress) options.onProgress({ doneSize: doneSize });
 
-			// Wait for a frame so that the app remains responsive in mobile.
-			// https://corbt.com/posts/2015/12/22/breaking-up-heavy-processing-in-react-native.html
-			await shim.waitForFrame();
+			// Each file block already awaits I/O and crypto. Request a frame roughly
+			// every MiB to keep the UI responsive without waiting after every block.
+			if (blockIndex++ % frameWaitInterval === 0) {
+				await shim.waitForFrame();
+			}
 
 			const encrypted = await this.encrypt(method, masterKeyPlainText, block);
 			await crypto.increaseNonce(this.encryptionNonce_);
 
-			await destination.append(padLeft(encrypted.length.toString(16), 6, '0'));
-			await destination.append(encrypted);
+			await destination.append(padLeft(encrypted.length.toString(16), 6, '0') + encrypted);
 		}
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See encryptAbstract_ above
-	private async decryptAbstract_(source: any, destination: any, options: EncryptOptions = null) {
+	private async decryptAbstract_(source: any, destination: any, options: EncryptOptions = null, isFile = false) {
 		if (!options) options = {};
 
 		const header = await this.decodeHeaderSource_(source, options.isNoteLock) as { encryptionMethod: number; masterKeyId: string };
 		const masterKeyPlainText = await this.masterKeyPlainText_(header.masterKeyId, options);
+		const frameWaitInterval = isFile && header.encryptionMethod === EncryptionMethod.FileV1 && shim.mobilePlatform() !== MobilePlatform.None ? fileFrameWaitInterval : 1;
+		let blockIndex = 0;
 
 		let doneSize = 0;
 
@@ -660,7 +666,9 @@ export default class EncryptionService {
 			doneSize += length;
 			if (options.onProgress) options.onProgress({ doneSize: doneSize });
 
-			await shim.waitForFrame();
+			if (blockIndex++ % frameWaitInterval === 0) {
+				await shim.waitForFrame();
+			}
 
 			const block = await source.read(length);
 
@@ -706,9 +714,16 @@ export default class EncryptionService {
 
 	private async fileReader_(path: string, encoding: string) {
 		const handle = await this.fsDriver().open(path, 'r');
+		// Encrypted files contain ASCII text. On web, decoding its bytes with the
+		// browser API avoids Buffer's JavaScript ASCII conversion for every block.
+		const webAsciiDecoder = encoding === 'ascii' && shim.mobilePlatform() === MobilePlatform.Web ? new TextDecoder() : null;
 		const reader = {
 			handle: handle,
 			read: async (size: number) => {
+				if (webAsciiDecoder) {
+					const chunk = await this.fsDriver().readFileChunkAsBuffer(reader.handle, size);
+					return chunk ? webAsciiDecoder.decode(chunk) : null;
+				}
 				return this.fsDriver().readFileChunk(reader.handle, size, encoding);
 			},
 			close: async () => {
@@ -745,7 +760,9 @@ export default class EncryptionService {
 		options = { encryptionMethod: this.defaultFileEncryptionMethod(), ...options };
 
 		let source = await this.fileReader_(srcPath, 'base64');
-		let destination = await this.fileWriter_(destPath, 'ascii');
+		// FileV1 output is ASCII text, so UTF-8 writes the same bytes while using
+		// the direct UTF-8 file path on native and TextEncoder on web.
+		let destination = await this.fileWriter_(destPath, options.encryptionMethod === EncryptionMethod.FileV1 ? 'utf8' : 'ascii');
 
 		const cleanUp = async () => {
 			if (source) await source.close();
@@ -758,7 +775,7 @@ export default class EncryptionService {
 
 		try {
 			await this.fsDriver().unlink(destPath);
-			await this.encryptAbstract_(source, destination, options);
+			await this.encryptAbstract_(source, destination, options, true);
 		} catch (error) {
 			await cleanUp();
 			await this.fsDriver().unlink(destPath);
@@ -783,7 +800,7 @@ export default class EncryptionService {
 
 		try {
 			await this.fsDriver().unlink(destPath);
-			await this.decryptAbstract_(source, destination, options);
+			await this.decryptAbstract_(source, destination, options, true);
 		} catch (error) {
 			await cleanUp();
 			await this.fsDriver().unlink(destPath);

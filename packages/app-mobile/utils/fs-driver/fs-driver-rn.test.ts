@@ -8,6 +8,9 @@ const mockSaf = {
 };
 const mockRnFetchBlobAppendFile = jest.fn();
 const mockRnfsAppendFile = jest.fn();
+const mockRnfsRead = jest.fn();
+const mockQuickCryptoBinaryLikeToArrayBuffer = jest.fn();
+const mockQuickCryptoAb2str = jest.fn();
 
 jest.mock('rn-fetch-blob', () => ({
 	__esModule: true,
@@ -16,6 +19,15 @@ jest.mock('rn-fetch-blob', () => ({
 
 jest.mock('@dr.pogodin/react-native-fs', () => ({
 	appendFile: mockRnfsAppendFile,
+	read: mockRnfsRead,
+}));
+
+jest.mock('react-native-quick-crypto', () => ({
+	__esModule: true,
+	default: {
+		binaryLikeToArrayBuffer: mockQuickCryptoBinaryLikeToArrayBuffer,
+		ab2str: mockQuickCryptoAb2str,
+	},
 }));
 
 jest.mock('@joplin/react-native-saf-x', () => ({
@@ -45,6 +57,12 @@ describe('fs-driver-rn', () => {
 		mockSaf.copyFileToDirectory.mockResolvedValue({ uri: `${parentPath}/new.md` });
 		mockRnFetchBlobAppendFile.mockResolvedValue(0);
 		mockRnfsAppendFile.mockResolvedValue(undefined);
+		mockRnfsRead.mockResolvedValue('');
+		mockQuickCryptoBinaryLikeToArrayBuffer.mockImplementation((data: string, encoding: BufferEncoding) => {
+			const bytes = Buffer.from(data, encoding);
+			return bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength);
+		});
+		mockQuickCryptoAb2str.mockImplementation((data: ArrayBuffer, encoding: BufferEncoding) => Buffer.from(data).toString(encoding));
 	});
 
 	it('appends internal UTF-8 text without encoding it as base64 for RNFS', async () => {
@@ -67,6 +85,40 @@ describe('fs-driver-rn', () => {
 		expect(mockRnfsAppendFile).toHaveBeenCalledWith('/local/export.bin', 'dGVzdA==', 'base64');
 		expect(mockSaf.writeFile).toHaveBeenCalledWith(destinationPath, 'more text', { encoding: 'utf8', append: true });
 		expect(mockRnFetchBlobAppendFile).not.toHaveBeenCalled();
+	});
+
+	it('decodes ASCII reads via native conversions while preserving Latin-1 bytes and offsets', async () => {
+		const driver = new FsDriverRN();
+		const path = '/local/encrypted';
+		const handle = { path, offset: 0, mode: 'r', stat: { size: 5 } };
+		const firstBase64 = Buffer.from([0x4a, 0x45, 0x44]).toString('base64');
+		const secondBase64 = Buffer.from([0x80, 0xff]).toString('base64');
+		mockRnfsRead.mockResolvedValueOnce(firstBase64).mockResolvedValueOnce(secondBase64);
+
+		expect(await driver.readFileChunk(handle, 3, 'ascii')).toBe('JED');
+		expect(await driver.readFileChunk(handle, 2, 'ascii')).toBe('\u0080\u00ff');
+		expect(handle.offset).toBe(5);
+		expect(await driver.readFileChunk(handle, 1, 'ascii')).toBeNull();
+		expect(mockRnfsRead).toHaveBeenNthCalledWith(1, path, 3, 0, 'base64');
+		expect(mockRnfsRead).toHaveBeenNthCalledWith(2, path, 2, 3, 'base64');
+		expect(mockRnfsRead).toHaveBeenCalledTimes(2);
+		expect(mockQuickCryptoBinaryLikeToArrayBuffer).toHaveBeenCalledWith(firstBase64, 'base64');
+		expect(mockQuickCryptoBinaryLikeToArrayBuffer).toHaveBeenCalledWith(secondBase64, 'base64');
+		expect(mockQuickCryptoAb2str).toHaveBeenCalledWith(expect.any(ArrayBuffer), 'latin1');
+	});
+
+	it('keeps base64 and UTF-8 reads on the RNFS path', async () => {
+		const driver = new FsDriverRN();
+		const path = '/local/file';
+		const handle = { path, offset: 0, mode: 'r', stat: { size: 4 } };
+		mockRnfsRead.mockResolvedValueOnce('YWI=').mockResolvedValueOnce('cd');
+
+		expect(await driver.readFileChunk(handle, 2, 'base64')).toBe('YWI=');
+		expect(await driver.readFileChunk(handle, 2, 'utf8')).toBe('cd');
+		expect(mockRnfsRead).toHaveBeenNthCalledWith(1, path, 2, 0, 'base64');
+		expect(mockRnfsRead).toHaveBeenNthCalledWith(2, path, 2, 2, 'utf8');
+		expect(mockQuickCryptoBinaryLikeToArrayBuffer).not.toHaveBeenCalled();
+		expect(mockQuickCryptoAb2str).not.toHaveBeenCalled();
 	});
 
 	it('should overwrite an existing file discovered while warming an empty cache', async () => {

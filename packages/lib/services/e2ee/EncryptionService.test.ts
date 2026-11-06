@@ -6,6 +6,7 @@ import BaseItem from '../../models/BaseItem';
 import MasterKey from '../../models/MasterKey';
 import EncryptionService, { EncryptionMethod, isValidNoteLockHeader } from './EncryptionService';
 import { setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
+import shim, { MobilePlatform } from '../../shim';
 
 let service: EncryptionService = null;
 
@@ -341,6 +342,45 @@ describe('EncryptionService', () => {
 		expect(fileContentEqual(sourcePath, encryptedPath)).toBe(false);
 		expect(fileContentEqual(sourcePath, decryptedPath)).toBe(true);
 	}));
+
+	it.each([MobilePlatform.Web, MobilePlatform.Android])('should use optimized FileV1 file paths on %s', async (platform) => {
+		let masterKey = await service.generateMasterKey('123456');
+		masterKey = await MasterKey.save(masterKey);
+		await service.loadMasterKey(masterKey, '123456', true);
+
+		const sourcePath = `${Setting.value('tempDir')}/file-v1-source.bin`;
+		const encryptedPath = `${Setting.value('tempDir')}/file-v1-encrypted`;
+		const decryptedPath = `${Setting.value('tempDir')}/file-v1-decrypted.bin`;
+		await service.fsDriver().writeFile(sourcePath, Buffer.alloc(1024 * 1024 + 128 * 1024, 0x41).toString('base64'), 'base64');
+
+		const fsDriver = service.fsDriver();
+		const platformSpy = jest.spyOn(shim, 'mobilePlatform').mockReturnValue(platform);
+		const frameSpy = jest.spyOn(shim, 'waitForFrame');
+		const appendSpy = jest.spyOn(fsDriver, 'appendFile');
+		try {
+			await service.encryptFile(sourcePath, encryptedPath);
+			// One header and nine framed ciphertext blocks.
+			expect(appendSpy).toHaveBeenCalledTimes(10);
+			for (const call of appendSpy.mock.calls) expect(call[2]).toBe('utf8');
+			expect(frameSpy).toHaveBeenCalledTimes(2);
+			appendSpy.mockRestore();
+			frameSpy.mockClear();
+
+			const bufferReadSpy = jest.spyOn(fsDriver, 'readFileChunkAsBuffer');
+			try {
+				await service.decryptFile(encryptedPath, decryptedPath);
+				if (platform === MobilePlatform.Web) expect(bufferReadSpy).toHaveBeenCalled();
+				expect(frameSpy).toHaveBeenCalledTimes(2);
+				expect(fileContentEqual(sourcePath, decryptedPath)).toBe(true);
+			} finally {
+				bufferReadSpy.mockRestore();
+			}
+		} finally {
+			appendSpy.mockRestore();
+			frameSpy.mockRestore();
+			platformSpy.mockRestore();
+		}
+	});
 
 	it.each([
 		EncryptionMethod.SJCL1a,

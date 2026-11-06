@@ -1,5 +1,6 @@
 import FsDriverBase, { ReadDirStatsOptions } from '@joplin/lib/fs-driver-base';
 import RNFetchBlob from 'rn-fetch-blob';
+import QuickCrypto from 'react-native-quick-crypto';
 import * as RNFS from '@dr.pogodin/react-native-fs';
 import RNSAF, { DocumentFileDetail, openDocumentTree } from '@joplin/react-native-saf-x';
 import type { StatResultT, ReadDirResItemT } from '@dr.pogodin/react-native-fs';
@@ -565,7 +566,12 @@ export default class FsDriverRN extends FsDriverBase {
 		}
 
 		if (!length) return null;
-		const output = await RNFS.read(handle.path, length, handle.offset, encoding);
+		const data = await RNFS.read(handle.path, length, handle.offset, encoding === SupportedEncoding.Ascii ? SupportedEncoding.Base64 : encoding);
+		// RNFS decodes ASCII reads with the JS Buffer polyfill. Use QuickCrypto's
+		// native conversion to preserve the same one-byte-per-character result.
+		const output = encoding === SupportedEncoding.Ascii && data
+			? QuickCrypto.ab2str(QuickCrypto.binaryLikeToArrayBuffer(data, 'base64'), 'latin1')
+			: data;
 		// eslint-disable-next-line require-atomic-updates
 		handle.offset += length;
 		return output ? output : null;
