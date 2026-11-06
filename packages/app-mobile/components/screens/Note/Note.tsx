@@ -22,7 +22,7 @@ const md5 = require('md5');
 import BackButtonService from '../../../services/BackButtonService';
 import NavService, { OnNavigateCallback as OnNavigateCallback } from '@joplin/lib/services/NavService';
 import { ModelType } from '@joplin/lib/BaseModel';
-import { fileExtension, safeFileExtension } from '@joplin/lib/path-utils';
+import { fileExtension, friendlySafeFilename, safeFileExtension } from '@joplin/lib/path-utils';
 import * as mimeUtils from '@joplin/lib/mime-utils';
 import ScreenHeader, { FolderPickerOptions, MenuOption, ViewToggleButtonMode } from '../../ScreenHeader';
 import NoteTagsDialog from '../NoteTagsDialog';
@@ -84,9 +84,11 @@ import { defaultWindowId, HighlightedWord } from '@joplin/lib/reducer';
 import useVisiblePluginEditorViewIds from '@joplin/lib/hooks/plugins/useVisiblePluginEditorViewIds';
 import { SelectionRange } from '../../../contentScripts/markdownEditorBundle/types';
 import { EditorType } from '../../NoteEditor/types';
-import { IconButton } from 'react-native-paper';
-import { writeTextToCacheFile } from '../../../utils/ShareUtils';
+import { Button, IconButton, Portal, ProgressBar } from 'react-native-paper';
+import { makeIsolatedShareCacheDirectory, writeTextToCacheFile } from '../../../utils/ShareUtils';
 import shareFile from '../../../utils/shareFile';
+import InteropService from '@joplin/lib/services/interop/InteropService';
+import { ExportModuleOutputFormat, FileSystemItem } from '@joplin/lib/services/interop/types';
 import NotePositionService from '@joplin/lib/services/NotePositionService';
 import useKeyboardState from '../../../utils/hooks/useKeyboardState';
 import VoiceTyping from '../../../services/voiceTyping/VoiceTyping';
@@ -182,9 +184,11 @@ interface State {
 	multiline: boolean;
 	showMultilineToggle: boolean | null;
 	titleContainerWidth: number;
+	exportInProgress: boolean;
 }
 
 type ScrollEventSlice = { fraction: number };
+type ExportTask = { cancelled: boolean };
 
 class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> implements BaseNoteScreenComponent<State> {
 	// This isn't in this.state because we don't want changing scroll to trigger
@@ -213,6 +217,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	});
 	private refreshKey: number | undefined;
 	private reloadInProgress_ = false;
+	private exportTask_: ExportTask|null = null;
 
 	public static navigationOptions(): { header: null } {
 		return { header: null };
@@ -260,6 +265,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			multiline: false,
 			showMultilineToggle: null,
 			titleContainerWidth: 0,
+			exportInProgress: false,
 		};
 
 		const initialScroll = NotePositionService.instance().getScrollPercent(props.noteId, defaultWindowId);
@@ -541,6 +547,13 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				borderColor: theme.dividerColor,
 				color: theme.urlColor,
 			},
+			exportProgressBar: {
+				marginTop: theme.margin,
+			},
+			exportDialogActions: {
+				alignItems: 'flex-end',
+				marginTop: theme.margin,
+			},
 			lockedInShareBanner: {
 				backgroundColor: theme.warningBackgroundColor,
 				color: theme.color,
@@ -810,6 +823,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 
 	public componentWillUnmount() {
+		if (this.exportTask_) this.exportTask_.cancelled = true;
+		this.exportTask_ = null;
 		BackButtonService.removeHandler(this.backHandler);
 		NavService.removeHandler(this.navHandler);
 
@@ -1293,14 +1308,93 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		this.scheduleSave({ ...this.state, note: newNote });
 	}
 
+	private cancelExport = (task: ExportTask|null) => {
+		if (!task || this.exportTask_ !== task || task.cancelled) return;
+		// The export can finish in the background; its result is discarded below.
+		task.cancelled = true;
+		this.setState({ exportInProgress: false });
+	};
+
+	private async shareHtmlFile() {
+		const task: ExportTask = { cancelled: false };
+		this.exportTask_ = task;
+		this.setState({ exportInProgress: true });
+		let shareDir: string = null;
+		let shareCallReturned = false;
+		try {
+			const noteId = this.state.note?.id || this.props.noteId;
+			if (!noteId) throw new Error(_('Cannot find the note to share.'));
+			await this.saveActionQueue(noteId).processAllNow();
+			if (task.cancelled) return;
+			const savedNote = await Note.load(noteId);
+			if (task.cancelled) return;
+			if (!savedNote) throw new Error(_('Cannot find the note to share.'));
+
+			shareDir = await makeIsolatedShareCacheDirectory();
+			if (task.cancelled) return;
+			const fileToShare = `${shareDir}/${friendlySafeFilename(savedNote.title)}.html`;
+
+			const exportResult = await InteropService.instance().export({
+				path: fileToShare,
+				format: ExportModuleOutputFormat.Html,
+				target: FileSystemItem.File,
+				sourceNoteIds: [savedNote.id],
+				includeConflicts: true,
+				decryptLockedNotes: true,
+				plugins: this.props.plugins,
+				packIntoSingleFile: true,
+			});
+			if (task.cancelled) return;
+			this.setState({ exportInProgress: false });
+			if (exportResult.warnings.length) {
+				const shouldShare = await new Promise<boolean>(resolve => {
+					this.props.dialogs.prompt('', _('Some content may be missing from the note. Do you still want to share it?'), [
+						{ text: _('No'), style: 'cancel', onPress: () => resolve(false) },
+						{ text: _('Yes'), onPress: () => resolve(true) },
+					], { onDismiss: () => resolve(false) });
+				});
+				if (!shouldShare) return;
+			}
+			if (task.cancelled) return;
+			this.exportTask_ = null;
+			await shareFile(fileToShare, 'text/html');
+			shareCallReturned = true;
+		} catch (e) {
+			if (!task.cancelled) {
+				logger.error('Unable to share note as HTML:', e);
+				void shim.showErrorDialog(_('Unable to share note data. Reason: %s', e.toString()));
+			}
+		} finally {
+			if (this.exportTask_ === task) {
+				this.exportTask_ = null;
+				this.setState({ exportInProgress: false });
+			}
+			// The recipient may read the file after shareFile returns. clearSharedFilesCache removes it on the next app startup.
+			if (shareDir && !shareCallReturned) await shim.fsDriver().remove(shareDir);
+		}
+	}
+
 	private async share_onPress() {
+		const shareFormat = await this.props.dialogs.showMenu<'plainText'|'html'|'cancel'>(
+			_('Choose an option'), [
+				{ text: _('Plain text'), id: 'plainText' },
+				{ text: _('HTML'), id: 'html' },
+				{ text: _('Cancel'), id: 'cancel', style: 'cancel' },
+			],
+		);
+		if (shareFormat === 'cancel') return;
+		if (shareFormat === 'html') {
+			await this.shareHtmlFile();
+			return;
+		}
+
 		let noteToShare = this.state.note;
 		if (isNoteLockEnabled() && NoteLockNote.isLocked(noteToShare)) {
 			// The state note may hold the encrypted body, so the shared contents come from a gated load.
 			noteToShare = await Note.load(noteToShare.id, { useNoteLock: true });
 		}
 		const shareText = `${noteToShare.title}\n\n${noteToShare.body}`;
-		const filename = noteToShare.id ?? uuid.create();
+		const filename = friendlySafeFilename(noteToShare.title);
 
 		if (shareText.length > 100000) {
 			let fileToShare;
@@ -2146,6 +2240,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			title={getDisplayParentTitle(this.state.note, this.state.folder)}
 		/>;
 
+		const exportTask = this.exportTask_;
 		return (
 			<View style={this.rootStyle(this.props.themeId).root}>
 				{!increaseSpaceForEditor && header}
@@ -2162,6 +2257,21 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					visible={this.state.publishDialogShown}
 					onClose={this.onPublishDialogClose_}
 				/>
+				<Portal>
+					<DismissibleDialog
+						themeId={this.props.themeId}
+						visible={this.state.exportInProgress}
+						onDismiss={() => this.cancelExport(exportTask)}
+						heading={_('Exporting...')}
+						size={DialogVariant.SmallResize}
+						useNativeModal={false}
+					>
+						<ProgressBar indeterminate visible accessibilityLabel={_('Exporting...')} style={this.styles().exportProgressBar}/>
+						<View style={this.styles().exportDialogActions}>
+							<Button onPress={() => this.cancelExport(exportTask)}>{_('Cancel')}</Button>
+						</View>
+					</DismissibleDialog>
+				</Portal>
 				{this.state.noteLockUnlockPromptVisible && (
 					<DismissibleDialog
 						themeId={this.props.themeId}
