@@ -1,4 +1,4 @@
-# Joplin translation to Urdu (Pakistan)
+# Joplin translation to Urdu
 # Copyright (C) 2026 Rehman Ahmad
 # This file is distributed under the same license as the Joplin package.
 # Rehman Ahmad, 2026.
@@ -10,7 +10,7 @@ msgstr ""
 "PO-Revision-Date: 2026-10-31 19:35+0500\n"
 "Last-Translator: Rehman Ahmad\n"
 "Language-Team: \n"
-"Language: ur_PK\n"
+"Language: ur\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
