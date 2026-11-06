@@ -6,10 +6,16 @@ const mockSaf = {
 	writeFile: jest.fn(),
 	writeFileInDirectory: jest.fn(),
 };
+const mockRnFetchBlobAppendFile = jest.fn();
+const mockRnfsAppendFile = jest.fn();
 
 jest.mock('rn-fetch-blob', () => ({
 	__esModule: true,
-	default: { fs: {} },
+	default: { fs: { appendFile: mockRnFetchBlobAppendFile } },
+}));
+
+jest.mock('@dr.pogodin/react-native-fs', () => ({
+	appendFile: mockRnfsAppendFile,
 }));
 
 jest.mock('@joplin/react-native-saf-x', () => ({
@@ -37,6 +43,30 @@ describe('fs-driver-rn', () => {
 		mockSaf.copyFile.mockResolvedValue(undefined);
 		mockSaf.writeFileInDirectory.mockResolvedValue({ uri: `${parentPath}/new.md` });
 		mockSaf.copyFileToDirectory.mockResolvedValue({ uri: `${parentPath}/new.md` });
+		mockRnFetchBlobAppendFile.mockResolvedValue(0);
+		mockRnfsAppendFile.mockResolvedValue(undefined);
+	});
+
+	it('appends internal UTF-8 text without encoding it as base64 for RNFS', async () => {
+		const driver = new FsDriverRN();
+		const path = '/local/export.html';
+		// cSpell:disable
+		const content = 'a 𝓈𝓅𝑒𝒸𝒾𝒶𝓁 attachment';
+		// cSpell:enable
+		await driver.appendFile(path, content, 'utf-8');
+
+		expect(mockRnFetchBlobAppendFile).toHaveBeenCalledWith(path, content, 'utf8');
+		expect(mockRnfsAppendFile).not.toHaveBeenCalled();
+	});
+
+	it('keeps base64 and scoped URI appends on their existing paths', async () => {
+		const driver = new FsDriverRN();
+		await driver.appendFile('/local/export.bin', 'dGVzdA==', 'base64');
+		await driver.appendFile(destinationPath, 'more text', 'utf8');
+
+		expect(mockRnfsAppendFile).toHaveBeenCalledWith('/local/export.bin', 'dGVzdA==', 'base64');
+		expect(mockSaf.writeFile).toHaveBeenCalledWith(destinationPath, 'more text', { encoding: 'utf8', append: true });
+		expect(mockRnFetchBlobAppendFile).not.toHaveBeenCalled();
 	});
 
 	it('should overwrite an existing file discovered while warming an empty cache', async () => {
