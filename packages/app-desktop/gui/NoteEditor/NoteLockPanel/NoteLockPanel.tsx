@@ -6,6 +6,9 @@ import { noteLockPasswordErrorMessage } from '@joplin/lib/components/shared/conf
 import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
 import Button, { ButtonLevel } from '../../Button/Button';
 import LabelledPasswordInput from '../../PasswordInput/LabelledPasswordInput';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('NoteLockPanel');
 
 interface Props {
 	noteTitle: string;
@@ -32,6 +35,7 @@ export default function NoteLockPanel(props: Props) {
 			await NoteLockSession.instance().unlock(password);
 			// No success handling: the unlock event swaps this panel out for the note.
 		} catch (error) {
+			logger.warn('Could not unlock the note lock session:', error);
 			setErrorMessage(noteLockPasswordErrorMessage(error));
 			setUnlocking(false);
 		}

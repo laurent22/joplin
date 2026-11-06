@@ -86,7 +86,7 @@ const NoteLockSettings: React.FC<Props> = props => {
 			}
 			onModeChange(ActionMode.Collapsed);
 		} catch (error) {
-			setError(noteLockPasswordErrorMessage(error));
+			setError(noteLockPasswordErrorMessage(error, true));
 		} finally {
 			setSaving(false);
 		}
@@ -101,7 +101,7 @@ const NoteLockSettings: React.FC<Props> = props => {
 			await NoteLockKey.instance().upgrade(upgradePassword);
 			setUpgradePassword('');
 		} catch (error) {
-			setUpgradeError(noteLockPasswordErrorMessage(error));
+			setUpgradeError(noteLockPasswordErrorMessage(error, true));
 		} finally {
 			setSaving(false);
 		}

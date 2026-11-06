@@ -2,11 +2,11 @@ import shim from '../../../shim';
 import { _ } from '../../../locale';
 const { useCallback, useEffect, useState } = shim.react();
 
-// WebCrypto reports a wrong password as an OperationError, and the mobile native crypto as an
-// authentication failure. Any other error gets a generic message rather than the raw one, unless
-// the caller's errors are meant for the user, like the key migration ones.
+// WebCrypto and the mobile native crypto both report a wrong password as an OperationError. Any other
+// error gets a generic message rather than the raw one, unless the caller's errors are meant for the
+// user, like the key migration ones.
 export const noteLockPasswordErrorMessage = (error: unknown, preserveMessage = false) => {
-	if (error instanceof Error && (error.name === 'OperationError' || error.message.startsWith('Authentication failed!'))) return _('Invalid password');
+	if (error instanceof Error && error.name === 'OperationError') return _('Invalid password');
 	if (preserveMessage && error instanceof Error) return error.message;
 	return _('Could not unlock. Please try again.');
 };

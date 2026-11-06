@@ -104,7 +104,7 @@ const NoteLockConfig = (props: Props) => {
 			}
 			onModeChange(ActionMode.Collapsed);
 		} catch (error) {
-			setError(noteLockPasswordErrorMessage(error));
+			setError(noteLockPasswordErrorMessage(error, true));
 		} finally {
 			setSaving(false);
 		}

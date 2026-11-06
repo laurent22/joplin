@@ -79,6 +79,7 @@ describe('NoteLockConfig', () => {
 	webCryptoError.name = 'OperationError';
 	// What the native crypto on Android throws for a wrong password.
 	const nativeCryptoError = new Error('Authentication failed! Error: Cipher.final(...): Cipher final failed');
+	nativeCryptoError.name = 'OperationError';
 
 	test.each([webCryptoError, nativeCryptoError])('should report a wrong current password and keep the form (%s)', async (wrongPasswordError) => {
 		seedKey();
