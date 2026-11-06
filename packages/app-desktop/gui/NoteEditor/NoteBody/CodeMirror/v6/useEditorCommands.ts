@@ -26,6 +26,7 @@ interface Props {
 
 	visiblePanes: string[];
 	contentMarkupLanguage: MarkupLanguage;
+	resolvingConflict: boolean;
 }
 
 const useEditorCommands = (props: Props) => {
@@ -49,6 +50,15 @@ const useEditorCommands = (props: Props) => {
 					editorRef.current.insertText(text, UserEventSource.Drop);
 				} else if (cmd.type === 'files') {
 					pos ??= props.selectionRange.from;
+					if (props.resolvingConflict) {
+						editorRef.current.select(pos, pos);
+						const markup = await commandAttachFileToBody('', cmd.paths, {
+							createFileURL: !!cmd.createFileURL,
+							markupLanguage: props.contentMarkupLanguage,
+						});
+						if (markup) editorRef.current.insertText(markup, UserEventSource.Drop);
+						return;
+					}
 					const newBody = await commandAttachFileToBody(props.editorContent, cmd.paths, {
 						createFileURL: !!cmd.createFileURL,
 						position: pos,
@@ -89,6 +99,11 @@ const useEditorCommands = (props: Props) => {
 			},
 			insertText: (value: string) => editorRef.current.insertText(value),
 			attachFile: async () => {
+				if (props.resolvingConflict) {
+					const markup = await commandAttachFileToBody('', null, { markupLanguage: props.contentMarkupLanguage });
+					if (markup) editorRef.current.insertText(markup);
+					return;
+				}
 				const newBody = await commandAttachFileToBody(
 					props.editorContent, null, { position: props.selectionRange.from, markupLanguage: props.contentMarkupLanguage },
 				);
@@ -162,7 +177,7 @@ const useEditorCommands = (props: Props) => {
 			},
 		};
 	}, [
-		props.visiblePanes, props.editorContent, props.editorCopyText, props.editorCutText, props.editorPaste,
+		props.visiblePanes, props.editorContent, props.editorCopyText, props.editorCutText, props.editorPaste, props.resolvingConflict,
 		props.selectionRange,
 		props.contentMarkupLanguage,
 		props.webviewRef, editorRef,

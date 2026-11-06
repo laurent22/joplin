@@ -29,6 +29,7 @@ export default function stateToWhenClauseContext(state: AppState, options: WhenC
 		noteListHasNotes: !!windowState.notes.length,
 		isAltInstance,
 		activeNoteIsWhiteboard: !!windowState.activeNoteIsWhiteboard,
+		activeNoteIsConflict: !!windowState.activeNoteIsConflict,
 
 		// Deprecated
 		sideBarVisible: !!state.mainLayout && layoutItemProp(state.mainLayout, 'sideBar', 'visible'),
