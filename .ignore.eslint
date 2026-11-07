@@ -1197,6 +1197,7 @@ packages/editor/CodeMirror/extensions/markdownHighlightExtension.js
 packages/editor/CodeMirror/extensions/markdownMathExtension.test.js
 packages/editor/CodeMirror/extensions/markdownMathExtension.js
 packages/editor/CodeMirror/extensions/modifierKeyCssExtension.js
+packages/editor/CodeMirror/extensions/noResultsSearchStatus.js
 packages/editor/CodeMirror/extensions/overwriteModeExtension.test.js
 packages/editor/CodeMirror/extensions/overwriteModeExtension.js
 packages/editor/CodeMirror/extensions/rendering/addFormattingClasses.js
