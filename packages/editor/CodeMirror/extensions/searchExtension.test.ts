@@ -190,6 +190,15 @@ describe('searchExtension', () => {
 			{ doc: '\u039F\u03A3', search: '\u03BF\u03C3', caseSensitive: false, expectMatch: true },
 			{ doc: '\u039F\u03A3', search: '\u03BF\u03C2', caseSensitive: false, expectMatch: false },
 			{ doc: '\u03A3\u0391\u03A3', search: '\u03C3\u03B1\u03C3', caseSensitive: false, expectMatch: true },
+			// A capital sigma can also arise from NFKD decomposition: U+03F9
+			// (lunate sigma) and U+1D6BA (mathematical bold capital sigma)
+			// both fold to U+03A3. The cursor lowercases each code point's
+			// folded form in isolation, so these match a medial sigma but
+			// not a final one.
+			{ doc: '\u0391\u03F9', search: '\u03B1\u03C3', caseSensitive: false, expectMatch: true },
+			{ doc: '\u0391\u03F9', search: '\u03B1\u03C2', caseSensitive: false, expectMatch: false },
+			{ doc: 'x\u{1D6BA}y', search: 'x\u03C3y', caseSensitive: false, expectMatch: true },
+			{ doc: '\u0391\u03F9 \u03C3', search: '\u03B1\u03C3', caseSensitive: false, expectMatch: true },
 			// Escape sequences are interpreted by the search panel.
 			{ doc: 'x\ny', search: 'x\\ny', expectMatch: true },
 			{ doc: 'x\\ny', search: 'x\\ny', expectMatch: false },
