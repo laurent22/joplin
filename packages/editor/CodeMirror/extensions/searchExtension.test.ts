@@ -97,3 +97,42 @@ describe('searchExtension', () => {
 		expect(getSelectionFrom(view)).toBe(0);
 	});
 });
+
+describe('search panel no-results indication', () => {
+	const createDesktopEditor = async (initialText: string, cursorPosition: number) => {
+		const settings = { ...createEditorSettings(1), useExternalSearch: false };
+		const view = await createTestEditor(initialText, EditorSelection.cursor(cursorPosition), [], [
+			searchExtension(()=>{}, settings),
+		]);
+		openSearchPanel(view);
+		return view;
+	};
+
+	const getStatus = (view: EditorView) =>
+		view.dom.querySelector<HTMLElement>('.cm-panel.cm-search .cm-search-no-results');
+	const getButton = (view: EditorView, name: string) =>
+		view.dom.querySelector<HTMLButtonElement>(`.cm-panel.cm-search button[name=${name}]`);
+
+	test('shows "No results" and disables navigation when there are no matches', async () => {
+		const view = await createDesktopEditor('Line 1\n\nLine 3\nLine 4', 0);
+		await setSearchTextAndWait('not present', view);
+		expect(getStatus(view)?.textContent).toBe('No results');
+		expect(getButton(view, 'next')?.disabled).toBe(true);
+		expect(getButton(view, 'prev')?.disabled).toBe(true);
+	});
+
+	test('hides the indication when the search has matches', async () => {
+		const view = await createDesktopEditor('Line 1\n\nLine 3\nLine 4', 0);
+		await setSearchTextAndWait('Line 3', view);
+		expect(getStatus(view)?.textContent).toBe('');
+		expect(getButton(view, 'next')?.disabled).toBe(false);
+		expect(getButton(view, 'prev')?.disabled).toBe(false);
+	});
+
+	test('updates the indication when the document changes while searching', async () => {
+		const view = await createDesktopEditor('Line 1\n\nLine 3\nLine 4', 0);
+		await setSearchTextAndWait('Line 3', view);
+		view.dispatch({ changes: { from: 0, to: view.state.doc.length, insert: 'nothing here' } });
+		expect(getStatus(view)?.textContent).toBe('No results');
+	});
+});
