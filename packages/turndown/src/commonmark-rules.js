@@ -262,6 +262,22 @@ function isOrderedList(e) {
   return e.style && e.style.listStyleType === 'decimal';
 }
 
+// Two lists of the same kind with nothing between them are read back as one list, for
+// example a checklist followed by a bullet list. Count how many lists of the same kind
+// come right before this one, so that every second one can use another marker.
+function sameKindListsBefore(list) {
+  let count = 0;
+  let current = list;
+  while (true) {
+    let previous = current.previousSibling;
+    while (previous && previous.nodeType === 3 && !previous.nodeValue.trim()) previous = previous.previousSibling;
+    if (!previous || (previous.nodeName !== 'UL' && previous.nodeName !== 'OL')) return count;
+    if (isOrderedList(previous) !== isOrderedList(list)) return count;
+    count++;
+    current = previous;
+  }
+}
+
 // `content` should be the part of the item after the list marker (e.g. "[ ] test" in "- [ ] test").
 const removeListItemLeadingNewlines = (content) => {
   const itemStartRegex = /(^\[[Xx ]\]|^)([ \n]+)/;
@@ -295,11 +311,15 @@ rules.listItem = {
     }
     
 
+    var parent = node.parentNode
+    const otherMarker = sameKindListsBefore(parent) % 2 === 1;
     const joplinCheckbox = joplinCheckboxInfo(node);
     if (joplinCheckbox) {
-      prefix = '- [' + (joplinCheckbox.checked ? 'x' : ' ') + '] ';
+      prefix = (otherMarker ? '*' : '-') + ' [' + (joplinCheckbox.checked ? 'x' : ' ') + '] ';
     } else {
-      var parent = node.parentNode
+      if (!isOrderedList(parent) && otherMarker) {
+        prefix = (options.bulletListMarker === '-' ? '*' : '-') + ' '
+      }
       if (isOrderedList(parent)) {
         if (node.isCode) {
           // Ordered lists in code blocks are often for line numbers. Remove them. 
@@ -326,7 +346,7 @@ rules.listItem = {
           // 10.  next one
           //     second line
           //
-          prefix = indexStr + '.' + ' '.repeat(3 - indexStr.length)
+          prefix = indexStr + (otherMarker ? ')' : '.') + ' '.repeat(3 - indexStr.length)
         }
       }
     }
