@@ -5,6 +5,7 @@ import getSearchState from '../utils/getSearchState';
 import { EditorEventType } from '../../events';
 import { search, searchPanelOpen, SearchQuery, setSearchQuery } from '@codemirror/search';
 import announceSearchMatch from '../vendor/announceSearchMatch';
+import noResultsSearchStatus from './noResultsSearchStatus';
 
 type CancelEvent = { cancelled: boolean };
 
@@ -175,6 +176,8 @@ const searchExtension = (onEvent: OnEventCallback, settings: EditorSettings): Ex
 		} : undefined),
 
 		autoScrollToMatchPlugin,
+
+		noResultsSearchStatus,
 
 		EditorState.transactionExtender.of((tr) => {
 			if (tr.effects.some(e => e.is(setSearchQuery)) || searchPanelOpen(tr.state) !== searchPanelOpen(tr.startState)) {
