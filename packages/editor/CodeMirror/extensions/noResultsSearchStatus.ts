@@ -1,3 +1,4 @@
+// cspell:ignore jamo
 // Adds a "No results" indication to the built-in CodeMirror search panel:
 // when the current query has no matches in the document, a status message is
 // shown and the next/previous buttons are disabled.
