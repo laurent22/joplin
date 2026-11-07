@@ -132,7 +132,10 @@ router.get('api/shares/:id', async (path: SubPath, ctx: AppContext) => {
 	if (share && (share.type === ShareType.Note || share.type === ShareType.PublishedFolder)) {
 		// No authentication is necessary - anyone who knows the share ID is allowed
 		// to access the file. It is essentially public.
-		return shareModel.toApiOutput(share);
+		const output = await shareModel.toApiOutput(share) as Share;
+		// Published links are indexed by search engines, and the owner's ID would let anyone target their account
+		if (ctx.joplin.owner?.id !== share.owner_id) delete output.owner_id;
+		return output;
 	}
 
 	throw new ErrorNotFound();
