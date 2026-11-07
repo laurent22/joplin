@@ -359,8 +359,8 @@ describe('EncryptionService', () => {
 		const appendSpy = jest.spyOn(fsDriver, 'appendFile');
 		try {
 			await service.encryptFile(sourcePath, encryptedPath);
-			// One header and nine framed ciphertext blocks.
-			expect(appendSpy).toHaveBeenCalledTimes(10);
+			// Web batches the nine ciphertext blocks into two writes; Android writes each block.
+			expect(appendSpy).toHaveBeenCalledTimes(platform === MobilePlatform.Web ? 3 : 10);
 			for (const call of appendSpy.mock.calls) expect(call[2]).toBe('utf8');
 			expect(frameSpy).toHaveBeenCalledTimes(2);
 			appendSpy.mockRestore();

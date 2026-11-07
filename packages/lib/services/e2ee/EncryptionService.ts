@@ -14,6 +14,8 @@ const perfLogger = PerformanceLogger.create();
 
 const emptyUint8Array = new Uint8Array(0);
 const fileFrameWaitInterval = 8;
+// The web file driver opens a handle for each append. Write several records at once.
+const webFileWriteBufferSize = 1024 * 1024;
 
 function hexPad(s: string, length: number) {
 	return padLeft(s, length, '0');
@@ -614,7 +616,10 @@ export default class EncryptionService {
 		const chunkSize = this.chunkSize(method);
 		const crypto = shim.crypto;
 		const frameWaitInterval = isFile && method === EncryptionMethod.FileV1 && shim.mobilePlatform() !== MobilePlatform.None ? fileFrameWaitInterval : 1;
+		const isWebFileV1 = isFile && method === EncryptionMethod.FileV1 && shim.mobilePlatform() === MobilePlatform.Web;
 		let blockIndex = 0;
+		const pendingBlocks: string[] = [];
+		let pendingBlockSize = 0;
 
 		const header = {
 			encryptionMethod: method,
@@ -641,8 +646,20 @@ export default class EncryptionService {
 			const encrypted = await this.encrypt(method, masterKeyPlainText, block);
 			await crypto.increaseNonce(this.encryptionNonce_);
 
-			await destination.append(padLeft(encrypted.length.toString(16), 6, '0') + encrypted);
+			const output = padLeft(encrypted.length.toString(16), 6, '0') + encrypted;
+			if (isWebFileV1) {
+				pendingBlocks.push(output);
+				pendingBlockSize += output.length;
+				if (pendingBlockSize >= webFileWriteBufferSize) {
+					await destination.append(pendingBlocks.join(''));
+					pendingBlocks.length = 0;
+					pendingBlockSize = 0;
+				}
+			} else {
+				await destination.append(output);
+			}
 		}
+		if (pendingBlocks.length) await destination.append(pendingBlocks.join(''));
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See encryptAbstract_ above
