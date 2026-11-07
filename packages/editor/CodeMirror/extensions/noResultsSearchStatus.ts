@@ -114,9 +114,16 @@ const foldDocument = (docText: string, lower: boolean): FoldedDocument => {
 			folded = decomposeHangul(code);
 		} else if (lower && cpStr === '\u03A3') {
 			// Match the cursor's context-insensitive per-code-point lowercase.
+			// This case must stay out of runs (below) so the whole-string
+			// lowercase never sees a capital sigma in context.
 			folded = '\u03C3';
 		} else {
 			folded = basicNormalize(cpStr);
+			// The cursor lowercases each code point's folded form
+			// independently: whole-string lowercasing is context-sensitive
+			// for U+03A3, which code points such as U+03F9 (lunate sigma) or
+			// U+1D6BA (mathematical bold capital sigma) fold to under NFKD.
+			if (lower) folded = folded.toLowerCase();
 		}
 		if (folded === cpStr && cpLen === 1) {
 			i++;
@@ -139,8 +146,11 @@ const foldDocument = (docText: string, lower: boolean): FoldedDocument => {
 	for (const p of interior) boundaries[p] = 1;
 	// Lowercasing the folded text as a whole is equivalent to the cursor's
 	// per-code-point lowercase here: the folded text contains no U+03A3
-	// (mapped above) and no code point whose lowercase changes its length
-	// (the only such code point, U+0130, is decomposed by NFKD first).
+	// (literal ones are mapped per code point above, and NFKD-produced ones
+	// were lowercased within their own piece) and no code point whose
+	// lowercase changes its length (the only such code point, U+0130, is
+	// decomposed by NFKD first). Final-sigma is the only context-sensitive
+	// mapping in the default (locale-insensitive) lowercase.
 	if (lower) text = text.toLowerCase();
 	return { text, boundaries };
 };
