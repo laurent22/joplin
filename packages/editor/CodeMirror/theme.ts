@@ -244,6 +244,16 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 				fontSize: '1em',
 				color: isDarkTheme ? 'white' : 'black',
 			},
+			'& .cm-search-no-results': {
+				color: isDarkTheme ? '#ff9d9d' : '#cc0000',
+				fontWeight: 'bold',
+				padding: '0 4px',
+			},
+			// The base CodeMirror theme has no disabled styling - make the
+			// no-results state visible, not just semantic.
+			'& button:disabled': {
+				opacity: 0.5,
+			},
 		},
 	}, { dark: isDarkTheme });
 
