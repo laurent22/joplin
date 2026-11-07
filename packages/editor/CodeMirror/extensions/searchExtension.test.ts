@@ -1,3 +1,4 @@
+// cspell:ignore lait xcaf
 import { EditorSelection } from '@codemirror/state';
 import createTestEditor from '../testing/createTestEditor';
 import { getSearchQuery, openSearchPanel, SearchQuery, setSearchQuery } from '@codemirror/search';
