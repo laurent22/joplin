@@ -7,6 +7,7 @@ import type SettingType from '../Setting';
 import { AppType, SettingItemSubType, SettingItemType, SettingStorage, SyncStartupOperation, SettingItem, SettingButtonStyle } from './types';
 import { defaultListColumns } from '../../services/plugins/api/noteListType';
 import type { PluginSettings } from '../../services/plugins/PluginService';
+import type { BlockedPluginVersions } from '../../services/plugins/utils/blockedVersions';
 import type { PublicPrivateKeyPair } from '../../services/e2ee/ppk/ppk';
 import type { NoteLockKeyConflict } from '../../services/synchronizer/syncInfoUtils';
 import { EmptyObject } from '@joplin/utils/types';
@@ -1445,6 +1446,20 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Desktop, AppType.Mobile],
 			needRestart: true,
 			autoSave: true,
+		},
+
+		'plugins.blockedVersions': {
+			value: {} as BlockedPluginVersions,
+			type: SettingItemType.Object,
+			public: false,
+			appTypes: [AppType.Desktop, AppType.Mobile],
+		},
+
+		'plugins.blockedRestartNotice': {
+			value: [] as string[],
+			type: SettingItemType.Array,
+			public: false,
+			appTypes: [AppType.Desktop],
 		},
 
 		'plugins.enableWebviewDebugging': {

@@ -1,11 +1,13 @@
 import * as path from 'path';
 import { readJsonFile } from './utils';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
+import { isValidBlockedVersionEntry } from '@joplin/lib/services/plugins/utils/blockedVersions';
 
 export interface ManifestOverride {
 	_obsolete?: boolean;
 	_recommended?: boolean;
 	_superseded_package?: string;
+	_blocked_versions?: string[];
 }
 
 export type ManifestOverrides = Record<string, ManifestOverride>;
@@ -49,8 +51,20 @@ function pluginManifestOverridesPath(repoDir: string): string {
 	return path.resolve(repoDir, 'manifestOverrides.json');
 }
 
+export const validateManifestOverrides = (overrides: ManifestOverrides) => {
+	for (const [pluginId, override] of Object.entries(overrides)) {
+		const blockedVersions = override._blocked_versions;
+		if (blockedVersions === undefined) continue;
+		if (!Array.isArray(blockedVersions) || !blockedVersions.length || !blockedVersions.every(isValidBlockedVersionEntry)) {
+			throw new Error(`Invalid _blocked_versions for plugin ${pluginId}: ${JSON.stringify(blockedVersions)}. It must be a non-empty array of "*", exact versions or semver ranges.`);
+		}
+	}
+};
+
 export async function readManifestOverrides(repoDir: string): Promise<ManifestOverrides> {
-	return readJsonFile(pluginManifestOverridesPath(repoDir), {});
+	const overrides: ManifestOverrides = await readJsonFile(pluginManifestOverridesPath(repoDir), {});
+	validateManifestOverrides(overrides);
+	return overrides;
 }
 
 export const getSupersededPackages = (manifestOverrides: ManifestOverrides): string[] => {
