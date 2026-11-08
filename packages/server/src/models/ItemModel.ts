@@ -1180,7 +1180,7 @@ export default class ItemModel extends BaseModel<Item> {
 				const restoreCount = Array.from(itemsToRestoreByUser.values()).reduce((sum, items) => sum + items.length, 0);
 				modelLogger.info(`processOrphanedItems: Batch ${batchNum} - Restoring ${restoreCount} items for ${itemsToRestoreByUser.size} users`);
 				for (const [userId, items] of itemsToRestoreByUser) {
-					await this.models().userItem().addMulti(userId, items);
+					await this.models().userItem().addMulti(userId, items, { ignoreAlreadyExists: true });
 				}
 			}
 
