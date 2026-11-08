@@ -118,4 +118,9 @@ describe('overrideUtils', () => {
 			expect(() => validateManifestOverrides(overrides)).toThrow('Invalid _blocked_versions');
 		}
 	});
+
+	test('should not allow blocking a plugin that is not in the manifests', () => {
+		const overrides: ManifestOverrides = { 'does.not.exist': { _blocked_versions: ['*'] } };
+		expect(() => applyManifestOverrides({}, overrides)).toThrow('Cannot block plugin does.not.exist');
+	});
 });

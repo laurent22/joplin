@@ -588,7 +588,7 @@ export default class PluginService extends BaseService {
 
 	public isBlocked(manifest: PluginManifest) {
 		const blockedVersions: BlockedPluginVersions = Setting.value('plugins.blockedVersions');
-		return isRepoManifestBlocked(manifest) || isVersionBlocked(blockedVersions[manifest.id], manifest.version);
+		return isRepoManifestBlocked(manifest) || isVersionBlocked(blockedVersions?.[manifest.id], manifest.version);
 	}
 
 	public isCompatible(manifest: PluginManifest): boolean {

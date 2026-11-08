@@ -18,6 +18,10 @@ export function applyManifestOverrides(manifests: PluginManifests, overrides: Ma
 		const manifest = manifests[pluginId] as PluginManifest & Record<string, unknown>;
 
 		if (!manifest) {
+			if (override._blocked_versions) {
+				throw new Error(`Cannot block plugin ${pluginId}: it is not in manifests.json`);
+			}
+
 			// If the manifest does not exist in the destination, it means the
 			// plugin has been taken out, so the obsolete property should be set
 			// to `true`. If not, it's an error.

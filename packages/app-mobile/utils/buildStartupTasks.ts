@@ -531,7 +531,7 @@ const buildStartupTasks = (
 			}
 		};
 		void checkBlockedPlugins();
-		PoorManIntervals.setInterval(() => { void checkBlockedPlugins(); }, 4 * 60 * 60 * 1000);
+		PoorManIntervals.setInterval(() => { void checkBlockedPlugins(); }, 60 * 60 * 1000);
 	});
 	addTask('buildStartupTasks/run startup tests', async () => {
 		// ----------------------------------------------------------------------------

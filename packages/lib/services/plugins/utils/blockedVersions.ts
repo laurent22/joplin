@@ -20,21 +20,26 @@ export const isVersionBlocked = (blockedVersions: string[] | undefined, version:
 	return blockedVersions.some(entry => entryMatches(entry, version));
 };
 
+// Each comparator is checked on its own because satisfies() short-circuits, so "<1.0.0 || garbage"
+// would pass. This also rejects partial versions such as "1.2", which silently match nothing.
 export const isValidBlockedVersionEntry = (entry: unknown) => {
 	if (typeof entry !== 'string') return false;
-	if (entry === '*' || validateStrict(entry)) return true;
-	// Partial versions such as "1.2" are accepted by satisfies() but silently match nothing
-	if (!/[<>=^~|]|\s-\s/.test(entry)) return false;
-	try {
-		satisfies('0.0.0', entry);
-		return true;
-	} catch (error) {
-		return false;
-	}
+	if (entry === '*') return true;
+	const comparators = entry.split('||').flatMap(part => part.trim().split(/\s+-\s+|\s+/));
+	return comparators.every(c => validateStrict(c.replace(/^(<=|>=|<|>|=|\^|~)/, '')));
 };
 
 export const isRepoManifestBlocked = (manifest: PluginManifest) => {
 	return isVersionBlocked(manifest._blocked_versions, manifest.version);
+};
+
+// A mirror may serve a stale copy of the manifests, so it can add blocks but never lift them
+export const mergeBlockedVersions = (current: BlockedPluginVersions, fetched: BlockedPluginVersions) => {
+	const output = { ...current };
+	for (const [pluginId, versions] of Object.entries(fetched)) {
+		output[pluginId] = [...new Set([...(output[pluginId] ?? []), ...versions])];
+	}
+	return output;
 };
 
 export const blockedVersionsFromManifests = (manifests: PluginManifest[]) => {
