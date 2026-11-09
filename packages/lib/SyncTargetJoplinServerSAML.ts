@@ -74,7 +74,11 @@ export default class SyncTargetJoplinServerSAML extends SyncTargetJoplinServer {
 		// We check that the file API has been initialized at least once, otherwise the below check
 		// will always fail and it will be impossible to login.
 		if (this.lastFileApiOptions_) {
-			const check = await SyncTargetJoplinServerSAML.checkConfig(this.fileApiOptions_());
+			const check = await SyncTargetJoplinServer.checkConfig(
+				{ ...this.fileApiOptions_(), authorizedForPath: ()=>'*' },
+				SyncTargetJoplinServerSAML.id(),
+				await this.fileApi(),
+			);
 			return check.ok;
 		}
 
