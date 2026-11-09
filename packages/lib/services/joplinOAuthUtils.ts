@@ -246,7 +246,7 @@ export const checkIfLoginWasSuccessful = async ({ apiBaseUrl, applicationAuthId,
 // pending auth ID is still saved. On startup we check whether the server
 // has already confirmed the authorisation and, if so, save the credentials.
 export const completePendingAuthentication = async () => {
-	const syncTarget = Setting.value('sync.target');
+	const syncTarget = [9, 10].find(id => !!Setting.value(`sync.${id}.pendingAuthData`));
 	if (!isJoplinOAuthSyncTarget(syncTarget)) return;
 
 	const pendingAuthData = Setting.value(`sync.${syncTarget}.pendingAuthData`);

@@ -25,6 +25,33 @@ describe('joplinOAuthUtils', () => {
 		expect(Setting.value(`sync.${syncTargetId}.pendingAuthData`)).toEqual({});
 	});
 
+	it('should complete pending authentication for a login flow that didn\'t update sync.target', async () => {
+		const syncTargetId = SyncTargetRegistry.nameToId('joplinServer');
+		Setting.setValue(`sync.${syncTargetId}.path`, 'http://localhost:1235/');
+		Setting.setValue(`sync.${syncTargetId}.pendingAuthData`, {
+			path: 'http://localhost:1235/',
+			appId: 'some-id-here',
+		});
+		expect(Setting.value('sync.target')).not.toBe(syncTargetId);
+
+		const { reset } = mockFetch((request) => {
+			if (request.url.match(/^http:\/\/localhost:1235\/api\//)) {
+				return new Response(JSON.stringify({
+					status: 'finished',
+					id: '123',
+					password: '456',
+				}), { status: 200 });
+			}
+			return new Response('{}', { status: 404 });
+		});
+		try {
+			await completePendingAuthentication();
+		} finally {
+			reset();
+		}
+		expect(Setting.value('sync.target')).toBe(syncTargetId);
+	});
+
 	it.each([
 		{
 			label: 'should return null when the web_login_base_url route returns 404',
