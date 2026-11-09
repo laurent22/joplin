@@ -548,6 +548,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				color: theme.urlColor,
 			},
 			exportProgressBar: {
+				height: 4,
 				marginTop: theme.margin,
 			},
 			exportDialogActions: {
@@ -2263,7 +2264,9 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 						size={DialogVariant.SmallResize}
 						useNativeModal={false}
 					>
-						<ProgressBar indeterminate visible accessibilityLabel={_('Exporting...')} style={this.styles().exportProgressBar}/>
+						<View style={this.styles().exportProgressBar}>
+							<ProgressBar indeterminate visible accessibilityLabel={_('Exporting...')}/>
+						</View>
 						<View style={this.styles().exportDialogActions}>
 							<Button onPress={() => this.cancelExport(exportTask)}>{_('Cancel')}</Button>
 						</View>
