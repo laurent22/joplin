@@ -76,7 +76,6 @@ export default class BaseSyncTarget {
 		return [];
 	}
 
-	// Should return true when unknown
 	public async isAuthenticated() {
 		return false;
 	}
