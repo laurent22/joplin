@@ -1338,7 +1338,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				sourceNoteIds: [savedNote.id],
 				includeConflicts: true,
 				decryptLockedNotes: true,
-				plugins: this.props.plugins,
+				// Export runs in the app context, so renderer content scripts must not run here.
 				packIntoSingleFile: true,
 			});
 			if (task.cancelled) return;

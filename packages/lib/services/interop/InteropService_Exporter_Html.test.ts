@@ -242,6 +242,31 @@ describe('interop/InteropService_Exporter_Html', () => {
 		expect(readFenceContent).toBe(fenceContent);
 	}));
 
+	test('should not load renderer plugins during mobile HTML export', async () => {
+		const folder = await Folder.save({ title: 'folder' });
+		await Note.save({ body: '**note**', parent_id: folder.id });
+		const plugins: PluginStates = {
+			test: {
+				id: 'test',
+				contentScripts: {
+					[ContentScriptType.MarkdownItPlugin]: [{ id: 'script', path: 'plugin-script.js' }],
+				},
+				views: {},
+			},
+		};
+		const requireDynamic = jest.spyOn(shim, 'requireDynamic');
+		const mobilePlatform = jest.spyOn(shim, 'mobilePlatform').mockReturnValue(MobilePlatform.Ios);
+		try {
+			const path = `${exportDir()}/mobile.html`;
+			await InteropService.instance().export({ path, format: ExportModuleOutputFormat.Html, plugins });
+			expect(requireDynamic).not.toHaveBeenCalled();
+			expect(await fs.readFile(path, 'utf8')).toContain('<strong>note</strong>');
+		} finally {
+			requireDynamic.mockRestore();
+			mobilePlatform.mockRestore();
+		}
+	});
+
 	test('should not throw an error on invalid resource paths', (async () => {
 		const service = InteropService.instance();
 		const folder1 = await Folder.save({ title: 'folder1' });

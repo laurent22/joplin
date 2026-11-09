@@ -405,6 +405,7 @@ describe('screens/Note/Note', () => {
 				expect(shareFile).toHaveBeenCalledWith(expect.any(String), 'text/html');
 			});
 			const exportPath = exportHtml.mock.calls[0][0].path;
+			expect(exportHtml.mock.calls[0][0]).not.toHaveProperty('plugins');
 			expect(basename(exportPath)).toBe('Edited _ title_.html');
 			await act(async () => {});
 			expect(removeFile).not.toHaveBeenCalledWith(dirname(exportPath));

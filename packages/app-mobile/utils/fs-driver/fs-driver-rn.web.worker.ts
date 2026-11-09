@@ -407,6 +407,14 @@ export class WorkerApi {
 		await this.writeFile(to, await fromFile.arrayBuffer(), 'Buffer');
 	}
 
+	public async move(from: string, to: string) {
+		if (resolve('/', from) === resolve('/', to)) return;
+		const fromFile = await this.fileAtPath(from);
+		const toHandle = await this.pathToFileHandle_(to, true);
+		await fromFile.stream().pipeTo(await toHandle.createWritable());
+		await this.unlink(from);
+	}
+
 	public async stat(path: string, handle?: FileSystemDirectoryHandle|FileSystemFileHandle): Promise<TransferableStat|null> {
 		logger.debug('stat', path, handle ? 'with handle' : '');
 		try {
