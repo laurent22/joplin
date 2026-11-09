@@ -114,7 +114,7 @@ export enum SurveyProgress {
 	Dismissed,
 }
 
-type PendingAuthData = EmptyObject|{ path: string; appId: string };
+export type PendingAuthData = EmptyObject|{ path: string; appId: string };
 
 const builtInMetadata = (Setting: typeof SettingType) => {
 	const platform = shim.platformName();

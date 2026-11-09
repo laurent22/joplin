@@ -12,6 +12,7 @@ import NavService from './NavService';
 import { SettingsMap } from '../components/shared/config/config-shared';
 import { Second } from '@joplin/utils/time';
 import { substrWithEllipsis } from '../string-utils';
+import { PendingAuthData } from '../models/settings/builtInMetadata';
 
 const logger = Logger.create('joplinCloudUtils');
 
@@ -246,11 +247,12 @@ export const checkIfLoginWasSuccessful = async ({ apiBaseUrl, applicationAuthId,
 // pending auth ID is still saved. On startup we check whether the server
 // has already confirmed the authorisation and, if so, save the credentials.
 export const completePendingAuthentication = async () => {
-	const syncTarget = [9, 10].find(id => !!Setting.value(`sync.${id}.pendingAuthData`));
+	const isValidPendingAuthData = (data: PendingAuthData) => data?.appId && data?.path;
+	const syncTarget = [9, 10].find(id => isValidPendingAuthData(Setting.value(`sync.${id}.pendingAuthData`)));
 	if (!isJoplinOAuthSyncTarget(syncTarget)) return;
 
 	const pendingAuthData = Setting.value(`sync.${syncTarget}.pendingAuthData`);
-	if (!pendingAuthData?.appId || !pendingAuthData?.path) return;
+	if (!isValidPendingAuthData(pendingAuthData)) return;
 	try {
 		const apiPath = Setting.value(`sync.${syncTarget}.path`);
 		if (pendingAuthData.path !== apiPath) {
