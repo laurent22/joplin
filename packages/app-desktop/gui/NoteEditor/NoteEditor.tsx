@@ -27,7 +27,7 @@ import useConflictTitle, { ConflictStaleReason } from './utils/useConflictTitle'
 import ConflictFooter from './ConflictFooter/ConflictFooter';
 import ConflictBanner from './ConflictBanner/ConflictBanner';
 import bridge from '../../services/bridge';
-import finishConflictResolution, { FinishStatus } from '@joplin/lib/services/conflict/finishConflictResolution';
+import finishConflictResolution, { CannotWriteReason, FinishStatus } from '@joplin/lib/services/conflict/finishConflictResolution';
 import keepConflictCopy, { KeepStatus } from '@joplin/lib/services/conflict/keepConflictCopy';
 import { conflictNoteIsResolvable } from '@joplin/lib/services/conflict/conflictIsResolvable';
 import markupLanguageUtils from '@joplin/lib/utils/markupLanguageUtils';
@@ -271,8 +271,8 @@ function NoteEditorContent(props: NoteEditorProps) {
 			const result = await keepConflictCopy(note.id);
 
 			if (result.status !== KeepStatus.Ok) {
-				logger.warn('Could not keep the conflict note', note.id, result.status, result.reason);
-				bridge().showErrorMessageBox(result.reason === 'trashed'
+				logger.warn('Could not keep the conflict note', note.id, result.status, result.reason, result.errorMessage);
+				bridge().showErrorMessageBox(result.reason === CannotWriteReason.Trashed
 					? trashedConflictMessage()
 					: _('This note could not be kept. It may have been deleted or changed elsewhere.'));
 				return;
@@ -338,8 +338,8 @@ function NoteEditorContent(props: NoteEditorProps) {
 			}
 
 			if (result.status === FinishStatus.CannotWrite) {
-				logger.warn('Could not write the resolved note', note.id, result.reason);
-				bridge().showErrorMessageBox(result.reason === 'trashed'
+				logger.warn('Could not write the resolved note', note.id, result.reason, result.errorMessage);
+				bridge().showErrorMessageBox(result.reason === CannotWriteReason.Trashed
 					? trashedConflictMessage()
 					: _('This note cannot be updated, so the conflict was left as it is. It may be read-only, locked or encrypted.'));
 				return;

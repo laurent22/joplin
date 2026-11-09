@@ -10,10 +10,18 @@ export enum FinishStatus {
 	CannotWrite = 'cannotWrite',
 }
 
+export enum CannotWriteReason {
+	Encrypted = 'encrypted',
+	Locked = 'locked',
+	Trashed = 'trashed',
+	SaveFailed = 'saveFailed',
+}
+
 export interface FinishResult {
 	status: FinishStatus;
 	originalId: string;
-	reason?: string;
+	reason?: CannotWriteReason;
+	errorMessage?: string;
 }
 
 interface Options {
@@ -34,13 +42,13 @@ export default async (conflictNoteId: string, options: Options): Promise<FinishR
 	if (!original) return { status: FinishStatus.Unavailable, originalId: '' };
 
 	if (original.encryption_applied) {
-		return { status: FinishStatus.CannotWrite, originalId: original.id, reason: 'encrypted' };
+		return { status: FinishStatus.CannotWrite, originalId: original.id, reason: CannotWriteReason.Encrypted };
 	}
 	if (original.is_locked) {
-		return { status: FinishStatus.CannotWrite, originalId: original.id, reason: 'locked' };
+		return { status: FinishStatus.CannotWrite, originalId: original.id, reason: CannotWriteReason.Locked };
 	}
 	if (original.deleted_time) {
-		return { status: FinishStatus.CannotWrite, originalId: original.id, reason: 'trashed' };
+		return { status: FinishStatus.CannotWrite, originalId: original.id, reason: CannotWriteReason.Trashed };
 	}
 
 	// Based on what the merge used, not when the conflict was created. A previous
@@ -58,7 +66,7 @@ export default async (conflictNoteId: string, options: Options): Promise<FinishR
 	} catch (error) {
 		// A read-only or shared note throws here
 		logger.warn('Could not save the resolved note', original.id, error);
-		return { status: FinishStatus.CannotWrite, originalId: original.id, reason: error.message };
+		return { status: FinishStatus.CannotWrite, originalId: original.id, reason: CannotWriteReason.SaveFailed, errorMessage: error.message };
 	}
 
 	// Permanently, not to the trash: it only ever existed on this device

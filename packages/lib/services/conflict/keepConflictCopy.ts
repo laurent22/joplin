@@ -2,6 +2,7 @@ import Note from '../../models/Note';
 import Folder from '../../models/Folder';
 import ConflictNoteState from '../../models/ConflictNoteState';
 import Logger from '@joplin/utils/Logger';
+import { CannotWriteReason } from './finishConflictResolution';
 
 const logger = Logger.create('keepConflictCopy');
 
@@ -15,7 +16,8 @@ export interface KeepResult {
 	status: KeepStatus;
 	noteId: string;
 	title?: string;
-	reason?: string;
+	reason?: CannotWriteReason;
+	errorMessage?: string;
 }
 
 const suffix = 'conflicted copy';
@@ -54,7 +56,7 @@ export default async (conflictNoteId: string): Promise<KeepResult> => {
 	const folder = await Folder.load(original.parent_id);
 	if (!folder) return { status: KeepStatus.Unavailable, noteId: '' };
 	if (original.deleted_time || folder.deleted_time) {
-		return { status: KeepStatus.CannotWrite, noteId: conflictNoteId, reason: 'trashed' };
+		return { status: KeepStatus.CannotWrite, noteId: conflictNoteId, reason: CannotWriteReason.Trashed };
 	}
 
 	const baseTitle = note.title ?? '';
@@ -71,7 +73,7 @@ export default async (conflictNoteId: string): Promise<KeepResult> => {
 		});
 	} catch (error) {
 		logger.warn('Could not keep the conflict note', conflictNoteId, error);
-		return { status: KeepStatus.CannotWrite, noteId: conflictNoteId, reason: error.message };
+		return { status: KeepStatus.CannotWrite, noteId: conflictNoteId, reason: CannotWriteReason.SaveFailed, errorMessage: error.message };
 	}
 
 	try {

@@ -3,7 +3,7 @@ import Note from '../../models/Note';
 import ConflictNoteState from '../../models/ConflictNoteState';
 import Folder from '../../models/Folder';
 import Tag from '../../models/Tag';
-import finishConflictResolution, { FinishStatus } from './finishConflictResolution';
+import finishConflictResolution, { CannotWriteReason, FinishStatus } from './finishConflictResolution';
 
 const createConflict = async (options: { localBody?: string; remoteBody?: string; title?: string } = {}) => {
 	const title = options.title ?? 'Title';
@@ -136,6 +136,8 @@ describe('finishConflictResolution', () => {
 		saveSpy.mockRestore();
 
 		expect(result.status).toBe(FinishStatus.CannotWrite);
+		expect(result.reason).toBe(CannotWriteReason.SaveFailed);
+		expect(result.errorMessage).toBe('boom');
 		expect(await Note.load(conflictNote.id)).toBeTruthy();
 		expect((await Note.load(original.id)).body).toBe('theirs');
 	});

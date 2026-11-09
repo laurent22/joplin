@@ -3,6 +3,7 @@ import Note from '../../models/Note';
 import Folder from '../../models/Folder';
 import ConflictNoteState from '../../models/ConflictNoteState';
 import keepConflictCopy, { KeepStatus, titleForCopy } from './keepConflictCopy';
+import { CannotWriteReason } from './finishConflictResolution';
 
 const createConflict = async (title = 'Title') => {
 	const folder = await Folder.save({ title: 'Notebook' });
@@ -107,7 +108,7 @@ describe('keepConflictCopy', () => {
 		const result = await keepConflictCopy(conflictNote.id);
 
 		expect(result.status).toBe(KeepStatus.CannotWrite);
-		expect(result.reason).toBe('trashed');
+		expect(result.reason).toBe(CannotWriteReason.Trashed);
 		expect((await Note.load(conflictNote.id)).is_conflict).toBe(1);
 	});
 
