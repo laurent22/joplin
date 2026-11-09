@@ -80,6 +80,16 @@ export default class BaseSyncTarget {
 		return false;
 	}
 
+	// Like isAuthenticated, but never throws.
+	public async maybeAuthenticated() {
+		try {
+			return await this.isAuthenticated();
+		} catch (error) {
+			this.logger().error('Failed to check authenticated state', error);
+			return true;
+		}
+	}
+
 	public static authRouteName(): string {
 		return null;
 	}

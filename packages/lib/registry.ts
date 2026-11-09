@@ -131,7 +131,7 @@ class Registry {
 			}
 
 			const syncTargetId = Setting.value('sync.target');
-			const isAuthenticated = syncTargetId ? await this.syncTarget(syncTargetId).isAuthenticated() : false;
+			const isAuthenticated = syncTargetId ? await this.syncTarget(syncTargetId).maybeAuthenticated() : false;
 			const isPartialSync = syncOptions.syncSteps?.toString() === Synchronizer.partialSyncSteps.toString();
 
 			if (isAuthenticated && isPartialSync) {
