@@ -120,6 +120,7 @@ export default function useSearchMarkers({
 		if (!currentNoteSearchResult) return null;
 		if (!currentNoteSearchResult.searchType.includes(SearchType.Semantic)) return null;
 		const search = searches.find(search => search.id === searchId);
+		if (!search) return null;
 		return search.query_pattern;
 	}, [searches, searchId, currentNoteSearchResult]);
 

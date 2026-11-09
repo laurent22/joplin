@@ -33,7 +33,14 @@ describe('useSearchMarkers', () => {
 			// cSpell:enable
 			expected: [{ type: 'text', value: 'test-test-test-test' }],
 		},
-	])('should return keywords for semantic search matches: $label', async ({ noteBody, searchQuery, expected }) => {
+		{
+			label: 'should not throw when the selected search does not exist',
+			noteBody: 'example example example example',
+			searchQuery: 'examples example example example',
+			searchId: null,
+			expected: [],
+		},
+	])('should return keywords for semantic search matches: $label', async ({ noteBody, searchQuery, searchId = '1', expected }) => {
 		const note = await Note.save({ title: 'test', body: noteBody });
 		await updateSearchIndex();
 
@@ -44,7 +51,7 @@ describe('useSearchMarkers', () => {
 				localSearchMarkerOptions: () => null,
 				noteId: note.id,
 				searchResults,
-				searchId: '1',
+				searchId,
 				searches: [{ id: '1', query_pattern: searchQuery, query_type: 1, type_: -1, title: searchQuery }],
 				highlightedWords: [],
 				noteTitle: note.title,
