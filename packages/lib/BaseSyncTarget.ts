@@ -76,18 +76,9 @@ export default class BaseSyncTarget {
 		return [];
 	}
 
+	// Should return true when unknown
 	public async isAuthenticated() {
 		return false;
-	}
-
-	// Like isAuthenticated, but never throws.
-	public async maybeAuthenticated() {
-		try {
-			return await this.isAuthenticated();
-		} catch (error) {
-			this.logger().error('Failed to check authenticated state', error);
-			return true;
-		}
 	}
 
 	public static authRouteName(): string {
@@ -174,7 +165,7 @@ export default class BaseSyncTarget {
 
 	public async syncStarted() {
 		if (!this.synchronizer_) return false;
-		if (!(await this.maybeAuthenticated())) return false;
+		if (!(await this.isAuthenticated())) return false;
 		const sync = await this.synchronizer();
 		return sync.state() !== 'idle';
 	}
