@@ -174,7 +174,7 @@ export default class BaseSyncTarget {
 
 	public async syncStarted() {
 		if (!this.synchronizer_) return false;
-		if (!(await this.isAuthenticated())) return false;
+		if (!(await this.maybeAuthenticated())) return false;
 		const sync = await this.synchronizer();
 		return sync.state() !== 'idle';
 	}
