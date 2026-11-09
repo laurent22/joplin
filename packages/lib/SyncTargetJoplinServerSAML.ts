@@ -81,6 +81,13 @@ export default class SyncTargetJoplinServerSAML extends SyncTargetJoplinServer {
 		return true;
 	}
 
+	public static override authRouteName() {
+		if (super.authRouteName()) {
+			return 'JoplinServerSamlLogin';
+		}
+		return null; // e.g. due to invalid configuration
+	}
+
 	public static override requiresPassword() {
 		return false;
 	}

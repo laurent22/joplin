@@ -39,7 +39,7 @@ export default class SyncTargetJoplinServer extends SyncTargetJoplinServerBase {
 	}
 
 	public static override authRouteName() {
-		const validPath = isValidBaseUrl(Setting.value('sync.9.path'));
+		const validPath = isValidBaseUrl(Setting.value(`sync.${this.id()}.path`));
 		if (validPath) {
 			return super.authRouteName();
 		} else {
