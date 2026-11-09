@@ -12,6 +12,8 @@ import type Stripe from 'stripe';
 export const failedPaymentWarningInterval = 7 * Day;
 export const failedPaymentFinalAccount = 14 * Day;
 
+const createdAccountKey = (stripeSubscriptionId: string) => `subscriptionCreatedAccount::${stripeSubscriptionId}`;
+
 interface UserAndSubscription {
 	user: User;
 	subscription: Subscription;
@@ -163,8 +165,20 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 				source,
 			});
 
+			await this.models().keyValue().setValue(createdAccountKey(stripeSubscriptionId), user.id);
+
 			return { user, subscription };
 		}, 'SubscriptionModel::saveUserAndSubscription');
+	}
+
+	// Matching a checkout to an account by email, or by the subscription's owner, would also match
+	// existing accounts, because the webhook attaches new subscriptions to them.
+	public async consumeCreatedAccountId(stripeSubscriptionId: string): Promise<Uuid | null> {
+		const key = createdAccountKey(stripeSubscriptionId);
+		const userId = await this.models().keyValue().value<string>(key);
+		if (!userId) return null;
+		if (!(await this.models().keyValue().deleteValue(key))) return null;
+		return userId;
 	}
 
 	public async toggleSoftDelete(id: number, isDeleted: boolean) {

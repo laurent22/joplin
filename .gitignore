@@ -1664,8 +1664,10 @@ packages/lib/services/ai/providers/JoplinCloud.js
 packages/lib/services/ai/providers/OpenAiCompatible.test.js
 packages/lib/services/ai/providers/OpenAiCompatible.js
 packages/lib/services/ai/providers/TestProvider.js
+packages/lib/services/ai/providers/openAiResponses.js
 packages/lib/services/ai/testing/TestEmbeddingProvider.test.js
 packages/lib/services/ai/testing/TestEmbeddingProvider.js
+packages/lib/services/ai/testing/mockOpenAiServer.js
 packages/lib/services/ai/tools/ToolIndex.js
 packages/lib/services/ai/tools/buildEditorTools.js
 packages/lib/services/ai/tools/global/createNote.js
@@ -1677,6 +1679,7 @@ packages/lib/services/ai/tools/global/listTags.js
 packages/lib/services/ai/tools/global/manageTags.js
 packages/lib/services/ai/tools/global/readImage.js
 packages/lib/services/ai/tools/global/readNote.js
+packages/lib/services/ai/tools/global/readNotes.js
 packages/lib/services/ai/tools/global/searchNotes.js
 packages/lib/services/ai/tools/global/semanticSearchNotes.js
 packages/lib/services/ai/tools/global/updateNote.js
@@ -1684,12 +1687,16 @@ packages/lib/services/ai/tools/types.js
 packages/lib/services/ai/tools/utils/applyNoteEdits.test.js
 packages/lib/services/ai/tools/utils/applyNoteEdits.js
 packages/lib/services/ai/tools/utils/buildTool.js
+packages/lib/services/ai/tools/utils/loadNoteForReading.js
+packages/lib/services/ai/tools/utils/noteOutline.test.js
+packages/lib/services/ai/tools/utils/noteOutline.js
 packages/lib/services/ai/tools/utils/serializeToolOutput.js
 packages/lib/services/ai/tools/utils/settings.js
 packages/lib/services/ai/types.js
 packages/lib/services/ai/utils/extractReasoning.test.js
 packages/lib/services/ai/utils/extractReasoning.js
 packages/lib/services/ai/utils/findFencedBlock.js
+packages/lib/services/ai/utils/parseToolArguments.js
 packages/lib/services/commands/MenuUtils.js
 packages/lib/services/commands/ToolbarButtonUtils.test.js
 packages/lib/services/commands/ToolbarButtonUtils.js
@@ -1935,6 +1942,7 @@ packages/lib/services/rest/utils/defaultAction.js
 packages/lib/services/rest/utils/defaultLoadOptions.js
 packages/lib/services/rest/utils/defaultSaveOptions.js
 packages/lib/services/rest/utils/errors.js
+packages/lib/services/rest/utils/lockedNoteBodies.js
 packages/lib/services/rest/utils/paginatedResults.js
 packages/lib/services/rest/utils/readonlyProperties.js
 packages/lib/services/rest/utils/requestFields.js
@@ -2051,6 +2059,8 @@ packages/lib/urlUtils.js
 packages/lib/utils/ActionLogger.test.js
 packages/lib/utils/ActionLogger.js
 packages/lib/utils/attachedResources.js
+packages/lib/utils/compactCss.test.js
+packages/lib/utils/compactCss.js
 packages/lib/utils/credentialFiles.js
 packages/lib/utils/dom/makeSandboxedIframe.js
 packages/lib/utils/focusHandler.js
@@ -2073,6 +2083,8 @@ packages/lib/utils/joplinCloud/types.js
 packages/lib/utils/markupLanguageUtils.js
 packages/lib/utils/prefixWithHttps.js
 packages/lib/utils/processStartFlags.js
+packages/lib/utils/publicNetworkOnly.test.js
+packages/lib/utils/publicNetworkOnly.js
 packages/lib/utils/replaceUnsupportedCharacters.test.js
 packages/lib/utils/replaceUnsupportedCharacters.js
 packages/lib/utils/resolvePathWithinDir.test.js

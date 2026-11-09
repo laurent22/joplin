@@ -10,13 +10,14 @@ import Logger from '@joplin/utils/Logger';
 import getRawBody = require('raw-body');
 import { AccountType } from '../../models/UserModel';
 import { autoAssignCustomerPreferredLocales, betaUserTrialPeriodDays, cancelSubscription, initStripe, isBetaUser, priceIdToAccountType, stripeConfig, subscriptionItemByStripeSub } from '../../utils/stripe';
-import { Subscription, User, UserFlagType } from '../../services/database/types';
+import { Subscription, UserFlagType } from '../../services/database/types';
 import { findPrice, PricePeriod } from '@joplin/lib/utils/joplinCloud';
 import { Models } from '../../models/factory';
 import { confirmUrl } from '../../utils/urlUtils';
-import { msleep } from '../../utils/time';
+import { Hour, msleep } from '../../utils/time';
 import { IncomingMessage } from 'http';
 import { ErrorTaskInProgress } from '../../models/StripeEventModel';
+import { TokenPurpose } from '../../models/TokenModel';
 
 const logger = Logger.create('index/stripe');
 
@@ -130,12 +131,14 @@ export const handleSubscriptionCreated = async (stripe: Stripe, models: Models, 
 // https://stripe.com/docs/payments/checkout/fulfill-orders#fulfill
 //
 // It means that by the time success_url is called, the user hasn't been created
-// yet. So here we wait for the user to be available and return it. It shouldn't
-// wait for more than 2-3 seconds.
-const waitForUserCreation = async (models: Models, userEmail: string): Promise<User | null> => {
+// yet. So here we wait for the webhook to process the subscription, and return
+// the account it created, if any. It shouldn't wait for more than 2-3 seconds.
+const waitForCreatedAccountId = async (models: Models, stripeSubscriptionId: string) => {
 	for (let i = 0; i < 10; i++) {
-		const user = await models.user().loadByEmail(userEmail);
-		if (user) return user;
+		// The subscription and the created-account record are saved in the same transaction
+		if (await models.subscription().byStripeSubscriptionId(stripeSubscriptionId)) {
+			return models.subscription().consumeCreatedAccountId(stripeSubscriptionId);
+		}
 		await msleep(1000);
 	}
 	return null;
@@ -400,25 +403,35 @@ export const postHandlers: PostHandlers = {
 
 };
 
-const getHandlers: Record<string, StripeRouteHandler> = {
+export const getHandlers: Record<string, StripeRouteHandler> = {
 
 	success: async (stripe: Stripe, _path: SubPath, ctx: AppContext) => {
+		// The same page for every case where no token is handed out, so that it reveals nothing about the account
+		const thankYouPage = `
+			<p>Thank you for signing up for ${globalConfig().appName}! If this created a new account, you should receive an email shortly with a link to set your password. If you already had an account, you can now <a href="${globalConfig().baseUrl}/login">log in</a>.</p>
+			<p><a href="https://joplinapp.org">Go back to JoplinApp.org</a></p>
+		`;
+
 		try {
 			const models = ctx.joplin.models;
 			const checkoutSession = await stripe.checkout.sessions.retrieve(ctx.query.session_id as string);
-			const userEmail = checkoutSession.customer_details.email || checkoutSession.customer_email; // customer_email appears to be always null but fallback to it just in case
-			if (!userEmail) throw new Error(`Could not find email from checkout session: ${JSON.stringify(checkoutSession)}`);
-			const user = await waitForUserCreation(models, userEmail);
-			if (!user) throw new Error(`Could not find user from checkout session: ${JSON.stringify(checkoutSession)}`);
-			const validationToken = await ctx.joplin.models.token().generate(user.id);
+			if (checkoutSession.status !== 'complete') return thankYouPage;
+
+			const subscriptionId = typeof checkoutSession.subscription === 'string' ? checkoutSession.subscription : checkoutSession.subscription?.id;
+			if (!subscriptionId) return thankYouPage;
+
+			// Anyone can complete a checkout using someone else's email address, so a confirmation token is only
+			// handed out once, for an account this checkout has just created - never for an existing account.
+			const userId = await waitForCreatedAccountId(models, subscriptionId);
+			const user = userId ? await models.user().load(userId) : null;
+			if (!user || !user.must_set_password || Date.now() - user.created_time > Hour) return thankYouPage;
+
+			const validationToken = await models.token().generate(user.id, TokenPurpose.AccountConfirmation);
 			const redirectUrl = encodeURI(confirmUrl(user.id, validationToken, false));
 			return redirect(ctx, redirectUrl);
 		} catch (error) {
 			logger.error('Could not automatically redirect user to account confirmation page. They will have to follow the link in the confirmation email. Error was:', error);
-			return `
-				<p>Thank you for signing up for ${globalConfig().appName}! You should receive an email shortly with instructions on how to connect to your account.</p>
-				<p><a href="https://joplinapp.org">Go back to JoplinApp.org</a></p>
-			`;
+			return thankYouPage;
 		}
 	},
 

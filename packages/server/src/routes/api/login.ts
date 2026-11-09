@@ -1,13 +1,14 @@
 import config from '../../config';
 import Router from '../../utils/Router';
 import { redirect, SubPath } from '../../utils/routeUtils';
-import { generateRedirectHtml, getIdentityProvider, getServiceProvider } from '../../utils/saml';
+import { checkLoginResponse, generateRedirectHtml, getIdentityProvider, getServiceProvider } from '../../utils/saml';
 import { AppContext, RouteType, SamlPostResponse } from '../../utils/types';
 import { bodyFields, userIp } from '../../utils/requestUtils';
 import { ErrorBadRequest, ErrorForbidden } from '../../utils/errors';
 import { cookieSet } from '../../utils/cookies';
 import defaultView from '../../utils/defaultView';
 import limiterLoginBruteForce from '../../utils/request/limiterLoginBruteForce';
+import { checkLoginCodeFailures, countLoginCodeFailure } from '../../utils/request/limiterLoginCodeFailures';
 
 export const router = new Router(RouteType.Api);
 
@@ -33,6 +34,7 @@ router.post('api/saml', async (_path: SubPath, ctx: AppContext) => {
 	const fields = await bodyFields<SamlPostResponse & Record<string, unknown>>(ctx.req);
 
 	const result = await serviceProvider.parseLoginResponse(identityProvider, 'post', { body: fields });
+	checkLoginResponse(serviceProvider, result.extract);
 
 	// Extract attributes from the SAML response
 	const email = result.extract.attributes['email'];
@@ -83,6 +85,7 @@ router.get('api/login_with_code/:id', async (path: SubPath, ctx: AppContext) => 
 		throw new ErrorBadRequest();
 	}
 
+	await checkLoginCodeFailures();
 	const user = await ctx.joplin.models.user().authCodeLogin(code);
 
 	if (user) {
@@ -93,6 +96,7 @@ router.get('api/login_with_code/:id', async (path: SubPath, ctx: AppContext) => 
 			user_id: session.user_id,
 		};
 	} else { // Invalid auth code
+		await countLoginCodeFailure();
 		throw new ErrorBadRequest();
 	}
 });

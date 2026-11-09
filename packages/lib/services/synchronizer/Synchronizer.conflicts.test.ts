@@ -1,6 +1,6 @@
 import time from '../../time';
 import { allNotesFolders, localNotesFoldersSameAsRemote } from '../../testing/test-utils-synchronizer';
-import { synchronizerStart, setupDatabaseAndSynchronizer, sleep, switchClient, syncTargetId, loadEncryptionMasterKey, decryptionWorker, fileApi } from '../../testing/test-utils';
+import { synchronizerStart, setupDatabaseAndSynchronizer, sleep, switchClient, syncTargetId, loadEncryptionMasterKey, decryptionWorker, fileApi, withLogLevel } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import BaseItem from '../../models/BaseItem';
@@ -8,6 +8,7 @@ import Setting from '../../models/Setting';
 import { setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 import { NoteEntity } from '../database/types';
 import ItemChange from '../../models/ItemChange';
+import { LogLevel } from '@joplin/utils/Logger';
 
 describe('Synchronizer.conflicts', () => {
 	const createConflictNote = async (note: Partial<NoteEntity>) => {
@@ -238,7 +239,7 @@ describe('Synchronizer.conflicts', () => {
 		await switchClient(1);
 
 		await Note.save({ title: 'note1', parent_id: folder1.id });
-		await synchronizerStart();
+		await withLogLevel(LogLevel.Error, () => synchronizerStart());
 		const items: NoteEntity[] = await allNotesFolders();
 		expect(items.length).toBe(1);
 		expect(items[0].title).toBe('note1');

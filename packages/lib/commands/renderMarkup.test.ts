@@ -40,7 +40,7 @@ describe('renderMarkup', () => {
 			const renderedNote = await await command.execute(null, MarkupLanguage.Markdown, noteBody);
 			expect(renderedNote.html).toContain(`<div id="rendered-md"><p><img data-from-md data-resource-id="${resource.id}" src="`);
 			expect(renderedNote.html).toContain(`/resources-1/${resource.id}.jpg?t=`);
-			expect(renderedNote.html).toContain('" title alt="photo.jpg" /></p>');
+			expect(renderedNote.html).toContain('" title="" alt="photo.jpg" /></p>');
 		}
 	});
 

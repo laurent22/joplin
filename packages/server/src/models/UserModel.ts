@@ -1,6 +1,8 @@
 import BaseModel, { AclAction, LoadOptions, SaveOptions, ValidateOptions } from './BaseModel';
 import { EmailSender, Item, NotificationLevel, Subscription, User, UserFlagType, Uuid } from '../services/database/types';
 import { isHashedPassword, hashPassword, checkPassword } from '../utils/auth';
+import { randomBytes } from 'crypto';
+import { limiterLoginAccountBruteForce } from '../utils/request/limiterAccountBruteForce';
 import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge, ErrorNotFound, ErrorBadRequest } from '../utils/errors';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { _ } from '@joplin/lib/locale';
@@ -28,7 +30,8 @@ import changeEmailConfirmationTemplate from '../views/emails/changeEmailConfirma
 import changeEmailNotificationTemplate from '../views/emails/changeEmailNotificationTemplate';
 import { NotificationKey } from './NotificationModel';
 import prettyBytes = require('pretty-bytes');
-import { validateEmail } from '../utils/validation';
+import { isValidEmailRecipient, validateEmail } from '../utils/validation';
+import limiterEmailChanges from '../utils/request/limiterEmailChanges';
 import { EmailSubjectBody } from './EmailModel';
 import { Config, Env, LdapConfig } from '../utils/types';
 import { DbConnection } from '../db';
@@ -44,6 +47,13 @@ import { Services } from '../services/types';
 export { AccountType };
 
 const logger = Logger.create('UserModel');
+
+let dummyPasswordHash_: string = null;
+
+const dummyPasswordHash = async () => {
+	if (!dummyPasswordHash_) dummyPasswordHash_ = await hashPassword(randomBytes(32).toString('hex'));
+	return dummyPasswordHash_;
+};
 
 interface UserEmailDetails {
 	sender_id: EmailSender;
@@ -191,6 +201,8 @@ export const getNextSubscriptionPlan = (accountType: AccountType) => {
 	return { upgradeTo, downgradeTo };
 };
 
+const maxPasswordLength = 256;
+
 export default class UserModel extends BaseModel<User> {
 	private mfaEncryptionKey_: string = null;
 	private authCodeTtl = 600000; // 10 minutes
@@ -225,9 +237,21 @@ export default class UserModel extends BaseModel<User> {
 			return null;
 		}
 
+		// Without a password, the directory would receive an unauthenticated bind, which Active Directory accepts by
+		// default, and checking it against a hash would throw for a registered email only
+		if (typeof password !== 'string' || !password) {
+			await checkPassword('', await dummyPasswordHash());
+			return null;
+		}
+
 		const user = await this.loadByEmail(email);
 
-		for (const config of this.ldapConfig_) {
+		// The directory decides which of its entries matches an email, and its users may be able to edit theirs, so it
+		// never logs in to a local admin account, which keeps using its local password. A directory account that is
+		// made an admin keeps logging in through the directory.
+		const ldapConfigs = user?.is_admin && !user.is_external ? [] : this.ldapConfig_;
+
+		for (const config of ldapConfigs) {
 			if (config.enabled) {
 				const ldapUser = await ldapLogin(email, password, user, config);
 				if (ldapUser && !user) {
@@ -235,12 +259,23 @@ export default class UserModel extends BaseModel<User> {
 					return savedUser;
 				}
 				if (ldapUser && user) {
-					return ldapUser;
+					if (user.is_external) return user;
+
+					// From now on the account is managed by the directory. Its local password, which may be an old copy of
+					// the directory password or one set by someone else, stops working.
+					await this.save({ id: user.id, is_external: 1, email_confirmed: 1, password: randomBytes(32).toString('hex') }, { skipValidation: true });
+					return this.load(user.id);
 				}
 			}
 		}
 
-		if (!user || user.is_external) return null;
+		// An external account can only log in through the directory or SAML while either is enabled. Once they are turned
+		// off, it logs in with a local password, which can be set with a password reset.
+		if (!user || (user.is_external && this.isUsingExternalAuth_)) {
+			// So that the response takes as long as for a registered email, which would otherwise reveal the difference
+			await checkPassword(password || '', await dummyPasswordHash());
+			return null;
+		}
 		if (!(await checkPassword(password, user.password))) return null;
 		return user;
 	}
@@ -445,7 +480,8 @@ export default class UserModel extends BaseModel<User> {
 	private validatePassword(password: string) {
 		if (this.env === Env.Dev) return;
 
-		const result = zxcvbn(password);
+		// zxcvbn gets much slower as the input grows, and only the start of a password matters for its strength
+		const result = zxcvbn(password.slice(0, 100));
 		if (result.score < 3) {
 			let msg: string[] = [result.feedback.warning];
 			if (result.feedback.suggestions) {
@@ -501,20 +537,41 @@ export default class UserModel extends BaseModel<User> {
 	}
 
 	public async processEmailConfirmation(userId: Uuid, token: string, beforeChangingEmailHandler: (newEmail: string)=> Promise<void>) {
-		await this.models().token().checkToken(userId, token);
-		const user = await this.models().user().load(userId);
-		if (!user) throw new ErrorNotFound('No such user');
+		// Only the token sent to the new address can complete an email change. An account confirmation token can be
+		// sent to the account's current address, so it only confirms that address.
+		if (await this.models().token().isValid(userId, token, TokenPurpose.EmailChange)) {
+			const user = await this.models().user().load(userId);
+			if (!user) throw new ErrorNotFound('No such user');
 
-		const newEmail = await this.models().keyValue().value<string>(`newEmail::${userId}`);
-		if (newEmail) {
+			const newEmail = await this.models().keyValue().value<string>(`newEmail::${userId}`);
+			if (!newEmail) throw new ErrorNotFound('No pending email change');
+
 			await beforeChangingEmailHandler(newEmail);
 			await this.completeEmailChange(user);
+			await this.models().token().deleteByValue(userId, token, TokenPurpose.EmailChange);
 		} else {
+			await this.models().token().checkToken(userId, token, TokenPurpose.AccountConfirmation);
+			const user = await this.models().user().load(userId);
+			if (!user) throw new ErrorNotFound('No such user');
+
 			await this.confirmEmail(user);
 		}
 	}
 
+	// Returns the address to send a confirmation to, or an empty string if it is the current one. Called before saving
+	// the rest of the profile, so that a refused address does not leave the profile half saved.
+	public async newEmailToConfirm(user: User, email: string) {
+		const newEmail = this.formatValues({ email }).email;
+		if (newEmail === user.email) return '';
+		if (!isValidEmailRecipient(newEmail)) throw new ErrorUnprocessableEntity('Invalid email address');
+		// Only counted by initiateEmailChange(), once the current password has been checked
+		await limiterEmailChanges.check(user.id);
+		return newEmail;
+	}
+
 	public async initiateEmailChange(userId: Uuid, newEmail: string) {
+		if (!isValidEmailRecipient(newEmail)) throw new ErrorUnprocessableEntity('Invalid email address');
+		await limiterEmailChanges(userId);
 		const beforeSaveUser = await this.models().user().load(userId);
 
 		await this.models().notification().add(userId, NotificationKey.Any, NotificationLevel.Important, 'A confirmation email has been sent to your new address. Please follow the link in that email to confirm. Your email will only be updated after that.');
@@ -559,7 +616,7 @@ export default class UserModel extends BaseModel<User> {
 	}
 
 	public async sendAccountConfirmationEmail(user: User) {
-		const validationToken = await this.models().token().generate(user.id);
+		const validationToken = await this.models().token().generate(user.id, TokenPurpose.AccountConfirmation);
 		const url = encodeURI(confirmUrl(user.id, validationToken));
 
 		await this.models().email().push({
@@ -569,7 +626,9 @@ export default class UserModel extends BaseModel<User> {
 	}
 
 	public async sendChangeEmailConfirmationEmail(recipientEmail: string, user: User) {
-		const validationToken = await this.models().token().generate(user.id);
+		// Tokens sent for an earlier change went to a different address, so they must not complete this one
+		await this.models().token().deleteByUserAndPurpose(user.id, TokenPurpose.EmailChange);
+		const validationToken = await this.models().token().generate(user.id, TokenPurpose.EmailChange);
 		const url = encodeURI(confirmUrl(user.id, validationToken));
 
 		await this.models().email().push({
@@ -611,8 +670,13 @@ export default class UserModel extends BaseModel<User> {
 			await this.models().user().save({ id: user.id, password: fields.password });
 			await this.models().session().deleteByUserId(user.id);
 			await this.models().application().deleteByUserId(user.id);
-			await this.models().token().deleteByValue(user.id, token);
+			await this.models().token().deleteByValue(user.id, token, TokenPurpose.PasswordReset);
 		}, 'UserModel::resetPassword');
+
+		// Anyone can block logins to an account by sending wrong passwords, and the reset link proves at least as much as
+		// the password, so it lets the owner back in. Not with MFA: the count includes wrong MFA codes, which someone
+		// who controls the inbox could otherwise guess 10 at a time between resets.
+		if (!getIsMFAEnabled(user)) await limiterLoginAccountBruteForce.onSuccess(user.email);
 	}
 
 	public async handleBetaUserEmails() {
@@ -878,13 +942,24 @@ export default class UserModel extends BaseModel<User> {
 					// generating a bcrypt hash for each user is slow.
 				}
 			} else {
+				// Before any processing, since checking a long enough password can block the server for minutes
+				if (user.password.length > maxPasswordLength) throw new ErrorUnprocessableEntity(`The password cannot be longer than ${maxPasswordLength} characters`);
 				if (!options.skipValidation) this.validatePassword(user.password);
 				user.password = await hashPassword(user.password);
 			}
+
+			// A stale flag would let an account confirmation token replace this password
+			if (!isNew && !('must_set_password' in user)) user.must_set_password = 0;
 		}
+
+		const passwordChanged = !isNew && !!user.password;
 
 		return this.withTransaction(async () => {
 			const savedUser = await super.save(user, options);
+
+			// Changing the password is how an owner recovers their account, so nothing that someone else may have set up
+			// while they had access must survive it, such as a reset link or a pending email change to their address
+			if (passwordChanged) await this.cancelPendingAccountChanges(savedUser.id);
 
 			if (isNew && (object.email_confirmed !== 1 || object.must_set_password !== 0)) {
 				await this.sendAccountConfirmationEmail(savedUser);
@@ -912,6 +987,33 @@ export default class UserModel extends BaseModel<User> {
 
 	public async disableMFA(userId: Uuid) {
 		await this.save({ id: userId, totp_secret: '' });
+	}
+
+	// Changing a credential requires the current password, so that a session alone (a stolen cookie, or an authorised
+	// app) cannot lock the owner out. It is as useful for guessing the password as login is, so it shares its limiter.
+	public async checkCurrentPassword(userId: Uuid, password: string, services: Services) {
+		const user = await this.load(userId, { fields: ['email'] });
+		if (!user) throw new ErrorNotFound(`No such user: ${userId}`);
+
+		await limiterLoginAccountBruteForce.run(user.email, async () => {
+			// Through login() so that LDAP accounts are checked against the directory rather than a stale local copy
+			const loggedInUser = password ? await this.login(user.email, password, services) : null;
+			if (!loggedInUser || loggedInUser.id !== userId) {
+				await limiterLoginAccountBruteForce.onFailure(user.email, `password:${password || ''}`);
+				throw new ErrorUnprocessableEntity('The current password is incorrect');
+			}
+
+			await limiterLoginAccountBruteForce.onSuccess(user.email);
+		});
+	}
+
+	// Account confirmation tokens are kept: they can only confirm the current address, and a new account's welcome email
+	// must still work after its password has been set
+	private async cancelPendingAccountChanges(userId: Uuid) {
+		await this.models().keyValue().deleteValue(`newEmail::${userId}`);
+		for (const purpose of [TokenPurpose.PasswordReset, TokenPurpose.EmailChange]) {
+			await this.models().token().deleteByUserAndPurpose(userId, purpose);
+		}
 	}
 
 	public async isPasswordValid(userId: Uuid, password: string) {

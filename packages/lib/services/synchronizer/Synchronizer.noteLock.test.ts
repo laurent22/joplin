@@ -1,6 +1,6 @@
 import Setting from '../../models/Setting';
 import Note from '../../models/Note';
-import { afterAllCleanUp, encryptionService, fileApi, loadEncryptionMasterKey, setupDatabaseAndSynchronizer, switchClient, synchronizer, synchronizerStart } from '../../testing/test-utils';
+import { afterAllCleanUp, encryptionService, fileApi, loadEncryptionMasterKey, setupDatabaseAndSynchronizer, switchClient, synchronizer, synchronizerStart, withLogLevel } from '../../testing/test-utils';
 import EncryptionService from '../e2ee/EncryptionService';
 import NoteLockKey from '../noteLock/NoteLockKey';
 import NoteLockSession from '../noteLock/NoteLockSession';
@@ -11,6 +11,7 @@ import NoteLockNote from '../noteLock/NoteLockNote';
 import { finishNoteLockKeyMigration, migrateLockedNotes } from '../noteLock/NoteLockKeyMigration';
 import { MasterKeyEntity } from '../e2ee/types';
 import { setupAndEnableEncryption } from '../e2ee/utils';
+import { LogLevel } from '@joplin/utils/Logger';
 
 // Duplicates the singleton reset from NoteLockSession.test.ts: the note lock singletons cache the
 // encryption service, so each client switch has to rebuild them.
@@ -478,7 +479,7 @@ describe('Synchronizer.noteLock', () => {
 			return save(n, options);
 		});
 		try {
-			expect(await migrateLockedNotes('222222', '111111')).toMatchObject({ migrated: 1, failed: 1 });
+			expect(await withLogLevel(LogLevel.Error, () => migrateLockedNotes('222222', '111111'))).toMatchObject({ migrated: 1, failed: 1 });
 		} finally {
 			spy.mockRestore();
 		}

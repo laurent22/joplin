@@ -1,6 +1,8 @@
 
 
 import * as utils from '../utils';
+import { AllHtmlEntities as Entities } from 'html-entities';
+const htmlentities = new Entities().encode;
 
 
 export interface Options {
@@ -89,7 +91,7 @@ const createEventHandlingAttrs = (resourceId: string, options: Options, onClickA
 
 		// Only create code for non-empty listeners.
 		if (eventHandlersDict[listenerType].length > 0) {
-			const listener = eventHandlersDict[listenerType].replace(/["]/g, '&quot;');
+			const listener = htmlentities(eventHandlersDict[listenerType]);
 			result += ` ${listenerType}="${listener}" `;
 		}
 	}

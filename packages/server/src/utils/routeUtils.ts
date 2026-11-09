@@ -202,6 +202,11 @@ function disabledAccountCheck(route: MatchedRoute, user: User) {
 	if (!user || user.enabled) return;
 
 	if (route.subPath.schema.startsWith('api/')) throw new ErrorForbidden(`This account is disabled. Please login to ${config().baseUrl} for more information.`);
+
+	// The website also gives access to the content of items, including shared ones
+	if (['items', 'changes'].some(prefix => route.subPath.schema === prefix || route.subPath.schema.startsWith(`${prefix}/`))) {
+		throw new ErrorForbidden('This account is disabled.');
+	}
 }
 
 interface ExecRequestResult {

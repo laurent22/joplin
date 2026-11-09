@@ -199,12 +199,12 @@ const createEditor = async (
 		},
 		select: (anchor: number, head: number) => {
 			const transaction = view.state.tr;
+			const $anchor = transaction.doc.resolve(clampPointToDocument(view.state, anchor));
+			const $head = transaction.doc.resolve(clampPointToDocument(view.state, head));
+			// A cursor outside a text block (e.g. position 0, before the first paragraph) is invalid, so move it to
+			// the nearest text position. Ranges are kept as-is since they may intentionally cover block nodes.
 			transaction.setSelection(
-				TextSelection.create(
-					transaction.doc,
-					clampPointToDocument(view.state, anchor),
-					clampPointToDocument(view.state, head),
-				),
+				$anchor.pos === $head.pos ? TextSelection.between($anchor, $head) : new TextSelection($anchor, $head),
 			);
 			view.dispatch(transaction);
 		},

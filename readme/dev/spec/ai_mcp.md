@@ -43,9 +43,10 @@ Tool handlers return their raw payload. The dispatcher JSON-serialises it into M
 
 | Tool | Purpose | Default |
 |---|---|---|
-| `search_notes` | Keyword search (Joplin FTS syntax). Returns id, title, notebook id, updated time, and a snippet anchored on the match. | on |
+| `search_notes` | Keyword search (Joplin FTS syntax). Returns id, title, notebook id, updated time, a snippet anchored on the match, and the match's enclosing section. | on |
 | `semantic_search_notes` | Vector search via the embeddings index. Returns ranked chunks with source note id and score. | on |
-| `read_note` | One note with notebook title, tag names, timestamps. Body supports `offset` / `max_chars` paging. | on |
+| `read_note` | One note with notebook title, tag names, timestamps. See [Reading long notes](#reading-long-notes). | on |
+| `read_notes` | Up to 20 notes in one call. See [Reading several notes](#reading-several-notes). Shares the `read_note` setting. | on |
 | `list_notebooks` | Flat list of notebooks with `parent_id` and `note_count`. | on |
 | `list_tags` | Tags that have at least one attached note. | on |
 | `create_note` | Creates a note in the chosen notebook (default folder if omitted). | off |
@@ -55,6 +56,51 @@ Tool handlers return their raw payload. The dispatcher JSON-serialises it into M
 | `create_notebook` | Optionally nested under a parent. | off |
 
 Write tools default off so users grant write access deliberately.
+
+### Reading long notes
+
+`read_note` caps output at 8000 characters by default, since the model cannot know a note's size before asking. `outline` and `section` are mutually exclusive:
+
+| Params | Returns |
+|---|---|
+| none | Body, capped |
+| `outline: true` | Heading structure only, no body |
+| `section: "<addr>"` | That section, subsections included |
+
+The outline is one tab-separated line per heading:
+
+```
+path	chars	heading
+0	480	
+1	60	Joplin release process
+1.1	1600	Prerequisites
+1.2	12400	Desktop
+1.2.1	3600	Windows
+```
+
+`path` is positional and reflects nesting. Section `0` is the content before the first heading, omitted when empty; a note with no headings returns `0` alone, so the model reads its `chars` and falls back to paging.
+
+`section` takes a path (`"1.2.1"`) or heading text (`"Windows"`), which must match exactly one heading — several matches is an error listing the candidates, never an arbitrary pick. A section runs to the next heading of equal or higher level.
+
+Headings come from the app's markdown-it instance, so the outline matches the rendered note. Their whitespace is collapsed to single spaces, since newlines (multi-line setext headings) and tabs would break the line format; the `section` address is collapsed the same way, so a heading copied from the outline resolves.
+
+The outline is paged exactly like the body — `body`, `body_length`, `body_offset`, `body_returned_chars`, `has_more`, with `is_outline` marking the mode. It needs paging because long notes have outlines bigger than the body cap they replace, and sharing the body's units keeps `offset` meaning characters in both modes. It's text rather than JSON because JSON roughly doubles the tokens for the same information.
+
+Truncated responses include a message naming the alternatives, as `has_more` says output stopped but not what to do instead. `max_chars: 0` means no limit in both modes.
+
+### Reading several notes
+
+`read_notes(ids)` saves a round trip per search result. Unresolved ids go in `not_found` rather than failing the call.
+
+The bodies share one 8000-character budget, so 10 notes don't cost 10× the context. Short notes take what they need and the rest is split over the longer ones; truncated notes have `has_more: true` and are followed up with `read_note`. More than 20 ids is an error, since a tiny share per note is worse than making the model pick.
+
+### Search results carry their section
+
+A `search_notes` result reports `section` (a positional path) and `section_heading` for the match, so the model can call `read_note(id, section)` directly instead of spending a round trip on the outline. Sections come from the same `noteSections` helper that backs the outline, so a path from search always resolves as a `read_note` address. Nested matches report the innermost section; matches before the first heading, and notes without headings, get section `0`.
+
+Both fields are omitted when there is no body keyword to anchor on, as with a filter-only query like `title:Changelog`. Reporting the section containing offset 0 would point at section `1` — often the entire note.
+
+The anchor is found in the raw body, since normalising whitespace shifts every offset after the first run and the result could not be mapped back to a section. The snippet takes an over-wide window around it and normalises afterwards for display.
 
 ### Why purpose-built and not a Data API wrapper
 
