@@ -28,16 +28,28 @@ export async function putItemContents(path: SubPath, ctx: AppContext, isBatch: b
 	let items: SaveFromRawContentItem[] = [];
 
 	if (isBatch) {
+		// Everything is checked before anything is allocated: a non-string body such as `{"length": 300000000}` would
+		// otherwise make Buffer.from() allocate gigabytes
+		const batchItems: unknown = bodyFields.items;
+		if (!Array.isArray(batchItems)) throw new ErrorBadRequest('"items" must be an array');
+
 		let totalSize = 0;
-		items = bodyFields.items.map((item: { name: string; body?: string }) => {
-			totalSize += item.name.length + (item.body ? item.body.length : 0);
+		for (const item of batchItems as { name: unknown; body?: unknown }[]) {
+			if (!item || typeof item.name !== 'string') throw new ErrorBadRequest('Each item must have a "name" string');
+			if (item.body !== undefined && item.body !== null && typeof item.body !== 'string') throw new ErrorBadRequest('An item "body" must be a string');
+			// Counted in string length, as the client does when it builds the batch (ItemUploader), so that a batch of
+			// non-ASCII notes is not rejected. Now that bodies are known to be strings, a string allocates at most 3 bytes
+			// per character, and the request body as a whole is capped by formParse.
+			totalSize += item.name.length + (item.body ? (item.body as string).length : 0);
+			if (totalSize > batchMaxSize) throw new ErrorPayloadTooLarge(`Size of items is over the limit (${formatBytes(batchMaxSize)})`);
+		}
+
+		items = (batchItems as { name: string; body?: string }[]).map(item => {
 			return {
 				name: item.name,
 				body: item.body ? Buffer.from(item.body, 'utf8') : Buffer.alloc(0),
 			};
 		});
-
-		if (totalSize > batchMaxSize) throw new ErrorPayloadTooLarge(`Size of items (${formatBytes(totalSize)}) is over the limit (${formatBytes(batchMaxSize)})`);
 	} else {
 		const filePath = parsedBody?.files?.file ? parsedBody.files.file.filepath : null;
 

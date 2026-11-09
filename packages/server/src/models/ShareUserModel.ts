@@ -1,7 +1,13 @@
 import { Item, Share, ShareType, ShareUser, ShareUserStatus, User, Uuid } from '../services/database/types';
-import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from '../utils/errors';
+import { ErrorBadRequest, ErrorConflict, ErrorForbidden, ErrorNotFound } from '../utils/errors';
 import BaseModel, { AclAction, DeleteOptions } from './BaseModel';
 import { getCanReceiveFolder } from './utils/user';
+import config from '../config';
+
+// Without a mailer, which self-hosted servers often do not set up, an address cannot be confirmed
+export const needsEmailConfirmation = (user: User) => config().mailer.enabled && !user.email_confirmed;
+
+export const confirmEmailMessage = (action: string) => `Please confirm your email address before ${action}. A confirmation link was sent to your email address, and you can send it again from your profile page.`;
 
 export default class ShareUserModel extends BaseModel<ShareUser> {
 
@@ -9,14 +15,25 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 		return 'share_users';
 	}
 
+	// The checks that do not depend on the recipient. They must be done before the recipient's email is looked up, so
+	// that an invitation that cannot be sent anyway does not reveal whether an address has an account.
+	public async checkCanInvite(user: User, resource: ShareUser) {
+		// Otherwise anyone could share notebooks under an address they do not own, such as one typed in at checkout
+		if (needsEmailConfirmation(user)) throw new ErrorForbidden(confirmEmailMessage('sharing a notebook'));
+
+		const share = await this.models().share().load(resource.share_id);
+		if (!share || share.owner_id !== user.id) throw new ErrorForbidden('no access to the share object');
+	}
+
 	public async checkIfAllowed(user: User, action: AclAction, resource: ShareUser = null): Promise<void> {
 		if (action === AclAction.Create) {
+			await this.checkCanInvite(user, resource);
+
 			const recipient = await this.models().user().load(resource.user_id, { fields: ['account_type', 'can_receive_folder', 'enabled'] });
 			if (!recipient.enabled) throw new ErrorForbidden('the recipient account is disabled');
 			if (!getCanReceiveFolder(recipient)) throw new ErrorForbidden('The sharing feature is not enabled for the recipient account');
 
 			const share = await this.models().share().load(resource.share_id);
-			if (share.owner_id !== user.id) throw new ErrorForbidden('no access to the share object');
 			if (share.owner_id === resource.user_id) throw new ErrorForbidden('cannot share an item with yourself');
 
 			const existingShareUser = await this.byShareAndUserId(share.id, resource.user_id);
@@ -122,6 +139,9 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 	}
 
 	public async setStatus(shareId: Uuid, userId: Uuid, status: ShareUserStatus): Promise<Item> {
+		// The checks below compare it with the status values, which a string would get past
+		if (typeof status !== 'number') throw new ErrorBadRequest(`Invalid status: ${status}`);
+
 		const shareUser = await this.byShareAndUserId(shareId, userId);
 		if (!shareUser) throw new ErrorNotFound(`Item has not been shared with this user: ${shareId} / ${userId}`);
 
@@ -132,6 +152,18 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 
 		return this.withTransaction<Item>(async () => {
 			if (status === ShareUserStatus.Accepted) {
+				// The items that a disabled account planted in its share would otherwise still be delivered
+				const shareOwner = await this.models().user().load(share.owner_id, { fields: ['enabled'] });
+				if (!shareOwner?.enabled) throw new ErrorForbidden('This invitation can no longer be accepted, because the account that sent it is disabled.');
+
+				// Items with the same name as one of the user's own are not added (see UserItemModel.addMulti), so they would
+				// silently diverge from the shared ones. Refuse instead, so that the user knows.
+				const shareItems = await this.models().item().byShareId(shareId, { fields: ['id', 'name'] });
+				const userItemIdsByName = await this.models().userItem().itemIdsByName(userId, shareItems.map(i => i.name));
+				if (shareItems.some(i => userItemIdsByName.has(i.name) && userItemIdsByName.get(i.name) !== i.id)) {
+					throw new ErrorConflict('This notebook cannot be accepted because your account already contains a copy of it, or of some of its notes. This can happen if it was previously synchronised with your account. To accept it, first permanently delete that copy (delete it, then empty the trash) and synchronise.');
+				}
+
 				await this.models().share().createSharedFolderUserItems(shareId, userId);
 			}
 

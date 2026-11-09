@@ -4,6 +4,7 @@ import Logger from '@joplin/utils/Logger';
 import { LdapConfig } from './types';
 import { ErrorForbidden } from './errors';
 import { readFile } from 'fs/promises';
+import { randomBytes } from 'crypto';
 
 const logger = Logger.create('LDAP');
 
@@ -21,7 +22,8 @@ export default async function ldapLogin(email: string, password: string, user: U
 
 	logger.info(`Starting authentication with Server ${host}`);
 
-	if (password === '') {
+	// A bind with a DN and no password is an unauthenticated bind, which some directories accept
+	if (typeof password !== 'string' || !password) {
 		throw new ErrorForbidden('no password entered');
 	}
 
@@ -83,7 +85,10 @@ export default async function ldapLogin(email: string, password: string, user: U
 		if (userCreation && !user) {
 			const ldapUser: User = {};
 			ldapUser.email = email;
-			ldapUser.password = password;
+			// The account is managed by the directory, so that removing the user or changing their password there
+			// applies here too. Keeping a copy of the directory password would let it be used after that.
+			ldapUser.is_external = 1;
+			ldapUser.password = randomBytes(32).toString('hex');
 			ldapUser.email_confirmed = 1;
 			ldapUser.totp_secret = '';
 			ldapUser.full_name = searchResults.searchEntries[0][fullNameAttribute].toString();

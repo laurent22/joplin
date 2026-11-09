@@ -1,14 +1,15 @@
 import { resourceBlobPath } from '../utils/joplinUtils';
-import { Change2 as Change, ChangeType, Item, Share, ShareType, ShareUserStatus, User, Uuid } from '../services/database/types';
+import { Change2 as Change, ChangeType, EmailSender, Item, Share, ShareType, ShareUserStatus, User, Uuid } from '../services/database/types';
 import { unique } from '../utils/array';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from '../utils/errors';
-import { setQueryParameters } from '../utils/urlUtils';
+import { forgotPasswordUrl, setQueryParameters } from '../utils/urlUtils';
 import BaseModel, { AclAction, DeleteOptions, LoadOptions, ValidateOptions } from './BaseModel';
 import { userIdFromUserContentUrl } from '../utils/routeUtils';
 import { getCanShareFolder } from './utils/user';
 import { isUniqueConstraintError } from '../db';
 import Logger from '@joplin/utils/Logger';
-import { PerformanceTimer } from '../utils/time';
+import { formatDateOnServer, Minute, PerformanceTimer } from '../utils/time';
+import itemPublishedTemplate from '../views/emails/itemPublishedTemplate';
 
 const logger = Logger.create('ShareModel');
 
@@ -623,7 +624,7 @@ export default class ShareModel extends BaseModel<Share> {
 	// however can be called after a user accept a share, or to correct share
 	// errors, but re-assigning all items to a user.
 	public async createSharedFolderUserItems(shareId: Uuid, userId: Uuid) {
-		const query = this.models().item().byShareIdQuery(shareId, { fields: ['id', 'name'] });
+		const query = this.models().item().byShareIdQuery(shareId, { fields: ['id', 'name', 'owner_id'] });
 		await this.models().userItem().addMulti(
 			// Don't throw if a (user_id, item_id) pair already exists to avoid race conditions.
 			userId, query, { ignoreAlreadyExists: true },
@@ -664,7 +665,9 @@ export default class ShareModel extends BaseModel<Share> {
 		};
 
 		await this.checkIfAllowed(owner, AclAction.Create, shareToSave);
-		return this.save(shareToSave);
+		const share = await this.save(shareToSave);
+		await this.sendPublishedNotification(owner, share, folderItem, 'notebook');
+		return share;
 	}
 
 	public async shareNote(owner: User, noteId: string, masterKeyId: string, recursive: boolean): Promise<Share> {
@@ -688,7 +691,31 @@ export default class ShareModel extends BaseModel<Share> {
 
 		await this.checkIfAllowed(owner, AclAction.Create, shareToSave);
 
-		return this.save(shareToSave);
+		const share = await this.save(shareToSave);
+		await this.sendPublishedNotification(owner, share, noteItem, 'note');
+		return share;
+	}
+
+	// Anyone holding a session can publish the account's notes, and the owner's apps then upload them unencrypted, so
+	// the owner of encrypted notes is told about every new publication. Without encryption, that session can already
+	// read the notes, and emailing every publication only taught people to ignore the email.
+	private async sendPublishedNotification(owner: User, share: Share, item: Item, itemType: 'note' | 'notebook') {
+		if (!item.jop_encryption_applied) return;
+
+		await this.models().email().push({
+			// The apps publish several selected notes one at a time, so this sends at most one email per minute
+			key: `itemPublished::${Math.floor(Date.now() / Minute)}`,
+			...itemPublishedTemplate({
+				itemType,
+				publishedUrl: this.shareUrl(owner.id, share.id),
+				publishTime: formatDateOnServer(Date.now()),
+				changePasswordUrl: forgotPasswordUrl(),
+			}),
+			recipient_email: owner.email,
+			recipient_name: owner.full_name || '',
+			recipient_id: owner.id,
+			sender_id: EmailSender.NoReply,
+		});
 	}
 
 	public async delete(id: string | string[], options: DeleteOptions = {}): Promise<void> {

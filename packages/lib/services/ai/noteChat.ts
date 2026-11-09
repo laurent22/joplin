@@ -203,6 +203,7 @@ const stepNoteChat = async ({
 		role: ChatRole.Assistant,
 		content: chatResult.text ?? '',
 		toolCalls: allowTools ? chatResult.toolCalls : [],
+		responsesState: allowTools ? chatResult.responsesState : undefined,
 	});
 	onHistoryChanged([...messages]);
 

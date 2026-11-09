@@ -1,5 +1,14 @@
 # Joplin Desktop Changelog
 
+## [v3.7.22](https://github.com/laurent22/joplin/releases/tag/v3.7.22) - 2026-10-28T22:32:59Z
+
+- Improved: Add read_notes MCP tool ([#16845](https://github.com/laurent22/joplin/issues/16845)) ([#16782](https://github.com/laurent22/joplin/issues/16782))
+- Improved: Reduce read_note token consumption with outline and section navigation ([#16838](https://github.com/laurent22/joplin/issues/16838)) ([#16777](https://github.com/laurent22/joplin/issues/16777))
+- Improved: Return the enclosing section with each search_notes result ([#16842](https://github.com/laurent22/joplin/issues/16842)) ([#16778](https://github.com/laurent22/joplin/issues/16778))
+- Improved: Treat private network AI providers as local ([#16837](https://github.com/laurent22/joplin/issues/16837))
+- Improved: Upgrade app banner shows the wrong minimum app version ([#16819](https://github.com/laurent22/joplin/issues/16819)) ([#16721](https://github.com/laurent22/joplin/issues/16721) by [@Rygaa](https://github.com/Rygaa))
+- Fixed: Security: Upgrade to Electron 42.11.18 ([#16964](https://github.com/laurent22/joplin/issues/16964)) ([#16939](https://github.com/laurent22/joplin/issues/16939) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [v3.7.21](https://github.com/laurent22/joplin/releases/tag/v3.7.21) - 2026-09-25T21:31:12Z
 
 - New: Add setting to hide the AI Chat toolbar button ([#16607](https://github.com/laurent22/joplin/issues/16607))

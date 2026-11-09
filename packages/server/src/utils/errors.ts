@@ -8,6 +8,7 @@ export enum ErrorCode {
 	InvalidOrigin = 'invalidOrigin',
 	IsReadOnly = 'isReadOnly',
 	TaskAlreadyRunning = 'taskAlreadyRunning',
+	MfaCodeRequired = 'mfaCodeRequired',
 }
 
 export interface ErrorOptions {

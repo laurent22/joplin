@@ -2,7 +2,7 @@ import { routeResponseFormat, Response, RouteResponseFormat, execRequest } from 
 import { AppContext, Env } from '../utils/types';
 import { isView, View } from '../services/MustacheService';
 import config from '../config';
-import { userIp } from '../utils/requestUtils';
+import { removeUploadedFiles, userIp } from '../utils/requestUtils';
 import { createCsrfTag } from '../utils/csrf';
 import { getImpersonatorAdminSessionId } from '../routes/admin/utils/users/impersonate';
 import { onRequestComplete, onRequestStart } from '../utils/metrics';
@@ -117,5 +117,6 @@ export default async function(ctx: AppContext) {
 		}
 	} finally {
 		onRequestComplete(requestId);
+		await removeUploadedFiles(ctx.req);
 	}
 }

@@ -359,6 +359,17 @@ export function githubOauthToken() {
 	throw new Error(`Cannot get Oauth token. Neither ${filename} nor the env variable JOPLIN_GITHUB_OAUTH_TOKEN are present`);
 }
 
+// Unauthenticated requests share a 60/hour limit per IP, which CI runners
+// regularly exceed, so authenticate whenever a token is available.
+const gitHubReadHeaders = (userAgent: string) => {
+	const token = process.env.JOPLIN_GITHUB_OAUTH_TOKEN;
+	return {
+		'Content-Type': 'application/json',
+		'User-Agent': userAgent,
+		...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+	};
+};
+
 // Note that the GitHub API releases/latest is broken on the joplin-android repo
 // as of Nov 2021 (last working on 3 November 2021, first broken on 19
 // November). It used to return the latest **published** release but now it
@@ -371,10 +382,7 @@ export function githubOauthToken() {
 // method, but let's keep the old method just in case they break the API again.
 export async function gitHubLatestRelease(repoName: string): Promise<GitHubRelease> {
 	const response = await fetch(`https://api.github.com/repos/laurent22/${repoName}/releases/latest`, {
-		headers: {
-			'Content-Type': 'application/json',
-			'User-Agent': 'Joplin Readme Updater',
-		},
+		headers: gitHubReadHeaders('Joplin Readme Updater'),
 	});
 
 	if (!response.ok) throw new Error(`Cannot fetch releases: ${response.statusText}`);
@@ -387,10 +395,7 @@ export async function gitHubLatestRelease_KeepInCaseMicrosoftBreaksTheApiAgain(r
 
 	while (true) {
 		const response = await fetch(`https://api.github.com/repos/laurent22/${repoName}/releases?page=${pageNum}`, {
-			headers: {
-				'Content-Type': 'application/json',
-				'User-Agent': 'Joplin Readme Updater',
-			},
+			headers: gitHubReadHeaders('Joplin Readme Updater'),
 		});
 
 		if (!response.ok) throw new Error(`Cannot fetch releases: ${response.statusText}`);
@@ -409,10 +414,7 @@ export async function gitHubLatestRelease_KeepInCaseMicrosoftBreaksTheApiAgain(r
 
 export const gitHubLatestReleases = async (page: number, perPage: number) => {
 	const response = await fetch(`https://api.github.com/repos/laurent22/joplin/releases?page=${page}&per_page=${perPage}`, {
-		headers: {
-			'Content-Type': 'application/json',
-			'User-Agent': 'Joplin Forum Updater',
-		},
+		headers: gitHubReadHeaders('Joplin Forum Updater'),
 	});
 
 	if (!response.ok) throw new Error(`Cannot fetch releases: ${response.statusText}`);

@@ -224,6 +224,27 @@ describe('ItemModel', () => {
 		expect((await models().user().load(user1.id)).total_item_size).toBe(folder1.content_size);
 	});
 
+	test('should load a shared item with its content once, whatever the number of users who have it', async () => {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+
+		await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [
+					{
+						id: '00000000000000000000000000000001',
+					},
+				],
+			},
+		]);
+
+		const note = await models().item().loadByJopId(user1.id, '00000000000000000000000000000001');
+		const items = await models().item().loadWithContentMulti([note.id]);
+		expect(items.length).toBe(1);
+		expect(items[0].content.length).toBeGreaterThan(0);
+	});
+
 	test('should include shared items in total size calculation', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
