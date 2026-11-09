@@ -32,6 +32,7 @@ import timers from 'timers';
 import dgram from 'dgram';
 import { pipeline } from 'stream/promises';
 import { Second } from '@joplin/utils/time';
+import { publicNetworkOnlyConnector } from './utils/publicNetworkOnly';
 
 interface ProxySettings {
 	maxConcurrentConnections?: number;
@@ -565,8 +566,8 @@ function shimInit(options: ShimInitOptions = null) {
 		const doFetchOperation = async () => {
 			const agent: Agent = shim.httpAgent(url, options);
 			const dispatcher = agent.compose([
+				// No decompress interceptor: fetch() already decodes gzip/br/deflate, and the interceptor is experimental
 				interceptors.redirect({ maxRedirections: options.maxRedirects }),
-				interceptors.decompress(),
 			]);
 
 			const abortController = new AbortController();
@@ -574,7 +575,7 @@ function shimInit(options: ShimInitOptions = null) {
 				method: method,
 				headers: new Headers(headers),
 				dispatcher,
-				signal: abortController.signal,
+				signal: options.signal ? AbortSignal.any([abortController.signal, options.signal]) : abortController.signal,
 			});
 			try {
 				const response = await fetch(requestOptions);
@@ -674,7 +675,8 @@ function shimInit(options: ShimInitOptions = null) {
 		const resolvedProxyUrl = resolveProxyUrl(proxySettings.proxyUrl);
 		const lastSettings = shim.httpAgent_?.lastSettings;
 
-		if (resolvedProxyUrl && proxySettings.proxyEnabled) {
+		// A proxy would hide the address that publicNetworkOnly needs to check
+		if (resolvedProxyUrl && proxySettings.proxyEnabled && !options?.publicNetworkOnly) {
 			const baseSettings = agentSettingsBase(options);
 			const { connect: proxyConnectSettings } = agentSettingsBase(options);
 
@@ -700,6 +702,7 @@ function shimInit(options: ShimInitOptions = null) {
 		} else {
 			const agentSettings: Agent.Options = {
 				...agentSettingsBase(options),
+				...(options?.publicNetworkOnly ? { connect: publicNetworkOnlyConnector(options.timeout, tlsEcdhCurve) } : {}),
 				connections: 1,
 			} satisfies Agent.Options;
 			if (!fastDeepEqual(lastSettings, agentSettings)) {

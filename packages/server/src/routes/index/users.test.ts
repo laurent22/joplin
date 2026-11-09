@@ -2,12 +2,13 @@ import { User } from '../../services/database/types';
 import routeHandler from '../../middleware/routeHandler';
 import { NotificationKey } from '../../models/NotificationModel';
 import { cookieGet } from '../../utils/cookies';
-import { ErrorForbidden } from '../../utils/errors';
+import { ErrorForbidden, ErrorUnprocessableEntity } from '../../utils/errors';
 import { execRequest, execRequestC } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, parseHtml, checkContextError, expectHttpError, expectThrow, createSubscription } from '../../utils/testing/testUtils';
 import { uuidgen } from '@joplin/lib/uuid';
 import config from '../../config';
 import { AccountType } from '../../models/UserModel';
+import { TokenPurpose } from '../../models/TokenModel';
 
 async function postUser(sessionId: string, email: string, password: string = null, props: Partial<User> = null): Promise<User> {
 	password = password === null ? uuidgen() : password;
@@ -32,7 +33,7 @@ async function postUser(sessionId: string, email: string, password: string = nul
 	return context.response.body;
 }
 
-async function patchUser(sessionId: string, user: Partial<User> & Record<string, unknown>, url = ''): Promise<User> {
+async function patchUser(sessionId: string, user: Partial<User> & Record<string, unknown>, url = '', button = 'post_button'): Promise<User> {
 	const context = await koaAppContext({
 		sessionId: sessionId,
 		request: {
@@ -40,7 +41,7 @@ async function patchUser(sessionId: string, user: Partial<User> & Record<string,
 			url: url ? url : '/users',
 			body: {
 				...user,
-				post_button: true,
+				[button]: true,
 			},
 		},
 	});
@@ -100,13 +101,14 @@ describe('index/users', () => {
 	});
 
 	test('should change the password', async () => {
-		const { user, session } = await createUserAndSession(1, true);
+		const { user, session, password: currentPassword } = await createUserAndSession(1, true);
 		const context = await koaAppContext({ sessionId: session.id });
 
 		const userModel = models().user();
 
 		const password = uuidgen();
-		await patchUser(session.id, { id: user.id, password: password, password2: password });
+		await expectHttpError(async () => patchUser(session.id, { id: user.id, password: password, password2: password }, '/users/me'), ErrorUnprocessableEntity.httpCode);
+		await patchUser(session.id, { id: user.id, password: password, password2: password, current_password: currentPassword });
 		const modUser = await userModel.login('user1@localhost', password, context.joplin.services);
 		expect(!!modUser).toBe(true);
 		expect(modUser.id).toBe(user.id);
@@ -147,7 +149,7 @@ describe('index/users', () => {
 		expect(user1.email_confirmed).toBe(1);
 
 		// Check that the token is valid
-		expect(await models().token().isValid(user1.id, token)).toBe(true);
+		expect(await models().token().isValid(user1.id, token, TokenPurpose.AccountConfirmation)).toBe(true);
 
 		// Check that we can't set the password without the token
 		{
@@ -194,7 +196,7 @@ describe('index/users', () => {
 		expect(user1.email_confirmed).toBe(1);
 
 		// Check that the token has been cleared
-		expect(await models().token().isValid(user1.id, token)).toBe(false);
+		expect(await models().token().isValid(user1.id, token, TokenPurpose.AccountConfirmation)).toBe(false);
 
 		// Check that a notification has been created
 		const notification = (await models().notification().all())[0];
@@ -247,26 +249,32 @@ describe('index/users', () => {
 		expect(user1.email_confirmed).toBe(1);
 
 		// Check that the token has been cleared
-		expect(await models().token().isValid(user1.id, token)).toBe(false);
+		expect(await models().token().isValid(user1.id, token, TokenPurpose.AccountConfirmation)).toBe(false);
 
 		// Check that a notification has been created
 		const notification = (await models().notification().all())[0];
 		expect(notification.key).toBe(NotificationKey.EmailConfirmed);
 	});
 
-	test('should allow changing an email', async () => {
-		const { user, session } = await createUserAndSession();
+	test('should allow changing an email, together with the password', async () => {
+		const { user, session, password } = await createUserAndSession();
+		const newPassword = uuidgen();
+
+		await expectHttpError(async () => patchUser(session.id, { id: user.id, email: 'changed@example.com' }, '/users/me'), ErrorUnprocessableEntity.httpCode);
 
 		await patchUser(session.id, {
 			id: user.id,
 			email: 'changed@example.com',
+			password: newPassword,
+			password2: newPassword,
+			current_password: password,
 		}, '/users/me');
 
 		// It's not immediately changed
 		expect((await models().user().load(user.id)).email).toBe('user1@localhost');
 
 		// Grab the confirmation URL
-		const email = (await models().email().all()).find(e => e.recipient_id === user.id);
+		const email = (await models().email().all()).find(e => e.recipient_email === 'changed@example.com');
 		const [, path, , token] = email.body.match(/\/(users\/.*)(\?token=)(.{32})/);
 
 		await execRequest('', 'GET', path, null, { query: { token } });
@@ -279,6 +287,33 @@ describe('index/users', () => {
 		expect(keys[0].value).toBe('user1@localhost'); // The old email has been saved
 
 		await expectThrow(async () => execRequest('', 'GET', path, null, { query: { token } }));
+	});
+
+	test('should only complete an email change with the token sent to the new address', async () => {
+		const { user, session, password } = await createUserAndSession();
+		await models().user().save({ id: user.id, email_confirmed: 0 });
+
+		const confirmationLink = async (recipientEmail: string) => {
+			const email = (await models().email().all()).find(e => e.recipient_email === recipientEmail && e.body.includes('?token='));
+			const [, path, , token] = email.body.match(/\/(users\/.*)(\?token=)(.{32})/);
+			return { path, token };
+		};
+
+		await patchUser(session.id, { id: user.id, email: 'attacker@example.com', current_password: password }, '/users/me');
+		const earlierChange = await confirmationLink('attacker@example.com');
+		await patchUser(session.id, { id: user.id, email: 'victim@example.com', current_password: password }, '/users/me');
+
+		await patchUser(session.id, { id: user.id, email: 'attacker-inbox@example.com' }, '/users/me', 'send_account_confirmation_email');
+		expect((await models().email().all()).find(e => e.recipient_email === 'attacker-inbox@example.com')).toBeFalsy();
+
+		await expectThrow(async () => execRequest('', 'GET', earlierChange.path, null, { query: { token: earlierChange.token } }));
+
+		const accountConfirmation = await confirmationLink('user1@localhost');
+		await execRequest('', 'GET', accountConfirmation.path, null, { query: { token: accountConfirmation.token } });
+
+		const reloadedUser = await models().user().load(user.id);
+		expect(reloadedUser.email).toBe('user1@localhost');
+		expect(reloadedUser.email_confirmed).toBe(1);
 	});
 
 	test('should not change non-whitelisted properties', async () => {
@@ -327,7 +362,7 @@ describe('index/users', () => {
 		expect(await models().session().count()).toBe(3);
 
 		const newPassword = uuidgen();
-		await patchUser(session.id, { id: user.id, password: newPassword, password2: newPassword });
+		await patchUser(session.id, { id: user.id, password: newPassword, password2: newPassword, current_password: password });
 
 		const sessions = await models().session().all();
 		expect(sessions.length).toBe(1);
@@ -335,7 +370,7 @@ describe('index/users', () => {
 	});
 
 	test('should delete all applications when changing the password', async () => {
-		const { user, session } = await createUserAndSession(1, true);
+		const { user, session, password } = await createUserAndSession(1, true);
 
 		await models().application().createPreLoginRecord('random-string', '');
 		await models().application().onAuthorizeUse('random-string', user.id);
@@ -346,7 +381,7 @@ describe('index/users', () => {
 		expect(await models().application().count()).toBe(2);
 
 		const newPassword = uuidgen();
-		await patchUser(session.id, { id: user.id, password: newPassword, password2: newPassword });
+		await patchUser(session.id, { id: user.id, password: newPassword, password2: newPassword, current_password: password });
 
 		expect(await models().application().count()).toBe(0);
 	});
@@ -397,5 +432,47 @@ describe('index/users', () => {
 		if (shouldAllowUpgrade) {
 			expect(upgradeButton.textContent).toMatch(upgradeButtonText);
 		}
+	});
+
+	test.each([
+		['already has a password', async () => (await createUserAndSession(1)).user],
+		['has MFA enabled', async () => {
+			const user = await models().user().save({ email: 'user1@localhost', must_set_password: 1, password: uuidgen() });
+			await models().user().save({ id: user.id, totp_secret: 'encrypted-secret' });
+			return user;
+		}],
+	])('should not allow setting the password of an account that %s', async (_case, createUser) => {
+		const user = await createUser();
+		const token = await models().token().generate(user.id, TokenPurpose.AccountConfirmation);
+
+		const newPassword = uuidgen();
+		const context = await execRequestC('', 'POST', `users/${user.id}/confirm`, {
+			password: newPassword,
+			password2: newPassword,
+			token,
+		});
+
+		expect(cookieGet(context, 'sessionId')).toBeFalsy();
+		expect(await models().user().login(user.email, newPassword, context.joplin.services)).toBeFalsy();
+	});
+
+	test('should not accept a CSRF token to confirm an account', async () => {
+		const user = await models().user().save({
+			email: 'user1@localhost',
+			must_set_password: 1,
+			email_confirmed: 0,
+			password: uuidgen(),
+		});
+
+		const csrfToken = await models().token().generate(user.id, TokenPurpose.Csrf);
+
+		const newPassword = uuidgen();
+		const context = await execRequestC('', 'POST', `users/${user.id}/confirm`, {
+			password: newPassword,
+			password2: newPassword,
+			token: csrfToken,
+		});
+
+		expect(cookieGet(context, 'sessionId')).toBeFalsy();
 	});
 });

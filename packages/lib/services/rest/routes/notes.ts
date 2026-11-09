@@ -26,14 +26,15 @@ const { mimeTypeFromHeaders } = require('../../../net-utils');
 import { fileExtension, safeFileExtension, safeFilename, filename } from '../../../path-utils';
 import { MarkupToHtml } from '@joplin/renderer';
 const { ErrorNotFound, ErrorForbidden } = require('../utils/errors');
-import requestFields from '../utils/requestFields';
 import isNoteLockEnabled from '../../noteLock/isNoteLockEnabled';
 import NoteLockNote from '../../noteLock/NoteLockNote';
+import lockedNoteBodies from '../utils/lockedNoteBodies';
 import { fileUriToPath } from '@joplin/utils/url';
 import { NoteEntity, ResourceEntity } from '../../database/types';
 import { DownloadController } from '../../../downloadController';
 import { FetchBlobOptions } from '../../../types';
 import RevisionService from '../../RevisionService';
+import compactCss from '../../../utils/compactCss';
 
 const logger = Logger.create('routes/notes');
 
@@ -101,7 +102,7 @@ export interface ResourceFromPath extends DownloadedMediaFile {
 }
 
 
-async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> {
+async function requestNoteToNote(requestNote: RequestNote, fetchOptions?: FetchOptions): Promise<NoteEntity> {
 	const output: NoteEntity = {
 		title: requestNote.title ? requestNote.title : '',
 		body: requestNote.body ? requestNote.body : '',
@@ -113,7 +114,7 @@ async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> 
 
 	if (requestNote.body_html) {
 		if (requestNote.convert_to === 'html') {
-			const style = await buildNoteStyleSheet(requestNote.stylesheets);
+			const style = await buildNoteStyleSheet(requestNote.stylesheets, fetchOptions);
 
 			const minifyOptions = {
 				// Remove all spaces and, especially, newlines from tag attributes, as that would
@@ -122,16 +123,15 @@ async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> 
 				// Need to remove all whitespaces because whitespace at a beginning of a line
 				// means a code block in Markdown.
 				collapseWhitespace: true,
-				minifyCSS: true,
+				// Also for the CSS, but without the minifier's own, which drops CSS it does not know about and is slow on
+				// some inputs
+				minifyCSS: compactCss,
 				maxLineLength: 300,
+				// Only needed for templates such as PHP, and looking for them is slow on some inputs
+				ignoreCustomFragments: [] as RegExp[],
 			};
 
-			const uglifycss = require('uglifycss');
-			const styleString = uglifycss.processString(style.join('\n'), {
-				// Need to set a max length because Ace Editor takes forever
-				// to display notes with long lines.
-				maxLineLen: 200,
-			});
+			const styleString = compactCss(style.join('\n'));
 
 			const styleTag = style.length ? `<style>${styleString}</style>` + '\n' : '';
 			let minifiedHtml = '';
@@ -145,7 +145,7 @@ async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> 
 				minifiedHtml = requestNote.body_html;
 			}
 			output.body = styleTag + minifiedHtml;
-			output.body = htmlUtils.prependBaseUrl(output.body, baseUrl);
+			if (baseUrl) output.body = htmlUtils.prependBaseUrl(output.body, baseUrl);
 			output.markup_language = MarkupToHtml.MARKUP_LANGUAGE_HTML;
 		} else {
 			// Convert to Markdown
@@ -187,7 +187,7 @@ async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> 
 	return output;
 }
 
-async function buildNoteStyleSheet(stylesheets: Stylesheet[]) {
+async function buildNoteStyleSheet(stylesheets: Stylesheet[], fetchOptions?: FetchOptions) {
 	if (!stylesheets) return [];
 
 	const output = [];
@@ -198,7 +198,7 @@ async function buildNoteStyleSheet(stylesheets: Stylesheet[]) {
 		} else if (stylesheet.type === 'url') {
 			try {
 				const tempPath = `${Setting.value('tempDir')}/${md5(`${Math.random()}_${Date.now()}`)}.css`;
-				await shim.fetchBlob(stylesheet.value, { path: tempPath, maxRetry: 1 });
+				await shim.fetchBlob(stylesheet.value, { path: tempPath, maxRetry: 1, ...fetchOptions });
 				const text = await shim.fsDriver().readFile(tempPath);
 				output.push(text);
 				await shim.fsDriver().remove(tempPath);
@@ -440,7 +440,7 @@ export const extractNoteFromHTML = async (
 	fetchOptions?: FetchOptions,
 	allowedProtocols?: string[],
 ) => {
-	const note = await requestNoteToNote(requestNote);
+	const note = await requestNoteToNote(requestNote, fetchOptions);
 
 	const mediaUrls = extractMediaUrls(note.markup_language, note.body);
 
@@ -490,20 +490,13 @@ export default async function(request: Request, id: string = null, link: string 
 			throw new ErrorNotFound();
 		}
 
-		if (isNoteLockEnabled() && id) {
-			// SQLite column names are case-insensitive.
-			const fields = requestFields(request, BaseModel.TYPE_NOTE).map((f: string) => f.toLowerCase());
-			if (fields.includes('body') || fields.includes('*')) {
-				const note = await Note.load(id, { fields: ['is_locked'] });
-				if (NoteLockNote.isLocked(note)) throw new ErrorForbidden('The body of a locked note cannot be read through the API');
-			}
-		}
-
 		const sql: string[] = [];
 		if (request.query.include_deleted !== '1') sql.push('deleted_time = 0');
 		if (request.query.include_conflicts !== '1') sql.push('is_conflict = 0');
-		if (isNoteLockEnabled()) sql.push('is_locked = 0');
-		return defaultAction(BaseModel.TYPE_NOTE, request, id, link, null, { sql: sql.join(' AND ') });
+		const lockedBodies = isNoteLockEnabled() ? lockedNoteBodies(request, ModelType.Note) : null;
+		const result = await defaultAction(BaseModel.TYPE_NOTE, lockedBodies?.request ?? request, id, link, null, { sql: sql.join(' AND ') });
+		if (!lockedBodies) return result;
+		return id ? lockedBodies.replace(result) : lockedBodies.replacePage(result);
 	}
 
 	if (request.method === RequestMethod.POST) {

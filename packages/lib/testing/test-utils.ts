@@ -795,6 +795,16 @@ async function expectNotThrow(asyncFn: ()=> Promise<unknown>) {
 	}
 }
 
+// For code paths that a test deliberately makes fail, so that the expected warnings or errors don't clutter the output
+async function withLogLevel<T>(level: LogLevel, callback: ()=> Promise<T>) {
+	const previousLevel = Logger.globalLogger.setLevel(level);
+	try {
+		return await callback();
+	} finally {
+		Logger.globalLogger.setLevel(previousLevel);
+	}
+}
+
 function checkThrow(fn: ()=> unknown) {
 	let hasThrown = false;
 	try {
@@ -1261,4 +1271,4 @@ export const withWarningSilenced = async <T> (
 	}
 };
 
-export { supportDir, createNoteAndResource, createTempFile, createTestShareData, simulateReadOnlyShareEnv, waitForFolderCount, afterAllCleanUp, exportDir, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
+export { supportDir, withLogLevel, createNoteAndResource, createTempFile, createTestShareData, simulateReadOnlyShareEnv, waitForFolderCount, afterAllCleanUp, exportDir, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };

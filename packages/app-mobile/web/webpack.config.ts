@@ -74,7 +74,6 @@ const buildSharedConfig = (hotReload: boolean): webpack.Configuration => {
 				'react-native-fingerprint-scanner': emptyLibraryMock,
 				'@joplin/react-native-saf-x': emptyLibraryMock,
 				'react-native-quick-actions': emptyLibraryMock,
-				'uglifycss': emptyLibraryMock,
 				'react-native-share': emptyLibraryMock,
 				'react-native-camera': emptyLibraryMock,
 				'react-native-zip-archive': emptyLibraryMock,

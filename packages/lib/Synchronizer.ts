@@ -1307,6 +1307,7 @@ export default class Synchronizer {
 				this.dispatch({
 					type: 'MUST_UPGRADE_APP',
 					message: error.message,
+					appMinVersion: error.details,
 				});
 			}
 
@@ -1405,7 +1406,9 @@ export default class Synchronizer {
 
 			if (result.items.length > 0) {
 				logger.info('There are more outgoing changes to sync, schedule the sync again');
-				void reg.scheduleSync(reg.syncAsYouTypeInterval(), { syncSteps }, true);
+				// Tests drive syncs explicitly - a scheduled sync would run later, in another test, via the
+				// registry's own synchroniser, which isn't set up in tests.
+				if (!shim.isTestingEnv()) void reg.scheduleSync(reg.syncAsYouTypeInterval(), { syncSteps }, true);
 				hasOutgoingChanges = true;
 			}
 		}

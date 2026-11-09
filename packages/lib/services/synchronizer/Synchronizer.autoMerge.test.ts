@@ -1,4 +1,4 @@
-import { synchronizerStart, setupDatabaseAndSynchronizer, switchClient, synchronizer, loadEncryptionMasterKey, encryptionService, decryptionWorker } from '../../testing/test-utils';
+import { synchronizerStart, setupDatabaseAndSynchronizer, switchClient, synchronizer, loadEncryptionMasterKey, encryptionService, decryptionWorker, withLogLevel } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Setting from '../../models/Setting';
@@ -7,6 +7,7 @@ import { NoteEntity } from '../database/types';
 import { MasterKeyEntity } from '../e2ee/types';
 import { setEncryptionEnabled } from './syncInfoUtils';
 import { loadMasterKeysFromSettings } from '../e2ee/utils';
+import { LogLevel } from '@joplin/utils/Logger';
 
 // Auto-merge is off by default and runs on the client that detects the conflict
 // (client 1 here), so only that client needs it be enabled
@@ -340,7 +341,8 @@ describe('Synchronizer.autoMerge', () => {
 		// Drop the key so the incoming note can't be read
 		encryptionService().unloadMasterKey(masterKey);
 		await Note.save({ id: note.id, body: baseBody.replace('First paragraph.', 'First paragraph, edited locally.') });
-		await synchronizerStart();
+		// Uploading the local note fails too, since the key is gone
+		await withLogLevel(LogLevel.None, () => synchronizerStart());
 
 		// The local change is preserved as a conflict note and nothing is merged
 		const conflicts = await Note.conflictedNotes();
