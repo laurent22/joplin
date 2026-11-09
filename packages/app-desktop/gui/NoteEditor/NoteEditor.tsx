@@ -139,7 +139,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 	// The resolution UI needs the Markdown editor, so it replaces plugin editors and whiteboards
 	const conflictRestrictsEditor = props.conflictIsInView && (!conflictChecked || noteHasConflict);
 	const conflictBlocksPlugins = props.conflictIsInView && conflictChecked && noteHasConflict;
-	// The merge extension is only built for CodeMirror 6
+	// The merge extension needs CodeMirror 6. Plain text is kept to preserve safe mode.
 	const bodyEditor = conflictRestrictsEditor && props.bodyEditor !== NoteBodyEditorType.PlainText ? NoteBodyEditorType.CodeMirror6 : props.bodyEditor;
 	// The resolution UI needs only editor
 	const noteVisiblePanes = conflictRestrictsEditor ? ['editor'] : props.noteVisiblePanes;
