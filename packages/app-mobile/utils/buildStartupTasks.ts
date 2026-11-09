@@ -456,7 +456,7 @@ const buildStartupTasks = (
 	addTask('buildStartupTasks/run migrations', async () => {
 		await MigrationService.instance().run();
 	});
-	addTask('buildStartupTasks/complete pending Joplin Cloud auth', async () => {
+	addTask('buildStartupTasks/complete pending Joplin Server/Cloud auth', async () => {
 		await completePendingAuthentication();
 	});
 	addTask('buildStartupTasks/set up background tasks', async () => {
