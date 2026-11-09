@@ -41,6 +41,8 @@ export interface FetchOptions {
 	body?: string;
 	agent?: unknown;
 	signal?: AbortSignal;
+	// Not supported on mobile
+	timeout?: number;
 }
 
 interface AttachFileToNoteOptions {

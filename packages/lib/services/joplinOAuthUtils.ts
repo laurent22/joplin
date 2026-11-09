@@ -10,6 +10,7 @@ import SyncTargetRegistry from '../SyncTargetRegistry';
 import { isHttpOrHttpsUrl } from '@joplin/utils/url';
 import NavService from './NavService';
 import { SettingsMap } from '../components/shared/config/config-shared';
+import { Second } from '@joplin/utils/time';
 import { substrWithEllipsis } from '../string-utils';
 
 const logger = Logger.create('joplinCloudUtils');
@@ -184,13 +185,14 @@ interface CheckIfLoginWasSuccessfulOptions {
 	apiBaseUrl: string;
 	applicationAuthId: string;
 	syncTarget: JoplinSyncTargetId;
+	timeout?: number;
 }
 
 // We have isWaitingResponse inside the function to avoid any state from lingering
 // after an error occurs. E.g.: if the function would throw an error while isWaitingResponse
 // was set to true the next time we call the function the value would still be true.
 // The closure function prevents that.
-export const checkIfLoginWasSuccessful = async ({ apiBaseUrl, applicationAuthId, syncTarget }: CheckIfLoginWasSuccessfulOptions) => {
+export const checkIfLoginWasSuccessful = async ({ apiBaseUrl, applicationAuthId, syncTarget, timeout }: CheckIfLoginWasSuccessfulOptions) => {
 	if (!isValidBaseUrl(apiBaseUrl)) throw new Error('Invalid base URL');
 
 	let isWaitingResponse = false;
@@ -203,6 +205,7 @@ export const checkIfLoginWasSuccessful = async ({ apiBaseUrl, applicationAuthId,
 			headers: {
 				'X-JOPLIN-CUSTOM-API-KEY': syncTarget === 10 ? Setting.value('sync.10.apiKey') : '',
 			},
+			timeout,
 		});
 		if (response.status === 403) { // Not authorized yet
 			isWaitingResponse = false;
@@ -259,6 +262,9 @@ export const completePendingAuthentication = async () => {
 			apiBaseUrl: apiBaseUrl,
 			applicationAuthId: pendingAuthData.appId,
 			syncTarget,
+			// completePendingAuthentication can run on startup: Avoid blocking startup for more than a few
+			// seconds
+			timeout: 3 * Second,
 		});
 		if (result && result.success) {
 			logger.info('Completed pending Joplin Server/Cloud authentication');
