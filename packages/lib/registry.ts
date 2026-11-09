@@ -168,7 +168,7 @@ class Registry {
 						return;
 					}
 
-					if (!(await this.syncTarget(syncTargetId).isAuthenticated())) {
+					if (!(await this.syncTarget(syncTargetId).maybeAuthenticated())) {
 						this.dispatch({
 							type: 'MUST_AUTHENTICATE',
 							value: true,
