@@ -6,9 +6,10 @@ interface Props {
 	onKeepBoth: ()=> void;
 	onGoToConflict: (direction: 'previous'|'next')=> void;
 	disabled: boolean;
+	finishDisabled: boolean;
 }
 
-const ConflictFooter: React.FC<Props> = ({ onFinish, onKeepBoth, onGoToConflict, disabled }) => {
+const ConflictFooter: React.FC<Props> = ({ onFinish, onKeepBoth, onGoToConflict, disabled, finishDisabled }) => {
 	const onPrevious = React.useCallback(() => onGoToConflict('previous'), [onGoToConflict]);
 	const onNext = React.useCallback(() => onGoToConflict('next'), [onGoToConflict]);
 
@@ -25,7 +26,7 @@ const ConflictFooter: React.FC<Props> = ({ onFinish, onKeepBoth, onGoToConflict,
 				</button>
 			</div>
 			<button className='-keep-both' onClick={onKeepBoth} disabled={disabled}>{_('Keep both versions')}</button>
-			<button className='-finish' onClick={onFinish} disabled={disabled}>{_('Finish')}</button>
+			<button className='-finish' onClick={onFinish} disabled={disabled || finishDisabled}>{_('Finish')}</button>
 		</div>
 	);
 };

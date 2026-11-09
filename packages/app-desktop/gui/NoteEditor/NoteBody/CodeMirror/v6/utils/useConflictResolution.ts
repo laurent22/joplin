@@ -27,6 +27,7 @@ interface LoadedDocument {
 const useConflictResolution = ({ noteId, inView, contentMarkupLanguage, editorRef, reloadCount }: Props) => {
 	const [loaded, setLoaded] = useState<LoadedDocument|null>(null);
 	const [installFailedFor, setInstallFailedFor] = useState<string|null>(null);
+	const [installedDocument, setInstalledDocument] = useState<ConflictDocument|null>(null);
 
 	const conflictDocument = loaded && loaded.noteId === noteId ? loaded.document : null;
 
@@ -34,6 +35,8 @@ const useConflictResolution = ({ noteId, inView, contentMarkupLanguage, editorRe
 	const installedRef = useRef(false);
 
 	useEffect(() => {
+		setInstallFailedFor(null);
+
 		if (!inView) {
 			setLoaded(null);
 			return () => {};
@@ -56,13 +59,17 @@ const useConflictResolution = ({ noteId, inView, contentMarkupLanguage, editorRe
 
 				if (data.status !== ConflictDataStatus.Ok) {
 					setLoaded(null);
+					setInstallFailedFor(noteId);
 					return;
 				}
 
 				setLoaded({ noteId, document: buildConflictDocument(data.sections), remoteUpdatedTime: data.remoteUpdatedTime });
 			} catch (error) {
 				logger.warn('Could not load the conflict data for note', noteId, error);
-				if (!cancelled) setLoaded(null);
+				if (!cancelled) {
+					setLoaded(null);
+					setInstallFailedFor(noteId);
+				}
 			}
 		};
 
@@ -107,6 +114,7 @@ const useConflictResolution = ({ noteId, inView, contentMarkupLanguage, editorRe
 					forText: conflictDocument.text,
 				}),
 			});
+			setInstalledDocument(conflictDocument);
 			return true;
 		};
 
@@ -132,7 +140,7 @@ const useConflictResolution = ({ noteId, inView, contentMarkupLanguage, editorRe
 
 	return {
 		conflictContent: conflictDocument ? conflictDocument.text : null,
-		conflictRemoteUpdatedTime: conflictDocument ? loaded.remoteUpdatedTime : 0,
+		conflictRemoteUpdatedTime: conflictDocument && installedDocument === conflictDocument ? loaded.remoteUpdatedTime : 0,
 		conflictInstallFailed: installFailedFor === noteId,
 	};
 };

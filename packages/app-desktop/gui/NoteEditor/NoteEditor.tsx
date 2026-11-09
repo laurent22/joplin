@@ -304,6 +304,8 @@ function NoteEditorContent(props: NoteEditorProps) {
 				return;
 			}
 
+			if (!conflictMergeUpdatedTime) return;
+
 			const note = formNoteRef.current;
 
 			// A pending save would land after the note is deleted and bring it back
@@ -360,7 +362,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		} finally {
 			conflictFinishingRef.current = false;
 		}
-	}, [hasTitleConflict, resolvedTitle, remoteUpdatedTime, originalIsStale, askToReloadConflict, conflictInstallFailed, nextConflictAfter, props.dispatch]);
+	}, [hasTitleConflict, resolvedTitle, remoteUpdatedTime, originalIsStale, askToReloadConflict, conflictInstallFailed, conflictMergeUpdatedTime, nextConflictAfter, props.dispatch]);
 
 	const shownEditorViewIds = useVisiblePluginEditorViewIds(props.plugins, windowId, conflictRestrictsEditor);
 	useConnectToEditorPlugin({
@@ -1027,7 +1029,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
 					{renderSearchBar()}
 				</div>
-				{isConflictNote ? <ConflictFooter onFinish={onConflictFinish} onKeepBoth={onKeepBoth} onGoToConflict={onGoToConflict} disabled={isReadOnly}/> : null}
+				{isConflictNote ? <ConflictFooter onFinish={onConflictFinish} onKeepBoth={onKeepBoth} onGoToConflict={onGoToConflict} disabled={isReadOnly} finishDisabled={!conflictMergeUpdatedTime}/> : null}
 				<StatusBar
 					noteId={formNote.id}
 					setTagsToolbarButtonInfo={props.setTagsToolbarButtonInfo}
