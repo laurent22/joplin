@@ -17,6 +17,18 @@ pub(crate) struct RenderedSection {
 }
 
 const ERRORS_NOTE_NAME: &str = "⚠️ Errors ⚠️";
+const MAX_FILE_NAME_BYTES: usize = 255;
+
+// Shortens the title so the suffix and extension are kept
+fn build_file_name(title: &str, suffix: &str, extension: &str) -> String {
+    let max_title_bytes = MAX_FILE_NAME_BYTES.saturating_sub(suffix.len() + extension.len());
+    // A very long extension is shortened together with the title
+    if title.len() > max_title_bytes && extension.len() > max_title_bytes {
+        return build_file_name(&format!("{}{}", title, extension), suffix, "");
+    }
+    let end = title.floor_char_boundary(max_title_bytes);
+    format!("{}{}{}", &title[..end], suffix, extension)
+}
 
 impl Renderer {
     pub fn new() -> Self {
@@ -174,9 +186,17 @@ impl Renderer {
         extension: &str,
     ) -> Result<String> {
         let filename = filename_base.trim().replace("/", "_");
+        // Sanitize before shortening so removed characters don't use up the length limit
+        let filename = fs_driver().sanitize_file_name(&filename);
+        // Reserved Windows names such as CON are removed completely by the sanitizer
+        let filename = if filename.is_empty() {
+            fs_driver().sanitize_file_name(&format!("_{}", filename_base.trim()))
+        } else {
+            filename
+        };
         let mut i = 0;
         let mut current_filename =
-            fs_driver().sanitize_file_name(&format!("{}{}", filename, extension));
+            fs_driver().sanitize_file_name(&build_file_name(&filename, "", extension));
 
         loop {
             let current_full_path = fs_driver().join(parent_dir, &current_filename);
@@ -186,10 +206,75 @@ impl Renderer {
             }
 
             i += 1;
-            current_filename =
-                fs_driver().sanitize_file_name(&format!("{}_{}{}", filename, i, extension));
+            current_filename = fs_driver().sanitize_file_name(&build_file_name(
+                &filename,
+                &format!("_{}", i),
+                extension,
+            ));
         }
 
         Ok(current_filename)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::Renderer;
+
+    const MAX_FILE_NAME_BYTES: usize = 255;
+
+    #[test]
+    fn should_keep_html_extension_when_title_is_longer_than_255_bytes() {
+        let mut renderer = Renderer::new();
+
+        let filename = renderer
+            .title_to_unique_safe_filename("/out", &"a".repeat(260), ".html")
+            .unwrap();
+
+        assert!(filename.ends_with(".html"));
+        assert!(filename.len() <= MAX_FILE_NAME_BYTES);
+    }
+
+    #[test]
+    fn should_keep_title_text_when_long_title_has_invalid_characters() {
+        let mut renderer = Renderer::new();
+
+        let filename = renderer
+            .title_to_unique_safe_filename("/out", &format!("{}Notes", "?".repeat(260)), ".html")
+            .unwrap();
+
+        assert_eq!(filename, "Notes.html");
+    }
+
+    #[test]
+    fn should_keep_title_when_extension_is_very_long() {
+        for x_count in [253, 300] {
+            let mut renderer = Renderer::new();
+            let filename = format!("report.{}", "x".repeat(x_count));
+
+            let first = renderer.to_unique_safe_filename("/out", &filename).unwrap();
+            let second = renderer.to_unique_safe_filename("/out", &filename).unwrap();
+
+            for name in [&first, &second] {
+                assert!(name.starts_with("report."), "title was dropped: {:?}", name);
+                assert!(name.len() <= MAX_FILE_NAME_BYTES);
+            }
+            assert_ne!(first, second);
+        }
+    }
+
+    #[test]
+    fn should_not_create_empty_file_name_when_sanitizer_removes_the_title() {
+        let mut renderer = Renderer::new();
+
+        let first = renderer
+            .title_to_unique_safe_filename("/out", "???", ".html")
+            .unwrap();
+        let duplicate = renderer
+            .title_to_unique_safe_filename("/out", "???", ".html")
+            .unwrap();
+
+        assert_eq!(first, "_.html");
+        assert_eq!(duplicate, "__1.html");
     }
 }

@@ -39,6 +39,14 @@ export const supportedLocales: SupportedLocale[] = [
 		hreflang: 'de',
 	},
 	{
+		id: 'hr_HR',
+		lang: 'hr-hr',
+		pathPrefix: 'hr',
+		code: 'HR',
+		name: 'Hrvatski',
+		hreflang: 'hr',
+	},
+	{
 		id: 'zh_CN',
 		lang: 'zh-cn',
 		pathPrefix: 'cn',

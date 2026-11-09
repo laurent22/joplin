@@ -18,6 +18,42 @@ let themeCssElement: HTMLStyleElement|null = null;
 
 const initializeDialogWebView = (messageChannelId: string) => {
 	const loadedPaths: Set<string> = new Set();
+	let contentResizeObserver: ResizeObserver|null = null;
+	let observedElement: HTMLElement|null = null;
+	let observedContentSize: { width: number; height: number }|null = null;
+	let pageHideListenerRegistered = false;
+
+	const measureContent = (element: HTMLElement) => {
+		const viewportWidth = document.documentElement.clientWidth;
+		const scrollbarWidth = Math.max(0, window.innerWidth - viewportWidth);
+		// Include the scrollbar gutter when the content fills the viewport so feeding this
+		// measurement back into the iframe does not repeatedly shrink it.
+		const width = element.clientWidth === viewportWidth ? element.clientWidth + scrollbarWidth : element.clientWidth;
+		return { width, height: element.clientHeight };
+	};
+	const stopObservingContentSize = () => {
+		contentResizeObserver?.disconnect();
+		contentResizeObserver = null;
+		observedElement = null;
+		observedContentSize = null;
+		if (pageHideListenerRegistered) {
+			window.removeEventListener('pagehide', stopObservingContentSize);
+			pageHideListenerRegistered = false;
+		}
+	};
+	const observeContentSize = (element: HTMLElement) => {
+		if (observedElement === element && contentResizeObserver) return;
+
+		stopObservingContentSize();
+		observedElement = element;
+		observedContentSize = measureContent(element);
+		contentResizeObserver = new ResizeObserver(() => {
+			if (observedElement === element) observedContentSize = measureContent(element);
+		});
+		contentResizeObserver.observe(element, { box: 'border-box' });
+		window.addEventListener('pagehide', stopObservingContentSize);
+		pageHideListenerRegistered = true;
+	};
 
 	type ScriptType = 'js'|'css';
 	const includeScriptsOrStyles = (type: ScriptType, paths: string[]) => {
@@ -73,15 +109,21 @@ const initializeDialogWebView = (messageChannelId: string) => {
 			document.body.appendChild(styleElement);
 			themeCssElement = styleElement;
 		},
-		getContentSize: async () => {
+		getContentSize: async (watchForSizeChanges = false) => {
 			// To convert to React Native pixel units from browser pixel units,
 			// we need to multiply by the devicePixelRatio:
 			const dpr = window.devicePixelRatio ?? 1;
 
 			const element = document.getElementById('joplin-plugin-content') ?? document.body;
+			if (watchForSizeChanges) {
+				observeContentSize(element);
+			} else {
+				stopObservingContentSize();
+			}
+			const contentSize = observedContentSize ?? measureContent(element);
 			return {
-				width: element.clientWidth * dpr,
-				height: element.clientHeight * dpr,
+				width: contentSize.width * dpr,
+				height: contentSize.height * dpr,
 			};
 		},
 	};

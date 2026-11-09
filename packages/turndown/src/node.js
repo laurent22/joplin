@@ -14,8 +14,13 @@ function isBlank (node) {
     !isMeaningfulWhenBlank(node) &&
     /^\s*$/i.test(node.textContent) &&
     !hasVoid(node) &&
-    !hasMeaningfulWhenBlank(node)
+    !hasMeaningfulWhenBlank(node) &&
+    !isNonBreakingSpaceHeading(node)
   )
+}
+
+function isNonBreakingSpaceHeading (node) {
+  return /^H[1-6]$/.test(node.nodeName) && node.textContent.includes('\u00A0')
 }
 
 function flankingWhitespace (node, options) {
@@ -24,6 +29,14 @@ function flankingWhitespace (node, options) {
   }
 
   var edges = edgeWhitespace(node.textContent)
+
+  // Nonbreaking spaces at the edges of inline code are part of the code, so keep them inside it
+  if (node.nodeName === 'CODE') {
+    edges.leading = edges.leadingAscii
+    edges.trailing = edges.trailingAscii
+    edges.leadingNonAscii = ''
+    edges.trailingNonAscii = ''
+  }
 
   // abandon leading ASCII WS if left-flanked by ASCII WS
   if (edges.leadingAscii && isFlankedByWhitespace('left', node, options)) {

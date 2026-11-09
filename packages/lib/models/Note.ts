@@ -608,6 +608,49 @@ export default class Note extends BaseItem {
 		return r && r.total ? r.total : 0;
 	}
 
+	// Like the export of a notebook, the check includes its sub-notebooks.
+	public static async hasLockedNoteInFolderTrees(folderIds: string[]) {
+		if (!folderIds.length) return false;
+
+		const result = await this.db().selectOne(`
+			WITH RECURSIVE folder_tree(id) AS (
+				SELECT id
+				FROM folders
+				WHERE id IN (${this.escapeIdsForSql(folderIds)})
+
+				UNION
+
+				SELECT folder.id
+				FROM folders folder
+				INNER JOIN folder_tree parent
+					ON folder.parent_id = parent.id
+				WHERE folder.deleted_time = 0
+			)
+			SELECT EXISTS (
+				SELECT 1
+				FROM notes note
+				INNER JOIN folder_tree folder
+					ON note.parent_id = folder.id
+				WHERE note.is_locked = 1
+					AND note.is_conflict = 0
+					AND note.deleted_time = 0
+				LIMIT 1
+			) AS value
+		`);
+
+		return !!result.value;
+	}
+
+	// Trashed and conflict notes count too: their content still depends on the note lock key.
+	public static async hasLockedNotes() {
+		return !!(await this.db().selectOne('SELECT 1 FROM notes WHERE is_locked = 1 LIMIT 1'));
+	}
+
+	public static async lockedNoteIds() {
+		const rows = await this.db().selectAll<{ id: string }>('SELECT id FROM notes WHERE is_locked = 1');
+		return rows.map(row => row.id);
+	}
+
 	public static unconflictedNotes() {
 		return this.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0');
 	}
@@ -745,16 +788,25 @@ export default class Note extends BaseItem {
 		const Folder = this.getClass<typeof FolderClass>('Folder');
 		if (folderId === Folder.conflictFolderId()) throw new Error(_('Cannot move note to "%s" notebook', Folder.conflictFolderTitle()));
 
+		const targetFolder = await Folder.load(folderId, {
+			fields: ['id', 'share_id'],
+		});
+
 		// When moving a note to a different folder, the user timestamp is not
 		// updated. However updated_time is updated so that the note can be
 		// synced later on.
 		//
 		// We also reset deleted_time, so that if a deleted note is moved to
 		// that folder it is restored. If it wasn't deleted, it does nothing.
+		//
+		// The share_id is also updated to match that of the parent, to give
+		// immediate feedback when a locked note is moved into or out of a
+		// share.
 
 		const modifiedNote: NoteEntity = {
 			id: noteId,
 			parent_id: folderId,
+			share_id: targetFolder?.share_id ?? '',
 			is_conflict: 0,
 			conflict_original_id: '',
 			deleted_time: 0,
@@ -909,6 +961,8 @@ export default class Note extends BaseItem {
 	// before calling a gated save, but caution should be used if doing so, because if the body
 	// is ever not decrypted when doing so, it will cause the contents to be double encrypted,
 	// causing the plain text to become inaccessible in UI, with no automatic remedy available.
+	// It must also never be set to true without first checking that isNoteLockEnabled() is true,
+	// as a note marked decrypted is refused when the feature is turned off before the save.
 	public static async save(o: NoteEntity, options: SaveOptions = null): Promise<NoteEntity> {
 		const isNew = this.isNew(o, options);
 
@@ -951,6 +1005,11 @@ export default class Note extends BaseItem {
 		// in the item_changes table
 		const oldNote = !isNew && o.id ? await Note.load(o.id) : null;
 		let plainTextBodyToReturn: string = null;
+		// With the feature turned off the note lock path below is skipped, so a decrypted body would be written over the
+		// ciphertext. The stored row decides for a partial save, which may not carry the lock state.
+		if (!isNoteLockEnabled() && (o as NoteLockNoteEntity).isDecrypted && (NoteLockNote.isLocked(o) || NoteLockNote.isLocked(oldNote))) {
+			throw new Error('Locked notes cannot be saved while the note lock feature is turned off');
+		}
 		if (isNoteLockEnabled()) {
 			if (!options?.useNoteLock && o.is_locked !== undefined && 'body' in o && !!(o as NoteLockNoteEntity).isDecrypted) throw new Error('Saves including both is_locked and body fields must be gated when the body was loaded using a gated load');
 			if (!isNew && o.is_locked !== undefined && !!o.is_locked !== !!oldNote?.is_locked && !('body' in o)) throw new Error('Saves that change is_locked must include the body field');

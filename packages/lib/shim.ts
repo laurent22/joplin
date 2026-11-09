@@ -91,6 +91,7 @@ export type SetClientCertificateOptions = {
 
 export interface HttpAgentOptions {
 	timeout?: number;
+	publicNetworkOnly?: boolean;
 }
 
 let isTestingEnv_ = false;

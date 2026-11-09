@@ -203,6 +203,7 @@ const stepNoteChat = async ({
 		role: ChatRole.Assistant,
 		content: chatResult.text ?? '',
 		toolCalls: allowTools ? chatResult.toolCalls : [],
+		responsesState: allowTools ? chatResult.responsesState : undefined,
 	});
 	onHistoryChanged([...messages]);
 
@@ -240,9 +241,6 @@ const assertWithinTokenBudget = (history: ChatMessage[], budget: number) => {
 		totalTokens += estimateTokens(message.content);
 		if (message.role === ChatRole.Assistant) {
 			totalTokens += estimateToolCallTokens(message.toolCalls ?? []);
-		}
-		if (message.role === ChatRole.Tool) {
-			totalTokens += estimateTokens(message.content);
 		}
 	}
 

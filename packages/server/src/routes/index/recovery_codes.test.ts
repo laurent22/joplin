@@ -2,7 +2,8 @@ import { totp } from 'otplib';
 import routeHandler from '../../middleware/routeHandler';
 import { cookieGet, cookieSet } from '../../utils/cookies';
 import { execRequest } from '../../utils/testing/apiUtils';
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, koaAppContext } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, koaAppContext, expectHttpError } from '../../utils/testing/testUtils';
+import { ErrorUnprocessableEntity } from '../../utils/errors';
 
 describe('index/recovery_codes', () => {
 
@@ -20,6 +21,19 @@ describe('index/recovery_codes', () => {
 
 	beforeEach(async () => {
 		await beforeEachDb();
+	});
+
+	test('should only regenerate recovery codes with the password', async () => {
+		const { session, user, password } = await createUserAndSession(1);
+		await models().user().enableMFA(user.id, 'totp-secret', session.id);
+		const codes = async () => (await models().recoveryCode().loadByUserId(user.id)).map(c => c.code);
+		const codesBefore = await codes();
+
+		await expectHttpError(async () => execRequest(session.id, 'POST', 'recovery_codes', {}), ErrorUnprocessableEntity.httpCode);
+		expect(await codes()).toEqual(codesBefore);
+
+		await execRequest(session.id, 'POST', 'recovery_codes', { password });
+		expect(await codes()).not.toEqual(codesBefore);
 	});
 
 	test('should not be able to see recovery codes without access key', async () => {

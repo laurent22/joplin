@@ -27,6 +27,13 @@
 			{{{csrfTag}}}
 			<input type="hidden" name="id" value="{{user.id}}"/>
 
+			<div class="field">
+				<label class="label" for="password">Password</label>
+				<div class="control">
+					<input id="password" class="input" type="password" name="password" autocomplete="current-password"/>
+				</div>
+			</div>
+
 			<div class="control block is-pulled-right">
 				<input type="submit" name="postButton" class="button is-primary" value="{{buttonTitle}}" />
 			</div>

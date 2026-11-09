@@ -13,13 +13,14 @@ import { NotificationKey } from '../../models/NotificationModel';
 import { accountTypeOptions, accountTypeToString, getNextSubscriptionPlan } from '../../models/UserModel';
 import { confirmUrl, stripePortalUrl } from '../../utils/urlUtils';
 import { initStripe, updateCustomerEmail } from '../../utils/stripe';
-import { createCsrfTag } from '../../utils/csrf';
+import { checkNotCrossSiteRequest, createCsrfTag } from '../../utils/csrf';
 import { formatDateTime } from '../../utils/time';
 import { cookieSet } from '../../utils/cookies';
 import { userFlagToString } from '../../models/UserFlagModel';
 import { stopImpersonating } from '../admin/utils/users/impersonate';
 import { _ } from '@joplin/lib/locale';
 import { getIsMFAEnabled } from '../../models/utils/user';
+import { TokenPurpose } from '../../models/TokenModel';
 
 export interface CheckRepeatPasswordInput {
 	password: string;
@@ -54,6 +55,7 @@ function makeUser(userId: Uuid, fields: Record<string, unknown>): User {
 interface FormFields {
 	id: Uuid;
 	post_button: string;
+	current_password: string;
 	update_subscription_basic_button: string;
 	update_subscription_pro_button: string;
 	stop_impersonate_button: string;
@@ -185,7 +187,7 @@ router.get('users/:id/confirm', async (path: SubPath, ctx: AppContext, error: Er
 
 		return view;
 	} else {
-		await models.token().deleteByValue(userId, token);
+		await models.token().deleteByValue(userId, token, TokenPurpose.AccountConfirmation);
 		await models.notification().add(userId, NotificationKey.EmailConfirmed);
 
 		if (ctx.joplin.owner) {
@@ -203,16 +205,29 @@ interface SetPasswordFormData {
 }
 
 router.post('users/:id/confirm', async (path: SubPath, ctx: AppContext) => {
+	checkNotCrossSiteRequest(ctx);
 	const userId = path.id;
 
 	try {
 		const fields = await bodyFields<SetPasswordFormData>(ctx.req);
-		await ctx.joplin.models.token().checkToken(userId, fields.token);
+		await ctx.joplin.models.token().checkToken(userId, fields.token, TokenPurpose.AccountConfirmation);
+
+		// Only an account that has never had a password set can get one from
+		// this end point. Otherwise a confirmation token - which can be
+		// obtained for any email address via the Stripe checkout flow - would
+		// be enough to take over an established account. To change a known
+		// password use the profile page; to replace a forgotten one use the
+		// password reset flow.
+		const user = await ctx.joplin.models.user().load(userId);
+		if (!user) throw new ErrorNotFound(`No such user: ${userId}`);
+		if (!user.must_set_password) throw new ErrorForbidden('This account already has a password. Please login, or use the password reset form.');
+		// The session below is created without asking for the MFA code
+		if (getIsMFAEnabled(user)) throw new ErrorForbidden('This account has multi-factor authentication enabled. Please use the password reset form.');
 
 		const password = checkRepeatPassword(fields, true);
 
 		await ctx.joplin.models.user().save({ id: userId, password, must_set_password: 0 });
-		await ctx.joplin.models.token().deleteByValue(userId, fields.token);
+		await ctx.joplin.models.token().deleteByValue(userId, fields.token, TokenPurpose.AccountConfirmation);
 
 		const session = await ctx.joplin.models.session().createUserSession(userId);
 		cookieSet(ctx, 'sessionId', session.id);
@@ -247,13 +262,14 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 		if (fields.post_button) {
 			const userToSave: User = models.user().fromApiInput(user);
 			await models.user().checkIfAllowed(owner, AclAction.Update, userToSave);
+			const newEmail = userToSave.email ? await models.user().newEmailToConfirm(owner, userToSave.email) : '';
+			if (userToSave.password || newEmail) await models.user().checkCurrentPassword(owner.id, fields.current_password, ctx.joplin.services);
 
-			if (userToSave.email && userToSave.email !== owner.email) {
-				await models.user().initiateEmailChange(owner.id, userToSave.email);
-				delete userToSave.email;
-			}
-
+			if (newEmail) delete userToSave.email;
 			await models.user().save(userToSave, { isNew: false });
+
+			// After saving, since a password change cancels any pending email change
+			if (newEmail) await models.user().initiateEmailChange(owner.id, newEmail);
 
 			// When changing the password, we also clear all session IDs for
 			// that user, except the current one (otherwise they would be
@@ -263,7 +279,8 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 				await models.application().deleteByUserId(userToSave.id);
 			}
 		} else if (fields.send_account_confirmation_email) {
-			await models.user().sendAccountConfirmationEmail(user);
+			// Sent to the stored address, never to the one in the form, as the token confirms whichever address receives it
+			if (!owner.email_confirmed) await models.user().sendAccountConfirmationEmail(owner);
 		} else if (fields.stop_impersonate_button) {
 			const returnUrl = await stopImpersonating(ctx);
 			return redirect(ctx, returnUrl ? returnUrl : config().baseUrl);

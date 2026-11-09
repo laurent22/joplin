@@ -77,9 +77,15 @@ rules.heading = {
 
   replacement: function (content, node, options) {
     var hLevel = Number(node.nodeName.charAt(1))
+    var originalContentLength = content.length
+    // The markdown renderer trims raw nonbreaking spaces at the start and end of a heading,
+    // so escape only those. Inside a code span, `&nbsp;` would be shown as literal text.
+    content = content
+      .replace(/^\u{00A0}+/u, s => '&nbsp;'.repeat(s.length))
+      .replace(/\u{00A0}+$/u, s => '&nbsp;'.repeat(s.length))
 
     if (options.headingStyle === 'setext' && hLevel < 3) {
-      var underline = repeat((hLevel === 1 ? '=' : '-'), content.length)
+      var underline = repeat((hLevel === 1 ? '=' : '-'), originalContentLength)
       return (
         '\n\n' + content + '\n' + underline + '\n\n'
       )

@@ -59,7 +59,8 @@ describe('index/applications', () => {
 		const { user, session } = await createUserAndSession(1);
 		await models().user().save({ id: user.id });
 
-		await getApplicationConfirm('asdf', session.id);
+		const confirmPage = await getApplicationConfirm('asdf', session.id);
+		expect(confirmPage.response.body).toContain(user.email);
 		await doApplicationConfirm('asdf', session.id);
 
 		const applications = await models().application().all();

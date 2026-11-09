@@ -5,7 +5,7 @@ import { betaUserTrialPeriodDays, isBetaUser, stripeConfig } from '../../utils/s
 import { beforeAllDb, afterAllTests, beforeEachDb, models, koaAppContext, expectNotThrow } from '../../utils/testing/testUtils';
 import { AppContext } from '../../utils/types';
 import { uuidgen } from '@joplin/lib/uuid';
-import { postHandlers } from './stripe';
+import { getHandlers, postHandlers } from './stripe';
 import Stripe from 'stripe';
 import { SubPath } from '../../utils/routeUtils';
 import { Hour, Month, Second } from '@joplin/utils/time';
@@ -109,6 +109,18 @@ async function createUserViaSubscription(ctx: AppContext, options: WebhookOption
 			],
 		},
 	}, options);
+}
+
+const checkoutSession = (status = 'complete') => ({ status, subscription: 'sub_1', customer_details: { email: 'toto@example.com' } });
+
+// Returns the URL the success page redirects to, or '' if it does not redirect
+async function requestSuccessPage(session: Record<string, unknown>) {
+	const ctx = await koaAppContext();
+	const redirect = jest.fn();
+	ctx.redirect = redirect;
+	const stripe = { ...mockStripe(), checkout: { sessions: { retrieve: async () => session } } };
+	await getHandlers.success(stripe as unknown as Stripe, {} as unknown as SubPath, ctx);
+	return redirect.mock.calls.length ? redirect.mock.calls[0][0] as string : '';
 }
 
 describe('index/stripe', () => {
@@ -233,6 +245,34 @@ describe('index/stripe', () => {
 		expect(stripe.subscriptions.cancel).toHaveBeenCalledTimes(1);
 
 		expect(subBefore.stripe_subscription_id).toBe(subAfter.stripe_subscription_id);
+	});
+
+	test('should hand out a confirmation token once, for the account the checkout created', async () => {
+		await createUserViaSubscription(await koaAppContext(), { userEmail: 'toto@example.com', subscriptionId: 'sub_1' });
+		const user = await models().user().loadByEmail('toto@example.com');
+
+		expect(await requestSuccessPage(checkoutSession())).toContain(`/users/${user.id}/confirm?token=`);
+		expect(await requestSuccessPage(checkoutSession())).toBe('');
+	});
+
+	test.each([
+		['the checkout attached to an existing account awaiting its password', async () => {
+			await models().user().save({ email: 'toto@example.com', password: uuidgen(), must_set_password: 1 });
+			await createUserViaSubscription(await koaAppContext(), { userEmail: 'toto@example.com', subscriptionId: 'sub_1' });
+			return checkoutSession();
+		}],
+		['the checkout is not complete', async () => {
+			await createUserViaSubscription(await koaAppContext(), { userEmail: 'toto@example.com', subscriptionId: 'sub_1' });
+			return checkoutSession('open');
+		}],
+		['the account was created more than an hour ago', async () => {
+			await createUserViaSubscription(await koaAppContext(), { userEmail: 'toto@example.com', subscriptionId: 'sub_1' });
+			const user = await models().user().loadByEmail('toto@example.com');
+			await models().user().save({ id: user.id, created_time: Date.now() - 2 * Hour });
+			return checkoutSession();
+		}],
+	])('should not hand out a confirmation token when %s', async (_case, setup) => {
+		expect(await requestSuccessPage(await setup())).toBe('');
 	});
 
 	test('should disable an account if the sub is cancelled', async () => {

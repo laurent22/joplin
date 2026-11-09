@@ -38,6 +38,7 @@ interface Argv {
 
 import * as nodeSqlite from 'sqlite3';
 import { shimInit } from '@joplin/lib/shim-init-node';
+import { isSameSite } from './utils/urlUtils';
 const cors = require('@koa/cors');
 shimInit({ nodeSqlite });
 
@@ -94,6 +95,23 @@ async function getEnvFilePath(env: Env, argv: { envFile?: string }): Promise<str
 	return '';
 }
 
+const getCorsAllowedDomains = (envVariables: EnvVariables, env: Env) => {
+	const corsAllowedDomains = envVariables.CORS_ALLOWED_DOMAINS
+		.split(',')
+		.map(domain => domain.trim())
+		.filter(domain => !!domain);
+
+	if (env === Env.Dev) {
+		// Stripe (dev)
+		corsAllowedDomains.push('http://localhost:8077');
+
+		// Web client (dev)
+		corsAllowedDomains.push('http://localhost:8088');
+	}
+
+	return corsAllowedDomains;
+};
+
 async function main() {
 	const { selectedCommand, argv: yargsArgv } = await setupCommands();
 
@@ -126,21 +144,8 @@ async function main() {
 	// loads the user, which is then used by notificationHandler. And finally
 	// routeHandler uses data from both previous middlewares. It would be good to
 	// layout these dependencies in code but not clear how to do this.
-	const corsAllowedDomains = [
-		'https://joplinapp.org',
 
-		// Allows sync with the web version of Joplin
-		'https://app.joplincloud.com',
-	];
-
-	if (env === Env.Dev) {
-		// Stripe (dev)
-		corsAllowedDomains.push('http://localhost:8077');
-
-		// Web client (dev)
-		corsAllowedDomains.push('http://localhost:8088');
-	}
-
+	const corsAllowedDomains = getCorsAllowedDomains(envVariables, env);
 	function acceptOrigin(origin: string): boolean {
 		// Origin can be string "null"
 		if (origin === 'null') return false;
@@ -187,6 +192,7 @@ async function main() {
 						name: 'error',
 						title: 'Error',
 						path: 'index/error',
+						showFooter: true,
 						content: { error },
 					});
 				} catch (anotherError) {
@@ -322,6 +328,9 @@ async function main() {
 		appLogger().info('Public base URL:', config().baseUrl);
 		appLogger().info('API base URL:', config().apiBaseUrl);
 		appLogger().info('User content base URL:', config().userContentBaseUrl);
+		if (config().userContentBaseUrl !== config().baseUrl && isSameSite(config().userContentBaseUrl, config().baseUrl)) {
+			appLogger().warn('USER_CONTENT_BASE_URL is on the same site as APP_BASE_URL, so published notes are not isolated from the rest of the server: browsers treat requests between sibling subdomains as same-site and send the session cookie with them, and a page on one can set cookies for the other. Use a separate domain, as Joplin Cloud does with joplinusercontent.com.');
+		}
 		appLogger().info('Log dir:', config().logDir);
 		appLogger().info('DB Config:', markPasswords(config().database));
 		appLogger().info('Mailer Config:', markPasswords(config().mailer));

@@ -288,6 +288,10 @@ div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"] .wb-expander.wb-i
 	display: none;
 }
 
+.folder-tree-overlay {
+	display: none;
+}
+
 @media (max-width: 768px) {
 	.folder-tree-toggle {
 		display: flex;
@@ -311,7 +315,7 @@ div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"] .wb-expander.wb-i
 		top: 0;
 		left: 0;
 		bottom: 0;
-		z-index: 30;
+		z-index: 31;
 		max-width: 80vw;
 		width: 280px;
 		transform: translateX(-100%);
@@ -323,6 +327,17 @@ div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"] .wb-expander.wb-i
 	.published-folder-sidebar.is-open {
 		transform: translateX(0);
 		visibility: visible;
+	}
+
+	.published-note-layout:has(.published-folder-sidebar.is-open) .folder-tree-overlay {
+		display: block;
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 30;
+		background: rgba(0, 0, 0, 0.4);
 	}
 
 	.page-note .published-note-layout.with-tree .note-main {

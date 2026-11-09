@@ -494,6 +494,16 @@ describe('InteropService_Importer_OneNote', () => {
 		expect(notesToMarkdownString(matchingNotes)).toMatchSnapshot();
 	});
 
+	it('should import pages whose title is longer than 255 characters', async () => {
+		const notes = await importNote(`${supportDir}/onenote/long_title.zip`);
+		const resources = await Resource.all();
+
+		const noteTitleLengths = notes.map(note => note.title.length).sort((a, b) => a - b);
+
+		expect(noteTitleLengths).toEqual(['long_title'.length, 230, 260]);
+		expect(resources.filter(resource => resource.title.length > 230)).toEqual([]);
+	});
+
 	it('should import updated/created timestamps', async () => {
 		const notes = await importNote(`${supportDir}/onenote/testOneNoteEmbeddedWordDoc.one`);
 		const importedNote = notes.find(n => n.title.startsWith('Embedded doc sheet'));

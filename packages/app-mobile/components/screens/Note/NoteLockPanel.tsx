@@ -15,6 +15,7 @@ interface Props {
 	themeId: number;
 	hasNoteLockKey: boolean;
 	undecryptable?: boolean;
+	migrationRunning?: boolean;
 	onUnlocked?: ()=> void;
 }
 
@@ -94,6 +95,10 @@ const NoteLockPanel = (props: Props) => {
 	}, [password, unlocking, props.onUnlocked]);
 
 	const renderForm = () => {
+		if (props.migrationRunning) {
+			return <Text style={styles.message}>{_('This note cannot be read while a note lock key migration is in progress.')}</Text>;
+		}
+
 		if (props.undecryptable) {
 			return (
 				<Text style={styles.message}>{_('This note could not be unlocked. If it was locked prior to a password reset, the content is no longer recoverable.')}</Text>

@@ -4,13 +4,15 @@ import Setting from '@joplin/lib/models/Setting';
 import { act, fireEvent, render, screen, userEvent } from '../../utils/testing/testingLibrary';
 import { ShareInvitation, ShareUserStatus } from '@joplin/lib/services/share/reducer';
 import makeShareInvitation from '@joplin/lib/testing/share/makeMockShareInvitation';
-import { encryptionService, setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
+import { encryptionService, setupDatabaseAndSynchronizer, switchClient, synchronizer, synchronizerStart } from '@joplin/lib/testing/test-utils';
+import { fetchSyncInfo, uploadSyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import TestProviderStack from '../testing/TestProviderStack';
 import { AppState } from '../../utils/types';
 import { Store } from 'redux';
 import createMockReduxStore from '../../utils/testing/createMockReduxStore';
 import setupGlobalStore from '../../utils/testing/setupGlobalStore';
 import MasterKey from '@joplin/lib/models/MasterKey';
+import shim from '@joplin/lib/shim';
 
 interface WrapperProps {
 	store: Store<AppState>;
@@ -136,6 +138,47 @@ describe('WarningBanner', () => {
 		expect(screen.getByText(query)).toBeVisible();
 	});
 
+	test('the note lock key conflict banner should link to the migration screen', () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		Setting.setValue('noteLock.conflictNoteLockKey', { noteLockKey: { id: 'sync-target-key' }, syncMigrationId: 'lineage' });
+		const mock = createMockStore();
+
+		render(<WarningBannerWrapper store={mock.store}/>);
+		const banner = screen.getByText(/different note lock key/);
+		expect(banner).toBeVisible();
+		fireEvent.press(banner);
+
+		expect(mock.getRouteName()).toBe('NoteLockMigration');
+	});
+
+	test('the note lock migration banner should follow the run and be dismissed once it has completed', () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		Setting.setValue('noteLock.conflictNoteLockKey', { noteLockKey: { id: 'sync-target-key' }, syncMigrationId: 'lineage' });
+		const mock = createMockStore();
+		const setStatus = (value: unknown) => act(() => {
+			mock.store.dispatch({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value });
+		});
+		render(<WarningBannerWrapper store={mock.store}/>);
+
+		setStatus({ running: true, failed: 0, skipped: 0 });
+		expect(screen.getByText(/Migration is in progress/)).toBeVisible();
+		expect(screen.queryByText(/different note lock key/)).toBeNull();
+
+		setStatus({ running: false, failed: 2, skipped: 0 });
+		expect(screen.getByText(/2 locked notes could not be migrated/)).toBeVisible();
+		const showMessageBox = jest.spyOn(shim, 'showMessageBox').mockResolvedValue(1);
+		fireEvent.press(screen.getByText('Skip'));
+		expect(showMessageBox).toHaveBeenCalled();
+		showMessageBox.mockRestore();
+		fireEvent.press(screen.getByText('Retry'));
+		expect(mock.getRouteName()).toBe('NoteLockMigration');
+
+		setStatus({ running: false, failed: 0, skipped: 1 });
+		expect(screen.getByText(/has completed.*1 locked note was skipped/)).toBeVisible();
+		fireEvent.press(screen.getByText(/has completed/));
+		expect(mock.store.getState().noteLockMigrationStatus).toBeNull();
+	});
+
 	test.each([
 		'Joplin Cloud' as const,
 		'Joplin Server' as const,
@@ -158,5 +201,23 @@ describe('WarningBanner', () => {
 
 		// Should hide the warning banner
 		expect(screen.queryByRole('button', { name: buttonName })).toBeNull();
+	});
+
+	test('should show the sync target minimum version in the upgrade app banner', async () => {
+		await setupDatabaseAndSynchronizer(0);
+		await switchClient(0);
+		await synchronizerStart();
+		const store = createMockReduxStore();
+		setupGlobalStore(store);
+
+		const remoteInfo = await fetchSyncInfo(synchronizer().api());
+		remoteInfo.appMinVersion = '3.9.0';
+		await uploadSyncInfo(synchronizer().api(), remoteInfo);
+
+		synchronizer().dispatch = store.dispatch;
+		await synchronizerStart();
+
+		render(<TestProviderStack store={store}><WarningBanner/></TestProviderStack>);
+		expect(screen.getByTestId('warning-box')).toHaveTextContent('In order to synchronise, Please upgrade your application to version 3.9.0: Update it from the App Store');
 	});
 });

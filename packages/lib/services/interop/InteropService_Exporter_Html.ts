@@ -71,6 +71,8 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 				} else {
 					output = `${friendlySafeFilename(item.title)}/${output}`;
 					output = await shim.fsDriver().findUniqueFilename(output);
+					const [exportedFolderName] = output.split(/[/\\]/, 1);
+					this.addTitleTruncationWarning_(item, exportedFolderName);
 				}
 			}
 			if (!item.parent_id) return output;
@@ -120,6 +122,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 			} else {
 				noteFilePath = `${dirPath}/${friendlySafeFilename(item.title)}.html`;
 				noteFilePath = await shim.fsDriver().findUniqueFilename(noteFilePath);
+				this.addTitleTruncationWarning_(item, basename(noteFilePath));
 			}
 
 			const bodyMd = await this.processNoteResources_(item);

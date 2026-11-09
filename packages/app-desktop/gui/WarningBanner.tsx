@@ -16,6 +16,9 @@ import { AppState } from '../app.reducer';
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import { showMissingMasterKeyMessage, showUnknownKeyFormatBanner } from '@joplin/lib/services/e2ee/utils';
+import { noteLockKeyConflictFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import { NoteLockMigrationStatus } from '@joplin/lib/reducer';
+import { confirmAndSkipNoteLockKeyMigration, notMigratedMessage, withSkippedCount } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
 import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/config/shouldShowMissingPasswordWarning';
 import { isJoplinOAuthSyncTarget, openSyncSettings } from '@joplin/lib/services/joplinOAuthUtils';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
@@ -37,6 +40,8 @@ interface Props {
 	hasDisabledSyncItems: boolean;
 	showUnknownKeyFormatMessage: boolean;
 	showMissingMasterKeyMessage: boolean;
+	showNoteLockKeyConflictMessage: boolean;
+	noteLockMigrationStatus: NoteLockMigrationStatus|null;
 	mustUpgradeAppMessage: string;
 	syncTargetAppMinVersion: string;
 	shouldSwitchToAppleSiliconVersion: boolean;
@@ -78,6 +83,20 @@ const WarningBanner: React.FC<Props> = props => {
 			props: {
 				defaultSection: 'encryption',
 			},
+		});
+	};
+
+	const onMigrateLockedNotes = () => {
+		props.dispatch({
+			type: 'DIALOG_OPEN',
+			name: 'noteLockMigration',
+		});
+	};
+
+	const onDismissNoteLockMigrationStatus = () => {
+		props.dispatch({
+			type: 'NOTE_LOCK_MIGRATION_STATUS_SET',
+			value: null,
 		});
 	};
 
@@ -155,6 +174,28 @@ const WarningBanner: React.FC<Props> = props => {
 			_('The synchronisation password is missing.'),
 			_('Set the password'),
 			onViewSyncSettingsScreen,
+		);
+	} else if (props.noteLockMigrationStatus?.running) {
+		msg = renderNotificationMessage(_('Re-encrypting your locked notes with the synced key. Migration is in progress...'));
+	} else if (props.noteLockMigrationStatus?.failed || props.noteLockMigrationStatus?.awaitingDecryption) {
+		msg = renderNotificationMessage(
+			notMigratedMessage(props.noteLockMigrationStatus),
+			_('Retry'),
+			onMigrateLockedNotes,
+			_('Skip'),
+			() => void confirmAndSkipNoteLockKeyMigration(props.dispatch),
+		);
+	} else if (props.noteLockMigrationStatus) {
+		msg = renderNotificationMessage(
+			withSkippedCount(_('The migration of your locked notes has completed.'), props.noteLockMigrationStatus),
+			_('Dismiss'),
+			onDismissNoteLockMigrationStatus,
+		);
+	} else if (props.showNoteLockKeyConflictMessage) {
+		msg = renderNotificationMessage(
+			_('Synchronisation is stopped because the sync target uses a different note lock key to the one on your device.'),
+			_('Migrate your locked notes'),
+			onMigrateLockedNotes,
 		);
 	} else if (props.shouldUpgradeSyncTarget) {
 		msg = renderNotificationMessage(
@@ -304,6 +345,8 @@ const mapStateToProps = (state: AppState) => {
 		hasDisabledEncryptionItems: state.hasDisabledEncryptionItems,
 		showMissingMasterKeyMessage: showMissingMasterKeyMessage(syncInfo, state.notLoadedMasterKeys),
 		showUnknownKeyFormatMessage: showUnknownKeyFormatBanner(syncInfo),
+		showNoteLockKeyConflictMessage: noteLockKeyConflictFromState(state),
+		noteLockMigrationStatus: state.noteLockMigrationStatus,
 		showNeedUpgradingMasterKeyMessage: showNeedUpgradingEnabledMasterKeyMessage,
 		showShouldReencryptMessage: state.settings['encryption.shouldReencrypt'] >= Setting.SHOULD_REENCRYPT_YES,
 		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,
@@ -312,7 +355,7 @@ const mapStateToProps = (state: AppState) => {
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
 		isSafeMode: state.settings.isSafeMode,
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
-		syncTargetAppMinVersion: syncInfo.appMinVersion,
+		syncTargetAppMinVersion: state.mustUpgradeAppMinVersion,
 		showInvalidJoplinServerCredential: isJoplinOAuthSyncTarget(state.settings['sync.target']) && state.mustAuthenticate,
 		syncTargetName: SyncTargetRegistry.idToLabelOrEmpty(state.settings['sync.target']),
 		shouldSwitchToAppleSiliconVersion: shim.isAppleSilicon() && shim.isMac() && process.arch !== 'arm64',

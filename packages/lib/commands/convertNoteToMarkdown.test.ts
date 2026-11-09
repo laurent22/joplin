@@ -266,6 +266,37 @@ describe('convertNoteToMarkdown', () => {
 		expect(converted.deleted_time).toBe(0);
 	});
 
+	it('should not save a decrypted locked note when note lock is turned off during the conversion', async () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		shim.showErrorDialog = jest.fn();
+		NoteLockService.destroyInstance();
+		NoteLockSession.destroyInstance();
+		NoteLockKey.destroyInstance();
+		EncryptionService.instance_ = encryptionService();
+		await NoteLockKey.instance().create('123456');
+		await NoteLockSession.instance().unlock('123456');
+		const folder = await Folder.save({ title: 'test_folder' });
+		const htmlNote = await Note.save({ title: 'test', body: '<p>Hello</p>', parent_id: folder.id, markup_language: MarkupLanguage.Html });
+		const lockedNote = { ...(await Note.load(htmlNote.id)), is_locked: 1, isDecrypted: true };
+		await Note.save(lockedNote, { useNoteLock: true });
+		state.selectedNoteIds = [htmlNote.id];
+
+		// The backup copy is made between the gated load and the save.
+		const duplicate = Note.duplicate.bind(Note);
+		const spy = jest.spyOn(Note, 'duplicate').mockImplementation((...args) => {
+			Setting.setValue('featureFlag.noteLock', false);
+			return duplicate(...args);
+		});
+		try {
+			await convertHtmlToMarkdown.runtime().execute({ state, dispatch: jest.fn() });
+		} finally {
+			spy.mockRestore();
+		}
+
+		expect(shim.showErrorDialog).toHaveBeenCalledTimes(1);
+		expect((await Note.load(htmlNote.id)).body).not.toContain('Hello');
+	});
+
 	it('should finish converting the remaining locked notes when the session locks mid-run', async () => {
 		Setting.setValue('featureFlag.noteLock', true);
 		shim.showErrorDialog = jest.fn();

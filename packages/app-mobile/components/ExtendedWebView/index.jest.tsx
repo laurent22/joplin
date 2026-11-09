@@ -57,6 +57,15 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 	useEffect(() => {
 		// JSDOM polyfills
 		dom.window.eval(polyfillScrollFunctions);
+		dom.window.eval(`
+			// JSDOM does not implement ResizeObserver. Observer behaviour is covered by
+			// the initializeDialogWebView unit tests.
+			window.ResizeObserver ??= class ResizeObserver {
+				observe() {}
+				unobserve() {}
+				disconnect() {}
+			};
+		`);
 
 		dom.window.eval(`
 			// JSDOM iframes are missing certain functionality required by Joplin,

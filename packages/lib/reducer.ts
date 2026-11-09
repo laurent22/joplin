@@ -90,6 +90,14 @@ export interface StateLastDeletion {
 	timestamp: number;
 }
 
+// The background note lock key migration, kept after it ends until its banner is dismissed.
+export interface NoteLockMigrationStatus {
+	running: boolean;
+	failed: number;
+	skipped: number;
+	awaitingDecryption: number;
+}
+
 export type HighlightedWord = ComplexTerm|string;
 
 export interface WindowState {
@@ -191,6 +199,7 @@ export interface State extends WindowState {
 	isInsertingNotes: boolean;
 	hasEncryptedItems: boolean;
 	noteLockSessionUnlocked: boolean;
+	noteLockMigrationStatus: NoteLockMigrationStatus|null;
 	needApiAuth: boolean;
 	profileConfig: ProfileConfig;
 	noteListRendererIds: string[];
@@ -198,6 +207,7 @@ export interface State extends WindowState {
 	lastDeletion: StateLastDeletion;
 	lastDeletionNotificationTime: number;
 	mustUpgradeAppMessage: string;
+	mustUpgradeAppMinVersion: string;
 	mustAuthenticate: boolean;
 	toast: Toast | null;
 	editorNoteReloadTimeRequest: number;
@@ -262,6 +272,7 @@ export const defaultState: State = {
 	isInsertingNotes: false,
 	hasEncryptedItems: false,
 	noteLockSessionUnlocked: false,
+	noteLockMigrationStatus: null,
 	needApiAuth: false,
 	profileConfig: null,
 	noteListRendererIds: getListRendererIds(),
@@ -273,6 +284,7 @@ export const defaultState: State = {
 	},
 	lastDeletionNotificationTime: 0,
 	mustUpgradeAppMessage: '',
+	mustUpgradeAppMinVersion: '',
 	mustAuthenticate: false,
 	editorNoteReloadTimeRequest: 0,
 	allowSelectionInOtherFolders: false,
@@ -1583,6 +1595,10 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			draft.noteLockSessionUnlocked = action.value;
 			break;
 
+		case 'NOTE_LOCK_MIGRATION_STATUS_SET':
+			draft.noteLockMigrationStatus = action.value;
+			break;
+
 		case 'SET_ACTIVE_NOTE_IS_UNDECRYPTABLE':
 			{
 				// The editor reporting this may be in a background window, so the flag follows that
@@ -1660,6 +1676,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'MUST_UPGRADE_APP':
 			draft.mustUpgradeAppMessage = action.message;
+			draft.mustUpgradeAppMinVersion = action.appMinVersion;
 			break;
 
 		case 'MUST_AUTHENTICATE':

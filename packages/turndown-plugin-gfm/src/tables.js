@@ -29,8 +29,11 @@ function getColumnAlignment(table, columnIndex) {
 
   var align = '';
 
-  for (var i = 0; i < table.rows.length; ++i) {
-    var row = table.rows[i];
+  // Read `rows` once: under domino each access re-walks the whole table, which made converting large tables
+  // quadratic: https://github.com/laurent22/joplin/issues/16894
+  var rows = table.rows;
+  for (var i = 0; i < rows.length; ++i) {
+    var row = rows[i];
     if (columnIndex < row.childNodes.length) {
       var cellAlignment = getAlignment(row.childNodes[columnIndex]);
       ++votes[cellAlignment];
@@ -371,8 +374,9 @@ function handleColSpan(content, node, emptyChar) {
 
 function tableColCount(node) {
   let maxColCount = 0;
-  for (let i = 0; i < node.rows.length; i++) {
-    const row = node.rows[i]
+  const rows = node.rows;
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i]
     const colCount = row.childNodes.length
     if (colCount > maxColCount) maxColCount = colCount
   }
