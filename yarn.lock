@@ -12627,7 +12627,7 @@ __metadata:
     fs-extra: "npm:11.3.6"
     glob: "npm:11.1.0"
     gulp: "npm:5.0.1"
-    highlight.js: "npm:11.11.1"
+    highlight.js: "npm:11.11.2"
     immer: "npm:9.0.21"
     is-apple-silicon: "npm:1.1.2"
     jest: "npm:29.7.0"
@@ -13151,7 +13151,7 @@ __metadata:
     abcjs: "npm:6.6.4"
     font-awesome-filetypes: "npm:2.1.0"
     fs-extra: "npm:11.3.6"
-    highlight.js: "npm:11.11.1"
+    highlight.js: "npm:11.11.2"
     html-entities: "npm:1.4.0"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
@@ -35432,10 +35432,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"highlight.js@npm:11.11.1":
-  version: 11.11.1
-  resolution: "highlight.js@npm:11.11.1"
-  checksum: 10/205272f12f2c8ab1760452a75c58b043b11129cf3a5d2a9c0c90d43993580d0f5c385a73a4b8aba197eef20c0ec37d64000e6b35c4ed5991324f4c2dc78f4e43
+"highlight.js@npm:11.11.2":
+  version: 11.11.2
+  resolution: "highlight.js@npm:11.11.2"
+  checksum: 10/613b12a6a47994e3144ba54eea7d24438a9056bdb996ad81b6c7436bf1a6a4435db007c86f6786673823578e6fb8ad054da4783f269784165da81f902332e047
   languageName: node
   linkType: hard
 
