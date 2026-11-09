@@ -163,6 +163,7 @@ export interface NoteBodyEditorProps {
 	conflictReloadCount?: number;
 	conflictIsInView?: boolean;
 	onConflictInstallFailed?: (failed: boolean)=> void;
+	onConflictMergeLoaded?: (remoteUpdatedTime: number)=> void;
 }
 
 export interface NoteBodyEditorPropsAndRef extends NoteBodyEditorProps {

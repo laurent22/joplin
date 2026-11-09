@@ -21,6 +21,7 @@ interface Props {
 interface LoadedDocument {
 	noteId: string;
 	document: ConflictDocument;
+	remoteUpdatedTime: number;
 }
 
 const useConflictResolution = ({ noteId, inView, contentMarkupLanguage, editorRef, reloadCount }: Props) => {
@@ -58,7 +59,7 @@ const useConflictResolution = ({ noteId, inView, contentMarkupLanguage, editorRe
 					return;
 				}
 
-				setLoaded({ noteId, document: buildConflictDocument(data.sections) });
+				setLoaded({ noteId, document: buildConflictDocument(data.sections), remoteUpdatedTime: data.remoteUpdatedTime });
 			} catch (error) {
 				logger.warn('Could not load the conflict data for note', noteId, error);
 				if (!cancelled) setLoaded(null);
@@ -131,6 +132,7 @@ const useConflictResolution = ({ noteId, inView, contentMarkupLanguage, editorRe
 
 	return {
 		conflictContent: conflictDocument ? conflictDocument.text : null,
+		conflictRemoteUpdatedTime: conflictDocument ? loaded.remoteUpdatedTime : 0,
 		conflictInstallFailed: installFailedFor === noteId,
 	};
 };

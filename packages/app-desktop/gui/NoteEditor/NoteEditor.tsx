@@ -104,6 +104,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 	const conflictFinishingRef = useRef(false);
 	const [conflictReloadCount, setConflictReloadCount] = useState(0);
 	const [conflictInstallFailed, setConflictInstallFailed] = useState(false);
+	const [conflictMergeUpdatedTime, setConflictMergeUpdatedTime] = useState(0);
 
 	// Should be constant and unique to this instance of the editor.
 	const editorId = useMemo(() => {
@@ -133,7 +134,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 	}, []);
 
 	const effectiveNoteId = useEffectiveNoteId(props);
-	const { conflictTitle, resolvedTitle, setResolvedTitle, hasTitleConflict, isConflictNote: noteHasConflict, conflictChecked, remoteUpdatedTime, originalIsStale, staleReason, reloadConflict } = useConflictTitle(effectiveNoteId);
+	const { conflictTitle, resolvedTitle, setResolvedTitle, hasTitleConflict, isConflictNote: noteHasConflict, conflictChecked, remoteUpdatedTime, originalIsStale, staleReason, reloadConflict } = useConflictTitle(effectiveNoteId, conflictMergeUpdatedTime);
 
 	// The resolution UI needs the Markdown editor, so it replaces plugin editors and whiteboards
 	const conflictRestrictsEditor = props.conflictIsInView && (!conflictChecked || noteHasConflict);
@@ -731,6 +732,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		conflictReloadCount,
 		conflictIsInView: isConflictNote,
 		onConflictInstallFailed: setConflictInstallFailed,
+		onConflictMergeLoaded: setConflictMergeUpdatedTime,
 	};
 
 	let editor = null;

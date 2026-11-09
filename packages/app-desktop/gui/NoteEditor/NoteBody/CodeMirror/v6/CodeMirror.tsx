@@ -80,7 +80,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 	usePluginServiceRegistration(ref);
 
-	const { conflictContent, conflictInstallFailed } = useConflictResolution({
+	const { conflictContent, conflictRemoteUpdatedTime, conflictInstallFailed } = useConflictResolution({
 		noteId: props.noteId,
 		inView: props.conflictIsInView,
 		contentMarkupLanguage: props.contentMarkupLanguage,
@@ -95,6 +95,11 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	useEffect(() => {
 		onConflictInstallFailed?.(conflictInstallFailed);
 	}, [conflictInstallFailed, onConflictInstallFailed]);
+
+	const onConflictMergeLoaded = props.onConflictMergeLoaded;
+	useEffect(() => {
+		onConflictMergeLoaded?.(conflictRemoteUpdatedTime);
+	}, [conflictRemoteUpdatedTime, onConflictMergeLoaded]);
 
 	const codeMirror_change = useCallback((newBody: string) => {
 		// A half-resolved merge must not be saved, so nothing is until Finish

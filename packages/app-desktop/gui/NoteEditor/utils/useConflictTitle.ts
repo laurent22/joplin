@@ -20,7 +20,7 @@ export enum ConflictStaleReason {
 	Trashed = 'trashed',
 }
 
-const useConflictTitle = (noteId: string) => {
+const useConflictTitle = (noteId: string, mergeUpdatedTime = 0) => {
 	const [titles, setTitles] = useState<ConflictTitles|null>(null);
 	const [reloadCount, setReloadCount] = useState(0);
 	const [remoteUpdatedTime, setRemoteUpdatedTime] = useState(0);
@@ -30,7 +30,9 @@ const useConflictTitle = (noteId: string) => {
 	const [originalIsStale, setOriginalIsStale] = useState(false);
 	const [staleReason, setStaleReason] = useState(ConflictStaleReason.Changed);
 	const [originalId, setOriginalId] = useState<string|null>(null);
-	const remoteUpdatedTimeRef = useRef(0);
+	const oldestUpdatedTime = mergeUpdatedTime ? Math.min(mergeUpdatedTime, remoteUpdatedTime) : remoteUpdatedTime;
+	const oldestUpdatedTimeRef = useRef(oldestUpdatedTime);
+	oldestUpdatedTimeRef.current = oldestUpdatedTime;
 
 	const loaded = loadedNoteId === noteId;
 	const active = loaded ? titles : null;
@@ -59,7 +61,6 @@ const useConflictTitle = (noteId: string) => {
 
 				setIsConflict(data.status === ConflictDataStatus.Ok);
 				setRemoteUpdatedTime(data.remoteUpdatedTime);
-				remoteUpdatedTimeRef.current = data.remoteUpdatedTime;
 
 				if (data.status !== ConflictDataStatus.Ok || !data.titleConflict) {
 					setTitles(null);
@@ -101,10 +102,8 @@ const useConflictTitle = (noteId: string) => {
 				return;
 			}
 
-			if (original.updated_time > remoteUpdatedTimeRef.current) {
-				setStaleReason(ConflictStaleReason.Changed);
-				setOriginalIsStale(true);
-			}
+			setStaleReason(ConflictStaleReason.Changed);
+			setOriginalIsStale(original.updated_time > oldestUpdatedTimeRef.current);
 		} catch (error) {
 			logger.warn('Could not check whether the original note changed', originalId, error);
 		}
@@ -123,11 +122,12 @@ const useConflictTitle = (noteId: string) => {
 
 		eventManager.on(EventName.ItemChange, onItemChange);
 		eventManager.on(EventName.SyncComplete, onSyncComplete);
+		void checkOriginal();
 		return () => {
 			eventManager.off(EventName.ItemChange, onItemChange);
 			eventManager.off(EventName.SyncComplete, onSyncComplete);
 		};
-	}, [loaded, isConflict, originalId, checkOriginal]);
+	}, [loaded, isConflict, originalId, checkOriginal, oldestUpdatedTime]);
 
 	return {
 		conflictTitle: active ? active.conflictTitle : null,
@@ -136,7 +136,7 @@ const useConflictTitle = (noteId: string) => {
 		hasTitleConflict: !!active,
 		isConflictNote: loaded && isConflict,
 		conflictChecked: loaded,
-		remoteUpdatedTime,
+		remoteUpdatedTime: oldestUpdatedTime,
 		originalIsStale: loaded && isConflict && originalIsStale,
 		staleReason,
 		reloadConflict: () => setReloadCount(count => count + 1),
