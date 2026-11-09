@@ -25,8 +25,10 @@ describe('joplinOAuthUtils', () => {
 		expect(Setting.value(`sync.${syncTargetId}.pendingAuthData`)).toEqual({});
 	});
 
-	it('should complete pending authentication for a login flow that didn\'t update sync.target', async () => {
-		const syncTargetId = SyncTargetRegistry.nameToId('joplinServer');
+	it.each([
+		'joplinServer', 'joplinCloud',
+	])('should complete pending authentication for a login flow that didn\'t update sync.target (target: %s)', async (target) => {
+		const syncTargetId = SyncTargetRegistry.nameToId(target);
 		Setting.setValue(`sync.${syncTargetId}.path`, 'http://localhost:1235/');
 		Setting.setValue(`sync.${syncTargetId}.pendingAuthData`, {
 			path: 'http://localhost:1235/',
