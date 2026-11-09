@@ -83,7 +83,7 @@ export default abstract class SyncTargetJoplinServerBase extends BaseSyncTarget 
 			if (error.code === 403) {
 				return false;
 			}
-			this.logger().error('Joplin Server: Failed to check authentication state', error);
+			this.logger().warn('Joplin Server: Failed to check authentication state', error);
 
 			// For consistency with other sync targets:
 			return true;
