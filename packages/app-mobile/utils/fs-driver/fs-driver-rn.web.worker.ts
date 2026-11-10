@@ -19,7 +19,7 @@ declare global {
 	interface FileSystemSyncAccessHandle {
 		close(): void;
 		truncate(to: number): void;
-		write(buffer: ArrayBuffer|ArrayBufferView, options?: { at: number }): void;
+		write(buffer: ArrayBuffer|ArrayBufferView, options?: { at: number }): number;
 		read(buffer: ArrayBuffer|ArrayBufferView, options?: { at: number }): number;
 		getSize(): number;
 		flush(): void;
@@ -349,7 +349,7 @@ export class WorkerApi {
 			const dirHandle = await this.pathToDirectoryHandle_(dirname(path));
 
 			if (dirHandle) {
-				await dirHandle.removeEntry(basename(path), { recursive });
+				await dirHandle.removeEntry(removeReservedWords(basename(path)), { recursive });
 			} else {
 				console.warn(`remove: ENOENT: Parent directory of path ${JSON.stringify(path)} does not exist.`);
 			}
@@ -411,7 +411,30 @@ export class WorkerApi {
 		if (resolve('/', from) === resolve('/', to)) return;
 		const fromFile = await this.fileAtPath(from);
 		const toHandle = await this.pathToFileHandle_(to, true);
-		await fromFile.stream().pipeTo(await toHandle.createWritable());
+		if (typeof toHandle.createWritable === 'function') {
+			await fromFile.stream().pipeTo(await toHandle.createWritable());
+		} else {
+			// Earlier Safari versions support sync access handles but not createWritable.
+			const writer = await toHandle.createSyncAccessHandle();
+			try {
+				writer.truncate(0);
+				let at = 0;
+				await fromFile.stream().pipeTo(new WritableStream({
+					write(chunk) {
+						let chunkOffset = 0;
+						while (chunkOffset < chunk.byteLength) {
+							const written = writer.write(chunk.subarray(chunkOffset), { at });
+							if (written <= 0) throw new Error('Failed to write file while moving it.');
+							chunkOffset += written;
+							at += written;
+						}
+					},
+				}));
+				writer.flush();
+			} finally {
+				writer.close();
+			}
+		}
 		await this.unlink(from);
 	}
 
