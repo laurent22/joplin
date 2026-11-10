@@ -349,7 +349,7 @@ export class WorkerApi {
 			const dirHandle = await this.pathToDirectoryHandle_(dirname(path));
 
 			if (dirHandle) {
-				await dirHandle.removeEntry(basename(path), { recursive });
+				await dirHandle.removeEntry(removeReservedWords(basename(path)), { recursive });
 			} else {
 				console.warn(`remove: ENOENT: Parent directory of path ${JSON.stringify(path)} does not exist.`);
 			}
