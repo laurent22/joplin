@@ -1,6 +1,6 @@
 import { CipherAlgorithm, CryptoBuffer, Digest, MasterKeyEntity } from './types';
 import Logger from '@joplin/utils/Logger';
-import shim, { MobilePlatform } from '../../shim';
+import shim from '../../shim';
 import Setting from '../../models/Setting';
 import MasterKey from '../../models/MasterKey';
 import BaseItem from '../../models/BaseItem';
@@ -14,8 +14,7 @@ const perfLogger = PerformanceLogger.create();
 
 const emptyUint8Array = new Uint8Array(0);
 const fileFrameWaitInterval = 8;
-// The web file driver opens a handle for each append. Write several records at once.
-const webFileWriteBufferSize = 1024 * 1024;
+const encryptedFileWriteBufferSize = 1024 * 1024;
 
 function hexPad(s: string, length: number) {
 	return padLeft(s, length, '0');
@@ -606,8 +605,8 @@ export default class EncryptionService {
 		}
 	}
 
-	private frameWaitInterval_(method: EncryptionMethod, isFile: boolean) {
-		return isFile && method === EncryptionMethod.FileV1 && shim.mobilePlatform() !== MobilePlatform.None ? fileFrameWaitInterval : 1;
+	private frameWaitInterval_(isFile: boolean) {
+		return isFile ? fileFrameWaitInterval : 1;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- source/destination are duck-typed readers/writers (stringReader_/stringWriter_/fileReader_/fileWriter_) with a small structural API; passing the union here would require touching all four call sites
@@ -619,11 +618,8 @@ export default class EncryptionService {
 		const masterKeyPlainText = await this.masterKeyPlainText_(masterKeyId, options);
 		const chunkSize = this.chunkSize(method);
 		const crypto = shim.crypto;
-		const frameWaitInterval = this.frameWaitInterval_(method, isFile);
-		const isWebFileV1 = isFile && method === EncryptionMethod.FileV1 && shim.mobilePlatform() === MobilePlatform.Web;
+		const frameWaitInterval = this.frameWaitInterval_(isFile);
 		let blockIndex = 0;
-		const pendingBlocks: string[] = [];
-		let pendingBlockSize = 0;
 
 		const header = {
 			encryptionMethod: method,
@@ -641,8 +637,8 @@ export default class EncryptionService {
 			doneSize += chunkSize;
 			if (options.onProgress) options.onProgress({ doneSize: doneSize });
 
-			// Each file block already awaits I/O and crypto. Request a frame roughly
-			// every MiB to keep the UI responsive without waiting after every block.
+			// Each file block already awaits I/O and crypto. Request a frame every
+			// eight blocks to keep the UI responsive without waiting after every block.
 			if (blockIndex++ % frameWaitInterval === 0) {
 				await shim.waitForFrame();
 			}
@@ -651,19 +647,8 @@ export default class EncryptionService {
 			await crypto.increaseNonce(this.encryptionNonce_);
 
 			const output = padLeft(encrypted.length.toString(16), 6, '0') + encrypted;
-			if (isWebFileV1) {
-				pendingBlocks.push(output);
-				pendingBlockSize += output.length;
-				if (pendingBlockSize >= webFileWriteBufferSize) {
-					await destination.append(pendingBlocks.join(''));
-					pendingBlocks.length = 0;
-					pendingBlockSize = 0;
-				}
-			} else {
-				await destination.append(output);
-			}
+			await destination.append(output);
 		}
-		if (pendingBlocks.length) await destination.append(pendingBlocks.join(''));
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See encryptAbstract_ above
@@ -672,7 +657,7 @@ export default class EncryptionService {
 
 		const header = await this.decodeHeaderSource_(source, options.isNoteLock) as { encryptionMethod: number; masterKeyId: string };
 		const masterKeyPlainText = await this.masterKeyPlainText_(header.masterKeyId, options);
-		const frameWaitInterval = this.frameWaitInterval_(header.encryptionMethod, isFile);
+		const frameWaitInterval = this.frameWaitInterval_(isFile);
 		let blockIndex = 0;
 
 		let doneSize = 0;
@@ -747,12 +732,32 @@ export default class EncryptionService {
 		return reader;
 	}
 
-	private async fileWriter_(path: string, encoding: string) {
+	private async fileWriter_(path: string, encoding: string, bufferSize = 0) {
+		const pendingBlocks: string[] = [];
+		let pendingBlockSize = 0;
+		const flush = async () => {
+			if (!pendingBlockSize) return;
+			const data = pendingBlocks.join('');
+			pendingBlocks.length = 0;
+			pendingBlockSize = 0;
+			await this.fsDriver().appendFile(path, data, encoding);
+		};
+
 		return {
 			append: async (data: string) => {
-				return this.fsDriver().appendFile(path, data, encoding);
+				if (!bufferSize) return this.fsDriver().appendFile(path, data, encoding);
+				pendingBlocks.push(data);
+				pendingBlockSize += data.length;
+				if (pendingBlockSize >= bufferSize) await flush();
 			},
-			close: function() {},
+			close: async (flushPending = true) => {
+				if (flushPending) {
+					await flush();
+				} else {
+					pendingBlocks.length = 0;
+					pendingBlockSize = 0;
+				}
+			},
 		};
 	}
 
@@ -776,27 +781,35 @@ export default class EncryptionService {
 		let source = await this.fileReader_(srcPath, 'base64');
 		// All file encryption methods output ASCII text, so UTF-8 writes the same bytes
 		// while using the direct UTF-8 file path on native and TextEncoder on web.
-		let destination = await this.fileWriter_(destPath, 'utf8');
+		let destination = await this.fileWriter_(destPath, 'utf8', encryptedFileWriteBufferSize);
 
-		const cleanUp = async () => {
-			if (source) await source.close();
-			if (destination) await destination.close();
-			// eslint-disable-next-line require-atomic-updates
-			source = null;
-			// eslint-disable-next-line require-atomic-updates
-			destination = null;
+		const cleanUp = async (flushPending = true) => {
+			if (destination) {
+				const writer = destination;
+				// eslint-disable-next-line require-atomic-updates
+				destination = null;
+				await writer.close(flushPending);
+			}
+			if (source) {
+				const reader = source;
+				// eslint-disable-next-line require-atomic-updates
+				source = null;
+				await reader.close();
+			}
 		};
 
 		try {
 			await this.fsDriver().unlink(destPath);
 			await this.encryptAbstract_(source, destination, options, true);
-		} catch (error) {
 			await cleanUp();
-			await this.fsDriver().unlink(destPath);
+		} catch (error) {
+			try {
+				await cleanUp(false);
+			} finally {
+				await this.fsDriver().unlink(destPath);
+			}
 			throw error;
 		}
-
-		await cleanUp();
 	}
 
 	public async decryptFile(srcPath: string, destPath: string, options: EncryptOptions = null) {
