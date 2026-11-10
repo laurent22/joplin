@@ -373,14 +373,14 @@ describe('EncryptionService', () => {
 		['desktop', MobilePlatform.None],
 		['web', MobilePlatform.Web],
 		['android', MobilePlatform.Android],
-	])('should buffer FileV1 encrypted writes on %s', async (_platformName, platform) => {
+	])('should buffer encrypted file writes on %s', async (_platformName, platform) => {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
 		await service.loadMasterKey(masterKey, '123456', true);
 
-		const sourcePath = `${Setting.value('tempDir')}/file-v1-source.bin`;
-		const encryptedPath = `${Setting.value('tempDir')}/file-v1-encrypted`;
-		const decryptedPath = `${Setting.value('tempDir')}/file-v1-decrypted.bin`;
+		const sourcePath = `${Setting.value('tempDir')}/batched-file-source.bin`;
+		const encryptedPath = `${Setting.value('tempDir')}/batched-file-encrypted`;
+		const decryptedPath = `${Setting.value('tempDir')}/batched-file-decrypted.bin`;
 		await service.fsDriver().writeFile(sourcePath, Buffer.alloc(1024 * 1024 + 128 * 1024, 0x41).toString('base64'), 'base64');
 
 		const fsDriver = service.fsDriver();
