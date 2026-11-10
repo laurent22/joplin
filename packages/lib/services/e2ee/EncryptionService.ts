@@ -639,6 +639,7 @@ export default class EncryptionService {
 
 			// Each file block already awaits I/O and crypto. Request a frame every
 			// eight blocks to keep the UI responsive without waiting after every block.
+			// https://corbt.com/posts/2015/12/22/breaking-up-heavy-processing-in-react-native.html
 			if (blockIndex++ % frameWaitInterval === 0) {
 				await shim.waitForFrame();
 			}
