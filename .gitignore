@@ -1068,6 +1068,7 @@ packages/app-mobile/utils/fs-driver/constants.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.test.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.web.js
+packages/app-mobile/utils/fs-driver/fs-driver-rn.web.worker.test.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.web.worker.js
 packages/app-mobile/utils/fs-driver/runOnDeviceTests.js
 packages/app-mobile/utils/fs-driver/tarCreate.js
