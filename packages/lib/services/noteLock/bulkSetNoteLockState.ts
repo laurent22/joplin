@@ -21,9 +21,11 @@ export const folderTreeNoteIds = async (folderId: string) => {
 	return noteIds;
 };
 
-// A migration re-encrypts the notes locked with the local key, so a note locked with it once the migration is needed would be left behind.
+// A migration re-encrypts the notes locked with the local key, so a note locked with it once the migration is needed, or while
+// one runs (a re-encryption needs no key conflict), would be left behind.
 const throwIfMigrationNeeded = () => {
 	if (noteLockKeyConflict()) throw new Error(_('The note lock cannot be changed while your locked notes need to be migrated to the synced key.'));
+	if (NoteLockSession.instance().isMigrating()) throw new Error(_('The note lock cannot be changed while a migration is in progress.'));
 };
 
 // Unlike the single-note flow in setNoteLockState, this saves the notes itself, since most of them are not

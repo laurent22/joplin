@@ -248,6 +248,20 @@ describe('bulkSetNoteLockState', () => {
 		expect((await Note.load(note2.id)).is_locked).toBe(1);
 	});
 
+	it('should refuse to start while a migration is running, before asking for the password', async () => {
+		await NoteLockKey.instance().create('123456');
+		const note = await Note.save({ title: 'one', body: 'secret' });
+		NoteLockSession.instance().setMigrating(true);
+		const promptPassword = jest.fn();
+		const showErrorDialog = jest.spyOn(shim, 'showErrorDialog').mockResolvedValue(undefined);
+
+		await promptAndBulkSetNoteLockState([note.id], true, { promptPassword, goToNoteLockSetup: jest.fn() }, jest.fn());
+
+		expect(promptPassword).not.toHaveBeenCalled();
+		expect(showErrorDialog).toHaveBeenCalledWith('The note lock cannot be changed while a migration is in progress.');
+		expect((await Note.load(note.id)).is_locked).toBe(0);
+	});
+
 	it('should refuse to start while a migration is needed, before asking for the password', async () => {
 		await NoteLockKey.instance().create('123456');
 		const note = await Note.save({ title: 'one', body: 'secret' });
