@@ -2023,6 +2023,8 @@ packages/lib/services/whiteboard/generateId.js
 packages/lib/services/whiteboard/jsoncanvas.js
 packages/lib/services/whiteboard/parse.js
 packages/lib/services/whiteboard/presetColors.js
+packages/lib/services/whiteboard/renderToHtml.test.js
+packages/lib/services/whiteboard/renderToHtml.js
 packages/lib/services/whiteboard/resolveRef.js
 packages/lib/services/whiteboard/serialize.js
 packages/lib/services/whiteboard/whiteboard.test.js

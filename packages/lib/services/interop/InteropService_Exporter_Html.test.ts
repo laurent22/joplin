@@ -1,6 +1,6 @@
 import InteropService from '../../services/interop/InteropService';
 import { PluginStates } from '../../services/plugins/reducer';
-import { setupDatabaseAndSynchronizer, switchClient, exportDir } from '../../testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, exportDir, supportDir } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import * as fs from 'fs-extra';
@@ -9,6 +9,8 @@ import { ContentScriptType } from '../../services/plugins/api/types';
 import { ExportModuleOutputFormat, FileSystemItem } from './types';
 import { readFile } from 'fs/promises';
 import shim from '../../shim';
+import { Canvas } from '../whiteboard/jsoncanvas';
+import { serializeWhiteboard } from '../whiteboard/serialize';
 
 async function recreateExportDir() {
 	const dir = exportDir();
@@ -185,6 +187,40 @@ describe('interop/InteropService_Exporter_Html', () => {
 
 		const content = await readFile(filePath, 'utf-8');
 		expect(content).not.toContain('data:application/zip');
+	}));
+
+	test('should export a whiteboard as a rendered board instead of its source', (async () => {
+		const service = InteropService.instance();
+		const folder = await Folder.save({ title: 'folder1' });
+		const linkedNote = await Note.save({ title: 'Linked note', body: 'Linked *body*', parent_id: folder.id });
+		const resource = await shim.createResourceFromPath(`${supportDir}/photo.jpg`);
+		const canvas: Canvas = {
+			nodes: [
+				{ id: 'a', type: 'text', x: 0, y: 0, width: 200, height: 100, text: '**Card text**' },
+				{ id: 'b', type: 'file', x: 300, y: 0, width: 200, height: 100, file: `:/${linkedNote.id}` },
+				{ id: 'c', type: 'file', x: 0, y: 200, width: 200, height: 100, file: `:/${resource.id}` },
+			],
+			edges: [{ id: 'e', fromNode: 'a', fromSide: 'right', toNode: 'b', toSide: 'left', label: 'leads to' }],
+		};
+		const board = await Note.save({ title: 'Board', parent_id: folder.id, body: serializeWhiteboard('Intro text\n\n', canvas) });
+
+		const filePath = `${exportDir()}/test.html`;
+		await service.export({
+			path: filePath,
+			format: ExportModuleOutputFormat.Html,
+			sourceNoteIds: [board.id],
+			packIntoSingleFile: false,
+		});
+
+		const content = await readFile(filePath, 'utf-8');
+		expect(content).toContain('<p>Intro text</p>');
+		expect(content).toContain('class="joplin-whiteboard"');
+		expect(content).toContain('<strong>Card text</strong>');
+		expect(content).toContain('Linked note');
+		expect(content).toContain('Linked <em>body</em>');
+		expect(content).toContain(`<img class="image" src="_resources/${resource.id}.jpg"`);
+		expect(content).toContain('>leads to</text>');
+		expect(content).not.toContain('jsoncanvas');
 	}));
 
 });

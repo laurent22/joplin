@@ -1,5 +1,6 @@
 import InteropService_Exporter_Base from './InteropService_Exporter_Base';
-import BaseModel from '../../BaseModel';
+import BaseModel, { ModelType } from '../../BaseModel';
+import BaseItem from '../../models/BaseItem';
 import shim from '../../shim';
 import markupLanguageUtils from '../../markupLanguageUtils';
 import Folder from '../../models/Folder';
@@ -20,11 +21,28 @@ import { LinkRenderingType } from '@joplin/renderer/MdToHtml';
 import Logger from '@joplin/utils/Logger';
 import { parseRenderedNoteMetadata } from './utils';
 import ResourceLocalState from '../../models/ResourceLocalState';
-import { getGlobalSettings, ResourceInfos } from '@joplin/renderer/types';
+import { getGlobalSettings, RenderOptions, RenderResultPluginAsset, ResourceInfos } from '@joplin/renderer/types';
 import { fromFilename } from '../../mime-utils';
+import { _ } from '../../locale';
+import { hasWhiteboardFence, parseWhiteboard } from '../whiteboard/parse';
+import { FileCanvasNode } from '../whiteboard/jsoncanvas';
+import { isInternalRef, resolveFileRef } from '../whiteboard/resolveRef';
+import renderWhiteboardToHtml, { FileCardContent } from '../whiteboard/renderToHtml';
+import isNoteLockEnabled from '../noteLock/isNoteLockEnabled';
+import NoteLockSession from '../noteLock/NoteLockSession';
 const { isImageMimeType } = require('../../resourceUtils');
 
 const logger = Logger.create('InteropService_Exporter_Html');
+
+const uniqueAssets = (assets: RenderResultPluginAsset[]) => {
+	const seen = new Set<string>();
+	return assets.filter(asset => {
+		const key = `${asset.name}:${asset.path}`;
+		if (seen.has(key)) return false;
+		seen.add(key);
+		return true;
+	});
+};
 
 export default class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 
@@ -101,6 +119,86 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 		return newBody;
 	}
 
+	// Whiteboard notes are rendered as a picture of the board instead of their JSONCanvas source. The board is
+	// rendered separately and swapped in for a placeholder, so that the text around the fence is rendered as usual.
+	private async renderWhiteboard_(originalBody: string, bodyMd: string, renderOptions: RenderOptions) {
+		if (!hasWhiteboardFence(originalBody)) return null;
+		const original = parseWhiteboard(originalBody);
+		// Same canvas, but with the links to exported resources replaced by their path in the export
+		const processed = parseWhiteboard(bodyMd);
+		if (!original.hasCanvas || !processed.hasCanvas) return null;
+
+		const pluginAssets: RenderResultPluginAsset[] = [];
+		const renderMarkdown = async (markdown: string) => {
+			const result = await this.markupToHtml_.render(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, markdown, this.style_, { ...renderOptions, bodyOnly: true });
+			pluginAssets.push(...result.pluginAssets);
+			return result.html;
+		};
+
+		const exportedPaths = new Map<string, string>();
+		for (const [index, node] of original.canvas.nodes.entries()) {
+			const processedNode = processed.canvas.nodes[index];
+			if (node.type === 'file' && processedNode?.type === 'file' && processedNode.file !== node.file) {
+				exportedPaths.set(node.id, processedNode.file);
+			}
+		}
+
+		const renderFileCard = async (node: FileCanvasNode): Promise<FileCardContent> => {
+			const exportedPath = exportedPaths.get(node.id);
+			if (!isInternalRef(node.file)) {
+				return isImageMimeType(fromFilename(node.file)) ? { imageSrc: node.file, header: node.file } : { header: _('File'), bodyHtml: escapeHtml(node.file) };
+			}
+
+			const id = resolveFileRef(node.file).id;
+			const item = await BaseItem.loadItemById(id);
+			if (!item || item.deleted_time) return { header: _('Linked item'), bodyHtml: escapeHtml(_('This linked item has been deleted.')), isNotice: true };
+
+			if (item.type_ === ModelType.Resource) {
+				const resource = item as ResourceEntity;
+				if (exportedPath && isImageMimeType(resource.mime)) return { imageSrc: exportedPath, header: resource.title };
+				return { header: _('File'), bodyHtml: escapeHtml(resource.title || node.file) };
+			}
+
+			if (item.type_ !== ModelType.Note) return { header: _('Linked item'), bodyHtml: escapeHtml(node.file) };
+
+			let note = item as NoteEntity;
+			if (isNoteLockEnabled()) {
+				const lockedMessage = note.is_locked && !NoteLockSession.instance().isUnlocked()
+					? _('This linked item cannot be displayed because the note is locked. Unlock the session to view it')
+					: null;
+				if (lockedMessage) return { header: note.title, bodyHtml: escapeHtml(lockedMessage), isNotice: true };
+				try {
+					note = await Note.load(id, { useNoteLock: true });
+				} catch (error) {
+					logger.warn(`Could not decrypt linked note ${id}:`, error);
+					return { header: note.title, bodyHtml: escapeHtml(_('This linked item cannot be displayed because the note is locked and could not be unlocked')), isNotice: true };
+				}
+			}
+			return { header: note.title || _('Untitled'), bodyHtml: note.body ? await renderMarkdown(note.body) : '' };
+		};
+
+		const theme = this.style_;
+		const html = await renderWhiteboardToHtml(original.canvas, {
+			theme: {
+				appearance: theme.appearance,
+				color: theme.color,
+				colorFaded: theme.colorFaded,
+				backgroundColor: theme.backgroundColor,
+				dividerColor: theme.dividerColor,
+			},
+			renderMarkdown,
+			renderFileCard,
+		});
+
+		const placeholder = `JoplinWhiteboard${Date.now()}${Math.floor(Math.random() * 1e9)}`;
+		return {
+			markdown: `${processed.prefix}\n\n${placeholder}\n\n${processed.suffix}`,
+			placeholder,
+			html,
+			pluginAssets,
+		};
+	}
+
 	public async processItem(_itemType: number, item: NoteEntity) {
 		if ([BaseModel.TYPE_NOTE, BaseModel.TYPE_FOLDER].indexOf(item.type_) < 0) return;
 
@@ -126,7 +224,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 			}
 
 			const bodyMd = await this.processNoteResources_(item);
-			const result = await this.markupToHtml_.render(item.markup_language, bodyMd, this.style_, {
+			const renderOptions: RenderOptions = {
 				resources: this.resources_,
 				settingValue: getPluginSettingValue,
 
@@ -137,7 +235,13 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 					},
 				},
 				globalSettings: getGlobalSettings(Setting),
-			});
+			};
+			const whiteboard = item.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN ? await this.renderWhiteboard_(item.body, bodyMd, renderOptions) : null;
+			const result = await this.markupToHtml_.render(item.markup_language, whiteboard ? whiteboard.markdown : bodyMd, this.style_, renderOptions);
+			if (whiteboard) {
+				result.html = result.html.replace(new RegExp(`<p[^>]*>${whiteboard.placeholder}</p>|${whiteboard.placeholder}`), () => whiteboard.html);
+				result.pluginAssets = uniqueAssets(result.pluginAssets.concat(whiteboard.pluginAssets));
+			}
 
 			const noteContent = [];
 			const metadata = parseRenderedNoteMetadata(result.html ? result.html : '');
