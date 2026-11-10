@@ -53,6 +53,19 @@ describe('fs-driver-rn.web.worker', () => {
 		}) as WorkerApiType;
 	};
 
+	const makeFile = (content: string) => ({
+		kind: 'file',
+		getFile: async () => ({ size: content.length, lastModified: 0, text: async () => content }),
+	}) as unknown as FileSystemFileHandle;
+
+	const makeDirectory = (children: Map<string, FileSystemFileHandle|FileSystemDirectoryHandle>) => ({
+		kind: 'directory',
+		entries: async function* () { yield* children; },
+		getDirectoryHandle: async (name: string) => children.get(name),
+		getFileHandle: async (name: string) => children.get(name),
+		removeEntry: jest.fn(async (name: string) => { children.delete(name); }),
+	}) as unknown as FileSystemDirectoryHandle & { removeEntry: jest.Mock };
+
 	const makeMoveWorker = (maxBytesPerWrite: number) => {
 		const sourceBytes = new Uint8Array([1, 2, 3, 4, 5]);
 		const destinationBytes = new Uint8Array(sourceBytes.length);
@@ -119,5 +132,38 @@ describe('fs-driver-rn.web.worker', () => {
 		await expect(worker.move('/cache/note.html.tmp', '/cache/note.html')).rejects.toThrow();
 		expect(cache.removeEntry).not.toHaveBeenCalled();
 		expect(files.has('note.html._tmp')).toBe(true);
+	});
+
+	it('preserves distinct names in mounted directories', async () => {
+		const files = new Map<string, FileSystemFileHandle|FileSystemDirectoryHandle>([
+			['report.tmp', makeFile('original')],
+			['report._tmp', makeFile('encoded')],
+		]);
+		const external = makeDirectory(files);
+		const worker = makeWorker({} as SyncAccessHandle);
+		Object.assign(worker, { externalHandles_: new Map([['/external/mount', external]]) });
+
+		expect((await worker.readDirStats('/external/mount')).map(file => file.path)).toEqual(['report.tmp', 'report._tmp']);
+		expect(await worker.exists('/external/mount/report.tmp')).toBe(true);
+		expect(await worker.exists('/external/mount/report._tmp')).toBe(true);
+		expect(await worker.readFile('/external/mount/report.tmp')).toBe('original');
+		expect(await worker.readFile('/external/mount/report._tmp')).toBe('encoded');
+		await worker.unlink('/external/mount/report.tmp');
+		expect(external.removeEntry).toHaveBeenCalledWith('report.tmp', { recursive: false });
+		expect(await worker.exists('/external/mount/report._tmp')).toBe(true);
+		expect(files.has('report._tmp')).toBe(true);
+	});
+
+	it('keeps access to encoded app-storage names', async () => {
+		const files = new Map<string, FileSystemFileHandle|FileSystemDirectoryHandle>([['note._tmp', makeFile('cached')]]);
+		const cache = makeDirectory(files);
+		const root = makeDirectory(new Map([['cache', cache]]));
+		const worker = makeWorker({} as SyncAccessHandle);
+		Object.assign(worker, { fsRoot_: root });
+
+		expect((await worker.readDirStats('/cache')).map(file => file.path)).toEqual(['note.tmp']);
+		expect(await worker.readFile('/cache/note.tmp')).toBe('cached');
+		await worker.unlink('/cache/note.tmp');
+		expect(cache.removeEntry).toHaveBeenCalledWith('note._tmp', { recursive: false });
 	});
 });
