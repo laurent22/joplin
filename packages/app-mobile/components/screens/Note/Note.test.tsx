@@ -51,7 +51,6 @@ const mockUseVisiblePluginEditorViewIds = useVisiblePluginEditorViewIds as jest.
 jest.retryTimes(2);
 
 interface WrapperProps {
-	dialogs?: DialogControl;
 }
 
 let store: Store<AppState>;
@@ -67,9 +66,7 @@ function deferred<T>() {
 const mockNavigation = { state: { } };
 const WrappedNoteScreen: React.FC<WrapperProps> = _props => {
 	return <TestProviderStack store={store}>
-		<DialogContext.Provider value={_props.dialogs ?? null}>
-			<NoteScreen navigation={mockNavigation}/>
-		</DialogContext.Provider>
+		<NoteScreen navigation={mockNavigation}/>
 	</TestProviderStack>;
 };
 
@@ -664,7 +661,7 @@ describe('screens/Note/Note', () => {
 	it('should not tick the to-do checkbox of a locked note inside a share', async () => {
 		const noteId = await openNewNote({ title: 'Locked to-do', body: 'plain', is_todo: 1, is_locked: 1, share_id: 'share-1' });
 		const dialogs: Partial<DialogControl> = { error: jest.fn() };
-		const { unmount } = render(<WrappedNoteScreen dialogs={dialogs as DialogControl}/>);
+		const { unmount } = render(<DialogContext.Provider value={dialogs as DialogControl}><WrappedNoteScreen /></DialogContext.Provider>);
 
 		fireEvent.press(await screen.findByRole('checkbox'));
 
