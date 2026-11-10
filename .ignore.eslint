@@ -1090,6 +1090,8 @@ packages/app-mobile/utils/database-driver-react-native.web.js
 packages/app-mobile/utils/debounce.js
 packages/app-mobile/utils/focusView.js
 packages/app-mobile/utils/fs-driver/constants.js
+packages/app-mobile/utils/fs-driver/decodeAsciiChunk.test.js
+packages/app-mobile/utils/fs-driver/decodeAsciiChunk.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.test.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.web.js

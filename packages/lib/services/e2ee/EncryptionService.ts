@@ -735,16 +735,9 @@ export default class EncryptionService {
 
 	private async fileReader_(path: string, encoding: string) {
 		const handle = await this.fsDriver().open(path, 'r');
-		// Encrypted files contain ASCII text. On web, decoding its bytes with the
-		// browser API avoids Buffer's JavaScript ASCII conversion for every block.
-		const webAsciiDecoder = encoding === 'ascii' && shim.mobilePlatform() === MobilePlatform.Web ? new TextDecoder() : null;
 		const reader = {
 			handle: handle,
 			read: async (size: number) => {
-				if (webAsciiDecoder) {
-					const chunk = await this.fsDriver().readFileChunkAsBuffer(reader.handle, size);
-					return chunk ? webAsciiDecoder.decode(chunk) : null;
-				}
 				return this.fsDriver().readFileChunk(reader.handle, size, encoding);
 			},
 			close: async () => {

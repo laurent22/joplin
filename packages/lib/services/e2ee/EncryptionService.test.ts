@@ -366,15 +366,9 @@ describe('EncryptionService', () => {
 			appendSpy.mockRestore();
 			frameSpy.mockClear();
 
-			const bufferReadSpy = jest.spyOn(fsDriver, 'readFileChunkAsBuffer');
-			try {
-				await service.decryptFile(encryptedPath, decryptedPath);
-				if (platform === MobilePlatform.Web) expect(bufferReadSpy).toHaveBeenCalled();
-				expect(frameSpy).toHaveBeenCalledTimes(2);
-				expect(fileContentEqual(sourcePath, decryptedPath)).toBe(true);
-			} finally {
-				bufferReadSpy.mockRestore();
-			}
+			await service.decryptFile(encryptedPath, decryptedPath);
+			expect(frameSpy).toHaveBeenCalledTimes(2);
+			expect(fileContentEqual(sourcePath, decryptedPath)).toBe(true);
 		} finally {
 			appendSpy.mockRestore();
 			frameSpy.mockRestore();
