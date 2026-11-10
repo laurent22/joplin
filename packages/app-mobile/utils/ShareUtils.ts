@@ -14,8 +14,7 @@ const makeShareCacheDirectory = async () => {
 };
 
 export const makeIsolatedShareCacheDirectory = async () => {
-	// HTML export creates temporary resource and plugin asset folders beside the output file.
-	// A separate directory keeps them isolated from other shares and allows one-step cleanup.
+	// Keep each share's files separate so they cannot conflict and can be cleaned up independently.
 	const targetDir = `${await makeShareCacheDirectory()}/${uuid.create()}`;
 	await shim.fsDriver().mkdir(targetDir);
 	return targetDir;
