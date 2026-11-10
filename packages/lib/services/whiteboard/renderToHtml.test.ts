@@ -73,6 +73,17 @@ describe('whiteboard/renderToHtml', () => {
 		expect(html).toContain('href="https://example.com/?a=&quot;b&quot;&amp;c=&lt;d&gt;"');
 	});
 
+	test.each([
+		['https://example.com', true],
+		['mailto:someone@example.com', true],
+		['javascript:alert(1)', false],
+		['data:text/html,<script>alert(1)</script>', false],
+	])('should only make web link cards clickable (%s)', async (url, isClickable) => {
+		const html = await renderToHtml({ nodes: [{ id: 'l', type: 'link', x: 0, y: 0, width: 100, height: 50, url }], edges: [] }, options());
+		expect(html.includes('<a href=')).toBe(isClickable);
+		expect(html).not.toContain('<script>');
+	});
+
 	test('should render images and notices from file cards', async () => {
 		const html = await renderToHtml({ nodes: [{ id: 'f', type: 'file', x: 0, y: 0, width: 100, height: 50, file: ':/x' }, { id: 'n', type: 'file', x: 0, y: 100, width: 100, height: 50, file: ':/y' }], edges: [] }, options({
 			renderFileCard: async node => node.file === ':/x' ? { imageSrc: '_resources/x.png', header: 'photo' } : { header: 'Linked item', bodyHtml: 'Deleted', isNotice: true },

@@ -121,9 +121,9 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 
 	// Whiteboard notes are rendered as a picture of the board instead of their JSONCanvas source. The board is
 	// rendered separately and swapped in for a placeholder, so that the text around the fence is rendered as usual.
-	private async renderWhiteboard_(originalBody: string, bodyMd: string, renderOptions: RenderOptions) {
-		if (!hasWhiteboardFence(originalBody)) return null;
-		const original = parseWhiteboard(originalBody);
+	private async renderWhiteboard_(item: NoteEntity, bodyMd: string, renderOptions: RenderOptions) {
+		if (!hasWhiteboardFence(item.body)) return null;
+		const original = parseWhiteboard(item.body);
 		// Same canvas, but with the links to exported resources replaced by their path in the export
 		const processed = parseWhiteboard(bodyMd);
 		if (!original.hasCanvas || !processed.hasCanvas) return null;
@@ -174,11 +174,21 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 					return { header: note.title, bodyHtml: escapeHtml(_('This linked item cannot be displayed because the note is locked and could not be unlocked')), isNotice: true };
 				}
 			}
-			return { header: note.title || _('Untitled'), bodyHtml: note.body ? await renderMarkdown(note.body) : '' };
+			const body = await this.processNoteResources_({ ...item, body: note.body });
+			return { header: note.title || _('Untitled'), bodyHtml: body ? await renderMarkdown(body) : '' };
+		};
+
+		// Text cards come from the processed canvas, so that the images they embed point to the exported resources
+		const canvas = {
+			...original.canvas,
+			nodes: original.canvas.nodes.map((node, index) => {
+				const processedNode = processed.canvas.nodes[index];
+				return node.type === 'text' && processedNode?.type === 'text' ? processedNode : node;
+			}),
 		};
 
 		const theme = this.style_;
-		const html = await renderWhiteboardToHtml(original.canvas, {
+		const html = await renderWhiteboardToHtml(canvas, {
 			theme: {
 				appearance: theme.appearance,
 				color: theme.color,
@@ -236,7 +246,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 				},
 				globalSettings: getGlobalSettings(Setting),
 			};
-			const whiteboard = item.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN ? await this.renderWhiteboard_(item.body, bodyMd, renderOptions) : null;
+			const whiteboard = item.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN ? await this.renderWhiteboard_(item, bodyMd, renderOptions) : null;
 			const result = await this.markupToHtml_.render(item.markup_language, whiteboard ? whiteboard.markdown : bodyMd, this.style_, renderOptions);
 			if (whiteboard) {
 				result.html = result.html.replace(new RegExp(`<p[^>]*>${whiteboard.placeholder}</p>|${whiteboard.placeholder}`), () => whiteboard.html);

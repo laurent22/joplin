@@ -192,11 +192,11 @@ describe('interop/InteropService_Exporter_Html', () => {
 	test('should export a whiteboard as a rendered board instead of its source', (async () => {
 		const service = InteropService.instance();
 		const folder = await Folder.save({ title: 'folder1' });
-		const linkedNote = await Note.save({ title: 'Linked note', body: 'Linked *body*', parent_id: folder.id });
 		const resource = await shim.createResourceFromPath(`${supportDir}/photo.jpg`);
+		const linkedNote = await Note.save({ title: 'Linked note', body: `Linked *body* ![photo](:/${resource.id})`, parent_id: folder.id });
 		const canvas: Canvas = {
 			nodes: [
-				{ id: 'a', type: 'text', x: 0, y: 0, width: 200, height: 100, text: '**Card text**' },
+				{ id: 'a', type: 'text', x: 0, y: 0, width: 200, height: 100, text: `**Card text** ![photo](:/${resource.id})` },
 				{ id: 'b', type: 'file', x: 300, y: 0, width: 200, height: 100, file: `:/${linkedNote.id}` },
 				{ id: 'c', type: 'file', x: 0, y: 200, width: 200, height: 100, file: `:/${resource.id}` },
 			],
@@ -219,6 +219,9 @@ describe('interop/InteropService_Exporter_Html', () => {
 		expect(content).toContain('Linked note');
 		expect(content).toContain('Linked <em>body</em>');
 		expect(content).toContain(`<img class="image" src="_resources/${resource.id}.jpg"`);
+		// The image card, and the images in the text card and in the linked note
+		expect(content.split(`_resources/${resource.id}.jpg`)).toHaveLength(4);
+		expect(content).not.toContain(`:/${resource.id}`);
 		expect(content).toContain('>leads to</text>');
 		expect(content).not.toContain('jsoncanvas');
 	}));

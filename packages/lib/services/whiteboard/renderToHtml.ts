@@ -98,6 +98,9 @@ export const edgeGeometry = (edge: CanvasEdge, from: CanvasNode, to: CanvasNode)
 	};
 };
 
+// Link cards are written to the export as they are, so unlike Markdown links they are not filtered by the renderer
+const isWebUrl = (url: string) => /^(https?:\/\/|mailto:)/i.test(url.trim());
+
 const colorStyle = (node: CanvasNode, theme: WhiteboardTheme) => {
 	const stroke = resolveCanvasColor(node.color, theme.appearance, 'stroke');
 	const fill = resolveCanvasColor(node.color, theme.appearance, 'fill');
@@ -123,7 +126,8 @@ const renderCard = async (n: CanvasNode, options: RenderToHtmlOptions) => {
 		extraClass = ' -text';
 		content = `<div class="wb-md">${n.text ? await options.renderMarkdown(n.text) : ''}</div>`;
 	} else if (n.type === 'link') {
-		content = `<div class="header">${escapeHtml(_('Link'))}</div><div class="body -url"><a href="${escapeHtml(n.url)}">${escapeHtml(n.url)}</a></div>`;
+		const url = escapeHtml(n.url);
+		content = `<div class="header">${escapeHtml(_('Link'))}</div><div class="body -url">${isWebUrl(n.url) ? `<a href="${url}">${url}</a>` : url}</div>`;
 	} else if (n.type === 'file') {
 		const card = await options.renderFileCard(n);
 		if (card.imageSrc) {
