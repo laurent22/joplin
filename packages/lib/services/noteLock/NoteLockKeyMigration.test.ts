@@ -83,17 +83,25 @@ describe('NoteLockKeyMigration', () => {
 		expect(noteLockKeyConflict()).toEqual({ noteLockKey: { ...targetKey, syncMigrationId: targetSyncMigrationId } });
 	});
 
-	it('should re-encrypt the history of locked notes and count failed history apart from the notes', async () => {
+	it('should re-encrypt the history of locked notes and keep the migration open while some of it fails', async () => {
 		const note = await Note.save({ title: 'one', body: 'one', is_locked: 1 }, { useNoteLock: true });
 		const revision = await revisionService().createNoteRevision_(await Note.load(note.id), null, true);
 		const cipherText = Revision.applyTextPatch('', revision.body_diff);
 		await Revision.save({ ...revision, id: undefined, item_updated_time: revision.item_updated_time + 1, body_diff: Revision.createTextPatch('', `${cipherText.slice(0, -8)}xxxxxxxx`) });
+		const dispatch = jest.fn();
 
-		const result = await withLogLevel(LogLevel.Error, () => migrateLockedNotes(localPassword, targetPassword));
+		await withLogLevel(LogLevel.Error, () => startNoteLockKeyMigration(localPassword, targetPassword, dispatch, jest.fn(), false));
 
-		expect(result).toEqual({ migrated: 1, skipped: 0, failed: 0, awaitingDecryption: 0, failedRevisions: 1 });
-		const migratedBody = Revision.applyTextPatch('', (await Revision.load(revision.id)).body_diff);
-		expect(await NoteLockService.withDecryptedKey(scoped => scoped.decryptString(migratedBody), decryptedTargetKey)).toBe('one');
+		const status = dispatch.mock.calls[dispatch.mock.calls.length - 1][0].value;
+		expect(status).toEqual({ running: false, failed: 0, skipped: 0, awaitingDecryption: 0, failedRevisions: 1 });
+		expect(notMigratedMessage(status)).toBe('1 note history version of a locked note could not be migrated.');
+		expect(noteLockKeyConflict()).not.toBeNull();
+		const migratedDiff = (await Revision.load(revision.id)).body_diff;
+		expect(await NoteLockService.withDecryptedKey(scoped => scoped.decryptString(Revision.applyTextPatch('', migratedDiff)), decryptedTargetKey)).toBe('one');
+
+		// A retry leaves the history already under the target key alone.
+		expect(await withLogLevel(LogLevel.Error, () => migrateLockedNotes(localPassword, targetPassword))).toMatchObject({ failedRevisions: 1 });
+		expect((await Revision.load(revision.id)).body_diff).toBe(migratedDiff);
 	});
 
 	it('should leave notes already under the target key alone on retry', async () => {
