@@ -777,9 +777,9 @@ export default class EncryptionService {
 		options = { encryptionMethod: this.defaultFileEncryptionMethod(), ...options };
 
 		let source = await this.fileReader_(srcPath, 'base64');
-		// FileV1 output is ASCII text, so UTF-8 writes the same bytes while using
-		// the direct UTF-8 file path on native and TextEncoder on web.
-		let destination = await this.fileWriter_(destPath, options.encryptionMethod === EncryptionMethod.FileV1 ? 'utf8' : 'ascii');
+		// All file encryption methods output ASCII text, so UTF-8 writes the same bytes
+		// while using the direct UTF-8 file path on native and TextEncoder on web.
+		let destination = await this.fileWriter_(destPath, 'utf8');
 
 		const cleanUp = async () => {
 			if (source) await source.close();
