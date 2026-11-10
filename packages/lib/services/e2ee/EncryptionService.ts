@@ -606,6 +606,10 @@ export default class EncryptionService {
 		}
 	}
 
+	private frameWaitInterval_(method: EncryptionMethod, isFile: boolean) {
+		return isFile && method === EncryptionMethod.FileV1 && shim.mobilePlatform() !== MobilePlatform.None ? fileFrameWaitInterval : 1;
+	}
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- source/destination are duck-typed readers/writers (stringReader_/stringWriter_/fileReader_/fileWriter_) with a small structural API; passing the union here would require touching all four call sites
 	private async encryptAbstract_(source: any, destination: any, options: EncryptOptions = null, isFile = false) {
 		options = { encryptionMethod: this.defaultEncryptionMethod(), ...options };
@@ -615,7 +619,7 @@ export default class EncryptionService {
 		const masterKeyPlainText = await this.masterKeyPlainText_(masterKeyId, options);
 		const chunkSize = this.chunkSize(method);
 		const crypto = shim.crypto;
-		const frameWaitInterval = isFile && method === EncryptionMethod.FileV1 && shim.mobilePlatform() !== MobilePlatform.None ? fileFrameWaitInterval : 1;
+		const frameWaitInterval = this.frameWaitInterval_(method, isFile);
 		const isWebFileV1 = isFile && method === EncryptionMethod.FileV1 && shim.mobilePlatform() === MobilePlatform.Web;
 		let blockIndex = 0;
 		const pendingBlocks: string[] = [];
@@ -668,7 +672,7 @@ export default class EncryptionService {
 
 		const header = await this.decodeHeaderSource_(source, options.isNoteLock) as { encryptionMethod: number; masterKeyId: string };
 		const masterKeyPlainText = await this.masterKeyPlainText_(header.masterKeyId, options);
-		const frameWaitInterval = isFile && header.encryptionMethod === EncryptionMethod.FileV1 && shim.mobilePlatform() !== MobilePlatform.None ? fileFrameWaitInterval : 1;
+		const frameWaitInterval = this.frameWaitInterval_(header.encryptionMethod, isFile);
 		let blockIndex = 0;
 
 		let doneSize = 0;
