@@ -85,7 +85,7 @@ import useVisiblePluginEditorViewIds from '@joplin/lib/hooks/plugins/useVisibleP
 import { SelectionRange } from '../../../contentScripts/markdownEditorBundle/types';
 import { EditorType } from '../../NoteEditor/types';
 import { Button, IconButton, Portal, ProgressBar } from 'react-native-paper';
-import { makeIsolatedShareCacheDirectory, writeTextToCacheFile } from '../../../utils/ShareUtils';
+import { makeIsolatedShareCacheDirectory } from '../../../utils/ShareUtils';
 import shareFile from '../../../utils/shareFile';
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import { ExportModuleOutputFormat, FileSystemItem } from '@joplin/lib/services/interop/types';
@@ -1398,11 +1398,13 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		const filename = friendlySafeFilename(noteToShare.title);
 
 		if (shareText.length > 100000) {
-			let fileToShare;
+			let shareDir: string = null;
 			try {
 				// Using a .txt file extension causes a "No valid provider found from URL" error
 				// and blank share sheet on iOS for larger log files (around 200 KiB).
-				fileToShare = await writeTextToCacheFile(shareText, `${filename}.md`);
+				shareDir = await makeIsolatedShareCacheDirectory();
+				const fileToShare = `${shareDir}/${filename}.md`;
+				await shim.fsDriver().writeFile(fileToShare, shareText, 'utf8');
 				await shareFile(fileToShare, 'text/plain');
 			} catch (e) {
 				logger.error('Unable to share note data:', e);
@@ -1410,8 +1412,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				// Display a message to the user (e.g. in the case where the user is out of disk space).
 				void shim.showErrorDialog(_('Unable to share note data. Reason: %s', e.toString()));
 			} finally {
-				if (fileToShare) {
-					await shim.fsDriver().remove(fileToShare);
+				if (shareDir) {
+					await shim.fsDriver().remove(shareDir);
 				}
 			}
 		} else {

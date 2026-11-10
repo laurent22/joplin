@@ -241,6 +241,7 @@ describe('screens/Note/Note.sharing', () => {
 		await openNewNote({ title: 'Long / note?', body: 'x'.repeat(100001) });
 		const { dialogs } = makeShareDialogs('plainText');
 		const nativeShare = jest.spyOn(Share, 'share').mockResolvedValue({ action: Share.sharedAction });
+		const removeDir = jest.spyOn(shim.fsDriver(), 'remove');
 		const { unmount } = render(<WrappedNoteScreen dialogs={dialogs}/>);
 
 		await openNoteActionsMenu();
@@ -249,6 +250,8 @@ describe('screens/Note/Note.sharing', () => {
 		await waitFor(() => expect(shareFile).toHaveBeenCalledWith(expect.any(String), 'text/plain'));
 		const filePath = jest.mocked(shareFile).mock.calls[0][0];
 		expect(basename(filePath)).toBe('Long _ note_.md');
+		await waitFor(() => expect(removeDir).toHaveBeenCalledWith(dirname(filePath)));
+		expect(removeDir).not.toHaveBeenCalledWith(filePath);
 		expect(nativeShare).not.toHaveBeenCalled();
 		unmount();
 	});
