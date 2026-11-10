@@ -64,7 +64,7 @@ const bulkSetNoteLockState = async (noteIds: string[], isLocked: boolean) => {
 let running = false;
 
 interface BulkNoteLockOptions {
-	// A whole notebook can mix locked and unlocked notes, which a change by accident would lose, so it is confirmed first.
+	// Only changes the confirmation wording, since a whole notebook also takes in its nested notebooks.
 	wholeNotebook?: boolean;
 	// Runs once the session is unlocked, for the work that must happen just before the notes change.
 	beforeChange?: ()=> Promise<void>;
@@ -79,12 +79,16 @@ export const promptAndBulkSetNoteLockState = async (noteIds: string[], isLocked:
 	let message = '';
 	try {
 		throwIfMigrationNeeded();
+		// Locking a note deletes its history, so a change by accident is confirmed first.
+		let question;
 		if (options.wholeNotebook) {
-			const question = isLocked
+			question = isLocked
 				? _('Are you sure you want to lock all notes in this notebook and its nested notebooks?')
 				: _('Are you sure you want to remove lock from all notes in this notebook and its nested notebooks?');
-			if (await shim.showMessageBox(question, { buttons: [_('Yes'), _('No')], type: MessageBoxType.Confirm, cancelId: 1 }) !== 0) return;
+		} else {
+			question = isLocked ? _('Are you sure you want to lock the selected notes?') : _('Are you sure you want to remove lock from the selected notes?');
 		}
+		if (await shim.showMessageBox(question, { buttons: [_('Yes'), _('No')], type: MessageBoxType.Confirm, cancelId: 1 }) !== 0) return;
 		if (!await unlockNoteLockSession(prompts)) return;
 		await options.beforeChange?.();
 		dispatch({ type: 'NOTE_LOCK_BULK_CHANGE_RUNNING_SET', value: true });

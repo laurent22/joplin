@@ -37,6 +37,7 @@ describe('bulkSetNoteLockState', () => {
 		NoteLockKey.destroyInstance();
 		EncryptionService.instance_ = encryptionService();
 		Setting.setValue('featureFlag.noteLock', true);
+		jest.spyOn(shim, 'showMessageBox').mockResolvedValue(0);
 	});
 
 	afterEach(() => {
@@ -230,14 +231,14 @@ describe('bulkSetNoteLockState', () => {
 		const showErrorDialog = jest.spyOn(shim, 'showErrorDialog').mockResolvedValue(undefined);
 		let secondRun: Promise<void> = null;
 		const save = Note.save.bind(Note);
-		jest.spyOn(Note, 'save').mockImplementation(async (n, options) => {
+		const saveSpy = jest.spyOn(Note, 'save').mockImplementation(async (n, options) => {
 			secondRun ??= promptAndBulkSetNoteLockState([note2.id], true, prompts, jest.fn());
 			return save(n, options);
 		});
 
 		await promptAndBulkSetNoteLockState([note1.id], true, prompts, jest.fn());
 		await secondRun;
-		jest.restoreAllMocks();
+		saveSpy.mockRestore();
 
 		expect(showErrorDialog).toHaveBeenCalledWith('Please wait until the current note lock change has finished.');
 		expect((await Note.load(note1.id)).is_locked).toBe(1);
@@ -323,15 +324,18 @@ describe('bulkSetNoteLockState', () => {
 		expect((await Note.load(note.id)).is_locked).toBe(locked ? 1 : 0);
 	});
 
-	it('should not ask for confirmation when the notes are a selection', async () => {
+	test.each([
+		[true, 'Are you sure you want to lock the selected notes?'],
+		[false, 'Are you sure you want to remove lock from the selected notes?'],
+	])('should confirm before changing a selection of notes (lock: %s)', async (isLocked, question) => {
 		await setUpUnlockedSession();
-		const note = await Note.save({ title: 'one', body: 'secret' });
-		const showMessageBox = jest.spyOn(shim, 'showMessageBox');
+		const note = isLocked ? await Note.save({ title: 'one', body: 'secret' }) : await createLockedNote({ title: 'one', body: 'secret' });
+		const showMessageBox = jest.spyOn(shim, 'showMessageBox').mockResolvedValue(1);
 
-		await promptAndBulkSetNoteLockState([note.id], true, prompts, jest.fn());
+		await promptAndBulkSetNoteLockState([note.id], isLocked, prompts, jest.fn());
 
-		expect(showMessageBox).not.toHaveBeenCalled();
-		expect((await Note.load(note.id)).is_locked).toBe(1);
+		expect(showMessageBox.mock.calls[0][0]).toBe(question);
+		expect((await Note.load(note.id)).is_locked).toBe(isLocked ? 0 : 1);
 	});
 
 });
