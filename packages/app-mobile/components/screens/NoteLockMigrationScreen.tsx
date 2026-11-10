@@ -14,6 +14,7 @@ import BackButtonService from '../../services/BackButtonService';
 interface Props {
 	themeId: number;
 	dispatch: Dispatch;
+	noteLockBulkChangeRunning: boolean;
 }
 
 export const NoteLockMigrationScreenComponent: React.FC<Props> = props => {
@@ -70,12 +71,12 @@ export const NoteLockMigrationScreenComponent: React.FC<Props> = props => {
 		setMigrating(true);
 		setErrorMessage('');
 		try {
-			await startNoteLockKeyMigration(localPassword, targetPassword, props.dispatch, () => props.dispatch({ type: 'NAV_BACK' }));
+			await startNoteLockKeyMigration(localPassword, targetPassword, props.dispatch, () => props.dispatch({ type: 'NAV_BACK' }), props.noteLockBulkChangeRunning);
 		} catch (error) {
 			setErrorMessage(error.name === 'OperationError' ? _('Invalid password') : error.message);
 			setMigrating(false);
 		}
-	}, [localPassword, targetPassword, props.dispatch]);
+	}, [localPassword, targetPassword, props.dispatch, props.noteLockBulkChangeRunning]);
 
 	const onSkip = useCallback(async () => {
 		if (await confirmAndSkipNoteLockKeyMigration(props.dispatch)) props.dispatch({ type: 'NAV_BACK' });
@@ -128,5 +129,6 @@ export const NoteLockMigrationScreenComponent: React.FC<Props> = props => {
 export default connect((state: AppState) => {
 	return {
 		themeId: state.settings.theme,
+		noteLockBulkChangeRunning: state.noteLockBulkChangeRunning,
 	};
 })(NoteLockMigrationScreenComponent);

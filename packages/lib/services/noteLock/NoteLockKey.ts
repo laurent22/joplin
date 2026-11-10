@@ -1,7 +1,7 @@
 import uuid from '../../uuid';
 import Setting from '../../models/Setting';
 import EncryptionService from '../e2ee/EncryptionService';
-import { MasterKeyEntity } from '../e2ee/types';
+import { MasterKeyEntity, NoteLockKeyEntity } from '../e2ee/types';
 import { localSyncInfo, saveLocalSyncInfo } from '../synchronizer/syncInfoUtils';
 
 export interface DecryptedNoteLockKey {
@@ -11,6 +11,8 @@ export interface DecryptedNoteLockKey {
 
 // Importers that predate note lock skip this file, since they only read .md files.
 export const noteLockKeyFileName = 'note_lock_key.json';
+// The sync target's key while a key migration is pending, so notes already moved to it can still be recovered.
+export const syncedNoteLockKeyFileName = 'synced_note_lock_key.json';
 
 export default class NoteLockKey {
 
@@ -29,22 +31,22 @@ export default class NoteLockKey {
 		this.instance_ = null;
 	}
 
-	public load(): MasterKeyEntity {
+	public load(): NoteLockKeyEntity {
 		return localSyncInfo().noteLockKey;
 	}
 
-	public save(o: MasterKeyEntity): MasterKeyEntity {
-		const key = { ...o };
+	public save(o: MasterKeyEntity): NoteLockKeyEntity {
+		const key: NoteLockKeyEntity = { ...o };
 		if (!key.id) {
 			key.id = uuid.create();
 			key.created_time = Date.now();
 		}
 		key.updated_time = Date.now();
+		// Only a key migration replaces the sync migration id, so a reset keeps the lineage it belongs to.
+		if (!key.syncMigrationId) key.syncMigrationId = this.load()?.syncMigrationId || uuid.create();
 
 		const syncInfo = localSyncInfo();
 		syncInfo.noteLockKey = key;
-		// Only a key migration replaces the sync migration id, so a reset keeps the lineage it belongs to.
-		if (!syncInfo.syncMigrationId) syncInfo.syncMigrationId = uuid.create();
 		saveLocalSyncInfo(syncInfo);
 
 		return key;

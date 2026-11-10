@@ -51,7 +51,7 @@ describe('Synchronizer.noteLock', () => {
 
 	it('should propagate a password reset to the sync target and then to other devices', async () => {
 		const firstKey = await NoteLockKey.instance().create('111111');
-		const syncMigrationId = localSyncInfo().syncMigrationId;
+		const syncMigrationId = localSyncInfo().noteLockKey.syncMigrationId;
 		await Note.save({ title: 'locked', is_locked: 1 });
 		await synchronizerStart();
 
@@ -67,7 +67,7 @@ describe('Synchronizer.noteLock', () => {
 		await switchToClient(1);
 		await synchronizerStart();
 		expect(NoteLockKey.instance().load()).toEqual(resetKey);
-		expect(localSyncInfo().syncMigrationId).toBe(syncMigrationId);
+		expect(localSyncInfo().noteLockKey.syncMigrationId).toBe(syncMigrationId);
 	});
 
 	it('should propagate the newest of repeated offline resets to the key they replaced', async () => {
@@ -115,7 +115,7 @@ describe('Synchronizer.noteLock', () => {
 			expect(Setting.value('noteLock.conflictNoteLockKey').noteLockKey).toEqual(winningKey);
 		}
 
-		expect(await migrateLockedNotes('222222', '333333')).toEqual({ migrated: 1, skipped: 0, failed: 0, awaitingDecryption: 0 });
+		expect(await migrateLockedNotes('222222', '333333')).toEqual({ migrated: 1, skipped: 0, failed: 0, awaitingDecryption: 0, failedRevisions: 0 });
 		finishNoteLockKeyMigration();
 		expect(Setting.value('noteLock.passwordReset')).toBe(false);
 		expect(Setting.value('noteLock.keyIdToReset')).toBe('');
@@ -149,26 +149,25 @@ describe('Synchronizer.noteLock', () => {
 
 	it('should stop the sync and park the remote key when a different lineage meets local locked notes', async () => {
 		const remoteKey = await NoteLockKey.instance().create('111111');
-		const remoteSyncMigrationId = localSyncInfo().syncMigrationId;
 		await synchronizerStart();
 
 		await switchToClient(2);
 		const localKey = await NoteLockKey.instance().create('222222');
-		const localSyncMigrationId = localSyncInfo().syncMigrationId;
+		const localSyncMigrationId = localSyncInfo().noteLockKey.syncMigrationId;
 		await Note.save({ title: 'locked', is_locked: 1 });
 
 		for (let i = 0; i < 2; i++) {
 			await expect(synchronizerStart(null, { throwOnError: true })).rejects.toMatchObject({ code: ErrorCode.NoteLockKeyConflict });
 			expect(NoteLockKey.instance().load()).toEqual(localKey);
-			expect(localSyncInfo().syncMigrationId).toBe(localSyncMigrationId);
+			expect(localSyncInfo().noteLockKey.syncMigrationId).toBe(localSyncMigrationId);
 			expect(await remoteNoteLockKeyId()).toBe(remoteKey.id);
-			expect(Setting.value('noteLock.conflictNoteLockKey')).toEqual({ noteLockKey: remoteKey, syncMigrationId: remoteSyncMigrationId });
+			expect(Setting.value('noteLock.conflictNoteLockKey')).toEqual({ noteLockKey: remoteKey });
 		}
 	});
 
 	it('should drop a local key that no note depends on and adopt the sync target key', async () => {
 		const remoteKey = await NoteLockKey.instance().create('111111');
-		const remoteSyncMigrationId = localSyncInfo().syncMigrationId;
+		const remoteSyncMigrationId = localSyncInfo().noteLockKey.syncMigrationId;
 		await synchronizerStart();
 
 		await switchToClient(2);
@@ -176,7 +175,7 @@ describe('Synchronizer.noteLock', () => {
 		await synchronizerStart();
 
 		expect(NoteLockKey.instance().load()).toEqual(remoteKey);
-		expect(localSyncInfo().syncMigrationId).toBe(remoteSyncMigrationId);
+		expect(localSyncInfo().noteLockKey.syncMigrationId).toBe(remoteSyncMigrationId);
 		expect(await remoteNoteLockKeyId()).toBe(remoteKey.id);
 		expect(Setting.value('noteLock.conflictNoteLockKey')).toEqual({});
 	});
@@ -202,7 +201,7 @@ describe('Synchronizer.noteLock', () => {
 	it('should sync again after migrating local locked notes to the sync target key', async () => {
 		Setting.setValue('featureFlag.noteLock', true);
 		const remoteKey = await NoteLockKey.instance().create('111111');
-		const remoteSyncMigrationId = localSyncInfo().syncMigrationId;
+		const remoteSyncMigrationId = localSyncInfo().noteLockKey.syncMigrationId;
 		await synchronizerStart();
 
 		await switchToClient(2);
@@ -212,11 +211,11 @@ describe('Synchronizer.noteLock', () => {
 		const note = await Note.save({ title: 'secret', body: 'secret body', is_locked: 1 }, { useNoteLock: true });
 		await expect(synchronizerStart(null, { throwOnError: true })).rejects.toMatchObject({ code: ErrorCode.NoteLockKeyConflict });
 
-		expect(await migrateLockedNotes('222222', '111111')).toEqual({ migrated: 1, skipped: 0, failed: 0, awaitingDecryption: 0 });
+		expect(await migrateLockedNotes('222222', '111111')).toEqual({ migrated: 1, skipped: 0, failed: 0, awaitingDecryption: 0, failedRevisions: 0 });
 		finishNoteLockKeyMigration();
 		await synchronizerStart(null, { throwOnError: true });
 		expect(NoteLockKey.instance().load()).toEqual(remoteKey);
-		expect(localSyncInfo().syncMigrationId).toBe(remoteSyncMigrationId);
+		expect(localSyncInfo().noteLockKey.syncMigrationId).toBe(remoteSyncMigrationId);
 		expect(await remoteNoteLockKeyId()).toBe(remoteKey.id);
 
 		await switchToClient(1);
@@ -433,14 +432,31 @@ describe('Synchronizer.noteLock', () => {
 		await synchronizerStart();
 
 		const remoteInfo = await fetchSyncInfo(fileApi());
-		remoteInfo.syncMigrationId = '';
+		const remoteKey = remoteInfo.noteLockKey;
+		remoteInfo.noteLockKey = { ...remoteKey, syncMigrationId: '' };
 		await fileApi().put('info.json', remoteInfo.serialize());
-		await expect(synchronizerStart(null, { throwOnError: true })).rejects.toThrow('migration ID');
+		await expect(synchronizerStart(null, { throwOnError: true })).rejects.toThrow('on the sync target has no sync migration ID');
 
+		remoteInfo.noteLockKey = remoteKey;
+		await fileApi().put('info.json', remoteInfo.serialize());
 		const localInfo = localSyncInfo();
-		localInfo.syncMigrationId = '';
+		localInfo.noteLockKey = { ...localInfo.noteLockKey, syncMigrationId: '' };
 		saveLocalSyncInfo(localInfo);
-		await expect(synchronizerStart(null, { throwOnError: true })).rejects.toThrow('migration ID');
+		await expect(synchronizerStart(null, { throwOnError: true })).rejects.toThrow('on this device has no sync migration ID');
+	});
+
+	it('should let a profile without a note lock key sync from a target whose key has no sync migration id', async () => {
+		await NoteLockKey.instance().create('111111');
+		await Note.save({ title: 'synced note' });
+		await synchronizerStart();
+		const remoteInfo = await fetchSyncInfo(fileApi());
+		remoteInfo.noteLockKey = { ...remoteInfo.noteLockKey, syncMigrationId: '' };
+		await fileApi().put('info.json', remoteInfo.serialize());
+
+		await switchToClient(2);
+		await synchronizerStart(null, { throwOnError: true });
+
+		expect((await Note.all()).map(note => note.title)).toEqual(['synced note']);
 	});
 	// Sets up client 2 with a locked note and a conflict parked against client 1's key on the sync target.
 	const parkConflictOnClient2 = async () => {

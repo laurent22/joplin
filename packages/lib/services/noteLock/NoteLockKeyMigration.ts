@@ -3,6 +3,7 @@ import { Dispatch } from 'redux';
 import { _, _n } from '../../locale';
 import type { NoteLockMigrationStatus } from '../../reducer';
 import Note from '../../models/Note';
+import Revision from '../../models/Revision';
 import time from '../../time';
 import shim, { MessageBoxType } from '../../shim';
 import EncryptionService from '../e2ee/EncryptionService';
@@ -10,6 +11,7 @@ import { adoptNoteLockKeyConflict, noteLockKeyConflict } from '../synchronizer/s
 import isNoteLockEnabled from './isNoteLockEnabled';
 import NoteLockKey, { DecryptedNoteLockKey } from './NoteLockKey';
 import NoteLockSession from './NoteLockSession';
+import NoteLockService from './NoteLockService';
 
 const logger = Logger.create('NoteLockKeyMigration');
 
@@ -20,6 +22,8 @@ export interface NoteLockKeyMigrationResult {
 	failed: number;
 	// Still encrypted by sync, so their note lock body cannot be read yet. A retry once they are decrypted picks them up.
 	awaitingDecryption: number;
+	// Note history of locked notes, counted apart from the notes so a failed history version is not mistaken for a failed note.
+	failedRevisions: number;
 }
 
 // Re-encrypts the notes locked with the local key to the parked target key; notes already under it are left
@@ -35,7 +39,7 @@ export const migrateLockedNotes = async (localPassword: string, targetPassword: 
 		id: conflict.noteLockKey.id,
 		plainText: await encryptionService.decryptMasterKeyContent(conflict.noteLockKey, targetPassword),
 	};
-	const result: NoteLockKeyMigrationResult = { migrated: 0, skipped: 0, failed: 0, awaitingDecryption: 0 };
+	const result: NoteLockKeyMigrationResult = { migrated: 0, skipped: 0, failed: 0, awaitingDecryption: 0, failedRevisions: 0 };
 	// A sync may have replaced the parked key while the passwords were checked. From here the sync leaves it alone.
 	if (noteLockKeyConflict()?.noteLockKey.id !== targetKey.id) throw new Error(_('The note lock key on the sync target changed. Please try again.'));
 	NoteLockSession.instance().setMigrating(true);
@@ -65,6 +69,24 @@ export const migrateLockedNotes = async (localPassword: string, targetPassword: 
 			// With the feature turned off the note was not re-encrypted, whether Note.save refused it or saved it ungated.
 			if (!isNoteLockEnabled()) throw new Error(_('The note lock key migration was cancelled because the note lock feature was turned off.'));
 		}
+		// A locked revision holds the whole note rather than a diff, so its body is re-encrypted on its own. Revisions under
+		// another key cannot be read here, so they are left as they are.
+		for (const revisionId of await Revision.lockedRevisionIds()) {
+			try {
+				const revision = await Revision.load(revisionId);
+				if (revision.encryption_applied) throw new Error('The revision is still encrypted by sync');
+				const body = Revision.applyTextPatch('', revision.body_diff);
+				const { masterKeyId } = await encryptionService.decodeHeaderString(body, true);
+				if (masterKeyId !== localKey.id) continue;
+				const plainBody = await NoteLockService.withDecryptedKey(scoped => scoped.decryptString(body), localKey);
+				const targetBody = await NoteLockService.withDecryptedKey(scoped => scoped.encryptString(plainBody), targetKey);
+				await Revision.save({ id: revision.id, body_diff: Revision.createTextPatch('', targetBody) });
+			} catch (error) {
+				logger.warn(`Could not migrate revision ${revisionId}:`, error);
+				result.failedRevisions++;
+			}
+			if (!isNoteLockEnabled()) throw new Error(_('The note lock key migration was cancelled because the note lock feature was turned off.'));
+		}
 	} finally {
 		NoteLockSession.instance().setMigrating(false);
 	}
@@ -87,14 +109,16 @@ export const confirmAndSkipNoteLockKeyMigration = async (dispatch: Dispatch) => 
 
 // Runs in the background once both passwords are accepted, so the app stays usable, and reports its progress for the
 // banners. A run with failures keeps the target key parked for a retry or a skip.
-export const startNoteLockKeyMigration = async (localPassword: string, targetPassword: string, dispatch: Dispatch, onStarted: ()=> void) => {
+export const startNoteLockKeyMigration = async (localPassword: string, targetPassword: string, dispatch: Dispatch, onStarted: ()=> void, bulkChangeRunning: boolean) => {
+	// A note locked by the bulk change after the migration passed it would stay under the local key.
+	if (bulkChangeRunning) throw new Error(_('Please wait until the current note lock change has finished.'));
 	let started = false;
 	let result: NoteLockKeyMigrationResult;
 	try {
 		result = await migrateLockedNotes(localPassword, targetPassword, () => {
 			started = true;
 			onStarted();
-			dispatch({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: { running: true, failed: 0, skipped: 0, awaitingDecryption: 0 } });
+			dispatch({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: { running: true, failed: 0, skipped: 0, awaitingDecryption: 0, failedRevisions: 0 } });
 		});
 	} catch (error) {
 		// Before the start the dialog is still open to show the error, after it the dialog is gone.
@@ -103,14 +127,15 @@ export const startNoteLockKeyMigration = async (localPassword: string, targetPas
 		await shim.showErrorDialog(error.message);
 		return;
 	}
-	if (!result.failed && !result.awaitingDecryption) finishNoteLockKeyMigration();
-	dispatch({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: { running: false, failed: result.failed, skipped: result.skipped, awaitingDecryption: result.awaitingDecryption } });
+	if (!result.failed && !result.awaitingDecryption && !result.failedRevisions) finishNoteLockKeyMigration();
+	dispatch({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value: { running: false, failed: result.failed, skipped: result.skipped, awaitingDecryption: result.awaitingDecryption, failedRevisions: result.failedRevisions } });
 };
 
 // The notes a run left under the local key, so the banner offers a retry or a skip.
 export const notMigratedMessage = (status: NoteLockMigrationStatus) => {
 	const parts = [];
 	if (status.failed) parts.push(_n('%d locked note could not be migrated.', '%d locked notes could not be migrated.', status.failed, status.failed));
+	if (status.failedRevisions) parts.push(_n('%d note history version of a locked note could not be migrated.', '%d note history versions of locked notes could not be migrated.', status.failedRevisions, status.failedRevisions));
 	if (status.awaitingDecryption) parts.push(_n('%d locked note is still waiting to be decrypted and was not migrated yet.', '%d locked notes are still waiting to be decrypted and were not migrated yet.', status.awaitingDecryption, status.awaitingDecryption));
 	return withSkippedCount(parts.join(' '), status);
 };

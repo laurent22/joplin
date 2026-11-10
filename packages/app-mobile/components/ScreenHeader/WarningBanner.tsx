@@ -141,7 +141,7 @@ const WarningBannerComponent: React.FC<Props> = props => {
 	if (props.showNoteLockKeyConflictMessage !== false) {
 		if (migration?.running) {
 			warningComps.push(renderWarningBox('noteLockMigration', _('Re-encrypting your locked notes with the synced key. Migration is in progress...'), null));
-		} else if (migration?.failed || migration?.awaitingDecryption) {
+		} else if (migration?.failed || migration?.awaitingDecryption || migration?.failedRevisions) {
 			warningComps.push(renderWarningBox('noteLockMigration', notMigratedMessage(migration), null, [
 				{ title: _('Retry'), onPress: () => void NavService.go('NoteLockMigration') },
 				{ title: _('Skip'), onPress: () => void confirmAndSkipNoteLockKeyMigration(props.dispatch) },

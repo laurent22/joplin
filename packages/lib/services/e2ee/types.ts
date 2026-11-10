@@ -12,6 +12,12 @@ export interface MasterKeyEntity {
 	hasBeenUsed?: boolean;
 }
 
+export interface NoteLockKeyEntity extends MasterKeyEntity {
+	// Identifies the note lock key lineage: created with the first key, kept through password resets and replaced only
+	// when the user migrates to a sync target's key. It lives in the key so that clients which only know the key keep it.
+	syncMigrationId?: string;
+}
+
 export type KeyPairAndSize<KeyPair> = { keyPair: KeyPair; keySize: number };
 
 export enum PublicKeyAlgorithm {

@@ -140,7 +140,7 @@ describe('WarningBanner', () => {
 
 	test('the note lock key conflict banner should link to the migration screen', () => {
 		Setting.setValue('featureFlag.noteLock', true);
-		Setting.setValue('noteLock.conflictNoteLockKey', { noteLockKey: { id: 'sync-target-key' }, syncMigrationId: 'lineage' });
+		Setting.setValue('noteLock.conflictNoteLockKey', { noteLockKey: { id: 'sync-target-key' } });
 		const mock = createMockStore();
 
 		render(<WarningBannerWrapper store={mock.store}/>);
@@ -153,7 +153,7 @@ describe('WarningBanner', () => {
 
 	test('the note lock migration banner should follow the run and be dismissed once it has completed', () => {
 		Setting.setValue('featureFlag.noteLock', true);
-		Setting.setValue('noteLock.conflictNoteLockKey', { noteLockKey: { id: 'sync-target-key' }, syncMigrationId: 'lineage' });
+		Setting.setValue('noteLock.conflictNoteLockKey', { noteLockKey: { id: 'sync-target-key' } });
 		const mock = createMockStore();
 		const setStatus = (value: unknown) => act(() => {
 			mock.store.dispatch({ type: 'NOTE_LOCK_MIGRATION_STATUS_SET', value });
