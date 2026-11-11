@@ -1,0 +1,11 @@
+{
+	"name": "@joplin/missing",
+	"version": "0.0.0",
+	"description": "A package that behaves as if it was not installed, used to exclude optional dependencies from build",
+	"private": true,
+	"main": "./index.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/laurent22/joplin.git"
+	}
+}

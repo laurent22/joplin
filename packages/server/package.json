@@ -1,6 +1,9 @@
 {
   "name": "@joplin/server",
   "version": "3.7.5",
+  "installConfig": {
+    "hoistingLimits": "workspaces"
+  },
   "private": true,
   "scripts": {
     "start-dev": "yarn build && JOPLIN_IS_TESTING=1 nodemon --config nodemon.json --ext ts,js,mustache,css,tsx dist/index.js --env dev",

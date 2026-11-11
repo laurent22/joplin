@@ -1,6 +1,9 @@
 {
   "name": "@joplin/app-desktop",
   "version": "3.7.22",
+  "installConfig": {
+    "hoistingLimits": "workspaces"
+  },
   "description": "Joplin for Desktop",
   "main": "main.bundle.js",
   "private": true,
