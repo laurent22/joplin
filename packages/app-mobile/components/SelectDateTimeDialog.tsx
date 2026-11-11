@@ -6,7 +6,7 @@ import time from '@joplin/lib/time';
 import { Platform } from 'react-native';
 import Modal from './Modal';
 import { formatMsToLocal } from '@joplin/utils/time';
-const DateTimePickerModal = require('react-native-modal-datetime-picker').default;
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const styles = StyleSheet.create({
 	centeredView: {
@@ -52,11 +52,23 @@ const styles = StyleSheet.create({
 	},
 });
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export default class SelectDateTimeDialog extends React.PureComponent<any, any> {
+interface SelectDateTimeDialogProps {
+	themeId: number;
+	shown: boolean;
+	date: Date | null;
+	onAccept?: (date: Date | null)=> void;
+	onReject?: ()=> void;
+}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public constructor(props: any) {
+interface SelectDateTimeDialogState {
+	date: Date | null;
+	mode: 'date' | 'datetime' | 'time';
+	showPicker: boolean;
+}
+
+export default class SelectDateTimeDialog extends React.PureComponent<SelectDateTimeDialogProps, SelectDateTimeDialogState> {
+
+	public constructor(props: SelectDateTimeDialogProps) {
 		super(props);
 
 		this.state = {
@@ -71,8 +83,7 @@ export default class SelectDateTimeDialog extends React.PureComponent<any, any> 
 		this.onSetDate = this.onSetDate.bind(this);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public UNSAFE_componentWillReceiveProps(newProps: any) {
+	public UNSAFE_componentWillReceiveProps(newProps: SelectDateTimeDialogProps) {
 		if (newProps.date !== this.state.date) {
 			this.setState({ date: newProps.date });
 		}

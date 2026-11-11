@@ -1,15 +1,14 @@
 import * as pdfjsLib from 'pdfjs-dist';
+import { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import { ScaledSize, RenderRequest, RenderResult } from './types';
 import { Mutex, MutexInterface, withTimeout } from 'async-mutex';
 
 
 export default class PdfDocument {
 	public url: string | Uint8Array;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private doc: any = null;
+	private doc: PDFDocumentProxy = null;
 	public pageCount: number = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private pages: any = {};
+	private pages: Record<number, PDFPageProxy> = {};
 	private rendererMutex: MutexInterface = null;
 	private pageSize: {
 		height: number;
@@ -26,8 +25,7 @@ export default class PdfDocument {
 		this.url = url;
 		const loadingTask = pdfjsLib.getDocument({ url, isEvalSupported: false });
 		try {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const pdfDocument: any = await loadingTask.promise;
+			const pdfDocument: PDFDocumentProxy = await loadingTask.promise;
 			this.doc = pdfDocument;
 			this.pageCount = pdfDocument.numPages;
 		} catch (error) {

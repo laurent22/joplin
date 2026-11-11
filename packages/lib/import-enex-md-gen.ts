@@ -25,7 +25,8 @@ enum SectionType {
 interface Section {
 	type: SectionType;
 	parent: Section;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// Mixed array: strings, nested Section/Hr objects, and tag fragments built during ENEX traversal
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See above
 	lines: any[];
 	isHeader?: boolean;
 }
@@ -55,9 +56,8 @@ interface ParserState {
 	inPre: boolean;
 	inQuote: boolean;
 	lists: ParserStateList[];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	anchorAttributes: any[];
-	spanAttributes: string[];
+	anchorAttributes: Record<string, string>[];
+	spanAttributes: Record<string, string>[];
 	tags: ParserStateTag[];
 	currentCode?: string;
 }
@@ -331,8 +331,7 @@ function simplifyString(s: string): string {
 	return output;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function collapseWhiteSpaceAndAppend(lines: string[], state: any, text: string) {
+function collapseWhiteSpaceAndAppend(lines: string[], state: ParserState, text: string) {
 	if (state.inCode.length) {
 		lines.push(text);
 	} else {
@@ -461,11 +460,9 @@ function isNewLineBlock(s: string) {
 	return s === BLOCK_OPEN || s === BLOCK_CLOSE;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function attributeToLowerCase(node: any) {
+function attributeToLowerCase(node: { attributes?: Record<string, string> }) {
 	if (!node.attributes) return {};
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const output: any = {};
+	const output: Record<string, string> = {};
 	for (const n in node.attributes) {
 		if (!node.attributes.hasOwnProperty(n)) continue;
 		output[n.toLowerCase()] = node.attributes[n];
@@ -473,8 +470,9 @@ function attributeToLowerCase(node: any) {
 	return output;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function cssValue(context: any, style: string, propName: string | string[]): string {
+type SaxContext = { _parser?: { line: number; column: number } } | null;
+
+function cssValue(context: SaxContext, style: string, propName: string | string[]): string {
 	if (!style) return null;
 
 	const propNames = Array.isArray(propName) ? propName : [propName];
@@ -484,8 +482,7 @@ function cssValue(context: any, style: string, propName: string | string[]): str
 		if (!o.stylesheet.rules.length) return null;
 
 		for (const propName of propNames) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const prop = o.stylesheet.rules[0].declarations.find((d: any) => d.property.toLowerCase() === propName);
+			const prop = (o.stylesheet.rules[0].declarations as { property: string; value: string }[]).find(d => d.property.toLowerCase() === propName);
 			if (prop && prop.value) return prop.value.trim().toLowerCase();
 		}
 
@@ -496,8 +493,7 @@ function cssValue(context: any, style: string, propName: string | string[]): str
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function isInvisibleBlock(context: any, attributes: any) {
+function isInvisibleBlock(context: SaxContext, attributes: { style?: string }) {
 	const display = cssValue(context, attributes.style, 'display');
 	return display && display.indexOf('none') === 0;
 }
@@ -516,8 +512,7 @@ function trimBlockOpenAndClose(lines: string[]): string[] {
 	return output;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function isSpanWithStyle(attributes: any) {
+function isSpanWithStyle(attributes: Record<string, string> | undefined) {
 	if (attributes) {
 		if ('style' in attributes) {
 			return true;
@@ -528,8 +523,7 @@ function isSpanWithStyle(attributes: any) {
 	return false;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function isSpanStyleBold(attributes: any) {
+function isSpanStyleBold(attributes: { style?: string }) {
 	let style = attributes.style;
 	if (!style) return false;
 
@@ -543,15 +537,13 @@ function isSpanStyleBold(attributes: any) {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function isSpanStyleItalic(attributes: any) {
+function isSpanStyleItalic(attributes: { style?: string }) {
 	let style = attributes.style;
 	style = style.replace(/\s+/g, '');
 	return (style.toLowerCase().includes('font-style:italic'));
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function displaySaxWarning(context: any, message: string) {
+function displaySaxWarning(context: SaxContext, message: string) {
 	const line = [];
 	const parser = context ? context._parser : null;
 	if (parser) {
@@ -561,8 +553,7 @@ function displaySaxWarning(context: any, message: string) {
 	console.warn(line.join(': '));
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function isCodeBlock(context: any, nodeName: string, attributes: any) {
+function isCodeBlock(context: SaxContext, nodeName: string, attributes: { style?: string }) {
 	if (nodeName === 'code') return true;
 
 	if (attributes && attributes.style) {
@@ -581,8 +572,7 @@ function isCodeBlock(context: any, nodeName: string, attributes: any) {
 	return false;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function isHighlight(context: any, _nodeName: string, attributes: any) {
+function isHighlight(context: SaxContext, _nodeName: string, attributes: { style?: string }) {
 	if (attributes && attributes.style) {
 		// Evernote uses various inconsistent CSS prefixes: so far I've found
 		// "--en", "-en", "-evernote", so I'm guessing "--evernote" probably
@@ -604,7 +594,7 @@ function isHighlight(context: any, _nodeName: string, attributes: any) {
 	return false;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- stream is a node Readable; sax-stream consumes it and reuses the underlying handle
 function enexXmlToMdArray(stream: any, resources: ResourceEntity[], tasks: ExtractedTask[]): Promise<EnexXmlToMdArrayResult> {
 	const remainingResources = resources.slice();
 
@@ -638,8 +628,7 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[], tasks: Extra
 			parent: null,
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		saxStream.on('error', (e: any) => {
+		saxStream.on('error', (e: Error) => {
 			console.warn(e);
 		});
 
@@ -680,8 +669,7 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[], tasks: Extra
 			section.lines = collapseWhiteSpaceAndAppend(section.lines, state, text);
 		});
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		saxStream.on('opentag', function(node: any) {
+		saxStream.on('opentag', function(node: { name: string; attributes?: Record<string, string> }) {
 			const nodeAttributes = attributeToLowerCase(node);
 			const n = node.name.toLowerCase();
 			const isVisible = !isInvisibleBlock(this, nodeAttributes);
@@ -1289,7 +1277,7 @@ function drawTable(table: Section) {
 			if (flatRender) {
 				line.push(BLOCK_OPEN);
 
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mixed array of cell text fragments and recursive table render output; built up during table cell processing
 				let currentCells: any[] = [];
 
 				const renderCurrentCells = () => {
@@ -1371,8 +1359,7 @@ function drawTable(table: Section) {
 	lines.push(BLOCK_CLOSE);
 
 	if (caption) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const captionLines: any[] = renderLines(caption.lines);
+		const captionLines = renderLines(caption.lines);
 		lines = lines.concat(captionLines);
 	}
 
@@ -1433,7 +1420,7 @@ function postProcessMarkdown(lines: string[]) {
 
 // A "line" can be some Markdown text, or it can be a section, like a table,
 // etc. so this function returns an array of strings.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- line is either a string or one of various Section subtypes built during ENEX traversal
 function renderLine(line: any) {
 	if (typeof line === 'object' && line.type === 'table') {
 		// A table
@@ -1468,7 +1455,7 @@ function renderLine(line: any) {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See renderLine above
 function renderLines(lines: any[]) {
 	let mdLines: string[] = [];
 	for (let i = 0; i < lines.length; i++) {

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Dispatch } from 'redux';
 import { useCallback, useState, useEffect, useMemo } from 'react';
 import { _ } from '@joplin/lib/locale';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
@@ -12,17 +13,22 @@ import KvStore from '@joplin/lib/services/KvStore';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import LabelledPasswordInput from '../PasswordInput/LabelledPasswordInput';
 import shim from '@joplin/lib/shim';
+import time from '@joplin/lib/time';
 
 interface Props {
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 }
 
 enum Mode {
 	Set = 1,
 	Reset = 2,
 }
+
+const syncAfterDefaultInterval = async () => {
+	await time.msleep(reg.defaultScheduleInterval());
+	await reg.waitForSyncFinishedThenSync();
+};
 
 export default function(props: Props) {
 	const [status, setStatus] = useState(MasterPasswordStatus.NotSet);
@@ -40,7 +46,7 @@ export default function(props: Props) {
 		if ([MasterPasswordStatus.NotSet, MasterPasswordStatus.Invalid].includes(status)) return false;
 		if (mode === Mode.Reset) return false;
 		return true;
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
+
 	}, [status, mode]);
 
 	const onClose = useCallback(() => {
@@ -78,7 +84,8 @@ export default function(props: Props) {
 				} else {
 					throw new Error(`Unknown mode: ${mode}`);
 				}
-				void reg.waitForSyncFinishedThenSync();
+				// We need to defer the sync, as enabling encryption may take a few seconds to complete
+				void syncAfterDefaultInterval();
 				onClose();
 			} catch (error) {
 				void shim.showErrorDialog(error.message);
@@ -97,18 +104,15 @@ export default function(props: Props) {
 		return !hasMasterPasswordEncryptedData;
 	}, [mode, showCurrentPassword, hasMasterPasswordEncryptedData]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onCurrentPasswordChange = useCallback((event: any) => {
+	const onCurrentPasswordChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
 		setCurrentPassword(event.target.value);
 	}, []);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onPasswordChange1 = useCallback((event: any) => {
+	const onPasswordChange1 = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
 		setPassword1(event.target.value);
 	}, []);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onPasswordChange2 = useCallback((event: any) => {
+	const onPasswordChange2 = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
 		setPassword2(event.target.value);
 	}, []);
 

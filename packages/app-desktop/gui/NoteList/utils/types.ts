@@ -3,14 +3,17 @@ import { ListRenderer, NoteListColumns } from '@joplin/lib/services/plugins/api/
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { Size } from '@joplin/utils/types';
 import { Dispatch } from 'redux';
+import { EventEmitter } from 'events';
+import { HighlightedWord } from '@joplin/lib/reducer';
 
 export interface Props {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	themeId: any;
+	themeId: number;
 	selectedNoteIds: string[];
 	notes: NoteEntity[];
 	dispatch: Dispatch;
 	watchedNoteFiles: string[];
+	publishedNoteIds: string[];
+	isFolderPublished: boolean;
 	plugins: PluginStates;
 	selectedFolderId: string;
 	customCss: string;
@@ -18,15 +21,14 @@ export interface Props {
 	noteSortOrder: string;
 	uncompletedTodosOnTop: boolean;
 	showCompletedTodos: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	resizableLayoutEventEmitter: any;
+	resizableLayoutEventEmitter: EventEmitter;
 	isInsertingNotes: boolean;
 	folders: FolderEntity[];
 	size: Size;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- searches: any[] is the shape in lib's reducer; tightening requires updating the reducer first
 	searches: any[];
 	selectedSearchId: string;
-	highlightedWords: string[];
+	highlightedWords: HighlightedWord[];
 	provisionalNoteIds: string[];
 	visible: boolean;
 	focusedField: string;

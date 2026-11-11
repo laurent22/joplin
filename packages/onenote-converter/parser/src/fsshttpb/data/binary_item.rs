@@ -13,7 +13,7 @@ pub(crate) struct BinaryItem(Vec<u8>);
 impl BinaryItem {
     pub(crate) fn parse(reader: Reader) -> Result<BinaryItem> {
         let size = CompactU64::parse(reader)?.value();
-        let data = reader.read(size as usize)?.to_vec();
+        let data = reader.read(size.try_into()?)?;
 
         Ok(BinaryItem(data))
     }
@@ -25,6 +25,9 @@ impl BinaryItem {
 
 impl From<BinaryItem> for FileBlob {
     fn from(value: BinaryItem) -> Self {
-        value.0.into()
+        let size = value.0.len();
+        let data = value.0;
+
+        FileBlob::new(Box::new(data), size)
     }
 }

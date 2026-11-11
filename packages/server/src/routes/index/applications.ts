@@ -1,7 +1,7 @@
 
 import { SubPath, redirect } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
-import { RouteType } from '../../utils/types';
+import { HttpMethod, RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import defaultView from '../../utils/defaultView';
 import { formParse, userIp } from '../../utils/requestUtils';
@@ -16,9 +16,12 @@ import { ErrorForbidden } from '../../utils/errors';
 
 const router: Router = new Router(RouteType.Web);
 
-router.publicSchemas.push('applications/:id/confirm');
+// Only the GET consent page is public. The authorising POST must keep the CSRF
+// check, else a cross-site request could authorise an application for a
+// logged-in user.
+router.publicSchemasByMethod[HttpMethod.GET] = ['applications/:id/confirm'];
 
-function makeView(error: Error = null, applicationAuthId: string, csrfTag: string) {
+function makeView(error: Error = null, applicationAuthId: string, csrfTag: string, accountEmail: string) {
 	const view = defaultView('applications/confirm', 'Confirm application authorisation');
 	view.content = {
 		error,
@@ -28,6 +31,9 @@ function makeView(error: Error = null, applicationAuthId: string, csrfTag: strin
 		cancelRedirect: homeUrl(),
 		title: _('Authorisation required'),
 		description: _('Joplin needs your permission to access your %s account and to synchronise data with it.', config().appName),
+		// Another website may have signed the browser in to a different account, so the user must see which one it is
+		accountLabel: _('Signed in as:'),
+		accountEmail,
 		cancel: _('Cancel'),
 		authorise: _('Authorise'),
 	};
@@ -108,7 +114,7 @@ router.get('applications/:id/confirm', async (path: SubPath, ctx: AppContext) =>
 		ctx.query.type as string,
 	);
 
-	return makeView(null, path.id, await createCsrfTag(ctx));
+	return makeView(null, path.id, await createCsrfTag(ctx), ctx.joplin.owner.email);
 });
 
 router.post('applications/:id/confirm', async (_path: SubPath, ctx: AppContext) => {

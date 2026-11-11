@@ -28,6 +28,7 @@ export default function stateToWhenClauseContext(state: AppState, options: WhenC
 		sidebarVisible: isMainWindow && !!state.mainLayout && layoutItemProp(state.mainLayout, 'sideBar', 'visible'),
 		noteListHasNotes: !!windowState.notes.length,
 		isAltInstance,
+		activeNoteIsWhiteboard: !!windowState.activeNoteIsWhiteboard,
 
 		// Deprecated
 		sideBarVisible: !!state.mainLayout && layoutItemProp(state.mainLayout, 'sideBar', 'visible'),

@@ -1,6 +1,6 @@
 import time from './time';
 import Setting from './models/Setting';
-import { filename, fileExtension } from './path-utils';
+import { basename, filename, fileExtension, rtrimSlashes } from './path-utils';
 const md5 = require('md5');
 import resolvePathWithinDir from './utils/resolvePathWithinDir';
 import { Buffer } from 'buffer';
@@ -14,7 +14,7 @@ export interface Stat {
 }
 
 export interface ReadDirStatsOptions {
-	recursive: boolean;
+	recursive?: boolean;
 }
 
 export interface RemoveOptions {
@@ -31,6 +31,16 @@ export interface ZipEntry {
 	name: string;
 }
 
+// Node fs uses a number; react-native uses a number; web uses a custom object — keep this loose at the base.
+export type FileHandle = unknown;
+
+export interface TarOptions {
+	strict?: boolean;
+	portable?: boolean;
+	file: string;
+	cwd: string;
+}
+
 
 export default class FsDriverBase {
 
@@ -38,13 +48,12 @@ export default class FsDriverBase {
 		throw new Error('Not implemented: stat()');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Most callers pass utf8 (string) but base64/buffer is also valid; widening to string|Buffer breaks many call sites that use string-only methods
 	public async readFile(_path: string, _encoding = 'utf8'): Promise<any> {
 		throw new Error('Not implemented: readFile');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async appendFile(_path: string, _content: string, _encoding = 'base64'): Promise<any> {
+	public async appendFile(_path: string, _content: string, _encoding = 'base64'): Promise<void> {
 		throw new Error('Not implemented: appendFile');
 	}
 
@@ -73,13 +82,11 @@ export default class FsDriverBase {
 		return this.move(source, dest);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async readFileChunk(_handle: any, _length: number, _encoding = 'base64'): Promise<string> {
+	public async readFileChunk(_handle: FileHandle, _length: number, _encoding = 'base64'): Promise<string> {
 		throw new Error('Not implemented: readFileChunk');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async readFileChunkAsBuffer(handle: any, length: number): Promise<Buffer> {
+	public async readFileChunkAsBuffer(handle: FileHandle, length: number): Promise<Buffer> {
 		const chunk = await this.readFileChunk(handle, length, 'base64');
 		if (chunk) {
 			return Buffer.from(chunk, 'base64');
@@ -88,13 +95,11 @@ export default class FsDriverBase {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async open(_path: string, _mode: any): Promise<any> {
+	public async open(_path: string, _mode: string | number): Promise<FileHandle> {
 		throw new Error('Not implemented: open');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async close(_handle: any): Promise<any> {
+	public async close(_handle: FileHandle): Promise<void> {
 		throw new Error('Not implemented: close');
 	}
 
@@ -198,8 +203,11 @@ export default class FsDriverBase {
 			return reservedNames.includes(testName.toLowerCase());
 		};
 
-		const nameNoExt = filename(name, true);
-		let extension = fileExtension(name);
+		name = rtrimSlashes(name);
+		const baseName = basename(name);
+		const pathPrefix = name.substring(0, name.length - baseName.length);
+		const nameNoExt = pathPrefix + filename(baseName);
+		let extension = fileExtension(baseName);
 		if (extension) extension = `.${extension}`;
 		let nameToTry = nameNoExt + extension;
 		while (true) {
@@ -258,13 +266,11 @@ export default class FsDriverBase {
 		};
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async tarExtract(_options: any) {
+	public async tarExtract(_options: TarOptions) {
 		throw new Error('Not implemented: tarExtract');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async tarCreate(_options: any, _filePaths: string[]) {
+	public async tarCreate(_options: TarOptions, _filePaths: string[]) {
 		throw new Error('Not implemented: tarCreate');
 	}
 

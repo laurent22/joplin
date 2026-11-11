@@ -1,6 +1,11 @@
-export default function(requestMethod: string, modelId: string = null) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const options: any = { userSideValidation: true };
+export interface DefaultSaveOptions {
+	userSideValidation: boolean;
+	isNew?: boolean;
+	autoTimestamp?: boolean;
+}
+
+export default function(requestMethod: string, modelId: string = null): DefaultSaveOptions {
+	const options: DefaultSaveOptions = { userSideValidation: true };
 	if (requestMethod === 'POST' && modelId) options.isNew = true;
 	return options;
 }

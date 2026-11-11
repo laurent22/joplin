@@ -3,7 +3,7 @@ import { _ } from '@joplin/lib/locale';
 import bridge from '../../../services/bridge';
 import Folder from '@joplin/lib/models/Folder';
 import { getTrashFolderId } from '@joplin/lib/services/trash';
-const { substrWithEllipsis } = require('@joplin/lib/string-utils');
+import { substrWithEllipsis } from '@joplin/lib/string-utils';
 
 export const declaration: CommandDeclaration = {
 	name: 'deleteFolder',

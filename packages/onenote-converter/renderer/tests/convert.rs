@@ -120,3 +120,49 @@ fn convert_ink() {
     let rendered_file = fs::read_to_string(content_file).expect("should read the content file");
     assert!(rendered_file.contains("<svg style"));
 }
+
+#[test]
+fn convert_printout() {
+    let TestResources {
+        output_dir,
+        test_data_dir,
+    } = setup("printout");
+
+    convert(
+        &test_data_dir.join("Printout.one").to_string_lossy(),
+        &output_dir.to_string_lossy(),
+        &test_data_dir.to_string_lossy(),
+    )
+    .unwrap();
+
+    // Should create a table of contents file
+    assert!(output_dir.join("Printout.html").exists());
+    // Should convert the input page to an HTML file
+    let content_file = output_dir.join("Printout").join("Test.html");
+    assert!(content_file.exists());
+
+    let rendered_file = fs::read_to_string(content_file).expect("should read the content file");
+    // Should correctly detect the file extension:
+    assert!(
+        !rendered_file.contains("<img src=\"test4_1.pdf\""),
+        "should not use the PDF extension for printout pages"
+    );
+    assert!(
+        rendered_file.contains("<img src=\"test4_1.pdf.png\""),
+        "should import as a PNG"
+    );
+
+    // Should correctly create the PNG
+    let png_data =
+        fs::read(output_dir.join("Printout").join("test4_1.pdf.png")).expect("should read the PNG");
+    assert_eq!(
+        png_data[0..4],
+        [0x89, 0x50, 0x4E, 0x47],
+        "PNG should have the correct initial bytes"
+    );
+    assert_eq!(
+        png_data.len(),
+        14_005,
+        "PNG should have the correct byte length"
+    );
+}

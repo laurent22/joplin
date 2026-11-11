@@ -21,6 +21,7 @@ export enum EditorCommandType {
 	ToggleNumberedList = 'textNumberedList',
 	ToggleBulletedList = 'textBulletedList',
 	ToggleCheckList = 'textCheckbox',
+	ToggleBlockQuote = 'textBlockQuote',
 
 	ToggleHeading = 'textHeading',
 	ToggleHeading1 = 'textHeading1',
@@ -32,6 +33,12 @@ export enum EditorCommandType {
 	InsertHorizontalRule = 'textHorizontalRule',
 	InsertTable = 'textTable',
 	InsertCodeBlock = 'textCodeBlock',
+
+	// Table editing commands
+	TableAddRow = 'tableAddRow',
+	TableAddColumn = 'tableAddColumn',
+	TableDeleteRow = 'tableDeleteRow',
+	TableDeleteColumn = 'tableDeleteColumn',
 
 	// Find commands
 	ToggleSearch = 'textSearch',
@@ -182,6 +189,7 @@ export interface EditorTheme extends Theme {
 	marginLeft?: number;
 	marginRight?: number;
 	listTabSize?: string;
+	paddingBottom: number;
 }
 
 export interface EditorSettings {
@@ -212,6 +220,7 @@ export interface EditorSettings {
 	katexEnabled: boolean;
 	spellcheckEnabled: boolean;
 	inlineRenderingEnabled: boolean;
+	tableEditingEnabled: boolean;
 	imageRenderingEnabled: boolean;
 	readOnly: boolean;
 	highlightActiveLine: boolean;

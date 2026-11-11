@@ -1,7 +1,12 @@
-const fountain = require('../../vendor/fountain.min.js');
+import { RendererTheme } from '../../types';
+import type * as MarkdownIt from 'markdown-it';
+import type Token = require('markdown-it/lib/token');
+import type Renderer = require('markdown-it/lib/renderer');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Theme is defined in @joplin/lib and we don't import it here
-const pluginAssets = function(theme: any) {
+const fountain = require('../../vendor/fountain.min.js');
+import htmlUtils from '../../htmlUtils';
+
+const pluginAssets = function(theme: RendererTheme) {
 	return [
 		{
 			inline: true,
@@ -127,8 +132,7 @@ const pluginAssets = function(theme: any) {
 	];
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function renderFountainScript(markdownIt: any, content: string) {
+function renderFountainScript(markdownIt: MarkdownIt, content: string) {
 	const result = fountain.parse(content);
 
 	let titlePageHtml = '';
@@ -140,27 +144,25 @@ function renderFountainScript(markdownIt: any, content: string) {
 		`;
 	}
 
+	const contentHtml = result.html.script;
 	return `
 		<!-- joplin-metadata-print-title = false -->
 		<div class="fountain joplin-editable">
 			<pre class="joplin-source" hidden data-joplin-language="fountain" data-joplin-source-open="\`\`\`fountain&#10;" data-joplin-source-close="&#10;\`\`\`&#10;">${markdownIt.utils.escapeHtml(content)}</pre>
-			${titlePageHtml}
+			${htmlUtils.sanitizeHtml(titlePageHtml)}
 			<div class="page">
-				${result.html.script}
+				${htmlUtils.sanitizeHtml(contentHtml)}
 			</div>
 		</div>
 	`;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function plugin(markdownIt: any) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const defaultRender = markdownIt.renderer.rules.fence || function(tokens: any[], idx: number, options: any, _env: any, self: any) {
+function plugin(markdownIt: MarkdownIt) {
+	const defaultRender: Renderer.RenderRule = markdownIt.renderer.rules.fence || function(tokens, idx, options, _env, self) {
 		return self.renderToken(tokens, idx, options);
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	markdownIt.renderer.rules.fence = function(tokens: any[], idx: number, options: any, env: any, self: any) {
+	markdownIt.renderer.rules.fence = function(tokens: Token[], idx: number, options: MarkdownIt.Options, env: unknown, self: Renderer) {
 		const token = tokens[idx];
 		if (token.info !== 'fountain') return defaultRender(tokens, idx, options, env, self);
 		return renderFountainScript(markdownIt, token.content);

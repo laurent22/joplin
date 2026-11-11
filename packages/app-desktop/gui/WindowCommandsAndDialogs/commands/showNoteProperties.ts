@@ -1,6 +1,7 @@
 import CommandService, { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import { stateUtils } from '@joplin/lib/reducer';
+import { WindowControl } from '../utils/useWindowControl';
 
 export const declaration: CommandDeclaration = {
 	name: 'showNoteProperties',
@@ -8,8 +9,7 @@ export const declaration: CommandDeclaration = {
 	iconName: 'icon-info',
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const runtime = (comp: any): CommandRuntime => {
+export const runtime = (comp: WindowControl): CommandRuntime => {
 	return {
 		execute: async (context: CommandContext, noteId: string = null) => {
 			noteId = noteId || stateUtils.selectedNoteId(context.state);

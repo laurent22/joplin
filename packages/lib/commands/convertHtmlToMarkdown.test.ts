@@ -1,13 +1,14 @@
 import { runtime } from './convertHtmlToMarkdown';
 import { CommandContext } from '../services/CommandService';
 import { defaultState } from '../reducer';
+import { Dispatch } from 'redux';
 
 const command = runtime();
 
 const makeContext = (): CommandContext => {
 	return {
 		state: defaultState,
-		dispatch: ()=>{},
+		dispatch: jest.fn(()=>{}) as Dispatch,
 	};
 };
 

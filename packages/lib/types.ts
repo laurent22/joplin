@@ -7,6 +7,7 @@ export enum ApplicationPlatform {
 	MacOs = 3,
 	Android = 4,
 	Ios = 5,
+	Web = 6,
 }
 
 export enum ApplicationType {
@@ -16,11 +17,21 @@ export enum ApplicationType {
 	Cli = 3,
 }
 
+export type DownloadHandler = Pick<DownloadController, 'handleChunk'>;
+
 export type FetchBlobOptions = {
 	path?: string;
 	method?: string;
 	maxRedirects?: number;
+	maxRetry?: number;
 	timeout?: number;
+	ignoreTlsErrors?: boolean;
 	headers?: Record<string, string>;
-	downloadController?: DownloadController;
+	downloadController?: DownloadHandler;
+	// Only allows connections to public internet addresses, on every redirect too. Only supported on Node.
+	publicNetworkOnly?: boolean;
+	// Unlike timeout, which only limits inactivity, this can bound the total duration. Only supported on Node.
+	signal?: AbortSignal;
+	// Defaults to true, only respected on mobile:
+	overwrite?: boolean;
 };

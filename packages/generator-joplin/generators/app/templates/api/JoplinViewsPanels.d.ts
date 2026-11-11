@@ -1,4 +1,5 @@
-import Plugin from '../Plugin';
+import Plugin, { MessageListenerCallback } from '../Plugin';
+import { PluginStore } from '../ViewController';
 import { ViewHandle } from './types';
 /**
  * Allows creating and managing view panels. View panels allow displaying any HTML
@@ -17,7 +18,7 @@ import { ViewHandle } from './types';
 export default class JoplinViewsPanels {
     private store;
     private plugin;
-    constructor(plugin: Plugin, store: any);
+    constructor(plugin: Plugin, store: PluginStore);
     private controller;
     /**
      * Creates a new panel
@@ -50,7 +51,7 @@ export default class JoplinViewsPanels {
      * demo](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/post_messages) for more details.
      *
      */
-    onMessage(handle: ViewHandle, callback: Function): Promise<void>;
+    onMessage(handle: ViewHandle, callback: MessageListenerCallback): Promise<void>;
     /**
      * Sends a message to the webview.
      *

@@ -18,6 +18,7 @@ sanitize-filename = "0.3.0"
 console_error_panic_hook = "0.1.7"
 encoding_rs = "0.8.31"
 enum-primitive-derive = "0.2.2"
+time = { version = "0.3.44", features = ["macros"] }
 itertools = "0.10.3"
 num-traits = "0.2"
 uuid = "1.1.2"

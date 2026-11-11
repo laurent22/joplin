@@ -13,8 +13,7 @@ import { copyFile } from 'fs-extra';
 //
 // In our case, all bigInteger are timestamps, which JavaScript can handle
 // fine as numbers.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-require('pg').types.setTypeParser(20, (val: any) => {
+require('pg').types.setTypeParser(20, (val: string) => {
 	return parseInt(val, 10);
 });
 
@@ -37,7 +36,6 @@ const migrationDir = `${__dirname}/migrations`;
 export const sqliteDefaultDir = pathUtils.dirname(__dirname);
 
 export const defaultAdminEmail = 'admin@localhost';
-export const defaultAdminPassword = 'admin';
 
 export type DbConnection = Knex;
 
@@ -72,10 +70,8 @@ export interface KnexDatabaseConfig {
 
 export interface ConnectionCheckResult {
 	isCreated: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	error: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	latestMigration: any;
+	error: Error | null;
+	latestMigration: { name: string } | null;
 	connection: DbConnection;
 }
 
@@ -169,11 +165,10 @@ export const setCollateC = async (db: DbConnection, tableName: string, columnNam
 	await db.raw(`ALTER TABLE ${tableName} ALTER COLUMN ${columnName} SET DATA TYPE character varying(32) COLLATE "C"`);
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function makeSlowQueryHandler(duration: number, connection: any, sql: string, bindings: any[]) {
+function makeSlowQueryHandler(duration: number, connection: DbConnection, sql: string, bindings: unknown[]) {
 	return setTimeout(() => {
 		try {
-			logger.warn(`Slow query (${duration}ms+):`, connection.raw(sql, bindings).toString());
+			logger.warn(`Slow query (${duration}ms+):`, connection.raw(sql, bindings as readonly Knex.RawBinding[]).toString());
 		} catch (error) {
 			logger.error('Could not log slow query', { sql, bindings }, error);
 		}
@@ -182,13 +177,11 @@ function makeSlowQueryHandler(duration: number, connection: any, sql: string, bi
 
 export function setupSlowQueryLog(connection: DbConnection, slowQueryLogMinDuration: number) {
 	interface QueryInfo {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		timeoutId: any;
+		timeoutId: ReturnType<typeof setTimeout>;
 		startTime: number;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const queryInfos: Record<any, QueryInfo> = {};
+	const queryInfos: Record<string, QueryInfo> = {};
 
 	// These queries do not return a response, so "query-response" is not
 	// called.
@@ -224,10 +217,8 @@ export function setupSlowQueryLog(connection: DbConnection, slowQueryLogMinDurat
 	});
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const filterBindings = (bindings: any[]): Record<string, any> => {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const output: Record<string, any> = {};
+const filterBindings = (bindings: unknown[]): Record<string, unknown> => {
+	const output: Record<string, unknown> = {};
 
 	for (let i = 0; i < bindings.length; i++) {
 		let value = bindings[i];
@@ -244,8 +235,7 @@ interface KnexQueryErrorResponse {
 }
 
 interface KnexQueryErrorData {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	bindings: any[];
+	bindings: unknown[];
 	queryContext: QueryContext;
 }
 
@@ -325,8 +315,27 @@ const fixMigrationNames = async (db: DbConnection) => {
 	}
 };
 
-export async function migrateLatest(db: DbConnection, disableTransactions = false) {
+// Knex acquires a row in `knex_migrations_lock` before running migrations and releases it
+// after. Because the lock is committed outside the migration transaction, a server crash
+// mid-migration leaves the lock held, which then blocks every subsequent restart. Joplin
+// Server is single-instance per database, so it is always safe to clear the lock before
+// running migrations.
+const forceUnlockMigrations = async (db: DbConnection) => {
+	try {
+		await db.migrate.forceFreeMigrationsLock();
+	} catch (error) {
+		if (isNoSuchTableError(error)) return;
+		throw error;
+	}
+};
+
+const beforeMigrate = async (db: DbConnection) => {
 	await fixMigrationNames(db);
+	await forceUnlockMigrations(db);
+};
+
+export async function migrateLatest(db: DbConnection, disableTransactions = false) {
+	await beforeMigrate(db);
 
 	await db.migrate.latest({
 		directory: migrationDir,
@@ -335,7 +344,7 @@ export async function migrateLatest(db: DbConnection, disableTransactions = fals
 }
 
 export async function migrateUp(db: DbConnection, disableTransactions = false) {
-	await fixMigrationNames(db);
+	await beforeMigrate(db);
 
 	await db.migrate.up({
 		directory: migrationDir,
@@ -344,7 +353,7 @@ export async function migrateUp(db: DbConnection, disableTransactions = false) {
 }
 
 export async function migrateDown(db: DbConnection, disableTransactions = false) {
-	await fixMigrationNames(db);
+	await beforeMigrate(db);
 
 	await db.migrate.down({
 		directory: migrationDir,
@@ -361,10 +370,9 @@ export async function migrateUnlock(db: DbConnection) {
 export async function migrateList(db: DbConnection, asString = true) {
 	await fixMigrationNames(db);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const migrations: any = await db.migrate.list({
+	const migrations = await db.migrate.list({
 		directory: migrationDir,
-	});
+	}) as [(string | { file: string })[], (string | { name?: string; file?: string })[]];
 
 	// The migration array has a rather inconsistent format:
 	//
@@ -384,15 +392,15 @@ export async function migrateList(db: DbConnection, asString = true) {
 	//   ]
 	// ]
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const getMigrationName = (migrationInfo: any) => {
-		if (migrationInfo && migrationInfo.name) return migrationInfo.name;
-		if (migrationInfo && migrationInfo.file) return migrationInfo.file;
-		return migrationInfo;
+	type MigrationInfo = string | { name?: string; file?: string };
+
+	const getMigrationName = (migrationInfo: MigrationInfo): string => {
+		if (typeof migrationInfo === 'object' && migrationInfo.name) return migrationInfo.name;
+		if (typeof migrationInfo === 'object' && migrationInfo.file) return migrationInfo.file;
+		return migrationInfo as string;
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const formatName = (migrationInfo: any) => {
+	const formatName = (migrationInfo: MigrationInfo) => {
 		const s = getMigrationName(migrationInfo).split('.');
 		s.pop();
 		return s.join('.');
@@ -473,8 +481,7 @@ export async function truncateTables(db: DbConnection, includedTables: string[] 
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function isNoSuchTableError(error: any): boolean {
+function isNoSuchTableError(error: { code?: string; message?: string } | null | undefined): boolean {
 	if (error) {
 		// Postgres error: 42P01: undefined_table
 		if (error.code === '42P01') return true;
@@ -486,8 +493,7 @@ function isNoSuchTableError(error: any): boolean {
 	return false;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function isUniqueConstraintError(error: any): boolean {
+export function isUniqueConstraintError(error: { code?: string; message?: string } | null | undefined): boolean {
 	if (error) {
 		// Postgres error: 23505: unique_violation
 		if (error.code === '23505') return true;

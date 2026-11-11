@@ -29,7 +29,7 @@ const ShareManagerWrapper: React.FC<WrapperProps> = props => {
 	);
 };
 
-describe('ShareManager', () => {
+describe('ShareManager/index', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);

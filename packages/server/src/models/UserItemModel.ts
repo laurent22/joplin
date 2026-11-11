@@ -1,4 +1,4 @@
-import { ChangeType, Item, ItemType, UserItem, Uuid } from '../services/database/types';
+import { ChangeType, Item, UserItem, Uuid, ItemType } from '../services/database/types';
 import BaseModel, { DeleteOptions, LoadOptions, SaveOptions } from './BaseModel';
 import { unique } from '../utils/array';
 import { ErrorNotFound } from '../utils/errors';
@@ -8,6 +8,15 @@ import Logger from '@joplin/utils/Logger';
 import { isUniqueConstraintError } from '../db';
 
 const logger = Logger.create('UserItemModel');
+
+// addMulti can process a whole notebook at once, so item IDs are only ever logged
+// as a sample.
+const maxLoggedItemIds = 20;
+
+const itemIdSample = (itemIds: Uuid[]) => {
+	const sample = itemIds.slice(0, maxLoggedItemIds).join(', ');
+	return itemIds.length > maxLoggedItemIds ? `${sample}, ... (${itemIds.length - maxLoggedItemIds} more)` : sample;
+};
 
 interface DeleteByShare {
 	id: Uuid;
@@ -128,8 +137,17 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		await this.deleteBy({ byShareId: shareId, byUserId: userId });
 	}
 
+	public async itemIdsByName(userId: Uuid, names: string[]) {
+		const output = new Map<string, Uuid>();
+		for (let i = 0; i < names.length; i += 500) {
+			const items = await this.models().item().loadByNames(userId, names.slice(i, i + 500), { fields: ['id', 'name'] });
+			for (const item of items) output.set(item.name, item.id);
+		}
+		return output;
+	}
+
 	public async add(userId: Uuid, itemId: Uuid, options: UserItemSaveOptions = {}): Promise<void> {
-		const item = await this.models().item().load(itemId, { fields: ['id', 'name'] });
+		const item = await this.models().item().load(itemId, { fields: ['id', 'name', 'owner_id'] });
 		if (!item) {
 			throw new ErrorNotFound(`No such item: ${itemId}`);
 		}
@@ -142,12 +160,35 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		perfTimer.push('Main');
 
 		const items: Item[] = Array.isArray(itemsQuery) ? itemsQuery : await itemsQuery.whereNotIn('id', this.db('user_items').select('item_id').where('user_id', '=', userId));
-		if (!items.length) return;
+
+		// Callers such as ShareModel::createSharedFolderUserItems only call this after
+		// determining that items are missing, so selecting nothing means the caller's view
+		// and this query disagree. Log it to tell that case apart from a failing insert.
+		if (!items.length) {
+			logger.info(`addMulti: No item to add for user ${userId} (caller passed ${Array.isArray(itemsQuery) ? 'an array' : 'a query'})`);
+			perfTimer.pop();
+			return;
+		}
+
+		logger.info(`addMulti: Adding ${items.length} items for user ${userId}: ${itemIdSample(items.map(i => i.id))}`);
 
 		perfTimer.push(`Processing ${items.length} items`);
 
+		const skippedItemIds: Uuid[] = [];
+		const nameTakenItemIds: Uuid[] = [];
+		const itemIdsByName = await this.itemIdsByName(userId, items.filter(i => i.owner_id !== userId).map(i => i.name));
+
 		for (const item of items) {
-			if (!('name' in item) || !('id' in item)) throw new Error('item.id and item.name must be set');
+			if (!('name' in item) || !('id' in item) || !('owner_id' in item)) throw new Error('item.id, item.name and item.owner_id must be set');
+
+			// Items are looked up by name, so a shared item with the same name as another item in this user's account
+			// would make those lookups pick either one, and the user's own uploads could go to the other user's item
+			const nameTakenBy = itemIdsByName.get(item.name);
+			if (item.owner_id !== userId && nameTakenBy && nameTakenBy !== item.id) {
+				nameTakenItemIds.push(item.id);
+				continue;
+			}
+			itemIdsByName.set(item.name, item.id);
 
 			await this.withTransaction(async () => {
 				try {
@@ -157,21 +198,31 @@ export default class UserItemModel extends BaseModel<UserItem> {
 					}, options);
 
 					if (this.models().item().shouldRecordChange(item.name)) {
-						await this.models().change().save({
-							item_type: ItemType.UserItem,
-							item_id: item.id,
-							item_name: item.name,
+						await this.models().change().recordChange({
+							itemName: item.name,
+							itemId: item.id,
+							sourceUserId: userId,
+							shareId: item.jop_share_id ?? '',
+							previousItem: { jop_share_id: '' },
 							type: ChangeType.Create,
-							previous_item: '',
-							user_id: userId,
+							itemType: ItemType.UserItem,
 						});
 					}
 				} catch (error) {
 					if (!options.ignoreAlreadyExists || !isUniqueConstraintError(error)) {
 						throw error;
 					}
+					skippedItemIds.push(item.id);
 				}
 			}, 'UserItemModel::addMulti');
+		}
+
+		if (skippedItemIds.length) {
+			logger.info(`addMulti: Skipped ${skippedItemIds.length} already existing user items for user ${userId}: ${itemIdSample(skippedItemIds)}`);
+		}
+
+		if (nameTakenItemIds.length) {
+			logger.warn(`addMulti: Skipped ${nameTakenItemIds.length} items for user ${userId} because the user already has a different item with the same name: ${itemIdSample(nameTakenItemIds)}`);
 		}
 
 		perfTimer.pop();
@@ -209,14 +260,13 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		} else if (options.byUserItem) {
 			userItems = [options.byUserItem];
 		} else if (options.byUserItemIds) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			userItems = await this.loadByIds(options.byUserItemIds as any);
+			userItems = await this.loadByIds(options.byUserItemIds);
 		} else {
 			throw new Error('Invalid options');
 		}
 
 		const itemIds = unique(userItems.map(ui => ui.item_id));
-		const items = await this.models().item().loadByIds(itemIds, { fields: ['id', 'name'] });
+		const items = await this.models().item().loadByIds(itemIds, { fields: ['id', 'name', 'jop_share_id'] });
 
 		await this.withTransaction(async () => {
 			for (const userItem of userItems) {
@@ -226,13 +276,15 @@ export default class UserItemModel extends BaseModel<UserItem> {
 				if (!item) continue;
 
 				if (options.recordChanges && this.models().item().shouldRecordChange(item.name)) {
-					await this.models().change().save({
-						item_type: ItemType.UserItem,
-						item_id: userItem.item_id,
-						item_name: item.name,
+					const shareId = item.jop_share_id;
+					await this.models().change().recordChange({
+						itemName: item.name,
+						itemId: userItem.item_id,
+						sourceUserId: userItem.user_id,
+						shareId,
+						previousItem: { jop_share_id: shareId },
 						type: ChangeType.Delete,
-						previous_item: '',
-						user_id: userItem.user_id,
+						itemType: ItemType.UserItem,
 					});
 				}
 			}

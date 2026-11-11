@@ -74,6 +74,10 @@ async function main() {
 			dest: `${buildLibDir}/tinymce/langs`,
 		},
 		{
+			src: `${buildDir}/images`,
+			dest: `${buildLibDir}/images`,
+		},
+		{
 			src: `${nodeModulesDir}/tesseract.js-core`,
 			dest: `${buildDir}/tesseract.js-core`,
 		},
@@ -82,6 +86,7 @@ async function main() {
 	const files = [
 		'@fortawesome/fontawesome-free/css/all.min.css',
 		'@joeattardi/emoji-button/dist/index.js',
+		'@xyflow/react/dist/style.css',
 		'codemirror/addon/',
 		'codemirror/lib/codemirror.css',
 		'mark.js/dist/mark.min.js',

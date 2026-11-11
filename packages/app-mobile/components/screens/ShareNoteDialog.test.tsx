@@ -1,21 +1,33 @@
 import * as React from 'react';
 import { AppState } from '../../utils/types';
 import { Store } from 'redux';
-import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
+import { msleep, setupDatabaseAndSynchronizer, switchClient, synchronizerStart } from '@joplin/lib/testing/test-utils';
 import createMockReduxStore from '../../utils/testing/createMockReduxStore';
 import setupGlobalStore from '../../utils/testing/setupGlobalStore';
 import TestProviderStack from '../testing/TestProviderStack';
 import ShareNoteDialog from './ShareNoteDialog';
 import Note from '@joplin/lib/models/Note';
 import mockShareService from '@joplin/lib/testing/share/mockShareService';
-import { fireEvent, render, screen, waitFor } from '../../utils/testing/testingLibrary';
+import { act, fireEvent, render, screen, waitFor } from '../../utils/testing/testingLibrary';
 import Folder from '@joplin/lib/models/Folder';
 import ShareService from '@joplin/lib/services/share/ShareService';
+import { ShareType, StateShare } from '@joplin/lib/services/share/reducer';
 
-const mockServiceForNoteSharing = () => {
+enum ShareServiceMockMode {
+	// Behave like older Joplin Server versions
+	Legacy,
+	Modern,
+}
+
+const mockServiceForNoteSharing = (shares: StateShare[], mode: ShareServiceMockMode) => {
 	mockShareService({
-		getShares: async () => {
-			return { items: [] };
+		getShares: async (query) => {
+			// Legacy server versions don't support filtering
+			if (mode === ShareServiceMockMode.Modern && query && 'item' in query) {
+				return { items: shares.filter(s => s.note_id === query.item || s.folder_id === query.item) };
+			}
+
+			return { items: shares };
 		},
 		postShares: async () => ({ id: 'test-id' }),
 		getShareInvitations: async () => null,
@@ -47,14 +59,14 @@ describe('ShareNoteDialog', () => {
 		store = createMockReduxStore();
 		setupGlobalStore(store);
 
-		mockServiceForNoteSharing();
+		mockServiceForNoteSharing([], ShareServiceMockMode.Legacy);
 	});
 
 	test('pressing "Copy Shareable Link" should publish the note', async () => {
 		const folder = await Folder.save({ title: 'Folder' });
 		const note = await Note.save({ title: 'Test', parent_id: folder.id });
 
-		render(<WrappedShareDialog noteId={note.id}/>);
+		const { unmount } = render(<WrappedShareDialog noteId={note.id}/>);
 
 		const linkButton = await screen.findByRole('button', { name: 'Copy Shareable Link' });
 		expect(linkButton).not.toBeDisabled();
@@ -67,5 +79,49 @@ describe('ShareNoteDialog', () => {
 		expect(await Note.load(note.id)).toMatchObject({
 			is_shared: 1,
 		});
+
+		unmount();
+	});
+
+	test.each([
+		{
+			label: 'should not show "Unpublish" for unpublished notes',
+			published: false,
+		},
+		{
+			label: 'should show an "Unpublish" button for published notes',
+			published: true,
+			mode: ShareServiceMockMode.Legacy,
+		},
+		{
+			label: 'should show an "Unpublish" button for published notes, for a server that supports filtering shares',
+			published: true,
+			mode: ShareServiceMockMode.Modern,
+		},
+	])('$label', async ({ published, mode }) => {
+		const folder = await Folder.save({ title: 'Folder' });
+		const note = await Note.save({ title: 'Test', parent_id: folder.id });
+
+		if (published) {
+			await ShareService.instance().shareNote(note.id, false);
+			await synchronizerStart();
+
+			mockServiceForNoteSharing([
+				{ id: '1234', note_id: note.id, folder_id: '', master_key_id: '', type: ShareType.Note },
+			], mode);
+		}
+
+		const { unmount } = render(<WrappedShareDialog noteId={note.id}/>);
+		// Yield to the event loop -- allow useEffect hooks and async calls to run.
+		await act(() => msleep(1));
+
+		if (published) {
+			expect(await screen.findByRole('button', { name: 'Unpublish' })).toBeVisible();
+		} else {
+			const unpublishButton = screen.queryByRole('button', { name: 'Unpublish' });
+			expect(unpublishButton).toBeNull();
+		}
+
+		unmount();
 	});
 });

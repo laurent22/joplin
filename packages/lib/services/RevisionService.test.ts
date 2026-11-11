@@ -501,6 +501,23 @@ describe('services/RevisionService', () => {
 		expect(revNote.user_updated_time).toBe(userUpdatedTime);
 	}));
 
+	it('should not track user_data in revisions', (async () => {
+		const n1_v0 = await Note.save({ title: 'hello' });
+		await Note.save({ id: n1_v0.id, title: 'hello world', user_data: '{"plugin":{"value":1}}' });
+		await revisionService().collectRevisions();
+
+		const revisions = await Revision.all();
+		expect(revisions.length).toBe(1);
+		const md = JSON.parse(revisions[0].metadata_diff);
+		expect(md.new.user_data).toBeUndefined();
+		expect(md.deleted).not.toContain('user_data');
+
+		// A user_data-only change should not create a revision.
+		await Note.save({ id: n1_v0.id, user_data: '{"plugin":{"value":2}}' });
+		await revisionService().collectRevisions();
+		expect((await Revision.all()).length).toBe(1);
+	}));
+
 	it('should not create a revision if there is already a recent one', (async () => {
 		const n1_v0 = await Note.save({ title: '' });
 		await Note.save({ id: n1_v0.id, title: 'hello' });

@@ -3,7 +3,7 @@
 // Provides metrics about the operating system and server application, and format them in a message
 // that can be printed to log.
 
-import { MemUsedInfo, cpu, mem } from 'node-os-utils';
+import * as os from 'os';
 import { Minute } from './time';
 import Logger from '@joplin/utils/Logger';
 
@@ -53,43 +53,26 @@ export const clearMetrics = () => {
 	activeRequests_.clear();
 };
 
-export const heartbeatMessage = async () => {
-	const interval = 1000;
-
-	const promises: Promise<void>[] = [];
-
-	interface Info {
-		cpu?: number;
-		memory?: MemUsedInfo;
-	}
-
-	const info: Info = {};
-
-	const getCpu = async () => {
-		info.cpu = await cpu.usage(interval);
-	};
-
-	const getMemory = async () => {
-		info.memory = await mem.used();
-	};
-
-	promises.push(getCpu());
-	promises.push(getMemory());
-
-	await Promise.all(promises);
+export const heartbeatMessage = () => {
+	const loadAvg = os.loadavg();
+	const totalMemMb = Math.round(os.totalmem() / (1024 * 1024));
+	const freeMemMb = Math.round(os.freemem() / (1024 * 1024));
+	const usedMemMb = totalMemMb - freeMemMb;
 
 	const line: string[] = [];
 
-	line.push(`Cpu: ${info.cpu}%`);
-	line.push(`Mem: ${info.memory.usedMemMb} / ${info.memory.totalMemMb} MB (${Math.round((info.memory.usedMemMb / info.memory.totalMemMb) * 100)}%)`);
+	const cpuCount = os.cpus().length;
+	const cpuPercent = Math.round((loadAvg[0] / cpuCount) * 100);
+	line.push(`Cpu: ${cpuPercent}%`);
+	line.push(`Mem: ${usedMemMb} / ${totalMemMb} MB (${Math.round((usedMemMb / totalMemMb) * 100)}%)`);
 	line.push(`Req: ${requestsPerMinute()} / min`);
 	line.push(`Active req: ${activeRequests_.size}`);
 
 	return line.join('; ');
 };
 
-export const logHeartbeat = async () => {
-	logger.info(await heartbeatMessage());
+export const logHeartbeat = () => {
+	logger.info(heartbeatMessage());
 };
 
 export const onRequestStart = (requestId: string) => {

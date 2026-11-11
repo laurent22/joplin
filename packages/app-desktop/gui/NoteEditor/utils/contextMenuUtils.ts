@@ -8,6 +8,7 @@ import CommandService from '@joplin/lib/services/CommandService';
 import { type MenuItem as MenuItemType } from 'electron';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import { ModelType } from '@joplin/lib/BaseModel';
+import { TinyMceEditorEvents } from '../NoteBody/TinyMCE/utils/types';
 
 const MenuItem = bridge().MenuItem;
 const logger = Logger.create('contextMenuUtils');
@@ -37,21 +38,17 @@ export interface ContextMenuOptions {
 	linkToCopy: string;
 	textToCopy: string;
 	htmlToCopy: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	insertContent: Function;
+	insertContent: (content: string)=> void;
 	isReadOnly?: boolean;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	fireEditorEvent: Function;
+	fireEditorEvent: (event: TinyMceEditorEvents)=> void;
 	htmlToMd: HtmlToMarkdownHandler;
 	mdToHtml: MarkupToHtmlHandler;
 }
 
 export interface ContextMenuItem {
 	label: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onAction: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	isActive: Function;
+	onAction: (options: ContextMenuOptions)=> void;
+	isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions)=> boolean;
 	isSeparator?: boolean;
 }
 

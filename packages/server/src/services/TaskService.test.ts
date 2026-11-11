@@ -111,4 +111,22 @@ describe('TaskService', () => {
 		expect(stateAfter.running).toBe(0);
 	});
 
+	test('should not fail if an interrupted task no longer exists', async () => {
+		const service = newService();
+
+		const tasks = createDemoTasks();
+		await service.registerTasks(tasks);
+
+		// Use a task ID with no corresponding TaskId enum entry.
+		// This simulates a task that is no longer present after downgrading
+		// the server:
+		const nonExistentTaskId = 123456;
+		await models().taskState().save({
+			id: nonExistentTaskId,
+			task_id: nonExistentTaskId as TaskId,
+			running: 1,
+		}, { isNew: true });
+
+		await service.resetInterruptedTasks();
+	});
 });

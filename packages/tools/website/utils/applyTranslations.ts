@@ -1,9 +1,9 @@
 import { unique } from '@joplin/lib/ArrayUtils';
 import { attributesHtml, isSelfClosingTag } from '@joplin/renderer/htmlUtils';
 import { Translations } from '../../utils/translation';
-const Entities = require('html-entities').AllHtmlEntities;
+import { AllHtmlEntities as Entities } from 'html-entities';
 const htmlentities = new Entities().encode;
-const htmlparser2 = require('@joplin/fork-htmlparser2');
+import * as htmlparser2 from '@joplin/fork-htmlparser2';
 
 const trimHtml = (content: string) => {
 	return content
@@ -95,8 +95,7 @@ export default (html: string, _languageCode: string, translations: Translations)
 
 	const parser = new htmlparser2.Parser({
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		onopentag: (name: string, attrs: any) => {
+		onopentag: (name: string, attrs: Record<string, string>) => {
 			if (name === 'script') state.inScript = true;
 
 			if ('translate' in attrs) {

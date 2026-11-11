@@ -109,6 +109,7 @@ export const withDerivedColors = (theme: Theme) => {
 
 	return {
 		...theme,
+
 		borderColor4: rgbString(Color(theme.color).alpha(0.3)),
 		iconColor: rgbString(Color(theme.color).alpha(0.8)),
 		focusOutlineColor: theme.colorWarn,
@@ -372,8 +373,11 @@ export function themeStyle(themeId: number): ThemeStyle {
 	return themeCache_[cacheKey];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const cachedStyles_: any = {
+const cachedStyles_: {
+	themeId: number | null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Cached styles are heterogeneous per call site; see buildStyle below
+	styles: Record<string, { style: any; timestamp: number }>;
+} = {
 	themeId: null,
 	styles: {},
 };
@@ -381,10 +385,9 @@ const cachedStyles_: any = {
 // cacheKey must be a globally unique key, and must change whenever
 // the dependencies of the style change. If the style depends only
 // on the theme, a static string can be provided as a cache key.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partially refactored code from before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Style shape varies per call site (CSSProperties for React, styled-components objects, plain CSS strings)
 type BuildStyleCallback = (style: ThemeStyle)=> any;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code from before rule was applied
-export function buildStyle(cacheKey: any, themeId: number, callback: BuildStyleCallback) {
+export function buildStyle(cacheKey: string | (string | number)[], themeId: number, callback: BuildStyleCallback) {
 	cacheKey = Array.isArray(cacheKey) ? cacheKey.join('_') : cacheKey;
 
 	// We clear the cache whenever switching themes

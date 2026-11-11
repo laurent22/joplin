@@ -4,12 +4,15 @@ import { cookieDelete, cookieGet } from '../../utils/cookies';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, models, parseHtml, createUser } from '../../utils/testing/testUtils';
 import { AppContext } from '../../utils/types';
 import * as crypto from '../../utils/crypto';
+import { limiterLoginAccountBruteForce } from '../../utils/request/limiterAccountBruteForce';
+import config from '../../config';
 
-async function doLogin(email: string, password: string): Promise<AppContext> {
+async function doLogin(email: string, password: string, headers: Record<string, string> = {}): Promise<AppContext> {
 	const context = await koaAppContext({
 		request: {
 			method: 'POST',
 			url: '/login',
+			headers,
 			body: {
 				email: email,
 				password: password,
@@ -40,7 +43,7 @@ async function doLoginWithMFA(email: string, password: string, mfaCode: string, 
 	return context;
 }
 
-describe('index_login', () => {
+describe('login', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('index_login', {
@@ -80,6 +83,18 @@ describe('index_login', () => {
 		const sessionId = cookieGet(context, 'sessionId');
 		const session: Session = await models().session().load(sessionId);
 		expect(session.user_id).toBe(user.id);
+	});
+
+	test.each([
+		['a cross-site request', () => ({ 'sec-fetch-site': 'cross-site' }), false],
+		['a same-site request', () => ({ 'sec-fetch-site': 'same-site' }), false],
+		['another origin', () => ({ origin: 'https://attacker.example' }), false],
+		['a same-origin request', () => ({ 'sec-fetch-site': 'same-origin' }), true],
+		['the server origin', () => ({ origin: new URL(config().baseUrl).origin }), true],
+	])('should only log in from the server\'s own login page: %s', async (_label, headers, shouldLogIn) => {
+		const user = await createUser(1);
+		const context = await doLogin(user.email, '123456', headers());
+		expect(!!cookieGet(context, 'sessionId')).toBe(shouldLogIn);
 	});
 
 	test('should not login with invalid credentials', async () => {
@@ -147,6 +162,33 @@ describe('index_login', () => {
 		const context = await doLogin(user.email, '123456');
 
 		expect(context.response.body.toString().includes('<label class="label">Authentication code</label>')).toBe(true);
+
+		// Otherwise anyone could find out which accounts have MFA
+		const wrongPasswordContext = await doLogin(user.email, 'wrong-password');
+		expect(wrongPasswordContext.response.body.toString().includes('<label class="label">Authentication code</label>')).toBe(false);
+	});
+
+	test('should let the owner of a blocked account log in from the form with their password and MFA code', async () => {
+		process.env.JOPLIN_TEST_ACCOUNT_LIMITER = '1';
+		const checkCode = jest.spyOn(crypto, 'isValidMFACode').mockImplementation((_secret, code) => code === '654321');
+
+		try {
+			const user = await createUser(1);
+			await models().user().save({ id: user.id, totp_secret: 'totp_secret' });
+			for (let i = 0; i < 10; i++) await doLogin(user.email, `wrong-password-${i}`);
+
+			// The form asks for the code, as it is the only way in while the account is blocked
+			const blockedContext = await doLogin(user.email, '123456');
+			expect(cookieGet(blockedContext, 'sessionId')).toBe(undefined);
+			expect(blockedContext.response.body.toString().includes('<label class="label">Authentication code</label>')).toBe(true);
+
+			const context = await doLoginWithMFA(user.email, '123456', '654321');
+			expect(cookieGet(context, 'sessionId')).toBeTruthy();
+		} finally {
+			checkCode.mockRestore();
+			delete process.env.JOPLIN_TEST_ACCOUNT_LIMITER;
+			await limiterLoginAccountBruteForce.reset();
+		}
 	});
 
 	test('should populate the email and password input fields with sent values if user has MFA enabled', async () => {

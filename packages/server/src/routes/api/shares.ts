@@ -1,17 +1,21 @@
 import { ErrorBadRequest, ErrorNotFound } from '../../utils/errors';
-import { Share, ShareType } from '../../services/database/types';
+import { Share, ShareType, ShareUser } from '../../services/database/types';
 import { bodyFields, ownerRequired } from '../../utils/requestUtils';
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { AclAction } from '../../models/BaseModel';
+import limiterShareInvitations from '../../utils/request/limiterShareInvitations';
+import Logger from '@joplin/utils/Logger';
 
 interface ShareApiInput extends Share {
 	folder_id?: string;
 	note_id?: string;
 	recursive?: number;
 }
+
+const logger = Logger.create('api/shares');
 
 const router = new Router(RouteType.Api);
 
@@ -32,6 +36,7 @@ router.post('api/shares', async (_path: SubPath, ctx: AppContext) => {
 	const shareInput: ShareApiInput = shareModel.fromApiInput(fields) as ShareApiInput;
 	if (fields.folder_id) shareInput.folder_id = fields.folder_id;
 	if (fields.note_id) shareInput.note_id = fields.note_id;
+	if ('type' in fields) shareInput.type = Number(fields.type) as ShareType;
 	const masterKeyId = fields.master_key_id || '';
 
 	// - The API end point should only expose two ways of sharing:
@@ -40,6 +45,10 @@ router.post('api/shares', async (_path: SubPath, ctx: AppContext) => {
 	// - Additionally, the App method is available, but not exposed via the API.
 
 	if (shareInput.folder_id) {
+		if (shareInput.type === ShareType.PublishedFolder) {
+			return ctx.joplin.models.share().sharePublishedFolder(ctx.joplin.owner, shareInput.folder_id);
+		}
+
 		return ctx.joplin.models.share().shareFolder(ctx.joplin.owner, shareInput.folder_id, masterKeyId);
 	} else if (shareInput.note_id) {
 		return ctx.joplin.models.share().shareNote(ctx.joplin.owner, shareInput.note_id, masterKeyId, fields.recursive === 1);
@@ -57,17 +66,32 @@ router.post('api/shares/:id/users', async (path: SubPath, ctx: AppContext) => {
 	}
 
 	const fields = await bodyFields(ctx.req) as UserInput;
-	const user = await ctx.joplin.models.user().loadByEmail(fields.email);
-	if (!user) throw new ErrorNotFound('User not found');
-
 	const masterKey = fields.master_key || '';
 	const shareId = path.id;
 
-	await ctx.joplin.models.shareUser().checkIfAllowed(ctx.joplin.owner, AclAction.Create, {
+	// Check that the caller owns the share before looking up the email,
+	// otherwise the end point reports whether any given address has an account.
+	const share = await ctx.joplin.models.share().load(shareId);
+	if (!share) throw new ErrorNotFound(`No such share: ${shareId}`);
+	await ctx.joplin.models.share().checkIfAllowed(ctx.joplin.owner, AclAction.Read, share);
+	if (share.type !== ShareType.Folder) throw new ErrorBadRequest('Only a shared notebook can have recipients');
+
+	const checkResource: ShareUser = {
 		share_id: shareId,
-		user_id: user.id,
 		master_key: masterKey,
-	});
+	};
+
+	await ctx.joplin.models.shareUser().checkCanInvite(ctx.joplin.owner, checkResource);
+	await limiterShareInvitations(ctx.joplin.owner.id);
+
+	const user = await ctx.joplin.models.user().loadByEmail(fields.email);
+	if (!user) {
+		logger.info(`Share ${shareId}: invitation from ${ctx.joplin.owner.id} to an address without an account`);
+		throw new ErrorNotFound('User not found');
+	}
+
+	checkResource.user_id = user.id;
+	await ctx.joplin.models.shareUser().checkIfAllowed(ctx.joplin.owner, AclAction.Create, checkResource);
 
 	return ctx.joplin.models.shareUser().addByEmail(shareId, user.email, masterKey);
 });
@@ -105,7 +129,7 @@ router.get('api/shares/:id', async (path: SubPath, ctx: AppContext) => {
 	const shareModel = ctx.joplin.models.share();
 	const share = await shareModel.load(path.id);
 
-	if (share && share.type === ShareType.Note) {
+	if (share && (share.type === ShareType.Note || share.type === ShareType.PublishedFolder)) {
 		// No authentication is necessary - anyone who knows the share ID is allowed
 		// to access the file. It is essentially public.
 		return shareModel.toApiOutput(share);

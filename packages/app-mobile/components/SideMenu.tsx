@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { AccessibilityInfo, Animated, Dimensions, Easing, I18nManager, LayoutChangeEvent, PanResponder, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { AccessibilityInfo, Animated, Dimensions, Easing, I18nManager, LayoutChangeEvent, PanResponder, PanResponderGestureState, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { State } from '@joplin/lib/reducer';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import AccessibleView from './accessibility/AccessibleView';
 import { _ } from '@joplin/lib/locale';
 import useReduceMotionEnabled from '../utils/hooks/useReduceMotionEnabled';
 import { themeStyle } from './global-style';
-import useSafeAreaPadding from '../utils/hooks/useSafeAreaPadding';
 
 export enum SideMenuPosition {
 	Left = 'left',
@@ -22,14 +21,14 @@ interface Props {
 
 	menu: React.ReactNode;
 	children: React.ReactNode|React.ReactNode[];
-	edgeHitWidth: number;
 	toleranceX: number;
-	toleranceY: number;
+	minHorizontalSwipe: number;
 	openMenuOffset: number;
 	menuPosition: SideMenuPosition;
 
 	onChange: OnChangeCallback;
 	disableGestures: boolean;
+	disableOpenGesture: boolean;
 }
 
 interface UseStylesProps {
@@ -41,7 +40,6 @@ interface UseStylesProps {
 
 const useStyles = ({ themeId, isLeftMenu, menuWidth, menuOpenFraction }: UseStylesProps) => {
 	const { height: windowHeight, width: windowWidth } = useWindowDimensions();
-	const safeAreaInsets = useSafeAreaPadding();
 
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
@@ -81,11 +79,6 @@ const useStyles = ({ themeId, isLeftMenu, menuWidth, menuOpenFraction }: UseStyl
 				bottom: 0,
 				width: menuWidth,
 
-				paddingLeft: isLeftMenu ? safeAreaInsets.paddingLeft : 0,
-				paddingRight: isLeftMenu ? 0 : safeAreaInsets.paddingRight,
-				paddingTop: safeAreaInsets.paddingTop,
-				paddingBottom: safeAreaInsets.paddingBottom,
-
 				// In React Native, RTL replaces `left` with `right` and `right` with `left`.
 				// As such, we need to reverse the normal direction in RTL mode.
 				...(isLeftMenu === !I18nManager.isRTL ? {
@@ -117,7 +110,7 @@ const useStyles = ({ themeId, isLeftMenu, menuWidth, menuOpenFraction }: UseStyl
 				width: windowWidth,
 			},
 		});
-	}, [themeId, isLeftMenu, windowWidth, windowHeight, menuWidth, menuOpenFraction, safeAreaInsets]);
+	}, [themeId, isLeftMenu, windowWidth, windowHeight, menuWidth, menuOpenFraction]);
 };
 
 interface UseAnimationsProps {
@@ -128,6 +121,7 @@ interface UseAnimationsProps {
 
 const useAnimations = ({ menuWidth, isLeftMenu, open }: UseAnimationsProps) => {
 	const [animating, setIsAnimating] = useState(false);
+	const animationGenerationRef = useRef(0);
 	const menuDragOffset = useMemo(() => new Animated.Value(0), []);
 	const basePositioningFraction = useMemo(() => new Animated.Value(0), []);
 	const maximumDragOffsetValue = useMemo(() => new Animated.Value(1), []);
@@ -150,6 +144,10 @@ const useAnimations = ({ menuWidth, isLeftMenu, open }: UseAnimationsProps) => {
 	const reduceMotionEnabled = useReduceMotionEnabled();
 	const reduceMotionEnabledRef = useRef(false);
 	reduceMotionEnabledRef.current = reduceMotionEnabled;
+	const beginAnimating = useCallback(() => {
+		animationGenerationRef.current++;
+		setIsAnimating(true);
+	}, []);
 
 	const updateMenuPosition = useCallback(() => {
 		const baseAnimationProps = {
@@ -157,23 +155,22 @@ const useAnimations = ({ menuWidth, isLeftMenu, open }: UseAnimationsProps) => {
 			duration: reduceMotionEnabledRef.current ? 0 : 200,
 			useNativeDriver: true,
 		};
+		const animationGeneration = ++animationGenerationRef.current;
 		setIsAnimating(true);
 
 		const animation = Animated.parallel([
 			Animated.timing(basePositioningFraction, { toValue: open ? 1 : 0, ...baseAnimationProps }),
 			Animated.timing(menuDragOffset, { toValue: 0, ...baseAnimationProps }),
 		]);
-		animation.start((result) => {
-			if (result.finished) {
-				setIsAnimating(false);
-			}
+		animation.start(() => {
+			if (animationGeneration === animationGenerationRef.current) setIsAnimating(false);
 		});
 	}, [open, menuDragOffset, basePositioningFraction]);
 	useEffect(() => {
 		updateMenuPosition();
 	}, [updateMenuPosition]);
 
-	return { setIsAnimating, animating, updateMenuPosition, menuOpenFraction, menuDragOffset };
+	return { beginAnimating, animating, updateMenuPosition, menuOpenFraction, menuDragOffset };
 };
 
 const SideMenuComponent: React.FC<Props> = props => {
@@ -184,7 +181,6 @@ const SideMenuComponent: React.FC<Props> = props => {
 	}, [props.isOpen]);
 
 	const [menuWidth, setMenuWidth] = useState(0);
-	const [contentWidth, setContentWidth] = useState(0);
 
 	// In right-to-left layout, swap left and right to be consistent with other parts of
 	// the app's layout.
@@ -195,13 +191,22 @@ const SideMenuComponent: React.FC<Props> = props => {
 		const openMenuOffsetPercentage = props.openMenuOffset / Dimensions.get('window').width;
 		const menuWidth = Math.floor(width * openMenuOffsetPercentage);
 
-		setContentWidth(width);
 		setMenuWidth(menuWidth);
 	}, [props.openMenuOffset]);
 
-	const { animating, setIsAnimating, menuDragOffset, updateMenuPosition, menuOpenFraction } = useAnimations({
+	const { animating, beginAnimating, menuDragOffset, updateMenuPosition, menuOpenFraction } = useAnimations({
 		isLeftMenu, menuWidth, open,
 	});
+
+	const onGestureEnd = useCallback((gestureState: PanResponderGestureState) => {
+		const newOpen = (gestureState.dx > 0) === isLeftMenu;
+
+		if (newOpen === open) {
+			updateMenuPosition();
+		} else {
+			setIsOpen(newOpen);
+		}
+	}, [isLeftMenu, open, updateMenuPosition]);
 
 	const panResponder = useMemo(() => {
 		return PanResponder.create({
@@ -210,38 +215,40 @@ const SideMenuComponent: React.FC<Props> = props => {
 					return false;
 				}
 
-				let startX;
+				if (props.disableOpenGesture && !open) {
+					return false;
+				}
+
 				let dx;
 				const dy = gestureState.dy;
-
-				// Untransformed start position of the gesture -- moveX is the current position of
-				// the pointer. Subtracting dx gives us the original start position.
-				const gestureStartScreenX = gestureState.moveX - gestureState.dx;
 
 				// Transform x, dx such that they are relative to the target screen edge -- this simplifies later
 				// math.
 				if (isLeftMenu) {
-					startX = gestureStartScreenX;
 					dx = gestureState.dx;
 				} else {
-					startX = contentWidth - gestureStartScreenX;
 					dx = -gestureState.dx;
 				}
 
-				const motionWithinToleranceY = Math.abs(dy) <= props.toleranceY;
-				let startWithinTolerance, motionWithinToleranceX;
+				// Allowed horizontal swipe gestures can be made from anywhere on the screen
+				const horizontalEnough = Math.abs(dx) >= props.minHorizontalSwipe; // Check that the dead zone has passed before starting the gesture, catering for curved swipes
+				const horizontalDominant = Math.abs(dx) > Math.abs(dy) * 2; // Check the direction is horizontal, allowing diagonal swipes up to a certain angle
+				let motionWithinToleranceX; // Check the correct direction is used in relation to whether swiping open / closed
+
 				if (open) {
-					startWithinTolerance = startX >= menuWidth - props.edgeHitWidth;
 					motionWithinToleranceX = dx <= -props.toleranceX;
 				} else {
-					startWithinTolerance = startX <= props.edgeHitWidth;
 					motionWithinToleranceX = dx >= props.toleranceX;
 				}
 
-				return startWithinTolerance && motionWithinToleranceX && motionWithinToleranceY;
+				return (
+					motionWithinToleranceX &&
+					horizontalEnough &&
+					horizontalDominant
+				);
 			},
 			onPanResponderGrant: () => {
-				setIsAnimating(true);
+				beginAnimating();
 			},
 			onPanResponderMove: Animated.event([
 				null,
@@ -249,15 +256,14 @@ const SideMenuComponent: React.FC<Props> = props => {
 				{ dx: menuDragOffset },
 			], { useNativeDriver: false }),
 			onPanResponderEnd: (_event, gestureState) => {
-				const newOpen = (gestureState.dx > 0) === isLeftMenu;
-				if (newOpen === open) {
-					updateMenuPosition();
-				} else {
-					setIsOpen(newOpen);
-				}
+				onGestureEnd(gestureState);
+			},
+			onPanResponderTerminate: (_event, gestureState) => {
+				// This prevents the gesture from leaving the menu partially open on web
+				onGestureEnd(gestureState);
 			},
 		});
-	}, [isLeftMenu, menuDragOffset, menuWidth, props.toleranceX, props.toleranceY, contentWidth, open, props.disableGestures, props.edgeHitWidth, updateMenuPosition, setIsAnimating]);
+	}, [isLeftMenu, menuDragOffset, props.toleranceX, props.minHorizontalSwipe, open, props.disableGestures, props.disableOpenGesture, onGestureEnd, beginAnimating]);
 
 	const onChangeRef = useRef(props.onChange);
 	onChangeRef.current = props.onChange;
@@ -270,10 +276,11 @@ const SideMenuComponent: React.FC<Props> = props => {
 	}, [open]);
 
 	const onCloseButtonPress = useCallback(() => {
+		if (!open) return;
 		setIsOpen(false);
 		// Set isAnimating as soon as possible to avoid components disappearing, then reappearing.
-		setIsAnimating(true);
-	}, [setIsAnimating]);
+		beginAnimating();
+	}, [open, beginAnimating]);
 
 	const styles = useStyles({ themeId: props.themeId, menuOpenFraction, menuWidth, isLeftMenu });
 

@@ -4,7 +4,7 @@ import { ModelType } from '../../../BaseModel';
 import BaseItem from '../../../models/BaseItem';
 import Resource from '../../../models/Resource';
 import { getItemUserData, setItemUserData, deleteItemUserData } from '../../../models/utils/userData';
-import Api from '../../rest/Api';
+import Api, { RequestFile, RequestMethod } from '../../rest/Api';
 import Plugin from '../Plugin';
 import { Path } from './types';
 
@@ -46,8 +46,7 @@ import { Path } from './types';
  */
 export default class JoplinData {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private api_: any = new Api();
+	private api_: Api = new Api();
 	private pathSegmentRegex_: RegExp;
 	private plugin: Plugin;
 
@@ -55,7 +54,7 @@ export default class JoplinData {
 		this.plugin = plugin;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: body can be any serialisable value
 	private serializeApiBody(body: any) {
 		if (typeof body !== 'string') { return JSON.stringify(body); }
 		return body;
@@ -77,24 +76,24 @@ export default class JoplinData {
 		return path.join('/');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: query/body are arbitrary user-provided values
 	public async get(path: Path, query: any = null) {
-		return this.api_.route('GET', this.pathToString(path), query);
+		return this.api_.route(RequestMethod.GET, this.pathToString(path), query);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async post(path: Path, query: any = null, body: any = null, files: any[] = null) {
-		return this.api_.route('POST', this.pathToString(path), query, this.serializeApiBody(body), files);
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: query/body are arbitrary user-provided values
+	public async post(path: Path, query: any = null, body: any = null, files: RequestFile[] = null) {
+		return this.api_.route(RequestMethod.POST, this.pathToString(path), query, this.serializeApiBody(body), files);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async put(path: Path, query: any = null, body: any = null, files: any[] = null) {
-		return this.api_.route('PUT', this.pathToString(path), query, this.serializeApiBody(body), files);
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: query/body are arbitrary user-provided values
+	public async put(path: Path, query: any = null, body: any = null, files: RequestFile[] = null) {
+		return this.api_.route(RequestMethod.PUT, this.pathToString(path), query, this.serializeApiBody(body), files);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: query/body are arbitrary user-provided values
 	public async delete(path: Path, query: any = null) {
-		return this.api_.route('DELETE', this.pathToString(path), query);
+		return this.api_.route(RequestMethod.DELETE, this.pathToString(path), query);
 	}
 
 	public async itemType(itemId: string): Promise<ModelType> {

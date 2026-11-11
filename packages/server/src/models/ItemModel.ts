@@ -1,11 +1,11 @@
 import BaseModel, { SaveOptions, LoadOptions, DeleteOptions as BaseDeleteOptions, ValidateOptions, AclAction } from './BaseModel';
-import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType, User, UserItem } from '../services/database/types';
+import { ItemType, databaseSchema, Uuid, Item, ShareType, ShareUserStatus, Share, ChangeType, User, UserItem } from '../services/database/types';
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 import { isJoplinItemName, isJoplinResourceBlobPath, linkedResourceIds, serializeJoplinItem, unserializeJoplinItem } from '../utils/joplinUtils';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { ApiError, CustomErrorCode, ErrorConflict, ErrorForbidden, ErrorPayloadTooLarge, ErrorUnprocessableEntity, ErrorCode, ErrorBadRequest } from '../utils/errors';
 import { Knex } from 'knex';
-import { ChangePreviousItem } from './ChangeModel';
+import { ChangePreviousItem } from './ChangeModel/ChangeModel';
 import { unique } from '../utils/array';
 import StorageDriverBase, { Context } from './items/storage/StorageDriverBase';
 import { DbConnection, isUniqueConstraintError, returningSupported } from '../db';
@@ -39,6 +39,10 @@ export interface DeleteDatabaseContentOptions {
 	maxProcessedItems?: number;
 }
 
+export interface ProcessOrphanedItemsOptions {
+	batchSize?: number;
+}
+
 export interface SaveFromRawContentItem {
 	name: string;
 	body: Buffer;
@@ -46,8 +50,7 @@ export interface SaveFromRawContentItem {
 
 export interface SaveFromRawContentResultItem {
 	item: Item;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	error: any;
+	error: (Error & { httpCode?: number; code?: string }) | { httpCode?: number; code?: string; message?: string; stack?: string } | null;
 }
 
 export type SaveFromRawContentResult = Record<string, SaveFromRawContentResultItem>;
@@ -132,10 +135,20 @@ export default class ItemModel extends BaseModel<Item> {
 			} else {
 				if (share.owner_id !== user.id) {
 					const shareUser = await this.models().shareUser().byShareAndUserId(share.id, user.id);
-					if (!shareUser) throw new ErrorForbidden('user has no access to this share');
+					if (!shareUser || shareUser.status !== ShareUserStatus.Accepted) throw new ErrorForbidden('user has no access to this share');
 				}
 			}
 		}
+	}
+
+	// A recipient uploading a stale copy of a share's root folder (e.g. from a previous sync target), moving it to another
+	// share, or moving it inside another folder (which makes the owner's client unshare it) would otherwise take it away
+	// from the owner. `IsReadOnly` makes the client revert to the server version.
+	private async checkCanChangeShareRootFolder(user: User, itemId: Uuid, previousShareId: Uuid) {
+		if (!previousShareId) return;
+		const share = await this.models().share().load(previousShareId, { fields: ['owner_id', 'item_id'] });
+		if (!share || share.item_id !== itemId || share.owner_id === user.id) return;
+		throw new ErrorForbidden('Only the share owner can move or unshare its root folder', { code: ErrorCode.IsReadOnly });
 	}
 
 	public fromApiInput(item: Item): Item {
@@ -152,8 +165,7 @@ export default class ItemModel extends BaseModel<Item> {
 		const output: Item = {};
 		const propNames = ['id', 'name', 'updated_time', 'created_time'];
 		for (const k of Object.keys(object)) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			if (propNames.includes(k)) (output as any)[k] = (object as any)[k];
+			if (propNames.includes(k)) (output as Record<string, unknown>)[k] = (object as Record<string, unknown>)[k];
 		}
 		return output;
 	}
@@ -250,6 +262,26 @@ export default class ItemModel extends BaseModel<Item> {
 		return items.length ? items[0] : null;
 	}
 
+	public async loadByJopParentId(userId: Uuid | Uuid[], parentId: string, options: ItemLoadOptions = {}): Promise<Item[]> {
+		const userIds = Array.isArray(userId) ? userId : [userId];
+		if (!userIds.length) return [];
+
+		const rows: Item[] = await this
+			.db('user_items')
+			.leftJoin('items', 'items.id', 'user_items.item_id')
+			.distinct(this.selectFields(options, null, 'items', ['items.content_size']))
+			.whereIn('user_items.user_id', userIds)
+			.where('items.jop_parent_id', '=', parentId);
+
+		if (options.withContent) {
+			for (const row of rows) {
+				row.content = await this.storageDriverRead(row.id, row.content_size, { models: this.models() });
+			}
+		}
+
+		return rows;
+	}
+
 	public async loadByNames(userId: Uuid | Uuid[], names: string[], options: ItemLoadOptions = {}): Promise<Item[]> {
 		if (!names.length) return [];
 
@@ -291,7 +323,7 @@ export default class ItemModel extends BaseModel<Item> {
 		const items: Item[] = await this
 			.db('user_items')
 			.leftJoin('items', 'items.id', 'user_items.item_id')
-			.select(fields)
+			.distinct(fields)
 			.whereIn('items.id', ids);
 
 		const promises: Promise<Buffer>[] = [];
@@ -553,7 +585,7 @@ export default class ItemModel extends BaseModel<Item> {
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Returns either a NoteEntity / FolderEntity / ResourceEntity / TagEntity etc. depending on jop_type; callers consume specific properties without narrowing
 	public itemToJoplinItem(itemRow: Item): any {
 		if (itemRow.jop_type <= 0) throw new Error(`Not a Joplin item: ${itemRow.id}`);
 		if (!itemRow.content) throw new Error('Item content is missing');
@@ -565,6 +597,12 @@ export default class ItemModel extends BaseModel<Item> {
 		item.type_ = itemRow.jop_type;
 		item.encryption_applied = itemRow.jop_encryption_applied;
 		item.updated_time = itemRow.jop_updated_time;
+
+		// Old notes and folders have no deleted_time in their content, so
+		// default it to 0 here
+		if ((item.type_ === ModelType.Note || item.type_ === ModelType.Folder) && item.deleted_time === undefined) {
+			item.deleted_time = 0;
+		}
 
 		return item;
 	}
@@ -589,7 +627,7 @@ export default class ItemModel extends BaseModel<Item> {
 			error: Error;
 			resourceIds?: string[];
 			isNote?: boolean;
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Heterogeneous Joplin entity types (Note/Folder/Resource/Tag) — see itemToJoplinItem
 			joplinItem?: any;
 		}
 
@@ -598,6 +636,8 @@ export default class ItemModel extends BaseModel<Item> {
 			name: string;
 			owner_id: string;
 			jop_share_id: string;
+			jop_type: ModelType;
+			jop_parent_id: string;
 		}
 
 		return this.withTransaction(async () => {
@@ -632,13 +672,29 @@ export default class ItemModel extends BaseModel<Item> {
 						name: rawItem.name,
 					};
 
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See itemToJoplinItem - heterogeneous entity type
 					let joplinItem: any = null;
 
 					let resourceIds: string[] = [];
 
 					if (isJoplinItem) {
 						joplinItem = await unserializeJoplinItem(rawItem.body.toString());
+
+						// Null bytes break Joplin's serialised item format and can cause
+						// silent truncation in some HTTP clients (notably React Native on
+						// iOS), making the item unreadable on those devices.
+						const nul = String.fromCharCode(0);
+						for (const k of Object.keys(joplinItem)) {
+							if (typeof joplinItem[k] === 'string' && joplinItem[k].includes(nul)) {
+								throw new ErrorUnprocessableEntity(`Item ${rawItem.name} cannot be saved because its ${k} contains a null byte`);
+							}
+						}
+
+						// Clients save a downloaded item under the id in its content, so an item whose content
+						// id differs from its name would overwrite another item on other share participants' devices
+						if (rawItem.name !== `${joplinItem.id}.md`) throw new ErrorUnprocessableEntity(`Item ${rawItem.name} cannot be saved because its id does not match its name: ${joplinItem.id}`);
+						if (existingItem && existingItem.jop_type && existingItem.jop_type !== joplinItem.type_) throw new ErrorUnprocessableEntity(`Item ${rawItem.name} cannot change its type`);
+
 						isNote = joplinItem.type_ === ModelType.Note;
 						resourceIds = isNote ? linkedResourceIds(joplinItem.body) : [];
 
@@ -665,7 +721,12 @@ export default class ItemModel extends BaseModel<Item> {
 
 					if (existingItem) item.id = existingItem.id;
 
-					if (options.shareId) item.jop_share_id = options.shareId;
+					if (options.shareId) {
+						// Shared items are propagated to every participant, so a shared info.json (or other file) would
+						// shadow the participant's own copy. Joplin items carry their share_id in their content instead.
+						if (!isJoplinResourceBlobPath(rawItem.name)) throw new ErrorUnprocessableEntity(`Only resource blobs can be associated with a share via share_id: ${rawItem.name}`);
+						item.jop_share_id = options.shareId;
+					}
 
 					// Check if the user is allowed to create an item here - in
 					// particular it would be disabled if the user has only
@@ -688,7 +749,11 @@ export default class ItemModel extends BaseModel<Item> {
 						await this.checkIfAllowed(user, AclAction.Create, itemToCheck);
 					} else {
 						const newShareId = item.jop_share_id || '';
+						const parentChanged = isJoplinItem && (item.jop_parent_id || '') !== (existingItem.jop_parent_id || '');
 						if (previousShareId !== newShareId) await this.checkIfAllowed(user, AclAction.Update, itemToCheck);
+						// Share roots are folders, which saves a share lookup for every note that is moved
+						const isFolder = existingItem.jop_type === ModelType.Folder;
+						if (isFolder && (previousShareId !== newShareId || parentChanged)) await this.checkCanChangeShareRootFolder(user, existingItem.id, previousShareId);
 					}
 
 					await this.models().user().checkMaxItemSizeLimit(user, rawItem.body, item, joplinItem);
@@ -723,55 +788,50 @@ export default class ItemModel extends BaseModel<Item> {
 
 				const itemToSave = { ...o.item };
 
+				const content = itemToSave.content;
+				delete itemToSave.content;
+
+				itemToSave.content_storage_id = (await this.storageDriver()).storageId;
+
+				itemToSave.content_size = content ? content.byteLength : 0;
+
+				// Here we save the item row and content, and we want to
+				// make sure that either both are saved or none of them.
+				// The savepoint wraps the entire operation so that any
+				// error (including unique constraint violations) is
+				// rolled back cleanly without aborting the outer
+				// transaction.
+
+				// TODO: When an item is uploaded multiple times
+				// simultaneously there could be a race condition, where the
+				// content would not match the db row (for example, the
+				// content_size would differ).
+				//
+				// Possible solutions:
+				//
+				// - Row-level lock on items.id, and release once the
+				//   content is saved.
+				// - Or external lock - eg. Redis.
+
+				const savePoint = await this.setSavePoint();
+
 				try {
-					const content = itemToSave.content;
-					delete itemToSave.content;
-
-					itemToSave.content_storage_id = (await this.storageDriver()).storageId;
-
-					itemToSave.content_size = content ? content.byteLength : 0;
-
-					// Here we save the item row and content, and we want to
-					// make sure that either both are saved or none of them.
-					// This is done by setting up a save point before saving the
-					// row, and rollbacking if the content cannot be saved.
-					//
-					// Normally, since we are in a transaction, throwing an
-					// error should work, but since we catch all errors within
-					// this block it doesn't work.
-
-					// TODO: When an item is uploaded multiple times
-					// simultaneously there could be a race condition, where the
-					// content would not match the db row (for example, the
-					// content_size would differ).
-					//
-					// Possible solutions:
-					//
-					// - Row-level lock on items.id, and release once the
-					//   content is saved.
-					// - Or external lock - eg. Redis.
-
-					const savePoint = await this.setSavePoint();
 					const savedItem = await this.saveForUser(user.id, itemToSave);
-
-					try {
-						await this.storageDriverWrite(savedItem.id, content, { models: this.models() });
-						await this.releaseSavePoint(savePoint);
-					} catch (error) {
-						await this.rollbackSavePoint(savePoint);
-						throw error;
-					}
+					await this.storageDriverWrite(savedItem.id, content, { models: this.models() });
 
 					if (o.isNote) {
 						await this.models().itemResource().deleteByItemId(savedItem.id);
 						await this.models().itemResource().addResourceIds(savedItem.id, o.resourceIds);
 					}
 
+					await this.releaseSavePoint(savePoint);
+
 					output[name] = {
 						item: savedItem,
 						error: null,
 					};
 				} catch (error) {
+					await this.rollbackSavePoint(savePoint);
 					output[name] = {
 						item: null,
 						error: error,
@@ -883,14 +943,11 @@ export default class ItemModel extends BaseModel<Item> {
 		};
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async allForDebug(): Promise<any[]> {
+	public async allForDebug(): Promise<(Omit<Item, 'content'> & { content?: string | Buffer })[]> {
 		const items = await this.all({ fields: ['*'] });
 		return items.map(i => {
 			if (!i.content) return i;
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			i.content = i.content.toString() as any;
-			return i;
+			return { ...i, content: i.content.toString() };
 		});
 	}
 
@@ -967,28 +1024,37 @@ export default class ItemModel extends BaseModel<Item> {
 		if (storageDriverFallback) await storageDriverFallback.delete(ids, { models: this.models() });
 	}
 
-	public async deleteForUser(userId: Uuid, item: Item, options: DeleteOptions = {}): Promise<void> {
-		if (this.isRootSharedFolder(item)) {
-			const share = await this.models().share().byItemId(item.id);
-			if (!share) {
-				// In that case we don't do anything - the item is going to be
-				// deleted locally anyway. And we can't delete a root folder,
-				// otherwise it will potentially delete it for other users too.
-				modelLogger.warn(`Trying to delete a root folder associated with a share that no longer exists: ${item.id}`);
-				return;
-			}
-			const userShare = await this.models().shareUser().byShareAndUserId(share.id, userId);
-
-			if (userShare) {
-				// Leave the share, but keep the notebook for the owner
-				await this.models().shareUser().delete(userShare.id);
-			} else if (share.owner_id === userId) {
-				// Delete the share for everyone
-				await this.delete(item.id, options);
-			}
-		} else {
-			await this.delete(item.id, options);
+	public async deleteForUser(userId: Uuid, items: Item|Item[], options: DeleteOptions = {}): Promise<void> {
+		if (!Array.isArray(items)) {
+			items = [items];
 		}
+
+		const toDelete = [];
+		for (const item of items) {
+			if (this.isRootSharedFolder(item)) {
+				const share = await this.models().share().byItemId(item.id);
+				if (!share) {
+					// In that case we don't do anything - the item is going to be
+					// deleted locally anyway. And we can't delete a root folder,
+					// otherwise it will potentially delete it for other users too.
+					modelLogger.warn(`Trying to delete a root folder associated with a share that no longer exists: ${item.id}`);
+					continue;
+				}
+				const userShare = await this.models().shareUser().byShareAndUserId(share.id, userId);
+
+				if (userShare) {
+					// Leave the share, but keep the notebook for the owner
+					await this.models().shareUser().delete(userShare.id);
+				} else if (share.owner_id === userId) {
+					// Delete the share for everyone
+					toDelete.push(item.id);
+				}
+			} else {
+				toDelete.push(item.id);
+			}
+		}
+
+		await this.delete(toDelete, options);
 	}
 
 	public async makeTestItem(userId: Uuid, num: number) {
@@ -1024,27 +1090,96 @@ export default class ItemModel extends BaseModel<Item> {
 	// can't be replicated so far. On Joplin Cloud it happens on only 0.0008% of
 	// items, so a simple processing task like this one is sufficient for now
 	// but it would be nice to get to the bottom of this bug.
-	public processOrphanedItems = async () => {
-		await this.withTransaction(async () => {
-			const orphanedItems: Item[] = await this.db(this.tableName)
-				.select(['items.id', 'items.owner_id'])
-				.leftJoin('user_items', 'user_items.item_id', 'items.id')
-				.whereNull('user_items.user_id');
+	public processOrphanedItems = async (options: ProcessOrphanedItemsOptions = {}) => {
+		// The obvious query here is `items LEFT JOIN user_items WHERE
+		// user_items.id IS NULL LIMIT N` (or the equivalent NOT EXISTS).
+		// That times out on busy instances: orphans are ~0.0008% of items, so
+		// Postgres has to scan most of the table to find a single batch, and
+		// the statement timeout fires before it returns anything.
+		//
+		// Instead we walk `items` by primary key in fixed-size windows. Each
+		// window is two cheap indexed queries: fetch the next N items by id,
+		// then look up which of those ids exist in user_items. The orphan
+		// filter happens in TS. Per-query cost is bounded by the window size,
+		// not by the table size, so no statement can blow past the timeout.
+		const batchSize = options.batchSize ?? 10000;
+		let batchNum = 0;
+		let totalProcessed = 0;
+		let lastId = '';
 
-			const userIds: string[] = orphanedItems.map(i => i.owner_id);
+		modelLogger.info(`processOrphanedItems: Starting with batchSize=${batchSize}`);
+
+		while (true) {
+			batchNum++;
+			const batchStartTime = Date.now();
+
+			const windowItems: Item[] = await this.db(this.tableName)
+				.select(['items.id', 'items.name', 'items.owner_id'])
+				.where('items.id', '>', lastId)
+				.orderBy('items.id')
+				.limit(batchSize);
+
+			if (!windowItems.length) {
+				modelLogger.info(`processOrphanedItems: Completed. Total items processed: ${totalProcessed}`);
+				break;
+			}
+
+			// Advance the cursor by the window boundary, not by orphans found,
+			// so that windows with zero orphans still make progress.
+			lastId = windowItems[windowItems.length - 1].id;
+
+			const windowItemIds = windowItems.map(i => i.id);
+			const existingUserItems = await this.db('user_items')
+				.select('item_id')
+				.whereIn('item_id', windowItemIds);
+			const userItemIds = new Set(existingUserItems.map(u => u.item_id));
+			const orphanedItems = windowItems.filter(i => !userItemIds.has(i.id));
+
+			if (!orphanedItems.length) {
+				const batchDuration = Date.now() - batchStartTime;
+				modelLogger.info(`processOrphanedItems: Batch ${batchNum} - No orphans in window of ${windowItems.length} items (${batchDuration}ms)`);
+				continue;
+			}
+
+			modelLogger.info(`processOrphanedItems: Batch ${batchNum} - Found ${orphanedItems.length} orphaned items`);
+			for (const o of orphanedItems) {
+				modelLogger.info(`OrphanTrace: found orphan item=${o.id} owner=${o.owner_id} name=${o.name}`);
+			}
+
+			const userIds: string[] = unique(orphanedItems.map(i => i.owner_id));
 			const users = await this.models().user().loadByIds(userIds, { fields: ['id'] });
+			const existingUserIds = new Set(users.map(u => u.id));
 
-			for (const orphanedItem of orphanedItems) {
-				if (!users.find(u => u.id)) {
-					// The user may have been deleted since then. In that case, we
-					// simply delete the orphaned item.
-					await this.delete(orphanedItem.id);
+			const itemsToDelete: string[] = [];
+			const itemsToRestoreByUser = new Map<string, Item[]>();
+
+			for (const item of orphanedItems) {
+				if (!existingUserIds.has(item.owner_id)) {
+					itemsToDelete.push(item.id);
 				} else {
-					// Otherwise we add it back to the user's collection
-					await this.models().userItem().add(orphanedItem.owner_id, orphanedItem.id);
+					const userItems = itemsToRestoreByUser.get(item.owner_id) || [];
+					userItems.push(item);
+					itemsToRestoreByUser.set(item.owner_id, userItems);
 				}
 			}
-		}, 'ItemModel::processOrphanedItems');
+
+			if (itemsToDelete.length) {
+				modelLogger.info(`processOrphanedItems: Batch ${batchNum} - Deleting ${itemsToDelete.length} items (users no longer exist)`);
+				await this.delete(itemsToDelete);
+			}
+
+			if (itemsToRestoreByUser.size) {
+				const restoreCount = Array.from(itemsToRestoreByUser.values()).reduce((sum, items) => sum + items.length, 0);
+				modelLogger.info(`processOrphanedItems: Batch ${batchNum} - Restoring ${restoreCount} items for ${itemsToRestoreByUser.size} users`);
+				for (const [userId, items] of itemsToRestoreByUser) {
+					await this.models().userItem().addMulti(userId, items);
+				}
+			}
+
+			totalProcessed += orphanedItems.length;
+			const batchDuration = Date.now() - batchStartTime;
+			modelLogger.info(`processOrphanedItems: Batch ${batchNum} completed in ${batchDuration}ms`);
+		}
 	};
 
 	// This method should be private because items should only be saved using
@@ -1054,7 +1189,7 @@ export default class ItemModel extends BaseModel<Item> {
 		if (!userId) throw new Error('userId is required');
 
 		item = { ... item };
-		const isNew = await this.isNew(item, options);
+		let isNew = await this.isNew(item, options);
 
 		let previousItem: ChangePreviousItem = null;
 		let previousName: string|null = null;
@@ -1077,12 +1212,31 @@ export default class ItemModel extends BaseModel<Item> {
 		}
 
 		return this.withTransaction(async () => {
+			// Savepoint needed because on Postgres a failed statement aborts the whole
+			// transaction, and we recover from the unique constraint error below.
+			const savePoint = await this.setSavePoint();
+
 			try {
 				item = await super.save(item, options);
+				await this.releaseSavePoint(savePoint);
 			} catch (error) {
+				await this.rollbackSavePoint(savePoint);
+
 				if (isUniqueConstraintError(error)) {
-					modelLogger.error(`Unique constraint error on item: ${JSON.stringify({ id: item.id, name: item.name, jop_id: item.jop_id, owner_id: item.owner_id })}`, error);
-					throw new ErrorConflict(`This item is already present and cannot be added again: ${item.name}`);
+					// The item was created by a concurrent request - typically a client
+					// retrying an upload that is still being processed. Save it as an update
+					// so that the retry is not treated as an error.
+					const existingItem = await this.loadByName(item.owner_id || userId, item.name, { fields: ['id'] });
+
+					if (!existingItem) {
+						modelLogger.error(`Unique constraint error on item, but the item could not be found: ${JSON.stringify({ id: item.id, name: item.name, jop_id: item.jop_id, owner_id: item.owner_id })}`, error);
+						throw new ErrorConflict(`This item is already present and cannot be added again: ${item.name}`);
+					}
+
+					modelLogger.info(`Item was created by a concurrent request - updating it instead: ${JSON.stringify({ name: item.name, jop_id: item.jop_id, owner_id: item.owner_id })}`);
+
+					isNew = false;
+					item = await super.save({ ...item, id: existingItem.id }, { ...options, isNew: false });
 				} else {
 					throw error;
 				}
@@ -1090,18 +1244,18 @@ export default class ItemModel extends BaseModel<Item> {
 
 			if (isNew) await this.models().userItem().add(userId, item.id);
 
-			// We only record updates. This because Create and Update events are
-			// per user, whenever a user_item is created or deleted.
+			// We only record updates. Create and Delete events are recorded elsewhere.
 			const changeItemName = item.name || previousName;
 
 			if (!isNew && this.shouldRecordChange(changeItemName)) {
-				await this.models().change().save({
-					item_type: this.itemType,
-					item_id: item.id,
-					item_name: changeItemName,
-					type: isNew ? ChangeType.Create : ChangeType.Update,
-					previous_item: previousItem ? this.models().change().serializePreviousItem(previousItem) : '',
-					user_id: userId,
+				await this.models().change().recordChange({
+					itemId: item.id,
+					sourceUserId: userId,
+					shareId: item.jop_share_id ?? '',
+					previousItem,
+					itemName: changeItemName,
+					type: ChangeType.Update,
+					itemType: this.itemType,
 				});
 			}
 

@@ -22,14 +22,13 @@ export function sortByValue<T extends SortableObject>(object: T): T {
 		return v1 < v2 ? -1 : +1;
 	});
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const output: any = {};
+	const output: Record<string, SortableValue> = {};
 	for (let i = 0; i < temp.length; i++) {
 		const item = temp[i];
 		output[item.key] = item.value;
 	}
 
-	return output;
+	return output as T;
 }
 
 export function fieldsEqual(o1: AnyObject, o2: AnyObject) {
@@ -53,15 +52,14 @@ type ValuesToFunctions<T extends AnyObject> = {
 };
 
 export function convertValuesToFunctions<T extends AnyObject>(o: T): ValuesToFunctions<T> {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const output: any = {};
+	const output: Record<string, ()=> unknown> = {};
 	for (const n in o) {
 		if (!o.hasOwnProperty(n)) continue;
 		output[n] = () => {
-			return typeof o[n] === 'function' ? o[n]() : o[n];
+			return typeof o[n] === 'function' ? (o[n] as ()=> unknown)() : o[n];
 		};
 	}
-	return output;
+	return output as ValuesToFunctions<T>;
 }
 
 export function isEmpty(o: AnyObject|null) {

@@ -9,6 +9,15 @@ interface ApiConfig {
 	newsCategoryId: number;
 }
 
+interface DiscourseApiError extends Error {
+	apiObject: {
+		errors?: string[];
+		error_type?: string;
+		extras?: { wait_seconds?: number; time_left?: string };
+	} | null;
+	status: number;
+}
+
 export enum HttpMethod {
 	GET = 'GET',
 	POST = 'POST',
@@ -61,8 +70,8 @@ export const execApi = async (method: HttpMethod, path: string, body: Record<str
 
 		if (!response.ok) {
 			const errorText = await response.text();
-			const error = new Error(`On ${method} ${path}: ${errorText}`);
-			let apiObject = null;
+			const error = new Error(`On ${method} ${path}: ${errorText}`) as DiscourseApiError;
+			let apiObject: DiscourseApiError['apiObject'] = null;
 			try {
 				apiObject = JSON.parse(errorText);
 			} catch (error) {
@@ -80,10 +89,8 @@ export const execApi = async (method: HttpMethod, path: string, body: Record<str
 			//     }
 			// }
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			(error as any).apiObject = apiObject;
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			(error as any).status = response.status;
+			error.apiObject = apiObject;
+			error.status = response.status;
 
 			if (apiObject?.extras?.wait_seconds) {
 				await msleep(apiObject.extras.wait_seconds * 1000 + 1000);
@@ -93,8 +100,7 @@ export const execApi = async (method: HttpMethod, path: string, body: Record<str
 			throw error;
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		return response.json() as any;
+		return response.json();
 	}
 };
 
@@ -125,21 +131,18 @@ export const getTopicByExternalId = async (externalId: string): Promise<ForumTop
 	}
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const createTopic = async (topic: any): Promise<ForumTopic> => {
+export const createTopic = async (topic: Record<string, string | number>): Promise<ForumTopic> => {
 	return execApi(HttpMethod.POST, 'posts', topic);
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const createPost = async (topicId: number, post: any): Promise<ForumTopic> => {
+export const createPost = async (topicId: number, post: Record<string, string | number>): Promise<ForumTopic> => {
 	return execApi(HttpMethod.POST, 'posts', {
 		topic_id: topicId,
 		...post,
 	});
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const updatePost = async (postId: number, content: any): Promise<void> => {
+export const updatePost = async (postId: number, content: Record<string, string | number>): Promise<void> => {
 	await execApi(HttpMethod.PUT, `posts/${postId}.json`, content);
 };
 

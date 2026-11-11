@@ -1,10 +1,12 @@
-import { ErrorBadRequest, ErrorNotFound } from '../../utils/errors';
+import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from '../../utils/errors';
 import { bodyFields } from '../../utils/requestUtils';
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { AclAction } from '../../models/BaseModel';
+import { ShareUserStatus } from '../../services/database/types';
+import { confirmEmailMessage, needsEmailConfirmation } from '../../models/ShareUserModel';
 
 const router = new Router(RouteType.Api);
 
@@ -15,11 +17,16 @@ router.patch('api/share_users/:id', async (path: SubPath, ctx: AppContext) => {
 
 	await shareUserModel.checkIfAllowed(ctx.joplin.owner, AclAction.Update, shareUser);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const body = await bodyFields<any>(ctx.req);
+	const body = await bodyFields<{ status?: number }>(ctx.req);
 
 	if ('status' in body) {
-		return shareUserModel.setStatus(shareUser.share_id, shareUser.user_id, body.status);
+		// Converted, so that a value such as "1" cannot get past the checks below and in setStatus()
+		const status = Number(body.status);
+		if (status !== ShareUserStatus.Accepted && status !== ShareUserStatus.Rejected) throw new ErrorBadRequest(`Invalid status: ${body.status}`);
+
+		// Otherwise notebooks shared with an address would go to whoever registered it first
+		if (status === ShareUserStatus.Accepted && needsEmailConfirmation(ctx.joplin.owner)) throw new ErrorForbidden(confirmEmailMessage('accepting a shared notebook'));
+		return shareUserModel.setStatus(shareUser.share_id, shareUser.user_id, status);
 	} else {
 		throw new ErrorBadRequest('Only setting status is supported');
 	}
@@ -36,11 +43,12 @@ router.del('api/share_users/:id', async (path: SubPath, ctx: AppContext) => {
 router.get('api/share_users', async (_path: SubPath, ctx: AppContext) => {
 	const shareUsers = await ctx.joplin.models.shareUser().byUserId(ctx.joplin.owner.id);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const items: any[] = [];
+	const items: Record<string, unknown>[] = [];
 	for (const su of shareUsers) {
 		const share = await ctx.joplin.models.share().load(su.share_id);
 		const sharer = await ctx.joplin.models.user().load(share.owner_id);
+		// They cannot be accepted (see ShareUserModel.setStatus)
+		if (su.status === ShareUserStatus.Waiting && !sharer.enabled) continue;
 
 		items.push({
 			id: su.id,

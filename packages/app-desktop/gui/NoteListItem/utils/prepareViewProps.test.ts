@@ -141,23 +141,44 @@ describe('prepareViewProps', () => {
 		});
 	});
 
-	it('should return isComplete true when all checkboxes are checked', async () => {
+	it.each([
+		{
+			label: 'set isComplete to true when all checkboxes are checked',
+			body: '- [x] task 1\n- [X] task 2\n- [x] task 3',
+			expectedStatus: {
+				total: 3,
+				checked: 3,
+				percent: 100,
+				isComplete: true,
+			},
+		},
+		{
+			label: 'not recognise checkbox markup that isn\'t in a checklist',
+			body: 'This will not render as a checkbox: "- [x] task 1".',
+			expectedStatus: null,
+		},
+		{
+			label: 'recognise checkbox markup within block quotes',
+			body: '> > - [ ] This\n\n> - [ ] is\n> - [x] a test',
+			expectedStatus: {
+				total: 3,
+				checked: 1,
+				percent: 33,
+				isComplete: false,
+			},
+		},
+	])('should $label', async ({ body, expectedStatus }) => {
 		Setting.setValue('notes.showCheckboxCompletionChart', true);
 
 		const note = await Note.save({
 			title: 'test',
-			body: '- [x] task 1\n- [X] task 2\n- [x] task 3',
+			body,
 		});
 
 		const result = await prepare(['note.checkboxes'], note);
 		expect(result).toEqual({
 			note: {
-				checkboxes: {
-					total: 3,
-					checked: 3,
-					percent: 100,
-					isComplete: true,
-				},
+				checkboxes: expectedStatus,
 			},
 		});
 	});

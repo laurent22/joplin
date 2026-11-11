@@ -1,3 +1,23 @@
+<div class="block">
+	<form method="GET" action="{{searchUrl}}">
+		<div class="field">
+			<label class="label">Search email</label>
+			<div class="control">
+				<input name="query" id="query" class="input" type="text" placeholder="Recipient name or email" value="{{query}}">
+				{{#queryArray}}
+					<input type="hidden" name="{{name}}" value="{{value}}" />
+				{{/queryArray}}
+			</div>
+		</div>
+
+		<div class="field is-grouped">
+			<div class="control">
+				<button class="button is-link">Search</button>
+			</div>
+		</div>
+	</form>
+</div>
+
 <form method='POST' action="{{postUrl}}">
 	{{{csrfTag}}}
 

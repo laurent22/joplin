@@ -65,6 +65,7 @@ interface Props {
 	plugins: PluginStates;
 	noteResources: ResourceInfos;
 	editorImageRendering: boolean;
+	editorTableEditing: boolean;
 	editorInlineRendering: boolean;
 
 	onScroll: OnScroll;
@@ -74,6 +75,7 @@ interface Props {
 	onUndoRedoDepthChange: OnUndoRedoDepthChange;
 	onAttach: OnAttach;
 	refreshKey?: number;
+	onLoadEnd?: ()=> void;
 }
 
 function fontFamilyFromSettings() {
@@ -99,6 +101,10 @@ function editorTheme(themeId: number) {
 		fontSizeUnits: 'em',
 		fontSize: estimatedFontSizeInEm,
 		fontFamily: fontFamilyFromSettings(),
+
+		// Avoid adding extra padding on iOS:
+		// When the keyboard is open, iOS adds its own padding to the bottom of the note editor.
+		paddingBottom: Platform.OS === 'ios' ? 0 : 150,
 	};
 }
 
@@ -126,8 +132,7 @@ const useEditorControl = (
 			supportsCommand(command: EditorCommandType) {
 				return editorRef.current.supportsCommand(command);
 			},
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			execCommand(command, ...args: any[]) {
+			execCommand(command, ...args: unknown[]) {
 				logger.debug('execCommand', command);
 				return editorRef.current.execCommand(command, ...args);
 			},
@@ -283,6 +288,7 @@ const useEditorSettings = (props: Props) => {
 		katexEnabled: Setting.value('markdown.plugin.katex'),
 		spellcheckEnabled: Setting.value('editor.mobile.spellcheckEnabled'),
 		inlineRenderingEnabled,
+		tableEditingEnabled: props.editorTableEditing,
 		imageRenderingEnabled: props.editorImageRendering,
 		language: props.markupLanguage === MarkupLanguage.Html ? EditorLanguageType.Html : EditorLanguageType.Markdown,
 		useExternalSearch: true,
@@ -301,7 +307,7 @@ const useEditorSettings = (props: Props) => {
 		indentWithTabs: true,
 
 		editorLabel: _('Markdown editor'),
-	}), [props.themeId, props.readOnly, props.markupLanguage, highlightActiveLine, inlineRenderingEnabled, props.editorImageRendering]);
+	}), [props.themeId, props.readOnly, props.markupLanguage, highlightActiveLine, inlineRenderingEnabled, props.editorImageRendering, props.editorTableEditing]);
 
 	return editorSettings;
 };
@@ -488,6 +494,7 @@ function NoteEditor(props: Props) {
 					noteResources={props.noteResources}
 					plugins={props.plugins}
 					onAttach={onAttach}
+					onLoadEnd={props.onLoadEnd}
 				/>
 			</View>
 
@@ -512,6 +519,7 @@ export default connect((state: AppState) => {
 	return {
 		themeId: state.settings.theme,
 		editorInlineRendering: state.settings['editor.inlineRendering'],
+		editorTableEditing: state.settings['editor.tableEditing'],
 		editorImageRendering: state.settings['editor.imageRendering'],
 	};
 }, null, null, { forwardRef: true })(NoteEditor);

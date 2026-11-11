@@ -45,8 +45,8 @@ const getDiffDebugMessage = (actual: string, expected: string) => {
 		if (expectedBinary[i] !== actualBinary[i]) {
 			diffMessage.push(
 				'First binary difference at position', i, `(0x${i.toString(16)})`, ': ', expectedBinary[i], '!=', actualBinary[i], '(expected != actual)',
-				'\n\tContext: expected[i-3:i+5] = ', [...expectedBinary.slice(i - 3, i + 5)],
-				'\n\tContext: actual[i-3 : i+5] = ', [...actualBinary.slice(i - 3, i + 5)],
+				'\n\tContext: expected[i-3:i+5] = ', [...expectedBinary.slice(Math.max(i - 3, 0), i + 5)],
+				'\n\tContext: actual[i-3 : i+5] = ', [...actualBinary.slice(Math.max(i - 3, 0), i + 5)],
 				'\n\tactual.byteLength = ', actualBinary.length, ', expected.byteLength = ', expectedBinary.length,
 				'\n\n',
 			);
@@ -62,8 +62,8 @@ const getDiffDebugMessage = (actual: string, expected: string) => {
 			diffMessage.push(
 				'Last binary difference (working from end)', ': ',
 				expectedBinary[indexExpected], '!=', actualBinary[indexActual], `(expected[${indexExpected}] != actual[${indexActual}])`,
-				'\n\tContext: expected[a-6:a+3] = ', [...expectedBinary.slice(indexExpected - 6, indexExpected + 3)],
-				'\n\tContext: actual[b-6 : b+3] = ', [...actualBinary.slice(indexActual - 6, indexActual + 3)],
+				'\n\tContext: expected[a-6:a+3] = ', [...expectedBinary.slice(Math.max(indexExpected - 6, 0), indexExpected + 3)],
+				'\n\tContext: actual[b-6 : b+3] = ', [...actualBinary.slice(Math.max(indexActual - 6, 0), indexActual + 3)],
 				'\n\twhere expected.byteLength = ', expectedBinary.byteLength, 'and actual.byteLength = ', actualBinary.byteLength,
 				'\n\n',
 			);

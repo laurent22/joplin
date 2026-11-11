@@ -2,7 +2,7 @@ import { EditorSelection } from '@codemirror/state';
 import {
 	insertHorizontalRule,
 	insertOrIncreaseIndent,
-	toggleBolded, toggleCode, toggleHeaderLevel, toggleItalicized, toggleMath, updateLink,
+	toggleBlockQuote, toggleBolded, toggleCode, toggleHeaderLevel, toggleItalicized, toggleMath, updateLink,
 } from '../editorCommands/markdownCommands';
 import createTestEditor from '../testing/createTestEditor';
 import { blockMathTagName } from '../extensions/markdownMathExtension';
@@ -10,6 +10,42 @@ import { blockMathTagName } from '../extensions/markdownMathExtension';
 describe('markdownCommands', () => {
 
 	jest.retryTimes(2);
+
+	it('should toggle only continuously selected lines as blockquotes', async () => {
+		const initialText = 'First line\nSecond line\nThird line\nFourth line';
+		const editor = await createTestEditor(
+			initialText,
+			EditorSelection.range(0, initialText.indexOf('\nFourth line')),
+			[],
+		);
+
+		toggleBlockQuote(editor);
+		expect(editor.state.doc.toString()).toBe('> First line\n> Second line\n> Third line\nFourth line');
+
+		toggleBlockQuote(editor);
+		expect(editor.state.doc.toString()).toBe(initialText);
+	});
+
+	it('should toggle all selections as blockquotes when selected lines are not continuous', async () => {
+		const initialText = 'First line\nSecond line\nThird line\nFourth line';
+		const thirdLineStart = initialText.indexOf('Third line');
+		const fourthLineStart = initialText.indexOf('Fourth line');
+		const editor = await createTestEditor(
+			initialText,
+			[
+				EditorSelection.range(0, 'First line'.length),
+				EditorSelection.range(thirdLineStart, thirdLineStart + 'Third line'.length),
+				EditorSelection.range(fourthLineStart, initialText.length),
+			],
+			[],
+		);
+
+		toggleBlockQuote(editor);
+		expect(editor.state.doc.toString()).toBe('> First line\nSecond line\n> Third line\n> Fourth line');
+
+		toggleBlockQuote(editor);
+		expect(editor.state.doc.toString()).toBe(initialText);
+	});
 
 	it('should bold/italicize everything selected', async () => {
 		const initialDocText = 'Testing...';
@@ -39,6 +75,49 @@ describe('markdownCommands', () => {
 	});
 
 	it.each([
+		{
+			name: 'bolding bullet lists line by line',
+			initialDocText: '- one\n- two',
+			syntaxNodes: ['BulletList'],
+			toggleCommand: toggleBolded,
+			expectedAfterFirstToggle: '- **one**\n- **two**',
+		},
+		{
+			name: 'bolding bullet lists (alternate format, with indentation) line by line',
+			initialDocText: '+ one\n\t+ two',
+			syntaxNodes: ['BulletList'],
+			toggleCommand: toggleBolded,
+			expectedAfterFirstToggle: '+ **one**\n\t+ **two**',
+		},
+		{
+			name: 'italicizing ordered lists line by line',
+			initialDocText: '1. one\n2. two',
+			syntaxNodes: ['OrderedList'],
+			toggleCommand: toggleItalicized,
+			expectedAfterFirstToggle: '1. *one*\n2. *two*',
+		},
+		{
+			name: 'bolding checklist content while preserving markers',
+			initialDocText: '- [ ] one\n- [x] two',
+			syntaxNodes: ['BulletList'],
+			toggleCommand: toggleBolded,
+			expectedAfterFirstToggle: '- [ ] **one**\n- [x] **two**',
+		},
+	])('should support $name', async ({ initialDocText, syntaxNodes, toggleCommand, expectedAfterFirstToggle }) => {
+		const editor = await createTestEditor(
+			initialDocText,
+			EditorSelection.range(0, initialDocText.length),
+			syntaxNodes,
+		);
+
+		toggleCommand(editor);
+		expect(editor.state.doc.toString()).toBe(expectedAfterFirstToggle);
+
+		toggleCommand(editor);
+		expect(editor.state.doc.toString()).toBe(initialDocText);
+	});
+
+	it.each([
 		['trailing', 'ABC  ', '**ABC**  '],
 		['leading', '  ABC', '  **ABC**'],
 		['both leading and trailing', '  ABC  ', '  **ABC**  '],
@@ -54,6 +133,42 @@ describe('markdownCommands', () => {
 			from: 0,
 			to: expected.length,
 		});
+	});
+
+	it('should wrap fenced code block multiline selections as a whole region', async () => {
+		const initialDocText = '```\none\ntwo\n```';
+		const editor = await createTestEditor(
+			initialDocText,
+			EditorSelection.range(0, initialDocText.length),
+			['FencedCode'],
+		);
+
+		toggleBolded(editor);
+		expect(editor.state.doc.toString()).toBe('**```\none\ntwo\n```**');
+	});
+
+	it('should apply bold to blockquote list content without wrapping markers', async () => {
+		const initialDocText = '> - one\n> - two';
+		const editor = await createTestEditor(
+			initialDocText,
+			EditorSelection.range(0, initialDocText.length),
+			['Blockquote', 'BulletList'],
+		);
+
+		toggleBolded(editor);
+		expect(editor.state.doc.toString()).toBe('> - **one**\n> - **two**');
+	});
+
+	it('should preserve blank lines when bolding multiline list selections', async () => {
+		const initialDocText = '- one\n\n- two';
+		const editor = await createTestEditor(
+			initialDocText,
+			EditorSelection.range(0, initialDocText.length),
+			['BulletList'],
+		);
+
+		toggleBolded(editor);
+		expect(editor.state.doc.toString()).toBe('- **one**\n\n- **two**');
 	});
 
 	it('for a cursor, bolding, then italicizing, should produce a bold-italic region', async () => {
@@ -343,6 +458,3 @@ describe('markdownCommands', () => {
 		expect(editor.state.doc.toString()).toBe('testing\n* * *\n* * *\n\n> this is a test\n> * * *\n> * * *');
 	});
 });
-
-
-

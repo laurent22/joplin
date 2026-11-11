@@ -13,14 +13,30 @@ import { HtmlToMarkdownHandler, MarkupToHtmlHandler } from './types';
 import markupRenderOptions from './markupRenderOptions';
 import { fileExtension, filename, safeFileExtension, safeFilename } from '@joplin/utils/path';
 const joplinRendererUtils = require('@joplin/renderer').utils;
-const { clipboard } = require('electron');
+import type { NativeImage } from 'electron';
+import { clipboard } from 'electron';
 import * as mimeUtils from '@joplin/lib/mime-utils';
 import bridge from '../../../services/bridge';
 import { getCollator, getCollatorLocale } from '@joplin/lib/models/utils/getCollator';
 const md5 = require('md5');
-const path = require('path');
+import * as path from 'path';
 
 const logger = Logger.create('resourceHandling');
+
+const textForPasteInspection = (text: string) => {
+	try {
+		return decodeURIComponent(text);
+	} catch {
+		return text;
+	}
+};
+
+export const plainTextLooksLikeAffinityImageData = (text: string) => {
+	if (!text) return false;
+
+	const decodedText = textForPasteInspection(text);
+	return /<svg(?:\s|>)/i.test(decodedText) && /data:image\/[^;]+;base64,/i.test(decodedText);
+};
 
 export async function handleResourceDownloadMode(noteBody: string) {
 	if (noteBody && Setting.value('sync.resourceDownloadMode') === 'auto') {
@@ -29,8 +45,13 @@ export async function handleResourceDownloadMode(noteBody: string) {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function commandAttachFileToBody(body: string, filePaths: string[] = null, options: any = null) {
+interface CommandAttachFileToBodyOptions {
+	createFileURL?: boolean;
+	position?: number;
+	markupLanguage?: MarkupLanguage;
+}
+
+export async function commandAttachFileToBody(body: string, filePaths: string[] = null, options: CommandAttachFileToBodyOptions = null) {
 	options = {
 		createFileURL: false,
 		position: 0,
@@ -79,8 +100,7 @@ export async function commandAttachFileToBody(body: string, filePaths: string[] 
 	return body;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function resourcesStatus(resourceInfos: any) {
+export function resourcesStatus(resourceInfos: import('@joplin/renderer/types').ResourceInfos) {
 	let lowestIndex = joplinRendererUtils.resourceStatusIndex('ready');
 	for (const id in resourceInfos) {
 		const s = joplinRendererUtils.resourceStatus(Resource, resourceInfos[id]);
@@ -90,8 +110,31 @@ export function resourcesStatus(resourceInfos: any) {
 	return joplinRendererUtils.resourceStatusName(lowestIndex);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function getResourcesFromPasteEvent(event: any) {
+const clipboardImageToResource = async (image: NativeImage, mime: string) => {
+	const fileExt = mimeUtils.toFileExtension(mime);
+	const filePath = `${Setting.value('tempDir')}/${md5(Date.now())}.${fileExt}`;
+	await shim.writeImageToFile(image, mime, filePath);
+	try {
+		const md = await commandAttachFileToBody('', [filePath]);
+		return md;
+	} finally {
+		await shim.fsDriver().remove(filePath);
+	}
+};
+
+export const getResourceFromClipboardImage = async () => {
+	const image = clipboard.readImage();
+	if (image.isEmpty()) return null;
+
+	const supportedFormats = ['image/png', 'image/jpg', 'image/jpeg'];
+	const format = clipboard.availableFormats()
+		.map((format: string) => format.toLowerCase())
+		.find((format: string) => supportedFormats.includes(format)) || 'image/png';
+
+	return clipboardImageToResource(image, format);
+};
+
+export async function getResourcesFromPasteEvent(event: { preventDefault: ()=> void } | null) {
 	const output = [];
 	const formats = clipboard.availableFormats();
 	for (let i = 0; i < formats.length; i++) {
@@ -104,19 +147,22 @@ export async function getResourcesFromPasteEvent(event: any) {
 				continue;
 			}
 			if (event) event.preventDefault();
-
-			const image = clipboard.readImage();
-
-			const fileExt = mimeUtils.toFileExtension(format);
-			const filePath = `${Setting.value('tempDir')}/${md5(Date.now())}.${fileExt}`;
-
-			await shim.writeImageToFile(image, format, filePath);
-			const md = await commandAttachFileToBody('', [filePath]);
-			await shim.fsDriver().remove(filePath);
-
+			const md = await clipboardImageToResource(clipboard.readImage(), format);
 			if (md) output.push(md);
 		}
 	}
+
+	// Some applications (e.g. macshot) copy images to the clipboard without
+	// an image/* format, but clipboard.readImage() can still read them.
+	if (!output.length) {
+		const image = clipboard.readImage();
+		if (!image.isEmpty()) {
+			if (event) event.preventDefault();
+			const md = await clipboardImageToResource(image, 'image/png');
+			if (md) output.push(md);
+		}
+	}
+
 	return output;
 }
 

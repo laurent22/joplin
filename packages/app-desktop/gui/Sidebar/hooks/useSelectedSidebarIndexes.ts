@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ListItem, ListItemType } from '../types';
 import { isFolderSelected, isTagSelected } from '@joplin/lib/components/shared/side-menu-shared';
 import { Dispatch } from 'redux';
-const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
+import { ALL_NOTES_FILTER_ID } from '@joplin/lib/reserved-ids';
 
 type UpdateSelectedIndexOptions = { extend: boolean };
 

@@ -4,6 +4,9 @@ import { _ } from '@joplin/lib/locale';
 import { ModelType } from '@joplin/lib/BaseModel';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Note from '@joplin/lib/models/Note';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
+import NoteLockNote, { lockedNoteBodyPlaceholder } from '@joplin/lib/services/noteLock/NoteLockNote';
+import { NoteEntity } from '@joplin/lib/services/database/types';
 
 class Command extends BaseCommand {
 	public override usage() {
@@ -18,12 +21,13 @@ class Command extends BaseCommand {
 		return [['-v, --verbose', _('Displays the complete information about note.')]];
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public override async action(args: any) {
+	public override async action(args: { note: string; options: { verbose?: boolean } }) {
 		const title = args['note'];
 
 		const item = await app().loadItem(ModelType.Note, title, { parent: app().currentFolder() });
 		if (!item) throw new Error(_('Cannot find "%s".', title));
+		// The note is loaded without the gate, so a locked body is ciphertext.
+		if (isNoteLockEnabled() && NoteLockNote.isLocked(item)) (item as NoteEntity).body = lockedNoteBodyPlaceholder;
 
 		let content = '';
 

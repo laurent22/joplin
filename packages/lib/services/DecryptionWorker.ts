@@ -1,5 +1,5 @@
 import BaseItem, { ItemsThatNeedDecryptionResult } from '../models/BaseItem';
-import BaseModel from '../BaseModel';
+import BaseModel, { ModelType } from '../BaseModel';
 import MasterKey from '../models/MasterKey';
 import Resource from '../models/Resource';
 import ResourceService from './ResourceService';
@@ -10,7 +10,7 @@ import EncryptionService from './e2ee/EncryptionService';
 import PerformanceLogger from '../PerformanceLogger';
 import AsyncActionQueue from '../AsyncActionQueue';
 
-const EventEmitter = require('events');
+import { EventEmitter } from 'events';
 const perfLogger = PerformanceLogger.create();
 
 interface DecryptionResult {
@@ -18,6 +18,11 @@ interface DecryptionResult {
 	decryptedItemCounts?: Record<number, number>;
 	decryptedItemCount?: number;
 	error: Error | null;
+}
+
+interface DecryptionWorkerStartOptions {
+	masterKeyNotLoadedHandler?: 'throw' | 'dispatch';
+	errorHandler?: 'log' | 'throw';
 }
 
 // Key for use with the KvStore.
@@ -36,8 +41,7 @@ export default class DecryptionWorker {
 
 	private state_ = 'idle';
 	private logger_: Logger;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public dispatch: Function = () => {};
+	public dispatch: (action: { type: string; [key: string]: unknown })=> void = () => {};
 	private scheduleId_: ReturnType<typeof setTimeout> | null = null;
 	private eventEmitter_: InstanceType<typeof EventEmitter>;
 	private kvStore_: KvStore = null;
@@ -59,13 +63,13 @@ export default class DecryptionWorker {
 		return this.logger_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public on(eventName: string, callback: Function) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- EventEmitter events carry heterogeneous payloads by name; per-event typing would require a string-literal map across all callers
+	public on(eventName: string, callback: (...args: any[])=> void) {
 		return this.eventEmitter_.on(eventName, callback);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public off(eventName: string, callback: Function) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See on() above
+	public off(eventName: string, callback: (...args: any[])=> void) {
 		return this.eventEmitter_.removeListener(eventName, callback);
 	}
 
@@ -131,15 +135,12 @@ export default class DecryptionWorker {
 		await this.kvStore().deleteByPrefix(decryptionErrorKeyPrefix);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public dispatchReport(report: any) {
-		const action = { ...report };
-		action.type = 'DECRYPTION_WORKER_SET';
+	public dispatchReport(report: Record<string, unknown>) {
+		const action = { ...report, type: 'DECRYPTION_WORKER_SET' };
 		this.dispatch(action);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private async start_(options: any = null): Promise<DecryptionResult> {
+	private async start_(options: DecryptionWorkerStartOptions = null): Promise<DecryptionResult> {
 		if (options === null) options = {};
 		if (!('masterKeyNotLoadedHandler' in options)) options.masterKeyNotLoadedHandler = 'throw';
 		if (!('errorHandler' in options)) options.errorHandler = 'log';
@@ -218,6 +219,12 @@ export default class DecryptionWorker {
 						await this.kvStore().deleteValue(errorKey);
 					};
 
+					const markSuccessfulDecryption = async (decryptedItemType: number) => {
+						await clearDecryptionCounter();
+						if (!decryptedItemCounts[decryptedItemType]) decryptedItemCounts[decryptedItemType] = 0;
+						decryptedItemCounts[decryptedItemType]++;
+					};
+
 					// Don't log in production as it results in many messages when importing many items
 					// this.logger().debug('DecryptionWorker: decrypting: ' + item.id + ' (' + ItemClass.tableName() + ')');
 					try {
@@ -230,13 +237,19 @@ export default class DecryptionWorker {
 							continue;
 						}
 
+						if (item.type_ === ModelType.Note) {
+							// Validate if still eligible to decrypt using the latest encryption_applied value, as notes may be decrypted on demand while the decryption worker is running.
+							// If it has been decrypted already, avoid decrypting it again to avoid potentially overwriting it with an outdated version
+							const encryptionApplied = (await ItemClass.load(item.id, { fields: ['encryption_applied'] }))?.encryption_applied;
+							if (!encryptionApplied) {
+								this.logger().info(`DecryptionWorker: Skipping decryption for note ${item.id} as it was already decrypted on demand`);
+								await markSuccessfulDecryption(item.type_);
+								continue;
+							}
+						}
+
 						const decryptedItem = await ItemClass.decrypt(item);
-
-						await clearDecryptionCounter();
-
-						if (!decryptedItemCounts[decryptedItem.type_]) decryptedItemCounts[decryptedItem.type_] = 0;
-
-						decryptedItemCounts[decryptedItem.type_]++;
+						await markSuccessfulDecryption(decryptedItem.type_);
 
 						if (decryptedItem.type_ === Resource.modelType() && !!decryptedItem.encryption_blob_encrypted) {
 							// itemsThatNeedDecryption() will return the resource again if the blob has not been decrypted,
@@ -324,8 +337,7 @@ export default class DecryptionWorker {
 		return finalReport;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async start(options: any = {}): Promise<DecryptionResult> {
+	public async start(options: DecryptionWorkerStartOptions = {}): Promise<DecryptionResult> {
 		let output = null;
 		let lastError: Error;
 

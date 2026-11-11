@@ -7,8 +7,7 @@ const { useEffect, useState } = shim.react();
 
 export interface SyncTargetUpgradeResult {
 	done: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	error: any;
+	error: Error | null;
 }
 
 export default function useSyncTargetUpgrade(): SyncTargetUpgradeResult {

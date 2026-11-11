@@ -87,7 +87,7 @@ export default class UserDeletionModel extends BaseModel<UserDeletion> {
 		if (item.start_time !== now) throw new Error('Job was already started');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Tests pass plain strings here while runtime callers pass Errors; tightening to `Error | string` forces a logic change (errorToString only accepts Error)
 	public async end(deletionId: number, success: boolean, error: any) {
 		const now = Date.now();
 

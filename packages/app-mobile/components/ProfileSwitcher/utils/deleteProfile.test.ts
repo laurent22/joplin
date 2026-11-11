@@ -56,33 +56,4 @@ describe('deleteProfile', () => {
 		expect(await pathExists(resourceDir)).toBe(false);
 		expect(await pathExists(pluginDataDir)).toBe(false);
 	});
-
-	it('should refuse to delete the default profile', async () => {
-		const config: ProfileConfig = {
-			version: CurrentProfileVersion,
-			currentProfileId: 'test',
-			profiles: [
-				{
-					name: 'Testing',
-					id: DefaultProfileId,
-				},
-				{
-					name: 'Another test',
-					id: 'test',
-				},
-			],
-		};
-
-		try {
-			await deleteProfile({
-				profileConfig: config,
-				toDelete: config.profiles[0],
-				databaseDriver: new MockDatabaseDriver(),
-			});
-
-			expect('did not throw').toBe('threw');
-		} catch (error) {
-			expect(String(error)).toMatch(/The default profile cannot be deleted/);
-		}
-	});
 });

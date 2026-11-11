@@ -5,8 +5,7 @@ const logger = Logger.create('loadScript');
 export interface Script {
 	id: string;
 	src: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	attrs?: Record<string, any>;
+	attrs?: Record<string, string>;
 }
 
 export const loadScript = async (script: Script, document: Document) => {
@@ -14,11 +13,11 @@ export const loadScript = async (script: Script, document: Document) => {
 		// eslint-disable-next-line no-console
 		console.info('Loading script:', script);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		let element: any = document.getElementById(script.id);
+		let element = document.getElementById(script.id) as HTMLLinkElement | HTMLScriptElement | null;
 
 		if (element) {
-			if (element.href === script.src || element.src === script.src) {
+			const src = 'href' in element ? element.href : element.src;
+			if (src === script.src) {
 				logger.info(`Trying to load a script that has already been loaded: ${JSON.stringify(script)} - skipping it`);
 				resolve(null);
 			} else {
@@ -29,17 +28,19 @@ export const loadScript = async (script: Script, document: Document) => {
 		}
 
 		if (script.src.indexOf('.css') >= 0) {
-			element = document.createElement('link');
-			element.rel = 'stylesheet';
-			element.href = script.src;
+			const link = document.createElement('link');
+			link.rel = 'stylesheet';
+			link.href = script.src;
+			element = link;
 		} else {
-			element = document.createElement('script');
-			element.src = script.src;
+			const scriptElement = document.createElement('script');
+			scriptElement.src = script.src;
 			if (script.attrs) {
 				for (const attr in script.attrs) {
-					element[attr] = script.attrs[attr];
+					(scriptElement as unknown as Record<string, string>)[attr] = script.attrs[attr];
 				}
 			}
+			element = scriptElement;
 		}
 
 		element.id = script.id;

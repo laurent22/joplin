@@ -1,21 +1,26 @@
 import time from './time';
-const fs = require('fs-extra');
-import { basicDelta, MultiPutItem } from './file-api';
+import * as fs from 'fs-extra';
+import { basicDelta, DeltaOptions, GetOptions, MultiPutItem, PutOptions } from './file-api';
+
+interface MemoryItem {
+	path: string;
+	isDir: boolean;
+	updated_time: number;
+	content: string;
+	isDeleted?: boolean;
+}
 
 export default class FileApiDriverMemory {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private items_: any[];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private deletedItems_: any[];
+	private items_: MemoryItem[];
+	private deletedItems_: MemoryItem[];
 
 	public constructor() {
 		this.items_ = [];
 		this.deletedItems_ = [];
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private encodeContent_(content: any) {
+	private encodeContent_(content: string | Buffer) {
 		if (content instanceof Buffer) {
 			return content.toString('base64');
 		} else {
@@ -27,12 +32,15 @@ export default class FileApiDriverMemory {
 		return true;
 	}
 
+	public get supportsMultiDelete() {
+		return true;
+	}
+
 	public get supportsAccurateTimestamp() {
 		return true;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private decodeContent_(content: any) {
+	private decodeContent_(content: string) {
 		if (!content) return '';
 		return Buffer.from(content, 'base64').toString('utf-8');
 	}
@@ -65,8 +73,7 @@ export default class FileApiDriverMemory {
 		return Promise.resolve(item ? { ...item } : null);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async setTimestamp(path: string, timestampMs: number): Promise<any> {
+	public async setTimestamp(path: string, timestampMs: number): Promise<void> {
 		const item = this.itemByPath(path);
 		if (!item) return Promise.reject(new Error(`File not found: ${path}`));
 		item.updated_time = timestampMs;
@@ -95,8 +102,7 @@ export default class FileApiDriverMemory {
 		});
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async get(path: string, options: any) {
+	public async get(path: string, options: GetOptions) {
 		const item = this.itemByPath(path);
 		if (!item) return Promise.resolve(null);
 		if (item.isDir) return Promise.reject(new Error(`${path} is a directory, not a file`));
@@ -118,8 +124,7 @@ export default class FileApiDriverMemory {
 		this.items_.push(this.newItem(path, true));
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async put(path: string, content: any, options: any = null) {
+	public async put(path: string, content: string | Buffer, options: PutOptions = null) {
 		if (!options) options = {};
 
 		if (options.source === 'file') content = await fs.readFile(options.path);
@@ -137,10 +142,8 @@ export default class FileApiDriverMemory {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async multiPut(items: MultiPutItem[], options: any = null) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const output: any = {
+	public async multiPut(items: MultiPutItem[], options: PutOptions = null) {
+		const output: { items: Record<string, { item: MemoryItem | null; error: Error | null }> } = {
 			items: {},
 		};
 
@@ -162,6 +165,30 @@ export default class FileApiDriverMemory {
 		return output;
 	}
 
+	public async multiDelete(itemNames: string[]) {
+		type ItemOutput = {
+			[id: string]: { error?: Error };
+		};
+		const output = {
+			items: Object.create(null) as ItemOutput,
+		};
+
+		for (const name of itemNames) {
+			try {
+				await this.delete(`/root/${name}`);
+				output.items[name] = {
+					error: null,
+				};
+			} catch (error) {
+				output.items[name] = {
+					error: error,
+				};
+			}
+		}
+
+		return output;
+	}
+
 	public async delete(path: string) {
 		const index = this.itemIndexByPath(path);
 		if (index >= 0) {
@@ -173,8 +200,7 @@ export default class FileApiDriverMemory {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async move(oldPath: string, newPath: string): Promise<any> {
+	public async move(oldPath: string, newPath: string): Promise<void> {
 		const sourceItem = this.itemByPath(oldPath);
 		if (!sourceItem) return Promise.reject(new Error(`Path not found: ${oldPath}`));
 		await this.delete(newPath); // Overwrite if newPath already exists
@@ -185,8 +211,7 @@ export default class FileApiDriverMemory {
 		this.items_ = [];
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async delta(path: string, options: any = null) {
+	public async delta(path: string, options: DeltaOptions = null) {
 		const getStatFn = async (path: string) => {
 			const output = this.items_.slice();
 			for (let i = 0; i < output.length; i++) {

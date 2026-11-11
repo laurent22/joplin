@@ -3,6 +3,7 @@
 import Resource from '../../../models/Resource';
 import Setting from '../../../models/Setting';
 import shim from '../../../shim';
+import { ResourceEntity } from '../../database/types';
 import { Rectangle } from './types';
 
 export interface CreateFromBufferOptions {
@@ -48,10 +49,17 @@ export interface ResizeOptions {
 
 export type Handle = string;
 
+interface NativeImageLike {
+	toPNG(): Buffer;
+	toJPEG(quality: number): Buffer;
+	resize(options: ResizeOptions): NativeImageLike;
+	crop(rect: Rectangle): NativeImageLike;
+	getSize(): { width: number; height: number };
+}
+
 interface Image {
 	handle: Handle;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	data: any;
+	data: NativeImageLike;
 }
 
 const getResourcePath = async (resourceId: string): Promise<string> => {
@@ -94,8 +102,7 @@ export default class JoplinImaging {
 		return image;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private cacheImage(data: any) {
+	private cacheImage(data: NativeImageLike) {
 		const handle = this.createImageHandle();
 		this.images_.push({
 			handle,
@@ -120,7 +127,7 @@ export default class JoplinImaging {
 	 * image.
 	 */
 	public async createFromPath(filePath: string): Promise<Handle> {
-		return this.cacheImage(await this.implementation_.createFromPath(filePath));
+		return this.cacheImage(await this.implementation_.createFromPath(filePath) as NativeImageLike);
 	}
 
 	public async createFromResource(resourceId: string): Promise<Handle> {
@@ -129,7 +136,7 @@ export default class JoplinImaging {
 
 	public async createFromPdfPath(path: string, options?: CreateFromPdfOptions): Promise<Handle[]> {
 		const images = await this.implementation_.createFromPdf(path, options);
-		return images.map(image => this.cacheImage(image));
+		return images.map(image => this.cacheImage(image as NativeImageLike));
 	}
 
 	public async createFromPdfResource(resourceId: string, options?: CreateFromPdfOptions): Promise<Handle[]> {
@@ -184,7 +191,7 @@ export default class JoplinImaging {
 	public async toPngFile(handle: Handle, filePath: string) {
 		const image = this.imageByHandle(handle);
 		const data = image.data.toPNG();
-		await shim.fsDriver().writeFile(filePath, data, 'buffer');
+		await shim.fsDriver().writeFile(filePath, data as unknown as string, 'buffer');
 	}
 
 	/**
@@ -193,7 +200,7 @@ export default class JoplinImaging {
 	public async toJpgFile(handle: Handle, filePath: string, quality = 80) {
 		const image = this.imageByHandle(handle);
 		const data = image.data.toJPEG(quality);
-		await shim.fsDriver().writeFile(filePath, data, 'buffer');
+		await shim.fsDriver().writeFile(filePath, data as unknown as string, 'buffer');
 	}
 
 	private tempFilePath(ext: string) {
@@ -204,8 +211,7 @@ export default class JoplinImaging {
 	 * Creates a new Joplin resource from the image data. The image will be
 	 * first converted to a JPEG.
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async toJpgResource(handle: Handle, resourceProps: any, quality = 80) {
+	public async toJpgResource(handle: Handle, resourceProps: Partial<ResourceEntity>, quality = 80) {
 		const tempFilePath = this.tempFilePath('jpg');
 		await this.toJpgFile(handle, tempFilePath, quality);
 		const newResource = await shim.createResourceFromPath(tempFilePath, resourceProps, { resizeLargeImages: 'never' });
@@ -217,8 +223,7 @@ export default class JoplinImaging {
 	 * Creates a new Joplin resource from the image data. The image will be
 	 * first converted to a PNG.
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async toPngResource(handle: Handle, resourceProps: any) {
+	public async toPngResource(handle: Handle, resourceProps: Partial<ResourceEntity>) {
 		const tempFilePath = this.tempFilePath('png');
 		await this.toPngFile(handle, tempFilePath);
 		const newResource = await shim.createResourceFromPath(tempFilePath, resourceProps, { resizeLargeImages: 'never' });

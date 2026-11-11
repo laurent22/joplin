@@ -14,7 +14,7 @@ export interface Options {
 //
 // It's however convenient for smaller lists as it reduces the need for
 // building complex SQL queries.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Callers pass entity types (NoteEntity, FolderEntity, etc.) which lack index signatures
 export default function(itemType: ModelType, items: any[], request: Request, options: Options = null): ModelFeedPage {
 	options = {
 		sort: true,
@@ -30,11 +30,9 @@ export default function(itemType: ModelType, items: any[], request: Request, opt
 	const sortBy = pagination.order[0].by;
 	const sortDir = pagination.order[0].dir;
 	const caseInsensitive = pagination.order[0].caseInsensitive;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const sortedItems = items.slice().map((item: any) => {
+	const sortedItems = items.slice().map(item => {
 		if (!fields.length) return item;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const newItem: any = {};
+		const newItem: Record<string, unknown> = {};
 		for (const k of Object.keys(item)) {
 			if (!fields.includes(k)) continue;
 			newItem[k] = item[k];
@@ -43,10 +41,9 @@ export default function(itemType: ModelType, items: any[], request: Request, opt
 	});
 
 	if (options.sort) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		sortedItems.sort((a: any, b: any) => {
-			let v1 = a && (sortBy in a) ? a[sortBy] : '';
-			let v2 = b && (sortBy in b) ? b[sortBy] : '';
+		sortedItems.sort((a, b) => {
+			let v1: unknown = a && (sortBy in a) ? a[sortBy] : '';
+			let v2: unknown = b && (sortBy in b) ? b[sortBy] : '';
 			if (caseInsensitive && typeof v1 === 'string') v1 = v1.toLowerCase();
 			if (caseInsensitive && typeof v2 === 'string') v2 = v2.toLowerCase();
 

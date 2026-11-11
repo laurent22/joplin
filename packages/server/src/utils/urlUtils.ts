@@ -1,10 +1,11 @@
 import { URL } from 'url';
+import { isIP } from 'net';
 import config from '../config';
 import { Uuid } from '../services/database/types';
 import { isHttpOrHttpsUrl } from '@joplin/utils/url';
 import { ReportType } from '../services/reports/types';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Callers pass heterogeneous shapes (Koa ParsedUrlQuery with `string | string[]`, table pagination with numbers, and plain string records); a tighter type forces fixes at every call site
 export function setQueryParameters(url: string, query: any): string {
 	if (!query) return url;
 
@@ -137,3 +138,15 @@ export function applicationDeleteUrl(id: string) {
 export function adminReportUrl(type: ReportType) {
 	return `${config().adminBaseUrl}/reports/${type}`;
 }
+
+// Browsers send a site's cookies to requests from its sibling subdomains, so published notes are only isolated from the
+// rest of the server when they are served from another registrable domain. Without a public suffix list, the last two
+// labels of the host stand in for it, which errs on the side of reporting domains such as example.co.uk as the same site.
+export const isSameSite = (url1: string, url2: string) => {
+	const site = (url: string) => {
+		const host = new URL(url).hostname;
+		if (isIP(host) || !host.includes('.')) return host;
+		return host.split('.').slice(-2).join('.');
+	};
+	return site(url1) === site(url2);
+};

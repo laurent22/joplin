@@ -45,7 +45,7 @@ public class SharePackage implements ReactPackage {
     }
 
     public static class ShareModule extends ReactContextBaseJavaModule implements ActivityEventListener, LifecycleEventListener {
-        private boolean handledStartIntent = false;
+        private Activity handledStartIntentActivity = null;
         private Intent receivedShareIntent = null;
 
         ShareModule(@NonNull ReactApplicationContext reactContext) {
@@ -206,15 +206,16 @@ public class SharePackage implements ReactPackage {
 
         @Override
         public void onHostResume() {
-            if (this.getCurrentActivity() != null) {
-                Intent intent = this.getCurrentActivity().getIntent();
-                if (this.handledStartIntent) {
-                    // sometimes onHostResume is fired after onNewIntent
-                    // and we only care about the activity intent when the first time app opens
-                    return;
+            Activity currentActivity = this.getCurrentActivity();
+            if (currentActivity != null && currentActivity != this.handledStartIntentActivity) {
+                // Read the start intent once per activity. A later onNewIntent may be
+                // followed by onHostResume, while a share after Back may create a new activity.
+                this.handledStartIntentActivity = currentActivity;
+                Intent intent = currentActivity.getIntent();
+                // Recents can relaunch the original share intent, but it is not a new share.
+                if (intent != null && (intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0) {
+                    this.onNewIntent(intent);
                 }
-                this.handledStartIntent = true;
-                this.onNewIntent(intent);
             }
         }
 
@@ -223,6 +224,7 @@ public class SharePackage implements ReactPackage {
 
         @Override
         public void onHostDestroy() {
+            this.handledStartIntentActivity = null;
         }
     }
 }

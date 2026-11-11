@@ -111,9 +111,8 @@ export default class MigrationHandler extends BaseService {
 			timeoutMs: 1000 * 30,
 		});
 
-		let autoLockError = null;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		this.lockHandler_.startAutoLockRefresh(exclusiveLock, (error: any) => {
+		let autoLockError: Error | null = null;
+		this.lockHandler_.startAutoLockRefresh(exclusiveLock, (error: Error) => {
 			autoLockError = error;
 		});
 

@@ -33,6 +33,13 @@ const schema = {
 	],
 } satisfies BaseSchema;
 
+const normalizeFolderTitle = (title: string) => {
+	// Joplin removes / and \ from the beginning of folder titles.
+	// For consistency, this must be done in the fuzzer, too.
+	const illegalStartCharRegex = /^[/\\]+/;
+	return title.replace(illegalStartCharRegex, '');
+};
+
 export default class FolderRecord extends Serializable<typeof schema> implements FolderData {
 	public readonly parentId: ItemId;
 	public readonly id: ItemId;
@@ -48,7 +55,7 @@ export default class FolderRecord extends Serializable<typeof schema> implements
 
 		this.parentId = options.parentId;
 		this.id = options.id;
-		this.title = options.title;
+		this.title = normalizeFolderTitle(options.title);
 		this.childIds = options.childIds;
 		this.isShared_ = options.isShared ?? options.sharedWith.length > 0;
 		this.ownedByEmail = options.ownedByEmail;

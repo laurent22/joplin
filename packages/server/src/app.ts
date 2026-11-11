@@ -1,7 +1,7 @@
 // Allows displaying error stack traces with TypeScript file paths
 require('source-map-support').install();
 
-import * as Koa from 'koa';
+import Koa from 'koa';
 import * as fs from 'fs-extra';
 import Logger, { LogLevel, LoggerWrapper, TargetType } from '@joplin/utils/Logger';
 import config, { fullVersionString, initConfig, runningInDocker } from './config';
@@ -15,13 +15,12 @@ import ownerHandler from './middleware/ownerHandler';
 import setupAppContext from './utils/setupAppContext';
 import { initializeJoplinUtils } from './utils/joplinUtils';
 import startServices from './utils/startServices';
-import { credentialFile } from './utils/testing/testUtils';
 import apiVersionHandler from './middleware/apiVersionHandler';
 import clickJackingHandler from './middleware/clickJackingHandler';
 import newModelFactory from './models/factory';
 import setupCommands from './utils/setupCommands';
 import { RouteResponseFormat, routeResponseFormat } from './utils/routeUtils';
-import { parseEnv } from './env';
+import { parseEnv, EnvVariables } from './env';
 import { parseEnvFile } from '@joplin/utils/env';
 import storageConnectionCheck from './utils/storageConnectionCheck';
 import { setLocale } from '@joplin/lib/locale';
@@ -29,6 +28,7 @@ import initLib from '@joplin/lib/initLib';
 import checkAdminHandler from './middleware/checkAdminHandler';
 import ActionLogger from '@joplin/lib/utils/ActionLogger';
 import { setupSamlAuthentication } from './utils/saml';
+import { credentialFile } from './utils/testing/credentialFile';
 
 interface Argv {
 	env?: Env;
@@ -36,13 +36,13 @@ interface Argv {
 	envFile?: string;
 }
 
-const nodeSqlite = require('sqlite3');
+import * as nodeSqlite from 'sqlite3';
+import { shimInit } from '@joplin/lib/shim-init-node';
+import { isSameSite } from './utils/urlUtils';
 const cors = require('@koa/cors');
-const { shimInit } = require('@joplin/lib/shim-init-node.js');
 shimInit({ nodeSqlite });
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const defaultEnvVariables: Record<Env, any> = {
+const defaultEnvVariables: Record<Env, Partial<EnvVariables>> = {
 	dev: {
 		// To test with the Postgres database, uncomment DB_CLIENT below and
 		// comment out SQLITE_DATABASE. Then start the Postgres server using
@@ -68,26 +68,24 @@ function appLogger(): LoggerWrapper {
 	return appLogger_;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function markPasswords(o: Record<string, any>): Record<string, any> {
-	if (!o) return o;
+function markPasswords(o: object): Record<string, unknown> {
+	if (!o) return o as Record<string, unknown>;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const output: Record<string, any> = {};
+	const output: Record<string, unknown> = {};
+	const input = o as Record<string, unknown>;
 
-	for (const k of Object.keys(o)) {
+	for (const k of Object.keys(input)) {
 		if (k.toLowerCase().includes('password') || k.toLowerCase().includes('secret') || k.toLowerCase().includes('connectionstring')) {
 			output[k] = '********';
 		} else {
-			output[k] = o[k];
+			output[k] = input[k];
 		}
 	}
 
 	return output;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function getEnvFilePath(env: Env, argv: any): Promise<string> {
+async function getEnvFilePath(env: Env, argv: { envFile?: string }): Promise<string> {
 	if (argv.envFile) return argv.envFile;
 
 	if (env === Env.Dev) {
@@ -97,11 +95,27 @@ async function getEnvFilePath(env: Env, argv: any): Promise<string> {
 	return '';
 }
 
+const getCorsAllowedDomains = (envVariables: EnvVariables, env: Env) => {
+	const corsAllowedDomains = envVariables.CORS_ALLOWED_DOMAINS
+		.split(',')
+		.map(domain => domain.trim())
+		.filter(domain => !!domain);
+
+	if (env === Env.Dev) {
+		// Stripe (dev)
+		corsAllowedDomains.push('http://localhost:8077');
+
+		// Web client (dev)
+		corsAllowedDomains.push('http://localhost:8088');
+	}
+
+	return corsAllowedDomains;
+};
+
 async function main() {
 	const { selectedCommand, argv: yargsArgv } = await setupCommands();
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const argv: Argv = yargsArgv as any;
+	const argv: Argv = yargsArgv as unknown as Argv;
 	const env: Env = argv.env as Env || Env.Prod;
 
 	const envFilePath = await getEnvFilePath(env, argv);
@@ -130,21 +144,8 @@ async function main() {
 	// loads the user, which is then used by notificationHandler. And finally
 	// routeHandler uses data from both previous middlewares. It would be good to
 	// layout these dependencies in code but not clear how to do this.
-	const corsAllowedDomains = [
-		'https://joplinapp.org',
 
-		// Allows sync with the web version of Joplin
-		'https://app.joplincloud.com',
-	];
-
-	if (env === Env.Dev) {
-		// Stripe (dev)
-		corsAllowedDomains.push('http://localhost:8077');
-
-		// Web client (dev)
-		corsAllowedDomains.push('http://localhost:8088');
-	}
-
+	const corsAllowedDomains = getCorsAllowedDomains(envVariables, env);
 	function acceptOrigin(origin: string): boolean {
 		// Origin can be string "null"
 		if (origin === 'null') return false;
@@ -174,7 +175,11 @@ async function main() {
 		} catch (error) {
 			ctx.status = error.httpCode || 500;
 
-			appLogger().error(`Middleware error on ${ctx.path}:`, error);
+			if (ctx.status >= 500) {
+				appLogger().error(`Middleware error on ${ctx.path}:`, error);
+			} else {
+				appLogger().info(`Middleware error on ${ctx.path}:`, error);
+			}
 
 			const responseFormat = routeResponseFormat(ctx);
 
@@ -187,6 +192,7 @@ async function main() {
 						name: 'error',
 						title: 'Error',
 						path: 'index/error',
+						showFooter: true,
 						content: { error },
 					});
 				} catch (anotherError) {
@@ -215,6 +221,8 @@ async function main() {
 		// https://github.com/koajs/cors/issues/52#issuecomment-413887382
 		origin: (ctx: AppContext) => {
 			const origin = ctx.request.header.origin;
+
+			if (!origin) return '';
 
 			if (acceptOrigin(origin)) {
 				return origin;
@@ -274,8 +282,7 @@ async function main() {
 	if (selectedCommand) {
 		const commandArgv = {
 			...argv,
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			_: (argv as any)._.slice(),
+			_: (argv as Argv & { _: string[] })._.slice(),
 		};
 		commandArgv._.splice(0, 1);
 
@@ -321,6 +328,9 @@ async function main() {
 		appLogger().info('Public base URL:', config().baseUrl);
 		appLogger().info('API base URL:', config().apiBaseUrl);
 		appLogger().info('User content base URL:', config().userContentBaseUrl);
+		if (config().userContentBaseUrl !== config().baseUrl && isSameSite(config().userContentBaseUrl, config().baseUrl)) {
+			appLogger().warn('USER_CONTENT_BASE_URL is on the same site as APP_BASE_URL, so published notes are not isolated from the rest of the server: browsers treat requests between sibling subdomains as same-site and send the session cookie with them, and a page on one can set cookies for the other. Use a separate domain, as Joplin Cloud does with joplinusercontent.com.');
+		}
 		appLogger().info('Log dir:', config().logDir);
 		appLogger().info('DB Config:', markPasswords(config().database));
 		appLogger().info('Mailer Config:', markPasswords(config().mailer));
@@ -385,8 +395,7 @@ async function main() {
 	if (runCommandAndExitApp) process.exit(0);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-main().catch((error: any) => {
+main().catch((error: Error) => {
 	console.error(error);
 	process.exit(1);
 });

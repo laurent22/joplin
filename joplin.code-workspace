@@ -108,7 +108,7 @@
 			"./packages/renderer/**/.vscode/": true,
 			"./packages/renderer/**/copyLib.bat": true,
 			"./packages/renderer/**/node_modules/": true,
-			".eslintignore": true,
+			".ignore.eslint": true,
 			".gitignore": true,
 			".yarn/cache": true,
 			".yarn/install-state.gz": true,

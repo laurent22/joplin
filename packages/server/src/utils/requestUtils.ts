@@ -1,17 +1,21 @@
 import { cookieGet } from './cookies';
-import { ErrorForbidden } from './errors';
+import { ErrorForbidden, ErrorPayloadTooLarge } from './errors';
 import { AppContext } from './types';
-import * as formidable from 'formidable';
+import formidable from 'formidable';
 import { Fields, Files } from 'formidable';
 import { IncomingMessage } from 'http';
 import { uuidgen } from './uuid';
+import { safeRemove } from './fileUtils';
+import { MB } from './bytes';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+const maxBufferedBodySize = 10 * MB;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Many route handlers read fields without narrowing (e.g. `body.fields.email`); tightening to `unknown` propagates casts through every handler
 export type BodyFields = Record<string, any>;
 
 interface FormParseResult {
 	fields: BodyFields;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Callers access `.filepath` on the value which is `File | File[]` in the typed Files; narrowing forces casts at every call site
 	files: any;
 }
 
@@ -24,8 +28,7 @@ interface FormParseRequest extends IncomingMessage {
 	__isMocked: boolean;
 	__parsed: ParsedBody;
 	files: Files;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	body: any;
+	body: unknown;
 }
 
 // Previously Formidable would return the files and fields as key/value pairs. With v3, the value
@@ -38,8 +41,9 @@ interface FormParseRequest extends IncomingMessage {
 //
 // As of 2024-01-18, this may no longer be necessary since we reverted to Formidable v2, but keeping
 // it anyway just in case.
-const convertFieldsToKeyValue = (fields: Files | Fields) => {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Returned in place of `Fields`/`Files` and consumed by callers expecting those types; tightening to `unknown` cascades through to formidable's API
+const convertFieldsToKeyValue = (fields: Files | Fields): Record<string, any> => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See convertFieldsToKeyValue return type
 	const convertedFields: Record<string, any> = {};
 	for (const [k, v] of Object.entries(fields)) {
 		if (Array.isArray(v)) {
@@ -54,28 +58,33 @@ const convertFieldsToKeyValue = (fields: Files | Fields) => {
 
 // Input should be Koa ctx.req, which corresponds to the native Node request
 export async function formParse(request: IncomingMessage): Promise<FormParseResult> {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const req: FormParseRequest = request as any;
+	const req: FormParseRequest = request as unknown as FormParseRequest;
 
 	// It's not clear how to get mocked requests to be parsed successfully by
 	// formidable so we use this small hack. If it's mocked, we are running test
 	// units and the request body is already an object and can be returned.
 	if (req.__isMocked) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const output: any = {};
+		const output: Partial<FormParseResult> = {};
 		if (req.files) output.files = req.files;
-		output.fields = req.body || {};
-		return output;
+		output.fields = (req.body || {}) as BodyFields;
+		return output as FormParseResult;
 	}
 
 	if (req.__parsed) return req.__parsed;
 
 	const isFormContentType = req.headers['content-type'] === 'application/x-www-form-urlencoded' || req.headers['content-type'].startsWith('multipart/form-data');
 
+	// JSON and urlencoded bodies are buffered in memory in full, so they are capped. Uploaded items are streamed to a
+	// file instead, and batch uploads are at most 1 MB of content.
+	const mediaType = (req.headers['content-type'] || '').split(';')[0].trim().toLowerCase();
+	const isBufferedBody = /json|urlencoded/.test(mediaType);
+	if (isBufferedBody && Number(req.headers['content-length']) > maxBufferedBodySize) {
+		throw new ErrorPayloadTooLarge(`Request body is over the limit (${maxBufferedBodySize} bytes)`);
+	}
+
 	// Note that for Formidable to work, the content-type must be set in the
 	// headers
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	return new Promise((resolve: Function, reject: Function) => {
+	return new Promise<FormParseResult>((resolve, reject) => {
 		let promiseCompleted = false;
 
 		const form = formidable({
@@ -101,6 +110,28 @@ export async function formParse(request: IncomingMessage): Promise<FormParseResu
 				reject(wrapped);
 			});
 
+			// Content-Length can be missing (chunked encoding), so the bytes received are counted too. Added after
+			// form.parse(), since the listener starts the data flowing.
+			const limitBufferedBody = () => {
+				if (!isBufferedBody) return;
+				let receivedBytes = 0;
+				req.on('data', (chunk: Buffer) => {
+					receivedBytes += chunk.length;
+					if (receivedBytes <= maxBufferedBodySize || promiseCompleted) return;
+					promiseCompleted = true;
+					reject(new ErrorPayloadTooLarge(`Request body is over the limit (${maxBufferedBodySize} bytes)`));
+					req.destroy();
+				});
+			};
+
+			// Formidable only returns the last file of each field name, so files are tracked as they are created, for
+			// removeUploadedFiles()
+			const uploadedFilePaths: string[] = [];
+			(req as IncomingMessage & { __uploadedFilePaths?: string[] }).__uploadedFilePaths = uploadedFilePaths;
+			form.on('fileBegin', (_name: string, file: { filepath: string }) => {
+				uploadedFilePaths.push(file.filepath);
+			});
+
 			form.parse(req, (error: Error, fields: Fields, files: Files) => {
 				if (promiseCompleted) return;
 				promiseCompleted = true;
@@ -122,6 +153,8 @@ export async function formParse(request: IncomingMessage): Promise<FormParseResu
 				};
 				resolve(req.__parsed);
 			});
+
+			limitBufferedBody();
 		} catch (error) {
 			if (promiseCompleted) return;
 			promiseCompleted = true;
@@ -132,14 +165,19 @@ export async function formParse(request: IncomingMessage): Promise<FormParseResu
 	});
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function bodyFields<T>(req: any/* , filter:string[] = null*/): Promise<T> {
+// Formidable keeps uploaded files in the temp directory, and most routes have no use for them once the request is done
+export const removeUploadedFiles = async (req: IncomingMessage & { __uploadedFilePaths?: string[] }) => {
+	for (const filePath of req.__uploadedFilePaths ?? []) {
+		await safeRemove(filePath);
+	}
+};
+
+export async function bodyFields<T>(req: IncomingMessage/* , filter:string[] = null*/): Promise<T> {
 	const form = await formParse(req);
 	return form.fields as T;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const bodyFiles = async <T>(req: any/* , filter:string[] = null*/): Promise<T> => {
+export const bodyFiles = async <T>(req: IncomingMessage/* , filter:string[] = null*/): Promise<T> => {
 	const form = await formParse(req);
 	return form.files as T;
 };
@@ -148,15 +186,16 @@ export function ownerRequired(ctx: AppContext) {
 	if (!ctx.joplin.owner) throw new ErrorForbidden();
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function headerSessionId(headers: any): string {
-	return headers['x-api-auth'] ? headers['x-api-auth'] : '';
+export function headerSessionId(headers: Record<string, string | string[]>): string {
+	return headers['x-api-auth'] ? headers['x-api-auth'] as string : '';
 }
 
 export function contextSessionId(ctx: AppContext, throwIfNotFound = true): string {
 	if (ctx.headers['x-api-auth']) return ctx.headers['x-api-auth'] as string;
 
-	const id = cookieGet(ctx, 'sessionId');
+	// The API is not CSRF-protected, so it must not accept the cookie the browser sends on its own. Otherwise a script on
+	// a same-site page, such as a published note on a sibling subdomain, could act as whoever is logged in.
+	const id = isApiRequest(ctx) ? '' : cookieGet(ctx, 'sessionId');
 	if (!id && throwIfNotFound) throw new ErrorForbidden('Invalid or missing session');
 	return id;
 }

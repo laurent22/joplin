@@ -10,7 +10,8 @@ import limiterLoginBruteForce from '../../utils/request/limiterLoginBruteForce';
 import { cookieSet } from '../../utils/cookies';
 import { adminDashboardUrl, applicationsConfirmUrl, homeUrl } from '../../utils/urlUtils';
 import { generateRedirectHtml } from '../../utils/saml';
-import { ErrorForbidden } from '../../utils/errors';
+import { ErrorCode, ErrorForbidden, ErrorTooManyRequests } from '../../utils/errors';
+import { checkNotCrossSiteRequest } from '../../utils/csrf';
 
 type LoginViewContentOptions = {
 	showMfaCodeInput: boolean;
@@ -24,8 +25,7 @@ type LoginInputFields = {
 	applicationAuthId?: string;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function makeView(error: any = null, fields?: LoginInputFields, viewContentOptions?: LoginViewContentOptions): View {
+function makeView(error: Error | null = null, fields?: LoginInputFields, viewContentOptions?: LoginViewContentOptions): View {
 	const view = defaultView('login', 'Login');
 	view.content = {
 		error,
@@ -107,29 +107,33 @@ router.get('login/:id', async (path: SubPath, ctx: AppContext) => {
 });
 
 router.post('login', async (path: SubPath, ctx: AppContext) => {
+	checkNotCrossSiteRequest(ctx);
 	await limiterLoginBruteForce(userIp(ctx));
 
 	const body = await formParse(ctx.req);
 
 	try {
-		const hasMFAEnabled = await ctx.joplin.models.user().hasMFAEnabled(body.fields.email);
-
-		if (hasMFAEnabled && (!body.fields.mfaCode && !body.fields.recoveryCode)) {
-			return internalRedirect(path, ctx, router, 'login', body.fields, { showMfaCodeInput: true });
-		}
-
 		const session = await ctx.joplin.models.session().authenticate(
-			body.fields.email, body.fields.password, body.fields.mfaCode, body.fields.recoveryCode,
+			body.fields.email, body.fields.password, ctx.joplin.services, body.fields.mfaCode, body.fields.recoveryCode,
 		);
 		cookieSet(ctx, 'sessionId', session.id);
 		const owner = await ctx.joplin.models.user().load(session.user_id, { fields: ['id', 'is_admin'] });
 
 		return redirect(ctx, getRedirectUrl(owner.is_admin, body.fields.applicationAuthId));
 	} catch (error) {
+		// Only raised once the password has been checked, so that the form does not reveal which accounts have MFA
+		if (error.code === ErrorCode.MfaCodeRequired) {
+			return internalRedirect(path, ctx, router, 'login', body.fields, { showMfaCodeInput: true });
+		}
+
+		// A blocked account can still be logged in to with its password and an MFA code. The field is shown for any
+		// blocked account, since showing it only for those with MFA would tell which ones have it.
+		const isBlocked = error instanceof ErrorTooManyRequests;
+
 		return makeView(
 			error,
 			{ email: body.fields.email, password: body.fields.password, applicationAuthId: body.fields.applicationAuthId },
-			{ showMfaCodeInput: Boolean(body.fields.mfaCode), showRecoveryCodeInput: Boolean(body.fields.recoveryCode) },
+			{ showMfaCodeInput: Boolean(body.fields.mfaCode) || (isBlocked && !body.fields.recoveryCode), showRecoveryCodeInput: Boolean(body.fields.recoveryCode) },
 		);
 	}
 });

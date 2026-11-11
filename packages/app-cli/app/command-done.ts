@@ -15,8 +15,7 @@ class Command extends BaseCommand {
 		return _('Marks a to-do as done.');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static async handleAction(commandInstance: BaseCommand, args: any, isCompleted: boolean) {
+	public static async handleAction(commandInstance: BaseCommand, args: { note: string }, isCompleted: boolean) {
 		const note: NoteEntity = await app().loadItem(ModelType.Note, args.note);
 		commandInstance.encryptionCheck(note);
 		if (!note) throw new Error(_('Cannot find "%s".', args.note));
@@ -32,8 +31,7 @@ class Command extends BaseCommand {
 		});
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public override async action(args: any) {
+	public override async action(args: { note: string }) {
 		await Command.handleAction(this, args, true);
 	}
 }

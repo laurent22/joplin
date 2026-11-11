@@ -10,10 +10,12 @@ import BaseService from './BaseService';
 import { _ } from '../locale';
 import { ItemChangeEntity, NoteEntity, RevisionEntity } from './database/types';
 import Logger from '@joplin/utils/Logger';
+import isNoteLockEnabled from './noteLock/isNoteLockEnabled';
+import NoteLockNote from './noteLock/NoteLockNote';
 import { MarkupLanguage } from '../../renderer';
-const { substrWithEllipsis } = require('../string-utils');
+import { substrWithEllipsis } from '../string-utils';
 const { sprintf } = require('sprintf-js');
-const { wrapError } = require('../errorUtils');
+import { wrapError } from '../errorUtils';
 
 const logger = Logger.create('RevisionService');
 
@@ -21,14 +23,10 @@ export default class RevisionService extends BaseService {
 
 	public static instance_: RevisionService;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private changedSinceCollectionCache_: Set<string> = new Set();
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private maintenanceCalls_: any[] = [];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private maintenanceTimer1_: any = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private maintenanceTimer2_: any = null;
+	private maintenanceCalls_: boolean[] = [];
+	private maintenanceTimer1_: ReturnType<typeof shim.setTimeout> = null;
+	private maintenanceTimer2_: ReturnType<typeof shim.setInterval> = null;
 	private isCollecting_ = false;
 	public isRunningInBackground_ = false;
 
@@ -65,13 +63,12 @@ export default class RevisionService extends BaseService {
 	}
 
 	private noteMetadata_(note: NoteEntity) {
-		const excludedFields = ['type_', 'title', 'body', 'created_time', 'updated_time', 'encryption_applied', 'encryption_cipher_text', 'is_conflict'];
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const md: any = {};
+		const excludedFields = ['type_', 'title', 'body', 'created_time', 'updated_time', 'encryption_applied', 'encryption_cipher_text', 'is_conflict', 'user_data'];
+		const md: Record<string, unknown> = {};
+		const noteRecord = note as unknown as Record<string, unknown>;
 		for (const k in note) {
 			if (excludedFields.indexOf(k) >= 0) continue;
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			md[k] = (note as any)[k];
+			md[k] = noteRecord[k];
 		}
 
 		if (note.user_updated_time === note.updated_time) delete md.user_updated_time;
@@ -89,13 +86,23 @@ export default class RevisionService extends BaseService {
 				item_type: BaseModel.TYPE_NOTE,
 				item_id: note.id,
 				item_updated_time: note.updated_time,
+				// Carried with the flag off too, so the revision still marks its body as ciphertext.
+				is_locked: note.is_locked ? 1 : 0,
 			};
 
 			const noteMd = this.noteMetadata_(note);
 			const noteTitle = note.title ? note.title : '';
 			const noteBody = note.body ? note.body : '';
 
-			if (!parentRev) {
+			if (isNoteLockEnabled() && NoteLockNote.isLocked(note)) {
+				// A locked note body is ciphertext, so diffing it against other revisions would produce
+				// large meaningless patches. Each revision is standalone instead: no parent, full contents.
+				if (parentRev && !bypassInterval && Date.now() - parentRev.updated_time < Setting.value('revisionService.intervalBetweenRevisions')) return null;
+				output.title_diff = Revision.createTextPatch('', noteTitle);
+				output.body_diff = Revision.createTextPatch('', noteBody);
+				output.metadata_diff = Revision.createObjectPatch({}, noteMd);
+			} else if (!parentRev || !!parentRev.is_locked !== !!note.is_locked) {
+				// A chain never crosses a lock state change, so clearing plaintext history cannot orphan a locked revision.
 				output.title_diff = Revision.createTextPatch('', noteTitle);
 				output.body_diff = Revision.createTextPatch('', noteBody);
 				output.metadata_diff = Revision.createObjectPatch({}, noteMd);
@@ -259,8 +266,7 @@ export default class RevisionService extends BaseService {
 		};
 		output.updated_time = output.user_updated_time;
 		output.created_time = output.user_created_time;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		(output as any).type_ = BaseModel.TYPE_NOTE;
+		(output as NoteEntity & { type_?: number }).type_ = BaseModel.TYPE_NOTE;
 		if (!('markup_language' in output)) output.markup_language = MarkupLanguage.Markdown;
 
 		return output;
@@ -378,10 +384,19 @@ export default class RevisionService extends BaseService {
 	public async deleteHistoryForNote(noteIds: string | string[], options: DeleteOptions) {
 		const ids = Array.isArray(noteIds) ? noteIds : [noteIds];
 		await Revision.deleteHistoryForNote(ids, options);
+		await this.resetHistoryState_(ids);
+	}
 
+	public async deleteUnencryptedHistoryForNote(noteIds: string | string[], options: DeleteOptions) {
+		const ids = Array.isArray(noteIds) ? noteIds : [noteIds];
+		await Revision.deleteUnencryptedHistoryForNote(ids, options);
+		await this.resetHistoryState_(ids);
+	}
+
+	private async resetHistoryState_(noteIds: string[]) {
 		// Clear any cached content in the item_changes table and reset the state of the note in the revision service, to ensure that any new revisions created
 		// upon revision collection do not include contents which were present prior to triggering the deletion
-		for (const noteId of ids) {
+		for (const noteId of noteIds) {
 			await ItemChange.resetOldNoteContent(noteId);
 			RevisionService.instance().removeChangedSinceCollection(noteId);
 		}

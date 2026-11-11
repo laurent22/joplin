@@ -1,7 +1,7 @@
 import { EditorView } from '@codemirror/view';
 import typeText from './typeText';
 
-interface KeyInfo {
+export interface KeyInfo {
 	key: string;
 	code: string;
 	// Text to type if the event was not processed
@@ -21,8 +21,8 @@ const pressReleaseKey = (editor: EditorView, key: KeyInfo) => {
 
 	editor.contentDOM.dispatchEvent(keyDownEvent);
 
-	if (key.typesText && !keyDownPrevented) {
-		typeText(editor, key.typesText);
+	if (key.typesText !== undefined && !keyDownPrevented) {
+		typeText(editor, key.typesText, key);
 	}
 
 	editor.contentDOM.dispatchEvent(new KeyboardEvent('keyup', key));

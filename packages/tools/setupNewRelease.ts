@@ -108,11 +108,10 @@ function iosVersionHack(majorMinorVersion: string) {
 }
 
 async function main() {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const argv: any = yargs.parserConfiguration({
+	const argv = await yargs.parserConfiguration({
 		'parse-numbers': false,
 		'parse-positional-numbers': false,
-	}).argv;
+	}).argv as { _: string[]; updateVersion?: string; updateDependenciesVersion?: string };
 
 	if (!argv._ || !argv._.length) throw new Error('Please specify the major.minor version, eg. 1.2');
 

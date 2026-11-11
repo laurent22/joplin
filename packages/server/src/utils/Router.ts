@@ -16,6 +16,11 @@ export default class Router {
 	public public = false;
 	public publicSchemas: string[] = [];
 
+	// Schemas that are public for the listed methods only, and private for all
+	// others (e.g. a GET consent page that's reachable before login, while its
+	// POST still goes through the session and CSRF checks).
+	public publicSchemasByMethod: Partial<Record<HttpMethod, string[]>> = {};
+
 	public responseFormat: RouteResponseFormat = null;
 
 	private routes_: Record<string, Record<string, RouteInfo>> = {};
@@ -47,8 +52,9 @@ export default class Router {
 		throw new ErrorNotFound(`Could not resolve: ${method} ${schema}`);
 	}
 
-	public isPublic(schema: string): boolean {
-		return this.public || this.publicSchemas.includes(schema);
+	public isPublic(schema: string, method: HttpMethod): boolean {
+		if (this.public || this.publicSchemas.includes(schema)) return true;
+		return !!this.publicSchemasByMethod[method]?.includes(schema);
 	}
 
 	public alias(method: HttpMethod, path: string, target: string) {

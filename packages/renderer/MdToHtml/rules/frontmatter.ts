@@ -1,4 +1,4 @@
-import type * as MarkdownIt from 'markdown-it';
+import type MarkdownIt from 'markdown-it';
 import type * as StateBlock from 'markdown-it/lib/rules_block/state_block';
 import hljs from '../../highlight';
 
@@ -120,6 +120,8 @@ const assets = () => {
 				.joplin-frontmatter-rendered pre.hljs {
 					margin: 0;
 					border-radius: 0;
+					white-space: pre-wrap;
+					word-break: break-word;
 				}
 				.joplin-frontmatter-marker {
 					margin: 0;

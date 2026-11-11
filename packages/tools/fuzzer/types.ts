@@ -37,6 +37,10 @@ export interface ShareOptions {
 	readOnly: boolean;
 }
 
+export interface UpdateNoteOptions {
+	message?: string;
+}
+
 export interface ActionableClient {
 	createFolder(data: FolderData): Promise<void>;
 	shareFolder(id: ItemId, shareWith: Client, options: ShareOptions): Promise<void>;
@@ -45,7 +49,7 @@ export interface ActionableClient {
 	deleteFolder(id: ItemId): Promise<void>;
 	deleteNote(id: ItemId): Promise<void>;
 	createNote(data: NoteData): Promise<void>;
-	updateNote(data: NoteData): Promise<void>;
+	updateNote(data: NoteData, options?: UpdateNoteOptions): Promise<void>;
 	attachResource(note: NoteData, resource: ResourceData): Promise<NoteData>;
 	createResource(resource: ResourceData): Promise<void>;
 	moveItem(itemId: ItemId, newParentId: ItemId): Promise<void>;

@@ -386,7 +386,9 @@ public class EfficientDocumentHelper {
     return newUri;
   }
 
-  private Uri createFile(final String unknownStr, final String mimeType) throws IOException {
+  private Uri createFile(
+    final String unknownStr, final String mimeType, final boolean replaceIfDestinationExists
+  ) throws IOException {
     Uri uri = null;
 
     try {
@@ -395,6 +397,7 @@ public class EfficientDocumentHelper {
     }
 
     if (uri != null) {
+      if (replaceIfDestinationExists) return uri;
       throw new IOExceptionFast("a file or directory already exist at: " + uri);
     }
 
@@ -405,6 +408,7 @@ public class EfficientDocumentHelper {
       file.getParentFile().mkdirs();
       boolean created = file.createNewFile();
       if (!created) {
+        if (replaceIfDestinationExists && file.exists() && file.isFile()) return uri;
         throw new IOExceptionFast("could not create file at: " + unknownStr);
       }
       return uri;
@@ -412,30 +416,48 @@ public class EfficientDocumentHelper {
 
     Uri parentDirOfFile = getDocumentUri(unknownStr, true, false);
 
-    // it should be safe because user cannot select sd root or primary root
-    // and any other path would have at least one '/' to provide a file name in a folder
     String fileName = UriHelper.getFileName(unknownStr);
+    return createFileInDirectory(parentDirOfFile, fileName, mimeType, replaceIfDestinationExists);
+  }
+
+  private Uri createFileInDirectory(
+    final Uri parentDirOfFile,
+    final String fileName,
+    final String mimeType,
+    final boolean replaceIfDestinationExists
+  ) throws IOException {
     if (fileName.indexOf(':') != -1) {
       throw new IOExceptionFast(
         "Invalid file name: Could not extract filename from uri string provided");
     }
 
-    // maybe edited maybe not
+    String creationMimeType = "*/*";
+
+    // Some providers append the extension associated with the MIME type. Pass
+    // the MIME type only when the requested name already has an extension;
+    // extensionless Joplin resource IDs must remain extensionless.
     String correctFileName = fileName;
 
-    // only files with mime type are special, so we treat it special
     if (mimeType != null && !mimeType.equals("")) {
-      int indexOfDot = fileName.indexOf('.');
+      int indexOfDot = fileName.lastIndexOf('.');
       // len - 1 because there should be an extension that has at least 1 letter
-      if (indexOfDot != -1 && indexOfDot < fileName.length() - 1) {
+      if (indexOfDot > 0 && indexOfDot < fileName.length() - 1) {
         correctFileName = fileName.substring(0, indexOfDot);
+        creationMimeType = mimeType;
       }
     }
 
+    // Directory-based callers have already listed the parent and rechecked its
+    // document cache. Querying the directory again here would make bulk creation
+    // quadratic on providers that cannot filter children. A provider that permits
+    // exact same-name siblings could still race with an unrelated external writer
+    // between that listing and createDocument(). This is an inherent, pre-existing
+    // SAF limitation shared by other createDocument call sites; provider-renamed
+    // collisions are detected and cleaned up below.
     Uri createdFile = DocumentsContract.createDocument(
       context.getContentResolver(),
       parentDirOfFile,
-      mimeType != null && !mimeType.equals("") ? mimeType : "*/*",
+      creationMimeType,
       correctFileName
     );
 
@@ -447,21 +469,56 @@ public class EfficientDocumentHelper {
     String createdFileName = UriHelper.getFileName(createdFile.toString());
 
     if (!createdFileName.equals(fileName)) {
-      // some times setting mimetypes causes name changes, this is to prevent that.
-      try {
-        createdFile = renameTo(createdFile, fileName);
-      } catch (RenameFailedException e) {
-        unlink(e.getResultUri());
+      // A provider can change the name when a document with the requested name
+      // already exists. Do not try to rename this document into the occupied
+      // destination: a rename can partially succeed before reporting an error.
+      // Delete the document returned by this create call. Replacement-capable
+      // callers can then resolve and overwrite the intended destination;
+      // create-only callers retain their collision failure semantics.
+      unlink(createdFile);
+      if (!replaceIfDestinationExists) {
         throw new IOExceptionFast(
           "The created file name was not as expected: input name was '"
-            + e.getInputName()
-            + "' "
-            + "but got: '"
-            + e.getResultName());
+            + fileName
+            + "' but got: '"
+            + createdFileName
+            + "'");
       }
+      DocumentStat existingFile = findFile(parentDirOfFile, fileName);
+      if (existingFile == null || existingFile.isDirectory()) {
+        throw new IOExceptionFast(
+          "The created file name was not as expected and the existing destination could not be resolved: input name was '"
+            + fileName
+            + "' but got: '"
+            + createdFileName
+            + "'");
+      }
+      return existingFile.getInternalUri();
     }
 
     return createdFile;
+  }
+
+  private void writeToFile(final Uri uri, final String data, final String encoding, final boolean append) throws IOException {
+    byte[] bytes = GeneralHelper.stringToBytes(data, encoding);
+
+    try (OutputStream out =
+           context
+             .getContentResolver()
+             .openOutputStream(uri, append ? "wa" : "wt")) {
+      out.write(bytes);
+    }
+  }
+
+  private void copyFileContents(final Uri sourceUri, final Uri destinationUri) throws IOException {
+    try (InputStream inStream = context.getContentResolver().openInputStream(sourceUri);
+         OutputStream outStream = context.getContentResolver().openOutputStream(destinationUri, "wt")) {
+      byte[] buffer = new byte[1024 * 4];
+      int length;
+      while ((length = inStream.read(buffer)) > 0) {
+        outStream.write(buffer, 0, length);
+      }
+    }
   }
 
   // all public methods SHOULD be below here
@@ -575,7 +632,7 @@ public class EfficientDocumentHelper {
       @Override
       public Object doAsync() {
         try {
-          Uri uri = createFile(unknownStr, mimeType);
+          Uri uri = createFile(unknownStr, mimeType, false);
           return getStat(uri).getWritableMap();
         } catch (Exception e) {
           return e;
@@ -734,26 +791,103 @@ public class EfficientDocumentHelper {
       public Object doAsync() {
         try {
           Uri uri;
+          Uri suppliedUri = UriHelper.getUnifiedUri(unknownStr);
 
-          try {
-            uri = getDocumentUri(unknownStr, false, true);
-            if (uri == null) {
-              throw new FileNotFoundExceptionFast();
+          if (UriHelper.isDocumentUri(suppliedUri)) {
+            // A direct document URI already identifies the destination. Opening its
+            // output stream validates it, so querying it first only adds provider
+            // overhead to every cached overwrite.
+            uri = suppliedUri;
+          } else {
+            try {
+              uri = getDocumentUri(unknownStr, false, true);
+              if (uri == null) {
+                throw new FileNotFoundExceptionFast();
+              }
+            } catch (FileNotFoundException e) {
+              uri = createFile(unknownStr, mimeType, true);
             }
-          } catch (FileNotFoundException e) {
-            uri = createFile(unknownStr, mimeType);
           }
 
-          byte[] bytes = GeneralHelper.stringToBytes(data, encoding);
-
-          try (OutputStream out =
-                 context
-                   .getContentResolver()
-                   .openOutputStream(uri, append ? "wa" : "wt")) {
-            out.write(bytes);
-          }
+          writeToFile(uri, data, encoding, append);
 
           return null;
+        } catch (Exception e) {
+          return e;
+        }
+      }
+
+      @Override
+      public void doSync(Object o) {
+        if (o instanceof Exception) {
+          rejectWithException((Exception) o, promise);
+        } else {
+          promise.resolve(o);
+        }
+      }
+    });
+  }
+
+  public void writeFileInDirectory(
+    String directoryUriString,
+    String fileName,
+    String data,
+    String encoding,
+    String mimeType,
+    boolean replaceIfDestinationExists,
+    final Promise promise) {
+    Async.execute(new Async.Task<Object>() {
+      @Override
+      public Object doAsync() {
+        try {
+          Uri directoryUri = getDocumentUri(directoryUriString, false, true);
+          Uri fileUri = createFileInDirectory(
+            directoryUri, fileName, mimeType, replaceIfDestinationExists
+          );
+          writeToFile(fileUri, data, encoding, false);
+          return getStat(fileUri).getWritableMap();
+        } catch (Exception e) {
+          return e;
+        }
+      }
+
+      @Override
+      public void doSync(Object o) {
+        if (o instanceof Exception) {
+          rejectWithException((Exception) o, promise);
+        } else {
+          promise.resolve(o);
+        }
+      }
+    });
+  }
+
+  public void copyFileToDirectory(
+    String sourceUriString,
+    String directoryUriString,
+    String fileName,
+    boolean replaceIfDestinationExists,
+    final Promise promise) {
+    Async.execute(new Async.Task<Object>() {
+      @Override
+      public Object doAsync() {
+        try {
+          Uri sourceUri = getDocumentUri(sourceUriString, false, true);
+          String sourceMimeType = null;
+          // Extensionless Joplin resources are deliberately created with */* so
+          // providers do not append an extension. A source stat cannot affect the
+          // destination in that case and only adds another provider round trip.
+          int extensionIndex = fileName.lastIndexOf('.');
+          if (extensionIndex > 0 && extensionIndex < fileName.length() - 1) {
+            DocumentStat sourceStat = getStat(sourceUri);
+            sourceMimeType = sourceStat.getMimeType();
+          }
+          Uri directoryUri = getDocumentUri(directoryUriString, false, true);
+          Uri destinationUri = createFileInDirectory(
+            directoryUri, fileName, sourceMimeType, replaceIfDestinationExists
+          );
+          copyFileContents(sourceUri, destinationUri);
+          return getStat(destinationUri).getWritableMap();
         } catch (Exception e) {
           return e;
         }
@@ -799,24 +933,15 @@ public class EfficientDocumentHelper {
             }
           } catch (FileNotFoundException e) {
             if (srcStats != null) {
-              destUri = createFile(unknownDestUri, srcStats.getMimeType());
+              destUri = createFile(unknownDestUri, srcStats.getMimeType(), replaceIfDestExists);
             } else {
               // createFile() will treat mimetype null as "*/*"
-              destUri = createFile(unknownDestUri, null);
+              destUri = createFile(unknownDestUri, null, replaceIfDestExists);
             }
 
           }
 
-          try (InputStream inStream =
-                 context.getContentResolver().openInputStream(srcUri);
-               OutputStream outStream =
-                 context.getContentResolver().openOutputStream(destUri, "wt")) {
-            byte[] buffer = new byte[1024 * 4];
-            int length;
-            while ((length = inStream.read(buffer)) > 0) {
-              outStream.write(buffer, 0, length);
-            }
-          }
+          copyFileContents(srcUri, destUri);
 
           if (!copy) {
             unlink(srcUri);

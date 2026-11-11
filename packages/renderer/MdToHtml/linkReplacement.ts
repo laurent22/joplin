@@ -1,8 +1,8 @@
 import { LinkRenderingType } from '../MdToHtml';
-import { ItemIdToUrlHandler, OptionsResourceModel, ResourceInfos } from '../types';
+import { ItemIdToUrlHandler, OptionsResourceModel, ResourceEntity, ResourceInfos } from '../types';
 import * as utils from '../utils';
 import createEventHandlingAttrs from './createEventHandlingAttrs';
-const Entities = require('html-entities').AllHtmlEntities;
+import { AllHtmlEntities as Entities } from 'html-entities';
 const htmlentities = new Entities().encode;
 const urlUtils = require('../urlUtils.js');
 const { getClassNameForMimeType } = require('font-awesome-filetypes');
@@ -21,8 +21,7 @@ export interface Options {
 
 export interface LinkReplacementResult {
 	html: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	resource: any;
+	resource: ResourceEntity | null;
 	resourceReady: boolean;
 	resourceFullPath: string;
 }

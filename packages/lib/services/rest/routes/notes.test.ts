@@ -6,9 +6,13 @@ import { readFile, readdir, remove, writeFile } from 'fs-extra';
 import Resource from '../../../models/Resource';
 import Api, { RequestMethod } from '../Api';
 import Note from '../../../models/Note';
-import { setupDatabaseAndSynchronizer, switchClient } from '../../../testing/test-utils';
+import Folder from '../../../models/Folder';
+import Tag from '../../../models/Tag';
+import { setupDatabaseAndSynchronizer, switchClient, noteLockCipherTextStandIn } from '../../../testing/test-utils';
 import Revision from '../../../models/Revision';
 import { ModelType } from '../../../BaseModel';
+import { NoteEntity } from '../../database/types';
+import { lockedNoteBodyPlaceholder } from '../../noteLock/NoteLockNote';
 const md5 = require('md5');
 
 const imagePath = `${__dirname}/../../../images/SideMenuHeader.png`;
@@ -229,6 +233,72 @@ describe('routes/notes', () => {
 		await api.route(RequestMethod.DELETE, `notes/${note.id}/revisions`);
 
 		expect(await Revision.load(revision.id)).toBeFalsy();
+	});
+
+	test('should return a placeholder body for locked notes and refuse to modify it', async () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		const api = new Api();
+		// A JLD-prefixed body passes the save path untouched, standing in for real ciphertext.
+		const note = await Note.save({ title: 'locked', body: noteLockCipherTextStandIn(), is_locked: 1 });
+
+		const metadata = await api.route(RequestMethod.GET, `notes/${note.id}`);
+		expect(metadata).toEqual({ id: note.id, parent_id: '', title: 'locked', deleted_time: 0, type_: ModelType.Note });
+		expect(await api.route(RequestMethod.GET, `notes/${note.id}`, { fields: 'id,body' })).toEqual({ id: note.id, body: lockedNoteBodyPlaceholder, type_: ModelType.Note });
+		expect((await api.route(RequestMethod.GET, `notes/${note.id}`, { fields: 'id,BODY' })).BODY).toBe(lockedNoteBodyPlaceholder);
+		expect((await api.route(RequestMethod.GET, `notes/${note.id}`, { fields: '*' })).body).toBe(lockedNoteBodyPlaceholder);
+		await expect(api.route(RequestMethod.GET, `notes/${note.id}/resources`)).rejects.toThrow('locked note');
+
+		const renamed = await api.route(RequestMethod.PUT, `notes/${note.id}`, null, JSON.stringify({ title: 'renamed' }));
+		expect(renamed.title).toBe('renamed');
+		expect('body' in renamed).toBe(false);
+		expect((await Note.load(note.id)).title).toBe('renamed');
+		await expect(api.route(RequestMethod.PUT, `notes/${note.id}`, null, JSON.stringify({ body: 'overwrite' }))).rejects.toThrow('locked note');
+		await expect(api.route(RequestMethod.PUT, `notes/${note.id}`, null, JSON.stringify({ is_locked: 0 }))).rejects.toThrow('lock state');
+		expect((await Note.load(note.id)).body).toBe(noteLockCipherTextStandIn());
+	});
+
+	test.each([
+		{ label: 'lock a plaintext note', startLocked: 0, value: '1foo' },
+		{ label: 'unlock an encrypted note', startLocked: 1, value: '0x1' },
+	])('should reject a malformed lock state that would $label', async ({ startLocked, value }) => {
+		Setting.setValue('featureFlag.noteLock', true);
+		const api = new Api();
+		const note = await Note.save({ title: 'note', body: startLocked ? noteLockCipherTextStandIn('body') : 'body', is_locked: startLocked });
+
+		await expect(api.route(RequestMethod.PUT, `notes/${note.id}`, null, JSON.stringify({ is_locked: value }))).rejects.toThrow('lock state');
+		expect((await Note.load(note.id)).is_locked).toBe(startLocked);
+	});
+
+	test('should list locked notes with a placeholder body', async () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		const api = new Api();
+		const folder = await Folder.save({ title: 'folder' });
+		const plain = await Note.save({ title: 'plain', body: 'text', parent_id: folder.id });
+		const locked = await Note.save({ title: 'locked', body: noteLockCipherTextStandIn(), is_locked: 1, parent_id: folder.id });
+		const tag = await Tag.save({ title: 'tag' });
+		await Tag.addNote(tag.id, plain.id);
+		await Tag.addNote(tag.id, locked.id);
+
+		for (const path of ['notes', `folders/${folder.id}/notes`, `tags/${tag.id}/notes`]) {
+			const response = await api.route(RequestMethod.GET, path, { fields: 'id,body' });
+			expect(response.items).toHaveLength(2);
+			expect(response.items).toContainEqual({ id: locked.id, body: lockedNoteBodyPlaceholder });
+			expect(response.items).toContainEqual({ id: plain.id, body: 'text' });
+			const withLockState = await api.route(RequestMethod.GET, path, { fields: 'id,body,is_locked' });
+			expect(withLockState.items).toContainEqual({ id: locked.id, body: lockedNoteBodyPlaceholder, is_locked: 1 });
+		}
+
+		Setting.setValue('featureFlag.noteLock', false);
+		expect((await api.route(RequestMethod.GET, 'notes', { fields: 'id,body' })).items.find((n: NoteEntity) => n.id === locked.id).body).toBe(noteLockCipherTextStandIn());
+	});
+
+	test('should not restrict locked notes when note lock is disabled', async () => {
+		Setting.setValue('featureFlag.noteLock', false);
+		const api = new Api();
+		const note = await Note.save({ title: 'locked', body: 'ciphertext', is_locked: 1 });
+
+		const loaded = await api.route(RequestMethod.GET, `notes/${note.id}`, { fields: 'id,body' });
+		expect(loaded.body).toBe('ciphertext');
 	});
 
 });

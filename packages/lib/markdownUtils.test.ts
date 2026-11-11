@@ -1,6 +1,6 @@
 import markdownUtils from './markdownUtils';
 
-describe('Should detect list items', () => {
+describe('markdownUtils', () => {
 	test('should detect `- lorem ipsum` as list item ', () => {
 		expect(markdownUtils.isListItem('- lorem ipsum')).toBe(true);
 	});

@@ -49,13 +49,13 @@ impl FileNodeListFragment {
                 file_nodes.push(file_node);
             }
 
-            assert_eq!(remaining_0 - reader.remaining(), file_node_size);
+            assert_eq!(remaining_0 - reader.remaining(), file_node_size as u64);
         }
 
         context.update_remaining_nodes_in_fragment(&header, maximum_node_count);
 
         let padding_length = size - 36 - file_node_size;
-        reader.advance(padding_length)?;
+        reader.advance(padding_length as u64)?;
 
         let next_fragment = FileChunkReference64x32::parse(reader)?;
 

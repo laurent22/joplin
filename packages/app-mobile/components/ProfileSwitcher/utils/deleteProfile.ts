@@ -2,10 +2,11 @@ import { Profile, ProfileConfig } from '@joplin/lib/services/profileConfig/types
 import { getDatabaseName, getPluginDataDir, getResourceDir, saveProfileConfig } from '../../../services/profiles';
 import { deleteProfileById, getCurrentProfile, isSubProfile } from '@joplin/lib/services/profileConfig';
 import Setting from '@joplin/lib/models/Setting';
-import shim from '@joplin/lib/shim';
+import shim, { MessageBoxType } from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import resolvePathWithinDir from '@joplin/lib/utils/resolvePathWithinDir';
 import DatabaseDriver from '@joplin/lib/database-driver';
+import { _ } from '@joplin/lib/locale';
 
 const logger = Logger.create('deleteProfile');
 
@@ -17,14 +18,17 @@ interface DeleteProfileOptions {
 
 const deleteProfile = async (options: DeleteProfileOptions) => {
 	logger.info('Deleting profile config', options.toDelete.id);
-	// This step also verifies that the to-be-deleted profile is not the default profile, etc.
-	const newConfig = deleteProfileById(options.profileConfig, options.toDelete.id);
-	// Save the profile config early. If the later deletion steps fail, this prevents the user from
-	// opening a partially-deleted profile:
-	await saveProfileConfig(newConfig);
-
+	if (options.toDelete.id === options.profileConfig.currentProfileId) throw new Error(_('The active profile cannot be deleted. Switch to a different profile and try again.'));
 	const subProfile = isSubProfile(options.toDelete);
-	if (!subProfile) throw new Error('Deleting a sub-profile is not supported');
+
+	// Deleting the default profile must be handled differently. We can't delete the whole directory because it contains other profiles and global settings
+	if (subProfile) {
+		const newConfig = deleteProfileById(options.profileConfig, options.toDelete.id);
+		// Save the profile config early. If the later deletion steps fail, this prevents the user from
+		// opening a partially-deleted profile. The default profile does not get deleted from the list,
+		// but the data will be cleared
+		await saveProfileConfig(newConfig);
+	}
 
 	// Retrieve and validate both the database name and resources directory
 	// **before** doing any deletion.
@@ -42,11 +46,38 @@ const deleteProfile = async (options: DeleteProfileOptions) => {
 		logger.warn('Failed to delete database: ', error, '. Was the profile initialized?');
 	}
 
-	logger.info('Deleting resources directory', resourcesDir);
-	await shim.fsDriver().remove(resourcesDir);
+	if (subProfile) {
+		logger.info('Deleting resources directory', resourcesDir);
+		await shim.fsDriver().remove(resourcesDir);
+	} else {
+		try {
+			const items = await shim.fsDriver().readDirStats(resourcesDir);
+
+			for (const item of items) {
+				if (item.isDirectory()) continue;
+				const fileName = item.path;
+
+				if (/^[a-f0-9]{32}\./.test(fileName)) {
+					const fullPath = `${resourcesDir}/${fileName}`;
+					try {
+						await shim.fsDriver().unlink(fullPath);
+						logger.info('Deleted resource file: ', fullPath);
+					} catch (error) {
+						logger.error('Error deleting resource file: ', fullPath, error);
+					}
+				}
+			}
+		} catch (error) {
+			logger.error('Error reading resources directory: ', resourcesDir, error);
+		}
+	}
 
 	logger.info('Deleting plugin data directory', pluginDataDir);
 	await shim.fsDriver().remove(pluginDataDir);
+
+	if (!subProfile) {
+		await shim.showMessageBox(_('The default profile has been reset.'), { type: MessageBoxType.Info });
+	}
 };
 
 export default deleteProfile;
@@ -70,7 +101,7 @@ const getTargetResourceDirectory = ({ toDelete: target }: DeleteProfileOptions) 
 	// Add an extra check here to verify that deleting the other profile's resource directory
 	// doesn't also delete **the active** profile's resource directory. On mobile, the resources
 	// directory can sometimes contain other profile directories (e.g. in the case of the default profile).
-	if (resolvePathWithinDir(resourcesDir, Setting.value('resourceDir')) !== null) {
+	if (isSubProfile(target) && resolvePathWithinDir(resourcesDir, Setting.value('resourceDir')) !== null) {
 		throw new Error('Refusing to delete a directory that contains the active profile\'s resource directory.');
 	}
 	return resourcesDir;
@@ -79,7 +110,7 @@ const getTargetResourceDirectory = ({ toDelete: target }: DeleteProfileOptions) 
 
 const getTargetPluginDataDirectory = ({ toDelete: target }: DeleteProfileOptions) => {
 	const pluginDataDir = getPluginDataDir(target, isSubProfile(target));
-	if (resolvePathWithinDir(pluginDataDir, Setting.value('pluginDataDir')) !== null) {
+	if (isSubProfile(target) && resolvePathWithinDir(pluginDataDir, Setting.value('pluginDataDir')) !== null) {
 		throw new Error('Refusing to delete a directory that contains the active profile\'s plugin data directory.');
 	}
 	return pluginDataDir;

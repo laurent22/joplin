@@ -2,7 +2,7 @@ import { validateLinks } from '@joplin/renderer';
 const stringPadding = require('string-padding');
 const urlUtils = require('./urlUtils');
 import type * as MarkdownItType from 'markdown-it';
-const MarkdownIt = require('markdown-it');
+import MarkdownIt from 'markdown-it';
 
 // Taken from codemirror/addon/edit/continuelist.js
 const listRegex = /^(\s*)([*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]\s))(\s*)/;
@@ -72,15 +72,15 @@ const markdownUtils = {
 	},
 
 	prependBaseUrl(md: string, baseUrl: string) {
-		// eslint-disable-next-line no-useless-escape, @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		return md.replace(/(\]\()([^\s\)]+)(.*?\))/g, (_match: any, before: string, url: string, after: string) => {
+		// eslint-disable-next-line no-useless-escape -- Old code before rule was applied
+		return md.replace(/(\]\()([^\s\)]+)(.*?\))/g, (_match: string, before: string, url: string, after: string) => {
 			return before + urlUtils.prependBaseUrl(url, baseUrl) + after;
 		});
 	},
 
 	// Returns the **encoded** URLs, so to be useful they should be decoded again before use.
 	extractFileUrls(md: string, onlyType: string = null): string[] {
-		const markdownIt: MarkdownItType = new MarkdownIt();
+		const markdownIt = new MarkdownIt();
 		markdownIt.validateLink = validateLinks; // Necessary to support file:/// links
 
 		const env = {};
@@ -90,8 +90,7 @@ const markdownUtils = {
 		let linkType = onlyType;
 		if (linkType === 'pdf') linkType = 'link_open';
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const searchUrls = (tokens: any[]) => {
+		const searchUrls = (tokens: MarkdownItType.Token[]) => {
 			for (let i = 0; i < tokens.length; i++) {
 				const token = tokens[i];
 				if ((!onlyType && (token.type === 'link_open' || token.type === 'image')) || (!!onlyType && token.type === onlyType) || (onlyType === 'pdf' && token.type === 'link_open')) {

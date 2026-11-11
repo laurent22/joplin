@@ -1,4 +1,5 @@
 import BaseModel, { DeleteOptions } from '../BaseModel';
+import FsDriverBase from '../fs-driver-base';
 import BaseItem from './BaseItem';
 import ItemChange from './ItemChange';
 import NoteResource from './NoteResource';
@@ -10,7 +11,7 @@ import ResourceLocalState from './ResourceLocalState';
 import * as pathUtils from '../path-utils';
 import { safeFilename } from '../path-utils';
 import * as mime from '../mime-utils';
-const { FsDriverDummy } = require('../fs-driver-dummy.js');
+import FsDriverDummy from '../fs-driver-dummy';
 import JoplinError from '../JoplinError';
 import itemCanBeEncrypted from './utils/itemCanBeEncrypted';
 import { getEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
@@ -65,8 +66,7 @@ export default class Resource extends BaseItem {
 
 	public static shareService_: ShareService = null;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static fsDriver_: any;
+	public static fsDriver_: FsDriverBase;
 
 	public static tableName() {
 		return 'resources';
@@ -90,8 +90,7 @@ export default class Resource extends BaseItem {
 		return isSupportedImageMimeType(type);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static fetchStatuses(resourceIds: string[]): Promise<any[]> {
+	public static fetchStatuses(resourceIds: string[]): Promise<{ resource_id: string; fetch_status: number }[]> {
 		if (!resourceIds.length) return Promise.resolve([]);
 		return this.db().selectAll(`SELECT resource_id, fetch_status FROM resource_local_states WHERE resource_id IN (${this.escapeIdsForSql(resourceIds)})`);
 	}
@@ -224,7 +223,7 @@ export default class Resource extends BaseItem {
 				// at all. It can happen for example when there's a crash between the moment the data
 				// is decrypted and the resource item is updated.
 				this.logger().warn(`Found a resource that was most likely already decrypted but was marked as encrypted. Marked it as decrypted: ${item.id}`);
-				this.fsDriver().move(encryptedPath, plainTextPath);
+				await this.fsDriver().move(encryptedPath, plainTextPath);
 			} else {
 				throw error;
 			}
@@ -244,8 +243,7 @@ export default class Resource extends BaseItem {
 
 		const share = resource.share_id ? await this.shareService().shareById(resource.share_id) : null;
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		if (!getEncryptionEnabled() || !itemCanBeEncrypted(resource as any, share)) {
+		if (!getEncryptionEnabled() || !itemCanBeEncrypted(resource as Parameters<typeof itemCanBeEncrypted>[0], share)) {
 			// Normally not possible since itemsThatNeedSync should only return decrypted items
 			if (resource.encryption_blob_encrypted) throw new Error('Trying to access encrypted resource but encryption is currently disabled');
 			return { path: plainTextPath, resource: resource };
@@ -272,8 +270,7 @@ export default class Resource extends BaseItem {
 		return { path: encryptedPath, resource: resourceCopy };
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static markupTag(resource: any, markupLanguage: MarkupLanguage = MarkupLanguage.Markdown) {
+	public static markupTag(resource: ResourceEntity & { alt?: string }, markupLanguage: MarkupLanguage = MarkupLanguage.Markdown) {
 		let tagAlt = resource.alt ? resource.alt : resource.title;
 		if (!tagAlt) tagAlt = '';
 		const lines = [];
@@ -319,19 +316,16 @@ export default class Resource extends BaseItem {
 		return resourceUrlToId(url);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static async localState(resourceOrId: any): Promise<ResourceLocalStateEntity> {
+	public static async localState(resourceOrId: ResourceEntity | string): Promise<ResourceLocalStateEntity> {
 		return ResourceLocalState.byResourceId(typeof resourceOrId === 'object' ? resourceOrId.id : resourceOrId);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static setLocalStateQueries(resourceOrId: any, state: ResourceLocalStateEntity) {
+	public static setLocalStateQueries(resourceOrId: ResourceEntity | string, state: ResourceLocalStateEntity) {
 		const id = typeof resourceOrId === 'object' ? resourceOrId.id : resourceOrId;
 		return ResourceLocalState.saveQueries({ ...state, resource_id: id });
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static async setLocalState(resourceOrId: any, state: ResourceLocalStateEntity) {
+	public static async setLocalState(resourceOrId: ResourceEntity | string, state: ResourceLocalStateEntity) {
 		const id = typeof resourceOrId === 'object' ? resourceOrId.id : resourceOrId;
 		await ResourceLocalState.save({ ...state, resource_id: id });
 	}
@@ -497,8 +491,7 @@ export default class Resource extends BaseItem {
 		return folder.id;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private static async resourceConflictFolder(): Promise<any> {
+	private static async resourceConflictFolder() {
 		const conflictFolderTitle = _('Conflicts (attachments)');
 		const Folder = this.getClass('Folder');
 
@@ -609,8 +602,7 @@ export default class Resource extends BaseItem {
 		const makeQuery = (useRowValue: boolean): SqlQuery => {
 			const whereSql = useRowValue ? '(updated_time, id) > (?, ?)' : 'updated_time > ?';
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const params: any[] = [updatedTime];
+			const params: (string | number)[] = [updatedTime];
 			if (useRowValue) {
 				params.push(id);
 			}

@@ -22,7 +22,7 @@ impl ObjectDataBlob {
 
 impl fmt::Debug for ObjectDataBlob {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "ObjectDataBlob({} bytes)", self.0.as_ref().len())
+        write!(f, "ObjectDataBlob({} bytes)", self.0.len())
     }
 }
 

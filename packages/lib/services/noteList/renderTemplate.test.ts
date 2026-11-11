@@ -1,4 +1,4 @@
-import { NoteListColumns } from '../plugins/api/noteListType';
+import { ColumnName, NoteListColumns } from '../plugins/api/noteListType';
 import renderTemplate from './renderTemplate';
 
 describe('renderTemplate', () => {
@@ -14,8 +14,7 @@ describe('renderTemplate', () => {
 				width: 100,
 			},
 			{
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				name: 'note.titleHtml' as any, // Testing backward compatibility
+				name: 'note.titleHtml' as ColumnName, // Testing backward compatibility
 				width: 200,
 			},
 			{

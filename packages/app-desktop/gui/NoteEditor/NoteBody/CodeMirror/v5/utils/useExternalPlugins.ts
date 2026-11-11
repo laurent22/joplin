@@ -20,7 +20,7 @@ const addPluginDependency = (path: string) => {
 	document.head.appendChild(element);
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Receives dynamically-loaded CodeMirror 5 namespace; @types/codemirror's signature is too narrow for plugin registration
 export default function useExternalPlugins(CodeMirror: any, plugins: PluginStates) {
 	const [options, setOptions] = useState({});
 	useEffect(() => {

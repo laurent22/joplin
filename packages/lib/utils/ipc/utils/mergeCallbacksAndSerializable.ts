@@ -4,8 +4,7 @@ import isTransferableObject from './isTransferableObject';
 type CallMethodWithIdCallback = (id: string, args: SerializableDataAndCallbacks[])=> Promise<SerializableDataAndCallbacks>;
 
 // Intended to be used to track callbacks for garbage collection
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-type OnAfterCallbackCreated = (callbackId: string, callbackRef: ()=> any)=> void;
+type OnAfterCallbackCreated = (callbackId: string, callbackRef: (...args: SerializableDataAndCallbacks[])=> Promise<SerializableDataAndCallbacks>)=> void;
 
 // Below, we use TypeScript syntax to specify the return type of mergeCallbacksAndSerializable
 // based on the type of its arguments.

@@ -1,4 +1,4 @@
-const htmlparser2 = require('@joplin/fork-htmlparser2');
+import * as htmlparser2 from '@joplin/fork-htmlparser2';
 
 export type HtmlAttrs = Record<string, string>;
 

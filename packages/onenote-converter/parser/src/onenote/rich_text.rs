@@ -5,7 +5,7 @@ use crate::one::property::color_ref::ColorRef;
 use crate::one::property::layout_alignment::LayoutAlignment;
 use crate::one::property::paragraph_alignment::ParagraphAlignment;
 use crate::one::property_set::{embedded_ink_container, paragraph_style_object, rich_text_node};
-use crate::onenote::ink::{Ink, InkBoundingBox, parse_ink_data};
+use crate::onenote::ink::{Ink, InkBoundingBox, InkContent, parse_ink_data};
 use crate::onenote::note_tag::{NoteTag, parse_note_tags};
 use crate::onenote::text_region::TextRegion;
 use crate::onestore::object::Object;
@@ -423,32 +423,45 @@ pub(crate) fn parse_rich_text(content_id: ExGuid, space: ObjectSpaceRef) -> Resu
     let embedded_objects: Vec<_> = objects
         .into_iter()
         .enumerate()
-        .map(|(i, (object_type, embedded_data))| match object_type {
-            Some(INK_END_OF_LINE_BLOB) => {
-                objects_without_ref += 1;
-                Ok(Some(EmbeddedObject::InkLineBreak))
-            }
-            Some(INK_SPACE_BLOB) => {
-                objects_without_ref += 1;
-                parse_embedded_ink_space(embedded_data)
-                    .map(|space| Some(EmbeddedObject::InkSpace(space)))
-            }
-            None => {
-                if !data.text_run_data_object.is_empty() {
-                    return parse_embedded_ink_data(
-                        data.text_run_data_object[i - objects_without_ref],
-                        space.clone(),
-                        embedded_data,
-                    )
-                    .map(|container| Some(EmbeddedObject::Ink(container)));
-                }
+        .map(|(i, (object_type, embedded_data))| {
+            let i = i - objects_without_ref;
 
-                Ok(None)
+            let object_ref = data.text_run_data_object.get(i);
+            let is_valid_ref = object_ref
+                .map(|object_ref| space.get_object(*object_ref).is_some())
+                .unwrap_or(true);
+
+            // Based on sample .one files, spaces and EOL blobs either:
+            // - Have an invalid associated object reference (is_valid_ref = false)
+            // - Have no associated object reference (is_valid_ref = true)
+            //
+            // In the first case, the object reference will be skipped automatically.
+            // In the second, we need to adjust so that the references for subsequent
+            // objects aren't skipped.
+            if let Some(object_type) = object_type
+                && is_valid_ref
+                && (object_type == INK_END_OF_LINE_BLOB || object_type == INK_SPACE_BLOB)
+            {
+                objects_without_ref += 1;
             }
-            Some(v) => Err(ErrorKind::MalformedOneNoteFileData(
-                format!("unknown embedded object type: {:x}", v).into(),
-            )
-            .into()),
+
+            match object_type {
+                Some(INK_END_OF_LINE_BLOB) => Ok(Some(EmbeddedObject::InkLineBreak)),
+                Some(INK_SPACE_BLOB) => parse_embedded_ink_space(embedded_data)
+                    .map(|space| Some(EmbeddedObject::InkSpace(space))),
+                None => {
+                    if let Some(object_ref) = object_ref {
+                        return parse_embedded_ink_data(*object_ref, space.clone(), embedded_data)
+                            .map(|container| Some(EmbeddedObject::Ink(container)));
+                    }
+
+                    Ok(None)
+                }
+                Some(v) => Err(ErrorKind::MalformedOneNoteFileData(
+                    format!("unknown embedded object type: {:x}", v).into(),
+                )
+                .into()),
+            }
         })
         .collect::<Result<Vec<_>>>()?
         .into_iter()
@@ -513,7 +526,7 @@ fn parse_embedded_ink_data(
 
     let data = EmbeddedInkContainer {
         ink: Ink {
-            ink_strokes: strokes,
+            content: InkContent::Strokes(strokes),
             bounding_box: bb,
             offset_horizontal: data.offset_horiz,
             offset_vertical: data.offset_vert,

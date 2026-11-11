@@ -3,8 +3,9 @@ import HtmlToHtml from './HtmlToHtml';
 import htmlUtils from './htmlUtils';
 import { Options as NoteStyleOptions } from './noteStyle';
 import { AllHtmlEntities } from 'html-entities';
-import { FsDriver, MarkupLanguage, MarkupRenderer, MarkupToHtmlConverter, OptionsResourceModel, RenderOptions, RenderResult } from './types';
+import { FsDriver, MarkupLanguage, MarkupRenderer, MarkupToHtmlConverter, OptionsResourceModel, RenderOptions, RenderResult, RendererTheme } from './types';
 import defaultResourceModel from './defaultResourceModel';
+import type * as MarkdownItType from 'markdown-it';
 const MarkdownIt = require('markdown-it');
 
 export interface PluginOptions {
@@ -29,8 +30,7 @@ export default class MarkupToHtml implements MarkupToHtmlConverter {
 
 	private renderers_: Record<string, MarkupRenderer> = {};
 	private options_: Options;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private rawMarkdownIt_: any;
+	private rawMarkdownIt_: MarkdownItType;
 
 	public constructor(options: Options = null) {
 		this.options_ = {
@@ -43,18 +43,17 @@ export default class MarkupToHtml implements MarkupToHtmlConverter {
 	private renderer(markupLanguage: MarkupLanguage) {
 		if (this.renderers_[markupLanguage]) return this.renderers_[markupLanguage];
 
-		let RendererClass = null;
+		let renderer: MarkupRenderer;
 
 		if (markupLanguage === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN) {
-			RendererClass = MdToHtml;
+			renderer = new MdToHtml(this.options_);
 		} else if (markupLanguage === MarkupToHtml.MARKUP_LANGUAGE_HTML) {
-			RendererClass = HtmlToHtml;
+			renderer = new HtmlToHtml(this.options_);
 		} else {
 			throw new Error(`Invalid markup language: ${markupLanguage}`);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		this.renderers_[markupLanguage] = new RendererClass(this.options_ as any);
+		this.renderers_[markupLanguage] = renderer;
 		return this.renderers_[markupLanguage];
 	}
 
@@ -89,8 +88,7 @@ export default class MarkupToHtml implements MarkupToHtmlConverter {
 		if (r.clearCache) r.clearCache();
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async render(markupLanguage: MarkupLanguage, markup: string, theme: any, options: RenderOptions): Promise<RenderResult> {
+	public async render(markupLanguage: MarkupLanguage, markup: string, theme: RendererTheme, options: RenderOptions): Promise<RenderResult> {
 		if (this.options_.isSafeMode) {
 			const htmlentities = new AllHtmlEntities();
 			return {
@@ -102,8 +100,7 @@ export default class MarkupToHtml implements MarkupToHtmlConverter {
 		return this.renderer(markupLanguage).render(markup, theme, options);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async allAssets(markupLanguage: MarkupLanguage, theme: any, noteStyleOptions: NoteStyleOptions = null) {
+	public async allAssets(markupLanguage: MarkupLanguage, theme: RendererTheme, noteStyleOptions: NoteStyleOptions = null) {
 		return this.renderer(markupLanguage).allAssets(theme, noteStyleOptions);
 	}
 }

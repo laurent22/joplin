@@ -1,7 +1,7 @@
 import routeHandler from '../../middleware/routeHandler';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext } from '../../utils/testing/testUtils';
 
-describe('api_ping', () => {
+describe('ping', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('api_ping');
@@ -24,8 +24,7 @@ describe('api_ping', () => {
 
 		await routeHandler(context);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const body = context.response.body as any;
+		const body = context.response.body as { status: string; message: string };
 
 		expect(context.response.status).toBe(200);
 		expect(body.status).toBe('ok');

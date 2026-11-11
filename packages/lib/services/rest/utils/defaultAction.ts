@@ -5,6 +5,7 @@ import paginatedResults from './paginatedResults';
 import readonlyProperties from './readonlyProperties';
 import requestFields from './requestFields';
 import BaseItem from '../../../models/BaseItem';
+import { LoadOptions } from '../../../models/utils/types';
 import { WhereQuery } from '../../../models/utils/paginatedFeed';
 
 export default async function(modelType: number, request: Request, id: string = null, link: string = null, defaultFields: string[] = null, whereQuery: WhereQuery = null) {
@@ -12,8 +13,7 @@ export default async function(modelType: number, request: Request, id: string = 
 
 	const ModelClass = BaseItem.getClassByItemType(modelType);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const getOneModel = async (options: any = null) => {
+	const getOneModel = async (options: LoadOptions = null) => {
 		const model = await ModelClass.load(id, options || {});
 		if (!model) throw new ErrorNotFound();
 		return model;

@@ -152,6 +152,7 @@ const commands: Record<EditorCommandType, ExtendedCommand|null> = {
 	[EditorCommandType.ToggleNumberedList]: toggleList(schema.nodes.ordered_list),
 	[EditorCommandType.ToggleBulletedList]: toggleList(schema.nodes.bullet_list),
 	[EditorCommandType.ToggleCheckList]: toggleList(schema.nodes.task_list),
+	[EditorCommandType.ToggleBlockQuote]: null,
 	[EditorCommandType.ToggleHeading]: toggleHeading(2),
 	[EditorCommandType.ToggleHeading1]: toggleHeading(1),
 	[EditorCommandType.ToggleHeading2]: toggleHeading(2),
@@ -277,6 +278,12 @@ const commands: Record<EditorCommandType, ExtendedCommand|null> = {
 	[EditorCommandType.JumpToHash]: (state, dispatch, view, [targetHash]) => {
 		return jumpToHash(targetHash)(state, dispatch, view);
 	},
+
+	// Table editing commands (handled by prosemirror-tables plugin, not here)
+	[EditorCommandType.TableAddRow]: null,
+	[EditorCommandType.TableAddColumn]: null,
+	[EditorCommandType.TableDeleteRow]: null,
+	[EditorCommandType.TableDeleteColumn]: null,
 };
 
 export default commands;

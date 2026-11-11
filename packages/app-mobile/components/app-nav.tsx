@@ -1,9 +1,11 @@
 import * as React from 'react';
+import { ComponentType } from 'react';
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import NotesScreen from './screens/Notes/Notes';
 import SearchScreen from './screens/SearchScreen';
 import { Platform, View, StyleSheet } from 'react-native';
-import { AppState } from '../utils/types';
+import { AppState, Route } from '../utils/types';
 import { themeStyle } from './global-style';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import useKeyboardState from '../utils/hooks/useKeyboardState';
@@ -13,12 +15,10 @@ import { useMemo } from 'react';
 import KeyboardAvoidingView from './KeyboardAvoidingView';
 
 interface Props {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	route: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	screens: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	dispatch: (action: any)=> void;
+	route: Route;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Each screen has different props (themeId, dispatch, navigation, visible, ...); typing the union would force a refactor of every screen
+	screens: Record<string, { screen: ComponentType<any> }>;
+	dispatch: Dispatch;
 	themeId: number;
 }
 

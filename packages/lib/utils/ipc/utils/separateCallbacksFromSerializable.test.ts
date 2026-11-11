@@ -33,8 +33,7 @@ describe('separateCallbacksFromSerializable', () => {
 		]);
 
 		expect(Array.isArray(separated.callbacks)).toBe(true);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const callbackArray = separated.callbacks as any[];
+		const callbackArray = separated.callbacks as string[];
 
 		// Should have assigned IDs to the two functions
 		expect(callbackArray[0]).not.toBeFalsy();

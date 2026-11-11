@@ -68,8 +68,7 @@ export const parseEnvFile = (env_file: string, options: Options = {}) => {
 
 		} catch (error) {
 			if (options.raise) {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				(error as any).message = `Environment file could not be read: ${env_file}: ${(error as any).message}`;
+				(error as Error).message = `Environment file could not be read: ${env_file}: ${(error as Error).message}`;
 				throw error;
 			} else {
 				if (options.verbose && options.logger) {
@@ -97,13 +96,12 @@ export const parseEnvFile = (env_file: string, options: Options = {}) => {
 			} else {
 				lineVariables.push(line);
 
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				const key_value = line.match(/^([^=]+)\s*=\s*(.*)$/) as any;
+				const key_value = line.match(/^([^=]+)\s*=\s*(.*)$/) as RegExpMatchArray;
 
 				const env_key = key_value[1];
 
 				// remove ' and " characters if right side of = is quoted
-				const env_value = key_value[2].match(/^(['"]?)([^\n]*)\1$/m)[2];
+				const env_value = (key_value[2].match(/^(['"]?)([^\n]*)\1$/m) as RegExpMatchArray)[2];
 
 				if ((env_key in data[env_file]) && !options.allowDuplicateKeys) throw new Error(`Found duplicate key: ${env_key}`);
 

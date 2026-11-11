@@ -9,12 +9,15 @@ import { Stripe } from 'stripe';
 import Logger from '@joplin/utils/Logger';
 import getRawBody = require('raw-body');
 import { AccountType } from '../../models/UserModel';
-import { autoAssignCustomerPreferredLocales, betaUserTrialPeriodDays, cancelSubscription, initStripe, isBetaUser, priceIdToAccountType, stripeConfig } from '../../utils/stripe';
-import { Subscription, User, UserFlagType } from '../../services/database/types';
+import { autoAssignCustomerPreferredLocales, betaUserTrialPeriodDays, cancelSubscription, initStripe, isBetaUser, priceIdToAccountType, stripeConfig, subscriptionItemByStripeSub } from '../../utils/stripe';
+import { Subscription, UserFlagType } from '../../services/database/types';
 import { findPrice, PricePeriod } from '@joplin/lib/utils/joplinCloud';
 import { Models } from '../../models/factory';
 import { confirmUrl } from '../../utils/urlUtils';
-import { msleep } from '../../utils/time';
+import { Hour, msleep } from '../../utils/time';
+import { IncomingMessage } from 'http';
+import { ErrorTaskInProgress } from '../../models/StripeEventModel';
+import { TokenPurpose } from '../../models/TokenModel';
 
 const logger = Logger.create('index/stripe');
 
@@ -22,8 +25,7 @@ const router: Router = new Router(RouteType.Web);
 
 router.public = true;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function stripeEvent(stripe: Stripe, req: any): Promise<Stripe.Event> {
+async function stripeEvent(stripe: Stripe, req: IncomingMessage): Promise<Stripe.Event> {
 	if (!stripeConfig().webhookSecret) throw new Error('webhookSecret is required');
 
 	const body = await getRawBody(req);
@@ -43,14 +45,11 @@ interface CreateCheckoutSessionFields {
 	source: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-type StripeRouteHandler = (stripe: Stripe, path: SubPath, ctx: AppContext)=> Promise<any>;
+type StripeRouteHandler = (stripe: Stripe, path: SubPath, ctx: AppContext)=> Promise<unknown>;
 
 interface PostHandlers {
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	createCheckoutSession: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	webhook: Function;
+	createCheckoutSession: StripeRouteHandler;
+	webhook: (stripe: Stripe, path: SubPath, ctx: AppContext, event?: Stripe.Event, logErrors?: boolean)=> Promise<unknown>;
 }
 
 interface SubscriptionInfo {
@@ -65,7 +64,7 @@ async function getSubscriptionInfo(event: Stripe.Event, ctx: AppContext): Promis
 	return { sub, stripeSub };
 }
 
-export const handleSubscriptionCreated = async (stripe: Stripe, models: Models, customerName: string, userEmail: string, accountType: AccountType, stripeUserId: string, stripeSubscriptionId: string) => {
+export const handleSubscriptionCreated = async (stripe: Stripe, models: Models, customerName: string, userEmail: string, accountType: AccountType, stripeUserId: string, stripeSubscriptionId: string, source: string) => {
 	const existingUser = await models.user().loadByEmail(userEmail);
 
 	if (existingUser) {
@@ -96,6 +95,7 @@ export const handleSubscriptionCreated = async (stripe: Stripe, models: Models, 
 				stripe_user_id: stripeUserId,
 				stripe_subscription_id: stripeSubscriptionId,
 				last_payment_time: Date.now(),
+				source,
 			});
 		} else {
 			if (sub.stripe_subscription_id === stripeSubscriptionId) {
@@ -119,6 +119,7 @@ export const handleSubscriptionCreated = async (stripe: Stripe, models: Models, 
 			accountType,
 			stripeUserId,
 			stripeSubscriptionId,
+			source,
 		);
 	}
 };
@@ -130,15 +131,33 @@ export const handleSubscriptionCreated = async (stripe: Stripe, models: Models, 
 // https://stripe.com/docs/payments/checkout/fulfill-orders#fulfill
 //
 // It means that by the time success_url is called, the user hasn't been created
-// yet. So here we wait for the user to be available and return it. It shouldn't
-// wait for more than 2-3 seconds.
-const waitForUserCreation = async (models: Models, userEmail: string): Promise<User | null> => {
+// yet. So here we wait for the webhook to process the subscription, and return
+// the account it created, if any. It shouldn't wait for more than 2-3 seconds.
+const waitForCreatedAccountId = async (models: Models, stripeSubscriptionId: string) => {
 	for (let i = 0; i < 10; i++) {
-		const user = await models.user().loadByEmail(userEmail);
-		if (user) return user;
+		// The subscription and the created-account record are saved in the same transaction
+		if (await models.subscription().byStripeSubscriptionId(stripeSubscriptionId)) {
+			return models.subscription().consumeCreatedAccountId(stripeSubscriptionId);
+		}
 		await msleep(1000);
 	}
 	return null;
+};
+
+let serverSetupTask: Promise<void>|null = null;
+const handleFirstEvent = async (models: Models) => {
+	serverSetupTask ??= (async () => {
+		logger.info('Clearing old Stripe tasks');
+		// Any events that were interrupted by server shutdown can be retried:
+		await models.stripeEvent().clearInProgressEvents();
+	})();
+
+	try {
+		await serverSetupTask;
+	} catch (error) {
+		serverSetupTask = null;
+		throw error;
+	}
 };
 
 export const postHandlers: PostHandlers = {
@@ -243,16 +262,7 @@ export const postHandlers: PostHandlers = {
 		event = event ? event : await stripeEvent(stripe, ctx.req);
 
 		const models = ctx.joplin.models;
-
-		// Webhook endpoints might occasionally receive the same event more than
-		// once.
-		// https://stripe.com/docs/webhooks/best-practices#duplicate-events
-		const eventDoneKey = `stripeEventDone::${event.id}`;
-		if (await models.keyValue().value<number>(eventDoneKey)) {
-			logger.info(`Skipping event that has already been done: ${event.id}`);
-			return;
-		}
-		await models.keyValue().setValue(eventDoneKey, 1);
+		await handleFirstEvent(models);
 
 		// console.info('EVENT', JSON.stringify(event, null, 4));
 
@@ -274,7 +284,7 @@ export const postHandlers: PostHandlers = {
 				const checkoutSession: Stripe.Checkout.Session = event.data.object as Stripe.Checkout.Session;
 				const userEmail = checkoutSession.customer_details.email || checkoutSession.customer_email;
 				const customer = await stripe.customers.retrieve(checkoutSession.customer as string) as Stripe.Customer;
-				await stripe.customers.update(customer.id, { metadata: { source: checkoutSession.metadata.source } });
+				await stripe.customers.update(customer.id, { metadata: { source: checkoutSession.metadata?.source || '' } });
 				logger.info('Checkout session completed:', checkoutSession.id);
 				logger.info('User email:', userEmail);
 			},
@@ -288,7 +298,7 @@ export const postHandlers: PostHandlers = {
 				let accountType = AccountType.Basic;
 				try {
 					// Really have to dig out the price ID
-					const priceId = stripeSub.items.data[0].price.id;
+					const priceId = subscriptionItemByStripeSub(stripeSub).price.id;
 					accountType = priceIdToAccountType(priceId);
 				} catch (error) {
 					logger.error('Could not determine account type from price ID - defaulting to "Basic"', error);
@@ -299,12 +309,19 @@ export const postHandlers: PostHandlers = {
 				await handleSubscriptionCreated(
 					stripe,
 					models,
-					customer.name,
+					// PayPal checkouts leave the customer name empty in Stripe
+					customer.name || '',
 					customer.email,
 					accountType,
 					stripeUserId,
 					stripeSubscriptionId,
+					customer.metadata?.source || '',
 				);
+
+				const subscription = await models.subscription().byStripeSubscriptionId(stripeSubscriptionId);
+				if (subscription) {
+					await models.subscription().updateFromStripe(subscription, stripeSub);
+				}
 			},
 
 			'invoice.paid': async () => {
@@ -349,22 +366,31 @@ export const postHandlers: PostHandlers = {
 				// Stripe to the local account.
 
 				const { sub, stripeSub } = await getSubscriptionInfo(event, ctx);
-				const newAccountType = priceIdToAccountType(stripeSub.items.data[0].price.id);
+				const newAccountType = priceIdToAccountType(subscriptionItemByStripeSub(stripeSub).price.id);
 				const user = await models.user().load(sub.user_id, { fields: ['id'] });
 				if (!user) throw new Error(`No such user: ${sub.user_id}`);
 
 				logger.info(`Updating subscription of user ${user.id} to ${newAccountType}`);
 				await models.user().save({ id: user.id, account_type: newAccountType });
+
+				await models.subscription().updateFromStripe(sub, stripeSub);
 			},
 
 		};
 
 		if (hooks[event.type]) {
-			logger.info(`Got Stripe event: ${event.type} [Handled]`);
 			try {
-				await hooks[event.type]();
+				await models.stripeEvent().withTask(
+					async () => {
+						logger.info(`Got Stripe event: ${event.type} [Handled]`);
+						await hooks[event.type]();
+					},
+					{ stripeEventId: event.id },
+				);
 			} catch (error) {
-				if (logErrors) {
+				if (error instanceof ErrorTaskInProgress) {
+					logger.info(`Skipped duplicate event ${event.type}`, event.id);
+				} else if (logErrors) {
 					logger.error(`Error processing event ${event.type}:`, event, error);
 				} else {
 					throw error;
@@ -377,25 +403,35 @@ export const postHandlers: PostHandlers = {
 
 };
 
-const getHandlers: Record<string, StripeRouteHandler> = {
+export const getHandlers: Record<string, StripeRouteHandler> = {
 
 	success: async (stripe: Stripe, _path: SubPath, ctx: AppContext) => {
+		// The same page for every case where no token is handed out, so that it reveals nothing about the account
+		const thankYouPage = `
+			<p>Thank you for signing up for ${globalConfig().appName}! If this created a new account, you should receive an email shortly with a link to set your password. If you already had an account, you can now <a href="${globalConfig().baseUrl}/login">log in</a>.</p>
+			<p><a href="https://joplinapp.org">Go back to JoplinApp.org</a></p>
+		`;
+
 		try {
 			const models = ctx.joplin.models;
 			const checkoutSession = await stripe.checkout.sessions.retrieve(ctx.query.session_id as string);
-			const userEmail = checkoutSession.customer_details.email || checkoutSession.customer_email; // customer_email appears to be always null but fallback to it just in case
-			if (!userEmail) throw new Error(`Could not find email from checkout session: ${JSON.stringify(checkoutSession)}`);
-			const user = await waitForUserCreation(models, userEmail);
-			if (!user) throw new Error(`Could not find user from checkout session: ${JSON.stringify(checkoutSession)}`);
-			const validationToken = await ctx.joplin.models.token().generate(user.id);
+			if (checkoutSession.status !== 'complete') return thankYouPage;
+
+			const subscriptionId = typeof checkoutSession.subscription === 'string' ? checkoutSession.subscription : checkoutSession.subscription?.id;
+			if (!subscriptionId) return thankYouPage;
+
+			// Anyone can complete a checkout using someone else's email address, so a confirmation token is only
+			// handed out once, for an account this checkout has just created - never for an existing account.
+			const userId = await waitForCreatedAccountId(models, subscriptionId);
+			const user = userId ? await models.user().load(userId) : null;
+			if (!user || !user.must_set_password || Date.now() - user.created_time > Hour) return thankYouPage;
+
+			const validationToken = await models.token().generate(user.id, TokenPurpose.AccountConfirmation);
 			const redirectUrl = encodeURI(confirmUrl(user.id, validationToken, false));
 			return redirect(ctx, redirectUrl);
 		} catch (error) {
 			logger.error('Could not automatically redirect user to account confirmation page. They will have to follow the link in the confirmation email. Error was:', error);
-			return `
-				<p>Thank you for signing up for ${globalConfig().appName}! You should receive an email shortly with instructions on how to connect to your account.</p>
-				<p><a href="https://joplinapp.org">Go back to JoplinApp.org</a></p>
-			`;
+			return thankYouPage;
 		}
 	},
 
@@ -512,10 +548,9 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 };
 
 router.post('stripe/:id', async (path: SubPath, ctx: AppContext) => {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	if (!(postHandlers as any)[path.id]) throw new ErrorNotFound(`No such action: ${path.id}`);
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	return (postHandlers as any)[path.id](initStripe(), path, ctx);
+	const handler = (postHandlers as unknown as Record<string, (stripe: Stripe, path: SubPath, ctx: AppContext)=> Promise<unknown>>)[path.id];
+	if (!handler) throw new ErrorNotFound(`No such action: ${path.id}`);
+	return handler(initStripe(), path, ctx);
 });
 
 router.get('stripe/:id', async (path: SubPath, ctx: AppContext) => {

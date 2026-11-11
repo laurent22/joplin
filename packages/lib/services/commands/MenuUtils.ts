@@ -75,8 +75,7 @@ export default class MenuUtils {
 		return KeymapService.instance();
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public commandToMenuItem(commandName: string, onClick: Function): MenuItem {
+	public commandToMenuItem(commandName: string, onClick: (commandName: string)=> void): MenuItem {
 		const command = this.service.commandByName(commandName);
 
 		const item: MenuItem = {
@@ -95,8 +94,7 @@ export default class MenuUtils {
 		return item;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public commandToStatefulMenuItem(commandName: string, commandTarget?: any, options?: WhenClauseContextOptions): MenuItem {
+	public commandToStatefulMenuItem(commandName: string, commandTarget?: unknown, options?: WhenClauseContextOptions): MenuItem {
 		const whenClauseContext = this.service.currentWhenClauseContext(options);
 
 		const menuItem = this.commandToMenuItem(commandName, () => {
@@ -106,8 +104,7 @@ export default class MenuUtils {
 		return menuItem;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public commandsToMenuItems(commandNames: string[], onClick: Function, locale: string): MenuItems {
+	public commandsToMenuItems(commandNames: string[], onClick: (commandName: string)=> void, locale: string): MenuItems {
 		const key = `${this.keymapService.lastSaveTime}_${commandNames.join('_')}_${locale}`;
 		if (this.menuItemCache_[key]) return this.menuItemCache_[key];
 

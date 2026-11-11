@@ -2,7 +2,7 @@ import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
 import AxeBuilder from '@axe-core/playwright';
 import { Page } from '@playwright/test';
-import SettingsScreen from './models/SettingsScreen';
+import SettingsScreen from './models/SettingsScreen/SettingsScreen';
 
 const createScanner = (page: Page) => {
 	return new AxeBuilder({ page })
@@ -34,6 +34,23 @@ const expectNoViolations = async (page: Page) => {
 	// random failure in CI.
 	await expect.poll(async () => {
 		const results = await scanner.analyze();
+		if (results.violations.length > 0) {
+			// Keep CI failures actionable with compact, structured rule/selector details.
+			const violationSummary = results.violations.map(violation => ({
+				rule: violation.id,
+				impact: violation.impact,
+				description: violation.description,
+				help: violation.help,
+				helpUrl: violation.helpUrl,
+				nodes: violation.nodes.map(node => ({
+					target: node.target,
+					failureSummary: node.failureSummary,
+				})),
+			}));
+
+			console.error('WCAG violations detected:');
+			console.error(JSON.stringify(violationSummary, null, 2));
+		}
 		return results.violations;
 	}).toEqual([]);
 };
@@ -69,16 +86,19 @@ test.describe('wcag', () => {
 		await expect(folder2).toHaveJSProperty('ariaLevel', '3'); // Should be a sub-folder
 
 		await mainScreen.createNewNote('Test');
+		await mainScreen.noteEditor.showMarkdownEditor();
 
 		// Ensure that `:hover` styling is consistent between tests:
 		await mainScreen.noteEditor.noteTitleInput.hover();
 
 		await expectNoViolations(mainWindow);
 
-		// Should not find issues with the Rich Text Editor
-		await mainScreen.noteEditor.toggleEditorsButton.click();
-		await mainScreen.noteEditor.richTextEditor.click();
+		// Should not find issues after showing the note viewer
+		await mainScreen.noteEditor.showNoteViewer();
+		await expectNoViolations(mainWindow);
 
+		// Should not find issues with the Rich Text Editor
+		await mainScreen.noteEditor.showRichTextEditor();
 		await expectNoViolations(mainWindow);
 	});
 
@@ -96,6 +116,24 @@ test.describe('wcag', () => {
 	test('should not detect significant issues in the change app layout screen', async ({ mainWindow, electronApp }) => {
 		const mainScreen = await new MainScreen(mainWindow).setup();
 		await mainScreen.changeLayoutScreen.open(electronApp);
+		await expectNoViolations(mainWindow);
+	});
+
+	test('should not detect significant issues in the AI chat panel', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('test');
+
+		await mainScreen.chatPanel.configure(electronApp);
+		await mainScreen.chatPanel.open(electronApp);
+
+		await mainScreen.chatPanel.sendMessage('/reply-with test');
+		await mainScreen.chatPanel.waitForMessageCount(2);
+
+		await mainScreen.chatPanel.sendMessage(
+			'/tool editor_appendToNote {"text": "test"}\n/reply-with done',
+		);
+		await mainScreen.chatPanel.waitForMessageCount(5);
+
 		await expectNoViolations(mainWindow);
 	});
 });

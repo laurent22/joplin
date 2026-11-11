@@ -8,6 +8,21 @@ import { ErrorForbidden } from '../../utils/errors';
 
 jest.mock('../../utils/ldapLogin');
 
+const enableLdap = () => {
+	config().LDAP_1_ENABLED = true;
+	config().ldap[0] = {
+		enabled: true,
+		userCreation: true,
+		host: '',
+		mailAttribute: '',
+		fullNameAttribute: '',
+		baseDN: '',
+		bindDN: '',
+		bindPW: '',
+		tlsCaFile: '',
+	};
+};
+
 async function postSession(email: string, password: string): Promise<AppContext> {
 	const context = await koaAppContext({
 		request: {
@@ -66,11 +81,9 @@ describe('api/sessions', () => {
 
 		const context = await postSession(user.email, password);
 		expect(context.response.status).toBe(200);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		expect(!!(context.response.body as any).id).toBe(true);
+		expect(!!(context.response.body as { id: string }).id).toBe(true);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const session: Session = await models().session().load((context.response.body as any).id);
+		const session: Session = await models().session().load((context.response.body as { id: string }).id);
 		expect(session.user_id).toBe(user.id);
 	});
 
@@ -153,11 +166,9 @@ describe('api/sessions', () => {
 
 		expect(ldapLogin).toHaveBeenCalled();
 		expect(context.response.status).toBe(200);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		expect(!!(context.response.body as any).id).toBe(true);
+		expect(!!(context.response.body as { id: string }).id).toBe(true);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const session: Session = await models().session().load((context.response.body as any).id);
+		const session: Session = await models().session().load((context.response.body as { id: string }).id);
 		expect(session.user_id).toBe(user.id);
 
 	});
@@ -184,13 +195,77 @@ describe('api/sessions', () => {
 
 		expect(ldapLogin).toHaveBeenCalled();
 		expect(context.response.status).toBe(200);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		expect(!!(context.response.body as any).id).toBe(true);
+		expect(!!(context.response.body as { id: string }).id).toBe(true);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const session: Session = await models().session().load((context.response.body as any).id);
+		const session: Session = await models().session().load((context.response.body as { id: string }).id);
 		expect(session.user_id).toBe(user.id);
 
+	});
+
+	test('should only accept the directory password for an account that LDAP has logged in to', async () => {
+		const { user, password } = await createUserAndSession(1, false);
+		enableLdap();
+
+		(ldapLogin as jest.Mock).mockResolvedValue(user);
+		expect((await postSession(user.email, 'directory-password')).response.status).toBe(200);
+		expect((await models().user().load(user.id)).is_external).toBe(1);
+
+		// For example after the user was removed from the directory: the local password, which may be an old copy of
+		// the directory one, no longer works
+		(ldapLogin as jest.Mock).mockResolvedValue(null);
+		expect((await postSession(user.email, password)).response.status).toBe(403);
+	});
+
+	test('should not let LDAP log in to an admin account', async () => {
+		const { user, password } = await createUserAndSession(1, true);
+		enableLdap();
+		(ldapLogin as jest.Mock).mockClear();
+		(ldapLogin as jest.Mock).mockResolvedValue(user);
+
+		expect((await postSession(user.email, 'directory-password')).response.status).toBe(403);
+		expect(ldapLogin).not.toHaveBeenCalled();
+		expect((await postSession(user.email, password)).response.status).toBe(200);
+	});
+
+	test('should let LDAP log in to an admin account managed by the directory', async () => {
+		const { user } = await createUserAndSession(1, true);
+		await models().user().save({ id: user.id, is_external: 1 }, { skipValidation: true });
+		enableLdap();
+		(ldapLogin as jest.Mock).mockResolvedValue(user);
+
+		expect((await postSession(user.email, 'directory-password')).response.status).toBe(200);
+	});
+
+	test('should let an account managed by the directory log in with a local password once LDAP is turned off', async () => {
+		// Before creating the user, since an earlier test may have left LDAP enabled
+		(ldapLogin as jest.Mock).mockResolvedValue(null);
+		const { user, password } = await createUserAndSession(1, false);
+		await models().user().save({ id: user.id, is_external: 1 }, { skipValidation: true });
+		enableLdap();
+
+		expect((await postSession(user.email, password)).response.status).toBe(403);
+
+		config().LDAP_1_ENABLED = false;
+		config().ldap[0].enabled = false;
+		try {
+			expect((await postSession(user.email, password)).response.status).toBe(200);
+		} finally {
+			enableLdap();
+		}
+	});
+
+	test('should refuse a login without a password before trying the directory or the local password', async () => {
+		(ldapLogin as jest.Mock).mockResolvedValue(null);
+		const { user } = await createUserAndSession(1, false);
+		enableLdap();
+		(ldapLogin as jest.Mock).mockClear();
+
+		// The same answer for a registered email and an unknown one
+		for (const email of [user.email, 'unknown@example.com']) {
+			expect((await postSession(email, undefined)).response.status).toBe(403);
+			expect((await postSession(email, '')).response.status).toBe(403);
+		}
+		expect(ldapLogin).not.toHaveBeenCalled();
 	});
 
 	test('should not login if ldapLogin returns ForbiddenError', async () => {
@@ -260,11 +335,9 @@ describe('api/sessions', () => {
 		await routeHandler(context);
 
 		expect(context.response.status).toBe(200);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		expect(!!(context.response.body as any).id).toBe(true);
+		expect(!!(context.response.body as { id: string }).id).toBe(true);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const session: Session = await models().session().load((context.response.body as any).id);
+		const session: Session = await models().session().load((context.response.body as { id: string }).id);
 		expect(session.user_id).toBe(user.id);
 	});
 

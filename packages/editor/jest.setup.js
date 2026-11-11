@@ -25,3 +25,16 @@ document.createRange = () => {
 	});
 	return result;
 };
+
+// By default, jsdom's window.scrollTo throws an unimplemented error
+window.scrollTo = (scrollX, scrollY) => {
+	if (typeof scrollX === 'object') {
+		const options = scrollX;
+		scrollX = options.left ?? 0;
+		scrollY = options.top ?? 0;
+	}
+
+	const target = document.scrollingElement ?? document.body;
+	target.scrollTop = scrollY;
+	target.scrollLeft = scrollX;
+};

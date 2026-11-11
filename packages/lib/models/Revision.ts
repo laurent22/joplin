@@ -365,8 +365,8 @@ export default class Revision extends BaseItem {
 					const bodyDiff = this.createTextPatch('', merged.body);
 					const metadataDiff = this.createObjectPatch({}, merged.metadata);
 					queries.push({
-						sql: 'UPDATE revisions SET title_diff = ?, body_diff = ?, metadata_diff = ?, updated_time = ? WHERE id = ?',
-						params: [titleDiff, bodyDiff, metadataDiff, time.unixMs(), keptRev.id],
+						sql: 'UPDATE revisions SET title_diff = ?, body_diff = ?, metadata_diff = ?, updated_time = ?, parent_id = ? WHERE id = ?',
+						params: [titleDiff, bodyDiff, metadataDiff, time.unixMs(), '', keptRev.id],
 					});
 				}
 			}
@@ -407,13 +407,25 @@ export default class Revision extends BaseItem {
 		await this.batchDelete(revisions.map(item => item.id), options);
 	}
 
+	// Same as deleteHistoryForNote, but keeps locked revisions when clearing plaintext history during note locking.
+	public static async deleteUnencryptedHistoryForNote(noteIds: string | string[], options: DeleteOptions) {
+		const ids = Array.isArray(noteIds) ? noteIds : [noteIds];
+
+		const revisions: RevisionEntity[] = await this.modelSelectAll(
+			`SELECT id FROM revisions WHERE item_type = ? AND item_id in (${this.escapeIdsForSql(ids)}) AND is_locked = 0 ORDER BY item_updated_time DESC`,
+			[ModelType.Note],
+		);
+
+		await this.batchDelete(revisions.map(item => item.id), options);
+	}
+
 	public static async revisionExists(itemType: ModelType, itemId: string, updatedTime: number) {
 		const existingRev = await Revision.latestRevision(itemType, itemId);
 		return existingRev && existingRev.item_updated_time === updatedTime;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private static parsePatch(patch: any): any[] {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- patchArray items have a diff-match-patch shape (.diffs as [number, string][]); no installed @types/diff-match-patch
+	private static parsePatch(patch: string): any[] {
 		return patch ? JSON.parse(patch) : [];
 	}
 

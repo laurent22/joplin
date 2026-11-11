@@ -106,6 +106,7 @@ const SearchScreenComponent: React.FC<Props> = props => {
 					onChangeText={setQuery}
 					onSubmitEditing={onOverridePause}
 					onClearButtonPress={clearButton_press}
+					placeholder={_('Search notes, notebooks...')}
 				/>
 				<SearchResults
 					query={query}

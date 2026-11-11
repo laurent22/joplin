@@ -3,7 +3,6 @@ import { ElectronApplication, expect, Locator, Page } from '@playwright/test';
 import MainScreen from './MainScreen';
 import activateMainMenuItem from '../util/activateMainMenuItem';
 import { msleep } from '@joplin/utils/time';
-import retryOnFailure from '../util/retryOnFailure';
 
 export default class GoToAnything {
 	public readonly containerLocator: Locator;
@@ -14,17 +13,32 @@ export default class GoToAnything {
 		this.inputLocator = this.containerLocator.getByRole('textbox');
 	}
 
-	public async waitFor() {
-		await this.containerLocator.waitFor();
+	public async waitFor(timeout?: number) {
+		await this.containerLocator.waitFor({ timeout });
 	}
 
 	public async open(electronApp: ElectronApplication) {
 		await this.mainScreen.waitFor();
-		const openFromMenu = async () => {
+
+		// The menu item toggles the dialog, so retrying unconditionally would close a dialog
+		// that a previous slow attempt had just opened.
+		await expect.poll(async () => {
+			if (await this.containerLocator.isVisible()) return true;
+
 			await activateMainMenuItem(electronApp, 'Goto Anything...');
-			await this.waitFor();
-		};
-		await retryOnFailure(openFromMenu, { maxRetries: 3 });
+			try {
+				await this.waitFor(5_000);
+			} catch (error) {
+				return false;
+			}
+			return true;
+		}, {
+			timeout: 30_000,
+			message: 'should open the Goto Anything dialog',
+		}).toBe(true);
+
+		// Filling the controlled input before React attaches onChange silently drops the text.
+		await this.inputLocator.waitFor();
 	}
 
 	public async openLinkToNote(electronApp: ElectronApplication) {

@@ -1,3 +1,4 @@
+import { ResourceEntity } from '../../database/types';
 import { Rectangle } from './types';
 export interface CreateFromBufferOptions {
     width?: number;
@@ -65,7 +66,10 @@ export default class JoplinImaging {
     createFromPdfResource(resourceId: string, options?: CreateFromPdfOptions): Promise<Handle[]>;
     getPdfInfoFromPath(path: string): Promise<PdfInfo>;
     getPdfInfoFromResource(resourceId: string): Promise<PdfInfo>;
-    getSize(handle: Handle): Promise<any>;
+    getSize(handle: Handle): Promise<{
+        width: number;
+        height: number;
+    }>;
     resize(handle: Handle, options?: ResizeOptions): Promise<string>;
     crop(handle: Handle, rectangle: Rectangle): Promise<string>;
     toPngFile(handle: Handle, filePath: string): Promise<void>;
@@ -78,12 +82,12 @@ export default class JoplinImaging {
      * Creates a new Joplin resource from the image data. The image will be
      * first converted to a JPEG.
      */
-    toJpgResource(handle: Handle, resourceProps: any, quality?: number): Promise<import("../../database/types").ResourceEntity>;
+    toJpgResource(handle: Handle, resourceProps: Partial<ResourceEntity>, quality?: number): Promise<ResourceEntity>;
     /**
      * Creates a new Joplin resource from the image data. The image will be
      * first converted to a PNG.
      */
-    toPngResource(handle: Handle, resourceProps: any): Promise<import("../../database/types").ResourceEntity>;
+    toPngResource(handle: Handle, resourceProps: Partial<ResourceEntity>): Promise<ResourceEntity>;
     /**
      * Image data is not automatically deleted by Joplin so make sure you call
      * this method on the handle once you are done.

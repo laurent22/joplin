@@ -1,10 +1,9 @@
 import { useCallback, useRef } from 'react';
 import shim from '@joplin/lib/shim';
 
-// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type, @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamic editor / webview ref; Function matches the original onScroll signature
 export default function useScrollHandler(editorRef: any, webviewRef: any, onScroll: Function) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const scrollTimeoutId_ = useRef<any>(null);
+	const scrollTimeoutId_ = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const scrollPercent_ = useRef(0);
 	const ignoreNextEditorScrollTime_ = useRef(Date.now());
 	const ignoreNextEditorScrollEventCount_ = useRef(0);
@@ -12,8 +11,7 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 	const scrollTopIsUncertain_ = useRef(true);
 	const lastResizeHeight_ = useRef(NaN);
 	const lastLinesHeight_ = useRef(NaN);
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const restoreEditorPercentScrollTimeoutId_ = useRef<any>(null);
+	const restoreEditorPercentScrollTimeoutId_ = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 	// Ignores one next scroll event for a short time.
 	const ignoreNextEditorScrollEvent = () => {
@@ -37,8 +35,7 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 		return false;
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const scheduleOnScroll = useCallback((event: any) => {
+	const scheduleOnScroll = useCallback((event: { percent: number }) => {
 		if (scrollTimeoutId_.current) {
 			shim.clearTimeout(scrollTimeoutId_.current);
 			scrollTimeoutId_.current = null;
@@ -144,7 +141,7 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamic editor instance / scrollInfo / line-handle types; no @types/codemirror in this repo
 	const editor_resize = useCallback((cm: any) => {
 		if (isCodeMirrorReady(cm)) {
 			// This handler is called when resized and refreshed.
@@ -167,7 +164,7 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 	// When heights of lines are updated in CodeMirror, 'update' events are raised.
 	// If such an update event is raised, scroll position should be restored.
 	// See https://github.com/laurent22/joplin/issues/5981
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamic editor instance / scrollInfo / line-handle types; no @types/codemirror in this repo
 	const editor_update = useCallback((cm: any, edited: boolean) => {
 		if (isCodeMirrorReady(cm)) {
 			if (edited) return;
@@ -203,7 +200,7 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 	};
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamic editor instance / scrollInfo / line-handle types; no @types/codemirror in this repo
 const translateLE_ = (codeMirror: any, percent: number, l2e: boolean) => {
 	// If the input is out of (0,1) or not number, it is not translated.
 	if (!(0 < percent && percent < 1)) return percent;
@@ -239,17 +236,17 @@ const translateLE_ = (codeMirror: any, percent: number, l2e: boolean) => {
 // percent. They are used for synchronous scrolling between Editor and Viewer.
 // To see the detail of synchronous scrolling, refer the following design document.
 // https://github.com/laurent22/joplin/pull/5826#issuecomment-986032165
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamic editor instance / scrollInfo / line-handle types; no @types/codemirror in this repo
 const translateScrollPercentL2E = (cm: any, lPercent: number) => {
 	return translateLE_(cm, lPercent, true);
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamic editor instance / scrollInfo / line-handle types; no @types/codemirror in this repo
 const translateScrollPercentE2L = (cm: any, ePercent: number) => {
 	return translateLE_(cm, ePercent, false);
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamic editor instance / scrollInfo / line-handle types; no @types/codemirror in this repo
 function isCodeMirrorReady(cm: any) {
 	const info = cm?.getScrollInfo();
 	return info && info.height - info.clientHeight > 0;

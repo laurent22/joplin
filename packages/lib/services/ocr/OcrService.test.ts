@@ -1,4 +1,4 @@
-import { createNoteAndResource, newOcrService, ocrSampleDir, resourceFetcher, setupDatabaseAndSynchronizer, supportDir, switchClient, synchronizerStart } from '../../testing/test-utils';
+import { createNoteAndResource, newOcrService, ocrSampleDir, resourceFetcher, setupDatabaseAndSynchronizer, supportDir, switchClient, synchronizerStart, withWarningSilenced } from '../../testing/test-utils';
 import { supportedMimeTypes } from './OcrService';
 import Resource from '../../models/Resource';
 import { ResourceEntity, ResourceOcrDriverId, ResourceOcrStatus } from '../database/types';
@@ -8,6 +8,21 @@ import Setting from '../../models/Setting';
 import createAccessiblePdf from './utils/createAccessiblePdf';
 import { PdfOcrDetails } from './utils/types';
 import * as fs from 'fs-extra';
+import shim from '../../shim';
+import { copyFile } from 'fs/promises';
+import { join } from 'path';
+
+const highConfidenceTestOcrResource = {
+	expectedText: 'This is a lot of 12 point text to test the\n' +
+		'ocr code and see if it works on all types\n' +
+		'of file format.\n' +
+		'The quick brown dog jumped over the\n' +
+		'lazy fox. The quick brown dog jumped\n' +
+		'over the lazy fox. The quick brown dog\n' +
+		'jumped over the lazy fox. The quick\n' +
+		'brown dog jumped over the lazy fox.',
+	path: `${ocrSampleDir}/testocr.png`,
+};
 
 describe('OcrService', () => {
 
@@ -20,7 +35,7 @@ describe('OcrService', () => {
 	});
 
 	it('should process resources', async () => {
-		const { resource: resource1 } = await createNoteAndResource({ path: `${ocrSampleDir}/testocr.png` });
+		const { resource: resource1 } = await createNoteAndResource({ path: highConfidenceTestOcrResource.path });
 		const { resource: resource2 } = await createNoteAndResource({ path: `${supportDir}/photo.jpg` });
 		const { resource: resource3 } = await createNoteAndResource({ path: `${ocrSampleDir}/with_bullets.png` });
 
@@ -32,22 +47,14 @@ describe('OcrService', () => {
 		const service = newOcrService();
 		await service.processResources();
 
-		const expectedText = 'This is a lot of 12 point text to test the\n' +
-			'ocr code and see if it works on all types\n' +
-			'of file format.\n' +
-			'The quick brown dog jumped over the\n' +
-			'lazy fox. The quick brown dog jumped\n' +
-			'over the lazy fox. The quick brown dog\n' +
-			'jumped over the lazy fox. The quick\n' +
-			'brown dog jumped over the lazy fox.';
 		const processedResource1: ResourceEntity = await Resource.load(resource1.id);
-		expect(processedResource1.ocr_text).toBe(expectedText);
+		expect(processedResource1.ocr_text).toBe(highConfidenceTestOcrResource.expectedText);
 		expect(processedResource1.ocr_status).toBe(ResourceOcrStatus.Done);
 		expect(processedResource1.ocr_error).toBe('');
 
 		const details = Resource.unserializeOcrDetails(processedResource1.ocr_details);
 		const lines = details.map(l => l.words.map(w => w.t).join(' ')).join('\n');
-		expect(lines).toBe(expectedText);
+		expect(lines).toBe(highConfidenceTestOcrResource.expectedText);
 		expect(details[0].words[0].t).toBe('This');
 		expect(details[0].words[0]).toEqual({ 't': 'This', 'bb': [36, 96, 92, 116], 'bl': [36, 96, 116, 116] });
 
@@ -388,6 +395,73 @@ describe('OcrService', () => {
 		// Multi-page PDF should be roughly twice the size of single page
 		// (minus some overhead for shared resources like fonts)
 		expect(pdfBytes.length).toBeGreaterThan(jpegBuffer.length * 1.5);
+	});
+
+	it('should truncate long OCR text', async () => {
+		const service = newOcrService();
+		service.testing_setOcrMaxSize(10);
+
+		const { resource: resource1 } = await createNoteAndResource({ path: `${ocrSampleDir}/multi_page__embedded_text.pdf` });
+		const { resource: resource2 } = await createNoteAndResource({ path: `${ocrSampleDir}/testocr.png` });
+		await msleep(1);
+		expect(await Resource.needOcrCount(supportedMimeTypes)).toBe(2);
+
+		await service.processResources();
+
+		expect(await Resource.load(resource1.id)).toMatchObject({
+			ocr_text: 'This is...',
+		});
+		// PNG resources are unlikely to go over the actual ocr_text length limit, but the logic should
+		// support them anyway:
+		expect(await Resource.load(resource2.id)).toMatchObject({
+			ocr_text: 'This is...',
+		});
+	});
+
+	it('should truncate long OCR text in accessible-mode PDFs', async () => {
+		Setting.setValue('ocr.pdfMode', 'accessible');
+
+		// Converting PDFs to images requires the <canvas> element, which isn't available in a testing
+		// environment.
+		const pdfToImages = jest.spyOn(shim, 'pdfToImages');
+		pdfToImages.mockImplementation(async (_pdfPath, outputDirectory) => {
+			const paths = [];
+			for (let i = 0; i < 5; i++) {
+				const outputPath = join(outputDirectory, `page-${i}.png`);
+				await copyFile(`${ocrSampleDir}/testocr.png`, outputPath);
+				paths.push(outputPath);
+			}
+			return paths;
+		});
+
+		const service = newOcrService();
+		const maxSize = highConfidenceTestOcrResource.expectedText.length * 2 + '.\n...'.length;
+		service.testing_setOcrMaxSize(maxSize);
+
+		try {
+			const { resource } = await createNoteAndResource({ path: `${ocrSampleDir}/multi_page__embedded_text.pdf` });
+			await msleep(1);
+			expect(await Resource.needOcrCount(supportedMimeTypes)).toBe(1);
+
+			await withWarningSilenced(/Recognize: Truncated/, async () => {
+				await service.processResources();
+			});
+
+			const reloaded = await Resource.load(resource.id);
+			expect(reloaded).toMatchObject({
+				ocr_text: [
+					highConfidenceTestOcrResource.expectedText,
+					highConfidenceTestOcrResource.expectedText,
+					'...',
+				].join('\n'),
+			});
+
+			// Should **not** truncate ocr_details
+			const parsedOcrDetails: PdfOcrDetails = JSON.parse(reloaded.ocr_details);
+			expect(parsedOcrDetails.pages).toHaveLength(5);
+		} finally {
+			pdfToImages.mockRestore();
+		}
 	});
 
 });

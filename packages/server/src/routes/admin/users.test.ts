@@ -1,13 +1,15 @@
-import { User } from '../../services/database/types';
+import { mock as stripeMock, reset as resetStripe } from '../../utils/testing/mockStripe';
+import { User, UserFlagType } from '../../services/database/types';
 import routeHandler from '../../middleware/routeHandler';
 import { execRequest } from '../../utils/testing/apiUtils';
-import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, checkContextError, expectHttpError } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, checkContextError, expectHttpError, createSubscription } from '../../utils/testing/testUtils';
 import { uuidgen } from '@joplin/lib/uuid';
 import { ErrorForbidden } from '../../utils/errors';
 import { AccountType } from '../../models/UserModel';
+import { findPrice, PricePeriod } from '@joplin/lib/utils/joplinCloud';
+import { stripeConfig } from '../../utils/stripe';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function postUser(sessionId: string, email: string, password: string = null, props: any = null): Promise<User> {
+async function postUser(sessionId: string, email: string, password: string = null, props: Record<string, unknown> = null): Promise<User> {
 	password = password === null ? uuidgen() : password;
 
 	const context = await koaAppContext({
@@ -30,16 +32,15 @@ async function postUser(sessionId: string, email: string, password: string = nul
 	return context.response.body;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function patchUser(sessionId: string, user: any, url = ''): Promise<User> {
+async function patchUser(sessionId: string, user: Record<string, unknown>, url = ''): Promise<User> {
 	const context = await koaAppContext({
 		sessionId: sessionId,
 		request: {
 			method: 'POST',
 			url: url ? url : '/admin/users',
 			body: {
-				...user,
 				post_button: true,
+				...user,
 			},
 		},
 	});
@@ -61,6 +62,7 @@ describe('admin/users', () => {
 
 	beforeEach(async () => {
 		await beforeEachDb();
+		resetStripe();
 	});
 
 	test('should create a new user', async () => {
@@ -117,7 +119,8 @@ describe('admin/users', () => {
 
 		const password = uuidgen();
 		await postUser(session.id, email, password);
-		const loggedInUser = await models().user().login(email, password);
+		const ctx = await koaAppContext();
+		const loggedInUser = await models().user().login(email, password, ctx.joplin.services);
 		expect(!!loggedInUser).toBe(true);
 		expect(loggedInUser.email).toBe('ilikeuppercaseandspaces@example.com');
 	});
@@ -162,8 +165,10 @@ describe('admin/users', () => {
 			'STRIPE_SUB_ID',
 		);
 		const { user } = await createUserAndSession(1, false);
+		const ctx = await koaAppContext();
+
 		await models().user().save({ id: admin.id, password, is_admin: 1 });
-		const session = await models().session().authenticate(admin.email, password, '');
+		const session = await models().session().authenticate(admin.email, password, ctx.joplin.services, '');
 		const result = await execRequest(session.id, 'GET', 'admin/users', null, {
 			query: {
 				query: 'STRIPE_SUB_ID',
@@ -196,12 +201,13 @@ describe('admin/users', () => {
 
 	test('should delete sessions when changing password', async () => {
 		const { user, session, password } = await createUserAndSession(1);
+		const ctx = await koaAppContext({ sessionId: session.id });
 
 		const mfaCode = '';
 
-		await models().session().authenticate(user.email, password, mfaCode);
-		await models().session().authenticate(user.email, password, mfaCode);
-		await models().session().authenticate(user.email, password, mfaCode);
+		await models().session().authenticate(user.email, password, ctx.joplin.services, mfaCode);
+		await models().session().authenticate(user.email, password, ctx.joplin.services, mfaCode);
+		await models().session().authenticate(user.email, password, ctx.joplin.services, mfaCode);
 
 		expect(await models().session().count()).toBe(4);
 
@@ -225,6 +231,30 @@ describe('admin/users', () => {
 
 		// cannot delete own user
 		await expectHttpError(async () => execRequest(adminSession.id, 'POST', `admin/users/${admin.id}`, { disable_button: true }), ErrorForbidden.httpCode);
+
+		// cannot remove flags from own user, which a disabled admin could otherwise use to re-enable themselves
+		await expectHttpError(async () => execRequest(adminSession.id, 'POST', `admin/users/${admin.id}`, { delete_user_flags: true, [`user_flag_${UserFlagType.ManuallyDisabled}`]: 'on' }), ErrorForbidden.httpCode);
+	});
+
+	test('should revoke the sessions and apps of a disabled account', async () => {
+		const { session: adminSession } = await createUserAndSession(1, true);
+		const { user, session } = await createUserAndSession(2);
+
+		await execRequest(adminSession.id, 'POST', `admin/users/${user.id}`, { disable_button: true });
+
+		expect((await models().user().load(user.id)).enabled).toBe(0);
+		expect(await models().session().load(session.id)).toBeFalsy();
+	});
+
+	test('should send a password reset email, and keep must_set_password off, for an account that has a password', async () => {
+		const { session: adminSession } = await createUserAndSession(1, true);
+		const { user } = await createUserAndSession(2);
+
+		await execRequest(adminSession.id, 'POST', `admin/users/${user.id}`, { send_account_confirmation_email: true });
+
+		expect((await models().user().load(user.id)).must_set_password).toBe(0);
+		const emails = (await models().email().all()).filter(e => e.recipient_id === user.id);
+		expect(emails.some(e => e.body.includes('/password/reset?token='))).toBe(true);
 	});
 
 	test('should delete all applications when changing password to enforce user login', async () => {
@@ -248,4 +278,45 @@ describe('admin/users', () => {
 		expect(await models().application().count()).toBe(0);
 	});
 
+	test.each([
+		{
+			fromType: AccountType.Pro,
+			toType: AccountType.Pro100Gb,
+			buttonId: 'update_subscription_pro_100gb_button' as const,
+		},
+		{
+			fromType: AccountType.Pro100Gb,
+			toType: AccountType.Pro,
+			buttonId: 'update_subscription_pro_button' as const,
+		},
+	])('should update a user account from type $fromType to $toType in Stripe', async ({ fromType, toType, buttonId }) => {
+		const { user } = await createUserAndSession(1, false, {
+			account_type: fromType,
+		});
+		const subscription = await createSubscription(user, 'stripe-user-id', 'stripe-subscription-id');
+		const admin = await createUserAndSession(2, true);
+
+		const originalPrice = findPrice(stripeConfig(), { accountType: fromType, period: PricePeriod.Monthly });
+		stripeMock.setMockSubscription(
+			'stripe-subscription-id',
+			{ items: [originalPrice] },
+		);
+
+		await patchUser(admin.session.id, {
+			id: user.id,
+			[buttonId]: true,
+			post_button: false,
+		}, `/admin/users/${user.id}`);
+
+		const upgradePrice = findPrice(stripeConfig(), { accountType: toType, period: PricePeriod.Monthly });
+		expect(stripeMock.subscriptions.update).toHaveBeenCalledWith(
+			subscription.stripe_subscription_id,
+			{
+				items: [
+					{ deleted: true },
+					{ price: upgradePrice.id },
+				],
+			},
+		);
+	});
 });

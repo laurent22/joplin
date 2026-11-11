@@ -1,10 +1,10 @@
 import convertLinksToLocale from './convertLinksToLocale';
+import { Locale } from './types';
 
 describe('convertLinksToLocale', () => {
 
 	it('should convert links', async () => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const tests: [string, any, string][] = [
+		const tests: [string, Partial<Locale>, string][] = [
 			[
 				'test [link](/help/link)',
 				{ pathPrefix: 'fr' },
@@ -18,7 +18,7 @@ describe('convertLinksToLocale', () => {
 		];
 
 		for (const [input, locale, expected] of tests) {
-			const actual = convertLinksToLocale(input, locale);
+			const actual = convertLinksToLocale(input, locale as Locale);
 			expect(actual).toBe(expected);
 		}
 	});

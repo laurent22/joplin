@@ -18,12 +18,10 @@ interface CurrentPositionOptions {}
 
 type GeoipService = ()=> Promise<CurrentPositionResponse>;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const fetchJson = async (url: string): Promise<any> => {
-	let r = await shim.fetch(url);
-	if (!r.ok) throw new Error(`Could not get geolocation: ${await r.text()}`);
-	r = await r.json();
-	return r;
+const fetchJson = async (url: string): Promise<Record<string, unknown>> => {
+	const response = await shim.fetch(url);
+	if (!response.ok) throw new Error(`Could not get geolocation: ${await response.text()}`);
+	return await response.json();
 };
 
 const geoipServices: Record<string, GeoipService> = {
@@ -35,9 +33,9 @@ const geoipServices: Record<string, GeoipService> = {
 		return {
 			timestamp: Date.now(),
 			coords: {
-				longitude: r.longitude,
+				longitude: r.longitude as number,
 				altitude: 0,
-				latitude: r.latitude,
+				latitude: r.latitude as number,
 			},
 		};
 	},

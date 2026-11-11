@@ -21,6 +21,7 @@ module.exports = {
 	// See https://github.com/lint-staged/lint-staged/issues/934#issuecomment-743299357
 	'*.{js,jsx,ts,tsx,task1}': 'yarn checkIgnoredFiles',
 	'*.{js,jsx,ts,tsx,task2}': 'yarn spellcheck',
+	'*.{js,jsx}': 'yarn checkGeneratedFiles',
 	'*.{js,jsx,ts,tsx,task3}': 'yarn linter-precommit',
 	'*.{json,task4}': 'yarn packageJsonLint',
 	'*.{md,mdx,task5}': 'yarn spellcheck',

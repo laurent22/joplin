@@ -1,14 +1,18 @@
 import FsDriverBase, { ReadDirStatsOptions } from '@joplin/lib/fs-driver-base';
-const RNFetchBlob = require('rn-fetch-blob').default;
+import RNFetchBlob from 'rn-fetch-blob';
 import * as RNFS from '@dr.pogodin/react-native-fs';
 import RNSAF, { DocumentFileDetail, openDocumentTree } from '@joplin/react-native-saf-x';
+import type { StatResultT, ReadDirResItemT } from '@dr.pogodin/react-native-fs';
+
+type RnfsStatLike = StatResultT | ReadDirResItemT | DocumentFileDetail;
 import { Platform } from 'react-native';
 import tarCreate from './tarCreate';
 import tarExtract from './tarExtract';
 import JoplinError from '@joplin/lib/JoplinError';
 const md5 = require('md5');
 import { resolve } from 'path';
-
+import Logger from '@joplin/utils/Logger';
+const logger = Logger.create('fs-driver-rn');
 
 const ANDROID_URI_PREFIX = 'content://';
 
@@ -49,6 +53,201 @@ const normalizeEncoding = (encoding: string): SupportedEncoding => {
 };
 
 export default class FsDriverRN extends FsDriverBase {
+	private safDocumentUris_ = new Map<string, string>();
+	private safDirectoryUris_ = new Map<string, string>();
+	private listedSafDirectories_ = new Set<string>();
+
+	private cachedSafUri_(path: string) {
+		const normalizedPath = this.normalizeSafPath_(path);
+		return this.safDocumentUris_.get(normalizedPath) ?? normalizedPath;
+	}
+
+	private normalizeSafPath_(path: string) {
+		return path.replace(/\/$/, '');
+	}
+
+	private safParentPath_(path: string) {
+		const normalizedPath = this.normalizeSafPath_(path);
+		return normalizedPath.substring(0, normalizedPath.lastIndexOf('/'));
+	}
+
+	private safRelativePath_(directoryPath: string, document: DocumentFileDetail) {
+		directoryPath = this.normalizeSafPath_(directoryPath);
+		const pathPrefix = `${directoryPath}/`;
+		if (!document.uri.startsWith(pathPrefix)) {
+			throw new Error(`Cannot derive SAF relative path: Document URI does not start with directory path: ${document.uri}`);
+		}
+		return document.uri.substring(pathPrefix.length);
+	}
+
+	private invalidateSafDirectory_(path: string) {
+		const normalizedPath = this.normalizeSafPath_(path);
+		this.safDirectoryUris_.delete(normalizedPath);
+		this.listedSafDirectories_.delete(normalizedPath);
+	}
+
+	private invalidateSafPath_(path: string) {
+		const normalizedPath = this.normalizeSafPath_(path);
+		const pathPrefix = `${normalizedPath}/`;
+		for (const cachedPath of this.safDocumentUris_.keys()) {
+			if (cachedPath === normalizedPath || cachedPath.startsWith(pathPrefix)) this.safDocumentUris_.delete(cachedPath);
+		}
+		for (const cachedPath of this.safDirectoryUris_.keys()) {
+			if (cachedPath === normalizedPath || cachedPath.startsWith(pathPrefix)) this.safDirectoryUris_.delete(cachedPath);
+		}
+		for (const cachedPath of this.listedSafDirectories_) {
+			if (cachedPath === normalizedPath || cachedPath.startsWith(pathPrefix)) this.listedSafDirectories_.delete(cachedPath);
+		}
+		this.invalidateSafDirectory_(this.safParentPath_(normalizedPath));
+	}
+
+	private async withCachedSafUri_<T>(path: string, callback: (resolvedPath: string)=> Promise<T>, retryIfStale = false): Promise<T> {
+		path = this.normalizeSafPath_(path);
+		const cachedUri = this.cachedSafUri_(path);
+		try {
+			return await callback(cachedUri);
+		} catch (error) {
+			// Only non-mutating operations may retry a stale URI immediately. A
+			// mutating native operation can report ENOENT during its final metadata
+			// check, after it has already changed the destination.
+			if (cachedUri === path) throw error;
+			this.invalidateSafPath_(path);
+			// Providers do not consistently report stale documents as ENOENT. Clear
+			// the cached URI after any failure so a later operation resolves fresh
+			// state, but only replay this operation when staleness is confirmed and
+			// the caller has declared an immediate retry safe.
+			if (error?.code !== 'ENOENT' || !retryIfStale) throw error;
+			return callback(path);
+		}
+	}
+
+	private async safDirectoryUri_(path: string) {
+		const normalizedPath = path.replace(/\/$/, '');
+		const cachedUri = this.safDirectoryUris_.get(normalizedPath);
+		if (cachedUri) return cachedUri;
+
+		const directory = await RNSAF.stat(normalizedPath);
+		const directoryUri = directory.documentUri ?? directory.uri;
+		this.safDirectoryUris_.set(normalizedPath, directoryUri);
+		return directoryUri;
+	}
+
+	private cacheSafDirectoryListing_(path: string, documents: DocumentFileDetail[], relativePaths: string[] = null) {
+		const normalizedPath = path.replace(/\/$/, '');
+		const pathPrefix = `${normalizedPath}/`;
+		for (const cachedPath of this.safDocumentUris_.keys()) {
+			if (cachedPath.startsWith(pathPrefix) && !cachedPath.substring(pathPrefix.length).includes('/')) {
+				this.safDocumentUris_.delete(cachedPath);
+			}
+		}
+
+		for (let i = 0; i < documents.length; i++) {
+			const document = documents[i];
+			const relativePath = relativePaths?.[i] ?? this.safRelativePath_(normalizedPath, document);
+			this.safDocumentUris_.set(`${pathPrefix}${relativePath}`, document.documentUri ?? document.uri);
+		}
+		this.listedSafDirectories_.add(normalizedPath);
+	}
+
+	private async ensureSafDirectoryListed_(path: string) {
+		const normalizedPath = this.normalizeSafPath_(path);
+		if (this.listedSafDirectories_.has(normalizedPath)) return;
+
+		try {
+			await this.safDirectoryUri_(normalizedPath);
+			const documents = await RNSAF.listFiles(normalizedPath);
+			this.cacheSafDirectoryListing_(normalizedPath, documents);
+		} catch (error) {
+			this.invalidateSafDirectory_(normalizedPath);
+			throw error;
+		}
+	}
+
+	private async writeSafFile_(path: string, content: string, encoding: SupportedEncoding) {
+		path = this.normalizeSafPath_(path);
+		if (this.safDocumentUris_.has(path)) {
+			return this.withCachedSafUri_(path, resolvedPath => RNSAF.writeFile(resolvedPath, content, { encoding }));
+		}
+
+		const lastSlashIndex = path.lastIndexOf('/');
+		const parentPath = path.substring(0, lastSlashIndex);
+		try {
+			await this.ensureSafDirectoryListed_(parentPath);
+		} catch (error) {
+			if (error?.code !== 'ENOENT') throw error;
+			return RNSAF.writeFile(path, content, { encoding });
+		}
+		if (this.safDocumentUris_.has(path)) {
+			return this.withCachedSafUri_(path, resolvedPath => RNSAF.writeFile(resolvedPath, content, { encoding }));
+		}
+
+		const parentUri = this.safDirectoryUris_.get(parentPath);
+		if (parentUri) {
+			try {
+				const document = await RNSAF.writeFileInDirectory(parentUri, path.substring(lastSlashIndex + 1), content, { encoding, replaceIfDestinationExists: true });
+				this.safDocumentUris_.set(path, document.documentUri ?? document.uri);
+				return;
+			} catch (error) {
+				// The operation may have created and written the destination before
+				// failing during close or its final metadata check. Never replay it here.
+				this.invalidateSafDirectory_(parentPath);
+				throw error;
+			}
+		}
+
+		return RNSAF.writeFile(path, content, { encoding });
+	}
+
+	private async copyToSaf_(source: string, dest: string): Promise<void> {
+		dest = this.normalizeSafPath_(dest);
+		if (this.safDocumentUris_.has(dest)) {
+			await this.withCachedSafUri_(dest, resolvedDest => RNSAF.copyFile(source, resolvedDest, { replaceIfDestinationExists: true }));
+			return;
+		}
+
+		const lastSlashIndex = dest.lastIndexOf('/');
+		const parentPath = dest.substring(0, lastSlashIndex);
+		try {
+			await this.ensureSafDirectoryListed_(parentPath);
+		} catch (error) {
+			if (error?.code !== 'ENOENT') throw error;
+			await RNSAF.copyFile(source, dest, { replaceIfDestinationExists: true });
+			return;
+		}
+		if (this.safDocumentUris_.has(dest)) {
+			await this.withCachedSafUri_(dest, resolvedDest => RNSAF.copyFile(source, resolvedDest, { replaceIfDestinationExists: true }));
+			return;
+		}
+
+		const parentUri = this.safDirectoryUris_.get(parentPath);
+		if (parentUri) {
+			try {
+				const document = await RNSAF.copyFileToDirectory(source, parentUri, dest.substring(lastSlashIndex + 1), { replaceIfDestinationExists: true });
+				this.safDocumentUris_.set(dest, document.documentUri ?? document.uri);
+				return;
+			} catch (error) {
+				// The operation may have created and copied the destination before
+				// failing during close or its final metadata check. Never replay it here.
+				this.invalidateSafDirectory_(parentPath);
+				throw error;
+			}
+		}
+
+		await RNSAF.copyFile(source, dest, { replaceIfDestinationExists: true });
+	}
+
+	private async appendSafFile_(path: string, content: string, encoding: SupportedEncoding) {
+		path = this.normalizeSafPath_(path);
+		const hasCachedUri = this.safDocumentUris_.has(path);
+		try {
+			return await this.withCachedSafUri_(path, resolvedPath => RNSAF.writeFile(resolvedPath, content, { encoding, append: true }));
+		} finally {
+			// A cache-cold append resolves by path and may create the destination.
+			// Force the parent listing to be refreshed before a later create/update.
+			if (!hasCachedUri) this.invalidateSafPath_(path);
+		}
+	}
+
 	public appendFileSync() {
 		throw new Error('Not implemented: appendFileSync');
 	}
@@ -56,23 +255,21 @@ export default class FsDriverRN extends FsDriverBase {
 	// Requires that the file already exists.
 	// TODO: Update for compatibility with fs-driver-node's appendFile (which does not
 	//       require that the file exists).
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public appendFile(path: string, content: any, rawEncoding = 'base64') {
+	public appendFile(path: string, content: string, rawEncoding = 'base64') {
 		const encoding = normalizeEncoding(rawEncoding);
 
 		if (isScopedUri(path)) {
-			return RNSAF.writeFile(path, content, { encoding, append: true });
+			return this.appendSafFile_(path, content, encoding);
 		}
 		return RNFS.appendFile(path, content, encoding);
 	}
 
 	// Encoding can be either "utf8", "utf-8", or "base64"
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public writeFile(path: string, content: any, rawEncoding = 'base64') {
+	public writeFile(path: string, content: string, rawEncoding = 'base64') {
 		const encoding = normalizeEncoding(rawEncoding);
 
 		if (isScopedUri(path)) {
-			return RNSAF.writeFile(path, content, { encoding: encoding });
+			return this.writeSafFile_(path, content, encoding);
 		}
 
 		// We need to use rn-fetch-blob here due to this bug:
@@ -86,58 +283,81 @@ export default class FsDriverRN extends FsDriverBase {
 	}
 
 	// Returns a format compatible with Node.js format
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private rnfsStatToStd_(stat: any, path: string) {
+	private rnfsStatToStd_(stat: RnfsStatLike, path: string) {
 		let birthtime;
-		const mtime = stat.lastModified ? new Date(stat.lastModified) : stat.mtime;
-		if (stat.lastModified) {
-			birthtime = new Date(stat.lastModified);
-		} else if (stat.ctime) {
+		const lastModified = 'lastModified' in stat ? stat.lastModified : undefined;
+		const ctime = 'ctime' in stat ? stat.ctime : undefined;
+		const mtime = lastModified ? new Date(lastModified) : ('mtime' in stat ? stat.mtime : undefined);
+		if (lastModified) {
+			birthtime = new Date(lastModified);
+		} else if (ctime) {
 			// Confusingly, "ctime" normally means "change time" but here it's used as "creation time". Also sometimes it is null
-			birthtime = stat.ctime;
+			birthtime = ctime;
 		} else {
-			birthtime = stat.mtime;
+			birthtime = 'mtime' in stat ? stat.mtime : undefined;
 		}
 		return {
 			birthtime,
 			mtime,
-			isDirectory: () => stat.type ? stat.type === 'directory' : stat.isDirectory(),
+			isDirectory: () => 'type' in stat && stat.type ? stat.type === 'directory' : ('isDirectory' in stat ? stat.isDirectory() : false),
 			path: path,
 			size: stat.size,
 		};
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async readDirStats(path: string, options: any = null) {
-		if (!options) options = {};
-		if (!('recursive' in options)) options.recursive = false;
+	public async readDirStats(path: string, options: ReadDirStatsOptions = null) {
+		if (!options) options = { recursive: false };
 
 		const isScoped = isScopedUri(path);
+		if (isScoped) path = this.normalizeSafPath_(path);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		let stats: any[] = [];
+		let stats: RnfsStatLike[] = [];
 		try {
 			if (isScoped) {
+				await this.safDirectoryUri_(path);
 				stats = await RNSAF.listFiles(path);
 			} else {
 				stats = await RNFS.readDir(path);
 			}
 		} catch (error) {
+			if (isScoped) this.invalidateSafDirectory_(path);
 			throw new Error(`Could not read directory: ${path}: ${error.message}`);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		const toRelativePath = (stat: RnfsStatLike) => {
+			if (isScoped) return this.safRelativePath_(path, stat as DocumentFileDetail);
+
+			let relativePath = (stat as StatResultT | ReadDirResItemT).path;
+
+			// Workaround: Paths returned by RNFS.readDir can include a leading /private/, when this isn't included
+			// in the original path variable:
+			if (relativePath.startsWith('/private/') && !path.startsWith('/private/')) {
+				relativePath = relativePath.replace(/^\/private/, '');
+			}
+
+			if (!relativePath.startsWith(path)) {
+				logger.warn('readDirStats: Relative path does not start with original:', { relativePath, path });
+			}
+
+			relativePath = relativePath.substring(path.length + 1);
+			return relativePath;
+		};
+		const relativePaths = stats.map(toRelativePath);
+		if (isScoped) this.cacheSafDirectoryListing_(path, stats as DocumentFileDetail[], relativePaths);
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Output combines DocumentFileDetail (SAF) or normalized Stat (RNFS) entries
 		let output: any[] = [];
 		for (let i = 0; i < stats.length; i++) {
 			const stat = stats[i];
-			const relativePath = (isScoped ? stat.uri : stat.path).substr(path.length + 1);
+
+			const relativePath = relativePaths[i];
 			const standardStat = this.rnfsStatToStd_(stat, relativePath);
 			output.push(standardStat);
 
 			if (isScoped) {
 				// readUriDirStatsHandleRecursion_ expects stat to have a URI property.
 				// Use the original stat.
-				output = await this.readUriDirStatsHandleRecursion_(stat, output, options);
+				output = await this.readUriDirStatsHandleRecursion_(stat as DocumentFileDetail, output, options);
 			} else {
 				output = await this.readDirStatsHandleRecursion_(path, standardStat, output, options);
 			}
@@ -159,14 +379,26 @@ export default class FsDriverRN extends FsDriverBase {
 
 	public async move(source: string, dest: string) {
 		if (isScopedUri(source) || isScopedUri(dest)) {
-			await RNSAF.moveFile(source, dest, { replaceIfDestinationExists: true });
+			try {
+				await RNSAF.moveFile(source, dest, { replaceIfDestinationExists: true });
+			} finally {
+				this.invalidateSafPath_(source);
+				this.invalidateSafPath_(dest);
+			}
+			return;
 		}
 		return RNFS.moveFile(source, dest);
 	}
 
 	public async rename(source: string, dest: string) {
 		if (isScopedUri(source) || isScopedUri(dest)) {
-			await RNSAF.rename(source, dest);
+			try {
+				await RNSAF.rename(source, dest);
+			} finally {
+				this.invalidateSafPath_(source);
+				this.invalidateSafPath_(dest);
+			}
+			return;
 		}
 		return RNFS.moveFile(source, dest);
 	}
@@ -180,7 +412,11 @@ export default class FsDriverRN extends FsDriverBase {
 
 	public async mkdir(path: string) {
 		if (isScopedUri(path)) {
-			await RNSAF.mkdir(path);
+			try {
+				await RNSAF.mkdir(path);
+			} finally {
+				this.invalidateSafPath_(path);
+			}
 			return;
 		}
 
@@ -189,10 +425,25 @@ export default class FsDriverRN extends FsDriverBase {
 	}
 
 	public async stat(path: string) {
+		const isScoped = isScopedUri(path);
 		try {
 			let r;
-			if (isScopedUri(path)) {
-				r = await RNSAF.stat(path);
+			if (isScoped) {
+				const normalizedPath = this.normalizeSafPath_(path);
+				// A direct document URI avoids resolving the filename by walking the
+				// parent directory. stat() still queries the provider for fresh metadata,
+				// and a confirmed stale URI is safely retried through the logical path.
+				r = await this.withCachedSafUri_(normalizedPath, resolvedPath => RNSAF.stat(resolvedPath), true);
+				const documentUri = r.documentUri ?? r.uri;
+				if (r.type === 'directory') {
+					this.safDirectoryUris_.set(normalizedPath, documentUri);
+				} else {
+					// stat() is used immediately before upload conflict resolution.
+					// Retain the document found by that live lookup so an accepted
+					// upload overwrites it rather than creating another document from
+					// an older parent listing.
+					this.safDocumentUris_.set(normalizedPath, documentUri);
+				}
 			} else {
 				r = await RNFS.stat(path);
 			}
@@ -202,6 +453,7 @@ export default class FsDriverRN extends FsDriverBase {
 				// Probably { [Error: File does not exist] framesToPop: 1, code: 'EUNSPECIFIED' }
 				//     or   { [Error: The file {file} couldn’t be opened because there is no such file.], code: 'ENSCOCOAERRORDOMAIN260' }
 				// which unfortunately does not have a proper error code. Can be ignored.
+				if (isScoped) this.invalidateSafPath_(path);
 				return null;
 			} else {
 				throw error;
@@ -233,8 +485,7 @@ export default class FsDriverRN extends FsDriverBase {
 		};
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public close(_handle: any): Promise<void> {
+	public close(_handle: unknown): Promise<void> {
 		// Nothing
 		return null;
 	}
@@ -243,19 +494,28 @@ export default class FsDriverRN extends FsDriverBase {
 		const encoding = normalizeEncoding(rawEncoding);
 
 		if (isScopedUri(path)) {
-			return RNSAF.readFile(path, { encoding: encoding });
+			return this.withCachedSafUri_(path, resolvedPath => RNSAF.readFile(resolvedPath, { encoding: encoding }), true);
 		}
 		return RNFS.readFile(path, encoding);
 	}
 
 	// Always overwrite destination
 	public async copy(source: string, dest: string) {
+		if (isScopedUri(source) || isScopedUri(dest)) {
+			if (isScopedUri(source)) {
+				try {
+					await this.withCachedSafUri_(source, resolvedSource => RNSAF.copyFile(resolvedSource, dest, { replaceIfDestinationExists: true }));
+				} finally {
+					if (isScopedUri(dest)) this.invalidateSafPath_(dest);
+				}
+			} else {
+				await this.copyToSaf_(source, dest);
+			}
+			return;
+		}
+
 		let retry = false;
 		try {
-			if (isScopedUri(source) || isScopedUri(dest)) {
-				await RNSAF.copyFile(source, dest, { replaceIfDestinationExists: true });
-				return;
-			}
 			await RNFS.copyFile(source, dest);
 		} catch (error) {
 			// On iOS it will throw an error if the file already exist
@@ -264,18 +524,16 @@ export default class FsDriverRN extends FsDriverBase {
 		}
 
 		if (retry) {
-			if (isScopedUri(source) || isScopedUri(dest)) {
-				await RNSAF.copyFile(source, dest, { replaceIfDestinationExists: true });
-			} else {
-				await RNFS.copyFile(source, dest);
-			}
+			await RNFS.copyFile(source, dest);
 		}
 	}
 
 	public async unlink(path: string) {
 		try {
 			if (isScopedUri(path)) {
-				await RNSAF.unlink(path);
+				// Deletion is idempotent and unlink does not perform a post-delete stat,
+				// so retrying a confirmed stale document URI is safe here.
+				await this.withCachedSafUri_(path, resolvedPath => RNSAF.unlink(resolvedPath), true);
 				return;
 			}
 			await RNFS.unlink(path);
@@ -286,11 +544,12 @@ export default class FsDriverRN extends FsDriverBase {
 			} else {
 				throw error;
 			}
+		} finally {
+			if (isScopedUri(path)) this.invalidateSafPath_(path);
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async readFileChunk(handle: any, length: number, rawEncoding = 'base64') {
+	public async readFileChunk(handle: { path: string; offset: number; mode: string; stat: { size: number } | null }, length: number, rawEncoding = 'base64') {
 		if (!handle?.stat) {
 			throw new JoplinError('File does not exist (reading file chunk).', 'ENOENT');
 		}
@@ -322,16 +581,14 @@ export default class FsDriverRN extends FsDriverBase {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async tarExtract(options: any) {
+	public async tarExtract(options: Omit<Parameters<typeof tarExtract>[0], 'cwd'> & { cwd?: string }) {
 		await tarExtract({
 			cwd: RNFS.DocumentDirectoryPath,
 			...options,
 		});
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async tarCreate(options: any, filePaths: string[]) {
+	public async tarCreate(options: Omit<Parameters<typeof tarCreate>[0], 'cwd'> & { cwd?: string }, filePaths: string[]) {
 		await tarCreate({
 			cwd: RNFS.DocumentDirectoryPath,
 			...options,

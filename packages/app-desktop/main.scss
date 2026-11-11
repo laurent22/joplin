@@ -126,6 +126,34 @@ a {
 	color: grey;
 	font-size: 1.2em;
 	margin: 40px 20px;
+
+	&.-with-close-button {
+		align-items: stretch;
+		flex-direction: column;
+		height: calc(100vh - 80px);
+		justify-content: flex-start;
+		max-height: calc(100vh - 80px);
+		min-width: min(600px, calc(100vw - 40px));
+		width: calc(100vw - 40px);
+	}
+}
+
+.modal-message-scrollable-content {
+	flex: 1 1 auto;
+	min-height: 0;
+	overflow-y: auto;
+}
+
+.modal-message-actions {
+	display: flex;
+	flex-shrink: 0;
+	justify-content: flex-end;
+	padding-top: 20px;
+
+	button {
+		min-width: 80px;
+		padding: 6px 16px;
+	}
 }
 
 .loading-animation {
@@ -286,18 +314,24 @@ Component-specific classes
 	padding-bottom: 20px;
 }
 
-.master-password-dialog .dialog-root, .enable-encryption-dialog .dialog-root {
+.master-password-dialog .dialog-root, .enable-encryption-dialog .dialog-root, .disable-encryption-dialog .dialog-root {
 	min-width: 500px;
 	max-width: 600px;
 }
 
-.master-password-dialog .dialog-content, .enable-encryption-dialog .dialog-content {
+.note-lock-migration-dialog > .content {
+	box-sizing: border-box;
+	width: 500px;
+	max-width: 100%;
+}
+
+.master-password-dialog .dialog-content, .enable-encryption-dialog .dialog-content, .disable-encryption-dialog .dialog-content, .note-lock-migration-dialog .dialog-content {
 	background-color: var(--joplin-background-color3);
 	padding: 1em;
 	padding-bottom: 1px;
 }
 
-.master-password-dialog .current-password-wrapper, .enable-encryption-dialog .current-password-wrapper {
+.master-password-dialog .current-password-wrapper, .enable-encryption-dialog .current-password-wrapper, .disable-encryption-dialog .current-password-wrapper {
 	display: flex;
 	flex-direction: row;
 	align-items: center;

@@ -1,9 +1,12 @@
 import { RuleOptions } from '../../MdToHtml';
+import { RendererTheme } from '../../types';
+import type * as MarkdownIt from 'markdown-it';
+import type Token = require('markdown-it/lib/token');
+import type StateCore = require('markdown-it/lib/rules_core/state_core');
 
 let checkboxIndex_ = -1;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function pluginAssets(theme: any) {
+function pluginAssets(theme: RendererTheme) {
 	return [
 		{
 			inline: true,
@@ -56,8 +59,7 @@ function pluginAssets(theme: any) {
 	];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function createPrefixTokens(Token: any, id: string, checked: boolean, label: string, postMessageSyntax: string, sourceToken: any, disabled: boolean): any[] {
+function createPrefixTokens(Token: typeof import('markdown-it/lib/token'), id: string, checked: boolean, label: string, postMessageSyntax: string, sourceToken: Token, disabled: boolean): Token[] {
 	let token = null;
 	const tokens = [];
 
@@ -110,20 +112,17 @@ function createPrefixTokens(Token: any, id: string, checked: boolean, label: str
 	return tokens;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function createSuffixTokens(Token: any): any[] {
+function createSuffixTokens(Token: typeof import('markdown-it/lib/token')): Token[] {
 	return [
 		new Token('label_close', 'label', -1),
 		new Token('checkbox_wrapper_close', 'div', -1),
 	];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function checkboxPlugin(markdownIt: any, options: RuleOptions) {
+function checkboxPlugin(markdownIt: MarkdownIt, options: RuleOptions) {
 	const renderingType = options.checkboxRenderingType || 1;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	markdownIt.core.ruler.push('checkbox', (state: any) => {
+	markdownIt.core.ruler.push('checkbox', (state: StateCore) => {
 		const tokens = state.tokens;
 		const Token = state.Token;
 

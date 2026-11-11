@@ -10,22 +10,19 @@ import { Console } from 'console';
 const sandboxProxy = require('@joplin/lib/services/plugins/sandboxProxy');
 
 function createConsoleWrapper(pluginId: string) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const wrapper: any = {};
+	const wrapper: Record<string, (...args: unknown[])=> unknown> = {};
 
 	for (const n in console) {
 		// eslint-disable-next-line no-console
 		if (!console.hasOwnProperty(n)) continue;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		wrapper[n] = (...args: any[]) => {
+		wrapper[n] = (...args: unknown[]) => {
 			const newArgs = args.slice();
 			newArgs.splice(0, 0, `Plugin "${pluginId}":`);
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			return (console as any)[n](...newArgs);
+			return (console as unknown as Record<string, (...args: unknown[])=> unknown>)[n](...newArgs);
 		};
 	}
 
-	return wrapper;
+	return wrapper as unknown as typeof Console;
 }
 
 // The CLI plugin runner is more complex than it needs to be because it more or less emulates
@@ -44,8 +41,7 @@ interface SandboxProxy {
 export default class PluginRunner extends BasePluginRunner {
 
 	private eventHandlers_: EventHandlers = {};
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private activeSandboxCalls_: any = {};
+	private activeSandboxCalls_: Record<string, boolean> = {};
 	private sandboxProxies: Map<string, SandboxProxy> = new Map();
 
 	public constructor() {
@@ -54,8 +50,7 @@ export default class PluginRunner extends BasePluginRunner {
 		this.eventHandler = this.eventHandler.bind(this);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private async eventHandler(eventHandlerId: string, args: any[]) {
+	private async eventHandler(eventHandlerId: string, args: unknown[]) {
 		const cb = this.eventHandlers_[eventHandlerId];
 		return cb(...args);
 	}
@@ -63,8 +58,7 @@ export default class PluginRunner extends BasePluginRunner {
 	private newSandboxProxy(pluginId: string, sandbox: Global) {
 		let stopped = false;
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const target = async (path: string, args: any[]) => {
+		const target = async (path: string, args: unknown[]) => {
 			if (stopped) {
 				throw new Error(`Plugin with ID ${pluginId} has been stopped. Cannot execute sandbox call.`);
 			}
@@ -91,8 +85,7 @@ export default class PluginRunner extends BasePluginRunner {
 	}
 
 	public async run(plugin: Plugin, sandbox: Global): Promise<void> {
-		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-		return new Promise((resolve: Function, reject: Function) => {
+		return new Promise<void>((resolve, reject) => {
 			const onStarted = () => {
 				plugin.off('started', onStarted);
 				resolve();
@@ -119,8 +112,7 @@ export default class PluginRunner extends BasePluginRunner {
 
 	public async waitForSandboxCalls(): Promise<void> {
 		const startTime = Date.now();
-		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-		return new Promise((resolve: Function, reject: Function) => {
+		return new Promise<void>((resolve, reject) => {
 			const iid = setInterval(() => {
 				if (!Object.keys(this.activeSandboxCalls_).length) {
 					clearInterval(iid);

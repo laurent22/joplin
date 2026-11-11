@@ -60,7 +60,7 @@ import ItemModel from './ItemModel';
 import UserModel from './UserModel';
 import UserItemModel from './UserItemModel';
 import SessionModel from './SessionModel';
-import ChangeModel from './ChangeModel';
+import ChangeModel from './ChangeModel/ChangeModel';
 import NotificationModel from './NotificationModel';
 import ShareModel from './ShareModel';
 import EmailModel from './EmailModel';
@@ -79,6 +79,7 @@ import BackupItemModel from './BackupItemModel';
 import TaskStateModel from './TaskStateModel';
 import ApplicationModel from './ApplicationModel';
 import RecoveryCodeModel from './RecoveryCodeModel';
+import StripeEventModel from './StripeEventModel';
 
 export type NewModelFactoryHandler = (db: DbConnection)=> Models;
 
@@ -126,6 +127,10 @@ export class Models {
 
 	public apiClient() {
 		return new ApiClientModel(this.db_, this.dbSlave_, this.newModelFactory, this.config_);
+	}
+
+	public stripeEvent() {
+		return new StripeEventModel(this.db_, this.dbSlave_, this.newModelFactory, this.config_);
 	}
 
 	public session() {

@@ -14,7 +14,7 @@ jest.mock('react-native-share', () => {
 	const Share = {
 		open: (_options: ShareOptions) => jest.fn(),
 	};
-	return { default: Share };
+	return Share;
 });
 
 describe('NoteExportButton', () => {

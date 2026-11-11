@@ -3,13 +3,20 @@ import Tag from '@joplin/lib/models/Tag';
 import BaseModel from '@joplin/lib/BaseModel';
 import Setting from '@joplin/lib/models/Setting';
 import { _ } from '@joplin/lib/locale';
-import { FolderEntity } from '@joplin/lib/services/database/types';
+import { FolderEntity, TagEntity } from '@joplin/lib/services/database/types';
 import {
 	getDisplayParentId,
 	getTrashFolderId,
 } from '@joplin/lib/services/trash';
 const ListWidget = require('tkwidgets/ListWidget.js');
 
+interface SearchItem {
+	id: string;
+	title: string;
+	type_: number;
+}
+
+type FolderListItem = FolderEntity | TagEntity | SearchItem | '-';
 
 export default class FolderListWidget extends ListWidget {
 	private folders_: FolderEntity[] = [];
@@ -28,37 +35,36 @@ export default class FolderListWidget extends ListWidget {
 		this.trimItemTitle = false;
 		this.showIds = false;
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		this.itemRenderer = (item: any) => {
+		this.itemRenderer = (item: FolderListItem) => {
 			const output = [];
 			if (item === '-') {
 				output.push('-'.repeat(this.innerWidth));
 			} else if (item.type_ === Folder.modelType()) {
-				const depth = this.folderDepth(this.folders, item.id);
+				const folder = item as FolderEntity & { note_count?: number };
+				const depth = this.folderDepth(this.folders, folder.id);
 				output.push(' '.repeat(depth));
 
 				// Add collapse/expand indicator
-				const hasChildren = this.folderHasChildren_(this.folders, item.id);
+				const hasChildren = this.folderHasChildren_(this.folders, folder.id);
 				if (hasChildren) {
 					const collapsedFolders = Setting.value('collapsedFolderIds');
-					const isCollapsed = collapsedFolders.includes(item.id);
+					const isCollapsed = collapsedFolders.includes(folder.id);
 					output.push(isCollapsed ? '[+] ' : '[-] ');
 				} else {
 					output.push('  '); // Space for alignment
 				}
 
 				if (this.showIds) {
-					output.push(Folder.shortId(item.id));
+					output.push(Folder.shortId(folder.id));
 				}
-				output.push(Folder.displayTitle(item));
+				output.push(Folder.displayTitle(folder));
 
-				if (Setting.value('showNoteCounts') && !item.deleted_time && item.id !== getTrashFolderId()) {
-					let noteCount = item.note_count;
-					if (this.folderHasChildren_(this.folders, item.id)) {
+				if (Setting.value('showNoteCounts') && !folder.deleted_time && folder.id !== getTrashFolderId()) {
+					let noteCount = folder.note_count;
+					if (this.folderHasChildren_(this.folders, folder.id)) {
 						for (let i = 0; i < this.folders.length; i++) {
-							if (this.folders[i].parent_id === item.id) {
-								// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-								noteCount -= (this.folders[i] as any).note_count;
+							if (this.folders[i].parent_id === folder.id) {
+								noteCount -= (this.folders[i] as FolderEntity & { note_count?: number }).note_count;
 							}
 						}
 					}
@@ -190,8 +196,7 @@ export default class FolderListWidget extends ListWidget {
 			const wasSelectedItemId = this.selectedJoplinItemId;
 			const previousParentType = this.notesParentType;
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			let newItems: any[] = [];
+			let newItems: FolderListItem[] = [];
 			const orderFolders = (parentId: string) => {
 				for (let i = 0; i < this.folders.length; i++) {
 					const f = this.folders[i];

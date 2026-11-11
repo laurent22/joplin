@@ -3,7 +3,7 @@ const baseConfig = require('../../jest.config.base.js');
 module.exports = {
 	...baseConfig,
 
-	preset: 'react-native',
+	preset: '@react-native/jest-preset',
 
 	'moduleFileExtensions': [
 		'ts',

@@ -1,4 +1,5 @@
 import { Store } from 'redux';
+import { ModelType } from '../../BaseModel';
 import JoplinServerApi from '../../JoplinServerApi';
 import { _ } from '../../locale';
 import Logger from '@joplin/utils/Logger';
@@ -6,14 +7,14 @@ import Folder from '../../models/Folder';
 import MasterKey from '../../models/MasterKey';
 import Note from '../../models/Note';
 import Setting from '../../models/Setting';
-import { FolderEntity } from '../database/types';
+import { FolderEntity, NoteEntity } from '../database/types';
 import EncryptionService from '../e2ee/EncryptionService';
 import { PublicPrivateKeyPair, mkReencryptFromPasswordToPublicKey, mkReencryptFromPublicKeyToPassword, supportsPpkAlgorithm } from '../e2ee/ppk/ppk';
 import { MasterKeyEntity } from '../e2ee/types';
 import { getMasterPassword } from '../e2ee/utils';
 import ResourceService from '../ResourceService';
 import { addMasterKey, getEncryptionEnabled, localSyncInfo } from '../synchronizer/syncInfoUtils';
-import { ShareInvitation, SharePermissions, State, stateRootKey, StateShare } from './reducer';
+import { ShareInvitation, SharePermissions, ShareType, State, stateRootKey, StateShare } from './reducer';
 import PerformanceLogger from '../../PerformanceLogger';
 
 const logger = Logger.create('ShareService');
@@ -22,15 +23,22 @@ const perfLogger = PerformanceLogger.create();
 export interface ApiShare {
 	id: string;
 	master_key_id: string;
-	folder_id: string;
+	folder_id?: string;
+	note_id?: string;
+	type?: number;
+}
+
+export interface ApiTeamUsers {
+	items: { email: string }[];
+	has_more: boolean;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function formatShareInvitations(invitations: any[]): ShareInvitation[] {
+function formatShareInvitations(invitations: (Omit<ShareInvitation, 'master_key'> & { master_key: string | MasterKeyEntity | null })[]): ShareInvitation[] {
 	return invitations.map(inv => {
 		return {
 			...inv,
-			master_key: inv.master_key ? JSON.parse(inv.master_key) : null,
+			master_key: inv.master_key && typeof inv.master_key === 'string' ? JSON.parse(inv.master_key) : inv.master_key,
 		};
 	});
 }
@@ -39,8 +47,7 @@ export default class ShareService {
 
 	private static instance_: ShareService;
 	private api_: JoplinServerApi = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private store_: Store<any> = null;
+	private store_: Store<unknown> = null;
 	private encryptionService_: EncryptionService = null;
 	private initialized_ = false;
 
@@ -50,8 +57,7 @@ export default class ShareService {
 		return this.instance_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public initialize(store: Store<any>, encryptionService: EncryptionService, api: JoplinServerApi = null) {
+	public initialize(store: Store<unknown>, encryptionService: EncryptionService, api: JoplinServerApi = null) {
 		this.initialized_ = true;
 		this.store_ = store;
 		this.encryptionService_ = encryptionService;
@@ -63,13 +69,12 @@ export default class ShareService {
 		return [9, 10, 11].includes(Setting.value('sync.target')); // Joplin Server, Joplin Cloud targets
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private get store(): Store<any> {
+	private get store(): Store<unknown> {
 		return this.store_;
 	}
 
 	public get state(): State {
-		return this.store.getState()[stateRootKey] as State;
+		return (this.store.getState() as Record<string, unknown>)[stateRootKey] as State;
 	}
 
 	public get userId(): string {
@@ -303,12 +308,57 @@ export default class ShareService {
 		return share;
 	}
 
+	public async publishFolder(folderId: string): Promise<StateShare> {
+		const folder = await Folder.load(folderId);
+		if (!folder) throw new Error(`No such folder: ${folderId}`);
+
+		const share = await this.api().exec('POST', 'api/shares', {}, {
+			folder_id: folderId,
+			type: ShareType.PublishedFolder,
+		});
+
+		await this.refreshShares();
+
+		return share;
+	}
+
+	public async unpublishFolder(folderId: string): Promise<void> {
+		const folder = await Folder.load(folderId);
+		if (!folder) throw new Error(`No such folder: ${folderId}`);
+
+		const share = this.shares.find(s => s.type === ShareType.PublishedFolder && s.folder_id === folderId);
+		if (!share) throw new Error(`No published share for folder: ${folderId}`);
+
+		const remainingShares = this.shares.filter(s => s.id !== share.id);
+		const folderIds = [folderId, ...(await Folder.allChildrenFolders(folderId)).map(f => f.id)];
+		const folders = await Folder.loadItemsByIds(folderIds) as FolderEntity[];
+		const noteIds = (await Promise.all(folderIds.map(id => Folder.noteIds(id, { includeConflicts: true, includeDeleted: true })))).flat();
+		const notes = await Note.loadItemsByIds(noteIds) as NoteEntity[];
+		const directlyPublishedNoteIds = new Set(remainingShares
+			.filter(s => s.type === ShareType.Note && !!s.note_id)
+			.map(s => s.note_id));
+
+		for (const folderItem of folders) {
+			await Folder.updateShareStatus({ ...folderItem, type_: ModelType.Folder }, false);
+		}
+
+		for (const note of notes) {
+			await Note.updateShareStatus({ ...note, type_: ModelType.Note }, directlyPublishedNoteIds.has(note.id));
+		}
+
+		await Folder.updateAllShareIds(ResourceService.instance(), remainingShares);
+
+		// Clean local state first so next sync can recover if deletion stops midway
+		await this.deleteShare(share.id);
+		await this.refreshShares();
+	}
+
 	public async unshareNote(noteId: string) {
 		const note = await Note.load(noteId);
 		if (!note) throw new Error(`No such note: ${noteId}`);
 
-		const shares = await this.refreshShares();
-		const noteShares = shares.filter(s => s.note_id === noteId);
+		const noteShares = (await this.loadSharesByItem(noteId))
+			.filter(s => s.type === ShareType.Note);
 
 		const promises: Promise<void>[] = [];
 
@@ -333,7 +383,7 @@ export default class ShareService {
 	}
 
 	public folderShare(folderId: string): StateShare {
-		return this.shares.find(s => s.folder_id === folderId);
+		return this.shares.find(s => s.type === ShareType.Folder && s.folder_id === folderId);
 	}
 
 	public isSharedFolderOwner(folderId: string, userId: string = null): boolean {
@@ -397,12 +447,56 @@ export default class ShareService {
 		await this.api().exec('DELETE', `api/shares/${shareId}`);
 	}
 
+	public async isPublished(item: NoteEntity|FolderEntity, shares: StateShare[]) {
+		// Try to determine whether the item is published without doing a network request:
+		const isPublishedItemShare = (s: StateShare) => s.type === ShareType.Note || s.type === ShareType.PublishedFolder;
+		if (shares.some(s => (
+			isPublishedItemShare(s) &&
+			(s.folder_id === item.id || s.note_id === item.id)
+		))) {
+			return true;
+		}
+
+		// In some cases, an item can have is_shared = 1, but no share in `shares`. In this case,
+		// either the item has been unpublished remotely and not yet synced, or the item was published
+		// by another user. Send a network request to determine whether the item is actually published:
+		if (item.is_shared) {
+			const shares = (await this.loadSharesByItem(item.id))
+				.filter(isPublishedItemShare);
+			return shares.length > 0;
+		}
+
+		return false;
+	}
+
+	private async loadSharesByItem(itemId: string) {
+		const shares = await this.api().exec('GET', 'api/shares', { item: itemId });
+		if (!Array.isArray(shares?.items)) throw new Error(`Invalid response: Shares list is not an array. Was ${typeof shares?.items}.`);
+
+		const items: StateShare[] = shares.items.filter(
+			// For compatibility with older server versions that don't support search
+			(i: StateShare) => (
+				(i.type === ShareType.Note && i.note_id === itemId)
+				|| (i.type === ShareType.PublishedFolder && i.folder_id === itemId)
+				|| (i.type === ShareType.Folder && i.folder_id === itemId)
+			),
+		);
+		return items;
+	}
+
 	private async loadShares() {
 		return this.api().exec('GET', 'api/shares');
 	}
 
 	private async loadShareUsers(shareId: string) {
 		return this.api().exec('GET', `api/shares/${shareId}/users`);
+	}
+
+	// Team member email autocomplete when sharing a notebook (Joplin Cloud / Teams).
+	public async loadTeamUsers(teamId: string, userEmailSearch: string): Promise<ApiTeamUsers> {
+		return this.api().exec('GET', `api/teams/${encodeURIComponent(teamId)}/users`, {
+			user_email_search: userEmailSearch,
+		});
 	}
 
 	private async loadShareInvitations() {
@@ -560,6 +654,8 @@ export default class ShareService {
 	private async updateNoLongerSharedItems() {
 		const shareIds = this.shares.map(share => share.id).concat(this.shareInvitations.map(si => si.share.id));
 		await Folder.updateNoLongerSharedItems(shareIds);
+		await Folder.updateNoLongerPublishedFolders(this.shares);
+		await Note.updateNoLongerPublishedNotes(this.shares);
 	}
 
 	public async maintenance() {

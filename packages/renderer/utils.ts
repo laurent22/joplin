@@ -1,7 +1,7 @@
 import { attributesHtml } from './htmlUtils';
 import { ItemIdToUrlHandler, OptionsResourceModel, ResourceInfo, ResourceInfos } from './types';
 
-const Entities = require('html-entities').AllHtmlEntities;
+import { AllHtmlEntities as Entities } from 'html-entities';
 const htmlentities = new Entities().encode;
 
 // Imported from models/Resource.js
@@ -12,7 +12,7 @@ const FetchStatuses = {
 	FETCH_STATUS_ERROR: 3,
 };
 
-export const getAttr = function(attrs: string[], name: string, defaultValue: string = null) {
+export const getAttr = function(attrs: [string, string][], name: string, defaultValue: string = null) {
 	for (let i = 0; i < attrs.length; i++) {
 		if (attrs[i][0] === name) return attrs[i].length > 1 ? attrs[i][1] : null;
 	}

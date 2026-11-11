@@ -31,6 +31,7 @@ import ListItemWrapper, { ItemSelectionState } from '../listItemComponents/ListI
 import { focus } from '@joplin/lib/utils/focusHandler';
 import shim from '@joplin/lib/shim';
 import useOnItemClick from './useOnItemClick';
+import { ShareType, StateShare } from '@joplin/lib/services/share/reducer';
 
 const Menu = bridge().Menu;
 const MenuItem: typeof MenuItemType = bridge().MenuItem;
@@ -41,6 +42,7 @@ interface Props {
 	dispatch: Dispatch;
 	themeId: number;
 	plugins: PluginStates;
+	shares: StateShare[];
 	folders: FolderEntity[];
 	collapsedFolderIds: string[];
 	containerRef: React.RefObject<HTMLDivElement>;
@@ -255,6 +257,8 @@ const useOnRenderItem = (props: Props) => {
 				if (shareFolderItem.enabled) menu.append(shareFolderItem);
 				const leaveSharedFolderItem = folderCommandToMenuItem('leaveSharedFolder', itemId);
 				if (leaveSharedFolderItem.enabled) menu.append(leaveSharedFolderItem);
+				const publishFolderItem = folderCommandToMenuItem('showPublishFolderDialog', itemId);
+				if (publishFolderItem.enabled) menu.append(publishFolderItem);
 
 				menu.append(
 					new MenuItem({
@@ -382,6 +386,20 @@ const useOnRenderItem = (props: Props) => {
 	const showFolderIcons = useMemo(() => {
 		return Folder.shouldShowFolderIcons(props.folders);
 	}, [props.folders]);
+	const publishedFolderIds = useMemo(() => {
+		const output = new Set(props.shares.filter(share => share.type === ShareType.PublishedFolder).map(share => share.folder_id));
+		for (const folder of props.folders) {
+			if (folder.is_shared && !folder.share_id) output.add(folder.id);
+		}
+		let size = 0;
+		while (size !== output.size) {
+			size = output.size;
+			for (const folder of props.folders) {
+				if (output.has(folder.parent_id)) output.add(folder.id);
+			}
+		}
+		return output;
+	}, [props.folders, props.shares]);
 
 	const itemCount = props.listItems.length;
 	return useCallback((item: ListItem, index: number) => {
@@ -418,8 +436,7 @@ const useOnRenderItem = (props: Props) => {
 		} else if (item.kind === ListItemType.Folder) {
 			const folder = item.folder;
 			const isExpanded = props.collapsedFolderIds.indexOf(folder.id) < 0;
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			let noteCount = (folder as any).note_count;
+			let noteCount = (folder as FolderEntity & { note_count?: number }).note_count;
 
 			// For now hide the count for folders in the trash because it doesn't work and getting it to
 			// work would be tricky.
@@ -429,8 +446,7 @@ const useOnRenderItem = (props: Props) => {
 			if (isExpanded) {
 				for (let i = 0; i < props.folders.length; i++) {
 					if (props.folders[i].parent_id === folder.id) {
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-						noteCount -= (props.folders[i] as any).note_count;
+						noteCount -= (props.folders[i] as FolderEntity & { note_count?: number }).note_count;
 					}
 				}
 			}
@@ -452,6 +468,7 @@ const useOnRenderItem = (props: Props) => {
 				folderItem_click={onItemClick}
 				onFolderToggleClick_={onFolderToggleClick_}
 				shareId={folder.share_id}
+				isPublished={publishedFolderIds.has(folder.id)}
 				parentId={folder.parent_id}
 				showFolderIcon={showFolderIcons}
 				index={index}
@@ -505,6 +522,7 @@ const useOnRenderItem = (props: Props) => {
 		onTagDrop_,
 		props.collapsedFolderIds,
 		props.folders,
+		publishedFolderIds,
 		showFolderIcons,
 		props.selectedIndex,
 		props.selectedIndexes,

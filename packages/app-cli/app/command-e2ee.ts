@@ -1,4 +1,4 @@
-const BaseCommand = require('./base-command').default;
+import BaseCommand from './base-command';
 import { _ } from '@joplin/lib/locale';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
@@ -30,12 +30,10 @@ class Command extends BaseCommand {
 		];
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async action(args: any) {
+	public async action(args: { command: string; path?: string; options: { password?: string; verbose?: boolean; output?: string; 'retry-failed-items'?: boolean; force?: boolean } }) {
 		const options = args.options;
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const askForMasterKey = async (error: any) => {
+		const askForMasterKey = async (error: { masterKeyId: string }) => {
 			const masterKeyId = error.masterKeyId;
 			const password = await this.prompt(_('Enter master password:'), { type: 'string', secure: true });
 			if (!password) {

@@ -62,10 +62,8 @@ describe('LockModel', () => {
 	test('should validate locks', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		await expectHttpError(async () => models().lock().acquireLock(user1.id, 'wrongtype' as any, LockClientType.Desktop, '1111'), ErrorUnprocessableEntity.httpCode);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		await expectHttpError(async () => models().lock().acquireLock(user1.id, LockType.Exclusive, 'wrongclienttype' as any, '1111'), ErrorUnprocessableEntity.httpCode);
+		await expectHttpError(async () => models().lock().acquireLock(user1.id, 'wrongtype' as unknown as LockType, LockClientType.Desktop, '1111'), ErrorUnprocessableEntity.httpCode);
+		await expectHttpError(async () => models().lock().acquireLock(user1.id, LockType.Exclusive, 'wrongclienttype' as unknown as LockClientType, '1111'), ErrorUnprocessableEntity.httpCode);
 		await expectHttpError(async () => models().lock().acquireLock(user1.id, LockType.Exclusive, LockClientType.Desktop, 'veryverylongclientidveryverylongclientidveryverylongclientidveryverylongclientid'), ErrorUnprocessableEntity.httpCode);
 	});
 
@@ -91,6 +89,21 @@ describe('LockModel', () => {
 		expect(lock1.id).not.toBe(lock2.id);
 
 		jest.useRealTimers();
+	});
+
+	test.each([
+		['an array', ['a', 'b']],
+		['an object with a length', { length: 10 }],
+		['a string with unexpected characters', 'a_b'],
+	])('should reject a client ID that is %s', async (_case, clientId) => {
+		const { user } = await createUserAndSession(1);
+		await expectHttpError(async () => models().lock().acquireLock(user.id, LockType.Sync, LockClientType.Desktop, clientId as unknown as string), ErrorUnprocessableEntity.httpCode);
+	});
+
+	test('should limit the number of sync locks per user', async () => {
+		const { user } = await createUserAndSession(1);
+		for (let i = 0; i < 50; i++) await models().lock().acquireLock(user.id, LockType.Sync, LockClientType.Desktop, `client${i}`);
+		await expectHttpError(async () => models().lock().acquireLock(user.id, LockType.Sync, LockClientType.Desktop, 'client50'), ErrorConflict.httpCode);
 	});
 
 });

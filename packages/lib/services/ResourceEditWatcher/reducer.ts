@@ -5,7 +5,7 @@ export const defaultState = {
 	watchedResources: {},
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Redux reducer composed across app-desktop/app-mobile with different state shapes; action types are heterogeneous
 const reducer = produce((draft: Draft<any>, action: any) => {
 	if (action.type.indexOf('RESOURCE_EDIT_WATCHER_') !== 0) return;
 

@@ -10,15 +10,20 @@ import Note from '../../models/Note';
 import Tag from '../../models/Tag';
 const { sprintf } = require('sprintf-js');
 import shim from '../../shim';
-const { fileExtension } = require('../../path-utils');
+import { Stat } from '../../fs-driver-base';
+import { ResourceEntity } from '../database/types';
+import { MasterKeyEntity } from '../e2ee/types';
+import { fileExtension } from '../../path-utils';
 import uuid from '../../uuid';
+import isNoteLockEnabled from '../noteLock/isNoteLockEnabled';
+import NoteLockService from '../noteLock/NoteLockService';
+import NoteLockSession from '../noteLock/NoteLockSession';
+import NoteLockKey, { DecryptedNoteLockKey, noteLockKeyFileName } from '../noteLock/NoteLockKey';
 
 export default class InteropService_Importer_Raw extends InteropService_Importer_Base {
 	public async exec(result: ImportExportResult) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const itemIdMap: any = {};
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const createdResources: any = {};
+		const itemIdMap: Record<string, string> = {};
+		const createdResources: Record<string, ResourceEntity> = {};
 		const noteTagsToCreate = [];
 		const destinationFolderId = this.options_.destinationFolderId;
 
@@ -37,8 +42,25 @@ export default class InteropService_Importer_Raw extends InteropService_Importer
 
 		const stats = await shim.fsDriver().readDirStats(this.sourcePath_);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const folderExists = function(stats: any[], folderId: string) {
+		// A backup with locked notes carries their encrypted key (see the raw exporter).
+		let importNoteLockKey: DecryptedNoteLockKey = null;
+		let undecryptableNotes = 0;
+		if (isNoteLockEnabled() && await shim.fsDriver().exists(`${this.sourcePath_}/${noteLockKeyFileName}`)) {
+			const keyFile: MasterKeyEntity = JSON.parse(await shim.fsDriver().readFile(`${this.sourcePath_}/${noteLockKeyFileName}`));
+			const profileKeyId = NoteLockKey.instance().load()?.id;
+			if (keyFile?.id && this.options_.onNoteLockKey) {
+				importNoteLockKey = await this.options_.onNoteLockKey(keyFile);
+			} else if (keyFile?.id && !profileKeyId) {
+				// Without a handler, as for the CLI, nothing can update the notes.
+				result.warnings.push('The locked notes in this backup cannot be read, because no note lock key has been set up on this profile');
+			} else if (keyFile?.id && keyFile.id !== profileKeyId) {
+				result.warnings.push('The locked notes in this backup have not been migrated to the current note lock key and will be unreadable');
+			}
+		}
+		// Captured once the prompts have unlocked the session, so locking it partway through does not fail the remaining notes.
+		const profileNoteLockKey = importNoteLockKey ? NoteLockSession.instance().decryptedKey() : null;
+
+		const folderExists = function(stats: Stat[], folderId: string) {
 			folderId = folderId.toLowerCase();
 			for (let i = 0; i < stats.length; i++) {
 				const stat = stats[i];
@@ -48,8 +70,7 @@ export default class InteropService_Importer_Raw extends InteropService_Importer
 			return false;
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		let defaultFolder_: any = null;
+		let defaultFolder_: import('../database/types').FolderEntity | null = null;
 		const defaultFolder = async () => {
 			if (defaultFolder_) return defaultFolder_;
 			const folderTitle = await Folder.findUniqueItemTitle(this.options_.defaultFolderTitle ? this.options_.defaultFolderTitle : 'Imported', '');
@@ -89,6 +110,7 @@ export default class InteropService_Importer_Raw extends InteropService_Importer
 				const item = await BaseItem.unserialize(content);
 				const itemType = item.type_;
 				const ItemClass = BaseItem.itemClass(item);
+				let useNoteLockSave = false;
 
 				delete item.type_;
 
@@ -99,6 +121,26 @@ export default class InteropService_Importer_Raw extends InteropService_Importer
 					item.id = itemIdMap[item.id];
 					item.parent_id = itemIdMap[item.parent_id];
 					item.body = await replaceLinkedItemIds(item.body);
+
+					if (isNoteLockEnabled() && item.is_locked) {
+						// The linked id rewrite cannot reach a ciphertext body, so remap the extracted
+						// list instead, keeping the imported resources safe from orphan cleanup.
+						item.extracted_resource_ids = Note.serializeExtractedResourceIds(Note.unserializeExtractedResourceIds(item.extracted_resource_ids).map(id => {
+							if (!itemIdMap[id]) itemIdMap[id] = uuid.create();
+							return itemIdMap[id];
+						}));
+						if (importNoteLockKey) {
+							try {
+								const plainBody = await NoteLockService.withDecryptedKey(scoped => scoped.decryptString(item.body), importNoteLockKey);
+								item.body = await replaceLinkedItemIds(plainBody);
+								// Marked like a gated load, so a save after the feature is turned off fails instead of writing it as plain text.
+								item.isDecrypted = true;
+								useNoteLockSave = true;
+							} catch {
+								undecryptableNotes++;
+							}
+						}
+					}
 				} else if (itemType === BaseModel.TYPE_FOLDER) {
 					if (destinationFolderId) continue;
 
@@ -140,12 +182,18 @@ export default class InteropService_Importer_Raw extends InteropService_Importer
 					continue;
 				}
 
-				await ItemClass.save(item, { isNew: true, autoTimestamp: false });
+				await ItemClass.save(item, { isNew: true, autoTimestamp: false, useNoteLock: useNoteLockSave, noteLockKey: profileNoteLockKey });
 			} catch (error) {
+				if (error.code === 'malformedItem') {
+					result.warnings.push(sprintf('Skipped malformed item: %s: %s', stat.path, error.message));
+					continue;
+				}
 				error.message = `Could not import: ${stat.path}: ${error.message}`;
 				throw error;
 			}
 		}
+
+		if (undecryptableNotes) result.warnings.push(`${undecryptableNotes} locked note(s) could not be unlocked with the provided key and were imported unchanged`);
 
 		for (let i = 0; i < noteTagsToCreate.length; i++) {
 			const noteTag = noteTagsToCreate[i];

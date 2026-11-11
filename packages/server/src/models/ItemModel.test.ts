@@ -6,8 +6,11 @@ import { StorageDriverType } from '../utils/types';
 import config from '../config';
 import { msleep } from '../utils/time';
 import loadStorageDriver from './items/storage/loadStorageDriver';
-import { ErrorPayloadTooLarge } from '../utils/errors';
+import { ErrorPayloadTooLarge, ErrorUnprocessableEntity } from '../utils/errors';
+import { makeNoteSerializedBody } from '../utils/testing/serializedItems';
 import { isSqlite } from '../db';
+import { ModelType } from '@joplin/lib/BaseModel';
+import { Item } from '../services/database/types';
 
 describe('ItemModel', () => {
 
@@ -221,6 +224,27 @@ describe('ItemModel', () => {
 		expect((await models().user().load(user1.id)).total_item_size).toBe(folder1.content_size);
 	});
 
+	test('should load a shared item with its content once, whatever the number of users who have it', async () => {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+
+		await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [
+					{
+						id: '00000000000000000000000000000001',
+					},
+				],
+			},
+		]);
+
+		const note = await models().item().loadByJopId(user1.id, '00000000000000000000000000000001');
+		const items = await models().item().loadWithContentMulti([note.id]);
+		expect(items.length).toBe(1);
+		expect(items[0].content.length).toBeGreaterThan(0);
+	});
+
 	test('should include shared items in total size calculation', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
@@ -290,6 +314,42 @@ describe('ItemModel', () => {
 		models = newModelFactory(db(), dbSlave(), config());
 
 		await expectNotThrow(async () => models.item().loadWithContent(item.id));
+	});
+
+	test('should reject Joplin items whose fields contain a null byte', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+		const factory = newModelFactory(db(), dbSlave(), config());
+
+		const nul = String.fromCharCode(0);
+		const noteId = '00000000000000000000000000000001';
+		const body = makeNoteSerializedBody({
+			id: noteId,
+			title: 'topology',
+			body: `Just a body with a null byte${nul} in the middle`,
+		});
+
+		const result = await factory.item().saveFromRawContent(user1, {
+			name: `${noteId}.md`,
+			body: Buffer.from(body),
+		});
+
+		expect(result[`${noteId}.md`].error).toBeTruthy();
+		expect(result[`${noteId}.md`].error.httpCode).toBe(ErrorUnprocessableEntity.httpCode);
+		expect(result[`${noteId}.md`].error.message).toMatch(/null byte/);
+	});
+
+	test('should accept non-Joplin binary uploads containing a null byte', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+		const factory = newModelFactory(db(), dbSlave(), config());
+
+		const nul = String.fromCharCode(0);
+		const result = await factory.item().saveFromRawContent(user1, {
+			name: 'binary.bin',
+			body: Buffer.from(`some${nul}bytes`),
+		});
+
+		expect(result['binary.bin'].error).toBeNull();
+		expect(result['binary.bin'].item).toBeTruthy();
 	});
 
 	const setupImportContentTest = async () => {
@@ -548,6 +608,30 @@ describe('ItemModel', () => {
 		expect((await models().userItem().byUserId(user2.id)).length).toBe(1);
 	});
 
+	test('should process orphaned items in batches', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+
+		await createItemTree3(user1.id, '', '', [
+			{ id: '000000000000000000000000000000F1' },
+			{ id: '000000000000000000000000000000F2' },
+			{ id: '000000000000000000000000000000F3' },
+			{ id: '000000000000000000000000000000F4' },
+			{ id: '000000000000000000000000000000F5' },
+		]);
+
+		await db()('user_items').where('user_id', '=', user1.id).delete();
+
+		expect(await models().item().count()).toBe(5);
+		expect(await models().userItem().count()).toBe(0);
+
+		// Process with batch size of 2 - should require 3 batches to process all 5 items
+		await models().item().processOrphanedItems({ batchSize: 2 });
+
+		expect(await models().item().count()).toBe(5);
+		expect(await models().userItem().count()).toBe(5);
+		expect((await models().userItem().byUserId(user1.id)).length).toBe(5);
+	});
+
 	test('should return multiple item contents', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 
@@ -583,6 +667,43 @@ describe('ItemModel', () => {
 		})()).rejects.toThrow();
 
 		await models().item().delete('00000000000000000000000000000003', { allowNoOp: true });
+	});
+
+	test('itemToJoplinItem should default deleted_time to 0 when the item content has none', async () => {
+		const makeRow = (content: object): Item => ({
+			jop_type: ModelType.Note,
+			content: Buffer.from(JSON.stringify(content)),
+		});
+
+		const oldNote = models().item().itemToJoplinItem(makeRow({ type_: ModelType.Note, title: 'Ping' }));
+		expect(oldNote.deleted_time).toBe(0);
+
+		const trashedNote = models().item().itemToJoplinItem(makeRow({ type_: ModelType.Note, title: 'Ping', deleted_time: 123 }));
+		expect(trashedNote.deleted_time).toBe(123);
+	});
+
+	test('should update the item when it was created by a concurrent request', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+
+		// Simulates a client retrying an upload while the original request is still being
+		// processed: the item does not exist when the caller checks for it, but does by the
+		// time it is inserted.
+		await models().item().saveForUser(user1.id, {
+			name: 'test.txt',
+			content: Buffer.from('original'),
+		});
+
+		const savedItem = await models().item().saveForUser(user1.id, {
+			name: 'test.txt',
+			content: Buffer.from('retried'),
+		});
+
+		const allItems = await models().item().all();
+		expect(allItems.length).toBe(1);
+		expect(savedItem.id).toBe(allItems[0].id);
+
+		const content = await models().item().loadWithContent(savedItem.id);
+		expect(content.content.toString()).toBe('retried');
 	});
 
 });

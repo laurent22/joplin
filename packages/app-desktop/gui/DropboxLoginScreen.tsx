@@ -1,21 +1,28 @@
 import * as React from 'react';
+import { Dispatch } from 'redux';
 import ButtonBar from './ConfigScreen/ButtonBar';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../services/bridge';
 
-const { connect } = require('react-redux');
-const { themeStyle } = require('@joplin/lib/theme');
-const Shared = require('@joplin/lib/components/shared/dropbox-login-shared');
+import { connect } from 'react-redux';
+import { themeStyle } from '@joplin/lib/theme';
+import Shared from '@joplin/lib/components/shared/dropbox-login-shared';
 
 interface Props {
 	themeId: number;
+	style: { width: number; height: number };
+	dispatch: Dispatch;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-class DropboxLoginScreenComponent extends React.Component<any, any> {
+interface State {
+	loginUrl: string;
+	authCode: string;
+	checkingAuthToken: boolean;
+}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private shared_: any;
+class DropboxLoginScreenComponent extends React.Component<Props, State> {
+
+	private shared_: Shared<DropboxLoginScreenComponent>;
 
 	public constructor(props: Props) {
 		super(props);
@@ -24,7 +31,7 @@ class DropboxLoginScreenComponent extends React.Component<any, any> {
 	}
 
 	public UNSAFE_componentWillMount() {
-		this.shared_.refreshUrl();
+		void this.shared_.refreshUrl();
 	}
 
 	public render() {

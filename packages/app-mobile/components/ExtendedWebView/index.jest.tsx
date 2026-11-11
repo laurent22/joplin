@@ -57,6 +57,15 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 	useEffect(() => {
 		// JSDOM polyfills
 		dom.window.eval(polyfillScrollFunctions);
+		dom.window.eval(`
+			// JSDOM does not implement ResizeObserver. Observer behaviour is covered by
+			// the initializeDialogWebView unit tests.
+			window.ResizeObserver ??= class ResizeObserver {
+				observe() {}
+				unobserve() {}
+				disconnect() {}
+			};
+		`);
 
 		dom.window.eval(`
 			// JSDOM iframes are missing certain functionality required by Joplin,
@@ -105,7 +114,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 		dom.window.setWebViewApi({
 			postMessage: (message: unknown) => {
 				logger.debug('Got message', message);
-				onMessageRef.current({ nativeEvent: { data: message } });
+				onMessageRef.current({ nativeEvent: { data: message as string } });
 			},
 		});
 
@@ -128,8 +137,8 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 		onLoadEndRef.current?.();
 	}, [dom]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- HACK: Allow wrapper testing logic to access the DOM.
-	const additionalProps: any = { window: dom?.window };
+	// HACK: Allow wrapper testing logic to access the DOM.
+	const additionalProps: Record<string, unknown> = { window: dom?.window };
 	return (
 		<View style={props.style} testID={props.testID} {...additionalProps}/>
 	);

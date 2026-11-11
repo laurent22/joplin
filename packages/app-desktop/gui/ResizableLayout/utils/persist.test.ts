@@ -42,8 +42,7 @@ describe('persist', () => {
 	});
 
 	test('should load a layout', () => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const layout: any = {
+		const layout: LayoutItem = {
 			key: 'root',
 			children: [
 				{

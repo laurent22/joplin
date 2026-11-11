@@ -12,9 +12,9 @@ import time from '@joplin/lib/time';
 import bridge from '../services/bridge';
 import { NoteEntity, RevisionEntity } from '@joplin/lib/services/database/types';
 import { AppState } from '../app.reducer';
-const urlUtils = require('@joplin/lib/urlUtils');
+import * as urlUtils from '@joplin/lib/urlUtils';
 const ReactTooltip = require('react-tooltip');
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 import shared from '@joplin/lib/components/shared/note-screen-shared';
 import getHelpMessage from '@joplin/lib/components/shared/NoteRevisionViewer/getHelpMessage';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
@@ -27,6 +27,11 @@ import { focus } from '@joplin/lib/utils/focusHandler';
 import useDeleteHistoryClick from '@joplin/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick';
 import { getGlobalSettings } from '@joplin/renderer/types';
 import Setting from '@joplin/lib/models/Setting';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
+import NoteLockService from '@joplin/lib/services/noteLock/NoteLockService';
+import NoteLockPanel from './NoteEditor/NoteLockPanel/NoteLockPanel';
+import hasNoteLockKey from './utils/hasNoteLockKey';
+import { Dispatch } from 'redux';
 
 interface Props {
 	themeId: number;
@@ -36,6 +41,9 @@ interface Props {
 	scrollbarSize: ScrollbarSize;
 	fontFamily: string;
 	showNoteLinkIcon: boolean;
+	noteLockSessionUnlocked: boolean;
+	hasNoteLockKey: boolean;
+	dispatch: Dispatch;
 }
 
 const useNoteContent = (
@@ -47,8 +55,13 @@ const useNoteContent = (
 	scrollbarSize: ScrollbarSize,
 	fontFamily: string,
 	showNoteLinkIcon: boolean,
+	canDecrypt: boolean,
 ) => {
 	const [note, setNote] = useState<NoteEntity>(null);
+	// The revision note as merged from the diffs, with a locked body still encrypted. Restoring
+	// this keeps the restored copy a valid locked note, so it is never decrypted for restore.
+	const [restoreNote, setRestoreNote] = useState<NoteEntity>(null);
+	const [decryptFailed, setDecryptFailed] = useState(false);
 
 	const markupToHtml = useMarkupToHtml({
 		themeId,
@@ -60,15 +73,37 @@ const useNoteContent = (
 	});
 
 	useAsyncEffect(async (event) => {
+		// Cleared before the load so a switch never keeps the previous revision's failure or restore target.
+		setRestoreNote(null);
+		setDecryptFailed(false);
 		if (!revisions.length || !currentRevId) {
 			setNote(null);
 		} else {
 			const revIndex = BaseModel.modelIndexById(revisions, currentRevId);
 			const note = await RevisionService.instance().revisionNote(revisions, revIndex);
 			if (!note || event.cancelled) return;
-			setNote(note);
+			if (isNoteLockEnabled() && revisions[revIndex].is_locked) {
+				// A revision is a JSON diff object, so a gated load is not possible: the diffs are
+				// merged first and the resulting body is decrypted manually here.
+				let displayBody = '';
+				let failed = false;
+				if (canDecrypt) {
+					try {
+						displayBody = await NoteLockService.instance().decryptString(note.body ?? '');
+					} catch (error) {
+						console.warn('Could not decrypt revision content:', error);
+						failed = true;
+					}
+					if (event.cancelled) return;
+				}
+				setDecryptFailed(failed);
+				setNote({ ...note, body: displayBody });
+			} else {
+				setNote(note);
+			}
+			setRestoreNote(note);
 		}
-	}, [revisions, currentRevId, themeId, customCss, viewerRef]);
+	}, [revisions, currentRevId, themeId, customCss, viewerRef, canDecrypt]);
 
 	useQueuedAsyncEffect(async () => {
 		const noteBody = note?.body ?? _('This note has no history');
@@ -85,10 +120,10 @@ const useNoteContent = (
 		});
 	}, [note, viewerRef, markupToHtml, showNoteLinkIcon]);
 
-	return note;
+	return { note, restoreNote, decryptFailed };
 };
 
-const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack, customCss, scrollbarSize, fontFamily, showNoteLinkIcon }) => {
+const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack, customCss, scrollbarSize, fontFamily, showNoteLinkIcon, noteLockSessionUnlocked, hasNoteLockKey, dispatch }) => {
 	const helpButton_onClick = useCallback(() => {}, []);
 	const viewerRef = useRef<NoteViewerControl|null>(null);
 	const revisionListRef = useRef<HTMLSelectElement|null>(null);
@@ -98,8 +133,9 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 	const [restoring, setRestoring] = useState(false);
 	const [deleting, setDeleting] = useState(false);
 
-	const note = useNoteContent(
-		viewerRef, currentRevId, revisions, themeId, customCss, scrollbarSize, fontFamily, showNoteLinkIcon,
+	const canDecrypt = noteLockSessionUnlocked && hasNoteLockKey;
+	const { note, restoreNote, decryptFailed } = useNoteContent(
+		viewerRef, currentRevId, revisions, themeId, customCss, scrollbarSize, fontFamily, showNoteLinkIcon, canDecrypt,
 	);
 
 	const viewer_domReady = useCallback(async () => {
@@ -112,12 +148,12 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 	}, [noteId]);
 
 	const importButton_onClick = useCallback(async () => {
-		if (!note) return;
+		if (!restoreNote) return;
 		setRestoring(true);
-		await RevisionService.instance().importRevisionNote(note);
+		await RevisionService.instance().importRevisionNote(restoreNote);
 		setRestoring(false);
-		await shim.showMessageBox(RevisionService.instance().restoreSuccessMessage(note), { type: MessageBoxType.Info });
-	}, [note]);
+		await shim.showMessageBox(RevisionService.instance().restoreSuccessMessage(restoreNote), { type: MessageBoxType.Info });
+	}, [restoreNote]);
 
 	const resetScreenState = useCallback(() => {
 		setRevisions([]);
@@ -134,7 +170,6 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 		if (onBack) onBack();
 	}, [onBack]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const revisionList_onChange: React.ChangeEventHandler<HTMLSelectElement> = useCallback((event) => {
 		const value = event.target.value;
 
@@ -145,8 +180,7 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 		}
 	}, [onBack]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const webview_ipcMessage = useCallback(async (event: any) => {
+	const webview_ipcMessage = useCallback(async (event: { channel?: string; args?: unknown[] }) => {
 		// For the revision view, we only support a minimal subset of the IPC messages.
 		// For example, we don't need interactive checkboxes or sync between viewer and editor view.
 		// We try to get most links work though, except for internal (joplin://) links.
@@ -190,6 +224,9 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 		);
 	}
 
+	const revisionLocked = isNoteLockEnabled() && revisions.some(r => r.id === currentRevId && !!r.is_locked);
+	const showLockPanel = revisionLocked && (!canDecrypt || decryptFailed);
+
 	const restoreButtonTitle = _('Restore');
 	const deleteHistoryButtonTitle = _('Delete history');
 	const helpMessage = getHelpMessage(restoreButtonTitle);
@@ -203,7 +240,7 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 			<select disabled={!revisions.length} value={currentRevId} className='revisions' style={theme.dropdownList} onChange={revisionList_onChange} ref={revisionListRef}>
 				{revisionListItems}
 			</select>
-			<button disabled={!revisions.length || restoring} onClick={importButton_onClick} className='restore'style={{ ...theme.buttonStyle, marginLeft: 10, height: theme.inputStyle.height }}>
+			<button disabled={!restoreNote || restoring || showLockPanel} onClick={importButton_onClick} className='restore'style={{ ...theme.buttonStyle, marginLeft: 10, height: theme.inputStyle.height }}>
 				{restoreButtonTitle}
 			</button>
 			<button disabled={!revisions.length || deleting} onClick={deleteHistoryButton_onClick} className='deleteHistory'style={{ ...theme.buttonStyle, marginLeft: 10, height: theme.inputStyle.height }}>
@@ -213,7 +250,8 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 		</div>
 	);
 
-	const viewer = <NoteTextViewer themeId={themeId} viewerStyle={{ display: 'flex', flex: 1, borderLeft: 'none' }} ref={viewerRef} onDomReady={viewer_domReady} onIpcMessage={webview_ipcMessage} />;
+	// The viewer stays mounted while the lock panel shows because its dom-ready event loads the revision list.
+	const viewer = <NoteTextViewer themeId={themeId} viewerStyle={{ display: showLockPanel ? 'none' : 'flex', flex: 1, borderLeft: 'none' }} ref={viewerRef} onDomReady={viewer_domReady} onIpcMessage={webview_ipcMessage} />;
 
 	useEffect(() => {
 		// We need to force focus here because otherwise the focus is lost and goes back
@@ -224,6 +262,12 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 	return (
 		<div className='revision-viewer-root'>
 			{titleInput}
+			{showLockPanel ? <NoteLockPanel
+				noteTitle={note?.title ?? ''}
+				hasNoteLockKey={hasNoteLockKey}
+				dispatch={dispatch}
+				undecryptable={decryptFailed && noteLockSessionUnlocked}
+			/> : null}
 			{viewer}
 			<ReactTooltip place="bottom" delayShow={300} className="help-tooltip" />
 		</div>
@@ -236,6 +280,8 @@ const mapStateToProps = (state: AppState) => {
 		scrollbarSize: state.settings['style.scrollbarSize'],
 		fontFamily: state.settings['style.viewer.fontFamily'],
 		showNoteLinkIcon: state.settings['notes.showNoteLinkIcon'],
+		noteLockSessionUnlocked: state.noteLockSessionUnlocked,
+		hasNoteLockKey: hasNoteLockKey(state.settings['syncInfoCache']),
 	};
 };
 

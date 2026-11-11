@@ -7,8 +7,8 @@ import { _ } from '@joplin/lib/locale';
 
 const getWebViewVersionText = () => {
 	if (Platform.OS === 'android') {
-		// SystemVersionInformationModule is unavailable on older versions of Android.
-		const constants = NativeModules.SystemVersionInformationModule?.getConstants();
+		// SystemInformationPackage is unavailable on older versions of Android.
+		const constants = NativeModules.SystemInformationPackage?.getConstants();
 		return [
 			_('WebView version: %s', constants?.webViewVersion ?? _('Unknown')),
 			_('WebView package: %s', constants?.webViewPackage ?? _('Unknown')),
@@ -45,8 +45,7 @@ const getVersionInfoText = (pluginStates: PluginSettings) => {
 
 	versionInfoLines.push(
 		_('FTS enabled: %d', Setting.value('db.ftsEnabled')),
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partially refactored old code before rule was applied
-		_('Hermes enabled: %d', (global as any).HermesInternal ? 1 : 0),
+		_('Hermes enabled: %d', (global as { HermesInternal?: unknown }).HermesInternal ? 1 : 0),
 	);
 
 	return versionInfoLines.join('\n');

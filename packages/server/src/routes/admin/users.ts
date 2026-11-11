@@ -11,7 +11,7 @@ import { View } from '../../services/MustacheService';
 import defaultView from '../../utils/defaultView';
 import { AclAction } from '../../models/BaseModel';
 import { AccountType, accountTypeOptions, accountTypeToString } from '../../models/UserModel';
-import { uuidgen } from '@joplin/lib/uuid';
+import { uuidgen } from '../../utils/uuid';
 import { formatMaxItemSize, formatMaxTotalSize, formatTotalSize, formatTotalSizePercent, yesOrNo } from '../../utils/strings';
 import { getCanShareFolder, totalSizeClass } from '../../models/utils/user';
 import { yesNoDefaultOptions, yesNoOptions } from '../../utils/views/select';
@@ -24,6 +24,7 @@ import { userFlagToString } from '../../models/UserFlagModel';
 import { _ } from '@joplin/lib/locale';
 import { makeTablePagination, makeTableView, Row, Table } from '../../utils/views/table';
 import { PaginationOrderDir } from '../../models/utils/pagination';
+import checkCanCreateUser from '../utils/checkCanCreateUser';
 
 export interface CheckRepeatPasswordInput {
 	password: string;
@@ -41,29 +42,26 @@ export function checkRepeatPassword(fields: CheckRepeatPasswordInput, required: 
 	return '';
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function boolOrDefaultToValue(fields: any, fieldName: string): number | null {
+function boolOrDefaultToValue(fields: Record<string, unknown>, fieldName: string): number | null {
 	if (fields[fieldName] === '') return null;
 	const output = Number(fields[fieldName]);
 	if (isNaN(output) || (output !== 0 && output !== 1)) throw new Error(`Invalid value for ${fieldName}`);
 	return output;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function intOrDefaultToValue(fields: any, fieldName: string): number | null {
+function intOrDefaultToValue(fields: Record<string, unknown>, fieldName: string): number | null {
 	if (fields[fieldName] === '') return null;
 	const output = Number(fields[fieldName]);
 	if (isNaN(output)) throw new Error(`Invalid value for ${fieldName}`);
 	return output;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function makeUser(isNew: boolean, fields: any): User {
+function makeUser(isNew: boolean, fields: Record<string, unknown> & { id?: Uuid }): User {
 	const user: User = {};
 
-	if ('email' in fields) user.email = fields.email;
-	if ('full_name' in fields) user.full_name = fields.full_name;
-	if ('is_admin' in fields) user.is_admin = fields.is_admin;
+	if ('email' in fields) user.email = fields.email as string;
+	if ('full_name' in fields) user.full_name = fields.full_name as string;
+	if ('is_admin' in fields) user.is_admin = fields.is_admin as number;
 	if ('max_item_size' in fields) user.max_item_size = intOrDefaultToValue(fields, 'max_item_size');
 	if ('max_total_item_size' in fields) user.max_total_item_size = intOrDefaultToValue(fields, 'max_total_item_size');
 	if ('can_share_folder' in fields) user.can_share_folder = boolOrDefaultToValue(fields, 'can_share_folder');
@@ -71,7 +69,7 @@ function makeUser(isNew: boolean, fields: any): User {
 	if ('can_upload' in fields) user.can_upload = intOrDefaultToValue(fields, 'can_upload');
 	if ('account_type' in fields) user.account_type = Number(fields.account_type);
 
-	const password = checkRepeatPassword(fields, false);
+	const password = checkRepeatPassword(fields as unknown as CheckRepeatPasswordInput, false);
 	if (password) user.password = password;
 
 	if (!isNew) user.id = fields.id;
@@ -227,8 +225,7 @@ router.get('admin/users', async (_path: SubPath, ctx: AppContext) => {
 	return view;
 });
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-router.get('admin/users/:id', async (path: SubPath, ctx: AppContext, user: User = null, error: any = null) => {
+router.get('admin/users/:id', async (path: SubPath, ctx: AppContext, user: User = null, error: Error | null = null) => {
 	const owner = ctx.joplin.owner;
 	const isMe = userIsMe(path);
 	const isNew = userIsNew(path);
@@ -283,6 +280,7 @@ router.get('admin/users/:id', async (path: SubPath, ctx: AppContext, user: User 
 		view.content.subscription = subscription;
 		view.content.showManageSubscription = !isNew;
 		view.content.showUpdateSubscriptionBasic = !isNew && user.account_type !== AccountType.Basic;
+		view.content.showUpdateSubscriptionPro100Gb = !isNew && user.account_type !== AccountType.Pro100Gb;
 		view.content.showUpdateSubscriptionPro = !isNew && user.account_type !== AccountType.Pro;
 		view.content.subLastPaymentStatus = lastPaymentAttempt.status;
 		view.content.subLastPaymentDate = formatDateTime(lastPaymentAttempt.time);
@@ -304,8 +302,7 @@ router.get('admin/users/:id', async (path: SubPath, ctx: AppContext, user: User 
 
 	if (config().accountTypesEnabled) {
 		view.content.showAccountTypes = true;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		view.content.accountTypes = accountTypeOptions().map((o: any) => {
+		view.content.accountTypes = accountTypeOptions().map((o: { value: number; selected?: boolean }) => {
 			o.selected = user.account_type === o.value;
 			return o;
 		});
@@ -325,6 +322,7 @@ interface FormFields {
 	send_account_confirmation_email: string;
 	update_subscription_basic_button: string;
 	update_subscription_pro_button: string;
+	update_subscription_pro_100gb_button: string;
 	impersonate_button: string;
 	// stop_impersonate_button: string;
 	delete_user_flags: string;
@@ -344,18 +342,21 @@ router.post('admin/users', async (path: SubPath, ctx: AppContext) => {
 		const fields = body.fields as FormFields;
 		const isNew = userIsNew(path);
 		if (userIsMe(path)) fields.id = userId;
-		user = makeUser(isNew, fields);
+		user = makeUser(isNew, fields as unknown as Record<string, unknown> & { id?: Uuid });
 
 		const models = ctx.joplin.models;
 
 		if (fields.post_button) {
 			const userToSave: User = models.user().fromApiInput(user);
-			await models.user().checkIfAllowed(owner, isNew ? AclAction.Create : AclAction.Update, userToSave);
 
 			if (isNew) {
+				await checkCanCreateUser(ctx.joplin.services, ctx.joplin.models, ctx.joplin.owner);
+
 				const savedUser = await models.user().save(userToSave);
 				userId = savedUser.id;
 			} else {
+				await models.user().checkIfAllowed(owner, AclAction.Update, userToSave);
+
 				await models.user().save(userToSave, { isNew: false });
 
 				// When changing the password, we also clear all session IDs for
@@ -373,10 +374,21 @@ router.post('admin/users', async (path: SubPath, ctx: AppContext) => {
 			const user = await models.user().load(path.id);
 			await models.user().checkIfAllowed(owner, AclAction.Delete, user);
 			await models.userFlag().toggle(user.id, UserFlagType.ManuallyDisabled, !fields.restore_button);
+
+			// Otherwise the account keeps its open sessions and authorised apps
+			if (fields.disable_button) {
+				await models.session().deleteByUserId(user.id);
+				await models.application().deleteByUserId(user.id);
+			}
 		} else if (fields.send_account_confirmation_email) {
 			const user = await models.user().load(path.id);
-			await models.user().save({ id: user.id, must_set_password: 1 });
-			await models.user().sendAccountConfirmationEmail(user);
+			// Never put an account that has a password back into "must set password": a confirmation token
+			// would then be enough to replace that password.
+			if (user.must_set_password) {
+				await models.user().sendAccountConfirmationEmail(user);
+			} else {
+				await models.user().sendResetPasswordEmail(user.email);
+			}
 		} else if (fields.impersonate_button) {
 			await startImpersonating(ctx, userId, ctx.URL.href);
 			return redirect(ctx, config().baseUrl);
@@ -386,6 +398,8 @@ router.post('admin/users', async (path: SubPath, ctx: AppContext) => {
 			await updateSubscriptionType(stripe, models, userId, AccountType.Basic);
 		} else if (fields.update_subscription_pro_button) {
 			await updateSubscriptionType(stripe, models, userId, AccountType.Pro);
+		} else if (fields.update_subscription_pro_100gb_button) {
+			await updateSubscriptionType(stripe, models, userId, AccountType.Pro100Gb);
 		} else if (fields.recheck_invoice_button) {
 			await recheckPaymentStatus(stripe, models, userId);
 		} else if (fields.schedule_deletion_button) {
@@ -398,6 +412,9 @@ router.post('admin/users', async (path: SubPath, ctx: AppContext) => {
 
 			await models.notification().addInfo(owner.id, `User ${user.email} has been scheduled for deletion on ${formatDateTime(deletionDate)}. [View deletion list](${adminUserDeletionsUrl()})`);
 		} else if (fields.delete_user_flags) {
+			// Otherwise a disabled admin could re-enable their own account
+			if (userId === owner.id) throw new ErrorForbidden('You cannot remove flags from your own account');
+
 			const userFlagTypes: UserFlagType[] = [];
 			for (const key of Object.keys(fields)) {
 				if (key.startsWith('user_flag_')) {

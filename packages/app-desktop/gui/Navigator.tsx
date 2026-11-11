@@ -6,7 +6,7 @@ import bridge from '../services/bridge';
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { WindowIdContext } from './NewWindowOrIFrame';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of code from before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Each registered screen has its own props shape; the navigator just spreads them through
 type ScreenProps = any;
 
 interface AppScreen {

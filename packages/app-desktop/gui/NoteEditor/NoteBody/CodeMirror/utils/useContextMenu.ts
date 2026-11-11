@@ -16,6 +16,9 @@ import { menuItems } from '../../../utils/contextMenu';
 import isItemId from '@joplin/lib/models/utils/isItemId';
 import { extractResourceUrls } from '@joplin/lib/urlUtils';
 import { WindowIdContext } from '../../../../NewWindowOrIFrame';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('useContextMenu');
 
 export type ResourceMarkupType = 'image' | 'file';
 
@@ -327,7 +330,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 			// So in this situation, we use must manually align the internal codemirror selection
 			// to the contextmenu selection
 			if (editorRef.current && !editorRef.current.cm6 && spellCheckerMenuItems.length > 0) {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 editor's runtime alignSelection method is not in the type
 				(editorRef.current as any).alignSelection(params);
 			}
 
@@ -345,7 +348,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 				menu.append(extraItem);
 			}
 
-			// eslint-disable-next-line github/array-foreach, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
+			// eslint-disable-next-line github/array-foreach, @typescript-eslint/no-explicit-any -- forEach used historically; lib's MenuItem shape doesn't structurally satisfy Electron's MenuItemConstructorOptions
 			menuUtils.pluginContextMenuItems(props.plugins, MenuItemLocation.EditorContextMenu).forEach((item: any) => {
 				menu.append(new MenuItem(item));
 			});
@@ -355,11 +358,21 @@ const useContextMenu = (props: ContextMenuProps) => {
 
 		// Prepend the event listener so that it gets called before
 		// the listener that shows the default menu.
-		targetWindow.webContents.prependListener('context-menu', onContextMenu);
+		try {
+			targetWindow.webContents.prependListener('context-menu', onContextMenu);
+		} catch (error) {
+			logger.warn('Error registering menu', error);
+		}
 
 		return () => {
-			if (!targetWindow.isDestroyed()) {
-				targetWindow.webContents.off('context-menu', onContextMenu);
+			try {
+				if (!targetWindow.isDestroyed()) {
+					targetWindow.webContents.off('context-menu', onContextMenu);
+				}
+			} catch (error) {
+				// This can happen if the window closes after the isDestroyed check, but before webContents.off
+				// finishes running.
+				logger.warn('Error removing menu listener', error);
 			}
 		};
 	}, [

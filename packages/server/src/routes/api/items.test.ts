@@ -6,9 +6,9 @@ import { Item } from '../../services/database/types';
 import { PaginatedItems, SaveFromRawContentResult } from '../../models/ItemModel';
 import { shareFolderWithUser } from '../../utils/testing/shareApiUtils';
 import { resourceBlobPath } from '../../utils/joplinUtils';
-import { ErrorForbidden, ErrorPayloadTooLarge } from '../../utils/errors';
+import { ErrorBadRequest, ErrorForbidden, ErrorPayloadTooLarge, ErrorUnprocessableEntity } from '../../utils/errors';
 import { PaginatedResults } from '../../models/utils/pagination';
-import { makeNoteSerializedBody } from '../../utils/testing/serializedItems';
+import { makeFolderSerializedBody, makeNoteSerializedBody } from '../../utils/testing/serializedItems';
 
 describe('api/items', () => {
 
@@ -70,6 +70,7 @@ describe('api/items', () => {
 
 		const newParentId = '000000000000000000000000000000F2';
 		const tempFilePath = await makeTempFileWithContent(makeNoteSerializedBody({
+			id: noteId,
 			parent_id: newParentId,
 			title: 'new title',
 		}));
@@ -84,8 +85,7 @@ describe('api/items', () => {
 	test('should delete an item', async () => {
 		const { user, session } = await createUserAndSession(1, true);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const tree: any = {
+		const tree: Record<string, Record<string, null>> = {
 			'000000000000000000000000000000F1': {
 				'00000000000000000000000000000001': null,
 			},
@@ -173,8 +173,7 @@ describe('api/items', () => {
 	test('should batch upload items', async () => {
 		const { session: session1 } = await createUserAndSession(1, false);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const result: PaginatedResults<any> = await putApi(session1.id, 'batch_items', {
+		const result: PaginatedResults<unknown> = await putApi(session1.id, 'batch_items', {
 			items: [
 				{
 					name: '00000000000000000000000000000001.md',
@@ -191,14 +190,36 @@ describe('api/items', () => {
 		expect(Object.keys(result.items).sort()).toEqual(['00000000000000000000000000000001.md', '00000000000000000000000000000002.md']);
 	});
 
+	test.each([
+		['a body that is not a string', { items: [{ name: 'a.txt', body: { length: 300000000 } }] }, ErrorBadRequest.httpCode],
+		['items that are not an array', { items: { length: 300000000 } }, ErrorBadRequest.httpCode],
+		['bodies over the size limit', { items: [{ name: 'a.txt', body: 'x'.repeat(600 * 1024) }, { name: 'b.txt', body: 'x'.repeat(600 * 1024) }] }, ErrorPayloadTooLarge.httpCode],
+	])('should reject a batch upload with %s before allocating anything', async (_case, body, expectedHttpCode) => {
+		const { session } = await createUserAndSession(1, false);
+		const bufferFrom = jest.spyOn(Buffer, 'from');
+
+		await expectHttpError(async () => putApi(session.id, 'batch_items', body), expectedHttpCode);
+		expect(bufferFrom).not.toHaveBeenCalled();
+
+		bufferFrom.mockRestore();
+	});
+
+	test('should accept a batch that is within the limit as the client counts it, in characters', async () => {
+		const { session } = await createUserAndSession(1, false);
+		// 1.2 MB in UTF-8, but 400K characters, which is what the client's 1 MB batch limit counts
+		const body = '\u4E2D'.repeat(400 * 1024);
+
+		const result = await putApi<Record<string, SaveFromRawContentResult>>(session.id, 'batch_items', { items: [{ name: 'test.txt', body }] });
+		expect(result['items']['test.txt'].error).toBeFalsy();
+	});
+
 	test('should report errors when batch uploading', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1, false);
 
 		const note1 = makeNoteSerializedBody({ id: '00000000000000000000000000000001' });
 		await models().user().save({ id: user1.id, max_item_size: note1.length });
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const result: PaginatedResults<any> = await putApi(session1.id, 'batch_items', {
+		const result: PaginatedResults<unknown> = await putApi(session1.id, 'batch_items', {
 			items: [
 				{
 					name: '00000000000000000000000000000001.md',
@@ -211,8 +232,7 @@ describe('api/items', () => {
 			],
 		});
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const items: SaveFromRawContentResult = result.items as any;
+		const items: SaveFromRawContentResult = result.items as unknown as SaveFromRawContentResult;
 
 		expect(Object.keys(items).length).toBe(2);
 		expect(Object.keys(items).sort()).toEqual(['00000000000000000000000000000001.md', '00000000000000000000000000000002.md']);
@@ -293,6 +313,50 @@ describe('api/items', () => {
 
 		const item = await models().item().loadByName(user1.id, resourceBlobPath('000000000000000000000000000000E1'));
 		expect(item.jop_share_id).toBe(share.id);
+	});
+
+	test('should only associate resource blobs with a share via share_id', async () => {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+
+		await createItem(session1.id, 'root:/info.json:', 'victim');
+
+		const { share } = await shareFolderWithUser(session2.id, session1.id, '000000000000000000000000000000F1', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [],
+			},
+		]);
+
+		await expectHttpError(
+			async () => putApi(session2.id, 'items/root:/info.json:/content', {}, { query: { share_id: share.id } }),
+			ErrorUnprocessableEntity.httpCode,
+		);
+
+		expect(await models().item().loadByName(user2.id, 'info.json')).toBeFalsy();
+
+		await models().share().updateSharedItems3();
+
+		const items = await models().item().loadByNames(user1.id, ['info.json']);
+		expect(items.length).toBe(1);
+		expect(items[0].owner_id).toBe(user1.id);
+	});
+
+	test('should not save a Joplin item whose id does not match its name, or whose type changes', async () => {
+		const { session } = await createUserAndSession(1);
+		const itemId = '00000000000000000000000000000001';
+
+		await expectHttpError(
+			async () => createItem(session.id, `root:/${itemId}.md:`, makeNoteSerializedBody({ id: '00000000000000000000000000000002' })),
+			ErrorUnprocessableEntity.httpCode,
+		);
+
+		await createItem(session.id, `root:/${itemId}.md:`, makeFolderSerializedBody({ id: itemId }));
+
+		await expectHttpError(
+			async () => createItem(session.id, `root:/${itemId}.md:`, makeNoteSerializedBody({ id: itemId })),
+			ErrorUnprocessableEntity.httpCode,
+		);
 	});
 
 	test('should not upload or download items if the account is disabled', async () => {

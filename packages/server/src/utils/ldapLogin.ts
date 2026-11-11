@@ -1,9 +1,10 @@
-import { Client } from 'ldapts';
+import { Client, EqualityFilter } from 'ldapts';
 import { User } from '../services/database/types';
 import Logger from '@joplin/utils/Logger';
 import { LdapConfig } from './types';
 import { ErrorForbidden } from './errors';
 import { readFile } from 'fs/promises';
+import { randomBytes } from 'crypto';
 
 const logger = Logger.create('LDAP');
 
@@ -21,7 +22,8 @@ export default async function ldapLogin(email: string, password: string, user: U
 
 	logger.info(`Starting authentication with Server ${host}`);
 
-	if (password === '') {
+	// A bind with a DN and no password is an unauthenticated bind, which some directories accept
+	if (typeof password !== 'string' || !password) {
 		throw new ErrorForbidden('no password entered');
 	}
 
@@ -42,38 +44,40 @@ export default async function ldapLogin(email: string, password: string, user: U
 			tlsOptions: tlsOptions,
 		});
 
-		if (bindDN.length !== 0) {
+		try {
+			if (bindDN.length !== 0) {
+				try {
+					await client.bind(bindDN, bindPW);
+				} catch (error) {
+					error.message = `Could not bind to the ldap server ${host}: ${error.message}`;
+					throw error;
+				}
+			}
+
 			try {
-				await client.bind(bindDN, bindPW);
+				searchResults = await client.search(baseDN, {
+					filter: new EqualityFilter({ attribute: mailAttribute, value: email }),
+					attributes: ['dn', fullNameAttribute],
+				});
+
+				if (searchResults.searchEntries.length === 0) return null;
+
 			} catch (error) {
-				error.message = `Could not bind to the ldap server ${host}: ${error.message}`;
+				error.message = `Could not search the ldap server ${host}: ${error.message}`;
 				throw error;
 			}
-		}
 
-		try {
-			searchResults = await client.search(baseDN, {
-				filter: `(${mailAttribute}=${email})`,
-				attributes: ['dn', fullNameAttribute],
-			});
+			if (bindDN.length !== 0) {
+				await client.unbind();
+			}
 
-			if (searchResults.searchEntries.length === 0) return null;
-
-		} catch (error) {
-			error.message = `Could not search the ldap server ${host}: ${error.message}`;
-			throw error;
-		}
-
-		if (bindDN.length !== 0) {
-			await client.unbind();
-		}
-
-		try {
-			await client.bind(searchResults.searchEntries[0].dn, password);
-		} catch (error) {
-			if (error.code === 49) return null;
-			error.message = `Could not login ${host}: ${error.message}`;
-			throw error;
+			try {
+				await client.bind(searchResults.searchEntries[0].dn, password);
+			} catch (error) {
+				if (error.code === 49) return null;
+				error.message = `Could not login ${host}: ${error.message}`;
+				throw error;
+			}
 		} finally {
 			await client.unbind();
 		}
@@ -81,8 +85,12 @@ export default async function ldapLogin(email: string, password: string, user: U
 		if (userCreation && !user) {
 			const ldapUser: User = {};
 			ldapUser.email = email;
-			ldapUser.password = password;
+			// The account is managed by the directory, so that removing the user or changing their password there
+			// applies here too. Keeping a copy of the directory password would let it be used after that.
+			ldapUser.is_external = 1;
+			ldapUser.password = randomBytes(32).toString('hex');
 			ldapUser.email_confirmed = 1;
+			ldapUser.totp_secret = '';
 			ldapUser.full_name = searchResults.searchEntries[0][fullNameAttribute].toString();
 			return ldapUser;
 		}

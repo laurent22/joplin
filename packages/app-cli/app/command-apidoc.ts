@@ -1,7 +1,7 @@
 import BaseCommand from './base-command';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import BaseModel from '@joplin/lib/BaseModel';
-const { toTitleCase } = require('@joplin/lib/string-utils.js');
+import { toTitleCase } from '@joplin/lib/string-utils';
 import { reg } from '@joplin/lib/registry.js';
 import markdownUtils, { MarkdownTableRow } from '@joplin/lib/markdownUtils';
 import Database from '@joplin/lib/database';
@@ -37,8 +37,7 @@ class Command extends BaseCommand {
 		return markdownUtils.createMarkdownTable(headers, tableFields);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public override async action(args: any) {
+	public override async action(args: { file: string }) {
 		const models = [
 			{
 				type: BaseModel.TYPE_NOTE,
@@ -251,7 +250,7 @@ async function fetchAllNotes() {
 
 			lines.push('### Properties');
 			lines.push('');
-			lines.push(this.createPropertiesTable(tableFields));
+			lines.push(this.createPropertiesTable(tableFields as unknown as MarkdownTableRow[]));
 			lines.push('');
 
 			lines.push(`### GET /${tableName}`);
@@ -427,7 +426,7 @@ async function fetchAllNotes() {
 			lines.push('');
 			lines.push('### Properties');
 			lines.push('');
-			lines.push(this.createPropertiesTable(tableFields));
+			lines.push(this.createPropertiesTable(tableFields as unknown as MarkdownTableRow[]));
 			lines.push('');
 			lines.push('### GET /events');
 			lines.push('');

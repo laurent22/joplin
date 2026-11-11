@@ -14,21 +14,22 @@ import { pathExists, readFile, readdirSync } from 'fs-extra';
 import RevisionService from '@joplin/lib/services/RevisionService';
 import shim from '@joplin/lib/shim';
 import setupCommand from './setupCommand';
+import BaseCommand from './base-command';
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
+import initializeCommandService from './utils/initializeCommandService';
+import { cliUtils } from './cli-utils';
+import Cache from '@joplin/lib/Cache';
 
 type FolderOrNoteType = ModelType.Note | ModelType.Folder | 'folderOrNote';
-import initializeCommandService from './utils/initializeCommandService';
-const { cliUtils } = require('./cli-utils.js');
-const Cache = require('@joplin/lib/Cache');
 
-class Application extends BaseApplication {
+type CommandMetadata = ReturnType<BaseCommand['metadata']>;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic command loading system
-	private commands_: Record<string, any> = {};
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic command metadata
-	private commandMetadata_: any = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic command type
-	private activeCommand_: any = null;
+
+export class Application extends BaseApplication {
+
+	private commands_: Record<string, BaseCommand> = {};
+	private commandMetadata_: Record<string, CommandMetadata> = null;
+	private activeCommand_: BaseCommand = null;
 	private allCommandsLoaded_ = false;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic GUI type with many optional methods
 	private gui_: any = null;
@@ -123,7 +124,7 @@ class Application extends BaseApplication {
 		return [];
 	}
 
-	public setupCommand(cmd: string) {
+	public setupCommand(cmd: BaseCommand) {
 		return setupCommand(cmd, (t: string) => this.stdout(t), () => this.store(), () => this.gui());
 	}
 
@@ -171,8 +172,7 @@ class Application extends BaseApplication {
 		}
 
 		if (uiType !== null) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic command type
-			const temp: Record<string, any> = {};
+			const temp: Record<string, BaseCommand> = {};
 			for (const n in this.commands_) {
 				if (!this.commands_.hasOwnProperty(n)) continue;
 				const c = this.commands_[n];
@@ -198,7 +198,7 @@ class Application extends BaseApplication {
 	public async commandMetadata() {
 		if (this.commandMetadata_) return this.commandMetadata_;
 
-		let output = await this.cache_.getItem('metadata');
+		let output = await this.cache_.getItem('metadata') as Record<string, CommandMetadata>;
 		if (output) {
 			this.commandMetadata_ = output;
 			return { ...this.commandMetadata_ };
@@ -438,13 +438,12 @@ class Application extends BaseApplication {
 			// Otherwise open the GUI
 			const keymap = await this.loadKeymaps();
 
-			const AppGui = require('./app-gui.js');
+			const AppGui = require('./app-gui.js').default;
 			this.gui_ = new AppGui(this, this.store(), keymap);
 			this.gui_.setLogger(this.logger());
 			await this.gui_.start();
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Redux dispatch type requires AnyAction
-			await refreshFolders((action: any) => this.store().dispatch(action), '');
+			await refreshFolders(action => this.store().dispatch(action), '');
 
 			const tags = await Tag.allWithNotes();
 

@@ -1,0 +1,17 @@
+diff --git a/types/react-native-web.d.ts b/types/react-native-web.d.ts
+index d6159045aa4b1f6864037cfc1c001a68605b416d..5950b82015f82f7840cf3bd2fc88e81dd0ff789c 100644
+--- a/types/react-native-web.d.ts
++++ b/types/react-native-web.d.ts
+@@ -3,7 +3,11 @@
+ import { StyleProp } from 'react-native';
+ import * as RN from 'react-native';
+ 
+-declare module 'react-native' {
++// Expo's extended react-native types are out-of-sync with upstream.
++// This causes TypeScript errors when compiling. These errors only occur
++// when strict null checks is disabled, and so do not occur with the default React Native
++// and Expo TypeScript config.
++declare module 'react-native-disabled' {
+   /**
+    * View
+    */

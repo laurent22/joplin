@@ -2,7 +2,6 @@ use parser::Parser;
 use parser_utils::errors::Error;
 use std::{
     env::{self, Args},
-    path::PathBuf,
     process::exit,
 };
 
@@ -15,27 +14,18 @@ pub fn main() {
         }
     };
 
-    let input_path_string = &config.input_file.to_string_lossy();
-    eprintln!("Reading {}", input_path_string);
-    let data = match std::fs::read(&config.input_file) {
-        Ok(data) => data,
-        Err(error) => {
-            let error = format!("File read error: {error}");
-            print_help_text(&config.program_name, &error);
-            exit(2)
-        }
-    };
+    let input_path_string = &config.input_file;
 
     let mut parser = Parser::new();
     if config.output_mode == OutputMode::Section {
-        let parsed_section = match parser.parse_section_from_data(&data, input_path_string) {
+        let parsed_section = match parser.parse_section(input_path_string) {
             Ok(section) => section,
             Err(error) => handle_parse_error(&config, error),
         };
 
         println!("{:#?}", parsed_section);
     } else {
-        let parsed_onestore = match parser.parse_onestore_raw(&data) {
+        let parsed_onestore = match parser.parse_onestore_raw(input_path_string) {
             Ok(section) => section,
             Err(error) => handle_parse_error(&config, error),
         };
@@ -72,7 +62,7 @@ enum OutputMode {
 }
 
 struct Config {
-    input_file: PathBuf,
+    input_file: String,
     output_mode: OutputMode,
     program_name: String,
 }
@@ -86,7 +76,7 @@ impl Config {
             });
         };
         let program_name = program_name.to_string();
-        let Some(input_file) = &args.next() else {
+        let Some(input_file) = args.next() else {
             return Err(ConfigParseError {
                 reason: "Not enough arguments",
                 program_name,
@@ -113,7 +103,7 @@ impl Config {
         }
 
         Ok(Config {
-            input_file: input_file.into(),
+            input_file,
             output_mode,
             program_name,
         })

@@ -1,5 +1,6 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const releases1: any = [
+import { GitHubRelease } from './checkForUpdatesUtils';
+
+export const releases1 = ([
 	{
 		'url': 'https://api.github.com/repos/laurent22/joplin/releases/111428211',
 		'assets_url': 'https://api.github.com/repos/laurent22/joplin/releases/111428211/assets',
@@ -4042,10 +4043,9 @@ export const releases1: any = [
 			'eyes': 1,
 		},
 	},
-];
+] as unknown) as GitHubRelease[];
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const releases2: any = [
+export const releases2 = ([
 	{
 		'url': 'https://api.github.com/repos/laurent22/joplin/releases/111428211',
 		'assets_url': 'https://api.github.com/repos/laurent22/joplin/releases/111428211/assets',
@@ -5154,10 +5154,9 @@ export const releases2: any = [
 			'eyes': 0,
 		},
 	},
-];
+] as unknown) as GitHubRelease[];
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const releases3: any = [
+export const releases3 = ([
 	{
 		'url': 'https://api.github.com/repos/laurent22/joplin/releases/170712277',
 		'assets_url': 'https://api.github.com/repos/laurent22/joplin/releases/170712277/assets',
@@ -6419,4 +6418,4 @@ export const releases3: any = [
 			'eyes': 0,
 		},
 	},
-];
+] as unknown) as GitHubRelease[];

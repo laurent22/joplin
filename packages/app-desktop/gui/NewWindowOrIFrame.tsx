@@ -12,6 +12,7 @@ import { SecondaryWindowApi } from '../utils/window/types';
 export const WindowIdContext = createContext(defaultWindowId);
 
 type OnCloseCallback = ()=> void;
+type OnSetWindowCallback = (window: Window)=> void;
 
 export enum WindowMode {
 	Iframe, NewWindow,
@@ -25,6 +26,7 @@ interface Props {
 	mode: WindowMode;
 	windowId: string;
 	onClose: OnCloseCallback;
+	onWindow: OnSetWindowCallback;
 }
 
 const useDocument = (
@@ -44,6 +46,12 @@ const useDocument = (
 			setDoc(iframeElement?.contentWindow?.document);
 		} else if (mode === WindowMode.NewWindow) {
 			openedWindow = window.open('about:blank');
+
+			// Required to support TinyMCE:
+			openedWindow.document.open();
+			openedWindow.document.write('<!DOCTYPE html><html><head></head><body></body></html>');
+			openedWindow.document.close();
+
 			setDoc(openedWindow.document);
 
 			// .onbeforeunload and .onclose events don't seem to fire when closed by a user -- rely on polling
@@ -141,11 +149,19 @@ const NewWindowOrIFrame: React.FC<Props> = props => {
 		}
 	}, [doc, props.windowId]);
 
+	const onWindowRef = useRef(props.onWindow);
+	onWindowRef.current = props.onWindow;
+	useEffect(() => {
+		const win = doc?.defaultView;
+		if (win && onWindowRef.current) {
+			onWindowRef.current(win);
+		}
+	}, [doc]);
+
 	const parentNode = loaded ? doc?.body : null;
 	const wrappedChildren = <WindowIdContext.Provider value={props.windowId}>{props.children}</WindowIdContext.Provider>;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Needed to allow adding the portal to the DOM
-	const contentPortal = parentNode && createPortal(wrappedChildren, parentNode) as any;
+	const contentPortal = parentNode && createPortal(wrappedChildren, parentNode);
 	if (props.mode === WindowMode.NewWindow) {
 		return <div style={{ display: 'none' }}>{contentPortal}</div>;
 	} else {

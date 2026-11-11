@@ -3,12 +3,12 @@ import Setting from '@joplin/lib/models/Setting';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import MigrationHandler from '@joplin/lib/services/synchronizer/MigrationHandler';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
-import Synchronizer from '@joplin/lib/Synchronizer';
+import Synchronizer, { SyncStartOptions } from '@joplin/lib/Synchronizer';
 import { masterKeysWithoutPassword } from '@joplin/lib/services/e2ee/utils';
 import { appTypeToLockType } from '@joplin/lib/services/synchronizer/LockHandler';
-const BaseCommand = require('./base-command').default;
+import BaseCommand from './base-command';
 import app from './app';
-const { OneDriveApiNodeUtils } = require('@joplin/lib/onedrive-api-node-utils.js');
+import { OneDriveApiNodeUtils } from '@joplin/lib/onedrive-api-node-utils';
 import { reg } from '@joplin/lib/registry';
 const { cliUtils } = require('./cli-utils.js');
 const md5 = require('md5');
@@ -18,16 +18,16 @@ import { checkIfLoginWasSuccessful, generateApplicationConfirmUrl } from '@jopli
 import Logger from '@joplin/utils/Logger';
 import { uuidgen } from '@joplin/lib/uuid';
 import ShareService from '@joplin/lib/services/share/ShareService';
+import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
+import SyncTargetDropbox from '@joplin/lib/SyncTargetDropbox';
 
 const logger = Logger.create('command-sync');
 
 class Command extends BaseCommand {
 
 	private syncTargetId_: number = null;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	private releaseLockFn_: Function = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private oneDriveApiUtils_: any = null;
+	private releaseLockFn_: ()=> void = null;
+	private oneDriveApiUtils_: OneDriveApiNodeUtils | null = null;
 
 	public usage() {
 		return 'sync';
@@ -59,11 +59,10 @@ class Command extends BaseCommand {
 
 		if (this.syncTargetId_ === 3 || this.syncTargetId_ === 4) {
 			// OneDrive
-			this.oneDriveApiUtils_ = new OneDriveApiNodeUtils(syncTarget.api());
+			this.oneDriveApiUtils_ = new OneDriveApiNodeUtils((syncTarget as SyncTargetOneDrive).api());
 			const auth = await this.oneDriveApiUtils_.oauthDance({
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				log: (...s: any[]) => {
-					return this.stdout(...s);
+				log: (s: string) => {
+					return this.stdout(s);
 				},
 			});
 			this.oneDriveApiUtils_ = null;
@@ -77,7 +76,7 @@ class Command extends BaseCommand {
 			return true;
 		} else if (syncTargetMd.name === 'dropbox') {
 			// Dropbox
-			const api = await syncTarget.api();
+			const api = await (syncTarget as SyncTargetDropbox).api();
 			const loginUrl = api.loginUrl();
 			this.stdout(_('To allow Joplin to synchronise with Dropbox, please follow the steps below:'));
 			this.stdout(_('Step 1: Open this URL in your browser to authorise the application:'));
@@ -136,8 +135,7 @@ class Command extends BaseCommand {
 		return !!this.oneDriveApiUtils_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async action(args: any) {
+	public async action(args: { options: { useLock?: number; target?: number; upgrade?: boolean } }) {
 		this.releaseLockFn_ = null;
 
 		// Lock is unique per profile/database
@@ -185,16 +183,10 @@ class Command extends BaseCommand {
 
 			const sync = await syncTarget.synchronizer();
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const options: any = {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				onProgress: (report: any) => {
+			const options: SyncStartOptions = {
+				onProgress: (report) => {
 					const lines = Synchronizer.reportToLines(report);
 					if (lines.length) cliUtils.redraw(lines.join(' '));
-				},
-				onMessage: (msg: string) => {
-					cliUtils.redrawDone();
-					this.stdout(msg);
 				},
 			};
 

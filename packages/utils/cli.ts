@@ -4,7 +4,7 @@ const readline = require('readline/promises');
 
 export const isTTY = () => process.stdin.isTTY;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- readline/promises is not yet typed in this version of @types/node.
 let readlineInterface: any = null;
 export const waitForCliInput = async () => {
 	readlineInterface ??= readline.createInterface({

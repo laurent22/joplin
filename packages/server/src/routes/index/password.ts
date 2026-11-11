@@ -5,7 +5,8 @@ import { AppContext } from '../../utils/types';
 import { ErrorNotFound } from '../../utils/errors';
 import defaultView from '../../utils/defaultView';
 import { forgotPasswordUrl, resetPasswordUrl } from '../../utils/urlUtils';
-import { bodyFields } from '../../utils/requestUtils';
+import { bodyFields, userIp } from '../../utils/requestUtils';
+import { limiterForgotPasswordBruteForce } from '../../utils/request/limiterAccountBruteForce';
 import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('index/password');
@@ -27,11 +28,17 @@ const subRoutes: Record<string, RouteHandler> = {
 		let confirmationMessage = '';
 
 		if (ctx.method === 'POST') {
+			await limiterForgotPasswordBruteForce(userIp(ctx));
+
 			const fields = await bodyFields<ForgotPasswordFields>(ctx.req);
 			try {
 				await ctx.joplin.models.user().sendResetPasswordEmail(fields.email || '');
 			} catch (error) {
-				logger.warn(`Could not send reset email for ${fields.email}`, error);
+				if (error instanceof ErrorNotFound) {
+					logger.info(`Could not send reset email for ${fields.email}`, error);
+				} else {
+					logger.warn(`Could not send reset email for ${fields.email}`, error);
+				}
 			}
 
 			confirmationMessage = 'If we have an account that matches your email, you should receive an email with instructions on how to reset your password shortly.';

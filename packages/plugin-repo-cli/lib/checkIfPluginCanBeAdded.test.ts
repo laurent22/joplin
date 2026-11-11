@@ -37,7 +37,7 @@ describe('checkIfPluginCanBeAdded', () => {
 
 			let hasThrown = false;
 			try {
-				checkIfPluginCanBeAdded(existingManifests, manifest);
+				checkIfPluginCanBeAdded(existingManifests as unknown as Parameters<typeof checkIfPluginCanBeAdded>[0], manifest as unknown as Parameters<typeof checkIfPluginCanBeAdded>[1], { source: 'npm' });
 			} catch (error) {
 				hasThrown = true;
 			}
@@ -81,13 +81,143 @@ describe('checkIfPluginCanBeAdded', () => {
 
 			let hasThrown = false;
 			try {
-				checkIfPluginCanBeAdded(existingManifests, manifest);
+				checkIfPluginCanBeAdded(existingManifests as unknown as Parameters<typeof checkIfPluginCanBeAdded>[0], manifest as unknown as Parameters<typeof checkIfPluginCanBeAdded>[1], { source: 'npm' });
 			} catch (error) {
 				hasThrown = true;
 			}
 
 			expect(!hasThrown).toBe(shouldWork);
 		}
+	});
+
+	test('should not add if already a plugin with this ID but different repository url', () => {
+		const testCases = [
+			[
+				{
+					'test': {
+						id: 'test',
+						repository_url: 'https://github.com/laurent22/joplin',
+					},
+				},
+				{
+					id: 'test',
+					repository_url: 'https://github.com/laurent22/joplin.git',
+				},
+				true,
+			],
+			[
+				{
+					'test': {
+						id: 'test',
+						repository_url: 'https://github.com/laurent22/joplin',
+					},
+				},
+				{
+					id: 'test',
+					repository_url: 'https://github.com/someone/else',
+				},
+				false,
+			],
+		];
+
+		for (const t of testCases) {
+			const [existingManifests, manifest, shouldWork] = t;
+
+			let hasThrown = false;
+			try {
+				checkIfPluginCanBeAdded(existingManifests as unknown as Parameters<typeof checkIfPluginCanBeAdded>[0], manifest as unknown as Parameters<typeof checkIfPluginCanBeAdded>[1], { source: 'repository' });
+			} catch (error) {
+				hasThrown = true;
+			}
+
+			expect(!hasThrown).toBe(shouldWork);
+		}
+	});
+
+	test('should reject moving a legacy npm plugin to an unverified repository', () => {
+		const existingManifests = {
+			'test': {
+				id: 'test',
+				_npm_package_name: 'original',
+			},
+		};
+		const manifest = {
+			id: 'test',
+			repository_url: 'https://github.com/attacker/plugin',
+		};
+
+		expect(
+			() => checkIfPluginCanBeAdded(
+				existingManifests as unknown as Parameters<typeof checkIfPluginCanBeAdded>[0],
+				manifest as unknown as Parameters<typeof checkIfPluginCanBeAdded>[1],
+				{ source: 'repository' },
+			),
+		).toThrow('A maintainer must verify and register its repository URL');
+	});
+
+	test('should reject a legacy repository migration even if the npm package name is copied', () => {
+		const existingManifests = {
+			'test': {
+				id: 'test',
+				_npm_package_name: 'original',
+			},
+		};
+		const manifest = {
+			id: 'test',
+			repository_url: 'https://github.com/attacker/plugin',
+			_npm_package_name: 'original',
+		};
+
+		expect(
+			() => checkIfPluginCanBeAdded(
+				existingManifests as unknown as Parameters<typeof checkIfPluginCanBeAdded>[0],
+				manifest as unknown as Parameters<typeof checkIfPluginCanBeAdded>[1],
+				{ source: 'repository' },
+			),
+		).toThrow('A maintainer must verify and register its repository URL');
+	});
+
+	test('should not fall back to an npm package name after repository ownership is registered', () => {
+		const existingManifests = {
+			'test': {
+				id: 'test',
+				repository_url: 'https://github.com/original/plugin',
+				_npm_package_name: 'original',
+			},
+		};
+		const manifest = {
+			id: 'test',
+			_npm_package_name: 'original',
+		};
+
+		expect(
+			() => checkIfPluginCanBeAdded(
+				existingManifests as unknown as Parameters<typeof checkIfPluginCanBeAdded>[0],
+				manifest as unknown as Parameters<typeof checkIfPluginCanBeAdded>[1],
+				{ source: 'npm' },
+			),
+		).toThrow('has already been published under repository');
+	});
+
+	test('should report repository ownership when npm targets a repository-origin plugin', () => {
+		const existingManifests = {
+			'test': {
+				id: 'test',
+				repository_url: 'https://github.com/original/plugin',
+			},
+		};
+		const manifest = {
+			id: 'test',
+			_npm_package_name: 'attacker-package',
+		};
+
+		expect(
+			() => checkIfPluginCanBeAdded(
+				existingManifests as unknown as Parameters<typeof checkIfPluginCanBeAdded>[0],
+				manifest as unknown as Parameters<typeof checkIfPluginCanBeAdded>[1],
+				{ source: 'npm' },
+			),
+		).toThrow('is owned by repository "https://github.com/original/plugin" and cannot be updated from npm package "attacker-package"');
 	});
 
 });

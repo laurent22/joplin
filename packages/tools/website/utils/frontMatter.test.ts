@@ -1,8 +1,7 @@
-import { compileWithFrontMatter, stripOffFrontMatter } from './frontMatter';
-const moment = require('moment');
+import { compileWithFrontMatter, FrontMatter, stripOffFrontMatter } from './frontMatter';
+import moment from 'moment';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const testCases: any[][] = [
+const testCases: [string, FrontMatter, string, string][] = [
 
 	// =============================================================
 

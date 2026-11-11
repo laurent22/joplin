@@ -1,6 +1,6 @@
 {
   "name": "@joplin/renderer",
-  "version": "3.6.0",
+  "version": "3.7.3",
   "description": "The Joplin note renderer, used the mobile and desktop application",
   "repository": "https://github.com/laurent22/joplin/tree/dev/packages/renderer",
   "main": "index.js",
@@ -22,22 +22,22 @@
   "devDependencies": {
     "@types/jest": "29.5.14",
     "@types/markdown-it": "13.0.9",
-    "@types/node": "18.19.130",
+    "@types/node": "24.13.3",
     "jest": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
     "mermaid": "11.10.1",
-    "ts-jest": "29.4.1",
-    "typescript": "5.8.3"
+    "ts-jest": "29.4.12",
+    "typescript": "5.9.3"
   },
   "dependencies": {
-    "@joplin/fork-htmlparser2": "^4.1.60",
-    "@joplin/fork-uslug": "^2.0.3",
-    "@joplin/utils": "~3.6",
+    "@joplin/fork-htmlparser2": "^4.1.66",
+    "@joplin/fork-uslug": "^2.0.9",
+    "@joplin/utils": "^3.7.3",
     "@types/json5": "2.2.0",
-    "abcjs": "6.5.2",
+    "abcjs": "6.6.4",
     "font-awesome-filetypes": "2.1.0",
-    "fs-extra": "11.3.3",
-    "highlight.js": "11.11.1",
+    "fs-extra": "11.3.6",
+    "highlight.js": "11.11.2",
     "html-entities": "1.4.0",
     "json-stringify-safe": "5.0.1",
     "json5": "2.2.3",
@@ -57,5 +57,5 @@
     "markdown-it-toc-done-right": "4.2.0",
     "md5": "2.3.0"
   },
-  "gitHead": "05a29b450962bf05a8642bbd39446a1f679a96ba"
+  "gitHead": "898d2999f93fbedf0ce5f6626feb63e1a732ce0a"
 }

@@ -1,8 +1,9 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, createItem, createItemTree, expectNotThrow, createNote } from '../utils/testing/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, createItem, createItemTree, expectNotThrow, createNote, createFolder } from '../utils/testing/testUtils';
 import { ErrorBadRequest, ErrorNotFound } from '../utils/errors';
-import { ShareType } from '../services/database/types';
+import { Change2, ChangeType, ShareType } from '../services/database/types';
 import { inviteUserToShare, shareFolderWithUser, shareWithUserAndAccept, updateItemShareId } from '../utils/testing/shareApiUtils';
 import { withWarningSilenced } from '@joplin/lib/testing/test-utils';
+import { createNanoForInboxEmail } from '@joplin/lib/uuid';
 
 // Goes through the process of:
 // 1. Creating two users/sessions
@@ -142,6 +143,29 @@ describe('ShareModel', () => {
 		const share2 = await models().share().shareNote(user1, '00000000000000000000000000000001', '', false);
 
 		expect(share1.id).toBe(share2.id);
+	});
+
+	test('should not reuse a disabled user share when publishing a shared note', async () => {
+		const { shareUser, note, session1, session2 } = await createShareWithNoteOwnedByRecipient();
+		const user1 = await models().user().load(session1.user_id);
+		const user2 = await models().user().load(session2.user_id);
+
+		const user2Share = await models().share().shareNote(user2, note.jop_id, '', false);
+		expect(user2Share.owner_id).toBe(user2.id);
+
+		await models().shareUser().delete(shareUser.id);
+		await models().user().save({
+			id: user2.id,
+			enabled: 0,
+		});
+		await models().share().updateSharedItems3();
+
+		const updatedNote = await models().item().load(note.id);
+		expect(updatedNote.owner_id).toBe(user1.id);
+
+		const user1Share = await models().share().shareNote(user1, note.jop_id, '', false);
+		expect(user1Share.id).not.toBe(user2Share.id);
+		expect(user1Share.owner_id).toBe(user1.id);
 	});
 
 	test('should delete a note that has been shared', async () => {
@@ -329,6 +353,77 @@ describe('ShareModel', () => {
 		expect(updatedNote.jop_share_id).toBe(share.id);
 	});
 
+
+
+
+
+
+
+
+	test('should not derive share ids or inbox addresses from Math.random', async () => {
+		const { user, session } = await createUserAndSession(1);
+		await createNote(session.id, { id: '00000000000000000000000000000001' });
+		await createNote(session.id, { id: '00000000000000000000000000000002' });
+
+		const random = jest.spyOn(Math, 'random').mockReturnValue(0.5);
+		try {
+			const share1 = await models().share().shareNote(user, '00000000000000000000000000000001', '', false);
+			const share2 = await models().share().shareNote(user, '00000000000000000000000000000002', '', false);
+			expect(share1.id).not.toBe(share2.id);
+			expect(createNanoForInboxEmail()).not.toBe(createNanoForInboxEmail());
+		} finally {
+			random.mockRestore();
+		}
+	});
+
+	test('should create a published folder share', async () => {
+		const { user, session } = await createUserAndSession(1);
+		await createFolder(session.id, { id: '000000000000000000000000000000F1', title: 'My Folder' });
+
+		const share = await models().share().sharePublishedFolder(user, '000000000000000000000000000000F1');
+
+		expect(share.type).toBe(ShareType.PublishedFolder);
+		expect(share.folder_id).toBe('000000000000000000000000000000F1');
+		expect(share.owner_id).toBe(user.id);
+	});
+
+	test('should return the same share if the folder is already published', async () => {
+		const { user, session } = await createUserAndSession(1);
+		await createFolder(session.id, { id: '000000000000000000000000000000F1', title: 'My Folder' });
+
+		const share1 = await models().share().sharePublishedFolder(user, '000000000000000000000000000000F1');
+		const share2 = await models().share().sharePublishedFolder(user, '000000000000000000000000000000F1');
+
+		expect(share1.id).toBe(share2.id);
+	});
+
+	test('should throw when publishing a folder that does not exist', async () => {
+		const { user } = await createUserAndSession(1);
+		const error = await checkThrowAsync(async () => models().share().sharePublishedFolder(user, '000000000000000000000000000000F9'));
+		expect(error instanceof ErrorNotFound).toBe(true);
+	});
+
+	test('should not mix up a published folder share with a regular folder share', async () => {
+		const { user, session } = await createUserAndSession(1);
+		await createFolder(session.id, { id: '000000000000000000000000000000F1', title: 'My Folder' });
+
+		const publishedShare = await models().share().sharePublishedFolder(user, '000000000000000000000000000000F1');
+		const folderItem = await models().item().loadByJopId(user.id, '000000000000000000000000000000F1');
+
+		const folderTypeResult = await models().share().byUserAndItemId(user.id, folderItem.id, ShareType.Folder);
+		expect(folderTypeResult).toBeFalsy();
+
+		const publishedTypeResult = await models().share().byUserAndItemId(user.id, folderItem.id, ShareType.PublishedFolder);
+		expect(publishedTypeResult).toBeTruthy();
+		expect(publishedTypeResult.id).toBe(publishedShare.id);
+	});
+
+
+
+
+
+
+
 	test('should not update owner_id after unsharing if an item has been moved out of a share by the item\'s owner', async () => {
 		const { shareUser, note, session2 } = await createShareWithNoteOwnedByRecipient();
 
@@ -340,6 +435,34 @@ describe('ShareModel', () => {
 
 		const updatedNote = await models().item().load(note.id);
 		expect(updatedNote.owner_id).toBe(session2.user_id);
+	});
+
+	test('should add create/delete changes when an item is moved out of a share', async () => {
+		const { note, session2, session1 } = await createShareWithNoteOwnedByRecipient();
+		await models().share().updateSharedItems3();
+
+		const greatestCounterBefore = (await models().change().all())
+			.map(c => c.counter)
+			.reduce((a, b) => Math.max(a, b));
+		const isNewChange = (change: Change2) => change.counter > greatestCounterBefore;
+
+		// Move out of the share
+		await updateItemShareId(session2, note.id, '');
+		await models().share().updateSharedItems3();
+
+		const itemChanges = (await models().change().all())
+			.filter(change => change.item_id === note.id)
+			// Exclude all changes from before the item was moved out of the share
+			.filter(isNewChange)
+			.sort((a, b) => a.counter - b.counter);
+		const changesOfType = (type: ChangeType) => itemChanges.filter(c => c.type === type);
+
+		// Should delete the item for the other share participant
+		expect(changesOfType(ChangeType.Delete)).toMatchObject([
+			{ user_id: session1.user_id },
+		]);
+		// Should not need to create the item, since it wasn't moved into a new share:
+		expect(changesOfType(ChangeType.Create)).toHaveLength(0);
 	});
 
 	// linkedNoteShareUrl: R=0, I=0, P=ε → O=N

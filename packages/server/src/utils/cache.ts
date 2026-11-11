@@ -1,6 +1,5 @@
 interface CacheEntry {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	object: any;
+	object: string;
 	timestamp: number;
 }
 
@@ -12,22 +11,19 @@ class Cache {
 
 	private cache: CacheEntries = {};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private async setAny(key: string, o: any): Promise<void> {
+	private async setAny(key: string, o: unknown): Promise<void> {
 		this.cache[key] = {
 			object: JSON.stringify(o),
 			timestamp: Date.now(),
 		};
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async setObject(key: string, object: any): Promise<void> {
+	public async setObject(key: string, object: unknown): Promise<void> {
 		if (!object) return;
 		return this.setAny(key, object);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private async getAny(key: string): Promise<any> {
+	private async getAny(key: string): Promise<unknown> {
 		if (!this.cache[key]) return null;
 		try {
 			const output = JSON.parse(this.cache[key].object);

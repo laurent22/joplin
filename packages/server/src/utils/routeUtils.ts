@@ -6,11 +6,11 @@ import { AppContext, HttpMethod, RouteType } from './types';
 import { URL } from 'url';
 import { csrfCheck } from './csrf';
 import { contextSessionId } from './requestUtils';
-import { shortToLong } from './uuid';
 import { stripOffQueryParameters } from './urlUtils';
 import { hasOwnProperty } from '@joplin/utils/object';
 
-const { ltrimSlashes, rtrimSlashes } = require('@joplin/lib/path-utils');
+import { ltrimSlashes, rtrimSlashes } from '@joplin/lib/path-utils';
+import safeUserContentResponse from './safeUserContentResponse';
 
 function dirname(path: string): string {
 	if (!path) throw new Error('Path is empty');
@@ -30,7 +30,7 @@ export enum RouteResponseFormat {
 	Json = 'json',
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Concrete handlers (e.g. `login`, `mfa`, `users`) narrow `args` to per-route field types; using `unknown[]` would break that narrowing via function-parameter contravariance
 export type RouteHandler = (path: SubPath, ctx: AppContext, ...args: any[])=> Promise<any>;
 
 export interface Routers {
@@ -58,11 +58,9 @@ export enum ResponseType {
 
 export class Response {
 	public type: ResponseType;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public response: any;
+	public response: unknown;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public constructor(type: ResponseType, response: any) {
+	public constructor(type: ResponseType, response: unknown) {
 		this.type = type;
 		this.response = response;
 	}
@@ -85,8 +83,7 @@ export function redirect(ctx: AppContext, url: string): Response {
 	return new Response(ResponseType.KoaResponse, ctx.response);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function internalRedirect(path: SubPath, ctx: AppContext, router: Router, urlSchema: string, ...args: any[]) {
+export function internalRedirect(path: SubPath, ctx: AppContext, router: Router, urlSchema: string, ...args: unknown[]) {
 	const endPoint = router.findEndPoint(HttpMethod.GET, urlSchema);
 	return endPoint.handler(path, ctx, ...args);
 }
@@ -205,27 +202,15 @@ function disabledAccountCheck(route: MatchedRoute, user: User) {
 	if (!user || user.enabled) return;
 
 	if (route.subPath.schema.startsWith('api/')) throw new ErrorForbidden(`This account is disabled. Please login to ${config().baseUrl} for more information.`);
+
+	// The website also gives access to the content of items, including shared ones
+	if (['items', 'changes'].some(prefix => route.subPath.schema === prefix || route.subPath.schema.startsWith(`${prefix}/`))) {
+		throw new ErrorForbidden('This account is disabled.');
+	}
 }
 
-const needsConvertedId = (_path: SubPath): boolean => {
-	// Return true if the particular schema should use a converted ID
-	return false;
-};
-
-const convertPathId = (path: SubPath): SubPath => {
-	if (needsConvertedId(path)) {
-		return {
-			...path,
-			id: shortToLong(path.id),
-		};
-	}
-
-	return path;
-};
-
 interface ExecRequestResult {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	response: any;
+	response: unknown;
 	path: SubPath;
 }
 
@@ -236,7 +221,7 @@ export async function execRequest(routes: Routers, ctx: AppContext): Promise<Exe
 	const endPoint = match.route.findEndPoint(ctx.request.method as HttpMethod, match.subPath.schema);
 	if (ctx.URL && !isValidOrigin(ctx.URL.origin, baseUrl(endPoint.type), endPoint.type)) throw new ErrorNotFound(`Invalid origin: ${ctx.URL.origin}`, ErrorCode.InvalidOrigin);
 
-	const isPublicRoute = match.route.isPublic(match.subPath.schema);
+	const isPublicRoute = match.route.isPublic(match.subPath.schema, ctx.request.method as HttpMethod);
 
 	// This is a generic catch-all for all private end points - if we
 	// couldn't get a valid session, we exit now. Individual end points
@@ -257,7 +242,7 @@ export async function execRequest(routes: Routers, ctx: AppContext): Promise<Exe
 
 	return {
 		response: await endPoint.handler(match.subPath, ctx),
-		path: convertPathId(match.subPath),
+		path: match.subPath,
 	};
 }
 
@@ -323,11 +308,22 @@ export function findMatchingRoute(path: string, routes: Routers): MatchedRoute {
 	throw new Error('Unreachable');
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function respondWithItemContent(koaResponse: any, item: Item, content: Buffer): Response {
+interface KoaResponseLike {
+	body: unknown;
+	set(name: string, value: unknown): void;
+}
+
+export function respondWithItemContent(koaResponse: KoaResponseLike, item: Item, content: Buffer): Response {
 	koaResponse.body = item.jop_type > 0 ? content.toString() : content;
-	koaResponse.set('Content-Type', item.mime_type);
 	koaResponse.set('Content-Length', content.byteLength);
+
+	// mime_type is user-controlled, so sanitize to prevent inline script execution.
+	const safe = safeUserContentResponse(item.mime_type, item.name || '');
+	koaResponse.set('Content-Type', safe.mime);
+	koaResponse.set('Content-Disposition', safe.contentDisposition);
+	koaResponse.set('Content-Security-Policy', safe.contentSecurityPolicy);
+	koaResponse.set('X-Content-Type-Options', safe.xContentTypeOptions);
+
 	return new Response(ResponseType.KoaResponse, koaResponse);
 }
 

@@ -3,6 +3,7 @@ import { Size } from '@joplin/utils/types';
 import { useEffect, useRef } from 'react';
 import { ItemFlow } from '@joplin/lib/services/plugins/api/noteListType';
 import { ItemEventHandlers } from './types';
+import attachNoteTitleTooltip from './noteTitleTooltip';
 
 const addItemEventListeners = (
 	element: HTMLElement,
@@ -16,8 +17,7 @@ const addItemEventListeners = (
 	const inputs = element.getElementsByTagName('input');
 	for (const input of inputs) {
 		if (input.type === 'checkbox' || input.type === 'text') {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- we're mixing React synthetic events with DOM events which ideally should not be done but it is fine in this particular case
-			input.addEventListener('change', listeners.onInputChange as any);
+			input.addEventListener('change', listeners.onInputChange as unknown as EventListener);
 			processedInputs.push(input);
 		}
 	}
@@ -25,29 +25,24 @@ const addItemEventListeners = (
 	const buttons = element.getElementsByTagName('button');
 	if (listeners.onClick) {
 		for (const button of buttons) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- we're mixing React synthetic events with DOM events which ideally should not be done but it is fine in this particular case
-			button.addEventListener('click', listeners.onClick as any);
+			button.addEventListener('click', listeners.onClick as unknown as EventListener);
 			processedButtons.push(button);
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- we're mixing React synthetic events with DOM events which ideally should not be done but it is fine in this particular case
-	const clickHandler = (e: MouseEvent) => onClick(e as any);
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- we're mixing React synthetic events with DOM events which ideally should not be done but it is fine in this particular case
-	const dblclickHandler = (e: MouseEvent) => onDoubleClick(e as any);
+	const clickHandler = (e: MouseEvent) => onClick(e as unknown as React.MouseEvent<HTMLDivElement>);
+	const dblclickHandler = (e: MouseEvent) => onDoubleClick(e as unknown as React.MouseEvent<HTMLDivElement>);
 	element.addEventListener('click', clickHandler);
 	element.addEventListener('dblclick', dblclickHandler);
 
 	return {
 		cleanup: () => {
 			for (const input of processedInputs) {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- we're mixing React synthetic events with DOM events which ideally should not be done but it is fine in this particular case
-				input.removeEventListener('change', listeners.onInputChange as any);
+				input.removeEventListener('change', listeners.onInputChange as unknown as EventListener);
 			}
 			if (listeners.onClick) {
 				for (const button of processedButtons) {
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- we're mixing React synthetic events with DOM events which ideally should not be done but it is fine in this particular case
-					button.removeEventListener('click', listeners.onClick as any);
+					button.removeEventListener('click', listeners.onClick as unknown as EventListener);
 				}
 			}
 			element.removeEventListener('click', clickHandler);
@@ -57,7 +52,7 @@ const addItemEventListeners = (
 };
 
 const useItemElement = (
-	rootElement: HTMLDivElement | null, noteId: string, noteHtml: string, focusVisible: boolean, style: React.CSSProperties, itemSize: Size, onClick: React.MouseEventHandler<HTMLDivElement>, onDoubleClick: React.MouseEventHandler<HTMLDivElement>, flow: ItemFlow, itemEventHandlers: ItemEventHandlers,
+	rootElement: HTMLDivElement | null, noteId: string, noteHtml: string, focusVisible: boolean, style: React.CSSProperties, itemSize: Size, onClick: React.MouseEventHandler<HTMLDivElement>, onDoubleClick: React.MouseEventHandler<HTMLDivElement>, flow: ItemFlow, itemEventHandlers: ItemEventHandlers, displayTitle = '',
 ) => {
 	const itemElement = useRef<HTMLDivElement>(null);
 
@@ -68,24 +63,25 @@ const useItemElement = (
 		element.setAttribute('data-id', noteId);
 		element.className = 'note-list-item';
 		for (const [n, v] of Object.entries(style)) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			(element.style as any)[n] = v;
+			(element.style as unknown as Record<string, unknown>)[n] = v;
 		}
 		if (flow === ItemFlow.LeftToRight) element.style.width = `${itemSize.width}px`;
 		element.style.height = `${itemSize.height}px`;
 		element.innerHTML = noteHtml;
 
 		const { cleanup } = addItemEventListeners(element, itemEventHandlers, onClick, onDoubleClick);
+		const detachTooltip = displayTitle ? attachNoteTitleTooltip(element, displayTitle) : null;
 
 		rootElement.appendChild(element);
 		itemElement.current = element;
 
 		return () => {
 			cleanup();
+			if (detachTooltip) detachTooltip();
 			itemElement.current = null;
 			element.remove();
 		};
-	}, [rootElement, itemSize, noteHtml, noteId, flow, style, onClick, onDoubleClick, itemEventHandlers]);
+	}, [rootElement, itemSize, noteHtml, noteId, flow, style, onClick, onDoubleClick, itemEventHandlers, displayTitle]);
 
 	useEffect(() => {
 		const element = itemElement.current;

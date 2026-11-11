@@ -27,7 +27,7 @@ export function modifyListLines(lines: string[], num: number, listSymbol: string
 	return lines;
 }
 // Helper functions that use the cursor
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamically-loaded namespace; @types/codemirror's signatures are too narrow for plugin registration
 export default function useCursorUtils(CodeMirror: any) {
 
 	CodeMirror.defineExtension('insertAtCursor', function(text: string) {
@@ -121,7 +121,7 @@ export default function useCursorUtils(CodeMirror: any) {
 	});
 
 	// params are the oncontextmenu params
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamically-loaded namespace; @types/codemirror's signatures are too narrow for plugin registration
 	CodeMirror.defineExtension('alignSelection', function(params: any) {
 		// The below is a HACK that uses the selectionText from electron and the coordinates of
 		// the click to determine what the codemirror selection should be
@@ -176,7 +176,7 @@ export default function useCursorUtils(CodeMirror: any) {
 		return beforeCursor.top < afterCursor.top && !!currentLine[ch - 1].match(/\s/);
 	});
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamically-loaded namespace; @types/codemirror's signatures are too narrow for plugin registration
 	CodeMirror.commands.goLineRightSmart = function(cm: any) {
 		// Only apply the manual cursor adjustments for contenteditable mode
 		if (cm.options.inputStyle !== 'contenteditable') {
@@ -205,7 +205,7 @@ export default function useCursorUtils(CodeMirror: any) {
 		}
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamically-loaded namespace; @types/codemirror's signatures are too narrow for plugin registration
 	CodeMirror.commands.goLineUpSmart = function(cm: any) {
 		if (cm.options.inputStyle !== 'contenteditable') {
 			cm.execCommand('goLineUp');
@@ -221,7 +221,7 @@ export default function useCursorUtils(CodeMirror: any) {
 		}
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamically-loaded namespace; @types/codemirror's signatures are too narrow for plugin registration
 	CodeMirror.commands.goLineDownSmart = function(cm: any) {
 		if (cm.options.inputStyle !== 'contenteditable') {
 			cm.execCommand('goLineDown');

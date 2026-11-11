@@ -1,5 +1,6 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export default async function(api: any) {
+import { FileApi } from '../../../file-api';
+
+export default async function(api: FileApi) {
 	await Promise.all([
 		api.mkdir('.resource'),
 		api.mkdir('.sync'),

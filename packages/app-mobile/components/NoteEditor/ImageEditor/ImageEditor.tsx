@@ -4,6 +4,7 @@ import Logger from '@joplin/utils/Logger';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import ExtendedWebView from '../../ExtendedWebView';
 import { OnMessageEvent, WebViewControl } from '../../ExtendedWebView/types';
+import { WebViewErrorEvent } from 'react-native-webview/lib/WebViewTypes';
 import { clearAutosave, writeAutosave } from './autosave';
 import { DialogContext } from '../../DialogManager';
 import BackButtonService from '../../../services/BackButtonService';
@@ -107,8 +108,7 @@ const ImageEditor = (props: Props) => {
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps
 	}, []);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onError = useCallback((event: any) => {
+	const onError = useCallback((event: WebViewErrorEvent) => {
 		logger.error('ImageEditor: WebView error: ', event);
 	}, []);
 

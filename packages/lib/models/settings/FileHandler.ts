@@ -4,8 +4,11 @@ import Setting from '../Setting';
 
 const logger = Logger.create('Settings');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export type SettingValues = Record<string, any>;
+export type SettingValues = Record<string, unknown>;
+
+export interface FileHandlerOptions {
+	overwrite?: boolean;
+}
 
 export default class FileHandler {
 
@@ -49,15 +52,18 @@ export default class FileHandler {
 		return result;
 	}
 
-	public async save(values: SettingValues) {
+	public async save(values: SettingValues, options: FileHandlerOptions = {}) {
 		values = { ...values };
+		const overwrite = !!options.overwrite;
 
-		// Merge with existing settings. This prevents settings stored by disabled or not-yet-loaded
-		// plugins from being deleted.
-		for (const key in this.parsedJsonCache_) {
-			const includesSetting = Object.prototype.hasOwnProperty.call(values, key);
-			if (!includesSetting) {
-				values[key] = this.parsedJsonCache_[key];
+		if (!overwrite) {
+			// Merge with existing settings. This prevents settings stored by disabled or not-yet-loaded
+			// plugins from being deleted.
+			for (const key in this.parsedJsonCache_) {
+				const includesSetting = Object.prototype.hasOwnProperty.call(values, key);
+				if (!includesSetting) {
+					values[key] = this.parsedJsonCache_[key];
+				}
 			}
 		}
 
@@ -70,6 +76,11 @@ export default class FileHandler {
 
 		await shim.fsDriver().writeFile(this.filePath_, json, 'utf8');
 		this.valueJsonCache_ = json;
+
+		if (overwrite) {
+			// Prevent pre-existing settings from being re-instated by subsequent saving of settings
+			this.parsedJsonCache_ = values;
+		}
 	}
 
 }

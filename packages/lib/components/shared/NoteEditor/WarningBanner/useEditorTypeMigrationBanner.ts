@@ -25,6 +25,7 @@ const useEditorTypeMigrationBanner = ({ markdownEditorEnabled, inEditorRendering
 				onPress: () => {
 					Setting.setValue('editor.inlineRendering', false);
 					Setting.setValue('editor.imageRendering', false);
+					Setting.setValue('editor.tableEditing', false);
 					onMigrationComplete();
 				},
 			},

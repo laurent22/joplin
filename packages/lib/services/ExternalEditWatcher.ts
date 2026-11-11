@@ -7,29 +7,37 @@ import { NoteEntity } from './database/types';
 import Note from '../models/Note';
 import { openFileWithExternalEditor } from './ExternalEditWatcher/utils';
 import AsyncActionQueue from '../AsyncActionQueue';
-const EventEmitter = require('events');
-const chokidar = require('chokidar');
+import { EventEmitter } from 'events';
+import * as chokidar from 'chokidar';
+const md5 = require('md5');
 const { ErrorNotFound } = require('./rest/utils/errors');
 
 interface ChangeEventContext {
 	path: string;
 }
 
+type DispatchFn = (action: { type: string; [key: string]: unknown })=> void;
+// Bridge() returns the desktop bridge with methods openItem/openExternal/etc. used by the external-editor helper.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Concrete bridge type lives in app-desktop; lib references it structurally
+type BridgeFn = ()=> any;
+
+const hashNoteContent = (content: string) => md5(content);
+type ItemId = string;
+
 export default class ExternalEditWatcher {
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	private dispatch: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	private bridge_: Function;
+	private dispatch: DispatchFn;
+	private bridge_: BridgeFn;
 	private logger_: Logger = new Logger();
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- chokidar typings vary across platforms; we use a small subset (watch/on/unwatch/close) treated structurally
 	private watcher_: any = null;
 	private changeEventQueue_: AsyncActionQueue<ChangeEventContext>;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private eventEmitter_: any = new EventEmitter();
-	private skipNextChangeEvent_: Record<string, boolean> = {};
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	private eventEmitter_: EventEmitter = new EventEmitter();
+	private skipNextChangeEvent_: Map<ItemId, boolean> = new Map();
+	private lastNoteContentHash_: Map<ItemId, string> = new Map();
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See watcher_ above
 	private chokidar_: any = chokidar;
+	private watcherReady_: Promise<void> = null;
 
 	private static instance_: ExternalEditWatcher;
 
@@ -39,8 +47,7 @@ export default class ExternalEditWatcher {
 		return this.instance_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public initialize(bridge: Function, dispatch: Function) {
+	public initialize(bridge: BridgeFn, dispatch: DispatchFn) {
 		this.bridge_ = bridge;
 		this.dispatch = dispatch;
 
@@ -95,13 +102,13 @@ export default class ExternalEditWatcher {
 		return Setting.value('profileDir');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public on(eventName: string, callback: Function) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- EventEmitter events carry heterogeneous payloads by name; per-event typing would need a string-literal map across all callers
+	public on(eventName: string, callback: (...args: any[])=> void) {
 		return this.eventEmitter_.on(eventName, callback);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public off(eventName: string, callback: Function) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See on() above
+	public off(eventName: string, callback: (...args: any[])=> void) {
 		return this.eventEmitter_.removeListener(eventName, callback);
 	}
 
@@ -121,6 +128,10 @@ export default class ExternalEditWatcher {
 				useFsEvents: false,
 			});
 
+			this.watcherReady_ = new Promise<void>(resolve => {
+				this.watcher_.on('ready', () => resolve());
+			});
+
 			this.watcher_.on('all', async (event: string, path: string) => {
 				this.logger().debug(`ExternalEditWatcher: Event: ${event}: ${path}`);
 
@@ -134,13 +145,12 @@ export default class ExternalEditWatcher {
 				} else if (event === 'change') {
 					const id = this.noteFilePathToId_(path);
 
-					if (!this.skipNextChangeEvent_[id]) {
+					if (!this.skipNextChangeEvent_.has(id)) {
 						this.changeEventQueue_.push(() => this.onNoteChange_(path), { path });
 					} else {
 						this.logger().debug('ExternalEditWatcher: Skipping this event.');
+						this.skipNextChangeEvent_.delete(id);
 					}
-
-					this.skipNextChangeEvent_ = {};
 				} else if (event === 'error') {
 					this.logger().error('ExternalEditWatcher: error');
 				}
@@ -198,6 +208,12 @@ export default class ExternalEditWatcher {
 			if (!noteContent) this.logger().warn(`ExternalEditWatcher: Could not re-read note - user might have purposely deleted note content: ${id}`);
 		}
 
+		const contentHash = hashNoteContent(noteContent);
+		if (contentHash === this.lastNoteContentHash_.get(id)) {
+			this.logger().info('ExternalEditWatcher: No changes since last write');
+			return;
+		}
+
 		this.logger().debug('ExternalEditWatcher: Updating note object.');
 
 		const updatedNote = await Note.unserializeForEdit(noteContent);
@@ -205,6 +221,8 @@ export default class ExternalEditWatcher {
 		updatedNote.parent_id = note.parent_id;
 		await Note.save(updatedNote);
 		this.eventEmitter_.emit('noteChange', { id: updatedNote.id, note: updatedNote });
+
+		this.lastNoteContentHash_.set(id, contentHash);
 	}
 
 	private noteIdToFilePath_(noteId: string) {
@@ -268,6 +286,10 @@ export default class ExternalEditWatcher {
 		if (!filePath) return;
 		this.watch(filePath);
 
+		// A save made before Chokidar's initial scan completes is folded into its "add" event,
+		// which we ignore, so the change would be lost.
+		await this.watcherReady_;
+
 		await openFileWithExternalEditor(filePath, this.bridge_());
 
 		this.dispatch({
@@ -278,14 +300,18 @@ export default class ExternalEditWatcher {
 		this.logger().info(`ExternalEditWatcher: Started watching ${filePath}`);
 	}
 
-	public async stopWatching(noteId: string) {
+	// Without a flush, a pending change finds the file removed below and is dropped.
+	public async stopWatching(noteId: string, flushPendingChanges = true) {
 		if (!noteId) return;
 
-		await this.changeEventQueue_.processAllNow();
+		if (flushPendingChanges) await this.changeEventQueue_.processAllNow();
 
 		const filePath = this.noteIdToFilePath_(noteId);
 		if (this.watcher_) this.watcher_.unwatch(filePath);
 		await shim.fsDriver().remove(filePath);
+
+		this.lastNoteContentHash_.delete(noteId);
+		this.skipNextChangeEvent_.delete(noteId);
 		this.dispatch({
 			type: 'NOTE_FILE_WATCHER_REMOVE',
 			id: noteId,
@@ -303,6 +329,9 @@ export default class ExternalEditWatcher {
 
 		if (this.watcher_) this.watcher_.close();
 		this.watcher_ = null;
+		this.watcherReady_ = null;
+		this.skipNextChangeEvent_.clear();
+		this.lastNoteContentHash_.clear();
 		this.logger().info('ExternalEditWatcher: Stopped watching all files');
 		this.dispatch({
 			type: 'NOTE_FILE_WATCHER_CLEAR',
@@ -321,7 +350,7 @@ export default class ExternalEditWatcher {
 
 		// When the note file is updated programmatically, we skip the next change event to
 		// avoid update loops. We only want to listen to file changes made by the user.
-		this.skipNextChangeEvent_[note.id] = true;
+		this.skipNextChangeEvent_.set(note.id, true);
 
 		await this.writeNoteToFile_(note);
 	}
@@ -334,7 +363,10 @@ export default class ExternalEditWatcher {
 
 		const filePath = this.noteIdToFilePath_(note.id);
 		const noteContent = await Note.serializeForEdit(note);
+
 		await shim.fsDriver().writeFile(filePath, noteContent, 'utf-8');
+		this.lastNoteContentHash_.set(note.id, hashNoteContent(noteContent));
+
 		return filePath;
 	}
 }

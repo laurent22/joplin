@@ -1,14 +1,14 @@
 import type * as MarkdownIt from 'markdown-it';
 
 const extractVideoId = (url: string) => {
-	const pattern = /^https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/;
+	const pattern = /^https?:\/\/(?:www\.|m\.)?(?:youtube\.com\/watch\?(?:.*&)?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/;
 	const match = url.match(pattern);
 	return match ? match[1] : null;
 };
 
 const plugin = (markdownIt: MarkdownIt) => {
 	const defaultLinkOpenRender = markdownIt.renderer.rules.link_open || function(tokens, idx, options, env, self) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- markdown-it's renderToken signature is (tokens, idx, options) but this fallback passes (tokens, idx, options, env, self); the extra args are unused but kept for parity with rules that override renderToken
 		return (self.renderToken as any)(tokens, idx, options, env, self);
 	};
 
@@ -17,7 +17,7 @@ const plugin = (markdownIt: MarkdownIt) => {
 	};
 
 	const defaultLinkCloseRender = markdownIt.renderer.rules.link_close || function(tokens, idx, options, env, self) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- markdown-it's renderToken signature is (tokens, idx, options) but this fallback passes (tokens, idx, options, env, self); the extra args are unused but kept for parity with rules that override renderToken
 		return (self.renderToken as any)(tokens, idx, options, env, self);
 	};
 

@@ -1,13 +1,12 @@
-const Entities = require('html-entities').AllHtmlEntities;
+import { AllHtmlEntities as Entities } from 'html-entities';
 const htmlentities = new Entities().encode;
+const decodeEntities = new Entities().decode;
 import { fileUriToPath } from '@joplin/utils/url';
-const htmlparser2 = require('@joplin/fork-htmlparser2');
+import * as htmlparser2 from '@joplin/fork-htmlparser2';
 
 // [\s\S] instead of . for multiline matching
 // https://stackoverflow.com/a/16119722/561309
 const imageRegex = /<img([\s\S]*?)src=["']([\s\S]*?)["']([\s\S]*?)>/gi;
-
-const anchorRegex = /<a([\s\S]*?)href=["']([\s\S]*?)["']([\s\S]*?)>/gi;
 
 const selfClosingElements = [
 	'area',
@@ -36,17 +35,19 @@ interface SanitizeHtmlOptions {
 	allowedFilePrefixes?: string[];
 }
 
+// htmlparser2 accepts attribute names that browsers parse differently, such as one starting with "=". Together with a
+// value-less attribute before it (`a =b="x onerror=..."`), the browser would see an attribute the sanitiser never did.
+const validAttributeName = /^[a-zA-Z_:][-a-zA-Z0-9_:.]*$/;
+
 export const attributesHtml = (attr: Record<string, string>) => {
 	const output = [];
 
 	for (const n in attr) {
 		if (!attr.hasOwnProperty(n)) continue;
+		if (!validAttributeName.test(n)) continue;
 
-		if (!attr[n]) {
-			output.push(n);
-		} else {
-			output.push(`${n}="${htmlentities(attr[n])}"`);
-		}
+		// Always with a value, even an empty one, so that nothing that follows can be read as this attribute's value
+		output.push(`${n}="${htmlentities(attr[n] || '')}"`);
 	}
 
 	return output.join(' ');
@@ -73,9 +74,19 @@ interface ProcessImageEvent {
 }
 type ProcessImageCallback = (data: ProcessImageEvent)=> ProcessImageResult;
 
+export interface ProcessAnchorTagsEvent {
+	href: string|undefined;
+}
+
+export type ProcessAnchorTagsAction =
+	| { type: 'replaceElement'; html: string }
+	| { type: 'replaceSource'; href: string }
+	| { type: 'setAttributes'; attrs: Record<string, string> };
+
+type ProcessAnchorTagsCallback = (event: ProcessAnchorTagsEvent)=> ProcessAnchorTagsAction | null;
+
 class HtmlUtils {
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public processImageTags(html: string, callback: ProcessImageCallback) {
 		if (!html) return '';
 
@@ -101,36 +112,32 @@ class HtmlUtils {
 		});
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public processAnchorTags(html: string, callback: Function) {
+	public processAnchorTags(html: string, callback: ProcessAnchorTagsCallback) {
 		if (!html) return '';
 
-		interface Action {
-			type: 'replaceElement' | 'replaceSource' | 'setAttributes';
-			href: string;
-			html: string;
-			attrs: Record<string, string>;
-		}
+		return replaceElements(html, (event) => {
+			if (event.name === 'a') {
+				const action = callback({ href: event.attrs['href'] });
 
-		return html.replace(anchorRegex, (_v, before, href, after) => {
-			const action: Action = callback({ href: href });
+				if (!action) return { attrs: event.attrs };
 
-			if (!action) return `<a${before}href="${href}"${after}>`;
+				if (action.type === 'replaceElement') {
+					return { openingTagHtml: action.html };
+				}
 
-			if (action.type === 'replaceElement') {
-				return action.html;
+				if (action.type === 'replaceSource') {
+					return { attrs: { ...event.attrs, href: action.href } };
+				}
+
+				if (action.type === 'setAttributes') {
+					return { attrs: action.attrs };
+				}
+
+				const exhaustivenessCheck: never = action;
+				throw new Error(`Invalid action: ${(exhaustivenessCheck as ProcessAnchorTagsAction).type}`);
+			} else {
+				return { attrs: event.attrs };
 			}
-
-			if (action.type === 'replaceSource') {
-				return `<img${before}href="${action.href}"${after}>`;
-			}
-
-			if (action.type === 'setAttributes') {
-				const attrHtml = attributesHtml(action.attrs);
-				return `<img${before}${attrHtml}${after}>`;
-			}
-
-			throw new Error(`Invalid action: ${action.type}`);
 		});
 	}
 
@@ -183,7 +190,7 @@ class HtmlUtils {
 			url.startsWith('http://') ||
 			url.startsWith('mailto:') ||
 			url.startsWith('joplin://') ||
-			!!url.match(/:\/[0-9a-zA-Z]{32}/) ||
+			!!url.match(/^:\/[0-9a-zA-Z]{32}(\/.*)?$/) ||
 			// We also allow anchors but only with a specific set of a characters.
 			// Fixes https://github.com/laurent22/joplin/issues/8286
 			!!url.match(/^#[a-zA-Z0-9-]+$/)) return true;
@@ -320,8 +327,11 @@ class HtmlUtils {
 				// particular we want to exclude `javascript:` URLs. This
 				// applies to A tags, and also AREA ones but to be safe we don't
 				// filter on the tag name and process all HREF attributes.
-				if ('href' in attrs && !this.isAcceptedUrl(attrs['href'], options.allowedFilePrefixes)) {
-					attrs['href'] = '#';
+				// "xlink:href" too, because the viewer click handler reads it.
+				for (const hrefAttr of ['href', 'xlink:href']) {
+					if (hrefAttr in attrs && !this.isAcceptedUrl(attrs[hrefAttr], options.allowedFilePrefixes)) {
+						attrs[hrefAttr] = '#';
+					}
 				}
 
 				// We need to clear any such attribute, otherwise it will
@@ -336,15 +346,6 @@ class HtmlUtils {
 						classAttr += ' jop-noMdConv';
 						attrs['class'] = classAttr.trim();
 					}
-				}
-
-				// For some reason, entire parts of HTML notes don't show up in
-				// the viewer when there's an anchor tag without an "href"
-				// attribute. It doesn't always happen and it seems to depend on
-				// what else is in the note but in any case adding the "href"
-				// fixes it. https://github.com/laurent22/joplin/issues/5687
-				if (name === 'a' && !attrs['href']) {
-					attrs['href'] = '#';
 				}
 
 				let attrHtml = attributesHtml(attrs);
@@ -417,6 +418,79 @@ const makeHtmlTag = (name: string, attrs: Record<string, string>) => {
 	if (attrHtml) attrHtml = ` ${attrHtml}`;
 	const closingSign = isSelfClosingTag(name) ? '/>' : '>';
 	return `<${name}${attrHtml}${closingSign}`;
+};
+
+
+interface TagRecord {
+	name: string;
+	attrs: Record<string, string>;
+}
+interface AttrsReplacement {
+	attrs: Record<string, string>;
+	openingTagHtml?: undefined;
+}
+interface OpeningTagReplacement {
+	attrs?: undefined;
+	openingTagHtml: string;
+}
+
+type OnMapTag = (tag: TagRecord)=> OpeningTagReplacement|AttrsReplacement;
+
+const replaceElements = (html: string, tagMapping: OnMapTag) => {
+	const output: string[] = [];
+	type StackEntry = { name: string };
+	const stack: StackEntry[] = [];
+
+	const parser = new htmlparser2.Parser({
+
+		oncomment: (data: string) => {
+			output.push(`<!--${htmlentities(data)}-->`);
+		},
+
+		onopentag: (name: string, attrs: Record<string, string>) => {
+			// Note: "name" and attribute names are always lowercase even
+			// when the input is not. So there is no need to call
+			// "toLowerCase" on them.
+			stack.push({ name });
+
+			for (const key of Object.keys(attrs)) {
+				if (typeof attrs[key] !== 'string') continue;
+				attrs[key] = decodeEntities(attrs[key]);
+			}
+
+			const mapping = tagMapping({ name, attrs });
+			let replacement;
+			if (mapping.openingTagHtml) {
+				replacement = mapping.openingTagHtml;
+			} else {
+				attrs = mapping.attrs;
+
+				let attrHtml = attributesHtml(attrs);
+				if (attrHtml) attrHtml = ` ${attrHtml}`;
+				const closingSign = isSelfClosingTag(name) ? '/>' : '>';
+				replacement = `<${name}${attrHtml}${closingSign}`;
+			}
+
+			output.push(replacement);
+		},
+
+		ontext: (encodedText: string) => {
+			output.push(encodedText);
+		},
+
+		onclosetag: (name: string) => {
+			stack.pop();
+			if (!isSelfClosingTag(name)) {
+				output.push(`</${name}>`);
+			}
+		},
+
+	}, { decodeEntities: false });
+
+	parser.write(html);
+	parser.end();
+
+	return output.join('');
 };
 
 // Will return either the content of the <BODY> tag if it exists, or the whole

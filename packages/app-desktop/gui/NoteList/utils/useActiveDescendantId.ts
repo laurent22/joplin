@@ -5,34 +5,27 @@ const useActiveDescendantId = (selectedFolderId: string, selectedNoteIds: string
 	const selectedNoteIdsRef = useRef(selectedNoteIds);
 	selectedNoteIdsRef.current = selectedNoteIds;
 
-	const [activeNoteId, setActiveNoteId] = useState('');
+	const [focusedNoteId, setFocusedNoteId] = useState('');
+
 	useEffect(() => {
-		setActiveNoteId(selectedNoteIdsRef.current?.[0] ?? '');
+		setFocusedNoteId(selectedNoteIdsRef.current?.[0] ?? '');
 	}, [selectedFolderId]);
 
-	const previousNoteIdsRef = useRef<string[]>(null);
-	previousNoteIdsRef.current = usePrevious(selectedNoteIds);
+	const previousSelectedNoteIds = usePrevious(selectedNoteIds, []);
+	let activeNoteId = focusedNoteId;
+
+	if (!selectedNoteIds.includes(activeNoteId)) {
+		// Prefer added items
+		activeNoteId = selectedNoteIds.find(id => !previousSelectedNoteIds.includes(id)) ?? selectedNoteIds[0] ?? '';
+	}
 
 	useEffect(() => {
-		const previousNoteIds = previousNoteIdsRef.current ?? [];
+		if (focusedNoteId !== activeNoteId) {
+			setFocusedNoteId(activeNoteId);
+		}
+	}, [focusedNoteId, activeNoteId]);
 
-		setActiveNoteId(current => {
-			if (selectedNoteIds.includes(current)) {
-				return current;
-			} else {
-				// Prefer added items
-				for (const id of selectedNoteIds) {
-					if (!previousNoteIds.includes(id)) {
-						return id;
-					}
-				}
-
-				return selectedNoteIds[0] ?? '';
-			}
-		});
-	}, [selectedNoteIds]);
-
-	return { activeNoteId, setActiveNoteId };
+	return { activeNoteId, setActiveNoteId: setFocusedNoteId };
 };
 
 export default useActiveDescendantId;

@@ -2,15 +2,27 @@
 
 import { ClipboardContent } from './types';
 
+interface ElectronClipboardLike {
+	readText(): string;
+	writeText(text: string): void;
+	readHTML(): string;
+	writeHTML(html: string): void;
+	readImage(): { toDataURL(): string } | null;
+	writeImage(image: unknown): void;
+	availableFormats(): string[];
+	write(data: Record<string, unknown>): void;
+}
+
+interface ElectronNativeImageLike {
+	createFromDataURL(dataUrl: string): unknown;
+}
+
 export default class JoplinClipboard {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private electronClipboard_: any = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private electronNativeImage_: any = null;
+	private electronClipboard_: ElectronClipboardLike = null;
+	private electronNativeImage_: ElectronNativeImageLike = null;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public constructor(electronClipboard: any, electronNativeImage: any) {
+	public constructor(electronClipboard: ElectronClipboardLike, electronNativeImage: ElectronNativeImageLike) {
 		this.electronClipboard_ = electronClipboard;
 		this.electronNativeImage_ = electronNativeImage;
 	}

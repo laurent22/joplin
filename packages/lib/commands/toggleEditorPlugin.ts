@@ -3,6 +3,7 @@ import { _ } from '../locale';
 import Logger from '@joplin/utils/Logger';
 import getActivePluginEditorViews from '../services/plugins/utils/getActivePluginEditorViews';
 import getShownPluginEditorView from '../services/plugins/utils/getShownPluginEditorView';
+import { stateUtils } from '../reducer';
 
 const logger = Logger.create('toggleEditorPlugin');
 
@@ -16,6 +17,19 @@ export const runtime = (): CommandRuntime => {
 	return {
 		execute: async (context: CommandContext) => {
 			const activeWindowId = context.state.windowId;
+
+			// The desktop core "Whiteboard" editor reuses this same toggle.
+			// If the active note is a whiteboard, flip its forced-markdown
+			// flag instead of touching plugin editor visibility.
+			const windowState = stateUtils.windowStateById(context.state, activeWindowId) as { activeNoteIsWhiteboard?: boolean };
+			if (windowState?.activeNoteIsWhiteboard) {
+				const noteId: string | undefined = context.state.selectedNoteIds?.[0];
+				if (noteId) {
+					context.dispatch({ type: 'WHITEBOARD_FORCE_MARKDOWN_TOGGLE', noteId });
+					return;
+				}
+			}
+
 			const activePluginStates = getActivePluginEditorViews(context.state.pluginService.plugins, activeWindowId);
 
 			if (activePluginStates.length === 0) {
@@ -51,6 +65,6 @@ export const runtime = (): CommandRuntime => {
 			}
 		},
 
-		enabledCondition: 'hasActivePluginEditor',
+		enabledCondition: 'hasActivePluginEditor || activeNoteIsWhiteboard',
 	};
 };

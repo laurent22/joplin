@@ -8,6 +8,7 @@ import Setting from '../Setting';
 import { checkObjectHasProperties } from '@joplin/utils/object';
 import isTrashableItem from '../../services/trash/isTrashableItem';
 import isJoplinServerVariant from './isJoplinServerVariant';
+import { NoteEntity } from '../../services/database/types';
 
 const logger = Logger.create('models/utils/readOnly');
 
@@ -47,8 +48,7 @@ export const checkIfItemCanBeChanged = (itemType: ModelType, changeSource: numbe
 	}
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const checkIfItemCanBeAddedToFolder = async (itemType: ModelType, Folder: any, changeSource: number, shareState: ShareState, parentId: string) => {
+export const checkIfItemCanBeAddedToFolder = async (itemType: ModelType, Folder: typeof import('../Folder').default, changeSource: number, shareState: ShareState, parentId: string) => {
 	if (needsShareReadOnlyChecks(itemType, changeSource, shareState) && parentId) {
 		const parentFolder = await Folder.load(parentId, { fields: ['id', 'share_id'] });
 
@@ -63,11 +63,14 @@ export const checkIfItemCanBeAddedToFolder = async (itemType: ModelType, Folder:
 			return;
 		}
 
-		if (itemIsReadOnlySync(itemType, changeSource, parentFolder, Setting.value('sync.userId'), shareState, true)) {
+		if (itemIsReadOnlySync(itemType, changeSource, parentFolder as ItemSlice, Setting.value('sync.userId'), shareState, true)) {
 			throw new JoplinError('Cannot add an item as a child of a read-only item', ErrorCode.IsReadOnly);
 		}
 	}
 };
+
+// A locked note inside a share is read-only until moved out: an older client editing it there would drop the lock.
+export const noteIsLockedInShare = (note: Pick<NoteEntity, 'is_locked' | 'share_id'>) => !!note?.is_locked && !!note.share_id;
 
 // Originally all these functions were there to handle share permissions - a note, folder or
 // resource that is not editable would be read-only. However this particular function now is also
@@ -104,8 +107,7 @@ export const itemIsReadOnlySync = (itemType: ModelType, changeSource: number, it
 	return !shareUser.can_write;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const itemIsReadOnly = async (BaseItem: any, itemType: ModelType, changeSource: number, itemId: string, userId: string, shareState: ShareState): Promise<boolean> => {
+export const itemIsReadOnly = async (BaseItem: typeof import('../BaseItem').default, itemType: ModelType, changeSource: number, itemId: string, userId: string, shareState: ShareState): Promise<boolean> => {
 	// if (!needsShareReadOnlyChecks(itemType, changeSource, shareState)) return false;
 	const item: ItemSlice = await BaseItem.loadItem(itemType, itemId, { fields: ['id', 'share_id', 'deleted_time'] });
 	if (!item) throw new JoplinError(`No such item: ${itemType}: ${itemId}`, ErrorCode.NotFound);

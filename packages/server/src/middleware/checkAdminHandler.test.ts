@@ -31,6 +31,21 @@ describe('checkAdminHandler', () => {
 		await expectNotThrow(async () => checkAdminHandler(context, koaNext));
 	});
 
+	test('should not access /admin if the admin account is disabled', async () => {
+		const { user, session } = await createUserAndSession(1, true);
+		await models().user().save({ id: user.id, enabled: 0 });
+
+		const context = await koaAppContext({
+			sessionId: session.id,
+			request: {
+				method: 'GET',
+				url: '/admin/teams',
+			},
+		});
+
+		await expectHttpError(async () => checkAdminHandler(context, koaNext), ErrorForbidden.httpCode);
+	});
+
 	test('should not access /admin if the user is not admin', async () => {
 		const { session } = await createUserAndSession(1);
 

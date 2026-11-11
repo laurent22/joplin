@@ -131,8 +131,7 @@ export default class PerFolderSortOrderService {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private static onFolderSelectionMayChange(cause: string, event: any) {
+	private static onFolderSelectionMayChange(cause: string, event: { value: string }) {
 		if (cause !== 'notesParentType' && cause !== 'selectedFolderId' && cause !== 'selectedSmartFilterId') {
 			return;
 		}
@@ -182,7 +181,7 @@ export default class PerFolderSortOrderService {
 
 	private static loadSharedSortOrder() {
 		const validFields = notesSortOrderFieldArray();
-		const value = Setting.value('notes.sharedSortOrder');
+		const value = Setting.value('notes.sharedSortOrder') as { field?: string; reverse?: boolean } & Record<string, string | boolean>;
 		for (const key in this.sharedSortOrder) {
 			if (value.hasOwnProperty(key)) {
 				if (key !== 'field' || validFields.includes(value.field)) {

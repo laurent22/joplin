@@ -70,10 +70,7 @@ const TaskButton: FunctionComponent<Props> = props => {
 			}
 		} catch (error) {
 			logger.error(`Task ${props.taskName} failed`, error);
-			await shim.showMessageBox(_('Task "%s" failed with error: %s', props.taskName, error.toString()), {
-				title: _('Error'),
-				buttons: [_('OK')],
-			});
+			await shim.showErrorDialog(_('Task "%s" failed with error: %s', props.taskName, error.toString()));
 		} finally {
 			if (!completedSuccessfully) {
 				setTaskStatus(TaskStatus.NotStarted);

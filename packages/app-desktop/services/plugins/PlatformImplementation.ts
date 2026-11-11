@@ -9,12 +9,11 @@ import { join } from 'path';
 import uuid, { uuidgen } from '@joplin/lib/uuid';
 import { hasProtocol } from '@joplin/utils/url';
 import { fileExtension } from '@joplin/utils/path';
-const { clipboard, nativeImage } = require('electron');
+import { clipboard, nativeImage } from 'electron';
 const packageInfo = require('../../packageInfo');
 
 interface Components {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	[key: string]: any;
+	[key: string]: unknown;
 }
 
 // PlatformImplementation provides access to platform specific dependencies,
@@ -67,8 +66,7 @@ export default class PlatformImplementation extends BasePlatformImplementation {
 		};
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public registerComponent(name: string, component: any) {
+	public registerComponent(name: string, component: unknown) {
 		this.components_[name] = component;
 	}
 

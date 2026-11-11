@@ -16,36 +16,36 @@ interface FocusOptions {
 	preventScroll: boolean;
 }
 
-interface FocusableElement {
-	focus: (options?: FocusOptions)=> void;
-	blur: ()=> void;
-}
+type MaybeFocusable = {
+	focus?: (...args: unknown[])=> void;
+	blur?: (...args: unknown[])=> void;
+};
 
-const toggleFocus = (source: string, element: FocusableElement, action: ToggleFocusAction, options: FocusOptions|null) => {
+const toggleFocus = (source: string, element: unknown, action: ToggleFocusAction, options: FocusOptions|null) => {
 	if (!element) {
 		logger.warn(`Tried action "${action}" on an undefined element: ${source}`);
 		return;
 	}
 
-	if (!element[action]) {
+	const focusable = element as MaybeFocusable;
+	const fn = focusable[action];
+	if (typeof fn !== 'function') {
 		logger.warn(`Element does not have a "${action}" method: ${source}`);
 		return;
 	}
 
 	logger.debug(`Action "${action}" from "${source}"`);
 	if (options) {
-		element[action](options);
+		fn.call(focusable, options);
 	} else {
-		element[action]();
+		fn.call(focusable);
 	}
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const focus = (source: string, element: any, options: FocusOptions|null = null) => {
+export const focus = (source: string, element: unknown, options: FocusOptions|null = null) => {
 	toggleFocus(source, element, ToggleFocusAction.Focus, options);
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const blur = (source: string, element: any) => {
+export const blur = (source: string, element: unknown) => {
 	toggleFocus(source, element, ToggleFocusAction.Blur, null);
 };

@@ -6,10 +6,10 @@ import { reg } from '@joplin/lib/registry';
 import { ScreenHeader } from '../ScreenHeader';
 import time from '@joplin/lib/time';
 import { themeStyle } from '../global-style';
-import Logger from '@joplin/utils/Logger';
+import Logger, { LogEntry } from '@joplin/utils/Logger';
 import { BaseScreenComponent } from '../base-screen';
 import { _ } from '@joplin/lib/locale';
-import { MenuOptionType } from '../ScreenHeader';
+import { MenuOption } from '../ScreenHeader';
 import { AppState } from '../../utils/types';
 import { writeTextToCacheFile } from '../../utils/ShareUtils';
 import shim from '@joplin/lib/shim';
@@ -18,17 +18,9 @@ import shareFile from '../../utils/shareFile';
 
 const logger = Logger.create('LogScreen');
 
-interface LogEntry {
-	id: number;
-	timestamp: number;
-	level: number;
-	message: string;
-}
-
 interface Props {
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	navigation: any;
+	navigation: { state: { defaultFilter?: string } };
 }
 
 interface State {
@@ -38,12 +30,11 @@ interface State {
 }
 
 class LogScreenComponent extends BaseScreenComponent<Props, State> {
-	private readonly menuOptions_: MenuOptionType[];
+	private readonly menuOptions_: MenuOption[];
 	private styles_: Record<number, ReturnType<typeof StyleSheet.create>>;
 	private readonly logListRef_ = React.createRef<FlatList>();
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static navigationOptions(): any {
+	public static navigationOptions(): { header: null } {
 		return { header: null };
 	}
 
@@ -93,7 +84,7 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 
 	private async getLogEntries(showErrorsOnly: boolean, limit: number|null = null): Promise<LogEntry[]> {
 		const levels = this.getLogLevels(showErrorsOnly);
-		return await reg.logger().lastEntries(limit, { levels, filter: this.state.filter }) as LogEntry[];
+		return await reg.logger().lastEntries(limit, { levels, filter: this.state.filter });
 	}
 
 	private async onSharePress() {
@@ -124,8 +115,8 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 
 		const theme = themeStyle(this.props.themeId);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const styles: any = {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Heterogeneous style entries (row + rowText, then rowTextError/Warn spread off rowText); typed split would force restructuring
+		const styles: Record<string, any> = {
 			row: {
 				flexDirection: 'row',
 				paddingLeft: 1,
@@ -163,6 +154,7 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 
 	private async refreshLogEntries(showErrorsOnly: boolean = null) {
 		if (showErrorsOnly === null) showErrorsOnly = this.state.showErrorsOnly;
+		const prevShowErrorsOnly = this.state.showErrorsOnly;
 
 		const limit = 1000;
 		const logEntries = await this.getLogEntries(showErrorsOnly, limit);
@@ -171,7 +163,7 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 			logEntries: logEntries,
 			showErrorsOnly: showErrorsOnly,
 		}, () => {
-			if (this.state.filter !== undefined) {
+			if (this.state.filter !== undefined || prevShowErrorsOnly !== showErrorsOnly) {
 				this.logListRef_.current?.scrollToOffset({ offset: 0, animated: false });
 			}
 		});

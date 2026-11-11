@@ -47,7 +47,7 @@ pub fn convert(path: &str, output_dir: &str, base_path: &str) -> Result<()> {
                 return Ok(());
             }
 
-            let section = Parser::new().parse_section(path.to_owned())?;
+            let section = Parser::new().parse_section(path)?;
 
             let section_output_dir = fs_driver().get_output_path(base_path, output_dir, path);
             section::Renderer::new().render(&section, section_output_dir.to_owned())?;

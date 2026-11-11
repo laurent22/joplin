@@ -1,13 +1,13 @@
 import { RuleOptions } from '../../MdToHtml';
 import linkReplacement from '../linkReplacement';
 import * as utils from '../../utils';
+import type * as MarkdownIt from 'markdown-it';
+import type Token = require('markdown-it/lib/token');
 
 const urlUtils = require('../../urlUtils.js');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function plugin(markdownIt: any, ruleOptions: RuleOptions) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	markdownIt.renderer.rules.link_open = function(tokens: any[], idx: number) {
+function plugin(markdownIt: MarkdownIt, ruleOptions: RuleOptions) {
+	markdownIt.renderer.rules.link_open = function(tokens: Token[], idx: number) {
 		const token = tokens[idx];
 		const href = utils.getAttr(token.attrs, 'href');
 		const resourceHrefInfo = urlUtils.parseResourceUrl(href);

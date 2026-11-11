@@ -2,13 +2,14 @@ import { RuleOptions } from '../../MdToHtml';
 import { attributesHtml } from '../../htmlUtils';
 import * as utils from '../../utils';
 import createEventHandlingAttrs from '../createEventHandlingAttrs';
+import type * as MarkdownIt from 'markdown-it';
+import type Token = require('markdown-it/lib/token');
+import type Renderer = require('markdown-it/lib/renderer');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function plugin(markdownIt: any, ruleOptions: RuleOptions) {
+function plugin(markdownIt: MarkdownIt, ruleOptions: RuleOptions) {
 	const defaultRender = markdownIt.renderer.rules.image;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	markdownIt.renderer.rules.image = (tokens: any[], idx: number, options: any, env: any, self: any) => {
+	markdownIt.renderer.rules.image = (tokens: Token[], idx: number, options: MarkdownIt.Options, env: unknown, self: Renderer) => {
 		const Resource = ruleOptions.ResourceModel;
 
 		const token = tokens[idx];

@@ -5,10 +5,14 @@ import { betaUserTrialPeriodDays, isBetaUser, stripeConfig } from '../../utils/s
 import { beforeAllDb, afterAllTests, beforeEachDb, models, koaAppContext, expectNotThrow } from '../../utils/testing/testUtils';
 import { AppContext } from '../../utils/types';
 import { uuidgen } from '@joplin/lib/uuid';
-import { postHandlers } from './stripe';
+import { getHandlers, postHandlers } from './stripe';
+import Stripe from 'stripe';
+import { SubPath } from '../../utils/routeUtils';
+import { Hour, Month, Second } from '@joplin/utils/time';
 
 interface StripeOptions {
 	userEmail?: string;
+	source?: string;
 }
 
 function mockStripe(options: StripeOptions = null) {
@@ -23,8 +27,10 @@ function mockStripe(options: StripeOptions = null) {
 				return {
 					name: 'Toto',
 					email: options.userEmail,
+					metadata: { source: options.source || '' },
 				};
 			},
+			update: jest.fn(),
 		},
 		subscriptions: {
 			cancel: jest.fn(),
@@ -48,32 +54,33 @@ function mockStripe(options: StripeOptions = null) {
 }
 
 interface WebhookOptions {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	stripe?: any;
+	stripe?: ReturnType<typeof mockStripe>;
 	eventId?: string;
 	subscriptionId?: string;
+	currentPeriodEndSeconds?: number;
 	customerId?: string;
 	sessionId?: string;
 	userEmail?: string;
 	accountType?: AccountType;
 	quantity?: number;
+	source?: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function simulateWebhook(ctx: AppContext, type: string, object: any, options: WebhookOptions = {}) {
+async function simulateWebhook(ctx: AppContext, type: string, object: Record<string, unknown>, options: WebhookOptions = {}) {
 	options = {
-		stripe: mockStripe({ userEmail: options.userEmail }),
+		stripe: mockStripe({ userEmail: options.userEmail, source: options.source }),
 		eventId: uuidgen(),
 		...options,
 	};
 
-	await postHandlers.webhook(options.stripe, {}, ctx, {
+	// The stripe client, sub-path and event are stubbed for this test, so cast past their full production types.
+	await postHandlers.webhook(options.stripe as unknown as Stripe, {} as unknown as SubPath, ctx, {
 		id: options.eventId,
 		type,
 		data: {
 			object,
 		},
-	}, false);
+	} as unknown as Stripe.Event, false);
 }
 
 async function createUserViaSubscription(ctx: AppContext, options: WebhookOptions = {}) {
@@ -92,6 +99,7 @@ async function createUserViaSubscription(ctx: AppContext, options: WebhookOption
 	await simulateWebhook(ctx, 'customer.subscription.created', {
 		id: options.subscriptionId,
 		customer: options.customerId,
+		current_period_end: options.currentPeriodEndSeconds ?? Math.floor((Date.now() + Month) / Second),
 		items: {
 			data: [
 				{
@@ -101,6 +109,18 @@ async function createUserViaSubscription(ctx: AppContext, options: WebhookOption
 			],
 		},
 	}, options);
+}
+
+const checkoutSession = (status = 'complete') => ({ status, subscription: 'sub_1', customer_details: { email: 'toto@example.com' } });
+
+// Returns the URL the success page redirects to, or '' if it does not redirect
+async function requestSuccessPage(session: Record<string, unknown>) {
+	const ctx = await koaAppContext();
+	const redirect = jest.fn();
+	ctx.redirect = redirect;
+	const stripe = { ...mockStripe(), checkout: { sessions: { retrieve: async () => session } } };
+	await getHandlers.success(stripe as unknown as Stripe, {} as unknown as SubPath, ctx);
+	return redirect.mock.calls.length ? redirect.mock.calls[0][0] as string : '';
 }
 
 describe('index/stripe', () => {
@@ -135,13 +155,40 @@ describe('index/stripe', () => {
 		expect(sub.last_payment_failed_time).toBe(0);
 	});
 
+	test('should store the signup source on the subscription', async () => {
+		const ctx = await koaAppContext();
+		await createUserViaSubscription(ctx, { userEmail: 'toto@example.com', source: 'desktop-wizard' });
+
+		const user = await models().user().loadByEmail('toto@example.com');
+		const sub = await models().subscription().byUserId(user.id);
+		expect(sub.source).toBe('desktop-wizard');
+	});
+
+	test('should default the source to an empty string when none is provided', async () => {
+		const ctx = await koaAppContext();
+		await createUserViaSubscription(ctx, { userEmail: 'toto@example.com' });
+
+		const user = await models().user().loadByEmail('toto@example.com');
+		const sub = await models().subscription().byUserId(user.id);
+		expect(sub.source).toBe('');
+	});
+
 	test('should not process the same event twice', async () => {
 		const ctx = await koaAppContext();
 		await createUserViaSubscription(ctx, { userEmail: 'toto@example.com', eventId: 'evt_1' });
-		const v = await models().keyValue().value('stripeEventDone::evt_1');
-		expect(v).toBe(1);
+		const loadUser = () => models().user().loadByEmail('toto@example.com');
+
+		let user = await loadUser();
+		expect(user).toMatchObject({
+			account_type: AccountType.Pro,
+		});
+		await models().user().delete(user.id);
+
 		// This event should simply be skipped
 		await expectNotThrow(async () => createUserViaSubscription(ctx, { userEmail: 'toto@example.com', eventId: 'evt_1' }));
+
+		user = await loadUser();
+		expect(user).toBeUndefined();
 	});
 
 	test('should check if it is a beta user', async () => {
@@ -198,6 +245,34 @@ describe('index/stripe', () => {
 		expect(stripe.subscriptions.cancel).toHaveBeenCalledTimes(1);
 
 		expect(subBefore.stripe_subscription_id).toBe(subAfter.stripe_subscription_id);
+	});
+
+	test('should hand out a confirmation token once, for the account the checkout created', async () => {
+		await createUserViaSubscription(await koaAppContext(), { userEmail: 'toto@example.com', subscriptionId: 'sub_1' });
+		const user = await models().user().loadByEmail('toto@example.com');
+
+		expect(await requestSuccessPage(checkoutSession())).toContain(`/users/${user.id}/confirm?token=`);
+		expect(await requestSuccessPage(checkoutSession())).toBe('');
+	});
+
+	test.each([
+		['the checkout attached to an existing account awaiting its password', async () => {
+			await models().user().save({ email: 'toto@example.com', password: uuidgen(), must_set_password: 1 });
+			await createUserViaSubscription(await koaAppContext(), { userEmail: 'toto@example.com', subscriptionId: 'sub_1' });
+			return checkoutSession();
+		}],
+		['the checkout is not complete', async () => {
+			await createUserViaSubscription(await koaAppContext(), { userEmail: 'toto@example.com', subscriptionId: 'sub_1' });
+			return checkoutSession('open');
+		}],
+		['the account was created more than an hour ago', async () => {
+			await createUserViaSubscription(await koaAppContext(), { userEmail: 'toto@example.com', subscriptionId: 'sub_1' });
+			const user = await models().user().loadByEmail('toto@example.com');
+			await models().user().save({ id: user.id, created_time: Date.now() - 2 * Hour });
+			return checkoutSession();
+		}],
+	])('should not hand out a confirmation token when %s', async (_case, setup) => {
+		expect(await requestSuccessPage(await setup())).toBe('');
 	});
 
 	test('should disable an account if the sub is cancelled', async () => {
@@ -281,6 +356,7 @@ describe('index/stripe', () => {
 		await simulateWebhook(ctx, 'customer.subscription.created', {
 			id: 'sub_new',
 			customer: 'cus_toto',
+			current_period_end: Math.floor((Date.now() + Month) / Second),
 			items: { data: [{ price: { id: stripePrice.id } }] },
 		}, { stripe });
 
@@ -322,6 +398,8 @@ describe('index/stripe', () => {
 		await simulateWebhook(ctx, 'customer.subscription.created', {
 			id: 'sub_1',
 			customer: 'cus_toto',
+			current_period_end: Math.floor((Date.now() + Month) / Second),
+			trial_end: Math.floor((Date.now() + Month) / Second),
 			items: { data: [{ price: { id: stripePrice.id } }] },
 		}, { stripe });
 
@@ -329,4 +407,31 @@ describe('index/stripe', () => {
 		expect(stripe.subscriptions.cancel).toHaveBeenCalledTimes(0);
 	});
 
+	test('should update subscription period end/trial end dates in the database when updated in Stripe', async () => {
+		const stripe = mockStripe({ userEmail: 'toto@example.com' });
+		const ctx = await koaAppContext();
+
+		const stripePrice = findPrice(stripeConfig(), { accountType: AccountType.Basic, period: PricePeriod.Monthly });
+		const sendWebhookEvent = (eventType: 'created'|'updated', currentPeriodEndSeconds: number) => {
+			return simulateWebhook(ctx, `customer.subscription.${eventType}`, {
+				id: 'sub_1',
+				customer: 'cus_toto',
+				current_period_end: currentPeriodEndSeconds,
+				items: { data: [{ price: { id: stripePrice.id } }] },
+			}, { stripe });
+		};
+
+		// Should update the subscription on created events
+		let periodEndSeconds = Math.floor((Date.now() + Hour) / Second);
+		await sendWebhookEvent('created', periodEndSeconds);
+
+		const subscription = () => models().subscription().byStripeSubscriptionId('sub_1');
+		expect(await subscription()).toMatchObject({ current_period_end: periodEndSeconds * Second });
+
+		periodEndSeconds += 300;
+
+		// Should update the subscription on updated events
+		await sendWebhookEvent('updated', periodEndSeconds);
+		expect(await subscription()).toMatchObject({ current_period_end: periodEndSeconds * Second });
+	});
 });

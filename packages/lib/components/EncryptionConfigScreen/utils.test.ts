@@ -63,13 +63,17 @@ describe('EncryptionConfigScreen/utils', () => {
 			initialProps,
 		});
 
+		// The hook runs PBKDF2-based key checks, which can be slow on CI — give
+		// waitFor enough time to outlast the default 1s timeout.
+		const waitForTimeout = 30_000;
+
 		// Different password from the master password should cause the secondary key
 		// to be marked as not using the master password.
 		await waitFor(() => {
 			const keys = hook.result.current.masterPasswordKeys;
 			expect(keys[activeMasterKey.id]).toBe(true);
 			expect(keys[secondaryMasterKey.id]).toBe(false);
-		});
+		}, { timeout: waitForTimeout });
 
 		expect(hook.result.current.masterPasswordKeys).toMatchObject({
 			[activeMasterKey.id]: true,
@@ -90,7 +94,7 @@ describe('EncryptionConfigScreen/utils', () => {
 			const keys = hook.result.current.masterPasswordKeys;
 			expect(keys[activeMasterKey.id]).toBe(true);
 			expect(keys[secondaryMasterKey.id]).toBe(false);
-		});
+		}, { timeout: waitForTimeout });
 
 		expect(hook.result.current.masterPasswordKeys).toMatchObject({
 			[activeMasterKey.id]: true,

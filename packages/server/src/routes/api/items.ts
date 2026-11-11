@@ -5,13 +5,14 @@ import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import * as fs from 'fs-extra';
-import { ErrorForbidden, ErrorMethodNotAllowed, ErrorNotFound, ErrorPayloadTooLarge, errorToPlainObject } from '../../utils/errors';
+import { ErrorBadRequest, ErrorForbidden, ErrorMethodNotAllowed, ErrorNotFound, ErrorPayloadTooLarge, errorToPlainObject } from '../../utils/errors';
 import ItemModel, { ItemSaveOption, SaveFromRawContentItem } from '../../models/ItemModel';
 import { requestPagination } from '../../models/utils/pagination';
 import { AclAction } from '../../models/BaseModel';
 import { safeRemove } from '../../utils/fileUtils';
 import { formatBytes, MB } from '../../utils/bytes';
-import { requestDeltaPagination } from '../../models/ChangeModel';
+import { requestDeltaPagination } from '../../models/ChangeModel/ChangeModel';
+import { hasOwnProperty } from '@joplin/utils/object';
 
 const router = new Router(RouteType.Api);
 
@@ -27,17 +28,28 @@ export async function putItemContents(path: SubPath, ctx: AppContext, isBatch: b
 	let items: SaveFromRawContentItem[] = [];
 
 	if (isBatch) {
+		// Everything is checked before anything is allocated: a non-string body such as `{"length": 300000000}` would
+		// otherwise make Buffer.from() allocate gigabytes
+		const batchItems: unknown = bodyFields.items;
+		if (!Array.isArray(batchItems)) throw new ErrorBadRequest('"items" must be an array');
+
 		let totalSize = 0;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		items = bodyFields.items.map((item: any) => {
-			totalSize += item.name.length + (item.body ? item.body.length : 0);
+		for (const item of batchItems as { name: unknown; body?: unknown }[]) {
+			if (!item || typeof item.name !== 'string') throw new ErrorBadRequest('Each item must have a "name" string');
+			if (item.body !== undefined && item.body !== null && typeof item.body !== 'string') throw new ErrorBadRequest('An item "body" must be a string');
+			// Counted in string length, as the client does when it builds the batch (ItemUploader), so that a batch of
+			// non-ASCII notes is not rejected. Now that bodies are known to be strings, a string allocates at most 3 bytes
+			// per character, and the request body as a whole is capped by formParse.
+			totalSize += item.name.length + (item.body ? (item.body as string).length : 0);
+			if (totalSize > batchMaxSize) throw new ErrorPayloadTooLarge(`Size of items is over the limit (${formatBytes(batchMaxSize)})`);
+		}
+
+		items = (batchItems as { name: string; body?: string }[]).map(item => {
 			return {
 				name: item.name,
 				body: item.body ? Buffer.from(item.body, 'utf8') : Buffer.alloc(0),
 			};
 		});
-
-		if (totalSize > batchMaxSize) throw new ErrorPayloadTooLarge(`Size of items (${formatBytes(totalSize)}) is over the limit (${formatBytes(batchMaxSize)})`);
 	} else {
 		const filePath = parsedBody?.files?.file ? parsedBody.files.file.filepath : null;
 
@@ -75,6 +87,76 @@ export async function putItemContents(path: SubPath, ctx: AppContext, isBatch: b
 	return output;
 }
 
+interface DelItemsResponse {
+	[itemName: string]: { error?: unknown };
+}
+
+export async function delItems(path: SubPath, ctx: AppContext, isBatch: boolean) {
+	const checkCanDelete = async (item: Item) => {
+		await ctx.joplin.models.item().checkIfAllowed(ctx.joplin.owner, AclAction.Delete, item);
+	};
+
+	const toDelete: Item[] = [];
+
+	const batchResponse: DelItemsResponse = Object.create(null);
+	if (isBatch) {
+		const parsedBody = await formParse(ctx.req);
+		const bodyFields = parsedBody.fields;
+
+		if (!Array.isArray(bodyFields.items)) throw new ErrorBadRequest('body.items must be an array');
+		for (const item of bodyFields.items) {
+			if (typeof item !== 'string') {
+				throw new ErrorBadRequest('array entry is not a string (in body.items)');
+			}
+		}
+		const batchMaxDeleteCount = 100;
+		if (bodyFields.items.length > batchMaxDeleteCount) {
+			throw new ErrorPayloadTooLarge(`Unable to delete more than ${batchMaxDeleteCount} items at a time`);
+		}
+
+		const loadedItems = await ctx.joplin.models.item().loadByNames(
+			ctx.joplin.owner.id, bodyFields.items,
+		);
+
+		for (const item of loadedItems) {
+			try {
+				await checkCanDelete(item);
+				toDelete.push(item);
+				batchResponse[item.name] = {};
+			} catch (error) {
+				batchResponse[item.name] = {
+					error: errorToPlainObject(error),
+				};
+			}
+		}
+
+		for (const item of bodyFields.items) {
+			const wasLoaded: boolean = hasOwnProperty(batchResponse, item);
+			if (!wasLoaded) {
+				batchResponse[item] = {
+					error: errorToPlainObject(
+						new ErrorNotFound(`Not found: ${item}`),
+					),
+				};
+			}
+		}
+	} else {
+		const item = await itemFromPath(ctx.joplin.owner.id, ctx.joplin.models.item(), path);
+		await checkCanDelete(item);
+		toDelete.push(item);
+	}
+
+	await ctx.joplin.models.item().deleteForUser(
+		ctx.joplin.owner.id,
+		toDelete,
+		// Even though item has already been fetched, a no-op can
+		// still happen if two users try to delete the item at the same time.
+		{ allowNoOp: true },
+	);
+
+	return isBatch ? batchResponse : null;
+}
+
 // Note about access control:
 //
 // - All these calls are scoped to a user, which is derived from the session
@@ -107,15 +189,7 @@ router.del('api/items/:id', async (path: SubPath, ctx: AppContext) => {
 			if (ctx.joplin.env !== 'dev') throw new ErrorMethodNotAllowed('Deleting the root is not allowed');
 			await ctx.joplin.models.item().deleteAll(ctx.joplin.owner.id);
 		} else {
-			const item = await itemFromPath(ctx.joplin.owner.id, ctx.joplin.models.item(), path);
-			await ctx.joplin.models.item().checkIfAllowed(ctx.joplin.owner, AclAction.Delete, item);
-			await ctx.joplin.models.item().deleteForUser(
-				ctx.joplin.owner.id,
-				item,
-				// Even though item has already been fetched, a no-op can
-				// still happen if two users try to delete the item at the same time.
-				{ allowNoOp: true },
-			);
+			await delItems(path, ctx, false);
 		}
 	} catch (error) {
 		if (error instanceof ErrorNotFound) {

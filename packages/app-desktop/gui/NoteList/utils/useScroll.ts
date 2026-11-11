@@ -87,13 +87,12 @@ const useScroll = (itemsPerLine: number, noteCount: number, itemSize: Size, list
 		// setScrollTopLikeYouMeanIt(newScrollTop);
 	}, [itemsPerLine, noteCount, itemSize.height, scrollTop, listSize.height, maxScrollTop, listRef]); // , setScrollTopLikeYouMeanIt]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onScroll = useCallback((event: any) => {
-		// console.info('ON SCROLL', event.target.scrollTop, 'Ignore:', Date.now() - lastScrollSetTime.current < 500);
+	const onScroll = useCallback((event: React.UIEvent<HTMLDivElement>) => {
+		// console.info('ON SCROLL', event.currentTarget.scrollTop, 'Ignore:', Date.now() - lastScrollSetTime.current < 500);
 
 		// Ignore the scroll event if it has just been set programmatically.
 		if (Date.now() - lastScrollSetTime.current < 10) return;
-		setScrollTop(event.target.scrollTop);
+		setScrollTop(event.currentTarget.scrollTop);
 	}, []);
 
 	return {

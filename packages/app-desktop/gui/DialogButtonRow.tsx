@@ -24,8 +24,7 @@ interface Props {
 	cancelButtonDisabled?: boolean;
 	okButtonShow?: boolean;
 	okButtonLabel?: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	okButtonRef?: any;
+	okButtonRef?: React.Ref<HTMLButtonElement>;
 	okButtonDisabled?: boolean;
 	customButtons?: ButtonSpec[];
 }

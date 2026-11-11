@@ -1,6 +1,7 @@
 import { ErrorBadRequest } from '../../utils/errors';
 import { decodeBase64, encodeBase64 } from '../../utils/base64';
 import { Knex } from 'knex';
+import { ParsedUrlQuery } from 'querystring';
 
 export enum PaginationOrderDir {
 	ASC = 'asc',
@@ -38,6 +39,17 @@ export const pageMaxSize = 100;
 const defaultOrderField_ = 'updated_time';
 const defaultOrderDir_ = PaginationOrderDir.DESC;
 
+// The order field ends up as a column name in the SQL query. Knex quotes
+// identifiers, so this is not an injection vector, but an arbitrary string
+// still reaches the database and comes back as a 500. Only accept something
+// that could be a column name, and reject anything else as a bad request.
+const orderFieldRegex_ = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
+
+const validateOrderField = (field: string) => {
+	if (typeof field !== 'string' || !orderFieldRegex_.test(field)) throw new ErrorBadRequest(`Invalid order_by parameter: ${field}`);
+	return field;
+};
+
 export function defaultPagination(): Pagination {
 	return {
 		limit: pageMaxSize,
@@ -55,37 +67,49 @@ function dbOffset(pagination: Pagination): number {
 	return pagination.limit * (pagination.page - 1);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function requestPaginationOrder(query: any, defaultOrderField: string = null, defaultOrderDir: PaginationOrderDir = null): PaginationOrder[] {
+export function requestPaginationOrder(query: ParsedUrlQuery | PaginationQueryParams, defaultOrderField: string = null, defaultOrderDir: PaginationOrderDir = null): PaginationOrder[] {
 	if (defaultOrderField === null) defaultOrderField = defaultOrderField_;
 	if (defaultOrderDir === null) defaultOrderDir = defaultOrderDir_;
 
-	const orderBy: string = 'order_by' in query ? query.order_by : defaultOrderField;
-	const orderDir: PaginationOrderDir = 'order_dir' in query ? query.order_dir : defaultOrderDir;
+	const orderBy: string = 'order_by' in query ? query.order_by as string : defaultOrderField;
+	const orderDir: PaginationOrderDir = 'order_dir' in query ? query.order_dir as PaginationOrderDir : defaultOrderDir;
 
 	if (![PaginationOrderDir.ASC, PaginationOrderDir.DESC].includes(orderDir)) throw new ErrorBadRequest(`Invalid order_dir parameter: ${orderDir}`);
 
 	return [{
-		by: orderBy,
+		by: validateOrderField(orderBy),
 		dir: orderDir,
 	}];
 }
 
 export function validatePagination(p: Pagination): Pagination {
-	if (p.limit < 0 || p.limit > pageMaxSize) throw new ErrorBadRequest(`Limit out of bond: ${p.limit}`);
-	if (p.page <= 0) throw new ErrorBadRequest(`Invalid page number: ${p.page}`);
+	if (!p || typeof p !== 'object') throw new ErrorBadRequest('Invalid pagination');
+	if (!Number.isFinite(p.limit) || p.limit < 0 || p.limit > pageMaxSize) throw new ErrorBadRequest(`Limit out of bond: ${p.limit}`);
+	if (!Number.isFinite(p.page) || p.page <= 0) throw new ErrorBadRequest(`Invalid page number: ${p.page}`);
+	if (!Array.isArray(p.order)) throw new ErrorBadRequest('Invalid order parameter');
 
 	for (const o of p.order) {
 		if (![PaginationOrderDir.ASC, PaginationOrderDir.DESC].includes(o.dir)) throw new ErrorBadRequest(`Invalid order_dir parameter: ${o.dir}`);
+		validateOrderField(o.by);
 	}
 
 	return p;
 }
 
 function processCursor(pagination: Pagination): Pagination {
-	// If a cursor is present, we parse it and move to the next page.
+	// If a cursor is present, we parse it and move to the next page. The
+	// cursor comes from the client, so a malformed one must be reported as a
+	// bad request rather than fail while parsing.
 	if (pagination.cursor) {
-		const p = validatePagination(JSON.parse(decodeBase64(pagination.cursor)));
+		let decoded: Pagination = null;
+
+		try {
+			decoded = JSON.parse(decodeBase64(pagination.cursor));
+		} catch (error) {
+			throw new ErrorBadRequest('Invalid cursor');
+		}
+
+		const p = validatePagination(decoded);
 		p.page++;
 		return p;
 	}
@@ -93,17 +117,18 @@ function processCursor(pagination: Pagination): Pagination {
 	return pagination as Pagination;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function requestPagination(query: any): Pagination {
+export function requestPagination(query: (Pagination & PaginationQueryParams) | null): Pagination {
 	if (!query) return defaultPagination();
 
 	if ('cursor' in query) {
 		return processCursor(query);
 	}
 
-	const limit = 'limit' in query ? query.limit : pageMaxSize;
+	// These come from the query string, so they are strings at runtime even
+	// though the type says otherwise.
+	const limit = 'limit' in query ? Number(query.limit) : pageMaxSize;
 	const order: PaginationOrder[] = requestPaginationOrder(query);
-	const page: number = 'page' in query ? query.page : 1;
+	const page: number = 'page' in query ? Number(query.page) : 1;
 
 	return validatePagination({ limit, order, page });
 }
@@ -143,8 +168,7 @@ export interface PageLink {
 	url?: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function filterPaginationQueryParams(query: any): PaginationQueryParams {
+export function filterPaginationQueryParams(query: PaginationQueryParams | null): PaginationQueryParams {
 	if (!query) return {};
 
 	const baseUrlQuery: PaginationQueryParams = {};
@@ -217,8 +241,7 @@ export function createPaginationLinks(page: number, pageCount: number, urlTempla
 // }
 
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function paginateDbQuery(query: Knex.QueryBuilder, pagination: Pagination, mainTable = ''): Promise<PaginatedResults<any>> {
+export async function paginateDbQuery<T = unknown>(query: Knex.QueryBuilder, pagination: Pagination, mainTable = ''): Promise<PaginatedResults<T>> {
 	pagination = {
 		...defaultPagination(),
 		...pagination,
@@ -226,8 +249,7 @@ export async function paginateDbQuery(query: Knex.QueryBuilder, pagination: Pagi
 
 	pagination = processCursor(pagination);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const orderSql: any[] = pagination.order.map(o => {
+	const orderSql = pagination.order.map(o => {
 		return {
 			column: (mainTable ? `${mainTable}.` : '') + o.by,
 			order: o.dir,

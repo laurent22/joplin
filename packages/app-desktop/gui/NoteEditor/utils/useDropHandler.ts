@@ -3,10 +3,11 @@ import Note from '@joplin/lib/models/Note';
 import { DragEvent as ReactDragEvent } from 'react';
 import { DropCommandValue } from './types';
 import { webUtils } from 'electron';
+import { RefObject } from 'react';
+import { NoteBodyEditorRef } from './types';
 
 interface HookDependencies {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	editorRef: any;
+	editorRef: RefObject<NoteBodyEditorRef>;
 }
 
 // Returns true if Joplin handled the event
@@ -42,7 +43,7 @@ export default function useDropHandler(dependencies: HookDependencies): DropHand
 					markdownTags: noteMarkdownTags,
 				};
 
-				editorRef.current.execCommand({
+				void editorRef.current.execCommand({
 					name: 'dropItems',
 					value: props,
 				});
@@ -70,7 +71,7 @@ export default function useDropHandler(dependencies: HookDependencies): DropHand
 					createFileURL: createFileURL,
 				};
 
-				editorRef.current.execCommand({
+				void editorRef.current.execCommand({
 					name: 'dropItems',
 					value: props,
 				});

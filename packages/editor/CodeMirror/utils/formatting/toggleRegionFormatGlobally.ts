@@ -3,9 +3,7 @@ import { RegionSpec } from './RegionSpec';
 import findInlineMatch, { MatchSide } from './findInlineMatch';
 import growSelectionToNode from '../growSelectionToNode';
 import toggleInlineSelectionFormat from './toggleInlineSelectionFormat';
-
-const blockQuoteStartLen = '> '.length;
-const blockQuoteRegex = /^>\s/;
+import { blockquoteDetectRegex, singleBlockquoteMarkerLength } from './markdownFormatPatterns';
 
 // Toggle formatting for all selections. For example,
 // toggling a code RegionSpec repeatedly should create:
@@ -35,7 +33,7 @@ const toggleRegionFormatGlobally = (
 		// Don't treat '> ' as part of the line's content if we're in a blockquote.
 		let contentLength = line.text.length;
 		if (inBlockQuote && preserveBlockQuotes) {
-			contentLength -= blockQuoteStartLen;
+			contentLength -= singleBlockquoteMarkerLength;
 		}
 
 		// If it matches the entire line, remove the newline character.
@@ -46,7 +44,7 @@ const toggleRegionFormatGlobally = (
 
 			// Take into account the extra '> ' characters, if necessary
 			if (inBlockQuote && preserveBlockQuotes) {
-				stopIdx += blockQuoteStartLen;
+				stopIdx += singleBlockquoteMarkerLength;
 			}
 		}
 
@@ -68,7 +66,7 @@ const toggleRegionFormatGlobally = (
 
 		if (startMatchLen >= 0 && stopMatchLen >= 0) {
 			const fromLine = doc.lineAt(sel.from);
-			const inBlockQuote = fromLine.text.match(blockQuoteRegex);
+			const inBlockQuote = fromLine.text.match(blockquoteDetectRegex);
 
 			let lineStartStr = '\n';
 			if (inBlockQuote && preserveBlockQuotes) {
@@ -131,7 +129,7 @@ const toggleRegionFormatGlobally = (
 		for (let i = fromLine.number; i <= toLine.number; i++) {
 			const line = doc.line(i);
 
-			if (!line.text.match(blockQuoteRegex)) {
+			if (!line.text.match(blockquoteDetectRegex)) {
 				inBlockQuote = false;
 				break;
 			}
@@ -139,8 +137,8 @@ const toggleRegionFormatGlobally = (
 
 		// Ignore block quote characters if in a block quote.
 		if (inBlockQuote && preserveBlockQuotes) {
-			fromLineText = fromLineText.substring(blockQuoteStartLen);
-			toLineText = toLineText.substring(blockQuoteStartLen);
+			fromLineText = fromLineText.substring(singleBlockquoteMarkerLength);
+			toLineText = toLineText.substring(singleBlockquoteMarkerLength);
 		}
 
 		// Otherwise, we're toggling the block version

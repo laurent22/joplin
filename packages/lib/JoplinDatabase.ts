@@ -125,8 +125,7 @@ INSERT INTO version (version) VALUES (1);
 export interface TableField {
 	name: string;
 	type: number;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	default: any;
+	default?: string | number | boolean | null;
 	description?: string;
 }
 
@@ -140,10 +139,10 @@ export default class JoplinDatabase extends Database {
 	private tableFields_: Record<string, TableField[]> = null;
 	private version_: number = null;
 	private tableFieldNames_: Record<string, string[]> = {};
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private tableDescriptions_: any;
+	private tableDescriptions_: Record<string, Record<string, string>>;
+	private sqliteVecAvailable_ = false;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Base Database class uses `any` for driver — different drivers (sqlite, better-sqlite3, web) have different shapes
 	public constructor(driver: any) {
 		super(driver);
 	}
@@ -152,10 +151,36 @@ export default class JoplinDatabase extends Database {
 		return this.initialized_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async open(options: any) {
+	// Returns true if the sqlite-vec extension loaded successfully when the
+	// database was opened. False on platforms where the prebuilt is missing or
+	// extension loading is otherwise blocked. Callers that need vector search
+	// (the AI embeddings index) should gate on this and degrade gracefully
+	// rather than throwing.
+	public sqliteVecAvailable() {
+		return this.sqliteVecAvailable_;
+	}
+
+	public async open(options: Record<string, unknown>) {
 		await super.open(options);
+		await this.tryLoadSqliteVec();
 		return this.initialize();
+	}
+
+	private async tryLoadSqliteVec() {
+		const sqliteVec = shim.sqliteVec();
+		if (!sqliteVec) {
+			this.sqliteVecAvailable_ = false;
+			this.logger().info('sqlite-vec not provided by the host app; vector search disabled');
+			return;
+		}
+		try {
+			await this.loadExtension(sqliteVec.getLoadablePath());
+			this.sqliteVecAvailable_ = true;
+			this.logger().info('sqlite-vec extension loaded');
+		} catch (error) {
+			this.sqliteVecAvailable_ = false;
+			this.logger().warn('sqlite-vec extension failed to load; vector search disabled:', error);
+		}
 	}
 
 	public tableFieldNames(tableName: string) {
@@ -171,8 +196,7 @@ export default class JoplinDatabase extends Database {
 		return output.slice();
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public tableFields(tableName: string, options: any = null) {
+	public tableFields(tableName: string, options: { includeDescription?: boolean } = null) {
 		if (options === null) options = {};
 
 		if (!this.tableFields_) throw new Error('Fields have not been loaded yet');
@@ -229,8 +253,7 @@ export default class JoplinDatabase extends Database {
 	}
 
 	public createDefaultRow(tableName: string) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const row: any = {};
+		const row: Record<string, unknown> = {};
 		const fields = this.tableFields(tableName);
 		for (let i = 0; i < fields.length; i++) {
 			const f = fields[i];
@@ -331,6 +354,7 @@ export default class JoplinDatabase extends Database {
 				if (tableName.indexOf('items_fts') === 0) continue;
 				if (tableName === 'notes_spellfix') continue;
 				if (tableName === 'search_aux') continue;
+				if (tableName.startsWith('note_embeddings_vec')) continue;
 
 				pragmas = await this.selectAll(`PRAGMA table_info("${tableName}")`);
 

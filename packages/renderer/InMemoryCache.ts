@@ -64,7 +64,7 @@ export default class Cache {
 		return defaultValue;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Generic cache can store values of any type
 	public setValue(key: string, value: any, ttl = 0) {
 		this.checkExpiredRecords();
 

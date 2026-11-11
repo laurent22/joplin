@@ -108,6 +108,11 @@ const declarations: CommandDeclaration[] = [
 		iconName: 'icon-to-do-list',
 	},
 	{
+		name: 'textBlockQuote',
+		label: () => _('Blockquote'),
+		iconName: 'icon-quote',
+	},
+	{
 		name: 'textHeading',
 		label: () => _('Heading'),
 		iconName: 'icon-heading',
@@ -182,6 +187,31 @@ const declarations: CommandDeclaration[] = [
 	},
 	{
 		name: 'viewer.focus',
+	},
+	{
+		name: 'editor.textTable',
+		label: () => _('Insert table'),
+		iconName: 'fas fa-table',
+	},
+	{
+		name: 'editor.tableAddRow',
+		label: () => _('Table: Add row'),
+		iconName: 'fas fa-plus',
+	},
+	{
+		name: 'editor.tableAddColumn',
+		label: () => _('Table: Add column'),
+		iconName: 'fas fa-columns',
+	},
+	{
+		name: 'editor.tableDeleteRow',
+		label: () => _('Table: Delete row'),
+		iconName: 'fas fa-minus',
+	},
+	{
+		name: 'editor.tableDeleteColumn',
+		label: () => _('Table: Delete column'),
+		iconName: 'fas fa-times',
 	},
 ];
 

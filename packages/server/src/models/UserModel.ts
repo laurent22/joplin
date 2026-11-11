@@ -1,15 +1,18 @@
 import BaseModel, { AclAction, LoadOptions, SaveOptions, ValidateOptions } from './BaseModel';
 import { EmailSender, Item, NotificationLevel, Subscription, User, UserFlagType, Uuid } from '../services/database/types';
 import { isHashedPassword, hashPassword, checkPassword } from '../utils/auth';
+import { randomBytes } from 'crypto';
+import { limiterLoginAccountBruteForce } from '../utils/request/limiterAccountBruteForce';
 import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge, ErrorNotFound, ErrorBadRequest } from '../utils/errors';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { _ } from '@joplin/lib/locale';
 import { formatBytes, GB, MB } from '../utils/bytes';
 import { itemIsEncrypted } from '../utils/joplinUtils';
 import { getIsMFAEnabled, getMaxItemSize, getMaxTotalItemSize } from './utils/user';
-import * as zxcvbn from 'zxcvbn';
+import zxcvbn from 'zxcvbn';
 import { confirmUrl, resetPasswordUrl } from '../utils/urlUtils';
 import { checkRepeatPassword, CheckRepeatPasswordInput } from '../routes/index/users';
+import { TokenPurpose } from './TokenModel';
 import accountConfirmationTemplate from '../views/emails/accountConfirmationTemplate';
 import resetPasswordTemplate from '../views/emails/resetPasswordTemplate';
 import { betaStartSubUrl, betaUserDateRange, betaUserTrialPeriodDays, isBetaUser, stripeConfig } from '../utils/stripe';
@@ -27,7 +30,9 @@ import changeEmailConfirmationTemplate from '../views/emails/changeEmailConfirma
 import changeEmailNotificationTemplate from '../views/emails/changeEmailNotificationTemplate';
 import { NotificationKey } from './NotificationModel';
 import prettyBytes = require('pretty-bytes');
-import { validateEmail } from '../utils/validation';
+import { isValidEmailRecipient, validateEmail } from '../utils/validation';
+import limiterEmailChanges from '../utils/request/limiterEmailChanges';
+import { EmailSubjectBody } from './EmailModel';
 import { Config, Env, LdapConfig } from '../utils/types';
 import { DbConnection } from '../db';
 import { NewModelFactoryHandler } from './factory';
@@ -37,8 +42,18 @@ const thirtyTwo = require('thirty-two');
 import config, { isUsingExternalAuth } from '../config';
 import { randomInt } from 'node:crypto';
 import { samlOwnedUserProperties } from '../utils/saml';
+import { AccountType, PlanName } from '@joplin/lib/utils/joplinCloud';
+import { Services } from '../services/types';
+export { AccountType };
 
 const logger = Logger.create('UserModel');
+
+let dummyPasswordHash_: string = null;
+
+const dummyPasswordHash = async () => {
+	if (!dummyPasswordHash_) dummyPasswordHash_ = await hashPassword(randomBytes(32).toString('hex'));
+	return dummyPasswordHash_;
+};
 
 interface UserEmailDetails {
 	sender_id: EmailSender;
@@ -49,10 +64,8 @@ interface UserEmailDetails {
 
 export type GetUsersApiResponse = User;
 
-export enum AccountType {
-	Default = 0,
-	Basic = 1,
-	Pro = 2,
+interface HasMfaEnabledOptions {
+	requireUserExists: boolean;
 }
 
 export interface Account {
@@ -61,6 +74,10 @@ export interface Account {
 	can_receive_folder: number;
 	max_item_size: number;
 	max_total_item_size: number;
+}
+
+interface EnabledUserCountOptions {
+	excludeMainAdmin: boolean;
 }
 
 const accountMetadata: Record<AccountType, Account> = {
@@ -90,6 +107,27 @@ const accountMetadata: Record<AccountType, Account> = {
 		max_item_size: 200 * MB,
 		max_total_item_size: 30 * GB,
 	},
+	[AccountType.Pro100Gb]: {
+		account_type: AccountType.Pro100Gb,
+		can_share_folder: 1,
+		can_receive_folder: 1,
+		max_item_size: 200 * MB,
+		max_total_item_size: 100 * GB,
+	},
+	[AccountType.Team]: {
+		account_type: AccountType.Team,
+		can_share_folder: 1,
+		can_receive_folder: 1,
+		max_item_size: 200 * MB,
+		max_total_item_size: 50 * GB,
+	},
+	[AccountType.SelfHosted]: {
+		account_type: AccountType.SelfHosted,
+		can_share_folder: 0,
+		can_receive_folder: 0,
+		max_item_size: 200 * MB,
+		max_total_item_size: 1 * MB,
+	},
 };
 
 interface AccountTypeSelectOptions {
@@ -117,6 +155,10 @@ export function accountTypeOptions(): AccountTypeSelectOptions[] {
 			value: AccountType.Pro,
 			label: accountTypeToString(AccountType.Pro),
 		},
+		{
+			value: AccountType.Pro100Gb,
+			label: accountTypeToString(AccountType.Pro100Gb),
+		},
 	];
 }
 
@@ -124,8 +166,42 @@ export function accountTypeToString(accountType: AccountType): string {
 	if (accountType === AccountType.Default) return 'Default';
 	if (accountType === AccountType.Basic) return 'Basic';
 	if (accountType === AccountType.Pro) return 'Pro';
-	throw new Error(`Invalid type: ${accountType}`);
+	if (accountType === AccountType.Pro100Gb) return 'Pro 100 GB';
+	if (accountType === AccountType.Team) return 'Team';
+	if (accountType === AccountType.SelfHosted) return 'Self hosted';
+	const exhaustivenessCheck: never = accountType;
+	throw new Error(`Invalid type: ${exhaustivenessCheck}`);
 }
+
+export const accountTypeToPlan = (accountType: AccountType): PlanName => {
+	if (accountType === AccountType.Basic) return PlanName.Basic;
+	if (accountType === AccountType.Pro) return PlanName.Pro;
+	if (accountType === AccountType.Pro100Gb) return PlanName.Pro100Gb;
+	if (accountType === AccountType.Team) return PlanName.Teams;
+	if (accountType === AccountType.SelfHosted) return PlanName.JoplinServerBusiness;
+	if (accountType === AccountType.Default) throw new Error('No plan exists for account type "Default"');
+	const exhaustivenessCheck: never = accountType;
+	throw new Error(`Invalid type: ${exhaustivenessCheck}`);
+};
+
+export const getNextSubscriptionPlan = (accountType: AccountType) => {
+	let upgradeTo = null;
+	let downgradeTo = null;
+	if (accountType === AccountType.Pro) {
+		upgradeTo = AccountType.Pro100Gb;
+		downgradeTo = AccountType.Basic;
+	} else if (accountType === AccountType.Basic) {
+		upgradeTo = AccountType.Pro;
+		downgradeTo = null;
+	} else if (accountType === AccountType.Pro100Gb) {
+		upgradeTo = null;
+		downgradeTo = AccountType.Pro;
+	}
+
+	return { upgradeTo, downgradeTo };
+};
+
+const maxPasswordLength = 256;
 
 export default class UserModel extends BaseModel<User> {
 	private mfaEncryptionKey_: string = null;
@@ -156,14 +232,26 @@ export default class UserModel extends BaseModel<User> {
 		return this.db<User>(this.tableName).where(user).first();
 	}
 
-	public async login(email: string, password: string): Promise<User> {
+	public async login(email: string, password: string, _services: Services): Promise<User> {
 		if (!config().LOCAL_AUTH_ENABLED) {
+			return null;
+		}
+
+		// Without a password, the directory would receive an unauthenticated bind, which Active Directory accepts by
+		// default, and checking it against a hash would throw for a registered email only
+		if (typeof password !== 'string' || !password) {
+			await checkPassword('', await dummyPasswordHash());
 			return null;
 		}
 
 		const user = await this.loadByEmail(email);
 
-		for (const config of this.ldapConfig_) {
+		// The directory decides which of its entries matches an email, and its users may be able to edit theirs, so it
+		// never logs in to a local admin account, which keeps using its local password. A directory account that is
+		// made an admin keeps logging in through the directory.
+		const ldapConfigs = user?.is_admin && !user.is_external ? [] : this.ldapConfig_;
+
+		for (const config of ldapConfigs) {
 			if (config.enabled) {
 				const ldapUser = await ldapLogin(email, password, user, config);
 				if (ldapUser && !user) {
@@ -171,22 +259,38 @@ export default class UserModel extends BaseModel<User> {
 					return savedUser;
 				}
 				if (ldapUser && user) {
-					return ldapUser;
+					if (user.is_external) return user;
+
+					// From now on the account is managed by the directory. Its local password, which may be an old copy of
+					// the directory password or one set by someone else, stops working.
+					await this.save({ id: user.id, is_external: 1, email_confirmed: 1, password: randomBytes(32).toString('hex') }, { skipValidation: true });
+					return this.load(user.id);
 				}
 			}
 		}
 
-		if (!user || user.is_external) return null;
+		// An external account can only log in through the directory or SAML while either is enabled. Once they are turned
+		// off, it logs in with a local password, which can be set with a password reset.
+		if (!user || (user.is_external && this.isUsingExternalAuth_)) {
+			// So that the response takes as long as for a registered email, which would otherwise reveal the difference
+			await checkPassword(password || '', await dummyPasswordHash());
+			return null;
+		}
 		if (!(await checkPassword(password, user.password))) return null;
 		return user;
 	}
 
-	public async ssoLogin(email: string, displayName: string) {
+	public async ssoLogin(email: string, displayName: string, _services: Services) {
 		if (!email || !displayName) {
 			return null;
 		}
 
 		let user = await this.loadByEmail(email);
+
+		// A local, password-based account already owns this email address. Do
+		// not allow a SAML assertion to log in as it - this would bypass the
+		// local account's password.
+		if (user && !user.is_external) return null;
 
 		if (!user) { // User does not exist
 			user = {
@@ -307,8 +411,7 @@ export default class UserModel extends BaseModel<User> {
 			];
 
 			for (const key of Object.keys(resource)) {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				if (!user.is_admin && !canBeChangedByNonAdmin.includes(key) && (resource as any)[key] !== (previousResource as any)[key]) {
+				if (!user.is_admin && !canBeChangedByNonAdmin.includes(key) && (resource as Record<string, unknown>)[key] !== (previousResource as Record<string, unknown>)[key]) {
 					throw new ErrorForbidden(`non-admin user cannot change "${key}"`);
 				}
 			}
@@ -324,7 +427,7 @@ export default class UserModel extends BaseModel<User> {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- joplinItem is the heterogeneous result of itemToJoplinItem (Note/Folder/Resource/Tag)
 	public async checkMaxItemSizeLimit(user: User, buffer: Buffer, item: Item, joplinItem: any) {
 		// If the item is encrypted, we apply a multiplier because encrypted
 		// items can be much larger (seems to be up to twice the size but for
@@ -377,7 +480,8 @@ export default class UserModel extends BaseModel<User> {
 	private validatePassword(password: string) {
 		if (this.env === Env.Dev) return;
 
-		const result = zxcvbn(password);
+		// zxcvbn gets much slower as the input grows, and only the start of a password matters for its strength
+		const result = zxcvbn(password.slice(0, 100));
 		if (result.score < 3) {
 			let msg: string[] = [result.feedback.warning];
 			if (result.feedback.suggestions) {
@@ -398,11 +502,11 @@ export default class UserModel extends BaseModel<User> {
 			if (!user.password && !user.must_set_password) throw new ErrorUnprocessableEntity('password must be set');
 		} else {
 			if ('email' in user && !user.email) throw new ErrorUnprocessableEntity('email must be set');
-			if ('email' in user && !user.email.includes('@')) throw new ErrorUnprocessableEntity(`Should include @ in email address, email: ${user.email}`);
+			if (user.email && !user.email.includes('@')) throw new ErrorUnprocessableEntity(`Should include @ in email address, email: ${user.email}`);
 			if ('password' in user && !user.password) throw new ErrorUnprocessableEntity('password must be set');
 		}
 
-		if ('email' in user) {
+		if (user.email) {
 			const existingUser = await this.loadByEmail(user.email);
 			if (existingUser && existingUser.id !== user.id) throw new ErrorUnprocessableEntity(`there is already a user with this email: ${user.email}`);
 			// See https://www.rfc-editor.org/errata_search.php?rfc=3696&eid=1690 (found via https://stackoverflow.com/a/574698)
@@ -410,7 +514,7 @@ export default class UserModel extends BaseModel<User> {
 			validateEmail(user.email);
 		}
 
-		if ('full_name' in user && user.full_name.length > 256) throw new ErrorUnprocessableEntity('Full name must be at most 256 characters');
+		if (user.full_name && user.full_name.length > 256) throw new ErrorUnprocessableEntity('Full name must be at most 256 characters');
 
 		return super.validate(user, options);
 	}
@@ -432,22 +536,42 @@ export default class UserModel extends BaseModel<User> {
 		await this.save({ id: user.id, email_confirmed: 1 });
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public async processEmailConfirmation(userId: Uuid, token: string, beforeChangingEmailHandler: Function) {
-		await this.models().token().checkToken(userId, token);
-		const user = await this.models().user().load(userId);
-		if (!user) throw new ErrorNotFound('No such user');
+	public async processEmailConfirmation(userId: Uuid, token: string, beforeChangingEmailHandler: (newEmail: string)=> Promise<void>) {
+		// Only the token sent to the new address can complete an email change. An account confirmation token can be
+		// sent to the account's current address, so it only confirms that address.
+		if (await this.models().token().isValid(userId, token, TokenPurpose.EmailChange)) {
+			const user = await this.models().user().load(userId);
+			if (!user) throw new ErrorNotFound('No such user');
 
-		const newEmail = await this.models().keyValue().value(`newEmail::${userId}`);
-		if (newEmail) {
+			const newEmail = await this.models().keyValue().value<string>(`newEmail::${userId}`);
+			if (!newEmail) throw new ErrorNotFound('No pending email change');
+
 			await beforeChangingEmailHandler(newEmail);
 			await this.completeEmailChange(user);
+			await this.models().token().deleteByValue(userId, token, TokenPurpose.EmailChange);
 		} else {
+			await this.models().token().checkToken(userId, token, TokenPurpose.AccountConfirmation);
+			const user = await this.models().user().load(userId);
+			if (!user) throw new ErrorNotFound('No such user');
+
 			await this.confirmEmail(user);
 		}
 	}
 
+	// Returns the address to send a confirmation to, or an empty string if it is the current one. Called before saving
+	// the rest of the profile, so that a refused address does not leave the profile half saved.
+	public async newEmailToConfirm(user: User, email: string) {
+		const newEmail = this.formatValues({ email }).email;
+		if (newEmail === user.email) return '';
+		if (!isValidEmailRecipient(newEmail)) throw new ErrorUnprocessableEntity('Invalid email address');
+		// Only counted by initiateEmailChange(), once the current password has been checked
+		await limiterEmailChanges.check(user.id);
+		return newEmail;
+	}
+
 	public async initiateEmailChange(userId: Uuid, newEmail: string) {
+		if (!isValidEmailRecipient(newEmail)) throw new ErrorUnprocessableEntity('Invalid email address');
+		await limiterEmailChanges(userId);
 		const beforeSaveUser = await this.models().user().load(userId);
 
 		await this.models().notification().add(userId, NotificationKey.Any, NotificationLevel.Important, 'A confirmation email has been sent to your new address. Please follow the link in that email to confirm. Your email will only be updated after that.');
@@ -492,7 +616,7 @@ export default class UserModel extends BaseModel<User> {
 	}
 
 	public async sendAccountConfirmationEmail(user: User) {
-		const validationToken = await this.models().token().generate(user.id);
+		const validationToken = await this.models().token().generate(user.id, TokenPurpose.AccountConfirmation);
 		const url = encodeURI(confirmUrl(user.id, validationToken));
 
 		await this.models().email().push({
@@ -502,7 +626,9 @@ export default class UserModel extends BaseModel<User> {
 	}
 
 	public async sendChangeEmailConfirmationEmail(recipientEmail: string, user: User) {
-		const validationToken = await this.models().token().generate(user.id);
+		// Tokens sent for an earlier change went to a different address, so they must not complete this one
+		await this.models().token().deleteByUserAndPurpose(user.id, TokenPurpose.EmailChange);
+		const validationToken = await this.models().token().generate(user.id, TokenPurpose.EmailChange);
 		const url = encodeURI(confirmUrl(user.id, validationToken));
 
 		await this.models().email().push({
@@ -520,7 +646,7 @@ export default class UserModel extends BaseModel<User> {
 	}
 
 	public async generateLinkForPasswordReset(userId: Uuid) {
-		const validationToken = await this.models().token().generate(userId);
+		const validationToken = await this.models().token().generate(userId, TokenPurpose.PasswordReset);
 		return resetPasswordUrl(validationToken);
 	}
 
@@ -538,14 +664,19 @@ export default class UserModel extends BaseModel<User> {
 
 	public async resetPassword(token: string, fields: CheckRepeatPasswordInput) {
 		checkRepeatPassword(fields, true);
-		const user = await this.models().token().userFromToken(token);
+		const user = await this.models().token().userFromToken(token, TokenPurpose.PasswordReset);
 
 		await this.withTransaction(async () => {
 			await this.models().user().save({ id: user.id, password: fields.password });
 			await this.models().session().deleteByUserId(user.id);
 			await this.models().application().deleteByUserId(user.id);
-			await this.models().token().deleteByValue(user.id, token);
+			await this.models().token().deleteByValue(user.id, token, TokenPurpose.PasswordReset);
 		}, 'UserModel::resetPassword');
+
+		// Anyone can block logins to an account by sending wrong passwords, and the reset link proves at least as much as
+		// the password, so it lets the owner back in. Not with MFA: the count includes wrong MFA codes, which someone
+		// who controls the inbox could otherwise guess 10 at a time between resets.
+		if (!getIsMFAEnabled(user)) await limiterLoginAccountBruteForce.onSuccess(user.email);
 	}
 
 	public async handleBetaUserEmails() {
@@ -593,8 +724,7 @@ export default class UserModel extends BaseModel<User> {
 	public async handleFailedPaymentSubscriptions() {
 		interface SubInfo {
 			subs: Subscription[];
-			// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-			templateFn: Function;
+			templateFn: ()=> EmailSubjectBody;
 			emailKeyPrefix: string;
 			flagType: UserFlagType;
 		}
@@ -650,10 +780,13 @@ export default class UserModel extends BaseModel<User> {
 
 		const basicAccount = accountByType(AccountType.Basic);
 		const proAccount = accountByType(AccountType.Pro);
+		const pro100GbAccount = accountByType(AccountType.Pro100Gb);
 		const basicDefaultLimit1 = Math.round(alertLimit1 * basicAccount.max_total_item_size);
 		const proDefaultLimit1 = Math.round(alertLimit1 * proAccount.max_total_item_size);
+		const pro100GbDefaultLimit1 = Math.round(alertLimit1 * pro100GbAccount.max_total_item_size);
 		const basicDefaultLimitMax = Math.round(alertLimitMax * basicAccount.max_total_item_size);
 		const proDefaultLimitMax = Math.round(alertLimitMax * proAccount.max_total_item_size);
+		const pro100GbDefaultLimitMax = Math.round(alertLimitMax * pro100GbAccount.max_total_item_size);
 
 		// ------------------------------------------------------------------------
 		// First, find all the accounts that are over the limit and send an
@@ -665,7 +798,8 @@ export default class UserModel extends BaseModel<User> {
 			.select(['id', 'total_item_size', 'max_total_item_size', 'account_type', 'email', 'full_name'])
 			.where(function() {
 				void this.whereRaw('total_item_size > ? AND account_type = ?', [basicDefaultLimit1, AccountType.Basic])
-					.orWhereRaw('total_item_size > ? AND account_type = ?', [proDefaultLimit1, AccountType.Pro]);
+					.orWhereRaw('total_item_size > ? AND account_type = ?', [proDefaultLimit1, AccountType.Pro])
+					.orWhereRaw('total_item_size > ? AND account_type = ?', [pro100GbDefaultLimit1, AccountType.Pro100Gb]);
 			})
 			// Users who are disabled or who cannot upload already received the
 			// notification.
@@ -685,7 +819,6 @@ export default class UserModel extends BaseModel<User> {
 		await this.withTransaction(async () => {
 			for (const user of users) {
 				const maxTotalItemSize = getMaxTotalItemSize(user);
-				const account = accountByType(user.account_type);
 
 				if (user.total_item_size > maxTotalItemSize * alertLimitMax) {
 					await this.models().email().push({
@@ -699,7 +832,7 @@ export default class UserModel extends BaseModel<User> {
 					});
 
 					await this.models().userFlag().add(user.id, UserFlagType.AccountOverLimit);
-				} else if (maxTotalItemSize > account.max_total_item_size * alertLimit1) {
+				} else if (user.total_item_size > maxTotalItemSize * alertLimit1) {
 					await this.models().email().push({
 						...oversizedAccount1({
 							percentLimit: alertLimit1 * 100,
@@ -726,7 +859,8 @@ export default class UserModel extends BaseModel<User> {
 			.where(function() {
 				void this
 					.whereRaw('u.total_item_size < ? AND u.account_type = ?', [basicDefaultLimitMax, AccountType.Basic])
-					.orWhereRaw('u.total_item_size < ? AND u.account_type = ?', [proDefaultLimitMax, AccountType.Pro]);
+					.orWhereRaw('u.total_item_size < ? AND u.account_type = ?', [proDefaultLimitMax, AccountType.Pro])
+					.orWhereRaw('u.total_item_size < ? AND u.account_type = ?', [pro100GbDefaultLimitMax, AccountType.Pro100Gb]);
 			});
 
 		await this.withTransaction(async () => {
@@ -742,11 +876,14 @@ export default class UserModel extends BaseModel<User> {
 	private formatValues(user: User): User {
 		const output: User = { ...user };
 		if ('email' in output) output.email = (`${user.email}`).trim().toLowerCase();
+		// The column is NOT NULL with a default of "", but callers may pass an
+		// explicit null - in particular PayPal checkouts, which leave the
+		// customer name empty in Stripe.
+		if ('full_name' in output && !output.full_name) output.full_name = '';
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private async syncInfo(userId: Uuid): Promise<any> {
+	private async syncInfo(userId: Uuid): Promise<{ ppk?: { value: PublicPrivateKeyPair } }> {
 		const item = await this.models().item().loadByName(userId, 'info.json');
 
 		// We can get there if user 1 tries to share a notebook with user 2, but
@@ -805,13 +942,24 @@ export default class UserModel extends BaseModel<User> {
 					// generating a bcrypt hash for each user is slow.
 				}
 			} else {
+				// Before any processing, since checking a long enough password can block the server for minutes
+				if (user.password.length > maxPasswordLength) throw new ErrorUnprocessableEntity(`The password cannot be longer than ${maxPasswordLength} characters`);
 				if (!options.skipValidation) this.validatePassword(user.password);
 				user.password = await hashPassword(user.password);
 			}
+
+			// A stale flag would let an account confirmation token replace this password
+			if (!isNew && !('must_set_password' in user)) user.must_set_password = 0;
 		}
+
+		const passwordChanged = !isNew && !!user.password;
 
 		return this.withTransaction(async () => {
 			const savedUser = await super.save(user, options);
+
+			// Changing the password is how an owner recovers their account, so nothing that someone else may have set up
+			// while they had access must survive it, such as a reset link or a pending email change to their address
+			if (passwordChanged) await this.cancelPendingAccountChanges(savedUser.id);
 
 			if (isNew && (object.email_confirmed !== 1 || object.must_set_password !== 0)) {
 				await this.sendAccountConfirmationEmail(savedUser);
@@ -828,14 +976,44 @@ export default class UserModel extends BaseModel<User> {
 		}, 'UserModel::saveMulti');
 	}
 
-	public async hasMFAEnabled(email: string) {
+	public async hasMFAEnabled(email: string, { requireUserExists }: HasMfaEnabledOptions) {
 		const user = await this.loadByEmail(email, { fields: ['totp_secret'] });
-		if (!user) throw new ErrorForbidden('Invalid email or password', { details: { email } });
+		if (!user) {
+			if (requireUserExists) throw new ErrorForbidden('Invalid email or password', { details: { email } });
+			return false;
+		}
 		return getIsMFAEnabled(user);
 	}
 
 	public async disableMFA(userId: Uuid) {
 		await this.save({ id: userId, totp_secret: '' });
+	}
+
+	// Changing a credential requires the current password, so that a session alone (a stolen cookie, or an authorised
+	// app) cannot lock the owner out. It is as useful for guessing the password as login is, so it shares its limiter.
+	public async checkCurrentPassword(userId: Uuid, password: string, services: Services) {
+		const user = await this.load(userId, { fields: ['email'] });
+		if (!user) throw new ErrorNotFound(`No such user: ${userId}`);
+
+		await limiterLoginAccountBruteForce.run(user.email, async () => {
+			// Through login() so that LDAP accounts are checked against the directory rather than a stale local copy
+			const loggedInUser = password ? await this.login(user.email, password, services) : null;
+			if (!loggedInUser || loggedInUser.id !== userId) {
+				await limiterLoginAccountBruteForce.onFailure(user.email, `password:${password || ''}`);
+				throw new ErrorUnprocessableEntity('The current password is incorrect');
+			}
+
+			await limiterLoginAccountBruteForce.onSuccess(user.email);
+		});
+	}
+
+	// Account confirmation tokens are kept: they can only confirm the current address, and a new account's welcome email
+	// must still work after its password has been set
+	private async cancelPendingAccountChanges(userId: Uuid) {
+		await this.models().keyValue().deleteValue(`newEmail::${userId}`);
+		for (const purpose of [TokenPurpose.PasswordReset, TokenPurpose.EmailChange]) {
+			await this.models().token().deleteByUserAndPurpose(userId, purpose);
+		}
 	}
 
 	public async isPasswordValid(userId: Uuid, password: string) {
@@ -861,4 +1039,29 @@ export default class UserModel extends BaseModel<User> {
 		await this.models().notification().add(userId, NotificationKey.Any, NotificationLevel.Important, 'Multi-factor authentication has been enabled for your account. Please remember to copy and save your recovery codes');
 	}
 
+	public async enabledUserCount({ excludeMainAdmin }: EnabledUserCountOptions) {
+		const result = await this.db('users')
+			.where('enabled', '=', 1)
+			.count('*', { as: 'count' });
+		let count = Number(result[0].count);
+
+		if (excludeMainAdmin) {
+			const hasAdminUser = !!await this.db('users')
+				.select({ 'id': 'id' })
+				.where('is_admin', '=', 1)
+				.where('enabled', '=', 1)
+				.first();
+			count -= (hasAdminUser ? 1 : 0);
+		}
+
+		return count;
+	}
+
+	public async enabledNonAdminUserCount() {
+		const result = await this.db('users')
+			.where('enabled', '=', 1)
+			.where('is_admin', '=', 0)
+			.count('*', { as: 'count' });
+		return Number(result[0].count);
+	}
 }

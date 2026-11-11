@@ -8,6 +8,7 @@ import { tempFilePath } from '../../testing/test-utils';
 import { ContentScriptType } from '../../services/plugins/api/types';
 import { ExportModuleOutputFormat, FileSystemItem } from './types';
 import { readFile } from 'fs/promises';
+import shim from '../../shim';
 
 async function recreateExportDir() {
 	const dir = exportDir();
@@ -61,6 +62,29 @@ describe('interop/InteropService_Exporter_Html', () => {
 		expect(files).toContain('note1.html');
 		expect(files).toContain('note2.html');
 	}));
+
+	test('should warn when a note title is truncated in the exported filename', async () => {
+		const longTitle = 'a'.repeat(51);
+		const longFolderTitle = 'b'.repeat(51);
+		const folder = await Folder.save({ title: longFolderTitle });
+		const note = await Note.save({ title: longTitle, parent_id: folder.id });
+		const duplicateNote = await Note.save({ title: longTitle, parent_id: folder.id });
+		await Note.save({ title: 'short title', parent_id: folder.id });
+
+		const result = await InteropService.instance().export({
+			path: exportDir(),
+			format: ExportModuleOutputFormat.Html,
+			target: FileSystemItem.Directory,
+		});
+
+		expect(result.warnings).toEqual([
+			`The notebook title "${longFolderTitle}" was truncated to "${'b'.repeat(50)}" in the exported folder name. Notebook ID: ${folder.id}`,
+			`The note title "${longTitle}" was truncated to "${'a'.repeat(50)}.html" in the exported file name. Note ID: ${note.id}`,
+			`The note title "${longTitle}" was truncated to "${'a'.repeat(50)} (1).html" in the exported file name. Note ID: ${duplicateNote.id}`,
+		]);
+		expect(await fs.pathExists(`${exportDir()}/${'b'.repeat(50)}/${'a'.repeat(50)}.html`)).toBe(true);
+		expect(await fs.pathExists(`${exportDir()}/${'b'.repeat(50)}/${'a'.repeat(50)} (1).html`)).toBe(true);
+	});
 
 	test('should export plugin assets', (async () => {
 		const service = InteropService.instance();
@@ -137,6 +161,30 @@ describe('interop/InteropService_Exporter_Html', () => {
 
 		const content = await readFile(filePath, 'utf-8');
 		expect(content).toContain('<a data-from-md="" title="/" href="" download="">a link starts with slash</a>');
+	}));
+
+	test('should not embed zip file for pdf', (async () => {
+		const service = InteropService.instance();
+		const folder1 = await Folder.save({ title: 'folder1' });
+
+		const zipPath = tempFilePath('zip');
+		await fs.writeFile(zipPath, 'fake zip content', 'utf8');
+		const resource = await shim.createResourceFromPath(zipPath);
+
+		const note = await Note.save({ title: 'note1', parent_id: folder1.id, body: `[archive.zip](:/${resource.id})` });
+		await Note.save({ id: note.id });
+
+		const filePath = `${exportDir()}/test.html`;
+
+		await service.export({
+			path: filePath,
+			format: ExportModuleOutputFormat.Html,
+			target: FileSystemItem.File,
+			shouldEmbedOnlyImages: true,
+		});
+
+		const content = await readFile(filePath, 'utf-8');
+		expect(content).not.toContain('data:application/zip');
 	}));
 
 });

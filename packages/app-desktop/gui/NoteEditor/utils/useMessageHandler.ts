@@ -1,5 +1,6 @@
 import { RefObject, useCallback } from 'react';
-import { FormNote, HtmlToMarkdownHandler, MarkupToHtmlHandler, ScrollOptions, MessageEvent } from './types';
+import { Dispatch } from 'redux';
+import { FormNote, HtmlToMarkdownHandler, MarkupToHtmlHandler, ScrollOptions, MessageEvent, NoteBodyEditorRef } from './types';
 import contextMenu from './contextMenu';
 import CommandService from '@joplin/lib/services/CommandService';
 import PostMessageService from '@joplin/lib/services/PostMessageService';
@@ -12,12 +13,9 @@ export default function useMessageHandler(
 	scrollWhenReadyRef: RefObject<ScrollOptions|null>,
 	clearScrollWhenReady: ()=> void,
 	windowId: string,
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	editorRef: any,
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	setLocalSearchResultCount: Function,
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function,
+	editorRef: RefObject<NoteBodyEditorRef>,
+	setLocalSearchResultCount: (count: number)=> void,
+	dispatch: Dispatch,
 	formNote: FormNote,
 	htmlToMd: HtmlToMarkdownHandler,
 	mdToHtml: MarkupToHtmlHandler,

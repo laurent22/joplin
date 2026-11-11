@@ -27,15 +27,18 @@ export interface Props {
 	minHeight?: number;
 	fitToContent?: boolean;
 	borderBottom?: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	theme?: any;
+	theme?: Record<string, unknown>;
 	onSubmit?: ()=> void;
 	onDismiss?: ()=> void;
 	onReady?: ()=> void;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function UserWebview(props: Props, ref: any) {
+export interface UserWebviewRef {
+	formData: ()=> unknown;
+	focus: ()=> void;
+}
+
+function UserWebview(props: Props, ref: React.Ref<UserWebviewRef>) {
 	const minWidth = props.minWidth ? props.minWidth : 200;
 	const minHeight = props.minHeight ? props.minHeight : 20;
 

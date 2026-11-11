@@ -1,0 +1,24 @@
+
+// Disable most warnings: Many of Joplin's dependencies (e.g. Expo) emit thousands of lines of
+// Objective C and Swift warnings when doing a full build. This makes it difficult to inspect
+// logs when tests fail in CI. For now, disable **all** warnings when doing CI testing. This is
+// done in a separate .xcconfig file to avoid silencing warnings when developing in XCode.
+//
+// Ref: https://stackoverflow.com/a/60091097
+//      https://github.com/swiftlang/swift-evolution/blob/main/proposals/0443-warning-control-flags.md
+OTHER_SWIFT_FLAGS = $(inherited) -suppress-warnings
+WARNING_CFLAGS = $(inherited) -w
+
+//
+// Options to improve build time
+// Ref: https://gist.github.com/gorhom/2d7caaeb64c21694dc691cedbe18e134
+//      https://developer.apple.com/documentation/xcode/build-settings-reference
+//
+
+// Optimize for fast builds
+ASSETCATALOG_COMPILER_OPTIMIZATION=time
+GCC_OPTIMIZATION_LEVEL=0
+GCC_PRECOMPILE_PREFIX_HEADER=YES
+
+// Run neighboring build tasks in parallel, when supported
+FUSE_BUILD_SCRIPT_PHASES = YES

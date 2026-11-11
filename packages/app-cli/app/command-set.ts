@@ -4,6 +4,7 @@ import { _ } from '@joplin/lib/locale';
 import { ModelType } from '@joplin/lib/BaseModel';
 import Database from '@joplin/lib/database';
 import Note from '@joplin/lib/models/Note';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
 
 class Command extends BaseCommand {
 	public override usage() {
@@ -22,8 +23,7 @@ class Command extends BaseCommand {
 		return _('Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s', s.join(', '));
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public override async action(args: any) {
+	public override async action(args: { note: string; name: string; value?: string }) {
 		const title = args['note'];
 		const propName = args['name'];
 		let propValue = args['value'];
@@ -35,10 +35,14 @@ class Command extends BaseCommand {
 		for (let i = 0; i < notes.length; i++) {
 			this.encryptionCheck(notes[i]);
 
+			// Enabling the lock here would only fail deep inside the gated save, so refuse it outright.
+			if (isNoteLockEnabled() && propName === 'is_locked') {
+				throw new Error(_('The note lock state cannot be changed from the command line'));
+			}
+
 			const timestamp = Date.now();
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const newNote: any = {
+			const newNote: Record<string, unknown> = {
 				id: notes[i].id,
 				type_: notes[i].type_,
 				updated_time: timestamp,

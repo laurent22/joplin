@@ -2,6 +2,7 @@ import { EditorSelection } from '@codemirror/state';
 import createTestEditor from '../../testing/createTestEditor';
 import replaceInlineHtml from './replaceInlineHtml';
 import waitFor from '@joplin/lib/testing/waitFor';
+import visibleEditorText from '../../testing/visibleEditorText';
 
 const createEditorWithCursor = async (initialMarkdown: string, cursorIndex: number, expectedTags: string[] = ['HTMLTag']) => {
 	const editor = await createTestEditor(
@@ -21,22 +22,24 @@ describe('replaceInlineHtml', () => {
 	jest.retryTimes(2);
 
 	test.each([
-		{ markdown: '<sup>Test</sup>', expectedDomTags: 'sup' },
-		{ markdown: '<strike>Test</strike>', expectedDomTags: 'strike' },
-		{ markdown: 'Test: <span style="color: red;">Test</span>', expectedDomTags: 'span[style]' },
-		{ markdown: 'Test: <span style="color: rgb(123, 0, 0);">Test</span>', expectedDomTags: 'span[style]' },
+		{ markdown: '<sup>Test</sup>', expectedDomTags: 'sup', expectedText: 'Test' },
+		{ markdown: '<strike>Test</strike>', expectedDomTags: 'strike', expectedText: 'Test' },
+		{ markdown: 'Test: <span style="color: red;">Test</span>', expectedDomTags: 'span[style]', expectedText: 'Test: Test' },
+		{ markdown: 'Test: <span style="color: rgb(123, 0, 0);">Test</span>', expectedDomTags: 'span[style]', expectedText: 'Test: Test' },
 		{
 			markdown: '<sup>Test *test*...</sup>',
 			expectedDomTags: 'sup',
+			expectedText: 'Test *test*...',
 			initialSyntaxTags: ['HTMLTag', 'Emphasis'],
 		},
-	])('should render inline HTML (case %#)', async ({ markdown, expectedDomTags: expectedTagsQuery, initialSyntaxTags }) => {
+	])('should render inline HTML (case %#)', async ({ markdown, expectedDomTags: expectedTagsQuery, expectedText, initialSyntaxTags }) => {
 		// Add additional newlines: Ensure that the cursor isn't initially on the same line as the content to be rendered:
 		const editor = await createEditor(`\n\n${markdown}\n\n`, initialSyntaxTags);
 
 		// Retry on failure to handle the case where the syntax tree is slow:
 		await waitFor(() => {
 			expect(editor.contentDOM.querySelector(expectedTagsQuery)).toBeTruthy();
+			expect(visibleEditorText(editor)).toBe(expectedText);
 		});
 	});
 
@@ -64,7 +67,7 @@ describe('replaceInlineHtml', () => {
 		const editor = await createEditorWithCursor(markdown, markdown.length);
 
 		await waitFor(() => {
-			expect(editor.contentDOM.textContent).toContain('<sup>x');
+			expect(visibleEditorText(editor)).toContain('<sup>x');
 		});
 	});
 
@@ -74,7 +77,16 @@ describe('replaceInlineHtml', () => {
 
 		await waitFor(() => {
 			expect(editor.contentDOM.querySelector('strike')).toBeFalsy();
-			expect(editor.contentDOM.textContent).toContain('<strike>');
+			expect(visibleEditorText(editor)).toContain('<strike>');
+		});
+	});
+
+	test('should not hide empty inline HTML tags', async () => {
+		const markdown = '<sup></sup>...';
+		const editor = await createEditorWithCursor(markdown, markdown.length);
+
+		await waitFor(() => {
+			expect(visibleEditorText(editor)).toBe('<sup></sup>...');
 		});
 	});
 });

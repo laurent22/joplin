@@ -16,6 +16,8 @@ import { KB } from '@joplin/utils/bytes';
 import { defaultWindowId } from '@joplin/lib/reducer';
 import { execCommand } from '@joplin/utils';
 
+const allowedExternalProtocols = ['http:', 'https:', 'mailto:', 'joplin:'];
+
 interface LastSelectedPath {
 	file: string;
 	directory: string;
@@ -235,11 +237,9 @@ export class Bridge {
 			if (registered) {
 				this.registeredGlobalHotkey_ = accelerator;
 			} else {
-				// eslint-disable-next-line no-console
 				console.warn(`Bridge: Failed to register global shortcut: ${accelerator}`);
 			}
 		} catch (error) {
-			// eslint-disable-next-line no-console
 			console.error(`Bridge: Error registering global shortcut "${accelerator}":`, error);
 		}
 	}
@@ -249,7 +249,7 @@ export class Bridge {
 			try {
 				globalShortcut.unregister(this.registeredGlobalHotkey_);
 			} catch (error) {
-				// eslint-disable-next-line no-console
+
 				console.warn('Bridge: Error removing global shortcut:', error);
 			}
 			this.registeredGlobalHotkey_ = '';
@@ -318,15 +318,13 @@ export class Bridge {
 	// Perhaps the easiest would be to patch electron-context-menu to
 	// support the renderer process again. Or possibly revert to an old
 	// version of electron-context-menu.
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public setupContextMenu(_spellCheckerMenuItemsHandler: Function) {
+	public setupContextMenu(_spellCheckerMenuItemsHandler: (misspelledWord: string, dictionarySuggestions: string[])=> void) {
 		require('./services/electron-context-menu')({
 			allWindows: [this.mainWindow()],
 
 			electronApp: this.electronApp(),
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			shouldShowMenu: (_event: any, params: any) => {
+			shouldShowMenu: (_event: unknown, params: { isEditable: boolean }) => {
 				return params.isEditable;
 			},
 
@@ -411,16 +409,14 @@ export class Bridge {
 
 	public async showOpenDialog(options: OpenDialogOptions = null) {
 		if (!options) options = {};
-		let fileType = 'file';
+		let fileType: keyof LastSelectedPath = 'file';
 		if (options.properties && options.properties.includes('openDirectory')) fileType = 'directory';
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		if (!('defaultPath' in options) && (this.lastSelectedPaths_ as any)[fileType]) options.defaultPath = (this.lastSelectedPaths_ as any)[fileType];
+		if (!('defaultPath' in options) && this.lastSelectedPaths_[fileType]) options.defaultPath = this.lastSelectedPaths_[fileType];
 		if (!('createDirectory' in options)) options.createDirectory = true;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- App-internal OpenDialogOptions.properties is string[]; Electron's is a stricter union
 		const { filePaths } = await dialog.showOpenDialog(this.activeWindow(), options as any);
 		if (filePaths && filePaths.length) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			(this.lastSelectedPaths_ as any)[fileType] = dirname(filePaths[0]);
+			this.lastSelectedPaths_[fileType] = dirname(filePaths[0]);
 		}
 		return filePaths;
 	}
@@ -483,6 +479,10 @@ export class Bridge {
 		setLocale(locale);
 	}
 
+	public setEnableUnresponsiveCheck(enabled: boolean) {
+		this.electronWrapper_.setEnableUnresponsiveCheck(enabled);
+	}
+
 	public get Menu() {
 		return Menu;
 	}
@@ -497,6 +497,12 @@ export class Bridge {
 		if (protocol === 'file:') {
 			await this.openItem(url);
 		} else {
+			// Some callers pass untrusted note content, and this reaches the OS
+			// URI dispatcher, where a dangerous scheme handler can mean RCE.
+			if (!allowedExternalProtocols.includes(protocol)) {
+				console.warn(`Bridge: openExternal: rejected URL with disallowed scheme "${protocol}"`);
+				return;
+			}
 			return shell.openExternal(url);
 		}
 	}

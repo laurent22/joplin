@@ -4,31 +4,30 @@ import { AppContextTestOptions, checkContextError, koaAppContext } from './testU
 
 export interface ExecRequestOptions {
 	filePath?: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	query?: Record<string, any>;
+	query?: Record<string, unknown>;
 
 	// Providing a baseAppContext allows skipping some amount of setup logic that can cause issues when
 	// called many times concurrently.
 	baseAppContext?: AppContext;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function putApiC(sessionId: string, path: string, body: Record<string, any> = null, options: ExecRequestOptions = null): Promise<AppContext> {
+
+export async function putApiC(sessionId: string, path: string, body: object = null, options: ExecRequestOptions = null): Promise<AppContext> {
 	return execApiC(sessionId, 'PUT', path, body, options);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function putApi<T>(sessionId: string, path: string, body: Record<string, any> = null, options: ExecRequestOptions = null): Promise<T> {
+
+export async function putApi<T>(sessionId: string, path: string, body: object = null, options: ExecRequestOptions = null): Promise<T> {
 	return execApi<T>(sessionId, 'PUT', path, body, options);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function patchApiC(sessionId: string, path: string, body: Record<string, any> = null, options: ExecRequestOptions = null): Promise<AppContext> {
+
+export async function patchApiC(sessionId: string, path: string, body: object = null, options: ExecRequestOptions = null): Promise<AppContext> {
 	return execApiC(sessionId, 'PATCH', path, body, options);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function patchApi<T>(sessionId: string, path: string, body: Record<string, any> = null, options: ExecRequestOptions = null): Promise<T> {
+
+export async function patchApi<T>(sessionId: string, path: string, body: object = null, options: ExecRequestOptions = null): Promise<T> {
 	return execApi<T>(sessionId, 'PATCH', path, body, options);
 }
 
@@ -44,22 +43,26 @@ export async function deleteApiC(sessionId: string, path: string, options: ExecR
 	return execApiC(sessionId, 'DELETE', path, null, options);
 }
 
-export async function deleteApi<T>(sessionId: string, path: string, options: ExecRequestOptions = null): Promise<T> {
-	return execApi<T>(sessionId, 'DELETE', path, null, options);
+interface DeleteRequestOptions extends ExecRequestOptions {
+	body?: Record<string, unknown>;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function postApiC(sessionId: string, path: string, body: Record<string, any> = null, options: ExecRequestOptions = null): Promise<AppContext> {
+export async function deleteApi<T>(sessionId: string, path: string, options: DeleteRequestOptions = null): Promise<T> {
+	return execApi<T>(sessionId, 'DELETE', path, options?.body ?? null, options);
+}
+
+
+export async function postApiC(sessionId: string, path: string, body: object = null, options: ExecRequestOptions = null): Promise<AppContext> {
 	return execApiC(sessionId, 'POST', path, body, options);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function postApi<T>(sessionId: string, path: string, body: Record<string, any> = null, options: ExecRequestOptions = null): Promise<T> {
+
+export async function postApi<T>(sessionId: string, path: string, body: object = null, options: ExecRequestOptions = null): Promise<T> {
 	return execApi<T>(sessionId, 'POST', path, body, options);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function execRequestC(sessionId: string, method: string, path: string, body: Record<string, any> = null, options: ExecRequestOptions = null): Promise<AppContext> {
+
+export async function execRequestC(sessionId: string, method: string, path: string, body: object = null, options: ExecRequestOptions = null): Promise<AppContext> {
 	options = options || {};
 
 	const appContextOptions: AppContextTestOptions = {
@@ -81,20 +84,20 @@ export async function execRequestC(sessionId: string, method: string, path: stri
 	return context;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function execRequest<T>(sessionId: string, method: string, url: string, body: Record<string, any> = null, options: ExecRequestOptions = null): Promise<T> {
+
+export async function execRequest<T>(sessionId: string, method: string, url: string, body: object = null, options: ExecRequestOptions = null): Promise<T> {
 	const context = await execRequestC(sessionId, method, url, body, options);
 	await checkContextError(context);
 	return context.response.body as T;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function execApiC(sessionId: string, method: string, path: string, body: Record<string, any> = null, options: ExecRequestOptions = null): Promise<AppContext> {
+
+export async function execApiC(sessionId: string, method: string, path: string, body: object = null, options: ExecRequestOptions = null): Promise<AppContext> {
 	return execRequestC(sessionId, method, `api/${path}`, body, options);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function execApi<T>(sessionId: string, method: string, url: string, body: Record<string, any> = null, options: ExecRequestOptions = null): Promise<T> {
+
+export async function execApi<T>(sessionId: string, method: string, url: string, body: object = null, options: ExecRequestOptions = null): Promise<T> {
 	const context = await execApiC(sessionId, method, url, body, options);
 	await checkContextError(context);
 	return context.response.body as T;

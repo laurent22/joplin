@@ -9,6 +9,9 @@ import { itemIsReadOnly } from '../models/utils/readOnly';
 import { ModelType } from '../BaseModel';
 import ItemChange from '../models/ItemChange';
 import Setting from '../models/Setting';
+import isNoteLockEnabled from '../services/noteLock/isNoteLockEnabled';
+import NoteLockNote, { NoteLockNoteEntity } from '../services/noteLock/NoteLockNote';
+import NoteLockSession from '../services/noteLock/NoteLockSession';
 import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('convertNoteToMarkdown');
@@ -31,6 +34,12 @@ export const runtime = (): CommandRuntime => {
 			const notes: NoteEntity[] = await Note.loadItemsByIdsOrFail(noteIds);
 
 			try {
+				const firstLockedNote = isNoteLockEnabled() ? notes.find(note => note.markup_language !== MarkupLanguage.Markdown && NoteLockNote.isLocked(note)) : null;
+				if (firstLockedNote && !NoteLockSession.instance().isUnlocked()) {
+					throw new Error(_('Cannot convert locked note: "%s"', firstLockedNote.title));
+				}
+				// Captured once so a session lock mid-run cannot fail the remaining conversions.
+				const noteLockKey = firstLockedNote ? NoteLockSession.instance().decryptedKey() : null;
 				let isFirst = true;
 				let processedCount = 0;
 				for (const note of notes) {
@@ -41,35 +50,44 @@ export const runtime = (): CommandRuntime => {
 					if (await itemIsReadOnly(Note, ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, note.id, Setting.value('sync.userId'), context.state.shareService)) {
 						throw new Error(_('Cannot convert read-only item: "%s"', note.title));
 					}
+					// Every note converts through a full gated load and save, so a locked body is
+					// decrypted for the conversion and the converted note is encrypted again.
+					const sourceNote: NoteLockNoteEntity = await Note.load(note.id, { useNoteLock: true, noteLockKey });
+					const markdownBody = await convertHtmlToMarkdown().execute(context, sourceNote.body);
+					const backupNote = await Note.duplicate(note.id, {
+						changes: {
+							user_created_time: note.user_created_time,
+							user_updated_time: note.user_updated_time,
+						},
+					});
 
-					const markdownBody = await convertHtmlToMarkdown().execute(context, note.body);
-					const newNote = await Note.duplicate(note.id);
+					note.body = markdownBody;
+					note.markup_language = MarkupLanguage.Markdown;
+					note.updated_time = Date.now();
 
-					newNote.body = markdownBody;
-					newNote.markup_language = MarkupLanguage.Markdown;
-
-					await Note.save(newNote);
-					await Note.delete(note.id, { toTrash: true });
+					const toSave = { ...note, isDecrypted: sourceNote.isDecrypted };
+					await Note.save(toSave, { autoTimestamp: false, useNoteLock: true, noteLockKey });
+					await Note.delete(backupNote.id, { toTrash: true });
 					processedCount ++;
 
 					if (isFirst) {
 						context.dispatch({
 							type: 'NOTE_SELECT',
-							id: newNote.id,
+							id: note.id,
 						});
 						isFirst = false;
 					}
 				}
 
 				void shim.showToast(_n(
-					'The note has been converted to Markdown and the original note has been moved to the trash',
-					'The notes have been converted to Markdown and the original notes have been moved to the trash',
+					'The note has been converted to Markdown and an HTML copy has been moved to the trash',
+					'The notes have been converted to Markdown and HTML copies have been moved to the trash',
 					processedCount,
 				), { type: ToastType.Success });
 			} catch (error) {
 				await shim.showErrorDialog(_('Could not convert notes to Markdown: %s', error.message));
 			}
 		},
-		enabledCondition: 'selectionIncludesHtmlNotes && (multipleNotesSelected || !noteIsReadOnly)',
+		enabledCondition: 'selectionIncludesHtmlNotes && (multipleNotesSelected || !noteIsReadOnly) && !noteLockContentUnavailable',
 	};
 };

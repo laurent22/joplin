@@ -1,5 +1,6 @@
 use crate::{one::property::PropertyType, onestore::object::Object};
 use parser_utils::errors::{ErrorKind, Result};
+use time::{Duration, macros::utc_datetime};
 
 /// A 32 bit date/time timestamp.
 ///
@@ -26,6 +27,12 @@ impl Time {
     }
 }
 
+impl From<Time> for time::UtcDateTime {
+    fn from(value: Time) -> Self {
+        utc_datetime!(1980-01-01 0:00) + Duration::seconds(value.0 as i64)
+    }
+}
+
 /// A 64 bit date/time timestamp.
 ///
 /// See [\[MS-DTYP\] 2.3.3]
@@ -49,5 +56,21 @@ impl Timestamp {
             .map(Timestamp);
 
         Ok(timestamp)
+    }
+}
+
+impl TryFrom<Timestamp> for time::UtcDateTime {
+    type Error = parser_utils::errors::Error;
+
+    fn try_from(value: Timestamp) -> Result<Self> {
+        // Note: This is a lossy conversion, since the original is in 100-nanosecond intervals
+        let microseconds = value.0 / 10;
+        utc_datetime!(1601-01-01 0:00)
+            // UtcDatetime can only represent dates in the (-9999 BCE, 9999 CE) range. Use checked_add
+            // to avoid a panic in the case of unexpectedly large dates:
+            .checked_add(Duration::milliseconds((microseconds / 1000) as i64))
+            .ok_or_else(|| {
+                parser_error!(MalformedOneStoreData, "Timestamp out of range {}", value.0).into()
+            })
     }
 }

@@ -4,6 +4,7 @@ import { FolderEntity, TagsWithNoteCountEntity } from '@joplin/lib/services/data
 import areAllFoldersCollapsed from '@joplin/lib/models/utils/areAllFoldersCollapsed';
 import getCanBeCollapsedFolderIds from '@joplin/lib/models/utils/getCanBeCollapsedFolderIds';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
+import { StateShare } from '@joplin/lib/services/share/reducer';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { useMemo, useRef, useState } from 'react';
@@ -23,6 +24,7 @@ interface Props {
 	dispatch: Dispatch;
 	themeId: number;
 	plugins: PluginStates;
+	shares: StateShare[];
 
 	tags: TagsWithNoteCountEntity[];
 	folders: FolderEntity[];
@@ -124,6 +126,7 @@ const mapStateToProps = (state: AppState) => {
 		collapsedFolderIds: state.collapsedFolderIds,
 		selectedSmartFilterId: mainWindowState.selectedSmartFilterId,
 		plugins: state.pluginService.plugins,
+		shares: state.shareService.shares,
 		tagHeaderIsExpanded: state.settings.tagHeaderIsExpanded,
 		folderHeaderIsExpanded: state.settings.folderHeaderIsExpanded,
 	};

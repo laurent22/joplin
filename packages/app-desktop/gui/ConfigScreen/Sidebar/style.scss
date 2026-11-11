@@ -1,0 +1,94 @@
+.settings-sidebar {
+	display: flex;
+	background-color: var(--joplin-background-color2);
+	flex-direction: column;
+	overflow-x: hidden;
+	overflow-y: auto;
+
+	> .searchbox {
+		padding: var(--joplin-main-padding);
+		padding-bottom: calc(var(--joplin-main-padding) / 2);
+	}
+
+	> .tablist > .separator {
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: row;
+		color: var(--joplin-color2);
+		padding: var(--joplin-main-padding);
+		padding-top: calc(var(--joplin-main-padding) * 0.8);
+		padding-bottom: calc(var(--joplin-main-padding) * 0.8);
+		border-top: 1px solid var(--joplin-divider-color);
+		border-bottom: 1px solid var(--joplin-divider-color);
+		background-color: var(--joplin-selected-color2);
+		font-size: var(--joplin-font-size);
+	}
+
+	> .tablist > .item {
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: row;
+		width: 100%;
+		border: none;
+		padding: var(--joplin-main-padding);
+		background: none;
+		transition: 0.1s;
+		text-align: left;
+		cursor: default;
+		font-family: inherit;
+		font-size: inherit;
+
+		&.sub {
+			padding-left: 35px;
+		}
+
+		&.selected {
+			background: var(--joplin-selected-color2);
+			opacity: 1;
+
+			> .icon {
+				color: var(--joplin-color2);
+			}
+
+			> .label {
+				color: var(--joplin-color2);
+			}
+		}
+
+		&:not(.selected):not(.disabled) {
+			opacity: 0.8;
+		}
+
+		&:hover:not(.disabled) {
+			background-color: var(--joplin-background-color-hover2);
+		}
+
+		&.disabled {
+			opacity: 0.3;
+			cursor: not-allowed;
+		}
+
+		> .icon {
+			font-size: calc(var(--joplin-font-size) * 1.4);
+			color: var(--joplin-color2);
+			margin-right: calc(var(--joplin-main-padding) / 1.5);
+		}
+
+		> .label {
+			font-size: calc(var(--joplin-font-size) * 1.2);
+			font-weight: 500;
+			color: var(--joplin-color2);
+			white-space: nowrap;
+			display: flex;
+			flex: 1;
+			align-items: center;
+			user-select: none;
+
+			> mark {
+				background-color: var(--joplin-search-marker-background-color);
+				color: var(--joplin-search-marker-color);
+				padding: 0;
+			}
+		}
+	}
+}

@@ -40,7 +40,7 @@ function buttonDefinitions(): ButtonDefinition[] {
 	];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE editor is dynamically loaded; published types don't cover the editor.ui.registry / formatter shape we use
 export default function(editor: any) {
 	const definitions = buttonDefinitions();
 
@@ -51,7 +51,7 @@ export default function(editor: any) {
 			onAction: async function() {
 				editor.execCommand('mceToggleFormat', false, def.name);
 			},
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE ToggleButton onSetup api type not in published types
 			onSetup: function(api: any) {
 				editor.formatter.formatChanged(def.name, (state: boolean) => {
 					api.setActive(state);

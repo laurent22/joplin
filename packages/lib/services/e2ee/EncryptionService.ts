@@ -1,4 +1,4 @@
-import { CipherAlgorithm, Digest, MasterKeyEntity } from './types';
+import { CipherAlgorithm, CryptoBuffer, Digest, MasterKeyEntity } from './types';
 import Logger from '@joplin/utils/Logger';
 import shim from '../../shim';
 import Setting from '../../models/Setting';
@@ -7,7 +7,7 @@ import BaseItem from '../../models/BaseItem';
 import JoplinError from '../../JoplinError';
 import { getActiveMasterKeyId, setActiveMasterKeyId } from '../synchronizer/syncInfoUtils';
 import PerformanceLogger from '../../PerformanceLogger';
-const { padLeft } = require('../../string-utils.js');
+import { padLeft } from '../../string-utils';
 
 const logger = Logger.create('EncryptionService');
 const perfLogger = PerformanceLogger.create();
@@ -18,10 +18,33 @@ function hexPad(s: string, length: number) {
 	return padLeft(s, length, '0');
 }
 
-export function isValidHeaderIdentifier(id: string, ignoreTooLongLength = false) {
+export function isValidHeaderIdentifier(id: string, ignoreTooLongLength = false, isNoteLock = false) {
 	if (!id) return false;
 	if (!ignoreTooLongLength && id.length !== 5) return false;
-	return /JED\d\d/.test(id);
+	return isNoteLock ? /JLD\d\d/.test(id) : /JED\d\d/.test(id);
+}
+
+// Version 1 has fixed-size metadata, later versions use the size in the header. The key id is
+// deliberately not compared, so data locked under another key is not encrypted a second time.
+export function isValidNoteLockHeader(text: string) {
+	if (typeof text !== 'string') return false;
+
+	const identifierSize = 5;
+	const metadataSizeFieldSize = 6;
+	const identifier = text.substring(0, identifierSize);
+	if (!isValidHeaderIdentifier(identifier, false, true)) return false;
+
+	const metadataSizeHex = text.substring(identifierSize, identifierSize + metadataSizeFieldSize);
+	if (!/^[0-9a-f]{6}$/.test(metadataSizeHex)) return false;
+
+	const metadataSize = parseInt(metadataSizeHex, 16);
+	const maximumMetadataSize = 1024;
+	if (!metadataSize || metadataSize > maximumMetadataSize) return false;
+	// Avoids validating a very short header, in case of a very specific combination of the first few characters
+	if (metadataSize < 34 || (identifier === 'JLD01' && metadataSize !== 34)) return false;
+
+	const metadata = text.substring(identifierSize + metadataSizeFieldSize, identifierSize + metadataSizeFieldSize + metadataSize);
+	return metadata.length === metadataSize && /^[0-9a-f]+$/.test(metadata);
 }
 
 interface DecryptedMasterKey {
@@ -29,8 +52,7 @@ interface DecryptedMasterKey {
 	plainText: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export interface EncryptionCustomHandler<Context = any> {
+export interface EncryptionCustomHandler<Context = unknown> {
 	context?: Context;
 	encrypt(context: Context, hexaBytes: string, password: string): Promise<string>;
 	decrypt(context: Context, data: string, password: string): Promise<string>;
@@ -51,10 +73,11 @@ export enum EncryptionMethod {
 
 export interface EncryptOptions {
 	encryptionMethod?: EncryptionMethod;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onProgress?: Function;
+	onProgress?: (event: { doneSize: number })=> void;
 	encryptionHandler?: EncryptionCustomHandler;
 	masterKeyId?: string;
+	decryptedMasterKey?: string;
+	isNoteLock?: boolean;
 }
 
 type GetPasswordCallback = ()=> string|Promise<string>;
@@ -67,7 +90,7 @@ export default class EncryptionService {
 
 	public static instance_: EncryptionService = null;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- fsDriver concrete shape varies per-platform (node FsDriverBase subclasses, RN, web); used as ambient property
 	public static fsDriver_: any = null;
 
 	private encryptedMasterKeys_: Map<string, EncryptedMasterKey> = new Map();
@@ -76,7 +99,7 @@ export default class EncryptionService {
 	public defaultFileEncryptionMethod_ = EncryptionMethod.FileV1; // public because used in tests
 	private defaultMasterKeyEncryptionMethod_ = EncryptionMethod.KeyV1;
 
-	private encryptionNonce_: Uint8Array = null;
+	private encryptionNonce_: CryptoBuffer = null;
 
 	private headerTemplates_ = {
 		// Template version 1
@@ -157,8 +180,7 @@ export default class EncryptionService {
 	public activeMasterKeyId() {
 		const id = getActiveMasterKeyId();
 		if (!id) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const error: any = new Error('No master key is defined as active. Check this: Either one or more master keys exist but no password was provided for any of them. Or no master key exist. Or master keys and password exist, but none was set as active.');
+			const error = new Error('No master key is defined as active. Check this: Either one or more master keys exist but no password was provided for any of them. Or no master key exist. Or master keys and password exist, but none was set as active.') as Error & { code: string };
 			error.code = 'noActiveMasterKey';
 			throw error;
 		}
@@ -227,8 +249,7 @@ export default class EncryptionService {
 		const key = this.decryptedMasterKeys_.get(id);
 
 		if (!key) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const error: any = new Error(`Master key is not loaded: ${id}`);
+			const error = new Error(`Master key is not loaded: ${id}`) as Error & { code: string; masterKeyId: string };
 			error.code = 'masterKeyNotLoaded';
 			error.masterKeyId = id;
 			throw error;
@@ -256,8 +277,7 @@ export default class EncryptionService {
 	}
 
 	private async randomHexString(byteCount: number) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const bytes: any[] = await shim.randomBytes(byteCount);
+		const bytes = (await shim.randomBytes(byteCount)) as number[];
 		return bytes
 			.map(a => {
 				return hexPad(a.toString(16), 2);
@@ -266,7 +286,10 @@ export default class EncryptionService {
 	}
 
 	public masterKeysThatNeedUpgrading(masterKeys: MasterKeyEntity[]) {
-		return MasterKey.allWithoutEncryptionMethod(masterKeys, [this.defaultMasterKeyEncryptionMethod_, EncryptionMethod.Custom]);
+		const keysWithNonDefaultMethods = MasterKey.allWithoutEncryptionMethod(masterKeys, [
+			this.defaultMasterKeyEncryptionMethod_, EncryptionMethod.Custom,
+		]);
+		return keysWithNonDefaultMethods.filter(key => key.encryption_method in EncryptionMethod);
 	}
 
 	public async reencryptMasterKey(model: MasterKeyEntity, decryptionPassword: string, encryptionPassword: string, decryptOptions: EncryptOptions = null, encryptOptions: EncryptOptions = null): Promise<MasterKeyEntity> {
@@ -302,8 +325,7 @@ export default class EncryptionService {
 	private async generateMasterKeyContent_(password: string, options: EncryptOptions = null) {
 		options = { encryptionMethod: this.defaultMasterKeyEncryptionMethod_, ...options };
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const bytes: any[] = await shim.randomBytes(256);
+		const bytes = (await shim.randomBytes(256)) as number[];
 		const hexaBytes = bytes.map(a => hexPad(a.toString(16), 2)).join('');
 
 		return this.encryptMasterKeyContent(options.encryptionMethod, hexaBytes, password, options);
@@ -351,8 +373,7 @@ export default class EncryptionService {
 		return true;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private wrapSjclError(sjclError: any) {
+	private wrapSjclError(sjclError: { message: string; stack?: string }) {
 		const error = new Error(sjclError.message);
 		error.stack = sjclError.stack;
 		return error;
@@ -538,32 +559,32 @@ export default class EncryptionService {
 		const sjcl = shim.sjclModule;
 		const crypto = shim.crypto;
 		if (method === EncryptionMethod.KeyV1) {
-			return (await crypto.decrypt(key, JSON.parse(cipherText), {
+			return crypto.bufferToString(await crypto.decrypt(key, JSON.parse(cipherText), {
 				cipherAlgorithm: CipherAlgorithm.AES_256_GCM,
 				authTagLength: 16,
 				digestAlgorithm: Digest.sha512,
 				keyLength: 32,
 				associatedData: emptyUint8Array,
 				iterationCount: 220000,
-			})).toString('hex');
+			}), 'hex');
 		} else if (method === EncryptionMethod.FileV1) {
-			return (await crypto.decrypt(key, JSON.parse(cipherText), {
+			return crypto.bufferToString(await crypto.decrypt(key, JSON.parse(cipherText), {
 				cipherAlgorithm: CipherAlgorithm.AES_256_GCM,
 				authTagLength: 16,
 				digestAlgorithm: Digest.sha512,
 				keyLength: 32,
 				associatedData: emptyUint8Array,
 				iterationCount: 3,
-			})).toString('base64');
+			}), 'base64');
 		} else if (method === EncryptionMethod.StringV1) {
-			return (await crypto.decrypt(key, JSON.parse(cipherText), {
+			return crypto.bufferToString(await crypto.decrypt(key, JSON.parse(cipherText), {
 				cipherAlgorithm: CipherAlgorithm.AES_256_GCM,
 				authTagLength: 16,
 				digestAlgorithm: Digest.sha512,
 				keyLength: 32,
 				associatedData: emptyUint8Array,
 				iterationCount: 3,
-			})).toString('utf16le');
+			}), 'utf16le');
 		} else if (this.isValidSjclEncryptionMethod(method)) {
 			try {
 				const output = sjcl.json.decrypt(key, cipherText);
@@ -582,13 +603,13 @@ export default class EncryptionService {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- source/destination are duck-typed readers/writers (stringReader_/stringWriter_/fileReader_/fileWriter_) with a small structural API; passing the union here would require touching all four call sites
 	private async encryptAbstract_(source: any, destination: any, options: EncryptOptions = null) {
 		options = { encryptionMethod: this.defaultEncryptionMethod(), ...options };
 
 		const method = options.encryptionMethod;
 		const masterKeyId = options.masterKeyId ? options.masterKeyId : this.activeMasterKeyId();
-		const masterKeyPlainText = (await this.loadedMasterKey(masterKeyId)).plainText;
+		const masterKeyPlainText = await this.masterKeyPlainText_(masterKeyId, options);
 		const chunkSize = this.chunkSize(method);
 		const crypto = shim.crypto;
 
@@ -597,7 +618,7 @@ export default class EncryptionService {
 			masterKeyId: masterKeyId,
 		};
 
-		await destination.append(this.encodeHeader_(header));
+		await destination.append(this.encodeHeader_(header, options.isNoteLock));
 
 		let doneSize = 0;
 		let lastFrameTimestamp = Date.now();
@@ -621,13 +642,12 @@ export default class EncryptionService {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See encryptAbstract_ above
 	private async decryptAbstract_(source: any, destination: any, options: EncryptOptions = null) {
 		if (!options) options = {};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const header: any = await this.decodeHeaderSource_(source);
-		const masterKeyPlainText = (await this.loadedMasterKey(header.masterKeyId)).plainText;
+		const header = await this.decodeHeaderSource_(source, options.isNoteLock) as { encryptionMethod: number; masterKeyId: string };
+		const masterKeyPlainText = await this.masterKeyPlainText_(header.masterKeyId, options);
 
 		let doneSize = 0;
 		let lastFrameTimestamp = Date.now();
@@ -650,6 +670,14 @@ export default class EncryptionService {
 		}
 	}
 
+	private async masterKeyPlainText_(masterKeyId: string, options: EncryptOptions) {
+		if (options.decryptedMasterKey !== undefined) {
+			if (options.masterKeyId !== masterKeyId) throw new Error(`Supplied master key ID does not match encrypted content: ${masterKeyId}`);
+			return options.decryptedMasterKey;
+		}
+		return (await this.loadedMasterKey(masterKeyId)).plainText;
+	}
+
 	private stringReader_(string: string, sync = false) {
 		const reader = {
 			index: 0,
@@ -664,11 +692,9 @@ export default class EncryptionService {
 	}
 
 	private stringWriter_() {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const output: any = {
-			data: [],
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			append: async function(data: any) {
+		const output = {
+			data: [] as string[],
+			append: async function(data: string) {
 				output.data.push(data);
 			},
 			result: function() {
@@ -679,8 +705,7 @@ export default class EncryptionService {
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private async fileReader_(path: string, encoding: any) {
+	private async fileReader_(path: string, encoding: string) {
 		const handle = await this.fsDriver().open(path, 'r');
 		const reader = {
 			handle: handle,
@@ -694,27 +719,23 @@ export default class EncryptionService {
 		return reader;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private async fileWriter_(path: string, encoding: any) {
+	private async fileWriter_(path: string, encoding: string) {
 		return {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			append: async (data: any) => {
+			append: async (data: string) => {
 				return this.fsDriver().appendFile(path, data, encoding);
 			},
 			close: function() {},
 		};
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async encryptString(plainText: any, options: EncryptOptions = null): Promise<string> {
+	public async encryptString(plainText: string, options: EncryptOptions = null): Promise<string> {
 		const source = this.stringReader_(plainText);
 		const destination = this.stringWriter_();
 		await this.encryptAbstract_(source, destination, options);
 		return destination.result();
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async decryptString(cipherText: any, options: EncryptOptions = null): Promise<string> {
+	public async decryptString(cipherText: string, options: EncryptOptions = null): Promise<string> {
 		const source = this.stringReader_(cipherText);
 		const destination = this.stringWriter_();
 		await this.decryptAbstract_(source, destination, options);
@@ -774,14 +795,12 @@ export default class EncryptionService {
 	}
 
 	public headerTemplate(version: number) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const r = (this.headerTemplates_ as any)[version];
+		const r = (this.headerTemplates_ as Record<number, { fields: (string | number)[][] }>)[version];
 		if (!r) throw new Error(`Unknown header version: ${version}`);
 		return r;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public encodeHeader_(header: any) {
+	public encodeHeader_(header: { encryptionMethod: number; masterKeyId: string }, isNoteLock: boolean) {
 		// Sanity check
 		if (header.masterKeyId.length !== 32) throw new Error(`Invalid master key ID size: ${header.masterKeyId}`);
 
@@ -789,46 +808,42 @@ export default class EncryptionService {
 		encryptionMetadata += padLeft(header.encryptionMethod.toString(16), 2, '0');
 		encryptionMetadata += header.masterKeyId;
 		encryptionMetadata = padLeft(encryptionMetadata.length.toString(16), 6, '0') + encryptionMetadata;
-		return `JED01${encryptionMetadata}`;
+		return `${isNoteLock ? 'JLD' : 'JED'}01${encryptionMetadata}`;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async decodeHeaderString(cipherText: any) {
+	public async decodeHeaderString(cipherText: string, isNoteLock = false) {
 		const source = this.stringReader_(cipherText);
-		return this.decodeHeaderSource_(source);
+		return this.decodeHeaderSource_(source, isNoteLock);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private async decodeHeaderSource_(source: any) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See encryptAbstract_ source/destination
+	private async decodeHeaderSource_(source: any, isNoteLock = false) {
 		const identifier = await source.read(5);
-		if (!isValidHeaderIdentifier(identifier)) throw new JoplinError(`Invalid encryption identifier. Data is not actually encrypted? ID was: ${identifier}`, 'invalidIdentifier');
+		if (!isValidHeaderIdentifier(identifier, false, isNoteLock)) throw new JoplinError(`Invalid encryption identifier. Data is not actually encrypted? ID was: ${identifier}`, 'invalidIdentifier');
 		const mdSizeHex = await source.read(6);
 		const mdSize = parseInt(mdSizeHex, 16);
 		if (isNaN(mdSize) || !mdSize) throw new Error(`Invalid header metadata size: ${mdSizeHex}`);
 		const md = await source.read(parseInt(mdSizeHex, 16));
-		return this.decodeHeaderBytes_(identifier + mdSizeHex + md);
+		return this.decodeHeaderBytes_(identifier + mdSizeHex + md, isNoteLock);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public decodeHeaderBytes_(headerHexaBytes: any) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const reader: any = this.stringReader_(headerHexaBytes, true);
+	public decodeHeaderBytes_(headerHexaBytes: string, isNoteLock: boolean) {
+		const reader = this.stringReader_(headerHexaBytes, true) as { read: (size: number)=> string };
 		const identifier = reader.read(3);
 		const version = parseInt(reader.read(2), 16);
-		if (identifier !== 'JED') throw new Error(`Invalid header (missing identifier): ${headerHexaBytes.substr(0, 64)}`);
+		if (identifier !== (isNoteLock ? 'JLD' : 'JED')) throw new Error(`Invalid header (missing identifier): ${headerHexaBytes.substr(0, 64)}`);
 		const template = this.headerTemplate(version);
 
 		parseInt(reader.read(6), 16); // Read the size and move the reader pointer forward
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const output: any = {};
+		const output: Record<string, string | number> = {};
 
 		for (let i = 0; i < template.fields.length; i++) {
 			const m = template.fields[i];
-			const name = m[0];
-			const size = m[1];
-			const type = m[2];
-			let v = reader.read(size);
+			const name = m[0] as string;
+			const size = m[1] as number;
+			const type = m[2] as string;
+			let v: string | number = reader.read(size);
 
 			if (type === 'int') {
 				v = parseInt(v, 16);
@@ -848,8 +863,7 @@ export default class EncryptionService {
 		return [EncryptionMethod.SJCL, EncryptionMethod.SJCL1a, EncryptionMethod.SJCL1b, EncryptionMethod.SJCL2, EncryptionMethod.SJCL3, EncryptionMethod.SJCL4].indexOf(method) >= 0;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async itemIsEncrypted(item: any) {
+	public async itemIsEncrypted(item: { encryption_applied?: number | boolean; encryption_cipher_text?: string; type_?: number }) {
 		if (!item) throw new Error('No item');
 		const ItemClass = BaseItem.itemClass(item);
 		if (!ItemClass.encryptionSupported()) return false;

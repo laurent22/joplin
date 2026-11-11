@@ -36,6 +36,12 @@ async function fetchLatestReleases() {
 	return (await response.json()) as GitHubRelease[];
 }
 
+export async function isReleaseVersion(version: string): Promise<boolean | null> {
+	const releases = await fetchLatestReleases();
+	const release = releases.find(release => release.tag_name === `v${version}`);
+	return release ? !release.prerelease : null;
+}
+
 function truncateText(text: string, length: number) {
 	let truncated = text.substring(0, length);
 	const lastNewLine = truncated.lastIndexOf('\n');
@@ -65,7 +71,7 @@ async function addSkippedVersion(s: string) {
 	await KvStore.instance().setValue('updateCheck::skippedVersions', JSON.stringify(versions));
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- parentWindow is passed to bridge().showMessageBox but the bridge signature no longer accepts a window arg; tightening would expose a pre-existing call-site mismatch (logic change)
 export default async function checkForUpdates(inBackground: boolean, parentWindow: any, options: CheckForUpdateOptions) {
 	if (isCheckingForUpdate_) {
 		logger.info('Skipping check because it is already running');

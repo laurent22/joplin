@@ -1,5 +1,5 @@
 import { DbConnection, connectDb, disconnectDb, truncateTables } from '../../db';
-import { User, Session, Item, Uuid } from '../../services/database/types';
+import { User, Session, Item, Uuid, Subscription } from '../../services/database/types';
 import { createDb, CreateDbOptions } from '../../tools/dbTools';
 import modelFactory from '../../models/factory';
 import { AppContext, DatabaseConfigClient, Env } from '../types';
@@ -14,7 +14,7 @@ import * as path from 'path';
 import * as fs from 'fs-extra';
 import * as jsdom from 'jsdom';
 import setupAppContext from '../setupAppContext';
-import { ApiError } from '../errors';
+import { ApiError, ErrorCode } from '../errors';
 import { getApi, putApi, deleteApi, ExecRequestOptions } from './apiUtils';
 import { FolderEntity, NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
 import { ModelType } from '@joplin/lib/BaseModel';
@@ -180,7 +180,7 @@ export async function beforeEachDb() {
 export interface AppContextTestOptions {
 	// owner?: User;
 	sessionId?: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- httpMocks.RequestOptions is too narrow: callers pass `files: { file: { path: string } }` and free-form `body` objects that the type rejects
 	request?: any;
 	ip?: string;
 	baseAppContext?: AppContext;
@@ -215,8 +215,7 @@ export function msleep(ms: number) {
 
 export const createBaseAppContext = () => {
 	const appLogger = Logger.create('AppTest');
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	return setupAppContext({} as any, Env.Dev, db_, dbSlave_, () => appLogger);
+	return setupAppContext({} as unknown as AppContext, Env.Dev, db_, dbSlave_, () => appLogger);
 };
 
 export async function koaAppContext(options: AppContextTestOptions = null): Promise<AppContext> {
@@ -255,7 +254,7 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 
 	// Set type to "any" because the Koa context has many properties and we
 	// don't need to mock all of them.
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- The Koa AppContext has many required properties; this test mock only provides a subset and casts to AppContext at return
 	const appContext: any = {
 		joplinBase: baseAppContext.joplinBase,
 		baseAppContext,
@@ -315,7 +314,15 @@ export function models() {
 }
 
 export function parseHtml(html: string): Document {
-	const dom = new jsdom.JSDOM(html);
+	const virtualConsole = new jsdom.VirtualConsole();
+	virtualConsole.sendTo(console, { omitJSDOMErrors: true });
+	virtualConsole.on('jsdomError', (error: Error & { detail?: unknown }) => {
+		// JSDOM's CSS parser doesn't support modern syntax (nested selectors, :has(), etc.) used in
+		// the rendered note stylesheets, so it spams the console. The HTML parse itself is unaffected.
+		if (error.message?.includes('Could not parse CSS stylesheet')) return;
+		console.error(error.stack, error.detail);
+	});
+	const dom = new jsdom.JSDOM(html, { virtualConsole });
 	return dom.window.document;
 }
 
@@ -343,7 +350,11 @@ export const createUserAndSession = async function(index = 1, isAdmin = false, o
 	if (options.account_type) user.account_type = options.account_type;
 
 	user = await models().user().save(user, { skipValidation: true });
-	const session = await models().session().authenticate(options.email, options.password, '');
+	// After creating the user, so that the confirmation email is still sent as for a real account
+	await models().user().save({ id: user.id, email_confirmed: 1 });
+
+	const ctx = await koaAppContext();
+	const session = await models().session().authenticate(options.email, options.password, ctx.joplin.services, '');
 
 	return {
 		user: await models().user().load(user.id),
@@ -352,17 +363,25 @@ export const createUserAndSession = async function(index = 1, isAdmin = false, o
 	};
 };
 
+export const createSubscription = async (user: User, stripeUserId: string, stripeSubscriptionId: string, options: Partial<Subscription> = {}) => {
+	return await models().subscription().save({
+		user_id: user.id,
+		stripe_user_id: stripeUserId,
+		stripe_subscription_id: stripeSubscriptionId,
+		last_payment_time: Date.now(),
+		...options,
+	});
+};
+
 export const createUser = async function(index = 1, isAdmin = false): Promise<User> {
 	return models().user().save({ email: `user${index}@localhost`, password: '123456', is_admin: isAdmin ? 1 : 0 }, { skipValidation: true });
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function createItemTree(userId: Uuid, parentFolderId: string, tree: any): Promise<void> {
+export async function createItemTree(userId: Uuid, parentFolderId: string, tree: Record<string, unknown>): Promise<void> {
 	const itemModel = models().item();
 
 	for (const jopId in tree) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const children: any = tree[jopId];
+		const children = tree[jopId] as Record<string, unknown> | null;
 		const isFolder = children !== null;
 
 		const newItem: Item = await itemModel.saveForUser(userId, {
@@ -392,8 +411,13 @@ export async function createItemTree(userId: Uuid, parentFolderId: string, tree:
 // 	}
 // }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function createItemTree3(userId: Uuid, parentFolderId: string, shareId: Uuid, tree: any[]): Promise<void> {
+interface ItemTree3Node {
+	id: string;
+	children?: ItemTree3Node[];
+	[key: string]: unknown;
+}
+
+export async function createItemTree3(userId: Uuid, parentFolderId: string, shareId: Uuid, tree: ItemTree3Node[]): Promise<void> {
 	const itemModel = models().item();
 	const user = await models().user().load(userId);
 
@@ -496,48 +520,13 @@ export async function createResource(sessionId: string, resource: ResourceEntity
 
 export function checkContextError(context: AppContext) {
 	if (context.response.status >= 400) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const body: any = context.response?.body || {};
+		const body = (context.response?.body || {}) as { code?: ErrorCode };
 		throw new ApiError(`${context.method} ${context.path} ${JSON.stringify(context.response)}`, context.response.status, body.code);
 	}
 }
 
-export async function credentialFile(filename: string): Promise<string> {
-	const filePath = `${require('os').homedir()}/joplin-credentials/${filename}`;
-	if (await fs.pathExists(filePath)) return filePath;
-	return '';
-}
-
-export async function readCredentialFile(filename: string, defaultValue: string = null) {
-	const filePath = await credentialFile(filename);
-	if (!filePath) {
-		if (defaultValue === null) throw new Error(`File not found: ${filename}`);
-		return defaultValue;
-	}
-
-	const r = await fs.readFile(filePath);
-	return r.toString();
-}
-
-export function credentialFileSync(filename: string): string {
-	const filePath = `${require('os').homedir()}/joplin-credentials/${filename}`;
-	if (fs.pathExistsSync(filePath)) return filePath;
-	return '';
-}
-
-export function readCredentialFileSync(filename: string, defaultValue: string = null) {
-	const filePath = credentialFileSync(filename);
-	if (!filePath) {
-		if (defaultValue === null) throw new Error(`File not found: ${filename}`);
-		return defaultValue;
-	}
-
-	const r = fs.readFileSync(filePath);
-	return r.toString();
-}
-
-// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-export async function checkThrowAsync(asyncFn: Function): Promise<any> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+export async function checkThrowAsync(asyncFn: ()=> unknown): Promise<any> {
 	try {
 		await asyncFn();
 	} catch (error) {
@@ -546,8 +535,8 @@ export async function checkThrowAsync(asyncFn: Function): Promise<any> {
 	return null;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-export async function expectThrow(asyncFn: Function, errorCode: any = undefined): Promise<any> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+export async function expectThrow(asyncFn: ()=> unknown, errorCode: any = undefined): Promise<any> {
 	let hasThrown = false;
 	let thrownError = null;
 	try {
@@ -569,8 +558,7 @@ export async function expectThrow(asyncFn: Function, errorCode: any = undefined)
 	return thrownError;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-export async function expectHttpError(asyncFn: Function, expectedHttpCode: number, expectedErrorCode: string = null): Promise<void> {
+export async function expectHttpError(asyncFn: ()=> unknown, expectedHttpCode: number, expectedErrorCode: string = null): Promise<void> {
 	let thrownError = null;
 
 	try {
@@ -590,8 +578,7 @@ export async function expectHttpError(asyncFn: Function, expectedHttpCode: numbe
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-export async function expectNoHttpError(asyncFn: Function): Promise<void> {
+export async function expectNoHttpError(asyncFn: ()=> unknown): Promise<void> {
 	let thrownError = null;
 
 	try {
@@ -607,8 +594,7 @@ export async function expectNoHttpError(asyncFn: Function): Promise<void> {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-export async function expectNotThrow(asyncFn: Function) {
+export async function expectNotThrow(asyncFn: ()=> unknown) {
 	let thrownError = null;
 	try {
 		await asyncFn();

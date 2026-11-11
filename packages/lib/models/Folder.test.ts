@@ -126,6 +126,21 @@ describe('models/Folder', () => {
 		expect(folders[3].id).toBe(f2.id);
 	}));
 
+	it('should order by last modified, handling cycles', async () => {
+		let f1 = await Folder.save({ title: 'folder1' });
+		const f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
+		const f3 = await Folder.save({ title: 'folder3', parent_id: f2.id });
+		f1 = await Folder.save({ id: f1.id, parent_id: f3.id });
+		await Note.save({ title: 'note3', parent_id: f3.id });
+
+		// Should not crash
+		await Folder.orderByLastModified([
+			await Folder.load(f3.id),
+			await Folder.load(f2.id),
+			await Folder.load(f1.id),
+		], 'desc');
+	});
+
 	it('should add node counts', (async () => {
 		const f1 = await Folder.save({ title: 'folder1' });
 		const f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
@@ -140,8 +155,7 @@ describe('models/Folder', () => {
 		{
 			const folders = await Folder.all({ includeConflictFolder: false });
 			await Folder.addNoteCounts(folders);
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const foldersById: any = {};
+			const foldersById: Record<string, FolderEntity & { note_count?: number }> = {};
 			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 			folders.forEach((f: FolderEntity) => { foldersById[f.id] = f; });
 
@@ -155,8 +169,7 @@ describe('models/Folder', () => {
 		{
 			const folders = await Folder.all({ includeConflictFolder: true });
 			await Folder.addNoteCounts(folders);
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const foldersById: any = {};
+			const foldersById: Record<string, FolderEntity & { note_count?: number }> = {};
 			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 			folders.forEach((f: FolderEntity) => { foldersById[f.id] = f; });
 
@@ -201,8 +214,7 @@ describe('models/Folder', () => {
 		const folders = await Folder.all();
 		await Folder.addNoteCounts(folders, false);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const foldersById: any = {};
+		const foldersById: Record<string, FolderEntity & { note_count?: number }> = {};
 		// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 		folders.forEach((f: FolderEntity) => { foldersById[f.id] = f; });
 

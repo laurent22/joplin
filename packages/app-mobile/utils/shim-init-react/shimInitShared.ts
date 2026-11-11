@@ -19,12 +19,6 @@ const shimInitShared = () => {
 		return Buffer.byteLength(string, 'utf-8');
 	};
 
-	shim.Buffer = Buffer;
-
-	shim.stringByteLength = function(string) {
-		return Buffer.byteLength(string, 'utf-8');
-	};
-
 	shim.httpAgent = () => null;
 
 	shim.fetch = async function(url, options = null) {

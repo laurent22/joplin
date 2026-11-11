@@ -9,6 +9,7 @@ import time from '@joplin/lib/time';
 import Logger from '@joplin/utils/Logger';
 import NoteScreen from './components/screens/Note/Note';
 import UpgradeSyncTargetScreen from './components/screens/UpgradeSyncTargetScreen';
+import NoteLockMigrationScreen from './components/screens/NoteLockMigrationScreen';
 import Setting, { } from '@joplin/lib/models/Setting';
 import PoorManIntervals from '@joplin/lib/PoorManIntervals';
 import { NotesParent, serializeNotesParent } from '@joplin/lib/reducer';
@@ -23,8 +24,17 @@ import { AppState as RNAppState, EmitterSubscription, View, Text, Linking, Nativ
 import getResponsiveValue from './components/getResponsiveValue';
 import NetInfo, { NetInfoSubscription } from '@react-native-community/netinfo';
 const DropdownAlert = require('react-native-dropdownalert').default;
+
+// Mirrors the DropdownAlertData type from react-native-dropdownalert
+interface DropdownAlertData {
+	type?: string;
+	title?: string;
+	message?: string;
+	interval?: number;
+	resolve?: (_value: DropdownAlertData)=> void;
+}
 import SafeAreaView from './components/SafeAreaView';
-const { connect, Provider } = require('react-redux');
+import { connect, Provider } from 'react-redux';
 import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 import BackButtonService, { BackButtonHandler } from './services/BackButtonService';
 import NavService from '@joplin/lib/services/NavService';
@@ -45,7 +55,7 @@ import EncryptionConfigScreen from './components/screens/encryption-config';
 import DropboxLoginScreen from './components/screens/dropbox-login.js';
 import { MenuProvider } from 'react-native-popup-menu';
 import SideMenu, { SideMenuPosition } from './components/SideMenu';
-import SideMenuContent from './components/side-menu-content';
+import SideMenuContent from './components/SideMenuContent/SideMenuContent';
 import SideMenuContentNote, { SideMenuContentOptions } from './components/SideMenuContentNote';
 import { reg } from '@joplin/lib/registry';
 import { defaultState } from '@joplin/lib/reducer';
@@ -54,9 +64,9 @@ import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import { themeStyle } from './components/global-style';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import SyncTargetFilesystem from '@joplin/lib/SyncTargetFilesystem';
-const SyncTargetNextcloud = require('@joplin/lib/SyncTargetNextcloud.js');
-const SyncTargetWebDAV = require('@joplin/lib/SyncTargetWebDAV.js');
-const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox.js');
+import SyncTargetNextcloud from '@joplin/lib/SyncTargetNextcloud';
+import SyncTargetWebDAV from '@joplin/lib/SyncTargetWebDAV';
+import SyncTargetDropbox from '@joplin/lib/SyncTargetDropbox';
 const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
 import SyncTargetJoplinServerSAML from '@joplin/lib/SyncTargetJoplinServerSAML';
 import BiometricPopup from './components/biometrics/BiometricPopup';
@@ -90,6 +100,7 @@ import { setDispatch } from './services/profiles';
 import { ReactNode } from 'react';
 import autodetectTheme, { onSystemColorSchemeChange } from './utils/autodetectTheme';
 import PluginRunnerWebView from './components/plugins/PluginRunnerWebView';
+import CommandService from '@joplin/lib/services/CommandService';
 import { refreshFolders, scheduleRefreshFolders } from '@joplin/lib/folders-screen-utils';
 import ShareManager from './components/screens/ShareManager';
 import { setDateFormat, setTimeFormat, setTimeLocale } from '@joplin/utils/time';
@@ -103,7 +114,7 @@ import SamlShared from '@joplin/lib/components/shared/SamlShared';
 import NoteRevisionViewer from './components/screens/NoteRevisionViewer';
 import DocumentScanner from './components/screens/DocumentScanner/DocumentScanner';
 import buildStartupTasks from './utils/buildStartupTasks';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import appReducer from './utils/appReducer';
 import SyncWizard from './components/SyncWizard/SyncWizard';
 import Synchronizer from '@joplin/lib/Synchronizer';
@@ -111,10 +122,19 @@ import Synchronizer from '@joplin/lib/Synchronizer';
 const logger = Logger.create('root');
 const perfLogger = PerformanceLogger.create();
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+interface DropdownAlertWrapperProps {
+	alert: (func: (data?: DropdownAlertData)=> Promise<DropdownAlertData>)=> void;
+}
+
+const DropdownAlertWrapper = ({ alert }: DropdownAlertWrapperProps) => {
+	const insets = useSafeAreaInsets();
+	return <DropdownAlert alert={alert} translucent alertViewStyle={{ padding: 8, marginTop: insets.top }} />;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Redux actions in this codebase don't have a single typed union; tightening would require a coordinated rewrite of every dispatched action across the mobile app
 let storeDispatch: any = function(_action: any) {};
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See storeDispatch above; action shapes are heterogeneous
 const logReducerAction = function(action: any) {
 	if (['SIDE_MENU_OPEN_PERCENT', 'SYNC_REPORT_UPDATE'].indexOf(action.type) >= 0) return;
 
@@ -128,16 +148,16 @@ const biometricsEnabled = (sensorInfo: SensorInfo): boolean => {
 	return !!sensorInfo && sensorInfo.enabled;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Redux middleware; store/next/action types would need to come from a typed action union — see storeDispatch above
 const generalMiddleware = (store: any) => (next: any) => async (action: any) => {
 	logReducerAction(action);
 	PoorManIntervals.update(); // This function needs to be called regularly so put it here
 
 	const result = next(action);
 	const newState: AppState = store.getState();
-	let doRefreshFolders = false;
+	let doRefreshFolders: boolean | string = false;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- storeDispatch is `any` (see top of file); cast required to satisfy reduxSharedMiddleware's Dispatch parameter
 	await reduxSharedMiddleware(store, next, action, storeDispatch as any);
 
 	if (action.type === 'NAV_GO') Keyboard.dismiss();
@@ -211,10 +231,24 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 			Setting.setValue('activeFolderId', newState.selectedFolderId);
 		}
 
-		const notesParent: NotesParent = {
-			type: action.smartFilterId ? 'SmartFilter' : 'Folder',
-			selectedItemId: action.smartFilterId ? action.smartFilterId : newState.selectedFolderId,
-		};
+		let notesParent: NotesParent;
+		if (action.smartFilterId) {
+			notesParent = {
+				type: 'SmartFilter',
+				selectedItemId: action.smartFilterId,
+			};
+		} else if (action.tagId) {
+			notesParent = {
+				type: 'Tag',
+				selectedItemId: action.tagId,
+			};
+		} else {
+			notesParent = {
+				type: 'Folder',
+				selectedItemId: newState.selectedFolderId,
+			};
+		}
+
 		Setting.setValue('notesParent', serializeNotesParent(notesParent));
 	}
 
@@ -230,9 +264,16 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 		Setting.setValue('noteVisiblePanes', newState.noteVisiblePanes);
 	}
 
+	if (action.type === 'SETTING_UPDATE_ONE' && action.key.indexOf('folders.sortOrder') === 0) {
+		doRefreshFolders = 'now';
+	}
+
 	if (doRefreshFolders) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		await scheduleRefreshFolders((action: any) => storeDispatch(action), newState.selectedFolderId);
+		if (doRefreshFolders === 'now') {
+			await refreshFolders(storeDispatch, newState.selectedFolderId);
+		} else {
+			await scheduleRefreshFolders(storeDispatch, newState.selectedFolderId);
+		}
 	}
 
 	return result;
@@ -271,7 +312,9 @@ interface AppComponentProps {
 	disableSideMenuGestures: boolean;
 	historyCanGoBack: boolean;
 	showSideMenu: boolean;
+	showPanelsDialog: boolean;
 	noteSelectionEnabled: boolean;
+	syncStarted: boolean;
 }
 
 interface AppComponentState {
@@ -287,8 +330,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 	private themeChangeListener_: NativeEventSubscription|null = null;
 	private keyboardShowListener_: EmitterSubscription|null = null;
 	private keyboardHideListener_: EmitterSubscription|null = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private dropdownAlert_ = (_data: any) => new Promise<any>(res => res);
+	private dropdownAlert_: (data?: DropdownAlertData)=> Promise<DropdownAlertData> = (_data?: DropdownAlertData) => new Promise<DropdownAlertData>(res => res);
 	private callbackUrl: string|null = null;
 
 	private lastSyncStarted_ = false;
@@ -299,7 +341,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 	private onAppStateChange_: ()=> void;
 	private backButtonHandler_: BackButtonHandler;
 	private handleNewShare_: ()=> void;
-	private handleOpenURL_: (event: unknown)=> void;
+	private handleOpenURL_: (event: { url: string })=> void;
 
 	public constructor(props: AppComponentProps) {
 		super(props);
@@ -320,14 +362,15 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 			PoorManIntervals.update();
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		this.handleOpenURL_ = (event: any) => {
+		this.handleOpenURL_ = (event: { url: string }) => {
 			// logger.info('Sharing: handleOpenURL_: start');
 
 			// If this is called while biometrics haven't been done yet, we can
 			// ignore the call, because handleShareData() will be called once
 			// biometricsDone is `true`.
-			if (event.url === ShareExtension.shareURL && this.props.biometricsDone) {
+			// ShareExtension.shareURL is declared as `()=> string` in the library typings but is
+			// actually assigned a string at runtime — isolate that typing inconsistency here.
+			if (event.url === (ShareExtension.shareURL as unknown as string) && this.props.biometricsDone) {
 				logger.info('Sharing: handleOpenURL_: Processing share data');
 				void this.handleShareData();
 			} else if (isCallbackUrl(event.url)) {
@@ -461,6 +504,11 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 		}
 
 		this.urlOpenListener_ = Linking.addEventListener('url', this.handleOpenURL_);
+		// A new activity can remount this component with biometrics already done.
+		// Its native share event may have arrived before the ShareExtension listener was attached.
+		if (this.props.biometricsDone) {
+			void this.handleShareData();
+		}
 
 		BackButtonService.initialize(this.backButtonHandler_);
 
@@ -550,8 +598,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async componentDidUpdate(prevProps: any) {
+	public async componentDidUpdate(prevProps: AppComponentProps) {
 		if (this.props.biometricsDone !== prevProps.biometricsDone && this.props.biometricsDone) {
 			logger.info('Sharing: componentDidUpdate: biometricsDone');
 			void this.handleShareData();
@@ -560,6 +607,13 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 	}
 
 	private async backButtonHandler() {
+		// Plugin dialogs use Paper's Modal, whose later hardwareBackPress listener runs first
+		// (React Native dispatches newest-first), so an open dialog consumes Back before this branch.
+		if (this.props.showPanelsDialog) {
+			await CommandService.instance().execute('dismissPluginPanels');
+			return true;
+		}
+
 		if (this.props.noteSelectionEnabled) {
 			this.props.dispatch({ type: 'NOTE_SELECTION_END' });
 			return true;
@@ -652,11 +706,9 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 		this.setState({ sideMenuWidth: this.getSideMenuWidth() });
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public UNSAFE_componentWillReceiveProps(newProps: any) {
+	public UNSAFE_componentWillReceiveProps(newProps: AppComponentProps) {
 		if (newProps.syncStarted !== this.lastSyncStarted_) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			if (!newProps.syncStarted) void refreshFolders((action: any) => this.props.dispatch(action), this.props.selectedFolderId);
+			if (!newProps.syncStarted) void refreshFolders(this.props.dispatch, this.props.selectedFolderId);
 			this.lastSyncStarted_ = newProps.syncStarted;
 		}
 	}
@@ -704,14 +756,17 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 		let sideMenuContent: ReactNode = null;
 		let menuPosition = SideMenuPosition.Left;
 		let disableSideMenuGestures = true;
+		let disableSideMenuOpenGesture = false;
 
 		if (this.props.routeName === 'Note') {
 			sideMenuContent = <SideMenuContentNote options={this.props.noteSideMenuOptions}/>;
 			menuPosition = SideMenuPosition.Right;
 			disableSideMenuGestures = this.props.disableSideMenuGestures;
+			// Opening the properties menu requires using the kebab menu, as open gestures would interfere with horizontally scrollable content in notes
+			disableSideMenuOpenGesture = true;
 		} else if (this.props.routeName === 'Notes') {
 			sideMenuContent = <SideMenuContent/>;
-			disableSideMenuGestures = false;
+			disableSideMenuGestures = this.props.noteSelectionEnabled;
 		} else {
 			sideMenuContent = <SideMenuContent/>;
 		}
@@ -727,6 +782,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 			JoplinServerSamlLogin: { screen: SsoLoginScreen(new SamlShared()) },
 			EncryptionConfig: { screen: EncryptionConfigScreen },
 			UpgradeSyncTarget: { screen: UpgradeSyncTargetScreen },
+			NoteLockMigration: { screen: NoteLockMigrationScreen },
 			ShareManager: { screen: ShareManager },
 			ProfileSwitcher: { screen: ProfileSwitcher },
 			ProfileEditor: { screen: ProfileEditor },
@@ -741,7 +797,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 
 
 		// const statusBarStyle = theme.appearance === 'light-content';
-		const statusBarStyle = 'light-content';
+		const statusBarStyle = theme.appearance === ThemeAppearance.Light ? 'dark-content' : 'light-content';
 
 		const shouldShowMainContent = !biometricsEnabled(this.state.sensorInfo) || this.props.biometricsDone;
 
@@ -750,37 +806,29 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 		logger.info('root.biometrics: shouldShowMainContent', shouldShowMainContent);
 		logger.info('root.biometrics: this.state.sensorInfo', this.state.sensorInfo);
 
-		// The right sidemenu can be difficult to close due to a bug in the sidemenu
-		// library (right sidemenus can't be swiped closed).
-		//
-		// Additionally, it can interfere with scrolling in the note viewer, so we use
-		// a smaller edge hit width.
-		const menuEdgeHitWidth = menuPosition === 'right' ? 20 : 30;
-
 		const mainContent = (
 			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
-				<SideMenu
-					menu={sideMenuContent}
-					edgeHitWidth={menuEdgeHitWidth}
-					toleranceX={4}
-					toleranceY={20}
-					openMenuOffset={this.state.sideMenuWidth}
-					menuPosition={menuPosition}
-					onChange={this.sideMenu_change}
-					isOpen={this.props.showSideMenu}
-					disableGestures={disableSideMenuGestures}
-				>
-					<View style={{ flexGrow: 1, flexShrink: 1, flexBasis: '100%' }}>
-						<SafeAreaView style={{ flex: 1 }} titleBarUnderlayColor={theme.backgroundColor2}>
+				<View style={{ flexGrow: 1, flexShrink: 1, flexBasis: '100%' }}>
+					<SafeAreaView style={{ flex: 1 }} titleBarUnderlayColor={theme.backgroundColor}>
+						<SideMenu
+							menu={sideMenuContent}
+							toleranceX={4}
+							minHorizontalSwipe={10}
+							openMenuOffset={this.state.sideMenuWidth}
+							menuPosition={menuPosition}
+							onChange={this.sideMenu_change}
+							isOpen={this.props.showSideMenu}
+							disableGestures={disableSideMenuGestures}
+							disableOpenGesture={disableSideMenuOpenGesture}
+						>
 							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 								{ shouldShowMainContent && <AppNav screens={appNavInit} dispatch={this.props.dispatch} /> }
 							</View>
-							{/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied */}
-							<DropdownAlert alert={(func: any) => (this.dropdownAlert_ = func)} />
 							<SyncWizard/>
-						</SafeAreaView>
-					</View>
-				</SideMenu>
+						</SideMenu>
+					</SafeAreaView>
+					<DropdownAlertWrapper alert={(func) => { this.dropdownAlert_ = func; }} />
+				</View>
 				<PluginRunnerWebView />
 				<PluginNotification/>
 			</View>
@@ -801,13 +849,16 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 						version: 3,
 						colors: {
 							...paperTheme.colors,
+
+							primary: theme.backgroundColor5,
+							onPrimary: theme.color5,
+							secondary: theme.backgroundColor4Dimmed,
+							onSecondary: theme.color4,
+
 							onPrimaryContainer: theme.color5,
 							primaryContainer: theme.backgroundColor5,
 
 							outline: theme.codeBorderColor,
-
-							primary: theme.color4,
-							onPrimary: theme.backgroundColor4,
 
 							background: theme.backgroundColor,
 
@@ -855,6 +906,7 @@ const mapStateToProps = (state: AppState) => {
 	return {
 		historyCanGoBack: state.historyCanGoBack,
 		showSideMenu: state.showSideMenu,
+		showPanelsDialog: state.showPanelsDialog,
 		syncStarted: state.syncStarted,
 		appState: state.appState,
 		noteSelectionEnabled: state.noteSelectionEnabled,

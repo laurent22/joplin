@@ -18,6 +18,7 @@ interface Issue {
 		merged_at: string|null;
 	};
 	number: number;
+	body: string|null;
 }
 
 interface IssueComment {
@@ -56,7 +57,11 @@ const runRequest = async (path: string) => {
 	};
 
 	const response = await fetch(url, { headers });
-	if (!response.ok) throw new Error(`Error: ${path}: ${await response.text()}`);
+	if (!response.ok) {
+		const body = await response.text();
+		const truncated = body.length > 500 ? `${body.substring(0, 500)}... [truncated]` : body;
+		throw new Error(`Error: ${path}: ${response.status} ${response.statusText}: ${truncated}`);
+	}
 
 	return response.json();
 };
@@ -69,13 +74,27 @@ const getIssueComments = async (issueNumber: number) => {
 	return (await runRequest(`issues/${issueNumber}/comments`)) as IssueComment[];
 };
 
-const validateComments = (comments: IssueComment[], expectedClaAuthorId: number) => {
+const hasSignature = (body: string|null) => {
+	if (!body) return false;
 	const okSignatures = [
 		signature,
 		`${signature}.`,
 	];
+	// Check each line: the bot accepts the signature on its own line, even
+	// when mixed with other content (e.g. in a PR description).
+	for (const line of body.split('\n')) {
+		if (okSignatures.includes(line.trim())) return true;
+	}
+	return false;
+};
+
+const validateSignature = (issue: Issue, comments: IssueComment[], expectedClaAuthorId: number) => {
+	// The CLA bot also accepts the signature in the PR body (top comment), so
+	// check there too in addition to the regular comments.
+	if (hasSignature(issue.body) && issue.user.id === expectedClaAuthorId) return true;
+
 	for (const comment of comments) {
-		if (okSignatures.includes(comment.body.trim())) {
+		if (hasSignature(comment.body)) {
 			if (comment.user.id === expectedClaAuthorId) return true;
 		}
 	}
@@ -110,6 +129,8 @@ const main = async () => {
 		8531, // Not merged
 		11567, // Changed year on license file: https://github.com/laurent22/joplin/commit/2b43a9a4d667fe6b81bc97b66e0b3700688ec3cf
 		13790, // Manually added for Linkosed
+		14501, // Not merged
+		14150, // Not merged and contributor and PR disappeared
 	];
 
 	const signedContributors = await getSignedContributors();
@@ -122,7 +143,7 @@ const main = async () => {
 
 		const issue = await getIssue(signedContributor.pullRequestNo);
 		const comments = await getIssueComments(issue.number);
-		const ok = validateComments(comments, issue.user.id);
+		const ok = validateSignature(issue, comments, issue.user.id);
 
 		if (!ok) throw new Error(`Could not find the signature on PR ${issue.number}`);
 

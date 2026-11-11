@@ -8,20 +8,28 @@
 		<input type="hidden" name="id" value="{{user.id}}"/>
 		<input type="hidden" name="is_new" value="{{isNew}}"/>
 		<div class="field">
-			<label class="label">Full name</label>
+			<label class="label" for="full_name">Full name</label>
 			<div class="control">
-				<input {{disabledIfExternalAuth}} class="input" type="text" name="full_name" value="{{user.full_name}}"/>
+				<input {{disabledIfExternalAuth}} class="input" type="text" id="full_name" name="full_name" value="{{user.full_name}}"/>
 			</div>
 		</div>
 		<div class="field">
-			<label class="label">Email</label>
+			<label class="label" for="email">Email</label>
 			<div class="control">
-				<input {{disabledIfExternalAuth}} class="input" type="email" name="email" value="{{user.email}}"/>
+				<input {{disabledIfExternalAuth}} class="input" type="email" id="email" name="email" value="{{user.email}}"/>
 			</div>
 		</div>
 
 		<div class="field">
-			<label class="label">Password</label>
+			<label class="label" for="current_password">Current password</label>
+			<div class="control">
+				<input {{disabledIfExternalAuth}} id="current_password" class="input" type="password" name="current_password" autocomplete="current-password"/>
+			</div>
+			<p class="help">Only needed to change your email or password.</p>
+		</div>
+
+		<div class="field">
+			<label class="label" for="password">Password</label>
 			<div class="control">
 				<input {{disabledIfExternalAuth}} id="password" class="input" type="password" name="password" autocomplete="new-password"/>
 			</div>
@@ -29,9 +37,9 @@
 		</div>
 
 		<div class="field">
-			<label class="label">Repeat password</label>
+			<label class="label" for="password2">Repeat password</label>
 			<div class="control">
-				<input {{disabledIfExternalAuth}} class="input" type="password" name="password2" autocomplete="new-password"/>
+				<input {{disabledIfExternalAuth}} class="input" type="password" id="password2" name="password2" autocomplete="new-password"/>
 			</div>
 		</div>
 
@@ -64,12 +72,12 @@
 		<h1 class="title">Your subscription</h1>
 
 		<div class="block">
-			{{#showUpdateSubscriptionPro}}
+			{{#showUpgradeSubscription}}
 				<div class="control block">
-					<p><a href="{{{global.baseUrl}}}/upgrade" class="button is-warning block">Upgrade to Pro</a></p>
-					<p class="help">Click for more info about the Pro plan and to upgrade your account.</p>
+					<p><a href="{{{global.baseUrl}}}/upgrade" class="button upgrade-subscription is-warning block">Upgrade to {{upgradeSubscriptionPlan}}</a></p>
+					<p class="help">Click for more info about the {{upgradeSubscriptionPlan}} plan and to upgrade your account.</p>
 				</div>
-			{{/showUpdateSubscriptionPro}}
+			{{/showUpgradeSubscription}}
 
 			<div class="control block">
 				<p><a class="button is-link" target="_blank" href="{{stripePortalUrl}}">Manage subscription</a></p>

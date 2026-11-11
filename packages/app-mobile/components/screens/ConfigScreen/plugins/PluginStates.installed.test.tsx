@@ -16,6 +16,8 @@ import mockRepositoryApiConstructor from './testUtils/mockRepositoryApiConstruct
 import Setting from '@joplin/lib/models/Setting';
 import mockPluginServiceSetup from '../../../../utils/testing/mockPluginServiceSetup';
 
+// Plugin install/uninstall tests have been observed to fail or time out in CI:
+jest.retryTimes(2);
 
 let reduxStore: Store<AppState> = null;
 

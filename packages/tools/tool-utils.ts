@@ -2,9 +2,9 @@ import { pathExists, readFile, writeFile, unlink, stat, createWriteStream } from
 import { hasCredentialFile, readCredentialFile } from '@joplin/lib/utils/credentialFiles';
 import { execCommand as execCommand2, commandToString } from '@joplin/utils';
 
-const fetch = require('node-fetch');
-const execa = require('execa');
-const moment = require('moment');
+import fetch from 'node-fetch';
+import execa = require('execa');
+import moment from 'moment';
 
 export interface GitHubReleaseAsset {
 	name: string;
@@ -104,8 +104,7 @@ async function loadGitHubUsernameCache() {
 	return {};
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function saveGitHubUsernameCache(cache: any) {
+async function saveGitHubUsernameCache(cache: Record<string, string>) {
 	const path = `${__dirname}/github_username_cache.json`;
 	await writeFile(path, JSON.stringify(cache));
 }
@@ -113,15 +112,13 @@ async function saveGitHubUsernameCache(cache: any) {
 // Returns the project root dir
 export const rootDir: string = require('path').dirname(require('path').dirname(__dirname));
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function execCommand(command: string, options: any = null): Promise<string> {
+export function execCommand(command: string, options: { cwd?: string; env?: NodeJS.ProcessEnv; maxBuffer?: number } = null): Promise<string> {
 	options = options || {};
 
 	const exec = require('child_process').exec;
 
 	return new Promise((resolve, reject) => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		exec(command, options, (error: any, stdout: any, stderr: any) => {
+		exec(command, options, (error: (Error & { signal?: string }) | null, stdout: string, stderr: string) => {
 			if (error) {
 				if (error.signal === 'SIGTERM') {
 					resolve('Process was killed');
@@ -156,13 +153,11 @@ export function execCommandWithPipes(executable: string, args: string[]) {
 	return new Promise((resolve, reject) => {
 		const child = spawn(executable, args, { stdio: 'inherit' });
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		child.on('error', (error: any) => {
+		child.on('error', (error: Error) => {
 			reject(error);
 		});
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		child.on('close', (code: any) => {
+		child.on('close', (code: number | null) => {
 			if (code !== 0) {
 				reject(new Error(`Ended with code ${code}`));
 			} else {
@@ -178,8 +173,7 @@ export function toSystemSlashes(path: string) {
 	return path.replace(/\\/g, '/');
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function setPackagePrivateField(filePath: string, value: any) {
+export async function setPackagePrivateField(filePath: string, value: boolean) {
 	const text = await readFile(filePath, 'utf8');
 	const obj = JSON.parse(text);
 	if (!value) {
@@ -196,8 +190,7 @@ export async function downloadFile(url: string, targetPath: string, headers: { [
 	return new Promise((resolve, reject) => {
 		const makeDownloadRequest = (url: string) => {
 			const file = createWriteStream(targetPath);
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			https.get(url, headers, (response: any) => {
+			https.get(url, headers, (response: import('http').IncomingMessage) => {
 				if (response.statusCode === 403) {
 					let data = '';
 					response.on('data', (chunk: string) => {
@@ -226,8 +219,7 @@ export async function downloadFile(url: string, targetPath: string, headers: { [
 					});
 				}
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			}).on('error', (error: any) => {
+			}).on('error', (error: Error) => {
 				reject(error);
 			});
 		};
@@ -244,14 +236,12 @@ export function fileSha256(filePath: string) {
 		const shasum = crypto.createHash(algo);
 
 		const s = fs.ReadStream(filePath);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		s.on('data', (d: any) => { shasum.update(d); });
+		s.on('data', (d: Buffer) => { shasum.update(d); });
 		s.on('end', () => {
 			const d = shasum.digest('hex');
 			resolve(d);
 		});
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		s.on('error', (error: any) => {
+		s.on('error', (error: Error) => {
 			reject(error);
 		});
 	});
@@ -268,8 +258,7 @@ export async function unlinkForce(filePath: string) {
 
 export function fileExists(filePath: string) {
 	return new Promise((resolve, reject) => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		stat(filePath, (error: any) => {
+		stat(filePath, (error: NodeJS.ErrnoException | null) => {
 			if (!error) {
 				resolve(true);
 			} else if (error.code === 'ENOENT') {
@@ -370,6 +359,17 @@ export function githubOauthToken() {
 	throw new Error(`Cannot get Oauth token. Neither ${filename} nor the env variable JOPLIN_GITHUB_OAUTH_TOKEN are present`);
 }
 
+// Unauthenticated requests share a 60/hour limit per IP, which CI runners
+// regularly exceed, so authenticate whenever a token is available.
+const gitHubReadHeaders = (userAgent: string) => {
+	const token = process.env.JOPLIN_GITHUB_OAUTH_TOKEN;
+	return {
+		'Content-Type': 'application/json',
+		'User-Agent': userAgent,
+		...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+	};
+};
+
 // Note that the GitHub API releases/latest is broken on the joplin-android repo
 // as of Nov 2021 (last working on 3 November 2021, first broken on 19
 // November). It used to return the latest **published** release but now it
@@ -381,12 +381,8 @@ export function githubOauthToken() {
 // As of July 2023 /latest seems to be working again, so switching back to this
 // method, but let's keep the old method just in case they break the API again.
 export async function gitHubLatestRelease(repoName: string): Promise<GitHubRelease> {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const response: any = await fetch(`https://api.github.com/repos/laurent22/${repoName}/releases/latest`, {
-		headers: {
-			'Content-Type': 'application/json',
-			'User-Agent': 'Joplin Readme Updater',
-		},
+	const response = await fetch(`https://api.github.com/repos/laurent22/${repoName}/releases/latest`, {
+		headers: gitHubReadHeaders('Joplin Readme Updater'),
 	});
 
 	if (!response.ok) throw new Error(`Cannot fetch releases: ${response.statusText}`);
@@ -398,12 +394,8 @@ export async function gitHubLatestRelease_KeepInCaseMicrosoftBreaksTheApiAgain(r
 	let pageNum = 1;
 
 	while (true) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const response: any = await fetch(`https://api.github.com/repos/laurent22/${repoName}/releases?page=${pageNum}`, {
-			headers: {
-				'Content-Type': 'application/json',
-				'User-Agent': 'Joplin Readme Updater',
-			},
+		const response = await fetch(`https://api.github.com/repos/laurent22/${repoName}/releases?page=${pageNum}`, {
+			headers: gitHubReadHeaders('Joplin Readme Updater'),
 		});
 
 		if (!response.ok) throw new Error(`Cannot fetch releases: ${response.statusText}`);
@@ -422,10 +414,7 @@ export async function gitHubLatestRelease_KeepInCaseMicrosoftBreaksTheApiAgain(r
 
 export const gitHubLatestReleases = async (page: number, perPage: number) => {
 	const response = await fetch(`https://api.github.com/repos/laurent22/joplin/releases?page=${page}&per_page=${perPage}`, {
-		headers: {
-			'Content-Type': 'application/json',
-			'User-Agent': 'Joplin Forum Updater',
-		},
+		headers: gitHubReadHeaders('Joplin Forum Updater'),
 	});
 
 	if (!response.ok) throw new Error(`Cannot fetch releases: ${response.statusText}`);
@@ -436,8 +425,7 @@ export const gitHubLatestReleases = async (page: number, perPage: number) => {
 	return releases;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function githubRelease(project: string, tagName: string, options: any = null): Promise<GitHubRelease> {
+export async function githubRelease(project: string, tagName: string, options: { isDraft?: boolean; isPreRelease?: boolean } = null): Promise<GitHubRelease> {
 	options = { isDraft: false,
 		isPreRelease: false, ...options };
 

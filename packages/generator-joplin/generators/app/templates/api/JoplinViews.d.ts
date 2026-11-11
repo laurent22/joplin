@@ -1,4 +1,6 @@
+import { JoplinViews as JoplinViewsImplementation } from '../BasePlatformImplementation';
 import Plugin from '../Plugin';
+import { PluginStore } from '../ViewController';
 import JoplinViewsDialogs from './JoplinViewsDialogs';
 import JoplinViewsMenuItems from './JoplinViewsMenuItems';
 import JoplinViewsMenus from './JoplinViewsMenus';
@@ -32,7 +34,7 @@ export default class JoplinViews {
     private editors_;
     private noteList_;
     private implementation_;
-    constructor(implementation: any, plugin: Plugin, store: any);
+    constructor(implementation: JoplinViewsImplementation, plugin: Plugin, store: PluginStore);
     get dialogs(): JoplinViewsDialogs;
     get panels(): JoplinViewsPanels;
     get editors(): JoplinViewsEditors;

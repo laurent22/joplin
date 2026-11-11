@@ -461,10 +461,8 @@ const codeToCountry_: CodeToCountryMap = {
 	ZW: ['Zimbabwe', 'Zimbabwe'],
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-let supportedLocales_: any = null;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-let localeStats_: any = null;
+let supportedLocales_: Record<string, Record<string, string[]>> | null = null;
+let localeStats_: Record<string, Record<string, unknown>> | null = null;
 
 const loadedLocales_: Record<string, Record<string, string[]>> = {};
 
@@ -503,7 +501,7 @@ const getPluralFunction = (lang: string) => {
 		if (!stats.pluralForms) {
 			pluralFunctions_[lang] = null;
 		} else {
-			pluralFunctions_[lang] = stats.pluralForms;
+			pluralFunctions_[lang] = stats.pluralForms as ParsePluralFormFunction;
 		}
 	}
 
@@ -666,13 +664,11 @@ export const toIso639Alpha3 = (code: string) => {
 	return info.alpha3;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function _(s: string, ...args: any[]): string {
+function _(s: string, ...args: unknown[]): string {
 	return stringByLocale(currentLocale_, s, ...args);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function _n(singular: string, plural: string, n: number, ...args: any[]) {
+function _n(singular: string, plural: string, n: number, ...args: unknown[]) {
 	if (['en_GB', 'en_US'].includes(currentLocale_)) {
 		if (n !== 1) return _(plural, ...args);
 		return _(singular, ...args);
@@ -697,8 +693,7 @@ function _n(singular: string, plural: string, n: number, ...args: any[]) {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const stringByLocale = (locale: string, s: string, ...args: any[]): string => {
+const stringByLocale = (locale: string, s: string, ...args: unknown[]): string => {
 	const strings = localeStrings(locale);
 	const result = strings[s];
 	let translatedString = '';

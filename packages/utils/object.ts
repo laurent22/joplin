@@ -9,7 +9,7 @@ export const objectValueFromPath = (o: any, path: string) => {
 	return result;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Generic utility used by callers with typed entity interfaces (NoteEntity, FolderEntity, etc.) that lack an index signature; tightening this would require widening every caller's argument.
 export function checkObjectHasProperties(object: any, properties: string[]) {
 	for (const prop of properties) {
 		if (!(prop in object)) throw new Error(`Missing property "${prop}": ${JSON.stringify(object)}`);

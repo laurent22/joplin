@@ -40,8 +40,9 @@ export const uuidgen = (length = 22) => {
 	return cachedUuidgen();
 };
 
+// The address is what lets anyone add notes to the account, so it must not be predictable
 export const createNanoForInboxEmail = (): string => {
-	return customAlphabet('0123456789abcdefghijklmnopqrstuvwxyz', 8)();
+	return customAlphabetSecure('0123456789abcdefghijklmnopqrstuvwxyz', 8)();
 };
 
 export { customAlphabetSecure };

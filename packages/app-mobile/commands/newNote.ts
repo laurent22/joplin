@@ -3,6 +3,7 @@ import Logger from '@joplin/utils/Logger';
 import goToNote, { GotoNoteOptions } from './util/goToNote';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
+import Setting from '@joplin/lib/models/Setting';
 
 const logger = Logger.create('newNoteCommand');
 
@@ -19,10 +20,16 @@ export const runtime = (): CommandRuntime => {
 				return;
 			}
 
+			let order;
+			if (Setting.value('notes.sortOrder.field') === 'order') {
+				order = await Note.getNextOrderValue(folder.id);
+			}
+
 			const note = await Note.save({
 				body,
 				parent_id: folder.id,
 				is_todo: todo ? 1 : 0,
+				...(order !== undefined ? { order } : {}),
 			}, { provisional: true });
 
 			logger.info(`Navigating to note ${note.id}`);

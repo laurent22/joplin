@@ -4,8 +4,7 @@ import Resource from '../models/Resource';
 import ResourceLocalState from '../models/ResourceLocalState';
 import { ResourceEntity } from '../services/database/types';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-let resourceCache_: any = {};
+let resourceCache_: AttachedResources = {};
 
 export function clearResourceCache() {
 	resourceCache_ = {};
@@ -23,8 +22,7 @@ export default async function attachedResources(noteBody: string): Promise<Attac
 	if (!noteBody) return {};
 	const resourceIds = await Note.linkedItemIdsByType(BaseModel.TYPE_RESOURCE, noteBody);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const output: any = {};
+	const output: AttachedResources = {};
 	for (let i = 0; i < resourceIds.length; i++) {
 		const id = resourceIds[i];
 

@@ -15,8 +15,7 @@ import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 
 require('./web/rnVectorIconsSetup.js');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Necessary until Root doesn't extend `any`
-AppRegistry.registerComponent('Joplin', () => Root as any);
+AppRegistry.registerComponent('Joplin', () => Root);
 
 // Fill properties not yet available in the TypeScript DOM types.
 interface ExtendedNavigator extends Navigator {

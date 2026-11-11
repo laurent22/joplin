@@ -10,16 +10,14 @@ interface AdvancedExpression {
 	// __sub_1 || test3
 	compiledText: string;
 	// { __sub_1: "test1 && test2" }
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	subExpressions: any;
+	subExpressions: Record<string, string>;
 }
 
 function parseAdvancedExpression(advancedExpression: string): AdvancedExpression {
 	let subExpressionIndex = -1;
 	let subExpressions = '';
 	let currentSubExpressionKey = '';
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const subContext: any = {};
+	const subContext: Record<string, string> = {};
 
 	let inBrackets = false;
 	for (let i = 0; i < advancedExpression.length; i++) {
@@ -67,11 +65,10 @@ export default class WhenClause {
 		this.validate_ = validate;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private createContext(ctx: any): IContext {
+	private createContext(ctx: object): IContext {
 		return {
-			getValue: (key: string) => {
-				return ctx[key];
+			getValue: <T>(key: string) => {
+				return (ctx as Record<string, unknown>)[key] as T;
 			},
 		};
 	}
@@ -82,12 +79,10 @@ export default class WhenClause {
 		return this.ruleCache_[exp];
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public evaluate(context: any): boolean {
+	public evaluate(context: object): boolean {
 		if (this.validate_) this.validate(context);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const subContext: any = {};
+		const subContext: Record<string, boolean> = {};
 
 		for (const k in this.expression_.subExpressions) {
 			const subExp = this.expression_.subExpressions[k];
@@ -98,8 +93,7 @@ export default class WhenClause {
 		return this.rules(this.expression_.compiledText).evaluate(this.createContext(fullContext));
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public validate(context: any) {
+	public validate(context: object) {
 		const keys = this.rules(this.expression_.original.replace(/[()]/g, ' ')).keys();
 		for (const key of keys) {
 			if (!(key in context)) throw new Error(`No such key: ${key}`);

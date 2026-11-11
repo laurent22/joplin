@@ -5,6 +5,8 @@ import { Request, RequestMethod } from '../Api';
 import collectionToPaginatedResults from '../utils/collectionToPaginatedResults';
 import Note from '../../../models/Note';
 import Tag from '../../../models/Tag';
+import isNoteLockEnabled from '../../noteLock/isNoteLockEnabled';
+import lockedNoteBodies from '../utils/lockedNoteBodies';
 const { ErrorBadRequest, ErrorNotFound } = require('../utils/errors');
 
 export default async function(request: Request, id: string = null, link: string = null) {
@@ -29,10 +31,11 @@ export default async function(request: Request, id: string = null, link: string 
 			// Ideally we should get all this in one SQL query but for now that will do
 			const noteIds = await Tag.noteIds(tag.id);
 			const output = [];
+			const lockedBodies = isNoteLockEnabled() ? lockedNoteBodies(request, ModelType.Note) : null;
 			for (let i = 0; i < noteIds.length; i++) {
-				const n = await Note.preview(noteIds[i], defaultLoadOptions(request, ModelType.Note));
+				const n = await Note.preview(noteIds[i], defaultLoadOptions(lockedBodies?.request ?? request, ModelType.Note));
 				if (!n) continue;
-				output.push(n);
+				output.push(lockedBodies ? lockedBodies.replace(n) : n);
 			}
 			return collectionToPaginatedResults(ModelType.Note, output, request);
 		}

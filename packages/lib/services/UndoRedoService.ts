@@ -1,18 +1,16 @@
 import AsyncActionQueue from '../AsyncActionQueue';
-const EventEmitter = require('events');
+import { EventEmitter } from 'events';
 
 class UndoQueue {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private inner_: any[] = [];
+	private inner_: unknown[] = [];
 	private size_ = 20;
 
 	public pop() {
 		return this.inner_.pop();
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public push(e: any) {
+	public push(e: unknown) {
 		this.inner_.push(e);
 		while (this.length > this.size_) {
 			this.inner_.splice(0, 1);
@@ -23,8 +21,7 @@ class UndoQueue {
 		return this.inner_.length;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public at(index: number): any {
+	public at(index: number): unknown {
 		return this.inner_[index];
 	}
 
@@ -35,41 +32,37 @@ export default class UndoRedoService {
 	private pushAsyncQueue: AsyncActionQueue = new AsyncActionQueue(700);
 	private undoStates: UndoQueue = new UndoQueue();
 	private redoStates: UndoQueue = new UndoQueue();
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private eventEmitter: any = new EventEmitter();
+	private eventEmitter: EventEmitter = new EventEmitter();
 	private isUndoing = false;
 
 	public constructor() {
 		this.push = this.push.bind(this);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public on(eventName: string, callback: Function) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- EventEmitter events carry heterogeneous payloads by name
+	public on(eventName: string, callback: (...args: any[])=> void) {
 		return this.eventEmitter.on(eventName, callback);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public off(eventName: string, callback: Function) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See on() above
+	public off(eventName: string, callback: (...args: any[])=> void) {
 		return this.eventEmitter.removeListener(eventName, callback);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public push(state: any) {
+	public push(state: unknown) {
 		this.undoStates.push(state);
 		this.redoStates = new UndoQueue();
 		this.eventEmitter.emit('stackChange');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public schedulePush(state: any) {
+	public schedulePush(state: unknown) {
 		this.pushAsyncQueue.push(async () => {
 			this.push(state);
 		});
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async undo(redoState: any) {
-		if (this.isUndoing) return;
+	public async undo(redoState: unknown) {
+		if (this.isUndoing) return undefined;
 		if (!this.canUndo) throw new Error('Nothing to undo');
 		this.isUndoing = true;
 		await this.pushAsyncQueue.processAllNow();
@@ -80,9 +73,8 @@ export default class UndoRedoService {
 		return state;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async redo(undoState: any) {
-		if (this.isUndoing) return;
+	public async redo(undoState: unknown) {
+		if (this.isUndoing) return undefined;
 		if (!this.canRedo) throw new Error('Nothing to redo');
 		this.isUndoing = true;
 		await this.pushAsyncQueue.processAllNow();

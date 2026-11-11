@@ -59,7 +59,8 @@ describe('index/applications', () => {
 		const { user, session } = await createUserAndSession(1);
 		await models().user().save({ id: user.id });
 
-		await getApplicationConfirm('asdf', session.id);
+		const confirmPage = await getApplicationConfirm('asdf', session.id);
+		expect(confirmPage.response.body).toContain(user.email);
 		await doApplicationConfirm('asdf', session.id);
 
 		const applications = await models().application().all();
@@ -115,6 +116,33 @@ describe('index/applications', () => {
 		await models().session().delete(session.id);
 
 		await expectHttpError(async () => execRequest(session.id, 'POST', 'applications/asdf/confirm', { applicationAuthId: 'asdf2' }, null), ErrorForbidden.httpCode);
+	});
+
+	test('should reject the authorisation POST without a valid CSRF token', async () => {
+		const { user, session } = await createUserAndSession(1);
+		await models().user().save({ id: user.id });
+
+		await getApplicationConfirm('asdf', session.id);
+
+		// Build the POST manually to send an invalid _csrf instead of the valid
+		// one koaAppContext injects automatically.
+		const context = await koaAppContext({
+			sessionId: session.id,
+			request: {
+				method: 'POST',
+				url: '/applications/asdf/confirm',
+				body: {
+					applicationAuthId: 'asdf',
+				},
+			},
+		});
+		(context.req as unknown as { body: Record<string, string> }).body._csrf = 'not-a-valid-token';
+
+		await routeHandler(context);
+
+		// routeHandler writes the error to the response rather than re-throwing.
+		expect(context.response.status).toBe(ErrorForbidden.httpCode);
+		expect((await models().application().all()).length).toBe(0);
 	});
 
 	test('should throw Bad Request if application auth id does not exist', async () => {

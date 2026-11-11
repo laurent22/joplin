@@ -1,5 +1,5 @@
 import { NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
-import { dropHeaderAt } from './useDragAndDrop';
+import { dropHeaderAt, InsertAt } from './useDragAndDrop';
 
 const defaultColumns: NoteListColumns = [
 	{
@@ -65,8 +65,7 @@ describe('useDragAndDrop', () => {
 			],
 		],
 	])('should drop columns', (columns, header, insertAt, expected) => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const actual = dropHeaderAt(columns, header, insertAt as any).map(c => c.name);
+		const actual = dropHeaderAt(columns, header, insertAt as InsertAt).map(c => c.name);
 		expect(actual).toEqual(expected);
 	});
 

@@ -1,10 +1,13 @@
-import { RefObject, Dispatch, SetStateAction, useEffect } from 'react';
+import { MutableRefObject, RefObject, Dispatch, SetStateAction, useEffect, useContext } from 'react';
+import { Dispatch as ReduxDispatch } from 'redux';
 import { WindowCommandDependencies, NoteBodyEditorRef, OnChangeEvent, ScrollOptionTypes } from './types';
 import editorCommandDeclarations, { enabledCondition } from '../editorCommandDeclarations';
 import CommandService, { CommandDeclaration, CommandRuntime, CommandContext, RegisteredRuntime } from '@joplin/lib/services/CommandService';
 import { formatMsToLocal } from '@joplin/utils/time';
 import { reg } from '@joplin/lib/registry';
 import getWindowCommandPriority from './getWindowCommandPriority';
+import { State } from '@joplin/lib/reducer';
+import { WindowIdContext } from '../../NewWindowOrIFrame';
 
 const commandsWithDependencies = [
 	require('../commands/showLocalSearch'),
@@ -20,10 +23,8 @@ type OnBodyChange = (event: OnChangeEvent)=> void;
 
 interface HookDependencies {
 	setShowLocalSearch: Dispatch<SetStateAction<boolean>>;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	noteSearchBarRef: any;
+	dispatch: ReduxDispatch;
+	noteSearchBarRef: MutableRefObject<HTMLInputElement | null>;
 	editorRef: RefObject<NoteBodyEditorRef>;
 	titleInputRef: RefObject<HTMLInputElement>;
 	onBodyChange: OnBodyChange;
@@ -36,8 +37,7 @@ function editorCommandRuntime(
 	onBodyChange: OnBodyChange,
 ): CommandRuntime {
 	return {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		execute: async (_context: CommandContext, ...args: any[]) => {
+		execute: async (_context: CommandContext, ...args: unknown[]) => {
 			if (!editorRef.current) {
 				reg.logger().warn('Received command, but editor is gone', declaration.name);
 				return;
@@ -81,9 +81,12 @@ function editorCommandRuntime(
 
 export default function useWindowCommandHandler(dependencies: HookDependencies) {
 	const { setShowLocalSearch, noteSearchBarRef, editorRef, titleInputRef, onBodyChange, containerRef } = dependencies;
+	const windowId = useContext(WindowIdContext);
 
 	useEffect(() => {
-		const getRuntimePriority = () => getWindowCommandPriority(containerRef);
+		const getRuntimePriority = (_state: State, targetWindowId: string|null) => {
+			return getWindowCommandPriority(containerRef, windowId === targetWindowId);
+		};
 
 		const deregisterCallbacks: RegisteredRuntime[] = [];
 		for (const declaration of editorCommandDeclarations) {
@@ -117,5 +120,5 @@ export default function useWindowCommandHandler(dependencies: HookDependencies) 
 				runtime.deregister();
 			}
 		};
-	}, [editorRef, setShowLocalSearch, noteSearchBarRef, titleInputRef, onBodyChange, containerRef]);
+	}, [editorRef, windowId, setShowLocalSearch, noteSearchBarRef, titleInputRef, onBodyChange, containerRef]);
 }

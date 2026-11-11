@@ -4,7 +4,7 @@
 
 import * as React from 'react';
 import { RefObject, useCallback, useMemo, useRef, useState } from 'react';
-import { GestureResponderEvent, Modal, Platform, Pressable, ScrollView, ScrollViewProps, StyleSheet, View, ViewStyle } from 'react-native';
+import { Animated, GestureResponderEvent, Modal, Platform, Pressable, ScrollView, ScrollViewProps, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import FocusControl from './accessibility/FocusControl/FocusControl';
 import { msleep, Second } from '@joplin/utils/time';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
@@ -15,6 +15,8 @@ import KeyboardAvoidingView from './KeyboardAvoidingView';
 import Dialog from '@joplin/lib/components/Dialog';
 import useKeyboardState from '../utils/hooks/useKeyboardState';
 
+type AllScrollViewProps = ScrollViewProps & { ref?: React.Ref<ScrollView> };
+
 type OnClose = ()=> void;
 type OnShow = ()=> void;
 export interface ModalElementProps {
@@ -24,11 +26,18 @@ export interface ModalElementProps {
 	// but can be `null` to prevent the default close behavior.
 	onClose: OnClose|null;
 	onShow?: OnShow;
+	// iOS only: Called once the modal has finished its dismissal transition
+	onDismissed?: ()=> void;
+	animationType?: 'fade'|'none';
+	// When false, render within the surrounding portal rather than creating a
+	// separate native/top-layer modal.
+	useNativeModal?: boolean;
+	wrapContent?: (view: React.ReactNode)=> React.ReactNode;
 
 	statusBarTranslucent?: boolean;
 
 	children: React.ReactNode;
-	containerStyle?: ViewStyle;
+	containerStyle?: StyleProp<ViewStyle>;
 	backgroundColor?: string;
 	modalBackgroundStyle?: ViewStyle;
 	// Extra styles for the accessibility tools dismiss button. For example,
@@ -39,7 +48,7 @@ export interface ModalElementProps {
 	// If scrollOverflow is provided, the modal is wrapped in a vertical
 	// ScrollView. This allows the user to scroll parts of dialogs into
 	// view that would otherwise be clipped by the screen edge.
-	scrollOverflow?: boolean|ScrollViewProps;
+	scrollOverflow?: boolean|AllScrollViewProps;
 }
 
 const useStyles = (hasScrollView: boolean, backgroundColor: string|undefined) => {
@@ -154,6 +163,9 @@ const ModalElement: React.FC<ModalElementProps> = ({
 	modalBackgroundStyle: extraModalBackgroundStyles,
 	dismissButtonStyle,
 	onClose,
+	onDismissed,
+	wrapContent,
+	useNativeModal = true,
 	...forwardedProps
 }) => {
 	const styles = useStyles(!!scrollOverflow, backgroundColor);
@@ -161,11 +173,10 @@ const ModalElement: React.FC<ModalElementProps> = ({
 	// contentWrapper adds padding. To allow styling the region outside of the modal
 	// (e.g. to add a background), the content is wrapped twice.
 	const content = (
-		<View style={containerStyle}>
+		<Animated.View style={containerStyle}>
 			{children}
-		</View>
+		</Animated.View>
 	);
-
 
 	const [containerComponent, setContainerComponent] = useState<View|null>(null);
 	const modalStatus = useModalStatus(containerComponent, forwardedProps.visible);
@@ -173,6 +184,11 @@ const ModalElement: React.FC<ModalElementProps> = ({
 	const containerRef = useRef<View|null>(null);
 	containerRef.current = containerComponent;
 	const { onShouldBackgroundCaptureTouch, onBackgroundTouchFinished } = useBackgroundTouchListeners(onClose, containerRef);
+
+	const onDismiss = useCallback(() => {
+		onClose?.();
+		onDismissed?.();
+	}, [onClose, onDismissed]);
 
 	// A close button for accessibility tools. Since iOS accessibility focus order is based on the position
 	// of the element on the screen, the close button is placed after the modal content, rather than behind.
@@ -183,7 +199,7 @@ const ModalElement: React.FC<ModalElementProps> = ({
 		accessibilityRole='button'
 	/> : null;
 
-	const contentAndBackdrop = <View
+	let contentAndBackdrop: React.ReactNode = <View
 		ref={setContainerComponent}
 		style={[styles.modalBackground, extraModalBackgroundStyles]}
 		onStartShouldSetResponder={onShouldBackgroundCaptureTouch}
@@ -192,11 +208,24 @@ const ModalElement: React.FC<ModalElementProps> = ({
 		{content}
 		{closeButton}
 	</View>;
+	if (wrapContent) {
+		contentAndBackdrop = wrapContent(contentAndBackdrop);
+	}
 
 	const extraScrollViewProps = (typeof scrollOverflow === 'object' ? scrollOverflow : {});
+	const modalContent = scrollOverflow ? (
+		<KeyboardAvoidingView style={styles.keyboardAvoidingView} enabled={true}>
+			<ScrollView
+				{...extraScrollViewProps}
+				style={[styles.modalScrollView, extraScrollViewProps.style]}
+				contentContainerStyle={[styles.modalScrollViewContent, extraScrollViewProps.contentContainerStyle]}
+			>{contentAndBackdrop}</ScrollView>
+		</KeyboardAvoidingView>
+	) : contentAndBackdrop;
+
 	const result = (
 		<FocusControl.ModalWrapper state={modalStatus}>
-			<ModalComponent
+			{useNativeModal ? <ModalComponent
 				// supportedOrientations: On iOS, this allows the dialog to be shown in non-portrait orientations.
 				supportedOrientations={['portrait', 'portrait-upside-down', 'landscape', 'landscape-left', 'landscape-right']}
 				animationType='fade'
@@ -205,21 +234,13 @@ const ModalElement: React.FC<ModalElementProps> = ({
 				// Web:
 				onClose={onClose}
 				// iOS only: Called after closing
-				onDismiss={onClose}
+				onDismiss={onDismiss}
 				// Called before closing on Android and sometimes called before closing on iOS
 				onRequestClose={onClose}
 				{...forwardedProps}
 			>
-				{scrollOverflow ? (
-					<KeyboardAvoidingView style={styles.keyboardAvoidingView} enabled={true}>
-						<ScrollView
-							{...extraScrollViewProps}
-							style={[styles.modalScrollView, extraScrollViewProps.style]}
-							contentContainerStyle={[styles.modalScrollViewContent, extraScrollViewProps.contentContainerStyle]}
-						>{contentAndBackdrop}</ScrollView>
-					</KeyboardAvoidingView>
-				) : contentAndBackdrop}
-			</ModalComponent>
+				{modalContent}
+			</ModalComponent> : (forwardedProps.visible ? modalContent : null)}
 		</FocusControl.ModalWrapper>
 	);
 
@@ -233,6 +254,9 @@ const ModalComponent = Platform.OS === 'web' ? (props: ModalElementProps) => {
 		open={props.visible}
 		onCancel={props.onClose}
 		onShow={props.onShow}
+		// 2026-09-03: Work around dialog display issues on Safari by autofocusing
+		// the root dialog element.
+		onBeforeShow={dialog => dialog.setAttribute('autofocus', 'true')}
 		preventAutoCloseOnCancel={true}
 	>
 		{props.children}

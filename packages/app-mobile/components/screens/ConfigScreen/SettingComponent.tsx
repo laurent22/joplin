@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { UpdateSettingValueCallback } from './types';
 import { View, Text } from 'react-native';
-import Setting, { AppType } from '@joplin/lib/models/Setting';
+import Setting, { AppType, SettingItem } from '@joplin/lib/models/Setting';
 import Dropdown from '../../Dropdown';
 import { ConfigScreenStyles } from './configScreenStyles';
 import SettingsToggle from './SettingsToggle';
@@ -11,26 +11,30 @@ import ValidatedIntegerInput from './ValidatedIntegerInput';
 import SettingTextInput from './SettingTextInput';
 import shim from '@joplin/lib/shim';
 import { themeStyle } from '../../global-style';
+import SettingsButton from './SettingsButton';
+import { useCallback, useState } from 'react';
+import { _ } from '@joplin/lib/locale';
+
+type OnSettingButtonClick = (key: string)=> Promise<void>;
 
 interface Props {
 	settingId: string;
 
 	// The value associated with the given settings key
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	value: any;
+	value: unknown;
 
 	styles: ConfigScreenStyles;
 	themeId: number;
 
-	updateSettingValue: UpdateSettingValueCallback;
+	onUpdateSettingValue: UpdateSettingValueCallback;
+	onSettingButtonClick: OnSettingButtonClick;
 }
 
 
 const SettingComponent: React.FunctionComponent<Props> = props => {
 	const themeId = props.themeId;
 	const theme = themeStyle(themeId);
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const output: any = null;
+	const output: React.ReactElement | null = null;
 
 	const md = Setting.settingMetadata(props.settingId);
 	const settingDescription = md.description ? md.description(AppType.Mobile) : '';
@@ -54,8 +58,7 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 					</Text>
 					<Dropdown
 						key="control"
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-						items={items as any}
+						items={items}
 						selectedValue={value}
 						itemListStyle={{
 							backgroundColor: theme.backgroundColor,
@@ -69,7 +72,7 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 							fontSize: theme.fontSize,
 						}}
 						onValueChange={(itemValue: string) => {
-							void props.updateSettingValue(props.settingId, itemValue);
+							void props.onUpdateSettingValue(props.settingId, itemValue);
 						}}
 						accessibilityHint={label}
 					/>
@@ -81,11 +84,11 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 		return (
 			<SettingsToggle
 				settingId={props.settingId}
-				value={props.value}
+				value={!!props.value}
 				themeId={props.themeId}
 				styles={props.styles}
 				label={md.label()}
-				updateSettingValue={props.updateSettingValue}
+				updateSettingValue={props.onUpdateSettingValue}
 				description={descriptionComp}
 			/>
 		);
@@ -93,11 +96,11 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 		return (
 			<ValidatedIntegerInput
 				settingId={props.settingId}
-				value={props.value}
+				value={props.value as number}
 				themeId={props.themeId}
 				styles={props.styles}
 				label={md.label()}
-				updateSettingValue={props.updateSettingValue}
+				updateSettingValue={props.onUpdateSettingValue}
 				description={descriptionComp}
 			/>
 		);
@@ -109,7 +112,7 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 					mode={md.key === 'sync.2.path' ? 'readwrite' : 'read'}
 					styles={props.styles}
 					settingMetadata={md}
-					updateSettingValue={props.updateSettingValue}
+					updateSettingValue={props.onUpdateSettingValue}
 					description={descriptionComp}
 				/>
 			);
@@ -118,16 +121,22 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 		return (
 			<SettingTextInput
 				settingId={props.settingId}
-				value={props.value}
+				value={props.value as string}
 				themeId={props.themeId}
 				styles={props.styles}
 				label={md.label()}
-				updateSettingValue={props.updateSettingValue}
+				updateSettingValue={props.onUpdateSettingValue}
 				description={descriptionComp}
 			/>
 		);
 	} else if (md.type === Setting.TYPE_BUTTON) {
-		// TODO: Not yet supported
+		return (
+			<SettingButtonComponent
+				metadata={md}
+				styles={props.styles}
+				onSettingButtonClick={props.onSettingButtonClick}
+			/>
+		);
 	} else if (Setting.value('env') === 'dev') {
 		throw new Error(`Unsupported setting type: ${md.type}`);
 	}
@@ -136,3 +145,38 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 };
 
 export default SettingComponent;
+
+interface SettingButtonProps {
+	metadata: SettingItem;
+	styles: ConfigScreenStyles;
+	onSettingButtonClick: OnSettingButtonClick;
+}
+
+const SettingButtonComponent: React.FC<SettingButtonProps> = ({ metadata, styles, onSettingButtonClick }) => {
+	const key = metadata.key;
+
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState<string|null>(null);
+
+	const onClick = useCallback(async () => {
+		setError(null);
+		setLoading(true);
+
+		try {
+			await onSettingButtonClick(key);
+		} catch (error) {
+			setError(String(error));
+		} finally {
+			setLoading(false);
+		}
+	}, [key, onSettingButtonClick]);
+
+	return <SettingsButton
+		title={metadata.label()}
+		description={metadata.description?.(AppType.Mobile)}
+		styles={styles}
+		clickHandler={onClick}
+		statusComponent={error && <Text style={styles.styleSheet.warningText}>{_('Failed: %s', error)}</Text>}
+		disabled={loading}
+	/>;
+};

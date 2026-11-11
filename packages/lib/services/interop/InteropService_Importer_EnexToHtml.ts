@@ -1,4 +1,4 @@
-import { ImportExportResult } from './types';
+import { ImportExportResult, ImportModuleOutputFormat } from './types';
 import InteropService_Importer_Base from './InteropService_Importer_Base';
 import { enexImporterExec } from './InteropService_Importer_EnexToMd';
 
@@ -9,7 +9,7 @@ export default class InteropService_Importer_EnexToHtml extends InteropService_I
 			this.options_.destinationFolder,
 			this.sourcePath_,
 			this.metadata().fileExtensions,
-			{ ...this.options_, outputFormat: 'html' },
+			{ ...this.options_, outputFormat: ImportModuleOutputFormat.Html },
 		);
 	}
 }

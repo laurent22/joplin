@@ -4,7 +4,12 @@ import { describe, it, beforeEach } from '@jest/globals';
 import { act, fireEvent, render, screen, userEvent, waitFor } from '../../../utils/testing/testingLibrary';
 
 import NoteScreen from './Note';
-import { setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv, supportDir, synchronizerStart, resourceFetcher, runWithFakeTimers } from '@joplin/lib/testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv, supportDir, synchronizerStart, resourceFetcher, runWithFakeTimers, encryptionService } from '@joplin/lib/testing/test-utils';
+import NoteLockKey from '@joplin/lib/services/noteLock/NoteLockKey';
+import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
+import NoteLockService from '@joplin/lib/services/noteLock/NoteLockService';
+import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
+import { enableNoteLock, disableNoteLock } from '@joplin/lib/services/noteLock/setNoteLockState';
 import waitForWithRealTimers from '@joplin/lib/testing/waitFor';
 import Note from '@joplin/lib/models/Note';
 import { AppState } from '../../../utils/types';
@@ -27,6 +32,21 @@ import Resource from '@joplin/lib/models/Resource';
 import TestProviderStack from '../../testing/TestProviderStack';
 import setupGlobalStore from '../../../utils/testing/setupGlobalStore';
 import CommandService from '@joplin/lib/services/CommandService';
+import BackButtonService from '../../../services/BackButtonService';
+import shared from '@joplin/lib/components/shared/note-screen-shared';
+import { DialogContext, DialogControl } from '../../DialogManager';
+import useVisiblePluginEditorViewIds from '@joplin/lib/hooks/plugins/useVisiblePluginEditorViewIds';
+import mockPluginServiceSetup from '../../../utils/testing/mockPluginServiceSetup';
+import createTestPlugin from '@joplin/lib/testing/plugins/createTestPlugin';
+import PluginService from '@joplin/lib/services/plugins/PluginService';
+import JoplinViewsEditors from '@joplin/lib/services/plugins/api/JoplinViewsEditor';
+import WebviewController from '@joplin/lib/services/plugins/WebviewController';
+import getShownPluginEditorView from '@joplin/lib/services/plugins/utils/getShownPluginEditorView';
+import { defaultWindowId } from '@joplin/lib/reducer';
+
+jest.mock('@joplin/lib/hooks/plugins/useVisiblePluginEditorViewIds', () => jest.fn((): string[] => []));
+
+const mockUseVisiblePluginEditorViewIds = useVisiblePluginEditorViewIds as jest.MockedFunction<typeof useVisiblePluginEditorViewIds>;
 
 jest.retryTimes(2);
 
@@ -34,6 +54,14 @@ interface WrapperProps {
 }
 
 let store: Store<AppState>;
+
+function deferred<T>() {
+	let resolve: (value: T)=> void;
+	const promise = new Promise<T>(resolvePromise => {
+		resolve = resolvePromise;
+	});
+	return { promise, resolve: resolve! };
+}
 
 const mockNavigation = { state: { } };
 const WrappedNoteScreen: React.FC<WrapperProps> = _props => {
@@ -110,19 +138,44 @@ const openNoteActionsMenu = async () => {
 		cursor = cursor.parent;
 	}
 
-	// Wrap in act(...) -- this tells the test library that component state is intended to update (prevents
-	// warnings).
-	await waitFor(async () => {
+	// act() rather than waitFor(): waitFor rejects if the timer mode changes while it polls, and
+	// draining the fake timers updates the menu drawer's state.
+	await act(async () => {
 		await runWithFakeTimers(async () => {
 			await userEvent.press(actionMenuButton);
 		});
-
-		// State can update until the menu content is marked as open (part of the
-		// menu transition).
-		await waitFor(async () => {
-			expect(await screen.findByTestId('menu-content-open')).toBeVisible();
-		});
 	});
+
+	// State can update until the menu content is marked as open (part of the
+	// menu transition).
+	await waitFor(async () => {
+		expect(await screen.findByTestId('menu-content-open')).toBeVisible();
+	});
+};
+
+const setupUnlockedNoteLock = async (password: string) => {
+	Setting.setValue('featureFlag.noteLock', true);
+	NoteLockService.destroyInstance();
+	NoteLockSession.destroyInstance();
+	NoteLockKey.destroyInstance();
+	EncryptionService.instance_ = encryptionService();
+	await NoteLockKey.instance().create(password);
+	await NoteLockSession.instance().unlock(password);
+};
+
+// enableNoteLock only emits an event for a mounted screen, so the fixture locks the row
+// directly with a gated save, then rotates the key from under it.
+const setupUndecryptableNote = async (noteProperties: NoteEntity) => {
+	await setupUnlockedNoteLock('111111');
+	const noteId = await openNewNote(noteProperties);
+	const lockedNote = { ...await Note.load(noteId, { useNoteLock: true }), is_locked: 1, isDecrypted: true };
+	await Note.save(lockedNote, { useNoteLock: true });
+	await act(async () => {
+		await NoteLockSession.instance().reset('222222');
+		await NoteLockSession.instance().unlock('222222');
+	});
+	store.dispatch({ type: 'SET_NOTE_LOCK_SESSION_UNLOCKED', value: true });
+	return noteId;
 };
 
 const expectToBeEditing = async (editing: boolean) => {
@@ -134,7 +187,7 @@ const expectToBeEditing = async (editing: boolean) => {
 };
 
 const openEditor = async () => {
-	const editToggle = await screen.findByLabelText('Toggle view/edit');
+	const editToggle = await screen.findByLabelText('Edit');
 
 	fireEvent.press(editToggle);
 	await expectToBeEditing(true);
@@ -158,11 +211,46 @@ const setupNoteWithPanes = async (panes: string[], noteTitle = 'Test note') => {
 	return renderResult;
 };
 
-describe('screens/Note', () => {
+const registerEditorPlugin = async () => {
+	const pluginId = 'org.joplinapp.editor-save-test';
+	mockPluginServiceSetup(store);
+	await createTestPlugin({
+		manifest_version: 1,
+		version: '0.1.0',
+		app_min_version: '2.3.4',
+		platforms: ['desktop', 'mobile'],
+		name: 'Editor save test',
+		id: pluginId,
+	});
+	const pluginService = PluginService.instance();
+	await pluginService.loadAndRunPlugins(
+		[`${Setting.value('pluginDir')}/${pluginId}.js`],
+		pluginService.unserializePluginSettings(Setting.value('plugins.states')),
+	);
+
+	const plugin = pluginService.pluginById(pluginId);
+	const editors = new JoplinViewsEditors(plugin, store);
+	let viewId = '';
+	await editors.register('test-editor', {
+		onSetup: async handle => {
+			viewId = handle;
+		},
+		onActivationCheck: async () => true,
+	});
+	const controller = plugin.viewController(viewId) as WebviewController;
+	controller.setActive(true);
+	await controller.setOpen(true);
+	mockUseVisiblePluginEditorViewIds.mockReturnValue([viewId]);
+
+	return { editors, pluginId, viewId };
+};
+
+describe('screens/Note/Note', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await setupDatabaseAndSynchronizer(0);
 		await switchClient(0);
+		Setting.setValue('editor.mobile.defaultEditState', 'view');
 
 		store = createMockReduxStore();
 		setupGlobalStore(store);
@@ -170,6 +258,7 @@ describe('screens/Note', () => {
 		// In order for note changes to be saved, note-screen-shared requires
 		// that at least one folder exist.
 		await Folder.save({ title: 'test', parent_id: '' });
+		mockUseVisiblePluginEditorViewIds.mockReturnValue([]);
 		jest.useRealTimers();
 	});
 
@@ -220,6 +309,127 @@ describe('screens/Note', () => {
 		unmount();
 	});
 
+	it('should discard a queued save when the reload time has moved on', async () => {
+		const noteId = await openNewNote({ title: 'Original title', body: 'Body' });
+		const { unmount } = render(<WrappedNoteScreen />);
+		const titleInput = await screen.findByDisplayValue('Original title');
+
+		await act(async () => {
+			fireEvent.changeText(titleInput, 'Stale local title');
+			const remotelyUpdatedNote = await Note.load(noteId);
+			remotelyUpdatedNote.title = 'Remote title';
+			await Note.save(remotelyUpdatedNote);
+			store.dispatch({ type: 'EDITOR_NOTE_NEEDS_RELOAD', noteId });
+		});
+
+		await waitForNoteToMatch(noteId, { title: 'Remote title' });
+		unmount();
+		await waitForNoteToMatch(noteId, { title: 'Remote title' });
+	});
+
+	it('should ignore header-menu saves during a reload when an editor plugin is visible', async () => {
+		const noteId = await openNewNote({ title: 'Original title', body: 'Original body' });
+		const { unmount } = render(<WrappedNoteScreen />);
+		const titleInput = await screen.findByDisplayValue('Original title');
+		await openNoteActionsMenu();
+
+		const originalReloadNote = shared.reloadNote;
+		const continueReload = deferred<void>();
+		const reloadSpy = jest.spyOn(shared, 'reloadNote').mockImplementation(async component => {
+			await continueReload.promise;
+			return originalReloadNote(component);
+		});
+
+		try {
+			await Note.save({ id: noteId, body: 'Remote body' });
+			mockUseVisiblePluginEditorViewIds.mockReturnValue(['test-editor-plugin']);
+
+			// Awaiting an unbounded promise inside act() leaks an open act scope if the test times out,
+			// which breaks render() in the retries.
+			await act(async () => {
+				store.dispatch({ type: 'EDITOR_NOTE_NEEDS_RELOAD', noteId });
+			});
+			await waitFor(() => expect(reloadSpy).toHaveBeenCalledTimes(1));
+			fireEvent.press(await screen.findByText('Convert to todo'));
+
+			// Give the save queue enough time to process any incorrectly scheduled action.
+			await act(async () => new Promise(resolve => setTimeout(resolve, 600)));
+			await waitForNoteToMatch(noteId, { body: 'Remote body', is_todo: 0 });
+
+			continueReload.resolve();
+			await waitFor(() => expect(titleInput).toBeEnabled());
+			await waitForNoteToMatch(noteId, { body: 'Remote body', is_todo: 0 });
+		} finally {
+			continueReload.resolve();
+			reloadSpy.mockRestore();
+			unmount();
+		}
+	});
+
+	it('should save editor plugin changes during a reload', async () => {
+		const noteId = await openNewNote({ title: 'Original title', body: 'Original body' });
+		const { editors, pluginId, viewId } = await registerEditorPlugin();
+		expect(getShownPluginEditorView(store.getState().pluginService.plugins, defaultWindowId)).toMatchObject({
+			editorPlugin: { id: pluginId },
+			editorView: { id: viewId },
+		});
+
+		const { unmount } = render(<WrappedNoteScreen />);
+		const titleInput = await screen.findByDisplayValue('Original title');
+		await screen.findByTestId('joplin__PluginDialogWebView');
+
+		const originalReloadNote = shared.reloadNote;
+		const continueReload = deferred<void>();
+		const reloadSpy = jest.spyOn(shared, 'reloadNote').mockImplementation(async component => {
+			await continueReload.promise;
+			return originalReloadNote(component);
+		});
+
+		try {
+			await Note.save({ id: noteId, body: 'Remote body' });
+			await act(async () => {
+				store.dispatch({ type: 'EDITOR_NOTE_NEEDS_RELOAD', noteId });
+			});
+			await waitFor(() => expect(reloadSpy).toHaveBeenCalledTimes(1));
+
+			await act(() => editors.saveNote(viewId, { noteId, body: 'Plugin body' }));
+			await waitForNoteToMatch(noteId, { body: 'Plugin body' });
+
+			continueReload.resolve();
+			await waitFor(() => expect(titleInput).toBeEnabled());
+			await waitForNoteToMatch(noteId, { body: 'Plugin body' });
+		} finally {
+			continueReload.resolve();
+			reloadSpy.mockRestore();
+			unmount();
+			await PluginService.instance().unloadPlugin(pluginId);
+		}
+	});
+
+	it('should not show an editor plugin for a locked note', async () => {
+		await setupUnlockedNoteLock('123456');
+		const noteId = await openNewNote({ title: 'To lock', body: 'plain' });
+		const { pluginId, viewId } = await registerEditorPlugin();
+		const shownEditorView = () => getShownPluginEditorView(store.getState().pluginService.plugins, defaultWindowId).editorView;
+
+		const { unmount } = render(<WrappedNoteScreen />);
+		await screen.findByTestId('joplin__PluginDialogWebView');
+		await act(() => enableNoteLock(noteId));
+		await waitFor(() => expect(shownEditorView()).toBeNull());
+		await waitForNoteToMatch(noteId, { is_locked: 1 });
+		unmount();
+
+		// Opening a note that is already locked.
+		(PluginService.instance().pluginById(pluginId).viewController(viewId) as WebviewController).setActive(true);
+		expect(shownEditorView()).toMatchObject({ id: viewId });
+		const { unmount: unmountLocked } = render(<WrappedNoteScreen />);
+		await waitFor(() => expect(shownEditorView()).toBeNull());
+
+		unmountLocked();
+		await PluginService.instance().unloadPlugin(pluginId);
+		Setting.setValue('featureFlag.noteLock', false);
+	});
+
 	it('changing the note body in the editor should update the note\'s body', async () => {
 		const defaultBody = 'Change me!';
 		const noteId = await openNewNote({ title: 'Unchanged title', body: defaultBody });
@@ -246,6 +456,142 @@ describe('screens/Note', () => {
 			noteScreen.unmount();
 			await waitForNoteToMatch(noteId, { body: 'Change me! Testing!!! This is a test. Test!' });
 		});
+	});
+
+	it('should re-encrypt a pending save with the captured key when the session locks right after enabling the note lock', async () => {
+		await setupUnlockedNoteLock('123456');
+
+		const defaultBody = 'plain body';
+		const noteId = await openNewNote({ title: 'To lock', body: defaultBody });
+
+		const { unmount } = render(<WrappedNoteScreen />);
+		await openEditor();
+		const editor = await getMarkdownEditorControl();
+		await act(async () => {
+			editor.select(defaultBody.length, defaultBody.length);
+			// The insert queues a save that is still pending when the session locks below, so it
+			// can only complete through the key captured by the state change handler.
+			editor.insertText(' edited');
+			await enableNoteLock(noteId);
+			NoteLockSession.instance().lock();
+		});
+
+		await act(() => waitForWithRealTimers(async () => {
+			const row = await Note.load(noteId);
+			expect(row.is_locked).toBe(1);
+			expect(row.body.includes('edited')).toBe(false);
+		}));
+
+		await NoteLockSession.instance().unlock('123456');
+		expect((await Note.load(noteId, { useNoteLock: true })).body).toBe('plain body edited');
+
+		unmount();
+		Setting.setValue('featureFlag.noteLock', false);
+	});
+
+	it('should become read-only as soon as a note inside a share is locked', async () => {
+		await setupUnlockedNoteLock('123456');
+		const noteId = await openNewNote({ title: 'Shared then locked', body: 'plain', share_id: 'share-1' });
+		const { unmount } = render(<WrappedNoteScreen />);
+
+		expect(await screen.findByDisplayValue('Shared then locked')).not.toBeDisabled();
+		await act(async () => {
+			await enableNoteLock(noteId);
+		});
+
+		expect(screen.getByDisplayValue('Shared then locked')).toBeDisabled();
+		await act(() => waitForWithRealTimers(async () => {
+			expect((await Note.load(noteId)).is_locked).toBe(1);
+		}));
+
+		unmount();
+		Setting.setValue('featureFlag.noteLock', false);
+	});
+
+	it('should store the plaintext body again when the note lock is removed', async () => {
+		await setupUnlockedNoteLock('123456');
+		const noteId = await openNewNote({ title: 'To unlock', body: 'plain body' });
+		await Note.save({ ...await Note.load(noteId, { useNoteLock: true }), is_locked: 1 }, { useNoteLock: true });
+
+		const { unmount } = render(<WrappedNoteScreen />);
+		await screen.findByDisplayValue('To unlock');
+
+		await act(async () => {
+			await disableNoteLock(noteId);
+		});
+		await act(() => waitForWithRealTimers(async () => {
+			const row = await Note.load(noteId);
+			expect(row.is_locked).toBe(0);
+			expect(row.body).toBe('plain body');
+		}));
+
+		unmount();
+		Setting.setValue('featureFlag.noteLock', false);
+	});
+
+	it('should disable tags for a note that cannot be unlocked while the session is unlocked', async () => {
+		await setupUndecryptableNote({ title: 'Old key note', body: 'secret' });
+
+		const { unmount } = render(<WrappedNoteScreen />);
+		expect(await screen.findByText('This note could not be unlocked. If it was locked prior to a password reset, the content is no longer recoverable.')).toBeVisible();
+
+		await openNoteActionsMenu();
+		const tagsButton = await screen.findByText('Tags');
+		expect(tagsButton).toHaveProp('disabled', true);
+
+		unmount();
+		Setting.setValue('featureFlag.noteLock', false);
+	});
+
+	it('should keep the locked panel when toggling the checkbox of an undecryptable to-do', async () => {
+		const noteId = await setupUndecryptableNote({ title: 'Old key todo', body: 'secret', is_todo: 1 });
+
+		const { unmount } = render(<WrappedNoteScreen />);
+		const undecryptableMessage = 'This note could not be unlocked. If it was locked prior to a password reset, the content is no longer recoverable.';
+		expect(await screen.findByText(undecryptableMessage)).toBeVisible();
+
+		fireEvent.press(screen.getByRole('checkbox'));
+		await act(() => waitForWithRealTimers(async () => {
+			expect((await Note.load(noteId)).todo_completed).toBeGreaterThan(0);
+		}));
+
+		// The metadata save must not hide the panel and expose the encrypted body.
+		expect(screen.getByText(undecryptableMessage)).toBeVisible();
+		const row = await Note.load(noteId);
+		expect(row.is_locked).toBe(1);
+		expect(row.body.includes('secret')).toBe(false);
+
+		// The metadata save must leave the screen unmodified: otherwise going back gate-saves the
+		// still encrypted body and throws. Stubbed so a regression cannot leak the save mutex.
+		const defaultBackHandler = jest.fn(async () => true);
+		BackButtonService.initialize(defaultBackHandler);
+		const saveSpy = jest.spyOn(shared, 'saveNoteButton_press').mockResolvedValue(undefined);
+		try {
+			await act(async () => {
+				await BackButtonService.back();
+			});
+			expect(saveSpy).not.toHaveBeenCalled();
+			expect(defaultBackHandler).toHaveBeenCalled();
+		} finally {
+			saveSpy.mockRestore();
+		}
+
+		unmount();
+		Setting.setValue('featureFlag.noteLock', false);
+	});
+
+	it('should offer relocking from a note that is not locked', async () => {
+		await setupUnlockedNoteLock('123456');
+		await openNewNote({ title: 'Plain note', body: 'not locked' });
+		store.dispatch({ type: 'SET_NOTE_LOCK_SESSION_UNLOCKED', value: true });
+
+		const { unmount } = render(<WrappedNoteScreen />);
+		await openNoteActionsMenu();
+
+		expect(await screen.findByText('Relock all notes')).toHaveProp('disabled', false);
+
+		unmount();
+		Setting.setValue('featureFlag.noteLock', false);
 	});
 
 	it('pressing "delete" should move the note to the trash', async () => {
@@ -279,6 +625,73 @@ describe('screens/Note', () => {
 			expect(await Note.load(noteId)).toBeUndefined();
 		});
 		expect(shim.showMessageBox).toHaveBeenCalled();
+
+		unmount();
+	});
+
+	it('should make a locked note inside a share read-only with the note lock feature turned off', async () => {
+		Setting.setValue('featureFlag.noteLock', false);
+		await openNewNote({ title: 'Locked in a share', body: 'plain', is_locked: 1, share_id: 'share-1' });
+		const { unmount } = render(<WrappedNoteScreen />);
+
+		const titleInput = await screen.findByDisplayValue('Locked in a share');
+		expect(titleInput).toBeDisabled();
+		expect(await screen.findByText('This note is read-only because it is locked and contained within a share. To enable editing, it must be moved outside of the share.')).toBeVisible();
+		expect(screen.getByHintText(/Selects a notebook/)).toBeVisible();
+
+		unmount();
+	});
+
+	it('should make a locked note editable as soon as it is moved out of a share', async () => {
+		const sharedFolder = await Folder.save({ title: 'Shared', share_id: 'share-1', parent_id: '' });
+		await Folder.save({ title: 'Outside the share', parent_id: '' });
+		await openNewNote({ title: 'Locked in a share', body: 'plain', is_locked: 1, share_id: 'share-1', parent_id: sharedFolder.id });
+		const { unmount } = render(<WrappedNoteScreen />);
+
+		expect(await screen.findByDisplayValue('Locked in a share')).toBeDisabled();
+		fireEvent.press(screen.getByHintText(/Selects a notebook/));
+		fireEvent.press(await screen.findByRole('menuitem', { name: 'Outside the share' }));
+
+		await waitFor(() => expect(screen.getByDisplayValue('Locked in a share')).not.toBeDisabled());
+		expect(screen.queryByText(/read-only because it is locked/)).toBeNull();
+
+		unmount();
+	});
+
+	it('should not tick the to-do checkbox of a locked note inside a share', async () => {
+		const noteId = await openNewNote({ title: 'Locked to-do', body: 'plain', is_todo: 1, is_locked: 1, share_id: 'share-1' });
+		const dialogs: Partial<DialogControl> = { error: jest.fn() };
+		const { unmount } = render(<DialogContext.Provider value={dialogs as DialogControl}><WrappedNoteScreen /></DialogContext.Provider>);
+
+		fireEvent.press(await screen.findByRole('checkbox'));
+
+		await waitFor(() => expect(dialogs.error).toHaveBeenCalledWith(expect.stringMatching(/read-only because it is locked/)));
+		expect(screen.getByRole('checkbox')).not.toBeChecked();
+		expect((await Note.load(noteId)).todo_completed).toBe(0);
+
+		unmount();
+	});
+
+	it('should hide the move picker for a locked note inside a read-only share', async () => {
+		const shareId = 'testShare';
+		await openNewNote({ title: 'Locked in a read-only share', body: 'plain', is_locked: 1, share_id: shareId });
+		const cleanup = simulateReadOnlyShareEnv(shareId, store);
+		const { unmount } = render(<WrappedNoteScreen />);
+
+		expect(await screen.findByDisplayValue('Locked in a read-only share')).toBeDisabled();
+		expect(screen.queryByHintText(/Selects a notebook/)).toBeNull();
+
+		act(() => cleanup());
+		unmount();
+	});
+
+	it('should show the unreadable share warning while the lock panel is showing', async () => {
+		await setupUndecryptableNote({ title: 'Locked in a share', body: 'secret', share_id: 'share-1' });
+		const { unmount } = render(<WrappedNoteScreen />);
+
+		expect(await screen.findByText('This note could not be unlocked. If it was locked prior to a password reset, the content is no longer recoverable.')).toBeVisible();
+		expect(screen.getByText('This note may not be readable because it is contained within a share.')).toBeVisible();
+		expect(screen.queryByText(/read-only because it is locked/)).toBeNull();
 
 		unmount();
 	});
@@ -377,28 +790,31 @@ describe('screens/Note', () => {
 	it.each([
 		[['viewer']],
 		[['editor']],
-	])('should initialize in the correct mode when noteVisiblePanes is %j', async (panes) => {
+	])('should initialize in the correct mode when noteVisiblePanes is %j, when default edit state is set to last', async (panes) => {
+		Setting.setValue('editor.mobile.defaultEditState', 'last');
 		const { unmount } = await setupNoteWithPanes(panes);
 		await expectToBeEditing(panes.includes('editor'));
 		unmount();
 	});
 
-	it('should show toggle button', async () => {
+	it('should show edit button when in view mode', async () => {
+		Setting.setValue('editor.mobile.defaultEditState', 'last');
 		const { unmount } = await setupNoteWithPanes(['viewer']);
-		const toggleButton = await screen.findByLabelText('Toggle view/edit');
-		expect(toggleButton).toBeVisible();
+		const editButton = await screen.findByLabelText('Edit');
+		expect(editButton).toBeVisible();
 		unmount();
 	});
 
 	it.each([
 		[['viewer']],
 		[['editor']],
-	])('should switch modes when toggle button is pressed', async (panes) => {
+	])('should switch modes when toggle button is pressed, when default edit state is set to last', async (panes) => {
+		Setting.setValue('editor.mobile.defaultEditState', 'last');
 		const initialEditing = panes.includes('editor');
 		const expectedEditing = !initialEditing;
 		const { unmount } = await setupNoteWithPanes(panes);
 		await expectToBeEditing(initialEditing);
-		const toggleButton = await screen.findByLabelText('Toggle view/edit');
+		const toggleButton = await screen.findByLabelText(/Edit|Stop editing/);
 		fireEvent.press(toggleButton);
 		await expectToBeEditing(expectedEditing);
 		unmount();
@@ -450,7 +866,9 @@ describe('screens/Note', () => {
 	it.each([
 		[['viewer']],
 		[['editor']],
-	])('should preserve noteVisiblePanes state when leaving and returning to the same note', async (panes) => {
+	])('should preserve noteVisiblePanes state when leaving and returning to the same note, when default edit state is set to last', async (panes) => {
+		Setting.setValue('editor.mobile.defaultEditState', 'last');
+
 		const firstRender = await setupNoteWithPanes(panes);
 		await expectToBeEditing(panes.includes('editor'));
 		// Navigate away
@@ -480,7 +898,9 @@ describe('screens/Note', () => {
 	it.each([
 		[['viewer']],
 		[['editor']],
-	])('should preserve noteVisiblePanes state when navigating from note 1 to note 2', async (panes) => {
+	])('should preserve noteVisiblePanes state when navigating from note 1 to note 2, when default edit state is set to last', async (panes) => {
+		Setting.setValue('editor.mobile.defaultEditState', 'last');
+
 		// Open note 1
 		await act(async () => {
 			store.dispatch({
@@ -511,6 +931,55 @@ describe('screens/Note', () => {
 		await expectToBeEditing(panes.includes('editor'));
 		expect(store.getState().noteVisiblePanes).toEqual(panes);
 		unmount();
+	});
+
+	// Regression test: when a provisional note has no title, saving derives the
+	// title from the body. The provisional-note branch of saveNoteButton_press
+	// also kicks off a background geolocation update; that callback used to
+	// close over a stale `state.note` (captured before the title was derived)
+	// and wipe the derived title back to empty when it resolved.
+	it('should not clear the auto-derived title when the background geolocation update resolves', async () => {
+		Setting.setValue('trackLocation', true);
+
+		const originalGeolocation = shim.Geolocation;
+		let resolveGeoloc: (v: unknown)=> void = () => {};
+		shim.Geolocation = {
+			currentPosition: () => new Promise(resolve => { resolveGeoloc = resolve; }),
+		};
+
+		let unmount = () => {};
+		try {
+			const noteId = await openNewNote({ title: '', body: '' });
+			store.dispatch({
+				type: 'NOTE_UPDATE_ONE',
+				note: await Note.load(noteId),
+				provisional: true,
+			});
+
+			({ unmount } = render(<WrappedNoteScreen />));
+			const editor = await getMarkdownEditorControl();
+
+			await act(async () => {
+				editor.insertText('Derived from body');
+			});
+
+			await screen.findByDisplayValue('Derived from body');
+
+			await act(async () => {
+				resolveGeoloc({ timestamp: Date.now(), coords: { latitude: 1, longitude: 2, altitude: 3 } });
+			});
+			await waitForNoteToMatch(noteId, { title: 'Derived from body' });
+			await waitFor(async () => {
+				const loaded = await Note.load(noteId);
+				expect(Number(loaded.latitude)).toBe(1);
+			});
+
+			expect(screen.getByDisplayValue('Derived from body')).toBeVisible();
+		} finally {
+			unmount();
+			shim.Geolocation = originalGeolocation;
+			Setting.setValue('trackLocation', false);
+		}
 	});
 
 	it('should set the initial editor cursor location to the specified hash', async () => {

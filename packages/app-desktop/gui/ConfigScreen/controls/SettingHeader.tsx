@@ -7,7 +7,7 @@ interface Props {
 const SettingHeader: React.FC<Props> = props => {
 	return (
 		<div className='setting-header'>
-			<label>{props.text}</label>
+			<span>{props.text}</span>
 		</div>
 	);
 };

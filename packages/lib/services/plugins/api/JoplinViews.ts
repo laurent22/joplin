@@ -1,6 +1,8 @@
 /* eslint-disable multiline-comment-style */
 
+import { JoplinViews as JoplinViewsImplementation } from '../BasePlatformImplementation';
 import Plugin from '../Plugin';
+import { PluginStore } from '../ViewController';
 import JoplinViewsDialogs from './JoplinViewsDialogs';
 import JoplinViewsMenuItems from './JoplinViewsMenuItems';
 import JoplinViewsMenus from './JoplinViewsMenus';
@@ -26,8 +28,7 @@ import JoplinViewsEditors from './JoplinViewsEditor';
  */
 export default class JoplinViews {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private store: any;
+	private store: PluginStore;
 	private plugin: Plugin;
 
 	private panels_: JoplinViewsPanels = null;
@@ -37,11 +38,9 @@ export default class JoplinViews {
 	private dialogs_: JoplinViewsDialogs = null;
 	private editors_: JoplinViewsEditors = null;
 	private noteList_: JoplinViewsNoteList = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private implementation_: any = null;
+	private implementation_: JoplinViewsImplementation = null;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public constructor(implementation: any, plugin: Plugin, store: any) {
+	public constructor(implementation: JoplinViewsImplementation, plugin: Plugin, store: PluginStore) {
 		this.store = store;
 		this.plugin = plugin;
 		this.implementation_ = implementation;

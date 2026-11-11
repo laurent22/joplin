@@ -4,7 +4,7 @@ import InteropService from '../../interop/InteropService';
 import InteropService_Exporter_Custom from '../../interop/InteropService_Exporter_Custom';
 import InteropService_Importer_Custom from '../../interop/InteropService_Importer_Custom';
 import { makeExportModule, makeImportModule } from '../../interop/Module';
-import { ModuleType } from '../../interop/types';
+import { ExportModuleOutputFormat, ModuleType } from '../../interop/types';
 import { ExportModule, ImportModule } from './types';
 
 /**
@@ -26,8 +26,8 @@ export default class JoplinInterop {
 
 	public async registerExportModule(module: ExportModule) {
 		const internalModule = makeExportModule({
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			...module as any,
+			...module,
+			format: module.format as ExportModuleOutputFormat,
 			type: ModuleType.Exporter,
 			fileExtensions: module.fileExtensions ? module.fileExtensions : [],
 		}, () => new InteropService_Exporter_Custom(module));

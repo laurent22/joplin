@@ -49,6 +49,7 @@
 	],
 	"ignoreDeps": [
 		"@babel/core",
+		"node-gyp",
 		// ProseMirror and CodeMirror often need to be deduplicated after updating (e.g. with
 		// yarn dedupe 'prosemirror-*'). Renovate doesn't do this, and, without the deduplication,
 		// multiple instances of some parts of the libraries can be loaded, breaking parts of the editor. 
@@ -76,6 +77,7 @@
 		"prosemirror-state",
 		"prosemirror-view",
 		"prosemirror-tables",
+		"prosemirror-transform",
 		// Does not use semver
 		"@dr.pogodin/react-native-fs",
 		"@fortawesome/fontawesome-svg-core",
@@ -150,6 +152,9 @@
 		"cocoapods",
 		"@react-native/metro-config",
 		"@react-native/babel-preset",
+		"nitrogen",
+		"react-native-nitro-modules",
+		"xcodeproj",
 
 		// We currently don't have automated tests that verify that the
 		// sidemenus work correctly in the mobile app. Because an update to
@@ -159,6 +164,7 @@
 		"react-native-reanimated",
 
 		// Cannot upgrade further due to ESM support
+		"nanoid",
 		"node-fetch",
 		"execa",
 		"open",
@@ -245,6 +251,9 @@
 
 		// We keep using v5 for now. Upgrading to v7 would require updating the icon names.
 		"@fortawesome/fontawesome-free",
+
+		// Don't think we use it - should be removed from fork-sax package
+		"tap",
 	],
 	"packageRules": [
 		// The React Monorepo rule appears to be automatically enabled, but the PR will usually fail

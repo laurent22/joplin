@@ -4,58 +4,21 @@ import CommandService from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 
 import StyledInput from '../../style/StyledInput';
-const styled = require('styled-components').default;
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-type StyleProps = any;
-
-export const Root = styled.div`
-	position: relative;
-	display: flex;
-	width: 100%;
-`;
-
-export const SearchButton = styled.button`
-	position: absolute;
-	right: 0;
-	background: none;
-	border: none;
-	height: 100%;
-	opacity: ${(props: StyleProps) => props.disabled ? 0.5 : 1};
-`;
-
-export const SearchButtonIcon = styled.span`
-	font-size: ${(props: StyleProps) => props.theme.toolbarIconSize}px;
-	color: ${(props: StyleProps) => props.theme.color4};
-`;
-
-export const SearchInput = styled(StyledInput)`
-	padding-right: 20px;
-	flex: 1;
-	width: 10px;
-
-	&::-webkit-search-cancel-button {
-		display: none;
-	}
-`;
 
 interface Props {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	inputRef?: any;
+	inputRef?: React.Ref<HTMLInputElement>;
 	value: string;
 	onChange(event: OnChangeEvent): void;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onFocus?: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onBlur?: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onKeyDown?: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onSearchButtonClick: Function;
+	onFocus?: React.FocusEventHandler<HTMLInputElement>;
+	onBlur?: React.FocusEventHandler<HTMLInputElement>;
+	onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
+	onSearchButtonClick: ()=> void;
 	searchStarted: boolean;
 	placeholder?: string;
 	disabled?: boolean;
+	inputClassName?: string;
 	'aria-controls'?: string;
+	iconButtonTabIndex?: number;
 }
 
 export interface OnChangeEvent {
@@ -66,15 +29,18 @@ export default function(props: Props) {
 	const iconName = !props.searchStarted ? CommandService.instance().iconName('search') : 'fa fa-times';
 	const iconLabel = !props.searchStarted ? _('Search') : _('Clear search');
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onChange = useCallback((event: any) => {
+	const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
 		props.onChange({ value: event.currentTarget.value });
 	}, [props.onChange]);
 
+	const fieldClassName = ['field'];
+	if (props.inputClassName) fieldClassName.push(props.inputClassName);
+
 	return (
-		<Root>
-			<SearchInput
+		<div className='search-input'>
+			<StyledInput
 				ref={props.inputRef}
+				className={fieldClassName.join(' ')}
 				value={props.value}
 				type="search"
 				placeholder={props.placeholder || _('Search...')}
@@ -84,14 +50,19 @@ export default function(props: Props) {
 				onKeyDown={props.onKeyDown}
 				spellCheck={false}
 				disabled={props.disabled}
+				aria-label={props.placeholder || _('Search...')}
 				aria-controls={props['aria-controls']}
 			/>
-			<SearchButton
+			<button
+				type='button'
+				className='button'
 				aria-label={iconLabel}
+				disabled={props.disabled}
+				tabIndex={props.iconButtonTabIndex}
 				onClick={props.onSearchButtonClick}
 			>
-				<SearchButtonIcon className={iconName}/>
-			</SearchButton>
-		</Root>
+				<span className={`icon ${iconName}`}/>
+			</button>
+		</div>
 	);
 }

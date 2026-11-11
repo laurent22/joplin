@@ -3,13 +3,12 @@ import { Decoration } from '@codemirror/view';
 import htmlNodeInfo, { HtmlNodeInfo } from '../../utils/htmlNodeInfo';
 import { SyntaxNodeRef } from '@lezer/common';
 import { EditorSelection, EditorState } from '@codemirror/state';
-
-const hideDecoration = Decoration.replace({});
+import makeHideReplaceExtension from './utils/makeHideReplaceExtension';
 
 type OnRenderTagContent = (openingTag: HtmlNodeInfo)=> Decoration;
 const createHtmlReplacementExtension = (tagName: string, onRenderContent: OnRenderTagContent) => {
 	const isMatchingTag = (info: HtmlNodeInfo) => {
-		return info.tagName().toLowerCase() === tagName;
+		return info.tagName()?.toLowerCase() === tagName;
 	};
 	const isMatchingOpeningTag = (info: HtmlNodeInfo) => {
 		return isMatchingTag(info) && info.opening;
@@ -90,12 +89,16 @@ const createHtmlReplacementExtension = (tagName: string, onRenderContent: OnRend
 		if (info.opening) {
 			const closingTag = findClosingTag(node, state);
 			if (!closingTag) return null;
+			const content = state.sliceDoc(node.to, closingTag.from);
+			if (!content.trim()) return null;
 			return [node.from, closingTag.to];
 		}
 
 		if (info.closing) {
 			const openingTag = findOpeningTag(node, state);
 			if (!openingTag) return null;
+			const content = state.sliceDoc(openingTag.to, node.from);
+			if (!content.trim()) return null;
 			return [openingTag.from, node.to];
 		}
 
@@ -108,12 +111,12 @@ const createHtmlReplacementExtension = (tagName: string, onRenderContent: OnRend
 		return selectionIntersectsRange(state.selection, range[0], range[1]);
 	};
 
-	const hideTags = makeInlineReplaceExtension({
+	const hideTags = makeHideReplaceExtension({
 		getRevealStrategy: (node, state) => {
 			return selectionTouchesTag(node, state);
 		},
-		createDecoration: (node, state) => {
-			return getMatchingTagRange(node, state) ? hideDecoration : null;
+		shouldHide: (node, state) => {
+			return !!getMatchingTagRange(node, state);
 		},
 	});
 

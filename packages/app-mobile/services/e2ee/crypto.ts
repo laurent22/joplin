@@ -1,4 +1,4 @@
-import { Crypto, CryptoBuffer, Digest, CipherAlgorithm, EncryptionResult, EncryptionParameters } from '@joplin/lib/services/e2ee/types';
+import { Crypto, CryptoBuffer, CryptoBufferEncoding, Digest, CipherAlgorithm, EncryptionResult, EncryptionParameters } from '@joplin/lib/services/e2ee/types';
 import QuickCrypto from 'react-native-quick-crypto';
 import type { CipherGCMOptions, CipherGCM, DecipherGCM } from 'crypto';
 import {
@@ -15,7 +15,7 @@ const digestNameMap: DigestNameMap = {
 	[Digest.sha512]: 'sha512',
 };
 
-const pbkdf2Raw = (password: string, salt: CryptoBuffer, iterations: number, keylen: number, digest: Digest): Promise<CryptoBuffer> => {
+const pbkdf2Raw = (password: string, salt: CryptoBuffer | ArrayBuffer, iterations: number, keylen: number, digest: Digest): Promise<CryptoBuffer> => {
 	return new Promise((resolve, reject) => {
 		QuickCrypto.pbkdf2(password, salt, iterations, keylen, digest, (error, result) => {
 			if (error) {
@@ -29,9 +29,9 @@ const pbkdf2Raw = (password: string, salt: CryptoBuffer, iterations: number, key
 
 const encryptRaw = (data: CryptoBuffer, algorithm: CipherAlgorithm, key: CryptoBuffer, iv: CryptoBuffer, authTagLength: number, associatedData: CryptoBuffer) => {
 
-	const cipher = QuickCrypto.createCipheriv(algorithm, key, iv, { authTagLength: authTagLength } as CipherGCMOptions) as CipherGCM;
+	const cipher = QuickCrypto.createCipheriv(algorithm, key, iv, { authTagLength: authTagLength } as CipherGCMOptions) as unknown as CipherGCM;
 
-	cipher.setAAD(associatedData, { plaintextLength: Buffer.byteLength(data) });
+	cipher.setAAD(associatedData, { plaintextLength: data.byteLength });
 
 	const encryptedData = [cipher.update(data), cipher.final()];
 	const authTag = cipher.getAuthTag();
@@ -39,14 +39,15 @@ const encryptRaw = (data: CryptoBuffer, algorithm: CipherAlgorithm, key: CryptoB
 	return Buffer.concat([encryptedData[0], encryptedData[1], authTag]);
 };
 
-const decryptRaw = (data: CryptoBuffer, algorithm: CipherAlgorithm, key: CryptoBuffer, iv: CryptoBuffer, authTagLength: number, associatedData: CryptoBuffer) => {
+const decryptRaw = (data: ArrayBuffer, algorithm: CipherAlgorithm, key: CryptoBuffer, iv: ArrayBuffer, authTagLength: number, associatedData: CryptoBuffer) => {
 
-	const decipher = QuickCrypto.createDecipheriv(algorithm, key, iv, { authTagLength: authTagLength } as CipherGCMOptions) as DecipherGCM;
+	const decipher = QuickCrypto.createDecipheriv(algorithm, key, iv, { authTagLength: authTagLength } as CipherGCMOptions) as unknown as DecipherGCM;
 
-	const authTag = data.subarray(-authTagLength);
-	const encryptedData = data.subarray(0, data.byteLength - authTag.byteLength);
+	const plaintextLength = data.byteLength - authTagLength;
+	const authTag = new Uint8Array(data, plaintextLength, authTagLength);
+	const encryptedData = new Uint8Array(data, 0, plaintextLength);
 	decipher.setAuthTag(authTag);
-	decipher.setAAD(associatedData, { plaintextLength: Buffer.byteLength(data) });
+	decipher.setAAD(associatedData, { plaintextLength: plaintextLength });
 
 	try {
 		return Buffer.concat([decipher.update(encryptedData), decipher.final()]);
@@ -82,7 +83,7 @@ const crypto: Crypto = {
 
 		// Parameters in EncryptionParameters won't appear in result
 		const result: EncryptionResult = {
-			salt: salt.toString('base64'),
+			salt: crypto.bufferToString(salt, 'base64'),
 			iv: '',
 			ct: '', // cipherText
 		};
@@ -94,25 +95,29 @@ const crypto: Crypto = {
 		const key = await pbkdf2Raw(password, salt, encryptionParameters.iterationCount, encryptionParameters.keyLength, encryptionParameters.digestAlgorithm);
 		const encrypted = encryptRaw(data, encryptionParameters.cipherAlgorithm, key, iv, encryptionParameters.authTagLength, encryptionParameters.associatedData);
 
-		result.iv = iv.toString('base64');
-		result.ct = encrypted.toString('base64');
+		result.iv = crypto.bufferToString(iv, 'base64');
+		result.ct = crypto.bufferToString(encrypted, 'base64');
 
 		return result;
 	},
 
 	decrypt: async (password: string, data: EncryptionResult, encryptionParameters: EncryptionParameters) => {
 
-		const salt = Buffer.from(data.salt, 'base64');
-		const iv = Buffer.from(data.iv, 'base64');
+		const salt = QuickCrypto.binaryLikeToArrayBuffer(data.salt, 'base64');
+		const iv = QuickCrypto.binaryLikeToArrayBuffer(data.iv, 'base64');
 
 		const key = await pbkdf2Raw(password, salt, encryptionParameters.iterationCount, encryptionParameters.keyLength, encryptionParameters.digestAlgorithm);
-		const decrypted = decryptRaw(Buffer.from(data.ct, 'base64'), encryptionParameters.cipherAlgorithm, key, iv, encryptionParameters.authTagLength, encryptionParameters.associatedData);
+		const decrypted = decryptRaw(QuickCrypto.binaryLikeToArrayBuffer(data.ct, 'base64'), encryptionParameters.cipherAlgorithm, key, iv, encryptionParameters.authTagLength, encryptionParameters.associatedData);
 
 		return decrypted;
 	},
 
-	encryptString: async (password: string, salt: CryptoBuffer, data: string, encoding: BufferEncoding, encryptionParameters: EncryptionParameters) => {
-		return crypto.encrypt(password, salt, Buffer.from(data, encoding), encryptionParameters);
+	encryptString: async (password: string, salt: CryptoBuffer, data: string, encoding: CryptoBufferEncoding, encryptionParameters: EncryptionParameters) => {
+		return crypto.encrypt(password, salt, new Uint8Array(QuickCrypto.binaryLikeToArrayBuffer(data, encoding)), encryptionParameters);
+	},
+
+	bufferToString: (buffer: CryptoBuffer, encoding: CryptoBufferEncoding) => {
+		return QuickCrypto.ab2str(buffer.buffer, encoding, buffer.byteOffset, buffer.byteOffset + buffer.byteLength);
 	},
 
 	generateNonce: generateNonceShared,

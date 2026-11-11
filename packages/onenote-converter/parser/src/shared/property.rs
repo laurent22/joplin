@@ -169,7 +169,7 @@ impl PropertyValue {
 
     fn parse_vec(reader: Reader) -> Result<PropertyValue> {
         let size = reader.get_u32()?;
-        let data = reader.read(size as usize)?.to_vec();
+        let data = reader.read(size as usize)?;
 
         Ok(PropertyValue::Vec(data))
     }

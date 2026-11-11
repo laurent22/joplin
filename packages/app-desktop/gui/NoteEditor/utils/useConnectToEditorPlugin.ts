@@ -21,6 +21,7 @@ interface Props {
 	setFormNote: OnSetFormNote;
 	scheduleSaveNote: OnScheduleSaveNote;
 	effectiveNoteId: string;
+	noteIsLocked: boolean;
 	shownEditorViewIds: string[];
 }
 
@@ -70,7 +71,7 @@ const useLoadedViewIdsCacheKey = (windowId: string, plugins: PluginStates) => {
 
 // Connects editor plugins to the current editor (handles editor plugin saving, loading).
 const useConnectToEditorPlugin = ({
-	plugins, startupPluginsLoaded, setFormNote, formNote, scheduleSaveNote, effectiveNoteId, activeEditorView, shownEditorViewIds,
+	plugins, startupPluginsLoaded, setFormNote, formNote, scheduleSaveNote, effectiveNoteId, noteIsLocked, activeEditorView, shownEditorViewIds,
 }: Props) => {
 	const windowId = useContext(WindowIdContext);
 	const loadedViewIdCacheKey = useLoadedViewIdsCacheKey(windowId, plugins);
@@ -83,10 +84,11 @@ const useConnectToEditorPlugin = ({
 		await editorPluginHandler.emitActivationCheck({
 			parentWindowId: windowId,
 			noteId: effectiveNoteId,
+			noteIsLocked,
 		});
 		// It's important to re-run the activation check when the loaded view IDs change.
 		// As such, `loadedViewIds` needs to be in the dependencies list:
-	}, [loadedViewIdCacheKey, windowId, effectiveNoteId, editorPluginHandler, startupPluginsLoaded]);
+	}, [loadedViewIdCacheKey, windowId, effectiveNoteId, noteIsLocked, editorPluginHandler, startupPluginsLoaded]);
 
 	useEffect(() => {
 		if (activeEditorView) {

@@ -46,6 +46,7 @@ interface FolderItemProps {
 	folderItem_click: (event: ItemClickEvent)=> void;
 	onFolderToggleClick_: ItemClickListener;
 	shareId: string;
+	isPublished: boolean;
 	selectionState: ItemSelectionState;
 
 	index: number;
@@ -53,10 +54,12 @@ interface FolderItemProps {
 }
 
 function FolderItem(props: FolderItemProps) {
-	const { hasChildren, showFolderIcon, isExpanded, parentId, depth, selectionState, folderId, folderTitle, folderIcon, noteCount, onFolderDragStart_, onFolderDragOver_, onFolderDrop_, itemContextMenu, folderItem_click, onFolderToggleClick_, shareId } = props;
+	const { hasChildren, showFolderIcon, isExpanded, parentId, depth, selectionState, folderId, folderTitle, folderIcon, noteCount, onFolderDragStart_, onFolderDragOver_, onFolderDrop_, itemContextMenu, folderItem_click, onFolderToggleClick_, shareId, isPublished } = props;
 
 	const shareTitle = _('Shared');
 	const shareIcon = shareId && !parentId ? <StyledShareIcon aria-label={shareTitle} title={shareTitle} className="fas fa-share-alt"/> : null;
+	const publishedTitle = _('Published');
+	const publishedIcon = isPublished ? <StyledShareIcon aria-label={publishedTitle} title={publishedTitle} className="fas fa-globe"/> : null;
 	const draggable = ![getTrashFolderId(), Folder.conflictFolderId()].includes(folderId);
 
 	const doRenderFolderIcon = () => {
@@ -98,6 +101,7 @@ function FolderItem(props: FolderItemProps) {
 				isConflictFolder={folderId === Folder.conflictFolderId()}
 				selected={selectionState.selected}
 				shareId={shareId}
+				isPublished={isPublished}
 				data-folder-id={folderId}
 				onDoubleClick={onFolderToggleClick_}
 
@@ -108,7 +112,7 @@ function FolderItem(props: FolderItemProps) {
 				}}
 			>
 				{doRenderFolderIcon()}<StyledSpanFix className="title">{folderTitle}</StyledSpanFix>
-				{shareIcon} <NoteCount count={noteCount}/>
+				{publishedIcon}{shareIcon} <NoteCount count={noteCount}/>
 			</StyledListItemAnchor>
 			<ExpandLink
 				// The ExpandLink is included after the title so that the screen reader reads the

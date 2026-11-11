@@ -1,3 +1,4 @@
+import { RendererTheme } from './types';
 
 // TODO: copied from string-utils
 function formatCssSize(v: string | number): string {
@@ -74,8 +75,7 @@ export const whiteBackgroundNoteStyle = () => {
 	`;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export default function(theme: any, options: Options = null) {
+export default function(theme: RendererTheme, options: Options = null) {
 	options = {
 		contentMaxWidth: 0,
 		...options,

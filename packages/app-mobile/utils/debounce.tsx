@@ -1,11 +1,9 @@
 import PoorManIntervals from '@joplin/lib/PoorManIntervals';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function debounce(func: (...args: any[])=> void, timeout: number) {
+function debounce<Args extends unknown[]>(func: (...args: Args)=> void, timeout: number) {
 	let timer: number;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	return (...args: any[]) => {
+	return (...args: Args) => {
 		PoorManIntervals.clearTimeout(timer);
 		timer = PoorManIntervals.setTimeout(() => { func.apply(this, args); }, timeout);
 	};

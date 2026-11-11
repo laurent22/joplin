@@ -1,4 +1,5 @@
-import Plugin from '../Plugin';
+import Plugin, { MessageListenerCallback } from '../Plugin';
+import { PluginStore } from '../ViewController';
 import { ActivationCheckCallback, ViewHandle, UpdateCallback, EditorPluginCallbacks } from './types';
 interface SaveNoteOptions {
     /**
@@ -55,7 +56,7 @@ export default class JoplinViewsEditors {
     private plugin;
     private activationCheckHandlers_;
     private unhandledActivationCheck_;
-    constructor(plugin: Plugin, store: any);
+    constructor(plugin: Plugin, store: PluginStore);
     private controller;
     /**
      * Registers a new editor plugin. Joplin will call the provided callback to create new editor views
@@ -79,7 +80,7 @@ export default class JoplinViewsEditors {
     /**
      * See [[JoplinViewPanels]]
      */
-    onMessage(handle: ViewHandle, callback: Function): Promise<void>;
+    onMessage(handle: ViewHandle, callback: MessageListenerCallback): Promise<void>;
     /**
      * Saves the content of the editor, without calling `onUpdate` for editors in the same window.
      */

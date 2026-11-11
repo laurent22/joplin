@@ -1,5 +1,8 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export default (command: string, options: any = null) => {
+interface SplitCommandStringOptions {
+	handleEscape?: boolean;
+}
+
+export default (command: string, options: SplitCommandStringOptions | null = null) => {
 	options = options || {};
 	if (!('handleEscape' in options)) {
 		options.handleEscape = true;

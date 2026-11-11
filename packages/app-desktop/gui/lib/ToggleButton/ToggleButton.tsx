@@ -6,8 +6,7 @@ const Color = require('color');
 
 interface Props {
 	value: boolean;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onToggle: Function;
+	onToggle: (value: boolean)=> void;
 	themeId: number;
 	'aria-label': string;
 }

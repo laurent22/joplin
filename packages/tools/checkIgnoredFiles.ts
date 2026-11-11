@@ -9,20 +9,20 @@ const main = async () => {
 
 	const previousContent = {
 		'.gitignore': await readFile('.gitignore', 'utf8'),
-		'.eslintignore': await readFile('.eslintignore', 'utf8'),
+		'.ignore.eslint': await readFile('.ignore.eslint', 'utf8'),
 	};
 
 	await execCommand('yarn updateIgnored', { quiet: true });
 
 	const newContent = {
 		'.gitignore': await readFile('.gitignore', 'utf8'),
-		'.eslintignore': await readFile('.eslintignore', 'utf8'),
+		'.ignore.eslint': await readFile('.ignore.eslint', 'utf8'),
 	};
 
-	if (newContent['.gitignore'] !== previousContent['.gitignore'] || newContent['.eslintignore'] !== previousContent['.eslintignore']) {
+	if (newContent['.gitignore'] !== previousContent['.gitignore'] || newContent['.ignore.eslint'] !== previousContent['.ignore.eslint']) {
 		await writeFile('.gitignore', previousContent['.gitignore'], 'utf8');
-		await writeFile('.eslintignore', previousContent['.eslintignore'], 'utf8');
-		throw new Error(`.gitignore or .eslintignore would be modified - run \`cd "${toSystemSlashes(rootDir)}" && yarn updateIgnored\``);
+		await writeFile('.ignore.eslint', previousContent['.ignore.eslint'], 'utf8');
+		throw new Error(`.gitignore or .ignore.eslint would be modified - run \`cd "${toSystemSlashes(rootDir)}" && yarn updateIgnored\``);
 	}
 };
 

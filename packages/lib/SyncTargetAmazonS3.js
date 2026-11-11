@@ -6,6 +6,26 @@ const Synchronizer = require('./Synchronizer').default;
 const { FileApiDriverAmazonS3 } = require('./file-api-driver-amazon-s3.js');
 const { S3Client, HeadBucketCommand } = require('@aws-sdk/client-s3');
 
+const newS3Client = options => {
+	const api = new S3Client(options);
+	// Browser HEAD responses may have a null body, which AWS SDK 3.296.0 does not handle.
+	api.middlewareStack.addRelativeTo(
+		next => async args => {
+			const { response } = await next(args);
+			if (response.body === null || response.body === undefined) response.body = new Uint8Array();
+			return { response };
+		},
+		{
+			name: 'nullFetchResponseBodyMiddleware',
+			toMiddleware: 'deserializerMiddleware',
+			relation: 'after',
+			step: 'deserialize',
+			override: true,
+		},
+	);
+	return api;
+};
+
 class SyncTargetAmazonS3 extends BaseSyncTarget {
 	static id() {
 		return 8;
@@ -63,7 +83,7 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 	api() {
 		if (this.api_) return this.api_;
 
-		this.api_ = new S3Client(this.s3AuthParameters());
+		this.api_ = newS3Client(this.s3AuthParameters());
 
 		// There is a bug with auto skew correction in aws-sdk-js-v3
 		// and this attempts to remove the skew correction for all calls.
@@ -91,7 +111,7 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 			ignoreTlsErrors: options.ignoreTlsErrors(),
 		};
 
-		const api = new S3Client(apiOptions);
+		const api = newS3Client(apiOptions);
 		const driver = new FileApiDriverAmazonS3(api, SyncTargetAmazonS3.s3BucketName());
 		const fileApi = new FileApi('', driver);
 		fileApi.setSyncTargetId(syncTargetId);

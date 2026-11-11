@@ -149,6 +149,22 @@ const GRAVITY_ACCEL = 9.8;
 const gravityAccel = 9.8;
 ```
 
+### Prefer positive names for booleans
+
+When possible, use positive names for booleans to avoid double negatives.
+
+**BAD:**
+```ts
+const isHidden = true;
+const isDisabled = true;
+```
+
+**Good:**
+```ts
+const isShown = true;
+const isEnabled = true;
+```
+
 ### Declare variables just before their usage
 
 **BAD:**
@@ -407,6 +423,22 @@ We don't use built-in database enums because they make migrations difficult. The
 ### Prefer using `tinyint(1)` to `bool`
 Booleans are not a distinct types in many common DBMS, including SQLite (which we use) and MySQL, so prefer using a `tinyint(1)` instead.
 
+### Use single quotes for SQLite string literals
+
+The web app's SQLite build disallows double quoted strings. Use single quotes for string literals to follow the SQL standard and support the web app.
+
+**Bad:**
+```tsx
+db().selectAll('SELECT * FROM folders WHERE id = "627eaaed99d2ad554de017786771c08e"')
+```
+
+**Good:**
+```tsx
+db().selectAll('SELECT * FROM folders WHERE id = \'627eaaed99d2ad554de017786771c08e\'')
+```
+
+**See also:** [SQLite quirks: Double quoted string literals](https://www.sqlite.org/quirks.html#double_quoted_string_literals_are_accepted)
+
 ## Web requests and API
 
 ### Use `snake_case`
@@ -479,6 +511,30 @@ await service.saveObject('row 2');
 // Now you can test the real implementation
 const rows = await service.fetchAll();
 // ...
+```
+
+## GitHub Actions
+
+### Avoid `${{ }}` within `run` blocks
+
+When used incorrectly, `${{ }}` within `run` blocks can allow script injection within GitHub actions. To make actions easier to audit, prefer passing arguments to `run` blocks as environment variables.
+
+See also: [GitHub Security Lab: Handling untrusted input](https://securitylab.github.com/resources/github-actions-untrusted-input/#remediation)
+
+**Bad:**
+```yml
+    - name: Print PR title
+    run: |
+        echo "Title: ${{ github.event.pull_request.title }}"
+```
+
+**Good:**
+```yml
+    - name: Print PR title
+    env:
+        PULL_REQUEST_TITLE: ${{ github.event.pull_request.title }}
+    run: |
+        echo "Title: $PULL_REQUEST_TITLE"
 ```
 
 ## See also

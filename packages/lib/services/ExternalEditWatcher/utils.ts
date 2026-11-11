@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 
 import { splitCommandString } from '@joplin/utils';
-import { spawn } from 'child_process';
+import { spawn, SpawnOptions } from 'child_process';
 import Logger from '@joplin/utils/Logger';
 import Setting from '../../models/Setting';
 import { fileExtension } from '../../path-utils';
@@ -9,8 +9,7 @@ import shim from '../../shim';
 
 const logger = Logger.create('ExternalEditWatcher/utils');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const spawnCommand = async (path: string, args: string[], options: any) => {
+const spawnCommand = async (path: string, args: string[], options: SpawnOptions) => {
 	return new Promise((resolve, reject) => {
 		// App bundles need to be opened using the `open` command.
 		// Additional args can be specified after --args, and the
@@ -29,8 +28,7 @@ const spawnCommand = async (path: string, args: string[], options: any) => {
 			path = 'open';
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const wrapError = (error: any) => {
+		const wrapError = (error: Error | null) => {
 			if (!error) return error;
 			const msg = error.message ? [error.message] : [];
 			msg.push(`Command was: "${path}" ${args.join(' ')}`);
@@ -49,8 +47,7 @@ const spawnCommand = async (path: string, args: string[], options: any) => {
 				}
 			}, 100);
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			subProcess.on('error', (error: any) => {
+			subProcess.on('error', (error: Error) => {
 				shim.clearInterval(iid);
 				reject(wrapError(error));
 			});
@@ -74,8 +71,11 @@ const textEditorCommand = () => {
 	};
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const openFileWithExternalEditor = async (filePath: string, bridge: any) => {
+interface ExternalBridge {
+	openItem(filePath: string): void;
+}
+
+export const openFileWithExternalEditor = async (filePath: string, bridge: ExternalBridge) => {
 	const cmd = textEditorCommand();
 	if (!cmd) {
 		bridge.openItem(filePath);

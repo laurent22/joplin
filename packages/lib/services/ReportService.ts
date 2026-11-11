@@ -8,7 +8,7 @@ import DecryptionWorker from './DecryptionWorker';
 import ResourceFetcher from './ResourceFetcher';
 import Resource from '../models/Resource';
 import { _, _n } from '../locale';
-const { toTitleCase } = require('../string-utils.js');
+import { toTitleCase } from '../string-utils';
 
 enum CanRetryType {
 	E2EE = 'e2ee',
@@ -135,9 +135,10 @@ export default class ReportService {
 		}
 
 		const conflictedCount = await Note.conflictedCount();
+		const syncIneligibleConflictedCount = await Note.syncIneligibleConflictedCount();
 
 		output.total = {
-			total: itemCount - conflictedCount,
+			total: itemCount - syncIneligibleConflictedCount,
 			synced: syncedCount,
 		};
 
@@ -146,10 +147,10 @@ export default class ReportService {
 		};
 
 		output.conflicted = {
-			total: await Note.conflictedCount(),
+			total: conflictedCount,
 		};
 
-		output.items['Note'].total -= output.conflicted.total;
+		output.items['Note'].total -= syncIneligibleConflictedCount;
 
 		return output;
 	}

@@ -23,19 +23,22 @@ const urlUtils = require('../../../urlUtils.js');
 import * as ArrayUtils from '../../../ArrayUtils';
 import Logger from '@joplin/utils/Logger';
 const { mimeTypeFromHeaders } = require('../../../net-utils');
-const { fileExtension, safeFileExtension, safeFilename, filename } = require('../../../path-utils');
-const { MarkupToHtml } = require('@joplin/renderer');
-const { ErrorNotFound } = require('../utils/errors');
+import { fileExtension, safeFileExtension, safeFilename, filename } from '../../../path-utils';
+import { MarkupToHtml } from '@joplin/renderer';
+const { ErrorNotFound, ErrorForbidden } = require('../utils/errors');
+import isNoteLockEnabled from '../../noteLock/isNoteLockEnabled';
+import NoteLockNote from '../../noteLock/NoteLockNote';
+import lockedNoteBodies from '../utils/lockedNoteBodies';
 import { fileUriToPath } from '@joplin/utils/url';
 import { NoteEntity, ResourceEntity } from '../../database/types';
 import { DownloadController } from '../../../downloadController';
 import { FetchBlobOptions } from '../../../types';
 import RevisionService from '../../RevisionService';
+import compactCss from '../../../utils/compactCss';
 
 const logger = Logger.create('routes/notes');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-let htmlToMdParser_: any = null;
+let htmlToMdParser_: HtmlToMd = null;
 
 function htmlToMdParser() {
 	if (htmlToMdParser_) return htmlToMdParser_;
@@ -43,9 +46,22 @@ function htmlToMdParser() {
 	return htmlToMdParser_;
 }
 
+interface Stylesheet {
+	type: 'text' | 'url';
+	value: string;
+}
+
+interface ImageSize {
+	naturalWidth: number;
+	naturalHeight: number;
+	width: number;
+	height: number;
+}
+
+export type ImageSizes = Record<string, ImageSize[]>;
+
 type RequestNote = {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	id?: any;
+	id?: string;
 	parent_id?: string;
 	title: string;
 	body?: string;
@@ -64,11 +80,9 @@ type RequestNote = {
 	base_url?: string;
 	convert_to: string;
 	source?: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	anchor_names?: any[];
-	image_sizes?: object;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	stylesheets: any;
+	anchor_names?: string[];
+	image_sizes?: ImageSizes;
+	stylesheets: Stylesheet[];
 };
 
 interface FetchOptions extends FetchBlobOptions {
@@ -88,9 +102,8 @@ export interface ResourceFromPath extends DownloadedMediaFile {
 }
 
 
-async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const output: any = {
+async function requestNoteToNote(requestNote: RequestNote, fetchOptions?: FetchOptions): Promise<NoteEntity> {
+	const output: NoteEntity = {
 		title: requestNote.title ? requestNote.title : '',
 		body: requestNote.body ? requestNote.body : '',
 	};
@@ -101,7 +114,7 @@ async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> 
 
 	if (requestNote.body_html) {
 		if (requestNote.convert_to === 'html') {
-			const style = await buildNoteStyleSheet(requestNote.stylesheets);
+			const style = await buildNoteStyleSheet(requestNote.stylesheets, fetchOptions);
 
 			const minifyOptions = {
 				// Remove all spaces and, especially, newlines from tag attributes, as that would
@@ -110,16 +123,15 @@ async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> 
 				// Need to remove all whitespaces because whitespace at a beginning of a line
 				// means a code block in Markdown.
 				collapseWhitespace: true,
-				minifyCSS: true,
+				// Also for the CSS, but without the minifier's own, which drops CSS it does not know about and is slow on
+				// some inputs
+				minifyCSS: compactCss,
 				maxLineLength: 300,
+				// Only needed for templates such as PHP, and looking for them is slow on some inputs
+				ignoreCustomFragments: [] as RegExp[],
 			};
 
-			const uglifycss = require('uglifycss');
-			const styleString = uglifycss.processString(style.join('\n'), {
-				// Need to set a max length because Ace Editor takes forever
-				// to display notes with long lines.
-				maxLineLen: 200,
-			});
+			const styleString = compactCss(style.join('\n'));
 
 			const styleTag = style.length ? `<style>${styleString}</style>` + '\n' : '';
 			let minifiedHtml = '';
@@ -133,7 +145,7 @@ async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> 
 				minifiedHtml = requestNote.body_html;
 			}
 			output.body = styleTag + minifiedHtml;
-			output.body = htmlUtils.prependBaseUrl(output.body, baseUrl);
+			if (baseUrl) output.body = htmlUtils.prependBaseUrl(output.body, baseUrl);
 			output.markup_language = MarkupToHtml.MARKUP_LANGUAGE_HTML;
 		} else {
 			// Convert to Markdown
@@ -175,8 +187,7 @@ async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> 
 	return output;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function buildNoteStyleSheet(stylesheets: any[]) {
+async function buildNoteStyleSheet(stylesheets: Stylesheet[], fetchOptions?: FetchOptions) {
 	if (!stylesheets) return [];
 
 	const output = [];
@@ -187,7 +198,7 @@ async function buildNoteStyleSheet(stylesheets: any[]) {
 		} else if (stylesheet.type === 'url') {
 			try {
 				const tempPath = `${Setting.value('tempDir')}/${md5(`${Math.random()}_${Date.now()}`)}.css`;
-				await shim.fetchBlob(stylesheet.value, { path: tempPath, maxRetry: 1 });
+				await shim.fetchBlob(stylesheet.value, { path: tempPath, maxRetry: 1, ...fetchOptions });
 				const text = await shim.fsDriver().readFile(tempPath);
 				output.push(text);
 				await shim.fsDriver().remove(tempPath);
@@ -202,8 +213,7 @@ async function buildNoteStyleSheet(stylesheets: any[]) {
 	return output;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function tryToGuessExtFromMimeType(response: any, mediaPath: string) {
+async function tryToGuessExtFromMimeType(response: { headers: Record<string, string | string[]> }, mediaPath: string) {
 	const mimeType = mimeTypeFromHeaders(response.headers);
 	if (!mimeType) return mediaPath;
 
@@ -279,7 +289,10 @@ export async function downloadMediaFile(url: string, fetchOptions?: FetchOptions
 		}
 		return newMediaPath ?? mediaPath;
 	} catch (error) {
-		logger.warn(`Cannot download image at ${url}`, error);
+		// Clipped pages regularly contain images that cannot be downloaded - dead tracking
+		// pixels, expired links, etc. There's nothing to be done about it, and the note is
+		// still created without them, so this is not logged as a warning.
+		logger.info(`Cannot download image at ${url}`, error);
 		return '';
 	}
 }
@@ -320,7 +333,7 @@ export async function createResourcesFromPaths(mediaFiles: DownloadedMediaFile[]
 			const resource = await shim.createResourceFromPath(mediaFile.path);
 			return { ...mediaFile, resource };
 		} catch (error) {
-			logger.warn(`Cannot create resource for ${mediaFile.originalUrl}`, error);
+			logger.info(`Cannot create resource for ${mediaFile.originalUrl}`, error);
 			return { ...mediaFile, resource: null };
 		}
 	};
@@ -340,10 +353,8 @@ async function removeTempFiles(urls: ResourceFromPath[]) {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function replaceUrlsByResources(markupLanguage: number, md: string, urls: ResourceFromPath[], imageSizes: any) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const imageSizesIndexes: any = {};
+function replaceUrlsByResources(markupLanguage: number, md: string, urls: ResourceFromPath[], imageSizes: ImageSizes) {
+	const imageSizesIndexes: Record<string, number> = {};
 
 	if (markupLanguage === MarkupToHtml.MARKUP_LANGUAGE_HTML) {
 		return htmlUtils.replaceMediaUrls(md, (url: string) => {
@@ -362,8 +373,8 @@ function replaceUrlsByResources(markupLanguage: number, md: string, urls: Resour
 		//
 		//     /(!?\[.*?\]\()([^\s\)]+)(.*?\))/g
 		//
-		// eslint-disable-next-line no-useless-escape, @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		return md.replace(/(!?\[.*?\]\()([^\s\)]+)(.*?\))/g, (_match: any, before: string, url: string, after: string) => {
+		// eslint-disable-next-line no-useless-escape -- Old code before rule was applied
+		return md.replace(/(!?\[.*?\]\()([^\s\)]+)(.*?\))/g, (_match: string, before: string, url: string, after: string) => {
 			let type = 'link';
 			if (before.startsWith('[embedded_pdf]')) {
 				type = 'pdf';
@@ -410,15 +421,13 @@ export function extractMediaUrls(markupLanguage: number, text: string): string[]
 }
 
 // Note must have been saved first
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function attachImageFromDataUrl(note: any, imageDataUrl: string, cropRect: any) {
+async function attachImageFromDataUrl(note: NoteEntity, imageDataUrl: string, cropRect: { x: number; y: number; width: number; height: number } | null) {
 	const tempDir = Setting.value('tempDir');
 	const mime = mimeUtils.fromDataUrl(imageDataUrl);
 	let ext = mimeUtils.toFileExtension(mime) || '';
 	if (ext) ext = `.${ext}`;
 	const tempFilePath = `${tempDir}/${md5(`${Math.random()}_${Date.now()}`)}${ext}`;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const imageConvOptions: any = {};
+	const imageConvOptions: { cropRect?: { x: number; y: number; width: number; height: number } } = {};
 	if (cropRect) imageConvOptions.cropRect = cropRect;
 	await shim.imageFromDataUrl(imageDataUrl, tempFilePath, imageConvOptions);
 	return await shim.attachFileToNote(note, tempFilePath);
@@ -427,12 +436,11 @@ async function attachImageFromDataUrl(note: any, imageDataUrl: string, cropRect:
 export const extractNoteFromHTML = async (
 	requestNote: RequestNote,
 	requestId: string,
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	imageSizes: any,
+	imageSizes: ImageSizes,
 	fetchOptions?: FetchOptions,
 	allowedProtocols?: string[],
 ) => {
-	const note = await requestNoteToNote(requestNote);
+	const note = await requestNoteToNote(requestNote, fetchOptions);
 
 	const mediaUrls = extractMediaUrls(note.markup_language, note.body);
 
@@ -469,6 +477,8 @@ export default async function(request: Request, id: string = null, link: string 
 		} else if (link && link === 'resources') {
 			const note = await Note.load(id);
 			if (!note) throw new ErrorNotFound();
+			// linkedResourceIds parses the body, which is ciphertext for a locked note.
+			if (isNoteLockEnabled() && NoteLockNote.isLocked(note)) throw new ErrorForbidden('The resources of a locked note cannot be listed through the API');
 			const resourceIds = await Note.linkedResourceIds(note.body);
 			const output = [];
 			const loadOptions = defaultLoadOptions(request, BaseModel.TYPE_RESOURCE);
@@ -483,7 +493,10 @@ export default async function(request: Request, id: string = null, link: string 
 		const sql: string[] = [];
 		if (request.query.include_deleted !== '1') sql.push('deleted_time = 0');
 		if (request.query.include_conflicts !== '1') sql.push('is_conflict = 0');
-		return defaultAction(BaseModel.TYPE_NOTE, request, id, link, null, { sql: sql.join(' AND ') });
+		const lockedBodies = isNoteLockEnabled() ? lockedNoteBodies(request, ModelType.Note) : null;
+		const result = await defaultAction(BaseModel.TYPE_NOTE, lockedBodies?.request ?? request, id, link, null, { sql: sql.join(' AND ') });
+		if (!lockedBodies) return result;
+		return id ? lockedBodies.replace(result) : lockedBodies.replacePage(result);
 	}
 
 	if (request.method === RequestMethod.POST) {
@@ -537,6 +550,13 @@ export default async function(request: Request, id: string = null, link: string 
 		const timestamp = Date.now();
 
 		const newProps = request.bodyJson(readonlyProperties('PUT'));
+
+		if (isNoteLockEnabled()) {
+			// Compare through the model's own coercion: Number() reads "1foo" as NaN, but the save path stores it as 1.
+			if ('is_locked' in newProps && !!Note.filter({ is_locked: newProps.is_locked }).is_locked !== !!note.is_locked) throw new ErrorForbidden('The note lock state cannot be changed through the API');
+			if (NoteLockNote.isLocked(note) && 'body' in newProps) throw new ErrorForbidden('The body of a locked note cannot be modified through the API');
+		}
+
 		if (!('user_updated_time' in newProps)) newProps.user_updated_time = timestamp;
 
 		let newNote = {
@@ -549,12 +569,20 @@ export default async function(request: Request, id: string = null, link: string 
 
 		BaseModel.dispatch({
 			type: 'EDITOR_NOTE_NEEDS_RELOAD',
+			noteId: id,
 		});
 
 		const requestNote = JSON.parse(request.body);
 		if (requestNote.tags || requestNote.tags === '') {
 			const tagTitles = requestNote.tags.split(',');
 			await Tag.setNoteTagsByTitles(id, tagTitles);
+		}
+
+		if (isNoteLockEnabled() && NoteLockNote.isLocked(newNote)) {
+			// The response would otherwise return the ciphertext body that GET refuses to serve. Copied
+			// rather than deleted in place, since Note.save has already dispatched this object.
+			newNote = { ...newNote };
+			delete newNote.body;
 		}
 
 		return newNote;

@@ -1,4 +1,4 @@
-const BaseCommand = require('./base-command').default;
+import BaseCommand from './base-command';
 import { reg } from '@joplin/lib/registry';
 import Note from '@joplin/lib/models/Note';
 import uuid from '@joplin/lib/uuid';
@@ -6,14 +6,12 @@ import populateDatabase from '@joplin/lib/services/debug/populateDatabase';
 import { readCredentialFile } from '@joplin/lib/utils/credentialFiles';
 import JoplinServerApi, { Session } from '@joplin/lib/JoplinServerApi';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function randomElement(array: any[]): any {
+function randomElement<T>(array: T[]): T | null {
 	if (!array.length) return null;
 	return array[Math.floor(Math.random() * array.length)];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function itemCount(args: any) {
+function itemCount(args: { arg0: string }) {
 	const count = Number(args.arg0);
 	if (!count || isNaN(count)) throw new Error('Note count must be specified');
 	return count;
@@ -32,8 +30,7 @@ class Command extends BaseCommand {
 		return false;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public options(): any[] {
+	public options(): [string, string][] {
 		return [
 			['--folder-count <count>', 'Folders to create'],
 			['--note-count <count>', 'Notes to create'],
@@ -43,8 +40,7 @@ class Command extends BaseCommand {
 		];
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async action(args: any) {
+	public async action(args: { command: string; arg0: string; options: { 'folder-count'?: number; 'note-count'?: number; 'tag-count'?: number; 'tags-per-note'?: number; silent?: number } }) {
 		const { command, options } = args;
 
 		if (command === 'populate') {
@@ -57,8 +53,7 @@ class Command extends BaseCommand {
 			});
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const promises: any[] = [];
+		const promises: Promise<unknown>[] = [];
 
 		if (command === 'createRandomNotes') {
 			const noteCount = itemCount(args);

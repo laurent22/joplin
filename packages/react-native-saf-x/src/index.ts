@@ -1,30 +1,23 @@
-import { NativeModules, Platform } from 'react-native';
+import { NativeModules } from 'react-native';
 
 const LINKING_ERROR =
-	`The package 'react-native-saf-x' doesn't seem to be linked. Make sure: \n\n${
-		Platform.select({ ios: '- You have run \'pod install\'\n', default: '' })
-	}- You rebuilt the app after installing the package\n` +
+	'The package \'react-native-saf-x\' doesn\'t seem to be linked. Make sure: \n' +
+	'- You aren\'t attempting to use the package on iOS or web\n' +
+	'- You rebuilt the app after installing the package\n' +
 	'- You are not using Expo managed workflow\n';
 
-let SafX: SafxInterface;
-
-if (Platform.OS === 'android') {
-	SafX = (
-		NativeModules.SafX
-			? NativeModules.SafX
-			: new Proxy(
-				{},
-				{
-					get() {
-						throw new Error(LINKING_ERROR);
-					},
+const SafX = (
+	NativeModules.SafX
+		? NativeModules.SafX
+		: new Proxy(
+			{},
+			{
+				get() {
+					throw new Error(LINKING_ERROR);
 				},
-			)
-	) as SafxInterface;
-} else {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	SafX = {} as any;
-}
+			},
+		)
+) as SafxInterface;
 
 export type Encoding = 'utf8' | 'base64' | 'ascii';
 
@@ -51,6 +44,15 @@ interface SafxInterface {
 		mimeType?: string,
 		append?: boolean,
 	): Promise<void>;
+	writeFileInDirectory(
+		directoryUri: string,
+		fileName: string,
+		data: string,
+		encoding?: Encoding,
+		mimeType?: string,
+		replaceIfDestinationExists?: boolean,
+	): Promise<DocumentFileDetail>;
+	copyFileToDirectory(sourceUri: string, directoryUri: string, fileName: string, replaceIfDestinationExists?: boolean): Promise<DocumentFileDetail>;
 	createFile(uriString: string, mimeType?: string): Promise<DocumentFileDetail>;
 	unlink(uriString: string): Promise<boolean>;
 	mkdir(uriString: string): Promise<DocumentFileDetail>;
@@ -69,6 +71,7 @@ interface SafxInterface {
 
 export type DocumentFileDetail = {
 	uri: string;
+	documentUri?: string;
 	name: string;
 	type: 'directory' | 'file';
 	lastModified: number;
@@ -152,6 +155,21 @@ export function writeFile(
 	if (!options) options = {};
 	const { encoding, append, mimeType } = options;
 	return SafX.writeFile(uriString, data, encoding, mimeType, !!append);
+}
+
+export function writeFileInDirectory(
+	directoryUri: string,
+	fileName: string,
+	data: string,
+	options?: Pick<FileOperationOptions, 'encoding' | 'mimeType'> & FileTransferOptions,
+) {
+	if (!options) options = {};
+	const { encoding, mimeType, replaceIfDestinationExists = false } = options;
+	return SafX.writeFileInDirectory(directoryUri, fileName, data, encoding, mimeType, replaceIfDestinationExists);
+}
+
+export function copyFileToDirectory(sourceUri: string, directoryUri: string, fileName: string, options: FileTransferOptions = {}) {
+	return SafX.copyFileToDirectory(sourceUri, directoryUri, fileName, !!options.replaceIfDestinationExists);
 }
 
 // Creates an empty file at given uri.
@@ -244,6 +262,8 @@ export default {
 	exists,
 	readFile,
 	writeFile,
+	writeFileInDirectory,
+	copyFileToDirectory,
 	createFile,
 	unlink,
 	mkdir,

@@ -3,8 +3,9 @@
 import eventManager, { EventName, WindowCloseEvent, WindowOpenEvent } from '../../../eventManager';
 import Setting from '../../../models/Setting';
 import { defaultWindowId } from '../../../reducer';
-import Plugin from '../Plugin';
+import Plugin, { MessageListenerCallback } from '../Plugin';
 import createViewHandle from '../utils/createViewHandle';
+import { PluginStore } from '../ViewController';
 import WebviewController, { ContainerType } from '../WebviewController';
 import { ActivationCheckCallback, EditorActivationCheckFilterObject, FilterHandler, ViewHandle, UpdateCallback, EditorPluginCallbacks } from './types';
 
@@ -63,14 +64,12 @@ type ActivationCheckSlice = Pick<EditorActivationCheckFilterObject, 'effectiveNo
  */
 export default class JoplinViewsEditors {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private store: any;
+	private store: PluginStore;
 	private plugin: Plugin;
 	private activationCheckHandlers_: Record<string, FilterHandler<EditorActivationCheckFilterObject>> = {};
 	private unhandledActivationCheck_: Map<string, ActivationCheckSlice> = new Map();
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public constructor(plugin: Plugin, store: any) {
+	public constructor(plugin: Plugin, store: PluginStore) {
 		this.store = store;
 		this.plugin = plugin;
 	}
@@ -198,8 +197,7 @@ export default class JoplinViewsEditors {
 	/**
 	 * See [[JoplinViewPanels]]
 	 */
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public async onMessage(handle: ViewHandle, callback: Function): Promise<void> {
+	public async onMessage(handle: ViewHandle, callback: MessageListenerCallback): Promise<void> {
 		return this.controller(handle).onMessage(callback);
 	}
 
@@ -262,7 +260,7 @@ export default class JoplinViewsEditors {
 	/**
 	 * See [[JoplinViewPanels]]
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: messages exchanged with webview can be of any serialisable type
 	public postMessage(handle: ViewHandle, message: any): void {
 		return this.controller(handle).postMessage(message);
 	}

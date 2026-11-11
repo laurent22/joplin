@@ -1,13 +1,22 @@
 import time from '../../time';
 import { allNotesFolders, localNotesFoldersSameAsRemote } from '../../testing/test-utils-synchronizer';
-import { synchronizerStart, setupDatabaseAndSynchronizer, sleep, switchClient, syncTargetId, loadEncryptionMasterKey, decryptionWorker } from '../../testing/test-utils';
+import { synchronizerStart, setupDatabaseAndSynchronizer, sleep, switchClient, syncTargetId, loadEncryptionMasterKey, decryptionWorker, fileApi, withLogLevel } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import BaseItem from '../../models/BaseItem';
+import Setting from '../../models/Setting';
 import { setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 import { NoteEntity } from '../database/types';
+import ItemChange from '../../models/ItemChange';
+import { LogLevel } from '@joplin/utils/Logger';
 
 describe('Synchronizer.conflicts', () => {
+	const createConflictNote = async (note: Partial<NoteEntity>) => {
+		const originalNote = await Note.save(note);
+		const conflictNote = await Note.createConflictNote(originalNote, ItemChange.SOURCE_SYNC);
+		await Note.delete(originalNote.id, { trackDeleted: false });
+		return conflictNote;
+	};
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
@@ -55,16 +64,83 @@ describe('Synchronizer.conflicts', () => {
 		for (const n in conflictedNote) {
 			if (!conflictedNote.hasOwnProperty(n)) continue;
 			if (n === 'id' || n === 'is_conflict' || n === 'conflict_original_id') continue;
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			expect(conflictedNote[n]).toBe((note2conf as any)[n]);
+			expect((conflictedNote as Record<string, unknown>)[n]).toBe((note2conf as Record<string, unknown>)[n]);
 		}
 
 		const noteUpdatedFromRemote = await Note.load(note1.id);
 		for (const n in noteUpdatedFromRemote) {
 			if (!noteUpdatedFromRemote.hasOwnProperty(n)) continue;
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			expect((noteUpdatedFromRemote as any)[n]).toBe((note2 as any)[n]);
+			expect((noteUpdatedFromRemote as Record<string, unknown>)[n]).toBe((note2 as Record<string, unknown>)[n]);
 		}
+	}));
+
+	it.each([
+		['missing', false, ''],
+		['empty', false, 'is_locked: \n'],
+		['empty', true, 'is_locked: \n'],
+	])('should discard the change of an older client that drops the lock of a note inside a share and push the local version back (%s is_locked, changed locally: %s)', (async (_name, changedLocally, lockLine) => {
+		const folder = await Folder.save({ title: 'folder' });
+		// Dated in the past, as is the older client's edit below, so the sync time cap does not hold back the push back.
+		const note = await Note.save({ title: 'Locked', body: 'JLD01cipher', is_locked: 1, parent_id: folder.id, updated_time: time.unixMs() - 60_000 }, { autoTimestamp: false });
+		await synchronizerStart();
+
+		const path = `${note.id}.md`;
+		const remote = (await fileApi().get(path)).replace('share_id: \n', 'share_id: share-1\n').replace('is_locked: 1\n', lockLine).replace('JLD01cipher', 'edited on an old client').replace(/^updated_time: .*$/m, `updated_time: ${time.unixMsToIso(note.updated_time + 1000)}`);
+		await fileApi().put(path, remote);
+		const title = changedLocally ? 'Renamed locally' : 'Locked';
+		if (changedLocally) await Note.save({ id: note.id, title });
+		await synchronizerStart();
+
+		expect((await Note.conflictedNotes()).length).toBe(0);
+		expect(await Note.load(note.id)).toMatchObject({ title, is_locked: 1, body: 'JLD01cipher' });
+
+		await synchronizerStart();
+		expect(await BaseItem.unserialize(await fileApi().get(path))).toMatchObject({ title, is_locked: 1, body: 'JLD01cipher' });
+	}));
+
+	it.each([false, true])('should keep a remote change that drops the lock of a note outside a share (changed locally: %s)', (async (changedLocally) => {
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'Locked', body: 'JLD01cipher', is_locked: 1, parent_id: folder.id, updated_time: time.unixMs() - 60_000 }, { autoTimestamp: false });
+		await synchronizerStart();
+
+		const path = `${note.id}.md`;
+		const remote = (await fileApi().get(path)).replace('is_locked: 1\n', '').replace('JLD01cipher', 'edited without the lock').replace(/^updated_time: .*$/m, `updated_time: ${time.unixMsToIso(note.updated_time + 1000)}`);
+		await fileApi().put(path, remote);
+		if (changedLocally) await Note.save({ id: note.id, title: 'Renamed locally' });
+		await synchronizerStart();
+
+		const bodies = [(await Note.load(note.id)).body, ...(await Note.conflictedNotes()).map(n => n.body)];
+		expect(bodies).toContain('edited without the lock');
+	}));
+
+	it.each([
+		['an older client edits an unlocked note', 0, ''],
+		['another device removes the lock', 1, 'is_locked: 0\n'],
+	])('should keep a remote change to a note inside a share when %s', (async (_name, isLocked, lockLine) => {
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'note', body: 'JLD01cipher', is_locked: isLocked, parent_id: folder.id });
+		await synchronizerStart();
+
+		const path = `${note.id}.md`;
+		const remote = (await fileApi().get(path)).replace('share_id: \n', 'share_id: share-1\n').replace(`is_locked: ${isLocked}\n`, lockLine).replace('JLD01cipher', 'changed remotely').replace(/^updated_time: .*$/m, `updated_time: ${time.unixMsToIso(note.updated_time + 1000)}`);
+		await fileApi().put(path, remote);
+		await synchronizerStart();
+
+		expect(await Note.load(note.id)).toMatchObject({ is_locked: 0, body: 'changed remotely' });
+	}));
+
+	it('should not keep a conflict when a shared locked note arrives with its lock state', (async () => {
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'Locked', body: 'JLD01cipher', is_locked: 1, parent_id: folder.id });
+		await synchronizerStart();
+
+		const path = `${note.id}.md`;
+		const remote = (await fileApi().get(path)).replace('share_id: \n', 'share_id: share-1\n').replace('JLD01cipher', 'JLD01ciphertext2').replace(/^updated_time: .*$/m, `updated_time: ${time.unixMsToIso(note.updated_time + 1000)}`);
+		await fileApi().put(path, remote);
+		await synchronizerStart();
+
+		expect((await Note.conflictedNotes()).length).toBe(0);
+		expect(await Note.load(note.id)).toMatchObject({ is_locked: 1, body: 'JLD01ciphertext2' });
 	}));
 
 	it('should cap sync_time to the current device time in the delta step', (async () => {
@@ -78,6 +154,43 @@ describe('Synchronizer.conflicts', () => {
 
 		const syncItem = await BaseItem.syncItem(syncTargetId(), note1.id, { fields: ['sync_time'] });
 		expect(syncItem.sync_time).toBeLessThan(note1.updated_time);
+	}));
+
+	it('should leave changes made after the upload phase for the next sync', (async () => {
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'original', parent_id: folder.id });
+		await synchronizerStart();
+
+		await switchClient(2);
+		await synchronizerStart();
+		await sleep(0.1);
+		await Note.save({ id: note.id, title: 'remote change' });
+		await synchronizerStart();
+
+		await switchClient(1);
+		let localChange: NoteEntity = null;
+		const loadItemsByIds = BaseItem.loadItemsByIds.bind(BaseItem);
+		const loadItemsByIdsMock = jest.spyOn(BaseItem, 'loadItemsByIds').mockImplementation(async ids => {
+			const items = await loadItemsByIds(ids);
+			if (ids.includes(note.id)) {
+				await sleep(0.1);
+				localChange = await Note.save({ id: note.id, title: 'local change' });
+			}
+			return items;
+		});
+
+		await synchronizerStart(null, { syncSteps: ['delta'] });
+		loadItemsByIdsMock.mockRestore();
+
+		expect((await Note.load(note.id)).title).toBe('local change');
+		const syncItem = await BaseItem.syncItem(syncTargetId(), note.id, { fields: ['sync_time'] });
+		expect(syncItem.sync_time).toBeLessThan(localChange.updated_time);
+
+		// The following upload phase sees both changes and uses the existing
+		// conflict handling path.
+		await synchronizerStart();
+		expect((await Note.load(note.id)).title).toBe('remote change');
+		expect((await Note.conflictedNotes()).map(note => note.title)).toContain('local change');
 	}));
 
 	it('should resolve folders conflicts', (async () => {
@@ -126,7 +239,7 @@ describe('Synchronizer.conflicts', () => {
 		await switchClient(1);
 
 		await Note.save({ title: 'note1', parent_id: folder1.id });
-		await synchronizerStart();
+		await withLogLevel(LogLevel.Error, () => synchronizerStart());
 		const items: NoteEntity[] = await allNotesFolders();
 		expect(items.length).toBe(1);
 		expect(items[0].title).toBe('note1');
@@ -225,9 +338,9 @@ describe('Synchronizer.conflicts', () => {
 		expect(remainingNote2?.id).toBe(note2.id);
 	}));
 
-	it('should not sync notes with conflicts', (async () => {
+	it('should sync newly created conflict notes', (async () => {
 		const f1 = await Folder.save({ title: 'folder' });
-		await Note.save({ title: 'mynote', parent_id: f1.id, is_conflict: 1 });
+		await createConflictNote({ title: 'mynote', parent_id: f1.id });
 		await synchronizerStart();
 
 		await switchClient(2);
@@ -235,13 +348,81 @@ describe('Synchronizer.conflicts', () => {
 		await synchronizerStart();
 		const notes = await Note.all();
 		const folders = await Folder.all();
-		expect(notes.length).toBe(0);
+		expect(notes).toHaveLength(1);
+		expect(notes[0].is_conflict).toBe(1);
 		expect(folders.length).toBe(1);
 	}));
 
-	it('should not try to delete on remote conflicted notes that have been deleted', (async () => {
+	it('should retain the local version when a synced conflict note has conflicting changes', async () => {
+		const folder = await Folder.save({ title: 'folder' });
+		const conflictNote = await createConflictNote({ title: 'original', parent_id: folder.id });
+		await synchronizerStart();
+
+		await switchClient(2);
+		await synchronizerStart();
+		await sleep(0.1);
+		await Note.save({ id: conflictNote.id, title: 'remote change' });
+		await synchronizerStart();
+
+		await switchClient(1);
+		await sleep(0.1);
+		await Note.save({ id: conflictNote.id, title: 'local change' });
+		await synchronizerStart();
+		expect((await Note.load(conflictNote.id)).title).toBe('local change');
+
+		await switchClient(2);
+		await synchronizerStart();
+		expect((await Note.load(conflictNote.id)).title).toBe('local change');
+	});
+
+	it('should use the remote version when it is newer than a local synced conflict note change', async () => {
+		const folder = await Folder.save({ title: 'folder' });
+		const conflictNote = await createConflictNote({ title: 'original', parent_id: folder.id });
+		await synchronizerStart();
+
+		await switchClient(2);
+		await synchronizerStart();
+
+		await switchClient(1);
+		await sleep(0.1);
+		await Note.save({ id: conflictNote.id, title: 'local change' });
+
+		await switchClient(2);
+		await sleep(0.1);
+		await Note.save({ id: conflictNote.id, title: 'remote change' });
+		await synchronizerStart();
+
+		await switchClient(1);
+		await synchronizerStart();
+		expect((await Note.load(conflictNote.id)).title).toBe('remote change');
+
+		await switchClient(2);
+		await synchronizerStart();
+		expect((await Note.load(conflictNote.id)).title).toBe('remote change');
+	});
+
+	it('should let remote deletion win over a local conflict note update', async () => {
+		const folder = await Folder.save({ title: 'folder' });
+		const conflictNote = await createConflictNote({ title: 'original', parent_id: folder.id });
+		await synchronizerStart();
+
+		await switchClient(2);
+		await synchronizerStart();
+		await Note.delete(conflictNote.id);
+		await synchronizerStart();
+
+		await switchClient(1);
+		await sleep(0.1);
+		await Note.save({ id: conflictNote.id, title: 'local change' });
+		await synchronizerStart();
+
+		expect(await Note.load(conflictNote.id)).toBeUndefined();
+		expect(await Note.conflictedNotes()).toHaveLength(0);
+	});
+
+	it('should delete remotely synced conflict notes', (async () => {
 		const f1 = await Folder.save({ title: 'folder' });
-		const n1 = await Note.save({ title: 'mynote', parent_id: f1.id });
+		const n1 = await createConflictNote({ title: 'mynote', parent_id: f1.id });
 		await synchronizerStart();
 
 		await switchClient(2);
@@ -251,10 +432,20 @@ describe('Synchronizer.conflicts', () => {
 		await Note.delete(n1.id);
 		const deletedItems = await BaseItem.deletedItems(syncTargetId());
 
-		expect(deletedItems.length).toBe(0);
+		expect(deletedItems).toHaveLength(1);
+		expect(deletedItems[0].item_id).toBe(n1.id);
+
+		await synchronizerStart();
+		await switchClient(1);
+		await synchronizerStart();
+		expect(await Note.load(n1.id)).toBeUndefined();
 	}));
 
 	async function ignorableNoteConflictTest(withEncryption: boolean) {
+		// This covers the conflict behaviour without auto-merge, which would otherwise
+		// merge the encrypted case instead of creating a conflict note
+		Setting.setValue('sync.autoMergeConflicts', false);
+
 		if (withEncryption) {
 			setEncryptionEnabled(true);
 			await loadEncryptionMasterKey();
@@ -284,40 +475,25 @@ describe('Synchronizer.conflicts', () => {
 		await Note.save(note2conf);
 		note2conf = await Note.load(note1.id);
 		await synchronizerStart();
+		if (withEncryption) await decryptionWorker().start();
 
-		if (!withEncryption) {
-			// That was previously a common conflict:
-			// - Client 1 mark todo as "done", and sync
-			// - Client 2 doesn't sync, mark todo as "done" todo. Then sync.
-			// In theory it is a conflict because the todo_completed dates are different
-			// but in practice it doesn't matter, we can just take the date when the
-			// todo was marked as "done" the first time.
+		// This is a metadata-only conflict: Both clients marked the same todo as done,
+		// but at slightly different times. Once encrypted remote content is decrypted,
+		// it can be ignored in the same way as an unencrypted conflict.
+		const conflictedNotes = await Note.conflictedNotes();
+		expect(conflictedNotes.length).toBe(0);
 
-			const conflictedNotes = await Note.conflictedNotes();
-			expect(conflictedNotes.length).toBe(0);
-
-			const notes = await Note.all();
-			expect(notes.length).toBe(1);
-			expect(notes[0].id).toBe(note1.id);
-			expect(notes[0].todo_completed).toBe(note2.todo_completed);
-		} else {
-			// If the notes are encrypted however it's not possible to do this kind of
-			// smart conflict resolving since we don't know the content, so in that
-			// case it's handled as a regular conflict.
-
-			const conflictedNotes = await Note.conflictedNotes();
-			expect(conflictedNotes.length).toBe(1);
-
-			const notes = await Note.all();
-			expect(notes.length).toBe(2);
-		}
+		const notes = await Note.all();
+		expect(notes.length).toBe(1);
+		expect(notes[0].id).toBe(note1.id);
+		expect(notes[0].todo_completed).toBe(note2.todo_completed);
 	}
 
 	it('should not consider it is a conflict if neither the title nor body of the note have changed', (async () => {
 		await ignorableNoteConflictTest(false);
 	}));
 
-	it('should always handle conflict if local or remote are encrypted', (async () => {
+	it('should ignore metadata-only conflicts when the remote note is encrypted', (async () => {
 		await ignorableNoteConflictTest(true);
 	}));
 

@@ -24,7 +24,7 @@ const useDialogMessenger = (props: Props) => {
 
 		const dialogApi: DialogMainProcessApi = {
 			postMessage: async (message: SerializableData) => {
-				return await plugin.viewController(viewId).emitMessage({ message });
+				return await plugin.viewController(viewId).emitMessage({ message }) as SerializableData;
 			},
 			onMessage: async (callback) => {
 				PostMessageService.instance().registerViewMessageHandler(

@@ -1,5 +1,8 @@
 # Security Policy
 
+> [!IMPORTANT]
+> Before submitting a report, please read the [Rules for reporting](#rules-for-reporting).
+
 ## Supported Versions
 
 Only the latest version is supported with security updates.
@@ -9,6 +12,14 @@ Only the latest version is supported with security updates.
 Please report vulnerabilities [through private vulnerability reporting](https://github.com/laurent22/joplin/security/advisories/new) **with a proof of concept** that shows the security vulnerability. Please do not contact us without this proof of concept, as we cannot fix anything without this.
 
 For general opinions on what makes an app more or less secure, please use the forum.
+
+## Rules for reporting
+
+Joplin is maintained by a small team, and we receive a high volume of reports that have not been verified by the person submitting them. Reviewing and reproducing an unverified finding takes us as long as a real one, so we need a few rules to keep the process workable for everyone.
+
+- **Two active reports per person.** If you have more than two open at once, we may close them all, and we may block the account.
+
+- **Verify your report before submitting it.** Confirm that the issue is still present in the latest version, and that you have actually carried out the steps your conclusion relies on. Repeatedly submitting findings that do not hold up may result in a permanent block.
 
 ## Areas outside Joplin's Threat Model
 
@@ -42,4 +53,4 @@ No, but you should use disk encryption. See also [Physically-local attacks](http
 
 ## Bounty
 
-We **do not** offer a bounty for discovering vulnerabilities, please do not ask. We can however credit you and link to your website in the changelog and release announcement.
+We **do not** offer a bounty for discovering vulnerabilities, please do not ask.

@@ -19,7 +19,7 @@ const rootDir = `${__dirname}/../..`;
 const localesDir = `${__dirname}/locales`;
 const libDir = `${rootDir}/packages/lib`;
 
-function serializeTranslation(translation: string) {
+function serializeTranslation(translation: Parameters<typeof parseTranslations>[0]) {
 	const output = parseTranslations(translation);
 	return JSON.stringify(output, Object.keys(output).sort((a, b) => a.toLowerCase() < b.toLowerCase() ? -1 : +1), '\t');
 }
