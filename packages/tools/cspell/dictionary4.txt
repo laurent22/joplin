@@ -381,3 +381,4 @@ Defense
 glyphless
 bfrange
 flate
+Thaana

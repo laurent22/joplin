@@ -104,6 +104,30 @@ const embedGlyphLessFont = (pdfDoc: PDFDocument) => {
 	}));
 };
 
+const rtlScriptRegex = /[\p{Script=Hebrew}\p{Script=Arabic}\p{Script=Syriac}\p{Script=Thaana}\p{Script=Nko}]/u;
+const isRtlLetter = (char: string) => rtlScriptRegex.test(char) && !/\p{N}/u.test(char);
+const isLtrStrong = (char: string) => /[\p{L}\p{N}]/u.test(char) && !isRtlLetter(char);
+
+// OCR text is in logical order, but viewers expect PDF text in visual (left-to-right) order and
+// reorder it when extracting. So in right-to-left words, the runs are reversed, as well as the
+// characters within right-to-left runs (numbers and Latin text remain left-to-right).
+const toVisualOrder = (text: string) => {
+	const chars = Array.from(text);
+	if (!chars.some(isRtlLetter)) return text;
+
+	const runs: string[][] = [];
+	for (const char of chars) {
+		const lastRun = runs[runs.length - 1];
+		if (lastRun && isLtrStrong(lastRun[0]) === isLtrStrong(char)) {
+			lastRun.push(char);
+		} else {
+			runs.push([char]);
+		}
+	}
+
+	return runs.reverse().map(run => isLtrStrong(run[0]) ? run.join('') : run.reverse().join('')).join('');
+};
+
 const toUtf16Hex = (text: string) => {
 	let output = '';
 	for (let i = 0; i < text.length; i++) {
@@ -144,7 +168,7 @@ const addInvisibleTextLayer = (
 			const pdfY = pageHeight - (y1 / OCR_SCALE_FACTOR) - fontSize * FONT_DESCENT / 1000;
 
 			// Stretch the text horizontally so that its selection matches the word on the image
-			const hex = toUtf16Hex(text);
+			const hex = toUtf16Hex(toVisualOrder(text));
 			const naturalWidth = (hex.length / 4) * fontSize * GLYPH_WIDTH / 1000;
 			const horizontalScale = wordWidth > 0 ? wordWidth / naturalWidth * 100 : 100;
 
