@@ -6,7 +6,6 @@ import BaseItem from '../../models/BaseItem';
 import MasterKey from '../../models/MasterKey';
 import EncryptionService, { EncryptionMethod, isValidNoteLockHeader } from './EncryptionService';
 import { setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
-import shim, { MobilePlatform } from '../../shim';
 
 let service: EncryptionService = null;
 
@@ -343,37 +342,7 @@ describe('EncryptionService', () => {
 		expect(fileContentEqual(sourcePath, decryptedPath)).toBe(true);
 	}));
 
-	it('should wait every eight blocks for legacy file encryption', async () => {
-		let masterKey = await service.generateMasterKey('123456');
-		masterKey = await MasterKey.save(masterKey);
-		await service.loadMasterKey(masterKey, '123456', true);
-
-		const method = EncryptionMethod.SJCL1b;
-		const sourcePath = `${Setting.value('tempDir')}/legacy-source.bin`;
-		const encryptedPath = `${Setting.value('tempDir')}/legacy-encrypted`;
-		const decryptedPath = `${Setting.value('tempDir')}/legacy-decrypted.bin`;
-		const source = Buffer.alloc(service.chunkSize(method) * 8 + 1, 0x41);
-		await service.fsDriver().writeFile(sourcePath, source.toString('base64'), 'base64');
-
-		const frameSpy = jest.spyOn(shim, 'waitForFrame');
-		try {
-			await service.encryptFile(sourcePath, encryptedPath, { encryptionMethod: method });
-			expect(frameSpy).toHaveBeenCalledTimes(2);
-			frameSpy.mockClear();
-
-			await service.decryptFile(encryptedPath, decryptedPath);
-			expect(frameSpy).toHaveBeenCalledTimes(2);
-			expect(fileContentEqual(sourcePath, decryptedPath)).toBe(true);
-		} finally {
-			frameSpy.mockRestore();
-		}
-	});
-
-	it.each([
-		['desktop', MobilePlatform.None],
-		['web', MobilePlatform.Web],
-		['android', MobilePlatform.Android],
-	])('should buffer encrypted file writes on %s', async (_platformName, platform) => {
+	it('should buffer encrypted file writes', async () => {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
 		await service.loadMasterKey(masterKey, '123456', true);
@@ -384,25 +353,16 @@ describe('EncryptionService', () => {
 		await service.fsDriver().writeFile(sourcePath, Buffer.alloc(1024 * 1024 + 128 * 1024, 0x41).toString('base64'), 'base64');
 
 		const fsDriver = service.fsDriver();
-		const platformSpy = jest.spyOn(shim, 'mobilePlatform').mockReturnValue(platform);
-		const frameSpy = jest.spyOn(shim, 'waitForFrame');
 		const appendSpy = jest.spyOn(fsDriver, 'appendFile');
 		try {
 			await service.encryptFile(sourcePath, encryptedPath);
 			expect(appendSpy).toHaveBeenCalledTimes(2);
 			for (const call of appendSpy.mock.calls) expect(call[2]).toBe('utf8');
-			expect(frameSpy).toHaveBeenCalledTimes(2);
-			appendSpy.mockRestore();
-			frameSpy.mockClear();
-
-			await service.decryptFile(encryptedPath, decryptedPath);
-			expect(frameSpy).toHaveBeenCalledTimes(2);
-			expect(fileContentEqual(sourcePath, decryptedPath)).toBe(true);
 		} finally {
 			appendSpy.mockRestore();
-			frameSpy.mockRestore();
-			platformSpy.mockRestore();
 		}
+		await service.decryptFile(encryptedPath, decryptedPath);
+		expect(fileContentEqual(sourcePath, decryptedPath)).toBe(true);
 	});
 
 	it('should remove encrypted files if the buffered write fails on close', async () => {

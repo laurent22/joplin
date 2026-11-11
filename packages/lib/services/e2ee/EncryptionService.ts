@@ -13,7 +13,6 @@ const logger = Logger.create('EncryptionService');
 const perfLogger = PerformanceLogger.create();
 
 const emptyUint8Array = new Uint8Array(0);
-const fileFrameWaitInterval = 8;
 const encryptedFileWriteBufferSize = 1024 * 1024;
 
 function hexPad(s: string, length: number) {
@@ -605,12 +604,8 @@ export default class EncryptionService {
 		}
 	}
 
-	private frameWaitInterval_(isFile: boolean) {
-		return isFile ? fileFrameWaitInterval : 1;
-	}
-
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- source/destination are duck-typed readers/writers (stringReader_/stringWriter_/fileReader_/fileWriter_) with a small structural API; passing the union here would require touching all four call sites
-	private async encryptAbstract_(source: any, destination: any, options: EncryptOptions = null, isFile = false) {
+	private async encryptAbstract_(source: any, destination: any, options: EncryptOptions = null) {
 		options = { encryptionMethod: this.defaultEncryptionMethod(), ...options };
 
 		const method = options.encryptionMethod;
@@ -618,8 +613,6 @@ export default class EncryptionService {
 		const masterKeyPlainText = await this.masterKeyPlainText_(masterKeyId, options);
 		const chunkSize = this.chunkSize(method);
 		const crypto = shim.crypto;
-		const frameWaitInterval = this.frameWaitInterval_(isFile);
-		let blockIndex = 0;
 
 		const header = {
 			encryptionMethod: method,
@@ -637,12 +630,9 @@ export default class EncryptionService {
 			doneSize += chunkSize;
 			if (options.onProgress) options.onProgress({ doneSize: doneSize });
 
-			// Each file block already awaits I/O and crypto. Request a frame every
-			// eight blocks to keep the UI responsive without waiting after every block.
+			// Wait for a frame so that the app remains responsive in mobile.
 			// https://corbt.com/posts/2015/12/22/breaking-up-heavy-processing-in-react-native.html
-			if (blockIndex++ % frameWaitInterval === 0) {
-				await shim.waitForFrame();
-			}
+			await shim.waitForFrame();
 
 			const encrypted = await this.encrypt(method, masterKeyPlainText, block);
 			await crypto.increaseNonce(this.encryptionNonce_);
@@ -653,13 +643,11 @@ export default class EncryptionService {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See encryptAbstract_ above
-	private async decryptAbstract_(source: any, destination: any, options: EncryptOptions = null, isFile = false) {
+	private async decryptAbstract_(source: any, destination: any, options: EncryptOptions = null) {
 		if (!options) options = {};
 
 		const header = await this.decodeHeaderSource_(source, options.isNoteLock) as { encryptionMethod: number; masterKeyId: string };
 		const masterKeyPlainText = await this.masterKeyPlainText_(header.masterKeyId, options);
-		const frameWaitInterval = this.frameWaitInterval_(isFile);
-		let blockIndex = 0;
 
 		let doneSize = 0;
 
@@ -673,9 +661,7 @@ export default class EncryptionService {
 			doneSize += length;
 			if (options.onProgress) options.onProgress({ doneSize: doneSize });
 
-			if (blockIndex++ % frameWaitInterval === 0) {
-				await shim.waitForFrame();
-			}
+			await shim.waitForFrame();
 
 			const block = await source.read(length);
 
@@ -801,7 +787,7 @@ export default class EncryptionService {
 
 		try {
 			await this.fsDriver().unlink(destPath);
-			await this.encryptAbstract_(source, destination, options, true);
+			await this.encryptAbstract_(source, destination, options);
 			await cleanUp();
 		} catch (error) {
 			try {
@@ -828,7 +814,7 @@ export default class EncryptionService {
 
 		try {
 			await this.fsDriver().unlink(destPath);
-			await this.decryptAbstract_(source, destination, options, true);
+			await this.decryptAbstract_(source, destination, options);
 		} catch (error) {
 			await cleanUp();
 			await this.fsDriver().unlink(destPath);
