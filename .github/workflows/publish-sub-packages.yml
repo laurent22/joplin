@@ -12,6 +12,11 @@ permissions:
   contents: read
   id-token: write
 
+# Two concurrent runs could both see a version as unpublished and then fail on the second publish
+concurrency:
+  group: publish-sub-packages
+  cancel-in-progress: false
+
 jobs:
   Publish:
     if: github.repository == 'laurent22/joplin'
@@ -19,17 +24,11 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      # Trusted publishing requires registry-url, and npm >= 11.5.1, which is bundled with Node 24.18
       - name: Setup build environment
         uses: ./.github/workflows/shared/setup-build-environment
-
-      # Trusted publishing does not work without registry-url
-      - uses: actions/setup-node@v6
         with:
-          node-version: '24.18'
           registry-url: 'https://registry.npmjs.org'
-
-      - name: Install npm with trusted publishing support
-        run: npm install -g npm@^11.5.1
 
       - name: Install and build
         env:

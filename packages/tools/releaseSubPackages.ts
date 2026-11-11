@@ -106,12 +106,14 @@ const hasLicenseFile = async (dir: string) => {
 const publishPackage = async (dir: string, rootLicensePath: string, dryRun: boolean) => {
 	const tempLicensePath = await hasLicenseFile(dir) ? '' : join(dir, 'LICENSE');
 	if (tempLicensePath) await copy(rootLicensePath, tempLicensePath);
+	const previousDir = process.cwd();
 	try {
 		chdir(dir);
 		// Without --workspaces=false, npm applies the root .gitignore to the package, which excludes
 		// required files such as packages/lib/vendor/
 		await execCommand(['npm', 'publish', '--workspaces=false', ...(dryRun ? ['--dry-run'] : [])]);
 	} finally {
+		chdir(previousDir);
 		if (tempLicensePath) await remove(tempLicensePath);
 	}
 };
