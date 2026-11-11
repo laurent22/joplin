@@ -1,12 +1,27 @@
 import { readFile } from 'fs/promises';
 import { createTempDir } from './fs.test';
-import { newHttpError, sendMessage, startServer, stopServer } from './ipc';
+import { IpcMessageHandler, IpcServer, newHttpError, sendMessage, startServer as startServerBase, stopServer } from './ipc';
 
 const getRandomPort = () => {
-	return Math.floor(Math.random() * (65535 - 20000 + 1)) + 20000;
+	// Stay below the OS ephemeral port ranges (Linux: 32768+, macOS/Windows: 49152+), otherwise an outgoing
+	// connection may hold the port, which `tcp-port-used` reports as free but `listen()` rejects with EADDRINUSE.
+	return Math.floor(Math.random() * 20000) + 10000;
+};
+
+let startedServers: IpcServer[] = [];
+
+const startServer = async (startPort: number, secretKeyFilePath: string, messageHandler: IpcMessageHandler) => {
+	const server = await startServerBase(startPort, secretKeyFilePath, messageHandler);
+	startedServers.push(server);
+	return server;
 };
 
 describe('ipc', () => {
+
+	afterEach(async () => {
+		for (const server of startedServers) await stopServer(server);
+		startedServers = [];
+	});
 
 	it('should send and receive messages', async () => {
 		const tempDir = await createTempDir();
@@ -14,7 +29,7 @@ describe('ipc', () => {
 		const serverPort1 = getRandomPort();
 		const serverPort2 = serverPort1 + 5;
 
-		const server1 = await startServer(serverPort1, secretFilePath, async (request) => {
+		await startServer(serverPort1, secretFilePath, async (request) => {
 			if (request.action === 'testing') {
 				return {
 					text: 'hello1',
@@ -24,7 +39,7 @@ describe('ipc', () => {
 			throw newHttpError(404);
 		});
 
-		const server2 = await startServer(serverPort2, secretFilePath, async (request) => {
+		await startServer(serverPort2, secretFilePath, async (request) => {
 			if (request.action === 'testing') {
 				return {
 					text: 'hello2',
@@ -83,9 +98,6 @@ describe('ipc', () => {
 				{ port: serverPort2, response: { text: 'hello2' } },
 			]);
 		}
-
-		await stopServer(server1);
-		await stopServer(server2);
 	});
 
 	it('should not process message if secret is invalid', async () => {
@@ -93,7 +105,7 @@ describe('ipc', () => {
 		const secretFilePath = `${tempDir}/secret.txt`;
 		const serverPort = getRandomPort();
 
-		const server = await startServer(serverPort, secretFilePath, async (request) => {
+		await startServer(serverPort, secretFilePath, async (request) => {
 			if (request.action === 'testing') {
 				return {
 					text: 'hello1',
@@ -124,8 +136,6 @@ describe('ipc', () => {
 
 			expect(responses.length).toBe(1);
 		}
-
-		await stopServer(server);
 	});
 
 });

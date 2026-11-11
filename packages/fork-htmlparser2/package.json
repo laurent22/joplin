@@ -1,7 +1,7 @@
 {
   "name": "@joplin/fork-htmlparser2",
   "description": "Fast & forgiving HTML/XML/RSS parser",
-  "version": "4.1.66",
+  "version": "4.1.67",
   "author": "Felix Boehm <me@feedic.com>",
   "publishConfig": {
     "access": "public"
@@ -18,7 +18,8 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/fb55/htmlparser2.git"
+    "url": "git+https://github.com/laurent22/joplin.git",
+    "directory": "packages/fork-htmlparser2"
   },
   "directories": {
     "lib": "lib/"
