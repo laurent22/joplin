@@ -1,6 +1,7 @@
 const gulp = require('gulp');
 const execa = require('execa');
 const { stdout } = require('process');
+const { readFileSync } = require('fs');
 
 const execCommand = async (executableName, args, options = null) => {
 	options = {
@@ -32,16 +33,15 @@ const execCommand = async (executableName, args, options = null) => {
 const tasks = {
 	completePublishAll: {
 		fn: async () => {
+			await execCommand('yarn', ['install', '--mode=update-lockfile']);
 			await execCommand('git', ['add', '-A']);
 			await execCommand('git', ['commit', '-m', 'Releasing sub-packages']);
 
-			await execCommand('node', ['packages/tools/releaseSubPackages.js', 'publish']);
-
-			await execCommand('yarn', ['install']);
-			await execCommand('git', ['add', '-A']);
-			await execCommand('git', ['commit', '-m', 'Lock file']);
-
-			await execCommand('git', ['push']);
+			// Pushing the tag triggers the publish-sub-packages workflow, which publishes the packages
+			const libVersion = JSON.parse(readFileSync('packages/lib/package.json', 'utf8')).version;
+			const tagName = `sub-packages-v${libVersion}`;
+			await execCommand('git', ['tag', tagName]);
+			await execCommand('git', ['push', '--atomic', 'origin', 'HEAD', tagName]);
 		},
 	},
 	build: {

@@ -42,7 +42,7 @@
     "syncFuzzer": "node ./packages/tools/fuzzer/cli.js",
     "postinstall": "husky && gulp build",
     "postPreReleasesToForum": "node ./packages/tools/postPreReleasesToForum",
-    "publishAll": "git pull && yarn buildParallel && node packages/tools/releaseSubPackages.js version && gulp completePublishAll",
+    "publishAll": "git pull && yarn workspace @joplin/tools tsc && node packages/tools/releaseSubPackages.js version && gulp completePublishAll",
     "releaseAndroid": "PATH=\"/usr/local/opt/openjdk@17/bin:$PATH\" node packages/tools/release-android.js",
     "releaseAndroidClean": "node packages/tools/release-android.js",
     "releaseCli": "node packages/tools/release-cli.js",
