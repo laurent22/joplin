@@ -26,6 +26,7 @@ describe('blockedVersions', () => {
 		['1.2.3 || >=2.0.0', true],
 		['<1.0.0 || garbage', false],
 		['>=1.2.3 garbage', false],
+		['>=1.2.3\t<2.0.0', false],
 		['1.2', false],
 		['v1.2.3', false],
 		['>=x', false],

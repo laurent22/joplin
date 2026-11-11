@@ -22,10 +22,11 @@ export const isVersionBlocked = (blockedVersions: string[] | undefined, version:
 
 // Each comparator is checked on its own because satisfies() short-circuits, so "<1.0.0 || garbage"
 // would pass. This also rejects partial versions such as "1.2", which silently match nothing.
+// Only spaces are accepted as separators since satisfies() throws on tabs.
 export const isValidBlockedVersionEntry = (entry: unknown) => {
 	if (typeof entry !== 'string') return false;
 	if (entry === '*') return true;
-	const comparators = entry.split('||').flatMap(part => part.trim().split(/\s+-\s+|\s+/));
+	const comparators = entry.split('||').flatMap(part => part.trim().split(/ +- +| +/));
 	return comparators.every(c => validateStrict(c.replace(/^(<=|>=|<|>|=|\^|~)/, '')));
 };
 
