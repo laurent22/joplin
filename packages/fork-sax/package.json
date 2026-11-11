@@ -8,7 +8,11 @@
     "access": "public"
   },
   "license": "ISC",
-  "repository": "git://github.com/isaacs/sax-js.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laurent22/joplin.git",
+    "directory": "packages/fork-sax"
+  },
   "files": [
     "lib/sax.js",
     "LICENSE",

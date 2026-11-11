@@ -2,6 +2,11 @@
   "name": "@joplin/lib",
   "version": "3.7.3",
   "description": "Joplin Core library",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laurent22/joplin.git",
+    "directory": "packages/lib"
+  },
   "author": "Laurent Cozic",
   "homepage": "",
   "license": "AGPL-3.0-or-later",

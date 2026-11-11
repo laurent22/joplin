@@ -18,7 +18,8 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/fb55/htmlparser2.git"
+    "url": "git+https://github.com/laurent22/joplin.git",
+    "directory": "packages/fork-htmlparser2"
   },
   "directories": {
     "lib": "lib/"
