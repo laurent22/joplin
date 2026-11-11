@@ -39,5 +39,9 @@ jobs:
           source "${GITHUB_WORKSPACE}/.github/scripts/retry.sh"
           retry yarn install
 
+      # Not part of the regular build, but plugin-repo-cli's entry point is dist/index.js
+      - name: Bundle plugin-repo-cli
+        run: yarn workspace @joplin/plugin-repo-cli dist
+
       - name: Publish
         run: node packages/tools/releaseSubPackages.js publish
