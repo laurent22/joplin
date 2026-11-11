@@ -397,6 +397,26 @@ describe('OcrService', () => {
 		expect(pdfBytes.length).toBeGreaterThan(jpegBuffer.length * 1.5);
 	});
 
+	it('should create an accessible PDF with non-WinAnsi characters', async () => {
+		const jpegBuffer = await fs.readFile(`${supportDir}/photo.jpg`);
+		const words = ['ı', 'Мир', '日本語'];
+
+		const ocrDetails: PdfOcrDetails = {
+			version: 1,
+			pages: [{
+				lines: [{ words: words.map((t, i) => ({ t, bb: [10 + i * 60, 60 + i * 60, 10, 30] })) }],
+			}],
+		};
+
+		const pdfBytes = await createAccessiblePdf([{ buffer: jpegBuffer, width: 400, height: 200 }], JSON.stringify(ocrDetails));
+		const pdfPath = join(Setting.value('tempDir'), 'accessible.pdf');
+		await fs.writeFile(pdfPath, pdfBytes);
+
+		const textByPage = await shim.pdfExtractEmbeddedText(pdfPath);
+		expect(textByPage.length).toBe(1);
+		for (const word of words) expect(textByPage[0]).toContain(word);
+	});
+
 	it('should truncate long OCR text', async () => {
 		const service = newOcrService();
 		service.testing_setOcrMaxSize(10);
