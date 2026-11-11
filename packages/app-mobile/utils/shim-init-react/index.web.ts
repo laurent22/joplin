@@ -92,6 +92,9 @@ const shimInit = () => {
 	};
 
 	shim.waitForFrame = (lastFrameTimestamp: number) => {
+		if (document.visibilityState !== 'visible') {
+			return Promise.resolve(lastFrameTimestamp);
+		}
 		if (Date.now() - lastFrameTimestamp < 200) {
 			return Promise.resolve(lastFrameTimestamp);
 		}

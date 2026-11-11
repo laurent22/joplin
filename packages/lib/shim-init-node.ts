@@ -739,14 +739,9 @@ function shimInit(options: ShimInitOptions = null) {
 			return Promise.resolve(lastFrameTimestamp);
 		}
 		return new Promise<number>((resolve) => {
-			const finishCallback = () => {
+			timers.setImmediate(() => {
 				resolve(Date.now());
-			};
-			if (typeof requestAnimationFrame === 'function') {
-				requestAnimationFrame(finishCallback);
-			} else {
-				setTimeout(finishCallback, 0);
-			}
+			});
 		});
 	};
 
