@@ -1,6 +1,6 @@
 {
   "name": "@joplin/htmlpack",
-  "version": "3.7.3",
+  "version": "3.7.4",
   "description": "Pack an HTML file and all its linked resources into a single HTML file",
   "repository": {
     "type": "git",
@@ -35,7 +35,7 @@
   "license": "MIT",
   "dependencies": {
     "@adobe/css-tools": "4.5.0",
-    "@joplin/fork-htmlparser2": "^4.1.66",
+    "@joplin/fork-htmlparser2": "^4.1.67",
     "datauri": "4.1.0",
     "fs-extra": "11.3.6",
     "html-entities": "1.4.0"

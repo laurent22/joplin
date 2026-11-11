@@ -1,6 +1,6 @@
 {
   "name": "@joplin/plugin-repo-cli",
-  "version": "3.7.6",
+  "version": "3.7.7",
   "description": "",
   "repository": {
     "type": "git",
@@ -30,9 +30,9 @@
     "yargs": "17.7.2"
   },
   "devDependencies": {
-    "@joplin/lib": "^3.7.3",
-    "@joplin/tools": "^3.7.3",
-    "@joplin/utils": "^3.7.3",
+    "@joplin/lib": "^3.7.4",
+    "@joplin/tools": "^3.7.4",
+    "@joplin/utils": "^3.7.4",
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.14",
     "@types/node": "24.13.3",
