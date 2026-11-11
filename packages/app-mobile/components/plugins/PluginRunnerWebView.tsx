@@ -9,6 +9,7 @@ import { connect, useStore } from 'react-redux';
 import Logger from '@joplin/utils/Logger';
 import PluginService, { PluginSettings, SerializedPluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { PluginHtmlContents, PluginStates } from '@joplin/lib/services/plugins/reducer';
+import { BlockedPluginVersions } from '@joplin/lib/services/plugins/utils/blockedVersions';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import PluginDialogManager from './dialogs/PluginDialogManager';
 import { AppState } from '../../utils/types';
@@ -33,6 +34,7 @@ const usePlugins = (
 	pluginSettings: PluginSettings,
 	pluginSupportEnabled: boolean,
 	devPluginPath: string,
+	blockedPluginVersions: BlockedPluginVersions,
 ) => {
 	const store = useStore<AppState>();
 	const lastPluginRunner = usePrevious(pluginRunner);
@@ -71,7 +73,7 @@ const usePlugins = (
 		if (!event.cancelled) {
 			reloadAllRef.current = false;
 		}
-	}, [pluginRunner, store, webviewLoaded, pluginSettings, reloadCounter]);
+	}, [pluginRunner, store, webviewLoaded, pluginSettings, reloadCounter, blockedPluginVersions]);
 };
 
 const useUnloadPluginsOnGlobalDisable = (
@@ -95,6 +97,7 @@ interface Props {
 	pluginSupportEnabled: boolean;
 	pluginStates: PluginStates;
 	devPluginPath: string;
+	blockedPluginVersions: BlockedPluginVersions;
 	pluginHtmlContents: PluginHtmlContents;
 	themeId: number;
 }
@@ -125,7 +128,7 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 	}, [webviewReloadCounter]);
 
 	const pluginSettings = usePluginSettings(props.serializedPluginSettings);
-	usePlugins(pluginRunner, webviewLoaded, pluginSettings, props.pluginSupportEnabled, props.devPluginPath);
+	usePlugins(pluginRunner, webviewLoaded, pluginSettings, props.pluginSupportEnabled, props.devPluginPath, props.blockedPluginVersions);
 	useUnloadPluginsOnGlobalDisable(props.pluginStates, props.pluginSupportEnabled);
 
 	const onLoadStart = useCallback(() => {
@@ -213,6 +216,7 @@ export default connect((state: AppState) => {
 		serializedPluginSettings: state.settings['plugins.states'],
 		pluginSupportEnabled: state.settings['plugins.pluginSupportEnabled'],
 		devPluginPath: state.settings['plugins.devPluginPaths'],
+		blockedPluginVersions: state.settings['plugins.blockedVersions'],
 		pluginStates: state.pluginService.plugins,
 		pluginHtmlContents: state.pluginService.pluginHtmlContents,
 		themeId: state.settings.theme,

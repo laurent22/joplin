@@ -712,6 +712,7 @@ packages/app-desktop/services/plugins/hooks/useThemeCss.test.js
 packages/app-desktop/services/plugins/hooks/useThemeCss.js
 packages/app-desktop/services/plugins/hooks/useViewIsReady.js
 packages/app-desktop/services/plugins/hooks/useWebviewToPluginMessages.js
+packages/app-desktop/services/plugins/startBlockedPluginsCheck.js
 packages/app-desktop/services/plugins/types.js
 packages/app-desktop/services/restart.js
 packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.js
@@ -1907,8 +1908,11 @@ packages/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo.js
 packages/lib/services/plugins/loadPlugins.test.js
 packages/lib/services/plugins/loadPlugins.js
 packages/lib/services/plugins/reducer.js
+packages/lib/services/plugins/refreshBlockedPluginVersions.js
 packages/lib/services/plugins/testing/MockPlatformImplementation.js
 packages/lib/services/plugins/testing/MockPluginRunner.js
+packages/lib/services/plugins/utils/blockedVersions.test.js
+packages/lib/services/plugins/utils/blockedVersions.js
 packages/lib/services/plugins/utils/createViewHandle.js
 packages/lib/services/plugins/utils/executeSandboxCall.js
 packages/lib/services/plugins/utils/getActivePluginEditorView.js

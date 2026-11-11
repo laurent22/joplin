@@ -26,6 +26,10 @@ const validateUntrustedManifest = (
 		throw new Error(`Plugin ${manifest.id} cannot mark itself as recommended.`);
 	}
 
+	if (typeof manifest._blocked_versions !== 'undefined') {
+		throw new Error(`Plugin ${manifest.id} cannot set its own blocked versions.`);
+	}
+
 	if (options.source === 'repository') {
 		if (!manifest.repository_url?.trim()) {
 			throw new Error(`Plugin ${manifest.id} must specify repository_url when published from a repository.`);

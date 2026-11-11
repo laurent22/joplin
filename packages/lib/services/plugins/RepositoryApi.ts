@@ -4,6 +4,7 @@ import { PluginManifest } from './utils/types';
 const md5 = require('md5');
 import { compareVersions } from 'compare-versions';
 import isCompatible from './utils/isCompatible';
+import { isRepoManifestBlocked } from './utils/blockedVersions';
 import { AppType } from '../../models/Setting';
 
 const logger = Logger.create('RepositoryApi');
@@ -92,6 +93,14 @@ export default class RepositoryApi {
 	}
 
 	public async initialize() {
+		await this.initializeManifestsOnly();
+		await this.loadRelease();
+
+		this.lastInitializedTime_ = Date.now();
+	}
+
+	// Skips the GitHub release API call, which is rate-limited and only needed to download plugins
+	public async initializeManifestsOnly() {
 		// https://github.com/joplin/plugins
 		// https://api.github.com/repos/joplin/plugins/releases
 		this.githubApiUrl_ = this.baseUrl_.replace(/^(https:\/\/)(github\.com\/)(.*)$/, '$1api.$2repos/$3');
@@ -102,9 +111,6 @@ export default class RepositoryApi {
 		this.isUsingDefaultContentUrl_ = this.contentBaseUrl_ === defaultContentBaseUrl;
 
 		await this.loadManifests();
-		await this.loadRelease();
-
-		this.lastInitializedTime_ = Date.now();
 	}
 
 	public async reinitialize() {
@@ -245,6 +251,7 @@ export default class RepositoryApi {
 		const manifest = manifests.find(m => m.id === pluginId);
 		if (!manifest) throw new Error(`No manifest for plugin ID "${pluginId}"`);
 		if (this.isBlockedByInstallMode(manifest)) throw new Error(`Plugin is blocked by intstallation policy. ID "${pluginId}"`);
+		if (isRepoManifestBlocked(manifest)) throw new Error(`This version of the plugin has been blocked: ${pluginId}@${manifest.version}`);
 
 		const fileUrl = this.assetFileUrl(manifest.id); // this.repoFileUrl(`plugins/${manifest.id}/plugin.jpl`);
 		const hash = md5(Date.now() + Math.random());
@@ -284,7 +291,7 @@ export default class RepositoryApi {
 		if (!manifest) return false;
 
 		const supportsCurrentAppVersion = compareVersions(installedVersion, manifest.version) < 0 && isCompatible(this.appVersion_, this.appType_, manifest);
-		return supportsCurrentAppVersion && !this.isBlockedByInstallMode(manifest);
+		return supportsCurrentAppVersion && !this.isBlockedByInstallMode(manifest) && !isRepoManifestBlocked(manifest);
 	}
 
 }
