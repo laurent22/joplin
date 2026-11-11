@@ -16,13 +16,51 @@ export interface PageImageWithDimensions {
 	height: number;
 }
 
-// Maps each UTF-16 code unit (used as CID) to itself. A bfrange may only vary in its last byte and a
-// block may contain at most 100 entries.
-const makeToUnicodeCMap = () => {
+// Maps code point to CID, for characters outside the BMP
+type SupplementaryCids = Map<number, number>;
+
+const surrogateStart = 0xD800;
+const surrogateEnd = 0xDFFF;
+
+const toUtf16Hex = (text: string) => {
+	let output = '';
+	for (let i = 0; i < text.length; i++) {
+		output += text.charCodeAt(i).toString(16).padStart(4, '0');
+	}
+	return output;
+};
+
+// BMP characters use their code point as CID. Supplementary characters don't fit in a two-byte CID,
+// so they are assigned CIDs in the surrogate range, which no valid character uses.
+const textToCids = (text: string, supplementaryCids: SupplementaryCids) => {
+	return Array.from(text).map(char => {
+		const codePoint = char.codePointAt(0);
+		if (codePoint >= surrogateStart && codePoint <= surrogateEnd) return 0xFFFD;
+		if (codePoint <= 0xFFFF) return codePoint;
+
+		let cid = supplementaryCids.get(codePoint);
+		if (cid === undefined) {
+			if (surrogateStart + supplementaryCids.size > surrogateEnd) return 0xFFFD;
+			cid = surrogateStart + supplementaryCids.size;
+			supplementaryCids.set(codePoint, cid);
+		}
+		return cid;
+	});
+};
+
+// Maps each BMP CID to itself, and supplementary CIDs to their UTF-16 sequence. A bfrange may only
+// vary in its last byte and a block may contain at most 100 entries.
+const makeToUnicodeCMap = (supplementaryCids: SupplementaryCids) => {
 	const ranges: string[] = [];
 	for (let i = 0; i < 256; i++) {
+		if (i >= surrogateStart >> 8 && i <= surrogateEnd >> 8) continue;
 		const high = i.toString(16).toUpperCase().padStart(2, '0');
 		ranges.push(`<${high}00> <${high}FF> <${high}00>`);
+	}
+
+	const chars: string[] = [];
+	for (const [codePoint, cid] of supplementaryCids) {
+		chars.push(`<${cid.toString(16).toUpperCase()}> <${toUtf16Hex(String.fromCodePoint(codePoint))}>`);
 	}
 
 	// cSpell:disable
@@ -30,6 +68,10 @@ const makeToUnicodeCMap = () => {
 	for (let i = 0; i < ranges.length; i += 100) {
 		const chunk = ranges.slice(i, i + 100);
 		blocks.push(`${chunk.length} beginbfrange\n${chunk.join('\n')}\nendbfrange`);
+	}
+	for (let i = 0; i < chars.length; i += 100) {
+		const chunk = chars.slice(i, i + 100);
+		blocks.push(`${chunk.length} beginbfchar\n${chunk.join('\n')}\nendbfchar`);
 	}
 
 	return [
@@ -52,8 +94,9 @@ const makeToUnicodeCMap = () => {
 };
 
 // Standard fonts only support WinAnsi, so any other character (Cyrillic, CJK, etc.) would make
-// pdf-lib throw. Instead, like Tesseract, we use a Type0 font whose CIDs are UTF-16 code units, all
-// mapped to the same empty glyph, with a ToUnicode CMap so that the text can be extracted.
+// pdf-lib throw. Instead, like Tesseract, we use a Type0 font whose CIDs are code points, all mapped
+// to the same glyph, with a ToUnicode CMap so that the text can be extracted. The CMap depends on
+// the supplementary characters in the document, so it's assigned once all the text has been added.
 const embedGlyphLessFont = (pdfDoc: PDFDocument) => {
 	const context = pdfDoc.context;
 
@@ -92,9 +135,9 @@ const embedGlyphLessFont = (pdfDoc: PDFDocument) => {
 		DW: GLYPH_WIDTH,
 	}));
 
-	const toUnicodeRef = context.register(context.flateStream(makeToUnicodeCMap()));
+	const toUnicodeRef = context.nextRef();
 
-	return context.register(context.obj({
+	const fontRef = context.register(context.obj({
 		Type: 'Font',
 		Subtype: 'Type0',
 		BaseFont: 'GlyphLessFont',
@@ -102,6 +145,8 @@ const embedGlyphLessFont = (pdfDoc: PDFDocument) => {
 		DescendantFonts: [cidFontRef],
 		ToUnicode: toUnicodeRef,
 	}));
+
+	return { fontRef, toUnicodeRef };
 };
 
 const rtlScriptRegex = /[\p{Script=Hebrew}\p{Script=Arabic}\p{Script=Syriac}\p{Script=Thaana}\p{Script=Nko}]/u;
@@ -115,25 +160,27 @@ const toVisualOrder = (text: string) => {
 	const chars = Array.from(text);
 	if (!chars.some(isRtlLetter)) return text;
 
-	const runs: string[][] = [];
-	for (const char of chars) {
+	// As in the Unicode bidi algorithm, combining marks take the direction of their base, and a
+	// separator between two left-to-right characters (e.g. in "2024.05") is left-to-right too.
+	const isLtr = chars.map(isLtrStrong);
+	for (let i = 1; i < chars.length; i++) {
+		if (/\p{M}/u.test(chars[i])) isLtr[i] = isLtr[i - 1];
+	}
+	for (let i = 1; i < chars.length - 1; i++) {
+		if (!isRtlLetter(chars[i]) && isLtr[i - 1] && isLtr[i + 1]) isLtr[i] = true;
+	}
+
+	const runs: { ltr: boolean; chars: string[] }[] = [];
+	for (let i = 0; i < chars.length; i++) {
 		const lastRun = runs[runs.length - 1];
-		if (lastRun && isLtrStrong(lastRun[0]) === isLtrStrong(char)) {
-			lastRun.push(char);
+		if (lastRun && lastRun.ltr === isLtr[i]) {
+			lastRun.chars.push(chars[i]);
 		} else {
-			runs.push([char]);
+			runs.push({ ltr: isLtr[i], chars: [chars[i]] });
 		}
 	}
 
-	return runs.reverse().map(run => isLtrStrong(run[0]) ? run.join('') : run.reverse().join('')).join('');
-};
-
-const toUtf16Hex = (text: string) => {
-	let output = '';
-	for (let i = 0; i < text.length; i++) {
-		output += text.charCodeAt(i).toString(16).padStart(4, '0');
-	}
-	return output;
+	return runs.reverse().map(run => run.ltr ? run.chars.join('') : run.chars.reverse().join('')).join('');
 };
 
 // Adds an invisible text layer to a PDF page based on OCR word positions.
@@ -144,6 +191,7 @@ const addInvisibleTextLayer = (
 	lines: RecognizeResultLine[],
 	fontRef: PDFRef,
 	pageHeight: number,
+	supplementaryCids: SupplementaryCids,
 ) => {
 	const fontName = page.node.newFontDictionary('GlyphLessFont', fontRef);
 	const operators: PDFOperator[] = [beginText(), setTextRenderingMode(TextRenderingMode.Invisible)];
@@ -168,15 +216,15 @@ const addInvisibleTextLayer = (
 			const pdfY = pageHeight - (y1 / OCR_SCALE_FACTOR) - fontSize * FONT_DESCENT / 1000;
 
 			// Stretch the text horizontally so that its selection matches the word on the image
-			const hex = toUtf16Hex(toVisualOrder(text));
-			const naturalWidth = (hex.length / 4) * fontSize * GLYPH_WIDTH / 1000;
+			const cids = textToCids(toVisualOrder(text), supplementaryCids);
+			const naturalWidth = cids.length * fontSize * GLYPH_WIDTH / 1000;
 			const horizontalScale = wordWidth > 0 ? wordWidth / naturalWidth * 100 : 100;
 
 			operators.push(
 				setFontAndSize(fontName, fontSize),
 				setCharacterSqueeze(horizontalScale),
 				setTextMatrix(1, 0, 0, 1, pdfX, pdfY),
-				showText(PDFHexString.of(hex)),
+				showText(PDFHexString.of(cids.map(cid => cid.toString(16).padStart(4, '0')).join(''))),
 			);
 		}
 	}
@@ -206,7 +254,8 @@ const createAccessiblePdf = async (
 
 	const pdfDoc = await PDFDocument.create();
 
-	const fontRef = embedGlyphLessFont(pdfDoc);
+	const { fontRef, toUnicodeRef } = embedGlyphLessFont(pdfDoc);
+	const supplementaryCids: SupplementaryCids = new Map();
 
 	for (let pageIndex = 0; pageIndex < pageImages.length; pageIndex++) {
 		const pageImage = pageImages[pageIndex];
@@ -231,8 +280,10 @@ const createAccessiblePdf = async (
 		});
 
 		// Add invisible text layer on top
-		addInvisibleTextLayer(page, pageOcr.lines, fontRef, pageHeight);
+		addInvisibleTextLayer(page, pageOcr.lines, fontRef, pageHeight, supplementaryCids);
 	}
+
+	pdfDoc.context.assign(toUnicodeRef, pdfDoc.context.flateStream(makeToUnicodeCMap(supplementaryCids)));
 
 	return pdfDoc.save();
 };

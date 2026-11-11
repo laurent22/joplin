@@ -398,9 +398,9 @@ describe('OcrService', () => {
 	});
 
 	it.each([
-		{ words: ['ı', 'Мир', '日本語'], rtl: false },
+		{ words: ['ı', 'Мир', '日本語', '𠀀😀'], rtl: false },
 		{ words: ['אור', 'חדש'], rtl: true },
-		{ words: ['نور', 'باب', 'عام2024'], rtl: true },
+		{ words: ['نور', 'باب', 'عام2024.05'], rtl: true },
 	])('should create an accessible PDF with text that can be extracted: $words', async ({ words, rtl }) => {
 		const jpegBuffer = await fs.readFile(`${supportDir}/photo.jpg`);
 
