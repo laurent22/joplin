@@ -632,6 +632,38 @@ describe('ItemModel', () => {
 		expect((await models().userItem().byUserId(user1.id)).length).toBe(5);
 	});
 
+	test('should process orphaned items mixed with valid items across batches', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+		const { user: user2 } = await createUserAndSession(2);
+
+		await createItemTree3(user1.id, '', '', [
+			{ id: '000000000000000000000000000000F1' },
+		]);
+
+		await createItemTree3(user2.id, '', '', [
+			{ id: '000000000000000000000000000000F2' },
+			{ id: '000000000000000000000000000000F3' },
+			{ id: '000000000000000000000000000000F4' },
+			{ id: '000000000000000000000000000000F5' },
+		]);
+
+		const f4 = await models().item().loadByJopId(user2.id, '000000000000000000000000000000F4');
+		await db()('user_items').where('item_id', '=', f4.id).delete();
+		await db()('users').where('id', '=', user1.id).delete();
+		await db()('user_items').where('user_id', '=', user1.id).delete();
+
+		await models().item().processOrphanedItems({ batchSize: 2 });
+
+		const items = await models().item().all();
+		expect(items.map(i => i.name).sort()).toEqual([
+			'000000000000000000000000000000F2.md',
+			'000000000000000000000000000000F3.md',
+			'000000000000000000000000000000F4.md',
+			'000000000000000000000000000000F5.md',
+		]);
+		expect((await models().userItem().byUserId(user2.id)).length).toBe(4);
+	});
+
 	test('should return multiple item contents', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 

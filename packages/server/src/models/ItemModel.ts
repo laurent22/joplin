@@ -1102,6 +1102,10 @@ export default class ItemModel extends BaseModel<Item> {
 		// then look up which of those ids exist in user_items. The orphan
 		// filter happens in TS. Per-query cost is bounded by the window size,
 		// not by the table size, so no statement can blow past the timeout.
+		//
+		// The window query only selects `id` so that it is an index-only scan.
+		// IDs are random, so any other column costs one heap page read per row,
+		// and walking the whole heap evicts the buffer cache used by the app.
 		const batchSize = options.batchSize ?? 10000;
 		let batchNum = 0;
 		let totalProcessed = 0;
@@ -1114,7 +1118,7 @@ export default class ItemModel extends BaseModel<Item> {
 			const batchStartTime = Date.now();
 
 			const windowItems: Item[] = await this.db(this.tableName)
-				.select(['items.id', 'items.name', 'items.owner_id'])
+				.select(['items.id'])
 				.where('items.id', '>', lastId)
 				.orderBy('items.id')
 				.limit(batchSize);
@@ -1133,13 +1137,17 @@ export default class ItemModel extends BaseModel<Item> {
 				.select('item_id')
 				.whereIn('item_id', windowItemIds);
 			const userItemIds = new Set(existingUserItems.map(u => u.item_id));
-			const orphanedItems = windowItems.filter(i => !userItemIds.has(i.id));
+			const orphanedItemIds = windowItemIds.filter(id => !userItemIds.has(id));
 
-			if (!orphanedItems.length) {
+			if (!orphanedItemIds.length) {
 				const batchDuration = Date.now() - batchStartTime;
 				modelLogger.info(`processOrphanedItems: Batch ${batchNum} - No orphans in window of ${windowItems.length} items (${batchDuration}ms)`);
 				continue;
 			}
+
+			const orphanedItems: Item[] = await this.db(this.tableName)
+				.select(['id', 'name', 'owner_id'])
+				.whereIn('id', orphanedItemIds);
 
 			modelLogger.info(`processOrphanedItems: Batch ${batchNum} - Found ${orphanedItems.length} orphaned items`);
 			for (const o of orphanedItems) {
@@ -1172,7 +1180,7 @@ export default class ItemModel extends BaseModel<Item> {
 				const restoreCount = Array.from(itemsToRestoreByUser.values()).reduce((sum, items) => sum + items.length, 0);
 				modelLogger.info(`processOrphanedItems: Batch ${batchNum} - Restoring ${restoreCount} items for ${itemsToRestoreByUser.size} users`);
 				for (const [userId, items] of itemsToRestoreByUser) {
-					await this.models().userItem().addMulti(userId, items);
+					await this.models().userItem().addMulti(userId, items, { ignoreAlreadyExists: true });
 				}
 			}
 
