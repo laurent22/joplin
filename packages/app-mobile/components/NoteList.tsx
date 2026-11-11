@@ -12,6 +12,7 @@ import Folder from '@joplin/lib/models/Folder';
 
 import { _ } from '@joplin/lib/locale';
 import NoteItem from './NoteItem';
+import NoteGrid from './NoteGrid';
 import { themeStyle } from './global-style';
 
 interface NoteListProps {
@@ -22,6 +23,7 @@ interface NoteListProps {
 	folders: FolderEntity[];
 	noteSelectionEnabled?: boolean;
 	selectedFolderId: string|null;
+	viewMode: string;
 }
 
 class NoteListComponent extends Component<NoteListProps> {
@@ -86,7 +88,9 @@ class NoteListComponent extends Component<NoteListProps> {
 	public render() {
 		// `enableEmptySections` is to fix this warning: https://github.com/FaridSafi/react-native-gifted-listview/issues/39
 
-		if (this.props.items.length) {
+		if (this.props.items.length && this.props.viewMode === 'grid') {
+			return <NoteGrid items={this.props.items} notesSource={this.props.notesSource} />;
+		} else if (this.props.items.length) {
 			return <FlatList
 				ref={ref => { this.rootRef_ = ref; }}
 				data={this.props.items}
@@ -120,6 +124,7 @@ const NoteList = connect((state: AppState) => {
 		themeId: state.settings.theme,
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		selectedFolderId: state.selectedFolderId,
+		viewMode: state.settings['notes.viewMode'],
 	};
 })(NoteListComponent);
 

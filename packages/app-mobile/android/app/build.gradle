@@ -126,6 +126,9 @@ android {
             // Release-like build that allows profiling with Android Studio Profiler
             initWith release
             signingConfig signingConfigs.debug
+            // Allows installing this test build side by side with the official app
+            applicationIdSuffix ".gridtest"
+            manifestPlaceholders = [usesCleartextTraffic: "false"]
             // Required for Android Studio Profiler to attach
             debuggable false
             // Keeps symbols for better stack traces in profiler

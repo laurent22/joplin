@@ -1417,6 +1417,21 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: true,
 		},
 
+		'notes.viewMode': {
+			value: 'list',
+			type: SettingItemType.String,
+			isEnum: true,
+			public: true,
+			appTypes: [AppType.Mobile],
+			section: 'appearance',
+			label: () => _('Notes view'),
+			options: () => ({
+				list: _('List'),
+				grid: _('Grid'),
+			}),
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
 		'notes.listRendererId': {
 			value: 'compact',
 			type: SettingItemType.String,

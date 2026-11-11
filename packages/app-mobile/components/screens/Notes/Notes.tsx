@@ -76,6 +76,13 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 		const buttons: MenuChoice<IdType>[] = [];
 		const sortNoteOptions = Setting.enumOptions('notes.sortOrder.field');
 
+		const isGridView = Setting.value('notes.viewMode') === 'grid';
+		buttons.push({
+			text: `[ ${_('Grid view')} ]`,
+			checked: isGridView,
+			id: { name: 'notes.viewMode', value: isGridView ? 'list' : 'grid' },
+		});
+
 		for (const field in sortNoteOptions) {
 			if (!sortNoteOptions.hasOwnProperty(field)) continue;
 			buttons.push({
