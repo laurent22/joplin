@@ -2,7 +2,11 @@
   "name": "@joplin/renderer",
   "version": "3.7.3",
   "description": "The Joplin note renderer, used the mobile and desktop application",
-  "repository": "https://github.com/laurent22/joplin/tree/dev/packages/renderer",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laurent22/joplin.git",
+    "directory": "packages/renderer"
+  },
   "main": "index.js",
   "types": "index.d.ts",
   "publishConfig": {

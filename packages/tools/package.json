@@ -17,7 +17,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/laurent22/joplin.git"
+    "url": "git+https://github.com/laurent22/joplin.git",
+    "directory": "packages/tools"
   },
   "license": "AGPL-3.0-or-later",
   "dependencies": {

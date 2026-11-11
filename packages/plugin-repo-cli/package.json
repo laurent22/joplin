@@ -2,6 +2,11 @@
   "name": "@joplin/plugin-repo-cli",
   "version": "3.7.6",
   "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laurent22/joplin.git",
+    "directory": "packages/plugin-repo-cli"
+  },
   "main": "./dist/index.js",
   "bin": "./dist/index.js",
   "publishConfig": {

@@ -2,6 +2,11 @@
   "name": "@joplin/htmlpack",
   "version": "3.7.3",
   "description": "Pack an HTML file and all its linked resources into a single HTML file",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laurent22/joplin.git",
+    "directory": "packages/htmlpack"
+  },
   "main": "dist/index.js",
   "types": "index.ts",
   "exports": {
