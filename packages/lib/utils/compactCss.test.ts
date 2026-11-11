@@ -36,6 +36,7 @@ describe('compactCss', () => {
 	])('should compact many %s quickly', (_case, css) => {
 		const startTime = Date.now();
 		compactCss(css);
-		expect(Date.now() - startTime).toBeLessThan(1000);
+		// Takes ~50ms normally. A quadratic implementation would take minutes, so a generous limit avoids failing on a loaded CI machine.
+		expect(Date.now() - startTime).toBeLessThan(10_000);
 	});
 });

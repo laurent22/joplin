@@ -11552,13 +11552,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/react-fontawesome@npm:3.3.1":
-  version: 3.3.1
-  resolution: "@fortawesome/react-fontawesome@npm:3.3.1"
+"@fortawesome/react-fontawesome@npm:3.4.0":
+  version: 3.4.0
+  resolution: "@fortawesome/react-fontawesome@npm:3.4.0"
   peerDependencies:
     "@fortawesome/fontawesome-svg-core": ~6 || ~7
     react: ^18.0.0 || ^19.0.0
-  checksum: 10/e099a5721099f1cf59d61fa21ce0ad6473be782470781574aa3c21136263f44d067e15dae4a4e273876ca3b3f16df6a099f93a4ed9c0a717223dffa66bb57da7
+  checksum: 10/64e57e04a7cd98352503edc8fa890420e75d8953262363579388b718656716c10ef2652c62af76edda4d1d1b35205c80ba68af7dc7b32ee4bf0d4c7093afc69e
   languageName: node
   linkType: hard
 
@@ -12627,7 +12627,7 @@ __metadata:
     fs-extra: "npm:11.3.6"
     glob: "npm:11.1.0"
     gulp: "npm:5.0.1"
-    highlight.js: "npm:11.11.1"
+    highlight.js: "npm:11.11.2"
     immer: "npm:9.0.21"
     is-apple-silicon: "npm:1.1.2"
     jest: "npm:29.7.0"
@@ -12979,7 +12979,7 @@ __metadata:
     "@types/react": "npm:19.1.10"
     "@types/react-dom": "npm:19.1.7"
     "@types/uuid": "npm:11.0.0"
-    adm-zip: "npm:0.5.18"
+    adm-zip: "npm:0.6.0"
     async-mutex: "npm:0.5.0"
     base-64: "npm:1.0.0"
     base64-stream: "npm:1.0.0"
@@ -13058,7 +13058,7 @@ __metadata:
   dependencies:
     "@fortawesome/fontawesome-svg-core": "npm:6.1.2"
     "@fortawesome/free-solid-svg-icons": "npm:6.1.2"
-    "@fortawesome/react-fontawesome": "npm:3.3.1"
+    "@fortawesome/react-fontawesome": "npm:3.4.0"
     "@joplin/lib": "npm:~3.7"
     "@types/jest": "npm:29.5.14"
     "@types/pdfjs-dist": "npm:2.10.378"
@@ -13151,7 +13151,7 @@ __metadata:
     abcjs: "npm:6.6.4"
     font-awesome-filetypes: "npm:2.1.0"
     fs-extra: "npm:11.3.6"
-    highlight.js: "npm:11.11.1"
+    highlight.js: "npm:11.11.2"
     html-entities: "npm:1.4.0"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
@@ -13224,7 +13224,7 @@ __metadata:
     markdown-it: "npm:13.0.2"
     mustache: "npm:4.2.0"
     node-cron: "npm:4.5.0"
-    node-mocks-http: "npm:1.17.2"
+    node-mocks-http: "npm:1.18.1"
     nodemailer: "npm:6.10.1"
     nodemon: "npm:3.1.14"
     otplib: "npm:12.0.1"
@@ -21414,10 +21414,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"adm-zip@npm:0.5.18":
-  version: 0.5.18
-  resolution: "adm-zip@npm:0.5.18"
-  checksum: 10/6eaa298828b92e543241fa24d01af774ad8709b80539b3fa60d4ba6f69fd5a15a19d8177e6d739f18f4e0933610ed555215dc6553b51c532534414702c255167
+"adm-zip@npm:0.6.0":
+  version: 0.6.0
+  resolution: "adm-zip@npm:0.6.0"
+  checksum: 10/6a49ab39055d8f716958d3a2055491ab86fe3359c4afeed9b14bbce78fb847bcd3cbaa0ff4921aaa19824aaa29d06691def1f53263db5224d06c068f922c5ba2
   languageName: node
   linkType: hard
 
@@ -35432,10 +35432,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"highlight.js@npm:11.11.1":
-  version: 11.11.1
-  resolution: "highlight.js@npm:11.11.1"
-  checksum: 10/205272f12f2c8ab1760452a75c58b043b11129cf3a5d2a9c0c90d43993580d0f5c385a73a4b8aba197eef20c0ec37d64000e6b35c4ed5991324f4c2dc78f4e43
+"highlight.js@npm:11.11.2":
+  version: 11.11.2
+  resolution: "highlight.js@npm:11.11.2"
+  checksum: 10/613b12a6a47994e3144ba54eea7d24438a9056bdb996ad81b6c7436bf1a6a4435db007c86f6786673823578e6fb8ad054da4783f269784165da81f902332e047
   languageName: node
   linkType: hard
 
@@ -44584,9 +44584,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-mocks-http@npm:1.17.2":
-  version: 1.17.2
-  resolution: "node-mocks-http@npm:1.17.2"
+"node-mocks-http@npm:1.18.1":
+  version: 1.18.1
+  resolution: "node-mocks-http@npm:1.18.1"
   dependencies:
     accepts: "npm:^1.3.7"
     content-disposition: "npm:^0.5.3"
@@ -44595,7 +44595,6 @@ __metadata:
     merge-descriptors: "npm:^1.0.1"
     methods: "npm:^1.1.2"
     mime: "npm:^1.3.4"
-    parseurl: "npm:^1.3.3"
     range-parser: "npm:^1.2.0"
     type-is: "npm:^1.6.18"
   peerDependencies:
@@ -44606,7 +44605,7 @@ __metadata:
       optional: true
     "@types/node":
       optional: true
-  checksum: 10/3ab97b5a7b2dba0032fc5090983e4ca4be0597f1c645b34dff99d465feb17ef1ee7ea4829a9b4303495399c1ac0f12f8964b878e0dda43cda798bb97254ad571
+  checksum: 10/7a7062de9b16c1ff8e90cd2a824fd74ab4e0c1552837ead87d54e4bc821324c1287a84aee6394d6c229c4fdc64bd2c249ce3d17b9e8e102d0f5142fe8e332958
   languageName: node
   linkType: hard
 
@@ -46464,7 +46463,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"parseurl@npm:^1.3.2, parseurl@npm:^1.3.3, parseurl@npm:~1.3.2, parseurl@npm:~1.3.3":
+"parseurl@npm:^1.3.2, parseurl@npm:~1.3.2, parseurl@npm:~1.3.3":
   version: 1.3.3
   resolution: "parseurl@npm:1.3.3"
   checksum: 10/407cee8e0a3a4c5cd472559bca8b6a45b82c124e9a4703302326e9ab60fc1081442ada4e02628efef1eb16197ddc7f8822f5a91fd7d7c86b51f530aedb17dfa2
