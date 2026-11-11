@@ -6,8 +6,10 @@ import config from '../../config';
 import ldapLogin from '../../utils/ldapLogin';
 import { ErrorForbidden } from '../../utils/errors';
 import UserModel from '../../models/UserModel';
+import limiterLoginBruteForce from '../../utils/request/limiterLoginBruteForce';
 
 jest.mock('../../utils/ldapLogin');
+jest.mock('../../utils/request/limiterLoginBruteForce');
 
 const enableLdap = () => {
 	config().LDAP_1_ENABLED = true;
@@ -345,6 +347,7 @@ describe('api/sessions', () => {
 	test('should reject email and password login before checking the password when API_EMAIL_LOGIN_ENABLED is false', async () => {
 		const { user, password } = await createUserAndSession(1, false);
 		const loginSpy = jest.spyOn(UserModel.prototype, 'login');
+		jest.mocked(limiterLoginBruteForce).mockClear();
 		config().API_EMAIL_LOGIN_ENABLED = false;
 
 		const context = await postSession(user.email, password);
@@ -352,6 +355,7 @@ describe('api/sessions', () => {
 		expect(context.response.status).toBe(403);
 		expect((context.response.body as { error: string }).error).toContain('Please sign in again using the browser');
 		expect(loginSpy).not.toHaveBeenCalled();
+		expect(limiterLoginBruteForce).not.toHaveBeenCalled();
 
 		config().API_EMAIL_LOGIN_ENABLED = true;
 		loginSpy.mockRestore();
@@ -359,11 +363,13 @@ describe('api/sessions', () => {
 
 	test('should still login with application credentials when API_EMAIL_LOGIN_ENABLED is false', async () => {
 		const { user, password, id } = await createApplicationCredentials();
+		jest.mocked(limiterLoginBruteForce).mockClear();
 		config().API_EMAIL_LOGIN_ENABLED = false;
 
 		const context = await postSession(id, password);
 
 		expect(context.response.status).toBe(200);
+		expect(limiterLoginBruteForce).toHaveBeenCalledTimes(1);
 		const session: Session = await models().session().load((context.response.body as { id: string }).id);
 		expect(session.user_id).toBe(user.id);
 
