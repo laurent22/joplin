@@ -11396,12 +11396,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@floating-ui/core@npm:^1.8.0":
+"@floating-ui/core@npm:^1.7.5":
   version: 1.8.0
   resolution: "@floating-ui/core@npm:1.8.0"
   dependencies:
     "@floating-ui/utils": "npm:^0.2.12"
   checksum: 10/762cd5677fd4e82597db2efdd8f1e81d248eac5615d8be755e1bbb5f12a14c56a6bccd735676374d4914db7ccb3f09ec405ec7433e8c48a5521f5d66dc8dd5d6
+  languageName: node
+  linkType: hard
+
+"@floating-ui/dom@npm:1.7.6":
+  version: 1.7.6
+  resolution: "@floating-ui/dom@npm:1.7.6"
+  dependencies:
+    "@floating-ui/core": "npm:^1.7.5"
+    "@floating-ui/utils": "npm:^0.2.11"
+  checksum: 10/84dff2ffdf85c8b92d7edafc543c55869abbeaeb3007fa983159467e050153b507a0f5fe8e84f88c3f28c35a82de9df9c20a6eef5560cbba3afae19141444ff2
   languageName: node
   linkType: hard
 
@@ -11414,17 +11424,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@floating-ui/dom@npm:^1.6.1":
-  version: 1.8.0
-  resolution: "@floating-ui/dom@npm:1.8.0"
-  dependencies:
-    "@floating-ui/core": "npm:^1.8.0"
-    "@floating-ui/utils": "npm:^0.2.12"
-  checksum: 10/2e7d75fb702875a62795dd8529569f27eff53167768d75476056d6bf824a1ba608177a8877ed9d728eadb5787b4bd07b043fb2c3125b7ad2505a398680b323c0
-  languageName: node
-  linkType: hard
-
-"@floating-ui/utils@npm:^0.2.12":
+"@floating-ui/utils@npm:^0.2.11, @floating-ui/utils@npm:^0.2.12":
   version: 0.2.12
   resolution: "@floating-ui/utils@npm:0.2.12"
   checksum: 10/ec4e176fb22d33d75df752c5acf82dcaacae40ed2d09c1a5015cb4081318fff20260db216678e952344b95f90c6b43214762b69eba7c51556ecd82c35a795cff
@@ -12651,7 +12651,7 @@ __metadata:
     react-redux: "npm:8.1.3"
     react-select: "npm:5.10.2"
     react-toggle-button: "npm:2.2.0"
-    react-tooltip: "npm:5.30.1"
+    react-tooltip: "npm:6.0.0"
     redux: "npm:4.2.1"
     reselect: "npm:4.1.8"
     roboto-fontface: "npm:0.10.0"
@@ -25383,13 +25383,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"classnames@npm:^2.3.0":
-  version: 2.5.1
-  resolution: "classnames@npm:2.5.1"
-  checksum: 10/58eb394e8817021b153bb6e7d782cfb667e4ab390cb2e9dac2fc7c6b979d1cc2b2a733093955fc5c94aa79ef5c8c89f11ab77780894509be6afbb91dddd79d15
-  languageName: node
-  linkType: hard
-
 "clean-css@npm:^4.2.1":
   version: 4.2.4
   resolution: "clean-css@npm:4.2.4"
@@ -25651,6 +25644,13 @@ __metadata:
   version: 2.1.2
   resolution: "clone@npm:2.1.2"
   checksum: 10/d9c79efba655f0bf601ab299c57eb54cbaa9860fb011aee9d89ed5ac0d12df1660ab7642fddaabb9a26b7eff0e117d4520512cb70798319ff5d30a111b5310c2
+  languageName: node
+  linkType: hard
+
+"clsx@npm:2.1.1":
+  version: 2.1.1
+  resolution: "clsx@npm:2.1.1"
+  checksum: 10/cdfb57fa6c7649bbff98d9028c2f0de2f91c86f551179541cf784b1cfdc1562dcb951955f46d54d930a3879931a980e32a46b598acaea274728dbe068deca919
   languageName: node
   linkType: hard
 
@@ -50669,16 +50669,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-tooltip@npm:5.30.1":
-  version: 5.30.1
-  resolution: "react-tooltip@npm:5.30.1"
+"react-tooltip@npm:6.0.0":
+  version: 6.0.0
+  resolution: "react-tooltip@npm:6.0.0"
   dependencies:
-    "@floating-ui/dom": "npm:^1.6.1"
-    classnames: "npm:^2.3.0"
+    "@floating-ui/dom": "npm:1.7.6"
+    clsx: "npm:2.1.1"
   peerDependencies:
     react: ">=16.14.0"
     react-dom: ">=16.14.0"
-  checksum: 10/99cc5243fbdfae5a8b0bba9d2ab56063f90c350f73a749bcad5442f548173c30df01bd3de0d1cd31c1f4a4ba4a24d00fd2984cf2026e771e764cb9580a80144e
+  checksum: 10/0aa0335ec1063c02913fbb1a301007469004f9d2c8d1411971ba2ce0a61fb7a02c18663f6784688381fd63322ce56ebf1ced40e5f5de179374d81abf1a239dd9
   languageName: node
   linkType: hard
 
