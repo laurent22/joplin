@@ -378,3 +378,7 @@ instr
 mixmark
 Hrvatski
 Defense
+glyphless
+bfrange
+flate
+Thaana
