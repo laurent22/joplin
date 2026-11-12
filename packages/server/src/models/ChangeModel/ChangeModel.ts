@@ -6,7 +6,7 @@ import { Config } from '../../utils/types';
 import ChangeModelOld from './ChangeModel.old';
 import ChangeModelNew from './ChangeModel.new';
 import BaseModel, { LoadOptions } from '../BaseModel';
-import { ErrorResyncRequired } from '../../utils/errors';
+import { ErrorBadRequest, ErrorResyncRequired } from '../../utils/errors';
 import Logger from '@joplin/utils/Logger';
 
 export { defaultChangeTtl } from './BaseChangeModel';
@@ -48,11 +48,18 @@ export function defaultDeltaPagination(): ChangePagination {
 	};
 }
 
+const deltaMaxLimit = 1000;
+
 export function requestDeltaPagination(query: ChangePagination | null): ChangePagination {
 	if (!query) return defaultDeltaPagination();
 
 	const output: ChangePagination = {};
-	if ('limit' in query) output.limit = query.limit;
+	if ('limit' in query) {
+		// It comes from the query string, so it is a string at runtime
+		const limit = Number(query.limit);
+		if (!Number.isInteger(limit) || limit < 1 || limit > deltaMaxLimit) throw new ErrorBadRequest(`Limit must be an integer from 1 to ${deltaMaxLimit}`);
+		output.limit = limit;
+	}
 	if ('cursor' in query) output.cursor = query.cursor;
 	return output;
 }

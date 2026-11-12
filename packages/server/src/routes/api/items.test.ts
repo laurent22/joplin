@@ -507,4 +507,18 @@ describe('api/items', () => {
 		expect(await models().item().loadByJopId(user1.id, '00000000000000000000000000000003')).toBeTruthy();
 	});
 
+	test.each(['x', '0', '1001', '1.5'])('should refuse an invalid delta limit: %s', async (limit) => {
+		const { session } = await createUserAndSession(1, true);
+		await expectHttpError(async () => getApi(session.id, 'items/root/delta', { query: { limit } }), ErrorBadRequest.httpCode);
+	});
+
+	test('should accept a valid delta limit', async () => {
+		const { session } = await createUserAndSession(1, true);
+		await createNote(session.id, { id: '00000000000000000000000000000001' });
+		await createNote(session.id, { id: '00000000000000000000000000000002' });
+		const result = await getApi<{ items: unknown[]; has_more: boolean }>(session.id, 'items/root/delta', { query: { limit: '1' } });
+		expect(result.items.length).toBe(1);
+		expect(result.has_more).toBe(true);
+	});
+
 });
