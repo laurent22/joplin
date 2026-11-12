@@ -18,9 +18,11 @@ export interface ConflictDocument {
 	regions: ConflictDocumentRegion[];
 }
 
-const kindOf = (localText: string, remoteText: string) => {
-	if (localText === '') return ConflictRegionKind.OnlyTheirs;
-	if (remoteText === '') return ConflictRegionKind.OnlyMine;
+const lineCount = (text: string, count: number|undefined) => count ?? (text === '' ? 0 : 1);
+
+const kindOf = (section: MergedSection) => {
+	if (lineCount(section.localText ?? '', section.localLineCount) === 0) return ConflictRegionKind.OnlyTheirs;
+	if (lineCount(section.remoteText ?? '', section.remoteLineCount) === 0) return ConflictRegionKind.OnlyMine;
 	return ConflictRegionKind.Changed;
 };
 
@@ -39,7 +41,7 @@ export default (sections: MergedSection[]): ConflictDocument => {
 		const remoteText = section.remoteText ?? '';
 		const text = isConflict ? remoteText : section.text;
 
-		const holdsNoLine = isConflict && (section.remoteLineCount ?? (text === '' ? 0 : 1)) === 0;
+		const holdsNoLine = isConflict && lineCount(text, section.remoteLineCount) === 0;
 		const separated = wroteALine && !holdsNoLine;
 		if (separated) {
 			parts.push('\n');
@@ -47,7 +49,7 @@ export default (sections: MergedSection[]): ConflictDocument => {
 		}
 
 		if (holdsNoLine) {
-			const region = { from: 0, to: 0, localText, kind: kindOf(localText, remoteText) };
+			const region = { from: 0, to: 0, localText, kind: kindOf(section) };
 			regions.push(region);
 			waitingForLine.push(region);
 			continue;
@@ -55,7 +57,7 @@ export default (sections: MergedSection[]): ConflictDocument => {
 
 		for (const region of waitingForLine) {
 			region.from = region.to = offset;
-			if (region.localText) {
+			if (region.kind === ConflictRegionKind.OnlyMine) {
 				region.localText += '\n';
 				lastAnchored = region;
 			}
@@ -67,7 +69,7 @@ export default (sections: MergedSection[]): ConflictDocument => {
 				from: offset,
 				to: offset + text.length,
 				localText,
-				kind: kindOf(localText, remoteText),
+				kind: kindOf(section),
 			});
 		}
 
@@ -78,7 +80,7 @@ export default (sections: MergedSection[]): ConflictDocument => {
 
 	for (const region of waitingForLine) {
 		region.from = region.to = offset;
-		if (!wroteALine || !region.localText) continue;
+		if (!wroteALine || region.kind !== ConflictRegionKind.OnlyMine) continue;
 		region.localText = `\n${region.localText}`;
 
 		// A blank last line has no length, so lines before and after it would share one position

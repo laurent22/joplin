@@ -1,5 +1,5 @@
 import buildConflictDocument, { ConflictRegionKind } from './buildConflictDocument';
-import { MergedSection } from './diffNotes';
+import { MergedSection, twoWayDiff } from './diffNotes';
 
 describe('buildConflictDocument', () => {
 
@@ -73,6 +73,18 @@ describe('buildConflictDocument', () => {
 		const document = buildConflictDocument(sections);
 
 		expect(document.text).toBe('before\n\nafter');
+	});
+
+	test.each([
+		['one blank line filled in their version', 'x\n\ny', 'x\na\ny', ConflictRegionKind.Changed],
+		['several blank lines filled in their version', 'x\n\n\n\ny', 'x\na\na\na\ny', ConflictRegionKind.Changed],
+		['a blank line only in my version', 'x\n\ny', 'x\ny', ConflictRegionKind.OnlyMine],
+	])('should keep my version of %s', (_label, local, remote, kind) => {
+		const document = buildConflictDocument(twoWayDiff(local, remote).sections);
+		const [region] = document.regions;
+
+		expect(region.kind).toBe(kind);
+		expect(document.text.slice(0, region.from) + region.localText + document.text.slice(region.to)).toBe(local);
 	});
 
 	test('should classify each region by which version has the text', () => {

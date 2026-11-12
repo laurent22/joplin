@@ -55,6 +55,16 @@ describe('conflictResolutionExtension', () => {
 		expect(conflictRegions(editor.state).map(r => r.localText)).toEqual(['local one', 'local two']);
 	});
 
+	test.each([
+		['one blank line', 'x\na\ny', { from: 2, to: 3, localText: '' }, 1],
+		['blank lines at the end of my version', 'x\na\na\na\ny', { from: 2, to: 7, localText: '\n\n' }, 3],
+	])('should show every row of my version when it ends with %s', async (_label, text, region, rows) => {
+		const editor = await createEditor(text, [region]);
+
+		const shown = editor.dom.querySelector('.cm-conflictLocalVersion-text');
+		expect(shown.textContent.split('\n').length + shown.querySelectorAll('br').length - 1).toBe(rows);
+	});
+
 	test('should give each region a distinct id', async () => {
 		const editor = await createEditor('one\ntwo', [
 			{ from: 0, to: 3, localText: 'ONE' },

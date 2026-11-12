@@ -94,6 +94,9 @@ class LocalVersionWidget extends WidgetType {
 			span.textContent = segment.text;
 			text.appendChild(span);
 		}
+		if (this.localText_ === '' || this.localText_.endsWith('\n')) {
+			text.appendChild(document.createElement('br'));
+		}
 
 		const button = document.createElement('button');
 		button.className = 'cm-conflictUseVersionButton';
