@@ -52,7 +52,10 @@ const decryptRaw = (data: ArrayBuffer, algorithm: CipherAlgorithm, key: CryptoBu
 	try {
 		return Buffer.concat([decipher.update(encryptedData), decipher.final()]);
 	} catch (error) {
-		throw new Error(`Authentication failed! ${error}`);
+		const authError = new Error(`Authentication failed! ${error}`);
+		// The name WebCrypto gives a failed decryption, so callers can tell a wrong key on both.
+		authError.name = 'OperationError';
+		throw authError;
 	}
 };
 
