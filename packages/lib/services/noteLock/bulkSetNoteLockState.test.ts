@@ -22,7 +22,7 @@ const createLockedNote = async (props: NoteEntity) => {
 
 // What a sync leaves behind when the sync target uses a different note lock key.
 const simulateMigrationNeeded = () => {
-	Setting.setValue('noteLock.conflictNoteLockKey', { noteLockKey: { id: 'target-key' }, syncMigrationId: 'target-migration' });
+	Setting.setValue('noteLock.conflictNoteLockKey', { noteLockKey: { id: 'target-key', syncMigrationId: 'target-migration' } });
 };
 
 const prompts = { promptPassword: async () => '123456', goToNoteLockSetup: jest.fn() };
