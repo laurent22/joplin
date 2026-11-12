@@ -119,8 +119,9 @@ export default function useSearchMarkers({
 	const semanticSearchQuery = useMemo(() => {
 		if (!currentNoteSearchResult) return null;
 		if (!currentNoteSearchResult.searchType.includes(SearchType.Semantic)) return null;
+		// searchResults is global but searchId is per-window, so the search may not be found (e.g. in a secondary window)
 		const search = searches.find(search => search.id === searchId);
-		return search.query_pattern;
+		return search?.query_pattern ?? null;
 	}, [searches, searchId, currentNoteSearchResult]);
 
 	const semanticSearchMatches = useSemanticSearchMatches({
