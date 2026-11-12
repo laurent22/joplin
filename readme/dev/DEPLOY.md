@@ -34,7 +34,9 @@ Unlike the mobile or desktop application, the CLI app doesn't bundle its depende
 
 	yarn publishAll
 
-This is going to publish all the Joplin libraries, such as `@joplin/lib`, `@joplin/tools`, etc.
+This is going to bump the version of all the Joplin libraries, such as `@joplin/lib`, `@joplin/tools`, etc., then commit and push a `sub-packages-v*` tag. The tag triggers the `publish-sub-packages.yml` workflow, which builds and publishes the libraries to npm using [trusted publishing](https://docs.npmjs.com/trusted-publishers). Wait for that workflow to complete before releasing the CLI app.
+
+Each library must have `laurent22/joplin` and `publish-sub-packages.yml` registered as a trusted publisher on npmjs.com, with "Allow npm publish" enabled. When adding a new library, it must be published once manually before this can be configured.
 
 Then in `app-cli/package.json`, all `@joplin` dependencies and devdependencies must be set to the last major/minor version. For example:
 

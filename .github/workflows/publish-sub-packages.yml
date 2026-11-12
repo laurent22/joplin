@@ -1,0 +1,47 @@
+name: Publish sub-packages
+
+# The tag is created and pushed by `yarn publishAll`. Publishing uses npm trusted publishing, so no
+# token is needed, but each package must have this workflow registered as a trusted publisher on
+# npmjs.com.
+on:
+  push:
+    tags:
+      - 'sub-packages-v*'
+
+permissions:
+  contents: read
+  id-token: write
+
+# Two concurrent runs could both see a version as unpublished and then fail on the second publish
+concurrency:
+  group: publish-sub-packages
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  Publish:
+    if: github.repository == 'laurent22/joplin'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+
+      # Trusted publishing requires registry-url, and npm >= 11.5.1, which is bundled with Node 24.18
+      - name: Setup build environment
+        uses: ./.github/workflows/shared/setup-build-environment
+        with:
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install and build
+        env:
+          IS_CONTINUOUS_INTEGRATION: 1
+          BUILD_SEQUENCIAL: 1
+        run: |
+          source "${GITHUB_WORKSPACE}/.github/scripts/retry.sh"
+          retry yarn install
+
+      # Not part of the regular build, but plugin-repo-cli's entry point is dist/index.js
+      - name: Bundle plugin-repo-cli
+        run: yarn workspace @joplin/plugin-repo-cli dist
+
+      - name: Publish
+        run: node packages/tools/releaseSubPackages.js publish

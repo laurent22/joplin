@@ -87,6 +87,10 @@ describe('shares', () => {
 		const result = await getApi<Share>('', `shares/${share.id}`);
 		expect(result.id).toBe(share.id);
 		expect(result.type).toBe(ShareType.PublishedFolder);
+		expect(result.owner_id).toBeUndefined();
+
+		const ownerResult = await getApi<Share>(session.id, `shares/${share.id}`);
+		expect(ownerResult.owner_id).toBe(share.owner_id);
 	});
 
 	test('should not reveal whether an email has an account', async () => {

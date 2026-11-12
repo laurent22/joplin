@@ -4,6 +4,7 @@ import { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../app.reducer';
 import { _ } from '@joplin/lib/locale';
+import { noteLockPasswordErrorMessage } from '@joplin/lib/components/shared/config/useNoteLockMode';
 import DialogButtonRow, { ClickEvent } from '../DialogButtonRow';
 import Dialog from '@joplin/lib/components/Dialog';
 import DialogTitle from '../DialogTitle';
@@ -54,7 +55,7 @@ export default function(props: Props) {
 			try {
 				await startNoteLockKeyMigration(localPassword, targetPassword, props.dispatch, onClose, bulkChangeRunning);
 			} catch (error) {
-				setErrorMessage(error.name === 'OperationError' ? _('Invalid password') : error.message);
+				setErrorMessage(noteLockPasswordErrorMessage(error, true));
 				setMigrating(false);
 			}
 		}

@@ -1,5 +1,11 @@
 # Joplin Server Changelog
 
+## [server-v3.7.5](https://github.com/laurent22/joplin/releases/tag/server-v3.7.5) - 2026-11-11T19:32:46Z
+
+- Improved: Reduce database load of the orphaned items task (#17061)
+- Security: Check the token on the account confirmation page when confirm_email=0 (dfe4a24)
+- Security: Do not reveal the owner's user ID on public share API (fbf73e5)
+
 ## [server-v3.7.4](https://github.com/laurent22/joplin/releases/tag/server-v3.7.4) - 2026-11-05T08:18:56Z
 
 - New: Add a check that does not count to the per-account limiter (738590a)

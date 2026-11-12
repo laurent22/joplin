@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { themeStyle } from '../global-style';
 import { _ } from '@joplin/lib/locale';
+import { noteLockPasswordErrorMessage } from '@joplin/lib/components/shared/config/useNoteLockMode';
 import { confirmAndSkipNoteLockKeyMigration, startNoteLockKeyMigration } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
 import ScreenHeader from '../ScreenHeader';
 import { PrimaryButton, SecondaryButton } from '../buttons';
@@ -73,7 +74,7 @@ export const NoteLockMigrationScreenComponent: React.FC<Props> = props => {
 		try {
 			await startNoteLockKeyMigration(localPassword, targetPassword, props.dispatch, () => props.dispatch({ type: 'NAV_BACK' }), props.noteLockBulkChangeRunning);
 		} catch (error) {
-			setErrorMessage(error.name === 'OperationError' ? _('Invalid password') : error.message);
+			setErrorMessage(noteLockPasswordErrorMessage(error, true));
 			setMigrating(false);
 		}
 	}, [localPassword, targetPassword, props.dispatch, props.noteLockBulkChangeRunning]);

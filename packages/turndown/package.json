@@ -1,7 +1,7 @@
 {
   "name": "@joplin/turndown",
   "description": "A library that converts HTML to Markdown",
-  "version": "4.0.88",
+  "version": "4.0.89",
   "author": "Dom Christie",
   "main": "lib/turndown.cjs.js",
   "publishConfig": {
@@ -34,7 +34,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/laurent22/joplin.git",
+    "url": "git+https://github.com/laurent22/joplin.git",
     "directory": "packages/turndown"
   },
   "scripts": {
@@ -46,6 +46,5 @@
     "build-test": "browserify test/turndown-test.js --outfile test/turndown-test.browser.js",
     "build": "npm run build-cjs",
     "prepare": "npm run build"
-  },
-  "gitHead": "898d2999f93fbedf0ce5f6626feb63e1a732ce0a"
+  }
 }

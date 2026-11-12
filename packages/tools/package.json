@@ -1,6 +1,6 @@
 {
   "name": "@joplin/tools",
-  "version": "3.7.3",
+  "version": "3.7.4",
   "description": "Various tools for Joplin",
   "main": "index.js",
   "author": "Laurent Cozic",
@@ -17,13 +17,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/laurent22/joplin.git"
+    "url": "git+https://github.com/laurent22/joplin.git",
+    "directory": "packages/tools"
   },
   "license": "AGPL-3.0-or-later",
   "dependencies": {
-    "@joplin/lib": "^3.7.3",
-    "@joplin/renderer": "^3.7.3",
-    "@joplin/utils": "^3.7.3",
+    "@joplin/lib": "^3.7.4",
+    "@joplin/renderer": "^3.7.4",
+    "@joplin/utils": "^3.7.4",
     "compare-versions": "6.1.1",
     "dayjs": "1.11.21",
     "execa": "4.1.0",
@@ -45,7 +46,7 @@
   },
   "devDependencies": {
     "@docusaurus/plugin-sitemap": "3.10.2",
-    "@joplin/fork-htmlparser2": "^4.1.66",
+    "@joplin/fork-htmlparser2": "^4.1.67",
     "@rmp135/sql-ts": "1.18.1",
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.14",
@@ -66,6 +67,5 @@
     "style-to-js": "1.1.21",
     "ts-node": "10.9.2",
     "typescript": "5.9.3"
-  },
-  "gitHead": "898d2999f93fbedf0ce5f6626feb63e1a732ce0a"
+  }
 }

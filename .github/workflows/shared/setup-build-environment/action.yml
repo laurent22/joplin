@@ -1,5 +1,10 @@
 name: 'Setup build environment'
 description: 'Install Joplin build dependencies'
+inputs:
+  registry-url:
+    description: 'npm registry URL, required for npm trusted publishing'
+    required: false
+    default: ''
 runs:
   using: 'composite'
   steps:
@@ -55,6 +60,7 @@ runs:
     - uses: actions/setup-node@v6
       with:
         node-version: '24.18'
+        registry-url: ${{ inputs.registry-url }}
         # Disable the cache on ARM runners. For now, we don't run "yarn install" on these
         # environments and this breaks actions/setup-node.
         # See https://github.com/laurent22/joplin/commit/47d0d3eb9e89153a609fb5441344da10904c6308#commitcomment-159577783.
@@ -70,3 +76,10 @@ runs:
     - uses: actions/setup-python@v6
       with:
         python-version: '3.14'
+
+    # Building the default plugins from source takes several minutes on Windows. Must be restored
+    # before "yarn install", which builds them.
+    - uses: actions/cache@v6
+      with:
+        path: packages/default-plugins/build-cache
+        key: default-plugins-${{ runner.os }}-${{ hashFiles('packages/default-plugins/pluginRepositories.json', 'packages/default-plugins/plugin-patches/**', 'packages/default-plugins/buildDefaultPlugins.ts') }}

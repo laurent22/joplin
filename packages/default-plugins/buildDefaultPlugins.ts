@@ -1,9 +1,10 @@
 
 /* eslint-disable no-console */
 
-import { copy, exists, remove, readdir, mkdtemp } from 'fs-extra';
+import { copy, exists, remove, readdir, mkdtemp, readFile } from 'fs-extra';
 import { join, resolve, basename } from 'path';
 import { tmpdir } from 'os';
+import { createHash } from 'crypto';
 import { chdir, cwd } from 'process';
 import { execCommand } from '@joplin/utils';
 import { glob } from 'glob';
@@ -16,7 +17,21 @@ interface Options {
 	outputParentDir: string|null;
 	beforeInstall: (buildDir: string, pluginName: string)=> Promise<void>;
 	beforePatch: ()=> Promise<void>;
+	useBuildCache: boolean;
 }
+
+// Increment to invalidate cached builds, for example after changing how plugins are built
+const buildCacheVersion = 1;
+const buildCacheDir = process.env.JOPLIN_DEFAULT_PLUGINS_CACHE_DIR || join(__dirname, 'build-cache');
+
+const getBuildCachePath = async (pluginId: string, repositoryData: RepositoryData) => {
+	const patchFile = getPathToPatchFileFor(pluginId);
+	const patch = await exists(patchFile) ? await readFile(patchFile, 'utf8') : '';
+	const hash = createHash('sha256')
+		.update(JSON.stringify([buildCacheVersion, pluginId, repositoryData.cloneUrl, repositoryData.commit, patch]))
+		.digest('hex');
+	return join(buildCacheDir, `${pluginId}-${hash.substring(0, 16)}.jpl`);
+};
 
 const buildDefaultPlugins = async (options: Options) => {
 	const pluginRepositoryData = await readRepositoryJson(join(__dirname, 'pluginRepositories.json'));
@@ -26,7 +41,23 @@ const buildDefaultPlugins = async (options: Options) => {
 		const outputPath = options.outputParentDir && join(options.outputParentDir, `${pluginId}.jpl`);
 
 		if (repositoryData.type === BuiltInPluginType.Built) {
-			await buildPlugin(pluginId, repositoryData, outputPath, options);
+			const cachePath = options.useBuildCache && outputPath ? await getBuildCachePath(pluginId, repositoryData) : null;
+			if (cachePath && await exists(cachePath)) {
+				logStatus('Using cached build of', pluginId, 'from', cachePath);
+				await copy(cachePath, outputPath);
+				continue;
+			}
+
+			const sourceHasLocalChanges = await buildPlugin(pluginId, repositoryData, outputPath, options);
+
+			if (cachePath) {
+				if (sourceHasLocalChanges) {
+					logStatus('Not caching build of', pluginId, ': its source checkout has local changes');
+				} else {
+					await copy(outputPath, cachePath);
+					logStatus('Saved build of', pluginId, 'to', cachePath);
+				}
+			}
 		} else {
 			if (!outputPath) {
 				console.warn('Skipping NPM plugin,', pluginId, ': missing output path.');
@@ -80,6 +111,9 @@ const buildPlugin = async (pluginId: string, repositoryData: RepositoryData, out
 			throw new Error(`Unable to checkout commit ${expectedCommitHash}`);
 		}
 
+		// Local changes are included in the build but not in the build cache key
+		const sourceHasLocalChanges = (await execCommand(['git', 'status', '--porcelain'], { showStdout: false })).trim() !== '';
+
 		logStatus('Copying repository files...');
 		await copy(pluginDir, buildDir, {
 			filter: fileName => {
@@ -122,6 +156,8 @@ const buildPlugin = async (pluginId: string, repositoryData: RepositoryData, out
 		} else {
 			console.warn('No output directory specified. Not copying built .jpl files.');
 		}
+
+		return sourceHasLocalChanges;
 	} catch (error) {
 		console.error(error);
 		console.log('Build directory', buildDir);

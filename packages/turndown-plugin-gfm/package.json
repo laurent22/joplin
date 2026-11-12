@@ -4,7 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.0.70",
+  "version": "1.0.71",
   "author": "Dom Christie",
   "main": "lib/turndown-plugin-gfm.cjs.js",
   "devDependencies": {
@@ -30,7 +30,8 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/laurent22/joplin-turndown-plugin-gfm.git"
+    "url": "git+https://github.com/laurent22/joplin.git",
+    "directory": "packages/turndown-plugin-gfm"
   },
   "scripts": {
     "build-all": "npm run build-cjs && npm run build-es && npm run build-iife",
@@ -40,6 +41,5 @@
     "build-iife": "rollup -c config/rollup.config.iife.js",
     "build-test": "browserify test/turndown-plugin-gfm-test.js --outfile test/turndown-plugin-gfm-test.browser.js",
     "prepare": "npm run build"
-  },
-  "gitHead": "898d2999f93fbedf0ce5f6626feb63e1a732ce0a"
+  }
 }
