@@ -48,11 +48,15 @@ const buildDefaultPlugins = async (options: Options) => {
 				continue;
 			}
 
-			await buildPlugin(pluginId, repositoryData, outputPath, options);
+			const sourceHasLocalChanges = await buildPlugin(pluginId, repositoryData, outputPath, options);
 
 			if (cachePath) {
-				await copy(outputPath, cachePath);
-				logStatus('Saved build of', pluginId, 'to', cachePath);
+				if (sourceHasLocalChanges) {
+					logStatus('Not caching build of', pluginId, ': its source checkout has local changes');
+				} else {
+					await copy(outputPath, cachePath);
+					logStatus('Saved build of', pluginId, 'to', cachePath);
+				}
 			}
 		} else {
 			if (!outputPath) {
@@ -107,6 +111,9 @@ const buildPlugin = async (pluginId: string, repositoryData: RepositoryData, out
 			throw new Error(`Unable to checkout commit ${expectedCommitHash}`);
 		}
 
+		// Local changes are included in the build but not in the build cache key
+		const sourceHasLocalChanges = (await execCommand(['git', 'status', '--porcelain'], { showStdout: false })).trim() !== '';
+
 		logStatus('Copying repository files...');
 		await copy(pluginDir, buildDir, {
 			filter: fileName => {
@@ -149,6 +156,8 @@ const buildPlugin = async (pluginId: string, repositoryData: RepositoryData, out
 		} else {
 			console.warn('No output directory specified. Not copying built .jpl files.');
 		}
+
+		return sourceHasLocalChanges;
 	} catch (error) {
 		console.error(error);
 		console.log('Build directory', buildDir);
