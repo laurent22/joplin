@@ -10,6 +10,7 @@ const editPatch = async (targetPluginId: string, outputParentDir: string|null) =
 
 	await buildDefaultPlugins({
 		outputParentDir: outputParentDir,
+		useBuildCache: false,
 		beforePatch: async () => {
 			// To make updating just the patch possible, a commit is created just before applying
 			// the patch.

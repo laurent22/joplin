@@ -15,6 +15,7 @@ import * as hideModalMessage from './hideModalMessage';
 import * as importFrom from './importFrom';
 import * as linkToNote from './linkToNote';
 import * as lockEncryptedNotes from './lockEncryptedNotes';
+import * as lockNotes from './lockNotes';
 import * as moveToFolder from './moveToFolder';
 import * as newFolder from './newFolder';
 import * as newNote from './newNote';
@@ -29,6 +30,7 @@ import * as openNote from './openNote';
 import * as openPdfViewer from './openPdfViewer';
 import * as openTag from './openTag';
 import * as print from './print';
+import * as removeNoteLockFromNotes from './removeNoteLockFromNotes';
 import * as renameFolder from './renameFolder';
 import * as renameTag from './renameTag';
 import * as resetLayout from './resetLayout';
@@ -76,6 +78,7 @@ const index: any[] = [
 	importFrom,
 	linkToNote,
 	lockEncryptedNotes,
+	lockNotes,
 	moveToFolder,
 	newFolder,
 	newNote,
@@ -90,6 +93,7 @@ const index: any[] = [
 	openPdfViewer,
 	openTag,
 	print,
+	removeNoteLockFromNotes,
 	renameFolder,
 	renameTag,
 	resetLayout,

@@ -20,6 +20,5 @@
   "devDependencies": {
     "wasm-pack": "0.13.1",
     "yargs": "17.7.2"
-  },
-  "gitHead": "898d2999f93fbedf0ce5f6626feb63e1a732ce0a"
+  }
 }
