@@ -631,6 +631,7 @@ export default class EncryptionService {
 			if (options.onProgress) options.onProgress({ doneSize: doneSize });
 
 			// Wait for a frame so that the app remains responsive in mobile.
+			// This wait is throttled to a maximum of one call per frameWaitIntervalMs.
 			// https://corbt.com/posts/2015/12/22/breaking-up-heavy-processing-in-react-native.html
 			const [frameTimestamp, encrypted] = await Promise.all([shim.waitForFrame(lastFrameTimestamp), this.encrypt(method, masterKeyPlainText, block)]);
 			lastFrameTimestamp = frameTimestamp;

@@ -189,6 +189,7 @@ export default function shimInit() {
 	};
 
 	shim.waitForFrame = (lastFrameTimestamp: number) => {
+		// Animation frames do not fire while the app is in the background.
 		if (AppState.currentState !== 'active') {
 			return Promise.resolve(lastFrameTimestamp);
 		}
