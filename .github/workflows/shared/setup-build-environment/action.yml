@@ -76,3 +76,10 @@ runs:
     - uses: actions/setup-python@v6
       with:
         python-version: '3.14'
+
+    # Building the default plugins from source takes several minutes on Windows. Must be restored
+    # before "yarn install", which builds them.
+    - uses: actions/cache@v6
+      with:
+        path: packages/default-plugins/build-cache
+        key: default-plugins-${{ runner.os }}-${{ hashFiles('packages/default-plugins/pluginRepositories.json', 'packages/default-plugins/plugin-patches/**', 'packages/default-plugins/buildDefaultPlugins.ts') }}
