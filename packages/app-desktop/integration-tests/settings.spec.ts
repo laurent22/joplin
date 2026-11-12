@@ -1,7 +1,7 @@
 import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
 import SettingsScreen from './models/SettingsScreen/SettingsScreen';
-import JoplinCloudLoginScreen from './models/JoplinCloudLoginScreen';
+import JoplinOAuthLoginScreen from './models/JoplinOAuthLoginScreen';
 
 test.describe('settings', () => {
 	test('should be possible to remove sort order buttons in settings', async ({ electronApp, mainWindow }) => {
@@ -50,7 +50,7 @@ test.describe('settings', () => {
 		// Should allow navigating to the Joplin Cloud login screen
 		const joplinCloudButton = mainScreen.dialog.getByRole('link', { name: 'Already have an account? Log in' });
 		await joplinCloudButton.click();
-		await new JoplinCloudLoginScreen(mainWindow).waitFor();
+		await new JoplinOAuthLoginScreen(mainWindow).waitFor();
 	});
 
 	test('clicking "Connect to Joplin Cloud" should open the Joplin Cloud login screen', async ({ mainWindow, electronApp }) => {
@@ -63,7 +63,7 @@ test.describe('settings', () => {
 		await syncTab.syncTargetDropdown.selectOption({ label: 'Joplin Cloud' });
 
 		await syncTab.connectToJoplinCloudButton.click();
-		await new JoplinCloudLoginScreen(mainWindow).waitFor();
+		await new JoplinOAuthLoginScreen(mainWindow).waitFor();
 	});
 
 	test('should be possible to navigate settings screen tabs with the arrow keys', async ({ electronApp, mainWindow, startupPluginsLoaded }) => {

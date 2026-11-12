@@ -17,7 +17,8 @@ import { substrWithEllipsis } from '@joplin/lib/string-utils';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
-import { reg } from '@joplin/lib/registry';
+import { isJoplinOAuthSyncTarget } from '@joplin/lib/services/joplinOAuthUtils';
+import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 
 const logger = Logger.create('WarningBanner');
 
@@ -33,7 +34,8 @@ interface Props {
 	syncTargetAppMinVersion?: string;
 	shareInvitations: ShareInvitation[];
 	processingShareInvitationResponse: boolean;
-	showInvalidJoplinCloudCredential: boolean;
+	showInvalidJoplinOAuthCredential: boolean;
+	syncTargetId: number;
 	noteLockKeyConflict: boolean;
 	showNoteLockKeyConflictMessage: boolean|undefined;
 	noteLockMigrationStatus: NoteLockMigrationStatus|null;
@@ -153,9 +155,20 @@ const WarningBannerComponent: React.FC<Props> = props => {
 			warningComps.push(renderWarningBox('noteLockMigration', _('The sync target uses a different note lock key to the one on your device. Press to migrate your locked notes.'), { screen: 'NoteLockMigration' }));
 		}
 	}
-	if (props.showInvalidJoplinCloudCredential) {
-		const target = { screen: 'JoplinCloudLogin' };
-		warningComps.push(renderWarningBox('syncLogin', _('Your Joplin Cloud credentials are invalid, please login.'), target));
+	if (props.showInvalidJoplinOAuthCredential) {
+		const syncTargetClass = SyncTargetRegistry.classById(props.syncTargetId);
+		const syncTargetLabel = SyncTargetRegistry.idToLabelOrEmpty(props.syncTargetId);
+
+		const authRouteName = syncTargetClass.authRouteName();
+		const target = authRouteName ? {
+			screen: authRouteName,
+		} : {
+			screen: 'Config',
+			screenProps: { sectionName: 'sync' },
+		};
+		warningComps.push(renderWarningBox(
+			'auth', _('Your %s credentials are invalid, please log in.', syncTargetLabel), target,
+		));
 	}
 
 	const shareInvitation = props.shareInvitations.find(inv => inv.status === ShareUserStatus.Waiting);
@@ -180,7 +193,7 @@ const WarningBannerComponent: React.FC<Props> = props => {
 
 const isSyncLoginRoute = (state: AppState) => {
 	const syncTargetId = state.settings['sync.target'];
-	const syncTarget = syncTargetId ? reg.syncTarget(syncTargetId) : null;
+	const syncTarget = syncTargetId ? SyncTargetRegistry.classById(syncTargetId) : null;
 	if (syncTarget) {
 		return state.route?.routeName === syncTarget.authRouteName();
 	}
@@ -209,7 +222,8 @@ export default connect((state: AppState) => {
 		syncTargetAppMinVersion: state.mustUpgradeAppMinVersion,
 		shareInvitations: state.shareService.shareInvitations,
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
-		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && !isSyncLoginRoute(state) && state.mustAuthenticate,
+		showInvalidJoplinOAuthCredential: isJoplinOAuthSyncTarget(state.settings['sync.target']) && !isSyncLoginRoute(state) && state.mustAuthenticate,
+		syncTargetId: state.settings['sync.target'],
 		noteLockKeyConflict: noteLockKeyConflictFromState(state),
 		noteLockMigrationStatus: state.noteLockMigrationStatus,
 	};

@@ -3,6 +3,7 @@ import { _ } from '../locale';
 import { reg } from '../registry';
 import Setting from '../models/Setting';
 import NavService from '../services/NavService';
+import SyncTargetRegistry from '../SyncTargetRegistry';
 
 export const declaration: CommandDeclaration = {
 	name: 'synchronize',
@@ -28,10 +29,12 @@ export const runtime = (): CommandRuntime => {
 			}
 
 			if (!(await reg.syncTarget().isAuthenticated())) {
-				if (reg.syncTarget().authRouteName()) {
+				const syncTargetClass = SyncTargetRegistry.classById(Setting.value('sync.target'));
+				const authRouteName = syncTargetClass.authRouteName();
+				if (authRouteName) {
 					utils.store.dispatch({
 						type: 'NAV_GO',
-						routeName: reg.syncTarget().authRouteName(),
+						routeName: authRouteName,
 					});
 					return 'auth';
 				}

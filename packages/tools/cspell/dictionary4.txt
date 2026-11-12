@@ -351,6 +351,7 @@ collegeboom
 jsdiff
 unmerged
 unspaced
+combobox
 syncdisabledicon
 syncable
 selfsigned

@@ -20,6 +20,9 @@ import { noteLockKeyConflictFromState } from '@joplin/lib/services/synchronizer/
 import { NoteLockMigrationStatus } from '@joplin/lib/reducer';
 import { confirmAndSkipNoteLockKeyMigration, notMigratedMessage, withSkippedCount } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
 import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/config/shouldShowMissingPasswordWarning';
+import { isJoplinOAuthSyncTarget, openSyncSettings } from '@joplin/lib/services/joplinOAuthUtils';
+import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
+import NavService from '@joplin/lib/services/NavService';
 import { connect } from 'react-redux';
 
 const logger = Logger.create('WarningBanner');
@@ -42,7 +45,9 @@ interface Props {
 	mustUpgradeAppMessage: string;
 	syncTargetAppMinVersion: string;
 	shouldSwitchToAppleSiliconVersion: boolean;
-	showInvalidJoplinCloudCredential: boolean;
+	showInvalidJoplinServerCredential: boolean;
+	syncTargetName: string;
+
 	onShow: ()=> void;
 	onHide: ()=> void;
 	height: number;
@@ -95,11 +100,19 @@ const WarningBanner: React.FC<Props> = props => {
 		});
 	};
 
-	const onViewJoplinCloudLoginScreen = () => {
-		props.dispatch({
-			type: 'NAV_GO',
-			routeName: 'JoplinCloudLogin',
-		});
+	const onViewJoplinServerLoginScreen = () => {
+		const syncTarget = Setting.value('sync.target');
+		if (!isJoplinOAuthSyncTarget(syncTarget)) {
+			void shim.showErrorDialog(_('Error: Not connected to Joplin Cloud or Joplin Server'));
+			return;
+		}
+
+		const routeName = SyncTargetRegistry.classById(syncTarget).authRouteName();
+		if (routeName) {
+			void NavService.go(routeName);
+		} else {
+			void openSyncSettings();
+		}
 	};
 
 	const onDisableSync = () => {
@@ -279,11 +292,11 @@ const WarningBanner: React.FC<Props> = props => {
 			_('Download it now'),
 			onDownloadAppleSiliconVersion,
 		);
-	} else if (props.showInvalidJoplinCloudCredential) {
+	} else if (props.showInvalidJoplinServerCredential) {
 		msg = renderNotificationMessage(
-			_('Your Joplin Cloud credentials are invalid, please login.'),
-			_('Login to Joplin Cloud.'),
-			onViewJoplinCloudLoginScreen,
+			_('Your %s credentials are invalid, please log in.', props.syncTargetName),
+			_('Log in to %s.', props.syncTargetName),
+			onViewJoplinServerLoginScreen,
 			_('Disable synchronisation'),
 			onDisableSync,
 		);
@@ -343,7 +356,8 @@ const mapStateToProps = (state: AppState) => {
 		isSafeMode: state.settings.isSafeMode,
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
 		syncTargetAppMinVersion: state.mustUpgradeAppMinVersion,
-		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
+		showInvalidJoplinServerCredential: isJoplinOAuthSyncTarget(state.settings['sync.target']) && state.mustAuthenticate,
+		syncTargetName: SyncTargetRegistry.idToLabelOrEmpty(state.settings['sync.target']),
 		shouldSwitchToAppleSiliconVersion: shim.isAppleSilicon() && shim.isMac() && process.arch !== 'arm64',
 	};
 };

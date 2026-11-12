@@ -117,6 +117,20 @@ const checkBufferToString = () => {
 	}
 };
 
+const checkGenerateUuid = () => {
+	const crypto = shim.crypto;
+	const uuid1 = crypto.randomUuid();
+	const uuid2 = crypto.randomUuid();
+
+	if (uuid1 === uuid2) {
+		throw new Error(`Generated duplicate UUIDs (${uuid1} === ${uuid2})`);
+	}
+
+	if (!uuid1.match(/^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}$/)) {
+		throw new Error(`Generated UUID does not match the expected pattern. UUID: ${uuid1}`);
+	}
+};
+
 export async function testStringPerformance(method: EncryptionMethod, dataSize: number, count: number, options: CheckTestDataOptions = null) {
 	options = {
 		throwOnError: false,
@@ -304,6 +318,9 @@ export const runIntegrationTests = async (silent = false, testPerformance = fals
 
 	log('Testing bufferToString...');
 	checkBufferToString();
+
+	log('Testing UUID...');
+	checkGenerateUuid();
 
 	log('Testing shim.randomBytes...');
 	await checkRandomBytes();

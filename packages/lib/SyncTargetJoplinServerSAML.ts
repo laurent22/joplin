@@ -74,11 +74,22 @@ export default class SyncTargetJoplinServerSAML extends SyncTargetJoplinServer {
 		// We check that the file API has been initialized at least once, otherwise the below check
 		// will always fail and it will be impossible to login.
 		if (this.lastFileApiOptions_) {
-			const check = await SyncTargetJoplinServer.checkConfig(null, null, await this.fileApi());
+			const check = await SyncTargetJoplinServer.checkConfig(
+				{ ...this.fileApiOptions_(), authorizedForPath: ()=>'*' },
+				SyncTargetJoplinServerSAML.id(),
+				await this.fileApi(),
+			);
 			return check.ok;
 		}
 
 		return true;
+	}
+
+	public static override authRouteName() {
+		if (super.authRouteName()) {
+			return 'JoplinServerSamlLogin';
+		}
+		return null; // e.g. due to invalid configuration
 	}
 
 	public static override requiresPassword() {
@@ -123,14 +134,18 @@ export default class SyncTargetJoplinServerSAML extends SyncTargetJoplinServer {
 		}
 	}
 
-	protected override async initFileApi() {
-		this.lastFileApiOptions_ = {
+	private fileApiOptions_() {
+		return {
 			path: () => Setting.value('sync.11.path'),
 			userContentPath: () => Setting.value('sync.11.userContentPath'),
 			username: () => '',
 			password: () => '',
 			apiKey: () => Setting.value('sync.11.apiKey'),
 		};
+	}
+
+	protected override async initFileApi() {
+		this.lastFileApiOptions_ = this.fileApiOptions_();
 		return initFileApi(SyncTargetJoplinServerSAML.id(), this.logger(), this.lastFileApiOptions_);
 	}
 }

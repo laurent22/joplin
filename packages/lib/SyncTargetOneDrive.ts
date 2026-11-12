@@ -62,7 +62,7 @@ export default class SyncTargetOneDrive extends BaseSyncTarget {
 		return p.oneDrive;
 	}
 
-	public authRouteName() {
+	public static authRouteName() {
 		return 'OneDriveLogin';
 	}
 

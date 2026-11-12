@@ -17,7 +17,7 @@ import KeyboardAvoidingView from './KeyboardAvoidingView';
 interface Props {
 	route: Route;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Each screen has different props (themeId, dispatch, navigation, visible, ...); typing the union would force a refactor of every screen
-	screens: Record<string, { screen: ComponentType<any> }>;
+	screens: Record<string, { screen: ComponentType<any>; props?: any }>;
 	dispatch: Dispatch;
 	themeId: number;
 }
@@ -42,6 +42,7 @@ const AppNavComponent: React.FC<Props> = (props) => {
 
 	const route = props.route;
 	let Screen = null;
+	let screenProps = {};
 	let notesScreenVisible = false;
 	let searchScreenVisible = false;
 
@@ -50,7 +51,9 @@ const AppNavComponent: React.FC<Props> = (props) => {
 	} else if (route.routeName === 'Search') {
 		searchScreenVisible = true;
 	} else {
-		Screen = props.screens[route.routeName].screen;
+		const screenSpec = props.screens[route.routeName];
+		Screen = screenSpec.screen;
+		screenProps = screenSpec.props;
 	}
 
 	const previousRouteName = usePrevious(route.routeName, '');
@@ -76,7 +79,14 @@ const AppNavComponent: React.FC<Props> = (props) => {
 		>
 			<NotesScreen visible={notesScreenVisible} />
 			{searchScreenLoaded && <SearchScreen visible={searchScreenVisible} />}
-			{!notesScreenVisible && !searchScreenVisible && <Screen navigation={{ state: route }} themeId={props.themeId} dispatch={props.dispatch} />}
+			{!notesScreenVisible && !searchScreenVisible && Screen && (
+				<Screen
+					navigation={{ state: route }}
+					themeId={props.themeId}
+					dispatch={props.dispatch}
+					{...screenProps}
+				/>
+			)}
 			<View style={{ height: autocompletionBarPadding }} />
 		</KeyboardAvoidingView>
 	);
@@ -89,4 +99,4 @@ const AppNav = connect((state: AppState) => {
 	};
 })(AppNavComponent);
 
-module.exports = { AppNav };
+export default AppNav;

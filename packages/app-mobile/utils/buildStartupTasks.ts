@@ -16,7 +16,7 @@ import { loadKeychainServiceAndSettings } from '@joplin/lib/services/SettingUtil
 import { setLocale } from '@joplin/lib/locale';
 import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
-import { completePendingAuthentication } from '@joplin/lib/services/joplinCloudUtils';
+import { completePendingAuthentication } from '@joplin/lib/services/joplinOAuthUtils';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 import initProfile from '@joplin/lib/services/profileConfig/initProfile';
 import VersionInfo from 'react-native-version-info';
@@ -458,7 +458,7 @@ const buildStartupTasks = (
 	addTask('buildStartupTasks/run migrations', async () => {
 		await MigrationService.instance().run();
 	});
-	addTask('buildStartupTasks/complete pending Joplin Cloud auth', async () => {
+	addTask('buildStartupTasks/complete pending Joplin Server/Cloud auth', async () => {
 		await completePendingAuthentication();
 	});
 	addTask('buildStartupTasks/set up background tasks', async () => {

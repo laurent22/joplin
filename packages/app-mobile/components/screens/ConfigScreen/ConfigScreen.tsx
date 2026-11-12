@@ -111,13 +111,6 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 	};
 
 	private checkSyncConfig_ = async () => {
-		if (this.state.settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud')) {
-			const isAuthenticated = await reg.syncTarget().isAuthenticated();
-			if (!isAuthenticated) {
-				void NavService.go('JoplinCloudLogin');
-				return;
-			}
-		}
 		// to ignore TLS errors we need to change the global state of the app, if the check fails we need to restore the original state
 		// this call sets the new value and returns the previous one which we can use later to revert the change
 		const prevIgnoreTlsErrors = await setIgnoreTlsErrors(this.state.settings['net.ignoreTlsErrors']);

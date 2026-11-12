@@ -1,26 +1,13 @@
 import Setting from './models/Setting';
 import Synchronizer from './Synchronizer';
 import { _ } from './locale.js';
-import BaseSyncTarget from './BaseSyncTarget';
 import { FileApi } from './file-api';
-import SyncTargetJoplinServer, { initFileApi } from './SyncTargetJoplinServer';
+import SyncTargetJoplinServerBase, { initFileApi } from './SyncTargetJoplinServerBase';
 
-interface FileApiOptions {
-	path(): string;
-	userContentPath(): string;
-	username(): string;
-	password(): string;
-	apiKey(): string;
-}
-
-export default class SyncTargetJoplinCloud extends BaseSyncTarget {
+export default class SyncTargetJoplinCloud extends SyncTargetJoplinServerBase {
 
 	public static id() {
 		return 10;
-	}
-
-	public static supportsConfigCheck() {
-		return SyncTargetJoplinServer.supportsConfigCheck();
 	}
 
 	public static targetName() {
@@ -50,21 +37,7 @@ export default class SyncTargetJoplinCloud extends BaseSyncTarget {
 		return true;
 	}
 
-	public async isAuthenticated() {
-		try {
-			const fileApi = await this.fileApi();
-			const api = fileApi.driver().api();
-			const sessionId = await api.sessionId();
-			return !!sessionId;
-		} catch (error) {
-			if (error.code === 403) {
-				return false;
-			}
-			throw error;
-		}
-	}
-
-	public authRouteName() {
+	public static override authRouteName() {
 		return 'JoplinCloudLogin';
 	}
 
@@ -78,12 +51,6 @@ export default class SyncTargetJoplinCloud extends BaseSyncTarget {
 		return super.fileApi();
 	}
 
-	public static async checkConfig(options: FileApiOptions) {
-		return SyncTargetJoplinServer.checkConfig({
-			...options,
-		}, SyncTargetJoplinCloud.id());
-	}
-
 	protected async initFileApi() {
 		return initFileApi(SyncTargetJoplinCloud.id(), this.logger(), {
 			path: () => Setting.value('sync.10.path'),
@@ -91,6 +58,7 @@ export default class SyncTargetJoplinCloud extends BaseSyncTarget {
 			username: () => Setting.value('sync.10.username'),
 			password: () => Setting.value('sync.10.password'),
 			apiKey: () => Setting.value('sync.10.apiKey'),
+			authorizedForPath: () => Setting.value('sync.10.authorizedForPath'),
 		});
 	}
 
