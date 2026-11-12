@@ -19,7 +19,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/laurent22/joplin"
+    "url": "git+https://github.com/laurent22/joplin.git",
+    "directory": "packages/app-cli"
   },
   "copyright": {
     "title": "Joplin CLI",
