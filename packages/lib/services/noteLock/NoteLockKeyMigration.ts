@@ -74,13 +74,17 @@ export const migrateLockedNotes = async (localPassword: string, targetPassword: 
 		for (const revisionId of await Revision.lockedRevisionIds()) {
 			try {
 				const revision = await Revision.load(revisionId);
+				// Removed by the revision service since the list was read.
+				if (!revision) continue;
 				if (revision.encryption_applied) throw new Error('The revision is still encrypted by sync');
 				const body = Revision.applyTextPatch('', revision.body_diff);
 				const { masterKeyId } = await encryptionService.decodeHeaderString(body, true);
 				if (masterKeyId !== localKey.id) continue;
 				const plainBody = await NoteLockService.withDecryptedKey(scoped => scoped.decryptString(body), localKey);
 				const targetBody = await NoteLockService.withDecryptedKey(scoped => scoped.encryptString(plainBody), targetKey);
-				await Revision.save({ id: revision.id, body_diff: Revision.createTextPatch('', targetBody) });
+				// The revision keeps its times, so new history snapshots are still spaced from it, and is uploaded again regardless.
+				await Revision.save({ id: revision.id, body_diff: Revision.createTextPatch('', targetBody) }, { autoTimestamp: false });
+				await Revision.forceSync(revision.id);
 			} catch (error) {
 				logger.warn(`Could not migrate revision ${revisionId}:`, error);
 				result.failedRevisions++;
