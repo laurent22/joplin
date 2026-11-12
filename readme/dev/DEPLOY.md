@@ -32,21 +32,7 @@ It must be built and released manually using XCode.
 
 Unlike the mobile or desktop application, the CLI app doesn't bundle its dependencies and is always installed from source. For that reason, all its `@joplin` dependencies, such as `@joplin/lib`, `@joplin/tools`, etc., must be published to npm with it.
 
-In `app-cli/package.json`, all `@joplin` dependencies and devdependencies must be set to the last major/minor version. For example:
-
-```json
-"dependencies": {
-	"@joplin/lib": "1.8",
-	"@joplin/renderer": "1.8",
-	"...": "..."
-},
-"devDependencies": {
-	"@joplin/tools": "1.8",
-	"...": "..."
-}
-```
-
-Then, to release the app, run:
+To release the app, run:
 
 	yarn releaseCli
 
