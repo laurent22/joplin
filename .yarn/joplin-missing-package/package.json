@@ -1,9 +1,8 @@
 {
 	"name": "@joplin/missing",
 	"version": "0.0.0",
-	"description": "A package that behaves as if it was not installed, used to exclude optional dependencies from build",
+	"description": "Has no entry point, so that require() and require.resolve() both fail as if the package was not installed. Used to exclude optional dependencies such as canvas.",
 	"private": true,
-	"main": "./index.js",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/laurent22/joplin.git"
