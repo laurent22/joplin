@@ -12569,7 +12569,7 @@ __metadata:
     react-redux: "npm:8.1.3"
     react-select: "npm:5.10.2"
     react-toggle-button: "npm:2.2.0"
-    react-tooltip: "npm:6.0.0"
+    react-tooltip: "npm:6.0.8"
     redux: "npm:4.2.1"
     reselect: "npm:4.1.8"
     roboto-fontface: "npm:0.10.0"
@@ -48037,16 +48037,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-tooltip@npm:6.0.0":
-  version: 6.0.0
-  resolution: "react-tooltip@npm:6.0.0"
+"react-tooltip@npm:6.0.8":
+  version: 6.0.8
+  resolution: "react-tooltip@npm:6.0.8"
   dependencies:
     "@floating-ui/dom": "npm:1.7.6"
     clsx: "npm:2.1.1"
   peerDependencies:
     react: ">=16.14.0"
     react-dom: ">=16.14.0"
-  checksum: 10/0aa0335ec1063c02913fbb1a301007469004f9d2c8d1411971ba2ce0a61fb7a02c18663f6784688381fd63322ce56ebf1ced40e5f5de179374d81abf1a239dd9
+  checksum: 10/b0823d8c48375953862c39261bde60b02339b38f64501572bdc51d1c201155a11ca62593b2b1f52d59706d92a35e9933bbf984433a63d5025fce9ba576a81fea
   languageName: node
   linkType: hard
 
