@@ -992,16 +992,23 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			return;
 		}
 		if (!NoteLockSession.instance().isUnlocked()) {
-			// Enabling is completed by enableNoteEncryptionUnlockCallback once the panel unlocks.
+			// Enabling is completed by enableNoteEncryptionUnlockCallback once the panel unlocks, without asking again.
 			this.setState({ noteLockUnlockPromptVisible: true });
 			return;
 		}
-		void this.setNoteLockState_(true);
+		void this.confirmAndSetNoteLockState_(true);
 	};
 
 	private disableNoteEncryption_onPress = () => {
-		void this.setNoteLockState_(false);
+		void this.confirmAndSetNoteLockState_(false);
 	};
+
+	// Locking deletes the note history, so a tap by accident is confirmed first.
+	private async confirmAndSetNoteLockState_(enable: boolean) {
+		const question = enable ? _('Are you sure you want to lock this note?') : _('Are you sure you want to remove lock from this note?');
+		if (await shim.showMessageBox(question, { buttons: [_('Yes'), _('No')], cancelId: 1 }) !== 0) return;
+		await this.setNoteLockState_(enable);
+	}
 
 	private enableNoteEncryptionUnlockCallback = () => {
 		this.setState({ noteLockUnlockPromptVisible: false });
