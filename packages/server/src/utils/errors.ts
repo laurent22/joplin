@@ -201,6 +201,26 @@ export function errorToPlainObject(error: unknown): PlainObjectError {
 	return output;
 }
 
+// Errors that were not thrown on purpose, such as database errors, can include internal details like the SQL query,
+// so only their ID is returned and the details are logged
+export const isUnexpectedError = (error: unknown) => !(error as ApiError)?.httpCode;
+
+export const unexpectedErrorMessage = (errorId: string) => `Internal server error (error ID: ${errorId})`;
+
+// The message of an error can include text from the request, so line breaks and other control characters are escaped,
+// otherwise they could be used to forge log lines
+export const errorMessageForLog = (message: string) => {
+	const maxLength = 500;
+	return JSON.stringify(message.length > maxLength ? `${message.substring(0, maxLength)}...` : message).slice(1, -1);
+};
+
+export const errorToApiOutput = (error: unknown, errorId: string): PlainObjectError => {
+	if (isUnexpectedError(error)) return { message: unexpectedErrorMessage(errorId) };
+	const output = errorToPlainObject(error);
+	delete output.stack;
+	return output;
+};
+
 export enum CustomErrorCode {
 	NotFound,
 }
