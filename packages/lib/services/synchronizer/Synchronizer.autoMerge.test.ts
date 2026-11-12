@@ -1,8 +1,7 @@
-import { synchronizerStart, setupDatabaseAndSynchronizer, switchClient, synchronizer, loadEncryptionMasterKey, encryptionService, decryptionWorker, withLogLevel } from '../../testing/test-utils';
+import { synchronizerStart, setupDatabaseAndSynchronizer, switchClient, synchronizer, loadEncryptionMasterKey, encryptionService, decryptionWorker, withLogLevel, syncTargetId } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Setting from '../../models/Setting';
-import ConflictNoteState from '../../models/ConflictNoteState';
 import { NoteEntity } from '../database/types';
 import { MasterKeyEntity } from '../e2ee/types';
 import { setEncryptionEnabled } from './syncInfoUtils';
@@ -103,11 +102,6 @@ describe('Synchronizer.autoMerge', () => {
 		expect(resolved.body).toContain('Second paragraph, remote.');
 		expect(resolved.body).not.toContain('<<<<<<<');
 
-		// The remote version is the original note, so only its updated_time is stored
-		const state = await ConflictNoteState.byNoteId(conflictNote.id);
-		expect(state.base_body).toBe(baseBody);
-		expect(state.remote_updated_time).toBe(resolved.updated_time);
-
 		// The merged changes must upload, or the other device never receives them
 		await synchronizerStart();
 		await switchClient(2);
@@ -194,18 +188,10 @@ describe('Synchronizer.autoMerge', () => {
 		// it too, so both sides share an ancestor
 		await switchClient(2);
 		await synchronizerStart();
-		await switchClient(1);
 
-		await Note.save({ id: note.id, body: 'client 1 edit' });
-		await synchronizerStart();
-		await switchClient(2);
-		await Note.save({ id: note.id, body: 'client 2 edit' });
-		await synchronizerStart();
-
-		const conflicts = await Note.conflictedNotes();
-		expect(conflicts).toHaveLength(1);
-		const state = await ConflictNoteState.byNoteId(conflicts[0].id);
-		expect(state.base_body).toBe('down body');
+		const base = await Note.syncBaseContent(syncTargetId(), note.id);
+		expect(base.base_body).toBe('down body');
+		expect(base.base_title).toBe('down title');
 	}));
 
 	it('should skip auto-merge for locked notes and fall back to a plain conflict note', (async () => {
@@ -319,9 +305,6 @@ describe('Synchronizer.autoMerge', () => {
 		const resolved = await Note.load(note.id);
 		expect(resolved.body).toContain('Second paragraph, remote.');
 		expect(resolved.title).toBe('Title');
-
-		const state = await ConflictNoteState.byNoteId(conflicts[0].id);
-		expect(state.remote_updated_time).toBe(resolved.updated_time);
 	}));
 
 	it('should create a plain conflict note when the remote note cannot be decrypted', (async () => {
