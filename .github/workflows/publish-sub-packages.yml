@@ -1,12 +1,14 @@
-name: Publish sub-packages
+name: Publish npm packages
 
-# The tag is created and pushed by `yarn publishAll`. Publishing uses npm trusted publishing, so no
-# token is needed, but each package must have this workflow registered as a trusted publisher on
+# The sub-packages tag is pushed by `yarn publishAll`, and the cli tag by `yarn releaseCli`. Either way,
+# any library or CLI app version not yet on npm is published. Publishing uses npm trusted publishing, so
+# no token is needed, but each package must have this workflow registered as a trusted publisher on
 # npmjs.com.
 on:
   push:
     tags:
       - 'sub-packages-v*'
+      - 'cli-v*'
 
 permissions:
   contents: read
