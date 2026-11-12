@@ -66,6 +66,7 @@ docs/**/*.mustache
 .yarn/*
 !.yarn/patches
 !.yarn/joplin-empty-package
+!.yarn/joplin-missing-package
 !.yarn/plugins
 !.yarn/releases
 !.yarn/sdks

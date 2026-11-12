@@ -2,7 +2,7 @@
 /* eslint-disable no-console */
 
 import { copy, exists, remove, readdir, mkdtemp, readFile } from 'fs-extra';
-import { join, resolve, basename } from 'path';
+import { join, resolve, basename, dirname } from 'path';
 import { tmpdir } from 'os';
 import { createHash } from 'crypto';
 import { chdir, cwd } from 'process';
@@ -65,7 +65,7 @@ const buildDefaultPlugins = async (options: Options) => {
 			}
 
 			logStatus('Copying plugin', pluginId, 'JPL file to', outputPath);
-			await copy(join(__dirname, 'node_modules', repositoryData.package, 'publish', `${pluginId}.jpl`), outputPath);
+			await copy(join(dirname(require.resolve(`${repositoryData.package}/package.json`)), 'publish', `${pluginId}.jpl`), outputPath);
 			logStatus('Copied.');
 		}
 	}
