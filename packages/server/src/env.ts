@@ -48,6 +48,10 @@ const defaultEnvValues: EnvVariables = {
 	// If this is disabled, a SAML-based login flow must be configured.
 	LOCAL_AUTH_ENABLED: true,
 
+	// Lets apps sign in to the API with email and password.
+	// When disabled they must use the browser login. Web UI login is not affected
+	API_EMAIL_LOGIN_ENABLED: true,
+
 	// ==================================================
 	// URL config
 	// ==================================================
@@ -303,6 +307,7 @@ export interface EnvVariables {
 	SAML_ORGANIZATION_DISPLAY_NAME: string;
 
 	LOCAL_AUTH_ENABLED: boolean;
+	API_EMAIL_LOGIN_ENABLED: boolean;
 
 	TRANSCRIBE_ENABLED: boolean;
 	TRANSCRIBE_API_KEY: string;
