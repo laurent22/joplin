@@ -90,10 +90,13 @@ const create = (win, options) => {
 				label: 'Paste',
 				enabled: editFlags.canPaste,
 				visible: props.isEditable,
-				click(menuItem) {
-					let clipboardContent = electron.clipboard.readText(props.selectionText);
-					clipboardContent = menuItem.transform ? menuItem.transform(clipboardContent) : clipboardContent;
-					webContents(win).insertText(clipboardContent);
+				// Use the native paste command rather than reading the clipboard and calling
+				// insertText(). Unlike insertText(), which only targets the top-level frame,
+				// paste() is routed to the focused frame. Without this, pasting into an input
+				// that is inside a cross-origin plugin iframe crashes the renderer process.
+				// https://github.com/laurent22/joplin/issues/16965
+				click() {
+					webContents(win).paste();
 				},
 			}),
 			saveImage: decorateMenuItem({
