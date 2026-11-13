@@ -716,6 +716,7 @@ export default class EncryptionService {
 		return reader;
 	}
 
+	// Never use bufferSize with base64: joining padded blocks can discard subsequent data.
 	private async fileWriter_(path: string, encoding: string, bufferSize = 0) {
 		const pendingBlocks: string[] = [];
 		let pendingBlockSize = 0;
