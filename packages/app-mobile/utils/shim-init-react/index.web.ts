@@ -97,16 +97,13 @@ const shimInit = () => {
 			return Promise.resolve(Date.now());
 		}
 		return new Promise<number>((resolve) => {
-			let settled = false;
-			const finish = () => {
-				if (settled) return;
-				settled = true;
-				resolve(Date.now());
-			};
 			// A backup timer ensures the wait completes if the tab becomes hidden
 			// after the visibility check but before the animation frame fires.
-			setTimeout(finish, 100);
-			requestAnimationFrame(finish);
+			const timeout = setTimeout(() => resolve(Date.now()), 100);
+			requestAnimationFrame(() => {
+				clearTimeout(timeout);
+				resolve(Date.now());
+			});
 		});
 	};
 
