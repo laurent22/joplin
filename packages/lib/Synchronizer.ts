@@ -500,9 +500,10 @@ export default class Synchronizer {
 				logger.info('Sync target remote info:', remoteInfo.filterSyncInfo());
 				eventManager.emit(EventName.SessionEstablished);
 
-				// Checked before anything is uploaded so a key without an id never reaches the target. The CLI cannot create or reset
-				// a note lock key or run a migration: it adopts the target's key, and a migration it would need (its locked notes
-				// meeting a different key, for example after switching the sync target) stops its sync. Revisit if it gains these.
+				// Checked before anything is uploaded so a key without a sync migration id never reaches the target. The CLI cannot
+				// create or reset a note lock key or run a migration: it adopts the target's key, and a migration it would need (its
+				// locked notes meeting a different key, for example after switching the sync target) stops its sync. Revisit if it
+				// gains these.
 				checkNoteLockKeyMigrationId(localSyncInfo(), remoteInfo);
 
 				let syncTargetIsNew = false;
@@ -532,6 +533,9 @@ export default class Synchronizer {
 				if (syncTargetIsNew && localInfo.activeMasterKeyId) {
 					localInfo = setMasterKeyHasBeenUsed(localInfo, localInfo.activeMasterKeyId);
 				}
+
+				// Checked again with the latest remote info, which may have been fetched again since the first check.
+				checkNoteLockKeyMigrationId(localInfo, remoteInfo);
 
 				const hasLockedNotes = await Note.hasLockedNotes();
 				// A reset only overwrites the target key it replaced, so a target reset elsewhere since then wins.
