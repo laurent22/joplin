@@ -735,13 +735,8 @@ export default class EncryptionService {
 				pendingBlockSize += data.length;
 				if (pendingBlockSize >= bufferSize) await flush();
 			},
-			close: async (flushPending = true) => {
-				if (flushPending) {
-					await flush();
-				} else {
-					pendingBlocks.length = 0;
-					pendingBlockSize = 0;
-				}
+			close: async () => {
+				await flush();
 			},
 		};
 	}
@@ -763,37 +758,20 @@ export default class EncryptionService {
 	public async encryptFile(srcPath: string, destPath: string, options: EncryptOptions = null) {
 		options = { encryptionMethod: this.defaultFileEncryptionMethod(), ...options };
 
-		let source = await this.fileReader_(srcPath, 'base64');
+		const source = await this.fileReader_(srcPath, 'base64');
 		// All file encryption methods output ASCII text, so UTF-8 writes the same bytes
 		// while using the direct UTF-8 file path on native and TextEncoder on web.
-		let destination = await this.fileWriter_(destPath, 'utf8', encryptedFileWriteBufferSize);
-
-		const cleanUp = async (flushPending = true) => {
-			if (destination) {
-				const writer = destination;
-				// eslint-disable-next-line require-atomic-updates
-				destination = null;
-				await writer.close(flushPending);
-			}
-			if (source) {
-				const reader = source;
-				// eslint-disable-next-line require-atomic-updates
-				source = null;
-				await reader.close();
-			}
-		};
+		const destination = await this.fileWriter_(destPath, 'utf8', encryptedFileWriteBufferSize);
 
 		try {
 			await this.fsDriver().unlink(destPath);
 			await this.encryptAbstract_(source, destination, options);
-			await cleanUp();
+			await destination.close();
 		} catch (error) {
-			try {
-				await cleanUp(false);
-			} finally {
-				await this.fsDriver().unlink(destPath);
-			}
+			await this.fsDriver().unlink(destPath);
 			throw error;
+		} finally {
+			await source.close();
 		}
 	}
 
