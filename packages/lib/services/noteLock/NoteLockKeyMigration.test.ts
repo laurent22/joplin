@@ -97,7 +97,7 @@ describe('NoteLockKeyMigration', () => {
 		expect(notMigratedMessage(status)).toBe('1 note history version of a locked note could not be migrated.');
 		expect(noteLockKeyConflict()).not.toBeNull();
 		const migratedRevision = await Revision.load(revision.id);
-		expect(migratedRevision.updated_time).toBe(revision.updated_time);
+		expect(migratedRevision.updated_time).toBe(revision.updated_time + 1);
 		const migratedDiff = migratedRevision.body_diff;
 		expect(await NoteLockService.withDecryptedKey(scoped => scoped.decryptString(Revision.applyTextPatch('', migratedDiff)), decryptedTargetKey)).toBe('one');
 

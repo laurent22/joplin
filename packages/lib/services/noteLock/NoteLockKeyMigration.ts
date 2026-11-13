@@ -82,10 +82,9 @@ export const migrateLockedNotes = async (localPassword: string, targetPassword: 
 				if (masterKeyId !== localKey.id) continue;
 				const plainBody = await NoteLockService.withDecryptedKey(scoped => scoped.decryptString(body), localKey);
 				const targetBody = await NoteLockService.withDecryptedKey(scoped => scoped.encryptString(plainBody), targetKey);
-				// The revision keeps its times, so new history snapshots are still spaced from it, and is uploaded again regardless.
-				// Flagged first: sync stays stopped until the migration ends, so a run cut off in between still uploads it.
-				await Revision.forceSync(revision.id);
-				await Revision.save({ id: revision.id, body_diff: Revision.createTextPatch('', targetBody) }, { autoTimestamp: false });
+				// One millisecond later, so it is uploaded and other devices download it, while new history snapshots are still
+				// spaced from it as before.
+				await Revision.save({ id: revision.id, body_diff: Revision.createTextPatch('', targetBody), updated_time: revision.updated_time + 1 }, { autoTimestamp: false });
 			} catch (error) {
 				logger.warn(`Could not migrate revision ${revisionId}:`, error);
 				result.failedRevisions++;
