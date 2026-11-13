@@ -308,10 +308,10 @@ export default class ShareModel extends BaseModel<Share> {
 					}
 				}
 
-				// Cross-check: is the item owner still in user_items? If not,
-				// this transition just produced an orphan.
-				const ownerUserItem = await this.models().userItem().byUserAndItemId(item.owner_id, item.id);
-				if (!ownerUserItem) {
+				// The owner losing access is expected when a recipient moves the item out of the share: handleDeleted then
+				// gives the item to that recipient. The item is only orphaned if nobody has access to it anymore.
+				const userItems = await this.models().userItem().byItemIds([item.id]);
+				if (!userItems.length) {
 					logger.error(`OrphanTrace: handleUpdated produced orphan item=${item.id} owner=${item.owner_id} previousShare=${previousShareId} nextShare=${nextShareId} changeUser=${change.user_id}`);
 				}
 			} finally {
