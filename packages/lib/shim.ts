@@ -454,7 +454,7 @@ const shim = {
 		throw new Error('Not implemented: openOrCreateFile');
 	},
 
-	waitForFrame: (_lastFrameTimestamp: number): Promise<number> => {
+	waitForFrame: (): Promise<number> => {
 		throw new Error('Not implemented: waitForFrame');
 	},
 

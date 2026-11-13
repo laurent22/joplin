@@ -91,13 +91,10 @@ const shimInit = () => {
 		return null;
 	};
 
-	shim.waitForFrame = (lastFrameTimestamp: number) => {
+	shim.waitForFrame = () => {
 		// Animation frames do not fire while the tab is hidden.
 		if (document.visibilityState !== 'visible') {
-			return Promise.resolve(lastFrameTimestamp);
-		}
-		if (Date.now() - lastFrameTimestamp < 200) {
-			return Promise.resolve(lastFrameTimestamp);
+			return Promise.resolve(Date.now());
 		}
 		return new Promise<number>((resolve) => {
 			let settled = false;

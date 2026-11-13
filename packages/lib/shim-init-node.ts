@@ -734,16 +734,7 @@ function shimInit(options: ShimInitOptions = null) {
 		return shim.electronBridge().openItem(filepath);
 	};
 
-	shim.waitForFrame = (lastFrameTimestamp: number) => {
-		if (Date.now() - lastFrameTimestamp < 200) {
-			return Promise.resolve(lastFrameTimestamp);
-		}
-		return new Promise<number>((resolve) => {
-			timers.setImmediate(() => {
-				resolve(Date.now());
-			});
-		});
-	};
+	shim.waitForFrame = async () => Date.now();
 
 	shim.appVersion = () => {
 		if (appVersion) return appVersion();

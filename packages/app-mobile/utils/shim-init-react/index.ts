@@ -188,13 +188,10 @@ export default function shimInit() {
 		void reloadAppAsync();
 	};
 
-	shim.waitForFrame = (lastFrameTimestamp: number) => {
+	shim.waitForFrame = () => {
 		// Animation frames do not fire while the app is in the background.
 		if (AppState.currentState !== 'active') {
-			return Promise.resolve(lastFrameTimestamp);
-		}
-		if (Date.now() - lastFrameTimestamp < 200) {
-			return Promise.resolve(lastFrameTimestamp);
+			return Promise.resolve(Date.now());
 		}
 		return new Promise<number>((resolve) => {
 			requestAnimationFrame(() => {

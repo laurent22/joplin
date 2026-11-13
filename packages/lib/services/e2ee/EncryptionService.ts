@@ -13,6 +13,7 @@ const logger = Logger.create('EncryptionService');
 const perfLogger = PerformanceLogger.create();
 
 const emptyUint8Array = new Uint8Array(0);
+const frameWaitIntervalMs = 200;
 
 function hexPad(s: string, length: number) {
 	return padLeft(s, length, '0');
@@ -633,7 +634,11 @@ export default class EncryptionService {
 			// Wait for a frame so that the app remains responsive in mobile.
 			// This wait is throttled to a maximum of one call per frameWaitIntervalMs.
 			// https://corbt.com/posts/2015/12/22/breaking-up-heavy-processing-in-react-native.html
-			const [frameTimestamp, encrypted] = await Promise.all([shim.waitForFrame(lastFrameTimestamp), this.encrypt(method, masterKeyPlainText, block)]);
+			const shouldWaitForFrame = Date.now() - lastFrameTimestamp >= frameWaitIntervalMs;
+			const [frameTimestamp, encrypted] = await Promise.all([
+				shouldWaitForFrame ? shim.waitForFrame() : lastFrameTimestamp,
+				this.encrypt(method, masterKeyPlainText, block),
+			]);
 			lastFrameTimestamp = frameTimestamp;
 
 			await crypto.increaseNonce(this.encryptionNonce_);
@@ -663,7 +668,11 @@ export default class EncryptionService {
 			doneSize += length;
 			if (options.onProgress) options.onProgress({ doneSize: doneSize });
 
-			const [frameTimestamp, block] = await Promise.all([shim.waitForFrame(lastFrameTimestamp), source.read(length)]);
+			const shouldWaitForFrame = Date.now() - lastFrameTimestamp >= frameWaitIntervalMs;
+			const [frameTimestamp, block] = await Promise.all([
+				shouldWaitForFrame ? shim.waitForFrame() : lastFrameTimestamp,
+				source.read(length),
+			]);
 			lastFrameTimestamp = frameTimestamp;
 
 			const plainText = await this.decrypt(header.encryptionMethod, masterKeyPlainText, block);
