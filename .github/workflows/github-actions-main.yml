@@ -15,7 +15,9 @@ jobs:
         # Visual Studio 2026 in late September 2026, and that job compiles
         # sqlite3 from source.
         # https://github.com/actions/runner-images/issues/14602
-        os: [macos-15-intel, ubuntu-22.04, windows-2025, ubuntu-22.04-arm, windows-11-vs2026-arm]
+        #
+        # The slower Intel macOS runner is only needed to build the Intel app for desktop releases.
+        os: ["${{ startsWith(github.ref, 'refs/tags/v') && 'macos-15-intel' || 'macos-15' }}", ubuntu-22.04, windows-2025, ubuntu-22.04-arm, windows-11-vs2026-arm]
     steps:
       - uses: actions/checkout@v6
 
