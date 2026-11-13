@@ -1,9 +1,9 @@
 import routeHandler from '../../middleware/routeHandler';
-import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, expectHttpError } from '../../utils/testing/testUtils';
 import { execRequest } from '../../utils/testing/apiUtils';
+import { ErrorBadRequest } from '../../utils/errors';
 import config from '../../config';
-import { Day } from '../../utils/time';
-import { mfaPromptDismissedKey } from './home';
+import { mfaPromptDismissDuration, mfaPromptDismissedKey } from './home';
 
 const hasMfaPrompt = async (sessionId: string) => {
 	const response: string = await execRequest(sessionId, 'GET', 'home');
@@ -46,10 +46,17 @@ describe('index/home', () => {
 		const { user, session } = await createUserAndSession();
 		expect(await hasMfaPrompt(session.id)).toBe(true);
 
-		await execRequest(session.id, 'POST', 'home', {});
+		await execRequest(session.id, 'POST', 'home', { dismissMfaPrompt: '1' });
 		expect(await hasMfaPrompt(session.id)).toBe(false);
 
-		await models().keyValue().setValue(mfaPromptDismissedKey(user.id), Date.now() - 30 * Day);
+		await models().keyValue().setValue(mfaPromptDismissedKey(user.id), Date.now() - mfaPromptDismissDuration);
+		expect(await hasMfaPrompt(session.id)).toBe(true);
+	});
+
+	test('should not dismiss the MFA prompt if the request does not ask for it', async () => {
+		const { session } = await createUserAndSession();
+
+		await expectHttpError(async () => execRequest(session.id, 'POST', 'home', {}), ErrorBadRequest.httpCode);
 		expect(await hasMfaPrompt(session.id)).toBe(true);
 	});
 

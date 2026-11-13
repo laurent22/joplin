@@ -10,8 +10,9 @@
 {{#showMfaPrompt}}
 	<form method="post" action="{{{global.baseUrl}}}/home" class="notification is-info content pr-6">
 		{{{csrfTag}}}
+		<input type="hidden" name="dismissMfaPrompt" value="1"/>
 		<button type="submit" class="delete" title="Dismiss"></button>
-		<p>Protect your account with multi-factor authentication (MFA): even if someone gets your password, they won’t be able to sign in. <a href="{{{global.baseUrl}}}/mfa/me">Turn on multi-factor authentication</a></p>
+		<p>{{mfaPromptMessage}} <a href="{{{global.baseUrl}}}/mfa/me">Turn on multi-factor authentication</a></p>
 	</form>
 {{/showMfaPrompt}}
 

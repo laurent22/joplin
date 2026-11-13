@@ -2,23 +2,24 @@ import { SubPath, redirect } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
-import { contextSessionId } from '../../utils/requestUtils';
-import { ErrorMethodNotAllowed } from '../../utils/errors';
+import { bodyFields, contextSessionId } from '../../utils/requestUtils';
+import { ErrorBadRequest, ErrorMethodNotAllowed } from '../../utils/errors';
 import defaultView from '../../utils/defaultView';
 import { AccountType, accountTypeToString } from '../../models/UserModel';
 import { formatMaxItemSize, formatMaxTotalSize, formatTotalSize, formatTotalSizePercent, yesOrNo } from '../../utils/strings';
-import { getCanReceiveFolder, getCanShareFolder, getIsMFAEnabled, totalSizeClass } from '../../models/utils/user';
+import { getCanReceiveFolder, getCanShareFolder, getIsMFAEnabled, mfaPromptMessage, totalSizeClass } from '../../models/utils/user';
 import config from '../../config';
 import { escapeHtml } from '../../utils/htmlUtils';
 import { betaStartSubUrl, betaUserTrialPeriodDays, isBetaUser } from '../../utils/stripe';
 import showJoplinServerBusinessPromo from '../../utils/showJoplinServerBusinessPromo';
-import { Day } from '../../utils/time';
+import { Month } from '../../utils/time';
 import { homeUrl } from '../../utils/urlUtils';
 import { createCsrfTag } from '../../utils/csrf';
 
 const router: Router = new Router(RouteType.Web);
 
 export const mfaPromptDismissedKey = (userId: string) => `mfaPromptDismissedTime::${userId}`;
+export const mfaPromptDismissDuration = Month;
 
 const shouldShowMfaPrompt = async (ctx: AppContext) => {
 	const user = ctx.joplin.owner;
@@ -26,7 +27,7 @@ const shouldShowMfaPrompt = async (ctx: AppContext) => {
 
 	const key = mfaPromptDismissedKey(user.id);
 	const dismissedTime = await ctx.joplin.models.keyValue().value<number>(key);
-	const isDismissalExpired = Date.now() - dismissedTime >= 30 * Day;
+	const isDismissalExpired = Date.now() - dismissedTime >= mfaPromptDismissDuration;
 	return !dismissedTime || isDismissalExpired;
 };
 
@@ -141,6 +142,7 @@ router.get('home', async (_path: SubPath, ctx: AppContext) => {
 			showJoplinServerBusinessPromo: await showJoplinServerBusinessPromo(ctx.joplin.models),
 			socialFeeds: socialFeeds(),
 			showMfaPrompt,
+			mfaPromptMessage,
 			csrfTag: showMfaPrompt ? await createCsrfTag(ctx) : '',
 		};
 
@@ -152,10 +154,20 @@ router.get('home', async (_path: SubPath, ctx: AppContext) => {
 	throw new ErrorMethodNotAllowed();
 });
 
+interface FormFields {
+	dismissMfaPrompt?: string;
+}
+
 router.post('home', async (_path: SubPath, ctx: AppContext) => {
-	const key = mfaPromptDismissedKey(ctx.joplin.owner.id);
-	await ctx.joplin.models.keyValue().setValue(key, Date.now());
-	return redirect(ctx, homeUrl());
+	const fields = await bodyFields<FormFields>(ctx.req);
+
+	if (fields.dismissMfaPrompt) {
+		const key = mfaPromptDismissedKey(ctx.joplin.owner.id);
+		await ctx.joplin.models.keyValue().setValue(key, Date.now());
+		return redirect(ctx, homeUrl());
+	}
+
+	throw new ErrorBadRequest('Invalid action');
 });
 
 export default router;
