@@ -326,7 +326,7 @@ rules.listItem = {
           // 10.  next one
           //     second line
           //
-          prefix = indexStr + '.' + ' '.repeat(3 - indexStr.length)
+          prefix = indexStr + '.' + ' '.repeat(Math.max(1, 3 - indexStr.length))
         }
       }
     }
