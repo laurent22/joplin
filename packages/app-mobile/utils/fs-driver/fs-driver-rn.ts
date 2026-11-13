@@ -256,7 +256,7 @@ export default class FsDriverRN extends FsDriverBase {
 	// Requires that the file already exists.
 	// TODO: Update for compatibility with fs-driver-node's appendFile (which does not
 	//       require that the file exists).
-	public async appendFile(path: string, content: string, rawEncoding = 'base64'): Promise<void> {
+	public async appendFile(path: string, content: string, rawEncoding = 'base64') {
 		const encoding = normalizeEncoding(rawEncoding);
 
 		if (isScopedUri(path)) {
