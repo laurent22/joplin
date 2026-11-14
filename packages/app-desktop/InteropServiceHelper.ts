@@ -42,6 +42,9 @@ export default class InteropServiceHelper {
 			sourceNoteIds: [noteId],
 			// The PDF export and printing ask first.
 			decryptLockedNotes: true,
+			// The note was picked by the user, so it should be exported even if it is a conflict.
+			// Otherwise nothing is written and opening the file fails with ENOENT.
+			includeConflicts: true,
 			customCss: '', ...exportOptions };
 
 		const service = InteropService.instance();
