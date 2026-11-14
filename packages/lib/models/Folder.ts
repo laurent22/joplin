@@ -1,4 +1,4 @@
-import { BaseItemEntity, defaultFolderIcon, FolderEntity, FolderIcon, NoteEntity, ResourceEntity } from '../services/database/types';
+import { BaseItemEntity, defaultFolderIcon, FolderEntity, FolderIcon, FolderIconType, NoteEntity, ResourceEntity } from '../services/database/types';
 import BaseModel, { DeleteOptions, ModelType } from '../BaseModel';
 import { FolderLoadOptions, SaveOptions } from './utils/types';
 import time from '../time';
@@ -1179,10 +1179,20 @@ export default class Folder extends BaseItem {
 
 	public static unserializeIcon(icon: string): FolderIcon {
 		if (!icon) return null;
-		return {
-			...defaultFolderIcon(),
-			...JSON.parse(icon),
-		};
+		try {
+			return {
+				...defaultFolderIcon(),
+				...JSON.parse(icon),
+			};
+		} catch (error) {
+			// The icon may have been set by an external tool (e.g. via the sync
+			// target directly) and not be valid JSON. Fall back to treating a
+			// plain string as an emoji icon, so that rendering does not crash.
+			if (typeof icon === 'string') {
+				return { ...defaultFolderIcon(), type: FolderIconType.Emoji, emoji: icon };
+			}
+			return null;
+		}
 	}
 
 	public static shouldShowFolderIcons(folders: FolderEntity[]) {
