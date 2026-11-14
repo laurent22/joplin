@@ -1,5 +1,6 @@
 import FsDriverBase, { ReadDirStatsOptions } from '@joplin/lib/fs-driver-base';
 import RNFetchBlob from 'rn-fetch-blob';
+import QuickCrypto from 'react-native-quick-crypto';
 import * as RNFS from '@dr.pogodin/react-native-fs';
 import RNSAF, { DocumentFileDetail, openDocumentTree } from '@joplin/react-native-saf-x';
 import type { StatResultT, ReadDirResItemT } from '@dr.pogodin/react-native-fs';
@@ -255,13 +256,17 @@ export default class FsDriverRN extends FsDriverBase {
 	// Requires that the file already exists.
 	// TODO: Update for compatibility with fs-driver-node's appendFile (which does not
 	//       require that the file exists).
-	public appendFile(path: string, content: string, rawEncoding = 'base64') {
+	public async appendFile(path: string, content: string, rawEncoding = 'base64') {
 		const encoding = normalizeEncoding(rawEncoding);
 
 		if (isScopedUri(path)) {
-			return this.appendSafFile_(path, content, encoding);
+			await this.appendSafFile_(path, content, encoding);
+		} else if (encoding === SupportedEncoding.Utf8) {
+			// RNFS base64-encodes UTF-8 text before passing it to native code. RNFetchBlob accepts it directly.
+			await RNFetchBlob.fs.appendFile(path, content, encoding);
+		} else {
+			await RNFS.appendFile(path, content, encoding);
 		}
-		return RNFS.appendFile(path, content, encoding);
 	}
 
 	// Encoding can be either "utf8", "utf-8", or "base64"
@@ -561,7 +566,12 @@ export default class FsDriverRN extends FsDriverBase {
 		}
 
 		if (!length) return null;
-		const output = await RNFS.read(handle.path, length, handle.offset, encoding);
+		const data = await RNFS.read(handle.path, length, handle.offset, encoding === SupportedEncoding.Ascii ? SupportedEncoding.Base64 : encoding);
+		// RNFS decodes ASCII reads with the JS Buffer polyfill. Use QuickCrypto's
+		// native conversion to preserve the same one-byte-per-character result.
+		const output = encoding === SupportedEncoding.Ascii && data
+			? QuickCrypto.ab2str(QuickCrypto.binaryLikeToArrayBuffer(data, 'base64'), 'latin1')
+			: data;
 		// eslint-disable-next-line require-atomic-updates
 		handle.offset += length;
 		return output ? output : null;

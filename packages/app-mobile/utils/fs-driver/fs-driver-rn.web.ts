@@ -2,6 +2,7 @@ import { resolve } from 'path';
 import FsDriverBase, { ReadDirStatsOptions, RemoveOptions, Stat } from '@joplin/lib/fs-driver-base';
 import tarExtract, { TarExtractOptions } from './tarExtract';
 import tarCreate, { TarCreateOptions } from './tarCreate';
+import decodeAsciiChunk from './decodeAsciiChunk';
 import { Buffer } from 'buffer';
 import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
 import RemoteMessenger from '@joplin/lib/utils/ipc/RemoteMessenger';
@@ -153,7 +154,10 @@ export default class FsDriverWeb extends FsDriverBase {
 	}
 
 	public override async readFileChunk(handle: FileHandle, length: number, encoding: BufferEncoding = 'base64') {
-		return (await this.readFileChunkAsBuffer(handle, length))?.toString(encoding) ?? null;
+		const chunk = await this.readFileChunkAsBuffer(handle, length);
+		if (!chunk) return null;
+		if (encoding === 'ascii') return decodeAsciiChunk(chunk);
+		return chunk.toString(encoding);
 	}
 
 	public override async close(handle: FileHandle) {

@@ -342,6 +342,53 @@ describe('EncryptionService', () => {
 		expect(fileContentEqual(sourcePath, decryptedPath)).toBe(true);
 	}));
 
+	it('should buffer encrypted file writes', async () => {
+		let masterKey = await service.generateMasterKey('123456');
+		masterKey = await MasterKey.save(masterKey);
+		await service.loadMasterKey(masterKey, '123456', true);
+
+		const sourcePath = `${Setting.value('tempDir')}/batched-file-source.bin`;
+		const encryptedPath = `${Setting.value('tempDir')}/batched-file-encrypted`;
+		const decryptedPath = `${Setting.value('tempDir')}/batched-file-decrypted.bin`;
+		await service.fsDriver().writeFile(sourcePath, Buffer.alloc(1024 * 1024 + 128 * 1024, 0x41).toString('base64'), 'base64');
+
+		const fsDriver = service.fsDriver();
+		const appendSpy = jest.spyOn(fsDriver, 'appendFile');
+		try {
+			await service.encryptFile(sourcePath, encryptedPath);
+			expect(appendSpy).toHaveBeenCalledTimes(2);
+			for (const call of appendSpy.mock.calls) expect(call[2]).toBe('utf8');
+		} finally {
+			appendSpy.mockRestore();
+		}
+		await service.decryptFile(encryptedPath, decryptedPath);
+		expect(fileContentEqual(sourcePath, decryptedPath)).toBe(true);
+	});
+
+	it('should remove encrypted files if the buffered write fails on close', async () => {
+		let masterKey = await service.generateMasterKey('123456');
+		masterKey = await MasterKey.save(masterKey);
+		await service.loadMasterKey(masterKey, '123456', true);
+
+		const fsDriver = service.fsDriver();
+		const sourcePath = `${Setting.value('tempDir')}/buffered-source.bin`;
+		const encryptedPath = `${Setting.value('tempDir')}/buffered-encrypted`;
+		await fsDriver.writeFile(sourcePath, Buffer.from('test').toString('base64'), 'base64');
+
+		const originalAppend = fsDriver.appendFile.bind(fsDriver);
+		const appendSpy = jest.spyOn(fsDriver, 'appendFile').mockImplementation(async (path, content, encoding) => {
+			await originalAppend(path, content, encoding);
+			throw new Error('Simulated write failure');
+		});
+		try {
+			await expect(service.encryptFile(sourcePath, encryptedPath)).rejects.toThrow('Simulated write failure');
+			expect(appendSpy).toHaveBeenCalledTimes(1);
+			expect(await fsDriver.exists(encryptedPath)).toBe(false);
+		} finally {
+			appendSpy.mockRestore();
+		}
+	});
+
 	it.each([
 		EncryptionMethod.SJCL1a,
 		EncryptionMethod.SJCL1b,
