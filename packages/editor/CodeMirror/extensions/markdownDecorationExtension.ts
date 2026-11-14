@@ -172,7 +172,7 @@ type DecorationDescription = { pos: number; length: number; decoration: Decorati
 
 // Returns a set of [Decoration]s, associated with block syntax groups that require
 // full-line styling.
-const computeDecorations = (view: EditorView) => {
+const computeDecorations = (view: EditorView, tablesOnly = false) => {
 	const decorations: DecorationDescription[] = [];
 
 	// Add a decoration to all lines between the document position [from] up to
@@ -207,6 +207,8 @@ const computeDecorations = (view: EditorView) => {
 		)?.iterate({
 			from, to,
 			enter: node => {
+				if (tablesOnly && !tableNodeNames.includes(node.name)) return;
+
 				let blockDecorated = false;
 
 				// Compute the visible region of the node.
@@ -259,6 +261,26 @@ const computeDecorations = (view: EditorView) => {
 	}
 	return decorationBuilder.finish();
 };
+
+const tableNodeNames = ['TableHeader', 'TableDelimiter', 'TableRow'];
+
+// Plain text keeps table decorations for the theme's monospace font,
+// which aligns table columns
+export const plainTextDecoratorExtension = ViewPlugin.fromClass(class {
+	public decorations: DecorationSet;
+
+	public constructor(view: EditorView) {
+		this.decorations = computeDecorations(view, true);
+	}
+
+	public update(viewUpdate: ViewUpdate) {
+		if (viewUpdate.docChanged || viewUpdate.viewportChanged) {
+			this.decorations = computeDecorations(viewUpdate.view, true);
+		}
+	}
+}, {
+	decorations: pluginVal => pluginVal.decorations,
+});
 
 const decoratorExtension = ViewPlugin.fromClass(class {
 	public decorations: DecorationSet;

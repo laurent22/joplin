@@ -65,6 +65,6 @@ export const runtime = (): CommandRuntime => {
 			}
 		},
 
-		enabledCondition: 'hasActivePluginEditor || activeNoteIsWhiteboard',
+		enabledCondition: '(hasActivePluginEditor || activeNoteIsWhiteboard) && !activeNoteIsConflict',
 	};
 };

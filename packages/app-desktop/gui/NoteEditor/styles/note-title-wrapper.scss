@@ -9,4 +9,11 @@
 		flex-direction: column;
 		align-items: flex-start;
 	}
+
+	// The conflict layout stacks its own rows, so it stays one full-width column
+	&.-conflict {
+		flex-direction: column;
+		align-items: stretch;
+		padding-right: var(--joplin-editor-padding-left);
+	}
 }
