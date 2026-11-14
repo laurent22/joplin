@@ -94,7 +94,7 @@ class LocalVersionWidget extends WidgetType {
 			span.textContent = segment.text;
 			text.appendChild(span);
 		}
-		if (this.localText_ === '' || this.localText_.endsWith('\n')) {
+		if (this.localText_ === '' || /(\r\n|\n|\r)$/.test(this.localText_)) {
 			text.appendChild(document.createElement('br'));
 		}
 
