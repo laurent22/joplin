@@ -13,6 +13,7 @@ const logger = Logger.create('EncryptionService');
 const perfLogger = PerformanceLogger.create();
 
 const emptyUint8Array = new Uint8Array(0);
+const frameWaitIntervalMs = 200;
 
 function hexPad(s: string, length: number) {
 	return padLeft(s, length, '0');
@@ -621,6 +622,7 @@ export default class EncryptionService {
 		await destination.append(this.encodeHeader_(header, options.isNoteLock));
 
 		let doneSize = 0;
+		let lastFrameTimestamp = Date.now();
 
 		while (true) {
 			const block = await source.read(chunkSize);
@@ -630,10 +632,15 @@ export default class EncryptionService {
 			if (options.onProgress) options.onProgress({ doneSize: doneSize });
 
 			// Wait for a frame so that the app remains responsive in mobile.
+			// This wait is throttled to a maximum of one call per frameWaitIntervalMs.
 			// https://corbt.com/posts/2015/12/22/breaking-up-heavy-processing-in-react-native.html
-			await shim.waitForFrame();
+			const shouldWaitForFrame = Date.now() - lastFrameTimestamp >= frameWaitIntervalMs;
+			const [frameTimestamp, encrypted] = await Promise.all([
+				shouldWaitForFrame ? shim.waitForFrame() : lastFrameTimestamp,
+				this.encrypt(method, masterKeyPlainText, block),
+			]);
+			lastFrameTimestamp = frameTimestamp;
 
-			const encrypted = await this.encrypt(method, masterKeyPlainText, block);
 			await crypto.increaseNonce(this.encryptionNonce_);
 
 			await destination.append(padLeft(encrypted.length.toString(16), 6, '0'));
@@ -649,6 +656,7 @@ export default class EncryptionService {
 		const masterKeyPlainText = await this.masterKeyPlainText_(header.masterKeyId, options);
 
 		let doneSize = 0;
+		let lastFrameTimestamp = Date.now();
 
 		while (true) {
 			const lengthHex = await source.read(6);
@@ -660,9 +668,12 @@ export default class EncryptionService {
 			doneSize += length;
 			if (options.onProgress) options.onProgress({ doneSize: doneSize });
 
-			await shim.waitForFrame();
-
-			const block = await source.read(length);
+			const shouldWaitForFrame = Date.now() - lastFrameTimestamp >= frameWaitIntervalMs;
+			const [frameTimestamp, block] = await Promise.all([
+				shouldWaitForFrame ? shim.waitForFrame() : lastFrameTimestamp,
+				source.read(length),
+			]);
+			lastFrameTimestamp = frameTimestamp;
 
 			const plainText = await this.decrypt(header.encryptionMethod, masterKeyPlainText, block);
 			await destination.append(plainText);
