@@ -167,7 +167,7 @@ const WarningBanner: React.FC<Props> = props => {
 		msg = renderNotificationMessage(_('Applying note lock changes. Please wait…'));
 	} else if (props.noteLockMigrationStatus?.running) {
 		msg = renderNotificationMessage(_('Re-encrypting your locked notes with the synced key. Migration is in progress...'));
-	} else if (props.noteLockMigrationStatus?.failed || props.noteLockMigrationStatus?.awaitingDecryption) {
+	} else if (props.noteLockMigrationStatus?.failed || props.noteLockMigrationStatus?.awaitingDecryption || props.noteLockMigrationStatus?.failedRevisions) {
 		msg = renderNotificationMessage(
 			notMigratedMessage(props.noteLockMigrationStatus),
 			_('Retry'),

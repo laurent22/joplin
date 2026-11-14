@@ -4,7 +4,7 @@ import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Setting from '../../models/Setting';
 import EncryptionService from '../e2ee/EncryptionService';
-import NoteLockKey, { noteLockKeyFileName } from '../noteLock/NoteLockKey';
+import NoteLockKey, { noteLockKeyFileName, syncedNoteLockKeyFileName } from '../noteLock/NoteLockKey';
 import NoteLockService from '../noteLock/NoteLockService';
 import NoteLockSession from '../noteLock/NoteLockSession';
 import Resource from '../../models/Resource';
@@ -204,6 +204,22 @@ describe('InteropService.noteLock', () => {
 		await Note.save({ title: 'broken', body: 'not ciphertext', parent_id: folder.id, is_locked: 1 });
 
 		await expect(InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Markdown, decryptLockedNotes: true })).rejects.toThrow('1 locked note could not be unlocked and was not exported.');
+	});
+
+	it('should also write the synced key while a key migration is pending', async () => {
+		await setUpUnlockedSession();
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'note', body: 'secret', parent_id: folder.id });
+		await lockNote(note.id);
+		await InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Raw });
+		expect(await fs.pathExists(`${exportDir()}/${syncedNoteLockKeyFileName}`)).toBe(false);
+
+		const syncedKey = { ...await encryptionService().generateMasterKey('654321'), id: 'synced-key', syncMigrationId: 'synced-lineage' };
+		Setting.setValue('noteLock.conflictNoteLockKey', { noteLockKey: syncedKey });
+		await InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Raw });
+
+		expect(JSON.parse(await fs.readFile(`${exportDir()}/${syncedNoteLockKeyFileName}`, 'utf-8'))).toEqual(syncedKey);
+		expect(JSON.parse(await fs.readFile(`${exportDir()}/${noteLockKeyFileName}`, 'utf-8')).id).toBe(NoteLockKey.instance().load().id);
 	});
 
 	it('should not write the key file when no note is locked', async () => {

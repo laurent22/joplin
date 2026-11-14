@@ -1,6 +1,8 @@
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
 import shim from '@joplin/lib/shim';
 import NoteLockMigrationDialog from './Dialog';
 import { confirmAndSkipNoteLockKeyMigration, startNoteLockKeyMigration } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
@@ -22,7 +24,8 @@ const skipMock = confirmAndSkipNoteLockKeyMigration as jest.Mock;
 
 const renderDialog = () => {
 	const dispatch = jest.fn();
-	render(<NoteLockMigrationDialog themeId={1} dispatch={dispatch}/>);
+	const store = createStore(() => ({ noteLockBulkChangeRunning: false }));
+	render(<Provider store={store}><NoteLockMigrationDialog themeId={1} dispatch={dispatch}/></Provider>);
 	fireEvent.change(screen.getByLabelText('Note lock password on this device'), { target: { value: 'local' } });
 	fireEvent.change(screen.getByLabelText('Note lock password on the sync target'), { target: { value: 'target' } });
 	return dispatch;
@@ -40,7 +43,7 @@ describe('NoteLockMigrationDialog/Dialog', () => {
 		fireEvent.click(screen.getByText('Migrate'));
 
 		await waitFor(() => expect(dispatch).toHaveBeenCalledWith({ type: 'DIALOG_CLOSE', name: 'noteLockMigration' }));
-		expect(startMock).toHaveBeenCalledWith('local', 'target', dispatch, expect.any(Function));
+		expect(startMock).toHaveBeenCalledWith('local', 'target', dispatch, expect.any(Function), false);
 		expect(skipMock).not.toHaveBeenCalled();
 	});
 

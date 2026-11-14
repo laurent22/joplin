@@ -5,7 +5,7 @@ import Setting from '../../models/Setting';
 import BaseItem from '../../models/BaseItem';
 import { State } from '../../reducer';
 import { PublicPrivateKeyPair } from '../e2ee/ppk/ppk';
-import { MasterKeyEntity } from '../e2ee/types';
+import { MasterKeyEntity, NoteLockKeyEntity } from '../e2ee/types';
 import { compareVersions } from 'compare-versions';
 import { _ } from '../../locale';
 import JoplinError from '../../JoplinError';
@@ -41,10 +41,9 @@ export interface MergeSyncInfosOptions {
 	hasLocalLockedNotes?: boolean;
 }
 
-// The sync target's note lock key and sync migration id, parked while a sync is stopped on a conflict.
+// The sync target's note lock key, parked while a sync is stopped on a conflict.
 export interface NoteLockKeyConflict {
-	noteLockKey: MasterKeyEntity;
-	syncMigrationId: string;
+	noteLockKey: NoteLockKeyEntity;
 }
 
 // This should be set to the client version whenever we require all the clients to be at the same
@@ -311,7 +310,7 @@ export function mergeSyncInfos(s1: SyncInfo, s2: SyncInfo, options: MergeSyncInf
 		noteLockKeySource = s2;
 	} else if (s1.noteLockKey.id === s2.noteLockKey.id) {
 		noteLockKeySource = (s1.noteLockKey.updated_time || 0) >= (s2.noteLockKey.updated_time || 0) ? s1 : s2;
-	} else if (s1.syncMigrationId === s2.syncMigrationId) {
+	} else if (s1.noteLockKey.syncMigrationId === s2.noteLockKey.syncMigrationId) {
 		noteLockKeySource = options.resetPropagates ? s1 : s2;
 	} else if (!options.hasLocalLockedNotes) {
 		noteLockKeySource = s2;
@@ -320,7 +319,6 @@ export function mergeSyncInfos(s1: SyncInfo, s2: SyncInfo, options: MergeSyncInf
 		throw new Error('Cannot merge a note lock key from a different lineage while local notes depend on the local key');
 	}
 	output.noteLockKey = noteLockKeySource.noteLockKey;
-	output.syncMigrationId = noteLockKeySource.syncMigrationId;
 
 	// We use >= so that the version from s1 (local) is preferred to the version in s2 (remote).
 	// For example, if s2 has appMinVersion 0.00 and s1 has appMinVersion 0.0.0, we choose the
@@ -340,8 +338,7 @@ export class SyncInfo {
 	private e2ee_: SyncInfoValueBoolean;
 	private activeMasterKeyId_: SyncInfoValueString;
 	private masterKeys_: MasterKeyEntity[] = [];
-	private noteLockKey_: MasterKeyEntity = null;
-	private syncMigrationId_ = '';
+	private noteLockKey_: NoteLockKeyEntity = null;
 	private ppk_: SyncInfoValuePublicPrivateKeyPair;
 	private appMinVersion_: string = appMinVersion_;
 	private revisionServiceEnabled_: SyncInfoValueBoolean;
@@ -364,7 +361,6 @@ export class SyncInfo {
 			activeMasterKeyId: this.activeMasterKeyId_,
 			masterKeys: this.masterKeys,
 			noteLockKey: this.noteLockKey,
-			syncMigrationId: this.syncMigrationId,
 			ppk: this.ppk_,
 			appMinVersion: this.appMinVersion,
 			revisionServiceEnabled: this.revisionServiceEnabled_,
@@ -415,7 +411,6 @@ export class SyncInfo {
 		this.activeMasterKeyId_ = 'activeMasterKeyId' in s ? s.activeMasterKeyId : { value: '', updatedTime: 0 };
 		this.masterKeys_ = 'masterKeys' in s ? s.masterKeys : [];
 		this.noteLockKey_ = 'noteLockKey' in s ? s.noteLockKey : null;
-		this.syncMigrationId_ = 'syncMigrationId' in s ? s.syncMigrationId : '';
 		this.ppk_ = 'ppk' in s ? s.ppk : { value: null, updatedTime: 0 };
 		this.appMinVersion_ = s.appMinVersion ? s.appMinVersion : '0.0.0';
 		this.revisionServiceEnabled_ = 'revisionServiceEnabled' in s ? s.revisionServiceEnabled : { value: true, updatedTime: 0 };
@@ -515,24 +510,14 @@ export class SyncInfo {
 		this.masterKeys_ = v;
 	}
 
-	public get noteLockKey(): MasterKeyEntity {
+	public get noteLockKey(): NoteLockKeyEntity {
 		return this.noteLockKey_;
 	}
 
-	public set noteLockKey(v: MasterKeyEntity) {
+	public set noteLockKey(v: NoteLockKeyEntity) {
 		if (JSON.stringify(v) === JSON.stringify(this.noteLockKey_)) return;
 
 		this.noteLockKey_ = v;
-	}
-
-	// Identifies the note lock key lineage: created with the first key, kept through password resets and
-	// replaced only when the user migrates to a sync target's key.
-	public get syncMigrationId(): string {
-		return this.syncMigrationId_;
-	}
-
-	public set syncMigrationId(v: string) {
-		this.syncMigrationId_ = v;
 	}
 
 	public keyTimestamp(name: string): number {
@@ -654,7 +639,6 @@ export const adoptNoteLockKeyConflict = () => {
 	if (!conflict) throw new Error('No note lock key conflict to adopt');
 	const syncInfo = localSyncInfo();
 	syncInfo.noteLockKey = conflict.noteLockKey;
-	syncInfo.syncMigrationId = conflict.syncMigrationId;
 	saveLocalSyncInfo(syncInfo);
 	Setting.setValue(noteLockKeyConflictSettingKey, {});
 	Setting.setValue('noteLock.passwordReset', false);
@@ -674,12 +658,12 @@ export const checkNoteLockKeyConflict = (local: SyncInfo, remote: SyncInfo, hasL
 		// makes staleReset true). staleReset is false both when a local password reset should propagate and when only a remote
 		// password reset was made (which silently accepts the remote key), and syncMigrationId is what tells a password reset
 		// apart from a key created for the first time.
-		if (!keysDiffer || (local.syncMigrationId === remote.syncMigrationId && !staleReset) || !hasLocalLockedNotes) {
+		if (!keysDiffer || (local.noteLockKey.syncMigrationId === remote.noteLockKey.syncMigrationId && !staleReset) || !hasLocalLockedNotes) {
 			if (parked) Setting.setValue(noteLockKeyConflictSettingKey, {});
 			return;
 		}
-		const conflict: NoteLockKeyConflict = { noteLockKey: remote.noteLockKey, syncMigrationId: remote.syncMigrationId };
-		if (!parked || parked.syncMigrationId !== conflict.syncMigrationId || parked.noteLockKey.id !== conflict.noteLockKey.id || parked.noteLockKey.updated_time !== conflict.noteLockKey.updated_time) {
+		const conflict: NoteLockKeyConflict = { noteLockKey: remote.noteLockKey };
+		if (!parked || parked.noteLockKey.syncMigrationId !== conflict.noteLockKey.syncMigrationId || parked.noteLockKey.id !== conflict.noteLockKey.id || parked.noteLockKey.updated_time !== conflict.noteLockKey.updated_time) {
 			Setting.setValue(noteLockKeyConflictSettingKey, conflict);
 		}
 	}
@@ -689,7 +673,7 @@ export const checkNoteLockKeyConflict = (local: SyncInfo, remote: SyncInfo, hasL
 };
 
 const sameNoteLockKey = (a: SyncInfo, b: SyncInfo) => {
-	return a.noteLockKey?.id === b.noteLockKey?.id && a.noteLockKey?.updated_time === b.noteLockKey?.updated_time && a.syncMigrationId === b.syncMigrationId;
+	return a.noteLockKey?.id === b.noteLockKey?.id && a.noteLockKey?.updated_time === b.noteLockKey?.updated_time && a.noteLockKey?.syncMigrationId === b.noteLockKey?.syncMigrationId;
 };
 
 // A reset, password change or migration that lands while a sync is in flight would be clobbered by the sync's
@@ -705,12 +689,12 @@ export const checkRemoteNoteLockKeyUnchanged = (fetched: SyncInfo, latest: SyncI
 };
 
 // Sync migration ids predate the release of the note lock feature, so a key without one comes from a
-// development build and cannot take part in the reset and migration handling.
-export const checkNoteLockKeyMigrationId = (s: SyncInfo, isRemote: boolean) => {
-	if (!s.noteLockKey || s.syncMigrationId) return;
-	throw new Error(isRemote
-		? _('Synchronisation was stopped because the note lock key on the sync target has no sync migration ID.')
-		: _('Synchronisation was stopped because the note lock key on this device has no sync migration ID. Please reset the note lock password.'));
+// development build and cannot take part in the reset and migration handling. With no local key, or the same
+// key on both sides, there is nothing to reset or migrate, so a new profile can still download from the target.
+export const checkNoteLockKeyMigrationId = (local: SyncInfo, remote: SyncInfo) => {
+	if (!local.noteLockKey || sameNoteLockKey(local, remote)) return;
+	if (!local.noteLockKey.syncMigrationId) throw new Error(_('Synchronisation was stopped because the note lock key on this device has no sync migration ID. Please reset the note lock password.'));
+	if (remote.noteLockKey && !remote.noteLockKey.syncMigrationId) throw new Error(_('Synchronisation was stopped because the note lock key on the sync target has no sync migration ID.'));
 };
 
 export const checkIfCanSync = (s: SyncInfo, appVersion: string) => {
