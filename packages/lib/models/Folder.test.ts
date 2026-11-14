@@ -3,6 +3,7 @@ import { FolderEntity } from '../services/database/types';
 import getTrashFolderId from '../services/trash/getTrashFolderId';
 import { createNTestNotes, setupDatabaseAndSynchronizer, sleep, switchClient, checkThrowAsync, createFolderTree, simulateReadOnlyShareEnv, expectThrow, withWarningSilenced } from '../testing/test-utils';
 import Folder from './Folder';
+import { FolderIconType } from '../services/database/types';
 import Note from './Note';
 import Setting from './Setting';
 
@@ -534,4 +535,14 @@ describe('models/Folder', () => {
 		expect(validFolder).toBeNull();
 	});
 
+
+	it('should ignore an invalid folder icon', () => {
+		// Icon values may be written by external tools and not contain valid JSON.
+		expect(Folder.unserializeIcon('🛒')).toBe(null);
+		expect(Folder.unserializeIcon('{oops')).toBe(null);
+		expect(Folder.unserializeIcon('')).toBe(null);
+
+		const validIcon = Folder.serializeIcon({ type: FolderIconType.FontAwesome, name: 'far fa-cart', emoji: '', dataUrl: '' });
+		expect(Folder.unserializeIcon(validIcon).name).toBe('far fa-cart');
+	});
 });

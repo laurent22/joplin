@@ -1179,10 +1179,18 @@ export default class Folder extends BaseItem {
 
 	public static unserializeIcon(icon: string): FolderIcon {
 		if (!icon) return null;
-		return {
-			...defaultFolderIcon(),
-			...JSON.parse(icon),
-		};
+		try {
+			return {
+				...defaultFolderIcon(),
+				...JSON.parse(icon),
+			};
+		} catch {
+			// Icon values can also come from external tools that write directly to the
+			// sync target, so the field may not contain valid JSON. Treat it as no icon,
+			// like an empty value - throwing here crashes every screen that renders
+			// folder icons, including the mobile side menu on startup.
+			return null;
+		}
 	}
 
 	public static shouldShowFolderIcons(folders: FolderEntity[]) {
