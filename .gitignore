@@ -1376,6 +1376,7 @@ packages/lib/InMemoryCache.test.js
 packages/lib/InMemoryCache.js
 packages/lib/JoplinDatabase.js
 packages/lib/JoplinError.js
+packages/lib/JoplinServerApi.test.js
 packages/lib/JoplinServerApi.js
 packages/lib/ObjectUtils.test.js
 packages/lib/ObjectUtils.js
