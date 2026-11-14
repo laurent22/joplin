@@ -963,6 +963,21 @@ export default class Synchronizer {
 				let hasCancelled = false;
 				if (lastContext.delta) context = lastContext.delta;
 
+				// Folder deletions are only applied once the delta step completes, so the resume position must not move past the
+				// page that found the first pending one, or a sync that doesn't complete would lose the deletion.
+				let hasPendingFolderDeletions = false;
+				let contextBeforePendingFolderDeletions: PaginatedList['context'] = null;
+				const resumeContext = (pageContext: PaginatedList['context']) => {
+					const source = hasPendingFolderDeletions ? contextBeforePendingFolderDeletions : pageContext;
+					if (!source) return source;
+					const output = { ...source };
+					// Remove these two variables because they can be large and can be rebuilt
+					// the next time the sync is started.
+					delete output.statsCache;
+					delete output.statIdsCache;
+					return output;
+				};
+
 				while (true) {
 					if (this.cancelling() || hasCancelled) break;
 
@@ -1228,6 +1243,10 @@ export default class Synchronizer {
 							if (content.encryption_applied) this.dispatch({ type: 'SYNC_GOT_ENCRYPTED_ITEM' });
 						} else if (action === SyncAction.DeleteLocal) {
 							if (local.type_ === BaseModel.TYPE_FOLDER) {
+								if (!hasPendingFolderDeletions) {
+									hasPendingFolderDeletions = true;
+									contextBeforePendingFolderDeletions = context;
+								}
 								localFoldersToDelete.add(local.id);
 								continue;
 							}
@@ -1250,14 +1269,7 @@ export default class Synchronizer {
 					// items being synced twice as an update. If the local and remote items are identical
 					// the update will simply be skipped.
 					if (!hasCancelled) {
-						if (options.saveContextHandler) {
-							const deltaToSave = { ...listResult.context };
-							// Remove these two variables because they can be large and can be rebuilt
-							// the next time the sync is started.
-							delete deltaToSave.statsCache;
-							delete deltaToSave.statIdsCache;
-							options.saveContextHandler({ delta: deltaToSave });
-						}
+						if (options.saveContextHandler) options.saveContextHandler({ delta: resumeContext(listResult.context) });
 
 						if (!listResult.hasMore) {
 							newDeltaContext = listResult.context;
@@ -1266,8 +1278,6 @@ export default class Synchronizer {
 						context = listResult.context;
 					}
 				}
-
-				outputContext.delta = newDeltaContext ? newDeltaContext : lastContext.delta;
 
 				// ------------------------------------------------------------------------
 				// Delete the folders that have been collected in the loop above.
@@ -1294,7 +1304,12 @@ export default class Synchronizer {
 						};
 						await Folder.delete(folderId, deletionOptions);
 					}
+					hasPendingFolderDeletions = false;
 				}
+
+				// If the sync was cancelled, resume from the last completed page rather than from where this sync started, so
+				// that the next sync doesn't download those items again.
+				outputContext.delta = newDeltaContext && !hasPendingFolderDeletions ? newDeltaContext : resumeContext(context);
 
 				if (!this.cancelling()) {
 					await BaseItem.deleteOrphanSyncItems();

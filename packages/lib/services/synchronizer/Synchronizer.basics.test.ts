@@ -11,6 +11,18 @@ import { ErrorCode } from '../../errors';
 import Resource from '../../models/Resource';
 import { exists } from 'fs-extra';
 
+// Delta pages are 50 items, so this cancels during the second page
+const syncAndCancelDuringSecondDeltaPage = async () => {
+	let cancelled = false;
+	const context = await synchronizerStart(null, { onProgress: (report) => {
+		if (cancelled || Number(report.fetchingProcessed ?? 0) < 60) return;
+		cancelled = true;
+		void synchronizer().cancel();
+	} });
+	expect(cancelled).toBe(true);
+	return context;
+};
+
 describe('Synchronizer.basics', () => {
 
 	beforeEach(async () => {
@@ -308,6 +320,47 @@ describe('Synchronizer.basics', () => {
 		await synchronizerStart();
 		notes = await Note.all();
 		expect(notes.length).toBe(1);
+	}));
+
+	it('should resume from the last completed delta page when a sync is cancelled', (async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		for (let i = 0; i < 120; i++) await Note.save({ title: `note ${i}`, parent_id: folder1.id });
+		await synchronizerStart();
+
+		await switchClient(2);
+
+		const cancelledContext = await syncAndCancelDuringSecondDeltaPage();
+		expect(cancelledContext.delta).not.toHaveProperty('statsCache');
+		expect(cancelledContext.delta).not.toHaveProperty('statIdsCache');
+
+		let processedCount = 0;
+		await synchronizerStart(null, { onProgress: (report) => {
+			processedCount = Number(report.fetchingProcessed ?? 0);
+		} });
+		expect(processedCount).toBeLessThan(121 - 50 + 1);
+		expect((await Note.all()).length).toBe(120);
+	}));
+
+	it('should not lose a folder deletion found before a sync is cancelled', (async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const folder2 = await Folder.save({ title: 'folder2' });
+		await synchronizerStart();
+		await switchClient(2);
+		await synchronizerStart();
+
+		await switchClient(1);
+		await Folder.delete(folder2.id);
+		for (let i = 0; i < 120; i++) await Note.save({ title: `note ${i}`, parent_id: folder1.id });
+		await synchronizerStart();
+
+		// Folder deletions are applied at the end of the delta step, so the cancelled sync leaves it in place
+		await switchClient(2);
+		await syncAndCancelDuringSecondDeltaPage();
+		expect(await Folder.load(folder2.id)).toBeTruthy();
+
+		await synchronizerStart();
+		expect(await Folder.load(folder2.id)).toBeFalsy();
+		expect((await Note.all()).length).toBe(120);
 	}));
 
 	it('should skip items that cannot be synced', (async () => {
