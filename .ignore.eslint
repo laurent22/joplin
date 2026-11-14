@@ -972,6 +972,7 @@ packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.js
 packages/app-mobile/components/screens/DocumentScanner/NotePreview.js
 packages/app-mobile/components/screens/JoplinCloudLoginScreen.js
 packages/app-mobile/components/screens/LogScreen.js
+packages/app-mobile/components/screens/Note/Note.sharing.test.js
 packages/app-mobile/components/screens/Note/Note.test.js
 packages/app-mobile/components/screens/Note/Note.js
 packages/app-mobile/components/screens/Note/NoteLockPanel.js
@@ -1096,6 +1097,7 @@ packages/app-mobile/utils/fs-driver/constants.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.test.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.web.js
+packages/app-mobile/utils/fs-driver/fs-driver-rn.web.worker.test.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.web.worker.js
 packages/app-mobile/utils/fs-driver/runOnDeviceTests.js
 packages/app-mobile/utils/fs-driver/tarCreate.js
@@ -1129,6 +1131,7 @@ packages/app-mobile/utils/polyfills/crypto-polyfill/index.js
 packages/app-mobile/utils/polyfills/index.js
 packages/app-mobile/utils/polyfills/index.web.js
 packages/app-mobile/utils/setupNotifications.js
+packages/app-mobile/utils/shareFile.test.js
 packages/app-mobile/utils/shareFile.js
 packages/app-mobile/utils/shareHandler.js
 packages/app-mobile/utils/shim-init-react/index.js

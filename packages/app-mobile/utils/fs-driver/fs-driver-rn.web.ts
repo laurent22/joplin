@@ -170,6 +170,12 @@ export default class FsDriverWeb extends FsDriverBase {
 		await this.messenger_.remoteApi.copy(from, to);
 	}
 
+	public override async move(from: string, to: string) {
+		if (resolve('/', from) === resolve('/', to)) return;
+		await this.copy(from, to);
+		await this.unlink(from);
+	}
+
 	public override async stat(path: string): Promise<Stat|null> {
 		const stat = await this.messenger_.remoteApi.stat(path);
 		if (!stat) return null;

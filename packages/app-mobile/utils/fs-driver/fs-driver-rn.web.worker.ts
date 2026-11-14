@@ -19,7 +19,7 @@ declare global {
 	interface FileSystemSyncAccessHandle {
 		close(): void;
 		truncate(to: number): void;
-		write(buffer: ArrayBuffer|ArrayBufferView, options?: { at: number }): void;
+		write(buffer: ArrayBuffer|ArrayBufferView, options?: { at: number }): number;
 		read(buffer: ArrayBuffer|ArrayBufferView, options?: { at: number }): number;
 		getSize(): number;
 		flush(): void;
@@ -57,6 +57,7 @@ export interface TransferableStat {
 const isNotFoundError = (error: Error) => error instanceof DOMException && error.name === 'NotFoundError';
 const isTypeMismatchError = (error: Error) => error instanceof DOMException && error.name === 'TypeMismatchError';
 const externalDirectoryPrefix = '/external/';
+const storedFileName = (path: string) => path.startsWith(externalDirectoryPrefix) ? basename(path) : removeReservedWords(basename(path));
 
 type AccessHandleDatabaseControl = {
 	clearExternalHandle(id: string): Promise<void>;
@@ -233,7 +234,7 @@ export class WorkerApi {
 
 		const parentDirs = dirname(path);
 		const parent = await this.pathToDirectoryHandle_(parentDirs, create);
-		const folderName = removeReservedWords(basename(path));
+		const folderName = storedFileName(path);
 
 		let handle: FileSystemDirectoryHandle;
 		if (!parent) {
@@ -274,7 +275,7 @@ export class WorkerApi {
 		}
 
 		try {
-			return parent.getFileHandle(removeReservedWords(basename(path)), { create });
+			return parent.getFileHandle(storedFileName(path), { create });
 		} catch (error) {
 			if (create) {
 				throw new Error(`${error} while getting file at path ${path}.`);
@@ -310,7 +311,17 @@ export class WorkerApi {
 					at = writer.getSize();
 				}
 
-				write = (data: BufferSource) => writer.write(data, { at });
+				write = (data: BufferSource) => {
+					const bytes = data instanceof ArrayBuffer ? new Uint8Array(data) : new Uint8Array(data.buffer, data.byteOffset, data.byteLength);
+					let written = 0;
+					while (written < bytes.byteLength) {
+						const count = writer.write(bytes.subarray(written), { at: at + written });
+						if (!Number.isInteger(count) || count <= 0 || count > bytes.byteLength - written) {
+							throw new Error(`Failed to write file ${path}`);
+						}
+						written += count;
+					}
+				};
 				close = () => writer.close();
 			} catch (error) {
 				// In some cases, createSyncAccessHandle isn't available. In other cases,
@@ -349,7 +360,7 @@ export class WorkerApi {
 			const dirHandle = await this.pathToDirectoryHandle_(dirname(path));
 
 			if (dirHandle) {
-				await dirHandle.removeEntry(basename(path), { recursive });
+				await dirHandle.removeEntry(storedFileName(path), { recursive });
 			} else {
 				console.warn(`remove: ENOENT: Parent directory of path ${JSON.stringify(path)} does not exist.`);
 			}
@@ -407,6 +418,12 @@ export class WorkerApi {
 		await this.writeFile(to, await fromFile.arrayBuffer(), 'Buffer');
 	}
 
+	public async move(from: string, to: string) {
+		if (resolve('/', from) === resolve('/', to)) return;
+		await this.copy(from, to);
+		await this.unlink(from);
+	}
+
 	public async stat(path: string, handle?: FileSystemDirectoryHandle|FileSystemFileHandle): Promise<TransferableStat|null> {
 		logger.debug('stat', path, handle ? 'with handle' : '');
 		try {
@@ -453,7 +470,7 @@ export class WorkerApi {
 			const result: TransferableStat[] = [];
 			try {
 				for await (const [childInternalName, childHandle] of dirHandle.entries()) {
-					const childFileName = restoreReservedWords(childInternalName);
+					const childFileName = path.startsWith(externalDirectoryPrefix) ? childInternalName : restoreReservedWords(childInternalName);
 					const childPath = join(path, childFileName);
 
 					const stat = await this.stat(childPath, childHandle);
@@ -487,7 +504,7 @@ export class WorkerApi {
 		const parentDirectory = await this.pathToDirectoryHandle_(dirname(path));
 		if (!parentDirectory) return false;
 
-		const fileName = removeReservedWords(basename(path));
+		const fileName = storedFileName(path);
 		try {
 			const childHandle = await parentDirectory.getFileHandle(fileName);
 			return !!childHandle;
