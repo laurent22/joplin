@@ -43,6 +43,10 @@ const useScheduleSaveCallbacks = (props: Props) => {
 				} else {
 					note = await formNoteToNote(formNote);
 				}
+				// A sync can move the note while the editor has unsaved changes, and saving the notebook
+				// the editor loaded would move it back, so the note keeps the notebook it is in now.
+				const storedNote = await Note.load(formNote.id, { fields: ['parent_id'] });
+				if (storedNote) note.parent_id = storedNote.parent_id;
 				logger.debug('Saving note...', isNoteLockEnabled() && note.is_locked ? note.id : note);
 				const savedNote = await Note.save(note, { changeId: `editorChange-${props.editorId}`, useNoteLock: true, noteLockKey: latestFormNote.noteLockKey });
 
