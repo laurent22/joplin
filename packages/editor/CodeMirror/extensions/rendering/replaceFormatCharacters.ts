@@ -33,6 +33,10 @@ const replaceFormatCharacters = [
 		shouldHide: (node, state) => {
 			return shouldFullReplace(node, state);
 		},
+		getSelectionOwner: (node, state) => {
+			if (node.name === 'QuoteMark') return state.doc.lineAt(node.from);
+			return node.node.parent;
+		},
 		getDecorationRange: (node, state) => {
 			// Headers in the form "## Header" should have the "##"s and the
 			// space immediately after hidden

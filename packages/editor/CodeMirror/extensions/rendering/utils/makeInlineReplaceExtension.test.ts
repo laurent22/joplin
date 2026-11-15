@@ -16,6 +16,8 @@ interface TestCase {
 	renderedText: string;
 	selectionFrom: number;
 	selectionTo: number;
+	expectedSelectionFrom?: number;
+	expectedSelectionTo?: number;
 	expectedSyntaxTreeTags: string[];
 	extensions: Extension[];
 }
@@ -27,6 +29,8 @@ const testCases: TestCase[] = [
 		renderedText: 'bold',
 		selectionFrom: 2,
 		selectionTo: 6,
+		expectedSelectionFrom: 0,
+		expectedSelectionTo: 8,
 		expectedSyntaxTreeTags: ['StrongEmphasis'],
 		extensions: [replaceFormatCharacters],
 	},
@@ -36,6 +40,8 @@ const testCases: TestCase[] = [
 		renderedText: 'bold italic',
 		selectionFrom: 3,
 		selectionTo: 14,
+		expectedSelectionFrom: 0,
+		expectedSelectionTo: 17,
 		expectedSyntaxTreeTags: ['Emphasis', 'StrongEmphasis'],
 		extensions: [replaceFormatCharacters],
 	},
@@ -45,6 +51,7 @@ const testCases: TestCase[] = [
 		renderedText: 'Heading',
 		selectionFrom: 2,
 		selectionTo: 9,
+		expectedSelectionFrom: 0,
 		expectedSyntaxTreeTags: ['ATXHeading1'],
 		extensions: [replaceFormatCharacters],
 	},
@@ -63,6 +70,8 @@ const testCases: TestCase[] = [
 		renderedText: 'Joplin website',
 		selectionFrom: 1,
 		selectionTo: 15,
+		expectedSelectionFrom: 0,
+		expectedSelectionTo: 39,
 		expectedSyntaxTreeTags: ['Link'],
 		extensions: [replaceLinks],
 	},
@@ -72,6 +81,8 @@ const testCases: TestCase[] = [
 		renderedText: 'Joplin website',
 		selectionFrom: 3,
 		selectionTo: 17,
+		expectedSelectionFrom: 0,
+		expectedSelectionTo: 43,
 		expectedSyntaxTreeTags: ['Link', 'StrongEmphasis'],
 		extensions: [replaceFormatCharacters, replaceLinks],
 	},
@@ -81,6 +92,8 @@ const testCases: TestCase[] = [
 		renderedText: 'red text',
 		selectionFrom: 25,
 		selectionTo: 33,
+		expectedSelectionFrom: 0,
+		expectedSelectionTo: 40,
 		expectedSyntaxTreeTags: ['HTMLTag'],
 		extensions: [replaceInlineHtml],
 	},
@@ -90,6 +103,7 @@ const testCases: TestCase[] = [
 		renderedText: '*literal asterisk*',
 		selectionFrom: 1,
 		selectionTo: 20,
+		expectedSelectionFrom: 0,
 		expectedSyntaxTreeTags: ['Escape'],
 		extensions: [replaceBackslashEscapes],
 	},
@@ -118,11 +132,13 @@ const directedTestCases = testCases.flatMap(testCase => [
 		...testCase,
 		direction: 'forward',
 		selection: EditorSelection.range(testCase.selectionFrom, testCase.selectionTo),
+		expectedSelection: EditorSelection.range(testCase.expectedSelectionFrom ?? testCase.selectionFrom, testCase.expectedSelectionTo ?? testCase.selectionTo),
 	},
 	{
 		...testCase,
 		direction: 'backward',
 		selection: EditorSelection.range(testCase.selectionTo, testCase.selectionFrom),
+		expectedSelection: EditorSelection.range(testCase.expectedSelectionTo ?? testCase.selectionTo, testCase.expectedSelectionFrom ?? testCase.selectionFrom),
 	},
 ]);
 
@@ -147,7 +163,7 @@ describe('makeInlineReplaceExtension', () => {
 	});
 
 	it.each(directedTestCases)('should include Markdown syntax for $label in a $direction mouse selection', async ({
-		markdown, renderedText, selection, expectedSyntaxTreeTags, extensions,
+		markdown, renderedText, selection, expectedSelection, expectedSyntaxTreeTags, extensions,
 	}) => {
 		const editor = await createTestEditor(
 			markdown,
@@ -161,11 +177,11 @@ describe('makeInlineReplaceExtension', () => {
 			editor.dispatch({ selection, userEvent: 'select.pointer' });
 			jest.runAllTimers();
 
-			const expectedSelection = {
+			const initialSelection = {
 				anchor: selection.anchor,
 				head: selection.head,
 			};
-			expect(editor.state.selection.main).toMatchObject(expectedSelection);
+			expect(editor.state.selection.main).toMatchObject(initialSelection);
 			expectTextContentToBe(visibleEditorText(editor), renderedText);
 
 			editor.dom.ownerDocument.dispatchEvent(new MouseEvent('mouseup', { button: 0 }));

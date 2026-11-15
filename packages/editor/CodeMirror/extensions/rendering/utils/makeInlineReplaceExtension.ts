@@ -4,67 +4,37 @@
 import { EditorView, Decoration, DecorationSet, WidgetType } from '@codemirror/view';
 import { ViewPlugin, ViewUpdate } from '@codemirror/view';
 import { syntaxTree } from '@codemirror/language';
-import { EditorSelection, EditorState, Range, StateEffect } from '@codemirror/state';
+import { EditorState, Range } from '@codemirror/state';
 import { SyntaxNodeRef } from '@lezer/common';
 import { ReplacementExtension } from '../types';
 import nodeIntersectsSelection from './nodeIntersectsSelection';
 import clampSelectionToDocument from '../../../utils/clampSelectionToDocument';
-
-const updateInlineDecorationsEffect = StateEffect.define();
-
-interface MouseSelectionState {
-	initialSelection: EditorSelection;
-}
+import renderedSelection, { hiddenSyntaxFacet, updateInlineDecorationsEffect } from './renderedSelection';
+import { HiddenSyntaxRange } from './normalizeRenderedSelection';
 
 interface VisibleRange {
 	from: number;
 	to: number;
 }
 
-export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) => ViewPlugin.fromClass(class {
+const makeInlineReplacePlugin = (extensionSpec: ReplacementExtension) => ViewPlugin.fromClass(class {
 	public decorations: DecorationSet = Decoration.set([]);
-	private mouseSelectionBefore_: MouseSelectionState|null = null;
+	public hiddenSyntax: HiddenSyntaxRange[] = [];
 
 	public constructor(private view: EditorView) {
-		view.dom.addEventListener('mousedown', this.onMouseDown, true);
-		view.dom.ownerDocument.addEventListener('mouseup', this.onMouseUp);
 		this.updateDecorations(view.state, view.visibleRanges);
 	}
-
-	public destroy() {
-		this.view.dom.removeEventListener('mousedown', this.onMouseDown, true);
-		this.view.dom.ownerDocument.removeEventListener('mouseup', this.onMouseUp);
-	}
-
-	private onMouseDown = (event: MouseEvent) => {
-		if (event.button === 0) {
-			this.mouseSelectionBefore_ = { initialSelection: this.view.state.selection };
-		}
-	};
-
-	private onMouseUp = () => {
-		if (this.mouseSelectionBefore_) {
-			// To prevent unnecessary scroll on iOS, decoration changes need to
-			// happen *after* the gesture ends.
-			requestAnimationFrame(() => {
-				this.mouseSelectionBefore_ = null;
-				this.view.dispatch({
-					effects: updateInlineDecorationsEffect.of(null),
-				});
-			});
-		}
-	};
 
 	private updateDecorations(state: EditorState, visibleRanges: readonly VisibleRange[]) {
 		const doc = state.doc;
 		let selection = state.selection;
-		if (this.mouseSelectionBefore_?.initialSelection) {
-			selection = clampSelectionToDocument(this.mouseSelectionBefore_.initialSelection, doc);
-		}
-		if (this.mouseSelectionBefore_) {
+		const initialSelection = this.view.plugin(renderedSelection)?.initialSelection;
+		if (initialSelection) {
+			selection = clampSelectionToDocument(initialSelection, doc);
 			state = state.update({ selection }).state;
 		}
 		const cursorLine = doc.lineAt(selection.main.anchor);
+		this.hiddenSyntax = [];
 
 		const parentTagCounts = new Map<string, number>();
 		const decorateNode = (node: SyntaxNodeRef) => {
@@ -89,6 +59,10 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 						widgets.push(decoration.range(range[0]));
 					} else {
 						widgets.push(decoration.range(range[0], range[1]));
+						const owner = extensionSpec.getSelectionOwner?.(node, state, parentTagCounts);
+						if (owner) {
+							this.hiddenSyntax.push({ from: range[0], to: range[1], ownerFrom: owner.from, ownerTo: owner.to });
+						}
 					}
 				}
 			}
@@ -168,12 +142,6 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 			|| extensionSpec.shouldFullReRender?.(transaction)
 		));
 
-		// Document changes move the selection, so the original selection may no longer
-		// be valid:
-		if (update.docChanged) {
-			this.mouseSelectionBefore_ = null;
-		}
-
 		if (update.docChanged || update.viewportChanged || update.selectionSet || forceUpdate) {
 			this.updateDecorations(update.state, update.view.visibleRanges);
 		}
@@ -181,5 +149,14 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 }, {
 	decorations: view => view.decorations,
 });
+
+export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) => {
+	const plugin = makeInlineReplacePlugin(extensionSpec);
+	return [
+		renderedSelection,
+		plugin,
+		hiddenSyntaxFacet.of(view => view.plugin(plugin)?.hiddenSyntax ?? []),
+	];
+};
 
 export default makeInlineReplaceExtension;

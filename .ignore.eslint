@@ -665,6 +665,7 @@ packages/app-desktop/integration-tests/multiWindow.spec.js
 packages/app-desktop/integration-tests/networking.spec.js
 packages/app-desktop/integration-tests/noteList.spec.js
 packages/app-desktop/integration-tests/pluginApi.spec.js
+packages/app-desktop/integration-tests/renderedMarkdownSelection.spec.js
 packages/app-desktop/integration-tests/resizableLayout.spec.js
 packages/app-desktop/integration-tests/richTextEditor.spec.js
 packages/app-desktop/integration-tests/settings.spec.js
@@ -1223,6 +1224,10 @@ packages/editor/CodeMirror/extensions/rendering/utils/makeHideReplaceExtension.j
 packages/editor/CodeMirror/extensions/rendering/utils/makeInlineReplaceExtension.test.js
 packages/editor/CodeMirror/extensions/rendering/utils/makeInlineReplaceExtension.js
 packages/editor/CodeMirror/extensions/rendering/utils/nodeIntersectsSelection.js
+packages/editor/CodeMirror/extensions/rendering/utils/normalizeRenderedSelection.test.js
+packages/editor/CodeMirror/extensions/rendering/utils/normalizeRenderedSelection.js
+packages/editor/CodeMirror/extensions/rendering/utils/renderedSelection.test.js
+packages/editor/CodeMirror/extensions/rendering/utils/renderedSelection.js
 packages/editor/CodeMirror/extensions/searchExtension.test.js
 packages/editor/CodeMirror/extensions/searchExtension.js
 packages/editor/CodeMirror/extensions/selectedNoteIdExtension.js
