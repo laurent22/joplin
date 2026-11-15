@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { afterEach, beforeEach, describe, it } from '@jest/globals';
-import { LayoutChangeEvent, Share } from 'react-native';
+import { LayoutChangeEvent, Platform, Share } from 'react-native';
 import { Store } from 'redux';
 import { basename, dirname } from 'path';
 
@@ -241,6 +241,29 @@ describe('screens/Note/Note.sharing', () => {
 		expect(exportHtml).not.toHaveBeenCalled();
 		expect(shareFile).not.toHaveBeenCalled();
 		unmount();
+	});
+
+	it('downloads a short plain-text note when Web Share is unavailable', async () => {
+		const originalPlatform = Platform.OS;
+		const originalShare = Object.getOwnPropertyDescriptor(navigator, 'share');
+		await openNewNote({ title: 'Web note', body: 'Short body' });
+		const { dialogs } = makeShareDialogs('plainText');
+		const nativeShare = jest.spyOn(Share, 'share');
+		const { unmount } = render(<WrappedNoteScreen dialogs={dialogs}/>);
+		try {
+			await openNoteActionsMenu();
+			const shareButton = await screen.findByText('Share');
+			Platform.OS = 'web';
+			Object.defineProperty(navigator, 'share', { configurable: true, value: undefined });
+			fireEvent.press(shareButton);
+			await waitFor(() => expect(shareFile).toHaveBeenCalledWith(expect.stringMatching(/Web note\.md$/), 'text/plain'));
+			expect(nativeShare).not.toHaveBeenCalled();
+		} finally {
+			Platform.OS = originalPlatform;
+			if (originalShare) Object.defineProperty(navigator, 'share', originalShare);
+			else Reflect.deleteProperty(navigator, 'share');
+			unmount();
+		}
 	});
 
 	it('shares a long plain-text note with a safe note-title filename', async () => {

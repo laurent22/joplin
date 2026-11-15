@@ -1445,7 +1445,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		const shareText = `${noteToShare.title}\n\n${noteToShare.body}`;
 		const filename = friendlySafeFilename(noteToShare.title);
 
-		if (shareText.length > 100000) {
+		if (shareText.length > 100000 || (isWeb && typeof navigator.share !== 'function')) {
 			let shareDir: string = null;
 			try {
 				// Using a .txt file extension causes a "No valid provider found from URL" error

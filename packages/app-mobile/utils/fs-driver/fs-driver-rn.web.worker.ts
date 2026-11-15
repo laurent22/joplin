@@ -352,7 +352,7 @@ export class WorkerApi {
 	}
 
 	public async remove(path: string, { recursive = true }: RemoveOptions = {}) {
-		path = normalize(path);
+		path = resolve('/', path);
 
 		this.directoryHandleCache_.clear();
 
@@ -463,6 +463,7 @@ export class WorkerApi {
 	}
 
 	public async readDirStats(path: string, options: ReadDirStatsOptions = { recursive: false }): Promise<TransferableStat[]|null> {
+		path = resolve('/', path);
 		const readDirStats = async (basePath: string, path: string, dirHandle?: FileSystemDirectoryHandle) => {
 			dirHandle ??= await this.pathToDirectoryHandle_(path);
 			if (!dirHandle) return null;

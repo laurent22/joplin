@@ -59,17 +59,34 @@ describe('fs-driver-rn', () => {
 		const source = '/local/source.md';
 		const dest = samePath ? source : '/local/destination.md';
 		try {
-			mockRnfs.exists.mockResolvedValue(exists);
+			mockRnfs.exists.mockImplementation(async path => path === source || exists);
 			mockRnfs.unlink.mockResolvedValue(undefined);
 			mockRnfs.moveFile.mockResolvedValue(undefined);
 			await new FsDriverRN().move(source, dest);
 
-			expect(mockRnfs.exists).toHaveBeenCalledTimes(platform === 'ios' && !samePath ? 1 : 0);
+			expect(mockRnfs.exists).toHaveBeenCalledTimes(platform === 'ios' && !samePath ? 2 : 0);
 			expect(mockRnfs.unlink).toHaveBeenCalledTimes(unlinks ? 1 : 0);
 			if (unlinks) {
 				expect(mockRnfs.unlink).toHaveBeenCalledWith(dest);
 				expect(mockRnfs.unlink.mock.invocationCallOrder[0]).toBeLessThan(mockRnfs.moveFile.mock.invocationCallOrder[0]);
 			}
+			expect(mockRnfs.moveFile).toHaveBeenCalledWith(source, dest);
+		} finally {
+			Platform.OS = originalPlatform;
+		}
+	});
+
+	it('keeps an existing iOS destination when the move source is missing', async () => {
+		const originalPlatform = Platform.OS;
+		Platform.OS = 'ios';
+		const source = '/local/missing.md';
+		const dest = '/local/existing.md';
+		try {
+			mockRnfs.exists.mockImplementation(async path => path === dest);
+			mockRnfs.moveFile.mockRejectedValueOnce(new Error('Source does not exist'));
+			await expect(new FsDriverRN().move(source, dest)).rejects.toThrow('Source does not exist');
+			expect(mockRnfs.exists).toHaveBeenCalledWith(source);
+			expect(mockRnfs.unlink).not.toHaveBeenCalled();
 			expect(mockRnfs.moveFile).toHaveBeenCalledWith(source, dest);
 		} finally {
 			Platform.OS = originalPlatform;

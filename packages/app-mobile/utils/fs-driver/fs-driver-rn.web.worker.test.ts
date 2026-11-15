@@ -144,11 +144,12 @@ describe('fs-driver-rn.web.worker', () => {
 		Object.assign(worker, { externalHandles_: new Map([['/external/mount', external]]) });
 
 		expect((await worker.readDirStats('/external/mount')).map(file => file.path)).toEqual(['report.tmp', 'report._tmp']);
+		expect((await worker.readDirStats('external/mount')).map(file => file.path)).toEqual(['report.tmp', 'report._tmp']);
 		expect(await worker.exists('/external/mount/report.tmp')).toBe(true);
 		expect(await worker.exists('/external/mount/report._tmp')).toBe(true);
 		expect(await worker.readFile('/external/mount/report.tmp')).toBe('original');
 		expect(await worker.readFile('/external/mount/report._tmp')).toBe('encoded');
-		await worker.unlink('/external/mount/report.tmp');
+		await worker.unlink('external/mount/report.tmp');
 		expect(external.removeEntry).toHaveBeenCalledWith('report.tmp', { recursive: false });
 		expect(await worker.exists('/external/mount/report._tmp')).toBe(true);
 		expect(files.has('report._tmp')).toBe(true);
