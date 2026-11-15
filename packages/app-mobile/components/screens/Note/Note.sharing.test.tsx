@@ -279,8 +279,9 @@ describe('screens/Note/Note.sharing', () => {
 		await waitFor(() => expect(shareFile).toHaveBeenCalledWith(expect.any(String), 'text/plain'));
 		const filePath = jest.mocked(shareFile).mock.calls[0][0];
 		expect(basename(filePath)).toBe('Long _ note_.md');
-		await waitFor(() => expect(removeDir).toHaveBeenCalledWith(dirname(filePath)));
-		expect(removeDir).not.toHaveBeenCalledWith(filePath);
+		await act(async () => {});
+		expect(removeDir).not.toHaveBeenCalledWith(dirname(filePath));
+		expect(await shim.fsDriver().exists(filePath)).toBe(true);
 		expect(nativeShare).not.toHaveBeenCalled();
 		unmount();
 	});

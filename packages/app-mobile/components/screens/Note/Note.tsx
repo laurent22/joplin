@@ -1447,6 +1447,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 		if (shareText.length > 100000 || (isWeb && typeof navigator.share !== 'function')) {
 			let shareDir: string = null;
+			let shareCallReturned = false;
 			try {
 				// Using a .txt file extension causes a "No valid provider found from URL" error
 				// and blank share sheet on iOS for larger log files (around 200 KiB).
@@ -1454,13 +1455,14 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				const fileToShare = `${shareDir}/${filename}.md`;
 				await shim.fsDriver().writeFile(fileToShare, shareText, 'utf8');
 				await shareFile(fileToShare, 'text/plain');
+				shareCallReturned = true;
 			} catch (e) {
 				logger.error('Unable to share note data:', e);
 
 				// Display a message to the user (e.g. in the case where the user is out of disk space).
 				void shim.showErrorDialog(_('Unable to share note data. Reason: %s', e.toString()));
 			} finally {
-				if (shareDir) {
+				if (shareDir && !shareCallReturned) {
 					await shim.fsDriver().remove(shareDir);
 				}
 			}
