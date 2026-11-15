@@ -2,7 +2,7 @@ import InteropService from '@joplin/lib/services/interop/InteropService';
 import { Dispatch } from 'redux';
 import CommandService from '@joplin/lib/services/CommandService';
 import shim from '@joplin/lib/shim';
-import { ExportModuleOutputFormat, ExportOptions, FileSystemItem } from '@joplin/lib/services/interop/types';
+import { ExportModuleOutputFormat, ExportOptions } from '@joplin/lib/services/interop/types';
 import { ExportModule } from '@joplin/lib/services/interop/Module';
 
 import { _ } from '@joplin/lib/locale';
@@ -19,6 +19,7 @@ import time from '@joplin/lib/time';
 import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron';
 const md5 = require('md5');
 import * as url from 'url';
+import noteHtmlExportOptions from './utils/noteHtmlExportOptions';
 
 interface ExportNoteOptions {
 	customCss?: string;
@@ -36,13 +37,7 @@ export default class InteropServiceHelper {
 	private static async exportNoteToHtmlFile(noteId: string, exportOptions: ExportNoteOptions) {
 		const tempFile = `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}.html`;
 
-		const fullExportOptions: ExportOptions = { path: tempFile,
-			format: ExportModuleOutputFormat.Html,
-			target: FileSystemItem.File,
-			sourceNoteIds: [noteId],
-			// The PDF export and printing ask first.
-			decryptLockedNotes: true,
-			customCss: '', ...exportOptions };
+		const fullExportOptions = noteHtmlExportOptions(noteId, tempFile, exportOptions);
 
 		const service = InteropService.instance();
 
