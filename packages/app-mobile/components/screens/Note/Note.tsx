@@ -1334,7 +1334,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			if (task.cancelled) return;
 			if (!savedNote) throw new Error(_('Cannot find the note to share.'));
 
-			shareDir = await makeIsolatedShareCacheDirectory();
+			shareDir = await makeIsolatedShareCacheDirectory(isNoteLockEnabled() && NoteLockNote.isLocked(savedNote));
 			if (task.cancelled) return;
 			const filename = friendlySafeFilename(savedNote.title);
 			const htmlPath = `${shareDir}/${filename}.html`;
@@ -1437,7 +1437,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		}
 
 		let noteToShare = this.state.note;
-		if (isNoteLockEnabled() && NoteLockNote.isLocked(noteToShare)) {
+		const fromLockedNote = isNoteLockEnabled() && NoteLockNote.isLocked(noteToShare);
+		if (fromLockedNote) {
 			// The state note may hold the encrypted body, so the shared contents come from a gated load.
 			noteToShare = await Note.load(noteToShare.id, { useNoteLock: true });
 		}
@@ -1449,7 +1450,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			try {
 				// Using a .txt file extension causes a "No valid provider found from URL" error
 				// and blank share sheet on iOS for larger log files (around 200 KiB).
-				shareDir = await makeIsolatedShareCacheDirectory();
+				shareDir = await makeIsolatedShareCacheDirectory(fromLockedNote);
 				const fileToShare = `${shareDir}/${filename}.md`;
 				await shim.fsDriver().writeFile(fileToShare, shareText, 'utf8');
 				await shareFile(fileToShare, 'text/plain');

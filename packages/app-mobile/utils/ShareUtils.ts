@@ -13,9 +13,9 @@ const makeShareCacheDirectory = async () => {
 	return targetDir;
 };
 
-export const makeIsolatedShareCacheDirectory = async () => {
+export const makeIsolatedShareCacheDirectory = async (fromLockedNote = false) => {
 	// Keep each share's files separate so they cannot conflict and can be cleaned up independently.
-	const targetDir = `${await makeShareCacheDirectory()}/${uuid.create()}`;
+	const targetDir = `${await makeShareCacheDirectory()}${fromLockedNote ? '/unlocked' : ''}/${uuid.create()}`;
 	await shim.fsDriver().mkdir(targetDir);
 	return targetDir;
 };

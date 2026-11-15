@@ -465,6 +465,7 @@ describe('screens/Note/Note.sharing', () => {
 				}));
 				expect(shareFile).toHaveBeenCalledWith(expect.any(String), 'text/html');
 			});
+			expect(exportHtml.mock.calls[0][0].path).toContain('/sharedFiles/unlocked/');
 		} finally {
 			unmount();
 			Setting.setValue('featureFlag.noteLock', false);
