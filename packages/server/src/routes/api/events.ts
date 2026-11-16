@@ -1,4 +1,5 @@
 import { ErrorNotFound } from '../../utils/errors';
+import { hasOwnProperty } from '@joplin/utils/object';
 import { bodyFields } from '../../utils/requestUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
@@ -19,7 +20,7 @@ const router = new Router(RouteType.Api);
 
 router.post('api/events', async (_path: SubPath, ctx: AppContext) => {
 	const event = await bodyFields<Event>(ctx.req);
-	if (!supportedEvents[event.name]) throw new ErrorNotFound(`Unknown event name: ${event.name}`);
+	if (typeof event.name !== 'string' || !hasOwnProperty(supportedEvents, event.name)) throw new ErrorNotFound('Unknown event name');
 	await supportedEvents[event.name](ctx);
 });
 

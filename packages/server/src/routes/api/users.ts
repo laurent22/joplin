@@ -63,7 +63,8 @@ router.get('api/users', async (_path: SubPath, ctx: AppContext) => {
 	await ctx.joplin.models.user().checkIfAllowed(ctx.joplin.owner, AclAction.List);
 
 	return {
-		items: await ctx.joplin.models.user().all(),
+		// Not using toApiOutput(), which makes several queries per user
+		items: await ctx.joplin.models.user().all({ fields: ['id', 'email', 'full_name', 'account_type', 'created_time', 'updated_time'] }),
 		has_more: false,
 	};
 });
