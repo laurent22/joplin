@@ -30,15 +30,18 @@ interface Props {
 interface State {
 	folder: FolderEntity;
 	lastSavedFolder: FolderEntity|null;
+	imageProcessing: boolean;
 }
 
 class FolderScreenComponent extends BaseScreenComponent<Props, State> {
+	private imageOperationId = 0;
 
 	public constructor(props: Props) {
 		super(props);
 		this.state = {
 			folder: Folder.new(),
 			lastSavedFolder: null,
+			imageProcessing: false,
 		};
 	}
 
@@ -86,10 +89,20 @@ class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 	}
 
 	private emoji_changeText(emoji: string) {
-		this.folderComponent_change('icon', emoji ? Folder.serializeIcon({ type: FolderIconType.Emoji, emoji, name: '', dataUrl: '' }) : '');
+		this.icon_change(emoji ? Folder.serializeIcon({ type: FolderIconType.Emoji, emoji, name: '', dataUrl: '' }) : '');
+	}
+
+	private icon_change(icon: string) {
+		this.imageOperationId++;
+		this.setState(prevState => ({
+			folder: { ...prevState.folder, icon },
+			imageProcessing: false,
+		}));
 	}
 
 	private async selectImage() {
+		const operationId = ++this.imageOperationId;
+		this.setState({ imageProcessing: true });
 		const tempPath = `${Setting.value('tempDir')}/${uuid.createNano()}`;
 		const resizedPath = `${tempPath}.jpg`;
 		try {
@@ -103,12 +116,15 @@ class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 			await shim.fsDriver().copy(sourcePath, tempPath);
 			await resizeImage({ inputPath: tempPath, outputPath: resizedPath, maxWidth: 256, maxHeight: 256, format: 'JPEG', quality: 0.8 });
 			const base64 = await shim.fsDriver().readFile(resizedPath, 'base64');
-			this.folderComponent_change('icon', Folder.serializeIcon({
+			if (operationId !== this.imageOperationId) return;
+			const icon = Folder.serializeIcon({
 				type: FolderIconType.DataUrl, emoji: '', name: '', dataUrl: `data:image/jpeg;base64,${base64}`,
-			}));
+			});
+			this.setState(prevState => ({ folder: { ...prevState.folder, icon }, imageProcessing: false }));
 		} catch (error) {
-			void shim.showErrorDialog(_('The notebook icon could not be set: %s', error.message));
+			if (operationId === this.imageOperationId) void shim.showErrorDialog(_('The notebook icon could not be set: %s', error.message));
 		} finally {
+			if (operationId === this.imageOperationId) this.setState({ imageProcessing: false });
 			await Promise.all([tempPath, resizedPath].map(async path => {
 				if (await shim.fsDriver().exists(path)) await shim.fsDriver().remove(path);
 			}));
@@ -117,6 +133,7 @@ class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 
 
 	private async saveFolderButton_press() {
+		if (this.state.imageProcessing) return;
 		let folder = { ...this.state.folder };
 
 		try {
@@ -140,7 +157,7 @@ class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 	}
 
 	public override render() {
-		const saveButtonDisabled = !this.isModified() || !this.state.folder.title;
+		const saveButtonDisabled = this.state.imageProcessing || !this.isModified() || !this.state.folder.title;
 		const icon = Folder.unserializeIcon(this.state.folder.icon);
 
 		return (
@@ -176,7 +193,7 @@ class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 				</View>
 				<View style={styles.iconButtons}>
 					<Button title={_('Select image...')} onPress={() => void this.selectImage()} />
-					{icon && <Button title={_('Clear')} onPress={() => this.folderComponent_change('icon', '')} />}
+					{icon && <Button title={_('Clear')} onPress={() => this.icon_change('')} />}
 				</View>
 				<View style={{ flex: 1 }} />
 			</View>
