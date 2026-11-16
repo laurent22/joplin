@@ -86,22 +86,23 @@ describe('renderedSelection', () => {
 		}
 	});
 
-	it.each(['keyboard', 'programmatic', 'visible syntax', 'no'])('should leave rendering and selection unchanged after %s selection', async kind => {
+	it.each([
+		{ kind: 'keyboard', select: true, userEvent: 'select' },
+		{ kind: 'programmatic', select: true },
+		{ kind: 'visible syntax', select: true, userEvent: 'select.pointer', initialCursor: 12 },
+		{ kind: 'no', select: false },
+	])('should leave rendering and selection unchanged on mouseup after $kind selection', async ({ select, userEvent, initialCursor }) => {
 		const editor = await createEditor();
 		try {
-			if (kind === 'visible syntax') {
-				editor.dispatch({ selection: { anchor: 12 } });
-			}
-			const text = visibleEditorText(editor);
+			if (initialCursor !== undefined) editor.dispatch({ selection: { anchor: initialCursor } });
 			mouseDown(editor);
-			if (kind !== 'no') {
-				editor.dispatch({ selection: EditorSelection.range(10, 14), userEvent: kind === 'visible syntax' ? 'select.pointer' : kind === 'keyboard' ? 'select' : undefined });
-			}
+			if (select) editor.dispatch({ selection: EditorSelection.range(10, 14), userEvent });
+			const text = visibleEditorText(editor);
 			const selection = editor.state.selection;
 			mouseUp(editor);
 			await jest.runAllTimersAsync();
 			expect(editor.state.selection.eq(selection)).toBe(true);
-			if (kind === 'no') expect(visibleEditorText(editor)).toBe(text);
+			expect(visibleEditorText(editor)).toBe(text);
 		} finally {
 			editor.destroy();
 		}
