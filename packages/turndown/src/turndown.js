@@ -261,10 +261,65 @@ function postProcess (output) {
 
   // Collapse multiple blank lines (or lines with only whitespace) into a single blank line
   if (this.options.collapseMultipleBlankLines) {
-    output = output.replace(/(\n\s*){3,}/g, '\n\n')
+    output = collapseMultipleBlankLines(output)
   }
 
   return output
+}
+
+/**
+ * Replaces each run of two or more blank (empty or whitespace-only) lines with a single empty
+ * line. The indentation of the line that follows is kept, and lines inside fenced code blocks
+ * are left as they are, since their blank lines and indentation are part of the code.
+ * @private
+ * @param {String} output The Markdown to process
+ * @returns The Markdown with the blank lines collapsed
+ * @type String
+ */
+
+function collapseMultipleBlankLines (output) {
+  var lines = output.split('\n')
+  var result = []
+  var openFence = null
+  var blankLines = []
+
+  var flushBlankLines = function () {
+    if (blankLines.length >= 2) {
+      result.push('')
+    } else {
+      result.push.apply(result, blankLines)
+    }
+    blankLines = []
+  }
+
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i]
+    var fenceMatch = line.match(/^\s*(`{3,}|~{3,})/)
+
+    if (openFence) {
+      result.push(line)
+      // A closing fence uses the same character, is at least as long as the opening one and
+      // has nothing after it but whitespace.
+      if (fenceMatch && fenceMatch[1].charAt(0) === openFence.charAt(0) &&
+        fenceMatch[1].length >= openFence.length && !line.slice(fenceMatch[0].length).trim()) {
+        openFence = null
+      }
+      continue
+    }
+
+    if (!line.trim()) {
+      blankLines.push(line)
+      continue
+    }
+
+    flushBlankLines()
+    result.push(line)
+    if (fenceMatch) openFence = fenceMatch[1]
+  }
+
+  flushBlankLines()
+
+  return result.join('\n')
 }
 
 /**

@@ -131,6 +131,28 @@ describe('HtmlToMd', () => {
 		expect(collapsedResult).toContain('\n\n');
 	});
 
+	// https://github.com/laurent22/joplin/issues/17089
+	it.each([
+		[
+			'should keep the indentation of the line after collapsed blank lines',
+			'<ul><li><p>a</p><p><br></p><p><br></p><p><br></p><p>b</p></li></ul>',
+			'- a\n\n    b',
+		],
+		[
+			'should not collapse blank lines inside a fenced code block',
+			'<pre><code class="language-python">def f():\n    x = 1\n\n\n    return x</code></pre>',
+			'```python\ndef f():\n    x = 1\n\n\n    return x\n```',
+		],
+		[
+			'should not collapse blank lines inside a code block that contains a fence',
+			'<pre><code>a\n```\n\n\n    b</code></pre><p>c</p><p><br></p><p><br></p><p><br></p><p>d</p>',
+			'````\na\n```\n\n\n    b\n````\n\nc\n\nd',
+		],
+	])('collapseMultipleBlankLines %s', (_title, html, expected) => {
+		const htmlToMd = new HtmlToMd();
+		expect(htmlToMd.parse(html, { tightLists: true, collapseMultipleBlankLines: true })).toBe(expected);
+	});
+
 	it('should not re-read the rows of a table for every row', async () => {
 		// Under domino, each access to `table.rows` walks the whole table, so reading it once per row made
 		// converting large tables quadratic: https://github.com/laurent22/joplin/issues/16894
