@@ -1,8 +1,10 @@
 import * as React from 'react';
 
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Button, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import Folder from '@joplin/lib/models/Folder';
+import Setting from '@joplin/lib/models/Setting';
+import uuid from '@joplin/lib/uuid';
 import BaseModel from '@joplin/lib/BaseModel';
 import { ScreenHeader } from '../ScreenHeader';
 import { BaseScreenComponent } from '../base-screen';
@@ -10,9 +12,12 @@ import shim from '@joplin/lib/shim';
 import { _ } from '@joplin/lib/locale';
 import FolderPicker from '../FolderPicker';
 import TextInput from '../TextInput';
-import { FolderEntity } from '@joplin/lib/services/database/types';
+import { FolderEntity, FolderIconType } from '@joplin/lib/services/database/types';
 import { AppState } from '../../utils/types';
 import { Dispatch } from 'redux';
+import SidebarIcon from '../SideMenuContent/SidebarIcon';
+import pickDocument from '../../utils/pickDocument';
+import resizeImage from '../../utils/image/resizeImage';
 
 interface Props {
 	folderId: string;
@@ -80,6 +85,36 @@ class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 		this.folderComponent_change('parent_id', parent);
 	}
 
+	private emoji_changeText(emoji: string) {
+		this.folderComponent_change('icon', emoji ? Folder.serializeIcon({ type: FolderIconType.Emoji, emoji, name: '', dataUrl: '' }) : '');
+	}
+
+	private async selectImage() {
+		const tempPath = `${Setting.value('tempDir')}/${uuid.createNano()}`;
+		const resizedPath = `${tempPath}.jpg`;
+		try {
+			const [file] = await pickDocument();
+			if (!file) return;
+			if (!['image/jpeg', 'image/png'].includes(file.type) && !/\.(jpe?g|png)$/i.test(file.fileName)) {
+				throw new Error(_('Unsupported image type: %s', file.type || file.fileName));
+			}
+
+			const sourcePath = Platform.OS === 'ios' ? decodeURIComponent(file.uri) : file.uri;
+			await shim.fsDriver().copy(sourcePath, tempPath);
+			await resizeImage({ inputPath: tempPath, outputPath: resizedPath, maxWidth: 256, maxHeight: 256, format: 'JPEG', quality: 0.8 });
+			const base64 = await shim.fsDriver().readFile(resizedPath, 'base64');
+			this.folderComponent_change('icon', Folder.serializeIcon({
+				type: FolderIconType.DataUrl, emoji: '', name: '', dataUrl: `data:image/jpeg;base64,${base64}`,
+			}));
+		} catch (error) {
+			void shim.showErrorDialog(_('The notebook icon could not be set: %s', error.message));
+		} finally {
+			await Promise.all([tempPath, resizedPath].map(async path => {
+				if (await shim.fsDriver().exists(path)) await shim.fsDriver().remove(path);
+			}));
+		}
+	}
+
 
 	private async saveFolderButton_press() {
 		let folder = { ...this.state.folder };
@@ -106,6 +141,7 @@ class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 
 	public override render() {
 		const saveButtonDisabled = !this.isModified() || !this.state.folder.title;
+		const icon = Folder.unserializeIcon(this.state.folder.icon);
 
 		return (
 			<View style={this.rootStyle(this.props.themeId).root}>
@@ -128,6 +164,20 @@ class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 						mustSelect
 					/>
 				</View>
+				<View style={styles.iconContainer}>
+					{icon && <SidebarIcon icon={icon} />}
+					<TextInput
+						style={styles.emojiInput}
+						themeId={this.props.themeId}
+						placeholder={_('Enter emoji')}
+						value={icon?.type === FolderIconType.Emoji ? icon.emoji : ''}
+						onChangeText={text => this.emoji_changeText(text)}
+					/>
+				</View>
+				<View style={styles.iconButtons}>
+					<Button title={_('Select image...')} onPress={() => void this.selectImage()} />
+					{icon && <Button title={_('Clear')} onPress={() => this.folderComponent_change('icon', '')} />}
+				</View>
 				<View style={{ flex: 1 }} />
 			</View>
 		);
@@ -149,6 +199,19 @@ const styles = StyleSheet.create({
 		paddingRight: 14,
 		paddingTop: 12,
 		paddingBottom: 12,
+	},
+	iconContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		paddingLeft: 14,
+		paddingRight: 14,
+	},
+	emojiInput: {
+		flex: 1,
+	},
+	iconButtons: {
+		flexDirection: 'row',
+		justifyContent: 'space-around',
 	},
 });
 
