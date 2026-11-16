@@ -471,6 +471,8 @@ export default class Synchronizer {
 		let errorToThrow = null;
 		let syncLock = null;
 		let hasCaughtError = false;
+		// Set while the delta step is running, so that a sync that fails during it resumes from the last completed page
+		let deltaResumeContext: (()=> PaginatedList['context'])|null = null;
 
 		try {
 			// Before synchronising make sure all share_id properties are set
@@ -957,7 +959,7 @@ export default class Synchronizer {
 				// At this point all the local items that have changed have been pushed to remote
 				// or handled as conflicts, so no conflict is possible after this.
 
-				let context = null;
+				let context: PaginatedList['context'] = null;
 				let newDeltaContext = null;
 				const localFoldersToDelete = new Set<string>();
 				let hasCancelled = false;
@@ -977,6 +979,7 @@ export default class Synchronizer {
 					delete output.statIdsCache;
 					return output;
 				};
+				deltaResumeContext = () => resumeContext(context);
 
 				while (true) {
 					if (this.cancelling() || hasCancelled) break;
@@ -1310,6 +1313,7 @@ export default class Synchronizer {
 				// If the sync was cancelled, resume from the last completed page rather than from where this sync started, so
 				// that the next sync doesn't download those items again.
 				outputContext.delta = newDeltaContext && !hasPendingFolderDeletions ? newDeltaContext : resumeContext(context);
+				deltaResumeContext = null;
 
 				if (!this.cancelling()) {
 					await BaseItem.deleteOrphanSyncItems();
@@ -1317,6 +1321,7 @@ export default class Synchronizer {
 			} // DELTA STEP
 		} catch (error) {
 			hasCaughtError = true;
+			if (deltaResumeContext) outputContext.delta = deltaResumeContext();
 
 			if (error.code === ErrorCode.MustUpgradeApp) {
 				this.dispatch({
