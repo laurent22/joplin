@@ -13,6 +13,7 @@ import usePrevious from '@joplin/lib/hooks/usePrevious';
 import { Theme } from '@joplin/lib/themes/type';
 import { useMemo } from 'react';
 import KeyboardAvoidingView from './KeyboardAvoidingView';
+import NoteOpenTransition from './NoteOpenTransition';
 
 interface Props {
 	route: Route;
@@ -76,7 +77,11 @@ const AppNavComponent: React.FC<Props> = (props) => {
 		>
 			<NotesScreen visible={notesScreenVisible} />
 			{searchScreenLoaded && <SearchScreen visible={searchScreenVisible} />}
-			{!notesScreenVisible && !searchScreenVisible && <Screen navigation={{ state: route }} themeId={props.themeId} dispatch={props.dispatch} />}
+			{!notesScreenVisible && !searchScreenVisible && (route.routeName === 'Note' ? (
+				<NoteOpenTransition>
+					<Screen navigation={{ state: route }} themeId={props.themeId} dispatch={props.dispatch} />
+				</NoteOpenTransition>
+			) : <Screen navigation={{ state: route }} themeId={props.themeId} dispatch={props.dispatch} />)}
 			<View style={{ height: autocompletionBarPadding }} />
 		</KeyboardAvoidingView>
 	);

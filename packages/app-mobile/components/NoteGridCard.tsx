@@ -13,6 +13,7 @@ import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
 import Icon from './Icon';
 import isSyncDisabledConflict from '@joplin/lib/services/noteList/isSyncDisabledConflict';
 import getNotePreviewText from '../utils/getNotePreviewText';
+import { clearNoteOpenTransition, requestNoteOpenTransition } from '../utils/noteOpenTransition';
 
 interface Props {
 	dispatch: Dispatch;
@@ -78,6 +79,7 @@ const useStyles = (themeId: number, width: number) => {
 const NoteGridCardComponent: React.FC<Props> = memo(props => {
 	const styles = useStyles(props.themeId, props.width);
 	const suppressPressUntilRef = useRef(0);
+	const cardRef = useRef<View>(null);
 	const [preview, setPreview] = useState('');
 
 	const note = props.note ?? {};
@@ -105,7 +107,24 @@ const NoteGridCardComponent: React.FC<Props> = memo(props => {
 		if (props.noteSelectionEnabled) {
 			props.dispatch({ type: 'NOTE_SELECTION_TOGGLE', id: props.note.id });
 		} else {
-			props.dispatch({ type: 'NAV_GO', routeName: 'Note', noteId: props.note.id });
+			const noteId = props.note.id;
+			const openNote = () => {
+				props.dispatch({ type: 'NAV_GO', routeName: 'Note', noteId });
+			};
+			// Let the note screen zoom in from this card.
+			const card = cardRef.current;
+			if (card) {
+				card.measureInWindow((x, y, width, height) => {
+					if (width > 0) {
+						requestNoteOpenTransition({ x: x + width / 2, y: y + height / 2 });
+					} else {
+						clearNoteOpenTransition();
+					}
+					openNote();
+				});
+			} else {
+				openNote();
+			}
 		}
 	}, [props.note, props.noteSelectionEnabled, props.dispatch]);
 
@@ -138,6 +157,7 @@ const NoteGridCardComponent: React.FC<Props> = memo(props => {
 
 	return (
 		<Pressable
+			ref={cardRef}
 			style={[isSelected ? styles.cardSelected : styles.card, isTodo && todoCompleted ? styles.completed : null]}
 			accessibilityRole='button'
 			accessibilityHint={props.noteSelectionEnabled ? '' : _('Opens note')}

@@ -70,6 +70,8 @@ interface ScreenHeaderProps {
 	onRedoButtonPress: OnPressCallback;
 	onSaveButtonPress: OnPressCallback;
 	sortButton_press?: OnPressCallback;
+	notesViewMode?: string;
+	onNotesViewModePress?: OnPressCallback;
 	onSearchButtonPress?: OnPressCallback;
 	onDeleteButtonPress?: OnPressCallback;
 
@@ -559,6 +561,21 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
+		function notesViewModeButton(styles: ScreenHeaderStyles, onPress: OnPressCallback, isGrid: boolean) {
+			// The icon shows the mode the button switches to, as in file managers.
+			return (
+				<IconButton
+					onPress={onPress}
+					themeId={themeId}
+
+					description={isGrid ? _('Switch to list view') : _('Switch to grid view')}
+					iconName={isGrid ? 'ionicon list' : 'ionicon grid-outline'}
+					contentWrapperStyle={styles.iconButton}
+					iconStyle={styles.topIcon}
+				/>
+			);
+		}
+
 		const menuOptions: MenuOption[] = [...this.props.menuOptions];
 
 		const selectedFolder = this.props.notesParentType === 'Folder' ? Folder.byId(this.props.folders, this.props.selectedFolderId) : null;
@@ -669,6 +686,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		const restoreButtonComp = selectedFolderInTrash && this.props.noteSelectionEnabled ? restoreButton(this.styles(), () => this.restoreButton_press(), headerItemDisabled) : null;
 		const duplicateButtonComp = !selectedFolderInTrash && this.props.noteSelectionEnabled ? duplicateButton(this.styles(), () => this.duplicateButton_press(), headerItemDisabled) : null;
 		const sortButtonComp = !this.props.noteSelectionEnabled && this.props.sortButton_press ? sortButton(this.styles(), () => this.props.sortButton_press()) : null;
+		const notesViewModeButtonComp = !this.props.noteSelectionEnabled && this.props.onNotesViewModePress ? notesViewModeButton(this.styles(), () => this.props.onNotesViewModePress(), this.props.notesViewMode === 'grid') : null;
 		const togglePluginEditorButton = renderTogglePluginEditorButton(this.styles(), () => CommandService.instance().execute('toggleEditorPlugin'), false);
 
 		// To allow the notebook dropdown (and perhaps other components) to have sufficient
@@ -727,6 +745,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					{titleComp}
 					{restoreButtonComp}
 					{duplicateButtonComp}
+					{notesViewModeButtonComp}
 					{sortButtonComp}
 					{menuComp}
 				</View>

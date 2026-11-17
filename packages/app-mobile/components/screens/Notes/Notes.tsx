@@ -33,6 +33,7 @@ interface Props {
 	tags: TagEntity[];
 	notesSource: string;
 	notesOrder: PreviewsOrder[];
+	notesViewMode: string;
 	uncompletedTodosOnTop: boolean;
 	showCompletedTodos: boolean;
 	noteSelectionEnabled: boolean;
@@ -71,17 +72,14 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 		await this.refreshNotes(newProps);
 	};
 
+	private notesViewModeButton_press = () => {
+		Setting.setValue('notes.viewMode', this.props.notesViewMode === 'grid' ? 'list' : 'grid');
+	};
+
 	private sortButton_press = async () => {
 		type IdType = { name: string; value: string|boolean };
 		const buttons: MenuChoice<IdType>[] = [];
 		const sortNoteOptions = Setting.enumOptions('notes.sortOrder.field');
-
-		const isGridView = Setting.value('notes.viewMode') === 'grid';
-		buttons.push({
-			text: `[ ${_('Grid view')} ]`,
-			checked: isGridView,
-			id: { name: 'notes.viewMode', value: isGridView ? 'list' : 'grid' },
-		});
 
 		for (const field in sortNoteOptions) {
 			if (!sortNoteOptions.hasOwnProperty(field)) continue;
@@ -326,6 +324,8 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 					title={iconString + title}
 					showBackButton={false}
 					sortButton_press={this.sortButton_press}
+					notesViewMode={this.props.notesViewMode}
+					onNotesViewModePress={this.notesViewModeButton_press}
 					folderPickerOptions={this.folderPickerOptions()}
 					showSearchButton={true}
 					showSideMenuButton={true}
@@ -359,6 +359,7 @@ const NotesScreen = connect((state: AppState) => {
 		themeId: state.settings.theme,
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		notesOrder: stateUtils.notesOrder(state.settings),
+		notesViewMode: state.settings['notes.viewMode'],
 	};
 })(NotesScreenWrapper);
 
