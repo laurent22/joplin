@@ -13,6 +13,31 @@ import { ModelType } from '@joplin/lib/BaseModel';
 import { Item } from '../services/database/types';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 
+// Gives user1 access to a note shared by user2, and to their own private note with the same name. The API no longer
+// allows getting into this state, but accounts that got into it before still have it.
+const createSharedAndPrivateCopies = async () => {
+	const { user: user1, session: session1 } = await createUserAndSession(1);
+	const { user: user2, session: session2 } = await createUserAndSession(2);
+	const noteId = '00000000000000000000000000000001';
+	const name = `${noteId}.md`;
+
+	const { share } = await shareFolderWithUser(session2.id, session1.id, '000000000000000000000000000000F1', [
+		{ id: '000000000000000000000000000000F1', children: [{ id: noteId }] },
+	]);
+	const sharedItem = await models().item().loadByName(user2.id, name);
+
+	const privateItem = await models().item().saveForUser(user1.id, {
+		name,
+		jop_id: noteId,
+		jop_type: ModelType.Note,
+		jop_parent_id: '000000000000000000000000000000F2',
+		jop_share_id: '',
+		content: Buffer.from(JSON.stringify({ title: 'original' })),
+	});
+
+	return { user1, user2, noteId, name, share, sharedItem, privateItem };
+};
+
 describe('ItemModel', () => {
 
 	beforeAll(async () => {
@@ -742,25 +767,7 @@ describe('ItemModel', () => {
 	});
 
 	test('should pick the same item consistently when a user has access to several items with the same name', async () => {
-		const { user: user1, session: session1 } = await createUserAndSession(1);
-		const { user: user2, session: session2 } = await createUserAndSession(2);
-		const noteId = '00000000000000000000000000000001';
-		const name = `${noteId}.md`;
-
-		const { share } = await shareFolderWithUser(session2.id, session1.id, '000000000000000000000000000000F1', [
-			{ id: '000000000000000000000000000000F1', children: [{ id: noteId }] },
-		]);
-		const sharedItem = await models().item().loadByName(user2.id, name);
-
-		// The API no longer allows getting into this state, but accounts that got into it before still have it
-		const privateItem = await models().item().saveForUser(user1.id, {
-			name,
-			jop_id: noteId,
-			jop_type: ModelType.Note,
-			jop_parent_id: '000000000000000000000000000000F2',
-			jop_share_id: '',
-			content: Buffer.from(JSON.stringify({ title: 'original' })),
-		});
+		const { user1, noteId, name, share, sharedItem, privateItem } = await createSharedAndPrivateCopies();
 
 		const upload = async (shareId: string, title: string) => {
 			await msleep(2);
@@ -778,6 +785,17 @@ describe('ItemModel', () => {
 		expect(await titleOf(sharedItem.id)).toBe('shared copy');
 		expect((await models().item().load(sharedItem.id)).jop_share_id).toBe(share.id);
 		expect((await models().item().loadByName(user1.id, name)).id).toBe(privateItem.id);
+	});
+
+	test('should update the user\'s own item when a concurrent request created it and the user has access to another item with the same name', async () => {
+		const { user1, user2, name, sharedItem, privateItem } = await createSharedAndPrivateCopies();
+		await msleep(2);
+		await models().item().saveForUser(user2.id, { id: sharedItem.id, content: Buffer.from('shared') });
+
+		const savedItem = await models().item().saveForUser(user1.id, { name, content: Buffer.from('retried') });
+
+		expect(savedItem.id).toBe(privateItem.id);
+		expect((await models().item().load(sharedItem.id)).owner_id).toBe(user2.id);
 	});
 
 });
