@@ -201,22 +201,8 @@ export default class ItemModel extends BaseModel<Item> {
 
 	public async sameNameItemsByShareId(shareId: Uuid): Promise<Item[]> {
 		return this
-			.byShareIdQuery(shareId, { fields: ['id', 'name', 'jop_type', 'jop_parent_id', 'jop_encryption_applied', 'jop_updated_time', 'updated_time', 'content_size'] })
+			.byShareIdQuery(shareId, { fields: ['id', 'name', 'owner_id', 'jop_id', 'jop_type', 'jop_updated_time', 'updated_time'] })
 			.whereIn('name', this.byShareIdQuery(shareId, { fields: ['name'] }).groupBy('name').havingRaw('count(*) > 1'));
-	}
-
-	public async haveSameContent(items: Item[]) {
-		const first = items[0];
-		const sameFields = items.every(i =>
-			i.jop_type === first.jop_type &&
-			(i.jop_parent_id || '') === (first.jop_parent_id || '') &&
-			(i.jop_encryption_applied || 0) === (first.jop_encryption_applied || 0) &&
-			i.content_size === first.content_size,
-		);
-		if (!sameFields || first.content_size > this.itemSizeHardLimit) return false;
-
-		const contents = await Promise.all(items.map(i => this.storageDriverRead(i.id, i.content_size, { models: this.models() })));
-		return contents.every(c => c.equals(contents[0]));
 	}
 
 	private async storageDriverWrite(itemId: Uuid, content: Buffer, context: Context) {

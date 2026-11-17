@@ -1,5 +1,5 @@
-import { resourceBlobPath } from '../utils/joplinUtils';
-import { Change2 as Change, ChangeType, EmailSender, Item, Share, ShareType, ShareUserStatus, User, Uuid } from '../services/database/types';
+import { isJoplinResourceBlobPath, resourceBlobPath } from '../utils/joplinUtils';
+import { Change2 as Change, ChangeType, EmailSender, Item, ItemType, Share, ShareType, ShareUserStatus, User, Uuid } from '../services/database/types';
 import { unique } from '../utils/array';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from '../utils/errors';
 import { forgotPasswordUrl, setQueryParameters } from '../utils/urlUtils';
@@ -11,6 +11,7 @@ import Logger from '@joplin/utils/Logger';
 import { formatDateOnServer, Minute, PerformanceTimer } from '../utils/time';
 import itemPublishedTemplate from '../views/emails/itemPublishedTemplate';
 import { itemIdSample } from './UserItemModel';
+import { ModelType } from '@joplin/lib/BaseModel';
 
 const logger = Logger.create('ShareModel');
 
@@ -592,9 +593,9 @@ export default class ShareModel extends BaseModel<Share> {
 
 	// A share can contain several items with the same name, for example when two accounts had the same data before one
 	// shared it with the other. Each user can only have one of them (see UserItemModel::addMulti), so the others never
-	// reach every participant. When the copies are identical, all but the newest are deleted. No change is recorded for
-	// the deletion because clients identify items by name, so they already have the right content, and a deletion
-	// followed by a creation of the same name in one delta page would make them delete their copy.
+	// reach every participant. All but the newest copy are deleted. No change is recorded for the deletion, because a
+	// deletion followed by a creation of the same name in one delta page would make clients delete their copy. Instead, an
+	// update is recorded for the kept copy, so that clients that had another one download it.
 	public async mergeDuplicateItems(share: Share) {
 		const items = await this.models().item().sameNameItemsByShareId(share.id);
 		if (!items.length) return;
@@ -605,27 +606,53 @@ export default class ShareModel extends BaseModel<Share> {
 		// Deleting an item deletes the shares that use it as their root folder or published note
 		const itemIdsUsedByShares = new Set((await this.byItemIds(items.map(i => i.id))).map(s => s.item_id));
 
+		// An attachment's file must come from the same copy as its metadata, so metadata is processed first
+		const keptOwnerByBlobName = new Map<string, Uuid>();
+		const names = [...itemsByName.keys()].sort((a, b) => Number(isJoplinResourceBlobPath(a)) - Number(isJoplinResourceBlobPath(b)));
+
+		const kept: Item[] = [];
 		const toDelete: Item[] = [];
 		const notMergedNames: string[] = [];
 
-		for (const [name, copies] of itemsByName) {
-			if (copies.some(c => itemIdsUsedByShares.has(c.id)) || !await this.models().item().haveSameContent(copies)) {
+		for (const name of names) {
+			const copies = itemsByName.get(name);
+			if (copies.some(c => itemIdsUsedByShares.has(c.id))) {
 				notMergedNames.push(name);
 				continue;
 			}
 
-			copies.sort((a, b) => (b.jop_updated_time - a.jop_updated_time) || (b.updated_time - a.updated_time) || (a.id < b.id ? -1 : 1));
+			const ownerId = keptOwnerByBlobName.get(name);
+			copies.sort((a, b) =>
+				(Number(b.owner_id === ownerId) - Number(a.owner_id === ownerId)) ||
+				(b.jop_updated_time - a.jop_updated_time) ||
+				(b.updated_time - a.updated_time) ||
+				(a.id < b.id ? -1 : 1),
+			);
+			if (copies[0].jop_type === ModelType.Resource) keptOwnerByBlobName.set(resourceBlobPath(copies[0].jop_id), copies[0].owner_id);
+			kept.push(copies[0]);
 			toDelete.push(...copies.slice(1));
 		}
 
-		if (notMergedNames.length) logger.info(`mergeDuplicateItems: Share ${share.id}: Not merging ${notMergedNames.length} items whose copies differ: ${itemIdSample(notMergedNames)}`);
+		if (notMergedNames.length) logger.info(`mergeDuplicateItems: Share ${share.id}: Not merging ${notMergedNames.length} items used by a share: ${itemIdSample(notMergedNames)}`);
 		if (!toDelete.length) return;
 
-		logger.info(`mergeDuplicateItems: Share ${share.id}: Deleting ${toDelete.length} identical copies: ${itemIdSample(toDelete.map(i => i.id))}`);
+		logger.info(`mergeDuplicateItems: Share ${share.id}: Deleting ${toDelete.length} duplicate copies: ${itemIdSample(toDelete.map(i => i.id))}`);
 		await this.models().item().delete(toDelete.map(i => i.id), { recordChanges: false });
 
 		for (const userId of await this.allShareUserIds(share)) {
 			await this.createSharedFolderUserItems(share.id, userId);
+		}
+
+		for (const item of kept) {
+			await this.models().change().recordChange({
+				itemName: item.name,
+				itemId: item.id,
+				sourceUserId: item.owner_id,
+				shareId: share.id,
+				previousItem: { jop_share_id: share.id },
+				type: ChangeType.Update,
+				itemType: ItemType.Item,
+			});
 		}
 	}
 

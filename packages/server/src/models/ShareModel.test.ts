@@ -1,9 +1,11 @@
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, createItem, createItemTree, expectNotThrow, createNote, createFolder } from '../utils/testing/testUtils';
 import { ErrorBadRequest, ErrorNotFound } from '../utils/errors';
-import { Change2, ChangeType, ShareType } from '../services/database/types';
+import { Change2, ChangeType, ShareType, Uuid } from '../services/database/types';
 import { inviteUserToShare, shareFolderWithUser, shareWithUserAndAccept, updateItemShareId } from '../utils/testing/shareApiUtils';
 import { withWarningSilenced } from '@joplin/lib/testing/test-utils';
 import { createNanoForInboxEmail } from '@joplin/lib/uuid';
+import { ModelType } from '@joplin/lib/BaseModel';
+import { resourceBlobPath } from '../utils/joplinUtils';
 
 // Goes through the process of:
 // 1. Creating two users/sessions
@@ -531,9 +533,9 @@ describe('ShareModel', () => {
 	});
 
 	test.each([
-		[true, 1],
-		[false, 2],
-	])('should merge items of a share that have the same name when their content is identical (identical: %s)', async (identical, expectedCount) => {
+		['the recipient', 1000],
+		['the owner', -1000],
+	])('should keep only the newest copy of items that have the same name in a share (newest: %s)', async (_newest, recipientTimeOffset) => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 		const noteId = '00000000000000000000000000000001';
@@ -544,30 +546,59 @@ describe('ShareModel', () => {
 		]);
 
 		// The API no longer allows a share to get two items with the same name, but shares that got them before still have them
-		const original = await models().item().loadWithContent((await models().item().loadByName(user1.id, name)).id);
+		const original = await models().item().loadByName(user1.id, name);
 		const copy = await models().item().saveForUser(user2.id, {
 			name,
 			jop_id: noteId,
 			jop_type: original.jop_type,
 			jop_parent_id: original.jop_parent_id,
 			jop_share_id: share.id,
-			jop_updated_time: original.jop_updated_time,
-			content: identical ? original.content : Buffer.alloc(original.content_size, 'x'),
-			content_size: original.content_size,
+			jop_updated_time: original.jop_updated_time + recipientTimeOffset,
+			content: Buffer.from('different content'),
+			content_size: 17,
 		});
+		const [newest, oldest] = recipientTimeOffset > 0 ? [copy, original] : [original, copy];
+		const users = [user1, user2];
+		const cursors = await Promise.all(users.map(async u => (await models().change().delta(u.id)).cursor));
 
 		await models().share().updateSharedItems3();
 
-		const remaining = (await models().item().byShareId(share.id)).filter(i => i.name === name);
-		expect(remaining.length).toBe(expectedCount);
-		expect((await models().item().loadByNames(user1.id, [name])).length).toBe(1);
-		expect((await models().item().loadByNames(user2.id, [name])).length).toBe(expectedCount);
-
-		if (identical) {
-			expect((await models().item().loadByName(user1.id, name)).id).toBe(remaining[0].id);
-			const deletedId = remaining[0].id === copy.id ? original.id : copy.id;
-			const deletionChanges = (await models().change().all()).filter(c => c.item_id === deletedId && c.type === ChangeType.Delete);
-			expect(deletionChanges).toEqual([]);
+		expect((await models().item().byShareId(share.id)).filter(i => i.name === name).map(i => i.id)).toEqual([newest.id]);
+		for (const [index, user] of users.entries()) {
+			expect((await models().item().loadByNames(user.id, [name])).map(i => i.id)).toEqual([newest.id]);
+			const changes = (await models().change().delta(user.id, { cursor: cursors[index] })).items;
+			expect(changes.filter(c => c.item_id === newest.id && c.type !== ChangeType.Delete).length).toBe(1);
+			expect(changes.filter(c => c.item_id === oldest.id)).toEqual([]);
 		}
+	});
+
+	test('should keep the file of an attachment from the same copy as its metadata', async () => {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+		const resourceId = '00000000000000000000000000000002';
+
+		const { share } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
+			{ id: '000000000000000000000000000000F1', children: [] },
+		]);
+
+		const saveCopy = (userId: Uuid, isMetadata: boolean, jopUpdatedTime: number) => models().item().saveForUser(userId, {
+			name: isMetadata ? `${resourceId}.md` : resourceBlobPath(resourceId),
+			...(isMetadata ? { jop_id: resourceId, jop_type: ModelType.Resource } : {}),
+			jop_share_id: share.id,
+			jop_updated_time: jopUpdatedTime,
+			content: Buffer.from(userId),
+			content_size: userId.length,
+		});
+
+		// The recipient's metadata is newer, but the owner's file is
+		await saveCopy(user2.id, true, 2000);
+		await saveCopy(user2.id, false, 1000);
+		await saveCopy(user1.id, true, 1000);
+		await saveCopy(user1.id, false, 2000);
+
+		await models().share().updateSharedItems3();
+
+		const remaining = (await models().item().byShareId(share.id, { fields: ['name', 'owner_id'] })).filter(i => i.name !== '000000000000000000000000000000F1.md');
+		expect(remaining.map(i => i.owner_id)).toEqual([user2.id, user2.id]);
 	});
 });
