@@ -272,6 +272,33 @@ describe('Synchronizer.resources', () => {
 		}
 	});
 
+	it('should not create a conflict for metadata changes to a resource synced without blob_updated_time', async () => {
+		const note = await Note.save({ title: 'ma note' });
+		await shim.attachFileToNote(note, `${supportDir}/sample.txt`);
+		const resource = (await Resource.all())[0];
+		await synchronizerStart();
+
+		// Simulate a resource uploaded by a client that predates blob_updated_time
+		const metadataPath = `${resource.id}.md`;
+		const metadata = await fileApi().get(metadataPath);
+		const newMetadata = metadata.replace(/^blob_updated_time: .*\n/m, '');
+		expect(newMetadata).not.toContain('blob_updated_time');
+		await fileApi().put(metadataPath, newMetadata);
+
+		await msleep(10);
+		await switchClient(2);
+		await synchronizerStart();
+		await resourceFetcher().startAndWait();
+		expect((await Resource.load(resource.id)).blob_updated_time).toBe(resource.updated_time);
+		await Resource.save({ id: resource.id, title: 'title from client 2' });
+		await synchronizerStart();
+
+		await switchClient(1);
+		await Resource.save({ id: resource.id, title: 'title from client 1' });
+		await synchronizerStart();
+		expect((await Note.all()).length).toBe(1);
+	});
+
 	it('should handle resource conflicts if a resource is changed locally but deleted remotely', async () => {
 		{
 			const tempFile = tempFilePath('txt');

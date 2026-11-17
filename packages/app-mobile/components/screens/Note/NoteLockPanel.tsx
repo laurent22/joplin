@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { themeStyle } from '../../global-style';
 import { _ } from '@joplin/lib/locale';
+import { noteLockPasswordErrorMessage } from '@joplin/lib/components/shared/config/useNoteLockMode';
 import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
 import NavService from '@joplin/lib/services/NavService';
 import Icon from '../../Icon';
@@ -87,9 +88,7 @@ const NoteLockPanel = (props: Props) => {
 		} catch (error) {
 			logger.warn('Could not unlock the note lock session:', error);
 			if (!mountedRef.current) return;
-			// WebCrypto reports a wrong password as a generic OperationError. Other errors stay
-			// out of the UI, e.g. the native crypto backends word theirs differently.
-			setErrorMessage(error.name === 'OperationError' ? _('Invalid password') : _('Could not unlock. Please try again.'));
+			setErrorMessage(noteLockPasswordErrorMessage(error));
 			setUnlocking(false);
 		}
 	}, [password, unlocking, props.onUnlocked]);

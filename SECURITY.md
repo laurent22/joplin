@@ -51,6 +51,12 @@ See also [Physically-local attacks](https://chromium.googlesource.com/chromium/s
 
 No, but you should use disk encryption. See also [Physically-local attacks](https://chromium.googlesource.com/chromium/src.git/+/master/docs/security/faq.md#why-arent-physically_local-attacks-in-chromes-threat-model)
 
+### Can a share recipient modify, delete or move notes in a shared notebook?
+
+Yes, this is intended. A notebook is only shared with someone after the owner has invited them by email and they have accepted the invitation, so share participants are considered trusted with the content of that notebook. They can edit or delete any note in it, or move a note out of it.
+
+Reports that rely on a share participant acting on the content of the shared notebook are therefore not considered vulnerabilities.
+
 ## Bounty
 
 We **do not** offer a bounty for discovering vulnerabilities, please do not ask.

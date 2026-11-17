@@ -1,6 +1,7 @@
 const gulp = require('gulp');
 const execa = require('execa');
 const { stdout } = require('process');
+const { readFileSync } = require('fs');
 
 const execCommand = async (executableName, args, options = null) => {
 	options = {
@@ -32,21 +33,15 @@ const execCommand = async (executableName, args, options = null) => {
 const tasks = {
 	completePublishAll: {
 		fn: async () => {
+			await execCommand('yarn', ['install', '--mode=update-lockfile']);
 			await execCommand('git', ['add', '-A']);
 			await execCommand('git', ['commit', '-m', 'Releasing sub-packages']);
 
-			// Lerna does some unnecessary auth check that doesn't work with
-			// automation tokens, thus the --no-verify-access. Automation token
-			// is still used for access when publishing even with this flag
-			// (publishing would fail otherwise).
-			// https://github.com/lerna/lerna/issues/2788
-			await execCommand('lerna', ['publish', 'from-package', '-y', '--no-verify-access']);
-
-			await execCommand('yarn', ['install']);
-			await execCommand('git', ['add', '-A']);
-			await execCommand('git', ['commit', '-m', 'Lock file']);
-
-			await execCommand('git', ['push']);
+			// Pushing the tag triggers the publish-sub-packages workflow, which publishes the packages
+			const libVersion = JSON.parse(readFileSync('packages/lib/package.json', 'utf8')).version;
+			const tagName = `sub-packages-v${libVersion}`;
+			await execCommand('git', ['tag', tagName]);
+			await execCommand('git', ['push', '--atomic', 'origin', 'HEAD', tagName]);
 		},
 	},
 	build: {

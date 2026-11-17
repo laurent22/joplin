@@ -169,7 +169,7 @@ describe('transcribe', () => {
 			));
 
 		expect(error.httpCode).toBe(500);
-		expect(error.message.startsWith('POST /api/transcribe {"status":500,"body":{"error":"Something went wrong"')).toBe(true);
+		expect(error.message).toMatch(/^POST \/api\/transcribe \{"status":500,"body":\{"error":"Internal server error \(error ID: [\w-]+\)"/);
 	});
 
 	test.each([

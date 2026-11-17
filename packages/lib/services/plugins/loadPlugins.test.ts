@@ -254,4 +254,34 @@ describe('loadPlugins', () => {
 		// The bad plugin should not be running
 		expect(failingPluginRunner.runningPluginIds).not.toContain(badPluginId);
 	});
+
+	test('should stop and not run blocked plugin versions', async () => {
+		const blockedId = 'joplin.test.plugin.blocked';
+		const otherId = 'joplin.test.plugin.other';
+		await createTestPlugin({ ...defaultManifestProperties, id: blockedId, name: 'Blocked' });
+		await createTestPlugin({ ...defaultManifestProperties, id: otherId, name: 'Other' });
+
+		const pluginRunner = new MockPluginRunner();
+		const loadPluginsOptions: LoadPluginsProps = {
+			pluginRunner,
+			pluginSettings: Setting.value('plugins.states'),
+			platformImplementation,
+			store: createMockReduxStore(),
+			reloadAll: false,
+			cancelEvent: { cancelled: false },
+		};
+
+		await loadPlugins(loadPluginsOptions);
+		await pluginRunner.waitForAllToBeRunning([blockedId, otherId]);
+
+		Setting.setValue('plugins.blockedVersions', { [blockedId]: [defaultManifestProperties.version] });
+		await withWarningSilenced(/Plugin version has been blocked/, async () => {
+			await loadPlugins(loadPluginsOptions);
+		});
+
+		expect(pluginRunner.runningPluginIds).toEqual([otherId]);
+		const blockedManifest = PluginService.instance().pluginById(blockedId).manifest;
+		expect(PluginService.instance().isCompatible(blockedManifest)).toBe(false);
+		expect(PluginService.instance().describeIncompatibility(blockedManifest)).toContain('security reasons');
+	});
 });

@@ -166,7 +166,12 @@ router.get('users/:id/confirm', async (path: SubPath, ctx: AppContext, error: Er
 		}
 	};
 
-	if (ctx.query.confirm_email !== '0') await models.user().processEmailConfirmation(userId, token, beforeChangingEmailHandler);
+	if (ctx.query.confirm_email !== '0') {
+		await models.user().processEmailConfirmation(userId, token, beforeChangingEmailHandler);
+	} else {
+		// Otherwise this page would reveal whether an account exists, and the email of an account without a password
+		await models.token().checkToken(userId, token, TokenPurpose.AccountConfirmation);
+	}
 
 	const user = await models.user().load(userId);
 	if (!user) throw new ErrorNotFound(`No such user: ${userId}`);

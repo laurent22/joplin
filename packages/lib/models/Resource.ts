@@ -683,7 +683,9 @@ export default class Resource extends BaseItem {
 			options = { ...options, autoTimestamp: false };
 			if (!resource.created_time) resource.created_time = now;
 			if (!resource.updated_time) resource.updated_time = now;
-			if (!resource.blob_updated_time) resource.blob_updated_time = now;
+			// Resources synced by older clients have no blob_updated_time. Deriving it from
+			// updated_time, like migration 44 does, keeps it identical on every client.
+			if (!resource.blob_updated_time) resource.blob_updated_time = resource.updated_time;
 		}
 
 		const output = await super.save(resource, options);
