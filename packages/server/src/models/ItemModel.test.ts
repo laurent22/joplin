@@ -11,6 +11,7 @@ import { makeNoteSerializedBody } from '../utils/testing/serializedItems';
 import { isSqlite } from '../db';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { Item } from '../services/database/types';
+import { NoteEntity } from '@joplin/lib/services/database/types';
 
 describe('ItemModel', () => {
 
@@ -738,6 +739,45 @@ describe('ItemModel', () => {
 
 		const content = await models().item().loadWithContent(savedItem.id);
 		expect(content.content.toString()).toBe('retried');
+	});
+
+	test('should pick the same item consistently when a user has access to several items with the same name', async () => {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+		const noteId = '00000000000000000000000000000001';
+		const name = `${noteId}.md`;
+
+		const { share } = await shareFolderWithUser(session2.id, session1.id, '000000000000000000000000000000F1', [
+			{ id: '000000000000000000000000000000F1', children: [{ id: noteId }] },
+		]);
+		const sharedItem = await models().item().loadByName(user2.id, name);
+
+		// The API no longer allows getting into this state, but accounts that got into it before still have it
+		const privateItem = await models().item().saveForUser(user1.id, {
+			name,
+			jop_id: noteId,
+			jop_type: ModelType.Note,
+			jop_parent_id: '000000000000000000000000000000F2',
+			jop_share_id: '',
+			content: Buffer.from(JSON.stringify({ title: 'original' })),
+		});
+
+		const upload = async (shareId: string, title: string) => {
+			await msleep(2);
+			await models().item().saveFromRawContent(user1, { name, body: Buffer.from(makeNoteSerializedBody({ id: noteId, share_id: shareId, title })) });
+		};
+		const titleOf = async (itemId: string) => (await models().item().loadAsJoplinItem<NoteEntity>(itemId)).title;
+
+		await upload(share.id, 'shared copy');
+		expect(await titleOf(sharedItem.id)).toBe('shared copy');
+		expect((await models().item().load(privateItem.id)).jop_share_id).toBe('');
+		expect((await models().item().loadByName(user1.id, name)).id).toBe(sharedItem.id);
+
+		await upload('', 'private copy');
+		expect(await titleOf(privateItem.id)).toBe('private copy');
+		expect(await titleOf(sharedItem.id)).toBe('shared copy');
+		expect((await models().item().load(sharedItem.id)).jop_share_id).toBe(share.id);
+		expect((await models().item().loadByName(user1.id, name)).id).toBe(privateItem.id);
 	});
 
 });

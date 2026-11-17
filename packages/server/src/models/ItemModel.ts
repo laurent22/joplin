@@ -259,7 +259,15 @@ export default class ItemModel extends BaseModel<Item> {
 
 	public async loadByJopId(userId: Uuid, jopId: string, options: ItemLoadOptions = {}): Promise<Item> {
 		const items = await this.loadByJopIds(userId, [jopId], options);
-		return items.length ? items[0] : null;
+		return this.mostRecentlyUpdated(items);
+	}
+
+	// A user can have access to several items with the same name, for example when two accounts had the same data before
+	// one shared it with the other. Picking the most recently updated one makes reads return the copy last written to.
+	private async mostRecentlyUpdated<T extends Item>(items: T[]) {
+		if (items.length <= 1) return items.length ? items[0] : null;
+		const latest = await this.db(this.tableName).select('id').whereIn('id', items.map(i => i.id)).orderBy('updated_time', 'desc').orderBy('id', 'asc').first();
+		return items.find(i => i.id === latest.id);
 	}
 
 	public async loadByJopParentId(userId: Uuid | Uuid[], parentId: string, options: ItemLoadOptions = {}): Promise<Item[]> {
@@ -305,7 +313,7 @@ export default class ItemModel extends BaseModel<Item> {
 
 	public async loadByName(userId: Uuid, name: string, options: ItemLoadOptions = {}): Promise<Item> {
 		const items = await this.loadByNames(userId, [name], options);
-		return items.length ? items[0] : null;
+		return this.mostRecentlyUpdated(items);
 	}
 
 	public async loadWithContent(id: Uuid, options: ItemLoadOptions = {}): Promise<Item> {
@@ -646,25 +654,6 @@ export default class ItemModel extends BaseModel<Item> {
 
 			for (const rawItem of rawContentItems) {
 				try {
-					const existingItem = existingItems.find(i => i.name === rawItem.name);
-
-					// Check if the user is allowed to modify the item - in
-					// particular it would be disabled if the user has only
-					// read-only access to a share. Later, once we have
-					// unserialized the content, and got all the relevant
-					// information, we check if the user is allowed to create
-					// the item.
-					//
-					// Normally only one such check is needed to know if the
-					// item can be updated... except if share_id is changed, in
-					// which case we need to check again with the new share_id
-					// (see below)
-					let previousShareId = '';
-					if (existingItem) {
-						await this.checkIfAllowed(user, AclAction.Update, existingItem);
-						previousShareId = existingItem.jop_share_id;
-					}
-
 					const isJoplinItem = isJoplinItemName(rawItem.name);
 					let isNote = false;
 
@@ -693,7 +682,6 @@ export default class ItemModel extends BaseModel<Item> {
 						// Clients save a downloaded item under the id in its content, so an item whose content
 						// id differs from its name would overwrite another item on other share participants' devices
 						if (rawItem.name !== `${joplinItem.id}.md`) throw new ErrorUnprocessableEntity(`Item ${rawItem.name} cannot be saved because its id does not match its name: ${joplinItem.id}`);
-						if (existingItem && existingItem.jop_type && existingItem.jop_type !== joplinItem.type_) throw new ErrorUnprocessableEntity(`Item ${rawItem.name} cannot change its type`);
 
 						isNote = joplinItem.type_ === ModelType.Note;
 						resourceIds = isNote ? linkedResourceIds(joplinItem.body) : [];
@@ -719,13 +707,33 @@ export default class ItemModel extends BaseModel<Item> {
 						item.content = rawItem.body;
 					}
 
-					if (existingItem) item.id = existingItem.id;
-
 					if (options.shareId) {
 						// Shared items are propagated to every participant, so a shared info.json (or other file) would
 						// shadow the participant's own copy. Joplin items carry their share_id in their content instead.
 						if (!isJoplinResourceBlobPath(rawItem.name)) throw new ErrorUnprocessableEntity(`Only resource blobs can be associated with a share via share_id: ${rawItem.name}`);
 						item.jop_share_id = options.shareId;
+					}
+
+					// If the user has several items with this name (see mostRecentlyUpdated()), update the one already in
+					// the target share, so that the other copy is not moved into or out of that share.
+					const sameNameItems = existingItems.filter(i => i.name === rawItem.name);
+					const sameShareItems = sameNameItems.filter(i => (i.jop_share_id || '') === (item.jop_share_id || ''));
+					const existingItem = await this.mostRecentlyUpdated(sameShareItems.length ? sameShareItems : sameNameItems);
+
+					// Check if the user is allowed to modify the item - in
+					// particular it would be disabled if the user has only
+					// read-only access to a share.
+					//
+					// Normally only one such check is needed to know if the
+					// item can be updated... except if share_id is changed, in
+					// which case we need to check again with the new share_id
+					// (see below)
+					let previousShareId = '';
+					if (existingItem) {
+						await this.checkIfAllowed(user, AclAction.Update, existingItem);
+						previousShareId = existingItem.jop_share_id;
+						if (isJoplinItem && existingItem.jop_type && existingItem.jop_type !== joplinItem.type_) throw new ErrorUnprocessableEntity(`Item ${rawItem.name} cannot change its type`);
+						item.id = existingItem.id;
 					}
 
 					// Check if the user is allowed to create an item here - in
