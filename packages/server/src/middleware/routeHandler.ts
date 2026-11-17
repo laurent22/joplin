@@ -7,10 +7,10 @@ import { createCsrfTag } from '../utils/csrf';
 import { getImpersonatorAdminSessionId } from '../routes/admin/utils/users/impersonate';
 import { onRequestComplete, onRequestStart } from '../utils/metrics';
 import { uuidgen } from '@joplin/lib/uuid';
-import { ApiError, ErrorTooManyRequests } from '../utils/errors';
+import { ApiError, errorMessageForLog, ErrorTooManyRequests, isUnexpectedError, unexpectedErrorMessage } from '../utils/errors';
 import { formatBytesSimple } from '../utils/bytes';
 
-const logRequestInfo = (ctx: AppContext, requestStartTime: number, error: Error | string | null) => {
+const logRequestInfo = (ctx: AppContext, requestStartTime: number, requestId: string, error: Error | string | null) => {
 	try {
 		const owner = ctx.joplin.owner;
 		// Technically this is not the total request duration because there are
@@ -28,13 +28,14 @@ const logRequestInfo = (ctx: AppContext, requestStartTime: number, error: Error 
 		// If it's a successful request or a user error (error code < 500) we display the
 		// information on a single line.
 		const line = getLinePrefix();
-		if (error && typeof error === 'string') line.push(error);
+		if (error && typeof error === 'string') line.push(errorMessageForLog(error));
 		line.push(`${ctx.request.method} ${ctx.path} (${ctx.response.status}) (${requestDuration}ms)`);
 		ctx.joplin.appLogger().info(line.join(': '));
 
 		// If we have an error object (should be a server error), we log the full stack trace.
 		if (error && typeof error !== 'string' && error.message) {
 			const line = getLinePrefix();
+			line.push(`Error ID ${requestId}`);
 			ctx.joplin.appLogger().error(`${line.join(': ')}:`, error);
 		}
 	} catch (logFunctionError) {
@@ -73,7 +74,7 @@ export default async function(ctx: AppContext) {
 			ctx.response.body = [undefined, null].includes(responseObject) ? '' : responseObject;
 		}
 
-		logRequestInfo(ctx, requestStartTime, null);
+		logRequestInfo(ctx, requestStartTime, requestId, null);
 	} catch (e) {
 		const error = e as ApiError;
 
@@ -83,12 +84,13 @@ export default async function(ctx: AppContext) {
 		ctx.response.status = error.httpCode ? error.httpCode : 500;
 
 		if (error.httpCode >= 400 && error.httpCode < 500) {
-			logRequestInfo(ctx, requestStartTime, error.message);
+			logRequestInfo(ctx, requestStartTime, requestId, error.message);
 		} else {
-			logRequestInfo(ctx, requestStartTime, error);
+			logRequestInfo(ctx, requestStartTime, requestId, error);
 		}
 
 		const responseFormat = routeResponseFormat(ctx);
+		const publicMessage = isUnexpectedError(error) ? unexpectedErrorMessage(requestId) : error.message;
 
 		if ((error as ErrorTooManyRequests).retryAfterMs) ctx.response.set('Retry-After', Math.ceil((error as ErrorTooManyRequests).retryAfterMs / 1000).toString());
 
@@ -101,7 +103,7 @@ export default async function(ctx: AppContext) {
 				path: 'index/error',
 				showFooter: true,
 				content: {
-					error,
+					error: { message: publicMessage },
 					stack: config().showErrorStackTraces ? error.stack : '',
 					owner: ctx.joplin.owner,
 				},
@@ -110,9 +112,9 @@ export default async function(ctx: AppContext) {
 			ctx.response.body = await ctx.joplin.services.mustache.renderView(view);
 		} else { // JSON
 			ctx.response.set('Content-Type', 'application/json');
-			const r: { error: string; stack?: string; code?: string } = { error: error.message };
+			const r: { error: string; stack?: string; code?: string } = { error: publicMessage };
 			if (ctx.joplin.env === Env.Dev && error.stack) r.stack = error.stack;
-			if (error.code) r.code = error.code;
+			if (error.code && !isUnexpectedError(error)) r.code = error.code;
 			ctx.response.body = r;
 		}
 	} finally {
