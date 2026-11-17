@@ -10,6 +10,7 @@ import { isUniqueConstraintError } from '../db';
 import Logger from '@joplin/utils/Logger';
 import { formatDateOnServer, Minute, PerformanceTimer } from '../utils/time';
 import itemPublishedTemplate from '../views/emails/itemPublishedTemplate';
+import { itemIdSample } from './UserItemModel';
 
 const logger = Logger.create('ShareModel');
 
@@ -215,6 +216,7 @@ export default class ShareModel extends BaseModel<Share> {
 
 	public async updateSharedItems3() {
 		const perfTimer = new PerformanceTimer(logger, 'updateSharedItems3');
+		const sharesWithFailedRepair = new Map<Uuid, Share>();
 
 		const addUserItem = async (shareUserId: Uuid, itemId: Uuid) => {
 			try {
@@ -443,6 +445,7 @@ export default class ShareModel extends BaseModel<Share> {
 						const newCount = await this.itemCountByUserAndShareId(share.id, row.user_id);
 						if (newCount === row.item_count) {
 							logger.warn(`checkForMissingUserItems: Repair had no effect: Share ${share.id}: User ${row.user_id}: Still has ${newCount} of ${realShareItemCount} items`);
+							sharesWithFailedRepair.set(share.id, share);
 						}
 					} else if (row.item_count > realShareItemCount) {
 						// Shouldn't be possible but log it just in case
@@ -580,7 +583,50 @@ export default class ShareModel extends BaseModel<Share> {
 			if (!paginatedChanges.has_more) break;
 		}
 
+		// Outside of the change processing transaction, because deleting items also deletes their content from storage,
+		// which can't be rolled back
+		for (const share of sharesWithFailedRepair.values()) await this.mergeDuplicateItems(share);
+
 		perfTimer.pop();
+	}
+
+	// A share can contain several items with the same name, for example when two accounts had the same data before one
+	// shared it with the other. Each user can only have one of them (see UserItemModel::addMulti), so the others never
+	// reach every participant. When the copies are identical, all but the newest are deleted. No change is recorded for
+	// the deletion because clients identify items by name, so they already have the right content, and a deletion
+	// followed by a creation of the same name in one delta page would make them delete their copy.
+	public async mergeDuplicateItems(share: Share) {
+		const items = await this.models().item().sameNameItemsByShareId(share.id);
+		if (!items.length) return;
+
+		const itemsByName = new Map<string, Item[]>();
+		for (const item of items) itemsByName.set(item.name, [...(itemsByName.get(item.name) ?? []), item]);
+
+		// Deleting an item deletes the shares that use it as their root folder or published note
+		const itemIdsUsedByShares = new Set((await this.byItemIds(items.map(i => i.id))).map(s => s.item_id));
+
+		const toDelete: Item[] = [];
+		const notMergedNames: string[] = [];
+
+		for (const [name, copies] of itemsByName) {
+			if (copies.some(c => itemIdsUsedByShares.has(c.id)) || !await this.models().item().haveSameContent(copies)) {
+				notMergedNames.push(name);
+				continue;
+			}
+
+			copies.sort((a, b) => (b.jop_updated_time - a.jop_updated_time) || (b.updated_time - a.updated_time) || (a.id < b.id ? -1 : 1));
+			toDelete.push(...copies.slice(1));
+		}
+
+		if (notMergedNames.length) logger.info(`mergeDuplicateItems: Share ${share.id}: Not merging ${notMergedNames.length} items whose copies differ: ${itemIdSample(notMergedNames)}`);
+		if (!toDelete.length) return;
+
+		logger.info(`mergeDuplicateItems: Share ${share.id}: Deleting ${toDelete.length} identical copies: ${itemIdSample(toDelete.map(i => i.id))}`);
+		await this.models().item().delete(toDelete.map(i => i.id), { recordChanges: false });
+
+		for (const userId of await this.allShareUserIds(share)) {
+			await this.createSharedFolderUserItems(share.id, userId);
+		}
 	}
 
 	public async updateResourceShareStatus(doShare: boolean, _shareId: Uuid, changerUserId: Uuid, toUserId: Uuid, resourceIds: string[]) {

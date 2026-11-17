@@ -529,4 +529,45 @@ describe('ShareModel', () => {
 		const url = await models().share().linkedNoteShareUrl(share, '00000000000000000000000000000002');
 		expect(url).toContain(`/shares/${note2Share.id}`);
 	});
+
+	test.each([
+		[true, 1],
+		[false, 2],
+	])('should merge items of a share that have the same name when their content is identical (identical: %s)', async (identical, expectedCount) => {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+		const noteId = '00000000000000000000000000000001';
+		const name = `${noteId}.md`;
+
+		const { share } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
+			{ id: '000000000000000000000000000000F1', children: [{ id: noteId }] },
+		]);
+
+		// The API no longer allows a share to get two items with the same name, but shares that got them before still have them
+		const original = await models().item().loadWithContent((await models().item().loadByName(user1.id, name)).id);
+		const copy = await models().item().saveForUser(user2.id, {
+			name,
+			jop_id: noteId,
+			jop_type: original.jop_type,
+			jop_parent_id: original.jop_parent_id,
+			jop_share_id: share.id,
+			jop_updated_time: original.jop_updated_time,
+			content: identical ? original.content : Buffer.alloc(original.content_size, 'x'),
+			content_size: original.content_size,
+		});
+
+		await models().share().updateSharedItems3();
+
+		const remaining = (await models().item().byShareId(share.id)).filter(i => i.name === name);
+		expect(remaining.length).toBe(expectedCount);
+		expect((await models().item().loadByNames(user1.id, [name])).length).toBe(1);
+		expect((await models().item().loadByNames(user2.id, [name])).length).toBe(expectedCount);
+
+		if (identical) {
+			expect((await models().item().loadByName(user1.id, name)).id).toBe(remaining[0].id);
+			const deletedId = remaining[0].id === copy.id ? original.id : copy.id;
+			const deletionChanges = (await models().change().all()).filter(c => c.item_id === deletedId && c.type === ChangeType.Delete);
+			expect(deletionChanges).toEqual([]);
+		}
+	});
 });

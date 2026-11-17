@@ -25,6 +25,7 @@ const modelLogger = Logger.create('ItemModel');
 
 export interface DeleteOptions extends BaseDeleteOptions {
 	deleteChanges?: boolean;
+	recordChanges?: boolean;
 }
 
 export interface ImportContentToStorageOptions {
@@ -196,6 +197,26 @@ export default class ItemModel extends BaseModel<Item> {
 	public async byShareId(shareId: Uuid, options: ItemLoadOptions = {}): Promise<Item[]> {
 		const query = this.byShareIdQuery(shareId, options);
 		return await query;
+	}
+
+	public async sameNameItemsByShareId(shareId: Uuid): Promise<Item[]> {
+		return this
+			.byShareIdQuery(shareId, { fields: ['id', 'name', 'jop_type', 'jop_parent_id', 'jop_encryption_applied', 'jop_updated_time', 'updated_time', 'content_size'] })
+			.whereIn('name', this.byShareIdQuery(shareId, { fields: ['name'] }).groupBy('name').havingRaw('count(*) > 1'));
+	}
+
+	public async haveSameContent(items: Item[]) {
+		const first = items[0];
+		const sameFields = items.every(i =>
+			i.jop_type === first.jop_type &&
+			(i.jop_parent_id || '') === (first.jop_parent_id || '') &&
+			(i.jop_encryption_applied || 0) === (first.jop_encryption_applied || 0) &&
+			i.content_size === first.content_size,
+		);
+		if (!sameFields || first.content_size > this.itemSizeHardLimit) return false;
+
+		const contents = await Promise.all(items.map(i => this.storageDriverRead(i.id, i.content_size, { models: this.models() })));
+		return contents.every(c => c.equals(contents[0]));
 	}
 
 	private async storageDriverWrite(itemId: Uuid, content: Buffer, context: Context) {
@@ -997,6 +1018,7 @@ export default class ItemModel extends BaseModel<Item> {
 	public async delete(id: string | string[], options: DeleteOptions = {}): Promise<void> {
 		options = {
 			deleteChanges: false,
+			recordChanges: true,
 			...options,
 		};
 
@@ -1010,7 +1032,7 @@ export default class ItemModel extends BaseModel<Item> {
 
 		await this.withTransaction(async () => {
 			await this.models().share().delete(shares.map(s => s.id));
-			await this.models().userItem().deleteByItemIds(ids, { recordChanges: !options.deleteChanges });
+			await this.models().userItem().deleteByItemIds(ids, { recordChanges: options.recordChanges && !options.deleteChanges });
 			await this.models().itemResource().deleteByItemIds(ids);
 			await super.delete(ids, options);
 			if (options.deleteChanges) await this.models().change().deleteByItemIds(ids);
