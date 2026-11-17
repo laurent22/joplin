@@ -1,4 +1,4 @@
-import { isJoplinResourceBlobPath, resourceBlobPath } from '../utils/joplinUtils';
+import { isJoplinResourceBlobPath, resourceBlobPath, resourceDirName } from '../utils/joplinUtils';
 import { Change2 as Change, ChangeType, EmailSender, Item, ItemType, Share, ShareType, ShareUserStatus, User, Uuid } from '../services/database/types';
 import { unique } from '../utils/array';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from '../utils/errors';
@@ -606,8 +606,11 @@ export default class ShareModel extends BaseModel<Share> {
 		// Deleting an item deletes the shares that use it as their root folder or published note
 		const itemIdsUsedByShares = new Set((await this.byItemIds(items.map(i => i.id))).map(s => s.item_id));
 
-		// An attachment's file must come from the same copy as its metadata, so metadata is processed first
-		const keptOwnerByBlobName = new Map<string, Uuid>();
+		// An attachment's file must come from the same copy as its metadata, so metadata is processed first. The metadata
+		// may not be duplicated, so the owner of the existing one is the default.
+		const blobResourceIds = [...itemsByName.keys()].filter(isJoplinResourceBlobPath).map(n => n.slice(resourceDirName.length + 1));
+		const metadataItems: Item[] = blobResourceIds.length ? await this.models().item().byShareIdQuery(share.id, { fields: ['jop_id', 'owner_id'] }).where('jop_type', ModelType.Resource).whereIn('jop_id', blobResourceIds) : [];
+		const keptOwnerByBlobName = new Map<string, Uuid>(metadataItems.map(i => [resourceBlobPath(i.jop_id), i.owner_id]));
 		const names = [...itemsByName.keys()].sort((a, b) => Number(isJoplinResourceBlobPath(a)) - Number(isJoplinResourceBlobPath(b)));
 
 		const kept: Item[] = [];
@@ -637,22 +640,25 @@ export default class ShareModel extends BaseModel<Share> {
 		if (!toDelete.length) return;
 
 		logger.info(`mergeDuplicateItems: Share ${share.id}: Deleting ${toDelete.length} duplicate copies: ${itemIdSample(toDelete.map(i => i.id))}`);
-		await this.models().item().delete(toDelete.map(i => i.id), { recordChanges: false });
+		// Storage deletion can fail after the copies are already gone from the database
+		try {
+			await this.models().item().delete(toDelete.map(i => i.id), { recordChanges: false });
+		} finally {
+			for (const userId of await this.allShareUserIds(share)) {
+				await this.createSharedFolderUserItems(share.id, userId);
+			}
 
-		for (const userId of await this.allShareUserIds(share)) {
-			await this.createSharedFolderUserItems(share.id, userId);
-		}
-
-		for (const item of kept) {
-			await this.models().change().recordChange({
-				itemName: item.name,
-				itemId: item.id,
-				sourceUserId: item.owner_id,
-				shareId: share.id,
-				previousItem: { jop_share_id: share.id },
-				type: ChangeType.Update,
-				itemType: ItemType.Item,
-			});
+			for (const item of kept) {
+				await this.models().change().recordChange({
+					itemName: item.name,
+					itemId: item.id,
+					sourceUserId: item.owner_id,
+					shareId: share.id,
+					previousItem: { jop_share_id: share.id },
+					type: ChangeType.Update,
+					itemType: ItemType.Item,
+				});
+			}
 		}
 	}
 
