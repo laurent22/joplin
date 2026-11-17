@@ -1234,7 +1234,7 @@ export default class ItemModel extends BaseModel<Item> {
 					// The item was created by a concurrent request - typically a client
 					// retrying an upload that is still being processed. Save it as an update
 					// so that the retry is not treated as an error.
-					const existingItem = await this.loadByName(item.owner_id || userId, item.name, { fields: ['id'] });
+					const existingItem = await this.loadByName(item.owner_id || userId, item.name, { fields: ['id', 'jop_share_id'] });
 
 					if (!existingItem) {
 						modelLogger.error(`Unique constraint error on item, but the item could not be found: ${JSON.stringify({ id: item.id, name: item.name, jop_id: item.jop_id, owner_id: item.owner_id })}`, error);
@@ -1244,6 +1244,7 @@ export default class ItemModel extends BaseModel<Item> {
 					modelLogger.info(`Item was created by a concurrent request - updating it instead: ${JSON.stringify({ name: item.name, jop_id: item.jop_id, owner_id: item.owner_id })}`);
 
 					isNew = false;
+					previousItem = { jop_share_id: existingItem.jop_share_id };
 					item = await super.save({ ...item, id: existingItem.id }, { ...options, isNew: false });
 				} else {
 					throw error;

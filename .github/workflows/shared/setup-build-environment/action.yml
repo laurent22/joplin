@@ -59,7 +59,9 @@ runs:
 
     - uses: actions/setup-node@v6
       with:
-        node-version: '24.18'
+        # Node 24 before 24.22 has a V8 GC bug that randomly crashes Jest workers
+        # with SIGSEGV on Apple Silicon - https://github.com/johnfrog76/toolkit/issues/182
+        node-version: '24.22'
         registry-url: ${{ inputs.registry-url }}
         # Disable the cache on ARM runners. For now, we don't run "yarn install" on these
         # environments and this breaks actions/setup-node.
