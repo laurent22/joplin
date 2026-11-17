@@ -85,19 +85,21 @@ const NoteGridCardComponent: React.FC<Props> = memo(props => {
 	const note = props.note ?? {};
 	const noteId = note.id;
 	const isEncrypted = !!note.encryption_applied;
+	// The body of a locked note should not be exposed in the list.
+	const isLocked = !!note.is_locked;
 
 	// The note list only loads note metadata, so the body is loaded lazily, only for the cards
 	// that are actually rendered (the grid is virtualized).
 	useEffect(() => {
 		let cancelled = false;
 		setPreview('');
-		if (!noteId || isEncrypted) return () => {};
+		if (!noteId || isEncrypted || isLocked) return () => {};
 		void (async () => {
 			const withBody = await Note.load(noteId, { fields: ['body'] });
 			if (!cancelled && withBody) setPreview(getNotePreviewText(withBody.body));
 		})();
 		return () => { cancelled = true; };
-	}, [noteId, note.updated_time, isEncrypted]);
+	}, [noteId, note.updated_time, isEncrypted, isLocked]);
 
 	const onPress = useCallback(() => {
 		if (Date.now() < suppressPressUntilRef.current) return;

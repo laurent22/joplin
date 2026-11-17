@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useCallback, useEffect, useRef } from 'react';
-import { FlatList, StyleSheet, View, useWindowDimensions } from 'react-native';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { FlatList, LayoutChangeEvent, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import NoteGridCard from './NoteGridCard';
 
@@ -29,8 +29,17 @@ const styles = StyleSheet.create({
 });
 
 const NoteGrid: React.FC<Props> = props => {
-	const { width } = useWindowDimensions();
+	const { width: windowWidth } = useWindowDimensions();
 	const listRef = useRef<FlatList<NoteEntity>>(null);
+
+	// Use the width of the container rather than the window, since the note list
+	// isn't necessarily full-width (e.g. side menu or split layouts). Until the first
+	// layout pass, fall back to the window width.
+	const [containerWidth, setContainerWidth] = useState(0);
+	const onLayout = useCallback((event: LayoutChangeEvent) => {
+		setContainerWidth(event.nativeEvent.layout.width);
+	}, []);
+	const width = containerWidth > 0 ? containerWidth : windowWidth;
 
 	const availableWidth = width - gap * 2;
 	const columnCount = getColumnCount(availableWidth);
@@ -46,7 +55,7 @@ const NoteGrid: React.FC<Props> = props => {
 	}, [cardWidth]);
 
 	return (
-		<View style={{ flex: 1 }}>
+		<View style={{ flex: 1 }} onLayout={onLayout}>
 			<FlatList
 				// The number of columns of a FlatList can't change on the fly
 				key={`grid-${columnCount}`}
