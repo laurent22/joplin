@@ -52,4 +52,11 @@ describe('timeUtils', () => {
 		expect(time.goForwardInTime(startDate, 23, 'year')).toBe(endDate.getTime().toString());
 	}));
 
+	it('should convert moment-like values to milliseconds', () => {
+		const date = new Date('2020-08-03T00:00:00.000Z');
+		const momentLike = { toDate: () => date };
+
+		expect(time.anythingToMs(momentLike)).toBe(date.getTime());
+	});
+
 });

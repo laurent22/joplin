@@ -135,7 +135,7 @@ class Time {
 	}
 
 	public anythingToMs(o: string | number | Date | { toDate(): Date } | null, defaultValue: number = null) {
-		if (o && typeof o === 'object' && 'toDate' in o) return o.toDate();
+		if (o && typeof o === 'object' && 'toDate' in o) return o.toDate().getTime();
 		if (!o) return defaultValue;
 		// There are a few date formats supported by Joplin that are not supported by
 		// moment without an explicit format specifier. The typical case is that a user
