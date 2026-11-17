@@ -92,6 +92,16 @@ jobs:
         run: |
           "${GITHUB_WORKSPACE}/.github/scripts/run_ci.sh"
 
+      # When a Jest worker is killed by a signal, the macOS crash report is the
+      # only way to find out whether V8 or a native module crashed.
+      - uses: actions/upload-artifact@v7
+        if: failure() && runner.os == 'macOS'
+        with:
+          name: crash-reports-${{ matrix.os }}
+          path: ~/Library/Logs/DiagnosticReports/node*.ips
+          if-no-files-found: ignore
+          retention-days: 14
+
       - name: Build and publish Windows app
         if: runner.os == 'Windows' && startsWith(github.ref, 'refs/tags/v')
         env:
