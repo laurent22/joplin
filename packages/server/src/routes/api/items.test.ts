@@ -521,4 +521,27 @@ describe('api/items', () => {
 		expect(result.has_more).toBe(true);
 	});
 
+	test.each([
+		['single', (sessionId: string, name: string) => deleteApi(sessionId, `items/root:/${name}:`)],
+		['batch', (sessionId: string, name: string) => deleteApi(sessionId, 'batch_items', { body: { items: [name] } })],
+	])('should delete every item with the same name that the user has access to (%s)', async (_label, deleteByName) => {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+		const noteId = '00000000000000000000000000000001';
+		const name = `${noteId}.md`;
+
+		await shareFolderWithUser(session2.id, session1.id, '000000000000000000000000000000F1', [
+			{ id: '000000000000000000000000000000F1', children: [{ id: noteId }] },
+		]);
+
+		// The API no longer allows getting into this state, but accounts that got into it before still have it
+		await models().item().saveForUser(user1.id, { name, jop_id: noteId, jop_type: ModelType.Note, jop_share_id: '', content: Buffer.from('{}') });
+		expect((await models().item().loadByNames(user1.id, [name])).length).toBe(2);
+
+		await deleteByName(session1.id, name);
+
+		expect(await models().item().loadByNames(user1.id, [name])).toEqual([]);
+		expect(await models().item().loadByNames(user2.id, [name])).toEqual([]);
+	});
+
 });
