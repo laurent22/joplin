@@ -1,4 +1,3 @@
-// cspell:ignore assoc
 import { EditorSelection } from '@codemirror/state';
 
 // A hidden source range and the rendered construct it belongs to. Keep this
