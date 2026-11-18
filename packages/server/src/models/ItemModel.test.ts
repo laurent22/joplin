@@ -776,6 +776,16 @@ describe('ItemModel', () => {
 		await expectHttpError(async () => models().item().saveForUser(user1.id, { name, content: Buffer.from('retried') }), ErrorConflict.httpCode);
 	});
 
+	test('should not change the item type when it was created by a concurrent request', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+		const name = `${'a'.repeat(32)}.md`;
+
+		const item = await models().item().saveForUser(user1.id, { name, jop_type: ModelType.Note, content: Buffer.from('') });
+
+		await expectHttpError(async () => models().item().saveForUser(user1.id, { name, jop_type: ModelType.Folder, content: Buffer.from('') }), ErrorUnprocessableEntity.httpCode);
+		expect((await models().item().load(item.id)).jop_type).toBe(ModelType.Note);
+	});
+
 	test('should pick the same item consistently when a user has access to several items with the same name', async () => {
 		const { user1, noteId, name, share, sharedItem, privateItem } = await createSharedAndPrivateCopies();
 

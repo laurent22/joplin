@@ -1246,7 +1246,7 @@ export default class ItemModel extends BaseModel<Item> {
 					// user_items join leaves orphaned items to the conflict error, since updating them would not make them accessible.
 					const existingItem: Item = await this.db(this.tableName)
 						.innerJoin('user_items', 'user_items.item_id', 'items.id')
-						.select('items.id', 'items.jop_share_id')
+						.select('items.id', 'items.jop_share_id', 'items.jop_type')
 						.where('items.name', '=', item.name)
 						.where('items.owner_id', '=', item.owner_id || userId)
 						.where('user_items.user_id', '=', userId)
@@ -1256,6 +1256,9 @@ export default class ItemModel extends BaseModel<Item> {
 						modelLogger.error(`Unique constraint error on item, but the item could not be found: ${JSON.stringify({ id: item.id, name: item.name, jop_id: item.jop_id, owner_id: item.owner_id })}`, error);
 						throw new ErrorConflict(`This item is already present and cannot be added again: ${item.name}`);
 					}
+
+					// Same check as in saveFromRawContent(), which could not see this item since it did not exist yet
+					if (item.jop_type && existingItem.jop_type && existingItem.jop_type !== item.jop_type) throw new ErrorUnprocessableEntity(`Item ${item.name} cannot change its type`);
 
 					modelLogger.info(`Item was created by a concurrent request - updating it instead: ${JSON.stringify({ name: item.name, jop_id: item.jop_id, owner_id: item.owner_id })}`);
 
