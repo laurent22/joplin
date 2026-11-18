@@ -6,7 +6,7 @@ import { ErrorForbidden } from '../utils/errors';
 import { isValidMFACode } from '../utils/crypto';
 import recoveryCodesAccessedTemplate from '../views/emails/recoveryCodesAccessedTemplate';
 import { forgotPasswordUrl } from '../utils/urlUtils';
-import { formatDateOnServer } from '../utils/time';
+import { formatDateOnServer, Hour } from '../utils/time';
 import { DbConnection } from '../db';
 import { NewModelFactoryHandler } from './factory';
 import { Services } from '../services/types';
@@ -148,6 +148,8 @@ export default class RecoveryCodeModel extends BaseModel<RecoveryCode> {
 			recipient_name: user.full_name,
 			recipient_id: userId,
 			sender_id: EmailSender.NoReply,
+			// Viewing the codes can be repeated at will, so this limits the alert to one per hour
+			key: `recoveryCodesAccessed::${Math.floor(Date.now() / Hour)}`,
 		});
 
 		return recoveryCodeAccess;

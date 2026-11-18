@@ -19,3 +19,4 @@ WebDAV-compatible services that are known to work with Joplin:
 - [WebDAV Nav](https://www.schimera.com/products/webdav-nav-server/), a macOS server.
 - [Zimbra](https://www.zimbra.com/)
 - [Infomaniak kDrive](https://www.infomaniak.com/fr/ksuite/kdrive)
+- [Koofr](https://koofr.eu)

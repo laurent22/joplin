@@ -720,13 +720,15 @@ describe('ItemModel', () => {
 		// Simulates a client retrying an upload while the original request is still being
 		// processed: the item does not exist when the caller checks for it, but does by the
 		// time it is inserted.
+		const name = `.resource/${'a'.repeat(32)}`;
+
 		await models().item().saveForUser(user1.id, {
-			name: 'test.txt',
+			name,
 			content: Buffer.from('original'),
 		});
 
 		const savedItem = await models().item().saveForUser(user1.id, {
-			name: 'test.txt',
+			name,
 			content: Buffer.from('retried'),
 		});
 
