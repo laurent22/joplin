@@ -5,6 +5,8 @@ import JoplinServerApi, { Session } from './JoplinServerApi';
 import { FileApi } from './file-api';
 import SyncTargetJoplinServer, { FileApiOptions } from './SyncTargetJoplinServer';
 import Logger from '@joplin/utils/Logger';
+import { getUserAgent } from './services/joplinCloudUtils';
+import shim from './shim';
 
 export async function newFileApi(id: number, options: FileApiOptions) {
 	const apiOptions = {
@@ -33,7 +35,9 @@ export async function initFileApi(syncTargetId: number, logger: Logger, options:
 
 export const authenticateWithCode = async (code: string) => {
 	try {
-		const response = await fetch(`${Setting.value('sync.11.path')}/api/login_with_code/${code}`);
+		const response = await shim.fetch(`${Setting.value('sync.11.path')}/api/login_with_code/${code}`, {
+			headers: { 'User-Agent': getUserAgent() },
+		});
 		if (response.status !== 200) {
 			return false;
 		}
@@ -88,7 +92,9 @@ export default class SyncTargetJoplinServerSAML extends SyncTargetJoplinServer {
 	public static override async checkConfig(fileApi: FileApiOptions) {
 		try {
 			// Simulate a login request
-			const result = await fetch(`${fileApi.path()}/api/saml`);
+			const result = await shim.fetch(`${fileApi.path()}/api/saml`, {
+				headers: { 'User-Agent': getUserAgent() },
+			});
 
 			if (result.status === 200) { // The server successfully responded, SAML is enabled
 				return {

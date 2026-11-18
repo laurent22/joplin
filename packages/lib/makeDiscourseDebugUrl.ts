@@ -10,11 +10,13 @@ export const renderErrorBlock = (errors: (string | Error)[]): string => {
 	}).map(l => l.trim()).join('\n\n')}\n\`\`\``;
 };
 
-const getOsName = (platform: typeof process.platform) => {
+export const getOsName = (platform: string) => {
 	if (platform === 'win32') return 'Windows';
 	if (platform === 'darwin') return 'macOS';
 	if (platform === 'linux') return 'Linux';
 	if (platform === 'android') return 'Android';
+	if (platform === 'ios') return 'iOS';
+	if (platform === 'web') return 'Web';
 	return '';
 };
 

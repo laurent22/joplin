@@ -6,7 +6,7 @@ import { Env } from './models/Setting';
 import Logger from '@joplin/utils/Logger';
 import personalizedUserContentBaseUrl from './services/joplinServer/personalizedUserContentBaseUrl';
 import { getHttpStatusMessage } from './net-utils';
-import { getApplicationInformation } from './services/joplinCloudUtils';
+import { getApplicationInformation, getUserAgent } from './services/joplinCloudUtils';
 import { stringify } from 'query-string';
 
 const logger = Logger.create('JoplinServerApi');
@@ -182,6 +182,7 @@ export default class JoplinServerApi {
 
 		if (sessionId) headers['X-API-AUTH'] = sessionId;
 		headers['X-API-MIN-VERSION'] = '2.6.0'; // Need server 2.6 for new lock support
+		headers['User-Agent'] = getUserAgent();
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See exec_.body above
 		type FetchOptions = { headers: Record<string, string>; method: string; path?: string; body?: any; signal?: AbortSignal };
