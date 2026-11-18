@@ -12619,7 +12619,7 @@ __metadata:
     "@react-native-community/netinfo": "npm:12.0.1"
     "@react-native-community/push-notification-ios": "npm:1.12.0"
     "@react-native-documents/picker": "npm:12.0.2"
-    "@react-native-vector-icons/fontawesome5": "npm:13.1.2"
+    "@react-native-vector-icons/fontawesome5": "npm:13.1.3"
     "@react-native-vector-icons/get-image": "npm:13.0.0"
     "@react-native-vector-icons/ionicons": "npm:13.1.2"
     "@react-native-vector-icons/material-design-icons": "npm:13.1.2"
@@ -15207,11 +15207,37 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-vector-icons/fontawesome5@npm:13.1.2":
-  version: 13.1.2
-  resolution: "@react-native-vector-icons/fontawesome5@npm:13.1.2"
+"@react-native-vector-icons/common@npm:^13.0.2":
+  version: 13.0.4
+  resolution: "@react-native-vector-icons/common@npm:13.0.4"
   dependencies:
-    "@react-native-vector-icons/common": "npm:^13.0.1"
+    find-up: "npm:^8.0.0"
+    picocolors: "npm:^1.1.1"
+    plist: "npm:^3.1.0"
+  peerDependencies:
+    "@react-native-vector-icons/get-image": ^13.0.2
+    "@react-native/assets-registry": "*"
+    expo-font: "*"
+    react: "*"
+    react-native: "*"
+  peerDependenciesMeta:
+    "@react-native-vector-icons/get-image":
+      optional: true
+    "@react-native/assets-registry":
+      optional: true
+    expo-font:
+      optional: true
+  bin:
+    rnvi-update-plist: lib/commonjs/scripts/updatePlist.js
+  checksum: 10/11e3a8b7e7a17d1d2734b42e03ae81d97a0742f2cc5118c5b3be5282fc740109d8724b27ee0cfb574dc8727340c98d649ca4f89383b718f4194cfdd51ba1c374
+  languageName: node
+  linkType: hard
+
+"@react-native-vector-icons/fontawesome5@npm:13.1.3":
+  version: 13.1.3
+  resolution: "@react-native-vector-icons/fontawesome5@npm:13.1.3"
+  dependencies:
+    "@react-native-vector-icons/common": "npm:^13.0.2"
   peerDependencies:
     "@expo/config-plugins": ">=10.0.0"
     react: "*"
@@ -15219,7 +15245,7 @@ __metadata:
   peerDependenciesMeta:
     "@expo/config-plugins":
       optional: true
-  checksum: 10/1f2ab89f12dd9b27db9609e4a9839a0faac7590faff5c60404151d03b65275bfdcff335ce751451db1db9059fbc99b3d22a9d41d8916d8fb2fb2dd0431b08548
+  checksum: 10/844ef5981a9e407f5183d623f0a5c0658568a268e4a5aaaad9b4e15a62a33b37c541a0bf5315577fd523ee81e4c0d1e460e94585b9f594e9a2d76401acda1152
   languageName: node
   linkType: hard
 
