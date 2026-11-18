@@ -149,9 +149,14 @@ export async function delItems(path: SubPath, ctx: AppContext, isBatch: boolean)
 			}
 		}
 	} else {
-		const item = await itemFromPath(ctx.joplin.owner.id, ctx.joplin.models.item(), path);
-		await checkCanDelete(item);
-		toDelete.push(item);
+		// An account can have access to several items with the same name, which the client sees as a single item, so
+		// they are all deleted, as in the batch case. Otherwise the remaining ones would come back on the client.
+		const items = await ctx.joplin.models.item().loadByNames(ctx.joplin.owner.id, [ctx.joplin.models.item().pathToName(path.id)]);
+		if (!items.length) throw new ErrorNotFound(`Not found: ${path.id}`);
+		for (const item of items) {
+			await checkCanDelete(item);
+			toDelete.push(item);
+		}
 	}
 
 	await ctx.joplin.models.item().deleteForUser(
