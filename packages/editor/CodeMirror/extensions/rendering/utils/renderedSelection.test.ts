@@ -125,6 +125,27 @@ describe('renderedSelection', () => {
 		}
 	});
 
+	it.each([
+		{ kind: 'dragend', end: (editor: EditorView) => editor.dom.ownerDocument.dispatchEvent(new Event('dragend')) },
+		{ kind: 'window blur', end: (editor: EditorView) => editor.dom.ownerDocument.defaultView.dispatchEvent(new Event('blur')) },
+		{ kind: 'mousemove without buttons', end: (editor: EditorView) => editor.dom.ownerDocument.dispatchEvent(new MouseEvent('mousemove', { buttons: 0 })) },
+	])('should follow later keyboard selections after a gesture ends with $kind instead of mouseup', async ({ end }) => {
+		const editor = await createEditor();
+		const reference = await createEditor();
+		try {
+			mouseDown(editor);
+			end(editor);
+			await jest.runAllTimersAsync();
+			const selection = EditorSelection.cursor(12);
+			editor.dispatch({ selection, userEvent: 'select' });
+			reference.dispatch({ selection });
+			expect(visibleEditorText(editor)).toBe(visibleEditorText(reference));
+		} finally {
+			editor.destroy();
+			reference.destroy();
+		}
+	});
+
 	it.each(['selection', 'document', 'new gesture', 'destroy'])('should cancel a pending completion after %s changes', async kind => {
 		const editor = await createEditor();
 		try {

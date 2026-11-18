@@ -21,6 +21,10 @@ const renderedSelection = ViewPlugin.fromClass(class {
 	public constructor(private view: EditorView) {
 		view.dom.addEventListener('mousedown', this.onMouseDown, true);
 		view.dom.ownerDocument.addEventListener('mouseup', this.onMouseUp);
+		// A drag-and-drop or focus change can swallow the mouseup.
+		view.dom.ownerDocument.addEventListener('dragend', this.finishGesture);
+		view.dom.ownerDocument.addEventListener('mousemove', this.onMouseMove);
+		view.dom.ownerDocument.defaultView?.addEventListener('blur', this.finishGesture);
 	}
 
 	public get initialSelection() {
@@ -50,8 +54,16 @@ const renderedSelection = ViewPlugin.fromClass(class {
 	};
 
 	private onMouseUp = (event: MouseEvent) => {
+		if (event.button === 0) this.finishGesture();
+	};
+
+	private onMouseMove = (event: MouseEvent) => {
+		if (event.buttons === 0) this.finishGesture();
+	};
+
+	private finishGesture = () => {
 		const gesture = this.gesture;
-		if (event.button !== 0 || !gesture || this.pendingRefresh !== null) return;
+		if (!gesture || this.pendingRefresh !== null) return;
 
 		// Wait until CodeMirror has finished the gesture. Changing decorations
 		// earlier can also cause unnecessary scrolling on iOS.
@@ -95,6 +107,9 @@ const renderedSelection = ViewPlugin.fromClass(class {
 		this.cancelGesture();
 		this.view.dom.removeEventListener('mousedown', this.onMouseDown, true);
 		this.view.dom.ownerDocument.removeEventListener('mouseup', this.onMouseUp);
+		this.view.dom.ownerDocument.removeEventListener('dragend', this.finishGesture);
+		this.view.dom.ownerDocument.removeEventListener('mousemove', this.onMouseMove);
+		this.view.dom.ownerDocument.defaultView?.removeEventListener('blur', this.finishGesture);
 	}
 });
 
