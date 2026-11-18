@@ -168,3 +168,29 @@ test('remove elements are overridden by keep', function(t) {
 	'Hello <del>world</del><ins>World</ins>'
 	);
 });
+
+test('ordered list items with three digit numbers keep a space after the marker', function(t) {
+	t.plan(2);
+	const turndownService = new TurndownService();
+	const html = `<ol>${Array.from({ length: 100 }, (_, i) => `<li>item ${i + 1}</li>`).join('')}</ol>`;
+	const output = turndownService.turndown(html);
+	t.ok(output.includes('100. item 100'), 'item 100 is "100. item 100"');
+	t.ok(!output.includes('100.item'), 'marker is not glued to the content');
+});
+
+test('ordered list items with four digit numbers do not throw and keep a space after the marker', function(t) {
+	t.plan(2);
+	const turndownService = new TurndownService();
+	const html = `<ol>${Array.from({ length: 1000 }, (_, i) => `<li>item ${i + 1}</li>`).join('')}</ol>`;
+	const output = turndownService.turndown(html);
+	t.ok(output.includes('1000. item 1000'), 'item 1000 is "1000. item 1000"');
+	t.ok(output.includes('999. item 999'), 'item 999 keeps its marker');
+});
+
+test('ordered list start attribute crossing the three digit boundary', function(t) {
+	t.plan(2);
+	const turndownService = new TurndownService();
+	const output = turndownService.turndown('<ol start="999"><li>first</li><li>second</li></ol>');
+	t.ok(output.includes('999. first'), 'first item is "999. first"');
+	t.ok(output.includes('1000. second'), 'second item is "1000. second"');
+});

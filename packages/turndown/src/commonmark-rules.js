@@ -290,44 +290,56 @@ rules.listItem = {
         .replace(/\n+$/, '\n') // replace trailing newlines with just a single one
 
     var prefix = options.bulletListMarker + ' '
-    if (node.isCode === false) {
-      content = content.replace(/\n/gm, '\n    ') // indent
-    }
-    
 
     const joplinCheckbox = joplinCheckboxInfo(node);
+
+    // Ordered markers are `indexStr + '.'` padded to a field at least 4
+    // characters wide. Once the number reaches three digits the field - and
+    // thus the content column - must grow, since the marker still requires at
+    // least one following space to be a valid list item.
+    var parent = node.parentNode
+    var indexStr = null
+    if (!joplinCheckbox && parent && isOrderedList(parent)) {
+      var start = parent.getAttribute('start')
+      var index = Array.prototype.indexOf.call(parent.children, node)
+      indexStr = (start ? Number(start) + index : index + 1) + ''
+    }
+
+    var contentIndent = '    '
+    if (indexStr !== null && node.isCode === false) {
+      contentIndent = ' '.repeat(Math.max(4, indexStr.length + 2))
+    }
+
+    if (node.isCode === false) {
+      content = content.replace(/\n/gm, '\n' + contentIndent) // indent
+    }
+
     if (joplinCheckbox) {
       prefix = '- [' + (joplinCheckbox.checked ? 'x' : ' ') + '] ';
-    } else {
-      var parent = node.parentNode
-      if (isOrderedList(parent)) {
-        if (node.isCode) {
-          // Ordered lists in code blocks are often for line numbers. Remove them. 
-          // See https://github.com/laurent22/joplin/pull/10126
-          // test case: packages/app-cli/tests/html_to_md/code_multiline_4.html
-          prefix = '';
-        } else {
-          var start = parent.getAttribute('start')
-          var index = Array.prototype.indexOf.call(parent.children, node)
-          var indexStr = (start ? Number(start) + index : index + 1) + ''
-          // The content of the line that contains the bullet must align wih the following lines.
-          //
-          // i.e it should be:
-          //
-          // 9.  my content
-          //     second line
-          // 10. next one
-          //     second line
-          //
-          // But not:
-          //
-          // 9.  my content
-          //     second line
-          // 10.  next one
-          //     second line
-          //
-          prefix = indexStr + '.' + ' '.repeat(3 - indexStr.length)
-        }
+    } else if (indexStr !== null) {
+      if (node.isCode) {
+        // Ordered lists in code blocks are often for line numbers. Remove them.
+        // See https://github.com/laurent22/joplin/pull/10126
+        // test case: packages/app-cli/tests/html_to_md/code_multiline_4.html
+        prefix = '';
+      } else {
+        // The content of the line that contains the bullet must align wih the following lines.
+        //
+        // i.e it should be:
+        //
+        // 9.  my content
+        //     second line
+        // 10. next one
+        //     second line
+        //
+        // But not:
+        //
+        // 9.  my content
+        //     second line
+        // 10.  next one
+        //     second line
+        //
+        prefix = indexStr + '.' + ' '.repeat(contentIndent.length - indexStr.length - 1)
       }
     }
 
