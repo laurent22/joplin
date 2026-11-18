@@ -24,14 +24,6 @@ public class AppDelegate: ExpoAppDelegate, UNUserNotificationCenterDelegate {
     reactNativeFactory = factory
     bindReactNativeFactory(factory)
  
-#if os(iOS) || os(tvOS)
-    window = UIWindow(frame: UIScreen.main.bounds)
-    factory.startReactNative(
-      withModuleName: "main",
-      in: window,
-      launchOptions: launchOptions)
-#endif
-    
     // Define UNUserNotificationCenter -- required by @react-native-community/push-notification-ios
     let center = UNUserNotificationCenter.current();
     center.delegate = self;
@@ -79,6 +71,74 @@ public class AppDelegate: ExpoAppDelegate, UNUserNotificationCenterDelegate {
   }
 }
  
+// Apps built with the iOS 27 SDK must use the UIScene life cycle, or they fail to launch. UIKit
+// then delivers URLs, user activities and quick actions to the scene instead of the AppDelegate.
+class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+  var window: UIWindow?
+
+  private var appDelegate: AppDelegate {
+    UIApplication.shared.delegate as! AppDelegate
+  }
+
+  func scene(
+    _ scene: UIScene,
+    willConnectTo session: UISceneSession,
+    options connectionOptions: UIScene.ConnectionOptions
+  ) {
+    guard let windowScene = scene as? UIWindowScene else { return }
+
+    let window = UIWindow(windowScene: windowScene)
+    self.window = window
+    // Some libraries (LogBox, rn-fetch-blob, react-native-quick-actions) access the window via
+    // UIApplication.shared.delegate.window
+    appDelegate.window = window
+
+    appDelegate.reactNativeFactory?.startReactNative(
+      withModuleName: "main",
+      in: window,
+      launchOptions: launchOptions(from: connectionOptions))
+  }
+
+  // Linking API
+  func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+    for context in URLContexts {
+      var options: [UIApplication.OpenURLOptionsKey: Any] = [:]
+      options[.sourceApplication] = context.options.sourceApplication
+      options[.annotation] = context.options.annotation
+      _ = appDelegate.application(UIApplication.shared, open: context.url, options: options)
+    }
+  }
+
+  // Universal Links
+  func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+    _ = appDelegate.application(UIApplication.shared, continue: userActivity, restorationHandler: { _ in })
+  }
+
+  // Quick actions
+  func windowScene(
+    _ windowScene: UIWindowScene,
+    performActionFor shortcutItem: UIApplicationShortcutItem,
+    completionHandler: @escaping (Bool) -> Void
+  ) {
+    appDelegate.application(UIApplication.shared, performActionFor: shortcutItem, completionHandler: completionHandler)
+  }
+
+  // On cold start, UIKit passes the URL, user activity or quick action in the connection options, but
+  // RCTLinkingManager.getInitialURL and RNQuickActionManager's initialAction read them from launchOptions.
+  private func launchOptions(from connectionOptions: UIScene.ConnectionOptions) -> [UIApplication.LaunchOptionsKey: Any] {
+    var launchOptions: [UIApplication.LaunchOptionsKey: Any] = [:]
+    launchOptions[.url] = connectionOptions.urlContexts.first?.url
+    launchOptions[.shortcutItem] = connectionOptions.shortcutItem
+    if let userActivity = connectionOptions.userActivities.first {
+      launchOptions[.userActivityDictionary] = [
+        UIApplication.LaunchOptionsKey.userActivityType.rawValue: userActivity.activityType,
+        "UIApplicationLaunchOptionsUserActivityKey": userActivity,
+      ]
+    }
+    return launchOptions
+  }
+}
+
 class ReactNativeDelegate: ExpoReactNativeFactoryDelegate {
   // Extension point for config-plugins
  
