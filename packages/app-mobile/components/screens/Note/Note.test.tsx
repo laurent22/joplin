@@ -592,19 +592,20 @@ describe('screens/Note/Note', () => {
 		// Mocked, since only the confirmation is under test and a real lock would keep saving after the test.
 		const enableNoteLockSpy = jest.spyOn(setNoteLockState, 'enableNoteLock').mockResolvedValue(undefined);
 		const { unmount } = render(<WrappedNoteScreen />);
+		try {
+			await openNoteActionsMenu();
+			fireEvent.press(await screen.findByText('Lock this note'));
 
-		await openNoteActionsMenu();
-		fireEvent.press(await screen.findByText('Lock this note'));
-
-		await waitFor(() => expect(showMessageBox).toHaveBeenCalledWith('Are you sure you want to lock this note?', expect.anything()));
-		await act(() => waitForWithRealTimers(async () => {
-			if (confirmed) expect(enableNoteLockSpy).toHaveBeenCalledWith(noteId);
-			else expect(enableNoteLockSpy).not.toHaveBeenCalled();
-		}));
-
-		enableNoteLockSpy.mockRestore();
-		showMessageBox.mockRestore();
-		unmount();
+			await waitFor(() => expect(showMessageBox).toHaveBeenCalledWith('Are you sure you want to lock this note?', expect.anything()));
+			await act(() => waitForWithRealTimers(async () => {
+				if (confirmed) expect(enableNoteLockSpy).toHaveBeenCalledWith(noteId);
+				else expect(enableNoteLockSpy).not.toHaveBeenCalled();
+			}));
+		} finally {
+			enableNoteLockSpy.mockRestore();
+			showMessageBox.mockRestore();
+			unmount();
+		}
 		Setting.setValue('featureFlag.noteLock', false);
 	});
 
@@ -618,24 +619,25 @@ describe('screens/Note/Note', () => {
 		const showMessageBox = jest.spyOn(shim, 'showMessageBox').mockResolvedValue(response);
 		const enableNoteLockSpy = jest.spyOn(setNoteLockState, 'enableNoteLock').mockResolvedValue(undefined);
 		const { unmount } = render(<WrappedNoteScreen />);
+		try {
+			await openNoteActionsMenu();
+			fireEvent.press(await screen.findByText('Lock this note'));
 
-		await openNoteActionsMenu();
-		fireEvent.press(await screen.findByText('Lock this note'));
-
-		await waitFor(() => expect(showMessageBox).toHaveBeenCalledWith('Are you sure you want to lock this note?', expect.anything()));
-		if (confirmed) {
-			expect(await screen.findByLabelText('Note lock password')).toBeVisible();
-		} else {
-			await act(() => waitForWithRealTimers(async () => {
-				expect(screen.queryByLabelText('Note lock password')).toBeNull();
-			}));
+			await waitFor(() => expect(showMessageBox).toHaveBeenCalledWith('Are you sure you want to lock this note?', expect.anything()));
+			if (confirmed) {
+				expect(await screen.findByLabelText('Note lock password')).toBeVisible();
+			} else {
+				await act(() => waitForWithRealTimers(async () => {
+					expect(screen.queryByLabelText('Note lock password')).toBeNull();
+				}));
+			}
+			expect(enableNoteLockSpy).not.toHaveBeenCalled();
+			expect(showMessageBox).toHaveBeenCalledTimes(1);
+		} finally {
+			enableNoteLockSpy.mockRestore();
+			showMessageBox.mockRestore();
+			unmount();
 		}
-		expect(enableNoteLockSpy).not.toHaveBeenCalled();
-		expect(showMessageBox).toHaveBeenCalledTimes(1);
-
-		enableNoteLockSpy.mockRestore();
-		showMessageBox.mockRestore();
-		unmount();
 		Setting.setValue('featureFlag.noteLock', false);
 	});
 
