@@ -80,10 +80,13 @@ const renderedSelection = ViewPlugin.fromClass(class {
 		if (update.docChanged) {
 			this.cancelGesture();
 		} else if (update.selectionSet) {
-			if (update.transactions.some(transaction => transaction.isUserEvent('select.pointer'))) {
-				this.gesture.hasPointerSelection = true;
-			} else {
+			const isPointer = update.transactions.some(transaction => transaction.isUserEvent('select.pointer'));
+			if (!isPointer && this.pendingRefresh !== null) {
 				this.cancelGesture();
+			} else {
+				// CodeMirror keeps dragging after other selection changes (e.g. Shift+Down),
+				// so keep the gesture and only complete selections the pointer made.
+				this.gesture.hasPointerSelection = isPointer;
 			}
 		}
 	}

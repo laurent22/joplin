@@ -91,18 +91,35 @@ describe('renderedSelection', () => {
 		{ kind: 'programmatic', select: true },
 		{ kind: 'visible syntax', select: true, userEvent: 'select.pointer', initialCursor: 12 },
 		{ kind: 'no', select: false },
-	])('should leave rendering and selection unchanged on mouseup after $kind selection', async ({ select, userEvent, initialCursor }) => {
+	])('should leave the selection unchanged and render it normally on mouseup after $kind selection', async ({ select, userEvent, initialCursor }) => {
 		const editor = await createEditor();
+		const reference = await createEditor();
 		try {
 			if (initialCursor !== undefined) editor.dispatch({ selection: { anchor: initialCursor } });
 			mouseDown(editor);
 			if (select) editor.dispatch({ selection: EditorSelection.range(10, 14), userEvent });
-			const text = visibleEditorText(editor);
 			const selection = editor.state.selection;
 			mouseUp(editor);
 			await jest.runAllTimersAsync();
 			expect(editor.state.selection.eq(selection)).toBe(true);
-			expect(visibleEditorText(editor)).toBe(text);
+			reference.dispatch({ selection });
+			expect(visibleEditorText(editor)).toBe(visibleEditorText(reference));
+		} finally {
+			editor.destroy();
+			reference.destroy();
+		}
+	});
+
+	it('should complete a drag that resumes after a keyboard selection', async () => {
+		const editor = await createEditor('# Heading\n\nSome text\n\nAway');
+		try {
+			mouseDown(editor);
+			editor.dispatch({ selection: EditorSelection.range(2, 13), userEvent: 'select.pointer' });
+			editor.dispatch({ selection: EditorSelection.range(2, 20), userEvent: 'select' });
+			editor.dispatch({ selection: EditorSelection.range(2, 15), userEvent: 'select.pointer' });
+			mouseUp(editor);
+			await jest.runAllTimersAsync();
+			expect(editor.state.selection.main).toMatchObject({ anchor: 0, head: 15 });
 		} finally {
 			editor.destroy();
 		}
