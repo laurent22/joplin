@@ -15,7 +15,7 @@ export const declaration: CommandDeclaration = {
 
 export const runtime = (): CommandRuntime => {
 	return {
-		// afterUnlock: the run that follows the unlock dialog, which already asked for the password, so it does not ask again.
+		// afterUnlock: the run that follows the unlock dialog, which was already confirmed, so it does not ask again.
 		execute: async (context: DesktopCommandContext, noteId: string = null, afterUnlock = false) => {
 			if (!isNoteLockEnabled()) return;
 			if (noteId === null) {
@@ -44,6 +44,10 @@ export const runtime = (): CommandRuntime => {
 				return;
 			}
 
+			// Locking deletes the note history, so a click by accident is confirmed first, also before the unlock dialog,
+			// whose text does not say what asked for it.
+			if (!afterUnlock && !bridge().showConfirmMessageBox(_('Are you sure you want to lock this note?'), { buttons: [_('Yes'), _('No')] })) return;
+
 			// A note that is not yet encrypted has no unlock overlay, so the session unlock has to
 			// happen through the dialog here.
 			if (!NoteLockSession.instance().isUnlocked()) {
@@ -54,9 +58,6 @@ export const runtime = (): CommandRuntime => {
 				});
 				return;
 			}
-
-			// Locking deletes the note history, so a click by accident is confirmed first.
-			if (!afterUnlock && !bridge().showConfirmMessageBox(_('Are you sure you want to lock this note?'), { buttons: [_('Yes'), _('No')] })) return;
 
 			// An externally edited note has a plaintext file on disk; flush and delete it before locking.
 			if (context.state.watchedNoteFiles.includes(noteId)) {

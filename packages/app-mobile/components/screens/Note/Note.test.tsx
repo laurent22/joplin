@@ -608,6 +608,37 @@ describe('screens/Note/Note', () => {
 		Setting.setValue('featureFlag.noteLock', false);
 	});
 
+	test.each([
+		['No', 1, false],
+		['Yes', 0, true],
+	])('should confirm locking before asking for the password when the session is locked, then go ahead only on %s', async (_answer, response, confirmed) => {
+		await setupUnlockedNoteLock('123456');
+		await openNewNote({ title: 'To lock', body: 'plain body' });
+		NoteLockSession.instance().lock();
+		const showMessageBox = jest.spyOn(shim, 'showMessageBox').mockResolvedValue(response);
+		const enableNoteLockSpy = jest.spyOn(setNoteLockState, 'enableNoteLock').mockResolvedValue(undefined);
+		const { unmount } = render(<WrappedNoteScreen />);
+
+		await openNoteActionsMenu();
+		fireEvent.press(await screen.findByText('Lock this note'));
+
+		await waitFor(() => expect(showMessageBox).toHaveBeenCalledWith('Are you sure you want to lock this note?', expect.anything()));
+		if (confirmed) {
+			expect(await screen.findByLabelText('Note lock password')).toBeVisible();
+		} else {
+			await act(() => waitForWithRealTimers(async () => {
+				expect(screen.queryByLabelText('Note lock password')).toBeNull();
+			}));
+		}
+		expect(enableNoteLockSpy).not.toHaveBeenCalled();
+		expect(showMessageBox).toHaveBeenCalledTimes(1);
+
+		enableNoteLockSpy.mockRestore();
+		showMessageBox.mockRestore();
+		unmount();
+		Setting.setValue('featureFlag.noteLock', false);
+	});
+
 	it('should offer relocking from a note that is not locked', async () => {
 		await setupUnlockedNoteLock('123456');
 		await openNewNote({ title: 'Plain note', body: 'not locked' });
