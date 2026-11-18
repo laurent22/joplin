@@ -1,10 +1,15 @@
 import { Pagination, PaginationOrder, PaginationOrderDir } from '../../../models/utils/types';
 import { Request } from '../Api';
 import { ErrorBadRequest } from './errors';
+import validateField from './validateField';
 
 function requestPaginationOrder(request: Request): PaginationOrder[] {
-	const orderBy: string = request.query.order_by ? request.query.order_by : 'updated_time';
-	const orderDir: PaginationOrderDir = request.query.order_dir ? request.query.order_dir : PaginationOrderDir.ASC;
+	const orderBy = request.query.order_by ? validateField(request.query.order_by) : 'updated_time';
+
+	let orderDir: PaginationOrderDir = PaginationOrderDir.ASC;
+	if (typeof request.query.order_dir === 'string' && request.query.order_dir.toUpperCase() === 'DESC') {
+		orderDir = PaginationOrderDir.DESC;
+	}
 
 	return [{
 		by: orderBy,
@@ -13,11 +18,23 @@ function requestPaginationOrder(request: Request): PaginationOrder[] {
 	}];
 }
 
-export default function(request: Request): Pagination {
-	const limit = request.query.limit ? request.query.limit : 100;
+const requestLimit = (request: Request) => {
+	const limit = request.query.limit ? Number(request.query.limit) : 100;
+	if (!Number.isInteger(limit)) throw new ErrorBadRequest(`Invalid limit: ${JSON.stringify(limit)}`);
 	if (limit < 0 || limit > 100) throw new ErrorBadRequest(`Limit out of bond: ${limit}`);
-	const order: PaginationOrder[] = requestPaginationOrder(request);
-	const page: number = request.query.page || 1;
+	return limit;
+};
+
+const requestPage = (request: Request) => {
+	const page = Number(request.query.page || 1);
+	if (!Number.isInteger(page)) throw new ErrorBadRequest(`Invalid page: ${page}`);
+	return page;
+};
+
+export default function(request: Request): Pagination {
+	const limit = requestLimit(request);
+	const order = requestPaginationOrder(request);
+	const page = requestPage(request);
 
 	return { limit, order, page };
 }

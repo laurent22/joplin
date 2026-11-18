@@ -777,7 +777,7 @@ async function expectThrow(asyncFn: ()=> unknown | Promise<unknown>, errorCode: 
 	}
 }
 
-async function expectNotThrow(asyncFn: ()=> Promise<unknown>) {
+async function expectNotThrow(asyncFn: ()=> unknown|Promise<unknown>) {
 	let thrownError = null;
 	try {
 		await asyncFn();

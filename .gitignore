@@ -1908,7 +1908,10 @@ packages/lib/services/rest/utils/errors.js
 packages/lib/services/rest/utils/paginatedResults.js
 packages/lib/services/rest/utils/readonlyProperties.js
 packages/lib/services/rest/utils/requestFields.js
+packages/lib/services/rest/utils/requestPaginationOptions.test.js
 packages/lib/services/rest/utils/requestPaginationOptions.js
+packages/lib/services/rest/utils/validateField.test.js
+packages/lib/services/rest/utils/validateField.js
 packages/lib/services/search/SearchEngine.resources.test.js
 packages/lib/services/search/SearchEngine.semantic.test.js
 packages/lib/services/search/SearchEngine.test.js
