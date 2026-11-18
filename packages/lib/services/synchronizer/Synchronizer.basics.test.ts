@@ -11,6 +11,33 @@ import { ErrorCode } from '../../errors';
 import Resource from '../../models/Resource';
 import { exists } from 'fs-extra';
 
+// Delta pages are 50 items, so this cancels during the second page
+const syncAndCancelDuringSecondDeltaPage = async () => {
+	let cancelled = false;
+	const context = await synchronizerStart(null, { onProgress: (report) => {
+		if (cancelled || Number(report.fetchingProcessed ?? 0) < 60) return;
+		cancelled = true;
+		void synchronizer().cancel();
+	} });
+	expect(cancelled).toBe(true);
+	return context;
+};
+
+// Delta pages are 50 items, so this fails fetching the second page
+const syncAndFailDuringSecondDeltaPage = async () => {
+	const api = synchronizer().api();
+	const delta = api.delta.bind(api);
+	let deltaCalls = 0;
+	const deltaSpy = jest.spyOn(api, 'delta').mockImplementation(async (path, options) => {
+		if (++deltaCalls === 2) throw new Error('Network error');
+		return delta(path, options);
+	});
+	const context = await synchronizerStart();
+	deltaSpy.mockRestore();
+	expect(deltaCalls).toBe(2);
+	return context;
+};
+
 describe('Synchronizer.basics', () => {
 
 	beforeEach(async () => {
@@ -308,6 +335,53 @@ describe('Synchronizer.basics', () => {
 		await synchronizerStart();
 		notes = await Note.all();
 		expect(notes.length).toBe(1);
+	}));
+
+	test.each([
+		['is cancelled', syncAndCancelDuringSecondDeltaPage],
+		['fails', syncAndFailDuringSecondDeltaPage],
+	])('should resume from the last completed delta page when a sync %s', (async (_name, interruptSync) => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		for (let i = 0; i < 120; i++) await Note.save({ title: `note ${i}`, parent_id: folder1.id });
+		await synchronizerStart();
+
+		await switchClient(2);
+
+		const interruptedContext = await interruptSync();
+		expect(interruptedContext.delta).not.toHaveProperty('statsCache');
+		expect(interruptedContext.delta).not.toHaveProperty('statIdsCache');
+
+		let processedCount = 0;
+		await synchronizerStart(null, { onProgress: (report) => {
+			processedCount = Number(report.fetchingProcessed ?? 0);
+		} });
+		expect(processedCount).toBeLessThan(121 - 50 + 1);
+		expect((await Note.all()).length).toBe(120);
+	}));
+
+	test.each([
+		['is cancelled', syncAndCancelDuringSecondDeltaPage],
+		['fails', syncAndFailDuringSecondDeltaPage],
+	])('should not lose a folder deletion found before a sync %s', (async (_name, interruptSync) => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const folder2 = await Folder.save({ title: 'folder2' });
+		await synchronizerStart();
+		await switchClient(2);
+		await synchronizerStart();
+
+		await switchClient(1);
+		await Folder.delete(folder2.id);
+		for (let i = 0; i < 120; i++) await Note.save({ title: `note ${i}`, parent_id: folder1.id });
+		await synchronizerStart();
+
+		// Folder deletions are applied at the end of the delta step, so the interrupted sync leaves it in place
+		await switchClient(2);
+		await interruptSync();
+		expect(await Folder.load(folder2.id)).toBeTruthy();
+
+		await synchronizerStart();
+		expect(await Folder.load(folder2.id)).toBeFalsy();
+		expect((await Note.all()).length).toBe(120);
 	}));
 
 	it('should skip items that cannot be synced', (async () => {
