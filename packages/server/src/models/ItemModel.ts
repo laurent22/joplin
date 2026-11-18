@@ -1242,8 +1242,15 @@ export default class ItemModel extends BaseModel<Item> {
 					// The item was created by a concurrent request - typically a client
 					// retrying an upload that is still being processed. Save it as an update
 					// so that the retry is not treated as an error.
-					// Not loadByName(), since the user may also have access to another user's item with the same name
-					const existingItem: Item = await this.db(this.tableName).select('id', 'jop_share_id').where('name', '=', item.name).where('owner_id', '=', item.owner_id || userId).first();
+					// Not loadByName(), since the user may also have access to another user's item with the same name. The
+					// user_items join leaves orphaned items to the conflict error, since updating them would not make them accessible.
+					const existingItem: Item = await this.db(this.tableName)
+						.innerJoin('user_items', 'user_items.item_id', 'items.id')
+						.select('items.id', 'items.jop_share_id')
+						.where('items.name', '=', item.name)
+						.where('items.owner_id', '=', item.owner_id || userId)
+						.where('user_items.user_id', '=', userId)
+						.first();
 
 					if (!existingItem) {
 						modelLogger.error(`Unique constraint error on item, but the item could not be found: ${JSON.stringify({ id: item.id, name: item.name, jop_id: item.jop_id, owner_id: item.owner_id })}`, error);

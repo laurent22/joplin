@@ -6,7 +6,7 @@ import { StorageDriverType } from '../utils/types';
 import config from '../config';
 import { msleep } from '../utils/time';
 import loadStorageDriver from './items/storage/loadStorageDriver';
-import { ErrorPayloadTooLarge, ErrorUnprocessableEntity } from '../utils/errors';
+import { ErrorConflict, ErrorPayloadTooLarge, ErrorUnprocessableEntity } from '../utils/errors';
 import { makeNoteSerializedBody } from '../utils/testing/serializedItems';
 import { isSqlite } from '../db';
 import { ModelType } from '@joplin/lib/BaseModel';
@@ -764,6 +764,16 @@ describe('ItemModel', () => {
 
 		const content = await models().item().loadWithContent(savedItem.id);
 		expect(content.content.toString()).toBe('retried');
+	});
+
+	test('should not update an orphaned item when the unique constraint fails', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+		const name = `.resource/${'a'.repeat(32)}`;
+
+		const orphanedItem = await models().item().saveForUser(user1.id, { name, content: Buffer.from('original') });
+		await db()('user_items').where('item_id', '=', orphanedItem.id).delete();
+
+		await expectHttpError(async () => models().item().saveForUser(user1.id, { name, content: Buffer.from('retried') }), ErrorConflict.httpCode);
 	});
 
 	test('should pick the same item consistently when a user has access to several items with the same name', async () => {
