@@ -7,7 +7,7 @@ import bridge from '../services/bridge';
 import restart from '../services/restart';
 import invitationRespond from '@joplin/lib/services/share/invitationRespond';
 import { _ } from '@joplin/lib/locale';
-import { ShareInvitation } from '@joplin/lib/services/share/reducer';
+import { ShareInvitation, StateShare } from '@joplin/lib/services/share/reducer';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { useEffect, useRef, useState } from 'react';
@@ -15,12 +15,14 @@ import Logger from '@joplin/utils/Logger';
 import { AppState } from '../app.reducer';
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
-import { showMissingMasterKeyMessage, showUnknownKeyFormatBanner } from '@joplin/lib/services/e2ee/utils';
+import { resolveE2eeEnabledStateConflict, showMissingMasterKeyMessage, showUnknownKeyFormatBanner } from '@joplin/lib/services/e2ee/utils';
 import { noteLockKeyConflictFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { NoteLockMigrationStatus } from '@joplin/lib/reducer';
 import { confirmAndSkipNoteLockKeyMigration, notMigratedMessage, withSkippedCount } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
 import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/config/shouldShowMissingPasswordWarning';
 import { connect } from 'react-redux';
+import { onAllowUnencryptedUploads, onKeepHeldBackChanges, plaintextUploadBannerMessage } from '@joplin/lib/services/synchronizer/utils/plaintextUploadHeldBackItems';
+import { reg } from '@joplin/lib/registry';
 
 const logger = Logger.create('WarningBanner');
 
@@ -35,6 +37,7 @@ interface Props {
 	processingShareInvitationResponse: boolean;
 	shareInvitations: ShareInvitation[];
 	hasDisabledSyncItems: boolean;
+	plaintextUploadHeldBackItemIds: string[];
 	showUnknownKeyFormatMessage: boolean;
 	showMissingMasterKeyMessage: boolean;
 	noteLockBulkChangeRunning: boolean;
@@ -42,8 +45,10 @@ interface Props {
 	noteLockMigrationStatus: NoteLockMigrationStatus|null;
 	mustUpgradeAppMessage: string;
 	syncTargetAppMinVersion: string;
+	mustFixPpk: boolean;
 	shouldSwitchToAppleSiliconVersion: boolean;
 	showInvalidJoplinCloudCredential: boolean;
+	showReEnableEncryptionBanner: boolean;
 	onShow: ()=> void;
 	onHide: ()=> void;
 	height: number;
@@ -138,8 +143,8 @@ const WarningBanner: React.FC<Props> = props => {
 		await restart();
 	};
 
-	const onInvitationRespond = async (shareUserId: string, folderId: string, masterKey: MasterKeyEntity, accept: boolean) => {
-		await invitationRespond(shareUserId, folderId, masterKey, accept);
+	const onInvitationRespond = async (shareUserId: string, share: StateShare, masterKey: MasterKeyEntity, accept: boolean) => {
+		await invitationRespond(shareUserId, share, masterKey, accept);
 	};
 
 	const showShareInvitationNotification = () => {
@@ -193,6 +198,32 @@ const WarningBanner: React.FC<Props> = props => {
 			_('Restart and upgrade'),
 			onRestartAndUpgrade,
 		);
+	} else if (props.showReEnableEncryptionBanner) {
+		const resolveE2eeConflict = async (reEnable: boolean) => {
+			await resolveE2eeEnabledStateConflict(EncryptionService.instance(), reEnable, props.dispatch);
+			void reg.scheduleSync(0);
+		};
+		msg = renderNotificationMessage(
+			_('Encryption has been disabled on the sync target.'),
+			_('Keep encryption enabled'),
+			() => resolveE2eeConflict(true),
+			_('Disable encryption'),
+			() => resolveE2eeConflict(false),
+		);
+	} else if (props.mustFixPpk) {
+		msg = renderNotificationMessage(
+			_('Unable to sync: Invalid public-private key pair.'),
+			_('More info'),
+			onViewEncryptionConfigScreen,
+		);
+	} else if (props.plaintextUploadHeldBackItemIds.length) {
+		msg = renderNotificationMessage(
+			plaintextUploadBannerMessage(props.plaintextUploadHeldBackItemIds.length),
+			_('Allow on this device'),
+			() => void onAllowUnencryptedUploads(),
+			_('Don\'t upload'),
+			() => void onKeepHeldBackChanges(props.plaintextUploadHeldBackItemIds, props.dispatch),
+		);
 	} else if (props.hasDisabledEncryptionItems) {
 		msg = renderNotificationMessage(
 			_('Some items cannot be decrypted.'),
@@ -218,9 +249,9 @@ const WarningBanner: React.FC<Props> = props => {
 		msg = renderNotificationMessage(
 			_('%s (%s) would like to share a notebook with you.', sharer.full_name, sharer.email),
 			_('Accept'),
-			() => onInvitationRespond(invitation.id, invitation.share.folder_id, invitation.master_key, true),
+			() => onInvitationRespond(invitation.id, invitation.share, invitation.master_key, true),
 			_('Reject'),
-			() => onInvitationRespond(invitation.id, invitation.share.folder_id, invitation.master_key, false),
+			() => onInvitationRespond(invitation.id, invitation.share, invitation.master_key, false),
 		);
 	} else if (props.hasDisabledSyncItems) {
 		msg = renderNotificationMessage(
@@ -332,6 +363,7 @@ const mapStateToProps = (state: AppState) => {
 
 	return {
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
+		plaintextUploadHeldBackItemIds: state.plaintextUploadHeldBackItemIds,
 		hasDisabledEncryptionItems: state.hasDisabledEncryptionItems,
 		showMissingMasterKeyMessage: showMissingMasterKeyMessage(syncInfo, state.notLoadedMasterKeys),
 		showUnknownKeyFormatMessage: showUnknownKeyFormatBanner(syncInfo),
@@ -346,8 +378,10 @@ const mapStateToProps = (state: AppState) => {
 		isSafeMode: state.settings.isSafeMode,
 		noteLockBulkChangeRunning: state.noteLockBulkChangeRunning,
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
+		mustFixPpk: state.mustFixPpk,
 		syncTargetAppMinVersion: state.mustUpgradeAppMinVersion,
 		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
+		showReEnableEncryptionBanner: syncInfo.e2ee && state.mustResolveE2eeEnabledConflict,
 		shouldSwitchToAppleSiliconVersion: shim.isAppleSilicon() && shim.isMac() && process.arch !== 'arm64',
 	};
 };

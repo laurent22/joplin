@@ -7,6 +7,7 @@ import { ModelType } from '@joplin/lib/BaseModel';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import Setting from '@joplin/lib/models/Setting';
 import { reg } from '@joplin/lib/registry';
+import isPublishBlockedByE2ee from '@joplin/lib/components/shared/ShareNoteDialog/isPublishBlockedByE2ee';
 
 const logger = Logger.create('command-publish');
 
@@ -43,6 +44,10 @@ class Command extends BaseCommand {
 
 		const force = args.options.force;
 		const alreadyShared = !!targetNote.is_shared;
+		if (!alreadyShared && isPublishBlockedByE2ee()) {
+			throw new Error(_('Your notes are protected by end-to-end encryption. To publish notes, run "%s".', 'config encryption.allowUnencryptedUploads true'));
+		}
+
 		const ok = force || alreadyShared ? true : await this.prompt(
 			_('Publish note "%s" (in notebook "%s")?', targetNote.title, parent.title ?? '<root>'),
 			{ booleanAnswerDefault: 'n' },

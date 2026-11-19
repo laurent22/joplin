@@ -5,23 +5,28 @@ import { reg } from '../../registry';
 import { _ } from '../../locale';
 import { MasterKeyEntity } from '../e2ee/types';
 import shim from '../../shim';
+import { StateShare } from './reducer';
 
 const logger = Logger.create('invitationRespond');
 
-export default async function(shareUserId: string, folderId: string, masterKey: MasterKeyEntity, accept: boolean) {
-	// The below functions can take a bit of time to complete so in the
-	// meantime we hide the notification so that the user doesn't click
-	// multiple times on the Accept link.
-	ShareService.instance().setProcessingShareInvitationResponse(true);
+const invitationRespond_ = async (shareUserId: string, share: StateShare, masterKey: MasterKeyEntity, accept: boolean) => {
+	const folderId = share.folder_id;
 
 	try {
-		await ShareService.instance().respondInvitation(shareUserId, masterKey, accept);
+		await ShareService.instance().respondInvitation(shareUserId, share, masterKey, accept);
 	} catch (error) {
 		logger.error(error);
 		if (shim.mobilePlatform() === 'web' && masterKey) {
 			alert(_('The web client does not support accepting encrypted shared notebooks. Please switch to the desktop or mobile app before accepting the share.\n\nError: "%s"', error.message));
 		} else {
-			alert(_('Could not respond to the invitation. Please try again, or check with the notebook owner if they are still sharing it.\n\nThe error was: "%s"', error.message));
+			const message = _('Could not respond to the invitation. Please try again, or check with the notebook owner if they are still sharing it.\n\nThe error was: "%s"', error.message);
+
+			if (typeof alert === 'undefined') {
+				// alert() doesn't exist on CLI. Throw to avoid a confusing "alert is undefined" error
+				throw new Error(message);
+			} else {
+				alert(message);
+			}
 		}
 	}
 
@@ -53,8 +58,16 @@ export default async function(shareUserId: string, folderId: string, masterKey: 
 		}
 	}
 
+	await ShareService.instance().refreshShareInvitations();
+};
+
+export default async function(shareUserId: string, share: StateShare, masterKey: MasterKeyEntity, accept: boolean) {
+	// The below functions can take a bit of time to complete so in the
+	// meantime we hide the notification so that the user doesn't click
+	// multiple times on the Accept link.
+	ShareService.instance().setProcessingShareInvitationResponse(true);
 	try {
-		await ShareService.instance().refreshShareInvitations();
+		await invitationRespond_(shareUserId, share, masterKey, accept);
 	} finally {
 		ShareService.instance().setProcessingShareInvitationResponse(false);
 	}

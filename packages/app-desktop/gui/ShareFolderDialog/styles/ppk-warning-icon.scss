@@ -1,0 +1,12 @@
+
+.ppk-warning-icon {
+	position: relative;
+	white-space: pre;
+
+	> .overlay {
+		position: absolute;
+		bottom: -2px;
+		right: -2px;
+		font-size: 8px;
+	}
+}

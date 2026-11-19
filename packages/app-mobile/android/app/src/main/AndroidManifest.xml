@@ -9,7 +9,6 @@
 	<uses-permission android:name="android.permission.USE_BIOMETRIC" />
 	<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
 	<!-- expo-audio recording
 		(see https://github.com/expo/expo/blob/51c14bb4b88afa4b8c21ea617b0096349098b098/packages/expo-audio/plugin/src/withAudio.ts#L78) -->

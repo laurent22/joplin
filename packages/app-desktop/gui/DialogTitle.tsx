@@ -1,3 +1,4 @@
+import * as React from 'react';
 import styled from 'styled-components';
 
 const Root = styled.h1<{ justifyContent?: string }>`

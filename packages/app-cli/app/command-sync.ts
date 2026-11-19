@@ -14,12 +14,12 @@ const { cliUtils } = require('./cli-utils.js');
 const md5 = require('md5');
 import * as locker from 'proper-lockfile';
 import { pathExists, writeFile } from 'fs-extra';
-import { checkIfLoginWasSuccessful, generateApplicationConfirmUrl } from '@joplin/lib/services/joplinCloudUtils';
+import { checkIfLoginWasSuccessful, createApplicationAuthId, generateApplicationConfirmUrl } from '@joplin/lib/services/joplinCloudUtils';
 import Logger from '@joplin/utils/Logger';
-import { uuidgen } from '@joplin/lib/uuid';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 import SyncTargetDropbox from '@joplin/lib/SyncTargetDropbox';
+import { heldBackItemsToConfirm, heldBackItemToLine, loadPlaintextUploadHeldBackItemGroups, plaintextUploadBannerMessage, plaintextUploadFaqUrl, PlaintextUploadReason } from '@joplin/lib/services/synchronizer/utils/plaintextUploadHeldBackItems';
 
 const logger = Logger.create('command-sync');
 
@@ -92,7 +92,7 @@ class Command extends BaseCommand {
 			api.setAuthToken(response.access_token);
 			return true;
 		} else if (syncTargetMd.name === 'joplinCloud') {
-			const applicationAuthId = uuidgen();
+			const applicationAuthId = createApplicationAuthId();
 			const checkForCredentials = async () => {
 				try {
 					const applicationAuthUrl = `${Setting.value('sync.10.path')}/api/application_auth/${applicationAuthId}`;
@@ -246,6 +246,12 @@ class Command extends BaseCommand {
 				}
 			}
 
+			if (app().store().getState().mustResolveE2eeEnabledConflict) {
+				this.stdout(
+					_('Encryption has been disabled remotely: Run either "%s" (to disable encryption) or "%s" (to keep encryption enabled)', 'e2ee disable', 'e2ee re-enable'),
+				);
+			}
+
 			// When using the tool in command line mode, the ResourceFetcher service is
 			// not going to be running in the background, so the resources need to be
 			// explicitly downloaded below.
@@ -254,6 +260,8 @@ class Command extends BaseCommand {
 				await ResourceFetcher.instance().fetchAll();
 				await ResourceFetcher.instance().waitForAllFinished();
 			}
+
+			await this.printPlaintextUploadHeldBackItems();
 
 			const noPasswordMkIds = await masterKeysWithoutPassword();
 			if (noPasswordMkIds.length) this.stdout(`/!\\ ${_('Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.')}`);
@@ -271,6 +279,24 @@ class Command extends BaseCommand {
 		}
 
 		cleanUp();
+	}
+
+	private async printPlaintextUploadHeldBackItems() {
+		const groups = await loadPlaintextUploadHeldBackItemGroups(this.syncTargetId_, ShareService.instance().shares);
+		const items = groups
+			.filter(group => group.reason !== PlaintextUploadReason.None)
+			.flatMap(group => group.items.map(item => ({ item, group })));
+		if (!items.length) return;
+
+		const maxListedItems = 10;
+		const lines = [`/!\\ ${plaintextUploadBannerMessage(heldBackItemsToConfirm(groups).length)}`];
+		for (const { item, group } of items.slice(0, maxListedItems)) {
+			lines.push(`  ${heldBackItemToLine(item)}: ${group.label}`);
+		}
+		if (items.length > maxListedItems) lines.push(`  ${_('...and %d more', items.length - maxListedItems)}`);
+		lines.push(_('To upload them, run "%s". Only do this if you use published notes or unencrypted shared notebooks.', 'config encryption.allowUnencryptedUploads true'));
+		lines.push(_('See %s for more information.', plaintextUploadFaqUrl));
+		this.stdout(lines.join('\n'));
 	}
 
 	public async cancel() {

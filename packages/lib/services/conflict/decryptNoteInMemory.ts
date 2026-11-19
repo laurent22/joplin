@@ -1,3 +1,5 @@
+import { ErrorCode } from '../../errors';
+import JoplinError from '../../JoplinError';
 import BaseItem from '../../models/BaseItem';
 import Note from '../../models/Note';
 import { NoteEntity } from '../database/types';
@@ -13,6 +15,14 @@ export default async (note: NoteEntity): Promise<NoteEntity|null> => {
 	try {
 		const plainText = await BaseItem.encryptionService().decryptString(note.encryption_cipher_text);
 		const plainNote: NoteEntity = await Note.unserialize(plainText);
+
+		// Prevents an attacker from swapping out the note's ciphertext with a different note
+		if (plainNote.id !== note.id) {
+			throw new JoplinError(
+				`Decrypted note has incorrect ID. Was: ${JSON.stringify(plainNote.id)}. Expected: ${JSON.stringify(note.id)}`,
+				ErrorCode.MalformedItem,
+			);
+		}
 
 		return {
 			...plainNote,

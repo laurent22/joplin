@@ -44,12 +44,16 @@ const downloadSignTool = async () => {
 
 	mkdirpSync(extractDir);
 
+	// Expand-Archive broke on the GitHub runner after a PowerShell/.NET update, and it doesn't return a
+	// non-zero exit code on failure. The tar.exe bundled with Windows can extract zip files.
 	execSync(
-		`powershell -Command "Expand-Archive -Path '${zipPath}' -DestinationPath '${extractDir}' -Force"`,
+		`"%SystemRoot%\\System32\\tar.exe" -xf "${zipPath}" -C "${extractDir}"`,
 		{ stdio: 'inherit' },
 	);
 
 	console.info('sign.js: Extracted sign tool zip:', readdirSync(extractDir));
+
+	if (!(await pathExists(`${extractDir}/${signToolName}`))) throw new Error(`sign.js: ${signToolName} not found after extracting ${zipPath}`);
 
 	return extractDir;
 };
