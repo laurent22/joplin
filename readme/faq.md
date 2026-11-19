@@ -151,6 +151,20 @@ Suggested resolution steps:
 2. Change your account password. For Joplin Server/Cloud, this can be done from the [profile screen](https://joplincloud.com/help#how-can-i-change-my-account-details).
 3. Regenerate the key pair. This can be done from Settings > Encryption.
 
+## How can I publish notes with end-to-end encryption turned on?
+
+With end-to-end encryption (E2EE) enabled, Joplin doesn't upload changes without encryption unless the "Allow publishing with end-to-end encryption on" setting is enabled. This setting can be found in Settings > Synchronisation and is only shown for the Joplin Cloud and Joplin Server sync targets.
+
+This setting applies to:
+- published notes, notebooks and their attachments,
+- notebooks shared without encryption, for example by users who don't use encryption.
+
+Without the setting, new notes can't be published, and changes to these items stay on the device. Already published notes stay published, with their last uploaded version.
+
+On CLI, the setting can be enabled with `config encryption.allowUnencryptedUploads true`. The changes that were waiting are then uploaded on the next sync.
+
+Turning the setting on weakens Joplin's end-to-end encryption.
+
 ## How can I use self-signed SSL certificates on Android?
 
 If you want to serve using https but can't or don't want to use SSL certificates signed by trusted certificate authorities (like "Let's Encrypt"), it's possible to generate a custom CA and sign your certificates with it. You can generate the CA and certificates using [openssl](https://gist.github.com/fntlnz/cf14feb5a46b2eda428e000157447309), but I like to use a tool called [mkcert](https://github.com/FiloSottile/mkcert) for its simplicity. Finally, you have to add your CA certificate to Android settings so that Android can recognize the certificates you signed with your CA as valid ([link](https://support.google.com/nexus/answer/2844832?hl=en-GB)).

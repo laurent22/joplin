@@ -2,7 +2,7 @@ import * as React from 'react';
 import WarningBanner, { WarningBannerComponent } from './WarningBanner';
 import Setting from '@joplin/lib/models/Setting';
 import NavService from '@joplin/lib/services/NavService';
-import { fireEvent, render, screen, userEvent } from '../../utils/testing/testingLibrary';
+import { act, fireEvent, render, screen, userEvent, waitFor } from '../../utils/testing/testingLibrary';
 import { ShareInvitation, ShareUserStatus } from '@joplin/lib/services/share/reducer';
 import makeShareInvitation from '@joplin/lib/testing/share/makeMockShareInvitation';
 import { encryptionService, loadEncryptionMasterKey, mockMobilePlatform, runWithFakeTimers, setupDatabaseAndSynchronizer, switchClient, synchronizer, synchronizerStart, withWarningSilenced } from '@joplin/lib/testing/test-utils';
@@ -13,8 +13,13 @@ import setupGlobalStore from '../../utils/testing/setupGlobalStore';
 import { Dispatch } from 'redux';
 import { setupAndEnableEncryption } from '@joplin/lib/services/e2ee/utils';
 import { Second } from '@joplin/utils/time';
-import { MobilePlatform } from '@joplin/lib/shim';
+import shim, { MobilePlatform } from '@joplin/lib/shim';
 import { reg } from '@joplin/lib/registry';
+import Folder from '@joplin/lib/models/Folder';
+import Note from '@joplin/lib/models/Note';
+import BaseItem from '@joplin/lib/models/BaseItem';
+import { ErrorCode } from '@joplin/lib/errors';
+import checkDisabledSyncItemsNotification from '@joplin/lib/services/synchronizer/utils/checkDisabledSyncItemsNotification';
 
 interface WrapperProps {
 	showMissingMasterKeyMessage?: boolean;
@@ -45,6 +50,8 @@ const WarningBannerWrapper: React.FC<WrapperProps> = props => {
 		showInvalidJoplinCloudCredential={props.showInvalidJoplinCloudCredential ?? false}
 		showReEnableEncryptionBanner={props.showReEnableEncryptionBanner ?? false}
 		mustFixPpk={props.mustFixPpk ?? false}
+		plaintextUploadHeldBackItemIds={[]}
+		routeName=''
 	/>;
 };
 
@@ -155,6 +162,43 @@ describe('WarningBanner', () => {
 
 		render(<TestProviderStack store={store}><WarningBanner/></TestProviderStack>);
 		expect(screen.getByTestId('warning-box')).toHaveTextContent('In order to synchronise, Please upgrade your application to version 3.9.0: Update it from the App Store');
+	});
+
+	test('the unencrypted upload banner should allow uploads on this device, or keep the changes until another one is held back', async () => {
+		const store = createMockReduxStore();
+		setupGlobalStore(store);
+		const folder = await Folder.save({ title: 'folder' });
+		const holdBack = async (title: string) => {
+			const note = await Note.save({ title, parent_id: folder.id });
+			await BaseItem.saveSyncDisabled(Setting.value('sync.target'), note, ErrorCode.PlaintextUploadNotConfirmed);
+			await act(() => checkDisabledSyncItemsNotification(store.dispatch));
+		};
+		await holdBack('note 1');
+		await holdBack('note 2');
+		reg.waitForSyncFinishedThenSync = jest.fn();
+		const confirmSpy = jest.spyOn(shim, 'showConfirmationDialog').mockResolvedValue(true);
+
+		render(<TestProviderStack store={store}><WarningBanner/></TestProviderStack>);
+		const bannerName = /^Publishing is turned off while end-to-end encryption is on/;
+		expect(screen.getByRole('button', { name: /: 2 changes weren't uploaded\.$/ })).toBeVisible();
+
+		const choose = async (choice: string) => {
+			fireEvent.press(screen.getByRole('button', { name: bannerName }));
+			await act(async () => {
+				fireEvent.press(screen.getByRole('button', { name: choice }));
+			});
+		};
+
+		await choose('Don\'t upload');
+		await waitFor(() => expect(screen.queryByRole('button', { name: bannerName })).toBeNull());
+
+		await holdBack('note 3');
+		expect(screen.getByRole('button', { name: /: 1 change wasn't uploaded\.$/ })).toBeVisible();
+
+		await choose('Allow on this device');
+		await waitFor(() => expect(Setting.value('encryption.allowUnencryptedUploads')).toBe(true));
+		expect(reg.waitForSyncFinishedThenSync).toHaveBeenCalled();
+		confirmSpy.mockRestore();
 	});
 
 	it('should show a warning banner when E2EE has been disabled on the sync target', async () => {

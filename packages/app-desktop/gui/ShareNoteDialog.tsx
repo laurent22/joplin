@@ -19,6 +19,7 @@ import useEncryptionWarningMessage from '@joplin/lib/components/shared/ShareNote
 import { SharingStatus } from '@joplin/lib/components/shared/ShareNoteDialog/types';
 import useIsPublished from '@joplin/lib/components/shared/ShareNoteDialog/useIsPublished';
 import { clipboard } from 'electron';
+import isPublishBlockedByE2ee from '@joplin/lib/components/shared/ShareNoteDialog/isPublishBlockedByE2ee';
 
 interface Props {
 	themeId: number;
@@ -26,6 +27,7 @@ interface Props {
 	onClose: ()=> void;
 	shares: StateShare[];
 	syncTargetId: number;
+	publishBlockedByE2ee: boolean;
 }
 
 export function ShareNoteDialog(props: Props) {
@@ -35,6 +37,10 @@ export function ShareNoteDialog(props: Props) {
 
 	const syncTargetInfo = useMemo(() => SyncTargetRegistry.infoById(props.syncTargetId), [props.syncTargetId]);
 	const noteCount = notes.length;
+	const unpublishedNoteCount = notes.filter(note => !note.is_shared).length;
+	const showShareButton = !props.publishBlockedByE2ee || (noteCount > 0 && !unpublishedNoteCount);
+	// Reloaded when these change, so that the dialog knows which notes publishing would still change
+	const shareIds = props.shares.map(share => share.id).join(',');
 
 	useEffect(() => {
 		void ShareService.instance().refreshShares();
@@ -50,7 +56,7 @@ export function ShareNoteDialog(props: Props) {
 		}
 
 		void fetchNotes();
-	}, [props.noteIds]);
+	}, [props.noteIds, shareIds, sharesState]);
 
 	const buttonRow_click = () => {
 		props.onClose();
@@ -79,7 +85,7 @@ export function ShareNoteDialog(props: Props) {
 	const encryptionWarning = useEncryptionWarningMessage();
 
 	function renderEncryptionWarningMessage() {
-		if (!encryptionWarning) return null;
+		if (!encryptionWarning || !unpublishedNoteCount) return null;
 		return <div className="message">{encryptionWarning}<hr/></div>;
 	}
 
@@ -103,11 +109,11 @@ export function ShareNoteDialog(props: Props) {
 				<DialogTitle title={_('Publish Notes')}/>
 				{renderNoteList(notes)}
 				{renderRecursiveShareCheckbox()}
-				<button
+				{showShareButton && <button
 					disabled={[SharingStatus.Creating, SharingStatus.Synchronizing].indexOf(sharesState) >= 0}
 					className="share"
 					onClick={shareLinkButton_click}
-				>{_n('Copy Shareable Link', 'Copy Shareable Links', noteCount)}</button>
+				>{_n('Copy Shareable Link', 'Copy Shareable Links', noteCount)}</button>}
 				<div className="message">{statusMessage}</div>
 				{renderEncryptionWarningMessage()}
 				<DialogButtonRow
@@ -148,6 +154,7 @@ const mapStateToProps = (state: AppState) => {
 	return {
 		shares: state.shareService.shares.filter(s => !!s.note_id),
 		syncTargetId: state.settings['sync.target'],
+		publishBlockedByE2ee: isPublishBlockedByE2ee(state),
 	};
 };
 

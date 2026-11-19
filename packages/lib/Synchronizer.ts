@@ -9,6 +9,7 @@ import BaseItem, { RemoteItemMetadata } from './models/BaseItem';
 import Folder from './models/Folder';
 import Note from './models/Note';
 import Resource from './models/Resource';
+import NoteResource from './models/NoteResource';
 import ItemChange from './models/ItemChange';
 import ResourceLocalState from './models/ResourceLocalState';
 import MasterKey from './models/MasterKey';
@@ -30,9 +31,12 @@ import handleConflictAction from './services/synchronizer/utils/handleConflictAc
 import resourceRemotePath from './services/synchronizer/utils/resourceRemotePath';
 import syncDeleteStep from './services/synchronizer/utils/syncDeleteStep';
 import { ErrorCode } from './errors';
-import { SyncAction } from './services/synchronizer/utils/types';
+import { conflictActions, SyncAction } from './services/synchronizer/utils/types';
 import checkDisabledSyncItemsNotification from './services/synchronizer/utils/checkDisabledSyncItemsNotification';
-import { NoteEntity } from './services/database/types';
+import { BaseItemEntity, NoteEntity } from './services/database/types';
+import { getPlaintextUploadReason, loadPlaintextUploadHeldBackItems, PlaintextUploadReason } from './services/synchronizer/utils/plaintextUploadHeldBackItems';
+import mustConfirmPlaintextUploads from './services/synchronizer/utils/mustConfirmPlaintextUploads';
+import { PlaintextUploadConfirmation, PlaintextUploadConfirmations } from './models/utils/checkPlaintextUploadConfirmed';
 import { reg } from './registry';
 import SyncTargetRegistry from './SyncTargetRegistry';
 import { Day } from '@joplin/utils/time';
@@ -100,6 +104,7 @@ export default class Synchronizer {
 	private syncTargetIsLocked_ = false;
 	private shareService_: ShareService = null;
 	private lockClientType_: LockClientType = null;
+	private pendingPlaintextUploadConfirmations_ = new Map<string, number|null>();
 
 	// Debug flags are used to test certain hard-to-test conditions
 	// such as cancelling in the middle of a loop.
@@ -176,6 +181,17 @@ export default class Synchronizer {
 
 	public setShareService(v: ShareService) {
 		this.shareService_ = v;
+	}
+
+	// Held-back items that the user confirmed for upload without encryption. Taken by the next upload step, whichever
+	// sync runs it.
+	public confirmPlaintextUploads(confirmations: PlaintextUploadConfirmation[]) {
+		for (const { id, updatedTime } of confirmations) this.pendingPlaintextUploadConfirmations_.set(id, updatedTime);
+	}
+
+	// Public for testing
+	public get pendingPlaintextUploadConfirmations(): ReadonlySet<string> {
+		return new Set(this.pendingPlaintextUploadConfirmations_.keys());
 	}
 
 	public setEncryptionService(v: EncryptionService) {
@@ -391,6 +407,24 @@ export default class Synchronizer {
 		}
 	}
 
+	// Releases held-back items that would now be uploaded encrypted, or that the user confirmed for this run. Apart from
+	// the delta step applying a remote change, this is the only place they're released. serializeForSync checks each
+	// item again before it's uploaded.
+	private async releasePlaintextUploadHeldBackItems(syncTargetId: number, confirmations: PlaintextUploadConfirmations) {
+		const shares = this.shareService_ ? this.shareService_.shares : [];
+		const releasedIds: string[] = [];
+
+		for (const item of await loadPlaintextUploadHeldBackItems(syncTargetId)) {
+			if (!mustConfirmPlaintextUploads() || confirmations.has(item.id) || getPlaintextUploadReason(item, shares) === PlaintextUploadReason.None) {
+				releasedIds.push(item.id);
+			}
+		}
+
+		if (releasedIds.length) logger.info(`Releasing ${releasedIds.length} items held back from upload: ${releasedIds.join(', ')}`);
+		await BaseItem.releasePlaintextUploadHeldBackItems(syncTargetId, releasedIds);
+		return releasedIds;
+	}
+
 	// Synchronisation is done in three major steps:
 	//
 	// 1. UPLOAD: Send to the sync target the items that have changed since the last sync.
@@ -438,6 +472,12 @@ export default class Synchronizer {
 			await ItemClass.saveSyncDisabled(syncTargetId, item, cannotSyncReason, itemLocation);
 		};
 
+		const getConflictType = (conflictedItem: BaseItemEntity) => {
+			if (conflictedItem.type_ === ModelType.Note) return SyncAction.NoteConflict;
+			if (conflictedItem.type_ === ModelType.Resource) return SyncAction.ResourceConflict;
+			return SyncAction.ItemConflict;
+		};
+
 		// We index resources before sync mostly to flag any potential orphan
 		// resource before it is being synced. That way, it can potentially be
 		// auto-deleted at a later time. Indexing resources is fast so it's fine
@@ -466,6 +506,8 @@ export default class Synchronizer {
 		let errorToThrow = null;
 		let syncLock = null;
 		let hasCaughtError = false;
+		// Confirmations that this sync took but didn't use, which are kept if the upload step doesn't finish
+		const unusedPlaintextUploadConfirmations = new Map<string, number|null>();
 
 		try {
 			// Before synchronising make sure all share_id properties are set
@@ -485,7 +527,8 @@ export default class Synchronizer {
 				}
 			}
 
-			const itemUploader = new ItemUploader(this.api(), this.apiCall);
+			const confirmedPlaintextUploads = new Map<string, number|null>();
+			const itemUploader = new ItemUploader(this.api(), this.apiCall, confirmedPlaintextUploads);
 
 			await this.api().initialize();
 			this.api().setTempDirName(Dirnames.Temp);
@@ -682,6 +725,21 @@ export default class Synchronizer {
 				);
 			} // DELETE_REMOTE STEP
 
+			// Items that are no longer held back from sync, but were until recently. Set by the upload step to the items it released from being held back.
+			let releasedHeldBackIds = new Set<string>();
+
+			// Other clients can't see that a note that can't be uploaded links to the attachment, so they may delete it as an
+			// orphan.
+			const shouldRecreateDeletedResource = async (resourceId: string) => {
+				const hasDownloaded = (await Resource.localState(resourceId)).fetch_status === Resource.FETCH_STATUS_DONE;
+				if (!hasDownloaded) return false;
+
+				const noteIds = await NoteResource.associatedNoteIds(resourceId);
+				// Notes released in this run count too, since the deletion can predate their upload.
+				if (noteIds.some(id => releasedHeldBackIds.has(id))) return true;
+				return (await BaseItem.syncDisabledIdsAmong(syncTargetId, noteIds)).length > 0;
+			};
+
 			// ========================================================================
 			// 1. UPLOAD
 			// ------------------------------------------------------------------------
@@ -690,10 +748,22 @@ export default class Synchronizer {
 			// ========================================================================
 
 			if (syncSteps.indexOf('update_remote') >= 0) {
+				for (const [id, updatedTime] of this.pendingPlaintextUploadConfirmations_) {
+					confirmedPlaintextUploads.set(id, updatedTime);
+					unusedPlaintextUploadConfirmations.set(id, updatedTime);
+				}
+				this.pendingPlaintextUploadConfirmations_.clear();
+				releasedHeldBackIds = new Set(await this.releasePlaintextUploadHeldBackItems(syncTargetId, confirmedPlaintextUploads));
+
 				const donePaths: string[] = [];
 
 				const completeItemProcessing = (path: string) => {
 					donePaths.push(path);
+					// Anything left to upload afterwards in this run, such as the text of an auto-merged conflict, is held
+					// back again
+					const id = BaseItem.pathToId(path);
+					confirmedPlaintextUploads.delete(id);
+					unusedPlaintextUploadConfirmations.delete(id);
 				};
 
 				while (true) {
@@ -741,16 +811,16 @@ export default class Synchronizer {
 						let reason = '';
 						let remoteContent = null;
 
-						const getConflictType = (conflictedItem: { type_?: number }) => {
-							if (conflictedItem.type_ === BaseModel.TYPE_NOTE) return SyncAction.NoteConflict;
-							if (conflictedItem.type_ === BaseModel.TYPE_RESOURCE) return SyncAction.ResourceConflict;
-							return SyncAction.ItemConflict;
-						};
-
 						if (!remote) {
 							if (!local.sync_time) {
 								action = SyncAction.CreateRemote;
 								reason = 'remote does not exist, and local is new and has never been synced';
+							} else if (local.type_ === ModelType.Resource && await shouldRecreateDeletedResource(local.id)) {
+								// Upload as a new item: Without this, only the metadata (not the blob) is uploaded.
+								await BaseItem.resetSyncTime(syncTargetId, local.id);
+								local = { ...local, sync_time: 0 };
+								action = SyncAction.CreateRemote;
+								reason = 'remote has been deleted, but a note that cannot be uploaded links to it';
 							} else {
 								// Note or item was modified after having been deleted remotely
 								// "itemConflict" is for all the items except the notes, which are dealt with in a special way
@@ -796,6 +866,13 @@ export default class Synchronizer {
 							} else {
 								action = SyncAction.UpdateRemote;
 								reason = 'local has changes';
+
+								const wouldBeHeldBack = mustConfirmPlaintextUploads()
+									&& getPlaintextUploadReason(local, this.shareService_?.shares ?? []) !== PlaintextUploadReason.None
+									&& !confirmedPlaintextUploads.has(local.id);
+								if (wouldBeHeldBack && await ItemClass.plaintextUploadRevealsNothingNew(local, remoteContent)) {
+									confirmedPlaintextUploads.set(local.id, local.updated_time);
+								}
 							}
 						}
 
@@ -848,7 +925,7 @@ export default class Synchronizer {
 							} else {
 								try {
 									const remoteContentPath = resourceRemotePath(local.id);
-									const result = await Resource.fullPathForSyncUpload(local);
+									const result = await Resource.fullPathForSyncUpload(local, confirmedPlaintextUploads);
 									const resource = result.resource;
 									local = resource as typeof local;
 									const localResourceContentPath = result.path;
@@ -867,7 +944,10 @@ export default class Synchronizer {
 										await this.apiCall('put', remoteContentPath, null, { path: localResourceContentPath, source: 'file', shareId: resource.share_id });
 									}
 								} catch (error) {
-									if (isCannotSyncError(error)) {
+									if (error && error.code === ErrorCode.PlaintextUploadNotConfirmed) {
+										await handleCannotSyncItem(ItemClass, syncTargetId, local, error.code);
+										action = null;
+									} else if (isCannotSyncError(error)) {
 										await handleCannotSyncItem(ItemClass, syncTargetId, local, error.message);
 										action = null;
 									} else if (error && error.code === ErrorCode.IsReadOnly) {
@@ -890,6 +970,9 @@ export default class Synchronizer {
 							} catch (error) {
 								if (error && error.code === 'rejectedByTarget') {
 									await handleCannotSyncItem(ItemClass, syncTargetId, local, error.message);
+									canSync = false;
+								} else if (error && error.code === ErrorCode.PlaintextUploadNotConfirmed) {
+									await handleCannotSyncItem(ItemClass, syncTargetId, local, error.code);
 									canSync = false;
 								} else if (error && error.code === ErrorCode.IsReadOnly) {
 									action = getConflictType(local);
@@ -954,6 +1037,9 @@ export default class Synchronizer {
 
 					if (!result.hasMore) break;
 				}
+
+				// Confirmations for items with nothing to upload end with the upload step
+				if (!this.cancelling()) unusedPlaintextUploadConfirmations.clear();
 			} // UPLOAD STEP
 
 			// ------------------------------------------------------------------------
@@ -968,7 +1054,7 @@ export default class Synchronizer {
 
 			if (syncSteps.indexOf('delta') >= 0) {
 				// At this point all the local items that have changed have been pushed to remote
-				// or handled as conflicts, so no conflict is possible after this.
+				// or handled as conflicts, so no conflict is possible after this, except for items held back from upload.
 
 				let context = null;
 				let newDeltaContext = null;
@@ -1016,6 +1102,10 @@ export default class Synchronizer {
 
 					const remoteIds = remotes.map(r => BaseItem.pathToId(r.path));
 					const locals = await BaseItem.loadItemsByIds(remoteIds);
+					const heldBackSyncTimes = new Map(
+						(await BaseItem.plaintextUploadHeldBackSyncItems(syncTargetId, remoteIds))
+							.map(syncItem => [syncItem.item_id, syncItem.sync_time]),
+					);
 
 					for (const remote of remotes) {
 						if (this.cancelling()) break;
@@ -1072,7 +1162,28 @@ export default class Synchronizer {
 							} else {
 								ItemClass = BaseItem.itemClass(local);
 								local = ItemClass.filter(local);
-								if (remote.isDeleted) {
+								const heldBackSyncTime = heldBackSyncTimes.get(remoteId);
+								if (remote.isDeleted && local.type_ === ModelType.Resource && await shouldRecreateDeletedResource(remoteId)) {
+									// Check that the item was actually deleted to avoid conflicts later on: Joplin Server delta keeps listing
+									// a deletion after the item is created again.
+									if (!await this.apiCall('stat', path)) await BaseItem.resetSyncTime(syncTargetId, remoteId);
+									reason = 'skipping: remote has been deleted, but a note that cannot be uploaded links to it';
+								} else if (
+									heldBackSyncTime !== undefined
+									// Only do conflict handling for changed held back items: A held back item with no local changes
+									// doesn't need to create a conflict. It can go through the normal update path, which also releases it.
+									&& local.updated_time > heldBackSyncTime
+								) {
+									// The local changes can't be uploaded yet, so the remote change is handled as a
+									// conflict here, in the same way as the upload loop does
+									if (!remote.isDeleted) content = await loadContent();
+									if (remote.isDeleted || (content && content.updated_time > heldBackSyncTime)) {
+										action = getConflictType(local);
+										reason = remote.isDeleted ? 'remote has been deleted, but local is held back with changes' : 'both remote and local have changes, and local is held back from upload';
+									} else {
+										reason = 'skipping: local is held back from upload';
+									}
+								} else if (remote.isDeleted) {
 									action = SyncAction.DeleteLocal;
 									reason = 'remote has been deleted';
 								} else {
@@ -1117,6 +1228,15 @@ export default class Synchronizer {
 						if (!action) continue;
 
 						this.logSyncOperation(action, local, remote, reason);
+
+						if (conflictActions.includes(action)) {
+							// Assume readOnly=false: At this point, a conflict action means that the local item has changes
+							// and thus usually isn't read-only. Even if it is, changes will be rejected when the item is
+							// eventually uploaded.
+							const readOnly = false;
+							await handleConflictAction(action, ItemClass, !remote.isDeleted, content, local, syncTargetId, readOnly, action => this.dispatch(action));
+							continue;
+						}
 
 						if (action === SyncAction.CreateLocal || action === SyncAction.UpdateLocal) {
 							if (content === null) {
@@ -1319,6 +1439,11 @@ export default class Synchronizer {
 					this.logLastRequests();
 				}
 			}
+		}
+
+		// The user doesn't have to confirm again after a network error. A confirmation made meanwhile is newer, so it's kept.
+		for (const [id, updatedTime] of unusedPlaintextUploadConfirmations) {
+			if (!this.pendingPlaintextUploadConfirmations_.has(id)) this.pendingPlaintextUploadConfirmations_.set(id, updatedTime);
 		}
 
 		try {

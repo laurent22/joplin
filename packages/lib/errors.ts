@@ -7,4 +7,5 @@ export enum ErrorCode {
 	MustUpgradeApp = 'mustUpgradeApp',
 	DownloadLimiter = 'downloadLimiter',
 	MalformedItem = 'malformedItem',
+	PlaintextUploadNotConfirmed = 'plaintextUploadNotConfirmed',
 }

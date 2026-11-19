@@ -10,6 +10,8 @@ type OnCancelListener = ()=> void;
 type OnShowListener = ()=> void;
 type OnBeforeShowListener = (dialog: HTMLDialogElement)=> void;
 
+const closedByAppReturnValue = 'closed-by-app';
+
 interface Props {
 	className?: string;
 	contentClassName?: string;
@@ -53,7 +55,9 @@ const Dialog: FC<Props> = props => {
 			dialogElement.showModal();
 			propsRef.current.onShow?.();
 		} else if (dialogElement.open && !open) {
-			dialogElement.close();
+			// Tag with closedByApp to prevent the 'close' event handler from interpreting this as a user
+			// trying to close the dialog. (Changes to the "open" prop should not fire the cancel event handler).
+			dialogElement.close(closedByAppReturnValue);
 		}
 	}, [dialogElement, contentRendered, props.open]);
 
@@ -169,9 +173,10 @@ const useDialogElement = (containerDocument: Document, onCancel: undefined|OnCan
 			}
 		});
 
-		const removedReturnValue = 'removed-from-dom';
 		dialog.addEventListener('close', () => {
-			const closedByCancel = dialog.returnValue !== removedReturnValue;
+			const closedByCancel = dialog.returnValue !== closedByAppReturnValue;
+			dialog.returnValue = '';
+
 			if (closedByCancel) {
 				if (!preventAutoCloseOnCancel || !skipCloseCancelRef.current) {
 					onCancelRef.current?.();
@@ -197,7 +202,7 @@ const useDialogElement = (containerDocument: Document, onCancel: undefined|OnCan
 			if (dialog.open) {
 				// .close: Instructs the browser to restore keyboard focus to whatever was focused
 				// before the dialog.
-				dialog.close(removedReturnValue);
+				dialog.close(closedByAppReturnValue);
 			}
 			dialog.remove();
 		};

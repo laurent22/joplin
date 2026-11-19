@@ -17,14 +17,17 @@ import { reg } from '@joplin/lib/registry';
 import { DialogContext } from '../DialogManager';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import { Dispatch } from 'redux';
+import { onAllowUnencryptedUploads, onKeepHeldBackChanges, plaintextUploadBannerMessage } from '@joplin/lib/services/synchronizer/utils/plaintextUploadHeldBackItems';
 
 const logger = Logger.create('WarningBanner');
 
 interface Props {
 	dispatch: Dispatch;
 	themeId: number;
+	routeName: string;
 	showMissingMasterKeyMessage: boolean;
 	hasDisabledSyncItems: boolean;
+	plaintextUploadHeldBackItemIds: string[];
 	shouldUpgradeSyncTarget: boolean;
 	showShouldUpgradeSyncTargetMessage: boolean|undefined;
 	hasDisabledEncryptionItems: boolean;
@@ -79,6 +82,26 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 		/>;
 	};
 
+	const renderPlaintextUploadWarning = () => {
+		const message = plaintextUploadBannerMessage(props.plaintextUploadHeldBackItemIds.length);
+		const onPress = async () => {
+			const allowId = 0;
+			const keepId = 1;
+			const cancelId = 2;
+			const choice = await shim.showMessageBox(message, {
+				buttons: [_('Allow on this device'), _('Don\'t upload'), _('Cancel')],
+				cancelId,
+				defaultId: cancelId,
+			});
+			if (choice === allowId) await onAllowUnencryptedUploads();
+			else if (choice === keepId) await onKeepHeldBackChanges(props.plaintextUploadHeldBackItemIds, props.dispatch);
+		};
+		return renderWarningBox('plaintextUpload', message, undefined, () => void onPress());
+	};
+
+	// The status screen already lists the changes
+	const showPlaintextUploadWarning = props.routeName !== 'Status' && props.plaintextUploadHeldBackItemIds.length > 0;
+
 	const renderMustUpgradeAppMessage = () => {
 		if (props.syncTargetAppMinVersion) {
 			const upgradeMessage = (message: string) => _(
@@ -119,6 +142,9 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 
 	if (props.showMissingMasterKeyMessage) {
 		warningComps.push(renderWarningBox('EncryptionConfig', _('Press to set the decryption password.')));
+	}
+	if (showPlaintextUploadWarning) {
+		warningComps.push(renderPlaintextUploadWarning());
 	}
 	if (props.hasDisabledSyncItems) {
 		warningComps.push(renderWarningBox('Status', _('Some items cannot be synchronised. Press for more info.')));
@@ -200,6 +226,8 @@ export default connect((state: AppState) => {
 		notesParentType: state.notesParentType,
 		showMissingMasterKeyMessage: showMissingMasterKeyMessage(syncInfo, state.notLoadedMasterKeys),
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
+		plaintextUploadHeldBackItemIds: state.plaintextUploadHeldBackItemIds,
+		routeName: state.route?.routeName,
 		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
 		syncTargetAppMinVersion: state.mustUpgradeAppMinVersion,

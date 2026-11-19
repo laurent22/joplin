@@ -343,14 +343,18 @@ export default class ShareService {
 			recursive: recursive ? 1 : 0,
 		});
 
-		await Note.save({
-			id: note.id,
-			parent_id: note.parent_id,
-			is_shared: 1,
-			updated_time: Date.now(),
-		}, {
-			autoTimestamp: false,
-		});
+		// Re-saving bumps the updated_time, which can prompt the user to confirm plaintext
+		// upload of an otherwise unchanged note. Avoid re-saving if already shared:
+		if (!note.is_shared) {
+			await Note.save({
+				id: note.id,
+				parent_id: note.parent_id,
+				is_shared: 1,
+				updated_time: Date.now(),
+			}, {
+				autoTimestamp: false,
+			});
+		}
 
 		return share;
 	}

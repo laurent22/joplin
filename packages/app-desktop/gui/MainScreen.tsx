@@ -25,6 +25,7 @@ import iterateItems from './ResizableLayout/utils/iterateItems';
 import removeItem from './ResizableLayout/utils/removeItem';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import { ShareInvitation, StateShare } from '@joplin/lib/services/share/reducer';
+import { onAllowUnencryptedUploads, onKeepHeldBackChanges, plaintextUploadBannerMessage } from '@joplin/lib/services/synchronizer/utils/plaintextUploadHeldBackItems';
 import removeKeylessItems from './ResizableLayout/utils/removeKeylessItems';
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
@@ -59,6 +60,7 @@ interface Props {
 	layoutMoveMode: boolean;
 	shouldUpgradeSyncTarget: boolean;
 	hasDisabledSyncItems: boolean;
+	plaintextUploadHeldBackItemIds: string[];
 	hasDisabledEncryptionItems: boolean;
 	hasMissingSyncCredentials: boolean;
 	showMissingMasterKeyMessage: boolean;
@@ -607,6 +609,14 @@ class MainScreenComponent extends React.Component<Props, State> {
 				_('More info'),
 				onViewEncryptionConfigScreen,
 			);
+		} else if (this.props.plaintextUploadHeldBackItemIds.length) {
+			msg = this.renderNotificationMessage(
+				plaintextUploadBannerMessage(this.props.plaintextUploadHeldBackItemIds.length),
+				_('Allow on this device'),
+				() => void onAllowUnencryptedUploads(),
+				_('Don\'t upload'),
+				() => void onKeepHeldBackChanges(this.props.plaintextUploadHeldBackItemIds, this.props.dispatch),
+			);
 		} else if (this.props.hasDisabledEncryptionItems) {
 			msg = this.renderNotificationMessage(
 				_('Some items cannot be decrypted.'),
@@ -717,6 +727,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 	public messageBoxVisible(props: Props = null) {
 		if (!props) props = this.props;
 		return props.hasDisabledSyncItems ||
+			props.plaintextUploadHeldBackItemIds.length > 0 ||
 			props.showMissingMasterKeyMessage ||
 			props.hasMissingSyncCredentials ||
 			props.showNeedUpgradingMasterKeyMessage ||
@@ -839,6 +850,7 @@ const mapStateToProps = (state: AppState) => {
 	return {
 		themeId: state.settings.theme,
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
+		plaintextUploadHeldBackItemIds: state.plaintextUploadHeldBackItemIds,
 		hasDisabledEncryptionItems: state.hasDisabledEncryptionItems,
 		showMissingMasterKeyMessage: showMissingMasterKeyMessage(syncInfo, state.notLoadedMasterKeys),
 		showNeedUpgradingMasterKeyMessage: showNeedUpgradingEnabledMasterKeyMessage,

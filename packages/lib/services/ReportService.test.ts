@@ -1,5 +1,5 @@
 import { _ } from '../locale';
-import ReportService, { ReportSection } from './ReportService';
+import ReportService, { ReportItem, ReportSection } from './ReportService';
 import { createNTestNotes, decryptionWorker, encryptionService, loadEncryptionMasterKey, setupDatabaseAndSynchronizer, supportDir, switchClient, syncTargetId, synchronizer, synchronizerStart } from '../testing/test-utils';
 import Folder from '../models/Folder';
 import BaseItem from '../models/BaseItem';
@@ -10,6 +10,10 @@ import { loadMasterKeysFromSettings, setupAndEnableEncryption } from './e2ee/uti
 import Setting from '../models/Setting';
 import DecryptionWorker from './DecryptionWorker';
 import { ModelType } from '../BaseModel';
+import Revision from '../models/Revision';
+import Tag from '../models/Tag';
+import { ErrorCode } from '../errors';
+import { setEncryptionEnabled } from './synchronizer/syncInfoUtils';
 
 
 const firstSectionWithTitle = (report: ReportSection[], title: string) => {
@@ -172,6 +176,53 @@ describe('ReportService', () => {
 			}
 		}
 		expect(await BaseItem.syncDisabledItemsCountIncludingIgnored(syncTargetId())).toBe(noteCount - 1);
+	});
+
+	it('should list disabled items of types without a title', async () => {
+		const note = await Note.save({ title: 'Test note', body: 'Test body' });
+		const tag = await Tag.save({ title: 'Test tag' });
+		const noteTag = await Tag.addNote(tag.id, note.id);
+		const revision = await Revision.save({ item_id: note.id, item_type: ModelType.Note, parent_id: '', item_updated_time: 1 });
+
+		const items = [
+			{ id: note.id, type_: ModelType.Note },
+			{ id: noteTag.id, type_: ModelType.NoteTag },
+			{ id: revision.id, type_: ModelType.Revision },
+		];
+		for (const item of items) {
+			await BaseItem.saveSyncDisabled(syncTargetId(), item, 'Test reason');
+		}
+
+		const sectionText = sectionBodyToText(getCannotSyncSection(await new ReportService().status(syncTargetId())));
+		for (const item of items) {
+			expect(sectionText).toContain(item.id);
+		}
+
+		const disabledNote = (await BaseItem.syncDisabledItems(syncTargetId())).find(row => row.syncInfo.item_id === note.id);
+		expect(disabledNote.item.title).toBe('Test note');
+	});
+
+	it('should list changes waiting to be uploaded without encryption, and only offer to unignore them', async () => {
+		setEncryptionEnabled(true);
+		const folder = await Folder.save({ title: 'published folder', is_shared: 1 });
+		const note = await Note.save({ title: 'held back', parent_id: folder.id, is_shared: 1 });
+		await BaseItem.saveSyncDisabled(syncTargetId(), note, ErrorCode.PlaintextUploadNotConfirmed);
+
+		const findRow = (section: ReportSection) => section.body.find(item => typeof item !== 'string' && item.text?.includes(note.id)) as ReportItem;
+
+		let row = findRow(getCannotSyncSection(await new ReportService().status(syncTargetId())));
+		expect(row.text).toBe(`held back (${note.id}) is waiting to be uploaded without encryption: In published notebook "published folder"`);
+		expect(row.canRetry).toBe(false);
+		// Held-back changes have their own banner
+		expect(await BaseItem.syncDisabledItemsCount(syncTargetId())).toBe(0);
+
+		await row.ignoreHandler();
+		row = findRow(getIgnoredSection(await new ReportService().status(syncTargetId())));
+		expect(row.canRetry).toBe(true);
+
+		await row.retryHandler();
+		expect(findRow(getCannotSyncSection(await new ReportService().status(syncTargetId()))).canIgnore).toBe(true);
+		expect(await BaseItem.plaintextUploadHeldBackSyncItems(syncTargetId())).toHaveLength(1);
 	});
 
 	it('should support ignoring sync errors for resources that failed to download', async () => {

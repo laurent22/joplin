@@ -566,6 +566,7 @@ describe('Synchronizer.e2ee', () => {
 		await setupAndEnableEncryption(encryptionService(), masterKey, '123456');
 		await loadMasterKeysFromSettings(encryptionService());
 		await Folder.save({ id: folder.id, is_shared: 1 });
+		synchronizer().confirmPlaintextUploads([{ id: folder.id, updatedTime: (await Folder.load(folder.id)).updated_time }]);
 		await synchronizerStart();
 
 		// Client 2 never enters the master password, so it can't decrypt the folder

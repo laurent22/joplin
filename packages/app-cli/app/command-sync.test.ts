@@ -5,6 +5,8 @@ import BaseItem from '@joplin/lib/models/BaseItem';
 import Command = require('./command-sync');
 import { loadMasterKeysFromSettings, resolveE2eeEnabledStateConflict, setupAndEnableEncryption } from '@joplin/lib/services/e2ee/utils';
 import { fetchSyncInfo, uploadSyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import Note from '@joplin/lib/models/Note';
+import Folder from '@joplin/lib/models/Folder';
 import { cliUtils } from './cli-utils';
 import { reg } from '@joplin/lib/registry';
 
@@ -26,6 +28,8 @@ describe('command-sync', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
+		reg.resetSyncTarget();
+
 		await setupApplication();
 		BaseItem.shareService_ = ShareService.instance();
 	});
@@ -58,6 +62,21 @@ describe('command-sync', () => {
 		// Should not display the message after resolving the conflict
 		await resolveE2eeEnabledStateConflict(encryptionService(), true, jest.fn());
 		expect(await synchronize()).not.toMatch(requestReEnableRegex);
+	});
+
+	it('should list items held back from a plaintext upload', async () => {
+		const masterKey = await loadEncryptionMasterKey();
+		await setupAndEnableEncryption(encryptionService(), masterKey, '11111');
+		await loadMasterKeysFromSettings(encryptionService());
+
+		const note = await Note.save({ title: 'published\nnote', is_shared: 1, parent_id: (await Folder.save({})).id });
+
+		const { command, output } = setUpCommand();
+		await command.action({ options: {} });
+
+		expect(output).toContain('/!\\ Publishing is turned off while end-to-end encryption is on: 1 change wasn\'t uploaded.');
+		expect(output).toContain(`  Note: "published note" (${note.id}): Published note`);
+		expect(output).toContain('To upload them, run "config encryption.allowUnencryptedUploads true". Only do this if you use published notes or unencrypted shared notebooks.');
 	});
 });
 

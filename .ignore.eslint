@@ -1444,6 +1444,7 @@ packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.js
 packages/lib/components/shared/PublishFolderDialog/useOnPublishFolderLinkClick.test.js
 packages/lib/components/shared/PublishFolderDialog/useOnPublishFolderLinkClick.js
 packages/lib/components/shared/SamlShared.js
+packages/lib/components/shared/ShareNoteDialog/isPublishBlockedByE2ee.js
 packages/lib/components/shared/ShareNoteDialog/onUnshareNoteClick.js
 packages/lib/components/shared/ShareNoteDialog/types.js
 packages/lib/components/shared/ShareNoteDialog/useEncryptionWarningMessage.js
@@ -1580,6 +1581,7 @@ packages/lib/models/settings/settingValidations.js
 packages/lib/models/settings/types.js
 packages/lib/models/utils/areAllFoldersCollapsed.test.js
 packages/lib/models/utils/areAllFoldersCollapsed.js
+packages/lib/models/utils/checkPlaintextUploadConfirmed.js
 packages/lib/models/utils/getCanBeCollapsedFolderIds.test.js
 packages/lib/models/utils/getCanBeCollapsedFolderIds.js
 packages/lib/models/utils/getCollator.js
@@ -1987,6 +1989,7 @@ packages/lib/services/synchronizer/Synchronizer.baseFields.test.js
 packages/lib/services/synchronizer/Synchronizer.basics.test.js
 packages/lib/services/synchronizer/Synchronizer.conflicts.test.js
 packages/lib/services/synchronizer/Synchronizer.e2ee.test.js
+packages/lib/services/synchronizer/Synchronizer.plaintextUploads.test.js
 packages/lib/services/synchronizer/Synchronizer.ppk.test.js
 packages/lib/services/synchronizer/Synchronizer.resources.test.js
 packages/lib/services/synchronizer/Synchronizer.revisions.test.js
@@ -2007,6 +2010,9 @@ packages/lib/services/synchronizer/tools.js
 packages/lib/services/synchronizer/utils/checkDisabledSyncItemsNotification.js
 packages/lib/services/synchronizer/utils/handleConflictAction.js
 packages/lib/services/synchronizer/utils/handleSyncStartupOperation.js
+packages/lib/services/synchronizer/utils/mustConfirmPlaintextUploads.js
+packages/lib/services/synchronizer/utils/plaintextUploadHeldBackItems.test.js
+packages/lib/services/synchronizer/utils/plaintextUploadHeldBackItems.js
 packages/lib/services/synchronizer/utils/resourceRemotePath.js
 packages/lib/services/synchronizer/utils/syncDeleteStep.js
 packages/lib/services/synchronizer/utils/types.js

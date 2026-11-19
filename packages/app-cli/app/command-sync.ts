@@ -17,6 +17,7 @@ import { pathExists, writeFile } from 'fs-extra';
 import { checkIfLoginWasSuccessful, createApplicationAuthId, generateApplicationConfirmUrl } from '@joplin/lib/services/joplinCloudUtils';
 import Logger from '@joplin/utils/Logger';
 import ShareService from '@joplin/lib/services/share/ShareService';
+import { heldBackItemsToConfirm, heldBackItemToLine, loadPlaintextUploadHeldBackItemGroups, plaintextUploadBannerMessage, plaintextUploadFaqUrl, PlaintextUploadReason } from '@joplin/lib/services/synchronizer/utils/plaintextUploadHeldBackItems';
 
 const logger = Logger.create('command-sync');
 
@@ -258,6 +259,8 @@ class Command extends BaseCommand {
 				await ResourceFetcher.instance().waitForAllFinished();
 			}
 
+			await this.printPlaintextUploadHeldBackItems();
+
 			const noPasswordMkIds = await masterKeysWithoutPassword();
 			if (noPasswordMkIds.length) this.stdout(`/!\\ ${_('Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.')}`);
 
@@ -274,6 +277,24 @@ class Command extends BaseCommand {
 		}
 
 		cleanUp();
+	}
+
+	private async printPlaintextUploadHeldBackItems() {
+		const groups = await loadPlaintextUploadHeldBackItemGroups(this.syncTargetId_, ShareService.instance().shares);
+		const items = groups
+			.filter(group => group.reason !== PlaintextUploadReason.None)
+			.flatMap(group => group.items.map(item => ({ item, group })));
+		if (!items.length) return;
+
+		const maxListedItems = 10;
+		const lines = [`/!\\ ${plaintextUploadBannerMessage(heldBackItemsToConfirm(groups).length)}`];
+		for (const { item, group } of items.slice(0, maxListedItems)) {
+			lines.push(`  ${heldBackItemToLine(item)}: ${group.label}`);
+		}
+		if (items.length > maxListedItems) lines.push(`  ${_('...and %d more', items.length - maxListedItems)}`);
+		lines.push(_('To upload them, run "%s". Only do this if you use published notes or unencrypted shared notebooks.', 'config encryption.allowUnencryptedUploads true'));
+		lines.push(_('See %s for more information.', plaintextUploadFaqUrl));
+		this.stdout(lines.join('\n'));
 	}
 
 	public async cancel() {

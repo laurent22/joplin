@@ -1,5 +1,6 @@
+import { newlyPublishedConfirmations } from '../synchronizer/utils/plaintextUploadHeldBackItems';
 import Note from '../../models/Note';
-import { createFolderTree, encryptionService, loadEncryptionMasterKey, msleep, resourceService, setupDatabaseAndSynchronizer, simulateReadOnlyShareEnv, supportDir, switchClient, synchronizerStart } from '../../testing/test-utils';
+import { createFolderTree, encryptionService, loadEncryptionMasterKey, msleep, resourceService, setupDatabaseAndSynchronizer, simulateReadOnlyShareEnv, supportDir, switchClient, synchronizer, synchronizerStart } from '../../testing/test-utils';
 import ShareService, { ApiShare, PublicKeyStatus, UserPublicKeyResponse } from './ShareService';
 import { ShareType, StateShare } from './reducer';
 import { NoteEntity, ResourceEntity } from '../database/types';
@@ -104,6 +105,7 @@ describe('ShareService', () => {
 		await msleep(1);
 		await Folder.updateAllShareIds(resourceService(), []);
 
+		synchronizer().confirmPlaintextUploads(await newlyPublishedConfirmations([note.id], (await Resource.all()).map(r => r.id)));
 		await synchronizerStart();
 
 		{

@@ -178,6 +178,8 @@ export interface State extends WindowState {
 	appState: string;
 	biometricsDone: boolean;
 	hasDisabledSyncItems: boolean;
+	// Held-back items that the user hasn't chosen to keep on this device
+	plaintextUploadHeldBackItemIds: string[];
 	hasDisabledEncryptionItems: boolean;
 	customViewerCss: string;
 	customChromeCssPaths: string[];
@@ -235,6 +237,7 @@ export const defaultState: State = {
 	appState: 'starting',
 	biometricsDone: false,
 	hasDisabledSyncItems: false,
+	plaintextUploadHeldBackItemIds: [],
 	hasDisabledEncryptionItems: false,
 	customViewerCss: '',
 	customChromeCssPaths: [],
@@ -1523,6 +1526,10 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'SYNC_HAS_DISABLED_SYNC_ITEMS':
 			draft.hasDisabledSyncItems = 'value' in action ? action.value : true;
+			break;
+
+		case 'SYNC_PLAINTEXT_UPLOAD_HELD_BACK_ITEMS_SET':
+			draft.plaintextUploadHeldBackItemIds = action.itemIds;
 			break;
 
 		case 'ENCRYPTION_HAS_DISABLED_ITEMS':
