@@ -435,30 +435,31 @@ export default class Folder extends BaseItem {
 		}
 	}
 
-	public static async allChildrenFolders(folderId: string): Promise<FolderEntity[]> {
+	public static async allChildrenFolders(folderId: string, { decryptedOnly = false }: { decryptedOnly?: boolean } = {}): Promise<FolderEntity[]> {
 		const sql = `
 			WITH RECURSIVE
-				folders_cte(id, parent_id, share_id) AS (
-					SELECT id, parent_id, share_id
+				folders_cte(id, parent_id, share_id, encryption_applied) AS (
+					SELECT id, parent_id, share_id, encryption_applied
 						FROM folders
-						WHERE parent_id = ?
+						WHERE parent_id = ? ${decryptedOnly ? 'AND folders.encryption_applied = 0' : ''}
 					UNION ALL
-						SELECT folders.id, folders.parent_id, folders.share_id
+						SELECT folders.id, folders.parent_id, folders.share_id, folders.encryption_applied
 							FROM folders
 							INNER JOIN folders_cte AS folders_cte ON (folders.parent_id = folders_cte.id)
+							${decryptedOnly ? 'WHERE folders.encryption_applied = 0' : ''}
 				)
-				SELECT id, parent_id, share_id FROM folders_cte;
+				SELECT id, parent_id, share_id, encryption_applied FROM folders_cte;
 		`;
 
 		return this.db().selectAll(sql, [folderId]);
 	}
 
 	public static async rootSharedFolders(activeShares: StateShare[]): Promise<FolderEntity[]> {
-		return this.removeDuplicateRootFolders(await this.db().selectAll('SELECT id, share_id FROM folders WHERE parent_id = \'\' AND share_id != \'\''), activeShares);
+		return this.removeDuplicateRootFolders(await this.db().selectAll('SELECT id, share_id, encryption_applied FROM folders WHERE parent_id = \'\' AND share_id != \'\''), activeShares);
 	}
 
 	public static async rootShareFoldersByKeyId(keyId: string): Promise<FolderEntity[]> {
-		return this.db().selectAll('SELECT id, share_id FROM folders WHERE master_key_id = ?', [keyId]);
+		return this.db().selectAll('SELECT id, share_id, encryption_applied FROM folders WHERE master_key_id = ?', [keyId]);
 	}
 
 	// We need this function for this situation:
@@ -530,22 +531,29 @@ export default class Folder extends BaseItem {
 		};
 
 		for (const rootFolder of rootFolders) {
-			const children = await this.allChildrenFolders(rootFolder.id);
+			const allChildren = await this.allChildrenFolders(rootFolder.id);
 
-			report.shareUpdateCount += children.length;
+			// Hold off on updating children until the item has decrypted.
+			// We can't be certain of the root's share_id until decryption has completed.
+			if (!rootFolder.encryption_applied) {
+				// Similarly, all parents of an item must be decrypted for the share_id to be safe to update
+				// (since decryption authenticates parent_id):
+				const decryptedChildren = await this.allChildrenFolders(rootFolder.id, { decryptedOnly: true });
+				report.shareUpdateCount += decryptedChildren.length;
 
-			for (const child of children) {
-				if (child.share_id !== rootFolder.share_id) {
-					await this.save({
-						id: child.id,
-						share_id: rootFolder.share_id,
-						updated_time: Date.now(),
-					}, { autoTimestamp: false });
+				for (const child of decryptedChildren) {
+					if (child.share_id !== rootFolder.share_id) {
+						await this.save({
+							id: child.id,
+							share_id: rootFolder.share_id,
+							updated_time: Date.now(),
+						}, { autoTimestamp: false });
+					}
 				}
 			}
 
 			sharedFolderIds.push(rootFolder.id);
-			sharedFolderIds = sharedFolderIds.concat(children.map(c => c.id));
+			sharedFolderIds = sharedFolderIds.concat(allChildren.map(c => c.id));
 		}
 
 		// Now that we've set the share ID on all the sub-folders of the shared
@@ -587,6 +595,9 @@ export default class Folder extends BaseItem {
 			FROM notes
 			LEFT JOIN folders ON notes.parent_id = folders.id
 			WHERE notes.share_id != folders.share_id
+				-- Don't trust share_id until items have decrypted
+				AND folders.encryption_applied = 0
+				AND notes.encryption_applied = 0
 		`);
 
 		logger.debug('updateNoteShareIds: notes to update:', rows.length);
@@ -661,7 +672,7 @@ export default class Folder extends BaseItem {
 				WHERE (
 					n.share_id != r.share_id
 					OR n.is_shared != r.is_shared
-				) AND nr.is_associated = 1
+				) AND nr.is_associated = 1 AND n.encryption_applied = 0
 			`)) as Row[];
 
 			if (!rows.length) return;
@@ -832,6 +843,8 @@ export default class Folder extends BaseItem {
 					JOIN folders AS parent ON parent.id = child.parent_id
 					WHERE child.is_shared = 0 AND parent.is_shared = 1
 						AND child.deleted_time = 0
+						AND parent.encryption_applied = 0
+						AND child.encryption_applied = 0
 					LIMIT ${limit}
 			`);
 

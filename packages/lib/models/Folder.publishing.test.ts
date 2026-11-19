@@ -171,6 +171,25 @@ describe('models/Folder.publishing', () => {
 		].map(title => ({ title })));
 	});
 
+	it('should not apply is_shared from an encrypted folder to its children', async () => {
+		const root = await createFolderTree('', [
+			{
+				title: 'root',
+				children: [
+					{ title: 'sub-folder', children: [] },
+					{ title: 'note' },
+				],
+			},
+		]);
+		await Folder.save({ id: root.id, is_shared: 1, encryption_applied: 1 });
+
+		const shareState = [publishedFolderShareState(root.id)];
+		await Folder.updateAllShareIds(resourceService(), shareState);
+		await Note.updatePublishedNotes(shareState);
+
+		await expectUnpublished([{ title: 'sub-folder' }, { title: 'note' }]);
+	});
+
 	it('should clear is_shared when a folder is no longer published', async () => {
 		await createFolderTree('', [
 			{
