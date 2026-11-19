@@ -7,7 +7,6 @@ import eventManager, { EventName } from '../eventManager';
 import { reg } from '../registry';
 import SyncTargetRegistry from '../SyncTargetRegistry';
 import Logger from '@joplin/utils/Logger';
-import { createSecureRandom } from '../uuid';
 
 const logger = Logger.create('joplinCloudUtils');
 
@@ -92,8 +91,6 @@ export const generateApplicationConfirmUrl = async (confirmUrl: string) => {
 
 	return `${confirmUrl}?${searchParams.toString()}`;
 };
-
-export const createApplicationAuthId = () => createSecureRandom();
 
 export const saveApplicationAuthId = async (applicationAuthId: string) => {
 	Setting.setValue('sync.10.pendingAuthId', applicationAuthId);
