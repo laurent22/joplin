@@ -2,11 +2,12 @@ import Logger from '@joplin/utils/Logger';
 import useAsyncEffect from '../../../../hooks/useAsyncEffect';
 import { _ } from '../../../../locale';
 import EncryptionService from '../../../../services/e2ee/EncryptionService';
-import { PublicPrivateKeyPair, isPublicPrivateKeyPairValid } from '../../../../services/e2ee/ppk/ppk';
+import { PublicPrivateKeyPair, getPpkAlgorithm, isPublicPrivateKeyPairValid, supportsPpkAlgorithm } from '../../../../services/e2ee/ppk/ppk';
 import { MasterPasswordStatus, regeneratePpk } from '../../../../services/e2ee/utils';
 import shim from '../../../../shim';
 import type { Dispatch } from 'redux';
 import { reg } from '../../../../registry';
+import { PublicKeyAlgorithm } from '../../../../services/e2ee/types';
 
 const logger = Logger.create('usePpkValidityChecker');
 
@@ -50,7 +51,20 @@ const usePpkValidityChecker = (props: PpkValidityCheckerProps) => {
 
 	const valid = useIsPpkValid(props);
 	const passwordCannotDecrypt = props.passwordStatus === MasterPasswordStatus.Invalid;
-	const message = valid === false && `❌ ${passwordCannotDecrypt ? _('The master password cannot decrypt the private key. The key pair may have been replaced.') : _('Incorrect public key.')}`;
+	const message = (() => {
+		if (valid === false) {
+			let content = _('Incorrect public key.');
+			if (passwordCannotDecrypt) {
+				content = _('The master password cannot decrypt the private key. The key pair may have been replaced.');
+			} else if (getPpkAlgorithm(props.ppk) === PublicKeyAlgorithm.RsaV1 && shim.mobilePlatform() === 'web') {
+				content = _('The key pair format is not supported on this device. Click to regenerate it.');
+			} else if (!supportsPpkAlgorithm(props.ppk)) {
+				content = _('Unknown public key format. The key may have been created by a newer version of Joplin. Update Joplin or regenerate the key pair.');
+			}
+			return `❌ ${content}`;
+		}
+		return undefined;
+	})();
 	return { valid, resetting, onResetPpk, onShowInvalidPpkHelp, message };
 };
 
@@ -74,7 +88,7 @@ const useIsPpkValid = (props: PpkValidityCheckerProps) => {
 			return;
 		}
 
-		if (props.passwordStatus !== MasterPasswordStatus.Valid) {
+		if (props.passwordStatus !== MasterPasswordStatus.Valid || !supportsPpkAlgorithm(props.ppk)) {
 			setValid(undefined);
 			return;
 		}

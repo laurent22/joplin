@@ -60,7 +60,11 @@ export const setRSA = (rsa: PublicKeyCryptoProvider) => {
 };
 
 const supportsAlgorithm = (algorithm: PublicKeyAlgorithm) => {
-	return Object.prototype.hasOwnProperty.call(rsa_, algorithm) && algorithm !== PublicKeyAlgorithm.Unknown;
+	// Providers list algorithms they don't support as null (e.g. RsaV1 on web)
+	if (!rsa_?.[algorithm]) return false;
+	// Check for keys like prototype
+	if (!Object.prototype.hasOwnProperty.call(rsa_, algorithm)) return false;
+	return algorithm !== PublicKeyAlgorithm.Unknown;
 };
 
 // Exported for testing purposes
@@ -159,7 +163,12 @@ export async function ppkPasswordIsValid(service: EncryptionService, ppk: Public
 	if (!ppk) throw new Error('PPK is undefined');
 
 	try {
-		await loadPpk(service, ppk, password);
+		if (supportsPpkAlgorithm(ppk)) {
+			await loadPpk(service, ppk, password);
+		} else {
+			// The key can't be loaded on this device, but the password can still be checked
+			await decryptPrivateKey(service, ppk.privateKey, password);
+		}
 	} catch (error) {
 		return false;
 	}
