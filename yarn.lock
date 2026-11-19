@@ -12622,7 +12622,7 @@ __metadata:
     "@react-native-vector-icons/fontawesome5": "npm:13.1.3"
     "@react-native-vector-icons/get-image": "npm:13.0.0"
     "@react-native-vector-icons/ionicons": "npm:13.1.3"
-    "@react-native-vector-icons/material-design-icons": "npm:13.1.2"
+    "@react-native-vector-icons/material-design-icons": "npm:13.1.3"
     "@react-native-vector-icons/material-icons": "npm:12.5.0"
     "@react-native/babel-preset": "npm:0.86.3"
     "@react-native/jest-preset": "npm:0.86.3"
@@ -15181,32 +15181,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-vector-icons/common@npm:^13.0.1":
-  version: 13.0.3
-  resolution: "@react-native-vector-icons/common@npm:13.0.3"
-  dependencies:
-    find-up: "npm:^8.0.0"
-    picocolors: "npm:^1.1.1"
-    plist: "npm:^3.1.0"
-  peerDependencies:
-    "@react-native-vector-icons/get-image": ^13.0.1
-    "@react-native/assets-registry": "*"
-    expo-font: "*"
-    react: "*"
-    react-native: "*"
-  peerDependenciesMeta:
-    "@react-native-vector-icons/get-image":
-      optional: true
-    "@react-native/assets-registry":
-      optional: true
-    expo-font:
-      optional: true
-  bin:
-    rnvi-update-plist: lib/commonjs/scripts/updatePlist.js
-  checksum: 10/35e95899ff0d01ccba351131c0d340f78591871c55cdcc0ed32405932c77cad76b47812241103940f3e91f0558d2270526a6aedaf7525e1c9cc74c389b2457f7
-  languageName: node
-  linkType: hard
-
 "@react-native-vector-icons/common@npm:^13.0.2":
   version: 13.0.4
   resolution: "@react-native-vector-icons/common@npm:13.0.4"
@@ -15275,11 +15249,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-vector-icons/material-design-icons@npm:13.1.2":
-  version: 13.1.2
-  resolution: "@react-native-vector-icons/material-design-icons@npm:13.1.2"
+"@react-native-vector-icons/material-design-icons@npm:13.1.3":
+  version: 13.1.3
+  resolution: "@react-native-vector-icons/material-design-icons@npm:13.1.3"
   dependencies:
-    "@react-native-vector-icons/common": "npm:^13.0.1"
+    "@react-native-vector-icons/common": "npm:^13.0.2"
   peerDependencies:
     "@expo/config-plugins": ">=10.0.0"
     react: "*"
@@ -15287,7 +15261,7 @@ __metadata:
   peerDependenciesMeta:
     "@expo/config-plugins":
       optional: true
-  checksum: 10/259c97ff8bd3c5a0783b824a3a784d7ddf843c19355aa6ac731cab134f673283745be6c08aa4f082273268f7663f19e156dca1b0c67b7a31eb7abcf4415693dc
+  checksum: 10/628c31c0101ef72a4930758805c09ed71e1f9a46dd6abe4a23264b4a9f3bab1c72b7066ceeb607a119f2f59973f696b29f76512e40b153610fc7283d4ad188c6
   languageName: node
   linkType: hard
 
