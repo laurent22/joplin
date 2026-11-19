@@ -294,7 +294,12 @@ describe('ShareService', () => {
 
 		const { share } = await testShareFolder(service);
 
-		await service.addShareRecipient(share.id, share.master_key_id, 'toto@example.com', { can_read: 1, can_write: 1 });
+		await service.addShareRecipient({
+			shareId: share.id,
+			masterKeyId: share.master_key_id,
+			recipientEmail: 'toto@example.com',
+			permissions: { can_read: 1, can_write: 1 },
+		});
 
 		expect(uploadedEmail).toBe('toto@example.com');
 
@@ -793,12 +798,12 @@ describe('ShareService', () => {
 		await service.refreshShares();
 		await Folder.save({ id: folder.id, ...folderChanges });
 
-		await expect(service.addShareRecipient(
-			share.id,
-			share.master_key_id,
-			'toto@example.com',
-			{ can_read: 1, can_write: 1 },
-		)).rejects.toThrow('Corrupt share');
+		await expect(service.addShareRecipient({
+			shareId: share.id,
+			masterKeyId: share.master_key_id,
+			recipientEmail: 'toto@example.com',
+			permissions: { can_read: 1, can_write: 1 },
+		})).rejects.toThrow('Corrupt share');
 		expect(postedRecipient).toBe(false);
 	});
 

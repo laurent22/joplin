@@ -4,7 +4,9 @@ import EncryptionService, { EncryptionCustomHandler, EncryptionMethod } from '..
 import { MasterKeyEntity, PublicKeyAlgorithm, PublicKeyCrypto, PublicKeyCryptoProvider } from '../types';
 import PerformanceLogger from '../../../PerformanceLogger';
 import { _ } from '../../../locale';
+import Logger from '@joplin/utils/Logger';
 
+const logger = Logger.create('ppk');
 const perfLogger = PerformanceLogger.create();
 
 interface PrivateKey {
@@ -187,6 +189,36 @@ async function loadPpk(service: EncryptionService, ppk: PublicPrivateKeyPair, pa
 async function loadPublicKey(publicKey: PublicKey, keySize: number): Promise<KeyPair> {
 	return loadKeys(publicKey, '', keySize);
 }
+
+export const isPublicPrivateKeyPairValid = async (service: EncryptionService, keyPair: PublicPrivateKeyPair, decryptionPassword: string) => {
+	const privateKeyPlainText = await decryptPrivateKey(service, keyPair.privateKey, decryptionPassword);
+
+	try {
+		// To support the `node-rsa`-based RsaV1 method, encryption must be done with only a public key loaded:
+		const publicKeyOnly = await loadPublicKey(keyPair.publicKey, keyPair.keySize);
+		const encryptionHandler = ppkEncryptionHandler(keyPair, publicKeyOnly);
+
+		const originalPlainText = 'ABCDEF';
+		const encrypted = await encryptionHandler.encrypt(
+			encryptionHandler.context, originalPlainText, '',
+		);
+
+		const fullKeyPair = await loadKeys(keyPair.publicKey, privateKeyPlainText, keyPair.keySize);
+		const decryptionHandler = ppkEncryptionHandler(keyPair, fullKeyPair);
+		const decrypted = await decryptionHandler.decrypt(
+			decryptionHandler.context, encrypted, '',
+		);
+
+		if (decrypted !== originalPlainText) {
+			// Should not happen: encrypt/decrypt should throw if the public/private keys do not match
+			return false;
+		}
+	} catch (error) {
+		logger.debug(`Failed to validate public-private key pair: ${error}. Mismatched keys?`);
+		return false;
+	}
+	return true;
+};
 
 function ppkEncryptionHandler(ppk: PublicPrivateKeyPair, rsaKeyPair: KeyPair): EncryptionCustomHandler {
 	interface Context {

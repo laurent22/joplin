@@ -34,6 +34,7 @@ interface Props {
 	processingShareInvitationResponse: boolean;
 	showInvalidJoplinCloudCredential: boolean;
 	showReEnableEncryptionBanner: boolean;
+	mustFixPpk: boolean;
 }
 
 const androidGooglePlayUrl = 'https://play.google.com/store/apps/details?id=net.cozic.joplin';
@@ -157,6 +158,17 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 			}),
 		);
 	}
+	if (props.mustFixPpk) {
+		warningComps.push(
+			<WarningBox
+				key='fix-ppk-button'
+				themeId={props.themeId}
+				targetScreen='EncryptionConfig'
+				message={_('Unable to sync: Invalid public-private key pair.')}
+				testID='warning-box'
+			/>,
+		);
+	}
 
 	const shareInvitation = props.shareInvitations.find(inv => inv.status === ShareUserStatus.Waiting);
 	if (
@@ -195,5 +207,6 @@ export default connect((state: AppState) => {
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
 		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
 		showReEnableEncryptionBanner: syncInfo.e2ee && state.mustResolveE2eeEnabledConflict,
+		mustFixPpk: state.mustFixPpk,
 	};
 })(WarningBannerComponent);

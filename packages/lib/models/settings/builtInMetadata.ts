@@ -165,6 +165,12 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			public: false,
 		},
 
+		'sync.lastPpkConsistencyCheck': {
+			value: { valid: true, ppk: '' },
+			type: SettingItemType.Object,
+			public: false,
+		},
+
 		'sync.2.path': {
 			value: '',
 			type: SettingItemType.String,

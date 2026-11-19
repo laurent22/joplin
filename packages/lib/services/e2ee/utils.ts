@@ -6,7 +6,7 @@ import { MasterKeyEntity } from './types';
 import EncryptionService from './EncryptionService';
 import { getActiveMasterKey, getActiveMasterKeyId, localSyncInfo, masterKeyEnabled, saveLocalSyncInfo, setActiveMasterKeyId, setEncryptionEnabled, SyncInfo } from '../synchronizer/syncInfoUtils';
 import JoplinError from '../../JoplinError';
-import { generateKeyPair, pkReencryptPrivateKey, ppkPasswordIsValid, shouldUpdatePpk } from './ppk/ppk';
+import { generateKeyPair, pkReencryptPrivateKey, ppkPasswordIsValid, PublicPrivateKeyPair, shouldUpdatePpk } from './ppk/ppk';
 import KvStore from '../KvStore';
 import Folder from '../../models/Folder';
 import ShareService from '../share/ShareService';
@@ -137,6 +137,23 @@ export async function migrateMasterPassword() {
 	}
 }
 
+export const regeneratePpk = async (originalPpk: PublicPrivateKeyPair) => {
+	const password = getMasterPassword();
+	logger.info('Regenerating ppk...');
+
+	// Cache the previous PPK locally. If a share was created with the old public key,
+	// the user should still be able to accept it (even if the old public key
+	// is no longer published).
+	Setting.setValue(
+		'encryption.cachedPpk',
+		{ ppk: originalPpk, timestamp: Date.now() },
+	);
+
+	const syncInfo = localSyncInfo();
+	syncInfo.ppk = await generateKeyPair(EncryptionService.instance(), password);
+	saveLocalSyncInfo(syncInfo);
+};
+
 export const migratePpk = async () => {
 	const syncInfo = localSyncInfo();
 	const ppk = syncInfo.ppk;
@@ -146,17 +163,7 @@ export const migratePpk = async () => {
 	if (!password) return;
 
 	logger.info('Migrating PPK');
-
-	// Cache the previous PPK locally. If a share was created with the old public key,
-	// the user should still be able to accept it (even if the old public key
-	// is no longer published).
-	Setting.setValue(
-		'encryption.cachedPpk',
-		{ ppk, timestamp: Date.now() },
-	);
-
-	syncInfo.ppk = await generateKeyPair(EncryptionService.instance(), password);
-	saveLocalSyncInfo(syncInfo);
+	await regeneratePpk(ppk);
 };
 
 // All master keys normally should be decrypted with the master password, however

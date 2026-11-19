@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { TextInput, TouchableOpacity, Linking, View, StyleSheet, Text, Button, ScrollView, TextStyle } from 'react-native';
-import { connect } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import ScreenHeader from '../ScreenHeader';
 import { themeStyle } from '../global-style';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
@@ -10,14 +10,18 @@ import { decryptedStatText, enableEncryptionConfirmationMessages, onSavePassword
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import { State } from '@joplin/lib/reducer';
 import { localSyncInfoSelector, masterKeyEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import { disableEncryptionConfirmationMessage, getDefaultMasterKey, setupAndDisableEncryption, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
+import { disableEncryptionConfirmationMessage, getDefaultMasterKey, MasterPasswordStatus, setupAndDisableEncryption, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
 import { useMemo, useState } from 'react';
 import { Divider, List } from 'react-native-paper';
 import shim from '@joplin/lib/shim';
+import usePpkValidityChecker from '@joplin/lib/components/shared/config/e2ee/usePpkValidityChecker';
+import { PublicPrivateKeyPair } from '@joplin/lib/services/e2ee/ppk/ppk';
+import { AppState } from '../../utils/types';
 
 interface Props {
 	themeId: number;
 	masterKeys: MasterKeyEntity[];
+	ppk: PublicPrivateKeyPair;
 	passwords: Record<string, string>;
 	notLoadedMasterKeys: string[];
 	encryptionEnabled: boolean;
@@ -30,7 +34,7 @@ const EncryptionConfigScreen = (props: Props) => {
 	const [passwordPromptAnswer, setPasswordPromptAnswer] = useState('');
 	const [passwordPromptConfirmAnswer, setPasswordPromptConfirmAnswer] = useState('');
 	const stats = useStats();
-	const { passwordChecks, masterPasswordKeys } = usePasswordChecker(props.masterKeys, props.activeMasterKeyId, props.masterPassword, props.passwords);
+	const { passwordChecks, masterPasswordKeys, masterPasswordStatus } = usePasswordChecker(props.masterKeys, props.activeMasterKeyId, props.masterPassword, props.passwords);
 	const { inputPasswords, onInputPasswordChange } = useInputPasswords(props.passwords);
 	const { inputMasterPassword, onMasterPasswordSave, onMasterPasswordChange } = useInputMasterPassword(props.masterKeys, props.activeMasterKeyId);
 	const [showDisabledKeys, setShowDisabledKeys] = useState(false);
@@ -82,6 +86,13 @@ const EncryptionConfigScreen = (props: Props) => {
 			disabledContainer: {
 				paddingLeft: theme.margin,
 				paddingRight: theme.margin,
+			},
+			ppkValidityChecker: {
+				marginTop: theme.itemMarginTop,
+				marginBottom: theme.itemMarginBottom,
+				flexDirection: 'row',
+				flexWrap: 'wrap',
+				gap: theme.margin,
 			},
 		});
 	}, [theme]);
@@ -291,6 +302,17 @@ const EncryptionConfigScreen = (props: Props) => {
 		}
 	};
 
+	const renderInvalidPpkSection = () => {
+		if (!props.masterPassword) return null;
+
+		return <PpkValidityChecker
+			password={props.masterPassword}
+			passwordStatus={masterPasswordStatus}
+			textStyle={styles.normalText}
+			ppk={props.ppk}
+		/>;
+	};
+
 	for (const enabledKey of props.masterKeys.filter(mk => masterKeyEnabled(mk))) {
 		mkComps.push(renderMasterKey(enabledKey));
 
@@ -383,6 +405,7 @@ const EncryptionConfigScreen = (props: Props) => {
 					>{_('Status')}</Text>
 					<Text style={styles.normalText}>{_('Encryption is: %s', props.encryptionEnabled ? _('Enabled') : _('Disabled'))}</Text>
 					{decryptedItemsInfo}
+					{renderInvalidPpkSection()}
 					{renderMasterPassword()}
 					{toggleButton}
 					{passwordPromptComp}
@@ -406,6 +429,33 @@ export default connect((state: State) => {
 		encryptionEnabled: syncInfo.e2ee,
 		activeMasterKeyId: syncInfo.activeMasterKeyId,
 		notLoadedMasterKeys: state.notLoadedMasterKeys,
+		ppk: syncInfo.ppk,
 		masterPassword: state.settings['encryption.masterPassword'],
 	};
 })(EncryptionConfigScreen);
+
+interface PpkValidityCheckerExtendedProps {
+	password: string;
+	passwordStatus: MasterPasswordStatus;
+	ppk: PublicPrivateKeyPair|undefined;
+	textStyle: TextStyle;
+}
+
+const PpkValidityChecker: React.FC<PpkValidityCheckerExtendedProps> = props => {
+	const dispatch = useDispatch();
+	const invalidRemotePpk = useSelector((state: AppState) => state.mustFixPpk);
+	const { message, onResetPpk, onShowInvalidPpkHelp, resetting } = usePpkValidityChecker({
+		...props,
+		dispatch,
+		invalidPpk: invalidRemotePpk,
+	});
+
+	return message && <View>
+		<Text style={props.textStyle}>{message}</Text>
+		<View style={{ flexDirection: 'row', gap: 4 }}>
+			<Button onPress={onShowInvalidPpkHelp} title={_('Help')}/>
+			<Button onPress={onResetPpk} title={_('Regenerate key pair')} disabled={resetting}/>
+		</View>
+	</View>;
+};
+

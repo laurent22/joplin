@@ -6,8 +6,7 @@ import BaseItem from '../../models/BaseItem';
 import BaseModel from '../../models/BaseItem';
 import Logger from '@joplin/utils/Logger';
 import { State } from '../../reducer';
-import { Second } from '@joplin/utils/time';
-import { Day } from '@joplin/utils/time';
+import { Second, Day } from '@joplin/utils/time';
 
 const mergeSyncInfosWithoutHistory = (s1: SyncInfo, s2: SyncInfo) => mergeSyncInfos({ s1, s2, lastS1: undefined, lastS2: undefined });
 

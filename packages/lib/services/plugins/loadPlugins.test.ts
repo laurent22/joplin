@@ -1,10 +1,8 @@
 import Setting from '../../models/Setting';
 import PluginService, { defaultPluginSetting } from '../../services/plugins/PluginService';
-import { setupDatabaseAndSynchronizer, switchClient, withWarningSilenced } from '../../testing/test-utils';
+import { createMockReduxStore, setupDatabaseAndSynchronizer, switchClient, withWarningSilenced } from '../../testing/test-utils';
 import loadPlugins, { Props as LoadPluginsProps } from './loadPlugins';
 import MockPluginRunner from './testing/MockPluginRunner';
-import reducer, { State, defaultState } from '../../reducer';
-import { Action, createStore } from 'redux';
 import MockPlatformImplementation from './testing/MockPlatformImplementation';
 import createTestPlugin from '../../testing/plugins/createTestPlugin';
 import Plugin from './Plugin';
@@ -12,12 +10,6 @@ import shim from '../../shim';
 import { PluginManifest } from './utils/types';
 import { writeFile, mkdirp } from 'fs-extra';
 import { join } from 'path';
-
-const createMockReduxStore = () => {
-	return createStore((state: State = defaultState, action: Action<string>) => {
-		return reducer(state, action);
-	});
-};
 
 const defaultManifestProperties = {
 	manifest_version: 1,

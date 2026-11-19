@@ -34,6 +34,15 @@ export interface ApiTeamUsers {
 	has_more: boolean;
 }
 
+interface AddShareRecipientOptions {
+	shareId: string;
+	masterKeyId: string;
+	recipientEmail: string;
+	permissions: SharePermissions;
+}
+
+export type UserPublicKeyResponse = PublicPrivateKeyPair|'';
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function formatShareInvitations(invitations: (Omit<ShareInvitation, 'master_key'> & { master_key: string | MasterKeyEntity | null })[]): ShareInvitation[] {
 	return invitations.map(inv => {
@@ -434,11 +443,11 @@ export default class ShareService {
 		return this.state.shareInvitations;
 	}
 
-	private async userPublicKey(userEmail: string): Promise<PublicPrivateKeyPair|''> {
+	public async userPublicKey(userEmail: string): Promise<UserPublicKeyResponse> {
 		return await this.api().exec('GET', `api/users/${encodeURIComponent(userEmail)}/public_key`);
 	}
 
-	public async addShareRecipient(shareId: string, masterKeyId: string, recipientEmail: string, permissions: SharePermissions) {
+	public async addShareRecipient({ shareId, masterKeyId, recipientEmail, permissions }: AddShareRecipientOptions) {
 		let recipientMasterKey: MasterKeyEntity = null;
 
 		if (getEncryptionEnabled()) {

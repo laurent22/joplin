@@ -232,7 +232,7 @@ function ShareFolderDialog(props: Props) {
 		}
 
 		try {
-			await ShareService.instance().addShareRecipient(share.id, share.master_key_id, recipientEmail, permissionsFromString(recipientPermissions));
+			await ShareService.instance().addShareRecipient({ shareId: share.id, masterKeyId: share.master_key_id, recipientEmail, permissions: permissionsFromString(recipientPermissions) });
 		} catch (error) {
 			// Handle the error but continue the process because we need to at
 			// least refresh the shares since one has been created above.

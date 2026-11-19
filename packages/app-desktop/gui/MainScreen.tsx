@@ -75,6 +75,7 @@ interface Props {
 	lastDeletionNotificationTime: number;
 	mustUpgradeAppMessage: string;
 	syncTargetAppMinVersion: string;
+	mustFixPpk: boolean;
 	showInvalidJoplinCloudCredential: boolean;
 	showReEnableEncryptionBanner: boolean;
 	toast: Toast;
@@ -600,6 +601,12 @@ class MainScreenComponent extends React.Component<Props, State> {
 				_('Disable encryption'),
 				() => resolveE2eeConflict(false),
 			);
+		} else if (this.props.mustFixPpk) {
+			msg = this.renderNotificationMessage(
+				_('Unable to sync: Invalid public-private key pair.'),
+				_('More info'),
+				onViewEncryptionConfigScreen,
+			);
 		} else if (this.props.hasDisabledEncryptionItems) {
 			msg = this.renderNotificationMessage(
 				_('Some items cannot be decrypted.'),
@@ -722,7 +729,8 @@ class MainScreenComponent extends React.Component<Props, State> {
 			!!this.props.mustUpgradeAppMessage ||
 			props.showInvalidJoplinCloudCredential ||
 			props.shouldSwitchToAppleSiliconVersion ||
-			props.showReEnableEncryptionBanner;
+			props.showReEnableEncryptionBanner ||
+			props.mustFixPpk;
 	}
 
 	private resizableLayout_resize(event: { layout: LayoutItem }) {
@@ -851,6 +859,7 @@ const mapStateToProps = (state: AppState) => {
 		lastDeletion: state.lastDeletion,
 		lastDeletionNotificationTime: state.lastDeletionNotificationTime,
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
+		mustFixPpk: state.mustFixPpk,
 		syncTargetAppMinVersion: state.mustUpgradeAppMinVersion,
 		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
 		showReEnableEncryptionBanner: syncInfo.e2ee && state.mustResolveE2eeEnabledConflict,

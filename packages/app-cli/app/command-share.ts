@@ -80,7 +80,9 @@ class Command extends BaseCommand {
 			};
 			logger.debug('Sharing folder', folder.id, 'with', email, 'permissions=', permissions);
 
-			await ShareService.instance().addShareRecipient(share.id, share.master_key_id, email, permissions);
+			await ShareService.instance().addShareRecipient({
+				shareId: share.id, masterKeyId: share.master_key_id, recipientEmail: email, permissions,
+			});
 
 			await ShareService.instance().refreshShares();
 			await ShareService.instance().refreshShareUsers(share.id);

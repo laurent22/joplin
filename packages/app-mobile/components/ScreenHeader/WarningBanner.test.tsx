@@ -27,6 +27,7 @@ interface WrapperProps {
 	processingShareInvitationResponse?: boolean;
 	showInvalidJoplinCloudCredential?: boolean;
 	showReEnableEncryptionBanner?: boolean;
+	mustFixPpk?: boolean;
 }
 
 const WarningBannerWrapper: React.FC<WrapperProps> = props => {
@@ -43,6 +44,7 @@ const WarningBannerWrapper: React.FC<WrapperProps> = props => {
 		processingShareInvitationResponse={props.processingShareInvitationResponse ?? false}
 		showInvalidJoplinCloudCredential={props.showInvalidJoplinCloudCredential ?? false}
 		showReEnableEncryptionBanner={props.showReEnableEncryptionBanner ?? false}
+		mustFixPpk={props.mustFixPpk ?? false}
 	/>;
 };
 

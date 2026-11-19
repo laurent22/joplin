@@ -24,6 +24,7 @@ import Dialog from '@joplin/lib/components/Dialog';
 import DialogButtonRow from '../DialogButtonRow';
 import DialogTitle from '../DialogTitle';
 import PasswordInput from '../PasswordInput/PasswordInput';
+import PpkValidityChecker from './PpkValidityChecker';
 
 interface Props {
 	themeId: number;
@@ -480,6 +481,12 @@ export const EncryptionConfigScreen = (props: Props) => {
 		);
 	};
 
+	const renderInvalidPpkSection = () => {
+		if (!props.masterPassword) return null;
+
+		return <PpkValidityChecker password={props.masterPassword} passwordStatus={masterPasswordStatus} ppk={props.ppk}/>;
+	};
+
 	const onClearMasterPassword = useCallback(() => {
 		Setting.setValue('encryption.masterPassword', '');
 	}, []);
@@ -595,6 +602,7 @@ export const EncryptionConfigScreen = (props: Props) => {
 			{renderDebugSection()}
 			{renderEncryptionSection()}
 			{renderMasterPasswordSection()}
+			{renderInvalidPpkSection()}
 			{renderMasterKeySection(props.masterKeys.filter(mk => masterKeyEnabled(mk)), true)}
 			{renderMasterKeySection(props.masterKeys.filter(mk => !masterKeyEnabled(mk)), false)}
 			{renderNonExistingMasterKeysSection()}

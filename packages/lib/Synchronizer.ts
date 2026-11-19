@@ -24,7 +24,7 @@ import { FileApi, isLocalServer, PaginatedList, RemoteItem, enableEnhancedBasicD
 import JoplinDatabase from './JoplinDatabase';
 import { checkIfCanSync, fetchSyncInfo, checkSyncTargetIsValid, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyHasBeenUsed, SyncInfo, syncInfoEquals, uploadSyncInfo } from './services/synchronizer/syncInfoUtils';
 import { getMasterPassword, setupAndDisableEncryption, setupAndEnableEncryption } from './services/e2ee/utils';
-import { generateKeyPair } from './services/e2ee/ppk/ppk';
+import { generateKeyPair, ppkPasswordIsValid, isPublicPrivateKeyPairValid } from './services/e2ee/ppk/ppk';
 import syncDebugLog from './services/synchronizer/syncDebugLog';
 import handleConflictAction from './services/synchronizer/utils/handleConflictAction';
 import resourceRemotePath from './services/synchronizer/utils/resourceRemotePath';
@@ -595,7 +595,49 @@ export default class Synchronizer {
 					// await uploadSyncInfo(this.api(), remoteInfo);
 				}
 
+				const assertValidPpk = async () => {
+					const ppk = localSyncInfo().ppk;
+					if (!ppk) return;
+					const serializedPpk = JSON.stringify(ppk);
+					const lastCheck = Setting.value('sync.lastPpkConsistencyCheck');
+					const onMustFixPpk = (mustFix: boolean) => {
+						Setting.setValue('sync.lastPpkConsistencyCheck', { valid: !mustFix, ppk: JSON.stringify(ppk) });
+						this.dispatch({ type: 'MUST_FIX_PPK', value: mustFix });
+					};
+
+					// Checking the PPK takes time. Skip it where possible.
+					if (lastCheck.ppk === serializedPpk && lastCheck.valid) return;
+
+					const masterPassword = getMasterPassword(false);
+					const masterPasswordValidForPrivateKey = (
+						!!masterPassword && await ppkPasswordIsValid(this.encryptionService(), ppk, masterPassword)
+					);
+					const masterPasswordValidForActiveKey = async () => {
+						if (!masterPassword) return false;
+						const activeKey = getActiveMasterKey();
+						if (!activeKey) return false;
+						return await this.encryptionService().checkMasterKeyPassword(activeKey, masterPassword);
+					};
+
+					if (masterPasswordValidForPrivateKey) {
+						if (!await isPublicPrivateKeyPairValid(this.encryptionService(), ppk, masterPassword)) {
+							onMustFixPpk(true);
+							throw new JoplinError('Incorrect public key: The public key may be corrupt or no longer match the private key.');
+						}
+
+						onMustFixPpk(false);
+					} else if (await masterPasswordValidForActiveKey()) {
+						onMustFixPpk(true);
+						throw new JoplinError('Invalid public-private key pair: The master password decrypts the active master key, but not the private key.');
+					} else {
+						logger.debug('Skipping PPK check: Master password is not set or is invalid for the new PPK.');
+						this.dispatch({ type: 'MUST_FIX_PPK', value: false });
+					}
+				};
+
 				this.dispatch({ type: 'MUST_RESOLVE_E2EE_ENABLED_CONFLICT', value: false });
+				await assertValidPpk();
+				this.dispatch({ type: 'MUST_FIX_PPK', value: false });
 			} catch (error) {
 				if (error.code === 403) {
 					this.dispatch({ type: 'MUST_AUTHENTICATE', value: true });

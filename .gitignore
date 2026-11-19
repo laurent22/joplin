@@ -93,6 +93,7 @@ packages/app-cli/app/command-cp.js
 packages/app-cli/app/command-done.test.js
 packages/app-cli/app/command-done.js
 packages/app-cli/app/command-dump.js
+packages/app-cli/app/command-e2ee.test.js
 packages/app-cli/app/command-e2ee.js
 packages/app-cli/app/command-edit.test.js
 packages/app-cli/app/command-edit.js
@@ -233,6 +234,7 @@ packages/app-desktop/gui/EditFolderDialog/Dialog.js
 packages/app-desktop/gui/EditFolderDialog/IconSelector.js
 packages/app-desktop/gui/EmojiBox.js
 packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js
+packages/app-desktop/gui/EncryptionConfigScreen/PpkValidityChecker.js
 packages/app-desktop/gui/EncryptionConfigScreen/enableFlow.test.js
 packages/app-desktop/gui/EncryptionConfigScreen/enableFlow.js
 packages/app-desktop/gui/ErrorBoundary.js
@@ -1421,6 +1423,8 @@ packages/lib/components/shared/config/config-search-text.js
 packages/lib/components/shared/config/config-search.test.js
 packages/lib/components/shared/config/config-shared.test.js
 packages/lib/components/shared/config/config-shared.js
+packages/lib/components/shared/config/e2ee/usePpkValidityChecker.test.js
+packages/lib/components/shared/config/e2ee/usePpkValidityChecker.js
 packages/lib/components/shared/config/plugins/types.js
 packages/lib/components/shared/config/plugins/useOnDeleteHandler.js
 packages/lib/components/shared/config/plugins/useOnInstallHandler.test.js

@@ -3,11 +3,15 @@ import { Store } from 'redux';
 import { AppState } from '../../utils/types';
 import TestProviderStack from '../testing/TestProviderStack';
 import EncryptionConfig from './encryption-config';
-import { loadEncryptionMasterKey, setupDatabaseAndSynchronizer, switchClient, synchronizerStart } from '@joplin/lib/testing/test-utils';
+import { encryptionService, loadEncryptionMasterKey, setupDatabaseAndSynchronizer, switchClient, synchronizerStart } from '@joplin/lib/testing/test-utils';
 import createMockReduxStore from '../../utils/testing/createMockReduxStore';
 import setupGlobalStore from '../../utils/testing/setupGlobalStore';
-import { getActiveMasterKeyId, setEncryptionEnabled, setMasterKeyEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import { act, render, screen } from '../../utils/testing/testingLibrary';
+import { getActiveMasterKeyId, localSyncInfo, saveLocalSyncInfo, setEncryptionEnabled, setMasterKeyEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import { act, fireEvent, render, screen, waitFor } from '../../utils/testing/testingLibrary';
+import Setting from '@joplin/lib/models/Setting';
+import { generateKeyPair, isPublicPrivateKeyPairValid } from '@joplin/lib/services/e2ee/ppk/ppk';
+import { reg } from '@joplin/lib/registry';
+import { Minute } from '@joplin/utils/time';
 
 interface WrapperProps { }
 
@@ -26,9 +30,14 @@ describe('encryption-config', () => {
 
 		setEncryptionEnabled(true);
 		await loadEncryptionMasterKey();
+		const password = '123456';
+		Setting.setValue('encryption.masterPassword', password);
 
 		store = createMockReduxStore();
 		setupGlobalStore(store);
+
+		// Prevent scheduled syncs from running after tests finish
+		reg.scheduleSync = jest.fn();
 	});
 	afterEach(() => {
 		screen.unmount();
@@ -67,6 +76,37 @@ describe('encryption-config', () => {
 		// Enabling the key should hide the button
 		act(() => setMasterKeyEnabled(masterKeyId, true));
 		expect(queryDisabledKeysButton()).toBeNull();
+
+		unmount();
+	});
+
+	test('should allow resetting an invalid PPK', async () => {
+		const password = '123456';
+		const ppk1 = await generateKeyPair(encryptionService(), password);
+		const ppk2 = await generateKeyPair(encryptionService(), password);
+
+		const syncInfo = localSyncInfo();
+		syncInfo.ppk = {
+			...ppk1,
+			publicKey: ppk2.publicKey,
+		};
+		saveLocalSyncInfo(syncInfo);
+
+		expect(await isPublicPrivateKeyPairValid(encryptionService(), syncInfo.ppk, password)).toBe(false);
+
+		const { unmount } = render(<WrappedEncryptionConfigScreen/>);
+
+		const queryResetPpkButton = () => screen.queryByRole('button', { name: 'Regenerate key pair' });
+
+		await waitFor(() => {
+			expect(queryResetPpkButton()).toBeVisible();
+			expect(queryResetPpkButton()).toBeEnabled();
+		}, { timeout: Minute });
+
+		fireEvent.press(queryResetPpkButton());
+		await waitFor(() => {
+			expect(queryResetPpkButton()).toBeNull();
+		}, { timeout: Minute });
 
 		unmount();
 	});

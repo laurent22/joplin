@@ -7,8 +7,9 @@ import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import * as pathUtils from '@joplin/lib/path-utils';
 import { getEncryptionEnabled, localSyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import { generateMasterKeyAndEnableEncryption, loadMasterKeysFromSettings, masterPasswordIsValid, resolveE2eeEnabledStateConflict, setupAndDisableEncryption } from '@joplin/lib/services/e2ee/utils';
+import { generateMasterKeyAndEnableEncryption, getMasterPassword, loadMasterKeysFromSettings, resolveE2eeEnabledStateConflict, masterPasswordIsValid, setupAndDisableEncryption } from '@joplin/lib/services/e2ee/utils';
 import { fromFile as fileTypeFromFile } from 'file-type';
+import { isPublicPrivateKeyPairValid } from '@joplin/lib/services/e2ee/ppk/ppk';
 
 class Command extends BaseCommand {
 	public usage() {
@@ -140,7 +141,29 @@ class Command extends BaseCommand {
 		}
 
 		if (args.command === 'status') {
-			this.stdout(_('Encryption is: %s', getEncryptionEnabled() ? _('Enabled') : _('Disabled')));
+			const enabled = getEncryptionEnabled();
+			this.stdout(_('Encryption is: %s', enabled ? _('Enabled') : _('Disabled')));
+
+			if (enabled) {
+				const ppk = localSyncInfo().ppk;
+
+				if (!getMasterPassword(false)) {
+					this.stdout(_('Missing master password'));
+				} else if (!await masterPasswordIsValid(getMasterPassword())) {
+					this.stdout(_('Invalid master password'));
+				} else if (!ppk) {
+					this.stdout(_('No public-private key pair'));
+				} else {
+					try {
+						const ppkValid = await isPublicPrivateKeyPairValid(EncryptionService.instance(), ppk, getMasterPassword());
+						if (!ppkValid) {
+							this.stdout(_('Invalid public-private key pair'));
+						}
+					} catch (error) {
+						this.stdout(`Failed to check public-private key pair: ${error}`);
+					}
+				}
+			}
 			return;
 		}
 
