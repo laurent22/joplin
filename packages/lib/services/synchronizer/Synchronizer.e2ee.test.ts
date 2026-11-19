@@ -1,7 +1,7 @@
 import time from '../../time';
 import shim from '../../shim';
 import Setting from '../../models/Setting';
-import { synchronizerStart, allSyncTargetItemsEncrypted, kvStore, supportDir, setupDatabaseAndSynchronizer, synchronizer, fileApi, switchClient, encryptionService, loadEncryptionMasterKey, decryptionWorker, checkThrowAsync } from '../../testing/test-utils';
+import { synchronizerStart, allSyncTargetItemsEncrypted, kvStore, supportDir, setupDatabaseAndSynchronizer, synchronizer, fileApi, switchClient, encryptionService, loadEncryptionMasterKey, decryptionWorker, checkThrowAsync, expectThrow } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Resource from '../../models/Resource';
@@ -434,5 +434,84 @@ describe('Synchronizer.e2ee', () => {
 		expect((await kvStore().all()).length).toBe(0);
 		expect((await decryptionWorker().decryptionDisabledItems()).length).toBe(0);
 	}));
+
+	it('should fail if the encrypted item ID does not match the plaintext item ID', async () => {
+		const masterKey = await loadEncryptionMasterKey();
+		await setupAndEnableEncryption(encryptionService(), masterKey, '123456');
+		await loadMasterKeysFromSettings(encryptionService());
+
+		const note1 = await Note.save({ title: 'note 1', body: 'Test 1!' });
+		const note2 = await Note.save({ title: 'note 2', body: 'Test 2!' });
+
+		await synchronizerStart();
+		expect(await allSyncTargetItemsEncrypted()).toBe(true);
+
+		const serializedItemWithNote1Id = await Note.serialize({
+			...note2,
+			encryption_cipher_text: await encryptionService().encryptString(
+				await Note.serialize({
+					...note1,
+					body: 'Overwritten!',
+				}),
+			),
+			encryption_applied: 1,
+			title: '',
+			body: '',
+		});
+		await fileApi().put(`${note2.id}.md`, serializedItemWithNote1Id);
+
+		await switchClient(2);
+
+		await synchronizerStart();
+		Setting.setObjectValue('encryption.passwordCache', masterKey.id, '123456');
+		await loadMasterKeysFromSettings(encryptionService());
+
+		await expectThrow(async () => {
+			await decryptionWorker().start({ errorHandler: 'throw' });
+		}, undefined, `Item has wrong ID: Expected "${note2.id}", but was "${note1.id}"`);
+
+		// Even if the decryption worker is configured to log instead of throw, note 2 should
+		// not overwrite note 1:
+		await decryptionWorker().start({ errorHandler: 'log' });
+		expect(await Note.load(note1.id)).toMatchObject({ body: 'Test 1!' });
+	});
+
+	it('should not allow a read-only conflict to save a decrypted note with a different ID', async () => {
+		const masterKey = await loadEncryptionMasterKey();
+		await setupAndEnableEncryption(encryptionService(), masterKey, '123456');
+		await loadMasterKeysFromSettings(encryptionService());
+
+		const note1 = await Note.save({ title: 'note 1', body: 'Test 1!' });
+		const note2 = await Note.save({ title: 'note 2', body: 'Test 2!' });
+		await synchronizerStart();
+
+		// The original updated_time is kept so that the local change is uploaded (rather than
+		// handled as a conflict immediately), which fails because the item is read-only.
+		const serializedItemWithNote1Id = await Note.serialize({
+			...note2,
+			encryption_cipher_text: await encryptionService().encryptString(
+				await Note.serialize({
+					...note1,
+					body: 'Overwritten!',
+				}),
+			),
+			encryption_applied: 1,
+			title: '',
+			body: '',
+		});
+		await fileApi().put(`${note2.id}.md`, serializedItemWithNote1Id);
+
+		await time.msleep(1);
+		await Note.save({ id: note2.id, body: 'Test 2! Local edit' });
+
+		synchronizer().testingHooks_ = ['itemIsReadOnly'];
+		try {
+			await synchronizerStart();
+		} finally {
+			synchronizer().testingHooks_ = [];
+		}
+
+		expect(await Note.load(note1.id)).toMatchObject({ body: 'Test 1!' });
+	});
 
 });

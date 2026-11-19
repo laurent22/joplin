@@ -20,7 +20,7 @@ import JoplinError from './JoplinError';
 import ShareService from './services/share/ShareService';
 import TaskQueue from './TaskQueue';
 import ItemUploader from './services/synchronizer/ItemUploader';
-import { FileApi, getSupportsDeltaWithItems, isLocalServer, PaginatedList, RemoteItem, enableEnhancedBasicDeltaAlgorithm } from './file-api';
+import { FileApi, isLocalServer, PaginatedList, RemoteItem, enableEnhancedBasicDeltaAlgorithm } from './file-api';
 import JoplinDatabase from './JoplinDatabase';
 import { checkIfCanSync, fetchSyncInfo, checkSyncTargetIsValid, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyHasBeenUsed, SyncInfo, syncInfoEquals, uploadSyncInfo } from './services/synchronizer/syncInfoUtils';
 import { getMasterPassword, setupAndDisableEncryption, setupAndEnableEncryption } from './services/e2ee/utils';
@@ -694,7 +694,7 @@ export default class Synchronizer {
 							try {
 								remoteContent = await this.apiCall('get', path);
 								if (!remoteContent) throw new Error(`Got metadata for path but could not fetch content: ${path}`);
-								remoteContent = await BaseItem.unserialize(remoteContent);
+								remoteContent = await BaseItem.unserializeAndValidate({ content: remoteContent, itemPath: path });
 							} catch (error) {
 								if (error.code === 'rejectedByTarget' || error.code === 'malformedItem') {
 									this.progressReport_.errors.push(error);
@@ -929,10 +929,6 @@ export default class Synchronizer {
 					// As long as we check that info.json still exists after each time the listResult field is repopulated, there should not be a risk of unwanted deletions when failsafe is enabled, unless the target directory is directly manipulated by the user
 					await checkSyncTargetIsValid(this.api());
 
-					const supportsDeltaWithItems = getSupportsDeltaWithItems(listResult);
-
-					logger.info('supportsDeltaWithItems = ', supportsDeltaWithItems);
-
 					const remotes = listResult.items;
 
 					this.logSyncOperation('fetchingTotal', null, null, 'Fetching delta items from sync target', remotes.length);
@@ -947,10 +943,6 @@ export default class Synchronizer {
 						if (this.api().supportsAccurateTimestamp) {
 							const local = locals.find(l => l.id === BaseItem.pathToId(remote.path));
 							if (local && local.updated_time === remote.jop_updated_time) needsToDownload = false;
-						}
-
-						if (supportsDeltaWithItems) {
-							needsToDownload = false;
 						}
 
 						if (needsToDownload) {
@@ -972,12 +964,10 @@ export default class Synchronizer {
 						if (!BaseItem.isSystemPath(remote.path)) continue; // The delta API might return things like the .sync, .resource or the root folder
 
 						const loadContent = async () => {
-							if (supportsDeltaWithItems) return remote.jopItem;
-
 							const task = await this.downloadQueue_.waitForResult(path);
 							if (task.error) throw task.error;
 							if (!task.result) return null;
-							return await BaseItem.unserialize(task.result as string);
+							return await BaseItem.unserializeAndValidate({ content: task.result as string, itemPath: path });
 						};
 
 						const path = remote.path;

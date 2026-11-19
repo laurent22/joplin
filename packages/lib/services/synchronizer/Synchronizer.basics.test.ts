@@ -1,6 +1,6 @@
 import Setting from '../../models/Setting';
 import { allNotesFolders, remoteNotesAndFolders, localNotesFoldersSameAsRemote } from '../../testing/test-utils-synchronizer';
-import { syncTargetName, afterAllCleanUp, synchronizerStart, setupDatabaseAndSynchronizer, synchronizer, sleep, switchClient, syncTargetId, fileApi, expectThrow, createNoteAndResource } from '../../testing/test-utils';
+import { syncTargetName, afterAllCleanUp, synchronizerStart, setupDatabaseAndSynchronizer, synchronizer, sleep, switchClient, syncTargetId, fileApi, expectThrow, createNoteAndResource, msleep, withWarningSilenced } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import BaseItem from '../../models/BaseItem';
@@ -335,6 +335,45 @@ describe('Synchronizer.basics', () => {
 		disabledItems = await BaseItem.syncDisabledItems(syncTargetId());
 		expect(disabledItems.length).toBe(1);
 	}));
+
+	it('should check that an item\'s metadata ID and filename ID match', async () => {
+		await switchClient(1);
+		const note1 = await Note.save({ title: 'note 1', body: 'Test 1!' });
+		const note2 = await Note.save({ title: 'note 2', body: 'Test 2!' });
+
+		await synchronizerStart();
+		await switchClient(2);
+		await synchronizerStart();
+
+		expect(await Note.load(note1.id)).toMatchObject({ body: 'Test 1!' });
+
+		await msleep(1);
+
+		const serializedItemWithNote1Id = await Note.serialize({
+			...note1,
+			body: 'Overwritten!',
+			updated_time: Date.now(),
+		});
+		await fileApi().put(`${note2.id}.md`, serializedItemWithNote1Id);
+
+		// Created after the invalid item, so that it comes later in the delta
+		await msleep(1);
+		await switchClient(1);
+		const note3 = await Note.save({ title: 'note 3', body: 'Test 3!' });
+		await withWarningSilenced(/has invalid content/, () => synchronizerStart());
+		await switchClient(2);
+
+		// Note 2 should not overwrite note 1 (despite having note 1's ID):
+		await withWarningSilenced(
+			/Item at "\w{32}\.md" has invalid content\. Expected ID "\w{32}"/,
+			() => synchronizerStart(),
+			{ requireWarning: true },
+		);
+		expect(await Note.load(note1.id)).toMatchObject({ body: 'Test 1!' });
+
+		// The invalid item should be skipped, rather than preventing other items from syncing
+		expect(await Note.load(note3.id)).toMatchObject({ body: 'Test 3!' });
+	});
 
 	it('should handle items that are read-only on the sync target', (async () => {
 		const folder = await Folder.save({ title: 'folder' });

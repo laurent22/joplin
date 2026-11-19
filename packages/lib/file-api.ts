@@ -36,9 +36,6 @@ export interface RemoteItem {
 	// value will always be ahead. However for synchronising we need to know the
 	// exact Joplin item updated_time value.
 	jop_updated_time?: number;
-
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- jopItem holds the decrypted Joplin item shape (NoteEntity, FolderEntity, ResourceEntity, etc.); narrowing here forces every delta consumer to discriminate
-	jopItem?: any;
 }
 
 export interface PaginatedList {
@@ -47,14 +44,6 @@ export interface PaginatedList {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Sync context shape varies by driver (timestamp, files cache, deltaToken, etc.); used opaquely by the file-api
 	context: any;
 }
-
-// Tells whether the delta call is going to include the items themselves or
-// just the metadata (which is the default). If the items are included it
-// means less http request and faster processing.
-export const getSupportsDeltaWithItems = (deltaResponse: PaginatedList) => {
-	if (!deltaResponse.items.length) return false;
-	return 'jopItem' in deltaResponse.items[0];
-};
 
 export const isLocalServer = (url: string) => {
 	const regex = /^(https?:\/\/)?(localhost|127(?:\.\d{1,3}){3}|\[::1\])(?::\d{1,5})?(\/.*)?$/i;

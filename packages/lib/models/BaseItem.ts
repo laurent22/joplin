@@ -20,6 +20,7 @@ import { checkObjectHasProperties } from '@joplin/utils/object';
 
 const { sprintf } = require('sprintf-js');
 import moment = require('moment');
+import { ErrorCode } from '../errors';
 
 export interface ItemsThatNeedDecryptionResult {
 	hasMore: boolean;
@@ -51,6 +52,11 @@ export interface RemoteItemMetadata {
 export interface EncryptedItemsStats {
 	encrypted: number;
 	total: number;
+}
+
+export interface UnserializeAndValidateOptions {
+	content: string;
+	itemPath: string;
 }
 
 export default class BaseItem extends BaseModel {
@@ -583,6 +589,11 @@ export default class BaseItem extends BaseModel {
 		plainItem.updated_time = item.updated_time;
 		plainItem.encryption_cipher_text = '';
 		plainItem.encryption_applied = 0;
+
+		if (plainItem.id !== item.id) {
+			throw new JoplinError(`Item has wrong ID: Expected ${JSON.stringify(item.id)}, but was ${JSON.stringify(plainItem.id)}`, ErrorCode.MalformedItem);
+		}
+
 		return ItemClass.save(plainItem, { autoTimestamp: false, changeSource: ItemChange.SOURCE_DECRYPTION });
 	}
 
@@ -642,6 +653,20 @@ export default class BaseItem extends BaseModel {
 		}
 
 		return output;
+	}
+
+	public static async unserializeAndValidate({ content, itemPath }: UnserializeAndValidateOptions) {
+		const unserialized = await this.unserialize(content);
+
+		const expectedId = this.pathToId(itemPath);
+		if (expectedId !== unserialized.id) {
+			throw new JoplinError(
+				`Item at ${JSON.stringify(itemPath)} has invalid content. Expected ID ${JSON.stringify(expectedId)}, but was ${JSON.stringify(unserialized.id)}.`,
+				ErrorCode.MalformedItem,
+			);
+		}
+
+		return unserialized;
 	}
 
 	public static async encryptedItemsStats(): Promise<EncryptedItemsStats> {

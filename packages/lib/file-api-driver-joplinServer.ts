@@ -53,7 +53,7 @@ export default class FileApiDriverJoplinServer {
 		return 3;
 	}
 
-	private metadataToStat_(md: { updated_time?: number; jop_updated_time?: number; jopItem?: unknown }, path: string, isDeleted = false, rootPath: string): RemoteItem {
+	private metadataToStat_(md: { updated_time?: number; jop_updated_time?: number }, path: string, isDeleted = false, rootPath: string): RemoteItem {
 		const output: RemoteItem = {
 			id: '',
 			path: rootPath ? path.substr(rootPath.length + 1) : path,
@@ -63,15 +63,10 @@ export default class FileApiDriverJoplinServer {
 			isDeleted: isDeleted,
 		};
 
-		// Only add this object is it's also present in the raw data. This is
-		// because `getSupportsDeltaWithItems()` relies on it being present or
-		// not to decide if the sync target supports "delta with items".
-		if ('jopItem' in md) output.jopItem = md.jopItem;
-
 		return output;
 	}
 
-	private metadataToStats_(mds: { name: string; updated_time?: number; jop_updated_time?: number; jopItem?: unknown }[], rootPath: string) {
+	private metadataToStats_(mds: { name: string; updated_time?: number; jop_updated_time?: number }[], rootPath: string) {
 		const output = [];
 		for (let i = 0; i < mds.length; i++) {
 			output.push(this.metadataToStat_(mds[i], mds[i].name, false, rootPath));
@@ -119,7 +114,7 @@ export default class FileApiDriverJoplinServer {
 						if (item.item_name.indexOf('.resource/') === 0) return false;
 						return true;
 					})
-					.map((item: { item_name: string; type: number; updated_time?: number; jop_updated_time?: number; jopItem?: unknown }) => {
+					.map((item: { item_name: string; type: number; updated_time?: number; jop_updated_time?: number }) => {
 						return this.metadataToStat_(item, item.item_name, item.type === 3, '');
 					});
 
