@@ -12,6 +12,7 @@ import { act, fireEvent, render, screen, waitFor } from '../../utils/testing/tes
 import Folder from '@joplin/lib/models/Folder';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import { ShareType, StateShare } from '@joplin/lib/services/share/reducer';
+import { setEncryptionEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 
 enum ShareServiceMockMode {
 	// Behave like older Joplin Server versions
@@ -120,6 +121,32 @@ describe('ShareNoteDialog', () => {
 		} else {
 			const unpublishButton = screen.queryByRole('button', { name: 'Unpublish' });
 			expect(unpublishButton).toBeNull();
+		}
+
+		unmount();
+	});
+
+	test.each([
+		{ published: false },
+		{ published: true },
+	])('should only show "Copy Shareable Link" for published notes while E2EE blocks publishing (published: $published)', async ({ published }) => {
+		setEncryptionEnabled(true);
+		store = createMockReduxStore();
+		setupGlobalStore(store);
+		const folder = await Folder.save({ title: 'Folder' });
+		const note = await Note.save({ title: 'Test', parent_id: folder.id, is_shared: published ? 1 : 0 });
+
+		const { unmount } = render(<WrappedShareDialog noteId={note.id}/>);
+		await screen.findByText('Test');
+
+		const linkButton = screen.queryByRole('button', { name: 'Copy Shareable Link' });
+		const blockedMessage = screen.queryByText(/To publish notes, enable/);
+		if (published) {
+			expect(linkButton).toBeVisible();
+			expect(blockedMessage).toBeNull();
+		} else {
+			expect(linkButton).toBeNull();
+			expect(blockedMessage).toBeVisible();
 		}
 
 		unmount();

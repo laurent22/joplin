@@ -7,6 +7,12 @@ import Logger from '@joplin/utils/Logger';
 const logger = Logger.create('checkDisabledSyncItemsNotification');
 
 export default async (dispatch: Dispatch) => {
+	const heldBackSyncItems = await BaseItem.plaintextUploadHeldBackSyncItems(Setting.value('sync.target'));
+	dispatch({
+		type: 'SYNC_PLAINTEXT_UPLOAD_HELD_BACK_ITEMS_SET',
+		itemIds: heldBackSyncItems.filter(syncItem => !syncItem.sync_warning_ignored).map(syncItem => syncItem.item_id),
+	});
+
 	const errorCount = await Resource.downloadStatusCounts(Resource.FETCH_STATUS_ERROR);
 	if (errorCount) {
 		logger.info(`${errorCount} resource download errors: Triggering notification`);

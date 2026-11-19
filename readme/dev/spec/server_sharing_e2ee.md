@@ -10,6 +10,14 @@ Once the key exchange is done, each user has their own copy of NOTEBOOK_KEY encr
 
 Whenever any item within the notebook is encrypted, it is done with NOTEBOOK_KEY.
 
+## Active attacker
+
+The above public key encryption process defends against an honest-but-curious server (passive attacker). It does not defend against an **active attacker** able to replace recipient public keys with custom public keys.
+
+To defend against an active attacker, users must manually validate recipient public keys using an out-of-band channel. Joplin's share dialog includes a 🔑 button, which shows a SHA256 hash of the recipient's public key. This hash is described as the "public key fingerprint" in Joplin's settings.
+
+In the share dialog, a checkmark is shown next to the 🔑 icon if the public key from the server matches the last-confirmed public key.
+
 # Migrations
 
 Enabling migration to a new public key algorithm can be done by:

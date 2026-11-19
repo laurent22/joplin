@@ -2,7 +2,7 @@ import { runWithFakeTimers, setupDatabaseAndSynchronizer, switchClient } from '@
 import { act, renderHook, waitFor } from '@testing-library/react';
 import useSearchMarkers from './useSearchMarkers';
 import Note from '@joplin/lib/models/Note';
-import SearchEngine from '@joplin/lib/services/search/SearchEngine';
+import SearchEngine, { ProcessResultsRow, SearchType } from '@joplin/lib/services/search/SearchEngine';
 import { Second } from '@joplin/utils/time';
 import { setUpSemanticSearch, tearDownSemanticSearch, updateSearchIndex } from '@joplin/lib/testing/ai/semanticSearch';
 
@@ -58,6 +58,24 @@ describe('useSearchMarkers', () => {
 			}, { timeout: 30 * Second });
 			test.unmount();
 		});
+	});
+
+	it('should not crash when the selected search is not in the search list', () => {
+		// This happens in secondary windows, which have no selected search but share the main window's search results
+		const searchResults = [{ id: 'note1', searchType: [SearchType.Semantic] } as ProcessResultsRow];
+		const test = renderHook(() => useSearchMarkers({
+			showLocalSearch: false,
+			localSearchMarkerOptions: () => null,
+			noteId: 'note1',
+			searchResults,
+			searchId: null,
+			searches: [],
+			highlightedWords: ['test'],
+			noteTitle: 'test',
+		}));
+
+		expect(test.result.current.keywords).toEqual(['test']);
+		test.unmount();
 	});
 
 });

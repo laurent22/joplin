@@ -5,6 +5,7 @@ import Logger from '@joplin/utils/Logger';
 import BaseItem from '../../models/BaseItem';
 import { BaseItemEntity } from '../database/types';
 import { ApiCallFunction } from './utils/types';
+import { PlaintextUploadConfirmations } from '../../models/utils/checkPlaintextUploadConfirmed';
 
 const logger = Logger.create('ItemUploader');
 
@@ -19,10 +20,12 @@ export default class ItemUploader {
 	private preUploadedItems_: Record<string, { error?: { message?: string; code?: number } }> = {};
 	private preUploadedItemUpdatedTimes_: Record<string, number> = {};
 	private maxBatchSize_ = 1 * 1024 * 1024; // 1MB;
+	private confirmedPlaintextUploads_: PlaintextUploadConfirmations;
 
-	public constructor(api: FileApi, apiCall: ApiCallFunction) {
+	public constructor(api: FileApi, apiCall: ApiCallFunction, confirmedPlaintextUploads: PlaintextUploadConfirmations = null) {
 		this.api_ = api;
 		this.apiCall_ = apiCall;
+		this.confirmedPlaintextUploads_ = confirmedPlaintextUploads;
 	}
 
 	public get maxBatchSize() {
@@ -50,7 +53,7 @@ export default class ItemUploader {
 				return;
 			}
 		}
-		const content = await ItemClass.serializeForSync(local);
+		const content = await ItemClass.serializeForSync(local, this.confirmedPlaintextUploads_);
 		await this.apiCall_('put', path, content);
 	}
 
@@ -65,9 +68,19 @@ export default class ItemUploader {
 			if (local.type_ === ModelType.Resource) continue;
 
 			const ItemClass = BaseItem.itemClass(local);
+			let body;
+			try {
+				body = await ItemClass.serializeForSync(local, this.confirmedPlaintextUploads_);
+			} catch (error) {
+				// Left out of the batch, so that serializeAndUploadItem() gets the same error and the synchronizer
+				// handles it for this item only, rather than aborting the sync
+				logger.info(`Could not serialize item for batch upload: ${local.id}`, error);
+				continue;
+			}
+
 			itemsToUpload.push({
 				name: BaseItem.systemPath(local),
-				body: await ItemClass.serializeForSync(local),
+				body,
 				localItemUpdatedTime: local.updated_time,
 			});
 		}

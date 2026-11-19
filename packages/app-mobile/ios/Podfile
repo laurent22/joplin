@@ -66,6 +66,18 @@ target 'Joplin' do
       :mac_catalyst_enabled => false,
       :ccache_enabled => ccache_enabled?(podfile_properties),
     )
+
+    # Xcode 27 rejects deployment targets below iOS 15. react_native_post_install raises them for pod
+    # targets but not for their resource bundle targets (e.g. SDWebImage, RNSVGFilters).
+    min_deployment_target = podfile_properties['ios.deploymentTarget'] || '15.1'
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        deployment_target = config.build_settings['IPHONEOS_DEPLOYMENT_TARGET']
+        if deployment_target && deployment_target.to_f < min_deployment_target.to_f
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = min_deployment_target
+        end
+      end
+    end
   end
 end
 

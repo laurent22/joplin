@@ -1,10 +1,13 @@
 import { VirtualOpaqueType } from '@joplin/utils/types';
 import uuid from '../../../uuid';
 import EncryptionService, { EncryptionCustomHandler, EncryptionMethod } from '../EncryptionService';
-import { MasterKeyEntity, PublicKeyAlgorithm, PublicKeyCrypto, PublicKeyCryptoProvider } from '../types';
+import { Digest, MasterKeyEntity, PublicKeyAlgorithm, PublicKeyCrypto, PublicKeyCryptoProvider } from '../types';
 import PerformanceLogger from '../../../PerformanceLogger';
 import { _ } from '../../../locale';
+import Logger from '@joplin/utils/Logger';
+import shim from '../../../shim';
 
+const logger = Logger.create('ppk');
 const perfLogger = PerformanceLogger.create();
 
 interface PrivateKey {
@@ -57,7 +60,11 @@ export const setRSA = (rsa: PublicKeyCryptoProvider) => {
 };
 
 const supportsAlgorithm = (algorithm: PublicKeyAlgorithm) => {
-	return Object.prototype.hasOwnProperty.call(rsa_, algorithm) && algorithm !== PublicKeyAlgorithm.Unknown;
+	// Providers list algorithms they don't support as null (e.g. RsaV1 on web)
+	if (!rsa_?.[algorithm]) return false;
+	// Check for keys like prototype
+	if (!Object.prototype.hasOwnProperty.call(rsa_, algorithm)) return false;
+	return algorithm !== PublicKeyAlgorithm.Unknown;
 };
 
 // Exported for testing purposes
@@ -156,7 +163,12 @@ export async function ppkPasswordIsValid(service: EncryptionService, ppk: Public
 	if (!ppk) throw new Error('PPK is undefined');
 
 	try {
-		await loadPpk(service, ppk, password);
+		if (supportsPpkAlgorithm(ppk)) {
+			await loadPpk(service, ppk, password);
+		} else {
+			// The key can't be loaded on this device, but the password can still be checked
+			await decryptPrivateKey(service, ppk.privateKey, password);
+		}
 	} catch (error) {
 		return false;
 	}
@@ -188,6 +200,36 @@ async function loadPublicKey(publicKey: PublicKey, keySize: number): Promise<Key
 	return loadKeys(publicKey, '', keySize);
 }
 
+export const isPublicPrivateKeyPairValid = async (service: EncryptionService, keyPair: PublicPrivateKeyPair, decryptionPassword: string) => {
+	const privateKeyPlainText = await decryptPrivateKey(service, keyPair.privateKey, decryptionPassword);
+
+	try {
+		// To support the `node-rsa`-based RsaV1 method, encryption must be done with only a public key loaded:
+		const publicKeyOnly = await loadPublicKey(keyPair.publicKey, keyPair.keySize);
+		const encryptionHandler = ppkEncryptionHandler(keyPair, publicKeyOnly);
+
+		const originalPlainText = 'ABCDEF';
+		const encrypted = await encryptionHandler.encrypt(
+			encryptionHandler.context, originalPlainText, '',
+		);
+
+		const fullKeyPair = await loadKeys(keyPair.publicKey, privateKeyPlainText, keyPair.keySize);
+		const decryptionHandler = ppkEncryptionHandler(keyPair, fullKeyPair);
+		const decrypted = await decryptionHandler.decrypt(
+			decryptionHandler.context, encrypted, '',
+		);
+
+		if (decrypted !== originalPlainText) {
+			// Should not happen: encrypt/decrypt should throw if the public/private keys do not match
+			return false;
+		}
+	} catch (error) {
+		logger.debug(`Failed to verify public-private key pair: ${error}. Mismatched keys?`);
+		return false;
+	}
+	return true;
+};
+
 function ppkEncryptionHandler(ppk: PublicPrivateKeyPair, rsaKeyPair: KeyPair): EncryptionCustomHandler {
 	interface Context {
 		rsaKeyPair: KeyPair;
@@ -216,6 +258,15 @@ function ppkEncryptionHandler(ppk: PublicPrivateKeyPair, rsaKeyPair: KeyPair): E
 		},
 	};
 }
+
+// Returns a lowercase hex string that identifies the public key. Use formatPublicKeyFingerprint to display it.
+export const ppkPublicKeyFingerprint = async (ppk: PublicPrivateKeyPair) => {
+	const digest = await shim.crypto.digest(Digest.sha256, Buffer.from(ppk.publicKey, 'utf-8'));
+	return Buffer.from(digest).toString('hex');
+};
+
+// Groups of four hex digits (e.g. "1a2b 3c4d ...") make fingerprints easier to compare
+export const formatPublicKeyFingerprint = (fingerprint: string) => fingerprint.match(/.{1,4}/g).join(' ');
 
 // Generates a master key and encrypts it using the provided PPK
 export async function ppkGenerateMasterKey(service: EncryptionService, ppk: PublicPrivateKeyPair, password: string): Promise<MasterKeyEntity> {

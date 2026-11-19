@@ -55,6 +55,16 @@ All the sub-notebooks, notes and resources within the shared notebook are shared
 
 Yes it does. Both sharer and recipient need to have E2EE enabled for it to work.
 
+### What is the End-To-End-Encryption connection security check?
+
+In Joplin desktop v3.7.23 and later, Joplin's share dialog includes a "Verify public key" button (🔑). This button allows the sharer to check that the **correct recipient** is receiving the notebook invitation, even if the server is untrustworthy.
+
+This button is only shown when encryption is enabled.
+
+The connection security check helps defend against:
+- A malicious server: The case where the server lies to the sharer about certain recipient information.
+- A compromised account: The case where someone untrusted has access to the recipient's account, but not the recipient's encryption password.
+
 ### What can it be used for?
 
 Some ideas:

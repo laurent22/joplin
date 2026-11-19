@@ -18,6 +18,7 @@ import useOnPublishFolderLinkClick from '@joplin/lib/components/shared/PublishFo
 import useShareStatusMessage from '@joplin/lib/components/shared/ShareNoteDialog/useShareStatusMessage';
 import { SharingStatus } from '@joplin/lib/components/shared/ShareNoteDialog/types';
 import Button from './Button/Button';
+import isPublishBlockedByE2ee from '@joplin/lib/components/shared/ShareNoteDialog/isPublishBlockedByE2ee';
 
 interface Props {
 	themeId: number;
@@ -25,6 +26,7 @@ interface Props {
 	onClose: ()=> void;
 	shares: StateShare[];
 	folders: FolderEntity[];
+	publishBlockedByE2ee: boolean;
 }
 
 export function PublishFolderDialog(props: Props) {
@@ -101,13 +103,13 @@ export function PublishFolderDialog(props: Props) {
 						<Button disabled={isUnpublishing} tooltip={_('Unpublish notebook')} iconName="fas fa-unlink" onClick={onUnpublishFolderClick}/>
 					)}
 				</div>
-				<button
+				{(!props.publishBlockedByE2ee || publishedShare) && <button
 					disabled={isUnpublishing || !folder || [SharingStatus.Creating, SharingStatus.Synchronizing].indexOf(publishFolderStatus) >= 0}
 					className="share"
 					onClick={publishFolderLinkButton_click}
-				>{publishedShare ? _('Copy Shareable Link') : _('Publish notebook')}</button>
+				>{publishedShare ? _('Copy Shareable Link') : _('Publish notebook')}</button>}
 				<div className="message">{statusMessage}</div>
-				{encryptionWarning && <div className="message">{encryptionWarning}<hr/></div>}
+				{encryptionWarning && !publishedShare && <div className="message">{encryptionWarning}<hr/></div>}
 				<DialogButtonRow
 					themeId={props.themeId}
 					onClick={onDialogButtonClick}
@@ -123,6 +125,7 @@ const mapStateToProps = (state: AppState) => {
 	return {
 		shares: state.shareService.shares,
 		folders: state.folders,
+		publishBlockedByE2ee: isPublishBlockedByE2ee(state),
 	};
 };
 
