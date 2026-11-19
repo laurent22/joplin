@@ -27,7 +27,7 @@ const generateChecksumFile = () => {
 	const checksum = sha512.sha512(appImageContent);
 	const sha512FileName = `${appImageName}.sha512`;
 	const sha512FilePath = path.join(distPath, sha512FileName);
-	fs.writeFileSync(sha512FilePath, checksum);
+	fs.writeFileSync(sha512FilePath, `${checksum}  ${appImageName}\n`);
 	return sha512FilePath;
 };
 
