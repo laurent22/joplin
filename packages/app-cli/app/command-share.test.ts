@@ -36,14 +36,18 @@ const defaultFolderShare: StateShare = {
 const mockShareServiceForFolderSharing = (eventHandlerOverrides: Partial<ApiMock>&{ onExec?: undefined }) => {
 	const invitations: ShareInvitation[] = [];
 
+	let isShared = false;
 	mockShareService({
 		getShareInvitations: async () => ({
 			items: invitations,
 		}),
-		getShares: async () => ({ items: [defaultFolderShare] }),
+		getShares: async () => ({ items: isShared ? [defaultFolderShare] : [] }),
 		getShareUsers: async (_id: string) => ({ items: [] }),
 		postShareUsers: async (_id, _body) => { },
-		postShares: async () => ({ id: shareId }),
+		postShares: async () => {
+			isShared = true;
+			return { id: shareId };
+		},
 		...eventHandlerOverrides,
 	}, ShareService.instance(), app().store());
 

@@ -227,7 +227,7 @@ class Command extends BaseCommand {
 			const invitation = invitations[0];
 
 			this.stdout(accept ? _('Accepting share...') : _('Rejecting share...'));
-			await invitationRespond(invitation.id, invitation.share.folder_id, invitation.master_key, accept);
+			await invitationRespond(invitation.id, invitation.share, invitation.master_key, accept);
 		};
 
 		const commandShareAccept = (folderId: string) => (

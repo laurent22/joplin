@@ -24,7 +24,7 @@ import validateLayout from './ResizableLayout/utils/validateLayout';
 import iterateItems from './ResizableLayout/utils/iterateItems';
 import removeItem from './ResizableLayout/utils/removeItem';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
-import { ShareInvitation } from '@joplin/lib/services/share/reducer';
+import { ShareInvitation, StateShare } from '@joplin/lib/services/share/reducer';
 import removeKeylessItems from './ResizableLayout/utils/removeKeylessItems';
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
@@ -561,8 +561,8 @@ class MainScreenComponent extends React.Component<Props, State> {
 			await restart();
 		};
 
-		const onInvitationRespond = async (shareUserId: string, folderId: string, masterKey: MasterKeyEntity, accept: boolean) => {
-			await invitationRespond(shareUserId, folderId, masterKey, accept);
+		const onInvitationRespond = async (shareUserId: string, share: StateShare, masterKey: MasterKeyEntity, accept: boolean) => {
+			await invitationRespond(shareUserId, share, masterKey, accept);
 		};
 
 		let msg = null;
@@ -625,9 +625,9 @@ class MainScreenComponent extends React.Component<Props, State> {
 			msg = this.renderNotificationMessage(
 				_('%s (%s) would like to share a notebook with you.', sharer.full_name, sharer.email),
 				_('Accept'),
-				() => onInvitationRespond(invitation.id, invitation.share.folder_id, invitation.master_key, true),
+				() => onInvitationRespond(invitation.id, invitation.share, invitation.master_key, true),
 				_('Reject'),
-				() => onInvitationRespond(invitation.id, invitation.share.folder_id, invitation.master_key, false),
+				() => onInvitationRespond(invitation.id, invitation.share, invitation.master_key, false),
 			);
 		} else if (this.props.hasDisabledSyncItems) {
 			msg = this.renderNotificationMessage(
