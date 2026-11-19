@@ -499,6 +499,7 @@ export default class Synchronizer {
 
 				if (!remoteInfo.version) {
 					logger.info('Sync target is new - setting it up...');
+					Setting.setValue('sync.lastRemoteSyncInfo', '');
 					await this.migrationHandler().upgrade(Setting.value('syncVersion'));
 					remoteInfo = await fetchSyncInfo(this.api());
 					syncTargetIsNew = true;
@@ -523,8 +524,39 @@ export default class Synchronizer {
 				// console.info('LOCAL', localInfo);
 				// console.info('REMOTE', remoteInfo);
 
+				const saveLastSyncInfo = (local: SyncInfo, remote: SyncInfo) => {
+					Setting.setValue('sync.lastLocalSyncInfo', local.serialize());
+					Setting.setValue('sync.lastRemoteSyncInfo', remote.serialize());
+					Setting.setValue('sync.lastRemoteSyncInfo.target', syncTargetId);
+				};
+				const loadLastSyncInfo = (key: 'lastLocalSyncInfo'|'lastRemoteSyncInfo') => {
+					if (key === 'lastRemoteSyncInfo') {
+						// If the sync target has changed, the cached lastRemoteSyncInfo probably isn't
+						// an old version of the remote sync info. Ignore it to avoid incorrectly marking
+						// all remote keys as changed:
+						const lastTarget = Setting.value('sync.lastRemoteSyncInfo.target');
+						if (lastTarget !== syncTargetId) {
+							return undefined;
+						}
+					}
+
+					const serialized = Setting.value(`sync.${key}`);
+					return serialized ? new SyncInfo(serialized) : undefined;
+				};
+
 				if (!syncInfoEquals(localInfo, remoteInfo)) {
-					let newInfo = mergeSyncInfos(localInfo, remoteInfo);
+					let newInfo: SyncInfo;
+					try {
+						newInfo = mergeSyncInfos({
+							s1: localInfo,
+							s2: remoteInfo,
+							lastS1: loadLastSyncInfo('lastLocalSyncInfo'),
+							lastS2: loadLastSyncInfo('lastRemoteSyncInfo'),
+						});
+					} catch (error) {
+						saveLastSyncInfo(localInfo, remoteInfo);
+						throw error;
+					}
 					if (newInfo.activeMasterKeyId) newInfo = setMasterKeyHasBeenUsed(newInfo, newInfo.activeMasterKeyId);
 					const previousE2EE = localInfo.e2ee;
 					logger.info('Sync target info differs between local and remote - merging infos: ', newInfo.toObject());
@@ -532,6 +564,7 @@ export default class Synchronizer {
 					await this.lockHandler().acquireLock(LockType.Exclusive, this.lockClientType(), this.clientId_, { clearExistingSyncLocksFromTheSameClient: true });
 					await uploadSyncInfo(this.api(), newInfo);
 					await saveLocalSyncInfo(newInfo);
+					saveLastSyncInfo(newInfo, newInfo);
 					await this.lockHandler().releaseLock(LockType.Exclusive, this.lockClientType(), this.clientId_);
 
 					// console.info('NEW', newInfo);
@@ -556,6 +589,7 @@ export default class Synchronizer {
 						}
 					}
 				} else {
+					saveLastSyncInfo(localInfo, remoteInfo);
 					// Set it to remote anyway so that timestamps are the same
 					// Note: that's probably not needed anymore?
 					// await uploadSyncInfo(this.api(), remoteInfo);

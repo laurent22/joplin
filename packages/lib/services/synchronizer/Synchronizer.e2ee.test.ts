@@ -9,8 +9,9 @@ import ResourceFetcher from '../../services/ResourceFetcher';
 import MasterKey from '../../models/MasterKey';
 import BaseItem from '../../models/BaseItem';
 import Synchronizer from '../../Synchronizer';
-import { fetchSyncInfo, getEncryptionEnabled, localSyncInfo, setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
-import { loadMasterKeysFromSettings, setupAndDisableEncryption, setupAndEnableEncryption } from '../e2ee/utils';
+import { fetchSyncInfo, getEncryptionEnabled, localSyncInfo, setEncryptionEnabled, uploadSyncInfo } from '../synchronizer/syncInfoUtils';
+import { loadMasterKeysFromSettings, resolveE2eeEnabledStateConflict, setupAndDisableEncryption, setupAndEnableEncryption } from '../e2ee/utils';
+import { Month } from '@joplin/utils/time';
 import { remoteNotesAndFolders } from '../../testing/test-utils-synchronizer';
 import { EncryptionMethod } from '../e2ee/EncryptionService';
 import { NoteEntity } from '../database/types';
@@ -512,6 +513,25 @@ describe('Synchronizer.e2ee', () => {
 		}
 
 		expect(await Note.load(note1.id)).toMatchObject({ body: 'Test 1!' });
+	});
+
+	it('should keep E2EE enabled locally when the remote e2ee enabled state has a future-valued timestamp and the user chooses to keep E2EE enabled', async () => {
+		const masterKey = await loadEncryptionMasterKey();
+		await setupAndEnableEncryption(encryptionService(), masterKey, '123456');
+		await loadMasterKeysFromSettings(encryptionService());
+		await synchronizerStart();
+
+		const remoteInfo = await fetchSyncInfo(fileApi());
+		remoteInfo.e2ee = false;
+		remoteInfo.setKeyTimestamp('e2ee', Date.now() + Month);
+		await uploadSyncInfo(fileApi(), remoteInfo);
+
+		await expectThrow(() => synchronizerStart(null, { throwOnError: true }), 'e2eeEnabledStateConflict');
+
+		await resolveE2eeEnabledStateConflict(encryptionService(), true, jest.fn());
+		await synchronizerStart(null, { throwOnError: true });
+
+		expect((await fetchSyncInfo(fileApi())).e2ee).toBe(true);
 	});
 
 });

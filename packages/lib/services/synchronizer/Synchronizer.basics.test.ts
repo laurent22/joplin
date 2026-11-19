@@ -1,15 +1,16 @@
 import Setting from '../../models/Setting';
 import { allNotesFolders, remoteNotesAndFolders, localNotesFoldersSameAsRemote } from '../../testing/test-utils-synchronizer';
-import { syncTargetName, afterAllCleanUp, synchronizerStart, setupDatabaseAndSynchronizer, synchronizer, sleep, switchClient, syncTargetId, fileApi, expectThrow, createNoteAndResource, msleep, withWarningSilenced } from '../../testing/test-utils';
+import { syncTargetName, afterAllCleanUp, synchronizerStart, setupDatabaseAndSynchronizer, synchronizer, sleep, switchClient, syncTargetId, fileApi, expectThrow, createNoteAndResource, withWarningSilenced, currentClientId } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import BaseItem from '../../models/BaseItem';
 import WelcomeUtils, { WelcomeAssetPlatform } from '../../WelcomeUtils';
 import { NoteEntity } from '../database/types';
-import { fetchSyncInfo, setAppMinVersion, uploadSyncInfo } from './syncInfoUtils';
+import { fetchSyncInfo, localSyncInfo, saveLocalSyncInfo, setAppMinVersion, uploadSyncInfo } from './syncInfoUtils';
 import { ErrorCode } from '../../errors';
 import Resource from '../../models/Resource';
 import { exists } from 'fs-extra';
+import { Month, msleep } from '@joplin/utils/time';
 
 describe('Synchronizer.basics', () => {
 
@@ -611,21 +612,78 @@ describe('Synchronizer.basics', () => {
 		const remoteInfoBefore = await fetchSyncInfo(synchronizer().api());
 
 		// Simulates upgrading the client
-		setAppMinVersion('100.0.0');
-		await synchronizerStart();
+		const { reset } = setAppMinVersion('100.0.0');
+		try {
+			await synchronizerStart();
 
-		// Then after sync, appMinVersion should be the same as that client version
-		const remoteInfoAfter = await fetchSyncInfo(synchronizer().api());
+			// Then after sync, appMinVersion should be the same as that client version
+			const remoteInfoAfter = await fetchSyncInfo(synchronizer().api());
 
-		expect(remoteInfoBefore.appMinVersion).toBe('3.7.0');
-		expect(remoteInfoAfter.appMinVersion).toBe('100.0.0');
+			expect(remoteInfoBefore.appMinVersion).toBe('3.7.0');
+			expect(remoteInfoAfter.appMinVersion).toBe('100.0.0');
 
-		// Now simulates synchronising with an older client version. In that case, it should not be
-		// allowed and the remote info.json should not change.
-		setAppMinVersion('80.0.0');
-		await expectThrow(async () => synchronizerStart(1, { throwOnError: true }), ErrorCode.MustUpgradeApp);
+			// Now simulates synchronising with an older client version. In that case, it should not be
+			// allowed and the remote info.json should not change.
+			setAppMinVersion('80.0.0');
+			await expectThrow(async () => synchronizerStart(1, { throwOnError: true }), ErrorCode.MustUpgradeApp);
 
-		expect((await fetchSyncInfo(synchronizer().api())).appMinVersion).toBe('100.0.0');
+			expect((await fetchSyncInfo(synchronizer().api())).appMinVersion).toBe('100.0.0');
+		} finally {
+			reset();
+		}
 	}));
 
+	it('should update the last-seen local/remote info', async () => {
+		await synchronizerStart();
+		const remoteInfo = await fetchSyncInfo(synchronizer().api());
+		expect(Setting.value('sync.lastLocalSyncInfo')).toBe(localSyncInfo().serialize());
+		expect(Setting.value('sync.lastRemoteSyncInfo')).toBe(remoteInfo.serialize());
+
+		// After a change to the remote info, the last local and last remote values should also be updated:
+		remoteInfo.revisionServiceTtlDays = 63;
+		await uploadSyncInfo(synchronizer().api(), remoteInfo);
+
+		await synchronizerStart();
+		const newRemoteInfo = await fetchSyncInfo(synchronizer().api());
+		const newLocalInfo = localSyncInfo();
+		expect(Setting.value('sync.lastLocalSyncInfo')).toBe(newLocalInfo.serialize());
+		expect(Setting.value('sync.lastRemoteSyncInfo')).toBe(newRemoteInfo.serialize());
+	});
+
+	it('should not re-upload unchanged info.json keys with far-future timestamps when reset on the sync target', async () => {
+		const setRemoteRevisionServiceTtl = async (ttl: number, timestamp: number) => {
+			const remoteInfo = await fetchSyncInfo(synchronizer().api());
+			remoteInfo.revisionServiceTtlDays = ttl;
+			remoteInfo.setKeyTimestamp('revisionServiceTtlDays', timestamp);
+			await uploadSyncInfo(synchronizer().api(), remoteInfo);
+		};
+		const syncBothClients = async () => {
+			// Use switchClient(i) + synchronizerStart rather than synchronizerStart(i) so that
+			// the correct localSyncInfo is used:
+			const initialClient = currentClientId();
+			await synchronizerStart();
+
+			await switchClient(initialClient === 1 ? 2 : 1);
+			await synchronizerStart();
+
+			await switchClient(initialClient);
+		};
+
+		await syncBothClients();
+		await setRemoteRevisionServiceTtl(123, Date.now() + Month);
+
+		await syncBothClients();
+		expect(localSyncInfo().revisionServiceTtlDays).toBe(123);
+
+		const localInfo = localSyncInfo();
+		localInfo.revisionServiceTtlDays = 3;
+		expect(localInfo.keyTimestamp('revisionServiceTtlDays')).toBeLessThan(Date.now() + Month);
+		saveLocalSyncInfo(localInfo);
+
+		await withWarningSilenced(/Overriding future-timestamped key with changed (local|remote) value/, async () => {
+			await syncBothClients();
+		});
+
+		expect((await fetchSyncInfo(synchronizer().api())).revisionServiceTtlDays).toBe(3);
+	});
 });

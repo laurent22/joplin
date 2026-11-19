@@ -2245,6 +2245,22 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			public: false,
 		},
 
+		'sync.lastLocalSyncInfo': {
+			value: '',
+			type: SettingItemType.String,
+			public: false,
+		},
+		'sync.lastRemoteSyncInfo': {
+			value: '',
+			type: SettingItemType.String,
+			public: false,
+		},
+		'sync.lastRemoteSyncInfo.target': {
+			value: -1,
+			type: SettingItemType.Int,
+			public: false,
+		},
+
 		isSafeMode: {
 			value: false,
 			type: SettingItemType.Bool,
