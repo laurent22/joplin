@@ -1,5 +1,9 @@
 # Joplin Android Changelog
 
+## [android-v3.7.13](https://github.com/laurent22/joplin/releases/tag/android-v3.7.13) - 2026-11-19T17:31:20Z
+
+- Improved: Remove unused READ_MEDIA_IMAGES permission (85f43dd)
+
 ## [android-v3.7.12](https://github.com/laurent22/joplin/releases/tag/android-v3.7.12) - 2026-11-19T15:30:58Z
 
 - Improved: Create the application authorisation ID in one place (79d954a)
