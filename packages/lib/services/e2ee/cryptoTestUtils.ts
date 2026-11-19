@@ -251,6 +251,12 @@ const decryptTestData: Record<string, DecryptTestData> = {
 		plaintext: 'ea5d8dd43823a812c9a64f4eb09b57e1aa2dbfcda50bf9e416dcd1f8c569a6462f7f61861c3ccda0c7c16bf4192ed9c7ecaf3e1248517bd6f397d1080d2632fc69e1ead59a398a07e7478c8d90142745c0dce39c2105b6d34117424697de03879caa3b6410325f14dc5755b69efa944eb83f06970d04444e83fe054576af20576c0f3a5dc23e0d6dcfa3e84ec05c21139070c0809bd2bdc86a7782368c9d99eb072c858c61ec8926136e6e50dfd57b7e8e0084ad08b2d984db0436f50433cab44b3c462ccd22a8567c8ff86675fff618b11526030f09f735646a9f189f54ba5485d069ee25ac468ec0a873c1223eed34962bd219972020cc147041d4b00a3ab8',
 		ciphertext: '{"salt":"iv5kKP+scMyXKO2jqzef3q9y9p/o/mj6zAoKVltbPx0=","iv":"Gz1PtbDzoaZzRx5m","ct":"YSS4ga1Q0MeVpFbMn2V45TaAbbuJM12vU/qYQ/VEGYPXhNQ4YchfRt7+LjhVxwpvfc/rD0znt6kpAh4ROGS2CLDy27/n5VICgTVY2VVff+YjPAma6odKn2pm4Z88fZlkoJVLi7QyU96Mvb6bYVbuNjQ16hOjFQ3iIIztLcafsHaW6v6gUFrDWYVQPi1/xovmmCe/GaM3JeMye5QQiFrmLQIxEJMNv8YiNyppMVf5b1YGFtDlOjm3XE2H9bb+wWNAd82mcwcAe+ZUedz3AH9PKlsRyBGHfGQ/rfFzeoFj+Wjm4fvPniPa1muRSMQDHU2Zw5YGWQwMNVUHt+y7lDoqPF2NQv4DvPmY1kLz2yohIzc="}',
 	},
+	stringKey: {
+		method: EncryptionMethod.StringKeyV1,
+		password: '4BfJl8YbM,nXx.LVgs!AzkWWA]',
+		plaintext: 'This is a test! ✏️',
+		ciphertext: '{"salt":"0G6dEP4LZbsM52gFkRu74wI0o4n1wiQe5PaSOdJkZhM=","iv":"q64LmBwpO6mldtSS","ct":"PxNE85jlesMDNu59aEtjq1SThSGxIDCALoS+NEOpGrVyi1JcqQBs2WYTck9FD90fqnAnhg=="}',
+	},
 	base64File: {
 		method: EncryptionMethod.FileV1,
 		password: '4BfJl8YbM,nXx.LVgs!AzkWWA]',

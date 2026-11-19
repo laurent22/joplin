@@ -1,4 +1,4 @@
-import { CipherAlgorithm, CryptoBuffer, Digest, MasterKeyEntity } from './types';
+import { CipherAlgorithm, CryptoBuffer, CryptoBufferEncoding, Digest, MasterKeyEntity } from './types';
 import Logger from '@joplin/utils/Logger';
 import shim from '../../shim';
 import Setting from '../../models/Setting';
@@ -46,6 +46,7 @@ export enum EncryptionMethod {
 	KeyV1 = 8,
 	FileV1 = 9,
 	StringV1 = 10,
+	StringKeyV1 = 11,
 }
 
 export interface EncryptOptions {
@@ -136,6 +137,7 @@ export default class EncryptionService {
 			[EncryptionMethod.KeyV1]: 5000, // Master key is not encrypted by chunks so this value will not be used.
 			[EncryptionMethod.FileV1]: 131072, // 128k
 			[EncryptionMethod.StringV1]: 65536, // 64k
+			[EncryptionMethod.StringKeyV1]: 5000, // Master key is not encrypted by chunks so this value will not be used.
 		};
 
 		return encryptionMethodChunkSizeMap[method];
@@ -319,15 +321,21 @@ export default class EncryptionService {
 	public async decryptMasterKeyContent(model: MasterKeyEntity, password: string, options: EncryptOptions = null): Promise<string> {
 		options = options || {};
 
+		let plainText;
 		if (model.encryption_method === EncryptionMethod.Custom) {
 			if (!options.encryptionHandler) throw new Error('Master key was encrypted using a custom method, but no encryptionHandler is provided');
-			return options.encryptionHandler.decrypt(options.encryptionHandler.context, model.content, password);
+			plainText = await options.encryptionHandler.decrypt(options.encryptionHandler.context, model.content, password);
+		} else {
+			plainText = await this.decrypt(model.encryption_method, password, model.content);
 		}
 
-		const plainText = await this.decrypt(model.encryption_method, password, model.content);
 		if (model.encryption_method === EncryptionMethod.SJCL2) {
 			const checksum = this.sha256(plainText);
 			if (checksum !== model.checksum) throw new Error('Could not decrypt master key (checksum failed)');
+		}
+
+		if (!plainText.match(/^[0-9a-f]+$/i)) {
+			throw new Error('Invalid master key content: master keys must decrypt to non-empty hexadecimal data');
 		}
 
 		return plainText;
@@ -358,6 +366,17 @@ export default class EncryptionService {
 
 		const sjcl = shim.sjclModule;
 		const crypto = shim.crypto;
+
+		const handleKeyV1 = async (encoding: CryptoBufferEncoding, associatedData: CryptoBuffer) => {
+			return JSON.stringify(await crypto.encryptString(key, await crypto.digest(Digest.sha256, this.encryptionNonce_), plainText, encoding, {
+				cipherAlgorithm: CipherAlgorithm.AES_256_GCM,
+				authTagLength: 16,
+				digestAlgorithm: Digest.sha512,
+				keyLength: 32,
+				associatedData,
+				iterationCount: 220000,
+			}));
+		};
 
 		type EncryptionMethodHandler = (()=> Promise<string>);
 		const handlers: Record<EncryptionMethod, EncryptionMethodHandler> = {
@@ -478,16 +497,10 @@ export default class EncryptionService {
 			// New encryption method powered by native crypto libraries(node:crypto/react-native-quick-crypto). Using AES-256-GCM and pbkdf2
 			// The master key is not directly used. A new data key is generated from the master key and a 256 bits random salt to prevent nonce reuse problem
 			// 2024-08: Set iteration count in pbkdf2 to 220000 as suggested by OWASP. https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html#pbkdf2
-			[EncryptionMethod.KeyV1]: async () => {
-				return JSON.stringify(await crypto.encryptString(key, await crypto.digest(Digest.sha256, this.encryptionNonce_), plainText, 'hex', {
-					cipherAlgorithm: CipherAlgorithm.AES_256_GCM,
-					authTagLength: 16,
-					digestAlgorithm: Digest.sha512,
-					keyLength: 32,
-					associatedData: emptyUint8Array,
-					iterationCount: 220000,
-				}));
-			},
+			[EncryptionMethod.KeyV1]: () => handleKeyV1('hex', emptyUint8Array),
+			// Same as KeyV1, but encodes/decodes to a JS string. The encryption method is authenticated
+			// so that changing the encryption method to KeyV1 will cause decryption to fail.
+			[EncryptionMethod.StringKeyV1]: () => handleKeyV1('utf16le', Buffer.from([method])),
 
 			// New encryption method powered by native crypto libraries(node:crypto/react-native-quick-crypto). Using AES-256-GCM and pbkdf2
 			// The master key is not directly used. A new data key is generated from the master key and a 256 bits random salt to prevent nonce reuse problem
@@ -531,15 +544,17 @@ export default class EncryptionService {
 
 		const sjcl = shim.sjclModule;
 		const crypto = shim.crypto;
-		if (method === EncryptionMethod.KeyV1) {
+		if (method === EncryptionMethod.KeyV1 || method === EncryptionMethod.StringKeyV1) {
+			const encoding = method === EncryptionMethod.KeyV1 ? 'hex' : 'utf16le';
+			const associatedData = method === EncryptionMethod.KeyV1 ? emptyUint8Array : Buffer.from([method]);
 			return crypto.bufferToString(await crypto.decrypt(key, JSON.parse(cipherText), {
 				cipherAlgorithm: CipherAlgorithm.AES_256_GCM,
 				authTagLength: 16,
 				digestAlgorithm: Digest.sha512,
 				keyLength: 32,
-				associatedData: emptyUint8Array,
+				associatedData,
 				iterationCount: 220000,
-			}), 'hex');
+			}), encoding);
 		} else if (method === EncryptionMethod.FileV1) {
 			return crypto.bufferToString(await crypto.decrypt(key, JSON.parse(cipherText), {
 				cipherAlgorithm: CipherAlgorithm.AES_256_GCM,
