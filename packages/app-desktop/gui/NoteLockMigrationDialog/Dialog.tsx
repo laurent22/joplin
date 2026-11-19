@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { Dispatch } from 'redux';
 import { useCallback, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { AppState } from '../../app.reducer';
 import { _ } from '@joplin/lib/locale';
 import { noteLockPasswordErrorMessage } from '@joplin/lib/components/shared/config/useNoteLockMode';
 import DialogButtonRow, { ClickEvent } from '../DialogButtonRow';
@@ -19,6 +21,7 @@ export default function(props: Props) {
 	const [targetPassword, setTargetPassword] = useState('');
 	const [migrating, setMigrating] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
+	const bulkChangeRunning = useSelector((state: AppState) => state.noteLockBulkChangeRunning);
 
 	const onClose = useCallback(() => {
 		props.dispatch({
@@ -50,13 +53,13 @@ export default function(props: Props) {
 			setMigrating(true);
 			setErrorMessage('');
 			try {
-				await startNoteLockKeyMigration(localPassword, targetPassword, props.dispatch, onClose);
+				await startNoteLockKeyMigration(localPassword, targetPassword, props.dispatch, onClose, bulkChangeRunning);
 			} catch (error) {
 				setErrorMessage(noteLockPasswordErrorMessage(error, true));
 				setMigrating(false);
 			}
 		}
-	}, [localPassword, targetPassword, onClose, props.dispatch]);
+	}, [localPassword, targetPassword, onClose, props.dispatch, bulkChangeRunning]);
 
 	return (
 		<Dialog onCancel={migrating ? undefined : onClose} className="note-lock-migration-dialog">

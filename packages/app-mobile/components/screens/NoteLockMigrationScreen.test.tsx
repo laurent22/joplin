@@ -24,7 +24,7 @@ const renderScreen = () => {
 	const dispatch = jest.fn();
 	render(
 		<TestProviderStack store={store}>
-			<NoteLockMigrationScreenComponent themeId={Setting.THEME_LIGHT} dispatch={dispatch}/>
+			<NoteLockMigrationScreenComponent themeId={Setting.THEME_LIGHT} dispatch={dispatch} noteLockBulkChangeRunning={false}/>
 		</TestProviderStack>,
 	);
 	fireEvent.changeText(screen.getByLabelText('Note lock password on this device'), 'local');
@@ -51,7 +51,7 @@ describe('NoteLockMigrationScreen', () => {
 		fireEvent.press(screen.getByText('Migrate'));
 
 		await waitFor(() => expect(dispatch).toHaveBeenCalledWith({ type: 'NAV_BACK' }));
-		expect(startMock).toHaveBeenCalledWith('local', 'target', dispatch, expect.any(Function));
+		expect(startMock).toHaveBeenCalledWith('local', 'target', dispatch, expect.any(Function), false);
 		expect(skipMock).not.toHaveBeenCalled();
 	});
 
@@ -68,7 +68,7 @@ describe('NoteLockMigrationScreen', () => {
 
 	test('should not show the migration banner on its own screen', async () => {
 		Setting.setValue('featureFlag.noteLock', true);
-		Setting.setValue('noteLock.conflictNoteLockKey', { noteLockKey: { id: 'target-key' }, syncMigrationId: 'lineage' });
+		Setting.setValue('noteLock.conflictNoteLockKey', { noteLockKey: { id: 'target-key' } });
 		store = createMockReduxStore();
 		setupGlobalStore(store);
 		renderScreen();

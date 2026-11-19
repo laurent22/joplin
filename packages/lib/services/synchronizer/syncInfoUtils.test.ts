@@ -156,8 +156,7 @@ describe('syncInfoUtils', () => {
 
 	const syncInfoWithNoteLockKey = (key: MasterKeyEntity, syncMigrationId: string) => {
 		const syncInfo = new SyncInfo();
-		syncInfo.noteLockKey = key;
-		syncInfo.syncMigrationId = syncMigrationId;
+		syncInfo.noteLockKey = key ? { ...key, syncMigrationId } : null;
 		return syncInfo;
 	};
 
@@ -176,7 +175,6 @@ describe('syncInfoUtils', () => {
 		const merged = mergeSyncInfos(local, remote, { resetPropagates });
 
 		expect(merged.noteLockKey).toEqual(expected.noteLockKey);
-		expect(merged.syncMigrationId).toBe(expected.syncMigrationId);
 	});
 
 	it('should refuse to merge a different lineage while local notes depend on the local key', () => {
@@ -191,7 +189,7 @@ describe('syncInfoUtils', () => {
 		const remote = syncInfoWithNoteLockKey(noteLockKey('1', 200), 'L1');
 
 		expect(() => checkNoteLockKeyConflict(local, remote, true, false)).toThrow(expect.objectContaining({ code: ErrorCode.NoteLockKeyConflict }));
-		expect(Setting.value('noteLock.conflictNoteLockKey')).toEqual({ noteLockKey: remote.noteLockKey, syncMigrationId: 'L1' });
+		expect(Setting.value('noteLock.conflictNoteLockKey')).toEqual({ noteLockKey: remote.noteLockKey });
 	});
 
 	test.each([
@@ -206,7 +204,7 @@ describe('syncInfoUtils', () => {
 	});
 
 	it('should keep rejecting syncs while notes depend on the parked key', () => {
-		const parked = { noteLockKey: noteLockKey('1', 200), syncMigrationId: 'L1' };
+		const parked = { noteLockKey: { ...noteLockKey('1', 200), syncMigrationId: 'L1' } };
 		Setting.setValue('noteLock.conflictNoteLockKey', parked);
 		const local = syncInfoWithNoteLockKey(noteLockKey('3', 300), 'L3');
 		const remote = syncInfoWithNoteLockKey(noteLockKey('3', 300), 'L3');
@@ -219,7 +217,7 @@ describe('syncInfoUtils', () => {
 		['the sync target has no key', null],
 		['the sync target has the local key', noteLockKey('3', 300)],
 	])('should drop a parked key that no note depends on when %s', (_description, remoteKey) => {
-		Setting.setValue('noteLock.conflictNoteLockKey', { noteLockKey: noteLockKey('1', 200), syncMigrationId: 'L1' });
+		Setting.setValue('noteLock.conflictNoteLockKey', { noteLockKey: { ...noteLockKey('1', 200), syncMigrationId: 'L1' } });
 		const local = syncInfoWithNoteLockKey(noteLockKey('3', 300), 'L3');
 		const remote = syncInfoWithNoteLockKey(remoteKey, remoteKey ? 'L3' : '');
 
@@ -228,27 +226,26 @@ describe('syncInfoUtils', () => {
 	});
 
 	it('should park the new sync target key when it changed and no note depends on the old one', () => {
-		Setting.setValue('noteLock.conflictNoteLockKey', { noteLockKey: noteLockKey('1', 200), syncMigrationId: 'L1' });
+		Setting.setValue('noteLock.conflictNoteLockKey', { noteLockKey: { ...noteLockKey('1', 200), syncMigrationId: 'L1' } });
 		const local = syncInfoWithNoteLockKey(noteLockKey('3', 300), 'L3');
 		const remote = syncInfoWithNoteLockKey(noteLockKey('4', 400), 'L4');
 
 		expect(() => checkNoteLockKeyConflict(local, remote, true, false)).toThrow(expect.objectContaining({ code: ErrorCode.NoteLockKeyConflict }));
-		expect(Setting.value('noteLock.conflictNoteLockKey')).toEqual({ noteLockKey: remote.noteLockKey, syncMigrationId: 'L4' });
+		expect(Setting.value('noteLock.conflictNoteLockKey')).toEqual({ noteLockKey: remote.noteLockKey });
 	});
 
 	test.each([
-		['a key without a sync migration id', noteLockKey('1', 200), '', true],
-		['a key with a sync migration id', noteLockKey('1', 200), 'L1', false],
-		['no key', null, '', false],
-	])('should check the sync migration id: %s', (_description, key, syncMigrationId, throws) => {
-		const syncInfo = syncInfoWithNoteLockKey(key, syncMigrationId);
-		for (const [isRemote, side] of [[false, 'on this device'], [true, 'on the sync target']] as const) {
-			const check = () => checkNoteLockKeyMigrationId(syncInfo, isRemote);
-			if (throws) {
-				expect(check).toThrow(side);
-			} else {
-				expect(check).not.toThrow();
-			}
+		['no local key, remote key without an id', null, '', noteLockKey('1', 200), '', null],
+		['the same key without an id on both sides', noteLockKey('1', 200), '', noteLockKey('1', 200), '', null],
+		['keys with ids', noteLockKey('2', 300), 'L2', noteLockKey('1', 200), 'L1', null],
+		['a local key without an id', noteLockKey('2', 300), '', noteLockKey('1', 200), 'L1', 'on this device'],
+		['a remote key without an id', noteLockKey('2', 300), 'L2', noteLockKey('1', 200), '', 'on the sync target'],
+	])('should check the sync migration id: %s', (_description, localKey, localId, remoteKey, remoteId, throwsFor) => {
+		const check = () => checkNoteLockKeyMigrationId(syncInfoWithNoteLockKey(localKey, localId), syncInfoWithNoteLockKey(remoteKey, remoteId));
+		if (throwsFor) {
+			expect(check).toThrow(throwsFor);
+		} else {
+			expect(check).not.toThrow();
 		}
 	});
 
@@ -396,7 +393,6 @@ describe('syncInfoUtils', () => {
 				'value': '400227d2222c4d3bb7346514861c643b',
 			},
 			'appMinVersion': '0.0.0',
-			'syncMigrationId': '',
 			'e2ee': {
 				'updatedTime': 0,
 				'value': true,

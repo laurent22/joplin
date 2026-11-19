@@ -6,7 +6,8 @@ import shim from '../../shim';
 import { BaseItemEntity, NoteEntity, ResourceEntity } from '../database/types';
 import EncryptionService from '../e2ee/EncryptionService';
 import NoteLockNote from '../noteLock/NoteLockNote';
-import NoteLockKey, { noteLockKeyFileName } from '../noteLock/NoteLockKey';
+import NoteLockKey, { noteLockKeyFileName, syncedNoteLockKeyFileName } from '../noteLock/NoteLockKey';
+import { noteLockKeyConflict } from '../synchronizer/syncInfoUtils';
 
 export default class InteropService_Exporter_Raw extends InteropService_Exporter_Base {
 
@@ -54,5 +55,8 @@ export default class InteropService_Exporter_Raw extends InteropService_Exporter
 			const key = NoteLockKey.instance().load();
 			if (key) await shim.fsDriver().writeFile(`${this.destDir_}/${noteLockKeyFileName}`, JSON.stringify(key), 'utf-8');
 		}
+		// The profile only parks the synced key until the migration finishes, so a backup made meanwhile keeps it too.
+		const conflict = noteLockKeyConflict();
+		if (conflict) await shim.fsDriver().writeFile(`${this.destDir_}/${syncedNoteLockKeyFileName}`, JSON.stringify(conflict.noteLockKey), 'utf-8');
 	}
 }

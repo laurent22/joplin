@@ -419,6 +419,11 @@ export default class Revision extends BaseItem {
 		await this.batchDelete(revisions.map(item => item.id), options);
 	}
 
+	public static async lockedRevisionIds() {
+		const rows = await this.db().selectAll<{ id: string }>('SELECT id FROM revisions WHERE is_locked = 1');
+		return rows.map(row => row.id);
+	}
+
 	public static async revisionExists(itemType: ModelType, itemId: string, updatedTime: number) {
 		const existingRev = await Revision.latestRevision(itemType, itemId);
 		return existingRev && existingRev.item_updated_time === updatedTime;
