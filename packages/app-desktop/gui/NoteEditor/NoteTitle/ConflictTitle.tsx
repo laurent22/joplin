@@ -92,16 +92,16 @@ const ConflictTitle: React.FC<Props> = ({ conflictTitle, disabled, resolvedTitle
 								</button>
 							</div>
 
-							<p><span className='-swatch -local'></span>{_('Yellow - your version from this device. Click "Use my version" to keep it.')}</p>
-							<p><span className='-swatch -incoming'></span>{_('Blue - the version which has been synced to your other device(s). You can edit it directly.')}</p>
+							<p><span className='-swatch -local'></span>{_('Yellow section - content from your version on this device. Click "Use my version" to keep it.')}</p>
+							<p><span className='-swatch -incoming'></span>{_('Blue section - content from the version which has been synced to your other device(s). If present, this content will be kept by default, and can be edited directly.')}</p>
 							<p>{_('Darker highlights show the words that differ.')}</p>
 
 							{hasTitleConflict ? (
 								<p className='-help-section'>{_('The title was changed too. The box on the right is the title that will be saved - edit it, or click the arrow to use the one on the left.')}</p>
 							) : null}
 
-							<p className='-help-section'>{_('Blue text is kept by default. Click "Finish" to save.')}</p>
-							<p>{_('To keep both, click "Keep both versions" instead.')}</p>
+							<p className='-help-section'>{_('When sections remain, only blue sections are retained, while any remaining yellow sections which have not been accepted will be discarded upon completion. Click "Finish" to complete resolution.')}</p>
+							<p>{_('To keep both versions of the full note, click "Keep both versions" instead.')}</p>
 						</div>
 					) : null}
 				</div>
