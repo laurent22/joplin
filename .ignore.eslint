@@ -151,6 +151,7 @@ packages/app-cli/app/command-settingschema.js
 packages/app-cli/app/command-share.test.js
 packages/app-cli/app/command-share.js
 packages/app-cli/app/command-status.js
+packages/app-cli/app/command-sync.test.js
 packages/app-cli/app/command-sync.js
 packages/app-cli/app/command-tag.js
 packages/app-cli/app/command-testing.js

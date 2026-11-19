@@ -7,7 +7,7 @@ import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import * as pathUtils from '@joplin/lib/path-utils';
 import { getEncryptionEnabled, localSyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import { generateMasterKeyAndEnableEncryption, loadMasterKeysFromSettings, masterPasswordIsValid, setupAndDisableEncryption } from '@joplin/lib/services/e2ee/utils';
+import { generateMasterKeyAndEnableEncryption, loadMasterKeysFromSettings, masterPasswordIsValid, resolveE2eeEnabledStateConflict, setupAndDisableEncryption } from '@joplin/lib/services/e2ee/utils';
 import { fromFile as fileTypeFromFile } from 'file-type';
 
 class Command extends BaseCommand {
@@ -16,7 +16,7 @@ class Command extends BaseCommand {
 	}
 
 	public description() {
-		return _('Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.'); // `generate-ppk`
+		return _('Manages E2EE configuration. Commands are `enable`, `re-enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.'); // `generate-ppk`
 	}
 
 	public options() {
@@ -78,6 +78,22 @@ class Command extends BaseCommand {
 
 			this.stdout(_('Completed decryption.'));
 		};
+
+		if (args.command === 're-enable') {
+			if (!localSyncInfo().e2ee) {
+				throw new Error(_('This command can only be used to resolve E2EE enabled state conflicts. To enable encryption for the first time, use "e2ee enable".'));
+			}
+
+			await resolveE2eeEnabledStateConflict(
+				EncryptionService.instance(),
+				true,
+				action => this.dispatch(action),
+			);
+			if (!localSyncInfo().e2ee) throw new Error('Failed to re-enable E2EE');
+
+			this.stdout(_('Re-enabled E2EE. Sync to apply changes.'));
+			return;
+		}
 
 		if (args.command === 'enable') {
 			const argPassword = options.password ? options.password.toString() : '';

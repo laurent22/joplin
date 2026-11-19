@@ -1,10 +1,12 @@
-import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, encryptionService, expectNotThrow, expectThrow, kvStore, msleep } from '../../testing/test-utils';
+import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, encryptionService, expectNotThrow, expectThrow, kvStore, msleep, runWithFakeTimers, loadEncryptionMasterKey } from '../../testing/test-utils';
 import MasterKey from '../../models/MasterKey';
-import { activeMasterKeySanityCheck, migrateMasterPassword, migratePpk, resetMasterPassword, showMissingMasterKeyMessage, updateMasterPassword } from './utils';
+import { activeMasterKeySanityCheck, migrateMasterPassword, migratePpk, resetMasterPassword, resolveE2eeEnabledStateConflict, setupAndEnableEncryption, showMissingMasterKeyMessage, updateMasterPassword } from './utils';
 import { localSyncInfo, masterKeyById, masterKeyEnabled, saveLocalSyncInfo, setActiveMasterKeyId, setMasterKeyEnabled, setPpk } from '../synchronizer/syncInfoUtils';
 import Setting from '../../models/Setting';
 import { generateKeyPair, generateKeyPairWithAlgorithm, getPpkAlgorithm, ppkPasswordIsValid, testing__setPpkMigrations_ } from './ppk/ppk';
 import { PublicKeyAlgorithm } from './types';
+import { Second } from '@joplin/utils/time';
+import shim from '../../shim';
 
 describe('e2ee/utils', () => {
 
@@ -235,4 +237,53 @@ describe('e2ee/utils', () => {
 		expect(syncInfo.activeMasterKeyId).toBe(mk1.id);
 	});
 
+	it.each([
+		{
+			label: 'should allow re-enabling remote E2EE',
+			reEnable: true,
+			expectedFinalE2eeState: true,
+		},
+		{
+			label: 'should allow disabling local E2EE',
+			reEnable: false,
+			acceptConfirmDialog: true,
+			expectedFinalE2eeState: false,
+		},
+		{
+			label: 'should allow the user to cancel disabling local E2EE',
+			reEnable: false,
+			acceptConfirmDialog: false,
+			expectedFinalE2eeState: true,
+		},
+	])('should resolve E2EE enabled state conflicts: $label', async ({ reEnable, acceptConfirmDialog, expectedFinalE2eeState }) => {
+		await setupAndEnableEncryption(encryptionService(), await loadEncryptionMasterKey());
+
+		await runWithFakeTimers(async () => {
+			const confirmDialogSpy = jest.spyOn(shim, 'showConfirmationDialog');
+			confirmDialogSpy.mockImplementationOnce(async () => !!acceptConfirmDialog);
+			try {
+				const initialE2eeTimestamp = localSyncInfo().keyTimestamp('e2ee');
+				jest.advanceTimersByTime(Second);
+
+				const mockDispatch = jest.fn();
+				await resolveE2eeEnabledStateConflict(
+					encryptionService(),
+					reEnable,
+					mockDispatch,
+				);
+
+				if (reEnable) {
+					// The e2ee key timestamp should be increased to force a re-upload of the
+					// e2ee enabled state:
+					const finalE2eeTimestamp = localSyncInfo().keyTimestamp('e2ee');
+					expect(finalE2eeTimestamp).toBeGreaterThan(initialE2eeTimestamp);
+				} else {
+					expect(confirmDialogSpy).toHaveBeenCalled();
+				}
+				expect(localSyncInfo().e2ee).toBe(expectedFinalE2eeState);
+			} finally {
+				confirmDialogSpy.mockRestore();
+			}
+		});
+	});
 });

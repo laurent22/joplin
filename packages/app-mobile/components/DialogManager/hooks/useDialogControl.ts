@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { Alert, Platform } from 'react-native';
+import { Alert } from 'react-native';
 import { DialogControl, DialogType, MenuChoice, PromptButtonSpec, DialogData, PromptOptions } from '../types';
 import { _ } from '@joplin/lib/locale';
 import { useMemo, useRef } from 'react';
+import shim from '@joplin/lib/shim';
 
 type SetPromptDialogs = React.Dispatch<React.SetStateAction<DialogData[]>>;
 
@@ -34,7 +35,7 @@ const useDialogControl = (setPromptDialogs: SetPromptDialogs) => {
 			},
 			prompt: (title: string, message: string, buttons: PromptButtonSpec[] = defaultButtons, options?: PromptOptions) => {
 				// Note: Alert.alert doesn't work on web.
-				if (Platform.OS === 'ios') {
+				if (shim.mobilePlatform() === 'ios') {
 					// Alert.alert provides a more native style on iOS.
 					// It also allows displaying confirmation dialogs on top of modals.
 					Alert.alert(title, message, buttons, options);

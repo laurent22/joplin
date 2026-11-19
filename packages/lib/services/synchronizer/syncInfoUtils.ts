@@ -272,7 +272,15 @@ const mergeActiveMasterKeys = (s1: SyncInfo, s2: SyncInfo, output: SyncInfo) => 
 export function mergeSyncInfos(s1: SyncInfo, s2: SyncInfo): SyncInfo {
 	const output: SyncInfo = new SyncInfo();
 
-	output.setWithTimestamp(s1.keyTimestamp('e2ee') > s2.keyTimestamp('e2ee') ? s1 : s2, 'e2ee');
+	const newE2ee = s1.keyTimestamp('e2ee') > s2.keyTimestamp('e2ee') ? s1 : s2;
+	if (s1.e2ee && !newE2ee.e2ee) {
+		throw new JoplinError(
+			'E2EE conflict: Encryption has been disabled remotely, but is still enabled locally.',
+			'e2eeEnabledStateConflict',
+		);
+	}
+
+	output.setWithTimestamp(newE2ee, 'e2ee');
 	output.setWithTimestamp(s1.keyTimestamp('ppk') > s2.keyTimestamp('ppk') ? s1 : s2, 'ppk');
 	output.setWithTimestamp(s1.keyTimestamp('revisionServiceEnabled') > s2.keyTimestamp('revisionServiceEnabled') ? s1 : s2, 'revisionServiceEnabled');
 	output.setWithTimestamp(s1.keyTimestamp('revisionServiceTtlDays') > s2.keyTimestamp('revisionServiceTtlDays') ? s1 : s2, 'revisionServiceTtlDays');

@@ -1,4 +1,4 @@
-import { afterAllCleanUp, setupDatabaseAndSynchronizer, logger, switchClient, encryptionService, msleep, fileApi } from '../../testing/test-utils';
+import { afterAllCleanUp, setupDatabaseAndSynchronizer, logger, switchClient, encryptionService, msleep, fileApi, expectThrow, expectNotThrow, runWithFakeTimers } from '../../testing/test-utils';
 import MasterKey from '../../models/MasterKey';
 import { checkIfCanSync, localSyncInfo, localSyncInfoSelector, masterKeyEnabled, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyEnabled, setMasterKeyHasBeenUsed, SyncInfo, syncInfoEquals, checkSyncTargetIsValid, fetchSyncInfo, onRevisionServiceSettingsChanged, setAppMinVersion } from './syncInfoUtils';
 import Setting from '../../models/Setting';
@@ -6,6 +6,7 @@ import BaseItem from '../../models/BaseItem';
 import BaseModel from '../../models/BaseItem';
 import Logger from '@joplin/utils/Logger';
 import { State } from '../../reducer';
+import { Second } from '@joplin/utils/time';
 
 describe('syncInfoUtils', () => {
 	it('should keep selected sync info stable while the cache is unchanged', () => {
@@ -231,6 +232,21 @@ describe('syncInfoUtils', () => {
 		syncInfo2.masterKeys[0].enabled = 0;
 		expect(mergeSyncInfos(syncInfo1, syncInfo2).activeMasterKeyId).toBe('1');
 	});
+
+	it('should throw rather than disable E2EE locally when disabled remotely', () => runWithFakeTimers(async () => {
+		const syncInfo1 = new SyncInfo();
+		const syncInfo2 = new SyncInfo();
+
+		syncInfo1.e2ee = true;
+		syncInfo2.e2ee = true;
+
+		jest.advanceTimersByTime(Second);
+
+		syncInfo2.e2ee = false;
+
+		await expectThrow(() => mergeSyncInfos(syncInfo1, syncInfo2), 'e2eeEnabledStateConflict');
+		await expectNotThrow(() => mergeSyncInfos(syncInfo2, syncInfo1));
+	}));
 
 	it('should fix the sync info if it contains invalid data', async () => {
 		logger.enabled = false;

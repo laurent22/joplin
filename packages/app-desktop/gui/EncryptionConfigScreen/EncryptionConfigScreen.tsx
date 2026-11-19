@@ -8,7 +8,7 @@ import dialogs from '../dialogs';
 import { decryptedStatText, determineKeyPassword, dontReencryptData, enableEncryptionConfirmationMessages, onSavePasswordClick, onToggleEnabledClick, reencryptData, upgradeMasterKey, useInputPasswords, useNeedMasterPassword, usePasswordChecker, useStats, useToggleShowDisabledMasterKeys } from '@joplin/lib/components/EncryptionConfigScreen/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import { getEncryptionEnabled, localSyncInfoSelector, masterKeyEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import { getDefaultMasterKey, getMasterPasswordStatusMessage, masterPasswordIsValid, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
+import { disableEncryptionConfirmationMessage, getDefaultMasterKey, getMasterPasswordStatusMessage, masterPasswordIsValid, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
 import Button, { ButtonLevel } from '../Button/Button';
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { connect } from 'react-redux';
@@ -410,7 +410,7 @@ export const EncryptionConfigScreen = (props: Props) => {
 			content: (
 				<div style={{ marginBottom: 16 }}>
 					<p style={theme.textStyle}>
-						{_('Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?')}
+						{disableEncryptionConfirmationMessage()}
 					</p>
 				</div>
 			),

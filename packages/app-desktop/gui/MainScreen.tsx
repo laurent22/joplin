@@ -30,7 +30,7 @@ import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncIn
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import executeCallbackUrl from './MainScreen/handleCallbackUrl';
 import ElectronAppWrapper from '../ElectronAppWrapper';
-import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
+import { resolveE2eeEnabledStateConflict, showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import invitationRespond from '@joplin/lib/services/share/invitationRespond';
 import restart from '../services/restart';
@@ -47,6 +47,7 @@ const logger = Logger.create('MainScreen');
 import { ipcRenderer } from 'electron';
 import layoutKeyToLabel from '../utils/layout/layoutKeyToLabel';
 import MainLayoutPane from './MainLayoutPane';
+import { reg } from '@joplin/lib/registry';
 
 interface Props {
 	plugins: PluginStates;
@@ -75,6 +76,7 @@ interface Props {
 	mustUpgradeAppMessage: string;
 	syncTargetAppMinVersion: string;
 	showInvalidJoplinCloudCredential: boolean;
+	showReEnableEncryptionBanner: boolean;
 	toast: Toast;
 	shouldSwitchToAppleSiliconVersion: boolean;
 }
@@ -586,6 +588,18 @@ class MainScreenComponent extends React.Component<Props, State> {
 				_('Restart and upgrade'),
 				onRestartAndUpgrade,
 			);
+		} else if (this.props.showReEnableEncryptionBanner) {
+			const resolveE2eeConflict = async (reEnable: boolean) => {
+				await resolveE2eeEnabledStateConflict(EncryptionService.instance(), reEnable, this.props.dispatch);
+				void reg.scheduleSync(0);
+			};
+			msg = this.renderNotificationMessage(
+				_('Encryption has been disabled on the sync target.'),
+				_('Keep encryption enabled'),
+				() => resolveE2eeConflict(true),
+				_('Disable encryption'),
+				() => resolveE2eeConflict(false),
+			);
 		} else if (this.props.hasDisabledEncryptionItems) {
 			msg = this.renderNotificationMessage(
 				_('Some items cannot be decrypted.'),
@@ -707,7 +721,8 @@ class MainScreenComponent extends React.Component<Props, State> {
 			this.props.needApiAuth ||
 			!!this.props.mustUpgradeAppMessage ||
 			props.showInvalidJoplinCloudCredential ||
-			props.shouldSwitchToAppleSiliconVersion;
+			props.shouldSwitchToAppleSiliconVersion ||
+			props.showReEnableEncryptionBanner;
 	}
 
 	private resizableLayout_resize(event: { layout: LayoutItem }) {
@@ -838,6 +853,7 @@ const mapStateToProps = (state: AppState) => {
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
 		syncTargetAppMinVersion: state.mustUpgradeAppMinVersion,
 		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
+		showReEnableEncryptionBanner: syncInfo.e2ee && state.mustResolveE2eeEnabledConflict,
 		toast: state.toast,
 		shouldSwitchToAppleSiliconVersion: shim.isAppleSilicon() && shim.isMac() && process.arch !== 'arm64',
 	};

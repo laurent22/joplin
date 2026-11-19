@@ -200,6 +200,7 @@ export interface State extends WindowState {
 	mustUpgradeAppMessage: string;
 	mustUpgradeAppMinVersion: string;
 	mustAuthenticate: boolean;
+	mustResolveE2eeEnabledConflict: boolean;
 	toast: Toast | null;
 	editorNoteReloadTimeRequest: number;
 	allowSelectionInOtherFolders: boolean;
@@ -276,6 +277,7 @@ export const defaultState: State = {
 	mustUpgradeAppMessage: '',
 	mustUpgradeAppMinVersion: '',
 	mustAuthenticate: false,
+	mustResolveE2eeEnabledConflict: false,
 	editorNoteReloadTimeRequest: 0,
 	allowSelectionInOtherFolders: false,
 	noteHtmlToMarkdownDone: '',
@@ -1611,6 +1613,10 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'MUST_AUTHENTICATE':
 			draft.mustAuthenticate = action.value;
+			break;
+
+		case 'MUST_RESOLVE_E2EE_ENABLED_CONFLICT':
+			draft.mustResolveE2eeEnabledConflict = action.value;
 			break;
 
 		case 'NOTE_LIST_RENDERER_ADD':

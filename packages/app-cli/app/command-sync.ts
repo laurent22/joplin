@@ -243,6 +243,12 @@ class Command extends BaseCommand {
 				}
 			}
 
+			if (app().store().getState().mustResolveE2eeEnabledConflict) {
+				this.stdout(
+					_('Encryption has been disabled remotely: Run either "%s" (to disable encryption) or "%s" (to keep encryption enabled)', 'e2ee disable', 'e2ee re-enable'),
+				);
+			}
+
 			// When using the tool in command line mode, the ResourceFetcher service is
 			// not going to be running in the background, so the resources need to be
 			// explicitly downloaded below.

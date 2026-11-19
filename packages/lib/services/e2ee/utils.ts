@@ -10,6 +10,9 @@ import { generateKeyPair, pkReencryptPrivateKey, ppkPasswordIsValid, shouldUpdat
 import KvStore from '../KvStore';
 import Folder from '../../models/Folder';
 import ShareService from '../share/ShareService';
+import shim from '../../shim';
+import { _ } from '../../locale';
+import { Dispatch } from 'redux';
 
 const logger = Logger.create('e2ee/utils');
 
@@ -64,6 +67,27 @@ export async function toggleAndSetupEncryption(service: EncryptionService, enabl
 
 	await loadMasterKeysFromSettings(service);
 }
+
+export const disableEncryptionConfirmationMessage = () => _('Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?');
+
+export const resolveE2eeEnabledStateConflict = async (service: EncryptionService, reEnable: boolean, dispatch: Dispatch) => {
+	const syncInfo = localSyncInfo();
+	if (!syncInfo.e2ee) throw new Error('Invalid initial state: E2EE is not enabled locally');
+
+	if (reEnable) {
+		syncInfo.e2ee = true;
+		syncInfo.setKeyTimestamp('e2ee', Date.now());
+		saveLocalSyncInfo(syncInfo);
+	} else {
+		const answer = await shim.showConfirmationDialog(disableEncryptionConfirmationMessage());
+		if (!answer) return;
+
+		logger.info('Disabling encryption...');
+		await setupAndDisableEncryption(service);
+	}
+
+	dispatch({ type: 'MUST_RESOLVE_E2EE_ENABLED_CONFLICT', value: false });
+};
 
 export async function generateMasterKeyAndEnableEncryption(service: EncryptionService, password: string) {
 	let masterKey = await service.generateMasterKey(password);

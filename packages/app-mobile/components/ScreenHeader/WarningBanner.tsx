@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { connect } from 'react-redux';
 import { Platform } from 'react-native';
 import { AppState } from '../../utils/types';
 import WarningBox from './WarningBox';
 import { _ } from '@joplin/lib/locale';
-import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
+import { resolveE2eeEnabledStateConflict, showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import Setting from '@joplin/lib/models/Setting';
 import { ShareInvitation, ShareUserStatus } from '@joplin/lib/services/share/reducer';
@@ -13,10 +13,15 @@ import { substrWithEllipsis } from '@joplin/lib/string-utils';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
+import { reg } from '@joplin/lib/registry';
+import { DialogContext } from '../DialogManager';
+import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
+import { Dispatch } from 'redux';
 
 const logger = Logger.create('WarningBanner');
 
 interface Props {
+	dispatch: Dispatch;
 	themeId: number;
 	showMissingMasterKeyMessage: boolean;
 	hasDisabledSyncItems: boolean;
@@ -28,6 +33,7 @@ interface Props {
 	shareInvitations: ShareInvitation[];
 	processingShareInvitationResponse: boolean;
 	showInvalidJoplinCloudCredential: boolean;
+	showReEnableEncryptionBanner: boolean;
 }
 
 const androidGooglePlayUrl = 'https://play.google.com/store/apps/details?id=net.cozic.joplin';
@@ -44,6 +50,8 @@ const fetchAndroidVersionIsPreRelease = async (version: string) => {
 export const WarningBannerComponent: React.FC<Props> = props => {
 	const warningComps = [];
 
+	const dialogs = useContext(DialogContext);
+
 	const [isAndroidTargetPreRelease, setIsAndroidTargetPreRelease] = useState<boolean|null>(null);
 
 	useAsyncEffect(async event => {
@@ -58,12 +66,13 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 		}
 	}, [props.mustUpgradeAppMessage, props.syncTargetAppMinVersion]);
 
-	const renderWarningBox = (screen: string, message: string, url?: string) => {
+	const renderWarningBox = (screen: string, message: string, url?: string, onPress?: ()=> void) => {
 		return <WarningBox
 			key={screen}
 			themeId={props.themeId}
 			targetScreen={screen}
 			url={url}
+			onPress={onPress}
 			message={message}
 			testID='warning-box'
 		/>;
@@ -125,6 +134,29 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 	if (props.showInvalidJoplinCloudCredential) {
 		warningComps.push(renderWarningBox('JoplinCloudLogin', _('Your Joplin Cloud credentials are invalid, please login.')));
 	}
+	if (props.showReEnableEncryptionBanner) {
+		warningComps.push(
+			renderWarningBox('reEnableEncryption', _('Encryption needs to be reconfigured.'), undefined, () => {
+				const resolveConflict = async (reEnable: boolean) => {
+					await resolveE2eeEnabledStateConflict(
+						EncryptionService.instance(),
+						reEnable,
+						props.dispatch,
+					);
+					void reg.scheduleSync(0);
+				};
+
+				dialogs.prompt(
+					'',
+					_('Encryption has been disabled on the sync target.'),
+					[
+						{ text: _('Disable encryption'), style: 'destructive', onPress: () => resolveConflict(false) },
+						{ text: _('Keep encryption enabled'), style: 'default', onPress: () => resolveConflict(true) },
+					],
+				);
+			}),
+		);
+	}
 
 	const shareInvitation = props.shareInvitations.find(inv => inv.status === ShareUserStatus.Waiting);
 	if (
@@ -162,5 +194,6 @@ export default connect((state: AppState) => {
 		shareInvitations: state.shareService.shareInvitations,
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
 		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
+		showReEnableEncryptionBanner: syncInfo.e2ee && state.mustResolveE2eeEnabledConflict,
 	};
 })(WarningBannerComponent);

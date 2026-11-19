@@ -560,9 +560,14 @@ export default class Synchronizer {
 					// Note: that's probably not needed anymore?
 					// await uploadSyncInfo(this.api(), remoteInfo);
 				}
+
+				this.dispatch({ type: 'MUST_RESOLVE_E2EE_ENABLED_CONFLICT', value: false });
 			} catch (error) {
 				if (error.code === 403) {
 					this.dispatch({ type: 'MUST_AUTHENTICATE', value: true });
+				}
+				if (error.code === 'e2eeEnabledStateConflict') {
+					this.dispatch({ type: 'MUST_RESOLVE_E2EE_ENABLED_CONFLICT', value: true });
 				}
 				if (error.code === 'outdatedSyncTarget') {
 					Setting.setValue('sync.upgradeState', Setting.SYNC_UPGRADE_STATE_SHOULD_DO);

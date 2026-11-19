@@ -8,6 +8,7 @@ interface Props {
 	themeId: number;
 	targetScreen: string;
 	url?: string;
+	onPress?: ()=> void;
 	message: string;
 	testID?: string;
 }
@@ -33,13 +34,18 @@ const WarningBox: React.FC<Props> = props => {
 	const styles = useStyles(props.themeId);
 
 	const onPress = useCallback(() => {
+		if (props.onPress) {
+			props.onPress();
+			return;
+		}
+
 		if (props.url !== undefined) {
 			void Linking.openURL(props.url);
 			return;
 		}
 
 		void NavService.go(props.targetScreen);
-	}, [props.targetScreen, props.url]);
+	}, [props.targetScreen, props.url, props.onPress]);
 
 	return (
 		<TouchableOpacity

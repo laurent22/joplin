@@ -10,7 +10,7 @@ import { decryptedStatText, enableEncryptionConfirmationMessages, onSavePassword
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import { State } from '@joplin/lib/reducer';
 import { localSyncInfoSelector, masterKeyEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import { getDefaultMasterKey, setupAndDisableEncryption, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
+import { disableEncryptionConfirmationMessage, getDefaultMasterKey, setupAndDisableEncryption, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
 import { useMemo, useState } from 'react';
 import { Divider, List } from 'react-native-paper';
 import shim from '@joplin/lib/shim';
@@ -304,7 +304,7 @@ const EncryptionConfigScreen = (props: Props) => {
 
 	const onToggleButtonClick = async () => {
 		if (props.encryptionEnabled) {
-			const ok = await shim.showConfirmationDialog(_('Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?'));
+			const ok = await shim.showConfirmationDialog(disableEncryptionConfirmationMessage());
 			if (!ok) return;
 
 			try {
