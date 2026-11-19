@@ -6,6 +6,7 @@ import { defaultProfileConfig } from '../services/profileConfig/types';
 import { createNewProfile, saveProfileConfig } from '../services/profileConfig';
 import initProfile from '../services/profileConfig/initProfile';
 import { defaultPluginSetting } from '../services/plugins/PluginService';
+import { SyncInfo } from '../services/synchronizer/syncInfoUtils';
 
 async function loadSettingsFromFile(): Promise<Record<string, unknown>> {
 	return JSON.parse(await readFile(Setting.settingFilePath, 'utf8'));
@@ -595,5 +596,23 @@ describe('models/Setting', () => {
 		} finally {
 			Setting.setConstant('isJoplinCloudWebApp', false);
 		}
+	});
+
+	test.each([
+		{ e2ee: false, syncTarget: 9, allowed: false, expected: false },
+		{ e2ee: true, syncTarget: 7, allowed: false, expected: false },
+		{ e2ee: false, syncTarget: 7, allowed: true, expected: true },
+		{ e2ee: true, syncTarget: 9, allowed: false, expected: true },
+		{ e2ee: true, syncTarget: 10, allowed: false, expected: true },
+		{ e2ee: true, syncTarget: 11, allowed: false, expected: true },
+	])('should only show the setting for unencrypted uploads with E2EE and a Joplin Server sync target, or while it is on (%j)', ({ e2ee, syncTarget, allowed, expected }) => {
+		const syncInfo = new SyncInfo();
+		syncInfo.e2ee = e2ee;
+		const settings = {
+			syncInfoCache: syncInfo.serialize(),
+			'sync.target': syncTarget,
+			'encryption.allowUnencryptedUploads': allowed,
+		};
+		expect(Setting.settingMetadata('encryption.allowUnencryptedUploads').show(settings)).toBe(expected);
 	});
 });

@@ -214,6 +214,73 @@ export const localSyncInfoSelector = createSelector(
 	cache => new SyncInfo(cache),
 );
 
+interface MergeSyncInfosOptions {
+	// If there is a distinction, s1 should be local sync info and s2 remote.
+	s1: SyncInfo;
+	s2: SyncInfo;
+	lastS1: SyncInfo|undefined;
+	lastS2: SyncInfo|undefined;
+}
+
+type ValueAndTimestamp<Value> = { value: Value; updatedTime: number|undefined };
+
+interface PreferFromLocalOptions<ValueType> {
+	key: string;
+	local: ValueAndTimestamp<ValueType>;
+	lastLocal: ValueAndTimestamp<ValueType>|undefined;
+	remote: ValueAndTimestamp<ValueType>;
+	lastRemote: ValueAndTimestamp<ValueType>|undefined;
+	preferLocalOnTie: boolean;
+}
+
+const shouldPreferFromLocal = <T> ({ key, local, lastLocal, remote, lastRemote, preferLocalOnTie }: PreferFromLocalOptions<T>) => {
+	const remoteWasUpdatedInFuture = remote.updatedTime > Date.now();
+	const localWasUpdatedInFuture = local.updatedTime > Date.now();
+	const hasHistoryTimestamps = lastLocal && lastRemote && lastLocal.updatedTime !== undefined && lastRemote.updatedTime !== undefined;
+
+	if (hasHistoryTimestamps && (remoteWasUpdatedInFuture || localWasUpdatedInFuture)) {
+		// If the local has changed since last sync, but the remote has not, prefer local, even if local.updatedTime < remote.updatedTime.
+		// This handles the case where `updatedTime` was set (e.g. maliciously) to a large value on the sync target
+		const sameLocal = fastDeepEqual(lastLocal, local);
+		const sameRemote = fastDeepEqual(lastRemote, remote);
+		if (!sameLocal && sameRemote && remoteWasUpdatedInFuture) {
+			logger.warn('Overriding future-timestamped key with changed local value. Key:', key);
+			return true;
+		}
+
+		// Handle the case where the current client has an unchanged local value (e.g. previously downloaded from a bad sync target)
+		// with a large timestamp that would override an unchanged remote value:
+		if (sameLocal && !sameRemote && localWasUpdatedInFuture) {
+			logger.warn('Overriding future-timestamped key with changed remote value. Key:', key);
+			return false;
+		}
+	}
+
+	// ?? 0: Migrating existing logic that handles noteLockKey's timestamp being undefined/null
+	const localTimestamp = local.updatedTime ?? 0;
+	const remoteTimestamp = remote.updatedTime ?? 0;
+	if (preferLocalOnTie) {
+		return localTimestamp >= remoteTimestamp;
+	} else {
+		return localTimestamp > remoteTimestamp;
+	}
+};
+
+interface PreferFromS1Options extends MergeSyncInfosOptions {
+	preferS1OnTie?: boolean;
+}
+
+const shouldPreferFromS1 = (key: keyof SyncInfo, { s1, s2, lastS1, lastS2, preferS1OnTie = false }: PreferFromS1Options) => {
+	return shouldPreferFromLocal({
+		key,
+		local: s1.valueAndTimestamp(key),
+		remote: s2.valueAndTimestamp(key),
+		lastLocal: lastS1?.valueAndTimestamp(key),
+		lastRemote: lastS2?.valueAndTimestamp(key),
+		preferLocalOnTie: preferS1OnTie,
+	});
+};
+
 // When deciding which master key should be active we should take into account
 // whether it's been used or not. If it's been used before it should most likely
 // remain the active one, regardless of timestamps. This is because the extra
@@ -242,7 +309,7 @@ export const localSyncInfoSelector = createSelector(
 //
 // 2023-05-30: Additionally, if one key is enabled and the other is not, we
 // always pick the enabled one regardless of usage.
-const mergeActiveMasterKeys = (s1: SyncInfo, s2: SyncInfo, output: SyncInfo) => {
+const mergeActiveMasterKeys = ({ s1, s2, lastS1, lastS2 }: MergeSyncInfosOptions, output: SyncInfo) => {
 	const activeMasterKey1 = getActiveMasterKey(s1);
 	const activeMasterKey2 = getActiveMasterKey(s2);
 	let doDefaultAction = false;
@@ -264,31 +331,56 @@ const mergeActiveMasterKeys = (s1: SyncInfo, s2: SyncInfo, output: SyncInfo) => 
 	}
 
 	if (doDefaultAction) {
-		output.setWithTimestamp(s1.keyTimestamp('activeMasterKeyId') > s2.keyTimestamp('activeMasterKeyId') ? s1 : s2, 'activeMasterKeyId');
+		output.setWithTimestamp(shouldPreferFromS1('activeMasterKeyId', { s1, s2, lastS1, lastS2 }) ? s1 : s2, 'activeMasterKeyId');
 	}
 };
 
-// If there is a distinction, s1 should be local sync info and s2 remote.
-export function mergeSyncInfos(s1: SyncInfo, s2: SyncInfo): SyncInfo {
-	const output: SyncInfo = new SyncInfo();
+const shouldPreferMasterKeyFromS1 = (mk1: MasterKeyEntity, mk2: MasterKeyEntity, { lastS1, lastS2 }: MergeSyncInfosOptions) => {
+	if (mk1.id !== mk2.id) throw new Error('Cannot compare master keys with different IDs');
 
-	output.setWithTimestamp(s1.keyTimestamp('e2ee') > s2.keyTimestamp('e2ee') ? s1 : s2, 'e2ee');
-	output.setWithTimestamp(s1.keyTimestamp('ppk') > s2.keyTimestamp('ppk') ? s1 : s2, 'ppk');
-	output.setWithTimestamp(s1.keyTimestamp('revisionServiceEnabled') > s2.keyTimestamp('revisionServiceEnabled') ? s1 : s2, 'revisionServiceEnabled');
-	output.setWithTimestamp(s1.keyTimestamp('revisionServiceTtlDays') > s2.keyTimestamp('revisionServiceTtlDays') ? s1 : s2, 'revisionServiceTtlDays');
+	const masterKeyToValueAndUpdatedTime = (m: MasterKeyEntity|undefined) => (
+		m ? { value: m, updatedTime: m.updated_time } : undefined
+	);
+
+	return shouldPreferFromLocal({
+		key: `masterKeys.${mk1.id}`,
+		local: masterKeyToValueAndUpdatedTime(mk1),
+		remote: masterKeyToValueAndUpdatedTime(mk2),
+		lastLocal: masterKeyToValueAndUpdatedTime(lastS1?.masterKeys.find(m => m.id === mk1.id)),
+		lastRemote: masterKeyToValueAndUpdatedTime(lastS2?.masterKeys.find(m => m.id === mk1.id)),
+		preferLocalOnTie: true,
+	});
+};
+
+export function mergeSyncInfos(options: MergeSyncInfosOptions): SyncInfo {
+	const output: SyncInfo = new SyncInfo();
+	const { s1, s2, lastS1, lastS2 } = options;
+
+	const newE2ee = shouldPreferFromS1('e2ee', options) ? s1 : s2;
+	if (s1.e2ee && !newE2ee.e2ee) {
+		throw new JoplinError(
+			'E2EE conflict: Encryption has been disabled remotely, but is still enabled locally.',
+			'e2eeEnabledStateConflict',
+		);
+	}
+
+	output.setWithTimestamp(newE2ee, 'e2ee');
+	output.setWithTimestamp(shouldPreferFromS1('ppk', options) ? s1 : s2, 'ppk');
+	output.setWithTimestamp(shouldPreferFromS1('revisionServiceEnabled', options) ? s1 : s2, 'revisionServiceEnabled');
+	output.setWithTimestamp(shouldPreferFromS1('revisionServiceTtlDays', options) ? s1 : s2, 'revisionServiceTtlDays');
 	output.version = s1.version > s2.version ? s1.version : s2.version;
 
-	mergeActiveMasterKeys(s1, s2, output);
+	mergeActiveMasterKeys({ s1, s2, lastS1, lastS2 }, output);
 
 	output.masterKeys = s1.masterKeys.slice();
 
-	for (const mk of s2.masterKeys) {
-		const idx = output.masterKeys.findIndex(m => m.id === mk.id);
+	for (const mk2 of s2.masterKeys) {
+		const idx = output.masterKeys.findIndex(m => m.id === mk2.id);
 		if (idx < 0) {
-			output.masterKeys.push(mk);
+			output.masterKeys.push(mk2);
 		} else {
-			const mk2 = output.masterKeys[idx];
-			output.masterKeys[idx] = mk.updated_time > mk2.updated_time ? mk : mk2;
+			const mk1 = output.masterKeys[idx];
+			output.masterKeys[idx] = shouldPreferMasterKeyFromS1(mk1, mk2, options) ? mk1 : mk2;
 		}
 	}
 
@@ -299,7 +391,12 @@ export function mergeSyncInfos(s1: SyncInfo, s2: SyncInfo): SyncInfo {
 	} else if (!noteLockKey2) {
 		output.noteLockKey = noteLockKey1;
 	} else {
-		output.noteLockKey = (noteLockKey1.updated_time || 0) >= (noteLockKey2.updated_time || 0) ? noteLockKey1 : noteLockKey2;
+		const preferKey1 = shouldPreferFromS1('noteLockKey', {
+			...options,
+			// Prefer local note lock keys over remote ones:
+			preferS1OnTie: true,
+		});
+		output.noteLockKey = preferKey1 ? noteLockKey1 : noteLockKey2;
 	}
 
 	// We use >= so that the version from s1 (local) is preferred to the version in s2 (remote).
@@ -502,16 +599,37 @@ export class SyncInfo {
 		this.noteLockKey_ = v;
 	}
 
+	private keyUsesSnakeCaseTimestamp(name: string) {
+		// noteLockKey uses snake_case for updated_time
+		return name === 'noteLockKey';
+	}
+
+	public valueAndTimestamp(name: keyof SyncInfo) {
+		const timestamp = this.keyTimestamp(name);
+		return { value: this[name], updatedTime: timestamp };
+	}
+
 	public keyTimestamp(name: string): number {
-		const self = this as unknown as Record<string, { updatedTime: number }>;
+		type ValueType = { updated_time?: number; updatedTime?: number };
+		const self = this as unknown as Record<string, ValueType>;
 		if (!(`${name}_` in self)) throw new Error(`Invalid name: ${name}`);
-		return self[`${name}_`].updatedTime;
+
+		if (this.keyUsesSnakeCaseTimestamp(name)) {
+			return self[`${name}_`]?.updated_time;
+		} else {
+			return self[`${name}_`]?.updatedTime;
+		}
 	}
 
 	public setKeyTimestamp(name: string, timestamp: number) {
-		const self = this as unknown as Record<string, { updatedTime: number }>;
+		const self = this as unknown as Record<string, { updatedTime?: number; updated_time?: number }>;
 		if (!(`${name}_` in self)) throw new Error(`Invalid name: ${name}`);
-		self[`${name}_`].updatedTime = timestamp;
+
+		if (this.keyUsesSnakeCaseTimestamp(name)) {
+			self[`${name}_`].updated_time = timestamp;
+		} else {
+			self[`${name}_`].updatedTime = timestamp;
+		}
 	}
 }
 

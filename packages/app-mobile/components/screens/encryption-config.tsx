@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { TextInput, TouchableOpacity, Linking, View, StyleSheet, Text, Button, ScrollView, TextStyle } from 'react-native';
-import { connect } from 'react-redux';
+import { TextInput, TouchableOpacity, Linking, View, StyleSheet, Text, Button, ScrollView, TextStyle, Platform } from 'react-native';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import ScreenHeader from '../ScreenHeader';
 import { themeStyle } from '../global-style';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
@@ -10,14 +10,20 @@ import { decryptedStatText, enableEncryptionConfirmationMessages, onSavePassword
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import { State } from '@joplin/lib/reducer';
 import { localSyncInfoSelector, masterKeyEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import { getDefaultMasterKey, setupAndDisableEncryption, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
+import { disableEncryptionConfirmationMessage, getDefaultMasterKey, MasterPasswordStatus, setupAndDisableEncryption, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
 import { useMemo, useState } from 'react';
 import { Divider, List } from 'react-native-paper';
 import shim from '@joplin/lib/shim';
+import usePpkValidityChecker from '@joplin/lib/components/shared/config/e2ee/usePpkValidityChecker';
+import usePublicKeyFingerprint from '@joplin/lib/components/shared/config/e2ee/usePublicKeyFingerprint';
+import { PublicPrivateKeyPair } from '@joplin/lib/services/e2ee/ppk/ppk';
+import isJoplinServerVariant from '@joplin/lib/models/utils/isJoplinServerVariant';
+import { AppState } from '../../utils/types';
 
 interface Props {
 	themeId: number;
 	masterKeys: MasterKeyEntity[];
+	ppk: PublicPrivateKeyPair;
 	passwords: Record<string, string>;
 	notLoadedMasterKeys: string[];
 	encryptionEnabled: boolean;
@@ -30,7 +36,7 @@ const EncryptionConfigScreen = (props: Props) => {
 	const [passwordPromptAnswer, setPasswordPromptAnswer] = useState('');
 	const [passwordPromptConfirmAnswer, setPasswordPromptConfirmAnswer] = useState('');
 	const stats = useStats();
-	const { passwordChecks, masterPasswordKeys } = usePasswordChecker(props.masterKeys, props.activeMasterKeyId, props.masterPassword, props.passwords);
+	const { passwordChecks, masterPasswordKeys, masterPasswordStatus } = usePasswordChecker(props.masterKeys, props.activeMasterKeyId, props.masterPassword, props.passwords);
 	const { inputPasswords, onInputPasswordChange } = useInputPasswords(props.passwords);
 	const { inputMasterPassword, onMasterPasswordSave, onMasterPasswordChange } = useInputMasterPassword(props.masterKeys, props.activeMasterKeyId);
 	const [showDisabledKeys, setShowDisabledKeys] = useState(false);
@@ -291,6 +297,18 @@ const EncryptionConfigScreen = (props: Props) => {
 		}
 	};
 
+	const renderPpkSection = () => {
+		if (!props.masterPassword) return null;
+
+		return <PpkValidityChecker
+			password={props.masterPassword}
+			passwordStatus={masterPasswordStatus}
+			headerStyle={styles.titleText}
+			textStyle={styles.normalText}
+			ppk={props.ppk}
+		/>;
+	};
+
 	for (const enabledKey of props.masterKeys.filter(mk => masterKeyEnabled(mk))) {
 		mkComps.push(renderMasterKey(enabledKey));
 
@@ -304,7 +322,7 @@ const EncryptionConfigScreen = (props: Props) => {
 
 	const onToggleButtonClick = async () => {
 		if (props.encryptionEnabled) {
-			const ok = await shim.showConfirmationDialog(_('Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?'));
+			const ok = await shim.showConfirmationDialog(disableEncryptionConfirmationMessage());
 			if (!ok) return;
 
 			try {
@@ -386,6 +404,7 @@ const EncryptionConfigScreen = (props: Props) => {
 					{renderMasterPassword()}
 					{toggleButton}
 					{passwordPromptComp}
+					{renderPpkSection()}
 					{mkComps}
 					{nonExistingMasterKeySection}
 				</View>
@@ -406,6 +425,78 @@ export default connect((state: State) => {
 		encryptionEnabled: syncInfo.e2ee,
 		activeMasterKeyId: syncInfo.activeMasterKeyId,
 		notLoadedMasterKeys: state.notLoadedMasterKeys,
+		ppk: syncInfo.ppk,
 		masterPassword: state.settings['encryption.masterPassword'],
 	};
 })(EncryptionConfigScreen);
+
+interface PpkValidityCheckerExtendedProps {
+	password: string;
+	passwordStatus: MasterPasswordStatus;
+	ppk: PublicPrivateKeyPair|undefined;
+
+	headerStyle: TextStyle;
+	textStyle: TextStyle;
+}
+
+const PpkValidityChecker: React.FC<PpkValidityCheckerExtendedProps> = props => {
+	const themeId = useSelector((state: AppState) => state.settings.theme);
+	const styles = useMemo(() => {
+		const theme = themeStyle(themeId);
+		return StyleSheet.create({
+			fingerprint: {
+				fontFamily: Platform.select({ ios: 'ui-monospace', default: 'monospace' }),
+			},
+			container: {
+				marginTop: theme.itemMarginTop,
+				marginBottom: theme.itemMarginBottom,
+				flexDirection: 'column',
+			},
+			buttonContainer: { flexDirection: 'row', gap: 4 },
+			helpText: {
+				marginBottom: theme.itemMarginBottom,
+			},
+		});
+	}, [themeId]);
+
+	const dispatch = useDispatch();
+	const invalidRemotePpk = useSelector((state: AppState) => state.mustFixPpk);
+	const { valid, message, onResetPpk, onShowInvalidPpkHelp, resetting } = usePpkValidityChecker({
+		...props,
+		dispatch,
+		invalidPpk: invalidRemotePpk,
+	});
+	const fingerprint = usePublicKeyFingerprint(props.ppk);
+	const supportsSharing = useSelector((state: AppState) => isJoplinServerVariant(state.settings['sync.target']));
+
+	const messageComponent = message && (
+		<View>
+			<Text style={props.textStyle}>{message}</Text>
+			<View style={styles.buttonContainer}>
+				<Button onPress={onShowInvalidPpkHelp} title={_('Help')}/>
+				<Button onPress={onResetPpk} title={_('Regenerate key pair')} disabled={resetting}/>
+			</View>
+		</View>
+	);
+	const publicKeyFingerprintComponent = valid && !!supportsSharing && !!fingerprint && (
+		<View>
+			<Text style={props.textStyle}>
+				{_('Public key fingerprint:')}{' '}
+				<Text style={styles.fingerprint} selectable>{fingerprint}</Text>
+			</Text>
+		</View>
+	);
+
+	return (messageComponent || publicKeyFingerprintComponent) ? <View style={styles.container}>
+		<Text
+			style={props.headerStyle}
+			accessibilityRole='header'
+		>{_('Public-private key pair')}</Text>
+		<Text style={[styles.helpText, props.textStyle]}>
+			{_('Public-private key pairs are used when sending and receiving share invitations.')}
+		</Text>
+		{messageComponent}
+		{publicKeyFingerprintComponent}
+	</View> : null;
+};
+

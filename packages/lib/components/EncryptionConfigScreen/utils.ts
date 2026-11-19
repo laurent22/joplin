@@ -188,7 +188,6 @@ export const usePasswordChecker = (masterKeys: MasterKeyEntity[], activeMasterKe
 			newMasterPasswordKeys[mk.id] = password === masterPassword && (ok || !masterPasswordOk);
 		}
 
-
 		if (event.cancelled) return;
 
 		setPasswordChecks(passwordChecks => {
@@ -201,7 +200,9 @@ export const usePasswordChecker = (masterKeys: MasterKeyEntity[], activeMasterKe
 			return newMasterPasswordKeys;
 		});
 
-		setMasterPasswordStatus(await getMasterPasswordStatus(masterPassword));
+		const newMasterPasswordStatus = await getMasterPasswordStatus(masterPassword);
+		if (event.cancelled) return;
+		setMasterPasswordStatus(newMasterPasswordStatus);
 	}, [masterKeys, masterPassword, passwords]);
 
 	return { passwordChecks, masterPasswordKeys, masterPasswordStatus };

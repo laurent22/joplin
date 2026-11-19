@@ -123,6 +123,16 @@ describe('EncryptionService', () => {
 		expect(hasThrown).toBe(true);
 	}));
 
+	it.each([
+		[EncryptionMethod.SJCL4, 'not hexadecimal'],
+		[EncryptionMethod.SJCL4, ''],
+		[EncryptionMethod.KeyV1, ''],
+	])('should not decrypt master keys with empty or non-hexadecimal content (method %s, content %j)', (async (encryptionMethod, plainText) => {
+		const masterKey = await service.encryptMasterKeyContent(encryptionMethod, plainText, '123456');
+
+		await expect(service.decryptMasterKeyContent(masterKey, '123456')).rejects.toThrow('Invalid master key content');
+	}));
+
 	it('should return the master keys that need an upgrade', (async () => {
 		const masterKey1 = await MasterKey.save(await service.generateMasterKey('123456', {
 			encryptionMethod: EncryptionMethod.SJCL2,

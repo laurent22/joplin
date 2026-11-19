@@ -99,7 +99,7 @@ export default function(href: string, options: Options = null): LinkReplacementR
 
 	let js = `${options.postMessageSyntax}(${JSON.stringify(href)}, { resourceId: ${JSON.stringify(resourceId)} }); return false;`;
 	if (options.enableLongPress && !!resourceId) {
-		const onClick = `${options.postMessageSyntax}(${JSON.stringify(href)})`;
+		const onClick = `${options.postMessageSyntax}(${JSON.stringify(href)}); return false;`;
 		js = createEventHandlingAttrs(resourceId, {
 			enableLongPress: options.enableLongPress ?? false,
 			postMessageSyntax: options.postMessageSyntax ?? 'void',

@@ -18,10 +18,10 @@ const IncomingShareItem: React.FC<Props> = props => {
 	const invitation = props.invitation;
 
 	const onAcceptInvitation = useCallback(() => {
-		void invitationRespond(invitation.id, invitation.share.folder_id, invitation.master_key, true);
+		void invitationRespond(invitation.id, invitation.share, invitation.master_key, true);
 	}, [invitation]);
 	const onRejectInvitation = useCallback(() => {
-		void invitationRespond(invitation.id, invitation.share.folder_id, invitation.master_key, false);
+		void invitationRespond(invitation.id, invitation.share, invitation.master_key, false);
 	}, [invitation]);
 
 	const sharer = invitation.share.user;

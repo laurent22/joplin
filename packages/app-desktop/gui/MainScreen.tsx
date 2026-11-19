@@ -24,13 +24,14 @@ import validateLayout from './ResizableLayout/utils/validateLayout';
 import iterateItems from './ResizableLayout/utils/iterateItems';
 import removeItem from './ResizableLayout/utils/removeItem';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
-import { ShareInvitation } from '@joplin/lib/services/share/reducer';
+import { ShareInvitation, StateShare } from '@joplin/lib/services/share/reducer';
+import { onAllowUnencryptedUploads, onKeepHeldBackChanges, plaintextUploadBannerMessage } from '@joplin/lib/services/synchronizer/utils/plaintextUploadHeldBackItems';
 import removeKeylessItems from './ResizableLayout/utils/removeKeylessItems';
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import executeCallbackUrl from './MainScreen/handleCallbackUrl';
 import ElectronAppWrapper from '../ElectronAppWrapper';
-import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
+import { resolveE2eeEnabledStateConflict, showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import invitationRespond from '@joplin/lib/services/share/invitationRespond';
 import restart from '../services/restart';
@@ -47,6 +48,7 @@ const logger = Logger.create('MainScreen');
 import { ipcRenderer } from 'electron';
 import layoutKeyToLabel from '../utils/layout/layoutKeyToLabel';
 import MainLayoutPane from './MainLayoutPane';
+import { reg } from '@joplin/lib/registry';
 
 interface Props {
 	plugins: PluginStates;
@@ -58,6 +60,7 @@ interface Props {
 	layoutMoveMode: boolean;
 	shouldUpgradeSyncTarget: boolean;
 	hasDisabledSyncItems: boolean;
+	plaintextUploadHeldBackItemIds: string[];
 	hasDisabledEncryptionItems: boolean;
 	hasMissingSyncCredentials: boolean;
 	showMissingMasterKeyMessage: boolean;
@@ -74,7 +77,9 @@ interface Props {
 	lastDeletionNotificationTime: number;
 	mustUpgradeAppMessage: string;
 	syncTargetAppMinVersion: string;
+	mustFixPpk: boolean;
 	showInvalidJoplinCloudCredential: boolean;
+	showReEnableEncryptionBanner: boolean;
 	toast: Toast;
 	shouldSwitchToAppleSiliconVersion: boolean;
 }
@@ -559,8 +564,8 @@ class MainScreenComponent extends React.Component<Props, State> {
 			await restart();
 		};
 
-		const onInvitationRespond = async (shareUserId: string, folderId: string, masterKey: MasterKeyEntity, accept: boolean) => {
-			await invitationRespond(shareUserId, folderId, masterKey, accept);
+		const onInvitationRespond = async (shareUserId: string, share: StateShare, masterKey: MasterKeyEntity, accept: boolean) => {
+			await invitationRespond(shareUserId, share, masterKey, accept);
 		};
 
 		let msg = null;
@@ -585,6 +590,32 @@ class MainScreenComponent extends React.Component<Props, State> {
 				_('The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.'),
 				_('Restart and upgrade'),
 				onRestartAndUpgrade,
+			);
+		} else if (this.props.showReEnableEncryptionBanner) {
+			const resolveE2eeConflict = async (reEnable: boolean) => {
+				await resolveE2eeEnabledStateConflict(EncryptionService.instance(), reEnable, this.props.dispatch);
+				void reg.scheduleSync(0);
+			};
+			msg = this.renderNotificationMessage(
+				_('Encryption has been disabled on the sync target.'),
+				_('Keep encryption enabled'),
+				() => resolveE2eeConflict(true),
+				_('Disable encryption'),
+				() => resolveE2eeConflict(false),
+			);
+		} else if (this.props.mustFixPpk) {
+			msg = this.renderNotificationMessage(
+				_('Unable to sync: Invalid public-private key pair.'),
+				_('More info'),
+				onViewEncryptionConfigScreen,
+			);
+		} else if (this.props.plaintextUploadHeldBackItemIds.length) {
+			msg = this.renderNotificationMessage(
+				plaintextUploadBannerMessage(this.props.plaintextUploadHeldBackItemIds.length),
+				_('Allow on this device'),
+				() => void onAllowUnencryptedUploads(),
+				_('Don\'t upload'),
+				() => void onKeepHeldBackChanges(this.props.plaintextUploadHeldBackItemIds, this.props.dispatch),
 			);
 		} else if (this.props.hasDisabledEncryptionItems) {
 			msg = this.renderNotificationMessage(
@@ -611,9 +642,9 @@ class MainScreenComponent extends React.Component<Props, State> {
 			msg = this.renderNotificationMessage(
 				_('%s (%s) would like to share a notebook with you.', sharer.full_name, sharer.email),
 				_('Accept'),
-				() => onInvitationRespond(invitation.id, invitation.share.folder_id, invitation.master_key, true),
+				() => onInvitationRespond(invitation.id, invitation.share, invitation.master_key, true),
 				_('Reject'),
-				() => onInvitationRespond(invitation.id, invitation.share.folder_id, invitation.master_key, false),
+				() => onInvitationRespond(invitation.id, invitation.share, invitation.master_key, false),
 			);
 		} else if (this.props.hasDisabledSyncItems) {
 			msg = this.renderNotificationMessage(
@@ -696,6 +727,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 	public messageBoxVisible(props: Props = null) {
 		if (!props) props = this.props;
 		return props.hasDisabledSyncItems ||
+			props.plaintextUploadHeldBackItemIds.length > 0 ||
 			props.showMissingMasterKeyMessage ||
 			props.hasMissingSyncCredentials ||
 			props.showNeedUpgradingMasterKeyMessage ||
@@ -707,7 +739,9 @@ class MainScreenComponent extends React.Component<Props, State> {
 			this.props.needApiAuth ||
 			!!this.props.mustUpgradeAppMessage ||
 			props.showInvalidJoplinCloudCredential ||
-			props.shouldSwitchToAppleSiliconVersion;
+			props.shouldSwitchToAppleSiliconVersion ||
+			props.showReEnableEncryptionBanner ||
+			props.mustFixPpk;
 	}
 
 	private resizableLayout_resize(event: { layout: LayoutItem }) {
@@ -816,6 +850,7 @@ const mapStateToProps = (state: AppState) => {
 	return {
 		themeId: state.settings.theme,
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
+		plaintextUploadHeldBackItemIds: state.plaintextUploadHeldBackItemIds,
 		hasDisabledEncryptionItems: state.hasDisabledEncryptionItems,
 		showMissingMasterKeyMessage: showMissingMasterKeyMessage(syncInfo, state.notLoadedMasterKeys),
 		showNeedUpgradingMasterKeyMessage: showNeedUpgradingEnabledMasterKeyMessage,
@@ -836,8 +871,10 @@ const mapStateToProps = (state: AppState) => {
 		lastDeletion: state.lastDeletion,
 		lastDeletionNotificationTime: state.lastDeletionNotificationTime,
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
+		mustFixPpk: state.mustFixPpk,
 		syncTargetAppMinVersion: state.mustUpgradeAppMinVersion,
 		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
+		showReEnableEncryptionBanner: syncInfo.e2ee && state.mustResolveE2eeEnabledConflict,
 		toast: state.toast,
 		shouldSwitchToAppleSiliconVersion: shim.isAppleSilicon() && shim.isMac() && process.arch !== 'arm64',
 	};

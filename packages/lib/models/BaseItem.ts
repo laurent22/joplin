@@ -11,6 +11,7 @@ import ShareService from '../services/share/ShareService';
 import type EncryptionService from '../services/e2ee/EncryptionService';
 import type RevisionService from '../services/RevisionService';
 import itemCanBeEncrypted from './utils/itemCanBeEncrypted';
+import checkPlaintextUploadConfirmed, { PlaintextUploadConfirmations } from './utils/checkPlaintextUploadConfirmed';
 import { getEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
 import JoplinError from '../JoplinError';
 import { LoadOptions, SaveOptions } from './utils/types';
@@ -20,6 +21,8 @@ import { checkObjectHasProperties } from '@joplin/utils/object';
 
 const { sprintf } = require('sprintf-js');
 import moment = require('moment');
+import { ErrorCode } from '../errors';
+import mustConfirmPlaintextUploads from '../services/synchronizer/utils/mustConfirmPlaintextUploads';
 
 export interface ItemsThatNeedDecryptionResult {
 	hasMore: boolean;
@@ -51,6 +54,11 @@ export interface RemoteItemMetadata {
 export interface EncryptedItemsStats {
 	encrypted: number;
 	total: number;
+}
+
+export interface UnserializeAndValidateOptions {
+	content: string;
+	itemPath: string;
 }
 
 export default class BaseItem extends BaseModel {
@@ -514,7 +522,19 @@ export default class BaseItem extends BaseModel {
 		return this.shareService_;
 	}
 
-	public static async serializeForSync(item: BaseItemEntity): Promise<string> {
+	protected static plaintextUploadConfirmationExemptFields(): string[] {
+		// Deleting an item can change deleted_time, updated_time, and user_updated_time
+		return ['deleted_time', 'updated_time', 'user_updated_time'];
+	}
+
+	public static async plaintextUploadRevealsNothingNew(local: BaseItemEntity, remote: BaseItemEntity) {
+		if (remote.encryption_applied) return false;
+		const exemptFields = this.plaintextUploadConfirmationExemptFields();
+		const nonExemptFields = [...this.fieldNames().filter(field => !exemptFields.includes(field)), 'type_'];
+		return await this.serialize(local, nonExemptFields) === await this.serialize(remote, nonExemptFields);
+	}
+
+	public static async serializeForSync(item: BaseItemEntity, confirmedPlaintextUploads: PlaintextUploadConfirmations = null): Promise<string> {
 		const ItemClass = this.itemClass(item);
 		const shownKeys = ItemClass.fieldNames();
 		shownKeys.push('type_');
@@ -525,6 +545,9 @@ export default class BaseItem extends BaseModel {
 		if (!getEncryptionEnabled() || !ItemClass.encryptionSupported() || !itemCanBeEncrypted(item, share)) {
 			// Normally not possible since itemsThatNeedSync should only return decrypted items
 			if (item.encryption_applied) throw new JoplinError('Item is encrypted but encryption is currently disabled', 'cannotSyncEncrypted');
+			if (mustConfirmPlaintextUploads() && ItemClass.encryptionSupported()) {
+				checkPlaintextUploadConfirmed(item, confirmedPlaintextUploads);
+			}
 			return serialized;
 		}
 
@@ -583,6 +606,11 @@ export default class BaseItem extends BaseModel {
 		plainItem.updated_time = item.updated_time;
 		plainItem.encryption_cipher_text = '';
 		plainItem.encryption_applied = 0;
+
+		if (plainItem.id !== item.id) {
+			throw new JoplinError(`Item has wrong ID: Expected ${JSON.stringify(item.id)}, but was ${JSON.stringify(plainItem.id)}`, ErrorCode.MalformedItem);
+		}
+
 		return ItemClass.save(plainItem, { autoTimestamp: false, changeSource: ItemChange.SOURCE_DECRYPTION });
 	}
 
@@ -641,7 +669,28 @@ export default class BaseItem extends BaseModel {
 			output[n] = await this.unserialize_format(output.type_, n, output[n]);
 		}
 
+		if (output.encryption_cipher_text && ItemClass.hasField('is_shared')) {
+			// With E2EE, whether the item is published (is_shared=1) must come from the E2EE ciphertext.
+			// Otherwise, the attacker controls is_shared on the item until the item is
+			// decrypted successfully. (is_shared propagates from folders to sub-folders/notes.)
+			output.is_shared = 0;
+		}
+
 		return output;
+	}
+
+	public static async unserializeAndValidate({ content, itemPath }: UnserializeAndValidateOptions) {
+		const unserialized = await this.unserialize(content);
+
+		const expectedId = this.pathToId(itemPath);
+		if (expectedId !== unserialized.id) {
+			throw new JoplinError(
+				`Item at ${JSON.stringify(itemPath)} has invalid content. Expected ID ${JSON.stringify(expectedId)}, but was ${JSON.stringify(unserialized.id)}.`,
+				ErrorCode.MalformedItem,
+			);
+		}
+
+		return unserialized;
 	}
 
 	public static async encryptedItemsStats(): Promise<EncryptedItemsStats> {
@@ -858,11 +907,18 @@ export default class BaseItem extends BaseModel {
 	}
 
 	public static async syncDisabledItems(syncTargetId: number) {
-		const rows = await this.db().selectAll('SELECT * FROM sync_items WHERE sync_disabled = 1 AND sync_target = ?', [syncTargetId]);
+		const rows = await this.db().selectAll(
+			'SELECT item_type, item_id, item_location, sync_disabled_reason, sync_warning_ignored FROM sync_items WHERE sync_disabled = 1 AND sync_target = ?',
+			[syncTargetId],
+		);
+
 		const output = [];
 		for (let i = 0; i < rows.length; i++) {
 			const row = rows[i];
-			const item = await this.loadItem(row.item_type, row.item_id);
+			// Only load a subset of the item fields to avoid performance issues (e.g. item `body`s can be huge)
+			const fieldNames = this.itemClass(row.item_type).fieldNames();
+			const fields = ['id', 'title'].filter(field => fieldNames.includes(field));
+			const item = await this.loadItem(row.item_type, row.item_id, { fields });
 			if (row.item_location === BaseItem.SYNC_ITEM_LOCATION_LOCAL && !item) continue; // The referenced item no longer exist
 
 			output.push({
@@ -875,9 +931,51 @@ export default class BaseItem extends BaseModel {
 		return output;
 	}
 
+	public static async plaintextUploadHeldBackSyncItems(syncTargetId: number, itemIds: string[] = null): Promise<SyncItemEntity[]> {
+		if (itemIds && !itemIds.length) return [];
+		const idFilter = itemIds ? ` AND item_id IN (${this.escapeIdsForSql(itemIds)})` : '';
+		return this.db().selectAll(
+			`SELECT item_type, item_id, sync_time, sync_warning_ignored FROM sync_items WHERE sync_target = ? AND sync_disabled = 1 AND sync_disabled_reason = ?${idFilter}`,
+			[syncTargetId, ErrorCode.PlaintextUploadNotConfirmed],
+		);
+	}
+
+	public static async syncDisabledIdsAmong(syncTargetId: number, itemIds: string[]): Promise<string[]> {
+		if (!itemIds.length) return [];
+		const rows: { item_id: string }[] = await this.db().selectAll(
+			`SELECT item_id FROM sync_items WHERE sync_target = ? AND sync_disabled = 1 AND item_id IN (${this.escapeIdsForSql(itemIds)})`,
+			[syncTargetId],
+		);
+		return rows.map(row => row.item_id);
+	}
+
+	// The item is then created again on the sync target, and a basic delta no longer reports it as deleted. Keeps the
+	// row, so that the item stays held back.
+	public static async resetSyncTime(syncTargetId: number, itemId: string) {
+		await this.db().exec('UPDATE sync_items SET sync_time = 0 WHERE sync_target = ? AND item_id = ?', [syncTargetId, itemId]);
+	}
+
+	// Unlike saveSyncEnabled, this keeps the row, so that sync_time is kept and the upload loop handles any remote change
+	// since then as a conflict
+	public static async releasePlaintextUploadHeldBackItems(syncTargetId: number, itemIds: string[]) {
+		if (!itemIds.length) return;
+		await this.db().exec(
+			`UPDATE sync_items SET sync_disabled = 0, sync_disabled_reason = '' WHERE sync_target = ? AND sync_disabled_reason = ? AND item_id IN (${this.escapeIdsForSql(itemIds)})`,
+			[syncTargetId, ErrorCode.PlaintextUploadNotConfirmed],
+		);
+	}
+
+	public static async ignorePlaintextUploadHeldBackItems(syncTargetId: number, itemIds: string[]) {
+		if (!itemIds.length) return;
+		await this.db().exec(
+			`UPDATE sync_items SET sync_warning_ignored = 1 WHERE sync_target = ? AND sync_disabled_reason = ? AND item_id IN (${this.escapeIdsForSql(itemIds)})`,
+			[syncTargetId, ErrorCode.PlaintextUploadNotConfirmed],
+		);
+	}
+
 	public static async syncDisabledItemsCount(syncTargetId: number, includeIgnored = false) {
-		const whereQueries = ['sync_disabled = 1', 'sync_target = ?'];
-		const whereArgs = [syncTargetId];
+		const whereQueries = ['sync_disabled = 1', 'sync_target = ?', 'sync_disabled_reason != ?'];
+		const whereArgs = [syncTargetId, ErrorCode.PlaintextUploadNotConfirmed];
 		if (!includeIgnored) {
 			whereQueries.push('sync_warning_ignored = 0');
 		}
@@ -933,6 +1031,14 @@ export default class BaseItem extends BaseModel {
 		const sql = 'UPDATE sync_items SET sync_warning_ignored = ? WHERE item_id = ? AND item_type = ? AND sync_target = ?';
 		const params = [1, itemId, itemType, syncTarget];
 		await this.db().exec(sql, params);
+	}
+
+	public static async unignoreItemSyncWarning(syncTarget: number, item: { type_?: number; id?: string }) {
+		checkObjectHasProperties(item, ['type_', 'id']);
+		await this.db().exec(
+			'UPDATE sync_items SET sync_warning_ignored = 0 WHERE item_id = ? AND item_type = ? AND sync_target = ?',
+			[item.id, item.type_, syncTarget],
+		);
 	}
 
 	// When an item is deleted, its associated sync_items data is not immediately deleted for

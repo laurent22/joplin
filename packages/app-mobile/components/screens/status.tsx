@@ -64,6 +64,7 @@ const processReport = (report: ReportSection[], refreshScreen: OnRefreshScreen, 
 					retryHandler = async () => {
 						await item.retryHandler();
 						await refreshScreen();
+						await checkDisabledSyncItemsNotification((action) => dispatch(action));
 					};
 				}
 				if (item.canIgnore) {

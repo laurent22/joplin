@@ -4,6 +4,8 @@ import Note from '../../models/Note';
 import { expectNotThrow, expectThrow, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import time from '../../time';
 import ItemUploader from './ItemUploader';
+import JoplinError from '../../JoplinError';
+import { ErrorCode } from '../../errors';
 import { ApiCallFunction } from './utils/types';
 
 interface ApiCall {
@@ -167,6 +169,32 @@ describe('synchronizer/ItemUploader', () => {
 		await expectNotThrow(async () => itemUploader.serializeAndUploadItem(Note, BaseItem.systemPath(notes[0]), notes[0]));
 		await expectThrow(async () => itemUploader.serializeAndUploadItem(Note, BaseItem.systemPath(notes[1]), notes[1]), null);
 		await expectNotThrow(async () => itemUploader.serializeAndUploadItem(Note, BaseItem.systemPath(notes[2]), notes[2]));
+	}));
+
+	it('should leave items that cannot be serialized out of the batch, and throw when they are uploaded', (async () => {
+		const callRecorder: ApiCall[] = [];
+		const itemUploader = new ItemUploader(newFakeApi(), newFakeApiCall(callRecorder));
+
+		const notes = [
+			await Note.save({ title: '1' }),
+			await Note.save({ title: '2' }),
+		];
+
+		const serializeForSync = Note.serializeForSync.bind(Note);
+		const spy = jest.spyOn(Note, 'serializeForSync').mockImplementation(async (item, confirmedIds) => {
+			if (item.id === notes[1].id) throw new JoplinError('Not confirmed', ErrorCode.PlaintextUploadNotConfirmed);
+			return serializeForSync(item, confirmedIds);
+		});
+
+		try {
+			await itemUploader.preUploadItems(notes);
+			expect(callRecorder.length).toBe(1);
+			expect((callRecorder[0].args[0] as MultiPutItem[]).map(it => it.name)).toEqual([BaseItem.systemPath(notes[0])]);
+
+			await expectThrow(async () => itemUploader.serializeAndUploadItem(Note, BaseItem.systemPath(notes[1]), notes[1]), ErrorCode.PlaintextUploadNotConfirmed);
+		} finally {
+			spy.mockRestore();
+		}
 	}));
 
 });

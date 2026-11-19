@@ -8,7 +8,7 @@ import dialogs from '../dialogs';
 import { decryptedStatText, determineKeyPassword, dontReencryptData, enableEncryptionConfirmationMessages, onSavePasswordClick, onToggleEnabledClick, reencryptData, upgradeMasterKey, useInputPasswords, useNeedMasterPassword, usePasswordChecker, useStats, useToggleShowDisabledMasterKeys } from '@joplin/lib/components/EncryptionConfigScreen/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import { getEncryptionEnabled, localSyncInfoSelector, masterKeyEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import { getDefaultMasterKey, getMasterPasswordStatusMessage, masterPasswordIsValid, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
+import { disableEncryptionConfirmationMessage, getDefaultMasterKey, getMasterPasswordStatusMessage, masterPasswordIsValid, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
 import Button, { ButtonLevel } from '../Button/Button';
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { connect } from 'react-redux';
@@ -24,6 +24,7 @@ import Dialog from '@joplin/lib/components/Dialog';
 import DialogButtonRow from '../DialogButtonRow';
 import DialogTitle from '../DialogTitle';
 import PasswordInput from '../PasswordInput/PasswordInput';
+import PpkValidityChecker from './PpkValidityChecker';
 
 interface Props {
 	themeId: number;
@@ -410,7 +411,7 @@ export const EncryptionConfigScreen = (props: Props) => {
 			content: (
 				<div style={{ marginBottom: 16 }}>
 					<p style={theme.textStyle}>
-						{_('Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?')}
+						{disableEncryptionConfirmationMessage()}
 					</p>
 				</div>
 			),
@@ -478,6 +479,12 @@ export const EncryptionConfigScreen = (props: Props) => {
 				</div>
 			</div>
 		);
+	};
+
+	const renderInvalidPpkSection = () => {
+		if (!props.masterPassword) return null;
+
+		return <PpkValidityChecker password={props.masterPassword} passwordStatus={masterPasswordStatus} ppk={props.ppk}/>;
 	};
 
 	const onClearMasterPassword = useCallback(() => {
@@ -595,6 +602,7 @@ export const EncryptionConfigScreen = (props: Props) => {
 			{renderDebugSection()}
 			{renderEncryptionSection()}
 			{renderMasterPasswordSection()}
+			{renderInvalidPpkSection()}
 			{renderMasterKeySection(props.masterKeys.filter(mk => masterKeyEnabled(mk)), true)}
 			{renderMasterKeySection(props.masterKeys.filter(mk => !masterKeyEnabled(mk)), false)}
 			{renderNonExistingMasterKeysSection()}

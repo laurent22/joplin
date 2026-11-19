@@ -5,6 +5,11 @@ const sqlite3 = require('sqlite3');
 const SyncTargetNone = require('@joplin/lib/SyncTargetNone').default;
 require('../../jest.base-setup.js')();
 
+// jsdom doesn't provide TextEncoder/TextDecoder, which lib's web crypto code uses
+const { TextDecoder, TextEncoder } = require('node:util');
+globalThis.TextEncoder ??= TextEncoder;
+globalThis.TextDecoder ??= TextDecoder;
+
 // Mock the S3 sync target -- the @aws-s3 libraries depend on an old version
 // of uuid that doesn't work with jest without additional configuration.
 jest.doMock('@joplin/lib/SyncTargetAmazonS3', () => {
