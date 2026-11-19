@@ -4,6 +4,7 @@ import ShareService from '../../services/share/ShareService';
 import { encryptionService } from '../test-utils';
 import JoplinServerApi, { ExecOptions } from '../../JoplinServerApi';
 import { ShareInvitation, StateShare, StateShareUser } from '../../services/share/reducer';
+import { PublicPrivateKeyPair } from '../../services/e2ee/ppk/ppk';
 
 const testReducer = (state = defaultState, action: unknown) => {
 	return reducer(state, action);
@@ -43,6 +44,7 @@ export type ApiMock = {
 	getShareUsers?: OnShareUsersGetListener;
 	postShareUsers?: OnShareUsersPostListener;
 	onUnhandled?: OnApiExecListener;
+	getPublicKey?: (email: string)=> Promise<Omit<PublicPrivateKeyPair, 'privateKey'>>;
 
 	onExec?: undefined;
 }|{
@@ -54,6 +56,7 @@ export type ApiMock = {
 	postShares?: undefined;
 	getShareUsers?: undefined;
 	postShareUsers?: undefined;
+	getPublicKey?: undefined;
 };
 
 // Initializes a share service with mocks
@@ -83,6 +86,12 @@ const mockShareService = (apiCallHandler: ApiMock, service?: ShareService, store
 				if (method === 'POST' && apiCallHandler.postShareUsers) {
 					return apiCallHandler.postShareUsers(shareId, body);
 				}
+			}
+
+			const userPublicKeyMatch = path.match(/^api\/users\/([^/]+)\/public_key$/);
+			if (userPublicKeyMatch && apiCallHandler.getPublicKey) {
+				const userEmail = decodeURIComponent(userPublicKeyMatch[1]);
+				return apiCallHandler.getPublicKey(userEmail);
 			}
 
 			if (apiCallHandler.onUnhandled) {

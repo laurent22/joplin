@@ -1,11 +1,11 @@
 import Note from '../../models/Note';
 import { createFolderTree, encryptionService, loadEncryptionMasterKey, msleep, resourceService, setupDatabaseAndSynchronizer, simulateReadOnlyShareEnv, supportDir, switchClient, synchronizerStart } from '../../testing/test-utils';
-import ShareService, { ApiShare } from './ShareService';
+import ShareService, { ApiShare, PublicKeyStatus, UserPublicKeyResponse } from './ShareService';
 import { ShareType, StateShare } from './reducer';
 import { NoteEntity, ResourceEntity } from '../database/types';
 import Folder from '../../models/Folder';
 import { localSyncInfo, setEncryptionEnabled, setPpk } from '../synchronizer/syncInfoUtils';
-import { generateKeyPair, mkReencryptFromPasswordToPublicKey } from '../e2ee/ppk/ppk';
+import { generateKeyPair, mkReencryptFromPasswordToPublicKey, PublicPrivateKeyPair } from '../e2ee/ppk/ppk';
 import MasterKey from '../../models/MasterKey';
 import { MasterKeyEntity } from '../e2ee/types';
 import { generateMasterKeyAndEnableEncryption, loadMasterKeysFromSettings, setupAndEnableEncryption, updateMasterPassword } from '../e2ee/utils';
@@ -270,7 +270,7 @@ describe('ShareService', () => {
 		}
 	});
 
-	it('should add a recipient', async () => {
+	it.each([false, true])('should add a recipient (public key passed as argument: %j)', async (publicKeyInOptions) => {
 		setEncryptionEnabled(true);
 		await updateMasterPassword('', '111111');
 		const ppk = await generateKeyPair(encryptionService(), '111111');
@@ -280,9 +280,11 @@ describe('ShareService', () => {
 
 		let uploadedEmail = '';
 		let uploadedMasterKey: MasterKeyEntity = null;
+		let fetchedPublicKey = false;
 
 		const service = testShareFolderService({
 			'GET api/users/toto%40example.com/public_key': async (_query, _body) => {
+				fetchedPublicKey = true;
 				return recipientPpk;
 			},
 			'POST api/shares/share_1/users': async (_query, body) => {
@@ -299,12 +301,16 @@ describe('ShareService', () => {
 			masterKeyId: share.master_key_id,
 			recipientEmail: 'toto@example.com',
 			permissions: { can_read: 1, can_write: 1 },
+			publicKey: publicKeyInOptions ? { ...recipientPpk, privateKey: undefined } : undefined,
 		});
 
 		expect(uploadedEmail).toBe('toto@example.com');
 
 		const content = JSON.parse(uploadedMasterKey.content);
 		expect(recipientPpk.id).toBe(content.ppkId);
+
+		// If a public key was passed as an option, addShareRecipient should not attempt to fetch
+		expect(fetchedPublicKey).toBe(!publicKeyInOptions);
 	});
 
 	it('should not update the folder\'s master_key_id when shareFolder is called multiple times', async () => {
@@ -803,8 +809,31 @@ describe('ShareService', () => {
 			masterKeyId: share.master_key_id,
 			recipientEmail: 'toto@example.com',
 			permissions: { can_read: 1, can_write: 1 },
+			publicKey: undefined,
 		})).rejects.toThrow('Corrupt share');
 		expect(postedRecipient).toBe(false);
 	});
 
+	const testKeyA = { publicKey: 'key-a' } as PublicPrivateKeyPair;
+	const testKeyB = { publicKey: 'key-b' } as PublicPrivateKeyPair;
+	it.each([
+		{ label: 'no earlier key', seen: null, confirmed: [], current: testKeyA, expected: PublicKeyStatus.Unknown },
+		{ label: 'no current key', seen: testKeyA, confirmed: [], current: '', expected: PublicKeyStatus.Unknown },
+		{ label: 'seen key', seen: testKeyA, confirmed: [], current: testKeyA, expected: PublicKeyStatus.Seen },
+		{ label: 'key differs from seen key', seen: testKeyA, confirmed: [], current: testKeyB, expected: PublicKeyStatus.Changed },
+		{ label: 'key differs from confirmed key', seen: null, confirmed: [testKeyA], current: testKeyB, expected: PublicKeyStatus.Changed },
+		{ label: 'confirmed and seen key', seen: testKeyA, confirmed: [testKeyA], current: testKeyA, expected: PublicKeyStatus.Confirmed },
+		{ label: 'confirmed key after sharing with a different key', seen: testKeyB, confirmed: [testKeyA], current: testKeyA, expected: PublicKeyStatus.Confirmed },
+		{ label: 'confirmed key replaced by a later confirmation', seen: null, confirmed: [testKeyA, testKeyB], current: testKeyA, expected: PublicKeyStatus.Changed },
+	])('publicKeyStatus should handle: $label', async ({ seen, confirmed, current, expected }) => {
+		const service = ShareService.instance();
+		const email = 'test@example.com';
+		if (seen) await service.markPublicKeyAsSeen_(email, seen);
+		for (const key of confirmed) {
+			// Emails are case-insensitive
+			await service.markPublicKeyAsConfirmed(email.toUpperCase(), key);
+		}
+
+		expect(await service.publicKeyStatus(email, current as UserPublicKeyResponse)).toBe(expected);
+	});
 });

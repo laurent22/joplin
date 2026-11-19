@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { TextInput, TouchableOpacity, Linking, View, StyleSheet, Text, Button, ScrollView, TextStyle } from 'react-native';
+import { TextInput, TouchableOpacity, Linking, View, StyleSheet, Text, Button, ScrollView, TextStyle, Platform } from 'react-native';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import ScreenHeader from '../ScreenHeader';
 import { themeStyle } from '../global-style';
@@ -15,7 +15,9 @@ import { useMemo, useState } from 'react';
 import { Divider, List } from 'react-native-paper';
 import shim from '@joplin/lib/shim';
 import usePpkValidityChecker from '@joplin/lib/components/shared/config/e2ee/usePpkValidityChecker';
+import usePublicKeyFingerprint from '@joplin/lib/components/shared/config/e2ee/usePublicKeyFingerprint';
 import { PublicPrivateKeyPair } from '@joplin/lib/services/e2ee/ppk/ppk';
+import isJoplinServerVariant from '@joplin/lib/models/utils/isJoplinServerVariant';
 import { AppState } from '../../utils/types';
 
 interface Props {
@@ -86,13 +88,6 @@ const EncryptionConfigScreen = (props: Props) => {
 			disabledContainer: {
 				paddingLeft: theme.margin,
 				paddingRight: theme.margin,
-			},
-			ppkValidityChecker: {
-				marginTop: theme.itemMarginTop,
-				marginBottom: theme.itemMarginBottom,
-				flexDirection: 'row',
-				flexWrap: 'wrap',
-				gap: theme.margin,
 			},
 		});
 	}, [theme]);
@@ -302,12 +297,13 @@ const EncryptionConfigScreen = (props: Props) => {
 		}
 	};
 
-	const renderInvalidPpkSection = () => {
+	const renderPpkSection = () => {
 		if (!props.masterPassword) return null;
 
 		return <PpkValidityChecker
 			password={props.masterPassword}
 			passwordStatus={masterPasswordStatus}
+			headerStyle={styles.titleText}
 			textStyle={styles.normalText}
 			ppk={props.ppk}
 		/>;
@@ -405,10 +401,10 @@ const EncryptionConfigScreen = (props: Props) => {
 					>{_('Status')}</Text>
 					<Text style={styles.normalText}>{_('Encryption is: %s', props.encryptionEnabled ? _('Enabled') : _('Disabled'))}</Text>
 					{decryptedItemsInfo}
-					{renderInvalidPpkSection()}
 					{renderMasterPassword()}
 					{toggleButton}
 					{passwordPromptComp}
+					{renderPpkSection()}
 					{mkComps}
 					{nonExistingMasterKeySection}
 				</View>
@@ -438,24 +434,69 @@ interface PpkValidityCheckerExtendedProps {
 	password: string;
 	passwordStatus: MasterPasswordStatus;
 	ppk: PublicPrivateKeyPair|undefined;
+
+	headerStyle: TextStyle;
 	textStyle: TextStyle;
 }
 
 const PpkValidityChecker: React.FC<PpkValidityCheckerExtendedProps> = props => {
+	const themeId = useSelector((state: AppState) => state.settings.theme);
+	const styles = useMemo(() => {
+		const theme = themeStyle(themeId);
+		return StyleSheet.create({
+			fingerprint: {
+				fontFamily: Platform.select({ ios: 'ui-monospace', default: 'monospace' }),
+			},
+			container: {
+				marginTop: theme.itemMarginTop,
+				marginBottom: theme.itemMarginBottom,
+				flexDirection: 'column',
+			},
+			buttonContainer: { flexDirection: 'row', gap: 4 },
+			helpText: {
+				marginBottom: theme.itemMarginBottom,
+			},
+		});
+	}, [themeId]);
+
 	const dispatch = useDispatch();
 	const invalidRemotePpk = useSelector((state: AppState) => state.mustFixPpk);
-	const { message, onResetPpk, onShowInvalidPpkHelp, resetting } = usePpkValidityChecker({
+	const { valid, message, onResetPpk, onShowInvalidPpkHelp, resetting } = usePpkValidityChecker({
 		...props,
 		dispatch,
 		invalidPpk: invalidRemotePpk,
 	});
+	const fingerprint = usePublicKeyFingerprint(props.ppk);
+	const supportsSharing = useSelector((state: AppState) => isJoplinServerVariant(state.settings['sync.target']));
 
-	return message && <View>
-		<Text style={props.textStyle}>{message}</Text>
-		<View style={{ flexDirection: 'row', gap: 4 }}>
-			<Button onPress={onShowInvalidPpkHelp} title={_('Help')}/>
-			<Button onPress={onResetPpk} title={_('Regenerate key pair')} disabled={resetting}/>
+	const messageComponent = message && (
+		<View>
+			<Text style={props.textStyle}>{message}</Text>
+			<View style={styles.buttonContainer}>
+				<Button onPress={onShowInvalidPpkHelp} title={_('Help')}/>
+				<Button onPress={onResetPpk} title={_('Regenerate key pair')} disabled={resetting}/>
+			</View>
 		</View>
-	</View>;
+	);
+	const publicKeyFingerprintComponent = valid && !!supportsSharing && !!fingerprint && (
+		<View>
+			<Text style={props.textStyle}>
+				{_('Public key fingerprint:')}{' '}
+				<Text style={styles.fingerprint} selectable>{fingerprint}</Text>
+			</Text>
+		</View>
+	);
+
+	return (messageComponent || publicKeyFingerprintComponent) ? <View style={styles.container}>
+		<Text
+			style={props.headerStyle}
+			accessibilityRole='header'
+		>{_('Public-private key pair')}</Text>
+		<Text style={[styles.helpText, props.textStyle]}>
+			{_('Public-private key pairs are used when sending and receiving share invitations.')}
+		</Text>
+		{messageComponent}
+		{publicKeyFingerprintComponent}
+	</View> : null;
 };
 

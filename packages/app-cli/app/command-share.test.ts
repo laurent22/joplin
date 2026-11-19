@@ -1,4 +1,4 @@
-import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
+import { encryptionService, expectNotThrow, expectThrow, loadEncryptionMasterKey, setupDatabaseAndSynchronizer, switchClient, synchronizerStart } from '@joplin/lib/testing/test-utils';
 import mockShareService, { ApiMock } from '@joplin/lib/testing/share/mockShareService';
 import { setupCommandForTesting, setupApplication } from './utils/testUtils';
 import Folder from '@joplin/lib/models/Folder';
@@ -7,6 +7,10 @@ import BaseItem from '@joplin/lib/models/BaseItem';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { ShareInvitation, ShareUserStatus, StateShare } from '@joplin/lib/services/share/reducer';
 import app from './app';
+import { formatPublicKeyFingerprint, generateKeyPair, ppkPublicKeyFingerprint } from '@joplin/lib/services/e2ee/ppk/ppk';
+import { loadMasterKeysFromSettings, setupAndEnableEncryption } from '@joplin/lib/services/e2ee/utils';
+import { reg } from '@joplin/lib/registry';
+import { FolderEntity } from '@joplin/lib/services/database/types';
 const Command = require('./command-share');
 
 const setUpCommand = () => {
@@ -33,25 +37,47 @@ const defaultFolderShare: StateShare = {
 	},
 };
 
-const mockShareServiceForFolderSharing = (eventHandlerOverrides: Partial<ApiMock>&{ onExec?: undefined }) => {
+const mockShareServiceForFolderSharing = (folder: FolderEntity, eventHandlerOverrides: Partial<ApiMock>&{ onExec?: undefined }) => {
 	const invitations: ShareInvitation[] = [];
 
 	let isShared = false;
+	let lastShareUserUpdate: unknown|null = null;
+	const folderShareInfo = async () => {
+		const reloadedFolder = await Folder.load(folder.id);
+		return { ...defaultFolderShare, folder_id: folder.id, master_key_id: reloadedFolder.master_key_id };
+	};
+
 	mockShareService({
 		getShareInvitations: async () => ({
 			items: invitations,
 		}),
-		getShares: async () => ({ items: isShared ? [defaultFolderShare] : [] }),
+		getShares: async () => {
+			if (isShared) {
+				return {
+					items: [await folderShareInfo()],
+				};
+			} else {
+				return { items: [] };
+			}
+		},
+
 		getShareUsers: async (_id: string) => ({ items: [] }),
-		postShareUsers: async (_id, _body) => { },
+
+		// Called when creating a share
 		postShares: async () => {
 			isShared = true;
-			return { id: shareId };
+			return await folderShareInfo();
 		},
+		// Called when a new user is added to a share
+		postShareUsers: async (_id, body) => {
+			lastShareUserUpdate = body;
+		},
+
 		...eventHandlerOverrides,
 	}, ShareService.instance(), app().store());
 
 	return {
+		lastShareUserUpdate: () => lastShareUserUpdate,
 		addInvitation: (invitation: Partial<ShareInvitation>) => {
 			const defaultInvitation: ShareInvitation = {
 				share: defaultFolderShare,
@@ -74,28 +100,14 @@ describe('command-share', () => {
 		await switchClient(1);
 		await setupApplication();
 		BaseItem.shareService_ = ShareService.instance();
+		// Mock scheduleSync to avoid warnings related to background sync running outside of tests
+		reg.scheduleSync = jest.fn();
 	});
 
 	test('should allow adding a user to a share', async () => {
 		const folder = await Folder.save({ title: 'folder1' });
 
-		let lastShareUserUpdate: unknown|null = null;
-		mockShareServiceForFolderSharing({
-			getShares: async () => {
-				const isShared = !!lastShareUserUpdate;
-				if (isShared) {
-					return {
-						items: [{ ...defaultFolderShare, folder_id: folder.id }],
-					};
-				} else {
-					return { items: [] };
-				}
-			},
-			// Called when a new user is added to a share
-			postShareUsers: async (_id, body) => {
-				lastShareUserUpdate = body;
-			},
-		});
+		const { lastShareUserUpdate } = mockShareServiceForFolderSharing(folder, {});
 
 		const { command } = setUpCommand();
 
@@ -106,7 +118,7 @@ describe('command-share', () => {
 			'user': 'test@localhost',
 			options: {},
 		});
-		expect(lastShareUserUpdate).toMatchObject({
+		expect(lastShareUserUpdate()).toMatchObject({
 			email: 'test@localhost',
 			can_write: 1,
 			can_read: 1,
@@ -121,11 +133,58 @@ describe('command-share', () => {
 				'read-only': true,
 			},
 		});
-		expect(lastShareUserUpdate).toMatchObject({
+		expect(lastShareUserUpdate()).toMatchObject({
 			email: 'test2@localhost',
 			can_write: 0,
 			can_read: 1,
 		});
+	});
+
+	it('should validate a provided public key fingerprint when adding a user to a share', async () => {
+		const masterKey = await loadEncryptionMasterKey();
+		await setupAndEnableEncryption(encryptionService(), masterKey, '111111');
+		await loadMasterKeysFromSettings(encryptionService());
+		await synchronizerStart();
+
+		const recipientPpk = await generateKeyPair(encryptionService(), '12345');
+
+		const folder = await Folder.save({ title: 'folder1' });
+		mockShareServiceForFolderSharing(folder, {
+			getPublicKey: async (email) => {
+				if (email === 'test@localhost') {
+					return { ...recipientPpk, privateKey: undefined };
+				}
+				return null;
+			},
+		});
+
+		const { command } = setUpCommand();
+
+		const fingerprint = formatPublicKeyFingerprint(await ppkPublicKeyFingerprint(recipientPpk));
+		await expectThrow(async () => {
+			await command.action({
+				'command': 'add',
+				'notebook': 'folder1',
+				'user': 'test@localhost',
+				options: {
+					'public-key-fingerprint': 'invalid',
+				},
+			});
+		}, undefined, `Public key fingerprint mismatch. Was "${fingerprint}" but expected "invalid".`);
+
+		const ungroupedFingerprint = fingerprint.replace(/ /g, '').toUpperCase();
+		for (const expectedFingerprint of [fingerprint, ungroupedFingerprint]) {
+			await expectNotThrow(async () => {
+				await command.action({
+					'command': 'add',
+					'notebook': 'folder1',
+					'user': 'test@localhost',
+					options: {
+						'public-key-fingerprint': expectedFingerprint,
+					},
+				});
+			});
+		}
 	});
 
 	test.each([
@@ -164,7 +223,8 @@ describe('command-share', () => {
 			].join('\n'),
 		},
 	])('share invitations: $label', async ({ invitations, expectedOutput }) => {
-		const mock = mockShareServiceForFolderSharing({});
+		const folder = await Folder.save({ title: 'test' });
+		const mock = mockShareServiceForFolderSharing(folder, {});
 		for (const invitation of invitations) {
 			mock.addInvitation(invitation);
 		}

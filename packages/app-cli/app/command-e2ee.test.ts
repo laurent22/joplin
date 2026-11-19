@@ -1,7 +1,7 @@
-import { encryptionService, loadEncryptionMasterKey, setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
+import { encryptionService, loadEncryptionMasterKey, setupDatabaseAndSynchronizer, switchClient, synchronizerStart, withWarningSilenced } from '@joplin/lib/testing/test-utils';
 import { setupCommandForTesting, setupApplication } from './utils/testUtils';
 import Command = require('./command-e2ee');
-import { generateKeyPairWithAlgorithm } from '@joplin/lib/services/e2ee/ppk/ppk';
+import { formatPublicKeyFingerprint, generateKeyPairWithAlgorithm, ppkPublicKeyFingerprint } from '@joplin/lib/services/e2ee/ppk/ppk';
 import { PublicKeyAlgorithm } from '@joplin/lib/services/e2ee/types';
 import { localSyncInfo, saveLocalSyncInfo, setEncryptionEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import Setting from '@joplin/lib/models/Setting';
@@ -24,7 +24,6 @@ describe('command-e2ee', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
-		await setupDatabaseAndSynchronizer(2);
 		await switchClient(1);
 		await setupApplication();
 
@@ -50,6 +49,33 @@ describe('command-e2ee', () => {
 		expect(statusLines).toHaveLength(2);
 		expect(statusLines[0]).toBe('Encryption is: Enabled');
 		expect(statusLines[1]).toMatch(/^Invalid public-private key pair/);
+	});
+
+	test('public-key subcommand should print the public key fingerprint', async () => {
+		expect(localSyncInfo().ppk).toBeFalsy();
+		expect(await runSubcommand('public-key')).toBe('No public-private key pair.');
+
+		// First sync should set up ppk
+		await synchronizerStart();
+		const ppk = localSyncInfo().ppk;
+		expect(ppk).toBeTruthy();
+
+		expect(await runSubcommand('public-key')).toBe(`Public key fingerprint: ${formatPublicKeyFingerprint(await ppkPublicKeyFingerprint(ppk))}`);
+	});
+
+	test('public-key subcommand should not print the fingerprint for an invalid key', async () => {
+		await synchronizerStart();
+
+		const syncInfo = localSyncInfo();
+		syncInfo.ppk = {
+			...syncInfo.ppk,
+			publicKey: 'bad',
+		};
+		saveLocalSyncInfo(syncInfo);
+
+		await withWarningSilenced(/Failed to get public key fingerprint/, async () => {
+			expect(await runSubcommand('public-key')).toBe('Failed to get public key fingerprint: Key pair is not valid.');
+		});
 	});
 
 });

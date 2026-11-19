@@ -3,10 +3,10 @@ import Dialog from '@joplin/lib/components/Dialog';
 import DialogButtonRow, { ClickEvent } from '../DialogButtonRow';
 import DialogTitle from '../DialogTitle';
 import { _ } from '@joplin/lib/locale';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import Folder from '@joplin/lib/models/Folder';
-import ShareService, { ApiShare } from '@joplin/lib/services/share/ShareService';
+import ShareService, { ApiShare, PublicKeyStatus, UserPublicKeyResponse } from '@joplin/lib/services/share/ShareService';
 import styled from 'styled-components';
 import StyledFormLabel from '../style/StyledFormLabel';
 import Button, { ButtonSize } from '../Button/Button';
@@ -21,6 +21,10 @@ import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffe
 import { ChangeEvent, Dropdown, DropdownOptions, DropdownVariant } from '../Dropdown/Dropdown';
 import shim from '@joplin/lib/shim';
 import { SettingsRecord } from '@joplin/lib/models/Setting';
+import PpkWarningIcon from './PpkWarningIcon';
+import { getEncryptionEnabled, localSyncInfoSelector } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import { PublicPrivateKeyPair } from '@joplin/lib/services/e2ee/ppk/ppk';
+import PpkValidationDialog from './PpkValidationDialog';
 const debounce = require('debounce');
 
 const logger = Logger.create('ShareFolderDialog');
@@ -102,6 +106,7 @@ interface Props {
 	shareUsers: Record<string, StateShareUser[]>;
 	canUseSharePermissions: boolean;
 	canUseRecipientAutocomplete: boolean;
+	encryptionEnabled: boolean;
 }
 
 interface RecipientDeleteEvent {
@@ -129,6 +134,27 @@ function ShareFolderDialog(props: Props) {
 	const [shareState, setShareState] = useState<ShareState>(ShareState.Idle);
 	const [recipientsBeingUpdated, setRecipientsBeingUpdated] = useState<Record<string, boolean>>({});
 	const [recipientSuggestions, setRecipientSuggestions] = useState<string[]>([]);
+	const [showPpkValidationDialog, setShowPpkValidationDialog] = useState(false);
+	const pinnedPublicKeys = useRef(new Map<string, PublicPrivateKeyPair>());
+	const reviewedPublicKeys = useRef(new Map<string, string>());
+	const [keyConfirmationCount, setKeyConfirmationCount] = useState(0);
+
+	const onGetPublicKey = useCallback(async (email: string) => {
+		const pinId = email.toLowerCase();
+		let pinnedKey = pinnedPublicKeys.current.get(pinId);
+		if (pinnedKey) return pinnedKey;
+
+		const fetchedKey = await ShareService.instance().userPublicKey(email);
+
+		// Handle the case where a key was pinned during fetch
+		pinnedKey = pinnedPublicKeys.current.get(pinId);
+		if (pinnedKey) return pinnedKey;
+
+		if (fetchedKey !== '') {
+			pinnedPublicKeys.current.set(pinId, fetchedKey);
+		}
+		return fetchedKey;
+	}, []);
 
 	async function synchronize(event: AsyncEffectEvent = null) {
 		setShareState(ShareState.Synchronizing);
@@ -206,7 +232,39 @@ function ShareFolderDialog(props: Props) {
 		};
 	};
 
+	const confirmContinueShareIfUnreviewed = useCallback(async (publicKey: PublicPrivateKeyPair) => {
+		const hasChanged = await ShareService.instance().publicKeyStatus(recipientEmail, publicKey) === PublicKeyStatus.Changed;
+		const hasReviewedKey = reviewedPublicKeys.current.get(recipientEmail.toLowerCase()) === publicKey.publicKey;
+		if (hasChanged && !hasReviewedKey) {
+			const reviewKeyIndex = 0;
+			const response = await shim.showMessageBox(
+				[
+					_('The share key for "%s" has changed.', recipientEmail),
+					[
+						_('This is expected if the recipient recently updated Joplin or regenerated the key pair. Otherwise, someone else may be trying to receive the invitation.'),
+						_('For full security, review the key before sharing.'),
+					].join(' '),
+				].join('\n\n'),
+				{
+					buttons: [_('Review key'), _('Share anyway')],
+					cancelId: reviewKeyIndex,
+				},
+			);
+
+			if (response === reviewKeyIndex) {
+				setShowPpkValidationDialog(true);
+				return { continueSharing: false };
+			}
+		}
+		return { continueSharing: true };
+	}, [recipientEmail]);
+
 	const shareRecipient_click = useCallback(async () => {
+		if (!recipientEmail.trim()) {
+			setLatestError(new Error(_('Please provide the recipient email')));
+			return;
+		}
+
 		setShareState(ShareState.Creating);
 		setLatestError(null);
 
@@ -223,6 +281,21 @@ function ShareFolderDialog(props: Props) {
 			setShareState(ShareState.Idle);
 		};
 
+		let publicKey: UserPublicKeyResponse|undefined = undefined;
+		try {
+			if (getEncryptionEnabled()) {
+				publicKey = await onGetPublicKey(recipientEmail);
+				if (publicKey) {
+					const { continueSharing } = await confirmContinueShareIfUnreviewed(publicKey);
+					if (!continueSharing) {
+						return defer(null);
+					}
+				}
+			}
+		} catch (error) {
+			return defer(error);
+		}
+
 		let share: ApiShare = null;
 
 		try {
@@ -232,7 +305,13 @@ function ShareFolderDialog(props: Props) {
 		}
 
 		try {
-			await ShareService.instance().addShareRecipient({ shareId: share.id, masterKeyId: share.master_key_id, recipientEmail, permissions: permissionsFromString(recipientPermissions) });
+			await ShareService.instance().addShareRecipient({
+				shareId: share.id,
+				masterKeyId: share.master_key_id,
+				recipientEmail,
+				permissions: permissionsFromString(recipientPermissions),
+				publicKey,
+			});
 		} catch (error) {
 			// Handle the error but continue the process because we need to at
 			// least refresh the shares since one has been created above.
@@ -254,7 +333,7 @@ function ShareFolderDialog(props: Props) {
 		} finally {
 			defer(null);
 		}
-	}, [recipientPermissions, props.folderId, recipientEmail]);
+	}, [recipientPermissions, props.folderId, recipientEmail, onGetPublicKey, confirmContinueShareIfUnreviewed]);
 
 	const recipientEmail_change = useCallback((value: string) => {
 		setRecipientEmail(value);
@@ -294,6 +373,14 @@ function ShareFolderDialog(props: Props) {
 		const disabled = shareState !== ShareState.Idle && shareState !== ShareState.Synchronizing;
 
 		const dropdown = !props.canUseSharePermissions ? null : <Dropdown options={permissionOptions} value={recipientPermissions} onChange={recipientPermissions_change}/>;
+		const ppkWarning = !!props.encryptionEnabled && (
+			<PpkWarningIcon
+				recipientEmail={recipientEmail}
+				onShowPpkValidationDialog={() => setShowPpkValidationDialog(true)}
+				onGetPublicKey={onGetPublicKey}
+				refreshCounter={keyConfirmationCount}
+			/>
+		);
 
 		return (
 			<StyledAddRecipient>
@@ -309,6 +396,7 @@ function ShareFolderDialog(props: Props) {
 						className='-form-control'
 					/>
 					{dropdown}
+					{ppkWarning}
 					<Button size={ButtonSize.Small} disabled={disabled} title={_('Share')} onClick={shareRecipient_click}></Button>
 				</StyledRecipientControls>
 			</StyledAddRecipient>
@@ -446,6 +534,19 @@ function ShareFolderDialog(props: Props) {
 				{renderError()}
 				{renderRecipients()}
 				{renderInfo()}
+				{showPpkValidationDialog && (
+					<PpkValidationDialog
+						recipientEmail={recipientEmail}
+						onGetPublicKey={onGetPublicKey}
+						onFingerprintShown={(email, publicKey) => {
+							reviewedPublicKeys.current.set(email.toLowerCase(), publicKey.publicKey);
+						}}
+						onFingerprintConfirmed={() => {
+							setKeyConfirmationCount(count => count + 1);
+						}}
+						onDismiss={() => setShowPpkValidationDialog(false)}
+					/>
+				)}
 				<DialogButtonRow
 					themeId={props.themeId}
 					onClick={buttonRow_click}
@@ -466,6 +567,7 @@ const mapStateToProps = (state: State) => {
 	const getCanUseSharePermissions = (settings: Partial<SettingsRecord>) => {
 		return [9, 10, 11].includes(settings['sync.target']) && !!settings['sync.10.canUseSharePermissions'];
 	};
+	const syncInfo = localSyncInfoSelector(state);
 
 	return {
 		shares: state.shareService.shares,
@@ -478,6 +580,8 @@ const mapStateToProps = (state: State) => {
 		// separated to be easier to update when premium features handling change.
 
 		canUseRecipientAutocomplete: getCanUseSharePermissions(state.settings),
+
+		encryptionEnabled: syncInfo.e2ee,
 	};
 };
 

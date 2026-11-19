@@ -9,7 +9,7 @@ import Note from '../../models/Note';
 import Setting from '../../models/Setting';
 import { FolderEntity, NoteEntity } from '../database/types';
 import EncryptionService from '../e2ee/EncryptionService';
-import { PublicPrivateKeyPair, mkReencryptFromPasswordToPublicKey, mkReencryptFromPublicKeyToPassword, supportsPpkAlgorithm } from '../e2ee/ppk/ppk';
+import { PublicPrivateKeyPair, mkReencryptFromPasswordToPublicKey, mkReencryptFromPublicKeyToPassword, ppkPublicKeyFingerprint, supportsPpkAlgorithm } from '../e2ee/ppk/ppk';
 import { MasterKeyEntity } from '../e2ee/types';
 import { getMasterPassword } from '../e2ee/utils';
 import ResourceService from '../ResourceService';
@@ -39,9 +39,34 @@ interface AddShareRecipientOptions {
 	masterKeyId: string;
 	recipientEmail: string;
 	permissions: SharePermissions;
+	// undefined => fetch from server
+	publicKey: PublicPrivateKeyPair|''|undefined;
 }
 
 export type UserPublicKeyResponse = PublicPrivateKeyPair|'';
+
+// Local only (not synced). Keys are identified by fingerprint.
+interface RecipientKeyHistory {
+	// Fingerprint of the key used for the last share invitation to this recipient
+	lastShared: string;
+	// Fingerprint of the key the user last checked with the recipient. Kept after a key change.
+	confirmed: string;
+}
+
+// .toLowerCase: Match Joplin Server's email case insensitivity for shares
+const recipientKeyHistoryKey = (email: string) => `ShareService::recipientKeyHistory::${email.toLowerCase()}`;
+const hasKeyHistory = (history: RecipientKeyHistory) => !!history.lastShared || !!history.confirmed;
+
+export enum PublicKeyStatus {
+	// No key, or no earlier key to compare against
+	Unknown,
+	// Same key as the last share invitation sent to this recipient
+	Seen,
+	// The user checked this key's fingerprint with the recipient
+	Confirmed,
+	// Matches neither the last shared nor the confirmed key
+	Changed,
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function formatShareInvitations(invitations: (Omit<ShareInvitation, 'master_key'> & { master_key: string | MasterKeyEntity | null })[]): ShareInvitation[] {
@@ -444,10 +469,48 @@ export default class ShareService {
 	}
 
 	public async userPublicKey(userEmail: string): Promise<UserPublicKeyResponse> {
-		return await this.api().exec('GET', `api/users/${encodeURIComponent(userEmail)}/public_key`);
+		// The server's empty "no public key" response is parsed as null, but elsewhere, '' usually means
+		// "no public key pair".
+		return await this.api().exec('GET', `api/users/${encodeURIComponent(userEmail)}/public_key`) ?? '';
 	}
 
-	public async addShareRecipient({ shareId, masterKeyId, recipientEmail, permissions }: AddShareRecipientOptions) {
+	private async loadRecipientKeyHistory_(email: string): Promise<RecipientKeyHistory> {
+		const value = await KvStore.instance().value(recipientKeyHistoryKey(email));
+		return typeof value === 'string' ? JSON.parse(value) : { lastShared: '', confirmed: '' };
+	}
+
+	private async saveRecipientKeyHistory_(email: string, history: RecipientKeyHistory) {
+		await KvStore.instance().setValue(recipientKeyHistoryKey(email), JSON.stringify(history));
+	}
+
+	// Whether a key for this recipient has been seen or confirmed before, and so could have changed.
+	public async hasPreviousPublicKey(email: string) {
+		return hasKeyHistory(await this.loadRecipientKeyHistory_(email));
+	}
+
+	// Public for testing
+	public async markPublicKeyAsSeen_(email: string, ppk: PublicPrivateKeyPair) {
+		const history = await this.loadRecipientKeyHistory_(email);
+		await this.saveRecipientKeyHistory_(email, { ...history, lastShared: await ppkPublicKeyFingerprint(ppk) });
+	}
+
+	public async markPublicKeyAsConfirmed(email: string, ppk: PublicPrivateKeyPair) {
+		const history = await this.loadRecipientKeyHistory_(email);
+		await this.saveRecipientKeyHistory_(email, { ...history, confirmed: await ppkPublicKeyFingerprint(ppk) });
+	}
+
+	public async publicKeyStatus(email: string, ppk: UserPublicKeyResponse) {
+		if (!ppk) return PublicKeyStatus.Unknown;
+
+		const history = await this.loadRecipientKeyHistory_(email);
+		const fingerprint = await ppkPublicKeyFingerprint(ppk);
+		if (history.confirmed === fingerprint) return PublicKeyStatus.Confirmed;
+		if (history.lastShared === fingerprint) return PublicKeyStatus.Seen;
+		if (hasKeyHistory(history)) return PublicKeyStatus.Changed;
+		return PublicKeyStatus.Unknown;
+	}
+
+	public async addShareRecipient({ shareId, masterKeyId, recipientEmail, permissions, publicKey }: AddShareRecipientOptions) {
 		let recipientMasterKey: MasterKeyEntity = null;
 
 		if (getEncryptionEnabled()) {
@@ -463,7 +526,7 @@ export default class ShareService {
 			if (shareFolder.share_id !== shareId) throw new Error(`Corrupt share: Share's folder has the wrong share ID. ${JSON.stringify({ was: shareFolder.share_id, expected: shareId })}`);
 			if (shareFolder.master_key_id !== masterKey.id) throw new Error(`Corrupt share: Share's folder had an incorrect master key ID: ${JSON.stringify({ was: shareFolder.master_key_id, expected: masterKey.id })}`);
 
-			const recipientPublicKey = await this.userPublicKey(recipientEmail);
+			const recipientPublicKey = publicKey === undefined ? await this.userPublicKey(recipientEmail) : publicKey;
 			if (!recipientPublicKey) throw new Error(_('Cannot share encrypted notebook with recipient %s because they have not enabled end-to-end encryption. They may do so from the screen Configuration > Encryption.', recipientEmail));
 
 			logger.info('Reencrypting master key with recipient public key', recipientPublicKey);
@@ -474,6 +537,10 @@ export default class ShareService {
 				getMasterPassword(),
 				recipientPublicKey,
 			);
+
+			// Mark the public key as seen *before* the POST, since the public-key-encrypted share key may still have been sent
+			// to the server even if the POST fails.
+			await this.markPublicKeyAsSeen_(recipientEmail, recipientPublicKey);
 		}
 
 		return this.api().exec('POST', `api/shares/${shareId}/users`, {}, {

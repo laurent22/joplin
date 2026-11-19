@@ -1,10 +1,11 @@
 import { VirtualOpaqueType } from '@joplin/utils/types';
 import uuid from '../../../uuid';
 import EncryptionService, { EncryptionCustomHandler, EncryptionMethod } from '../EncryptionService';
-import { MasterKeyEntity, PublicKeyAlgorithm, PublicKeyCrypto, PublicKeyCryptoProvider } from '../types';
+import { Digest, MasterKeyEntity, PublicKeyAlgorithm, PublicKeyCrypto, PublicKeyCryptoProvider } from '../types';
 import PerformanceLogger from '../../../PerformanceLogger';
 import { _ } from '../../../locale';
 import Logger from '@joplin/utils/Logger';
+import shim from '../../../shim';
 
 const logger = Logger.create('ppk');
 const perfLogger = PerformanceLogger.create();
@@ -214,7 +215,7 @@ export const isPublicPrivateKeyPairValid = async (service: EncryptionService, ke
 			return false;
 		}
 	} catch (error) {
-		logger.debug(`Failed to validate public-private key pair: ${error}. Mismatched keys?`);
+		logger.debug(`Failed to verify public-private key pair: ${error}. Mismatched keys?`);
 		return false;
 	}
 	return true;
@@ -248,6 +249,15 @@ function ppkEncryptionHandler(ppk: PublicPrivateKeyPair, rsaKeyPair: KeyPair): E
 		},
 	};
 }
+
+// Returns a lowercase hex string that identifies the public key. Use formatPublicKeyFingerprint to display it.
+export const ppkPublicKeyFingerprint = async (ppk: PublicPrivateKeyPair) => {
+	const digest = await shim.crypto.digest(Digest.sha256, Buffer.from(ppk.publicKey, 'utf-8'));
+	return Buffer.from(digest).toString('hex');
+};
+
+// Groups of four hex digits (e.g. "1a2b 3c4d ...") make fingerprints easier to compare
+export const formatPublicKeyFingerprint = (fingerprint: string) => fingerprint.match(/.{1,4}/g).join(' ');
 
 // Generates a master key and encrypts it using the provided PPK
 export async function ppkGenerateMasterKey(service: EncryptionService, ppk: PublicPrivateKeyPair, password: string): Promise<MasterKeyEntity> {

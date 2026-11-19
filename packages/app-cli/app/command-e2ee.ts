@@ -9,7 +9,10 @@ import * as pathUtils from '@joplin/lib/path-utils';
 import { getEncryptionEnabled, localSyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { generateMasterKeyAndEnableEncryption, getMasterPassword, loadMasterKeysFromSettings, resolveE2eeEnabledStateConflict, masterPasswordIsValid, setupAndDisableEncryption } from '@joplin/lib/services/e2ee/utils';
 import { fromFile as fileTypeFromFile } from 'file-type';
-import { isPublicPrivateKeyPairValid } from '@joplin/lib/services/e2ee/ppk/ppk';
+import { formatPublicKeyFingerprint, isPublicPrivateKeyPairValid, ppkPublicKeyFingerprint } from '@joplin/lib/services/e2ee/ppk/ppk';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('command-e2ee');
 
 class Command extends BaseCommand {
 	public usage() {
@@ -17,14 +20,14 @@ class Command extends BaseCommand {
 	}
 
 	public description() {
-		return _('Manages E2EE configuration. Commands are `enable`, `re-enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.'); // `generate-ppk`
+		return _('Manages E2EE configuration. Commands are `enable`, `re-enable`, `disable`, `decrypt`, `status`, `public-key`, `decrypt-file`, and `target-status`.'); // `generate-ppk`
 	}
 
 	public options() {
 		return [
 			// This is here mostly for testing - shouldn't be used
 			['-p, --password <password>', 'Use this password as master password (For security reasons, it is not recommended to use this option).'],
-			['-v, --verbose', 'More verbose output for the `target-status` command'],
+			['-v, --verbose', 'More verbose output for the `target-status` and `public-key` commands'],
 			['-o, --output <directory>', 'Output directory'],
 			['--retry-failed-items', 'Applies to `decrypt` command - retries decrypting items that previously could not be decrypted.'],
 			['-f, --force', 'Do not ask for input on failure'],
@@ -163,6 +166,35 @@ class Command extends BaseCommand {
 						this.stdout(`Failed to check public-private key pair: ${error}`);
 					}
 				}
+			}
+			return;
+		}
+
+		if (args.command === 'public-key') {
+			const ppk = localSyncInfo().ppk;
+			try {
+				if (ppk) {
+					const ppkValid = await isPublicPrivateKeyPairValid(EncryptionService.instance(), ppk, getMasterPassword());
+					if (!ppkValid) {
+						throw new Error(_('Key pair is not valid.'));
+					}
+
+					const fingerprint = await ppkPublicKeyFingerprint(ppk);
+					this.stdout(_('Public key fingerprint: %s', formatPublicKeyFingerprint(fingerprint)));
+
+					if (options.verbose) {
+						this.stdout(_('Full public key: %s', ppk.publicKey));
+					}
+				} else {
+					this.stdout(_('No public-private key pair.'));
+
+					if (!getEncryptionEnabled()) {
+						this.stdout(_('Enable encryption ("%s") to create a key pair.', 'e2ee enable'));
+					}
+				}
+			} catch (error) {
+				logger.warn('Failed to get public key fingerprint:', error);
+				this.stdout(_('Failed to get public key fingerprint: %s', error.message));
 			}
 			return;
 		}

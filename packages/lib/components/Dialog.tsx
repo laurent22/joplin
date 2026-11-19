@@ -12,6 +12,7 @@ type OnBeforeShowListener = (dialog: HTMLDialogElement)=> void;
 
 interface Props {
 	className?: string;
+	contentClassName?: string;
 	onCancel?: OnCancelListener;
 	onShow?: OnShowListener;
 	onBeforeShow?: OnBeforeShowListener;
@@ -71,7 +72,7 @@ const Dialog: FC<Props> = props => {
 	}
 
 	const content = (
-		<div className='content' style={props.contentStyle}>
+		<div className={`content ${props.contentClassName ?? ''}`} style={props.contentStyle}>
 			{props.children}
 		</div>
 	);
