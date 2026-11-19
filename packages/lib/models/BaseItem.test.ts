@@ -3,6 +3,8 @@ import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, syncTarget
 import BaseItem from './BaseItem';
 import Folder from './Folder';
 import Note from './Note';
+import Revision from './Revision';
+import { ModelType } from '../BaseModel';
 
 describe('BaseItem', () => {
 
@@ -142,6 +144,35 @@ https://joplinapp.org/ \\n
 		const noteAfter = await Note.unserialize(serialized);
 
 		expect(noteAfter).toEqual(noteBefore);
+	});
+
+	test.each([
+		{ label: 'is_shared: 1', isSharedLine: 'is_shared: 1', encrypted: true, expected: 0 },
+		{ label: 'an empty is_shared', isSharedLine: 'is_shared: ', encrypted: true, expected: 0 },
+		{ label: 'no is_shared line', isSharedLine: '', encrypted: true, expected: 0 },
+		{ label: 'is_shared: 1', isSharedLine: 'is_shared: 1', encrypted: false, expected: 1 },
+	])('should unserialize an item with $label (encrypted: $encrypted) to is_shared=$expected', async ({ isSharedLine, encrypted, expected }) => {
+		const folder = await Folder.save({ title: 'folder' });
+		const serialized = await Folder.serialize({
+			...folder,
+			is_shared: 1,
+			encryption_applied: encrypted ? 1 : 0,
+			encryption_cipher_text: encrypted ? 'ciphertext' : '',
+		});
+		const modified = serialized.replace(/^is_shared: 1\n?/m, isSharedLine ? `${isSharedLine}\n` : '');
+		expect(modified.includes('is_shared: 1')).toBe(isSharedLine === 'is_shared: 1');
+
+		expect((await Folder.unserialize(modified)).is_shared).toBe(expected);
+	});
+
+	it('should not add is_shared to encrypted items that do not have it', async () => {
+		const serialized = await Revision.serialize({
+			id: '00000000000000000000000000000001',
+			type_: ModelType.Revision,
+			encryption_applied: 1,
+			encryption_cipher_text: 'ciphertext',
+		});
+		expect('is_shared' in await Revision.unserialize(serialized)).toBe(false);
 	});
 
 	it('should not serialize the note title and body', async () => {

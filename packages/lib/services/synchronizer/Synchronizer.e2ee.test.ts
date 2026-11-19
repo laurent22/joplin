@@ -15,6 +15,7 @@ import { Month } from '@joplin/utils/time';
 import { remoteNotesAndFolders } from '../../testing/test-utils-synchronizer';
 import { EncryptionMethod } from '../e2ee/EncryptionService';
 import { NoteEntity } from '../database/types';
+import { msleep } from '@joplin/utils/time';
 
 let insideBeforeEach = false;
 
@@ -534,4 +535,51 @@ describe('Synchronizer.e2ee', () => {
 		expect((await fetchSyncInfo(fileApi())).e2ee).toBe(true);
 	});
 
+	it('should not allow setting is_shared=1 before an item is decrypted', async () => {
+		const folder = await Folder.save({ title: 'Test' });
+		const note = await Note.save({ title: 'Private', parent_id: folder.id });
+		const masterKey = await loadEncryptionMasterKey();
+		await setupAndEnableEncryption(encryptionService(), masterKey, '123456');
+		await loadMasterKeysFromSettings(encryptionService());
+		await synchronizerStart();
+
+		await msleep(1);
+
+		const folderOnSyncTarget = await Folder.unserialize(await fileApi().get(`${folder.id}.md`));
+		expect(folderOnSyncTarget).toMatchObject({ encryption_applied: 1 });
+
+		// Edit the serialized text directly: unserialize() resets is_shared on encrypted items.
+		const serialized = await Folder.serialize({ ...folderOnSyncTarget, updated_time: Date.now() });
+		const tampered = serialized.replace(/^is_shared:.*$/m, 'is_shared: 1');
+		expect(tampered).toMatch(/^is_shared: 1$/m);
+		await fileApi().put(`${folder.id}.md`, tampered);
+
+		await synchronizerStart();
+
+		expect(await Folder.load(folder.id)).toMatchObject({ encryption_applied: 1, is_shared: 0 });
+		expect(await Note.load(note.id)).toMatchObject({ is_shared: 0 });
+	});
+
+	it('should clear a previously-set is_shared when an encrypted version of the item is downloaded', async () => {
+		const folder = await Folder.save({ title: 'Test' });
+		const masterKey = await loadEncryptionMasterKey();
+		await setupAndEnableEncryption(encryptionService(), masterKey, '123456');
+		await loadMasterKeysFromSettings(encryptionService());
+		await Folder.save({ id: folder.id, is_shared: 1 });
+		await synchronizerStart();
+
+		// Client 2 never enters the master password, so it can't decrypt the folder
+		await switchClient(2);
+		await synchronizerStart();
+		expect(await Folder.load(folder.id)).toMatchObject({ is_shared: 1 });
+
+		await switchClient(1);
+		await msleep(1);
+		await Folder.save({ id: folder.id, is_shared: 0 });
+		await synchronizerStart();
+
+		await switchClient(2);
+		await synchronizerStart();
+		expect(await Folder.load(folder.id)).toMatchObject({ encryption_applied: 1, is_shared: 0 });
+	});
 });

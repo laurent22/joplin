@@ -652,6 +652,13 @@ export default class BaseItem extends BaseModel {
 			output[n] = await this.unserialize_format(output.type_, n, output[n]);
 		}
 
+		if (output.encryption_cipher_text && ItemClass.hasField('is_shared')) {
+			// With E2EE, whether the item is published (is_shared=1) must come from the E2EE ciphertext.
+			// Otherwise, the attacker controls is_shared on the item until the item is
+			// decrypted successfully. (is_shared propagates from folders to sub-folders/notes.)
+			output.is_shared = 0;
+		}
+
 		return output;
 	}
 
