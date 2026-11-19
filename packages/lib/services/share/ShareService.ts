@@ -317,6 +317,15 @@ export default class ShareService {
 			type: ShareType.PublishedFolder,
 		});
 
+		// Update updated_time to ensure that the folder gets is_shared=1, even if
+		// another client recently set is_shared=0.
+		await Folder.save({
+			id: folderId,
+			is_shared: 1,
+			updated_time: Date.now(),
+		}, {
+			autoTimestamp: false,
+		});
 		await this.refreshShares();
 
 		return share;
@@ -337,12 +346,18 @@ export default class ShareService {
 		const directlyPublishedNoteIds = new Set(remainingShares
 			.filter(s => s.type === ShareType.Note && !!s.note_id)
 			.map(s => s.note_id));
+		const directlyPublishedFolderIds = new Set(remainingShares
+			.filter(s => s.type === ShareType.PublishedFolder && !!s.folder_id)
+			.map(s => s.folder_id),
+		);
 
 		for (const folderItem of folders) {
-			await Folder.updateShareStatus({ ...folderItem, type_: ModelType.Folder }, false);
+			if (!folderItem.is_shared) continue;
+			await Folder.updateShareStatus({ ...folderItem, type_: ModelType.Folder }, directlyPublishedFolderIds.has(folderItem.id));
 		}
 
 		for (const note of notes) {
+			if (!note.is_shared) continue;
 			await Note.updateShareStatus({ ...note, type_: ModelType.Note }, directlyPublishedNoteIds.has(note.id));
 		}
 

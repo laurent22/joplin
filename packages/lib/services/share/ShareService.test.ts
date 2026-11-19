@@ -531,7 +531,11 @@ describe('ShareService', () => {
 		expect((await Note.load(note.id)).is_shared).toBe(1);
 	});
 
-	it('should keep a separately published child folder and child note published', async () => {
+	it.each([false, true])('should keep a separately published child folder and child note published (e2ee: %j)', async (e2ee) => {
+		if (e2ee) {
+			await setupAndEnableEncryption(encryptionService(), await loadEncryptionMasterKey());
+		}
+
 		const folderA = await Folder.save({ title: 'folder A' });
 		const folderB = await Folder.save({ title: 'folder B', parent_id: folderA.id });
 		const noteA = await Note.save({ title: 'note A', parent_id: folderA.id });
@@ -569,6 +573,35 @@ describe('ShareService', () => {
 		expect((await Folder.load(folderA.id)).is_shared).toBe(0);
 		expect((await Folder.load(folderB.id)).is_shared).toBe(1);
 		expect((await Note.load(noteA.id)).is_shared).toBe(1);
+	});
+
+	it('should not publish unpublished notes based on server-provided share state when unpublishing a folder (E2EE)', async () => {
+		await setupAndEnableEncryption(encryptionService(), await loadEncryptionMasterKey());
+
+		const folder = await Folder.save({ title: 'folder', is_shared: 1 });
+		const unpublishedNote = await Note.save({ title: 'unpublished note', parent_id: folder.id, is_shared: 0 });
+		const conflictNote = await Note.save({ title: 'conflict', parent_id: folder.id, is_shared: 0, is_conflict: 1 });
+
+		// A malicious server claims that all notes in the folder are directly published:
+		const sharesReturnedByServer: Partial<StateShare>[] = [
+			{ id: 'published-folder', type: ShareType.PublishedFolder, folder_id: folder.id },
+			{ id: 'fake-note-share-1', type: ShareType.Note, note_id: unpublishedNote.id },
+			{ id: 'fake-note-share-2', type: ShareType.Note, note_id: conflictNote.id },
+		];
+		const service = mockShareService({
+			onExec: async (method, path) => {
+				if (method === 'GET' && path === 'api/shares') return { items: sharesReturnedByServer };
+				if (method === 'DELETE') return null;
+				throw new Error(`Unhandled: ${method} ${path}`);
+			},
+		});
+
+		await service.refreshShares();
+		await service.unpublishFolder(folder.id);
+
+		expect((await Folder.load(folder.id)).is_shared).toBe(0);
+		expect((await Note.load(unpublishedNote.id)).is_shared).toBe(0);
+		expect((await Note.load(conflictNote.id)).is_shared).toBe(0);
 	});
 
 	it('should throw when the folder or its published share does not exist', async () => {

@@ -1,7 +1,8 @@
-import { setupDatabaseAndSynchronizer, switchClient, resourceService, createFolderTree } from '../testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, resourceService, createFolderTree, encryptionService, loadEncryptionMasterKey } from '../testing/test-utils';
 import Folder from '../models/Folder';
 import { ShareType, StateShare } from '../services/share/reducer';
 import Note from './Note';
+import { setupAndEnableEncryption } from '../services/e2ee/utils';
 
 const publishedFolderShareState = (folderId: string): StateShare => ({
 	id: `share-${folderId}`,
@@ -40,13 +41,72 @@ describe('models/Folder.publishing', () => {
 		await switchClient(1);
 	});
 
-	it('should set is_shared=1 on descendants of a published folder', async () => {
+	it.each([true, false])('should only set is_shared=1 based on server-provided share state when E2EE is disabled (e2ee: %j)', async (e2ee) => {
+		if (e2ee) {
+			const masterKey = await loadEncryptionMasterKey();
+			await setupAndEnableEncryption(encryptionService(), masterKey);
+		}
+
 		const root = await createFolderTree('', [
 			{
 				title: 'root',
 				children: [
 					{
 						title: 'sub-folder 1',
+						children: [],
+					},
+				],
+			},
+			{
+				title: 'unshared',
+				children: [
+					{
+						title: 'note',
+					},
+				],
+			},
+		]);
+
+		const shareState: StateShare[] = [
+			publishedFolderShareState(root.id),
+			publishedNoteShareState((await Note.loadByTitle('note')).id),
+		];
+
+		await Folder.updateAllShareIds(
+			resourceService(),
+			shareState,
+		);
+		await Note.updatePublishedNotes(
+			shareState,
+		);
+		if (e2ee) {
+			await expectUnpublished([
+				'root',
+				'sub-folder 1',
+				'note',
+			].map(title => ({ title })));
+		} else {
+			await expectPublished([
+				'root',
+				'sub-folder 1',
+				'note',
+			].map(title => ({ title })));
+		}
+	});
+
+	it('should set is_shared=1 on descendants of a published folder', async () => {
+		const root = await createFolderTree('', [
+			{
+				title: 'root',
+				is_shared: 1,
+				children: [
+					{
+						title: 'sub-folder 1',
+						children: [],
+					},
+					{
+						title: 'deleted sub-folder 1',
+						deleted_time: Date.now(),
 						children: [],
 					},
 					{
@@ -90,6 +150,7 @@ describe('models/Folder.publishing', () => {
 			'published note 3',
 			'unpublished folder',
 			'unpublished note',
+			'deleted sub-folder 1',
 		].map(title => ({ title })));
 
 		// Should update published notes when calling Note.updateNotePublicationStatus

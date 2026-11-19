@@ -1407,6 +1407,7 @@ packages/lib/components/shared/NoteEditor/WarningBanner/useEditorTypeMigrationBa
 packages/lib/components/shared/NoteList/getEmptyFolderMessage.js
 packages/lib/components/shared/NoteRevisionViewer/getHelpMessage.js
 packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.js
+packages/lib/components/shared/PublishFolderDialog/useOnPublishFolderLinkClick.test.js
 packages/lib/components/shared/PublishFolderDialog/useOnPublishFolderLinkClick.js
 packages/lib/components/shared/SamlShared.js
 packages/lib/components/shared/ShareNoteDialog/onUnshareNoteClick.js

@@ -22,7 +22,7 @@ import Setting from './Setting';
 import { itemIsReadOnlySync, ItemSlice } from './utils/readOnly';
 import ItemChange from './ItemChange';
 import { substrWithEllipsis } from '../string-utils';
-import { unique } from '../ArrayUtils';
+import { getEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
 
 const logger = Logger.create('models/Folder');
 
@@ -797,20 +797,53 @@ export default class Folder extends BaseItem {
 	}
 
 	private static async updateFolderPublishStatus_(activeShares: StateShare[]) {
-		const publishedFolderRootIds = activeSharesToPublishedFolderRootIds(activeShares);
-		const publishedFolderIds = unique(publishedFolderRootIds.concat(
-			(await Promise.all(
-				publishedFolderRootIds.map(id => this.allChildrenFolders(id)),
-			)).flatMap(folders => folders.map(f => f.id)),
-		));
+		const remotePublishedRootIds = activeSharesToPublishedFolderRootIds(activeShares);
+		if (!remotePublishedRootIds.length) return;
 
-		const publishedFolderIdSet = new Set(publishedFolderIds);
-
-		if (publishedFolderIds.length) {
-			for (const folder of await this.all({ fields: ['id', 'is_shared'] })) {
-				if (!publishedFolderIdSet.has(folder.id)) continue;
-				await this.updateShareStatus({ ...folder, type_: BaseModel.TYPE_FOLDER }, true);
+		// Only update is_shared based on server state when E2EE is disabled:
+		// - Why this is present: If Joplin crashes just after creating a share for the published item on the server,
+		//   the item will be published, but won't be marked as such in the UI.
+		// - Why this isn't always enabled if E2EE is enabled:
+		//   - Since items with is_shared=0 are protected by E2EE, even if a server-side share exists, items are not
+		//     accessible.
+		//   - Updating is_shared for toplevel items based on server state is unsafe when E2EE is enabled, since the
+		//     list of active shares is provided by the server and *must* be treated as untrusted.
+		if (!getEncryptionEnabled()) {
+			for (const folder of await this.loadItemsByIds(remotePublishedRootIds)) {
+				await this.updateShareStatus(folder, true);
 			}
+		}
+
+		let updatedFolders = true;
+		let updatedFolderCount = 0;
+
+		// maxIterations needs to be large to handle folder nesting:
+		const maxIterations = 15;
+		let iterations = 0;
+
+		for (iterations = 0; iterations < maxIterations && updatedFolders; iterations++) {
+			updatedFolders = false;
+
+			// Process in batches to limit the number of duplicate updates if another client is also
+			// setting is_shared=1 for these items (and a sync is ongoing).
+			const limit = 100;
+			const allUnpublishedFoldersInPublishedFolders = await this.modelSelectAll(`
+				SELECT child.id, child.parent_id, child.is_shared FROM folders AS child
+					JOIN folders AS parent ON parent.id = child.parent_id
+					WHERE child.is_shared = 0 AND parent.is_shared = 1
+						AND child.deleted_time = 0
+					LIMIT ${limit}
+			`);
+
+			for (const folder of allUnpublishedFoldersInPublishedFolders) {
+				await this.updateShareStatus({ ...folder, type_: BaseModel.TYPE_FOLDER }, true);
+				updatedFolders = true;
+				updatedFolderCount ++;
+			}
+		}
+
+		if (iterations === maxIterations) {
+			logger.warn('Stopped updating published folders early, after', updatedFolderCount, 'folders');
 		}
 	}
 
