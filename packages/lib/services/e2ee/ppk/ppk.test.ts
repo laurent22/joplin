@@ -1,6 +1,6 @@
 import { afterAllCleanUp, encryptionService, expectNotThrow, expectThrow, setupDatabaseAndSynchronizer, switchClient } from '../../../testing/test-utils';
 import { PublicKeyAlgorithm } from '../types';
-import { decryptPrivateKey, ppkDecryptMasterKeyContent, ppkGenerateMasterKey, ppkPasswordIsValid, mkReencryptFromPasswordToPublicKey, mkReencryptFromPublicKeyToPassword, generateKeyPairWithAlgorithm, supportsPpkAlgorithm } from './ppk';
+import { decryptPrivateKey, ppkDecryptMasterKeyContent, ppkGenerateMasterKey, ppkPasswordIsValid, mkReencryptFromPasswordToPublicKey, mkReencryptFromPublicKeyToPassword, generateKeyPairWithAlgorithm, supportsPpkAlgorithm, isPublicPrivateKeyPairValid, ppkPublicKeyFingerprint, PublicPrivateKeyPair, formatPublicKeyFingerprint } from './ppk';
 import { runIntegrationTests } from './ppkTestUtils';
 
 describe('ppk', () => {
@@ -12,6 +12,14 @@ describe('ppk', () => {
 
 	afterAll(async () => {
 		await afterAllCleanUp();
+	});
+
+	it('should compute public key fingerprints and format them as groups of four hex digits', async () => {
+		const ppk = { publicKey: 'test' } as PublicPrivateKeyPair;
+		// SHA-256 of "test"
+		const fingerprint = await ppkPublicKeyFingerprint(ppk);
+		expect(fingerprint).toBe('9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08');
+		expect(formatPublicKeyFingerprint(fingerprint)).toBe('9f86 d081 884c 7d65 9a2f eaa0 c55a d015 a3bf 4f1b 2b0b 822c d15d 6c15 b0f0 0a08');
 	});
 
 	describe.each([
@@ -107,6 +115,27 @@ describe('ppk', () => {
 			// since they should be using different passwords.
 			expect(key1.content).not.toBe(key2.content);
 		}));
+
+		it('should check if a public-private key pair is valid', async () => {
+			const ppk = await generateKeyPairWithAlgorithm(algorithm, encryptionService(), '111111');
+
+			// Should throw if the password is invalid
+			await expect(isPublicPrivateKeyPairValid(encryptionService(), ppk, 'wrong')).rejects.toThrow();
+
+			// Should return true for valid key pairs
+			expect(await isPublicPrivateKeyPairValid(encryptionService(), ppk, '111111')).toBe(true);
+
+			// Should return false for invalid key pairs
+			const ppk2 = await generateKeyPairWithAlgorithm(algorithm, encryptionService(), '111112');
+			expect(ppk2.publicKey).not.toBe(ppk.publicKey);
+
+			const mismatchedPpk = { ...ppk, publicKey: ppk2.publicKey };
+			expect(await isPublicPrivateKeyPairValid(encryptionService(), mismatchedPpk, '111111')).toBe(false);
+
+			// Should return false for malformed public keys
+			const malformedPublicKey = { ...ppk, publicKey: 'bad' };
+			expect(await isPublicPrivateKeyPairValid(encryptionService(), malformedPublicKey, '111111')).toBe(false);
+		});
 
 		it('should decrypt and encrypt data from different devices', (async () => {
 			await expectNotThrow(async () => runIntegrationTests(true));

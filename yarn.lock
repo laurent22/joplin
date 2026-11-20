@@ -11470,13 +11470,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/react-fontawesome@npm:3.4.0":
-  version: 3.4.0
-  resolution: "@fortawesome/react-fontawesome@npm:3.4.0"
+"@fortawesome/react-fontawesome@npm:3.5.0":
+  version: 3.5.0
+  resolution: "@fortawesome/react-fontawesome@npm:3.5.0"
   peerDependencies:
     "@fortawesome/fontawesome-svg-core": ~6 || ~7
     react: ^18.0.0 || ^19.0.0
-  checksum: 10/64e57e04a7cd98352503edc8fa890420e75d8953262363579388b718656716c10ef2652c62af76edda4d1d1b35205c80ba68af7dc7b32ee4bf0d4c7093afc69e
+  checksum: 10/7f79251f74e17853f7c41e1a9146f29facb7c469ef6ae2fb7d4562e5689d187f3499e83fee8380042e8f767d815eb5ac89c2b7af26a201161a7bdb115194c52b
   languageName: node
   linkType: hard
 
@@ -12619,10 +12619,10 @@ __metadata:
     "@react-native-community/netinfo": "npm:12.0.1"
     "@react-native-community/push-notification-ios": "npm:1.12.0"
     "@react-native-documents/picker": "npm:12.0.2"
-    "@react-native-vector-icons/fontawesome5": "npm:13.1.2"
+    "@react-native-vector-icons/fontawesome5": "npm:13.1.3"
     "@react-native-vector-icons/get-image": "npm:13.0.0"
-    "@react-native-vector-icons/ionicons": "npm:13.1.2"
-    "@react-native-vector-icons/material-design-icons": "npm:13.1.2"
+    "@react-native-vector-icons/ionicons": "npm:13.1.3"
+    "@react-native-vector-icons/material-design-icons": "npm:13.1.3"
     "@react-native-vector-icons/material-icons": "npm:12.5.0"
     "@react-native/babel-preset": "npm:0.86.3"
     "@react-native/jest-preset": "npm:0.86.3"
@@ -12784,7 +12784,7 @@ __metadata:
     "@types/react": "npm:19.1.10"
     "@types/react-redux": "npm:7.1.34"
     "@types/styled-components": "npm:5.1.32"
-    dompurify: "npm:3.4.13"
+    dompurify: "npm:3.4.14"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
     orderedmap: "npm:2.1.1"
@@ -12976,7 +12976,7 @@ __metadata:
   dependencies:
     "@fortawesome/fontawesome-svg-core": "npm:6.1.2"
     "@fortawesome/free-solid-svg-icons": "npm:6.1.2"
-    "@fortawesome/react-fontawesome": "npm:3.4.0"
+    "@fortawesome/react-fontawesome": "npm:3.5.0"
     "@joplin/lib": "npm:~3.7"
     "@types/jest": "npm:29.5.14"
     "@types/pdfjs-dist": "npm:2.10.378"
@@ -15181,15 +15181,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-vector-icons/common@npm:^13.0.1":
-  version: 13.0.3
-  resolution: "@react-native-vector-icons/common@npm:13.0.3"
+"@react-native-vector-icons/common@npm:^13.0.2":
+  version: 13.0.4
+  resolution: "@react-native-vector-icons/common@npm:13.0.4"
   dependencies:
     find-up: "npm:^8.0.0"
     picocolors: "npm:^1.1.1"
     plist: "npm:^3.1.0"
   peerDependencies:
-    "@react-native-vector-icons/get-image": ^13.0.1
+    "@react-native-vector-icons/get-image": ^13.0.2
     "@react-native/assets-registry": "*"
     expo-font: "*"
     react: "*"
@@ -15203,15 +15203,15 @@ __metadata:
       optional: true
   bin:
     rnvi-update-plist: lib/commonjs/scripts/updatePlist.js
-  checksum: 10/35e95899ff0d01ccba351131c0d340f78591871c55cdcc0ed32405932c77cad76b47812241103940f3e91f0558d2270526a6aedaf7525e1c9cc74c389b2457f7
+  checksum: 10/11e3a8b7e7a17d1d2734b42e03ae81d97a0742f2cc5118c5b3be5282fc740109d8724b27ee0cfb574dc8727340c98d649ca4f89383b718f4194cfdd51ba1c374
   languageName: node
   linkType: hard
 
-"@react-native-vector-icons/fontawesome5@npm:13.1.2":
-  version: 13.1.2
-  resolution: "@react-native-vector-icons/fontawesome5@npm:13.1.2"
+"@react-native-vector-icons/fontawesome5@npm:13.1.3":
+  version: 13.1.3
+  resolution: "@react-native-vector-icons/fontawesome5@npm:13.1.3"
   dependencies:
-    "@react-native-vector-icons/common": "npm:^13.0.1"
+    "@react-native-vector-icons/common": "npm:^13.0.2"
   peerDependencies:
     "@expo/config-plugins": ">=10.0.0"
     react: "*"
@@ -15219,7 +15219,7 @@ __metadata:
   peerDependenciesMeta:
     "@expo/config-plugins":
       optional: true
-  checksum: 10/1f2ab89f12dd9b27db9609e4a9839a0faac7590faff5c60404151d03b65275bfdcff335ce751451db1db9059fbc99b3d22a9d41d8916d8fb2fb2dd0431b08548
+  checksum: 10/844ef5981a9e407f5183d623f0a5c0658568a268e4a5aaaad9b4e15a62a33b37c541a0bf5315577fd523ee81e4c0d1e460e94585b9f594e9a2d76401acda1152
   languageName: node
   linkType: hard
 
@@ -15233,11 +15233,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-vector-icons/ionicons@npm:13.1.2":
-  version: 13.1.2
-  resolution: "@react-native-vector-icons/ionicons@npm:13.1.2"
+"@react-native-vector-icons/ionicons@npm:13.1.3":
+  version: 13.1.3
+  resolution: "@react-native-vector-icons/ionicons@npm:13.1.3"
   dependencies:
-    "@react-native-vector-icons/common": "npm:^13.0.1"
+    "@react-native-vector-icons/common": "npm:^13.0.2"
   peerDependencies:
     "@expo/config-plugins": ">=10.0.0"
     react: "*"
@@ -15245,15 +15245,15 @@ __metadata:
   peerDependenciesMeta:
     "@expo/config-plugins":
       optional: true
-  checksum: 10/67cf5a9455b188fb67aab8e4065e7b823c3612e408d4cdd70f41fdd4aee3306a3ba943e12d56b6fca775bfb04aeeb70e49a5eb3194c21409a25d29a3885a5d99
+  checksum: 10/fa3635242ef85cffaf58e5f53842f9ce4b870cb800ce474d147a860c68014b31daaee048fefd60b3e05d987b9f2167039371ef2c258804bd5144d2964d0df968
   languageName: node
   linkType: hard
 
-"@react-native-vector-icons/material-design-icons@npm:13.1.2":
-  version: 13.1.2
-  resolution: "@react-native-vector-icons/material-design-icons@npm:13.1.2"
+"@react-native-vector-icons/material-design-icons@npm:13.1.3":
+  version: 13.1.3
+  resolution: "@react-native-vector-icons/material-design-icons@npm:13.1.3"
   dependencies:
-    "@react-native-vector-icons/common": "npm:^13.0.1"
+    "@react-native-vector-icons/common": "npm:^13.0.2"
   peerDependencies:
     "@expo/config-plugins": ">=10.0.0"
     react: "*"
@@ -15261,7 +15261,7 @@ __metadata:
   peerDependenciesMeta:
     "@expo/config-plugins":
       optional: true
-  checksum: 10/259c97ff8bd3c5a0783b824a3a784d7ddf843c19355aa6ac731cab134f673283745be6c08aa4f082273268f7663f19e156dca1b0c67b7a31eb7abcf4415693dc
+  checksum: 10/628c31c0101ef72a4930758805c09ed71e1f9a46dd6abe4a23264b4a9f3bab1c72b7066ceeb607a119f2f59973f696b29f76512e40b153610fc7283d4ad188c6
   languageName: node
   linkType: hard
 
@@ -27921,15 +27921,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dompurify@npm:3.4.13":
-  version: 3.4.13
-  resolution: "dompurify@npm:3.4.13"
+"dompurify@npm:3.4.14":
+  version: 3.4.14
+  resolution: "dompurify@npm:3.4.14"
   dependencies:
     "@types/trusted-types": "npm:^2.0.7"
   dependenciesMeta:
     "@types/trusted-types":
       optional: true
-  checksum: 10/0db0a309a868a38aca042f606b37446977c35ee4501850a8c1bf2781337d79871daf1f4344bbf5b545f2a8c62e4d4e192c8fd6f1ff49ecec7c865c55a0aefee3
+  checksum: 10/e1948f825c9ea5dfc2d2adfdab60d230ccd593091cdf8ac30676b86df6bd1f97ab49e95678a164cbf3aa48d40304ad6dd58a35799261205142d9231aad357dae
   languageName: node
   linkType: hard
 

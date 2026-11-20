@@ -342,3 +342,22 @@ export const splitByMarkdownFormattingApproximate = (text: string) => {
 			.map(entry => entry.trim()),
 		);
 };
+
+// For text from an untrusted source, for example a title that someone with access to the sync account can set, shown
+// inside a sentence. The text can't end its quotes, start a new line or reorder the text around it, so it can't pass
+// for text from Joplin.
+export const quoteUntrustedText = (text: string, maxLength = 50) => {
+	const cleaned = text
+		// Format characters include bidi overrides and zero-width characters
+		.replace(/\p{Cf}/gu, '')
+		.replace(/[\p{Cc}\p{Z}\s]+/gu, ' ')
+		.replace(/["\p{Pi}\p{Pf}ʺ˝״″‶❝❞〃〝-〟＂]/gu, '\'')
+		.trim()
+		// A leading combining mark would combine with the opening quote
+		.replace(/^\p{M}+/u, '');
+
+	// By code point, so that a surrogate pair isn't split
+	const characters = [...cleaned];
+	const shortened = characters.length > maxLength ? `${characters.slice(0, maxLength - 1).join('').trimEnd()}…` : cleaned;
+	return `"${shortened}"`;
+};

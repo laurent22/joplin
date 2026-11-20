@@ -3,7 +3,7 @@ import shim from '../../shim';
 import Setting from '../../models/Setting';
 import { NoteEntity, ResourceEntity } from '../../services/database/types';
 import { remoteNotesFoldersResources, remoteResources } from '../../testing/test-utils-synchronizer';
-import { synchronizerStart, tempFilePath, resourceFetcher, supportDir, setupDatabaseAndSynchronizer, synchronizer, fileApi, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, checkThrowAsync, msleep, withWarningSilenced } from '../../testing/test-utils';
+import { synchronizerStart, tempFilePath, resourceFetcher, supportDir, setupDatabaseAndSynchronizer, synchronizer, fileApi, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, checkThrowAsync, msleep, withWarningSilenced, resourceService } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Resource from '../../models/Resource';
@@ -12,8 +12,43 @@ import BaseItem from '../../models/BaseItem';
 import { ModelType } from '../../BaseModel';
 import { setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 import { loadMasterKeysFromSettings } from '../e2ee/utils';
+import { reg } from '../../registry';
 
 let insideBeforeEach = false;
+
+// Client 2 can't see that the note on client 1 now links to the attachment, so it deletes it as an orphan. Ends on client
+// 1, before it syncs. Without linkBeforeDeletion, the second note is left for the caller to link.
+const deleteAttachmentAsOrphanOnClient2 = async ({ linkBeforeDeletion = true } = {}) => {
+	const resource = await shim.createResourceFromPath(`${supportDir}/photo.jpg`);
+	const firstNote = await Note.save({ title: 'first', body: `![](:/${resource.id})` });
+	const secondNote = await Note.save({ title: 'second' });
+	await resourceService().indexNoteResources();
+	await synchronizerStart();
+	await switchClient(2);
+	await synchronizerStart();
+	await resourceService().indexNoteResources();
+
+	await switchClient(1);
+	await Note.save({ id: firstNote.id, body: '' });
+	if (linkBeforeDeletion) {
+		await Note.save({ id: secondNote.id, body: `![](:/${resource.id})` });
+		await resourceService().indexNoteResources();
+		await BaseItem.saveSyncDisabled(syncTargetId(), await Note.load(secondNote.id), 'rejectedByTarget');
+	}
+	await resourceService().indexNoteResources();
+	await synchronizerStart();
+
+	await switchClient(2);
+	await synchronizerStart();
+	await resourceService().indexNoteResources();
+	await msleep(1);
+	await resourceService().deleteOrphanResources(0);
+	expect(await Resource.load(resource.id)).toBeFalsy();
+	await synchronizerStart();
+
+	await switchClient(1);
+	return { resource, secondNote };
+};
 
 describe('Synchronizer.resources', () => {
 
@@ -23,6 +58,7 @@ describe('Synchronizer.resources', () => {
 		await setupDatabaseAndSynchronizer(1);
 		await setupDatabaseAndSynchronizer(2);
 		await switchClient(1);
+		reg.scheduleSync = jest.fn();
 
 		insideBeforeEach = false;
 	});
@@ -476,6 +512,70 @@ describe('Synchronizer.resources', () => {
 		expect(localNote).toBeTruthy();
 		expect(localNote.title).toBe('good note');
 		expect(await Resource.load('11111111111111111111111111111111')).toBeFalsy();
+	});
+
+	// A rename changes neither the blob nor force_sync, which otherwise decide whether the blob is uploaded
+	it.each([
+		{ renamed: false },
+		{ renamed: true },
+	])('should upload an attachment and its blob again if another client deleted it as an orphan while a note that cannot be uploaded links to it (%j)', async ({ renamed }) => {
+		const { resource } = await deleteAttachmentAsOrphanOnClient2();
+		if (renamed) await Resource.save({ id: resource.id, title: 'renamed' });
+		await synchronizerStart();
+		await synchronizerStart();
+		expect((await remoteResources()).map(r => r.id)).toEqual([resource.id]);
+		expect(await fileApi().stat(`.resource/${resource.id}`)).toBeTruthy();
+
+		await switchClient(2);
+		await synchronizerStart();
+		await resourceService().indexNoteResources();
+		await msleep(1);
+		await resourceService().deleteOrphanResources(0);
+		expect(await Resource.load(resource.id)).toBeTruthy();
+	});
+
+	it('should keep an attachment deleted remotely if a note that links to it is rejected in the sync that sees the deletion', async () => {
+		const { resource, secondNote } = await deleteAttachmentAsOrphanOnClient2({ linkBeforeDeletion: false });
+		await Note.save({ id: secondNote.id, body: `![](:/${resource.id})` });
+		synchronizer().testingHooks_ = ['notesRejectedByTarget'];
+		await synchronizerStart();
+		synchronizer().testingHooks_ = [];
+		expect(await Resource.load(resource.id)).toBeTruthy();
+
+		await synchronizerStart();
+		expect((await remoteResources()).map(r => r.id)).toEqual([resource.id]);
+	});
+
+	it('should not handle a later local change as a conflict if a deletion is listed after re-uploading the attachment', async () => {
+		const { resource } = await deleteAttachmentAsOrphanOnClient2();
+		await Resource.save({ id: resource.id, title: 'local change' });
+
+		// Joplin Server keeps listing a deletion after the item is created again.
+		const originalDelta = fileApi().delta.bind(fileApi());
+		const deltaSpy = jest.spyOn(fileApi(), 'delta').mockImplementation(async (path, options) => {
+			const result = await originalDelta(path, options);
+			result.items.push({ id: resource.id, path: BaseItem.systemPath(resource.id), isDeleted: true, updated_time: Date.now() });
+			return result;
+		});
+		try {
+			await synchronizerStart();
+		} finally {
+			deltaSpy.mockRestore();
+		}
+
+		await msleep(1);
+		await Resource.updateResourceBlobContent(resource.id, `${supportDir}/photo-two.jpg`);
+		await synchronizerStart();
+		expect((await Resource.all()).map(r => r.id)).toEqual([resource.id]);
+	});
+
+	it('should not try to upload an attachment again if its blob was never downloaded', async () => {
+		const { resource } = await deleteAttachmentAsOrphanOnClient2();
+		await Resource.setLocalState(resource.id, { fetch_status: Resource.FETCH_STATUS_IDLE });
+		await synchronizerStart();
+		await synchronizerStart();
+		expect(await Resource.load(resource.id)).toBeFalsy();
+		expect((await BaseItem.syncDisabledItems(syncTargetId())).map(row => row.syncInfo.item_type)).toEqual([ModelType.Note]);
 	});
 
 });

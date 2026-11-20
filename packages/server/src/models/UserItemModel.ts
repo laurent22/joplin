@@ -13,7 +13,7 @@ const logger = Logger.create('UserItemModel');
 // as a sample.
 const maxLoggedItemIds = 20;
 
-const itemIdSample = (itemIds: Uuid[]) => {
+export const itemIdSample = (itemIds: Uuid[]) => {
 	const sample = itemIds.slice(0, maxLoggedItemIds).join(', ');
 	return itemIds.length > maxLoggedItemIds ? `${sample}, ... (${itemIds.length - maxLoggedItemIds} more)` : sample;
 };
