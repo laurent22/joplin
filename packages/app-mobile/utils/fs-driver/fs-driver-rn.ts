@@ -387,6 +387,10 @@ export default class FsDriverRN extends FsDriverBase {
 			}
 			return;
 		}
+		// Android can replace an existing file via its copy fallback; iOS moveFile cannot.
+		if (Platform.OS === 'ios' && source !== dest && await RNFS.exists(source) && await RNFS.exists(dest)) {
+			await RNFS.unlink(dest);
+		}
 		return RNFS.moveFile(source, dest);
 	}
 

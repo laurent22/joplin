@@ -58,6 +58,7 @@
     "expo-camera": "57.0.5",
     "expo-image-manipulator": "57.0.17",
     "expo-local-authentication": "57.0.3",
+    "expo-print": "57.0.2",
     "expo-sqlite": "57.0.3",
     "js-draw": "1.33.0",
     "lodash": "4.18.1",

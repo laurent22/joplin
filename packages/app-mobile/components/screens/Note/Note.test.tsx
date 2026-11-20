@@ -44,6 +44,7 @@ import getShownPluginEditorView from '@joplin/lib/services/plugins/utils/getShow
 import { defaultWindowId } from '@joplin/lib/reducer';
 
 jest.mock('@joplin/lib/hooks/plugins/useVisiblePluginEditorViewIds', () => jest.fn((): string[] => []));
+jest.mock('expo-print', () => ({ printAsync: jest.fn(), printToFileAsync: jest.fn() }));
 
 const mockUseVisiblePluginEditorViewIds = useVisiblePluginEditorViewIds as jest.MockedFunction<typeof useVisiblePluginEditorViewIds>;
 
