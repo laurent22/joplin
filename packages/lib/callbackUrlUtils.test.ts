@@ -82,6 +82,18 @@ describe('callbackUrlUtils', () => {
 			.toThrowError('Invalid callback url joplin://xcallbackurl/123?a=b');
 	});
 
+	// The desktop and mobile apps read CallbackUrlCommand at runtime, so the
+	// enum object has to exist in the compiled JavaScript. A `const enum` is
+	// erased by TypeScript and leaves it undefined there.
+	it('should expose the callback commands at runtime', () => {
+		const commands = (callbackUrlUtils as Record<string, unknown>)['CallbackUrlCommand'] as Record<string, string>;
 
+		expect(commands).toBeDefined();
+		expect(commands.OpenNote).toBe('openNote');
+		expect(commands.OpenFolder).toBe('openFolder');
+		expect(commands.OpenTag).toBe('openTag');
+		expect(commands.GetCurrentNote).toBe('getCurrentNote');
+		expect(commands.CreateNote).toBe('createNote');
+	});
 
 });

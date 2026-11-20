@@ -20,7 +20,10 @@ export function getTagCallbackUrl(tagId: string) {
 	return `joplin://x-callback-url/openTag?id=${encodeURIComponent(tagId)}`;
 }
 
-export const enum CallbackUrlCommand {
+// A regular enum, not a `const enum`: the desktop and mobile apps read
+// CallbackUrlCommand at runtime, and TypeScript erases a `const enum` object
+// from the emitted JavaScript, leaving it undefined there.
+export enum CallbackUrlCommand {
 	OpenNote = 'openNote',
 	OpenFolder = 'openFolder',
 	OpenTag = 'openTag',
