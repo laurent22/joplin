@@ -1,0 +1,218 @@
+.conflict-title {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	min-width: 0;
+	padding-top: 5px;
+	padding-bottom: 12px;
+
+	> .-header {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		gap: 8px;
+	}
+
+	.-title {
+		margin: 0;
+		font-size: 1.8em;
+		font-weight: bold;
+		color: var(--joplin-color);
+	}
+
+	> .-subheader {
+		display: flex;
+		flex-direction: row;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 8px;
+		padding-top: 14px;
+		padding-bottom: 14px;
+		border-bottom: 1px solid var(--joplin-divider-color);
+	}
+
+	.-instructions-title {
+		font-size: 1.1em;
+		font-weight: bold;
+		color: var(--joplin-color);
+	}
+
+	.-instructions-detail {
+		padding-top: 4px;
+		color: var(--joplin-color-faded);
+	}
+
+	> .-single-title {
+		display: flex;
+		padding-top: 6px;
+		padding-bottom: 14px;
+		border-bottom: 1px solid var(--joplin-divider-color);
+	}
+
+	.-help-anchor {
+		position: relative;
+		flex-shrink: 0;
+	}
+
+	// Floats over the note
+	.-help-popover {
+		position: absolute;
+		top: calc(100% + 6px);
+		right: 0;
+		z-index: 20;
+		width: 340px;
+		max-width: 80vw;
+		padding: 12px 14px 14px 14px;
+		border: 1px solid var(--joplin-divider-color);
+		border-radius: 6px;
+		background-color: var(--joplin-background-color);
+		box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+		color: var(--joplin-color-faded);
+		text-align: left;
+		cursor: default;
+
+		p {
+			margin: 0;
+			padding-bottom: 8px;
+
+			&:last-child {
+				padding-bottom: 0;
+			}
+		}
+
+		.-help-section {
+			margin-top: 4px;
+			padding-top: 10px;
+			border-top: 1px solid var(--joplin-divider-color);
+		}
+
+		.-swatch {
+			display: inline-block;
+			width: 10px;
+			height: 10px;
+			border-radius: 2px;
+			margin-right: 8px;
+			outline: 1px solid var(--joplin-divider-color);
+
+			&.-incoming {
+				background-color: #2D5BE5;
+			}
+
+			&.-local {
+				background-color: #F7D26E;
+			}
+		}
+	}
+
+	.-help-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 8px;
+		padding-bottom: 10px;
+	}
+
+	.-help-title {
+		font-weight: bold;
+		color: var(--joplin-color);
+	}
+
+	.-help-close {
+		flex-shrink: 0;
+		padding: 2px 6px;
+		border: none;
+		border-radius: 4px;
+		background: none;
+		color: var(--joplin-color-faded);
+		cursor: pointer;
+
+		&:hover {
+			background-color: var(--joplin-background-color-hover3);
+			color: var(--joplin-color);
+		}
+	}
+
+	.-help {
+		flex-shrink: 0;
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		padding: 8px 14px;
+		cursor: pointer;
+		border: 1px solid var(--joplin-divider-color);
+		border-radius: 6px;
+		background-color: var(--joplin-background-color);
+		color: var(--joplin-color);
+
+		&:hover {
+			background-color: var(--joplin-background-color-hover3);
+		}
+	}
+
+	> .-versions {
+		display: flex;
+		flex-direction: row;
+		align-items: flex-end;
+		gap: 12px;
+		padding-top: 14px;
+		padding-bottom: 14px;
+		border-bottom: 1px solid var(--joplin-divider-color);
+	}
+
+	.-field {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		flex: 1;
+		min-width: 0;
+	}
+
+	.-label {
+		font-weight: bold;
+		color: var(--joplin-color);
+	}
+
+	.-input {
+		width: 100%;
+		box-sizing: border-box;
+		padding: 10px 12px;
+		border: 1px solid var(--joplin-divider-color);
+		border-radius: 6px;
+		background-color: var(--joplin-background-color);
+		color: var(--joplin-color);
+		font-size: 1.1em;
+		overflow-x: auto;
+		text-overflow: clip;
+	}
+
+	.-input.-readonly {
+		background-color: var(--joplin-background-color3);
+		color: var(--joplin-color-faded);
+	}
+
+	.-copy {
+		flex-shrink: 0;
+		padding: 11px 18px;
+		cursor: pointer;
+		border: none;
+		border-radius: 6px;
+		background-color: var(--joplin-color4);
+		color: var(--joplin-background-color);
+		font-size: 1.1em;
+		line-height: 1;
+
+		&:hover {
+			background-color: var(--joplin-background-color-hover5);
+		}
+
+		&:disabled {
+			cursor: default;
+			opacity: 0.5;
+
+			&:hover {
+				background-color: var(--joplin-color4);
+			}
+		}
+	}
+}

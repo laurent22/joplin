@@ -6,7 +6,6 @@ import Note from '../../../models/Note';
 import Resource from '../../../models/Resource';
 import { BaseItemEntity, NoteEntity } from '../../database/types';
 import { SyncAction, conflictActions } from './types';
-import ConflictNoteState from '../../../models/ConflictNoteState';
 import autoMergeNote from '../../conflict/autoMergeNote';
 import decryptNoteInMemory from '../../conflict/decryptNoteInMemory';
 import isAutoMergeEnabled from '../../conflict/isAutoMergeEnabled';
@@ -173,17 +172,6 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 			// further down, so the conflict note must not refer back to it as its original.
 			const conflictNote = await Note.createConflictNote(local, ItemChange.SOURCE_SYNC, remoteExists);
 			createdConflictNoteId = conflictNote.id;
-
-			// Read the base before the rebuild below. The remote version is the original
-			// note, so only its updated_time is kept, to detect it changing later.
-			const base = await Note.syncBaseContent(syncTargetId, local.id);
-			const remoteNote = remoteContent as NoteEntity;
-			await ConflictNoteState.save({
-				note_id: conflictNote.id,
-				base_body: base ? base.base_body : '',
-				base_title: base ? base.base_title : '',
-				remote_updated_time: remoteNote ? remoteNote.updated_time : 0,
-			});
 		}
 	} else if (action === SyncAction.ResourceConflict) {
 		if (!remoteContent || Resource.mustHandleConflict(local, remoteContent)) {

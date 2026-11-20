@@ -3,6 +3,7 @@ import { _ } from '@joplin/lib/locale';
 import CommandService from '@joplin/lib/services/CommandService';
 import { ChangeEvent, useCallback, useContext, useRef } from 'react';
 import NoteToolbar from '../../NoteToolbar/NoteToolbar';
+import ConflictTitle from './ConflictTitle';
 import { buildStyle } from '@joplin/lib/theme';
 import time from '@joplin/lib/time';
 import { WindowIdContext } from '../../NewWindowOrIFrame';
@@ -16,6 +17,13 @@ interface Props {
 	titleInputRef: React.RefObject<HTMLInputElement>;
 	onTitleChange(event: ChangeEvent<HTMLInputElement>): void;
 	disabled: boolean;
+
+	// isConflictNote sets the title bar heading. conflictTitle is added only when
+	// the titles differ.
+	isConflictNote?: boolean;
+	conflictTitle?: string;
+	resolvedTitle?: string;
+	onResolvedTitleChange?: (title: string)=> void;
 }
 
 function styles_(props: Props) {
@@ -99,6 +107,8 @@ export default function NoteTitleBar(props: Props) {
 
 	const { onTitleFocus, onTitleBlur } = useReselectHandlers();
 
+	const hasTitleConflict = props.conflictTitle !== undefined;
+
 	function renderTitleBarDate() {
 		return <span className="updated-time-label" style={styles.titleDate}>{time.formatMsToLocal(props.noteUserUpdatedTime)}</span>;
 	}
@@ -114,26 +124,49 @@ export default function NoteTitleBar(props: Props) {
 		/>;
 	}
 
+	const infoGroup = (
+		<div className='note-title-info-group'>
+			{renderTitleBarDate()}
+			{renderNoteToolbar()}
+		</div>
+	);
+
+	const titleInput = (
+		<input
+			className="title-input"
+			type="text"
+			ref={props.titleInputRef}
+			placeholder={props.isProvisional ? (props.noteIsTodo ? _('Creating new to-do...') : _('Creating new note...')) : ''}
+			aria-label={props.isProvisional ? undefined : _('Note title')}
+			style={styles.titleInput}
+			readOnly={props.disabled}
+			onChange={props.onTitleChange}
+			onKeyDown={onTitleKeydown}
+			onFocus={onTitleFocus}
+			onBlur={onTitleBlur}
+			value={props.noteTitle}
+		/>
+	);
+
+	if (props.isConflictNote) {
+		return (
+			<div className='note-title-wrapper -conflict'>
+				<ConflictTitle
+					conflictTitle={hasTitleConflict ? props.conflictTitle : null}
+					disabled={props.disabled}
+					resolvedTitle={props.resolvedTitle}
+					onResolvedTitleChange={props.onResolvedTitleChange}
+					infoGroup={infoGroup}
+					titleInput={titleInput}
+				/>
+			</div>
+		);
+	}
+
 	return (
 		<div className='note-title-wrapper'>
-			<input
-				className="title-input"
-				type="text"
-				ref={props.titleInputRef}
-				placeholder={props.isProvisional ? (props.noteIsTodo ? _('Creating new to-do...') : _('Creating new note...')) : ''}
-				aria-label={props.isProvisional ? undefined : _('Note title')}
-				style={styles.titleInput}
-				readOnly={props.disabled}
-				onChange={props.onTitleChange}
-				onKeyDown={onTitleKeydown}
-				onFocus={onTitleFocus}
-				onBlur={onTitleBlur}
-				value={props.noteTitle}
-			/>
-			<div className='note-title-info-group'>
-				{renderTitleBarDate()}
-				{renderNoteToolbar()}
-			</div>
+			{titleInput}
+			{infoGroup}
 		</div>
 	);
 }
