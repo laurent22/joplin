@@ -39,6 +39,10 @@ router.get('shares/:id', async (path: SubPath, ctx: AppContext) => {
 
 	if (share.type !== ShareType.Note && share.type !== ShareType.PublishedFolder) throw new ErrorNotFound();
 
+	// Access is only checked when publishing, and the publisher may have lost it since, for example by being removed
+	// from the shared notebook
+	if (!(await ctx.joplin.models.item().userHasItem(share.owner_id, share.item_id))) throw new ErrorNotFound();
+
 	if (ctx.query.note_id && share.type === ShareType.Note && !share.recursive) {
 		const redirectUrl = await shareModel.linkedNoteShareUrl(share, ctx.query.note_id as string);
 		if (redirectUrl) return redirect(ctx, redirectUrl);

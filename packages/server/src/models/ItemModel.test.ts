@@ -6,11 +6,37 @@ import { StorageDriverType } from '../utils/types';
 import config from '../config';
 import { msleep } from '../utils/time';
 import loadStorageDriver from './items/storage/loadStorageDriver';
-import { ErrorPayloadTooLarge, ErrorUnprocessableEntity } from '../utils/errors';
+import { ErrorConflict, ErrorPayloadTooLarge, ErrorUnprocessableEntity } from '../utils/errors';
 import { makeNoteSerializedBody } from '../utils/testing/serializedItems';
 import { isSqlite } from '../db';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { Item } from '../services/database/types';
+import { NoteEntity } from '@joplin/lib/services/database/types';
+
+// Gives user1 access to a note shared by user2, and to their own private note with the same name. The API no longer
+// allows getting into this state, but accounts that got into it before still have it.
+const createSharedAndPrivateCopies = async () => {
+	const { user: user1, session: session1 } = await createUserAndSession(1);
+	const { user: user2, session: session2 } = await createUserAndSession(2);
+	const noteId = '00000000000000000000000000000001';
+	const name = `${noteId}.md`;
+
+	const { share } = await shareFolderWithUser(session2.id, session1.id, '000000000000000000000000000000F1', [
+		{ id: '000000000000000000000000000000F1', children: [{ id: noteId }] },
+	]);
+	const sharedItem = await models().item().loadByName(user2.id, name);
+
+	const privateItem = await models().item().saveForUser(user1.id, {
+		name,
+		jop_id: noteId,
+		jop_type: ModelType.Note,
+		jop_parent_id: '000000000000000000000000000000F2',
+		jop_share_id: '',
+		content: Buffer.from(JSON.stringify({ title: 'original' })),
+	});
+
+	return { user1, user2, noteId, name, share, sharedItem, privateItem };
+};
 
 describe('ItemModel', () => {
 
@@ -222,6 +248,27 @@ describe('ItemModel', () => {
 		await models().item().updateTotalSizes();
 
 		expect((await models().user().load(user1.id)).total_item_size).toBe(folder1.content_size);
+	});
+
+	test('should load a shared item with its content once, whatever the number of users who have it', async () => {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+
+		await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [
+					{
+						id: '00000000000000000000000000000001',
+					},
+				],
+			},
+		]);
+
+		const note = await models().item().loadByJopId(user1.id, '00000000000000000000000000000001');
+		const items = await models().item().loadWithContentMulti([note.id]);
+		expect(items.length).toBe(1);
+		expect(items[0].content.length).toBeGreaterThan(0);
 	});
 
 	test('should include shared items in total size calculation', async () => {
@@ -611,6 +658,38 @@ describe('ItemModel', () => {
 		expect((await models().userItem().byUserId(user1.id)).length).toBe(5);
 	});
 
+	test('should process orphaned items mixed with valid items across batches', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+		const { user: user2 } = await createUserAndSession(2);
+
+		await createItemTree3(user1.id, '', '', [
+			{ id: '000000000000000000000000000000F1' },
+		]);
+
+		await createItemTree3(user2.id, '', '', [
+			{ id: '000000000000000000000000000000F2' },
+			{ id: '000000000000000000000000000000F3' },
+			{ id: '000000000000000000000000000000F4' },
+			{ id: '000000000000000000000000000000F5' },
+		]);
+
+		const f4 = await models().item().loadByJopId(user2.id, '000000000000000000000000000000F4');
+		await db()('user_items').where('item_id', '=', f4.id).delete();
+		await db()('users').where('id', '=', user1.id).delete();
+		await db()('user_items').where('user_id', '=', user1.id).delete();
+
+		await models().item().processOrphanedItems({ batchSize: 2 });
+
+		const items = await models().item().all();
+		expect(items.map(i => i.name).sort()).toEqual([
+			'000000000000000000000000000000F2.md',
+			'000000000000000000000000000000F3.md',
+			'000000000000000000000000000000F4.md',
+			'000000000000000000000000000000F5.md',
+		]);
+		expect((await models().userItem().byUserId(user2.id)).length).toBe(4);
+	});
+
 	test('should return multiple item contents', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 
@@ -667,13 +746,15 @@ describe('ItemModel', () => {
 		// Simulates a client retrying an upload while the original request is still being
 		// processed: the item does not exist when the caller checks for it, but does by the
 		// time it is inserted.
+		const name = `.resource/${'a'.repeat(32)}`;
+
 		await models().item().saveForUser(user1.id, {
-			name: 'test.txt',
+			name,
 			content: Buffer.from('original'),
 		});
 
 		const savedItem = await models().item().saveForUser(user1.id, {
-			name: 'test.txt',
+			name,
 			content: Buffer.from('retried'),
 		});
 
@@ -683,6 +764,58 @@ describe('ItemModel', () => {
 
 		const content = await models().item().loadWithContent(savedItem.id);
 		expect(content.content.toString()).toBe('retried');
+	});
+
+	test('should not update an orphaned item when the unique constraint fails', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+		const name = `.resource/${'a'.repeat(32)}`;
+
+		const orphanedItem = await models().item().saveForUser(user1.id, { name, content: Buffer.from('original') });
+		await db()('user_items').where('item_id', '=', orphanedItem.id).delete();
+
+		await expectHttpError(async () => models().item().saveForUser(user1.id, { name, content: Buffer.from('retried') }), ErrorConflict.httpCode);
+	});
+
+	test('should not change the item type when it was created by a concurrent request', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+		const name = `${'a'.repeat(32)}.md`;
+
+		const item = await models().item().saveForUser(user1.id, { name, jop_type: ModelType.Note, content: Buffer.from('') });
+
+		await expectHttpError(async () => models().item().saveForUser(user1.id, { name, jop_type: ModelType.Folder, content: Buffer.from('') }), ErrorUnprocessableEntity.httpCode);
+		expect((await models().item().load(item.id)).jop_type).toBe(ModelType.Note);
+	});
+
+	test('should pick the same item consistently when a user has access to several items with the same name', async () => {
+		const { user1, noteId, name, share, sharedItem, privateItem } = await createSharedAndPrivateCopies();
+
+		const upload = async (shareId: string, title: string) => {
+			await msleep(2);
+			await models().item().saveFromRawContent(user1, { name, body: Buffer.from(makeNoteSerializedBody({ id: noteId, share_id: shareId, title })) });
+		};
+		const titleOf = async (itemId: string) => (await models().item().loadAsJoplinItem<NoteEntity>(itemId)).title;
+
+		await upload(share.id, 'shared copy');
+		expect(await titleOf(sharedItem.id)).toBe('shared copy');
+		expect((await models().item().load(privateItem.id)).jop_share_id).toBe('');
+		expect((await models().item().loadByName(user1.id, name)).id).toBe(sharedItem.id);
+
+		await upload('', 'private copy');
+		expect(await titleOf(privateItem.id)).toBe('private copy');
+		expect(await titleOf(sharedItem.id)).toBe('shared copy');
+		expect((await models().item().load(sharedItem.id)).jop_share_id).toBe(share.id);
+		expect((await models().item().loadByName(user1.id, name)).id).toBe(privateItem.id);
+	});
+
+	test('should update the user\'s own item when a concurrent request created it and the user has access to another item with the same name', async () => {
+		const { user1, user2, name, sharedItem, privateItem } = await createSharedAndPrivateCopies();
+		await msleep(2);
+		await models().item().saveForUser(user2.id, { id: sharedItem.id, content: Buffer.from('shared') });
+
+		const savedItem = await models().item().saveForUser(user1.id, { name, content: Buffer.from('retried') });
+
+		expect(savedItem.id).toBe(privateItem.id);
+		expect((await models().item().load(sharedItem.id)).owner_id).toBe(user2.id);
 	});
 
 });

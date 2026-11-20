@@ -74,6 +74,14 @@ Configuring a reverse proxy is not required for core functionality and is only r
 - [Apache Reverse Proxy](https://httpd.apache.org/docs/current/mod/mod_proxy.html)
 - [Nginx Reverse Proxy](https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/)
 
+Joplin Server takes the client IP address from the `X-Real-IP` header and uses it for rate limiting and logging. The reverse proxy should always set this header to the client address, replacing any value sent by the client. Otherwise, clients can choose their own IP address and bypass the rate limits. For example:
+
+- Nginx: `proxy_set_header X-Real-IP $remote_addr;`
+- Apache: `RequestHeader set X-Real-IP "expr=%{REMOTE_ADDR}"`
+- Caddy: `header_up X-Real-IP {remote_host}`
+
+If Joplin Server is exposed to the internet without a reverse proxy, the rate limits can be bypassed in the same way.
+
 ## Setup storage
 
 This step is optional.

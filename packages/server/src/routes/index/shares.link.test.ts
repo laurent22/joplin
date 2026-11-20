@@ -1,9 +1,13 @@
 import { Share, ShareType } from '../../services/database/types';
 import routeHandler from '../../middleware/routeHandler';
+import ItemModel from '../../models/ItemModel';
 import { ErrorForbidden, ErrorNotFound } from '../../utils/errors';
 import { postApi } from '../../utils/testing/apiUtils';
 import { testImageBuffer } from '../../utils/testing/fileApiUtils';
-import { beforeAllDb, afterAllTests, parseHtml, beforeEachDb, createUserAndSession, koaAppContext, checkContextError, expectNotThrow, createNote, createItem, models, expectHttpError, createResource, createFolder } from '../../utils/testing/testUtils';
+import { shareFolderWithUser } from '../../utils/testing/shareApiUtils';
+import { beforeAllDb, afterAllTests, parseHtml, beforeEachDb, createUserAndSession, koaAppContext, checkContextError, expectNotThrow, createNote, createItem, models, expectHttpError, createResource, createFolder, updateNote, updateItem } from '../../utils/testing/testUtils';
+import { makeFolderSerializedBody, makeNoteSerializedBody } from '../../utils/testing/serializedItems';
+import { MarkupToHtml } from '@joplin/renderer';
 
 const resourceSize = 2720;
 
@@ -80,6 +84,36 @@ describe('shares.link', () => {
 		expect(bodyHtml).toContain('Testing body');
 		expect(bodyHtml).not.toContain('class="footer"');
 		expect(bodyHtml).toContain('<title>Testing title'); // Means the page title is set to the note title
+	});
+
+	test('should render a published note once until it changes, without typographer', async () => {
+		const { session } = await createUserAndSession();
+
+		const noteItem = await createNote(session.id, {
+			id: '00000000000000000000000000000001',
+			body: 'Some "quoted" text',
+		});
+
+		const share = await postApi<Share>(session.id, 'shares', {
+			type: ShareType.Note,
+			note_id: noteItem.jop_id,
+		});
+
+		const render = jest.spyOn(MarkupToHtml.prototype, 'render');
+		try {
+			const bodyHtml = await getShareContent(share.id) as string;
+			expect(bodyHtml).toContain('quoted');
+			expect(bodyHtml).not.toContain('\u201c');
+
+			await getShareContent(share.id);
+			expect(render).toHaveBeenCalledTimes(1);
+
+			await updateNote(session.id, { id: '00000000000000000000000000000001', body: 'Changed body' });
+			expect(await getShareContent(share.id)).toContain('Changed body');
+			expect(render).toHaveBeenCalledTimes(2);
+		} finally {
+			render.mockRestore();
+		}
 	});
 
 	test('should not display a locked note', async () => {
@@ -215,6 +249,112 @@ describe('shares.link', () => {
 		await expectHttpError(async () => getShareContent(share.id, { note_id: '000000000000000000000000000000E2' }), ErrorNotFound.httpCode);
 	});
 
+	test('should stop serving a note published by a participant once they are removed from the shared notebook', async () => {
+		const { session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+
+		const { shareUser } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [
+					{
+						id: '00000000000000000000000000000001',
+						title: 'Owner note',
+					},
+				],
+			},
+		]);
+
+		const share = await postApi<Share>(session2.id, 'shares', {
+			type: ShareType.Note,
+			note_id: '00000000000000000000000000000001',
+		});
+
+		expect(await getShareContent(share.id)).toContain('Owner note');
+
+		await models().shareUser().delete(shareUser.id);
+		await models().share().updateSharedItems3();
+
+		await expectHttpError(async () => getShareContent(share.id), ErrorNotFound.httpCode);
+	});
+
+	test('should not list items from another share in a published notebook', async () => {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+
+		const { share: otherShare } = await shareFolderWithUser(session2.id, session1.id, '000000000000000000000000000000F2', [
+			{ id: '000000000000000000000000000000F2', children: [] },
+		]);
+
+		await createFolder(session1.id, { id: '000000000000000000000000000000F1', title: 'My Notebook' });
+		await createNote(session1.id, { id: '00000000000000000000000000000001', parent_id: '000000000000000000000000000000F1', title: 'Owner note' });
+
+		const share = await postApi<Share>(session1.id, 'shares', {
+			folder_id: '000000000000000000000000000000F1',
+			type: ShareType.PublishedFolder,
+		});
+
+		await createNote(session2.id, { id: '00000000000000000000000000000009', parent_id: '000000000000000000000000000000F1', share_id: otherShare.id, title: 'Planted note' });
+		await models().share().updateSharedItems3();
+		expect(await models().item().loadByJopId(user1.id, '00000000000000000000000000000009')).toBeTruthy();
+
+		const bodyHtml = await getShareContent(share.id) as string;
+		expect(bodyHtml).toContain('Owner note');
+		expect(bodyHtml).not.toContain('Planted note');
+		expect(await getShareContent(share.id, { note_id: '00000000000000000000000000000009' })).not.toContain('Planted note');
+	});
+
+	test('should list items added by other members when the published notebook is shared', async () => {
+		const { session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+
+		const { share: folderShare } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [{ id: '00000000000000000000000000000001', title: 'Owner note' }],
+			},
+		]);
+
+		const share = await postApi<Share>(session1.id, 'shares', {
+			folder_id: '000000000000000000000000000000F1',
+			type: ShareType.PublishedFolder,
+		});
+
+		await createNote(session2.id, { id: '00000000000000000000000000000002', parent_id: '000000000000000000000000000000F1', share_id: folderShare.id, title: 'Member note' });
+		await models().share().updateSharedItems3();
+
+		const bodyHtml = await getShareContent(share.id) as string;
+		expect(bodyHtml).toContain('Owner note');
+		expect(bodyHtml).toContain('Member note');
+	});
+
+	test('should not let another account add links to a published note by uploading an item with a linked id', async () => {
+		const { session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+
+		const privateResource = await createResource(session1.id, { id: '000000000000000000000000000000E1' }, 'private');
+		const privateNote = await createNote(session1.id, { id: '000000000000000000000000000000C1' });
+
+		const rootNote = await createNote(session1.id, {
+			id: '00000000000000000000000000000001',
+			body: '[](:/000000000000000000000000000000C9)',
+		});
+
+		const share = await postApi<Share>(session1.id, 'shares', {
+			type: ShareType.Note,
+			note_id: rootNote.jop_id,
+			recursive: 1,
+		});
+
+		await createNote(session2.id, {
+			id: '000000000000000000000000000000C9',
+			body: `![](:/${privateResource.jop_id}) [](:/${privateNote.jop_id})`,
+		});
+
+		await expectHttpError(async () => getShareContent(share.id, { resource_id: privateResource.jop_id }), ErrorNotFound.httpCode);
+		await expectHttpError(async () => getShareContent(share.id, { note_id: privateNote.jop_id }), ErrorNotFound.httpCode);
+	});
+
 	test('should not share linked notes if the "recursive" field is not set', async () => {
 		const { session } = await createUserAndSession();
 
@@ -344,6 +484,166 @@ describe('shares.link', () => {
 		expect(bodyHtml).toContain('folder-tree-data');
 		expect(bodyHtml).toContain('My Notebook');
 		expect(bodyHtml).toContain('My Note');
+	});
+
+	test('should load the published folder contents only when they have changed', async () => {
+		const { session } = await createUserAndSession();
+
+		await createFolder(session.id, { id: '000000000000000000000000000000F1', title: 'My Notebook' });
+		await createNote(session.id, { id: '00000000000000000000000000000001', parent_id: '000000000000000000000000000000F1', title: 'First title' });
+		await createNote(session.id, { id: '00000000000000000000000000000002', parent_id: '000000000000000000000000000000F1', title: 'Other note' });
+
+		const share = await postApi<Share>(session.id, 'shares', {
+			folder_id: '000000000000000000000000000000F1',
+			type: ShareType.PublishedFolder,
+		});
+
+		const loadWithContent = jest.spyOn(ItemModel.prototype, 'loadWithContent');
+		const now = jest.spyOn(Date, 'now');
+		try {
+			expect(await getShareContent(share.id)).toContain('First title');
+			loadWithContent.mockClear();
+
+			// Only the shared folder item itself is loaded again
+			expect(await getShareContent(share.id)).toContain('First title');
+			expect(loadWithContent).toHaveBeenCalledTimes(1);
+
+			await updateNote(session.id, { id: '00000000000000000000000000000001', parent_id: '000000000000000000000000000000F1', title: 'Second title' });
+			const later = Date.now() + 60 * 1000;
+			now.mockReturnValue(later);
+			loadWithContent.mockClear();
+
+			// The shared folder item, and only the note that changed
+			expect(await getShareContent(share.id)).toContain('Second title');
+			expect(loadWithContent).toHaveBeenCalledTimes(2);
+		} finally {
+			loadWithContent.mockRestore();
+			now.mockRestore();
+		}
+	});
+
+	test('should build a published folder once for concurrent requests', async () => {
+		const { session } = await createUserAndSession();
+
+		await createFolder(session.id, { id: '000000000000000000000000000000F1', title: 'My Notebook' });
+		await createNote(session.id, { id: '00000000000000000000000000000001', parent_id: '000000000000000000000000000000F1', title: 'My Note' });
+
+		const share = await postApi<Share>(session.id, 'shares', {
+			folder_id: '000000000000000000000000000000F1',
+			type: ShareType.PublishedFolder,
+		});
+
+		const loadWithContent = jest.spyOn(ItemModel.prototype, 'loadWithContent');
+		try {
+			await Promise.all([getShareContent(share.id), getShareContent(share.id), getShareContent(share.id)]);
+
+			// Each request loads the shared folder item, and the tree is built once, from the folder and its note
+			expect(loadWithContent).toHaveBeenCalledTimes(5);
+		} finally {
+			loadWithContent.mockRestore();
+		}
+	});
+
+	test('should refuse a published folder in the trash without loading its contents', async () => {
+		const { session } = await createUserAndSession();
+
+		await createFolder(session.id, { id: '000000000000000000000000000000F1', title: 'My Notebook' });
+		await createNote(session.id, { id: '00000000000000000000000000000001', parent_id: '000000000000000000000000000000F1', title: 'My Note' });
+
+		const share = await postApi<Share>(session.id, 'shares', {
+			folder_id: '000000000000000000000000000000F1',
+			type: ShareType.PublishedFolder,
+		});
+
+		const trashedFolder = makeFolderSerializedBody({ id: '000000000000000000000000000000F1', title: 'My Notebook' }).replace('deleted_time: 0', `deleted_time: ${Date.now()}`);
+		await updateItem(session.id, 'root:/000000000000000000000000000000F1.md:', trashedFolder);
+
+		const loadByJopParentId = jest.spyOn(ItemModel.prototype, 'loadByJopParentId');
+		try {
+			await expectHttpError(async () => getShareContent(share.id), ErrorNotFound.httpCode);
+			expect(loadByJopParentId).not.toHaveBeenCalled();
+		} finally {
+			loadByJopParentId.mockRestore();
+		}
+	});
+
+	test('should serve a cached published folder while it is being refreshed', async () => {
+		const { session } = await createUserAndSession();
+
+		await createFolder(session.id, { id: '000000000000000000000000000000F1', title: 'My Notebook' });
+		await createNote(session.id, { id: '00000000000000000000000000000001', parent_id: '000000000000000000000000000000F1', title: 'First title' });
+
+		const share = await postApi<Share>(session.id, 'shares', {
+			folder_id: '000000000000000000000000000000F1',
+			type: ShareType.PublishedFolder,
+		});
+
+		expect(await getShareContent(share.id)).toContain('First title');
+
+		// The refresh is held up, as by other refreshes that are slow
+		let releaseRefresh: ()=> void = null;
+		const refreshBlocked = new Promise<void>(resolve => {
+			releaseRefresh = resolve;
+		});
+		const loadByJopParentId = ItemModel.prototype.loadByJopParentId;
+		const loadChildren = jest.spyOn(ItemModel.prototype, 'loadByJopParentId').mockImplementation(async function(this: ItemModel, ...args: Parameters<ItemModel['loadByJopParentId']>) {
+			await refreshBlocked;
+			return loadByJopParentId.apply(this, args);
+		});
+		const now = jest.spyOn(Date, 'now').mockReturnValue(Date.now() + 30 * 1000);
+
+		try {
+			expect(await getShareContent(share.id)).toContain('First title');
+		} finally {
+			releaseRefresh();
+			loadChildren.mockRestore();
+			now.mockRestore();
+		}
+	});
+
+	test('should link to the attachments of an HTML note through the share it is viewed from', async () => {
+		const { session } = await createUserAndSession();
+
+		await createFolder(session.id, { id: '000000000000000000000000000000F1', title: 'My Notebook' });
+		const resource = await createResource(session.id, { id: '000000000000000000000000000000E1', mime: 'image/png', file_extension: 'png' }, 'test');
+		const noteBody = makeNoteSerializedBody({ id: '00000000000000000000000000000001', parent_id: '000000000000000000000000000000F1', body: `<img src=":/${resource.jop_id}"/>` }).replace('markup_language: 1', 'markup_language: 2');
+		await createItem(session.id, 'root:/00000000000000000000000000000001.md:', noteBody);
+
+		const folderShare = await postApi<Share>(session.id, 'shares', { folder_id: '000000000000000000000000000000F1', type: ShareType.PublishedFolder });
+		const noteShare = await postApi<Share>(session.id, 'shares', { note_id: '00000000000000000000000000000001', type: ShareType.Note });
+
+		expect(await getShareContent(folderShare.id, { note_id: '00000000000000000000000000000001' })).toContain(`shares/${folderShare.id}?resource_id=${resource.jop_id}`);
+		expect(await getShareContent(noteShare.id)).toContain(`shares/${noteShare.id}?resource_id=${resource.jop_id}`);
+	});
+
+	test('should shorten long note titles in the published folder tree', async () => {
+		const { session } = await createUserAndSession();
+
+		await createFolder(session.id, { id: '000000000000000000000000000000F1', title: 'My Notebook' });
+		await createNote(session.id, { id: '00000000000000000000000000000001', parent_id: '000000000000000000000000000000F1', title: `start${'x'.repeat(1000)}` });
+
+		const share = await postApi<Share>(session.id, 'shares', {
+			folder_id: '000000000000000000000000000000F1',
+			type: ShareType.PublishedFolder,
+		});
+
+		const bodyHtml = await getShareContent(share.id) as string;
+		expect(bodyHtml).toContain(`start${'x'.repeat(192)}...`);
+		expect(bodyHtml).not.toContain('x'.repeat(196));
+	});
+
+	test('should display a published folder whose sub-folder is also its parent', async () => {
+		const { session } = await createUserAndSession();
+
+		await createFolder(session.id, { id: '000000000000000000000000000000F1', parent_id: '000000000000000000000000000000F2', title: 'My Notebook' });
+		await createFolder(session.id, { id: '000000000000000000000000000000F2', parent_id: '000000000000000000000000000000F1', title: 'Sub-notebook' });
+
+		const share = await postApi<Share>(session.id, 'shares', {
+			folder_id: '000000000000000000000000000000F1',
+			type: ShareType.PublishedFolder,
+		});
+
+		expect(await getShareContent(share.id)).toContain('Sub-notebook');
 	});
 
 	test('should display a note inside a published folder', async () => {

@@ -1,6 +1,6 @@
 import { basename } from '@joplin/utils/path';
 import { Item } from '../services/database/types';
-import { isJoplinResourceBlobPath, itemIsEncrypted, localFileFromUrl } from './joplinUtils';
+import { isJoplinResourceBlobPath, itemIsEncrypted, localFileFromUrl, withFolderTreeRefreshSlot } from './joplinUtils';
 import { expectThrow } from './testing/testUtils';
 
 describe('joplinUtils', () => {
@@ -47,4 +47,28 @@ describe('joplinUtils', () => {
 	])('should detect resource blob paths: %s', (path, expected) => {
 		expect(isJoplinResourceBlobPath(path)).toBe(expected);
 	});
+	it('should run only one published notebook refresh per owner at a time', async () => {
+		const started: string[] = [];
+		let finishFirst: ()=> void = null;
+
+		const first = withFolderTreeRefreshSlot('owner1', async () => {
+			started.push('owner1-first');
+			await new Promise<void>(resolve => {
+				finishFirst = resolve;
+			});
+		});
+		const second = withFolderTreeRefreshSlot('owner1', async () => {
+			started.push('owner1-second');
+		});
+		await withFolderTreeRefreshSlot('owner2', async () => {
+			started.push('owner2');
+		});
+
+		expect(started).toEqual(['owner1-first', 'owner2']);
+
+		finishFirst();
+		await Promise.all([first, second]);
+		expect(started).toEqual(['owner1-first', 'owner2', 'owner1-second']);
+	});
+
 });

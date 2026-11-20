@@ -106,6 +106,17 @@ describe('urlUtils', () => {
 		}
 	}));
 
+	it.each([
+		['unclosed links', '[a]('.repeat(500_000)],
+		['unclosed reference links', `${']:'.repeat(500_000)}\r`],
+		['unclosed anchors', '<a'.repeat(500_000)],
+		['unclosed images', '<img'.repeat(250_000)],
+	])('should extract resource URLs from text with many %s quickly', (_case, text) => {
+		const startTime = Date.now();
+		expect(urlUtils.extractResourceUrls(text)).toEqual([]);
+		expect(Date.now() - startTime).toBeLessThan(1000);
+	});
+
 	it('urlProtocol should detect file protocol URLs', () => {
 		expect(urlUtils.urlProtocol('file:/test')).toBe('file:');
 		expect(urlUtils.urlProtocol('file://test')).toBe('file:');

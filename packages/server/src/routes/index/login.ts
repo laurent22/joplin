@@ -10,7 +10,8 @@ import limiterLoginBruteForce from '../../utils/request/limiterLoginBruteForce';
 import { cookieSet } from '../../utils/cookies';
 import { adminDashboardUrl, applicationsConfirmUrl, homeUrl } from '../../utils/urlUtils';
 import { generateRedirectHtml } from '../../utils/saml';
-import { ErrorForbidden } from '../../utils/errors';
+import { ErrorCode, ErrorForbidden, ErrorTooManyRequests } from '../../utils/errors';
+import { checkNotCrossSiteRequest } from '../../utils/csrf';
 
 type LoginViewContentOptions = {
 	showMfaCodeInput: boolean;
@@ -106,21 +107,12 @@ router.get('login/:id', async (path: SubPath, ctx: AppContext) => {
 });
 
 router.post('login', async (path: SubPath, ctx: AppContext) => {
+	checkNotCrossSiteRequest(ctx);
 	await limiterLoginBruteForce(userIp(ctx));
 
 	const body = await formParse(ctx.req);
 
 	try {
-		// Non-existent users may be created by session().authenticate in some setups -- we need to allow
-		// non-existent users here.
-		const hasMFAEnabled = await ctx.joplin.models.user().hasMFAEnabled(
-			body.fields.email, { requireUserExists: false },
-		);
-
-		if (hasMFAEnabled && (!body.fields.mfaCode && !body.fields.recoveryCode)) {
-			return internalRedirect(path, ctx, router, 'login', body.fields, { showMfaCodeInput: true });
-		}
-
 		const session = await ctx.joplin.models.session().authenticate(
 			body.fields.email, body.fields.password, ctx.joplin.services, body.fields.mfaCode, body.fields.recoveryCode,
 		);
@@ -129,10 +121,19 @@ router.post('login', async (path: SubPath, ctx: AppContext) => {
 
 		return redirect(ctx, getRedirectUrl(owner.is_admin, body.fields.applicationAuthId));
 	} catch (error) {
+		// Only raised once the password has been checked, so that the form does not reveal which accounts have MFA
+		if (error.code === ErrorCode.MfaCodeRequired) {
+			return internalRedirect(path, ctx, router, 'login', body.fields, { showMfaCodeInput: true });
+		}
+
+		// A blocked account can still be logged in to with its password and an MFA code. The field is shown for any
+		// blocked account, since showing it only for those with MFA would tell which ones have it.
+		const isBlocked = error instanceof ErrorTooManyRequests;
+
 		return makeView(
 			error,
 			{ email: body.fields.email, password: body.fields.password, applicationAuthId: body.fields.applicationAuthId },
-			{ showMfaCodeInput: Boolean(body.fields.mfaCode), showRecoveryCodeInput: Boolean(body.fields.recoveryCode) },
+			{ showMfaCodeInput: Boolean(body.fields.mfaCode) || (isBlocked && !body.fields.recoveryCode), showRecoveryCodeInput: Boolean(body.fields.recoveryCode) },
 		);
 	}
 });

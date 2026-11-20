@@ -32,13 +32,18 @@ export const decryptMFASecret = (encryptedSecret: string, encryptionKey: string)
 export const checkConsecutiveMFACodes = (totpSecret: string, confirmCode1: string, confirmCode2: string) => {
 	const decodedTotpSecret = thirtyTwo.decode(totpSecret);
 
-	totp.options = {
-		// Set epoch 30s in the past to verify if the first code is valid
-		epoch: Date.now() - 30 * 1000,
-	};
-	const isVerified = totp.check(confirmCode1, decodedTotpSecret);
-
-	totp.resetOptions();
+	// The totp instance is shared by the whole process, so its options must be restored even if the check throws,
+	// otherwise every MFA login would be checked against the wrong time
+	let isVerified = false;
+	try {
+		totp.options = {
+			// Set epoch 30s in the past to verify if the first code is valid
+			epoch: Date.now() - 30 * 1000,
+		};
+		isVerified = totp.check(confirmCode1, decodedTotpSecret);
+	} finally {
+		totp.resetOptions();
+	}
 	const isVerified2 = totp.check(confirmCode2, decodedTotpSecret);
 
 	return isVerified && isVerified2;

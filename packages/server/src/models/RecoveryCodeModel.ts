@@ -6,9 +6,10 @@ import { ErrorForbidden } from '../utils/errors';
 import { isValidMFACode } from '../utils/crypto';
 import recoveryCodesAccessedTemplate from '../views/emails/recoveryCodesAccessedTemplate';
 import { forgotPasswordUrl } from '../utils/urlUtils';
-import { formatDateOnServer } from '../utils/time';
+import { formatDateOnServer, Hour } from '../utils/time';
 import { DbConnection } from '../db';
 import { NewModelFactoryHandler } from './factory';
+import { Services } from '../services/types';
 import { Config } from '../utils/types';
 
 type RecoveryCodeAccess = {
@@ -98,13 +99,11 @@ export default class RecoveryCodeModel extends BaseModel<RecoveryCode> {
 		}, 'RecoveryCode::verify');
 	}
 
-	public async checkCredentials(userId: Uuid, password?: string, mfaCode?: string) {
+	public async checkCredentials(userId: Uuid, password: string, mfaCode: string, services: Services) {
 		const user = await this.models().user().load(userId, { fields: ['totp_secret'] });
 
-		if (password) {
-			const isPasswordValid = await this.models().user().isPasswordValid(userId, password);
-			if (isPasswordValid) return;
-		}
+		// Through the same per-account limiter as login, otherwise this page would allow guessing the password faster
+		if (password) return this.models().user().checkCurrentPassword(userId, password, services);
 
 		if (mfaCode) {
 			const isMfaCodeValid = await isValidMFACode(user.totp_secret, mfaCode);
@@ -149,6 +148,8 @@ export default class RecoveryCodeModel extends BaseModel<RecoveryCode> {
 			recipient_name: user.full_name,
 			recipient_id: userId,
 			sender_id: EmailSender.NoReply,
+			// Viewing the codes can be repeated at will, so this limits the alert to one per hour
+			key: `recoveryCodesAccessed::${Math.floor(Date.now() / Hour)}`,
 		});
 
 		return recoveryCodeAccess;

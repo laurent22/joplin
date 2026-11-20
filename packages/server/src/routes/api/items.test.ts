@@ -6,9 +6,9 @@ import { Item } from '../../services/database/types';
 import { PaginatedItems, SaveFromRawContentResult } from '../../models/ItemModel';
 import { shareFolderWithUser } from '../../utils/testing/shareApiUtils';
 import { resourceBlobPath } from '../../utils/joplinUtils';
-import { ErrorForbidden, ErrorPayloadTooLarge } from '../../utils/errors';
+import { ErrorBadRequest, ErrorForbidden, ErrorPayloadTooLarge, ErrorUnprocessableEntity } from '../../utils/errors';
 import { PaginatedResults } from '../../models/utils/pagination';
-import { makeNoteSerializedBody } from '../../utils/testing/serializedItems';
+import { makeFolderSerializedBody, makeNoteSerializedBody } from '../../utils/testing/serializedItems';
 
 describe('api/items', () => {
 
@@ -70,6 +70,7 @@ describe('api/items', () => {
 
 		const newParentId = '000000000000000000000000000000F2';
 		const tempFilePath = await makeTempFileWithContent(makeNoteSerializedBody({
+			id: noteId,
 			parent_id: newParentId,
 			title: 'new title',
 		}));
@@ -189,6 +190,29 @@ describe('api/items', () => {
 		expect(Object.keys(result.items).sort()).toEqual(['00000000000000000000000000000001.md', '00000000000000000000000000000002.md']);
 	});
 
+	test.each([
+		['a body that is not a string', { items: [{ name: 'a.txt', body: { length: 300000000 } }] }, ErrorBadRequest.httpCode],
+		['items that are not an array', { items: { length: 300000000 } }, ErrorBadRequest.httpCode],
+		['bodies over the size limit', { items: [{ name: 'a.txt', body: 'x'.repeat(600 * 1024) }, { name: 'b.txt', body: 'x'.repeat(600 * 1024) }] }, ErrorPayloadTooLarge.httpCode],
+	])('should reject a batch upload with %s before allocating anything', async (_case, body, expectedHttpCode) => {
+		const { session } = await createUserAndSession(1, false);
+		const bufferFrom = jest.spyOn(Buffer, 'from');
+
+		await expectHttpError(async () => putApi(session.id, 'batch_items', body), expectedHttpCode);
+		expect(bufferFrom).not.toHaveBeenCalled();
+
+		bufferFrom.mockRestore();
+	});
+
+	test('should accept a batch that is within the limit as the client counts it, in characters', async () => {
+		const { session } = await createUserAndSession(1, false);
+		// 1.2 MB in UTF-8, but 400K characters, which is what the client's 1 MB batch limit counts
+		const body = '\u4E2D'.repeat(400 * 1024);
+
+		const result = await putApi<Record<string, SaveFromRawContentResult>>(session.id, 'batch_items', { items: [{ name: 'test.txt', body }] });
+		expect(result['items']['test.txt'].error).toBeFalsy();
+	});
+
 	test('should report errors when batch uploading', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1, false);
 
@@ -289,6 +313,50 @@ describe('api/items', () => {
 
 		const item = await models().item().loadByName(user1.id, resourceBlobPath('000000000000000000000000000000E1'));
 		expect(item.jop_share_id).toBe(share.id);
+	});
+
+	test('should only associate resource blobs with a share via share_id', async () => {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+
+		await createItem(session1.id, 'root:/info.json:', 'victim');
+
+		const { share } = await shareFolderWithUser(session2.id, session1.id, '000000000000000000000000000000F1', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [],
+			},
+		]);
+
+		await expectHttpError(
+			async () => putApi(session2.id, 'items/root:/info.json:/content', {}, { query: { share_id: share.id } }),
+			ErrorUnprocessableEntity.httpCode,
+		);
+
+		expect(await models().item().loadByName(user2.id, 'info.json')).toBeFalsy();
+
+		await models().share().updateSharedItems3();
+
+		const items = await models().item().loadByNames(user1.id, ['info.json']);
+		expect(items.length).toBe(1);
+		expect(items[0].owner_id).toBe(user1.id);
+	});
+
+	test('should not save a Joplin item whose id does not match its name, or whose type changes', async () => {
+		const { session } = await createUserAndSession(1);
+		const itemId = '00000000000000000000000000000001';
+
+		await expectHttpError(
+			async () => createItem(session.id, `root:/${itemId}.md:`, makeNoteSerializedBody({ id: '00000000000000000000000000000002' })),
+			ErrorUnprocessableEntity.httpCode,
+		);
+
+		await createItem(session.id, `root:/${itemId}.md:`, makeFolderSerializedBody({ id: itemId }));
+
+		await expectHttpError(
+			async () => createItem(session.id, `root:/${itemId}.md:`, makeNoteSerializedBody({ id: itemId })),
+			ErrorUnprocessableEntity.httpCode,
+		);
 	});
 
 	test('should not upload or download items if the account is disabled', async () => {
@@ -437,6 +505,43 @@ describe('api/items', () => {
 		expect(await models().item().loadByJopId(user1.id, '00000000000000000000000000000002')).toBeNull();
 		// Should not have deleted the other item
 		expect(await models().item().loadByJopId(user1.id, '00000000000000000000000000000003')).toBeTruthy();
+	});
+
+	test.each(['x', '0', '1001', '1.5'])('should refuse an invalid delta limit: %s', async (limit) => {
+		const { session } = await createUserAndSession(1, true);
+		await expectHttpError(async () => getApi(session.id, 'items/root/delta', { query: { limit } }), ErrorBadRequest.httpCode);
+	});
+
+	test('should accept a valid delta limit', async () => {
+		const { session } = await createUserAndSession(1, true);
+		await createNote(session.id, { id: '00000000000000000000000000000001' });
+		await createNote(session.id, { id: '00000000000000000000000000000002' });
+		const result = await getApi<{ items: unknown[]; has_more: boolean }>(session.id, 'items/root/delta', { query: { limit: '1' } });
+		expect(result.items.length).toBe(1);
+		expect(result.has_more).toBe(true);
+	});
+
+	test.each([
+		['single', (sessionId: string, name: string) => deleteApi(sessionId, `items/root:/${name}:`)],
+		['batch', (sessionId: string, name: string) => deleteApi(sessionId, 'batch_items', { body: { items: [name] } })],
+	])('should delete every item with the same name that the user has access to (%s)', async (_label, deleteByName) => {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+		const noteId = '00000000000000000000000000000001';
+		const name = `${noteId}.md`;
+
+		await shareFolderWithUser(session2.id, session1.id, '000000000000000000000000000000F1', [
+			{ id: '000000000000000000000000000000F1', children: [{ id: noteId }] },
+		]);
+
+		// The API no longer allows getting into this state, but accounts that got into it before still have it
+		await models().item().saveForUser(user1.id, { name, jop_id: noteId, jop_type: ModelType.Note, jop_share_id: '', content: Buffer.from('{}') });
+		expect((await models().item().loadByNames(user1.id, [name])).length).toBe(2);
+
+		await deleteByName(session1.id, name);
+
+		expect(await models().item().loadByNames(user1.id, [name])).toEqual([]);
+		expect(await models().item().loadByNames(user2.id, [name])).toEqual([]);
 	});
 
 });

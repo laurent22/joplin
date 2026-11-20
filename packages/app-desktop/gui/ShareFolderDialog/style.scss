@@ -1,5 +1,3 @@
-.share-folder-dialog {
-	.permission-dropdown {
-		margin-right: 10px;
-	}
-}
+@use "./styles/ppk-validation-dialog.scss";
+@use "./styles/share-folder-dialog.scss";
+@use "./styles/ppk-warning-icon.scss";

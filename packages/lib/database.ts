@@ -77,11 +77,15 @@ export default class Database {
 
 	public escapeField(field: string) {
 		if (field === '*') return '*';
+
+		const invalidFormatError = () => new Error(`Invalid field format: ${field}`);
+		if (field.includes('`')) throw invalidFormatError();
+
 		const p = field.split('.');
 		if (p.length === 1) return `\`${field}\``;
-		if (p.length === 2) return `${p[0]}.\`${p[1]}\``;
+		if (p.length === 2) return `\`${p[0]}\`.\`${p[1]}\``;
 
-		throw new Error(`Invalid field format: ${field}`);
+		throw invalidFormatError();
 	}
 
 	public escapeFields(fields: string[] | string): string[] | string {

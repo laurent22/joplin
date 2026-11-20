@@ -154,6 +154,7 @@
 		"@react-native/babel-preset",
 		"nitrogen",
 		"react-native-nitro-modules",
+		"xcodeproj",
 
 		// We currently don't have automated tests that verify that the
 		// sidemenus work correctly in the mobile app. Because an update to
@@ -250,6 +251,9 @@
 
 		// We keep using v5 for now. Upgrading to v7 would require updating the icon names.
 		"@fortawesome/fontawesome-free",
+
+		// Don't think we use it - should be removed from fork-sax package
+		"tap",
 	],
 	"packageRules": [
 		// The React Monorepo rule appears to be automatically enabled, but the PR will usually fail

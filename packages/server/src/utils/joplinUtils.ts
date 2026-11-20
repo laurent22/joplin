@@ -10,14 +10,15 @@ import MasterKey from '@joplin/lib/models/MasterKey';
 import Revision from '@joplin/lib/models/Revision';
 import { Config } from './types';
 import * as fs from 'fs-extra';
+import { createHash } from 'crypto';
 import { Item, Share, Uuid } from '../services/database/types';
 import ItemModel from '../models/ItemModel';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { itemIsInTrash } from '@joplin/lib/services/trash';
 import { formatDateTime } from './time';
-import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from './errors';
+import { ErrorForbidden, ErrorNotFound } from './errors';
 import { MarkupToHtml } from '@joplin/renderer';
-import { OptionsResourceModel } from '@joplin/renderer/types';
+import { OptionsResourceModel, RenderResult } from '@joplin/renderer/types';
 import { isValidHeaderIdentifier } from '@joplin/lib/services/e2ee/EncryptionService';
 import { DatabaseDriverNode } from '@joplin/lib/database-driver-node';
 import { themeStyle } from '@joplin/lib/theme';
@@ -242,6 +243,46 @@ async function renderResource(userId: string, resourceId: string, item: Item, co
 	};
 }
 
+interface CachedRenderedNote {
+	result: RenderResult;
+	length: number;
+}
+
+// Anyone can publish a note that is slow to render, and it can then be requested anonymously in a loop, so the rendered
+// markup is cached by everything it depends on. Size-limited the same way as the folder tree cache.
+const renderedNoteCache = new Map<string, CachedRenderedNote>();
+let renderedNoteCacheLength = 0;
+const maxRenderedNoteCacheLength = 50_000_000;
+const maxCachedRenderedNotes = 10000;
+const maxCachedRenderedNoteLength = 5_000_000;
+
+const getCachedRenderedNote = (key: string) => {
+	const cached = renderedNoteCache.get(key);
+	if (!cached) return null;
+	renderedNoteCache.delete(key);
+	renderedNoteCache.set(key, cached);
+	return cached.result;
+};
+
+const cacheRenderedNote = (key: string, result: RenderResult) => {
+	const length = result.html.length + result.cssStrings.join('').length + JSON.stringify(result.pluginAssets).length;
+	if (length > maxCachedRenderedNoteLength) return;
+
+	const previous = renderedNoteCache.get(key);
+	if (previous) {
+		renderedNoteCache.delete(key);
+		renderedNoteCacheLength -= previous.length;
+	}
+	renderedNoteCache.set(key, { result, length });
+	renderedNoteCacheLength += length;
+
+	for (const [oldestKey, oldest] of renderedNoteCache) {
+		if (renderedNoteCacheLength <= maxRenderedNoteCacheLength && renderedNoteCache.size <= maxCachedRenderedNotes) break;
+		renderedNoteCache.delete(oldestKey);
+		renderedNoteCacheLength -= oldest.length;
+	}
+};
+
 async function renderNote(
 	share: Share,
 	note: NoteEntity,
@@ -254,10 +295,16 @@ async function renderNote(
 
 	const markupToHtml = new MarkupToHtml({
 		ResourceModel: Resource as OptionsResourceModel,
+		// Off by default in the apps, and its smart quotes are slow to render on some inputs
+		pluginOptions: { typographer: { enabled: false } },
 	});
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- markupToHtml.render's RenderOptions is loosely typed in @joplin/renderer; tightening would require updating the renderer package
 	const renderOptions: any = {
+		// Not used by the renderer, but part of the key of its own cache, which would otherwise return the HTML of a note
+		// rendered for another share, with links to that share
+		shareId: share.id,
+
 		resources: resourceInfos,
 
 		itemIdToUrl: (itemId: Uuid) => {
@@ -303,7 +350,14 @@ async function renderNote(
 	};
 
 	try {
-		const result = await markupToHtml.render(note.markup_language, note.body, themeStyle(Setting.THEME_LIGHT), renderOptions);
+		const linkedItems = Object.values(linkedItemInfos).map(info => info.item);
+		const cacheKey = createHash('sha256').update(JSON.stringify([share.id, !!folderTree, note.id, note.markup_language, note.body, linkedItems])).digest('hex');
+
+		let result = getCachedRenderedNote(cacheKey);
+		if (!result) {
+			result = await markupToHtml.render(note.markup_language, note.body, themeStyle(Setting.THEME_LIGHT), renderOptions);
+			cacheRenderedNote(cacheKey, result);
+		}
 
 		return renderNotePage(
 			note.title,
@@ -325,37 +379,156 @@ async function renderNote(
 	}
 }
 
-async function buildFolderTree(share: Share, folderId: string, activeNoteId = ''): Promise<RenderedFolderTree> {
-	const rootFolderItem = await models_.item().loadByJopId(share.owner_id, folderId, { fields: ['*'], withContent: true });
-	if (!rootFolderItem) throw new ErrorNotFound(`No such folder: ${folderId}`);
+interface FolderTreeMetadata {
+	item: Item;
+	children: FolderTreeMetadata[];
+}
 
-	const rootFolder = models_.item().itemToJoplinItem(rootFolderItem);
-	if (itemIsInTrash(rootFolder)) throw new ErrorNotFound(`No such folder: ${folderId}`);
+interface FolderTreeItemInfo {
+	updatedTime: number;
+	title: string;
+	inTrash: boolean;
+	jopUpdatedTime: number;
+}
+
+interface FolderTreeRefreshResult {
+	tree?: CachedFolderTree;
+	error?: Error;
+}
+
+interface CachedFolderTree {
+	fingerprint: string;
+	checkedTime: number;
+	rootTitle: string;
+	sourceJson: string;
+	allowedNoteIds: Set<string>;
+}
+
+// A published notebook's titles are only in its items' contents, which can add up to gigabytes, and the tree is needed
+// by every anonymous request for the page and each of its images. So it is built once, and rebuilt only when one of its
+// items has changed, loading only the items that changed, one at a time. An account can publish more notebooks than fit
+// in the cache, so only a few are refreshed at a time.
+const folderTreeCache = new Map<string, CachedFolderTree>();
+let folderTreeCacheLength = 0;
+const folderTreeItemInfos = new Map<Uuid, FolderTreeItemInfo>();
+const folderTreeRefreshes = new Map<string, Promise<FolderTreeRefreshResult>>();
+const runningFolderTreeRefreshesByOwner = new Map<Uuid, number>();
+let runningFolderTreeRefreshes = 0;
+const waitingFolderTreeRefreshes: { ownerId: Uuid; start: ()=> void }[] = [];
+const maxFolderTreeCacheLength = 50_000_000;
+const maxCachedFolderTrees = 1000;
+const maxCachedFolderTreeItemInfos = 100_000;
+const maxRunningFolderTreeRefreshes = 4;
+const maxRunningFolderTreeRefreshesPerOwner = 1;
+const maxFolderTreeStaleness = 60 * 1000;
+const maxFolderTreeTitleLength = 200;
+const folderTreeCheckInterval = 10 * 1000;
+const maxFolderTreeItems = 10000;
+
+const loadFolderTreeMetadata = async (ownerId: Uuid, rootFolderItem: Item) => {
+	const visitedFolderIds = new Set([rootFolderItem.jop_id]);
+	let itemCount = 0;
+
+	const loadChildren = async (parentId: string): Promise<FolderTreeMetadata[]> => {
+		const children = await models_.item().loadByJopParentId(ownerId, parentId, { fields: ['id', 'jop_id', 'jop_type', 'jop_share_id', 'updated_time'] });
+		const output: FolderTreeMetadata[] = [];
+
+		for (const child of children) {
+			if (child.jop_type !== ModelType.Folder && child.jop_type !== ModelType.Note) continue;
+			// The parent id is set by whoever uploads the item, so someone sharing another notebook with the publisher
+			// could otherwise add items to the published notebook
+			if ((child.jop_share_id || '') !== (rootFolderItem.jop_share_id || '')) continue;
+			if (itemCount >= maxFolderTreeItems) break;
+			itemCount++;
+
+			// Folders can be made to be each other's parent
+			if (child.jop_type === ModelType.Folder) {
+				if (visitedFolderIds.has(child.jop_id)) continue;
+				visitedFolderIds.add(child.jop_id);
+			}
+
+			output.push({
+				item: child,
+				children: child.jop_type === ModelType.Folder ? await loadChildren(child.jop_id) : [],
+			});
+		}
+
+		return output;
+	};
+
+	return loadChildren(rootFolderItem.jop_id);
+};
+
+const folderTreeFingerprint = (rootFolderItem: Item, nodes: FolderTreeMetadata[]) => {
+	const hash = createHash('sha256');
+	const add = (item: Item) => hash.update(`${item.id}:${item.updated_time}\n`);
+	add(rootFolderItem);
+
+	// Folders can be nested deeper than the call stack allows
+	const stack = nodes.slice().reverse();
+	while (stack.length) {
+		const node = stack.pop();
+		add(node.item);
+		for (let i = node.children.length - 1; i >= 0; i--) stack.push(node.children[i]);
+	}
+
+	return hash.digest('hex');
+};
+
+const loadFolderTreeItemInfo = async (item: Item) => {
+	let info = folderTreeItemInfos.get(item.id);
+
+	if (!info || info.updatedTime !== item.updated_time) {
+		// It may have been deleted since the tree metadata was loaded
+		const itemWithContent = await models_.item().loadWithContent(item.id);
+		if (!itemWithContent) return null;
+
+		const jopItem = models_.item().itemToJoplinItem(itemWithContent);
+		info = {
+			updatedTime: itemWithContent.updated_time,
+			title: substrWithEllipsis(jopItem.title || '', 0, maxFolderTreeTitleLength),
+			inTrash: itemIsInTrash(jopItem),
+			jopUpdatedTime: jopItem.updated_time,
+		};
+	}
+
+	folderTreeItemInfos.delete(item.id);
+	folderTreeItemInfos.set(item.id, info);
+	for (const oldestItemId of folderTreeItemInfos.keys()) {
+		if (folderTreeItemInfos.size <= maxCachedFolderTreeItemInfos) break;
+		folderTreeItemInfos.delete(oldestItemId);
+	}
+
+	return info;
+};
+
+const buildCachedFolderTree = async (share: Share, rootFolderItem: Item, nodes: FolderTreeMetadata[], fingerprint: string, checkedTime: number): Promise<CachedFolderTree> => {
+	const rootInfo = await loadFolderTreeItemInfo(rootFolderItem);
+	if (!rootInfo || rootInfo.inTrash) throw new ErrorNotFound(`No such folder: ${rootFolderItem.jop_id}`);
 
 	const allowedNoteIds = new Set<string>();
 
-	const buildNodes = async (parentId: string): Promise<TreeSourceNode[]> => {
-		const children = await models_.item().loadByJopParentId(share.owner_id, parentId, { fields: ['*'], withContent: true });
+	const buildNodes = async (nodes: FolderTreeMetadata[]): Promise<TreeSourceNode[]> => {
 		const output: TreeSourceNode[] = [];
 
-		for (const child of children) {
-			const childJopItem = models_.item().itemToJoplinItem(child);
-			if (itemIsInTrash(childJopItem)) continue;
+		for (const node of nodes) {
+			const info = await loadFolderTreeItemInfo(node.item);
+			if (!info || info.inTrash) continue;
 
-			if (child.jop_type === ModelType.Folder) {
+			if (node.item.jop_type === ModelType.Folder) {
 				output.push({
-					title: childJopItem.title || '',
-					key: childJopItem.id,
+					title: info.title,
+					key: node.item.jop_id,
 					folder: true,
 					expanded: true,
-					children: await buildNodes(childJopItem.id),
+					children: await buildNodes(node.children),
 				});
-			} else if (child.jop_type === ModelType.Note) {
-				allowedNoteIds.add(childJopItem.id);
+			} else {
+				allowedNoteIds.add(node.item.jop_id);
 				output.push({
-					title: childJopItem.title || '',
-					key: childJopItem.id,
-					url: models_.share().shareUrl(share.owner_id, share.id, { note_id: childJopItem.id, t: childJopItem.updated_time }),
+					title: info.title,
+					key: node.item.jop_id,
+					url: models_.share().shareUrl(share.owner_id, share.id, { note_id: node.item.jop_id, t: info.jopUpdatedTime }),
 				});
 			}
 		}
@@ -363,13 +536,130 @@ async function buildFolderTree(share: Share, folderId: string, activeNoteId = ''
 		return output;
 	};
 
-	const source = await buildNodes(rootFolder.id);
-	const activeKey = activeNoteId && allowedNoteIds.has(activeNoteId) ? activeNoteId : '';
+	return {
+		fingerprint,
+		checkedTime,
+		rootTitle: rootInfo.title,
+		sourceJson: JSON.stringify(await buildNodes(nodes)),
+		allowedNoteIds,
+	};
+};
+
+const refreshFolderTree = async (share: Share, folderId: string, tree: CachedFolderTree | undefined) => {
+	// Changes made during the refresh are picked up by the next one
+	const checkedTime = Date.now();
+
+	const rootFolderItem = await models_.item().loadByJopId(share.owner_id, folderId, { fields: ['id', 'jop_id', 'jop_share_id', 'updated_time'] });
+	if (!rootFolderItem) throw new ErrorNotFound(`No such folder: ${folderId}`);
+
+	const nodes = await loadFolderTreeMetadata(share.owner_id, rootFolderItem);
+	const fingerprint = folderTreeFingerprint(rootFolderItem, nodes);
+
+	if (tree && tree.fingerprint === fingerprint) return { ...tree, checkedTime };
+	return buildCachedFolderTree(share, rootFolderItem, nodes, fingerprint, checkedTime);
+};
+
+const canStartFolderTreeRefresh = (ownerId: Uuid) => {
+	return runningFolderTreeRefreshes < maxRunningFolderTreeRefreshes && (runningFolderTreeRefreshesByOwner.get(ownerId) || 0) < maxRunningFolderTreeRefreshesPerOwner;
+};
+
+const changeRunningFolderTreeRefreshes = (ownerId: Uuid, change: number) => {
+	runningFolderTreeRefreshes += change;
+	const ownerCount = (runningFolderTreeRefreshesByOwner.get(ownerId) || 0) + change;
+	if (ownerCount) {
+		runningFolderTreeRefreshesByOwner.set(ownerId, ownerCount);
+	} else {
+		runningFolderTreeRefreshesByOwner.delete(ownerId);
+	}
+};
+
+// Only a few refreshes run at a time, and only one per owner, so that one account with many large or deeply nested
+// published notebooks cannot hold up those of everyone else
+export const withFolderTreeRefreshSlot = async <T>(ownerId: Uuid, refresh: ()=> Promise<T>) => {
+	if (canStartFolderTreeRefresh(ownerId)) {
+		changeRunningFolderTreeRefreshes(ownerId, 1);
+	} else {
+		await new Promise<void>(resolve => {
+			waitingFolderTreeRefreshes.push({ ownerId, start: resolve });
+		});
+	}
+
+	try {
+		return await refresh();
+	} finally {
+		changeRunningFolderTreeRefreshes(ownerId, -1);
+
+		for (let i = 0; i < waitingFolderTreeRefreshes.length; i++) {
+			const waiting = waitingFolderTreeRefreshes[i];
+			if (!canStartFolderTreeRefresh(waiting.ownerId)) continue;
+			waitingFolderTreeRefreshes.splice(i, 1);
+			i--;
+			changeRunningFolderTreeRefreshes(waiting.ownerId, 1);
+			waiting.start();
+		}
+	}
+};
+
+const cacheFolderTree = (shareId: string, tree: CachedFolderTree) => {
+	const previous = folderTreeCache.get(shareId);
+	if (previous) {
+		folderTreeCache.delete(shareId);
+		folderTreeCacheLength -= previous.sourceJson.length;
+	}
+	folderTreeCache.set(shareId, tree);
+	folderTreeCacheLength += tree.sourceJson.length;
+
+	for (const [oldestShareId, oldestTree] of folderTreeCache) {
+		const isFull = folderTreeCacheLength > maxFolderTreeCacheLength || folderTreeCache.size > maxCachedFolderTrees;
+		if (!isFull || oldestShareId === shareId) break;
+		folderTreeCache.delete(oldestShareId);
+		folderTreeCacheLength -= oldestTree.sourceJson.length;
+	}
+};
+
+// Never rejects, so that a refresh that nobody waits for does not leave an unhandled rejection
+const startFolderTreeRefresh = (share: Share, folderId: string, previousTree: CachedFolderTree | undefined) => {
+	let refresh = folderTreeRefreshes.get(share.id);
+	if (refresh) return refresh;
+
+	refresh = (async () => {
+		try {
+			const tree = await withFolderTreeRefreshSlot(share.owner_id, () => refreshFolderTree(share, folderId, previousTree));
+			cacheFolderTree(share.id, tree);
+			return { tree };
+		} catch (error) {
+			return { error };
+		} finally {
+			folderTreeRefreshes.delete(share.id);
+		}
+	})();
+	folderTreeRefreshes.set(share.id, refresh);
+	return refresh;
+};
+
+async function buildFolderTree(share: Share, folderId: string, activeNoteId = ''): Promise<RenderedFolderTree> {
+	let tree = folderTreeCache.get(share.id);
+
+	if (!tree || Date.now() - tree.checkedTime > folderTreeCheckInterval) {
+		const refresh = startFolderTreeRefresh(share, folderId, tree);
+
+		// A cached tree is served while it is refreshed, unless it is old enough that serving it would keep showing
+		// notes that are no longer published
+		if (!tree || Date.now() - tree.checkedTime > maxFolderTreeStaleness) {
+			const result = await refresh;
+			if (result.error) throw result.error;
+			tree = result.tree;
+		}
+	}
+
+	cacheFolderTree(share.id, tree);
+
+	const activeKey = activeNoteId && tree.allowedNoteIds.has(activeNoteId) ? activeNoteId : '';
 
 	return {
-		rootTitle: rootFolder.title || '',
-		treeDataJson: JSON.stringify({ activeKey, source }),
-		allowedNoteIds,
+		rootTitle: tree.rootTitle,
+		treeDataJson: `{"activeKey":${JSON.stringify(activeKey)},"source":${tree.sourceJson}}`,
+		allowedNoteIds: tree.allowedNoteIds,
 	};
 }
 
@@ -442,7 +732,7 @@ const findParentNote = async (itemTree: TreeItem, resourceId: string) => {
 	};
 
 	const result = find_(itemTree, itemTree.children, resourceId);
-	if (!result) throw new ErrorBadRequest(`Cannot find parent of ${resourceId}`);
+	if (!result) throw new ErrorNotFound(`Resource "${resourceId}" does not belong to this share`);
 
 	const item = await models_.item().loadWithContent(result.item_id);
 	if (!item) throw new ErrorNotFound(`Cannot load item with ID ${result.item_id}`);
@@ -467,6 +757,9 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 	const bannerInfo = getDefaultBannerInfo();
 
 	if (item.jop_type === ModelType.Folder) {
+		// Checked before building the tree, which would otherwise be walked on every request only to be refused
+		if (itemIsInTrash(models_.item().itemToJoplinItem(item))) throw new ErrorNotFound(`No such folder: ${item.jop_id}`);
+
 		const folderTree = await buildFolderTree(share, item.jop_id, query.note_id || '');
 
 		if (!query.note_id) {
@@ -524,7 +817,7 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 	const rootNote: NoteEntity = models_.item().itemToJoplinItem(item);
 	if (itemIsInTrash(rootNote)) throw new ErrorNotFound(`No such note: ${rootNote.id}`);
 
-	const itemTree = await models_.itemResource().itemTree(item.id, rootNote.id);
+	const itemTree = await models_.itemResource().itemTree(userId, item.id, rootNote.id);
 
 	let linkedItemInfos: LinkedItemInfos = {};
 	let resourceInfos: ResourceInfos = {};

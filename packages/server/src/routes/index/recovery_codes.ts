@@ -39,6 +39,9 @@ const recoveryCodeAuthView = async (ctx: AppContext, error?: Error) => {
 router.post('recovery_codes', async (_path: SubPath, ctx: AppContext) => {
 	const owner = ctx.joplin.owner;
 
+	const fields = await bodyFields<{ password: string }>(ctx.req);
+	await ctx.joplin.models.user().checkCurrentPassword(owner.id, fields.password, ctx.joplin.services);
+
 	await ctx.joplin.models.recoveryCode().regenerate(owner.id);
 
 	const recoveryCodeAccessKey = await ctx.joplin.models.recoveryCode().saveRecoveryCodeAccessKey(owner.id);
@@ -93,7 +96,7 @@ router.post('recovery_codes/auth', async (_path: SubPath, ctx: AppContext) => {
 	const fields = await bodyFields<RecoveryCodeAuthInputs>(ctx.req);
 
 	try {
-		await ctx.joplin.models.recoveryCode().checkCredentials(owner.id, fields.password, fields.mfaCode);
+		await ctx.joplin.models.recoveryCode().checkCredentials(owner.id, fields.password, fields.mfaCode, ctx.joplin.services);
 		const recoveryCodeAccessKey = await ctx.joplin.models.recoveryCode().saveRecoveryCodeAccessKey(owner.id);
 		cookieSet(ctx, 'recoveryCodeAccessKey', recoveryCodeAccessKey);
 	} catch (error) {

@@ -70,7 +70,7 @@ describe('InteropService_Importer_EnexToMd', () => {
 		expect(notes[1].body).toContain('Mobilize & Measure');
 
 		// Reported, but flagged so it's not presented as a failed import.
-		expect(errors.length).toBe(1);
-		expect(isRecoverableError(errors[0])).toBe(true);
+		expect(errors.length).toBe(2);
+		expect(errors.every(isRecoverableError)).toBe(true);
 	});
 });

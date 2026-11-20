@@ -11,6 +11,7 @@ import { checkRepeatPassword } from './users';
 import { AccountType } from '../../models/UserModel';
 import { ErrorForbidden } from '../../utils/errors';
 import { cookieSet } from '../../utils/cookies';
+import { checkNotCrossSiteRequest } from '../../utils/csrf';
 
 function makeView(error: Error = null): View {
 	const view = defaultView('signup', 'Sign Up');
@@ -40,6 +41,7 @@ router.get('signup', async (_path: SubPath, _ctx: AppContext) => {
 router.post('signup', async (_path: SubPath, ctx: AppContext) => {
 	if (!config().signupEnabled) throw new ErrorForbidden('Signup is not enabled');
 
+	checkNotCrossSiteRequest(ctx);
 	await limiterSignupBruteForce(userIp(ctx));
 
 	try {

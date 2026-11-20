@@ -1494,6 +1494,13 @@
             parser.state = returnState
           } else if (isMatch(parser.entity.length ? entityBody : entityStart, c)) {
             parser.entity += c
+          } else if (c === '<' && parser.state === S.TEXT_ENTITY) {
+            // Joplin: Treat "<" as the start of a tag, otherwise the tag would be swallowed as text
+            strictFail(parser, 'Invalid character in entity name')
+            parser[buffer] += '&' + parser.entity
+            parser.entity = ''
+            parser.state = S.OPEN_WAKA
+            parser.startTagPosition = parser.position
           } else {
             strictFail(parser, 'Invalid character in entity name')
             parser[buffer] += '&' + parser.entity + c

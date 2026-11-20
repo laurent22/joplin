@@ -67,13 +67,14 @@ import OcrDriverTesseract from '../services/ocr/drivers/OcrDriverTesseract';
 import OcrService from '../services/ocr/OcrService';
 import { createWorker } from 'tesseract.js';
 import { reg } from '../registry';
-import { Store } from 'redux';
+import { Action, createStore, Store } from 'redux';
 import { dirname } from '@joplin/utils/path';
 import SyncTargetJoplinServerSAML from '../SyncTargetJoplinServerSAML';
 import { MarkupLanguage } from '@joplin/renderer';
 import SearchEngine from '../services/search/SearchEngine';
 import { getCACertificates } from 'node:tls';
 import setExtraRootCertificates from '../utils/tls/setExtraRootCertificates';
+import reducer, { defaultState, State } from '../reducer';
 
 // Each suite has its own separate data and temp directory so that multiple
 // suites can be run at the same time. suiteName is what is used to
@@ -734,6 +735,12 @@ function fileApi() {
 	return fileApis_[syncTargetId_];
 }
 
+export const createMockReduxStore = () => {
+	return createStore((state: State = defaultState, action: Action<string>) => {
+		return reducer(state, action);
+	});
+};
+
 function objectsEqual(o1: Record<string, unknown>, o2: Record<string, unknown>) {
 	if (Object.getOwnPropertyNames(o1).length !== Object.getOwnPropertyNames(o2).length) return false;
 	for (const n in o1) {
@@ -779,7 +786,7 @@ async function expectThrow(asyncFn: ()=> unknown | Promise<unknown>, errorCode: 
 	}
 }
 
-async function expectNotThrow(asyncFn: ()=> Promise<unknown>) {
+async function expectNotThrow(asyncFn: ()=> unknown|Promise<unknown>) {
 	let thrownError = null;
 	try {
 		await asyncFn();

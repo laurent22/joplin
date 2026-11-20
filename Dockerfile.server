@@ -78,6 +78,7 @@ ENV PM2_HOME=/opt/pm2
 
 USER $user
 
+COPY --chown=$user:$user --from=builder /build/node_modules /home/$user/node_modules
 COPY --chown=$user:$user --from=builder /build/packages /home/$user/packages
 COPY --chown=$user:$user --from=builder /usr/bin/tini /usr/local/bin/tini
 

@@ -15,6 +15,7 @@ export interface ChatStandardMessage extends ChatBaseMessage {
 	content: string;
 	hide?: boolean;
 	toolCalls?: ChatToolCall[];
+	responsesState?: ResponsesReplayState;
 }
 
 export interface ChatToolMessage extends ChatBaseMessage {
@@ -67,6 +68,11 @@ export interface ChatToolCall {
 	parseError: string|null;
 }
 
+export interface ResponsesReplayState {
+	key: string;
+	items: unknown[];
+}
+
 export type ChatFinishReason = 'stop' | 'length' | 'tool_calls' | 'other';
 
 export interface ChatResult {
@@ -79,6 +85,7 @@ export interface ChatResult {
 	// Model reasoning, from a dedicated provider field or extracted from inline
 	// markers. Kept separate so it doesn't pollute the assistant reply.
 	reasoningText?: string;
+	responsesState?: ResponsesReplayState;
 	// Joplin Cloud degradation / budget signals. Populated only by the
 	// joplin-cloud provider; other providers leave them undefined. Consumed
 	// internally to drive the aiStatus Redux slice — plugins receive only

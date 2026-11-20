@@ -1,5 +1,5 @@
 import { mock as stripeMock, reset as resetStripe } from '../../utils/testing/mockStripe';
-import { User } from '../../services/database/types';
+import { User, UserFlagType } from '../../services/database/types';
 import routeHandler from '../../middleware/routeHandler';
 import { execRequest } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, checkContextError, expectHttpError, createSubscription } from '../../utils/testing/testUtils';
@@ -231,6 +231,30 @@ describe('admin/users', () => {
 
 		// cannot delete own user
 		await expectHttpError(async () => execRequest(adminSession.id, 'POST', `admin/users/${admin.id}`, { disable_button: true }), ErrorForbidden.httpCode);
+
+		// cannot remove flags from own user, which a disabled admin could otherwise use to re-enable themselves
+		await expectHttpError(async () => execRequest(adminSession.id, 'POST', `admin/users/${admin.id}`, { delete_user_flags: true, [`user_flag_${UserFlagType.ManuallyDisabled}`]: 'on' }), ErrorForbidden.httpCode);
+	});
+
+	test('should revoke the sessions and apps of a disabled account', async () => {
+		const { session: adminSession } = await createUserAndSession(1, true);
+		const { user, session } = await createUserAndSession(2);
+
+		await execRequest(adminSession.id, 'POST', `admin/users/${user.id}`, { disable_button: true });
+
+		expect((await models().user().load(user.id)).enabled).toBe(0);
+		expect(await models().session().load(session.id)).toBeFalsy();
+	});
+
+	test('should send a password reset email, and keep must_set_password off, for an account that has a password', async () => {
+		const { session: adminSession } = await createUserAndSession(1, true);
+		const { user } = await createUserAndSession(2);
+
+		await execRequest(adminSession.id, 'POST', `admin/users/${user.id}`, { send_account_confirmation_email: true });
+
+		expect((await models().user().load(user.id)).must_set_password).toBe(0);
+		const emails = (await models().email().all()).filter(e => e.recipient_id === user.id);
+		expect(emails.some(e => e.body.includes('/password/reset?token='))).toBe(true);
 	});
 
 	test('should delete all applications when changing password to enforce user login', async () => {

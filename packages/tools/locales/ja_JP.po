@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: genneko <genneko217@gmail.com>\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: akiratamcat <akiratamcat@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.7\n"
+"X-Generator: Poedit 3.10\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:634
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -34,7 +36,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:147
 msgid "— now viewing: %s —"
-msgstr ""
+msgstr "— %s を表示中 —"
 
 #: packages/lib/services/KeymapService.ts:350
 #: packages/lib/services/KeymapService.ts:356
@@ -46,18 +48,17 @@ msgid "(%s)"
 msgstr "(%s)"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:173
-#, fuzzy
 msgid "(Cancelled)"
-msgstr "キャンセル"
+msgstr "(キャンセル済)"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/TextNode.tsx:141
 msgid "(empty — double-click to edit)"
-msgstr ""
+msgstr "(空 - ダブルクリックして編集)"
 
 #: packages/lib/services/ai/tools/global/searchNotes.ts:19
 #: packages/lib/services/ai/tools/global/semanticSearchNotes.ts:16
 msgid "(empty)"
-msgstr ""
+msgstr "(空)"
 
 #: packages/lib/services/plugins/api/JoplinViewsDialogs.ts:75
 msgid "(In plugin: %s)"
@@ -68,15 +69,13 @@ msgid "(level %d)"
 msgstr "(レベル %d)"
 
 #: packages/app-desktop/gui/ChatPanel/ChatMessageItem.tsx:60
-#, fuzzy
 msgid "(no message)"
-msgstr "プラグインのメッセージ"
+msgstr "(メッセージなし)"
 
 #: packages/lib/services/ai/tools/global/createNote.ts:16
 #: packages/lib/services/ai/tools/global/createNotebook.ts:13
-#, fuzzy
 msgid "(no title)"
-msgstr "ノートの題名"
+msgstr "(タイトルなし)"
 
 #: packages/lib/SyncTargetNone.ts:17
 msgid "(None)"
@@ -89,14 +88,17 @@ msgstr "(読み取り専用)"
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:147
 #: packages/lib/services/ai/tools/global/readImage.ts:35
 #: packages/lib/services/ai/tools/global/readNote.ts:18
-#, fuzzy
 msgid "(untitled)"
-msgstr "名称未設定"
+msgstr "(名称未設定)"
 
 #: packages/lib/models/settings/builtInMetadata.ts:64
 #: packages/lib/models/settings/builtInMetadata.ts:65
 msgid "(wysiwyg: %s)"
 msgstr "(WYSIWYG対応: %s)"
+
+#: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:461
+msgid "(You can show it again from Settings → AI)"
+msgstr "(再度表示するには、[設定] → [AI]から設定できます)"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:912
 #: packages/lib/shim-init-node.ts:291
@@ -145,13 +147,12 @@ msgstr "ウィンドウ(&W)"
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:506
 msgid "%d card"
 msgid_plural "%d cards"
-msgstr[0] ""
+msgstr[0] "%d カード"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:479
-#, fuzzy
 msgid "%d connection"
 msgid_plural "%d connections"
-msgstr[0] "より多くのアクションを非表示にする"
+msgstr[0] "%d コネクタ"
 
 #: packages/lib/models/settings/builtInMetadata.ts:2154
 #: packages/lib/models/settings/builtInMetadata.ts:2529
@@ -161,11 +162,11 @@ msgstr[0] "%d 日"
 
 #: packages/app-desktop/gui/ChatPanel/ChatMessageItem.tsx:29
 msgid "%d edit(s) applied, %d could not be placed automatically."
-msgstr ""
+msgstr "%d 件の編集を適用しましたが、%d 件は自動配置できませんでした。"
 
 #: packages/app-desktop/gui/ChatPanel/ChatMessageItem.tsx:27
 msgid "%d edit(s) applied."
-msgstr ""
+msgstr "%d 件の編集を適用しました。"
 
 #: packages/lib/utils/joplinCloud/index.ts:279
 #: packages/lib/utils/joplinCloud/index.ts:280
@@ -187,6 +188,32 @@ msgstr "ストレージ容量 %d GB"
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d 時間"
+
+#: packages/lib/services/noteLock/NoteLockKeyMigration.ts:113
+msgid "%d locked note could not be migrated."
+msgid_plural "%d locked notes could not be migrated."
+msgstr[0] "ロックされたノート %d 件を移行できませんでした。"
+
+#: packages/lib/services/interop/InteropService.ts:464
+msgid "%d locked note could not be unlocked and was not exported."
+msgid_plural "%d locked notes could not be unlocked and were not exported."
+msgstr[0] ""
+"ロックされたノート %d 件はロックを解除できなかったため、エクスポートされませ"
+"んでした。"
+
+#: packages/lib/services/noteLock/NoteLockKeyMigration.ts:114
+msgid ""
+"%d locked note is still waiting to be decrypted and was not migrated yet."
+msgid_plural ""
+"%d locked notes are still waiting to be decrypted and were not migrated yet."
+msgstr[0] "ロックされたノート %d 件はまだ復号待ちのため、移行されていません。"
+
+#: packages/lib/services/noteLock/NoteLockKeyMigration.ts:136
+msgid "%d locked note was skipped because it is locked with another key."
+msgid_plural ""
+"%d locked notes were skipped because they are locked with another key."
+msgstr[0] ""
+"ロックされたノート %d 件は別の鍵で保護されているため、スキップされました。"
 
 #: packages/lib/utils/joplinCloud/index.ts:264
 #: packages/lib/utils/joplinCloud/index.ts:265
@@ -210,10 +237,9 @@ msgid_plural "%d minutes"
 msgstr[0] "%d 分"
 
 #: packages/app-desktop/gui/PublishFolderDialog.tsx:97
-#, fuzzy
 msgid "%d note in notebook"
 msgid_plural "%d notes in notebook"
-msgstr[0] "%d 個のノートをノートブック \"%s\" に移動しますか？"
+msgstr[0] "ノートブック内のノート %d 件"
 
 #: packages/app-cli/app/command-rmnote.ts:33
 msgid "%d note matches this pattern. Delete it?"
@@ -231,7 +257,7 @@ msgstr "%d 枚の写真を撮影しました"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:552
 msgid "%d sections found"
-msgstr ""
+msgstr "%d 個のセクションが見つかりました"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:231
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:241
@@ -243,9 +269,8 @@ msgid "%s - Copy"
 msgstr "%s - コピー"
 
 #: packages/lib/services/commands/ToolbarButtonUtils.ts:64
-#, fuzzy
 msgid "%s (%s)"
-msgstr "%s %s (%s)"
+msgstr "%s (%s)"
 
 #: packages/lib/services/ReportService.ts:194
 msgid "%s (%s) could not be uploaded: %s"
@@ -261,9 +286,8 @@ msgid "%s (%s): %s"
 msgstr "%s (%s): %s"
 
 #: packages/lib/models/settings/builtInMetadata.ts:33
-#, fuzzy
 msgid "%s (Beta)"
-msgstr "ベータ版"
+msgstr "%s (Beta)"
 
 #: packages/app-desktop/checkForUpdates.ts:110
 msgid "%s (pre-release)"
@@ -293,7 +317,7 @@ msgstr "%s = %s (%s)"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:280
 msgid "%s added to toolbar"
-msgstr ""
+msgstr "%s をツールバーに追加しました"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ValidatedIntegerInput.tsx:32
 msgid "%s cannot be greater than %s"
@@ -309,7 +333,7 @@ msgstr "%s (%s より)"
 
 #: packages/lib/models/settings/builtInMetadata.ts:799
 msgid "%s input / %s output tokens used."
-msgstr ""
+msgstr "入力トークン %s、出力トークン %s を使用しました。"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:292
 msgid ""
@@ -320,28 +344,25 @@ msgstr ""
 "ります。"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:221
-#, fuzzy
 msgid "%s moved down"
-msgstr "下に移動"
+msgstr "%s を下に移動しました"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:215
 msgid "%s moved up"
-msgstr ""
+msgstr "%s を上に移動しました"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ValidatedIntegerInput.tsx:26
 msgid "%s must be a valid whole number"
 msgstr "%s には有効な整数を入力してください"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:209
-#, fuzzy
 msgid "%s removed from toolbar"
-msgstr "%s を共有から削除しました。"
+msgstr "%s をツールバーから削除しました"
 
 #: packages/app-mobile/components/plugins/dialogs/PluginPanelViewer.tsx:74
 msgid "%s tab opened"
 msgstr "%s タブを開きました"
 
-#: packages/lib/services/ReportService.ts:322
 #: packages/lib/services/ReportService.ts:323
 #: packages/lib/services/ReportService.ts:324
 #: packages/lib/services/ReportService.ts:327
@@ -369,12 +390,11 @@ msgstr "%s: パスワードがありません。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:473
 msgid "+ Group"
-msgstr ""
+msgstr "+ グループ"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:472
-#, fuzzy
 msgid "+ Text"
-msgstr "リッチテキスト"
+msgstr "+ テキスト"
 
 #: packages/app-cli/app/command-tag.ts:15
 msgid ""
@@ -401,7 +421,6 @@ msgstr ""
 "できます。"
 
 #: packages/server/src/utils/time.ts:56
-#, fuzzy
 msgid "1 day"
 msgid_plural "%d days"
 msgstr[0] "%d 日"
@@ -410,6 +429,8 @@ msgstr[0] "%d 日"
 msgid ""
 "14-day free trial. Cancel anytime during the trial and you won't be charged."
 msgstr ""
+"14日間の無料トライアル。トライアル期間中にいつでもキャンセルでき、その場合は"
+"料金は発生しません。"
 
 #: packages/editor/ProseMirror/plugins/imagePlugin.ts:148
 msgid "A brief description of the image:"
@@ -427,12 +448,23 @@ msgstr ""
 msgid "A new update (%s) is available"
 msgstr "新しいアップデート (%s) があります"
 
+#: packages/lib/services/noteLock/noteLockPrompts.ts:16
+msgid ""
+"A note lock key is required to update these notes, but hasn't been set up "
+"yet on your profile. Would you like to set one up now?"
+msgstr ""
+"これらのノートを更新するにはノートのロックキーが必要ですが、まだプロフィール"
+"に設定されていません。今すぐ設定しますか?"
+
 #: packages/lib/models/settings/builtInMetadata.ts:1558
 msgid ""
 "A system-wide keyboard shortcut that toggles the Joplin window. Works even "
 "when Joplin is not focused. Example: CommandOrControl+Shift+J. Leave empty "
 "to disable."
 msgstr ""
+"Joplin ウィンドウの表示／非表示を切り替えるグローバルショートカットです。"
+"Joplin がアクティブでない場合でも使用できます。例: Command Or "
+"Control+Shift+J。無効にするには空欄のままにしてください。"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1876
 msgid "A3"
@@ -504,11 +536,11 @@ msgstr "アクセスが拒否されました: パスワード、ユーザー名�
 
 #: packages/lib/utils/joplinCloud/index.ts:310
 msgid "Access your notes from any web browser at %s."
-msgstr ""
+msgstr "Web ブラウザーから %s にアクセスして、ノートを利用できます。"
 
 #: packages/lib/models/settings/builtInMetadata.ts:589
 msgid "Accessible"
-msgstr ""
+msgstr "アクセシビリティ"
 
 #: packages/lib/models/settings/builtInMetadata.ts:586
 msgid ""
@@ -516,6 +548,9 @@ msgid ""
 "accessible PDFs. It increases database size by approximately 10-20 KB per "
 "page."
 msgstr ""
+"アクセシビリティモードでは追加情報を保存することで、アクセシブルな PDF を作成"
+"できるようになります。データベースサイズは 1 ページあたり約 10～20 KB 増加し"
+"ます。"
 
 #: packages/server/src/routes/admin/users.ts:159
 msgid "Account"
@@ -553,13 +588,12 @@ msgid "Actual Size"
 msgstr "100%%表示"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:473
-#, fuzzy
 msgid "Add a group"
-msgstr "行を追加"
+msgstr "グループを追加"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:472
 msgid "Add a text card"
-msgstr ""
+msgstr "テキストカードを追加"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1772
 msgid "Add body"
@@ -577,7 +611,7 @@ msgstr "新規追加"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addNoteToWhiteboard.ts:18
 msgid "Add note to whiteboard..."
-msgstr ""
+msgstr "ホワイトボードへノートを追加..."
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/setTags.ts:52
 msgid "Add or remove tags:"
@@ -610,7 +644,7 @@ msgstr "ノートに追加"
 #: packages/lib/services/ai/tools/buildEditorTools.ts:50
 msgid "Added %d word"
 msgid_plural "Added %d words"
-msgstr[0] ""
+msgstr[0] "%d 個の単語を追加しました"
 
 #: packages/app-mobile/components/ComboBox.tsx:93
 msgid "Added new: %s"
@@ -618,10 +652,9 @@ msgstr "新規追加: %s"
 
 #: packages/app-mobile/components/TagEditor.tsx:244
 #: packages/lib/services/ai/tools/global/manageTags.ts:21
-#, fuzzy
 msgid "Added tag: %s"
 msgid_plural "Added tags: %s"
-msgstr[0] "タグを追加しました: %s"
+msgstr[0] "タグを追加: %s"
 
 #: packages/app-mobile/components/TagEditor.tsx:228
 msgid "Adds tag"
@@ -650,23 +683,22 @@ msgstr "高度なツール"
 
 #: packages/lib/models/Setting.ts:1374
 msgid "AI"
-msgstr ""
+msgstr "AI"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:438
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleAiChat.ts:22
 #: packages/app-desktop/utils/layout/layoutKeyToLabel.ts:9
 msgid "AI Chat"
-msgstr ""
+msgstr "AI チャット"
 
 #: packages/lib/services/ai/availability.ts:36
 #: packages/lib/services/ai/availability.ts:65
 msgid "AI features are disabled. Enable them in Settings → AI."
-msgstr ""
+msgstr "AI 機能はオフになっています。 [設定] → [AI] で有効にしてください。"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:24
-#, fuzzy
 msgid "AI is disabled"
-msgstr "無効な設定を非表示にする"
+msgstr "AI は無効です"
 
 #: packages/app-desktop/gui/AiDegradedNotice.tsx:15
 msgid ""
@@ -679,6 +711,9 @@ msgid ""
 "AI usage has exceeded your monthly allowance — responses are using a reduced-"
 "quality model. Credits replenish on a rolling 30-day basis. Buy more at %s."
 msgstr ""
+"AI の利用量が月間利用枠を超えたため、現在は性能を抑えたモデルで応答していま"
+"す。クレジットは過去 30 日間の利用状況に応じて順次回復します。追加のクレジッ"
+"トは %s で購入できます。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:18
 msgid "all"
@@ -700,15 +735,12 @@ msgid "All notes"
 msgstr "すべてのノート"
 
 #: packages/app-mobile/components/screens/tags.tsx:176
-#, fuzzy
 msgid ""
 "All notes associated with this tag will remain, but the tag will be removed "
 "from all notes."
 msgstr ""
-"タグ \"%s\" を削除しますか？\n"
-"\n"
-"このタグに関連するノートはそのまま残りますが、タグはすべてのノートから削除さ"
-"れます。"
+"このタグに関連付けられているノートは削除されませんが、このタグはすべてのノー"
+"トから削除されます。"
 
 #: packages/lib/onedrive-api-node-utils.ts:58
 msgid "All potential ports are in use - please report the issue at %s"
@@ -719,63 +751,57 @@ msgid "All shared folders:"
 msgstr "すべての共有フォルダー:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:990
-#, fuzzy
 msgid "Allow creating notebooks"
-msgstr "ノートブックの作成"
+msgstr "ノートブックの作成を許可する"
 
 #: packages/lib/models/settings/builtInMetadata.ts:946
-#, fuzzy
 msgid "Allow creating notes"
-msgstr "ノートを作成中。"
+msgstr "ノートの作成を許可する"
 
 #: packages/lib/models/settings/builtInMetadata.ts:979
 msgid "Allow editing tags on notes"
-msgstr ""
+msgstr "ノートのタグ編集を許可する"
 
 #: packages/lib/models/settings/builtInMetadata.ts:879
 msgid "Allow editing the current note (chat panel only)"
-msgstr ""
+msgstr "現在のノートの編集を許可する(チャットパネルのみ)"
 
 #: packages/lib/models/settings/builtInMetadata.ts:924
-#, fuzzy
 msgid "Allow listing notebooks"
-msgstr "リンクされたノートも公開する"
+msgstr "ノートブックの一覧表示を許可する"
 
 #: packages/lib/models/settings/builtInMetadata.ts:935
 msgid "Allow listing tags"
-msgstr ""
+msgstr "タグの一覧表示を許可する"
 
 #: packages/lib/models/settings/builtInMetadata.ts:913
 msgid "Allow reading images"
-msgstr ""
+msgstr "画像の読み取りを許可する"
 
 #: packages/lib/models/settings/builtInMetadata.ts:902
-#, fuzzy
 msgid "Allow reading notes"
-msgstr "ノートを作成中。"
+msgstr "ノートの読み取りを許可する"
 
 #: packages/lib/models/settings/builtInMetadata.ts:674
 msgid "Allow remote AI providers"
-msgstr ""
+msgstr "リモート AI プロバイダーを許可する"
 
 #: packages/lib/models/settings/builtInMetadata.ts:891
-#, fuzzy
 msgid "Allow searching notes"
-msgstr "リンクされたノートも公開する"
+msgstr "ノートの検索を許可する"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1001
 msgid "Allow semantic search of notes"
-msgstr ""
+msgstr "ノートのセマンティック検索を許可する"
 
 #: packages/lib/models/settings/builtInMetadata.ts:968
-#, fuzzy
 msgid "Allow trashing notes"
-msgstr "リンクされたノートも公開する"
+msgstr "ノートのごみ箱への移動を許可する"
 
 #: packages/lib/models/settings/builtInMetadata.ts:957
 #, fuzzy
 msgid "Allow updating notes"
-msgstr "すべてのノート"
+msgstr "ノートの更新を許可する"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1433
 msgid "Allows debugging mobile plugins. See %s for details."
@@ -784,7 +810,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:267
 msgid "Already have an account? Log in"
-msgstr ""
+msgstr "すでにアカウントをお持ちですか？ ログイン"
 
 #: packages/app-cli/app/command-config.ts:19
 msgid "Also displays unset and hidden config variables."
@@ -850,7 +876,7 @@ msgstr "Android APIレベル: %d"
 
 #: packages/lib/models/settings/builtInMetadata.ts:701
 msgid "Anthropic"
-msgstr ""
+msgstr "Anthropic"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:48
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:24
@@ -861,9 +887,8 @@ msgstr ""
 "このアドレスに送ったメールはノートに変換され、Inboxノートブックに保存されます"
 
 #: packages/lib/models/settings/builtInMetadata.ts:738
-#, fuzzy
 msgid "API key"
-msgstr "AWS アクセスキーID"
+msgstr "API key"
 
 #: packages/lib/models/Setting.ts:1358
 msgid "Appearance"
@@ -874,7 +899,6 @@ msgid "Application"
 msgstr "アプリケーション"
 
 #: packages/server/src/services/MustacheService.ts:153
-#, fuzzy
 msgid "Applications"
 msgstr "アプリケーション"
 
@@ -917,23 +941,24 @@ msgid "Aritim Dark"
 msgstr "Aritim Dark"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:483
-#, fuzzy
 msgid "Arrow at source"
-msgstr "ソースURLに行く"
+msgstr "始点に矢印"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:482
 msgid "Arrow at target"
-msgstr ""
+msgstr "終点に矢印"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:390
 msgid "Ask about this note, or request a change…"
-msgstr ""
+msgstr "このノートについて質問したり、変更を依頼したりできます…"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:363
 msgid ""
 "Ask about this note, or request changes. Select text in the editor first to "
 "scope the request to that selection."
 msgstr ""
+"このノートについて質問したり、変更を依頼したりできます。エディターでテキスト"
+"を選択してから実行すると、その選択範囲を対象に依頼できます。"
 
 #: packages/app-mobile/components/TagEditor.tsx:188
 msgid "Associated tags:"
@@ -988,9 +1013,8 @@ msgid "Attachment download behaviour"
 msgstr "添付ファイルのダウンロードの動作"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:367
-#, fuzzy
 msgid "Attachment: %s. Size: %s"
-msgstr "添付ファイルの衝突: \"%s\""
+msgstr "添付ファイル: %s サイズ: %s"
 
 #: packages/lib/services/ReportService.ts:313
 msgid "Attachments"
@@ -1007,6 +1031,9 @@ msgid ""
 "notebooks will also be unshared, so please ask the notebook owner to share "
 "it again with you."
 msgstr ""
+"重要: パスワードを再設定すると、現在のパスワードで暗号化されたデータは復号で"
+"きなくなります。また、暗号化された共有ノートブックはすべて共有が解除されま"
+"す。そのため、ノートブックの所有者に再度共有してもらうよう依頼してください。"
 
 #: packages/lib/models/settings/builtInMetadata.ts:68
 msgid ""
@@ -1026,9 +1053,8 @@ msgid ""
 msgstr "認証は完了していません(認証トークンが得られませんでした)"
 
 #: packages/server/src/routes/index/applications.ts:32
-#, fuzzy
 msgid "Authorisation required"
-msgstr "認証トークン:"
+msgstr "認証が必要です"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:159
 msgid "Authorisation token:"
@@ -1045,8 +1071,8 @@ msgid "Auto"
 msgstr "自動"
 
 #: packages/lib/models/settings/builtInMetadata.ts:2312
-msgid "Auto lock when switching note"
-msgstr ""
+msgid "Auto relock when switching notes"
+msgstr "ノート切り替え時に自動ロックする"
 
 #: packages/server/src/services/TaskService.ts:31
 msgid "Auto-add disabled accounts for deletion"
@@ -1072,6 +1098,10 @@ msgstr "アップデートを自動的に確認する"
 msgid "Automatically delete notes in the trash after a number of days"
 msgstr "ゴミ箱内のノートを一定日数後に自動削除する"
 
+#: packages/lib/models/settings/builtInMetadata.ts:2344
+msgid "Automatically merge non-conflicting note changes"
+msgstr "競合しないノートの変更を自動的に統合"
+
 #: packages/lib/models/settings/builtInMetadata.ts:1027
 msgid "Automatically switch theme to match system theme"
 msgstr "システムのテーマにあわせて自動設定"
@@ -1093,11 +1123,11 @@ msgstr "戻る"
 
 #: packages/lib/utils/joplinCloud/index.ts:449
 msgid "Back to %s"
-msgstr ""
+msgstr "%s へ戻る"
 
 #: packages/lib/models/settings/builtInMetadata.ts:725
 msgid "Base URL"
-msgstr ""
+msgstr "Base URL"
 
 #: packages/lib/utils/joplinCloud/index.ts:614
 msgid "Basic"
@@ -1108,17 +1138,21 @@ msgid "Beta"
 msgstr "ベータ版"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:484
-#, fuzzy
 msgid "Bidirectional"
-msgstr "より多くのアクションを非表示にする"
+msgstr "双方向"
 
 #: packages/lib/utils/joplinCloud/index.ts:604
 msgid "Billed annually (%s per user per year respectively)."
-msgstr ""
+msgstr "年額請求（各プランとも 1 ユーザーあたり年間 %s）"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:122
 msgid "Block code"
 msgstr "コードブロック"
+
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:112
+#: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:118
+msgid "Blockquote"
+msgstr "引用"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:72
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:79
@@ -1146,7 +1180,7 @@ msgstr "箇条書きリスト"
 
 #: packages/app-desktop/gui/AiDegradedNotice.tsx:20
 msgid "buy more credits"
-msgstr ""
+msgstr "クレジットを追加購入"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:127
 msgid "by %s"
@@ -1239,24 +1273,22 @@ msgid "Cannot access %s"
 msgstr "%s にアクセスできません"
 
 #: packages/app-cli/app/base-command.ts:25
-#, fuzzy
 msgid "Cannot change a locked note"
-msgstr "暗号化したアイテムは変更できません"
+msgstr "ロックされたノートは編集できません"
 
 #: packages/app-desktop/gui/NoteListItem/NoteListItem.tsx:71
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:76
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleNoteType.ts:18
 msgid "Cannot change a locked note while the session is locked"
-msgstr ""
+msgstr "セッションがロックされている間は、ロックされたノートを変更できません"
 
 #: packages/app-cli/app/base-command.ts:24
 msgid "Cannot change encrypted item"
 msgstr "暗号化したアイテムは変更できません"
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:39
-#, fuzzy
 msgid "Cannot convert locked note: \"%s\""
-msgstr "読み取り専用アイテムは変換できません: \"%s\""
+msgstr "ロックされたノートは変換できません: \"%s\""
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:51
 msgid "Cannot convert read-only item: \"%s\""
@@ -1271,9 +1303,8 @@ msgid "Cannot create a new note: %s"
 msgstr "新しいノートを作成できませんでした: %s"
 
 #: packages/app-cli/app/command-cat.ts:28
-#, fuzzy
 msgid "Cannot display a locked note"
-msgstr "新しいノートを作成できませんでした: %s"
+msgstr "ロックされたノートは表示できません"
 
 #: packages/app-cli/app/app.ts:81 packages/app-cli/app/command-attach.ts:21
 #: packages/app-cli/app/command-cat.ts:27 packages/app-cli/app/command-cp.ts:24
@@ -1353,9 +1384,8 @@ msgstr ""
 "を超えるためです"
 
 #: packages/app-mobile/root.tsx:636
-#, fuzzy
 msgid "Cannot share"
-msgstr "共有可能"
+msgstr "共有できません"
 
 #: packages/lib/services/share/ShareService.ts:423
 msgid ""
@@ -1376,6 +1406,9 @@ msgid ""
 "example, **bold** will appear as actual bold text. You can change this "
 "behaviour in the \"Editor\" section of Settings."
 msgstr ""
+"一部の Markdown 書式は既定でエディター上でも反映されるようになりました。たと"
+"えば、 **太字** は実際に太字のテキストとして表示されます。この動作は、［設"
+"定］→［エディター］で変更できます。"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleLayoutMoveMode.ts:7
 msgid "Change application layout"
@@ -1386,15 +1419,13 @@ msgid "Change language"
 msgstr "言語の切り替え"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:211
-#, fuzzy
 msgid "Change master password"
-msgstr "マスターパスワードの管理"
+msgstr "マスターパスワードを変更"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:130
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:140
-#, fuzzy
 msgid "Change note lock password"
-msgstr "マスターパスワードの管理"
+msgstr "ノートのロック用パスワードを変更"
 
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:124
 msgid "Change ratio"
@@ -1412,14 +1443,18 @@ msgstr "文字数"
 msgid "Characters excluding spaces"
 msgstr "文字数(空白を除く)"
 
+#: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:552
+#: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:553
+msgid "Chat history"
+msgstr "チャット履歴"
+
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:391
-#, fuzzy
 msgid "Chat message"
-msgstr "プラグインのメッセージ"
+msgstr "チャット メッセージ"
 
 #: packages/lib/models/settings/builtInMetadata.ts:687
 msgid "Chat provider"
-msgstr ""
+msgstr "チャットプロバイダー"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:207
 msgid "Check"
@@ -1430,9 +1465,8 @@ msgid "Check elements to display in the toolbar"
 msgstr "ツールバーに表示する項目を選択"
 
 #: packages/app-desktop/gui/MainScreen.tsx:653
-#, fuzzy
 msgid "Check for updates"
-msgstr "アップデートのチェック..."
+msgstr "アップデートを確認"
 
 #: packages/app-desktop/gui/MenuBar.tsx:598
 #: packages/app-desktop/gui/MenuBar.tsx:923
@@ -1461,6 +1495,10 @@ msgstr "チェックボックスリスト"
 msgid "Checked"
 msgstr "チェック済み"
 
+#: packages/lib/services/e2ee/utils.ts:383
+msgid "Checking..."
+msgstr "チェック中..."
+
 #: packages/lib/components/shared/config/config-shared.ts:104
 #: packages/lib/components/shared/config/config-shared.ts:149
 msgid "Checking... Please wait."
@@ -1483,7 +1521,7 @@ msgstr "Chrome ウェブストア"
 #: packages/app-mobile/components/screens/ConfigScreen/FileSystemPathSelector.tsx:105
 #: packages/app-mobile/components/screens/SearchScreen/SearchBar.tsx:50
 msgid "Clear"
-msgstr "クリア"
+msgstr "クリアー"
 
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:179
 msgid "Clear alarm"
@@ -1497,14 +1535,14 @@ msgstr "検索をクリア"
 
 #: packages/app-cli/app/command-clear.ts:11
 msgid "Clears the console output."
-msgstr ""
+msgstr "コンソールの出力を消去します。"
 
 #: packages/lib/components/shared/NoteRevisionViewer/getHelpMessage.ts:5
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
-"\"%s\"をクリックすると復元を行います。復元されるノートは\"%s\"というノート"
+"\"%s\" をクリックすると復元を行います。復元されるノートは \"%s\" というノート"
 "ブックにコピーされます。現在のバージョンのノートの置換や変更は行われません。"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:239
@@ -1516,6 +1554,8 @@ msgid ""
 "Click the eye icon in the toolbar to switch to the Markdown editor and fix "
 "the JSON manually."
 msgstr ""
+"ツールバーの目のアイコンをクリックして Markdown エディターに切り替え、JSON を"
+"手動で修正してください。"
 
 #: packages/app-desktop/gui/NoteEditor/StatusBar.tsx:79
 msgid "Click to add tags..."
@@ -1607,6 +1647,10 @@ msgstr "他のユーザーとノートブックで共同作業する"
 msgid "Collaborate on notebooks with others"
 msgstr "ノートブック上で共同作業を行う"
 
+#: packages/app-mobile/components/SideMenuContent/SideMenuItem.tsx:46
+msgid "Collapse %s"
+msgstr "%s を折りたたむ"
+
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderListWrapper.tsx:30
 msgid "Collapse all notebooks"
 msgstr "すべてのノートブックを折りたたむ"
@@ -1683,12 +1727,16 @@ msgstr "完了日時"
 msgid "Completed decryption."
 msgstr "復号が完了しました。"
 
+#: packages/app-desktop/InteropServiceHelper.ts:283
+msgid "Completed with warnings:"
+msgstr "警告付きで完了:"
+
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/TaskButton.tsx:93
 msgid ""
 "Completed with warnings:\n"
 "%s"
 msgstr ""
-"警告とともに完了:\n"
+"警告付きで完了:\n"
 "%s"
 
 #: packages/lib/Synchronizer.ts:226
@@ -1723,7 +1771,7 @@ msgstr "確認"
 
 #: packages/server/src/routes/index/recovery_codes.ts:28
 msgid "Confirm credentials"
-msgstr ""
+msgstr "認証情報を確認"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:163
 msgid "Confirm password cannot be empty"
@@ -1751,15 +1799,22 @@ msgstr "衝突"
 msgid "Conflicts (attachments)"
 msgstr "衝突 (添付ファイル)"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:321
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:479
-msgid "Connect to Joplin Cloud"
-msgstr "Joplin Cloudに接続"
+#: packages/lib/models/settings/builtInMetadata.ts:44
+msgid "Connect to %s"
+msgstr "%s へ接続"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:345
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:481
 msgid "Connect using your organisation account"
 msgstr "組織アカウントでログイン"
+
+#: packages/lib/components/shared/config/config-shared.ts:141
+msgid ""
+"Connected successfully, but the model used its entire output budget on "
+"reasoning and returned no text."
+msgstr ""
+"接続には成功しましたが、モデルが推論に利用可能な出力枠をすべて使い切ったた"
+"め、テキストは返されませんでした。"
 
 #: packages/lib/utils/joplinCloud/index.ts:372
 msgid "Consolidated billing"
@@ -1785,13 +1840,20 @@ msgid "Continue"
 msgstr "続行"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:51
-#, fuzzy
 msgid "Continue?"
-msgstr "続行"
+msgstr "続行しますか?"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:6
 msgid "Control character"
 msgstr "制御文字"
+
+#: packages/app-desktop/gui/ChatPanel/ChatHistory.tsx:86
+msgid "Conversation title"
+msgstr "会話のタイトル"
+
+#: packages/app-desktop/gui/ChatPanel/ChatHistory.tsx:71
+msgid "Conversations"
+msgstr "会話"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:809
 msgid "Convert it"
@@ -1799,7 +1861,7 @@ msgstr "変換する"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/TextNode.tsx:149
 msgid "Convert this card into a Joplin note"
-msgstr ""
+msgstr "このカードを Joplin のノートへ変換"
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:21
 msgid "Convert to Markdown"
@@ -1818,9 +1880,8 @@ msgid "Converting speech to text..."
 msgstr "音声をテキストに変換中..."
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:378
-#, fuzzy
 msgid "Copies a Markdown link to this attachment"
-msgstr "この添付ファイルをダウンロードするときにエラーが発生しました:"
+msgstr "この添付ファイルへの Markdown リンクをコピーします"
 
 #: packages/app-desktop/gui/MenuBar.tsx:565
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:52
@@ -1918,6 +1979,10 @@ msgstr "プラグインレポジトリに接続できませんでした。"
 msgid "Could not convert notes to Markdown: %s"
 msgstr "ノートをMarkdownに変換できませんでした: %s"
 
+#: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:417
+msgid "Could not delete conversation."
+msgstr "会話を削除できませんでした。"
+
 #: packages/app-desktop/InteropServiceHelper.ts:238
 msgid "Could not export notes: %s"
 msgstr "ノートをエクスポートできませんでした: %s"
@@ -1925,6 +1990,10 @@ msgstr "ノートをエクスポートできませんでした: %s"
 #: packages/lib/components/shared/config/plugins/useOnInstallHandler.ts:69
 msgid "Could not install plugin: %s"
 msgstr "プラグインをインストールできませんでした: %s"
+
+#: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:431
+msgid "Could not rename conversation."
+msgstr "会話の名前を変更できませんでした。"
 
 #: packages/lib/services/share/invitationRespond.ts:24
 msgid ""
@@ -1941,6 +2010,14 @@ msgstr ""
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:68
 msgid "Could not switch profile: %s"
 msgstr "プロファイルを切り替えられませんでした: %s"
+
+#: packages/app-mobile/components/screens/Note/NoteLockPanel.tsx:92
+msgid "Could not unlock. Please try again."
+msgstr "ロックを解除できませんでした。もう一度お試しください。"
+
+#: packages/app-mobile/components/screens/Note/Note.tsx:979
+msgid "Could not update the note lock. Please try again."
+msgstr "ノートのロックを更新できませんでした。もう一度お試しください。"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:238
 msgid "Could not upgrade master key: %s"
@@ -1972,7 +2049,7 @@ msgstr "ノートブックを作成します"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:215
 msgid "Create accessible document"
-msgstr ""
+msgstr "アクセシブルな文書を作成"
 
 #: packages/app-mobile/components/FolderPicker.tsx:112
 msgid "Create new notebook"
@@ -1996,9 +2073,8 @@ msgid "Create user"
 msgstr "ユーザーを作成"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newWhiteboard.ts:8
-#, fuzzy
 msgid "Create whiteboard"
-msgstr "ノートブックの作成"
+msgstr "ホワイトボードを作成"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:15
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:77
@@ -2018,18 +2094,16 @@ msgid "Created locally"
 msgstr "ローカルに作成"
 
 #: packages/lib/services/ai/tools/global/createNote.ts:16
-#, fuzzy
 msgid "Created note: %s"
-msgstr "ノートを作成"
+msgstr "ノートを作成: %s"
 
 #: packages/lib/services/ai/tools/global/createNotebook.ts:13
-#, fuzzy
 msgid "Created notebook: %s"
-msgstr "ノートブックの作成"
+msgstr "ノートブックを作成: %s"
 
 #: packages/lib/Synchronizer.ts:220
 msgid "Created remote items: %d."
-msgstr "リモートアイテムの作成: %d."
+msgstr "リモートアイテムを作成: %d."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:208
 msgid "Created: "
@@ -2182,7 +2256,7 @@ msgstr "スキャナーで作成したドキュメントのデフォルトタイ
 
 #: packages/lib/models/settings/builtInMetadata.ts:1681
 msgid "Default view / edit state"
-msgstr ""
+msgstr "既定の表示 / 編集状態"
 
 #: packages/app-cli/app/help-utils.ts:76
 msgid "Default: %s"
@@ -2206,9 +2280,8 @@ msgid "Delete"
 msgstr "削除"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:389
-#, fuzzy
 msgid "Delete attachment"
-msgstr "添付ファイル \"%s\" を削除しますか？"
+msgstr "添付ファイルを削除"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:235
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:264
@@ -2280,9 +2353,8 @@ msgid "Delete selected notes"
 msgstr "選択したノートを削除"
 
 #: packages/app-mobile/components/screens/tags.tsx:175
-#, fuzzy
 msgid "Delete tag \"%s\"?"
-msgstr "プラグイン \"%s\" を削除しますか？"
+msgstr "タグ \"%s\" を削除しますか？"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:38
 #: packages/app-mobile/components/side-menu-content.tsx:431
@@ -2319,9 +2391,8 @@ msgid "Deleted local items: %d."
 msgstr "ローカルアイテムの削除: %d."
 
 #: packages/lib/services/ai/tools/global/deleteNote.ts:12
-#, fuzzy
 msgid "Deleted note"
-msgstr "ノートを削除"
+msgstr "ノートの削除"
 
 #: packages/lib/Synchronizer.ts:223
 msgid "Deleted remote items: %d."
@@ -2348,9 +2419,8 @@ msgid "Deletes the notes without asking for confirmation."
 msgstr "ノートを確認なしで削除します。"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:390
-#, fuzzy
 msgid "Deletes this attachment"
-msgstr "添付ファイル \"%s\" を削除しますか？"
+msgstr "添付ファイルを削除"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:580
 msgid "Deletion log"
@@ -2390,9 +2460,8 @@ msgid "Disable"
 msgstr "無効化"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:175
-#, fuzzy
 msgid "Disable %s"
-msgstr "無効化"
+msgstr "%s を無効にする"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:409
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:427
@@ -2402,9 +2471,8 @@ msgid "Disable encryption"
 msgstr "暗号化を無効にする"
 
 #: packages/lib/components/shared/NoteEditor/WarningBanner/useEditorTypeMigrationBanner.ts:24
-#, fuzzy
 msgid "Disable it"
-msgstr "無効化"
+msgstr "無効にする"
 
 #: packages/app-desktop/gui/MainScreen.tsx:574
 msgid "Disable safe mode and restart"
@@ -2548,12 +2616,11 @@ msgstr ""
 
 #: packages/app-desktop/gui/JoplinCloudSignUpCallToAction.tsx:31
 msgid "Don't have an account yet?"
-msgstr ""
+msgstr "まだアカウントをお持ちではありませんか?"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:381
-#, fuzzy
 msgid "Don't show again"
-msgstr "このメッセージを今後表示しない"
+msgstr "今後は表示しない"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:811
 msgid "Don't show this message again"
@@ -2576,6 +2643,8 @@ msgstr "完了"
 msgid ""
 "Double tap to open this attachment. Long press to expand or collapse details."
 msgstr ""
+"添付ファイルを開くにはダブルタップしてください。詳細を展開または折りたたむに"
+"は長押ししてください。"
 
 #: packages/app-desktop/checkForUpdates.ts:116
 msgid "Download"
@@ -2588,11 +2657,11 @@ msgstr "ご使用のブラウザーに対応する拡張機能をインストー
 #: packages/app-desktop/gui/MainScreen.tsx:641
 #: packages/app-desktop/gui/MainScreen.tsx:653
 msgid "Download it from GitHub Releases"
-msgstr ""
+msgstr "GitHub Releases からダウンロード"
 
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:84
 msgid "Download it from the Joplin Android repository"
-msgstr ""
+msgstr "Joplin Android リポジトリからダウンロード"
 
 #: packages/app-desktop/gui/MainScreen.tsx:669
 msgid "Download it now"
@@ -2624,9 +2693,8 @@ msgid "Downloading resources..."
 msgstr "リソースをダウンロード中..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:14
-#, fuzzy
 msgid "Downloading…"
-msgstr "ダウンロード中"
+msgstr "ダウンロード中…"
 
 #: packages/lib/models/settings/builtInMetadata.ts:78
 msgid "Dracula"
@@ -2634,7 +2702,7 @@ msgstr "Dracula"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/GroupNode.tsx:71
 msgid "Drag to move group"
-msgstr ""
+msgstr "ドラッグしてグループを移動"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1355
 msgid "Draw picture"
@@ -2719,9 +2787,8 @@ msgid "Edit link"
 msgstr "リンクの編集"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1685
-#, fuzzy
 msgid "Edit mode"
-msgstr "ノートを編集する。"
+msgstr "編集モード"
 
 #: packages/app-cli/app/command-edit.ts:17
 msgid "Edit note."
@@ -2745,9 +2812,8 @@ msgid "Edit tag"
 msgstr "タグを編集"
 
 #: packages/app-mobile/components/screens/Note/commands/toggleVisiblePanes.ts:25
-#, fuzzy
 msgid "Editing"
-msgstr "リンクの編集"
+msgstr "編集"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:153
 #: packages/app-desktop/utils/layout/layoutKeyToLabel.ts:8
@@ -2823,7 +2889,7 @@ msgstr "Eメール"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:58
 msgid "Embedding index"
-msgstr ""
+msgstr "埋め込みインデックス"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:194
 msgid "emphasised text"
@@ -2843,9 +2909,8 @@ msgid "Enable"
 msgstr "有効"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:175
-#, fuzzy
 msgid "Enable %s"
-msgstr "有効"
+msgstr "有効 %s"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1502
 msgid "Enable ^sup^ syntax"
@@ -2872,9 +2937,8 @@ msgid "Enable ABC musical notation support"
 msgstr "ABC楽譜記法のサポートを有効にする"
 
 #: packages/lib/models/settings/builtInMetadata.ts:651
-#, fuzzy
 msgid "Enable AI features"
-msgstr "ソフトブレークを有効にする"
+msgstr "AI 機能を有効にする"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1495
 msgid "Enable audio player"
@@ -2897,7 +2961,7 @@ msgstr "暗号化を有効にする"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1508
 msgid "Enable external embeds (e.g. YouTube Videos)"
-msgstr ""
+msgstr "外部埋め込みを有効にする（例: YouTube 動画）"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1519
 msgid "Enable file:// URLs for images and videos"
@@ -2932,9 +2996,8 @@ msgid "Enable math expressions"
 msgstr "数式表現を有効にする"
 
 #: packages/lib/models/settings/builtInMetadata.ts:662
-#, fuzzy
 msgid "Enable MCP server"
-msgstr "PDFビューアーを有効にする"
+msgstr "MCP サーバー機能を有効にする"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1492
 msgid "Enable Mermaid diagrams support"
@@ -3022,6 +3085,9 @@ msgid ""
 "When disabled, the chat panel can still read the open note. Does not apply "
 "to MCP."
 msgstr ""
+"AI チャットパネルが開いているノートに対して、標準の編集操作を有効にします。無"
+"効にした場合でも、チャットパネルは開いているノートの内容を読み取ることができ"
+"ます。この設定は MCP には適用されません。"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:52
 msgid ""
@@ -3038,12 +3104,6 @@ msgstr "暗号化済"
 #: packages/lib/models/BaseItem.ts:1019
 msgid "Encrypted items cannot be modified"
 msgstr "暗号化したアイテムは修正できません"
-
-#: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/enableNoteEncryption.ts:33
-msgid ""
-"Encrypting a note requires a note lock password, which has not yet been set. "
-"Set it up now?"
-msgstr ""
 
 #: packages/lib/models/Setting.ts:1366
 msgid "Encryption"
@@ -3069,6 +3129,8 @@ msgid ""
 "Encryption was setup previously, but all keys have been disabled. To "
 "continue, please use the desktop app to enable a key."
 msgstr ""
+"暗号化は以前に設定されていましたが、すべての暗号鍵が無効になっています。続行"
+"するには、デスクトップアプリでいずれかの鍵を有効にしてください。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:438
 msgid "Encryption:"
@@ -3092,9 +3154,8 @@ msgid "Enter master password:"
 msgstr "マスターパスワードを入力してください:"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:175
-#, fuzzy
 msgid "Enter new password"
-msgstr "パスワードを入力"
+msgstr "新しいパスワードを入力"
 
 #: packages/app-mobile/components/screens/folder.tsx:115
 msgid "Enter notebook title"
@@ -3113,10 +3174,19 @@ msgstr "コードを入力"
 msgid "Enter the code:"
 msgstr "コードを入力:"
 
+#: packages/lib/services/noteLock/noteLockPrompts.ts:61
+msgid "Enter the note lock password the backup was created with"
+msgstr "バックアップの作成時に使用したノートのロック用パスワードを入力"
+
+#: packages/lib/services/noteLock/noteLockPrompts.ts:35
+msgid "Enter your current note lock password"
+msgstr "現在のノートロック用パスワードを入力"
+
 #: packages/app-desktop/gui/NoteLockUnlockDialog/Dialog.tsx:68
-msgid ""
-"Enter the note lock password to unlock encrypted notes for this session."
+msgid "Enter your password to unlock your notes for this session."
 msgstr ""
+"このセッション中にノートのロックを解除するには、パスワードを入力してくださ"
+"い。"
 
 #: packages/app-mobile/components/NoteItem.tsx:156
 msgid "Entering selection mode"
@@ -3164,7 +3234,7 @@ msgstr ""
 
 #: packages/lib/components/shared/config/config-shared.ts:154
 msgid "Error. The AI provider test failed:"
-msgstr ""
+msgstr "エラーです。AI プロバイダーのテストに失敗しました:"
 
 #: packages/app-mobile/components/screens/LogScreen.tsx:237
 msgid "Errors only"
@@ -3239,6 +3309,14 @@ msgstr "削除ログをエクスポート"
 msgid "Export profile"
 msgstr "プロファイルをエクスポート"
 
+#: packages/app-desktop/InteropServiceHelper.ts:218
+msgid "Export unprotected"
+msgstr "保護せずにエクスポート"
+
+#: packages/app-desktop/InteropServiceHelper.ts:218
+msgid "Export without locked notes"
+msgstr "ロックされたノートを除外してエクスポート"
+
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.test.tsx:42
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:70
 msgid "Exported successfully!"
@@ -3281,6 +3359,11 @@ msgid ""
 "running. Connected AI tools can read your note content; any text they "
 "retrieve may be sent to the external LLM provider those tools use."
 msgstr ""
+"モデル コンテキスト プロトコル（MCP）を介して、Joplin のノートを Claude "
+"Desktop や Cursor などの外部 AI アプリケーションに提供します。Web Clipper "
+"サービスの実行が必要です。接続された AI ツールはノートの内容を読み取ることが"
+"でき、取得したテキストは、それらのツールが利用する外部 LLM プロバイダーへ送信"
+"される場合があります。"
 
 #: packages/lib/models/settings/builtInMetadata.ts:2115
 msgid "Fail-safe"
@@ -3311,7 +3394,11 @@ msgstr "アカウントへの接続に失敗しました。もう一度お試し
 
 #: packages/app-desktop/commands/createAccessibleDocument.ts:75
 msgid "Failed to create accessible document: %s"
-msgstr ""
+msgstr "アクセシブルな文書の作成に失敗しました: %s"
+
+#: packages/app-mobile/components/screens/ConfigScreen/SettingComponent.tsx:179
+msgid "Failed: %s"
+msgstr "失敗: %s"
 
 #: packages/app-cli/app/main.js:107
 msgid "Fatal error:"
@@ -3349,7 +3436,7 @@ msgstr "フィルター"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:556
 msgid "Filtered by section [%s]"
-msgstr ""
+msgstr "セクション [%s] で絞り込み中"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:14
 msgid "Find"
@@ -3377,7 +3464,7 @@ msgstr "検索インデックスの修正中..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:486
 msgid "Flip"
-msgstr ""
+msgstr "反転"
 
 #: packages/app-desktop/gui/MenuBar.tsx:850
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.ts:9
@@ -3406,6 +3493,16 @@ msgstr "フォルダー \"%s\" は次のユーザーと共有されています:
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:98
 msgid "Follow link"
 msgstr "リンクを開く"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:215
+msgid ""
+"For better security, your note lock protection can be upgraded to a newer "
+"method. Enter your password to upgrade it. Your notes will keep locking and "
+"unlocking as usual."
+msgstr ""
+"セキュリティを向上させるため、ノートのロック保護を新しい方式にアップグレード"
+"できます。アップグレードするにはパスワードを入力してください。アップグレード"
+"後も、これまでどおりノートのロックとロック解除を行えます。"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProfileButton.tsx:38
 msgid "For debugging purpose only: export your profile to an external SD card."
@@ -3439,9 +3536,8 @@ msgid "Force path style"
 msgstr "パス形式を強制する"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:147
-#, fuzzy
 msgid "Forgot password?"
-msgstr "パスワードを表示"
+msgstr "パスワードを忘れましたか?"
 
 #: packages/lib/commands/historyForward.ts:6
 msgid "Forward"
@@ -3479,9 +3575,8 @@ msgid_plural "Generating links..."
 msgstr[0] "リンクを生成中..."
 
 #: packages/lib/models/Setting.ts:1411
-#, fuzzy
 msgid "Geolocation, image resize"
-msgstr "位置情報、スペルチェック、エディタツールバー、画像リサイズ"
+msgstr "位置情報、画像サイズ変更"
 
 #: packages/lib/utils/joplinCloud/index.ts:727
 msgid "Get a quote"
@@ -3506,7 +3601,7 @@ msgstr ""
 
 #: packages/lib/models/settings/builtInMetadata.ts:1557
 msgid "Global shortcut to show/hide Joplin"
-msgstr ""
+msgstr "Joplin の表示/非表示ショートカット"
 
 #: packages/app-mobile/services/voiceTyping/whisper.ts:188
 msgid "Glossary:"
@@ -3522,7 +3617,7 @@ msgstr "戻る"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:177
 msgid "Go to end of note"
-msgstr ""
+msgstr "ノートの末尾へ移動"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:44
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:59
@@ -3539,12 +3634,12 @@ msgstr "ソースURLに行く"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:172
 msgid "Go to start of note"
-msgstr ""
+msgstr "ノートの先頭へ移動"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/gotoAnything.ts:19
 #: packages/app-desktop/plugins/GotoAnything.tsx:790
 msgid "Goto Anything..."
-msgstr "Goto Anything..."
+msgstr "すべての項目を検索..."
 
 #: packages/app-desktop/gui/Root.tsx:131
 msgid "Grant authorisation"
@@ -3553,7 +3648,7 @@ msgstr "許可する"
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/GroupNode.tsx:85
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/GroupNode.tsx:86
 msgid "Group"
-msgstr ""
+msgstr "グループ"
 
 #: packages/app-cli/app/command-sync.ts:114
 msgid "Have you authorised the application login in the above URL?"
@@ -3611,6 +3706,10 @@ msgstr "キーボードを隠す"
 #: packages/app-desktop/gui/PasswordInput/PasswordInput.tsx:21
 msgid "Hide password"
 msgstr "パスワードを隠す"
+
+#: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:458
+msgid "Hide the AI Chat button"
+msgstr "AI チャットボタンを隠す"
 
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:46
 msgid "Hides warning"
@@ -3672,11 +3771,26 @@ msgstr ""
 "画像添付ファイルが単独の行にあり、その後に空白行が続く場合、Markdownソースの"
 "すぐ下にレンダリングされます。"
 
+#: packages/app-desktop/InteropServiceHelper.ts:285
+msgid ""
+"If any files are reported missing, download all relevant attachments to this "
+"device and try again."
+msgstr ""
+"不足しているファイルが報告された場合は、関連するすべての添付ファイルをこのデ"
+"バイスにダウンロードしてから、もう一度お試しください。"
+
 #: packages/lib/models/settings/builtInMetadata.ts:1139
 msgid ""
 "If enabled, opening an HTML note displays a prompt to convert the note to "
 "Markdown."
 msgstr ""
+"有効にすると、HTML ノートを開いた際にそのノートを Markdown に変換するか確認す"
+"るメッセージが表示されます。"
+
+#: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:455
+msgid ""
+"If you do not want to use the AI features, you may hide the toolbar button:"
+msgstr "AI 機能を使用しない場合は、ツールバーのボタンを非表示にできます:"
 
 #: packages/lib/services/joplinCloudUtils.ts:39
 msgid ""
@@ -3717,33 +3831,33 @@ msgid ""
 "Import a note from a text file (%s). The note will be imported into notebook "
 "'%s'."
 msgstr ""
+"テキストファイル (%s) からノートをインポートします。ノートは \"%s\" ノート"
+"ブックにインポートされます。"
 
 #: packages/lib/models/Setting.ts:1372
 msgid "Import and Export"
 msgstr "インポートとエクスポート"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.ts:114
-#, fuzzy
 msgid "Import anyway"
-msgstr "インポート"
+msgstr "このままインポート"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:105
-#, fuzzy
 msgid ""
 "Import failed. Make sure a %s file was selected.\n"
 "Details: %s"
 msgstr ""
-"インポートに失敗しました。JEXファイルが選択されているか確認してください。\n"
-"詳細: %s"
+"インポートできませんでした。%s ファイルが選択されていることを確認してくださ"
+"い。\n"
+" 詳細: %s"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:593
 msgid "Import from JEX"
 msgstr "JEX形式のファイルをインポート"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:599
-#, fuzzy
 msgid "Import from text file"
-msgstr "JEX形式のファイルをインポート"
+msgstr "テキストファイルをインポート"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:594
 msgid "Import notes from a JEX (Joplin Export) file."
@@ -3758,9 +3872,8 @@ msgid "Import..."
 msgstr "インポート..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:28
-#, fuzzy
 msgid "Imported Notes"
-msgstr "復元されたノート"
+msgstr "インポートしたノート"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:114
 msgid "Imported successfully!"
@@ -3834,7 +3947,6 @@ msgstr ""
 "重要: 再暗号化はどれか一つのデバイスで一回だけ実行してください。"
 
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:104
-#, fuzzy
 msgid "In order to synchronise, Please upgrade your application to version %s"
 msgstr ""
 "同期するには、アプリケーションをバージョン %s 以上にアップグレードしてくださ"
@@ -3842,30 +3954,27 @@ msgstr ""
 
 #: packages/app-desktop/gui/MainScreen.tsx:655
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:74
-#, fuzzy
 msgid ""
 "In order to synchronise, Please upgrade your application to version %s: %s"
 msgstr ""
 "同期するには、アプリケーションをバージョン %s 以上にアップグレードしてくださ"
-"い"
+"い: %s"
 
 #: packages/app-desktop/gui/MainScreen.tsx:643
-#, fuzzy
 msgid ""
 "In order to synchronise, Please upgrade your application to version %s: %s "
 "or update it using your package manager"
 msgstr ""
-"同期するには、アプリケーションをバージョン %s 以上にアップグレードしてくださ"
-"い"
+"同期するには、アプリケーションをバージョン %s にアップグレードしてください: "
+"%s またはパッケージマネージャーを使用して更新してください"
 
 #: packages/app-desktop/gui/MainScreen.tsx:635
-#, fuzzy
 msgid ""
 "In order to synchronise, Please upgrade your application to version %s. "
 "Joplin could not check update information."
 msgstr ""
-"同期するには、アプリケーションをバージョン %s 以上にアップグレードしてくださ"
-"い"
+"同期するには、アプリケーションをバージョン %s にアップグレードしてください。"
+"Joplin は更新情報を確認できませんでした。"
 
 #: packages/lib/services/synchronizer/syncInfoUtils.ts:617
 msgid "In order to synchronise, please upgrade your application to version %s+"
@@ -3923,32 +4032,30 @@ msgstr "インデントを増やす"
 
 #: packages/lib/models/settings/builtInMetadata.ts:835
 msgid "Index notes for AI search"
-msgstr ""
+msgstr "AI 検索用にノートのインデックスを作成"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:64
-#, fuzzy
 msgid "Indexed notes:"
-msgstr "インデントを減らす"
+msgstr "インデックス済みノート:"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:62
 msgid "Indexer:"
-msgstr ""
+msgstr "インデクサー:"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:25
-#, fuzzy
 msgid "Indexing is disabled"
-msgstr "無効な設定を非表示にする"
+msgstr "インデックス作成は無効"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:23
 msgid "Indexing…"
-msgstr ""
+msgstr "インデックス作成中…"
 
 #: packages/app-desktop/gui/PopupNotification/NotificationItem.tsx:22
 #: packages/app-mobile/components/DialogManager/hooks/useDialogControl.ts:21
 msgid "Info"
 msgstr "情報"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:255
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:244
 msgid "Information"
 msgstr "情報"
 
@@ -3962,14 +4069,13 @@ msgstr "挿入線"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:33
 #: packages/editor/CodeMirror/extensions/rendering/renderTables.ts:713
-#, fuzzy
 msgid "Insert column left"
-msgstr "日時の挿入"
+msgstr "左側へ列を挿入"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:34
 #: packages/editor/CodeMirror/extensions/rendering/renderTables.ts:714
 msgid "Insert column right"
-msgstr ""
+msgstr "左側へ列を挿入"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:196
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/useEditorCommands.ts:84
@@ -3979,23 +4085,22 @@ msgstr "ハイパーリンクの挿入"
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:31
 #: packages/editor/CodeMirror/extensions/rendering/renderTables.ts:711
 msgid "Insert row above"
-msgstr ""
+msgstr "上側へ行を挿入"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:32
 #: packages/editor/CodeMirror/extensions/rendering/renderTables.ts:712
 msgid "Insert row below"
-msgstr ""
+msgstr "下側へ行を挿入"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:188
-#, fuzzy
 msgid "Insert table"
-msgstr "日時の挿入"
+msgstr "表を挿入"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:122
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:881
 #: packages/app-mobile/components/screens/Note/commands/insertDateTime.ts:8
 msgid "Insert time"
-msgstr "日時の挿入"
+msgstr "日時を挿入"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:190
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/buttons/InstallButton.tsx:18
@@ -4060,11 +4165,12 @@ msgid ""
 "Invalid password. Please try again. If you have forgotten your password you "
 "will need to reset it."
 msgstr ""
+"パスワードが正しくありません。もう一度お試しください。パスワードを忘れた場合"
+"は、リセットする必要があります。"
 
 #: packages/lib/services/plugins/PluginService.ts:600
-#, fuzzy
 msgid "Invalid plugin manifest: %s"
-msgstr "無効な入力：%s"
+msgstr "プラグインマニフェストが無効です: %s"
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:24
 msgid "iOS version: %s"
@@ -4080,13 +4186,12 @@ msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "アイテム \"%s\" はダウンロードできませんでした：%s"
 
 #: packages/server/src/middleware/notificationHandler.ts:91
-#, fuzzy
 msgid "Item upload has been disabled."
-msgstr "ノートは保存されました。"
+msgstr "アイテムのアップロードは無効になっています。"
 
 #: packages/server/src/middleware/notificationHandler.ts:69
 msgid "Item upload will be disabled in %s."
-msgstr ""
+msgstr "あと %s でアイテムのアップロードが無効になります。"
 
 #: packages/server/src/services/MustacheService.ts:161
 #: packages/server/src/services/MustacheService.ts:284
@@ -4124,9 +4229,8 @@ msgstr "Joplin Cloud"
 
 #: packages/lib/models/settings/builtInMetadata.ts:699
 #: packages/lib/utils/joplinCloud/index.ts:345
-#, fuzzy
 msgid "Joplin Cloud AI (beta)"
-msgstr "Joplin Cloudメールアドレス"
+msgstr "Joplin Cloud AI (beta)"
 
 #: packages/lib/models/settings/builtInMetadata.ts:694
 #: packages/lib/services/ai/availability.ts:44
@@ -4134,6 +4238,8 @@ msgid ""
 "Joplin Cloud AI requires Joplin Cloud sync. Pick a different provider or "
 "restore Joplin Cloud sync."
 msgstr ""
+"Joplin Cloud AI を利用するには、Joplin Cloud との同期が必要です。別のプロバイ"
+"ダーを選択するか、Joplin Cloud との同期を再設定してください。"
 
 #: packages/app-desktop/gui/Root.tsx:165
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:149
@@ -4189,6 +4295,8 @@ msgid ""
 "Joplin needs your permission to access your %s account and to synchronise "
 "data with it."
 msgstr ""
+"Joplin が %s アカウントへアクセスし、そのアカウントとデータを同期するには、許"
+"可が必要です。"
 
 #: packages/lib/SyncTargetJoplinServer.ts:64
 msgid "Joplin Server"
@@ -4233,9 +4341,8 @@ msgstr ""
 "でも設定から変更できます。"
 
 #: packages/lib/utils/joplinCloud/index.ts:309
-#, fuzzy
 msgid "Joplin Web App"
-msgstr "Joplin Desktop"
+msgstr "Joplin Web App"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:139
 msgid ""
@@ -4259,9 +4366,8 @@ msgstr ""
 "業などJoplin固有の機能も利用可能です。"
 
 #: packages/lib/components/shared/NoteEditor/WarningBanner/useEditorTypeMigrationBanner.ts:33
-#, fuzzy
 msgid "Keep it enabled"
-msgstr "Hermes有効: %d"
+msgstr "有効のままにする"
 
 #: packages/lib/models/settings/builtInMetadata.ts:2156
 msgid "Keep note history for"
@@ -4272,9 +4378,8 @@ msgid "Keep notes in the trash for"
 msgstr "ゴミ箱の保存期間"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:210
-#, fuzzy
 msgid "Key upgrade"
-msgstr "アップグレード"
+msgstr "鍵のアップグレード"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1909
 msgid "Keyboard Mode"
@@ -4326,9 +4431,8 @@ msgid "Last error: %s"
 msgstr "最新のエラー: %s"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1686
-#, fuzzy
 msgid "Last used"
-msgstr "ユーザーを作成"
+msgstr "最終使用日時"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:439
 msgid "Later"
@@ -4416,9 +4520,8 @@ msgid "Link text"
 msgstr "リンクテキスト"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:830
-#, fuzzy
 msgid "Link to note"
-msgstr "ノートへのリンク..."
+msgstr "ノートへのリンク"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/linkToNote.ts:13
 msgid "Link to note..."
@@ -4426,9 +4529,8 @@ msgstr "ノートへのリンク..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/FileNode.tsx:201
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/FileNode.tsx:209
-#, fuzzy
 msgid "Linked item"
-msgstr "リストアイテム"
+msgstr "リンクされたアイテム"
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:179
 msgid "Links"
@@ -4453,18 +4555,19 @@ msgid "Loading..."
 msgstr "読み込み中..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/FileNode.tsx:210
-#, fuzzy
 msgid "Loading…"
-msgstr "読み込み中..."
+msgstr "読み込み中…"
+
+#: packages/app-mobile/components/NoteItem.tsx:249
+#: packages/lib/services/noteList/defaultLeftToRightListRenderer.ts:211
+#: packages/lib/services/noteList/defaultListRenderer.ts:232
+#: packages/lib/services/noteList/defaultMultiColumnsRenderer.ts:188
+msgid "Local only"
+msgstr "ローカルのみ"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:81
 msgid "Location"
 msgstr "場所"
-
-#: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/lockEncryptedNotes.ts:8
-#, fuzzy
-msgid "Lock encrypted notes"
-msgstr "暗号化したアイテムは変更できません"
 
 #: packages/app-cli/app/command-sync.ts:152
 msgid ""
@@ -4475,6 +4578,20 @@ msgstr ""
 "ロックファイルがすでに保持されています。同期作業が行われていない場合は、"
 "\"%s\"にあるロックファイルを削除して、作業を再度行ってください。"
 
+#: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/enableNoteEncryption.ts:13
+#: packages/app-mobile/components/screens/Note/Note.tsx:1591
+#: packages/app-mobile/components/screens/Note/Note.tsx:985
+msgid "Lock this note"
+msgstr "ノートの暗号化を有効にする"
+
+#: packages/app-mobile/components/NoteItem.tsx:250
+#: packages/lib/services/noteList/defaultLeftToRightListRenderer.ts:209
+#: packages/lib/services/noteList/defaultListRenderer.ts:230
+#: packages/lib/services/noteList/defaultMultiColumnsRenderer.ts:186
+#, fuzzy
+msgid "Locked"
+msgstr "新しいノート"
+
 #: packages/app-desktop/gui/NoteEditor/NoteLockPanel/NoteLockPanel.tsx:83
 #, fuzzy
 msgid "Locked note"
@@ -4482,14 +4599,28 @@ msgstr "新しいノート"
 
 #: packages/lib/models/Setting.ts:1390
 msgid ""
-"Locked notes are encrypted on this device and can only be read after "
-"entering your note lock password. The password is required again after "
-"locking or restarting Joplin."
+"Locked notes are specific notes that are encrypted on the device and "
+"protected by your note lock password. They can only be read after entering "
+"this password. The password is required again after relocking notes or "
+"restarting Joplin."
 msgstr ""
+"ロックされたノートとは、端末上で暗号化されノートのロック用パスワードで保護さ"
+"れた特定のノートです。これらのノートを閲覧するには、このパスワードを入力する"
+"必要があります。ノートを再度ロックした後や Joplin を再起動した後は、再びパス"
+"ワードの入力が必要になります。"
 
 #: packages/app-desktop/commands/startExternalEditing.ts:24
 msgid "Locked notes cannot be opened in an external editor"
+msgstr "ロックされたノートは外部エディターで開くことができません"
+
+#: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/enableNoteEncryption.ts:33
+#: packages/app-mobile/components/screens/Note/Note.tsx:985
+msgid ""
+"Locking a note requires the note lock password, which has not been set up "
+"yet. Set it up now?"
 msgstr ""
+"ノートをロックするには、ノートのロック用パスワードが必要ですが、まだ設定され"
+"ていません。今すぐ設定しますか?"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:579
 #: packages/app-mobile/components/screens/LogScreen.tsx:214
@@ -4532,10 +4663,13 @@ msgstr "経度"
 msgid "Make a donation"
 msgstr "寄付する"
 
+#: packages/app-desktop/gui/WarningBanner.tsx:273
+msgid "Manage"
+msgstr ""
+
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:370
-#, fuzzy
 msgid "Manage capabilities"
-msgstr "プロファイルの管理"
+msgstr "権限を管理"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:238
 msgid "Manage master password"
@@ -4550,9 +4684,8 @@ msgid "Manage multiple users"
 msgstr "複数ユーザーの管理"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:131
-#, fuzzy
 msgid "Manage password"
-msgstr "マスターパスワードの管理"
+msgstr "パスワードの管理"
 
 #: packages/app-desktop/commands/showProfileEditor.ts:6
 #: packages/app-desktop/gui/Root.tsx:170
@@ -4566,7 +4699,7 @@ msgstr "共有ノートブックを管理"
 
 #: packages/server/src/middleware/notificationHandler.ts:116
 msgid "Manage this server's license from the [admin dashboard](%s)."
-msgstr ""
+msgstr "このサーバーのライセンスは、%s から管理できます。"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:384
 msgid "Manage toolbar options"
@@ -4620,7 +4753,6 @@ msgid "Markdown editor: Highlight active line"
 msgstr "Markdownエディター: アクティブな行をハイライト"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1947
-#, fuzzy
 msgid "Markdown editor: Interactive table editing"
 msgstr "Markdownエディター: アクティブな行をハイライト"
 
@@ -4655,9 +4787,8 @@ msgid "Master password"
 msgstr "マスターパスワード"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:230
-#, fuzzy
 msgid "Master password status:"
-msgstr "マスターパスワード:"
+msgstr "マスターパスワードの状態:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:475
 #: packages/app-mobile/components/screens/encryption-config.tsx:261
@@ -4692,6 +4823,8 @@ msgstr "最大合計サイズ"
 msgid ""
 "MCP requires the Web Clipper service. Enable it in Settings → Web Clipper."
 msgstr ""
+"MCP を利用するには Web Clipper サービスが必要です。[設定] → [Web Clipper] で"
+"有効にしてください。"
 
 #: packages/lib/models/Setting.ts:1410
 msgid "Media player, math, diagrams, table of contents"
@@ -4700,6 +4833,20 @@ msgstr "メディアプレーヤー、数式、作図、目次"
 #: packages/lib/models/settings/builtInMetadata.ts:1728
 msgid "Medium"
 msgstr "中"
+
+#: packages/app-desktop/gui/NoteLockMigrationDialog/Dialog.tsx:83
+#: packages/app-mobile/components/screens/NoteLockMigrationScreen.tsx:120
+msgid "Migrate"
+msgstr ""
+
+#: packages/app-desktop/gui/NoteLockMigrationDialog/Dialog.tsx:63
+#: packages/app-mobile/components/screens/NoteLockMigrationScreen.tsx:89
+msgid "Migrate locked notes"
+msgstr "ロックされたノートを移行"
+
+#: packages/app-desktop/gui/WarningBanner.tsx:184
+msgid "Migrate your locked notes"
+msgstr "ロックされたノートを移行"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
 msgid "Minimise"
@@ -4735,11 +4882,11 @@ msgstr "モバイルデータ通信 - 自動同期無効"
 
 #: packages/lib/models/settings/builtInMetadata.ts:749
 msgid "Model"
-msgstr ""
+msgstr "モデル"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:60
 msgid "Model:"
-msgstr ""
+msgstr "モデル:"
 
 #: packages/app-desktop/gui/MainScreen.tsx:604
 msgid "More info"
@@ -4780,26 +4927,22 @@ msgstr ""
 "す。"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:259
-#, fuzzy
 msgid "Move %s down"
-msgstr "下に移動"
+msgstr "下に %s 移動"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:250
-#, fuzzy
 msgid "Move %s up"
-msgstr "上に移動"
+msgstr "上に %s 移動"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:37
 #: packages/editor/CodeMirror/extensions/rendering/renderTables.ts:720
-#, fuzzy
 msgid "Move column left"
-msgstr "左に移動"
+msgstr "列を左に移動"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:38
 #: packages/editor/CodeMirror/extensions/rendering/renderTables.ts:721
-#, fuzzy
 msgid "Move column right"
-msgstr "右に移動"
+msgstr "列を右に移動"
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:73
 msgid "Move down"
@@ -4828,15 +4971,13 @@ msgstr "右に移動"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:36
 #: packages/editor/CodeMirror/extensions/rendering/renderTables.ts:719
-#, fuzzy
 msgid "Move row down"
-msgstr "下に移動"
+msgstr "行を下に移動"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:35
 #: packages/editor/CodeMirror/extensions/rendering/renderTables.ts:718
-#, fuzzy
 msgid "Move row up"
-msgstr "上に移動"
+msgstr "行を上に移動"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.ts:16
 msgid "Move to notebook"
@@ -4875,14 +5016,17 @@ msgstr "リサイズしない"
 msgid "New attachment"
 msgstr "新しい添付ファイル"
 
+#: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:532
+msgid "New chat"
+msgstr "新しいチャット"
+
 #: packages/app-mobile/setupQuickActions.ts:34
 msgid "New drawing"
 msgstr "新しい描画"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:260
-#, fuzzy
 msgid "New group"
-msgstr "新しいプロファイル"
+msgstr "新しいグループ"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:120
 msgid "New invitations"
@@ -4926,9 +5070,8 @@ msgid "New notebook title"
 msgstr "新しいノートブックのタイトル"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:170
-#, fuzzy
 msgid "New password"
-msgstr "パスワードを表示"
+msgstr "新しいパスワード"
 
 #: packages/app-mobile/setupQuickActions.ts:32
 msgid "New photo"
@@ -4944,7 +5087,7 @@ msgstr "新しいサブノートブック"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:241
 msgid "New text card"
-msgstr ""
+msgstr "新しいテキストカード"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:125
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:72
@@ -5007,37 +5150,36 @@ msgstr "有効なノートブックがありません。"
 
 #: packages/lib/models/settings/builtInMetadata.ts:798
 msgid "No AI usage recorded yet."
-msgstr ""
+msgstr "AI の利用履歴はまだありません。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:481
 msgid "No arrow"
-msgstr ""
+msgstr "矢印なし"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:332
-#, fuzzy
 msgid "No attachments match your search."
-msgstr "次の添付ファイルが検索クエリに一致しました:"
+msgstr "検索条件に一致する添付ファイルはありません。"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:333
-#, fuzzy
 msgid "No attachments!"
-msgstr "添付ファイル一覧"
+msgstr "添付ファイルはありません！"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:355
 msgid "No colour"
-msgstr ""
+msgstr "色設定なし"
 
 #: packages/lib/services/ai/availability.ts:74
 msgid ""
 "No embedding model is installed. It is downloaded automatically on first use "
 "— check Settings → AI for progress."
 msgstr ""
+"埋め込みモデルがまだインストールされていません。初回利用時に自動的にダウン"
+"ロードされます。進行状況は [設定] → [AI] で確認できます。"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:538
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:552
-#, fuzzy
 msgid "No matching results"
-msgstr "該当なし"
+msgstr "一致する結果はありません"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:92
 msgid "No new invitations"
@@ -5108,6 +5250,8 @@ msgid ""
 "No valid notebook is available. Please create or select a notebook and try "
 "again."
 msgstr ""
+"利用可能なノートブックがありません。ノートブックを作成または選択してから、も"
+"う一度お試しください。"
 
 #: packages/app-cli/app/command-share.ts:188
 #: packages/app-cli/app/command-share.ts:208
@@ -5144,14 +5288,12 @@ msgid "Not now"
 msgstr "あとで"
 
 #: packages/app-desktop/gui/PublishFolderDialog.tsx:96
-#, fuzzy
 msgid "Not published"
-msgstr "公開されていないノート: %s"
+msgstr "公開されていません"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteLockConfig.tsx:142
-#, fuzzy
 msgid "Not set"
-msgstr "役に立たない"
+msgstr "未設定"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:13
 #, fuzzy
@@ -5222,7 +5364,7 @@ msgstr "ノートの履歴が削除されました。"
 
 #: packages/lib/services/ai/availability.ts:68
 msgid "Note indexing is turned off in Settings → AI."
-msgstr ""
+msgstr "ノートのインデックス作成は [設定] → [AI] で無効になっています。"
 
 #: packages/app-cli/app/command-done.ts:22
 msgid "Note is not a to-do: \"%s\""
@@ -5244,25 +5386,32 @@ msgid "Note list style"
 msgstr "ノート一覧のスタイル"
 
 #: packages/lib/models/Setting.ts:1367
-#, fuzzy
 msgid "Note lock"
-msgstr "コードブロック"
+msgstr "ノートロック"
 
 #: packages/app-desktop/gui/NoteEditor/NoteLockPanel/NoteLockPanel.tsx:70
 #: packages/app-desktop/gui/NoteLockUnlockDialog/Dialog.tsx:70
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:558
-#, fuzzy
 msgid "Note lock password"
-msgstr "Nextcloud パスワード"
+msgstr "ノートのロック用パスワード"
+
+#: packages/app-desktop/gui/NoteLockMigrationDialog/Dialog.tsx:73
+#: packages/app-mobile/components/screens/NoteLockMigrationScreen.tsx:105
+msgid "Note lock password on the sync target"
+msgstr "同期先のノートのロック用パスワード"
+
+#: packages/app-desktop/gui/NoteLockMigrationDialog/Dialog.tsx:68
+#: packages/app-mobile/components/screens/NoteLockMigrationScreen.tsx:92
+msgid "Note lock password on this device"
+msgstr "このデバイスのノートのロック用パスワード"
 
 #: packages/lib/models/Setting.ts:1407
-msgid "Note lock password, auto lock"
-msgstr ""
+msgid "Note lock password, auto relock"
+msgstr "ノートのロック用パスワード、自動再ロック"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteLockConfig.tsx:142
-#, fuzzy
 msgid "Note lock password:"
-msgstr "Nextcloud パスワード"
+msgstr "ノートのロック用パスワード:"
 
 #: packages/app-cli/app/command-unpublish.ts:35
 msgid "Note not published: %s"
@@ -5348,6 +5497,14 @@ msgstr "ノートと設定は次の場所に保存されます: %s"
 msgid "Notes can only be created within a notebook."
 msgstr "ノートは、ノートブック内のみに作ることができます。"
 
+#: packages/lib/services/noteLock/setNoteLockState.ts:26
+msgid ""
+"Notes cannot be locked or unlocked while a note lock key migration is "
+"required."
+msgstr ""
+"ノートロックキーの移行が必要な状態では、ノートをロックしたりロック解除したり"
+"することはできません。"
+
 #: packages/app-desktop/gui/PopupNotification/PopupNotificationList.tsx:32
 msgid "Notifications"
 msgstr "通知"
@@ -5358,35 +5515,37 @@ msgstr "番号つきリスト"
 
 #: packages/lib/services/interop/InteropService.ts:138
 msgid "Obsidian Vault"
-msgstr ""
+msgstr "Obsidian Vault"
 
 #: packages/app-desktop/commands/createAccessibleDocument.ts:57
-#, fuzzy
 msgid "OCR has been queued. Please wait for it to complete and then try again."
 msgstr ""
-"このアイテムは現在暗号化されています: %s \"%s\" すべてのアイテムの復号が終わ"
-"るまで待ち、もう一度実行してください。"
+"OCR の処理がキューに追加されました。処理が完了するまでお待ちいただき、その後"
+"もう一度お試しください。"
 
 #: packages/app-desktop/commands/createAccessibleDocument.ts:33
 msgid ""
 "OCR is not complete. Please wait for OCR to finish before creating an "
 "accessible document."
 msgstr ""
+"OCR の処理が完了していません。アクセシブルな文書を作成する前に、OCR が完了す"
+"るまでお待ちください。"
 
 #: packages/app-desktop/commands/createAccessibleDocument.ts:42
 msgid ""
 "OCR needs to run to generate an accessible document. This may take a moment. "
 "Would you like to continue?"
 msgstr ""
+"アクセシブルな文書を作成するには OCR を実行する必要があります。処理にはしばら"
+"く時間がかかる場合があります。続行しますか？"
 
 #: packages/lib/models/settings/builtInMetadata.ts:632
 msgid "OCR: Clear cache and re-download language data files"
 msgstr "OCR: キャッシュをクリアして言語データファイルを再ダウンロード"
 
 #: packages/lib/models/settings/builtInMetadata.ts:573
-#, fuzzy
 msgid "OCR: Enable optical character recognition"
-msgstr "光学文字認識 (OCR) を有効にする"
+msgstr "OCR: 光学文字認識を有効にする"
 
 #: packages/lib/models/settings/builtInMetadata.ts:613
 msgid "OCR: Language data URL or path"
@@ -5394,7 +5553,7 @@ msgstr "OCR: 言語データのURLまたはパス"
 
 #: packages/lib/models/settings/builtInMetadata.ts:585
 msgid "OCR: PDF processing mode"
-msgstr ""
+msgstr "OCR: PDF 処理モード"
 
 #: packages/lib/models/settings/builtInMetadata.ts:642
 msgid "OCR: Search in extracted content"
@@ -5444,6 +5603,19 @@ msgstr "行番号"
 msgid "One of your master keys use an obsolete encryption method."
 msgstr "古い暗号化方式を使っているマスターキーがあります。"
 
+#: packages/app-desktop/gui/WarningBanner.tsx:272
+#: packages/lib/components/EncryptionConfigScreen/utils.ts:233
+msgid "One or more encryption keys are stored in an unknown format."
+msgstr "1つ以上の暗号鍵が不明な形式で保存されています。"
+
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:125
+msgid ""
+"One or more encryption keys are stored in an unknown format. Press for more "
+"info."
+msgstr ""
+"1つ以上の暗号鍵が不明な形式で保存されています。詳細を表示するには選択してくだ"
+"さい。"
+
 #: packages/app-cli/app/gui/NoteWidget.ts:56
 msgid ""
 "One or more items are currently encrypted and you may need to supply a "
@@ -5478,6 +5650,9 @@ msgid ""
 "be created, and any notes locked with the old one will become permanently "
 "unreadable."
 msgstr ""
+"この操作は、現在のパスワードを忘れた場合にのみ行ってください。新しいパスワー"
+"ドが作成され、古いパスワードでロックされているノートは二度と読み取れなくなり"
+"ます。"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/print.ts:18
 msgid "Only one note can be printed at a time."
@@ -5492,9 +5667,8 @@ msgid "Open %s"
 msgstr "%s を開く"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:181
-#, fuzzy
 msgid "Open a note to start chatting."
-msgstr "ノートのタイトルを入力して検索"
+msgstr "チャットを開始するには、ノートを開いてください。"
 
 #: packages/app-desktop/commands/startExternalEditing.ts:11
 msgid "Open in external editor"
@@ -5537,6 +5711,10 @@ msgstr "設定を開く"
 msgid "Open Source"
 msgstr "オープンソース"
 
+#: packages/app-desktop/commands/openSyncWizard.ts:6
+msgid "Open sync wizard"
+msgstr "同期ウィザードを開く"
+
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:553
 #: packages/lib/models/settings/builtInMetadata.ts:118
 msgid "Open Sync Wizard..."
@@ -5551,9 +5729,8 @@ msgid "Open..."
 msgstr "開く..."
 
 #: packages/lib/models/settings/builtInMetadata.ts:700
-#, fuzzy
 msgid "OpenAI-compatible"
-msgstr "互換性なし"
+msgstr "Open AI 互換"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:238
 msgid "Opening section %s"
@@ -5589,7 +5766,7 @@ msgid ""
 "object. The full list of options is available at: %s"
 msgstr ""
 "ABCコードのレンダリング時に使用するオプションです。JSON5オブジェクト形式で指"
-"定してください。オプションの一覧は %s を参照してください。"
+"定してください。オプションの一覧は %s を参照してください"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:102
 msgid "Ordered list"
@@ -5604,9 +5781,8 @@ msgid "Other applications..."
 msgstr "その他のアプリケーション..."
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:363
-#, fuzzy
 msgid "Other sync options"
-msgstr "オプションを選択"
+msgstr "その他の同期オプション"
 
 #: packages/app-cli/app/command-import.ts:30
 msgid "Output format: %s"
@@ -5642,9 +5818,8 @@ msgstr "パスワードは空にできません"
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:132
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:558
 #: packages/app-mobile/components/screens/ConfigScreen/NoteLockConfig.tsx:103
-#, fuzzy
 msgid "Password setup"
-msgstr "パスワード"
+msgstr "パスワード設定"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:367
 #: packages/app-mobile/components/screens/encryption-config.tsx:145
@@ -5655,9 +5830,8 @@ msgstr "パスワード:"
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:182
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:198
 #: packages/app-mobile/components/screens/ConfigScreen/NoteLockConfig.tsx:132
-#, fuzzy
 msgid "Passwords do not match"
-msgstr "パスワードが一致しません!"
+msgstr "パスワードが一致しません"
 
 #: packages/app-cli/app/command-e2ee.ts:100
 #: packages/app-mobile/components/screens/encryption-config.tsx:164
@@ -5672,9 +5846,8 @@ msgstr "貼り付け"
 
 #: packages/app-desktop/gui/NoteEditor/commands/pasteAsMarkdown.ts:11
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.ts:178
-#, fuzzy
 msgid "Paste as Markdown"
-msgstr "Markdownとして編集"
+msgstr "Markdown 形式で貼り付け"
 
 #: packages/app-desktop/gui/NoteEditor/commands/pasteAsText.ts:7
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:280
@@ -5744,6 +5917,8 @@ msgid ""
 "Please disable users from the [admin dashboard](%s) to bring this server "
 "under the limit."
 msgstr ""
+"このサーバーのユーザー数を上限内に収めるため、%s の管理ダッシュボードからユー"
+"ザーを無効化してください。"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:227
 msgid ""
@@ -5760,6 +5935,31 @@ msgid ""
 "Please make sure you remember your password. It cannot be recovered if lost, "
 "and any data encrypted with it will become inaccessible."
 msgstr ""
+"パスワードは必ず忘れないようにしてください。紛失した場合でも復元することはで"
+"きず、そのパスワードで暗号化されたデータにはアクセスできなくなります。"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:130
+msgid ""
+"Please make sure you remember your password. It cannot be recovered if lost, "
+"and any locked notes will become inaccessible."
+msgstr ""
+"パスワードは必ず忘れないようにしてください。紛失した場合でも復元することはで"
+"きず、ロックされたノートにはアクセスできなくなります。"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:129
+#: packages/app-mobile/components/screens/ConfigScreen/NoteLockConfig.tsx:136
+msgid ""
+"Please make sure you remember your password. It cannot be recovered if lost, "
+"and any locked notes will become inaccessible. If you have already set up "
+"the note lock password on another device, there is no need to set it again, "
+"as the information required to access your locked notes is updated when you "
+"set up sync."
+msgstr ""
+"パスワードは必ず忘れないようにしてください。紛失した場合でも復元することはで"
+"きず、ロックされたノートにはアクセスできなくなります。なお、別のデバイスです"
+"でにノートのロック用パスワードを設定している場合は、再度設定する必要はありま"
+"せん。ロックされたノートにアクセスするために必要な情報は、同期を設定すると自"
+"動的に更新されます。"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:411
 msgid ""
@@ -5812,7 +6012,7 @@ msgstr "ノートをどのノートブックにインポートするのか指定
 
 #: packages/server/src/middleware/notificationHandler.ts:62
 msgid "Please update the license key from the [admin dashboard](%s)."
-msgstr ""
+msgstr "ライセンスキーを %s の管理ダッシュボードから更新してください。"
 
 #: packages/lib/services/plugins/PluginService.ts:607
 msgid "Please upgrade Joplin to version %s or later to use this plugin."
@@ -5934,6 +6134,10 @@ msgstr ""
 "ショートカットキーに続けてENTERを押すことで設定します。ショートカットを削除す"
 "るにはBACKSPACEを押してください。"
 
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:151
+msgid "Press to dismiss."
+msgstr "選択して閉じる"
+
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:111
 msgid "Press to set the decryption password."
 msgstr "復号するパスワードを入力してください。"
@@ -5972,7 +6176,7 @@ msgstr "Pro"
 
 #: packages/lib/utils/joplinCloud/index.ts:660
 msgid "Pro 100 GB"
-msgstr ""
+msgstr "Pro 100 GB"
 
 #: packages/server/src/services/TaskService.ts:27
 msgid "Process failed payment subscriptions"
@@ -6021,7 +6225,6 @@ msgid "Profiles"
 msgstr "プロファイル"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/TextNode.tsx:151
-#, fuzzy
 msgid "Promote to note"
 msgstr "ノートに変換"
 
@@ -6058,19 +6261,16 @@ msgid "Publish note..."
 msgstr "ノートを公開..."
 
 #: packages/app-desktop/gui/PublishFolderDialog.tsx:108
-#, fuzzy
 msgid "Publish notebook"
-msgstr "ノートを公開"
+msgstr "ノートブックを公開"
 
 #: packages/app-desktop/gui/PublishFolderDialog.tsx:91
-#, fuzzy
 msgid "Publish Notebook"
-msgstr "ノートを公開"
+msgstr "ノートブックを公開"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showPublishFolderDialog.ts:6
-#, fuzzy
 msgid "Publish notebook..."
-msgstr "ノートを公開..."
+msgstr "ノートブックを公開..."
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:103
 msgid "Publish Notes"
@@ -6113,7 +6313,7 @@ msgstr "終了"
 
 #: packages/app-desktop/gui/QuitSyncDialog.tsx:76
 msgid "Quit anyway"
-msgstr ""
+msgstr "このまま終了する"
 
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:183
 msgid "Re-download model"
@@ -6122,6 +6322,15 @@ msgstr "モデルを再ダウンロード"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:543
 msgid "Re-encrypt data"
 msgstr "データを再暗号化する"
+
+#: packages/app-desktop/gui/WarningBanner.tsx:166
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:143
+msgid ""
+"Re-encrypting your locked notes with the synced key. Migration is in "
+"progress..."
+msgstr ""
+"同期された鍵を使用して、ロックされたノートを再暗号化しています。移行処理を実"
+"行中です..."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:555
 msgid "Re-encryption"
@@ -6135,9 +6344,14 @@ msgstr "パスワードを再入力"
 msgid "Re-upload local data to sync target"
 msgstr "ローカルデータを同期先に再アップロードする"
 
+#: packages/lib/services/ai/tools/global/readNotes.ts:15
+#, fuzzy
+msgid "Read %d notes"
+msgstr "詳しく見る"
+
 #: packages/lib/services/ai/tools/global/listTags.ts:7
 msgid "Read all tags"
-msgstr ""
+msgstr "すべてのタグを読み取る"
 
 #: packages/lib/services/ai/tools/global/readImage.ts:35
 #, fuzzy
@@ -6148,7 +6362,7 @@ msgstr "読むのに必要な時間: %s 分"
 msgid "Read more"
 msgstr "詳しく見る"
 
-#: packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.tsx:60
+#: packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.tsx:67
 msgid "Read more about it"
 msgstr "もっと知りたい"
 
@@ -6163,9 +6377,8 @@ msgid "Read note: %s"
 msgstr "読むのに必要な時間: %s 分"
 
 #: packages/lib/services/ai/tools/global/listNotebooks.ts:8
-#, fuzzy
 msgid "Read notebooks"
-msgstr "ノートブックの名前を変更："
+msgstr "ノートブックを読み取る"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:169
 msgid "Read time: %s min"
@@ -6180,6 +6393,8 @@ msgid ""
 "Reading this note requires the note lock password, which has not been set up "
 "on this device yet."
 msgstr ""
+"このノートを開くにはノートのロック用パスワードが必要ですが、このデバイスでは"
+"まだ設定されていません。"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:344
 msgid "Recipient has accepted the invitation"
@@ -6252,6 +6467,11 @@ msgstr "拒否"
 msgid "Rejecting share..."
 msgstr "共有を拒否中..."
 
+#: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/lockEncryptedNotes.ts:8
+#: packages/app-mobile/components/screens/Note/Note.tsx:1614
+msgid "Relock all notes"
+msgstr "すべてのノートを再ロック"
+
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:159
 msgid "Remove"
 msgstr "削除"
@@ -6269,6 +6489,11 @@ msgstr "%s を削除"
 msgid "Remove %s from share"
 msgstr "%s を共有から削除"
 
+#: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/disableNoteEncryption.ts:9
+#: packages/app-mobile/components/screens/Note/Note.tsx:1600
+msgid "Remove note lock"
+msgstr "ノートのロックを解除"
+
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:164
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "すべてのノートからタグ \"%s\" を削除しますか？"
@@ -6278,10 +6503,9 @@ msgid "Remove this search from the sidebar?"
 msgstr "サイドバーからこの検索を削除しますか？"
 
 #: packages/lib/services/ai/tools/buildEditorTools.ts:51
-#, fuzzy
 msgid "Removed %d word"
 msgid_plural "Removed %d words"
-msgstr[0] "%s を削除"
+msgstr[0] "%d 語を削除しました"
 
 #: packages/app-cli/app/command-share.ts:112
 msgid "Removed %s from share."
@@ -6289,7 +6513,6 @@ msgstr "%s を共有から削除しました。"
 
 #: packages/app-mobile/components/TagEditor.tsx:258
 #: packages/lib/services/ai/tools/global/manageTags.ts:24
-#, fuzzy
 msgid "Removed tag: %s"
 msgid_plural "Removed tags: %s"
 msgstr[0] "タグを削除しました: %s"
@@ -6324,7 +6547,6 @@ msgstr "トークンを更新する"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:176
 #: packages/app-mobile/components/screens/ConfigScreen/NoteLockConfig.tsx:118
-#, fuzzy
 msgid "Repeat password"
 msgstr "パスワードを再入力"
 
@@ -6347,7 +6569,7 @@ msgstr "すべて置換"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:248
 msgid "Replace with..."
-msgstr "...と置換"
+msgstr "次に置換..."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:269
 msgid "Replace: "
@@ -6362,9 +6584,8 @@ msgid "replaced match on line $"
 msgstr "$ 行の一致を置換しました"
 
 #: packages/lib/services/ai/tools/buildEditorTools.ts:62
-#, fuzzy
 msgid "Replaced selection"
-msgstr "すべて置換"
+msgstr "選択範囲を置換しました"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:160
 msgid "Report an issue"
@@ -6389,16 +6610,15 @@ msgstr "レポート"
 #: packages/lib/models/settings/builtInMetadata.ts:675
 msgid ""
 "Required to use cloud-hosted AI models, including Joplin Cloud AI. When "
-"disabled, only on-device providers can be used."
+"disabled, only providers on your own device or private network can be used."
 msgstr ""
-
-#: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:416
-msgid "Reset"
-msgstr ""
+"Joplin Cloud AI を含む、クラウド上で提供される AI モデルを利用するために必要"
+"です。無効にすると、このデバイス上またはプライベートネットワーク内で提供され"
+"るプロバイダーのみ利用できます。"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:140
 msgid "Reset AI token usage counters?"
-msgstr ""
+msgstr "AI トークン使用量のカウンターをリセットしますか?"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/resetLayout.ts:7
 msgid "Reset application layout"
@@ -6411,23 +6631,20 @@ msgid "Reset master password"
 msgstr "マスターパスワードをリセット"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:125
-#, fuzzy
 msgid "Reset password"
-msgstr "パスワードを再入力"
+msgstr "パスワードをリセット"
 
 #: packages/lib/models/settings/builtInMetadata.ts:794
-#, fuzzy
 msgid "Reset token usage"
-msgstr "トークンを更新する"
+msgstr "トークン使用量をリセット"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1374
 msgid "Resize large images:"
 msgstr "大きな画像のリサイズ:"
 
 #: packages/app-desktop/commands/createAccessibleDocument.ts:21
-#, fuzzy
 msgid "Resource not found"
-msgstr "ノートを復元"
+msgstr "対象のリソースが見つかりません"
 
 #: packages/app-cli/app/command-import.ts:56
 #: packages/app-desktop/gui/ImportScreen.tsx:101
@@ -6505,12 +6722,11 @@ msgstr "ファイルのあるフォルダーを開く"
 #: packages/app-mobile/components/screens/Note/Note.tsx:1481
 #, fuzzy
 msgid "Reveal in notebook"
-msgstr "ノートブックを離れる"
+msgstr "ノートリスト内で表示"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1289
-#, fuzzy
 msgid "Reverse notebook sort order"
-msgstr "逆順に並び替え"
+msgstr "ノートブックの並び順を逆にする"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleNotesSortOrderReverse.ts:8
 #: packages/lib/models/settings/builtInMetadata.ts:1198
@@ -6543,7 +6759,7 @@ msgstr ""
 
 #: packages/app-desktop/commands/createAccessibleDocument.ts:43
 msgid "Run OCR"
-msgstr ""
+msgstr "Run OCR"
 
 #: packages/app-cli/app/command-batch.ts:29
 msgid ""
@@ -6652,6 +6868,11 @@ msgstr "スクロールバーのサイズ"
 msgid "Search"
 msgstr "検索"
 
+#: packages/app-desktop/gui/ChatPanel/ChatHistory.tsx:62
+#: packages/app-desktop/gui/ChatPanel/ChatHistory.tsx:63
+msgid "Search conversations"
+msgstr "会話を検索"
+
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:118
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/SearchPlugins.tsx:157
 msgid "Search for plugins..."
@@ -6659,7 +6880,7 @@ msgstr "プラグインを検索..."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:235
 msgid "Search for..."
-msgstr "...を検索"
+msgstr "次を検索..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:202
 msgid "Search hidden"
@@ -6674,9 +6895,8 @@ msgid "Search in current note"
 msgstr "現在のノートを検索"
 
 #: packages/app-mobile/components/screens/SearchScreen/index.tsx:109
-#, fuzzy
 msgid "Search notes, notebooks..."
-msgstr "ノートブックを共有..."
+msgstr "ノートやノートブックを検索..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:548
 #: packages/app-desktop/plugins/GotoAnything.tsx:710
@@ -6684,9 +6904,8 @@ msgid "Search results"
 msgstr "検索結果"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:166
-#, fuzzy
 msgid "Search settings..."
-msgstr "タグを検索"
+msgstr "設定を検索..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:202
 msgid "Search shown"
@@ -6713,9 +6932,8 @@ msgstr "検索..."
 
 #: packages/lib/services/ai/tools/global/searchNotes.ts:19
 #: packages/lib/services/ai/tools/global/semanticSearchNotes.ts:16
-#, fuzzy
 msgid "Searched for: %s"
-msgstr "ソースフォーマット: %s"
+msgstr "検索語: %s"
 
 #: packages/app-cli/app/command-search.ts:13
 msgid "Searches for the given <pattern> in all the notes."
@@ -6788,10 +7006,12 @@ msgid ""
 "Self-hosted instances of the Joplin web app cannot sync with Joplin Cloud. "
 "Open the official web app?"
 msgstr ""
+"セルフホスト版の Joplin Web アプリは Joplin Cloud と同期できません。公式の "
+"Web アプリを開きますか?"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:410
 msgid "Send"
-msgstr ""
+msgstr "送信"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.ts:159
 msgid "Send bug report"
@@ -6931,13 +7151,12 @@ msgid "Show all"
 msgstr "すべて表示"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:566
-#, fuzzy
 msgid "Show all results"
-msgstr "該当なし"
+msgstr "すべての結果を表示"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1403
 msgid "Show checkbox completion chart in note list"
-msgstr ""
+msgstr "ノート一覧にチェックボックスの完了状況チャートを表示する"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1088
 msgid "Show completed to-dos"
@@ -6953,7 +7172,7 @@ msgstr "無効化したキーを表示する"
 
 #: packages/lib/models/settings/builtInMetadata.ts:2544
 msgid "Show Joplin icon for note links"
-msgstr ""
+msgstr "ノートリンクに Joplin アイコンを表示する"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/FontSearch.tsx:51
 msgid "Show monospace fonts only."
@@ -6963,17 +7182,21 @@ msgstr "等幅フォントのみ表示。"
 msgid "Show note counts"
 msgstr "ノートの数を表示"
 
-#: packages/app-mobile/components/side-menu-content.tsx:265
+#: packages/app-mobile/components/SideMenuContent/FolderItem.tsx:89
 msgid "Show notebook options"
 msgstr "ノートブックのオプションを表示"
 
-#: packages/app-desktop/gui/PasswordInput/PasswordInput.tsx:21
+#: packages/app-desktop/gui/PasswordInput/PasswordInput.tsx:23
 msgid "Show password"
 msgstr "パスワードを表示"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1210
+#: packages/lib/models/settings/builtInMetadata.ts:1243
 msgid "Show sort order buttons"
 msgstr "ソート方法切り替えボタンを表示"
+
+#: packages/lib/models/settings/builtInMetadata.ts:783
+msgid "Show the AI Chat button in the note toolbar"
+msgstr "ノートツールバーに AI チャットボタンを表示する"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1534
 msgid "Show tray icon"
@@ -6985,7 +7208,7 @@ msgstr "サイドバーの表示切り替え"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:557
 msgid "Showing all matching settings"
-msgstr ""
+msgstr "一致する設定をすべて表示しています"
 
 #: packages/app-mobile/components/screens/tags.tsx:68
 msgid "Shows notes for tag"
@@ -7021,13 +7244,19 @@ msgid "Size"
 msgstr "サイズ"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:34
-#, fuzzy
 msgid "Size (largest first)"
-msgstr "大きな画像のリサイズ:"
+msgstr "サイズ (大きい順)"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:34
 msgid "Size (smallest first)"
-msgstr ""
+msgstr "サイズ (小さい順)"
+
+#: packages/app-desktop/gui/NoteLockMigrationDialog/Dialog.tsx:86
+#: packages/app-desktop/gui/WarningBanner.tsx:172
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:147
+#: packages/app-mobile/components/screens/NoteLockMigrationScreen.tsx:121
+msgid "Skip"
+msgstr "スキップ"
 
 #: packages/app-desktop/checkForUpdates.ts:116
 msgid "Skip this version"
@@ -7090,9 +7319,19 @@ msgid ""
 "Some items could not be synchronised. Please try to synchronise them first."
 msgstr "いくつかのアイテムを同期できませんでした。先に同期を試みてください。"
 
+#: packages/app-desktop/InteropServiceHelper.ts:217
+msgid ""
+"Some notes are locked and this export format requires them to be unlocked. "
+"Would you like to export these notes unprotected, or export without these "
+"notes?"
+msgstr ""
+"一部のノートがロックされています。 このエクスポート形式ではそれらのノートの"
+"ロックを解除する必要があります。 これらのノートを保護なしでエクスポートします"
+"か?  それともロックされたノートを除外してエクスポートしますか?"
+
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:308
 msgid "Something went wrong."
-msgstr ""
+msgstr "問題が発生しました。"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:96
 msgid "Sort \"%s\" in ascending order"
@@ -7103,14 +7342,12 @@ msgid "Sort \"%s\" in descending order"
 msgstr "\"%s\" を降順で並び替え"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:424
-#, fuzzy
 msgid "Sort by size"
-msgstr "スクロールバーのサイズ"
+msgstr "サイズで並べ替え"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:424
-#, fuzzy
 msgid "Sort by title"
-msgstr "ノートの題名"
+msgstr "題名で並べ替え"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1266
 msgid "Sort notebooks by"
@@ -7183,9 +7420,8 @@ msgstr "アプリケーションをトレイアイコンで最小化して起動
 #: packages/lib/utils/joplinCloud/index.ts:675
 #: packages/lib/utils/joplinCloud/index.ts:698
 #: packages/lib/utils/joplinCloud/index.ts:720
-#, fuzzy
 msgid "Start free trial"
-msgstr "録音を開始"
+msgstr "無料トライアルを開始"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:211
 msgid "Start recording"
@@ -7240,6 +7476,10 @@ msgstr "状態: %s"
 msgid "Status: Started on port %d"
 msgstr "状態: ポート %d で起動中"
 
+#: packages/app-mobile/components/screens/encryption-config.tsx:177
+msgid "Status: Unsupported key format"
+msgstr "状態: サポートされていない鍵形式"
+
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:143
 msgid "Step 1: Enable the clipper service"
 msgstr "ステップ1: クリッパーサービスを有効にする"
@@ -7275,9 +7515,8 @@ msgid "Stop external editing"
 msgstr "外部エディターでの編集を終了"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:410
-#, fuzzy
 msgid "Stop generating"
-msgstr "外部エディターでの編集を終了"
+msgstr "生成を停止"
 
 #: packages/lib/utils/joplinCloud/index.ts:270
 msgid "Storage space"
@@ -7310,7 +7549,7 @@ msgstr "成功です！ 同期の設定は正しいようです。"
 
 #: packages/lib/components/shared/config/config-shared.ts:151
 msgid "Success! The AI provider responded:"
-msgstr ""
+msgstr "成功しました。AI プロバイダーから応答がありました:"
 
 #: packages/app-desktop/gui/InlineCombobox.tsx:185
 msgid "Suggestions"
@@ -7332,7 +7571,7 @@ msgstr "前の行と入れ替え"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:486
 msgid "Swap source and target"
-msgstr ""
+msgstr "始点と終点を入れ替える"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleNoteType.ts:9
 msgid "Switch between note and to-do type"
@@ -7378,9 +7617,8 @@ msgid "Switch to to-do type"
 msgstr "ToDoに切り替え"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:152
-#, fuzzy
 msgid "Switched notes: %s"
-msgstr "ノートに切り替え"
+msgstr "ノートを切り替えました: %s"
 
 #: packages/app-cli/app/command-use.ts:13
 msgid ""
@@ -7395,7 +7633,6 @@ msgid "Sync as many devices as you want"
 msgstr "同期対象デバイス数無制限"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:92
-#, fuzzy
 msgid "Sync report"
 msgstr "デバッグレポートの送信"
 
@@ -7418,9 +7655,8 @@ msgid "Sync Target Upgrade"
 msgstr "同期先のアップグレード"
 
 #: packages/lib/versionInfo.ts:104
-#, fuzzy
 msgid "Sync target: %s"
-msgstr "同期の状態"
+msgstr "同期先: %s"
 
 #: packages/app-cli/app/command-sync.ts:40
 msgid "Sync to provided target (defaults to sync.target config value)"
@@ -7440,6 +7676,8 @@ msgid ""
 "Sync your notes with Joplin Cloud to access them on all your devices. Other "
 "sync options are also available."
 msgstr ""
+"Joplin Cloud とノートを同期すると、すべてのデバイスからアクセスできるようにな"
+"ります。Joplin Cloud 以外の同期方法も利用できます。"
 
 #: packages/lib/models/Setting.ts:1406
 msgid "Sync, encryption, proxy"
@@ -7451,9 +7689,8 @@ msgid "Synchronisation"
 msgstr "同期"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:43
-#, fuzzy
 msgid "Synchronisation error"
-msgstr "同期"
+msgstr "同期エラー"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1842
 msgid "Synchronisation interval"
@@ -7462,6 +7699,14 @@ msgstr "同期間隔"
 #: packages/app-cli/app/command-sync.ts:147
 msgid "Synchronisation is already in progress."
 msgstr "同期はすでに実行中です。"
+
+#: packages/app-desktop/gui/WarningBanner.tsx:183
+msgid ""
+"Synchronisation is stopped because the sync target uses a different note "
+"lock key to the one on your device."
+msgstr ""
+"同期先で使用されているノートロックキーがこのデバイス上のノートロックキーと異"
+"なるため同期は停止されています。"
 
 #: packages/app-desktop/gui/MenuBar.tsx:486
 #: packages/app-desktop/gui/Root.tsx:171
@@ -7476,6 +7721,56 @@ msgstr "同期先"
 msgid "Synchronisation target: %s (%s)"
 msgstr "同期先: %s (%s)"
 
+#: packages/lib/services/synchronizer/syncInfoUtils.ts:688
+msgid ""
+"Synchronisation was stopped because a note lock key migration is required. "
+"Enable the note lock feature to migrate your locked notes."
+msgstr ""
+"ノートロックキーの移行が必要なため同期は停止されました。ロックされたノートを"
+"移行するにはノートのロック機能を有効にしてください。"
+
+#: packages/lib/services/synchronizer/syncInfoUtils.ts:699
+msgid ""
+"Synchronisation was stopped because the note lock key changed on this device "
+"during the sync. Please synchronise again."
+msgstr ""
+"同期中にこのデバイスのノートロックキーが変更されたため、同期は停止されまし"
+"た。再度同期してください。"
+
+#: packages/lib/services/synchronizer/syncInfoUtils.ts:704
+msgid ""
+"Synchronisation was stopped because the note lock key on the sync target "
+"changed during the sync. Please synchronise again."
+msgstr ""
+"同期中に同期先のノートロックキーが変更されたため、同期は停止されました。再度"
+"同期してください。"
+
+#: packages/lib/services/synchronizer/syncInfoUtils.ts:712
+msgid ""
+"Synchronisation was stopped because the note lock key on the sync target has "
+"no sync migration ID."
+msgstr ""
+"同期先のノートロックキーに同期移行 ID が設定されていないため、同期は停止され"
+"ました。"
+
+#: packages/lib/services/synchronizer/syncInfoUtils.ts:713
+msgid ""
+"Synchronisation was stopped because the note lock key on this device has no "
+"sync migration ID. Please reset the note lock password."
+msgstr ""
+"このデバイスのノートロックキーに同期移行 ID がないため同期は停止されました。"
+"ノートロック用パスワードをリセットしてください。"
+
+#: packages/lib/services/synchronizer/syncInfoUtils.ts:687
+msgid ""
+"Synchronisation was stopped because the sync target uses a different note "
+"lock key to the one on your device. Your locked notes must be migrated to "
+"the synced key before synchronisation can continue."
+msgstr ""
+"同期先で使用されているノートロックキーがこのデバイスのノートロックキーと異な"
+"るため、同期は停止されました。同期を再開するにはロックされたノートを同期先の"
+"キーへ移行する必要があります。"
+
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:33
 #: packages/app-mobile/components/side-menu-content.tsx:668
 #: packages/lib/commands/synchronize.ts:9
@@ -7487,9 +7782,8 @@ msgid "Synchronise only over WiFi connection"
 msgstr "WiFi経由でのみ同期する"
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:142
-#, fuzzy
 msgid "Synchronise with Joplin Cloud"
-msgstr "Joplin Cloudに接続"
+msgstr "Joplin Cloud と同期"
 
 #: packages/app-cli/app/command-sync.ts:35
 msgid "Synchronises with remote storage."
@@ -7497,7 +7791,7 @@ msgstr "リモート保存領域と同期します。"
 
 #: packages/app-desktop/gui/QuitSyncDialog.tsx:75
 msgid "Synchronising remaining changes, please wait..."
-msgstr ""
+msgstr "残りの変更を同期しています。しばらくお待ちください..."
 
 #: packages/app-cli/app/command-publish.ts:55
 #: packages/app-cli/app/command-unpublish.ts:46
@@ -7523,24 +7817,20 @@ msgid "Table"
 msgstr "テーブル"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:198
-#, fuzzy
 msgid "Table: Add column"
-msgstr "列を追加"
+msgstr "表: 列を追加"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:193
-#, fuzzy
 msgid "Table: Add row"
-msgstr "行を追加"
+msgstr "表: 行を追加"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:208
-#, fuzzy
 msgid "Table: Delete column"
-msgstr "列を削除"
+msgstr "表: 列を削除"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:203
-#, fuzzy
 msgid "Table: Delete row"
-msgstr "行を削除"
+msgstr "表: 行を削除"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1878
 msgid "Tabloid"
@@ -7567,6 +7857,7 @@ msgstr "タグ"
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/setTags.ts:26
 msgid "Tags cannot be changed for locked notes while the session is locked"
 msgstr ""
+"セッションがロックされている間はロックされたノートのタグを変更できません"
 
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:111
 #: packages/app-mobile/components/screens/Note/commands/attachFile.ts:96
@@ -7591,9 +7882,8 @@ msgid "Teams"
 msgstr "Teams"
 
 #: packages/lib/models/settings/builtInMetadata.ts:810
-#, fuzzy
 msgid "Test AI configuration"
-msgstr "設定"
+msgstr "AI 設定をテスト"
 
 #: packages/lib/services/interop/InteropService.ts:147
 msgid "Text document"
@@ -7615,7 +7905,7 @@ msgstr ""
 #: packages/lib/services/ai/availability.ts:48
 #: packages/lib/services/ai/availability.ts:51
 msgid "The API key is missing. Set it in Settings → AI."
-msgstr ""
+msgstr "API キーが設定されていません。[設定] → [AI] で設定してください。"
 
 #: packages/app-desktop/bridge.ts:649
 msgid ""
@@ -7652,11 +7942,8 @@ msgid "The command \"%s\" is only available in GUI mode"
 msgstr "コマンド \"%s\"は、GUIのみで有効です"
 
 #: packages/server/src/middleware/notificationHandler.ts:43
-#, fuzzy
 msgid "The default admin password has not been changed! [Change it now](%s)"
-msgstr ""
-"デフォルトの管理者パスワードが変更されておらず危険な状態です! [今すぐ変更]"
-"(%s)"
+msgstr "既定の管理者パスワードが変更されていません! [今すぐ変更](%s)"
 
 #: packages/server/src/middleware/notificationHandler.ts:41
 msgid ""
@@ -7684,9 +7971,8 @@ msgstr ""
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:209
 #: packages/app-mobile/components/ProfileSwitcher/utils/deleteProfile.ts:79
-#, fuzzy
 msgid "The default profile has been reset."
-msgstr "Defaultプロファイルは削除できません"
+msgstr "デフォルトプロファイルがリセットされました。"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1871
 msgid ""
@@ -7762,19 +8048,23 @@ msgstr ""
 
 #: packages/server/src/middleware/notificationHandler.ts:113
 msgid "The license for this server failed to refresh."
-msgstr ""
+msgstr "このサーバーのライセンスの更新に失敗しました。"
 
 #: packages/server/src/middleware/notificationHandler.ts:68
 msgid ""
 "The license key for this Joplin Server Business instance has expired and "
 "needs to be renewed."
 msgstr ""
+"この Joplin Server Business インスタンスのライセンスキーは有効期限が切れてい"
+"るため、更新が必要です。"
 
 #: packages/server/src/middleware/notificationHandler.ts:80
 msgid ""
 "The license key for this Joplin Server Business instance has expired or is "
 "invalid. Uploading items has been disabled until the license is renewed."
 msgstr ""
+"この Joplin Server Business インスタンスのライセンスキーの有効期限が切れてい"
+"るか無効なため、ライセンスを更新するまでアイテムをアップロードできません。"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:236
 msgid "The master key has been upgraded successfully!"
@@ -7793,17 +8083,24 @@ msgstr ""
 #: packages/lib/services/ai/availability.ts:84
 msgid "The MCP server is disabled. Enable it in Settings → MCP."
 msgstr ""
+"MCP サーバーは無効になっています。 [設定] → [MCP] で有効にしてください。"
+
+#: packages/app-desktop/gui/WarningBanner.tsx:177
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:151
+msgid "The migration of your locked notes has completed."
+msgstr "ロックされたノートの移行が正常に完了しました。"
 
 #: packages/lib/models/settings/builtInMetadata.ts:750
 msgid ""
 "The model identifier to use, for example gpt-4o-mini or claude-3-5-sonnet-"
 "latest."
 msgstr ""
+"使用するモデル識別子を指定します。例: gpt-4o-mini, claude-3-5-sonnet-latest."
 
 #: packages/lib/services/ai/availability.ts:49
 #: packages/lib/services/ai/availability.ts:52
 msgid "The model name is missing. Set it in Settings → AI."
-msgstr ""
+msgstr "モデル名が設定されていません。［設定］→［AI］で設定してください。"
 
 #: packages/lib/services/RevisionService.ts:291
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
@@ -7814,30 +8111,49 @@ msgid ""
 "The note changed while the request was running; edits were not applied. Try "
 "again."
 msgstr ""
+"リクエストの処理中にノートが変更されたため、編集内容を適用できませんでした。"
+"もう一度お試しください。"
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:82
 msgid ""
-"The note has been converted to Markdown and the original note has been moved "
-"to the trash"
+"The note has been converted to Markdown and an HTML copy has been moved to "
+"the trash"
 msgid_plural ""
-"The notes have been converted to Markdown and the original notes have been "
-"moved to the trash"
-msgstr[0] "ノートをMarkdownに変換しました。元のノートはゴミ箱に移動されました"
+"The notes have been converted to Markdown and HTML copies have been moved to "
+"the trash"
+msgstr[0] ""
+"ノートを Markdown に変換しました。元の HTML コピーはごみ箱に移動されました"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:211
-#, fuzzy
 msgid ""
-"The note lock key uses an out-dated encryption algorithm and it is "
-"recommended to upgrade it. The upgraded key will still be able to decrypt "
-"and encrypt your data as usual."
+"The note lock key migration was cancelled because the note lock feature was "
+"turned off."
 msgstr ""
-"以下のキーは旧式の暗号化アルゴリズムを使用しているため、アップグレードをおす"
-"すめします。キーをアップグレードしても既存データはこれまでどおり復号化/暗号化"
-"が可能です。"
+"ノートロック機能が無効になったため、ノートロックキーの移行はキャンセルされま"
+"した。"
+
+#: packages/lib/services/noteLock/NoteLockKeyMigration.ts:40
+msgid "The note lock key on the sync target changed. Please try again."
+msgstr "同期先のノートロックキーが変更されました。もう一度お試しください。"
+
+#: packages/lib/services/noteLock/NoteLockSession.ts:55
+msgid ""
+"The note lock password cannot be reset while a note lock key migration is in "
+"progress."
+msgstr ""
+"ノートロックキーの移行中は、ノートのロック用パスワードをリセットできません。"
 
 #: packages/app-cli/app/command-set.ts:40
 msgid "The note lock state cannot be changed from the command line"
+msgstr "コマンドラインからノートのロック状態を変更することはできません"
+
+#: packages/lib/services/interop/InteropService_Exporter_Base.ts:60
+msgid ""
+"The note title \"%s\" was truncated to \"%s\" in the exported file name. "
+"Note ID: %s"
 msgstr ""
+"エクスポート後のファイル名では、ノートのタイトル \"%s\" が \"%s\" に切り詰め"
+"られました。ノート ID: %s"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:45
 msgid "The note was successfully moved to the trash."
@@ -7852,6 +8168,14 @@ msgstr "ノートブックとその内容をゴミ箱に移動しました。"
 msgid "The notebook could not be saved: %s"
 msgstr "ノートブックは保存できませんでした：%s"
 
+#: packages/lib/services/interop/InteropService_Exporter_Base.ts:59
+msgid ""
+"The notebook title \"%s\" was truncated to \"%s\" in the exported folder "
+"name. Notebook ID: %s"
+msgstr ""
+"エクスポート後のフォルダー名では、ノートブックのタイトル \"%s\" が \"%s\" に"
+"切り詰められました。ノートブック ID: %s"
+
 #: packages/app-cli/app/command-import.ts:75
 #: packages/app-desktop/gui/ImportScreen.tsx:117
 msgid "The notes have been imported: %s"
@@ -7862,11 +8186,15 @@ msgid ""
 "The OpenAI-compatible API endpoint. For example, https://api.openai.com/v1 "
 "or http://localhost:11434/v1 for Ollama."
 msgstr ""
+"使用する OpenAI 互換 API エンドポイントです。たとえば https://api.openai.com/"
+"v1 や、Ollama の場合は http://localhost:11434/v1 を指定します。"
 
 #: packages/lib/services/ai/availability.ts:47
 msgid ""
 "The OpenAI-compatible provider needs a base URL. Set it in Settings → AI."
 msgstr ""
+"OpenAI 互換プロバイダーにはベース URL の設定が必要です。 [設定] → [AI] で設定"
+"してください。"
 
 #: packages/app-cli/app/command-help.ts:73
 msgid "The possible commands are:"
@@ -7877,6 +8205,8 @@ msgid ""
 "The provider returned an empty response. Check that the base URL ends with /"
 "v1 and that a model is loaded."
 msgstr ""
+"プロバイダーから空の応答が返されました。ベース URL が /v1 で終わっているこ"
+"と、およびモデルが読み込まれていることを確認してください。"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:275
 msgid ""
@@ -7919,6 +8249,26 @@ msgstr ""
 "同期先のアップグレードが必要です。このバナーをクリックして続行してください。"
 "同期先のアップグレードが必要です。続行するにはこのバナーをクリックしてくださ"
 "い。"
+
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:153
+msgid ""
+"The sync target uses a different note lock key to the one on your device. "
+"Press to migrate your locked notes."
+msgstr ""
+"同期先で使用されているノートロックキーが、このデバイスのノートロックキーと異"
+"なります。ロックされたノートを移行するには選択してください。"
+
+#: packages/app-desktop/gui/NoteLockMigrationDialog/Dialog.tsx:65
+#: packages/app-mobile/components/screens/NoteLockMigrationScreen.tsx:91
+msgid ""
+"The sync target uses a different note lock key to the one on your device. "
+"Your locked notes must be re-encrypted with the synced key before "
+"synchronisation can continue. Locked notes cannot be read while they are "
+"being migrated."
+msgstr ""
+"同期先で使用されているノートロックキーが、このデバイスのノートロックキーと異"
+"なります。同期を続行するには、ロックされたノートを同期先のキーで再暗号化する"
+"必要があります。移行中は、ロックされたノートを閲覧できません。"
 
 #: packages/app-desktop/gui/MainScreen.tsx:579
 msgid "The synchronisation password is missing."
@@ -7980,9 +8330,8 @@ msgid "Theme"
 msgstr "テーマ"
 
 #: packages/lib/models/Setting.ts:1405
-#, fuzzy
 msgid "Themes, notebook sort order"
-msgstr "逆順に並び替え"
+msgstr "テーマ、ノートブックの並び順"
 
 #: packages/lib/components/shared/NoteList/getEmptyFolderMessage.ts:17
 msgid "There are currently no notes. Create one by clicking on the (+) button."
@@ -8034,6 +8383,14 @@ msgstr ""
 "のようなアイテムを探すには、題名またはID(上記の括弧内に表示されている)で検索"
 "してください。"
 
+#: packages/lib/components/EncryptionConfigScreen/utils.ts:234
+msgid ""
+"These keys were most likely created by a newer version of Joplin. Please "
+"check that Joplin has been updated to the latest version."
+msgstr ""
+"これらの鍵は、おそらく新しいバージョンの Joplin で作成されたものです。Joplin "
+"が最新版に更新されていることを確認してください。"
+
 #: packages/lib/models/Setting.ts:1384
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
@@ -8078,6 +8435,17 @@ msgstr ""
 "この認証トークンはサードパーティのアプリケーションにJoplinへのアクセスを許可"
 "するときにだけ使用します。"
 
+#: packages/lib/services/noteLock/noteLockPrompts.ts:52
+msgid ""
+"This backup contains notes locked with a different key. They must be updated "
+"now to use your current key, or they'll remain inaccessible and cannot be "
+"updated later. Would you like to update them?"
+msgstr ""
+"このバックアップには、別のキーでロックされたノートが含まれています。現在の"
+"キーを使用できるように、これらのノートを今すぐ更新する必要があります。更新し"
+"ない場合、ノートは引き続き利用できず、後から更新することもできません。更新し"
+"ますか？"
+
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:45
 msgid "This drawing may have unsaved changes."
 msgstr "この描画には未保存の変更がある可能性があります。"
@@ -8091,18 +8459,16 @@ msgstr ""
 "ンにして手動で有効にしてください。"
 
 #: packages/app-desktop/commands/createAccessibleDocument.ts:28
-#, fuzzy
 msgid "This feature is only available for PDF files."
-msgstr "この機能はJoplin CloudおよびJoplin Serverでのみ利用できます。"
+msgstr "この機能は PDF ファイルでのみ利用できます。"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:168
 msgid "This feature is only available on Joplin Cloud and Joplin Server."
 msgstr "この機能はJoplin CloudおよびJoplin Serverでのみ利用できます。"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:290
-#, fuzzy
 msgid "This file could not be opened: %s"
-msgstr "ノートは移動できませんでした：%s"
+msgstr "このファイルを開けませんでした: %s"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:180
 msgid "This image type is not supported by the recognition system."
@@ -8123,17 +8489,35 @@ msgid "This Joplin Server Business instance is only licensed for %d user."
 msgid_plural ""
 "This Joplin Server Business instance is only licensed for %d users."
 msgstr[0] ""
+"この Joplin Server Business インスタンスは %d ユーザー分のライセンスのみが付"
+"与されています。"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/FileNode.tsx:202
-#, fuzzy
-msgid "This linked item has been deleted."
-msgstr "ノートの履歴が削除されました。"
-
-#: packages/app-desktop/gui/NoteEditor/NoteLockPanel/NoteLockPanel.tsx:53
+#: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/FileNode.tsx:228
 msgid ""
-"This note could not be decrypted. If it was encrypted prior to a password "
-"reset, the contents are no longer recoverable."
+"This linked item cannot be displayed because the note is locked and could "
+"not be unlocked"
 msgstr ""
+"リンク先の項目は、ノートがロックされておりロックを解除できないため表示できま"
+"せん"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/FileNode.tsx:227
+msgid ""
+"This linked item cannot be displayed because the note is locked. Unlock the "
+"session to view it"
+msgstr ""
+"このリンク先の項目は、ノートがロックされているため表示できません。表示するに"
+"はセッションのロックを解除してください"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/FileNode.tsx:257
+msgid "This linked item has been deleted."
+msgstr "このリンク先の項目は削除されました。"
+
+#: packages/app-desktop/gui/NoteEditor/NoteLockPanel/NoteLockPanel.tsx:55
+#: packages/app-mobile/components/screens/Note/NoteLockPanel.tsx:99
+#: packages/lib/services/noteLock/NoteLockSession.ts:35
+msgid ""
+"This note cannot be read while a note lock key migration is in progress."
+msgstr "ノートロックキーの移行中は、このノートを閲覧できません。"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:275
 msgid "This note could not be deleted: %s"
@@ -8150,11 +8534,20 @@ msgid "This note could not be moved: %s"
 msgid_plural "These notes could not be moved: %s"
 msgstr[0] "ノートは移動できませんでした：%s"
 
+#: packages/app-desktop/gui/NoteEditor/NoteLockPanel/NoteLockPanel.tsx:59
+#: packages/app-mobile/components/screens/Note/NoteLockPanel.tsx:104
+msgid ""
+"This note could not be unlocked. If it was locked prior to a password reset, "
+"the content is no longer recoverable."
+msgstr ""
+"このノートのロックを解除できませんでした。パスワードのリセット前にロックされ"
+"たノートである場合、その内容はすでに復元できません。"
+
 #: packages/lib/models/Note.ts:150
 msgid "This note does not have geolocation information."
 msgstr "このノートには位置情報がありません。"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:270
+#: packages/app-mobile/components/screens/Note/Note.tsx:291
 msgid "This note has been modified:"
 msgstr "ノートは変更されています："
 
@@ -8174,29 +8567,51 @@ msgstr "このノートに履歴はありません"
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/disableNoteEncryption.ts:23
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/enableNoteEncryption.ts:28
 msgid "This note is currently being saved. Please try again in a moment."
-msgstr ""
+msgstr "このノートは現在保存中です。しばらくしてからもう一度お試しください。"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:350
 msgid "This note is encrypted and cannot be used with AI Chat."
-msgstr ""
+msgstr "このノートは暗号化されているため、AI チャットでは使用できません。"
 
-#: packages/app-desktop/gui/NoteEditor/NoteLockPanel/NoteLockPanel.tsx:67
-msgid ""
-"This note is encrypted. Enter the note lock password to unlock encrypted "
-"notes for this session."
-msgstr ""
-
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:807
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:815
 msgid ""
 "This note is in HTML format. Convert it to Markdown to edit it more easily."
 msgstr ""
 "このノートはHTML形式です。より簡単に編集するにはMarkdownに変換してください。"
+
+#: packages/app-desktop/gui/NoteEditor/NoteLockPanel/NoteLockPanel.tsx:67
+msgid ""
+"This note is locked. Enter your password to unlock your notes for this "
+"session."
+msgstr ""
+"このノートはロックされています。このセッション中にノートのロックを解除するに"
+"は、パスワードを入力してください。"
+
+#: packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.tsx:61
+#: packages/app-desktop/gui/NoteListItem/NoteListItem.tsx:70
+#: packages/app-mobile/components/NoteItem.tsx:138
+#: packages/app-mobile/components/screens/Note/Note.tsx:1696
+#: packages/app-mobile/components/screens/Note/Note.tsx:2127
+msgid ""
+"This note is read-only because it is locked and contained within a share. To "
+"enable editing, it must be moved outside of the share."
+msgstr ""
+"このノートはロックされており共有内に含まれているため、読み取り専用です。編集"
+"できるようにするには、共有の外へ移動する必要があります。"
+
+#: packages/app-desktop/gui/NoteEditor/NoteLockPanel/NoteLockPanel.tsx:92
+#: packages/app-mobile/components/screens/Note/Note.tsx:2127
+msgid "This note may not be readable because it is contained within a share."
+msgstr ""
+"このノートは共有内に含まれているため、正常に閲覧できない可能性があります。"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.ts:111
 msgid ""
 "This notebook contains Windows-specific files. For maximum compatibility, "
 "consider importing the notebook from Windows."
 msgstr ""
+"このノートブックには Windows 固有のファイルが含まれています。互換性を最大限に"
+"確保するため、Windows からインポートすることをおすすめします。"
 
 #: packages/lib/services/plugins/PluginService.ts:615
 msgid "This plugin doesn't support %s."
@@ -8207,6 +8622,8 @@ msgid ""
 "This provider sends data off your device. Turn on \"Allow remote AI "
 "providers\" in Settings → AI."
 msgstr ""
+"このプロバイダーはデータをデバイス外へ送信します。[設定] → [AI] で \"リモー"
+"ト AI プロバイダーを許可する\" を有効にしてください。"
 
 #: packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.tsx:65
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:37
@@ -8220,6 +8637,8 @@ msgstr ""
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:516
 msgid "This section opens in its own screen and is matched by section title."
 msgstr ""
+"このセクションは専用の画面で開かれ、セクションのタイトルに基づいて照合されま"
+"す。"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:144
 msgid ""
@@ -8236,9 +8655,8 @@ msgid "This subfolder of the trash has no notes."
 msgstr "ゴミ箱のこのサブフォルダーにはノートがありません。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardEditor.tsx:181
-#, fuzzy
 msgid "This whiteboard could not be loaded"
-msgstr "ノートは移動できませんでした：%s"
+msgstr "このホワイトボードを読み込めませんでした"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1536
 msgid ""
@@ -8284,20 +8702,20 @@ msgid "Title"
 msgstr "題名"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:33
-#, fuzzy
 msgid "Title (A-Z)"
-msgstr "題名"
+msgstr "題名 (A-Z)"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:33
-#, fuzzy
 msgid "Title (Z-A)"
-msgstr "題名"
+msgstr "題名 (Z-A)"
 
 #: packages/server/src/routes/index/recovery_codes.ts:29
 msgid ""
 "To access your recovery codes please enter an authentication code or your "
 "password."
 msgstr ""
+"リカバリーコードを表示するには、認証コードまたはパスワードを入力してくださ"
+"い。"
 
 #: packages/app-cli/app/command-sync.ts:79
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:52
@@ -8368,9 +8786,8 @@ msgstr ""
 "を実行してください"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:72
-#, fuzzy
 msgid "To switch the profile, the app is going to restart."
-msgstr "プロファイルを切り替えるためアプリを終了します。再度起動してください。"
+msgstr "プロファイルを切り替えるため、アプリを再起動します。"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:628
 msgid ""
@@ -8394,9 +8811,8 @@ msgid "to-do: %s"
 msgstr "ToDo: %s"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleAiChat.ts:10
-#, fuzzy
 msgid "Toggle AI Chat"
-msgstr "メニューバーの表示切り替え"
+msgstr "AI チャットの表示/非表示を切り替え"
 
 #: packages/lib/commands/toggleAllFolders.ts:8
 msgid "Toggle all notebooks"
@@ -8408,7 +8824,7 @@ msgstr "コメントの切り替え"
 
 #: packages/app-desktop/gui/MenuBar.tsx:933
 msgid "Toggle development tools"
-msgstr "開発者ツールのオンオフを切り替える"
+msgstr "開発者ツールのオンオフを切り替え"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleVisiblePanes.ts:6
 msgid "Toggle editor layout"
@@ -8464,7 +8880,7 @@ msgstr "ソート対象フィールドを切り替える"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleWhiteboardEditor.ts:6
 msgid "Toggle whiteboard / Markdown view"
-msgstr ""
+msgstr "ホワイトボード/Markdown 表示の切り替え"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:42
 msgid "Token has been copied to the clipboard!"
@@ -8473,7 +8889,7 @@ msgstr "トークンをクリップボードにコピーしました！"
 #: packages/lib/services/ai/noteChat.ts:327
 #, fuzzy
 msgid "Tool not found: %s"
-msgstr "\"%s\" は見つかりませんでした"
+msgstr "ツールが見つかりません: %s"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementToolbar.ts:8
 msgid "Toolbar"
@@ -8488,6 +8904,9 @@ msgid ""
 "Tools and services to expose to AI. AI agents can use these tools either via "
 "the note chat panel or Joplin's MCP server (if enabled)."
 msgstr ""
+"AI に公開するツールやサービス、およびその利用権限を設定します。AI エージェン"
+"トは、ノートのチャットパネルまたは Joplin の MCP サーバー（有効な場合）を通じ"
+"て、これらのツールを利用できます。"
 
 #: packages/server/src/routes/admin/users.ts:167
 msgid "Total Size"
@@ -8534,7 +8953,7 @@ msgstr ""
 
 #: packages/app-desktop/plugins/GotoAnything.tsx:721
 msgid "Type a note title to search for it."
-msgstr "ノートのタイトルを入力して検索"
+msgstr "ノートを検索するには、タイトルを入力してください。"
 
 #: packages/app-cli/app/help-utils.ts:61
 msgid "Type: %s."
@@ -8542,11 +8961,11 @@ msgstr "種類: %s."
 
 #: packages/lib/models/Setting.ts:1409
 msgid "Typography, spellcheck, layout"
-msgstr ""
+msgstr "文字組み・スペルチェック・レイアウト"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:63
 msgid "Unable to access the recording file."
-msgstr ""
+msgstr "録音ファイルにアクセスできません。"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1153
 msgid "Unable to edit resource of type %s"
@@ -8562,7 +8981,7 @@ msgstr "ノートデータを共有できません。理由: %s"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:16
 msgid "Unavailable on this platform"
-msgstr ""
+msgstr "このプラットフォームでは利用できません"
 
 #: packages/app-mobile/components/Checkbox.tsx:51
 msgid "Unchecked"
@@ -8608,14 +9027,17 @@ msgstr ""
 "不明なアイテムタイプをダウンロードしました - 最新のJoplinにアップデートしてく"
 "ださい"
 
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:214
+msgid "Unknown key format"
+msgstr "不明な鍵形式"
+
 #: packages/app-mobile/utils/getVersionInfoText.ts:28
 msgid "Unknown platform"
 msgstr "不明なプラットフォーム"
 
 #: packages/app-mobile/components/screens/ResourceScreen.tsx:42
-#, fuzzy
 msgid "Unknown size"
-msgstr "不明"
+msgstr "サイズ不明"
 
 #: packages/app-desktop/gui/NoteEditor/NoteLockPanel/NoteLockPanel.tsx:76
 #: packages/app-desktop/gui/NoteLockUnlockDialog/Dialog.tsx:79
@@ -8644,14 +9066,12 @@ msgid "Unpublish note"
 msgstr "ノートの公開を停止"
 
 #: packages/app-desktop/gui/PublishFolderDialog.tsx:101
-#, fuzzy
 msgid "Unpublish notebook"
-msgstr "ノートの公開を停止"
+msgstr "ノートブックの公開を解除"
 
 #: packages/app-cli/app/command-unpublish.ts:24
-#, fuzzy
 msgid "Unpublishes a note from Joplin Server or Joplin Cloud"
-msgstr "Joplin ServerまたはJoplin Cloudにノートを公開します"
+msgstr "Joplin Server または Joplin Cloud で公開中のノートの公開を解除します"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:431
 msgid "Unshare"
@@ -8674,13 +9094,16 @@ msgstr ""
 "クセスできなくなります。"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:79
-#, fuzzy
 msgid "Unsupported file extension. Expected: %s"
-msgstr "サポートされていない画像の形式: %s"
+msgstr "サポートされていないファイル拡張子です。対応している拡張子: %s"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1012
+#: packages/app-mobile/components/screens/Note/Note.tsx:1142
 msgid "Unsupported image type: %s"
 msgstr "サポートされていない画像の形式: %s"
+
+#: packages/lib/services/e2ee/utils.ts:388
+msgid "Unsupported key format"
+msgstr "サポートされていない鍵形式"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:162
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openItem.ts:55
@@ -8700,6 +9123,8 @@ msgid ""
 "Unsupported public key format. Please check that Joplin is updated to the "
 "latest version and try again."
 msgstr ""
+"サポートされていない公開鍵形式です。Joplin が最新版に更新されていることを確認"
+"してから、もう一度お試しください。"
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:54
 #: packages/app-desktop/gui/ResourceScreen.tsx:127
@@ -8711,7 +9136,7 @@ msgstr "名称未設定"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newWhiteboard.ts:16
 msgid "Untitled whiteboard"
-msgstr ""
+msgstr "無題のホワイトボード"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:205
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:170
@@ -8724,12 +9149,11 @@ msgstr "アップデートがあります"
 
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:91
 msgid "Update it from Google Play"
-msgstr ""
+msgstr "Google Play からアプリを更新してください"
 
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:99
-#, fuzzy
 msgid "Update it from the App Store"
-msgstr "テンプレートからノートを作成"
+msgstr "App Store から更新してください"
 
 #: packages/app-desktop/gui/UpdateNotification/UpdateNotification.tsx:53
 msgid "Update later"
@@ -8753,9 +9177,8 @@ msgid "Updated"
 msgstr "更新日時"
 
 #: packages/lib/services/ai/tools/buildEditorTools.ts:60
-#, fuzzy
 msgid "Updated %s block"
-msgstr "更新日時: %s"
+msgstr "%s ブロックを更新しました"
 
 #: packages/lib/models/Folder.ts:56 packages/lib/models/Note.ts:80
 msgid "updated date"
@@ -8766,9 +9189,8 @@ msgid "Updated local items: %d."
 msgstr "ローカルアイテムの更新: %d."
 
 #: packages/lib/services/ai/tools/global/updateNote.ts:26
-#, fuzzy
 msgid "Updated note"
-msgstr "更新: "
+msgstr "更新したノート"
 
 #: packages/lib/Synchronizer.ts:221
 msgid "Updated remote items: %d."
@@ -8807,7 +9229,7 @@ msgstr "同期先を最新バージョンにアップグレード。"
 
 #: packages/lib/utils/joplinCloud/index.ts:443
 msgid "Upgrade to 100 GB"
-msgstr ""
+msgstr "100GBへアップグレード"
 
 #: packages/app-mobile/components/CameraView/CameraView.web.tsx:45
 msgid "Upload photo"
@@ -8917,13 +9339,15 @@ msgstr "正当性"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.tsx:26
 msgid "Vector search is not available on this platform"
-msgstr ""
+msgstr "このプラットフォームではベクトル検索を利用できません"
 
 #: packages/lib/services/ai/availability.ts:71
 msgid ""
 "Vector search is unavailable on this platform (sqlite-vec extension not "
 "loaded)."
 msgstr ""
+"このプラットフォームではベクトル検索を利用できません（sqlite-vec 拡張機能が読"
+"み込まれていません）。"
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:9
 msgid "Verify your identity"
@@ -8936,7 +9360,7 @@ msgstr "表示"
 #: packages/lib/models/settings/builtInMetadata.ts:1684
 #, fuzzy
 msgid "View mode"
-msgstr "ビューアー"
+msgstr "ビューモード"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:198
 msgid "View OCR text"
@@ -9009,13 +9433,30 @@ msgstr "警告"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:160
 #: packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.tsx:50
-#, fuzzy
 msgid "Warning:"
-msgstr "警告"
+msgstr "警告:"
+
+#: packages/app-mobile/components/screens/encryption-config.tsx:407
+msgid "Warning: "
+msgstr "警告: "
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:319
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr "注意: 性能上の理由により、リソースは最大 %s 件までしか表示されません。"
+
+#: packages/lib/services/noteLock/NoteLockKeyMigration.ts:82
+msgid ""
+"Warning: Notes still locked with the current note lock key will become "
+"permanently unreadable. Before continuing, it is recommended to first export "
+"all notes on this device as a JEX backup, which can be imported again later "
+"if the correct password is used. Are you sure you want to continue without "
+"migrating the remaining notes?"
+msgstr ""
+"警告: 現在のノートロックキーで保護されたままのノートは、今後永久に閲覧できな"
+"くなります。続行する前に、このデバイス上のすべてのノートを JEX バックアップと"
+"してエクスポートしておくことをおすすめします。正しいパスワードがあれば、その"
+"バックアップは後で再インポートできます。残りのノートを移行せずに続行してもよ"
+"ろしいですか？"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:116
 msgid "We have a system for reporting and removing problematic plugins."
@@ -9080,7 +9521,7 @@ msgstr ""
 
 #: packages/lib/WelcomeUtils.ts:81
 msgid "Welcome!"
-msgstr "ようこそ!"
+msgstr "ようこそ !"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:100
 msgid "What are plugins?"
@@ -9099,6 +9540,8 @@ msgid ""
 "When enabled, plugins and built-in features can use AI models to generate or "
 "analyse text."
 msgstr ""
+"有効にすると、プラグインや組み込み機能が AI モデルを使用してテキストの生成や"
+"解析を行えるようになります。"
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:167
 msgid ""
@@ -9114,6 +9557,8 @@ msgid ""
 "When enabled, tables are rendered as an interactive widget in the editor. "
 "Disable this if you prefer to edit tables as raw Markdown."
 msgstr ""
+"有効にすると表はエディター内で対話的に操作できるウィジェットとして表示されま"
+"す。表を生の Markdown として編集したい場合は、この設定を無効にしてください。"
 
 #: packages/lib/models/settings/builtInMetadata.ts:574
 msgid ""
@@ -9122,6 +9567,16 @@ msgid ""
 msgstr ""
 "有効にすると、添付ファイルをスキャンしてテキストを抽出します。これにより添付"
 "ファイル内のテキストを検索できるようになります。"
+
+#: packages/lib/models/settings/builtInMetadata.ts:2345
+msgid ""
+"When the same note is edited on two devices, changes made to different lines "
+"are usually merged automatically. In rare cases, automatic merging may "
+"result in duplicated content or formatting changes"
+msgstr ""
+"同じノートが 2 台のデバイスで編集された場合、通常は異なる行への変更を自動的に"
+"統合します。まれに、自動統合によって内容の重複や書式の変更が発生することがあ"
+"ります"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:320
 msgid "Window unresponsive."
@@ -9185,14 +9640,14 @@ msgstr ""
 "上のためApple Silicon版をダウンロードしてください。"
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:137
-#, fuzzy
 msgid ""
 "You can synchronise your notes using Joplin Cloud, which also gives access "
 "to Joplin-specific features such as publishing notes or collaborating on "
 "notebooks with others."
 msgstr ""
-"Joplin独自の同期サービスです。特定ノートの公開や共有ノートブック上での共同作"
-"業などJoplin固有の機能も利用可能です。"
+"Joplin Cloud を使用してノートを同期できます。また、Joplin Cloud を利用すると"
+"ノートの公開や他のユーザーとのノートブック共同編集など Joplin 独自の機能も利"
+"用できます。"
 
 #: packages/app-mobile/components/NoteList.tsx:98
 msgid "You currently have no notebooks."
@@ -9204,7 +9659,7 @@ msgstr "インストールされているプラグインはありません。"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.tsx:63
 msgid "You have unsaved tag changes. Discard them?"
-msgstr ""
+msgstr "保存されていないタグの変更があります。破棄しますか？"
 
 #: packages/app-cli/app/gui/NoteWidget.ts:58
 msgid "You may also type `status` for more information."
@@ -9224,6 +9679,8 @@ msgid ""
 "You switched notes while the request was running; edits were not applied. "
 "Try again."
 msgstr ""
+"リクエストの処理中にノートを切り替えたため、編集内容を適用できませんでした。"
+"もう一度お試しください。"
 
 #: packages/lib/services/joplinCloudUtils.ts:55
 msgid ""
@@ -9258,10 +9715,13 @@ msgid ""
 "(E2EE) is enabled, or to share and encrypt notes with someone who has E2EE "
 "enabled."
 msgstr ""
+"マスターパスワードは、機密情報を保護するために使用されます。特に、エンドツー"
+"エンド暗号化（E2EE）が有効な場合にノートを暗号化する際や、E2EE を有効にしてい"
+"る相手とノートを共有し、暗号化する際に使用されます。"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:379
 msgid "Your note will be sent to the configured AI provider (%s)."
-msgstr ""
+msgstr "このノートは、設定されている AI プロバイダー（%s）に送信されます。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:460
 msgid "Your password is needed to decrypt some of your data."
@@ -9287,6 +9747,23 @@ msgstr "ズームイン"
 #: packages/app-desktop/gui/MenuBar.tsx:830
 msgid "Zoom Out"
 msgstr "ズームアウト"
+
+#~ msgid "Connect to Joplin Cloud"
+#~ msgstr "Joplin Cloudに接続"
+
+#, fuzzy
+#~ msgid "Lock encrypted notes"
+#~ msgstr "暗号化したアイテムは変更できません"
+
+#, fuzzy
+#~ msgid ""
+#~ "The note lock key uses an out-dated encryption algorithm and it is "
+#~ "recommended to upgrade it. The upgraded key will still be able to decrypt "
+#~ "and encrypt your data as usual."
+#~ msgstr ""
+#~ "以下のキーは旧式の暗号化アルゴリズムを使用しているため、アップグレードをお"
+#~ "すすめします。キーをアップグレードしても既存データはこれまでどおり復号化/"
+#~ "暗号化が可能です。"
 
 #~ msgid ""
 #~ "An error occurred while sending the response. This can happen if the app "
@@ -9720,9 +10197,6 @@ msgstr "ズームアウト"
 #~ "ここは *monospace* (等幅)フォントを指定しないと内容によっては正しく表示さ"
 #~ "れない場合があります。指定したフォントが誤っているか空の場合は、一般的な等"
 #~ "幅フォントが使用されます。"
-
-#~ msgid "Checking..."
-#~ msgstr "チェック中..."
 
 #~ msgid ""
 #~ "The Joplin Nextcloud App is either not installed or misconfigured. Please "

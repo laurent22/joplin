@@ -14,6 +14,7 @@ import * as mime from '../mime-utils';
 import FsDriverDummy from '../fs-driver-dummy';
 import JoplinError from '../JoplinError';
 import itemCanBeEncrypted from './utils/itemCanBeEncrypted';
+import checkPlaintextUploadConfirmed, { PlaintextUploadConfirmations } from './utils/checkPlaintextUploadConfirmed';
 import { getEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
 import ShareService from '../services/share/ShareService';
 import { LoadOptions } from './utils/types';
@@ -26,6 +27,7 @@ import { unique } from '../array';
 import ActionLogger from '../utils/ActionLogger';
 import isSqliteSyntaxError from '../services/database/isSqliteSyntaxError';
 import { internalUrl, isResourceUrl, isSupportedImageMimeType, resourceFilename, resourceFullPath, resourcePathToId, resourceRelativePath, resourceUrlToId } from './utils/resourceUtils';
+import mustConfirmPlaintextUploads from '../services/synchronizer/utils/mustConfirmPlaintextUploads';
 
 export const resourceOcrStatusToString = (status: ResourceOcrStatus) => {
 	const s: Record<ResourceOcrStatus, string> = {
@@ -233,12 +235,18 @@ export default class Resource extends BaseItem {
 		return super.save(decryptedItem, { autoTimestamp: false });
 	}
 
+	public static override async plaintextUploadRevealsNothingNew() {
+		// Additional check to prevent uploading locally changed resource blobs:
+		// super.plaintextUploadRevealsNothingNew doesn't compare resource blobs
+		return false;
+	}
+
 	// Prepare the resource by encrypting it if needed.
 	// The call returns the path to the physical file AND a representation of the resource object
 	// as it should be uploaded to the sync target. Note that this may be different from what is stored
 	// in the database. In particular, the flag encryption_blob_encrypted might be 1 on the sync target
 	// if the resource is encrypted, but will be 0 locally because the device has the decrypted resource.
-	public static async fullPathForSyncUpload(resource: ResourceEntity) {
+	public static async fullPathForSyncUpload(resource: ResourceEntity, confirmedPlaintextUploads: PlaintextUploadConfirmations = null) {
 		const plainTextPath = this.fullPath(resource);
 
 		const share = resource.share_id ? await this.shareService().shareById(resource.share_id) : null;
@@ -246,6 +254,9 @@ export default class Resource extends BaseItem {
 		if (!getEncryptionEnabled() || !itemCanBeEncrypted(resource as Parameters<typeof itemCanBeEncrypted>[0], share)) {
 			// Normally not possible since itemsThatNeedSync should only return decrypted items
 			if (resource.encryption_blob_encrypted) throw new Error('Trying to access encrypted resource but encryption is currently disabled');
+			if (mustConfirmPlaintextUploads()) {
+				checkPlaintextUploadConfirmed(resource, confirmedPlaintextUploads);
+			}
 			return { path: plainTextPath, resource: resource };
 		}
 
@@ -683,7 +694,9 @@ export default class Resource extends BaseItem {
 			options = { ...options, autoTimestamp: false };
 			if (!resource.created_time) resource.created_time = now;
 			if (!resource.updated_time) resource.updated_time = now;
-			if (!resource.blob_updated_time) resource.blob_updated_time = now;
+			// Resources synced by older clients have no blob_updated_time. Deriving it from
+			// updated_time, like migration 44 does, keeps it identical on every client.
+			if (!resource.blob_updated_time) resource.blob_updated_time = resource.updated_time;
 		}
 
 		const output = await super.save(resource, options);

@@ -20,6 +20,7 @@ import DismissibleDialog, { DialogVariant } from '../DismissibleDialog';
 import { _, _n } from '@joplin/lib/locale';
 import { LinkButton, PrimaryButton } from '../buttons';
 import { themeStyle } from '../global-style';
+import isPublishBlockedByE2ee from '@joplin/lib/components/shared/ShareNoteDialog/isPublishBlockedByE2ee';
 
 interface Props {
 	themeId: number;
@@ -27,6 +28,7 @@ interface Props {
 	visible: boolean;
 	onClose: ()=> void;
 	shares: StateShare[];
+	publishBlockedByE2ee: boolean;
 }
 
 const useStyles = (themeId: number) => {
@@ -105,7 +107,7 @@ const NoteItem: React.FC<NoteItemProps> = ({ note, shares, onUnpublishStart, sty
 };
 
 const ShareNoteDialogContent: React.FC<Props> = ({
-	themeId, noteId, shares,
+	themeId, noteId, shares, publishBlockedByE2ee,
 }) => {
 	const [notes, setNotes] = useState<NoteEntity[]>([]);
 	const recursiveShare = false;
@@ -113,6 +115,10 @@ const ShareNoteDialogContent: React.FC<Props> = ({
 	const [shareLinks, setShareLinks] = useState<string[]>([]);
 
 	const noteCount = notes.length;
+	const unpublishedNoteCount = notes.filter(note => !note.is_shared).length;
+	const showShareButton = !publishBlockedByE2ee || (noteCount > 0 && !unpublishedNoteCount);
+	// Reloaded when these change, so that the dialog knows whether publishing would still change the note
+	const shareIds = shares.map(share => share.id).join(',');
 
 	useEffect(() => {
 		void ShareService.instance().refreshShares();
@@ -122,7 +128,7 @@ const ShareNoteDialogContent: React.FC<Props> = ({
 		const note = await Note.load(noteId);
 		if (event.cancelled) return;
 		setNotes([note]);
-	}, [noteId]);
+	}, [noteId, shareIds, sharesState]);
 
 	const onCopyLinks = useCallback(async (links: string[]) => {
 		setShareLinks(links);
@@ -165,7 +171,7 @@ const ShareNoteDialogContent: React.FC<Props> = ({
 	const encryptionMessage = useEncryptionWarningMessage();
 
 	const renderEncryptionWarningMessage = () => {
-		if (!encryptionMessage) return null;
+		if (!encryptionMessage || !unpublishedNoteCount) return null;
 		return <>
 			<Text>{encryptionMessage}</Text>
 			<Divider/>
@@ -203,7 +209,7 @@ const ShareNoteDialogContent: React.FC<Props> = ({
 			{renderLinks()}
 		</ScrollView>
 		<Text aria-live='polite'>{statusMessage}</Text>
-		{copyLinkButton}
+		{showShareButton && copyLinkButton}
 	</View>;
 };
 
@@ -223,6 +229,7 @@ const mapStateToProps = (state: AppState) => {
 	return {
 		themeId: state.settings.theme,
 		shares: state.shareService.shares.filter(s => !!s.note_id),
+		publishBlockedByE2ee: isPublishBlockedByE2ee(state),
 	};
 };
 

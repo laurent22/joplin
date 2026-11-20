@@ -10,6 +10,7 @@ import Logger from '@joplin/utils/Logger';
 import RepositoryApi from './RepositoryApi';
 import { produce } from 'immer';
 import { PluginManifest } from './utils/types';
+import { BlockedPluginVersions, isRepoManifestBlocked, isVersionBlocked } from './utils/blockedVersions';
 import isCompatible from './utils/isCompatible';
 import { AppType } from './api/types';
 import minVersionForPlatform from './utils/isCompatible/minVersionForPlatform';
@@ -511,7 +512,9 @@ export default class PluginService extends BaseService {
 				// Load only the manifest first to check if the plugin is
 				// enabled before doing the expensive full load.
 				let plugin = await this.loadPluginFromPath(pluginPath, true);
-				const enabled = this.pluginEnabled(settings, plugin.id);
+				const blocked = this.isBlocked(plugin.manifest);
+				if (blocked) logger.warn(`Plugin version has been blocked: ${plugin.id}@${plugin.manifest.version}`);
+				const enabled = this.pluginEnabled(settings, plugin.id) && !blocked;
 				if (enabled) {
 					logger.info(`Loading full plugin: ${plugin.id}`);
 					plugin = await this.loadPluginFromPath(pluginPath, false);
@@ -583,8 +586,13 @@ export default class PluginService extends BaseService {
 		return shim.mobilePlatform() ? AppType.Mobile : AppType.Desktop;
 	}
 
+	public isBlocked(manifest: PluginManifest) {
+		const blockedVersions: BlockedPluginVersions = Setting.value('plugins.blockedVersions');
+		return isRepoManifestBlocked(manifest) || isVersionBlocked(blockedVersions?.[manifest.id], manifest.version);
+	}
+
 	public isCompatible(manifest: PluginManifest): boolean {
-		return isCompatible(this.appVersion_, this.appType_, manifest);
+		return isCompatible(this.appVersion_, this.appType_, manifest) && !this.isBlocked(manifest);
 	}
 
 	private validateManifest(manifest: unknown): void {
@@ -599,6 +607,8 @@ export default class PluginService extends BaseService {
 			const message = error instanceof Error ? error.message : String(error);
 			return _('Invalid plugin manifest: %s', message);
 		}
+
+		if (this.isBlocked(manifest)) return _('This version of the plugin has been disabled by the Joplin team for security reasons.');
 
 		if (this.isCompatible(manifest)) return null;
 

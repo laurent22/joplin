@@ -38,6 +38,9 @@ interface Argv {
 
 import * as nodeSqlite from 'sqlite3';
 import { shimInit } from '@joplin/lib/shim-init-node';
+import { isSameSite } from './utils/urlUtils';
+import { errorMessageForLog, isUnexpectedError, unexpectedErrorMessage } from './utils/errors';
+import { uuidgen } from '@joplin/lib/uuid';
 const cors = require('@koa/cors');
 shimInit({ nodeSqlite });
 
@@ -173,11 +176,13 @@ async function main() {
 			await next();
 		} catch (error) {
 			ctx.status = error.httpCode || 500;
+			const errorId = uuidgen();
+			const publicMessage = isUnexpectedError(error) ? unexpectedErrorMessage(errorId) : error.message;
 
 			if (ctx.status >= 500) {
-				appLogger().error(`Middleware error on ${ctx.path}:`, error);
+				appLogger().error(`Middleware error on ${ctx.path}: Error ID ${errorId}:`, error);
 			} else {
-				appLogger().info(`Middleware error on ${ctx.path}:`, error);
+				appLogger().info(`Middleware error on ${ctx.path}: ${errorMessageForLog(String(error.message))}`);
 			}
 
 			const responseFormat = routeResponseFormat(ctx);
@@ -192,15 +197,15 @@ async function main() {
 						title: 'Error',
 						path: 'index/error',
 						showFooter: true,
-						content: { error },
+						content: { error: { message: publicMessage } },
 					});
 				} catch (anotherError) {
 					ctx.response.set('Content-Type', 'application/json');
-					ctx.body = JSON.stringify({ error: `${error.message} (Check the server log for more information)` });
+					ctx.body = JSON.stringify({ error: `${publicMessage} (Check the server log for more information)` });
 				}
 			} else {
 				ctx.response.set('Content-Type', 'application/json');
-				ctx.body = JSON.stringify({ error: error.message });
+				ctx.body = JSON.stringify({ error: publicMessage });
 			}
 		}
 	});
@@ -327,6 +332,9 @@ async function main() {
 		appLogger().info('Public base URL:', config().baseUrl);
 		appLogger().info('API base URL:', config().apiBaseUrl);
 		appLogger().info('User content base URL:', config().userContentBaseUrl);
+		if (config().userContentBaseUrl !== config().baseUrl && isSameSite(config().userContentBaseUrl, config().baseUrl)) {
+			appLogger().warn('USER_CONTENT_BASE_URL is on the same site as APP_BASE_URL, so published notes are not isolated from the rest of the server: browsers treat requests between sibling subdomains as same-site and send the session cookie with them, and a page on one can set cookies for the other. Use a separate domain, as Joplin Cloud does with joplinusercontent.com.');
+		}
 		appLogger().info('Log dir:', config().logDir);
 		appLogger().info('DB Config:', markPasswords(config().database));
 		appLogger().info('Mailer Config:', markPasswords(config().mailer));

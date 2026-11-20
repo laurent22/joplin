@@ -8,6 +8,8 @@ import { failedPaymentFinalAccount, failedPaymentWarningInterval } from './Subsc
 import { stripePortalUrl } from '../utils/urlUtils';
 import { Day } from '../utils/time';
 import config from '../config';
+import { uuidgen } from '@joplin/lib/uuid';
+import * as auth from '../utils/auth';
 
 describe('UserModel', () => {
 
@@ -93,6 +95,12 @@ describe('UserModel', () => {
 		expect(email.sent_success).toBe(0);
 		expect(email.sent_time).toBe(0);
 		expect(email.error).toBe('');
+	});
+
+	test('should clear must_set_password when a password is set', async () => {
+		const user = await models().user().save({ email: 'user1@localhost', password: uuidgen(), must_set_password: 1 });
+		await models().user().save({ id: user.id, password: uuidgen() });
+		expect((await models().user().load(user.id)).must_set_password).toBe(0);
 	});
 
 	test('should send a beta reminder email', async () => {
@@ -566,8 +574,8 @@ describe('UserModel', () => {
 		});
 		const ctx = await koaAppContext();
 
-		// A CSRF or confirmation token has no purpose and must be rejected here.
-		const genericToken = await models().token().generate(user.id);
+		// A token minted for another purpose must be rejected here.
+		const genericToken = await models().token().generate(user.id, TokenPurpose.Csrf);
 
 		await expectHttpError(async () => {
 			await models().user().resetPassword(genericToken, { password: '222222', password2: '222222' });
@@ -582,13 +590,60 @@ describe('UserModel', () => {
 		expect(await models().user().login('test@example.com', '222222', ctx.joplin.services)).toBeTruthy();
 	});
 
+	test('should consume the token when resetting a password', async () => {
+		const user = await models().user().save({
+			email: 'test@example.com',
+			password: '111111',
+		});
+
+		const token = await models().token().generate(user.id, TokenPurpose.PasswordReset);
+		await models().user().resetPassword(token, { password: '222222', password2: '222222' });
+
+		// Otherwise the reset link could be used again until the token expires.
+		expect(await models().token().isValid(user.id, token, TokenPurpose.PasswordReset)).toBe(false);
+	});
+
+	test('should reject a password that is too long before checking its strength', async () => {
+		const user = await models().user().save({ email: 'test@example.com', password: '111111' });
+		const token = await models().token().generate(user.id, TokenPurpose.PasswordReset);
+		const password = 'a'.repeat(20000);
+
+		const error = await checkThrowAsync(async () => models().user().resetPassword(token, { password, password2: password }));
+		expect(error.httpCode).toBe(ErrorUnprocessableEntity.httpCode);
+		expect(error.message).toContain('cannot be longer than');
+	});
+
+	test('should cancel pending email changes and outstanding tokens when the password is reset', async () => {
+		const user = await models().user().save({ email: 'test@example.com', password: '111111' });
+		const welcomeEmail = (await models().email().all()).find(e => e.recipient_email === 'test@example.com');
+		const welcomeToken = welcomeEmail.body.match(/\?token=(.{32})/)[1];
+
+		await models().user().initiateEmailChange(user.id, 'attacker@example.com');
+		const changeEmail = (await models().email().all()).find(e => e.recipient_email === 'attacker@example.com');
+		const changeToken = changeEmail.body.match(/\?token=(.{32})/)[1];
+		const otherResetToken = await models().token().generate(user.id, TokenPurpose.PasswordReset);
+
+		const resetToken = await models().token().generate(user.id, TokenPurpose.PasswordReset);
+		await models().user().resetPassword(resetToken, { password: '222222', password2: '222222' });
+
+		await expectThrow(async () => models().user().processEmailConfirmation(user.id, changeToken, async () => {}));
+		expect((await models().user().load(user.id)).email).toBe('test@example.com');
+		expect(await models().keyValue().value(`newEmail::${user.id}`)).toBeFalsy();
+		expect(await models().token().isValid(user.id, otherResetToken, TokenPurpose.PasswordReset)).toBe(false);
+		expect(await models().token().isValid(user.id, welcomeToken, TokenPurpose.AccountConfirmation)).toBe(true);
+	});
+
 	test('should not log in an user using a email/password combo when the local auth is disabled', async () => {
 		config().LOCAL_AUTH_ENABLED = false;
 
-		const user = await createUser();
-		const ctx = await koaAppContext();
+		try {
+			const user = await createUser();
+			const ctx = await koaAppContext();
 
-		expect(await models().user().login(user.email, '123456', ctx.joplin.services)).toBe(null);
+			expect(await models().user().login(user.email, '123456', ctx.joplin.services)).toBe(null);
+		} finally {
+			config().LOCAL_AUTH_ENABLED = true;
+		}
 	});
 
 	test('should not change user properties managed by SAML', async () => {
@@ -686,6 +741,20 @@ describe('UserModel', () => {
 		await expectHttpError(async () => {
 			await models().user().hasMFAEnabled('no-exist@localhost', { requireUserExists: true });
 		}, 403);
+	});
+
+	test('should check a password even when there is no such user, so that it takes as long', async () => {
+		const { user } = await createUserAndSession(1);
+		const services = (await koaAppContext()).joplin.services;
+		const checkPassword = jest.spyOn(auth, 'checkPassword');
+
+		try {
+			expect(await models().user().login('no-such-user@localhost', 'any-password', services)).toBe(null);
+			expect(await models().user().login(user.email, 'wrong-password', services)).toBe(null);
+			expect(checkPassword).toHaveBeenCalledTimes(2);
+		} finally {
+			checkPassword.mockRestore();
+		}
 	});
 
 	test('should return the number of enabled non-admin users from enabledUserCount', async () => {

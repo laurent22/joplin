@@ -1,17 +1,21 @@
 import { ErrorBadRequest, ErrorNotFound } from '../../utils/errors';
-import { Share, ShareType } from '../../services/database/types';
+import { Share, ShareType, ShareUser } from '../../services/database/types';
 import { bodyFields, ownerRequired } from '../../utils/requestUtils';
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { AclAction } from '../../models/BaseModel';
+import limiterShareInvitations from '../../utils/request/limiterShareInvitations';
+import Logger from '@joplin/utils/Logger';
 
 interface ShareApiInput extends Share {
 	folder_id?: string;
 	note_id?: string;
 	recursive?: number;
 }
+
+const logger = Logger.create('api/shares');
 
 const router = new Router(RouteType.Api);
 
@@ -62,17 +66,32 @@ router.post('api/shares/:id/users', async (path: SubPath, ctx: AppContext) => {
 	}
 
 	const fields = await bodyFields(ctx.req) as UserInput;
-	const user = await ctx.joplin.models.user().loadByEmail(fields.email);
-	if (!user) throw new ErrorNotFound('User not found');
-
 	const masterKey = fields.master_key || '';
 	const shareId = path.id;
 
-	await ctx.joplin.models.shareUser().checkIfAllowed(ctx.joplin.owner, AclAction.Create, {
+	// Check that the caller owns the share before looking up the email,
+	// otherwise the end point reports whether any given address has an account.
+	const share = await ctx.joplin.models.share().load(shareId);
+	if (!share) throw new ErrorNotFound(`No such share: ${shareId}`);
+	await ctx.joplin.models.share().checkIfAllowed(ctx.joplin.owner, AclAction.Read, share);
+	if (share.type !== ShareType.Folder) throw new ErrorBadRequest('Only a shared notebook can have recipients');
+
+	const checkResource: ShareUser = {
 		share_id: shareId,
-		user_id: user.id,
 		master_key: masterKey,
-	});
+	};
+
+	await ctx.joplin.models.shareUser().checkCanInvite(ctx.joplin.owner, checkResource);
+	await limiterShareInvitations(ctx.joplin.owner.id);
+
+	const user = await ctx.joplin.models.user().loadByEmail(fields.email);
+	if (!user) {
+		logger.info(`Share ${shareId}: invitation from ${ctx.joplin.owner.id} to an address without an account`);
+		throw new ErrorNotFound('User not found');
+	}
+
+	checkResource.user_id = user.id;
+	await ctx.joplin.models.shareUser().checkIfAllowed(ctx.joplin.owner, AclAction.Create, checkResource);
 
 	return ctx.joplin.models.shareUser().addByEmail(shareId, user.email, masterKey);
 });
@@ -113,7 +132,10 @@ router.get('api/shares/:id', async (path: SubPath, ctx: AppContext) => {
 	if (share && (share.type === ShareType.Note || share.type === ShareType.PublishedFolder)) {
 		// No authentication is necessary - anyone who knows the share ID is allowed
 		// to access the file. It is essentially public.
-		return shareModel.toApiOutput(share);
+		const output = await shareModel.toApiOutput(share) as Share;
+		// Published links are indexed by search engines, and the owner's ID would let anyone target their account
+		if (ctx.joplin.owner?.id !== share.owner_id) delete output.owner_id;
+		return output;
 	}
 
 	throw new ErrorNotFound();

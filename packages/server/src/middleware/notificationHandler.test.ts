@@ -97,6 +97,7 @@ describe('notificationHandler', () => {
 
 	test('should display a banner if the email is not confirmed', async () => {
 		const { session, user } = await createUserAndSession(1);
+		await models().user().save({ id: user.id, email_confirmed: 0 });
 
 		{
 			const ctx = await runNotificationHandler(session.id);

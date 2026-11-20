@@ -1,14 +1,26 @@
 import { AppType } from '@joplin/lib/models/Setting';
 import RepositoryApi, { AppInfo, InstallMode } from '@joplin/lib/services/plugins/RepositoryApi';
+import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
+import refreshBlockedPluginVersions from '@joplin/lib/services/plugins/refreshBlockedPluginVersions';
 import { setupDatabaseAndSynchronizer, switchClient, supportDir, createTempDir } from '@joplin/lib/testing/test-utils';
-import { remove } from 'fs-extra';
+import { copy, mkdirp, readJson, remove, writeFile, writeJson } from 'fs-extra';
 
 let tempDirs: string[] = [];
-async function newRepoApi(appInfo: AppInfo = { type: AppType.Desktop, version: '3.0.0' }): Promise<RepositoryApi> {
+async function newRepoApi(appInfo: AppInfo = { type: AppType.Desktop, version: '3.0.0' }, blockedVersions: Record<string, string[]> = null): Promise<RepositoryApi> {
 	const tempDir = await createTempDir();
 	tempDirs.push(tempDir);
-	const repo = new RepositoryApi(`${supportDir}/pluginRepo`, tempDir, appInfo, InstallMode.Default);
+
+	let repoDir = `${supportDir}/pluginRepo`;
+	if (blockedVersions) {
+		repoDir = `${tempDir}/pluginRepo`;
+		await copy(`${supportDir}/pluginRepo`, repoDir);
+		const manifests = await readJson(`${repoDir}/manifests.json`);
+		for (const [id, versions] of Object.entries(blockedVersions)) manifests[id]._blocked_versions = versions;
+		await writeJson(`${repoDir}/manifests.json`, manifests);
+	}
+
+	const repo = new RepositoryApi(repoDir, tempDir, appInfo, InstallMode.Default);
 	await repo.initialize();
 	return repo;
 }
@@ -65,6 +77,35 @@ describe('services_plugins_RepositoryApi', () => {
 	])('should tell if a plugin can be updated (case %#)', (async ({ id, installedVersion, appVersion, shouldBeUpdatable }) => {
 		const api = await newRepoApi({ version: appVersion, type: AppType.Desktop });
 		expect(await api.pluginCanBeUpdated(id, installedVersion)).toBe(shouldBeUpdatable);
+	}));
+
+	it.each([
+		['1.0.2'],
+		['>=1.0.1'],
+		['*'],
+	])('should not update to or download a blocked version (%s)', (async (blockedVersion) => {
+		const id = 'org.joplinapp.plugins.ToggleSidebars';
+		const api = await newRepoApi(undefined, { [id]: [blockedVersion] });
+		expect(await api.pluginCanBeUpdated(id, '1.0.0')).toBe(false);
+		await expect(api.downloadPlugin(id)).rejects.toThrow('has been blocked');
+	}));
+
+	it('should cache the blocked versions only when plugins are installed', (async () => {
+		const blockedVersions = { 'org.joplinapp.plugins.ToggleSidebars': ['1.0.1', '1.0.2'] };
+		const api = await newRepoApi(undefined, blockedVersions);
+
+		await refreshBlockedPluginVersions(api);
+		expect(Setting.value('plugins.blockedVersions')).toEqual({});
+
+		const pluginPath = `${Setting.value('pluginDir')}/test.jpl`;
+		await mkdirp(Setting.value('pluginDir'));
+		await writeFile(pluginPath, '');
+		try {
+			await refreshBlockedPluginVersions(api);
+			expect(Setting.value('plugins.blockedVersions')).toEqual(blockedVersions);
+		} finally {
+			await remove(pluginPath);
+		}
 	}));
 
 });

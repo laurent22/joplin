@@ -1,15 +1,30 @@
 import { Canvas, CanvasEdge, CanvasNode, emptyCanvas, fenceTag } from './jsoncanvas';
 
-// Matches the first ` ```jsoncanvas ` fence in a note body. Captures:
-//   1: the body before the fence (incl. trailing newline if any)
-//   2: the JSON content between the fences
-//   3: the body after the closing fence
+// Matches the first ` ```jsoncanvas ` fence in a note body, and returns the body before it, the JSON content between
+// the fences and the body after it.
 //
 // Fence opener allows optional whitespace and an optional info-string newline.
 // Fence closer is a line consisting of just three or more backticks.
-const fenceRegex = new RegExp(
-	`^([\\s\\S]*?)\`\`\`${fenceTag}[ \\t]*\\r?\\n([\\s\\S]*?)\\r?\\n\`\`\`[ \\t]*(?:\\r?\\n|$)([\\s\\S]*)$`,
-);
+//
+// This used to be a single regex, which took quadratic time on bodies with many openers and no closer: it was retried
+// from every opener, while if the first opener has no closer after it, later ones cannot have one either.
+const matchFence = (body: string) => {
+	const openerRegex = new RegExp(`\`\`\`${fenceTag}[ \\t]*\\r?\\n`, 'g');
+	const opener = openerRegex.exec(body);
+	if (!opener) return null;
+
+	const contentStart = opener.index + opener[0].length;
+	const closerRegex = /\r?\n```[ \t]*(?:\r?\n|$)/g;
+	closerRegex.lastIndex = contentStart;
+	const closer = closerRegex.exec(body);
+	if (!closer) return null;
+
+	return {
+		prefix: body.slice(0, opener.index),
+		jsonText: body.slice(contentStart, closer.index),
+		suffix: body.slice(closer.index + closer[0].length),
+	};
+};
 
 export interface ParseResult {
 	canvas: Canvas;
@@ -25,15 +40,13 @@ export interface ParseResult {
 	parseError: string | null;
 }
 
-// Cheap precheck — `fenceRegex` uses lazy [\s\S]*? matching that's O(n) on
-// strings without a fence, so a literal-substring check first lets us bail
-// out without touching the regex engine for any note that isn't a whiteboard.
+// Cheap precheck, so that notes that are not whiteboards are not scanned.
 const fenceMarker = `\`\`\`${fenceTag}`;
 
 export const hasWhiteboardFence = (body: string): boolean => {
 	if (!body) return false;
 	if (body.indexOf(fenceMarker) === -1) return false;
-	return fenceRegex.test(body);
+	return !!matchFence(body);
 };
 
 const isObject = (value: unknown): value is Record<string, unknown> => {
@@ -97,14 +110,13 @@ const validateCanvas = (raw: unknown): Canvas | string => {
 export const parseWhiteboard = (body: string): ParseResult => {
 	if (!body) return { canvas: emptyCanvas(), prefix: '', suffix: '', hasCanvas: false, parseError: null };
 
-	// Same precheck as hasWhiteboardFence — skip the O(n) backtracking regex
-	// scan when the literal opening marker isn't even present.
+	// Same precheck as hasWhiteboardFence
 	if (body.indexOf(fenceMarker) === -1) return { canvas: emptyCanvas(), prefix: body, suffix: '', hasCanvas: false, parseError: null };
 
-	const match = body.match(fenceRegex);
+	const match = matchFence(body);
 	if (!match) return { canvas: emptyCanvas(), prefix: body, suffix: '', hasCanvas: false, parseError: null };
 
-	const [, prefix, jsonText, suffix] = match;
+	const { prefix, jsonText, suffix } = match;
 
 	let parsed: unknown;
 	try {

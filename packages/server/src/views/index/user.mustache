@@ -21,6 +21,14 @@
 		</div>
 
 		<div class="field">
+			<label class="label" for="current_password">Current password</label>
+			<div class="control">
+				<input {{disabledIfExternalAuth}} id="current_password" class="input" type="password" name="current_password" autocomplete="current-password"/>
+			</div>
+			<p class="help">Only needed to change your email or password.</p>
+		</div>
+
+		<div class="field">
 			<label class="label" for="password">Password</label>
 			<div class="control">
 				<input {{disabledIfExternalAuth}} id="password" class="input" type="password" name="password" autocomplete="new-password"/>

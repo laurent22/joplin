@@ -93,34 +93,63 @@ export const fileUrlToResourceUrl = (fileUrl: string, resourceDir: string, os: s
 	return null;
 };
 
-export const extractResourceUrls = (text: string) => {
-	const markdownLinkRegexes = [
-		// Standard [link](...)-style links
-		/\]\((.*?)\)/g,
-		// Reference links
-		/\]:(.*?)(?:[\n]|$)/g,
-	];
-	const output = [];
-	let result = null;
+const isLineTerminator = (c: string) => c === '\n' || c === '\r' || c === '\u2028' || c === '\u2029';
 
-	for (const regex of markdownLinkRegexes) {
-		while ((result = regex.exec(text)) !== null) {
-			const resourceUrlInfo = parseResourceUrl(result[1].trim());
-			if (resourceUrlInfo) output.push(resourceUrlInfo);
-		}
+// Same matches as the regex `opener(.*?)closer` with the global flag, where closer is a character, or a newline or the
+// end of the text when null. The regex takes quadratic time, because when no closer follows an opener on the same
+// line it is retried from every later opener, none of which can match either.
+const findLinkTargets = (text: string, opener: string, closer: string | null) => {
+	const output: string[] = [];
+	let index = 0;
+
+	while ((index = text.indexOf(opener, index)) !== -1) {
+		let end = index + opener.length;
+		while (end < text.length && text[end] !== closer && !isLineTerminator(text[end])) end++;
+
+		const isClosed = closer ? text[end] === closer : end === text.length || text[end] === '\n';
+		if (isClosed) output.push(text.substring(index + opener.length, end));
+		index = isClosed ? end + 1 : end;
 	}
 
-	const htmlRegexes = [
-		/<img[\s\S]*?src=["']:\/([a-zA-Z0-9]{32})["'][\s\S]*?>/gi,
-		/<a[\s\S]*?href=["']:\/([a-zA-Z0-9]{32})["'][\s\S]*?>/gi,
-	];
+	return output;
+};
 
-	for (const htmlRegex of htmlRegexes) {
-		while (true) {
-			const m = htmlRegex.exec(text);
-			if (!m) break;
-			output.push({ itemId: m[1], hash: '' });
-		}
+// Same matches as `/<tag[\s\S]*?attribute=["']:\/([a-zA-Z0-9]{32})["'][\s\S]*?>/gi`, in linear time for the same
+// reason: when no such attribute and closing bracket follow one tag, they do not follow any later tag either.
+const findHtmlResourceIds = (text: string, tagName: string, attributeName: string) => {
+	const tagRegex = new RegExp(`<${tagName}`, 'gi');
+	const attributeRegex = new RegExp(`${attributeName}=["']:\\/([a-zA-Z0-9]{32})["']`, 'gi');
+	const output: string[] = [];
+	let tag: RegExpExecArray | null;
+
+	while ((tag = tagRegex.exec(text)) !== null) {
+		attributeRegex.lastIndex = tag.index + tag[0].length;
+		const attribute = attributeRegex.exec(text);
+		if (!attribute) break;
+
+		const end = text.indexOf('>', attribute.index + attribute[0].length);
+		if (end === -1) break;
+
+		output.push(attribute[1]);
+		tagRegex.lastIndex = end + 1;
+	}
+
+	return output;
+};
+
+export const extractResourceUrls = (text: string) => {
+	const output = [];
+
+	// Standard [link](...)-style links, then reference links
+	const linkTargets = findLinkTargets(text, '](', ')').concat(findLinkTargets(text, ']:', null));
+	for (const linkTarget of linkTargets) {
+		const resourceUrlInfo = parseResourceUrl(linkTarget.trim());
+		if (resourceUrlInfo) output.push(resourceUrlInfo);
+	}
+
+	const htmlResourceIds = findHtmlResourceIds(text, 'img', 'src').concat(findHtmlResourceIds(text, 'a', 'href'));
+	for (const itemId of htmlResourceIds) {
+		output.push({ itemId, hash: '' });
 	}
 
 	return output;

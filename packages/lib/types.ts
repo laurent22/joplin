@@ -28,6 +28,10 @@ export type FetchBlobOptions = {
 	ignoreTlsErrors?: boolean;
 	headers?: Record<string, string>;
 	downloadController?: DownloadHandler;
+	// Only allows connections to public internet addresses, on every redirect too. Only supported on Node.
+	publicNetworkOnly?: boolean;
+	// Unlike timeout, which only limits inactivity, this can bound the total duration. Only supported on Node.
+	signal?: AbortSignal;
 	// Defaults to true, only respected on mobile:
 	overwrite?: boolean;
 };

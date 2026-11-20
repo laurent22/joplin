@@ -48,7 +48,7 @@ export default async (
 
 				if (remoteContent) {
 					try {
-						remoteContent = await BaseItem.unserialize(remoteContent);
+						remoteContent = await BaseItem.unserializeAndValidate({ content: remoteContent, itemPath: path });
 					} catch (unserializeError) {
 						if (unserializeError.code === 'malformedItem') {
 							logger.warn(`Skipping item from sync target: ${path}: ${unserializeError.message}`);

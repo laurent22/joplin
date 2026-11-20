@@ -15,7 +15,7 @@ describe('ItemResourceModel', () => {
 	});
 
 	test('should get an item tree', async () => {
-		const { session } = await createUserAndSession();
+		const { user, session } = await createUserAndSession();
 
 		const linkedNote1 = await createNote(session.id, {
 			id: '000000000000000000000000000000C1',
@@ -35,7 +35,7 @@ describe('ItemResourceModel', () => {
 			body: `[](:/${linkedNote1.jop_id}) [](:/${linkedNote2.jop_id})`,
 		});
 
-		const tree = await models().itemResource().itemTree(rootNote.id, rootNote.jop_id);
+		const tree = await models().itemResource().itemTree(user.id, rootNote.id, rootNote.jop_id);
 
 		expect(tree).toEqual({
 			item_id: rootNote.id,
@@ -62,7 +62,7 @@ describe('ItemResourceModel', () => {
 	});
 
 	test('should not go into infinite loop when a note links to itself', async () => {
-		const { session } = await createUserAndSession();
+		const { user, session } = await createUserAndSession();
 
 		const rootNote = await createNote(session.id, {
 			id: '00000000000000000000000000000001',
@@ -75,7 +75,7 @@ describe('ItemResourceModel', () => {
 			body: '![](:/00000000000000000000000000000001)',
 		});
 
-		const tree = await models().itemResource().itemTree(rootNote.id, rootNote.jop_id);
+		const tree = await models().itemResource().itemTree(user.id, rootNote.id, rootNote.jop_id);
 
 		expect(tree).toEqual({
 			item_id: rootNote.id,

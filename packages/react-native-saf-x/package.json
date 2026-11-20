@@ -1,6 +1,6 @@
 {
   "name": "@joplin/react-native-saf-x",
-  "version": "3.7.3",
+  "version": "3.7.4",
   "description": "a module to help work with scoped storages on android easily",
   "main": "src/index",
   "react-native": "src/index",
@@ -36,7 +36,11 @@
     "storage-access-framework",
     "fs"
   ],
-  "repository": "https://github.com/jd1378/react-native-saf-x",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laurent22/joplin.git",
+    "directory": "packages/react-native-saf-x"
+  },
   "author": "Javad Mnjd (https://github.com/jd1378)",
   "license": "AGPL-3.0-or-later",
   "homepage": "https://github.com/laurent22/joplin/tree/dev/packages/react-native-saf-x",
@@ -52,6 +56,5 @@
   "peerDependencies": {
     "react": "*",
     "react-native": "*"
-  },
-  "gitHead": "898d2999f93fbedf0ce5f6626feb63e1a732ce0a"
+  }
 }

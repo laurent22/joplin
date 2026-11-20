@@ -1365,7 +1365,7 @@ msgid ""
 "Cannot share encrypted notebook with recipient %s because they have not enabled end-to-end "
 "encryption. They may do so from the screen Configuration > Encryption."
 msgstr ""
-"Ne eblas kunhavigi ĉifritan notlibron kun ricevonto %s, ĉar tiu ne ebligis ĉifradon de fino al "
+"Ne eblas kunhavigi ĉifritan notlibron kun ricevonto %s, ĉar tiu ne ŝaltis ĉifradon de fino al "
 "fino. Tion eblas fari en la ekrano Agordo > Ĉifrado."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:340
@@ -1437,7 +1437,7 @@ msgstr "Kontroli ĝisdatigojn"
 
 #: packages/app-desktop/gui/MenuBar.tsx:598 packages/app-desktop/gui/MenuBar.tsx:923
 msgid "Check for updates..."
-msgstr "Kontrolu ĝisdatigojn..."
+msgstr "Kontroli ĝisdatigojn..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:357
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:488
@@ -1504,7 +1504,7 @@ msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current "
 "version of the note will not be replaced or modified."
 msgstr ""
-"Alklaku \"%s\" por restarigi la noton. Ĝi estos kopiita en la notlibron nomatan \"%s\". La nuna "
+"Alklaku \"%s\" por restaŭri la noton. Ĝi estos kopiita en la notlibron nomatan \"%s\". La nuna "
 "versio de la noto ne estos anstataŭigita aŭ modifita."
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:239
@@ -2441,7 +2441,7 @@ msgstr "Malŝalti la servon Web Clipper"
 #: packages/app-mobile/components/screens/encryption-config.tsx:384
 #: packages/lib/models/settings/builtInMetadata.ts:1845
 msgid "Disabled"
-msgstr "Malebligita"
+msgstr "Malŝaltita"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:353
 msgid "Disabled keys"
@@ -2539,7 +2539,7 @@ msgid ""
 "data! To enable encryption, please enter your password below."
 msgstr ""
 "Ne perdu la pasvorton, ĉar pro sekurecaj kialoj ĉi tio estos la *nura* maniero malĉifri la "
-"datumojn! Por ebligi ĉifradon, bonvolu enigi vian pasvorton sube."
+"datumojn! Por ŝalti ĉifradon, bonvolu enigi vian pasvorton sube."
 
 #: packages/lib/models/settings/builtInMetadata.ts:2499
 msgid "Document scanner: Title template"
@@ -2659,7 +2659,7 @@ msgstr "Dropbox"
 
 #: packages/app-desktop/gui/Root.tsx:164
 msgid "Dropbox Login"
-msgstr "Dropbox-salutnomo"
+msgstr "Ensaluto al Dropbox"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:14
 msgid "Due"
@@ -2839,7 +2839,7 @@ msgstr "Malplenigi rubujon"
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:87
 #: packages/app-mobile/components/screens/encryption-config.tsx:228
 msgid "Enable"
-msgstr "Ebligi"
+msgstr "Ŝalti"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:175
 #, python-format
@@ -2903,7 +2903,7 @@ msgstr "Permesi file://-URL-ojn por bildoj kaj videoj"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1499
 msgid "Enable footnotes"
-msgstr "Ebligi piednotojn"
+msgstr "Ŝalti piednotojn"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1491
 msgid "Enable Fountain syntax support"
@@ -2943,7 +2943,7 @@ msgstr "Ŝalti la plurtabelan Markdown-etendaĵon"
 
 #: packages/lib/models/settings/builtInMetadata.ts:2144
 msgid "Enable note history"
-msgstr "Ebligi nothistorion"
+msgstr "Ŝalti nothistorion"
 
 #: packages/lib/models/Setting.ts:1415
 msgid "Enable or disable plugins"
@@ -2960,7 +2960,7 @@ msgstr "Ŝalti subtenon por kromprogramoj"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1486
 msgid "Enable soft breaks"
-msgstr "Ŝalti molajn linisalton"
+msgstr "Ŝalti molajn linisaltojn"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1927
 msgid "Enable spell checking in Markdown editor"
@@ -2995,7 +2995,7 @@ msgstr "Ŝalti la servon Web Clipper"
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:93
 #: packages/app-mobile/components/screens/encryption-config.tsx:384
 msgid "Enabled"
-msgstr "Ebligita"
+msgstr "Ŝaltita"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1127
 msgid "Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions."
@@ -3183,7 +3183,7 @@ msgstr "Evernote-eksportdosieroj (dosierujo, kiel Markdown)"
 
 #: packages/app-cli/app/command-exit.ts:11
 msgid "Exits the application."
-msgstr "Eliri la aplikaĵon."
+msgstr "Eliras el la aplikaĵo."
 
 #: packages/app-mobile/components/side-menu-content.tsx:219
 #, python-format
@@ -3455,7 +3455,7 @@ msgstr "Trovita: %d."
 #: packages/app-mobile/utils/getVersionInfoText.ts:47
 #, python-format
 msgid "FTS enabled: %d"
-msgstr "FTS ebligita: %d"
+msgstr "FTS ŝaltita: %d"
 
 #: packages/app-desktop/checkForUpdates.ts:116
 msgid "Full changelog"
@@ -3620,7 +3620,7 @@ msgstr "Kaŝas averton"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:14
 msgid "Highlight"
-msgstr "Emfazi"
+msgstr "Elstarigi"
 
 #: packages/server/src/services/MustacheService.ts:149
 #: packages/server/src/services/MustacheService.ts:282
@@ -4015,12 +4015,12 @@ msgstr "Nevalida %s: %s."
 #: packages/app-cli/app/cli-utils.ts:199
 #, python-format
 msgid "Invalid answer: %s"
-msgstr "Malvalida respondo: %s"
+msgstr "Nevalida respondo: %s"
 
 #: packages/app-cli/app/command-tag.ts:94
 #, python-format
 msgid "Invalid command: \"%s\""
-msgstr "Malvalida komando: \"%s\""
+msgstr "Nevalida komando: \"%s\""
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:364
 msgid "Invalid format. E.g.: 48.8581372, 2.2926735"
@@ -4275,7 +4275,7 @@ msgstr "Ŝlosiloj kiuj bezonas ĝisdatigon"
 #: packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.tsx:494
 #: packages/editor/ProseMirror/plugins/imagePlugin.ts:265
 msgid "Label"
-msgstr "Etikedo"
+msgstr "Surskribo"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1885
 msgid "Landscape"
@@ -4576,7 +4576,7 @@ msgstr "Markdown-redaktilo"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1968
 msgid "Markdown editor: Highlight active line"
-msgstr "Markdown-redaktilo: emfazi aktivan linion"
+msgstr "Markdown-redaktilo: elstarigi aktivan linion"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1947
 msgid "Markdown editor: Interactive table editing"
@@ -4584,7 +4584,7 @@ msgstr "Markdown-redaktilo: interaga tabelredaktado"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1957
 msgid "Markdown editor: Render images"
-msgstr "Markdown-redaktilo: bildigi bildojn"
+msgstr "Markdown-redaktilo: montri bildojn"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1937
 msgid "Markdown editor: Render markup in editor"
@@ -5314,7 +5314,7 @@ msgstr "OCR: Vakigi kaŝmemoron kaj reelŝuti lingvajn datumdosierojn"
 
 #: packages/lib/models/settings/builtInMetadata.ts:573
 msgid "OCR: Enable optical character recognition"
-msgstr "OCR: Ebligi optikan signorekonon"
+msgstr "OCR: Ŝalti optikan signorekonon"
 
 #: packages/lib/models/settings/builtInMetadata.ts:613
 msgid "OCR: Language data URL or path"
@@ -5391,7 +5391,7 @@ msgstr "OneDrive"
 
 #: packages/app-desktop/gui/Root.tsx:163
 msgid "OneDrive Login"
-msgstr "OneDrive-salutnomo"
+msgstr "Ensaluto al OneDrive"
 
 #: packages/lib/services/interop/InteropService.ts:159
 msgid "OneNote Notebook"
@@ -6187,11 +6187,11 @@ msgstr "Forigi %s el kunhavigo"
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:164
 #, python-format
 msgid "Remove tag \"%s\" from all notes?"
-msgstr "Forigi etikedon \"%s\" el ĉiuj notoj?"
+msgstr "Ĉu forigi etikedon \"%s\" el ĉiuj notoj?"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:169
 msgid "Remove this search from the sidebar?"
-msgstr "Forigi ĉi tiun serĉon el la flankbreto?"
+msgstr "Ĉu forigi ĉi tiun serĉon el la flankbreto?"
 
 #: packages/lib/services/ai/tools/buildEditorTools.ts:51
 #, python-format
@@ -6379,11 +6379,11 @@ msgstr "Restarigi defaŭltojn"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/restoreNote.ts:10
 msgid "Restore note"
-msgstr "Restarigi noton"
+msgstr "Restaŭri noton"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/restoreFolder.ts:9
 msgid "Restore notebook"
-msgstr "Restarigi notlibron"
+msgstr "Restaŭri notlibron"
 
 #: packages/app-cli/app/command-restore.ts:12
 msgid "Restore the items matching <pattern> from the trash."
@@ -6391,7 +6391,7 @@ msgstr "Restarigas la erojn kongruantajn kun <pattern> el la rubujo."
 
 #: packages/lib/services/trash/index.ts:88
 msgid "Restored items"
-msgstr "Restarigitaj eroj"
+msgstr "Restaŭritaj eroj"
 
 #: packages/lib/services/RevisionService.ts:264
 msgid "Restored Notes"
@@ -7229,7 +7229,7 @@ msgstr "Ŝanĝi al antaŭa fotilo"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:89
 msgid "Switch to note type"
-msgstr "Ŝalti al nota tipo"
+msgstr "Ŝanĝi al nota tipo"
 
 #: packages/app-desktop/commands/switchProfile1.ts:7 packages/app-desktop/commands/switchProfile2.ts:7
 #: packages/app-desktop/commands/switchProfile3.ts:7
@@ -7252,7 +7252,7 @@ msgstr "Ŝanĝi al la nova redaktilo"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:98
 msgid "Switch to to-do type"
-msgstr "Ŝalti al taska tipo"
+msgstr "Ŝanĝi al taska tipo"
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:152
 #, python-format
@@ -8153,7 +8153,7 @@ msgstr "Por forigi etikedon, forigu ĝin de la asociitaj notoj."
 #: packages/lib/services/ReportService.ts:367
 #, python-format
 msgid "To delete: %d"
-msgstr "Forigi: %d"
+msgstr "Forigotaj: %d"
 
 #: packages/app-cli/app/command-help.ts:82
 msgid "To enter command line mode, press \":\""

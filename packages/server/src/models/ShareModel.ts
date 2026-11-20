@@ -1,14 +1,17 @@
-import { resourceBlobPath } from '../utils/joplinUtils';
-import { Change2 as Change, ChangeType, Item, Share, ShareType, ShareUserStatus, User, Uuid } from '../services/database/types';
+import { isJoplinResourceBlobPath, resourceBlobPath, resourceDirName } from '../utils/joplinUtils';
+import { Change2 as Change, ChangeType, EmailSender, Item, ItemType, Share, ShareType, ShareUserStatus, User, Uuid } from '../services/database/types';
 import { unique } from '../utils/array';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from '../utils/errors';
-import { setQueryParameters } from '../utils/urlUtils';
+import { forgotPasswordUrl, setQueryParameters } from '../utils/urlUtils';
 import BaseModel, { AclAction, DeleteOptions, LoadOptions, ValidateOptions } from './BaseModel';
 import { userIdFromUserContentUrl } from '../utils/routeUtils';
 import { getCanShareFolder } from './utils/user';
 import { isUniqueConstraintError } from '../db';
 import Logger from '@joplin/utils/Logger';
-import { PerformanceTimer } from '../utils/time';
+import { formatDateOnServer, Minute, PerformanceTimer } from '../utils/time';
+import itemPublishedTemplate from '../views/emails/itemPublishedTemplate';
+import { itemIdSample } from './UserItemModel';
+import { ModelType } from '@joplin/lib/BaseModel';
 
 const logger = Logger.create('ShareModel');
 
@@ -214,6 +217,7 @@ export default class ShareModel extends BaseModel<Share> {
 
 	public async updateSharedItems3() {
 		const perfTimer = new PerformanceTimer(logger, 'updateSharedItems3');
+		const sharesWithFailedRepair = new Map<Uuid, Share>();
 
 		const addUserItem = async (shareUserId: Uuid, itemId: Uuid) => {
 			try {
@@ -307,10 +311,10 @@ export default class ShareModel extends BaseModel<Share> {
 					}
 				}
 
-				// Cross-check: is the item owner still in user_items? If not,
-				// this transition just produced an orphan.
-				const ownerUserItem = await this.models().userItem().byUserAndItemId(item.owner_id, item.id);
-				if (!ownerUserItem) {
+				// The owner losing access is expected when a recipient moves the item out of the share: handleDeleted then
+				// gives the item to that recipient. The item is only orphaned if nobody has access to it anymore.
+				const userItems = await this.models().userItem().byItemIds([item.id]);
+				if (!userItems.length) {
 					logger.error(`OrphanTrace: handleUpdated produced orphan item=${item.id} owner=${item.owner_id} previousShare=${previousShareId} nextShare=${nextShareId} changeUser=${change.user_id}`);
 				}
 			} finally {
@@ -442,6 +446,7 @@ export default class ShareModel extends BaseModel<Share> {
 						const newCount = await this.itemCountByUserAndShareId(share.id, row.user_id);
 						if (newCount === row.item_count) {
 							logger.warn(`checkForMissingUserItems: Repair had no effect: Share ${share.id}: User ${row.user_id}: Still has ${newCount} of ${realShareItemCount} items`);
+							sharesWithFailedRepair.set(share.id, share);
 						}
 					} else if (row.item_count > realShareItemCount) {
 						// Shouldn't be possible but log it just in case
@@ -579,7 +584,82 @@ export default class ShareModel extends BaseModel<Share> {
 			if (!paginatedChanges.has_more) break;
 		}
 
+		// Outside of the change processing transaction, because deleting items also deletes their content from storage,
+		// which can't be rolled back
+		for (const share of sharesWithFailedRepair.values()) await this.mergeDuplicateItems(share);
+
 		perfTimer.pop();
+	}
+
+	// A share can contain several items with the same name, for example when two accounts had the same data before one
+	// shared it with the other. Each user can only have one of them (see UserItemModel::addMulti), so the others never
+	// reach every participant. All but the newest copy are deleted. No change is recorded for the deletion, because a
+	// deletion followed by a creation of the same name in one delta page would make clients delete their copy. Instead, an
+	// update is recorded for the kept copy, so that clients that had another one download it.
+	public async mergeDuplicateItems(share: Share) {
+		const items = await this.models().item().sameNameItemsByShareId(share.id);
+		if (!items.length) return;
+
+		const itemsByName = new Map<string, Item[]>();
+		for (const item of items) itemsByName.set(item.name, [...(itemsByName.get(item.name) ?? []), item]);
+
+		// Deleting an item deletes the shares that use it as their root folder or published note
+		const itemIdsUsedByShares = new Set((await this.byItemIds(items.map(i => i.id))).map(s => s.item_id));
+
+		// An attachment's file must come from the same copy as its metadata, so metadata is processed first. The metadata
+		// may not be duplicated, so the owner of the existing one is the default.
+		const blobResourceIds = [...itemsByName.keys()].filter(isJoplinResourceBlobPath).map(n => n.slice(resourceDirName.length + 1));
+		const metadataItems: Item[] = blobResourceIds.length ? await this.models().item().byShareIdQuery(share.id, { fields: ['jop_id', 'owner_id'] }).where('jop_type', ModelType.Resource).whereIn('jop_id', blobResourceIds) : [];
+		const keptOwnerByBlobName = new Map<string, Uuid>(metadataItems.map(i => [resourceBlobPath(i.jop_id), i.owner_id]));
+		const names = [...itemsByName.keys()].sort((a, b) => Number(isJoplinResourceBlobPath(a)) - Number(isJoplinResourceBlobPath(b)));
+
+		const kept: Item[] = [];
+		const toDelete: Item[] = [];
+		const notMergedNames: string[] = [];
+
+		for (const name of names) {
+			const copies = itemsByName.get(name);
+			if (copies.some(c => itemIdsUsedByShares.has(c.id))) {
+				notMergedNames.push(name);
+				continue;
+			}
+
+			const ownerId = keptOwnerByBlobName.get(name);
+			copies.sort((a, b) =>
+				(Number(b.owner_id === ownerId) - Number(a.owner_id === ownerId)) ||
+				(b.jop_updated_time - a.jop_updated_time) ||
+				(b.updated_time - a.updated_time) ||
+				(a.id < b.id ? -1 : 1),
+			);
+			if (copies[0].jop_type === ModelType.Resource) keptOwnerByBlobName.set(resourceBlobPath(copies[0].jop_id), copies[0].owner_id);
+			kept.push(copies[0]);
+			toDelete.push(...copies.slice(1));
+		}
+
+		if (notMergedNames.length) logger.info(`mergeDuplicateItems: Share ${share.id}: Not merging ${notMergedNames.length} items used by a share: ${itemIdSample(notMergedNames)}`);
+		if (!toDelete.length) return;
+
+		logger.info(`mergeDuplicateItems: Share ${share.id}: Deleting ${toDelete.length} duplicate copies: ${itemIdSample(toDelete.map(i => i.id))}`);
+		// Storage deletion can fail after the copies are already gone from the database
+		try {
+			await this.models().item().delete(toDelete.map(i => i.id), { recordChanges: false });
+		} finally {
+			for (const userId of await this.allShareUserIds(share)) {
+				await this.createSharedFolderUserItems(share.id, userId);
+			}
+
+			for (const item of kept) {
+				await this.models().change().recordChange({
+					itemName: item.name,
+					itemId: item.id,
+					sourceUserId: item.owner_id,
+					shareId: share.id,
+					previousItem: { jop_share_id: share.id },
+					type: ChangeType.Update,
+					itemType: ItemType.Item,
+				});
+			}
+		}
 	}
 
 	public async updateResourceShareStatus(doShare: boolean, _shareId: Uuid, changerUserId: Uuid, toUserId: Uuid, resourceIds: string[]) {
@@ -623,7 +703,7 @@ export default class ShareModel extends BaseModel<Share> {
 	// however can be called after a user accept a share, or to correct share
 	// errors, but re-assigning all items to a user.
 	public async createSharedFolderUserItems(shareId: Uuid, userId: Uuid) {
-		const query = this.models().item().byShareIdQuery(shareId, { fields: ['id', 'name'] });
+		const query = this.models().item().byShareIdQuery(shareId, { fields: ['id', 'name', 'owner_id'] });
 		await this.models().userItem().addMulti(
 			// Don't throw if a (user_id, item_id) pair already exists to avoid race conditions.
 			userId, query, { ignoreAlreadyExists: true },
@@ -664,7 +744,9 @@ export default class ShareModel extends BaseModel<Share> {
 		};
 
 		await this.checkIfAllowed(owner, AclAction.Create, shareToSave);
-		return this.save(shareToSave);
+		const share = await this.save(shareToSave);
+		await this.sendPublishedNotification(owner, share, folderItem, 'notebook');
+		return share;
 	}
 
 	public async shareNote(owner: User, noteId: string, masterKeyId: string, recursive: boolean): Promise<Share> {
@@ -688,7 +770,31 @@ export default class ShareModel extends BaseModel<Share> {
 
 		await this.checkIfAllowed(owner, AclAction.Create, shareToSave);
 
-		return this.save(shareToSave);
+		const share = await this.save(shareToSave);
+		await this.sendPublishedNotification(owner, share, noteItem, 'note');
+		return share;
+	}
+
+	// Anyone holding a session can publish the account's notes, and the owner's apps then upload them unencrypted, so
+	// the owner of encrypted notes is told about every new publication. Without encryption, that session can already
+	// read the notes, and emailing every publication only taught people to ignore the email.
+	private async sendPublishedNotification(owner: User, share: Share, item: Item, itemType: 'note' | 'notebook') {
+		if (!item.jop_encryption_applied) return;
+
+		await this.models().email().push({
+			// The apps publish several selected notes one at a time, so this sends at most one email per minute
+			key: `itemPublished::${Math.floor(Date.now() / Minute)}`,
+			...itemPublishedTemplate({
+				itemType,
+				publishedUrl: this.shareUrl(owner.id, share.id),
+				publishTime: formatDateOnServer(Date.now()),
+				changePasswordUrl: forgotPasswordUrl(),
+			}),
+			recipient_email: owner.email,
+			recipient_name: owner.full_name || '',
+			recipient_id: owner.id,
+			sender_id: EmailSender.NoReply,
+		});
 	}
 
 	public async delete(id: string | string[], options: DeleteOptions = {}): Promise<void> {

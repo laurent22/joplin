@@ -75,6 +75,11 @@ describe('index/items', () => {
 		await expectHttpError(async () => {
 			await requestItem(session2.id);
 		}, 404);
+
+		// A disabled account keeps its user_items, so it must be refused rather than rely on them
+		const owner1 = await models().session().sessionUser(session1.id);
+		await models().user().save({ id: owner1.id, enabled: 0 });
+		await expectHttpError(async () => requestItem(session1.id), 403);
 	});
 
 	test('should sanitise response headers when serving user-controlled MIME types', async () => {

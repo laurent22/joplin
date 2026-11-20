@@ -100,8 +100,8 @@ export default class KeyValueModel extends BaseModel<KeyValue> {
 		}
 	}
 
-	public async deleteValue(key: string): Promise<void> {
-		await this.db(this.tableName).where('key', '=', key).delete();
+	public async deleteValue(key: string): Promise<number> {
+		return this.db(this.tableName).where('key', '=', key).delete();
 	}
 
 	public async delete(_id: string | string[] | number | number[], _options: DeleteOptions = {}): Promise<void> {

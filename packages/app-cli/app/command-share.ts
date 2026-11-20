@@ -11,6 +11,8 @@ import Folder from '@joplin/lib/models/Folder';
 import invitationRespond from '@joplin/lib/services/share/invitationRespond';
 import CommandService from '@joplin/lib/services/CommandService';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
+import { formatPublicKeyFingerprint, ppkPublicKeyFingerprint } from '@joplin/lib/services/e2ee/ppk/ppk';
+import { getEncryptionEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 
 const logger = Logger.create('command-share');
 
@@ -21,6 +23,7 @@ type Args = {
 	user?: string;
 	options: {
 		'read-only'?: boolean;
+		'public-key-fingerprint'?: string;
 		json?: boolean;
 		force?: boolean;
 	};
@@ -64,6 +67,7 @@ class Command extends BaseCommand {
 		return [
 			['--read-only', _('Don\'t allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.')],
 			['-f, --force', _('Do not ask for user confirmation.')],
+			['--public-key-fingerprint <fingerprint>', _('For "share add": Expected recipient public key fingerprint (default: accept any public key)')],
 			['--json', _('Prefer JSON output.')],
 		];
 	}
@@ -71,6 +75,24 @@ class Command extends BaseCommand {
 	public async action(args: Args) {
 		const commandShareAdd = async (folder: FolderEntity, email: string) => {
 			await reg.waitForSyncFinishedThenSync();
+
+			let publicKey = undefined;
+			if (args.options['public-key-fingerprint'] !== undefined) {
+				if (!getEncryptionEnabled()) {
+					throw new Error(_('Enable encryption first, using "%s".', 'e2ee enable'));
+				}
+
+				publicKey = await ShareService.instance().userPublicKey(email);
+				if (!publicKey) {
+					throw new Error(_('Cannot verify public key fingerprint: Recipient has not enabled end-to-end encryption.'));
+				}
+
+				const expectedFingerprint = args.options['public-key-fingerprint'].toLowerCase().replace(/\s/g, '');
+				const actualFingerprint = await ppkPublicKeyFingerprint(publicKey);
+				if (actualFingerprint !== expectedFingerprint) {
+					throw new Error(_('Public key fingerprint mismatch. Was %s but expected %s.', JSON.stringify(formatPublicKeyFingerprint(actualFingerprint)), JSON.stringify(args.options['public-key-fingerprint'])));
+				}
+			}
 
 			const share = await ShareService.instance().shareFolder(folder.id);
 
@@ -80,7 +102,13 @@ class Command extends BaseCommand {
 			};
 			logger.debug('Sharing folder', folder.id, 'with', email, 'permissions=', permissions);
 
-			await ShareService.instance().addShareRecipient(share.id, share.master_key_id, email, permissions);
+			await ShareService.instance().addShareRecipient({
+				shareId: share.id,
+				masterKeyId: share.master_key_id,
+				recipientEmail: email,
+				permissions,
+				publicKey,
+			});
 
 			await ShareService.instance().refreshShares();
 			await ShareService.instance().refreshShareUsers(share.id);
@@ -227,7 +255,7 @@ class Command extends BaseCommand {
 			const invitation = invitations[0];
 
 			this.stdout(accept ? _('Accepting share...') : _('Rejecting share...'));
-			await invitationRespond(invitation.id, invitation.share.folder_id, invitation.master_key, accept);
+			await invitationRespond(invitation.id, invitation.share, invitation.master_key, accept);
 		};
 
 		const commandShareAccept = (folderId: string) => (
