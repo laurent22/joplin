@@ -29,7 +29,7 @@ const hiddenStyles = EditorView.theme({
 	},
 });
 
-type Options = Pick<ReplacementExtension, 'getRevealStrategy'|'getDecorationRange'> & {
+type Options = Pick<ReplacementExtension, 'getRevealStrategy'|'getDecorationRange'|'getSelectionOwner'> & {
 	shouldHide: (node: SyntaxNodeRef, state: EditorState, parentTags: ParentTags)=> boolean;
 };
 
@@ -56,6 +56,10 @@ const hideReplaceFacet = Facet.define<Options>({
 				getRevealStrategy: (node, state, parentTags) => {
 					const options = getActivePluginOptions(node, state, parentTags);
 					return options?.getRevealStrategy?.(node, state, parentTags);
+				},
+				getSelectionOwner: (node, state, parentTags) => {
+					const options = getActivePluginOptions(node, state, parentTags);
+					return options?.getSelectionOwner?.(node, state, parentTags);
 				},
 				mergeNeighbors: true,
 			}),
