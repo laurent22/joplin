@@ -1,5 +1,25 @@
 # Joplin Desktop Changelog
 
+## [v3.7.24](https://github.com/laurent22/joplin/releases/tag/v3.7.24) - 2026-11-19T17:20:16Z
+
+- Improved: Add a first-class OpenAI provider using the Responses API ([#16864](https://github.com/laurent22/joplin/issues/16864)) ([#16450](https://github.com/laurent22/joplin/issues/16450) by [@Rygaa](https://github.com/Rygaa))
+- Improved: Create the application authorisation ID in one place ([79d954a](https://github.com/laurent22/joplin/commit/79d954a))
+- Improved: Prioritize local changes to sync info over values with unchanged far-future remote timestamps (2624b35 by Henry Heino)
+- Improved: Sync/E2EE: Avoid propagating share/publish status until an item has decrypted (b6692eb by Henry Heino)
+- Fixed: Fix ENEX import failing when an unescaped ampersand is directly followed by a tag ([e5ed69a](https://github.com/laurent22/joplin/commit/e5ed69a))
+- Fixed: Fix crash when a semantic search result is open in a secondary window ([#17085](https://github.com/laurent22/joplin/issues/17085))
+- Security: Add UI to allow validating public key fingerprints when sharing notebooks (3fd2f2f by Henry Heino)
+- Security: Ask for confirmation before disabling E2EE (f4447dd by Henry Heino)
+- Security: Detect and allow recovering from invalid public-private key pairs (27944cf by Henry Heino)
+- Security: Disable unencrypted uploads by default when E2EE is enabled (cfce373 by Henry Heino)
+- Security: Fix SQL injection in data API (64522e0 by Henry Heino)
+- Security: Harden master key loading, add new encryption method forward compatibility (46c5442 by Henry Heino)
+- Security: Harden server share API response handling (64d513a by Henry Heino)
+- Security: Prevent OneNote import from reading files outside the import directory ([86250d4](https://github.com/laurent22/joplin/commit/86250d4))
+- Security: Sync/E2EE: Do not mark items as published based on the list of shares returned by the server (2d1a179 by Henry Heino)
+- Security: Sync/E2EE: Harden marking items as published/shared (3cf1c1a by Henry Heino)
+- Security: Sync: Do not allow a remote item to decrypt/deserialize to an item with a different ID (b61ef1e by Henry Heino)
+
 ## [v3.7.22](https://github.com/laurent22/joplin/releases/tag/v3.7.22) - 2026-10-28T22:32:59Z
 
 - Improved: Add read_notes MCP tool ([#16845](https://github.com/laurent22/joplin/issues/16845)) ([#16782](https://github.com/laurent22/joplin/issues/16782))
