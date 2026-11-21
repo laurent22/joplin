@@ -124,6 +124,8 @@ describe('markdownUtils2', () => {
 		['C# programming basics', 'C# programming basics'],
 		['Understanding a ~ b relationship', 'Understanding a ~ b relationship'],
 		['***~~***', ''],
+		['\\[2026-11-19\\] Note', '[2026-11-19] Note'],
+		['Escaped \\*asterisks\\* and \\_underscores\\_', 'Escaped *asterisks* and _underscores_'],
 	])('should create a default note title from the note body (%j -> %j)', (body, expectedTitle) => {
 		expect(markdownUtils.titleFromBody(body)).toBe(expectedTitle);
 	});

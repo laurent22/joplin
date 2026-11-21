@@ -259,6 +259,7 @@ const markdownUtils = {
 		title = title.replace(/^(~{2,}|={2,})$/, '');
 		title = title.replace(/^[#>\-*`\s=]+/, '');
 		title = title.replace(/[#>\-*`\s=]+$/, '');
+		title = title.replace(/\\([\\`*_{}[\]()#+\-.!~>])/g, '$1');
 		title = title.trim();
 		return title.substring(0, 80);
 	},
