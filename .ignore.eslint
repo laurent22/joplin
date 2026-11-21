@@ -2011,6 +2011,8 @@ packages/lib/services/search/SearchEngineUtils.js
 packages/lib/services/search/SearchFilter.test.js
 packages/lib/services/search/filterParser.test.js
 packages/lib/services/search/filterParser.js
+packages/lib/services/search/ftsPhraseRegex.test.js
+packages/lib/services/search/ftsPhraseRegex.js
 packages/lib/services/search/gotoAnythingStyleQuery.test.js
 packages/lib/services/search/gotoAnythingStyleQuery.js
 packages/lib/services/search/queryBuilder.js

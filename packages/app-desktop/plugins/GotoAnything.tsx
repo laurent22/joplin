@@ -8,6 +8,7 @@ import { _ } from '@joplin/lib/locale';
 import { themeStyle } from '@joplin/lib/theme';
 import SearchEngine, { ComplexTerm } from '@joplin/lib/services/search/SearchEngine';
 import gotoAnythingStyleQuery from '@joplin/lib/services/search/gotoAnythingStyleQuery';
+import ftsPhraseRegex from '@joplin/lib/services/search/ftsPhraseRegex';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import Tag from '@joplin/lib/models/Tag';
 import Folder from '@joplin/lib/models/Folder';
@@ -434,7 +435,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 						}
 					});
 
-					const phraseRegex = keywords.length > 1 ? new RegExp(keywords.map(term => removeDiacritics(term.valueRegex)).join('\\W+'), 'i') : null;
+					const phraseRegex = ftsPhraseRegex(keywords.map(term => removeDiacritics(term.valueRegex)));
 
 					for (let i = 0; i < results.length; i++) {
 						const row = results[i];
