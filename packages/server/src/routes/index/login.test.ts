@@ -1,7 +1,8 @@
 import { Session } from '../../services/database/types';
 import routeHandler from '../../middleware/routeHandler';
 import { cookieDelete, cookieGet } from '../../utils/cookies';
-import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, models, parseHtml, createUser } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, models, parseHtml, createUser, createUserAndSession } from '../../utils/testing/testUtils';
+import { ApplicationPlatform, ApplicationType } from '@joplin/lib/types';
 import { AppContext } from '../../utils/types';
 import * as crypto from '../../utils/crypto';
 import { limiterLoginAccountBruteForce } from '../../utils/request/limiterAccountBruteForce';
@@ -41,6 +42,18 @@ async function doLoginWithMFA(email: string, password: string, mfaCode: string, 
 
 	await routeHandler(context);
 	return context;
+}
+
+const appAuthId = 'asdf';
+const appQuery = `platform=${ApplicationPlatform.MacOs}&type=${ApplicationType.Desktop}&version=3.7.21`;
+
+async function sendRequest(method: string, url: string, { body, sessionId }: { body?: Record<string, string>; sessionId?: string } = {}) {
+	const { pathname, searchParams } = new URL(url, config().baseUrl);
+	const context = await koaAppContext({ sessionId, request: { method, url: pathname, query: Object.fromEntries(searchParams), body } });
+	const redirect = jest.fn();
+	context.redirect = redirect;
+	await routeHandler(context);
+	return { context, redirectUrl: redirect.mock.calls.length ? redirect.mock.calls[0][0] as string : '' };
 }
 
 describe('login', () => {
@@ -270,5 +283,42 @@ describe('login', () => {
 		expect(!!doc.querySelector('input[name=email]')).toBe(true);
 		expect(!!doc.querySelector('input[name=password]')).toBe(true);
 		expect(!!doc.querySelector('input[name=recoveryCode]')).toBe(true);
+	});
+
+	test('should keep the app details through the login when the owner is not logged in', async () => {
+		const user = await createUser(1);
+
+		const confirmPage = await sendRequest('GET', `/applications/${appAuthId}/confirm?${appQuery}`);
+		const loginPage = await sendRequest('GET', confirmPage.redirectUrl);
+		const loginDoc = parseHtml(loginPage.context.response.body as string);
+		const inputs = loginDoc.querySelectorAll<HTMLInputElement>('input[type=hidden]');
+		const fields = Object.fromEntries(Array.from(inputs, input => [input.name, input.value]));
+
+		const login = await sendRequest('POST', '/login', { body: { email: user.email, password: '123456', ...fields } });
+		await sendRequest('GET', login.redirectUrl, { sessionId: cookieGet(login.context, 'sessionId') });
+
+		const application = await models().application().onAuthorizeUse(appAuthId, user.id);
+		expect(application).toMatchObject({ platform: ApplicationPlatform.MacOs, type: ApplicationType.Desktop, version: '3.7.21' });
+	});
+
+	test('should keep the app details when the login asks for the MFA code', async () => {
+		const user = await createUser(1);
+		await models().user().save({ id: user.id, totp_secret: 'totp_secret' });
+		const fields = { applicationAuthId: appAuthId, applicationPlatform: `${ApplicationPlatform.MacOs}`, applicationType: `${ApplicationType.Desktop}`, applicationVersion: '3.7.21' };
+
+		const login = await sendRequest('POST', '/login', { body: { email: user.email, password: '123456', ...fields } });
+
+		const doc = parseHtml(login.context.response.body as string);
+		expect(!!doc.querySelector('input[name=mfaCode]')).toBe(true);
+		const inputs = doc.querySelectorAll<HTMLInputElement>('input[type=hidden]');
+		expect(Object.fromEntries(Array.from(inputs, input => [input.name, input.value]))).toEqual(fields);
+	});
+
+	test('should keep the app details when the login page is reloaded after the owner logged in from another tab', async () => {
+		const { session } = await createUserAndSession(1);
+
+		const loginPage = await sendRequest('GET', `/login?application_auth_id=${appAuthId}&${appQuery}`, { sessionId: session.id });
+
+		expect(loginPage.redirectUrl).toBe(`${config().baseUrl}/applications/${appAuthId}/confirm?${appQuery}`);
 	});
 });

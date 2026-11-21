@@ -8,7 +8,7 @@ import defaultView from '../../utils/defaultView';
 import { View } from '../../services/MustacheService';
 import limiterLoginBruteForce from '../../utils/request/limiterLoginBruteForce';
 import { cookieSet } from '../../utils/cookies';
-import { adminDashboardUrl, applicationsConfirmUrl, homeUrl } from '../../utils/urlUtils';
+import { adminDashboardUrl, ApplicationClientDetails, applicationsConfirmUrl, homeUrl } from '../../utils/urlUtils';
 import { generateRedirectHtml } from '../../utils/saml';
 import { ErrorCode, ErrorForbidden, ErrorTooManyRequests } from '../../utils/errors';
 import { checkNotCrossSiteRequest } from '../../utils/csrf';
@@ -23,6 +23,9 @@ type LoginInputFields = {
 	password?: string;
 	mfaCode?: string;
 	applicationAuthId?: string;
+	applicationPlatform?: string;
+	applicationType?: string;
+	applicationVersion?: string;
 };
 
 function makeView(error: Error | null = null, fields?: LoginInputFields, viewContentOptions?: LoginViewContentOptions): View {
@@ -33,6 +36,9 @@ function makeView(error: Error | null = null, fields?: LoginInputFields, viewCon
 		email: fields?.email,
 		password: fields?.password,
 		applicationAuthId: fields?.applicationAuthId,
+		applicationPlatform: fields?.applicationPlatform,
+		applicationType: fields?.applicationType,
+		applicationVersion: fields?.applicationVersion,
 		// should only show mfa code input if recovery code is not active
 		showMfaCodeInput: viewContentOptions?.showRecoveryCodeInput ? false : viewContentOptions?.showMfaCodeInput,
 		showRecoveryCodeInput: viewContentOptions?.showRecoveryCodeInput,
@@ -63,8 +69,8 @@ const getApplicationAuthId = (query: Queries, fields: LoginInputFields): string 
 };
 
 
-const getRedirectUrl = (isAdmin: number, applicationAuthId?: string) => {
-	if (applicationAuthId) return applicationsConfirmUrl(applicationAuthId);
+const getRedirectUrl = (isAdmin: number, applicationAuthId?: string, client?: ApplicationClientDetails) => {
+	if (applicationAuthId) return applicationsConfirmUrl(applicationAuthId, client);
 	if (isAdmin) return adminDashboardUrl();
 	return homeUrl();
 };
@@ -75,9 +81,16 @@ router.get('login', async (_path: SubPath, ctx: AppContext, fields: LoginInputFi
 		showRecoveryCodeInput: !!ctx.query?.showRecoveryCodeInput,
 	};
 	fields.applicationAuthId = getApplicationAuthId(ctx.query, fields);
+	fields.applicationPlatform = fields.applicationPlatform || ctx.query.platform as string;
+	fields.applicationType = fields.applicationType || ctx.query.type as string;
+	fields.applicationVersion = fields.applicationVersion || ctx.query.version as string;
 
 	if (ctx.joplin.owner) {
-		return redirect(ctx, getRedirectUrl(ctx.joplin.owner.is_admin, fields.applicationAuthId));
+		return redirect(ctx, getRedirectUrl(ctx.joplin.owner.is_admin, fields.applicationAuthId, {
+			platform: fields.applicationPlatform,
+			type: fields.applicationType,
+			version: fields.applicationVersion,
+		}));
 	}
 
 	return makeView(null, fields, viewContentOptions);
@@ -119,7 +132,11 @@ router.post('login', async (path: SubPath, ctx: AppContext) => {
 		cookieSet(ctx, 'sessionId', session.id);
 		const owner = await ctx.joplin.models.user().load(session.user_id, { fields: ['id', 'is_admin'] });
 
-		return redirect(ctx, getRedirectUrl(owner.is_admin, body.fields.applicationAuthId));
+		return redirect(ctx, getRedirectUrl(owner.is_admin, body.fields.applicationAuthId, {
+			platform: body.fields.applicationPlatform,
+			type: body.fields.applicationType,
+			version: body.fields.applicationVersion,
+		}));
 	} catch (error) {
 		// Only raised once the password has been checked, so that the form does not reveal which accounts have MFA
 		if (error.code === ErrorCode.MfaCodeRequired) {

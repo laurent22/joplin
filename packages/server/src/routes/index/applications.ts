@@ -103,7 +103,11 @@ router.post('applications/:id/delete', async (path: SubPath, ctx: AppContext) =>
 
 router.get('applications/:id/confirm', async (path: SubPath, ctx: AppContext) => {
 	if (!ctx.joplin.owner) {
-		return redirect(ctx, loginUrl(path.id));
+		return redirect(ctx, loginUrl(path.id, {
+			platform: ctx.query.platform as string,
+			type: ctx.query.type as string,
+			version: ctx.query.version as string,
+		}));
 	}
 
 	await ctx.joplin.models.application().createPreLoginRecord(
