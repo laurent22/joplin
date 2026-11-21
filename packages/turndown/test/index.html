@@ -323,6 +323,22 @@ def a_fenced_code block; end
 44. Ordered list item 44</pre>
 </div>
 
+<div class="case" data-name="ol with 100+ and 1000+ items">
+  <div class="input">
+    <ol start="99">
+      <li>Item 99</li>
+      <li>Item 100</li>
+    </ol>
+    <ol start="1000">
+      <li>Item 1000</li>
+    </ol>
+  </div>
+  <pre class="expected">99. Item 99
+100. Item 100
+
+1000. Item 1000</pre>
+</div>
+
 <div class="case" data-name="list spacing">
   <div class="input">
     <p>A paragraph.</p>
