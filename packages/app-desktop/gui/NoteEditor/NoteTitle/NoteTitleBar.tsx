@@ -119,6 +119,7 @@ export default function NoteTitleBar(props: Props) {
 			<input
 				className="title-input"
 				type="text"
+				dir="auto"
 				ref={props.titleInputRef}
 				placeholder={props.isProvisional ? (props.noteIsTodo ? _('Creating new to-do...') : _('Creating new note...')) : ''}
 				aria-label={props.isProvisional ? undefined : _('Note title')}
