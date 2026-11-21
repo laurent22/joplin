@@ -137,7 +137,14 @@ export default class ApplicationModel extends BaseModel<Application> {
 		return createSecureRandom();
 	}
 
-	public async createAppPassword(applicationAuthId: string): Promise<CreateAppPasswordResponse> {
+	private clientDescription(application: Application) {
+		// The confirm URL can be changed by anyone so we only show the version if it looks like 3.7.21 otherwise we show Unknown
+		const version = /^\d+\.\d+\.\d+$/.test(application.version) ? application.version : 'Unknown';
+		return `${this.getTypeName(application.type)} application (${this.getPlatformName(application.platform)}, version ${version})`;
+	}
+
+	// We use the device IP because in a phishing attack the browser IP is the victim IP
+	public async createAppPassword(applicationAuthId: string, ip: string): Promise<CreateAppPasswordResponse> {
 		return this.withTransaction(async () => {
 			const application = await this.getValidApplicationBeforeFirstLogin(applicationAuthId);
 			if (!application) return { status: 'unfinished', message: 'Application not found from Application Auth Id.' };
@@ -145,10 +152,15 @@ export default class ApplicationModel extends BaseModel<Application> {
 			const password = this.generatePassword();
 			const hashedPassword = await hashPassword(password);
 			await this.db(this.tableName)
-				.update({ password: hashedPassword })
+				.update({ password: hashedPassword, ip: ip || getEmptyIp(this.db) })
 				.where({ id: application.id });
 
 			await this.models().keyValue().deleteValue(this.applicationAuthIdKey(applicationAuthId));
+
+			await this.models().user().sendNewSignInEmail(application.user_id, {
+				client: this.clientDescription(application),
+				ip,
+			});
 
 			return { id: application.id, password, status: 'finished' };
 		}, 'ApplicationModel::createAppPassword');

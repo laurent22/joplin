@@ -12,6 +12,9 @@ import { adminDashboardUrl, applicationsConfirmUrl, homeUrl } from '../../utils/
 import { generateRedirectHtml } from '../../utils/saml';
 import { ErrorCode, ErrorForbidden, ErrorTooManyRequests } from '../../utils/errors';
 import { checkNotCrossSiteRequest } from '../../utils/csrf';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('index/login');
 
 type LoginViewContentOptions = {
 	showMfaCodeInput: boolean;
@@ -117,6 +120,11 @@ router.post('login', async (path: SubPath, ctx: AppContext) => {
 			body.fields.email, body.fields.password, ctx.joplin.services, body.fields.mfaCode, body.fields.recoveryCode,
 		);
 		cookieSet(ctx, 'sessionId', session.id);
+		try {
+			await ctx.joplin.models.user().sendNewSignInEmail(session.user_id, { client: 'Website', ip: userIp(ctx) });
+		} catch (error) {
+			logger.error('Could not send the sign-in email:', error);
+		}
 		const owner = await ctx.joplin.models.user().load(session.user_id, { fields: ['id', 'is_admin'] });
 
 		return redirect(ctx, getRedirectUrl(owner.is_admin, body.fields.applicationAuthId));

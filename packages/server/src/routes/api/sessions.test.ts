@@ -51,7 +51,7 @@ const createApplicationCredentials = async () => {
 		'',
 	);
 	await models().application().onAuthorizeUse(applicationAuthId, user.id);
-	const response = await models().application().createAppPassword(applicationAuthId);
+	const response = await models().application().createAppPassword(applicationAuthId, '');
 	if (response.status === 'finished') {
 		return {
 			user,
@@ -85,6 +85,7 @@ describe('api/sessions', () => {
 
 		const session: Session = await models().session().load((context.response.body as { id: string }).id);
 		expect(session.user_id).toBe(user.id);
+		expect((await models().email().all()).filter(e => e.subject.includes('New sign-in'))).toHaveLength(0);
 	});
 
 	test('should not login user with wrong password', async () => {
