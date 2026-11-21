@@ -435,7 +435,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 						}
 					});
 
-					const phraseRegex = ftsPhraseRegex(keywords.map(term => removeDiacritics(term.valueRegex)));
+					const phraseRegex = ftsPhraseRegex(keywords.map(term => removeDiacritics(term.value)));
 
 					for (let i = 0; i < results.length; i++) {
 						const row = results[i];
