@@ -28,6 +28,17 @@ const RELEVANCE_DEFAULTS: Record<SearchRelevance, RelevanceTuning> = {
 	loose: { k: 20, minScore: 0.74 },
 };
 
+// Caps the searches a long note fans out into when looking for related notes.
+const MAX_RELATED_QUERY_VECTORS = 10;
+
+// Spread evenly so later sections of a long note still count. Always keeps
+// the first item, which is the chunk that holds the title.
+const sampleEvenly = <T>(items: T[], max: number) => {
+	if (items.length <= max) return items;
+	const step = (items.length - 1) / (max - 1);
+	return Array.from({ length: max }, (_, i) => items[Math.round(i * step)]);
+};
+
 const DEFAULT_EMBEDDINGS_PAGE_SIZE = 500;
 const MAX_EMBEDDINGS_PAGE_SIZE = 5000;
 
@@ -186,6 +197,56 @@ export default class SearchService {
 						chunkText: hit.chunkText,
 						score,
 					});
+				}
+			}
+		}
+
+		return Array.from(best.values())
+			.sort((a, b) => b.score - a.score)
+			.slice(0, tuning.k);
+	}
+
+	// Uses the note's stored vectors as queries, so unlike search() it needs
+	// no embedding provider. Returns the best chunk of each other note.
+	public async relatedNotes(noteId: string, options: { scope?: SearchScope; relevance?: SearchRelevance } = {}): Promise<SearchResult[]> {
+		const tuning = RELEVANCE_DEFAULTS[options.relevance ?? 'normal'];
+
+		const vectors = await NoteEmbedding.vectorsByNoteId(noteId);
+		if (!vectors.length) return [];
+
+		const noteIds = await this.resolveScope(options.scope);
+		if (noteIds && noteIds.length === 0) return [];
+
+		const best = new Map<string, SearchResult>();
+		for (const queryVector of sampleEvenly(vectors, MAX_RELATED_QUERY_VECTORS)) {
+			// Hits are chunks, so a note with many close chunks can fill all k
+			// slots. Search again without the notes found so far, until tuning.k
+			// notes are found or the scores fall under minScore.
+			const foundNoteIds: string[] = [];
+			let done = false;
+			while (!done && foundNoteIds.length < tuning.k) {
+				const hits = await NoteEmbedding.similaritySearch(queryVector, {
+					k: tuning.k,
+					noteIds: noteIds ?? undefined,
+					excludeNoteIds: [noteId, ...foundNoteIds],
+				});
+				done = hits.length < tuning.k;
+				for (const hit of hits) {
+					const score = cosineFromDistance(hit.distance);
+					if (score < tuning.minScore) {
+						done = true;
+						break;
+					}
+					if (!foundNoteIds.includes(hit.noteId)) foundNoteIds.push(hit.noteId);
+					const existing = best.get(hit.noteId);
+					if (!existing || score > existing.score) {
+						best.set(hit.noteId, {
+							noteId: hit.noteId,
+							chunkIndex: hit.chunkIndex,
+							chunkText: hit.chunkText,
+							score,
+						});
+					}
 				}
 			}
 		}
