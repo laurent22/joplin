@@ -63,7 +63,7 @@ export interface ProcessResultsRow {
 	is_todo?: number;
 	todo_completed?: number;
 	isPhraseMatch?: boolean;
-	// Fraction of the query terms found in the title. Only set for FTS note results.
+	// Only set for FTS note results
 	titleCoverage?: number;
 }
 
@@ -472,7 +472,7 @@ export default class SearchEngine {
 				if (hitsThisRow(X[i], TITLE_COLUMN, j)) termsInTitle++;
 			}
 
-			// Resource rows come from a different query on items_fts, so numPhrases doesn't apply to them
+			// Resource rows come from a different FTS query, so their matchinfo doesn't line up
 			if (numPhrases && row.item_type === ModelType.Note) {
 				row.titleCoverage = termsInTitle / numPhrases;
 				row.weight += row.titleCoverage * TITLE_COVERAGE_WEIGHT;
@@ -739,13 +739,11 @@ export default class SearchEngine {
 		return rows;
 	}
 
-	// The main FTS query matches the terms anywhere in the note, so notes that contain them as
-	// an exact phrase would otherwise get no ranking advantage.
 	private async markPhraseMatches_(rows: ProcessResultsRow[], parsedQuery: ParsedQuery) {
 		const textTerms = parsedQuery.allTerms.filter(t => t.name === 'text' && !t.negated);
 		if (!rows.length || textTerms.length < 2 || textTerms.some(t => t.quoted)) return;
 
-		// filterParser wraps each word in quotes, which need to be removed to build a single phrase
+		// filterParser wraps every word in quotes
 		const phrase = `"${textTerms.map(t => t.value.replace(/^"(.*)"$/, '$1')).join(' ')}"`;
 
 		try {
@@ -1010,8 +1008,7 @@ export default class SearchEngine {
 	}
 }
 
-// Partial title matches only get a weight bonus, so that a single short term in a title (e.g.
-// "up*" matching "Upcoming") doesn't outrank notes that match the whole query.
+// Partial title matches only get a weight bonus, so that e.g. "up*" matching "Upcoming" doesn't win
 const titleMatchesAllTerms = (row: ProcessResultsRow) => {
 	if (row.titleCoverage === undefined) return row.fields.includes('title');
 	return row.titleCoverage >= 1;

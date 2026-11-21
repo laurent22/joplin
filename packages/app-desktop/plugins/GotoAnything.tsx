@@ -302,8 +302,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 		return SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 	}
 
-	// FTS only matches terms at the start of words, so highlights shouldn't match within words
-	// either (e.g. "ai*" shouldn't highlight "main")
+	// FTS matches at word start, so highlights shouldn't match within words (e.g. "ai*" in "main")
 	private async noteKeywords(searchQuery: string): Promise<ComplexTerm[]> {
 		const engine = SearchEngine.instance();
 		return (await this.keywords(searchQuery)).map(term => {
@@ -464,8 +463,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 								// will result in 'Joplin is a free, open source note taking application'
 								let mergedIndices = mergeOverlappingIntervals(indices, 3);
 
-								// Fragments are ordered by position, so stray matches near the top of the note
-								// could push the exact phrase out of the snippet
+								// Otherwise earlier stray matches can push the exact phrase out of the snippet
 								const phraseMatch = phraseRegex?.exec(normalizedBody);
 								if (phraseMatch) {
 									const phraseIndices: [number, number] = [phraseMatch.index, nextWhitespaceIndex(body, phraseMatch.index + phraseMatch[0].length + 15)];
