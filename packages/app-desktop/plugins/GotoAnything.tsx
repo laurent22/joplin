@@ -302,6 +302,16 @@ class DialogComponent extends React.PureComponent<Props, State> {
 		return SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 	}
 
+	// FTS only matches terms at the start of words, so highlights shouldn't match within words
+	// either (e.g. "ai*" shouldn't highlight "main")
+	private async noteKeywords(searchQuery: string): Promise<ComplexTerm[]> {
+		const engine = SearchEngine.instance();
+		return (await this.keywords(searchQuery)).map(term => {
+			const value = typeof term === 'string' ? term : term.value;
+			return { type: 'regex', value, valueRegex: engine.queryTermToRegex(value, { anchorToWordBoundary: true }) };
+		});
+	}
+
 	public markupToHtml() {
 		if (this.markupToHtml_) return this.markupToHtml_;
 		this.markupToHtml_ = markupLanguageUtils.newMarkupToHtml();
@@ -369,6 +379,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 			} else { // Note TITLE or BODY
 				listType = BaseModel.TYPE_NOTE;
 				searchQuery = gotoAnythingStyleQuery(this.state.query);
+				keywords = await this.noteKeywords(searchQuery);
 				// SearchEngine returns the title normalized, that is why we need to
 				// override this field below with the original title
 				results = (await SearchEngine.instance().search(searchQuery)) as unknown as GotoAnythingSearchResult[];
@@ -414,7 +425,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 					results = results.filter(r => !!notesById[r.id])
 						.map(r => ({ ...r, title: notesById[r.id].title }));
 
-					const keywordRegexes = (await this.keywords(searchQuery)).map(term => {
+					const keywordRegexes = keywords.map(term => {
 						if (typeof term === 'string') {
 							return new RegExp(escapeRegExp(term), 'ig');
 						} else if (term.valueRegex) {
@@ -423,6 +434,8 @@ class DialogComponent extends React.PureComponent<Props, State> {
 							return new RegExp(escapeRegExp(term.value), 'ig');
 						}
 					});
+
+					const phraseRegex = keywords.length > 1 ? new RegExp(keywords.map(term => removeDiacritics(term.valueRegex)).join('\\W+'), 'i') : null;
 
 					for (let i = 0; i < results.length; i++) {
 						const row = results[i];
@@ -449,7 +462,17 @@ class DialogComponent extends React.PureComponent<Props, State> {
 								// Merge multiple overlapping fragments into a single fragment to prevent repeated content
 								// e.g. 'Joplin is a free, open source' and 'open source note taking application'
 								// will result in 'Joplin is a free, open source note taking application'
-								const mergedIndices = mergeOverlappingIntervals(indices, 3);
+								let mergedIndices = mergeOverlappingIntervals(indices, 3);
+
+								// Fragments are ordered by position, so stray matches near the top of the note
+								// could push the exact phrase out of the snippet
+								const phraseMatch = phraseRegex?.exec(normalizedBody);
+								if (phraseMatch) {
+									const phraseIndices: [number, number] = [phraseMatch.index, nextWhitespaceIndex(body, phraseMatch.index + phraseMatch[0].length + 15)];
+									const others = mergedIndices.filter(f => f[1] < phraseIndices[0] || f[0] > phraseIndices[1]);
+									mergedIndices = [phraseIndices, ...others.slice(0, 2)];
+								}
+
 								fragments = mergedIndices.map((f: [number, number]) => body.slice(f[0], f[1])).join(' ... ');
 								// Add trailing ellipsis if the final fragment doesn't end where the note is ending
 								if (mergedIndices.length && mergedIndices[mergedIndices.length - 1][1] !== body.length) fragments += ' ...';
