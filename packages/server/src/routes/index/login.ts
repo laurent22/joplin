@@ -117,6 +117,7 @@ router.post('login', async (path: SubPath, ctx: AppContext) => {
 			body.fields.email, body.fields.password, ctx.joplin.services, body.fields.mfaCode, body.fields.recoveryCode,
 		);
 		cookieSet(ctx, 'sessionId', session.id);
+		await ctx.joplin.models.user().sendNewSignInEmail(session.user_id, { client: 'Website', ip: userIp(ctx) });
 		const owner = await ctx.joplin.models.user().load(session.user_id, { fields: ['id', 'is_admin'] });
 
 		return redirect(ctx, getRedirectUrl(owner.is_admin, body.fields.applicationAuthId));

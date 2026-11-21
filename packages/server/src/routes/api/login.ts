@@ -53,6 +53,7 @@ router.post('api/saml', async (_path: SubPath, ctx: AppContext) => {
 		case 'web-login': { // If the user wanted to load a page from Joplin Server, we set the cookie for this session
 			const session = await ctx.joplin.models.session().createUserSession(user.id);
 			cookieSet(ctx, 'sessionId', session.id);
+			await ctx.joplin.models.user().sendNewSignInEmail(user.id, { client: 'Website', ip: userIp(ctx) });
 
 			return redirect(ctx, `${config().baseUrl}/home`);
 		}
