@@ -40,7 +40,7 @@
     "@types/json5": "2.2.0",
     "abcjs": "6.6.4",
     "font-awesome-filetypes": "2.1.0",
-    "fs-extra": "11.3.6",
+    "fs-extra": "11.4.0",
     "highlight.js": "11.11.2",
     "html-entities": "1.4.0",
     "json-stringify-safe": "5.0.1",
