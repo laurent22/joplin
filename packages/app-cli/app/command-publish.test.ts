@@ -6,6 +6,7 @@ import { setupApplication, setupCommandForTesting } from './utils/testUtils';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
 import Setting from '@joplin/lib/models/Setting';
+import { setEncryptionEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 const Command = require('./command-publish');
 
 const setUpCommand = () => {
@@ -53,6 +54,16 @@ describe('command-publish', () => {
 		// Should have logged the publication URL
 		expect(onStdout).toHaveBeenCalled();
 		expect(onStdout.mock.lastCall[0]).toMatch(/Published at URL:/);
+	});
+
+	test('should refuse to publish a note while E2EE blocks publishing', async () => {
+		setEncryptionEnabled(true);
+		const { command } = setUpCommand();
+		const testFolder = await Folder.save({ title: 'Test' });
+		const testNote = await Note.save({ title: 'test', parent_id: testFolder.id });
+
+		await expect(command.action({ note: testNote.id, options: { force: true } })).rejects.toThrow('config encryption.allowUnencryptedUploads true');
+		expect(await Note.load(testNote.id)).toMatchObject({ is_shared: 0 });
 	});
 
 	test('should be enabled for Joplin Server and Cloud sync targets', () => {

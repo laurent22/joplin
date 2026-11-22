@@ -397,6 +397,33 @@ describe('OcrService', () => {
 		expect(pdfBytes.length).toBeGreaterThan(jpegBuffer.length * 1.5);
 	});
 
+	it.each([
+		{ words: ['ı', 'Мир', '日本語', '𠀀😀'], rtl: false },
+		{ words: ['אור', 'חדש'], rtl: true },
+		{ words: ['نور', 'باب', 'عام2024.05'], rtl: true },
+	])('should create an accessible PDF with text that can be extracted: $words', async ({ words, rtl }) => {
+		const jpegBuffer = await fs.readFile(`${supportDir}/photo.jpg`);
+
+		// Like Tesseract, words are in logical order, so right-to-left words are laid out from the right
+		const ocrDetails: PdfOcrDetails = {
+			version: 1,
+			pages: [{
+				lines: [{ words: words.map((t, i) => {
+					const x = rtl ? 700 - (i + 1) * 150 : 20 + i * 150;
+					return { t, bb: [x, x + 130, 20, 60] };
+				}) }],
+			}],
+		};
+
+		const pdfBytes = await createAccessiblePdf([{ buffer: jpegBuffer, width: 800, height: 400 }], JSON.stringify(ocrDetails));
+		const pdfPath = join(Setting.value('tempDir'), 'accessible.pdf');
+		await fs.writeFile(pdfPath, pdfBytes);
+
+		const textByPage = await shim.pdfExtractEmbeddedText(pdfPath);
+		expect(textByPage.length).toBe(1);
+		expect(textByPage[0].split(/\s+/)).toEqual(words);
+	});
+
 	it('should truncate long OCR text', async () => {
 		const service = newOcrService();
 		service.testing_setOcrMaxSize(10);

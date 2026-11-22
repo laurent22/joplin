@@ -1,11 +1,13 @@
 import * as path from 'path';
 import { readJsonFile } from './utils';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
+import { isValidBlockedVersionEntry } from '@joplin/lib/services/plugins/utils/blockedVersions';
 
 export interface ManifestOverride {
 	_obsolete?: boolean;
 	_recommended?: boolean;
 	_superseded_package?: string;
+	_blocked_versions?: string[];
 }
 
 export type ManifestOverrides = Record<string, ManifestOverride>;
@@ -16,6 +18,10 @@ export function applyManifestOverrides(manifests: PluginManifests, overrides: Ma
 		const manifest = manifests[pluginId] as PluginManifest & Record<string, unknown>;
 
 		if (!manifest) {
+			if (override._blocked_versions) {
+				throw new Error(`Cannot block plugin ${pluginId}: it is not in manifests.json`);
+			}
+
 			// If the manifest does not exist in the destination, it means the
 			// plugin has been taken out, so the obsolete property should be set
 			// to `true`. If not, it's an error.
@@ -49,8 +55,20 @@ function pluginManifestOverridesPath(repoDir: string): string {
 	return path.resolve(repoDir, 'manifestOverrides.json');
 }
 
+export const validateManifestOverrides = (overrides: ManifestOverrides) => {
+	for (const [pluginId, override] of Object.entries(overrides)) {
+		const blockedVersions = override._blocked_versions;
+		if (blockedVersions === undefined) continue;
+		if (!Array.isArray(blockedVersions) || !blockedVersions.length || !blockedVersions.every(isValidBlockedVersionEntry)) {
+			throw new Error(`Invalid _blocked_versions for plugin ${pluginId}: ${JSON.stringify(blockedVersions)}. It must be a non-empty array of "*", exact versions or semver ranges.`);
+		}
+	}
+};
+
 export async function readManifestOverrides(repoDir: string): Promise<ManifestOverrides> {
-	return readJsonFile(pluginManifestOverridesPath(repoDir), {});
+	const overrides: ManifestOverrides = await readJsonFile(pluginManifestOverridesPath(repoDir), {});
+	validateManifestOverrides(overrides);
+	return overrides;
 }
 
 export const getSupersededPackages = (manifestOverrides: ManifestOverrides): string[] => {

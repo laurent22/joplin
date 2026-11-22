@@ -51,7 +51,8 @@ const remappedPackages = {
 		: path.resolve(__dirname, 'config', 'config.default.js'),
 };
 
-const watchedFolders = [];
+// Dependencies of the local packages are hoisted to the root node_modules
+const watchedFolders = [path.resolve(__dirname, '../../node_modules')];
 for (const [, v] of Object.entries(localPackages)) {
 	watchedFolders.push(v);
 }

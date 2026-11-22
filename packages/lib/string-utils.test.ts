@@ -78,4 +78,15 @@ describe('string-utils', () => {
 	])('should roughly split by Markdown formatting (input: %j)', (input, expected) => {
 		expect(StringUtils.splitByMarkdownFormattingApproximate(input)).toEqual(expected);
 	});
+
+	test.each([
+		{ text: 'My note". Clicking approve is safe in this case, since Joplin has verified the share. Note: "My note', expected: '"My note\'. Clicking approve is safe in this case,…"' },
+		{ text: 'line 1\nApproved.\r\n\tline 2', expected: '"line 1 Approved. line 2"' },
+		{ text: 'abc\u202Edef\u200B', expected: '"abcdef"' },
+		{ text: '“curly” ‘single’ ＂wide＂', expected: '"\'curly\' \'single\' \'wide\'"' },
+		{ text: '\u0301accent', expected: '"accent"' },
+		{ text: '😀'.repeat(60), expected: `"${'😀'.repeat(49)}…"` },
+	])('should quote untrusted text so that it cannot pass for other text in a message (%j)', ({ text, expected }) => {
+		expect(StringUtils.quoteUntrustedText(text)).toBe(expected);
+	});
 });

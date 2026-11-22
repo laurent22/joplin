@@ -66,6 +66,7 @@ docs/**/*.mustache
 .yarn/*
 !.yarn/patches
 !.yarn/joplin-empty-package
+!.yarn/joplin-missing-package
 !.yarn/plugins
 !.yarn/releases
 !.yarn/sdks
@@ -93,6 +94,7 @@ packages/app-cli/app/command-cp.js
 packages/app-cli/app/command-done.test.js
 packages/app-cli/app/command-done.js
 packages/app-cli/app/command-dump.js
+packages/app-cli/app/command-e2ee.test.js
 packages/app-cli/app/command-e2ee.js
 packages/app-cli/app/command-edit.test.js
 packages/app-cli/app/command-edit.js
@@ -125,6 +127,7 @@ packages/app-cli/app/command-settingschema.js
 packages/app-cli/app/command-share.test.js
 packages/app-cli/app/command-share.js
 packages/app-cli/app/command-status.js
+packages/app-cli/app/command-sync.test.js
 packages/app-cli/app/command-sync.js
 packages/app-cli/app/command-tag.js
 packages/app-cli/app/command-testing.js
@@ -223,10 +226,10 @@ packages/app-desktop/gui/ConfigScreen/controls/ToggleAdvancedSettingsButton.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js
-packages/app-desktop/gui/ConfigScreen/controls/useNoteLockMode.js
 packages/app-desktop/gui/ConfigScreen/searchHighlight.test.js
 packages/app-desktop/gui/ConfigScreen/searchHighlight.js
 packages/app-desktop/gui/ConfigScreen/types.js
+packages/app-desktop/gui/CopyableCode.js
 packages/app-desktop/gui/DialogButtonRow.js
 packages/app-desktop/gui/DialogButtonRow/useKeyboardHandler.js
 packages/app-desktop/gui/DialogTitle.js
@@ -236,6 +239,7 @@ packages/app-desktop/gui/EditFolderDialog/Dialog.js
 packages/app-desktop/gui/EditFolderDialog/IconSelector.js
 packages/app-desktop/gui/EmojiBox.js
 packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js
+packages/app-desktop/gui/EncryptionConfigScreen/PpkValidityChecker.js
 packages/app-desktop/gui/EncryptionConfigScreen/enableFlow.test.js
 packages/app-desktop/gui/EncryptionConfigScreen/enableFlow.js
 packages/app-desktop/gui/ErrorBoundary.js
@@ -476,6 +480,11 @@ packages/app-desktop/gui/ResourceScreen.js
 packages/app-desktop/gui/Root.js
 packages/app-desktop/gui/Root_UpgradeSyncTarget.js
 packages/app-desktop/gui/SearchBar/SearchBar.js
+packages/app-desktop/gui/ShareFolderDialog/PpkValidationDialog.test.js
+packages/app-desktop/gui/ShareFolderDialog/PpkValidationDialog.js
+packages/app-desktop/gui/ShareFolderDialog/PpkWarningIcon.test.js
+packages/app-desktop/gui/ShareFolderDialog/PpkWarningIcon.js
+packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.test.js
 packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js
 packages/app-desktop/gui/ShareNoteDialog.js
 packages/app-desktop/gui/Sidebar/FolderAndTagList.js
@@ -538,6 +547,7 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/index.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/linkToNote.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/lockEncryptedNotes.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/commands/lockNotes.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newFolder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newNote.test.js
@@ -553,6 +563,7 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openNote.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openPdfViewer.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openTag.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/print.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/commands/removeNoteLockFromNotes.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameFolder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameTag.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/resetLayout.js
@@ -586,6 +597,7 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleWhiteboardEdito
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/utils/canUseNativeUndo.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/types.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/utils/appDialogs.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/utils/setNotesLockState.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/utils/showFolderPicker.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/utils/usePrintToCallback.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/utils/useSyncDialogState.js
@@ -686,6 +698,7 @@ packages/app-desktop/services/plugins/hooks/useThemeCss.test.js
 packages/app-desktop/services/plugins/hooks/useThemeCss.js
 packages/app-desktop/services/plugins/hooks/useViewIsReady.js
 packages/app-desktop/services/plugins/hooks/useWebviewToPluginMessages.js
+packages/app-desktop/services/plugins/startBlockedPluginsCheck.js
 packages/app-desktop/services/plugins/types.js
 packages/app-desktop/services/restart.js
 packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.js
@@ -1434,8 +1447,10 @@ packages/lib/components/shared/NoteEditor/WarningBanner/useEditorTypeMigrationBa
 packages/lib/components/shared/NoteList/getEmptyFolderMessage.js
 packages/lib/components/shared/NoteRevisionViewer/getHelpMessage.js
 packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.js
+packages/lib/components/shared/PublishFolderDialog/useOnPublishFolderLinkClick.test.js
 packages/lib/components/shared/PublishFolderDialog/useOnPublishFolderLinkClick.js
 packages/lib/components/shared/SamlShared.js
+packages/lib/components/shared/ShareNoteDialog/isPublishBlockedByE2ee.js
 packages/lib/components/shared/ShareNoteDialog/onUnshareNoteClick.js
 packages/lib/components/shared/ShareNoteDialog/types.js
 packages/lib/components/shared/ShareNoteDialog/useEncryptionWarningMessage.js
@@ -1447,12 +1462,16 @@ packages/lib/components/shared/config/config-search-text.js
 packages/lib/components/shared/config/config-search.test.js
 packages/lib/components/shared/config/config-shared.test.js
 packages/lib/components/shared/config/config-shared.js
+packages/lib/components/shared/config/e2ee/usePpkValidityChecker.test.js
+packages/lib/components/shared/config/e2ee/usePpkValidityChecker.js
+packages/lib/components/shared/config/e2ee/usePublicKeyFingerprint.js
 packages/lib/components/shared/config/plugins/types.js
 packages/lib/components/shared/config/plugins/useOnDeleteHandler.js
 packages/lib/components/shared/config/plugins/useOnInstallHandler.test.js
 packages/lib/components/shared/config/plugins/useOnInstallHandler.js
 packages/lib/components/shared/config/shouldShowMissingPasswordWarning.test.js
 packages/lib/components/shared/config/shouldShowMissingPasswordWarning.js
+packages/lib/components/shared/config/useNoteLockMode.js
 packages/lib/components/shared/dropbox-login-shared.js
 packages/lib/components/shared/note-screen-shared.test.js
 packages/lib/components/shared/note-screen-shared.js
@@ -1569,12 +1588,14 @@ packages/lib/models/settings/settingValidations.js
 packages/lib/models/settings/types.js
 packages/lib/models/utils/areAllFoldersCollapsed.test.js
 packages/lib/models/utils/areAllFoldersCollapsed.js
+packages/lib/models/utils/checkPlaintextUploadConfirmed.js
 packages/lib/models/utils/getCanBeCollapsedFolderIds.test.js
 packages/lib/models/utils/getCanBeCollapsedFolderIds.js
 packages/lib/models/utils/getCollator.js
 packages/lib/models/utils/getConflictFolderId.js
 packages/lib/models/utils/isItemId.js
 packages/lib/models/utils/isJoplinServerVariant.js
+packages/lib/models/utils/itemCanBeEncrypted.test.js
 packages/lib/models/utils/itemCanBeEncrypted.js
 packages/lib/models/utils/onFolderDrop.test.js
 packages/lib/models/utils/onFolderDrop.js
@@ -1829,6 +1850,8 @@ packages/lib/services/noteLock/NoteLockService.test.js
 packages/lib/services/noteLock/NoteLockService.js
 packages/lib/services/noteLock/NoteLockSession.test.js
 packages/lib/services/noteLock/NoteLockSession.js
+packages/lib/services/noteLock/bulkSetNoteLockState.test.js
+packages/lib/services/noteLock/bulkSetNoteLockState.js
 packages/lib/services/noteLock/hasLockedNoteWhileSessionLocked.js
 packages/lib/services/noteLock/isNoteLockEnabled.js
 packages/lib/services/noteLock/noteLockPrompts.test.js
@@ -1844,6 +1867,7 @@ packages/lib/services/ocr/drivers/OcrDriverTranscribe.js
 packages/lib/services/ocr/utils/createAccessiblePdf.js
 packages/lib/services/ocr/utils/filterOcrText.test.js
 packages/lib/services/ocr/utils/filterOcrText.js
+packages/lib/services/ocr/utils/glyphLessFont.js
 packages/lib/services/ocr/utils/types.js
 packages/lib/services/plugins/BasePlatformImplementation.js
 packages/lib/services/plugins/BasePluginRunner.js
@@ -1886,8 +1910,11 @@ packages/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo.js
 packages/lib/services/plugins/loadPlugins.test.js
 packages/lib/services/plugins/loadPlugins.js
 packages/lib/services/plugins/reducer.js
+packages/lib/services/plugins/refreshBlockedPluginVersions.js
 packages/lib/services/plugins/testing/MockPlatformImplementation.js
 packages/lib/services/plugins/testing/MockPluginRunner.js
+packages/lib/services/plugins/utils/blockedVersions.test.js
+packages/lib/services/plugins/utils/blockedVersions.js
 packages/lib/services/plugins/utils/createViewHandle.js
 packages/lib/services/plugins/utils/executeSandboxCall.js
 packages/lib/services/plugins/utils/getActivePluginEditorView.js
@@ -1951,7 +1978,10 @@ packages/lib/services/rest/utils/lockedNoteBodies.js
 packages/lib/services/rest/utils/paginatedResults.js
 packages/lib/services/rest/utils/readonlyProperties.js
 packages/lib/services/rest/utils/requestFields.js
+packages/lib/services/rest/utils/requestPaginationOptions.test.js
 packages/lib/services/rest/utils/requestPaginationOptions.js
+packages/lib/services/rest/utils/validateField.test.js
+packages/lib/services/rest/utils/validateField.js
 packages/lib/services/search/SearchEngine.resources.test.js
 packages/lib/services/search/SearchEngine.semantic.test.js
 packages/lib/services/search/SearchEngine.test.js
@@ -1961,6 +1991,8 @@ packages/lib/services/search/SearchEngineUtils.js
 packages/lib/services/search/SearchFilter.test.js
 packages/lib/services/search/filterParser.test.js
 packages/lib/services/search/filterParser.js
+packages/lib/services/search/ftsPhraseRegex.test.js
+packages/lib/services/search/ftsPhraseRegex.js
 packages/lib/services/search/gotoAnythingStyleQuery.test.js
 packages/lib/services/search/gotoAnythingStyleQuery.js
 packages/lib/services/search/queryBuilder.js
@@ -1989,6 +2021,7 @@ packages/lib/services/synchronizer/Synchronizer.basics.test.js
 packages/lib/services/synchronizer/Synchronizer.conflicts.test.js
 packages/lib/services/synchronizer/Synchronizer.e2ee.test.js
 packages/lib/services/synchronizer/Synchronizer.noteLock.test.js
+packages/lib/services/synchronizer/Synchronizer.plaintextUploads.test.js
 packages/lib/services/synchronizer/Synchronizer.ppk.test.js
 packages/lib/services/synchronizer/Synchronizer.resources.test.js
 packages/lib/services/synchronizer/Synchronizer.revisions.test.js
@@ -2009,6 +2042,9 @@ packages/lib/services/synchronizer/tools.js
 packages/lib/services/synchronizer/utils/checkDisabledSyncItemsNotification.js
 packages/lib/services/synchronizer/utils/handleConflictAction.js
 packages/lib/services/synchronizer/utils/handleSyncStartupOperation.js
+packages/lib/services/synchronizer/utils/mustConfirmPlaintextUploads.js
+packages/lib/services/synchronizer/utils/plaintextUploadHeldBackItems.test.js
+packages/lib/services/synchronizer/utils/plaintextUploadHeldBackItems.js
 packages/lib/services/synchronizer/utils/resourceRemotePath.js
 packages/lib/services/synchronizer/utils/syncDeleteStep.js
 packages/lib/services/synchronizer/utils/types.js
@@ -2263,6 +2299,8 @@ packages/tools/release-ios.js
 packages/tools/release-plugin-repo-cli.js
 packages/tools/release-server.js
 packages/tools/release-transcribe.js
+packages/tools/releaseSubPackages.test.js
+packages/tools/releaseSubPackages.js
 packages/tools/saveClaConsentRecords.js
 packages/tools/setupNewRelease.js
 packages/tools/spellcheck.js

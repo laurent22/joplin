@@ -6,7 +6,7 @@ import shim from '../shim';
 import Resource from '../models/Resource';
 import { FolderEntity, NoteEntity, ResourceEntity } from '../services/database/types';
 import ResourceService from '../services/ResourceService';
-import { StateShare } from '../services/share/reducer';
+import { ShareType, StateShare } from '../services/share/reducer';
 import ItemChange from './ItemChange';
 
 const testImagePath = `${supportDir}/photo.jpg`;
@@ -794,6 +794,71 @@ describe('models/Folder.sharing', () => {
 			updated_time: folder1.updated_time,
 			share_id: '',
 		});
+	});
+
+	// The share_id of an encrypted item comes from its unencrypted metadata, which the server can change. It can only
+	// be trusted once the item has been decrypted.
+	it.each(['folder', 'note'])('should not apply the share ID of an encrypted %s to its children', async (encryptedItemType) => {
+		const folder1 = await createFolderTree('', [
+			{
+				title: 'folder 1',
+				children: [
+					{ title: 'folder 2', children: [{ title: 'note 2' }] },
+					{ title: 'note 1' },
+				],
+			},
+		]);
+		const note1 = await Note.loadByTitle('note 1');
+		await shim.attachFileToNote(note1, testImagePath);
+		await resourceService().indexNoteResources();
+
+		const encryptedItem = { share_id: 'abcd1234', encryption_applied: 1 };
+		if (encryptedItemType === 'folder') {
+			await Folder.save({ id: folder1.id, ...encryptedItem });
+		} else {
+			await Note.save({ id: note1.id, ...encryptedItem });
+		}
+		await Folder.updateAllShareIds(resourceService(), []);
+
+		const children: { share_id?: string }[] = [
+			await Folder.loadByTitle('folder 2'),
+			await Note.loadByTitle('note 2'),
+			(await Resource.all())[0],
+		];
+		expect(children.map(item => item.share_id)).toEqual(['', '', '']);
+		if (encryptedItemType === 'folder') {
+			expect((await Note.load(note1.id)).share_id).toBe('');
+		}
+	});
+
+	// For example, after another share participant renames a shared folder and the new version hasn't been decrypted yet.
+	// When the encrypted folder is a subfolder (case 2), the server can also have changed its parent_id to move it into
+	// a different share (case 3).
+	it.each([
+		{ encryptedFolder: 'folder 1', shareIdBelowEncryptedFolder: 'abcd1234' },
+		{ encryptedFolder: 'folder 2', shareIdBelowEncryptedFolder: 'abcd1234' },
+		{ encryptedFolder: 'folder 2', shareIdBelowEncryptedFolder: '' },
+	])('should not change the share ID of decrypted folders and notes below an encrypted folder (%j)', async ({ encryptedFolder, shareIdBelowEncryptedFolder }) => {
+		const folder1 = await createFolderTree('', [
+			{
+				title: 'folder 1',
+				share_id: 'abcd1234',
+				children: [
+					{
+						title: 'folder 2',
+						share_id: shareIdBelowEncryptedFolder,
+						children: [{ title: 'folder 3', share_id: shareIdBelowEncryptedFolder, children: [{ title: 'note 3', share_id: shareIdBelowEncryptedFolder }] }],
+					},
+				],
+			},
+		]);
+		await Folder.save({ id: (await Folder.loadByTitle(encryptedFolder)).id, encryption_applied: 1 });
+
+		const share: StateShare = { id: 'abcd1234', type: ShareType.Folder, folder_id: folder1.id, note_id: '', master_key_id: '' };
+		await Folder.updateAllShareIds(resourceService(), [share]);
+
+		expect((await Folder.loadByTitle('folder 3')).share_id).toBe(shareIdBelowEncryptedFolder);
+		expect((await Note.loadByTitle('note 3')).share_id).toBe(shareIdBelowEncryptedFolder);
 	});
 
 });

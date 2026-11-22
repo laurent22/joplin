@@ -31,6 +31,7 @@ import NoteLockNote, { NoteLockNoteEntity } from '../services/noteLock/NoteLockN
 import isNoteLockEnabled from '../services/noteLock/isNoteLockEnabled';
 import { isValidNoteLockHeader } from '../services/e2ee/EncryptionService';
 import { ShareType, StateShare } from '../services/share/reducer';
+import { getEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
 
 export interface PreviewsOrder {
 	by: string;
@@ -658,13 +659,14 @@ export default class Note extends BaseItem {
 	public static async updatePublishedNotes(activeShares: StateShare[]) {
 		const directlyPublishedNoteIds = getDirectlyPublishedNoteIds(activeShares);
 
-		const loadUnpublishedWithDirectShare = async (): Promise<NoteEntity[]> => {
+		const loadUnpublishedNotesWithDirectShareFromServer = async (): Promise<NoteEntity[]> => {
 			if (directlyPublishedNoteIds.length === 0) return [];
 
 			return await this.db().selectAll(`
 				SELECT id, parent_id, is_shared
 				FROM notes
 				WHERE is_shared = 0 AND id IN (${this.escapeIdsForSql(directlyPublishedNoteIds)})
+					AND deleted_time = 0 AND is_conflict = 0
 			`);
 		};
 		const unpublishedNotesInPublishedFolders: NoteEntity[] = await this.db().selectAll(`
@@ -674,9 +676,16 @@ export default class Note extends BaseItem {
 			WHERE notes.is_shared = 0 AND folders.is_shared = 1
 				AND notes.is_conflict = 0
 				AND notes.deleted_time = 0
+				AND notes.encryption_applied = 0
+				AND folders.encryption_applied = 0
 		`);
 
-		const notesToPublish = unpublishedNotesInPublishedFolders.concat(await loadUnpublishedWithDirectShare());
+		let notesToPublish = unpublishedNotesInPublishedFolders;
+		// It's only safe to update which notes are published based on server state when E2EE is disabled:
+		if (!getEncryptionEnabled()) {
+			notesToPublish = notesToPublish.concat(await loadUnpublishedNotesWithDirectShareFromServer());
+		}
+
 		for (const note of notesToPublish) {
 			await this.updateShareStatus(
 				{ ...note, type_: BaseModel.TYPE_NOTE },

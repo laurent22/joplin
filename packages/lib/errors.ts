@@ -8,4 +8,6 @@ export enum ErrorCode {
 	DownloadLimiter = 'downloadLimiter',
 	Cancelled = 'cancelled',
 	NoteLockKeyConflict = 'noteLockKeyConflict',
+	MalformedItem = 'malformedItem',
+	PlaintextUploadNotConfirmed = 'plaintextUploadNotConfirmed',
 }

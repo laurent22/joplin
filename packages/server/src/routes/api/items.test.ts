@@ -507,4 +507,41 @@ describe('api/items', () => {
 		expect(await models().item().loadByJopId(user1.id, '00000000000000000000000000000003')).toBeTruthy();
 	});
 
+	test.each(['x', '0', '1001', '1.5'])('should refuse an invalid delta limit: %s', async (limit) => {
+		const { session } = await createUserAndSession(1, true);
+		await expectHttpError(async () => getApi(session.id, 'items/root/delta', { query: { limit } }), ErrorBadRequest.httpCode);
+	});
+
+	test('should accept a valid delta limit', async () => {
+		const { session } = await createUserAndSession(1, true);
+		await createNote(session.id, { id: '00000000000000000000000000000001' });
+		await createNote(session.id, { id: '00000000000000000000000000000002' });
+		const result = await getApi<{ items: unknown[]; has_more: boolean }>(session.id, 'items/root/delta', { query: { limit: '1' } });
+		expect(result.items.length).toBe(1);
+		expect(result.has_more).toBe(true);
+	});
+
+	test.each([
+		['single', (sessionId: string, name: string) => deleteApi(sessionId, `items/root:/${name}:`)],
+		['batch', (sessionId: string, name: string) => deleteApi(sessionId, 'batch_items', { body: { items: [name] } })],
+	])('should delete every item with the same name that the user has access to (%s)', async (_label, deleteByName) => {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+		const noteId = '00000000000000000000000000000001';
+		const name = `${noteId}.md`;
+
+		await shareFolderWithUser(session2.id, session1.id, '000000000000000000000000000000F1', [
+			{ id: '000000000000000000000000000000F1', children: [{ id: noteId }] },
+		]);
+
+		// The API no longer allows getting into this state, but accounts that got into it before still have it
+		await models().item().saveForUser(user1.id, { name, jop_id: noteId, jop_type: ModelType.Note, jop_share_id: '', content: Buffer.from('{}') });
+		expect((await models().item().loadByNames(user1.id, [name])).length).toBe(2);
+
+		await deleteByName(session1.id, name);
+
+		expect(await models().item().loadByNames(user1.id, [name])).toEqual([]);
+		expect(await models().item().loadByNames(user2.id, [name])).toEqual([]);
+	});
+
 });

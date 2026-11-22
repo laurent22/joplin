@@ -1,5 +1,23 @@
 # Joplin iOS Changelog
 
+## [ios-v13.7.7](https://github.com/laurent22/joplin/releases/tag/ios-v13.7.7) - 2026-11-19T15:54:42Z
+
+- Improved: Create the application authorisation ID in one place (79d954a)
+- Improved: Prioritize local changes to sync info over values with unchanged far-future remote timestamps (2624b35 by Henry Heino)
+- Improved: Sync/E2EE: Avoid propagating share/publish status until an item has decrypted (b6692eb by Henry Heino)
+- Improved: Upgrade app banner shows the wrong minimum app version (#16819) (#16721 by [@Rygaa](https://github.com/Rygaa))
+- Fixed: Fix encoding of generated event handler attributes in note viewer (#16794)
+- Security: Add UI to allow validating public key fingerprints when sharing notebooks (3fd2f2f by Henry Heino)
+- Security: Ask for confirmation before disabling E2EE (f4447dd by Henry Heino)
+- Security: Detect and allow recovering from invalid public-private key pairs (27944cf by Henry Heino)
+- Security: Disable unencrypted uploads by default when E2EE is enabled (cfce373 by Henry Heino)
+- Security: Fix SQL injection in data API (64522e0 by Henry Heino)
+- Security: Harden master key loading, add new encryption method forward compatibility (46c5442 by Henry Heino)
+- Security: Harden server share API response handling (64d513a by Henry Heino)
+- Security: Sync/E2EE: Do not mark items as published based on the list of shares returned by the server (2d1a179 by Henry Heino)
+- Security: Sync/E2EE: Harden marking items as published/shared (3cf1c1a by Henry Heino)
+- Security: Sync: Do not allow a remote item to decrypt/deserialize to an item with a different ID (b61ef1e by Henry Heino)
+
 ## [ios-v13.7.6](https://github.com/laurent22/joplin/releases/tag/ios-v13.7.6) - 2026-09-25T11:32:23Z
 
 - Fixed: Fix AI configuration test failing on reasoning models (#16594)

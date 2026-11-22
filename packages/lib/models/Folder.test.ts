@@ -371,6 +371,63 @@ describe('models/Folder', () => {
 		}
 	}));
 
+	it('should allow excluding encrypted children from allChildrenFolders', (async () => {
+		const folder = await createFolderTree('', [
+			{
+				title: 'folder 1',
+				children: [
+					{
+						title: 'folder 2',
+						encryption_applied: 1,
+						children: [
+							{
+								title: 'note 3',
+							},
+							{
+								title: 'folder 3',
+								children: [],
+							},
+						],
+					},
+					{
+						title: 'folder 4',
+						children: [],
+					},
+				],
+			},
+			{
+				title: 'folder 5',
+				children: [
+					{
+						title: 'folder 6',
+						encryption_applied: 1,
+						children: [],
+					},
+				],
+			},
+		]);
+
+		const folder2 = await Folder.loadByTitle('folder 2');
+		const folder3 = await Folder.loadByTitle('folder 3');
+		const folder4 = await Folder.loadByTitle('folder 4');
+		const folder5 = await Folder.loadByTitle('folder 5');
+
+		{
+			const children = await Folder.allChildrenFolders(folder.id, { decryptedOnly: true });
+			expect(children.map(c => c.id)).toEqual([folder4.id]);
+		}
+		{
+			const children = await Folder.allChildrenFolders('', { decryptedOnly: true });
+			expect(children.map(c => c.id).sort()).toEqual([folder.id, folder4.id, folder5.id].sort());
+		}
+
+		{
+			// Should return children of folder2 when folder2 is queried directly
+			const children = await Folder.allChildrenFolders(folder2.id, { decryptedOnly: true });
+			expect(children.map(c => c.id)).toEqual([folder3.id]);
+		}
+	}));
+
 	it('should not allow creating a new folder as a child of a read-only folder', async () => {
 		const cleanup = simulateReadOnlyShareEnv('123456789');
 

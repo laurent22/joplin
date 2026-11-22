@@ -6,7 +6,7 @@ import Note from '@joplin/lib/models/Note';
 import CommandService from '@joplin/lib/services/CommandService';
 import { runNoteChat } from '@joplin/lib/services/ai/noteChat';
 import { ChatRole } from '@joplin/lib/services/ai/types';
-import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, withWarningSilenced } from '@joplin/lib/testing/test-utils';
 import appReducer, { AiChatMessage, createAppDefaultState, createAppDefaultWindowState } from '../../app.reducer';
 import ChatPanel from './ChatPanel';
 import { WindowIdContext } from '../NewWindowOrIFrame';
@@ -186,8 +186,10 @@ describe('ChatPanel', () => {
 		jest.mocked(runNoteChat).mockRejectedValue(new Error('Network down'));
 		const view = renderPanel({ conversationId: 'chat-1', noteId: 'note-a', noteTitle: 'A', dispatch: jest.fn() });
 		fireEvent.change(view.getByRole('textbox'), { target: { value: 'Question' } });
-		await act(async () => { fireEvent.click(view.getByRole('button', { name: 'Send' })); });
-		await waitFor(async () => expect(await ChatConversation.messages('chat-1')).toMatchObject([{ role: 'error', text: 'Network down' }]));
+		await withWarningSilenced(/Chat failed/, async () => {
+			await act(async () => { fireEvent.click(view.getByRole('button', { name: 'Send' })); });
+			await waitFor(async () => expect(await ChatConversation.messages('chat-1')).toMatchObject([{ role: 'error', text: 'Network down' }]));
+		}, { requireWarning: true });
 	});
 
 	it('should assign an ID before messages are added to a new conversation', async () => {

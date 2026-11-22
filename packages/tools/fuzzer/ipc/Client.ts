@@ -365,6 +365,9 @@ class Client implements ActionableClient {
 
 		await this.execCliCommand_('config', 'api.token', this.apiData_.token);
 		await this.execCliCommand_('config', 'api.port', String(this.apiData_.port));
+
+		// Otherwise, with E2EE, the publish command would be refused and changes to published notes held back
+		await this.execCliCommand_('config', 'encryption.allowUnencryptedUploads', 'true');
 	}
 
 	private async startClipperServer_() {

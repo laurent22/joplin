@@ -1,4 +1,4 @@
-import { applyManifestOverrides, getObsoleteManifests, getSupersededPackages, ManifestOverrides } from './overrideUtils';
+import { applyManifestOverrides, getObsoleteManifests, getSupersededPackages, ManifestOverrides, validateManifestOverrides } from './overrideUtils';
 
 describe('overrideUtils', () => {
 
@@ -103,5 +103,24 @@ describe('overrideUtils', () => {
 		};
 		const supersededPackages = getSupersededPackages(manifestOverrides);
 		expect(supersededPackages).toMatchObject(['joplin-plugin-benji-favorites']);
+	});
+
+	test.each([
+		[['>=1.2.3', '1.0.0'], true],
+		[['1.2'], false],
+		[[] as string[], false],
+		['1.2.3', false],
+	])('should validate blocked versions (%j)', (blockedVersions, isValid) => {
+		const overrides = { 'org.joplinapp.plugins.ToggleSidebars': { _blocked_versions: blockedVersions } } as ManifestOverrides;
+		if (isValid) {
+			expect(() => validateManifestOverrides(overrides)).not.toThrow();
+		} else {
+			expect(() => validateManifestOverrides(overrides)).toThrow('Invalid _blocked_versions');
+		}
+	});
+
+	test('should not allow blocking a plugin that is not in the manifests', () => {
+		const overrides: ManifestOverrides = { 'does.not.exist': { _blocked_versions: ['*'] } };
+		expect(() => applyManifestOverrides({}, overrides)).toThrow('Cannot block plugin does.not.exist');
 	});
 });

@@ -221,6 +221,30 @@ describe('InteropService_Importer_Md', () => {
 		expect(note.body).toContain('![malformed link](https://malformed_uri/%E0%A4%A.jpg)');
 	});
 
+	it('should not import linked files outside the linked files base directory', async () => {
+		await fs.mkdirp(`${tempDir}/import/sub`);
+		await fs.writeFile(`${tempDir}/secret.txt`, 'secret');
+		await fs.writeFile(`${tempDir}/import/inside.txt`, 'inside');
+		// cSpell:disable
+		await fs.writeFile(`${tempDir}/import/sub/note.html`, '<a href="../inside.txt">a</a><a href="../../secret.txt">b</a><a href="%2E%2E/%2E%2E/secret.txt">c</a><a href="..%5C..%5Csecret.txt">d</a>');
+		// cSpell:enable
+
+		const importer = new InteropService_Importer_Md();
+		await importer.init(`${tempDir}/import`, {
+			format: 'html',
+			outputFormat: ImportModuleOutputFormat.Html,
+			path: `${tempDir}/import`,
+		});
+		importer.setMetadata({ fileExtensions: ['html'] });
+		importer.setLinkedFilesBaseDir(`${tempDir}/import`);
+		await importer.exec({ warnings: [] });
+
+		const note = (await Note.all())[0];
+		const items = await Note.linkedItems(note.body);
+		expect(items.map(i => i.title)).toEqual(['inside.txt']);
+		expect(note.body).toContain('href="../../secret.txt"');
+	});
+
 	it('should import resources from links with Windows path', async () => {
 		const note = await importNote(`${supportDir}/test_notes/md/windows_path.html`);
 		const items = await Note.linkedItems(note.body);

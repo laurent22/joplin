@@ -1,7 +1,7 @@
 import time from '../../time';
 import shim from '../../shim';
 import Setting from '../../models/Setting';
-import { synchronizerStart, allSyncTargetItemsEncrypted, kvStore, supportDir, setupDatabaseAndSynchronizer, synchronizer, fileApi, switchClient, encryptionService, loadEncryptionMasterKey, decryptionWorker, checkThrowAsync } from '../../testing/test-utils';
+import { synchronizerStart, allSyncTargetItemsEncrypted, kvStore, supportDir, setupDatabaseAndSynchronizer, synchronizer, fileApi, switchClient, encryptionService, loadEncryptionMasterKey, decryptionWorker, checkThrowAsync, expectThrow } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Resource from '../../models/Resource';
@@ -9,8 +9,9 @@ import ResourceFetcher from '../../services/ResourceFetcher';
 import MasterKey from '../../models/MasterKey';
 import BaseItem from '../../models/BaseItem';
 import Synchronizer from '../../Synchronizer';
-import { fetchSyncInfo, getEncryptionEnabled, localSyncInfo, setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
-import { loadMasterKeysFromSettings, setupAndDisableEncryption, setupAndEnableEncryption } from '../e2ee/utils';
+import { fetchSyncInfo, getEncryptionEnabled, localSyncInfo, setEncryptionEnabled, uploadSyncInfo } from '../synchronizer/syncInfoUtils';
+import { loadMasterKeysFromSettings, resolveE2eeEnabledStateConflict, setupAndDisableEncryption, setupAndEnableEncryption } from '../e2ee/utils';
+import { Month, msleep } from '@joplin/utils/time';
 import { remoteNotesAndFolders } from '../../testing/test-utils-synchronizer';
 import { EncryptionMethod } from '../e2ee/EncryptionService';
 import { NoteEntity } from '../database/types';
@@ -509,4 +510,150 @@ describe('Synchronizer.e2ee', () => {
 		expect((await decryptionWorker().decryptionDisabledItems()).length).toBe(0);
 	}));
 
+	it('should fail if the encrypted item ID does not match the plaintext item ID', async () => {
+		const masterKey = await loadEncryptionMasterKey();
+		await setupAndEnableEncryption(encryptionService(), masterKey, '123456');
+		await loadMasterKeysFromSettings(encryptionService());
+
+		const note1 = await Note.save({ title: 'note 1', body: 'Test 1!' });
+		const note2 = await Note.save({ title: 'note 2', body: 'Test 2!' });
+
+		await synchronizerStart();
+		expect(await allSyncTargetItemsEncrypted()).toBe(true);
+
+		const serializedItemWithNote1Id = await Note.serialize({
+			...note2,
+			encryption_cipher_text: await encryptionService().encryptString(
+				await Note.serialize({
+					...note1,
+					body: 'Overwritten!',
+				}),
+			),
+			encryption_applied: 1,
+			title: '',
+			body: '',
+		});
+		await fileApi().put(`${note2.id}.md`, serializedItemWithNote1Id);
+
+		await switchClient(2);
+
+		await synchronizerStart();
+		Setting.setObjectValue('encryption.passwordCache', masterKey.id, '123456');
+		await loadMasterKeysFromSettings(encryptionService());
+
+		await expectThrow(async () => {
+			await decryptionWorker().start({ errorHandler: 'throw' });
+		}, undefined, `Item has wrong ID: Expected "${note2.id}", but was "${note1.id}"`);
+
+		// Even if the decryption worker is configured to log instead of throw, note 2 should
+		// not overwrite note 1:
+		await decryptionWorker().start({ errorHandler: 'log' });
+		expect(await Note.load(note1.id)).toMatchObject({ body: 'Test 1!' });
+	});
+
+	it('should not allow a read-only conflict to save a decrypted note with a different ID', async () => {
+		const masterKey = await loadEncryptionMasterKey();
+		await setupAndEnableEncryption(encryptionService(), masterKey, '123456');
+		await loadMasterKeysFromSettings(encryptionService());
+
+		const note1 = await Note.save({ title: 'note 1', body: 'Test 1!' });
+		const note2 = await Note.save({ title: 'note 2', body: 'Test 2!' });
+		await synchronizerStart();
+
+		// The original updated_time is kept so that the local change is uploaded (rather than
+		// handled as a conflict immediately), which fails because the item is read-only.
+		const serializedItemWithNote1Id = await Note.serialize({
+			...note2,
+			encryption_cipher_text: await encryptionService().encryptString(
+				await Note.serialize({
+					...note1,
+					body: 'Overwritten!',
+				}),
+			),
+			encryption_applied: 1,
+			title: '',
+			body: '',
+		});
+		await fileApi().put(`${note2.id}.md`, serializedItemWithNote1Id);
+
+		await time.msleep(1);
+		await Note.save({ id: note2.id, body: 'Test 2! Local edit' });
+
+		synchronizer().testingHooks_ = ['itemIsReadOnly'];
+		try {
+			await synchronizerStart();
+		} finally {
+			synchronizer().testingHooks_ = [];
+		}
+
+		expect(await Note.load(note1.id)).toMatchObject({ body: 'Test 1!' });
+	});
+
+	it('should keep E2EE enabled locally when the remote e2ee enabled state has a future-valued timestamp and the user chooses to keep E2EE enabled', async () => {
+		const masterKey = await loadEncryptionMasterKey();
+		await setupAndEnableEncryption(encryptionService(), masterKey, '123456');
+		await loadMasterKeysFromSettings(encryptionService());
+		await synchronizerStart();
+
+		const remoteInfo = await fetchSyncInfo(fileApi());
+		remoteInfo.e2ee = false;
+		remoteInfo.setKeyTimestamp('e2ee', Date.now() + Month);
+		await uploadSyncInfo(fileApi(), remoteInfo);
+
+		await expectThrow(() => synchronizerStart(null, { throwOnError: true }), 'e2eeEnabledStateConflict');
+
+		await resolveE2eeEnabledStateConflict(encryptionService(), true, jest.fn());
+		await synchronizerStart(null, { throwOnError: true });
+
+		expect((await fetchSyncInfo(fileApi())).e2ee).toBe(true);
+	});
+
+	it('should not allow setting is_shared=1 before an item is decrypted', async () => {
+		const folder = await Folder.save({ title: 'Test' });
+		const note = await Note.save({ title: 'Private', parent_id: folder.id });
+		const masterKey = await loadEncryptionMasterKey();
+		await setupAndEnableEncryption(encryptionService(), masterKey, '123456');
+		await loadMasterKeysFromSettings(encryptionService());
+		await synchronizerStart();
+
+		await msleep(1);
+
+		const folderOnSyncTarget = await Folder.unserialize(await fileApi().get(`${folder.id}.md`));
+		expect(folderOnSyncTarget).toMatchObject({ encryption_applied: 1 });
+
+		// Edit the serialized text directly: unserialize() resets is_shared on encrypted items.
+		const serialized = await Folder.serialize({ ...folderOnSyncTarget, updated_time: Date.now() });
+		const tampered = serialized.replace(/^is_shared:.*$/m, 'is_shared: 1');
+		expect(tampered).toMatch(/^is_shared: 1$/m);
+		await fileApi().put(`${folder.id}.md`, tampered);
+
+		await synchronizerStart();
+
+		expect(await Folder.load(folder.id)).toMatchObject({ encryption_applied: 1, is_shared: 0 });
+		expect(await Note.load(note.id)).toMatchObject({ is_shared: 0 });
+	});
+
+	it('should clear a previously-set is_shared when an encrypted version of the item is downloaded', async () => {
+		const folder = await Folder.save({ title: 'Test' });
+		const masterKey = await loadEncryptionMasterKey();
+		await setupAndEnableEncryption(encryptionService(), masterKey, '123456');
+		await loadMasterKeysFromSettings(encryptionService());
+		await Folder.save({ id: folder.id, is_shared: 1 });
+		synchronizer().confirmPlaintextUploads([{ id: folder.id, updatedTime: (await Folder.load(folder.id)).updated_time }]);
+		await synchronizerStart();
+
+		// Client 2 never enters the master password, so it can't decrypt the folder
+		await switchClient(2);
+		await synchronizerStart();
+		expect(await Folder.load(folder.id)).toMatchObject({ is_shared: 1 });
+
+		await switchClient(1);
+		await msleep(1);
+		await Folder.save({ id: folder.id, is_shared: 0 });
+		await synchronizerStart();
+
+		await switchClient(2);
+		await synchronizerStart();
+		expect(await Folder.load(folder.id)).toMatchObject({ encryption_applied: 1, is_shared: 0 });
+	});
 });

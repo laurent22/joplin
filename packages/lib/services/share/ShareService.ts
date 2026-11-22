@@ -9,13 +9,14 @@ import Note from '../../models/Note';
 import Setting from '../../models/Setting';
 import { FolderEntity, NoteEntity } from '../database/types';
 import EncryptionService from '../e2ee/EncryptionService';
-import { PublicPrivateKeyPair, mkReencryptFromPasswordToPublicKey, mkReencryptFromPublicKeyToPassword, supportsPpkAlgorithm } from '../e2ee/ppk/ppk';
+import { PublicPrivateKeyPair, mkReencryptFromPasswordToPublicKey, mkReencryptFromPublicKeyToPassword, ppkPublicKeyFingerprint, supportsPpkAlgorithm } from '../e2ee/ppk/ppk';
 import { MasterKeyEntity } from '../e2ee/types';
 import { getMasterPassword } from '../e2ee/utils';
 import ResourceService from '../ResourceService';
 import { addMasterKey, getEncryptionEnabled, localSyncInfo } from '../synchronizer/syncInfoUtils';
 import { ShareInvitation, SharePermissions, ShareType, State, stateRootKey, StateShare } from './reducer';
 import PerformanceLogger from '../../PerformanceLogger';
+import KvStore from '../KvStore';
 
 const logger = Logger.create('ShareService');
 const perfLogger = PerformanceLogger.create();
@@ -33,6 +34,40 @@ export interface ApiTeamUsers {
 	has_more: boolean;
 }
 
+interface AddShareRecipientOptions {
+	shareId: string;
+	masterKeyId: string;
+	recipientEmail: string;
+	permissions: SharePermissions;
+	// undefined => fetch from server
+	publicKey: PublicPrivateKeyPair|''|undefined;
+}
+
+export type UserPublicKeyResponse = PublicPrivateKeyPair|'';
+
+// Local only (not synced). Keys are identified by fingerprint.
+interface RecipientKeyHistory {
+	// Fingerprint of the key used for the last share invitation to this recipient
+	lastShared: string;
+	// Fingerprint of the key the user last checked with the recipient. Kept after a key change.
+	confirmed: string;
+}
+
+// .toLowerCase: Match Joplin Server's email case insensitivity for shares
+const recipientKeyHistoryKey = (email: string) => `ShareService::recipientKeyHistory::${email.toLowerCase()}`;
+const hasKeyHistory = (history: RecipientKeyHistory) => !!history.lastShared || !!history.confirmed;
+
+export enum PublicKeyStatus {
+	// No key, or no earlier key to compare against
+	Unknown,
+	// Same key as the last share invitation sent to this recipient
+	Seen,
+	// The user checked this key's fingerprint with the recipient
+	Confirmed,
+	// Matches neither the last shared nor the confirmed key
+	Changed,
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function formatShareInvitations(invitations: (Omit<ShareInvitation, 'master_key'> & { master_key: string | MasterKeyEntity | null })[]): ShareInvitation[] {
 	return invitations.map(inv => {
@@ -42,6 +77,10 @@ function formatShareInvitations(invitations: (Omit<ShareInvitation, 'master_key'
 		};
 	});
 }
+
+// Intentionally tolerant regex to allow ID format changes in the future.
+const isShareIdValid = (id: string) => typeof id === 'string' && !!id.match(/^[a-z0-9_-]{1,72}$/i);
+const isMasterKeyIdValid = (id: string) => id === '' || isShareIdValid(id);
 
 export default class ShareService {
 
@@ -148,10 +187,18 @@ export default class ShareService {
 			});
 		}
 
+		const masterKeyId = folderMasterKey?.id ?? folder.master_key_id ?? '';
 		const share = await this.api().exec('POST', 'api/shares', {}, {
 			folder_id: folderId,
-			master_key_id: folderMasterKey ? folderMasterKey.id : '',
+			master_key_id: masterKeyId,
 		});
+
+		if ((share.master_key_id ?? '') !== masterKeyId) {
+			throw new Error(
+				`Failed to share folder: Error: Updated master key ${JSON.stringify(masterKeyId)} was not successfully applied. Please try unsharing and re-sharing the folder.`,
+			);
+		}
+		await this.shareMasterKeyIdCache_.update({ ...share, master_key_id: masterKeyId });
 
 		// Note: race condition if the share is created but the app crashes
 		// before setting share_id on the folder. See unshareFolder() for info.
@@ -296,14 +343,18 @@ export default class ShareService {
 			recursive: recursive ? 1 : 0,
 		});
 
-		await Note.save({
-			id: note.id,
-			parent_id: note.parent_id,
-			is_shared: 1,
-			updated_time: Date.now(),
-		}, {
-			autoTimestamp: false,
-		});
+		// Re-saving bumps the updated_time, which can prompt the user to confirm plaintext
+		// upload of an otherwise unchanged note. Avoid re-saving if already shared:
+		if (!note.is_shared) {
+			await Note.save({
+				id: note.id,
+				parent_id: note.parent_id,
+				is_shared: 1,
+				updated_time: Date.now(),
+			}, {
+				autoTimestamp: false,
+			});
+		}
 
 		return share;
 	}
@@ -317,6 +368,15 @@ export default class ShareService {
 			type: ShareType.PublishedFolder,
 		});
 
+		// Update updated_time to ensure that the folder gets is_shared=1, even if
+		// another client recently set is_shared=0.
+		await Folder.save({
+			id: folderId,
+			is_shared: 1,
+			updated_time: Date.now(),
+		}, {
+			autoTimestamp: false,
+		});
 		await this.refreshShares();
 
 		return share;
@@ -337,12 +397,18 @@ export default class ShareService {
 		const directlyPublishedNoteIds = new Set(remainingShares
 			.filter(s => s.type === ShareType.Note && !!s.note_id)
 			.map(s => s.note_id));
+		const directlyPublishedFolderIds = new Set(remainingShares
+			.filter(s => s.type === ShareType.PublishedFolder && !!s.folder_id)
+			.map(s => s.folder_id),
+		);
 
 		for (const folderItem of folders) {
-			await Folder.updateShareStatus({ ...folderItem, type_: ModelType.Folder }, false);
+			if (!folderItem.is_shared) continue;
+			await Folder.updateShareStatus({ ...folderItem, type_: ModelType.Folder }, directlyPublishedFolderIds.has(folderItem.id));
 		}
 
 		for (const note of notes) {
+			if (!note.is_shared) continue;
 			await Note.updateShareStatus({ ...note, type_: ModelType.Note }, directlyPublishedNoteIds.has(note.id));
 		}
 
@@ -406,11 +472,49 @@ export default class ShareService {
 		return this.state.shareInvitations;
 	}
 
-	private async userPublicKey(userEmail: string): Promise<PublicPrivateKeyPair|''> {
-		return await this.api().exec('GET', `api/users/${encodeURIComponent(userEmail)}/public_key`);
+	public async userPublicKey(userEmail: string): Promise<UserPublicKeyResponse> {
+		// The server's empty "no public key" response is parsed as null, but elsewhere, '' usually means
+		// "no public key pair".
+		return await this.api().exec('GET', `api/users/${encodeURIComponent(userEmail)}/public_key`) ?? '';
 	}
 
-	public async addShareRecipient(shareId: string, masterKeyId: string, recipientEmail: string, permissions: SharePermissions) {
+	private async loadRecipientKeyHistory_(email: string): Promise<RecipientKeyHistory> {
+		const value = await KvStore.instance().value(recipientKeyHistoryKey(email));
+		return typeof value === 'string' ? JSON.parse(value) : { lastShared: '', confirmed: '' };
+	}
+
+	private async saveRecipientKeyHistory_(email: string, history: RecipientKeyHistory) {
+		await KvStore.instance().setValue(recipientKeyHistoryKey(email), JSON.stringify(history));
+	}
+
+	// Whether a key for this recipient has been seen or confirmed before, and so could have changed.
+	public async hasPreviousPublicKey(email: string) {
+		return hasKeyHistory(await this.loadRecipientKeyHistory_(email));
+	}
+
+	// Public for testing
+	public async markPublicKeyAsSeen_(email: string, ppk: PublicPrivateKeyPair) {
+		const history = await this.loadRecipientKeyHistory_(email);
+		await this.saveRecipientKeyHistory_(email, { ...history, lastShared: await ppkPublicKeyFingerprint(ppk) });
+	}
+
+	public async markPublicKeyAsConfirmed(email: string, ppk: PublicPrivateKeyPair) {
+		const history = await this.loadRecipientKeyHistory_(email);
+		await this.saveRecipientKeyHistory_(email, { ...history, confirmed: await ppkPublicKeyFingerprint(ppk) });
+	}
+
+	public async publicKeyStatus(email: string, ppk: UserPublicKeyResponse) {
+		if (!ppk) return PublicKeyStatus.Unknown;
+
+		const history = await this.loadRecipientKeyHistory_(email);
+		const fingerprint = await ppkPublicKeyFingerprint(ppk);
+		if (history.confirmed === fingerprint) return PublicKeyStatus.Confirmed;
+		if (history.lastShared === fingerprint) return PublicKeyStatus.Seen;
+		if (hasKeyHistory(history)) return PublicKeyStatus.Changed;
+		return PublicKeyStatus.Unknown;
+	}
+
+	public async addShareRecipient({ shareId, masterKeyId, recipientEmail, permissions, publicKey }: AddShareRecipientOptions) {
 		let recipientMasterKey: MasterKeyEntity = null;
 
 		if (getEncryptionEnabled()) {
@@ -419,7 +523,14 @@ export default class ShareService {
 			const masterKey = syncInfo.masterKeys.find(m => m.id === masterKeyId);
 			if (!masterKey) throw new Error(`Cannot find master key with ID "${masterKeyId}"`);
 
-			const recipientPublicKey = await this.userPublicKey(recipientEmail);
+			const share = await this.shareById(shareId);
+			if (!share.folder_id) throw new Error(`Corrupt share: No folder_id is present for share ${JSON.stringify(shareId)}`);
+			const shareFolder = await Folder.load(share.folder_id);
+			if (!shareFolder) throw new Error(_('Notebook not found with ID "%s". Please check that the notebook still exists locally.', share.folder_id));
+			if (shareFolder.share_id !== shareId) throw new Error(`Corrupt share: Share's folder has the wrong share ID. ${JSON.stringify({ was: shareFolder.share_id, expected: shareId })}`);
+			if (shareFolder.master_key_id !== masterKey.id) throw new Error(`Corrupt share: Share's folder had an incorrect master key ID: ${JSON.stringify({ was: shareFolder.master_key_id, expected: masterKey.id })}`);
+
+			const recipientPublicKey = publicKey === undefined ? await this.userPublicKey(recipientEmail) : publicKey;
 			if (!recipientPublicKey) throw new Error(_('Cannot share encrypted notebook with recipient %s because they have not enabled end-to-end encryption. They may do so from the screen Configuration > Encryption.', recipientEmail));
 
 			logger.info('Reencrypting master key with recipient public key', recipientPublicKey);
@@ -430,6 +541,10 @@ export default class ShareService {
 				getMasterPassword(),
 				recipientPublicKey,
 			);
+
+			// Mark the public key as seen *before* the POST, since the public-key-encrypted share key may still have been sent
+			// to the server even if the POST fails.
+			await this.markPublicKeyAsSeen_(recipientEmail, recipientPublicKey);
 		}
 
 		return this.api().exec('POST', `api/shares/${shareId}/users`, {}, {
@@ -484,8 +599,66 @@ export default class ShareService {
 		return items;
 	}
 
+	private shareMasterKeyIdCache_ = (() => {
+		const shareToKey = (share: StateShare) => {
+			if (!isShareIdValid(share.id)) {
+				throw new Error(`Invalid share ID: ${JSON.stringify(share.id)}`);
+			}
+
+			return `ShareService::share_master_key_cache::${share.id}`;
+		};
+
+		return {
+			get: async (share: StateShare) => {
+				const value = await KvStore.instance().value(shareToKey(share));
+				if (!value) return null;
+
+				const masterKeyId: string = JSON.parse(value as string).masterKeyId;
+				return masterKeyId;
+			},
+			update: (share: StateShare) => {
+				const masterKeyId = share.master_key_id ?? '';
+				if (!isMasterKeyIdValid(masterKeyId)) {
+					throw new Error(`Invalid master key ID: ${JSON.stringify(masterKeyId)}`);
+				}
+
+				logger.info('Associating master key', masterKeyId, 'with share', share.id);
+
+				// Save as JSON to allow storing empty master key IDs: KvStore treats empty strings and null as equivalent
+				const data = JSON.stringify({ masterKeyId });
+				return KvStore.instance().setValue(shareToKey(share), data);
+			},
+		};
+	})();
+
 	private async loadShares() {
-		return this.api().exec('GET', 'api/shares');
+		const rawShares: StateShare[] = (await this.api().exec('GET', 'api/shares')).items;
+		const shares: StateShare[] = [];
+
+		for (const share of rawShares) {
+			if (!isShareIdValid(share.id)) {
+				throw new Error(`Share has invalid ID: ${JSON.stringify(share.id)}`);
+			}
+			const shareMasterKeyId = share.master_key_id ?? '';
+			if (!isMasterKeyIdValid(shareMasterKeyId)) {
+				throw new Error(`Share has invalid master key ID: ${JSON.stringify(share.master_key_id)}`);
+			}
+
+			const lastMasterKeyId = await this.shareMasterKeyIdCache_.get(share);
+			// A share with a master_key_id can have a cached key id of '' if the sharer disabled E2EE before sending the invitation,
+			// but had E2EE enabled when the share was first created:
+			const hadCachedMasterKeyId = lastMasterKeyId !== null && lastMasterKeyId !== '';
+			if (hadCachedMasterKeyId && shareMasterKeyId !== lastMasterKeyId) {
+				throw new Error(`Share has invalid master key ID (expected ${JSON.stringify(lastMasterKeyId)}, but was ${JSON.stringify(share.master_key_id)})`);
+			}
+			if (!hadCachedMasterKeyId) {
+				await this.shareMasterKeyIdCache_.update(share);
+			}
+
+			shares.push(share);
+		}
+
+		return { items: shares };
 	}
 
 	private async loadShareUsers(shareId: string) {
@@ -529,11 +702,24 @@ export default class ShareService {
 	}
 
 
-	public async respondInvitation(shareUserId: string, masterKey: MasterKeyEntity, accept: boolean) {
+	public async respondInvitation(shareUserId: string, share: StateShare, masterKey: MasterKeyEntity, accept: boolean) {
 		logger.info('respondInvitation: ', shareUserId, accept);
 
 		if (accept) {
+			const cachedMasterKeyId = await this.shareMasterKeyIdCache_.get(share);
+
 			if (masterKey) {
+				// Defend against an attacker attempting to replace the key for an existing share via a new invitation.
+				// This check is safe because changing a share's master key ID requires unsharing and re-sharing,
+				// which generates a new share ID.
+				if (cachedMasterKeyId && cachedMasterKeyId !== masterKey.id) {
+					throw new Error('Refusing to accept invitation: This share was previously accepted with a different master key.');
+				}
+
+				// Shares from the API don't have a master_key_id until *after* the user accepts the share.
+				// Add the master_key_id here so that the share is cached properly.
+				share = { ...share, master_key_id: masterKey.id };
+
 				const getReEncryptedKey = async (ppkCandidates: PublicPrivateKeyPair[]) => {
 					let lastError: Error = null;
 					for (const ppk of ppkCandidates) {
@@ -568,9 +754,23 @@ export default class ShareService {
 				const reencryptedMasterKey = await getReEncryptedKey(ppkCandidates);
 				logger.info('respondInvitation: Key has been reencrypted using master password', reencryptedMasterKey);
 
+				const existingKey = await MasterKey.load(masterKey.id);
+				if (existingKey) {
+					logger.info('respondInvitation: Local master key already exists for the share. Checking for match... Key ID:', masterKey.id);
+
+					const newPlaintext = await this.encryptionService_.decryptMasterKeyContent(reencryptedMasterKey, getMasterPassword());
+					const oldPlaintext = await this.encryptionService_.decryptMasterKeyContent(existingKey, getMasterPassword());
+					if (oldPlaintext !== newPlaintext) {
+						throw new Error(`Cannot accept share. A master key with ${JSON.stringify(masterKey.id)} already exists and is different.`);
+					}
+				}
+
 				await MasterKey.save(reencryptedMasterKey);
+			} else if (cachedMasterKeyId) {
+				throw new Error('Refusing to accept invitation for unencrypted share: A previous invitation for the same share was previously accepted, and was encrypted.');
 			}
 
+			await this.shareMasterKeyIdCache_.update(share);
 			await this.api().exec('PATCH', `api/share_users/${shareUserId}`, null, { status: 1 });
 		} else {
 			await this.api().exec('PATCH', `api/share_users/${shareUserId}`, null, { status: 2 });

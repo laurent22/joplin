@@ -1,10 +1,10 @@
 import * as React from 'react';
 
 import { describe, it, beforeEach } from '@jest/globals';
-import { act, fireEvent, render, screen, userEvent, waitFor } from '../../../utils/testing/testingLibrary';
+import { act, fireEvent, render, screen, userEvent, waitFor, within } from '../../../utils/testing/testingLibrary';
 
 import NoteScreen from './Note';
-import { setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv, supportDir, synchronizerStart, resourceFetcher, runWithFakeTimers, encryptionService } from '@joplin/lib/testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv, supportDir, synchronizerStart, resourceFetcher, runWithFakeTimers, encryptionService, mockMobilePlatform } from '@joplin/lib/testing/test-utils';
 import NoteLockKey from '@joplin/lib/services/noteLock/NoteLockKey';
 import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
 import NoteLockService from '@joplin/lib/services/noteLock/NoteLockService';
@@ -24,7 +24,7 @@ import ItemChange from '@joplin/lib/models/ItemChange';
 import { getDisplayParentId } from '@joplin/lib/services/trash';
 import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly';
 import { LayoutChangeEvent } from 'react-native';
-import shim from '@joplin/lib/shim';
+import shim, { MobilePlatform } from '@joplin/lib/shim';
 import getWebViewWindowById from '../../../utils/testing/getWebViewWindowById';
 import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
 import Setting from '@joplin/lib/models/Setting';
@@ -34,7 +34,6 @@ import setupGlobalStore from '../../../utils/testing/setupGlobalStore';
 import CommandService from '@joplin/lib/services/CommandService';
 import BackButtonService from '../../../services/BackButtonService';
 import shared from '@joplin/lib/components/shared/note-screen-shared';
-import { DialogContext, DialogControl } from '../../DialogManager';
 import useVisiblePluginEditorViewIds from '@joplin/lib/hooks/plugins/useVisiblePluginEditorViewIds';
 import mockPluginServiceSetup from '../../../utils/testing/mockPluginServiceSetup';
 import createTestPlugin from '@joplin/lib/testing/plugins/createTestPlugin';
@@ -660,17 +659,26 @@ describe('screens/Note/Note', () => {
 	});
 
 	it('should not tick the to-do checkbox of a locked note inside a share', async () => {
-		const noteId = await openNewNote({ title: 'Locked to-do', body: 'plain', is_todo: 1, is_locked: 1, share_id: 'share-1' });
-		const dialogs: Partial<DialogControl> = { error: jest.fn() };
-		const { unmount } = render(<DialogContext.Provider value={dialogs as DialogControl}><WrappedNoteScreen /></DialogContext.Provider>);
+		// Mock web so that dialogs use React components and not Alert.alert
+		const { reset } = mockMobilePlatform(MobilePlatform.Web);
+		let unmount;
+		try {
+			const noteId = await openNewNote({ title: 'Locked to-do', body: 'plain', is_todo: 1, is_locked: 1, share_id: 'share-1' });
+			({ unmount } = render(<WrappedNoteScreen />));
 
-		fireEvent.press(await screen.findByRole('checkbox'));
+			fireEvent.press(await screen.findByRole('checkbox'));
 
-		await waitFor(() => expect(dialogs.error).toHaveBeenCalledWith(expect.stringMatching(/read-only because it is locked/)));
-		expect(screen.getByRole('checkbox')).not.toBeChecked();
-		expect((await Note.load(noteId)).todo_completed).toBe(0);
+			await waitFor(() => {
+				const dialog = screen.getByTestId('prompt-dialog');
+				expect(within(dialog).getByText(/read-only because it is locked/)).toBeVisible();
+			});
 
-		unmount();
+			expect(screen.getByRole('checkbox')).not.toBeChecked();
+			expect((await Note.load(noteId)).todo_completed).toBe(0);
+		} finally {
+			unmount?.();
+			reset();
+		}
 	});
 
 	it('should hide the move picker for a locked note inside a read-only share', async () => {

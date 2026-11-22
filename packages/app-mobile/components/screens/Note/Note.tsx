@@ -2330,6 +2330,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 						visible={true}
 						onDismiss={this.noteLockUnlockPrompt_close}
 						size={DialogVariant.SmallResize}
+						scrollOverflow={{ keyboardShouldPersistTaps: 'handled' }}
 					>
 						<NoteLockPanel
 							themeId={this.props.themeId}

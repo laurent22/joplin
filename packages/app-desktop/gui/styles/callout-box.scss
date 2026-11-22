@@ -1,0 +1,10 @@
+
+.callout-box {
+	padding: var(--joplin-margin);
+	border-radius: 4px;
+
+	&.-warning {
+		background-color: var(--joplin-warning-background-color);
+		color: var(--joplin-color);
+	}
+}

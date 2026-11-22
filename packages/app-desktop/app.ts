@@ -18,6 +18,7 @@ import { _, setLocale } from '@joplin/lib/locale';
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
 import SpellCheckerServiceDriverNative from './services/spellChecker/SpellCheckerServiceDriverNative';
 import bridge from './services/bridge';
+import startBlockedPluginsCheck from './services/plugins/startBlockedPluginsCheck';
 import menuCommandNames from './gui/menuCommandNames';
 import ResourceService from '@joplin/lib/services/ResourceService';
 import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
@@ -385,6 +386,8 @@ class Application extends BaseApplication {
 				ipcRenderer.send('startup-plugins-loaded');
 
 				void afterDefaultPluginsLoaded(service.plugins, getDefaultPluginsInfo(), pluginSettings);
+
+				startBlockedPluginsCheck(this.store());
 			}
 		}, 500);
 	}
