@@ -9,7 +9,7 @@ import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { connect } from 'react-redux';
 import { AppState } from '../../../utils/types';
 import PluginUserWebView from './PluginUserWebView';
-import { View, StyleSheet, AccessibilityInfo } from 'react-native';
+import { View, StyleSheet, AccessibilityInfo, ScrollView } from 'react-native';
 import { _ } from '@joplin/lib/locale';
 import Setting from '@joplin/lib/models/Setting';
 import DismissibleDialog, { DialogVariant } from '../../../components/DismissibleDialog';
@@ -33,6 +33,15 @@ const styles = StyleSheet.create({
 	webViewContainer: {
 		flexGrow: 1,
 		flexShrink: 1,
+	},
+	tabSelector: {
+		flexGrow: 0,
+	},
+	tabSelectorContent: {
+		flexGrow: 1,
+	},
+	tabSelectorButtons: {
+		flexGrow: 1,
 	},
 });
 
@@ -148,11 +157,14 @@ const PluginPanelViewer: React.FC<Props> = props => {
 		}
 
 		return (
-			<SegmentedButtons
-				value={selectedTabId}
-				onValueChange={setSelectedTabId}
-				buttons={buttonInfos}
-			/>
+			<ScrollView horizontal={true} style={styles.tabSelector} contentContainerStyle={styles.tabSelectorContent}>
+				<SegmentedButtons
+					style={styles.tabSelectorButtons}
+					value={selectedTabId}
+					onValueChange={setSelectedTabId}
+					buttons={buttonInfos}
+				/>
+			</ScrollView>
 		);
 	};
 
