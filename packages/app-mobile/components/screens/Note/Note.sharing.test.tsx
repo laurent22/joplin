@@ -448,4 +448,37 @@ describe('screens/Note/Note.sharing', () => {
 			Setting.setValue('featureFlag.noteLock', false);
 		}
 	});
+
+	it('removes a locked note share recreated after relocking during export', async () => {
+		await setupUnlockedNoteLock('123456');
+		const noteId = await openNewNote({ title: 'Locked share', body: 'Secret body' });
+		const lockedNote = { ...await Note.load(noteId, { useNoteLock: true }), is_locked: 1, isDecrypted: true };
+		await Note.save(lockedNote, { useNoteLock: true });
+		store.dispatch({ type: 'SET_NOTE_LOCK_SESSION_UNLOCKED', value: true });
+
+		const exportFinished = deferred<void>();
+		const exportHtml = jest.spyOn(InteropService.instance(), 'export').mockImplementation(async options => {
+			await exportFinished.promise;
+			await shim.fsDriver().mkdir(dirname(options.path));
+			await shim.fsDriver().writeFile(options.path, 'decrypted', 'utf8');
+			return { warnings: [] };
+		});
+		const { dialogs } = makeShareDialogs('html');
+		const { unmount } = render(<WrappedNoteScreen dialogs={dialogs}/>);
+		try {
+			await getNoteViewerDom();
+			await openNoteActionsMenu();
+			fireEvent.press(await screen.findByText('Share'));
+			await waitFor(() => expect(exportHtml).toHaveBeenCalled());
+			const shareDir = dirname(exportHtml.mock.calls[0][0].path);
+
+			await act(async () => { NoteLockSession.instance().lock(); });
+			await act(async () => { exportFinished.resolve(undefined); });
+			await waitFor(() => expect(shareFile).toHaveBeenCalled());
+			await waitFor(async () => expect(await shim.fsDriver().exists(shareDir)).toBe(false));
+		} finally {
+			unmount();
+			Setting.setValue('featureFlag.noteLock', false);
+		}
+	});
 });

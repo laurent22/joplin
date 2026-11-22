@@ -40,7 +40,7 @@ import NoteLockKey, { DecryptedNoteLockKey } from '@joplin/lib/services/noteLock
 import NoteLockNote from '@joplin/lib/services/noteLock/NoteLockNote';
 import { disableNoteLock, enableNoteLock } from '@joplin/lib/services/noteLock/setNoteLockState';
 import { ErrorCode } from '@joplin/lib/errors';
-import eventManager, { EventName, NoteLockNoteStateChangeEvent } from '@joplin/lib/eventManager';
+import eventManager, { EventName, NoteLockNoteStateChangeEvent, NoteLockSessionChangeEvent } from '@joplin/lib/eventManager';
 import NoteLockPanel from './NoteLockPanel';
 import DismissibleDialog, { DialogVariant } from '../../DismissibleDialog';
 import SelectDateTimeDialog from '../../SelectDateTimeDialog';
@@ -1319,12 +1319,25 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		this.setState({ exportInProgress: false });
 	};
 
+	private watchForRelockDuringShare_() {
+		let relocked = !NoteLockSession.instance().isUnlocked();
+		const listener = (event: NoteLockSessionChangeEvent) => {
+			if (!event.unlocked) relocked = true;
+		};
+		eventManager.on(EventName.NoteLockSessionChange, listener);
+		return {
+			wasRelocked: () => relocked,
+			stop: () => eventManager.off(EventName.NoteLockSessionChange, listener),
+		};
+	}
+
 	private async shareExportedFile(format: 'html'|'pdf'|'print') {
 		const task: ExportTask = { cancelled: false };
 		this.exportTask_ = task;
 		this.setState({ exportInProgress: true });
 		let shareDir: string = null;
 		let shareCallReturned = false;
+		let relockWatcher: ReturnType<typeof this.watchForRelockDuringShare_>|null = null;
 		try {
 			const noteId = this.state.note?.id || this.props.noteId;
 			if (!noteId) throw new Error(_('Cannot find the note to share.'));
@@ -1334,7 +1347,9 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			if (task.cancelled) return;
 			if (!savedNote) throw new Error(_('Cannot find the note to share.'));
 
-			shareDir = await makeIsolatedShareCacheDirectory(isNoteLockEnabled() && NoteLockNote.isLocked(savedNote));
+			const fromLockedNote = isNoteLockEnabled() && NoteLockNote.isLocked(savedNote);
+			if (fromLockedNote) relockWatcher = this.watchForRelockDuringShare_();
+			shareDir = await makeIsolatedShareCacheDirectory(fromLockedNote);
 			if (task.cancelled) return;
 			const filename = friendlySafeFilename(savedNote.title);
 			const htmlPath = `${shareDir}/${filename}.html`;
@@ -1410,12 +1425,14 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				void shim.showErrorDialog(_('Unable to share note data. Reason: %s', e.toString()));
 			}
 		} finally {
+			const relocked = relockWatcher?.wasRelocked();
+			relockWatcher?.stop();
 			if (this.exportTask_ === task) {
 				this.exportTask_ = null;
 				this.setState({ exportInProgress: false });
 			}
 			// The recipient may read the file after shareFile returns. clearSharedFilesCache removes it on the next app startup.
-			if (shareDir && !shareCallReturned) await shim.fsDriver().remove(shareDir);
+			if (shareDir && (!shareCallReturned || relocked)) await shim.fsDriver().remove(shareDir);
 		}
 	}
 
@@ -1449,6 +1466,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		if (shareText.length > 100000 || (isWeb && typeof navigator.share !== 'function')) {
 			let shareDir: string = null;
 			let shareCallReturned = false;
+			const relockWatcher = fromLockedNote ? this.watchForRelockDuringShare_() : null;
 			try {
 				// Using a .txt file extension causes a "No valid provider found from URL" error
 				// and blank share sheet on iOS for larger log files (around 200 KiB).
@@ -1463,7 +1481,9 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				// Display a message to the user (e.g. in the case where the user is out of disk space).
 				void shim.showErrorDialog(_('Unable to share note data. Reason: %s', e.toString()));
 			} finally {
-				if (shareDir && !shareCallReturned) {
+				const relocked = relockWatcher?.wasRelocked();
+				relockWatcher?.stop();
+				if (shareDir && (!shareCallReturned || relocked)) {
 					await shim.fsDriver().remove(shareDir);
 				}
 			}
