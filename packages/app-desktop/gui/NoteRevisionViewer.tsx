@@ -13,7 +13,7 @@ import bridge from '../services/bridge';
 import { NoteEntity, RevisionEntity } from '@joplin/lib/services/database/types';
 import { AppState } from '../app.reducer';
 import * as urlUtils from '@joplin/lib/urlUtils';
-const ReactTooltip = require('react-tooltip');
+import { Tooltip } from 'react-tooltip';
 import { connect } from 'react-redux';
 import shared from '@joplin/lib/components/shared/note-screen-shared';
 import getHelpMessage from '@joplin/lib/components/shared/NoteRevisionViewer/getHelpMessage';
@@ -246,7 +246,7 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 			<button disabled={!revisions.length || deleting} onClick={deleteHistoryButton_onClick} className='deleteHistory'style={{ ...theme.buttonStyle, marginLeft: 10, height: theme.inputStyle.height }}>
 				{deleteHistoryButtonTitle}
 			</button>
-			<HelpButton tip={helpMessage} id="noteRevisionHelpButton" onClick={helpButton_onClick} />
+			<HelpButton tip={helpMessage} onClick={helpButton_onClick} />
 		</div>
 	);
 
@@ -269,7 +269,7 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 				undecryptable={decryptFailed && noteLockSessionUnlocked}
 			/> : null}
 			{viewer}
-			<ReactTooltip place="bottom" delayShow={300} className="help-tooltip" />
+			<Tooltip anchorSelect=".revision-viewer-title [data-tip]" content={helpMessage} place="bottom" delayShow={300} className="help-tooltip" />
 		</div>
 	);
 };
