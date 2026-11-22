@@ -8,6 +8,20 @@ const DIR_NAME = 'sharedFiles';
 
 let pendingUnlockedShareCleanup: Promise<void> = Promise.resolve();
 
+const waitForUnlockedShareCleanup = async () => {
+	while (true) {
+		const cleanup = pendingUnlockedShareCleanup;
+		try {
+			await cleanup;
+		} catch {
+			// A newer cleanup may already be queued. Otherwise, retry once before sharing.
+			if (cleanup === pendingUnlockedShareCleanup) await clearUnlockedSharedFilesCache();
+			continue;
+		}
+		if (cleanup === pendingUnlockedShareCleanup) return;
+	}
+};
+
 const makeShareCacheDirectory = async () => {
 	const targetDir = `${shim.fsDriver().getCacheDirectoryPath()}/${DIR_NAME}`;
 	await shim.fsDriver().mkdir(targetDir);
@@ -16,7 +30,7 @@ const makeShareCacheDirectory = async () => {
 };
 
 export const makeIsolatedShareCacheDirectory = async (fromLockedNote = false) => {
-	if (fromLockedNote) await pendingUnlockedShareCleanup;
+	if (fromLockedNote) await waitForUnlockedShareCleanup();
 	// Keep each share's files separate so they cannot conflict and can be cleaned up independently.
 	const targetDir = `${await makeShareCacheDirectory()}${fromLockedNote ? '/unlocked' : ''}/${uuid.create()}`;
 	await shim.fsDriver().mkdir(targetDir);

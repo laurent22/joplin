@@ -72,4 +72,42 @@ describe('ShareUtils', () => {
 			removeSpy.mockRestore();
 		}
 	});
+
+	test('retries a failed relock cleanup before creating an unlocked share directory', async () => {
+		const driver = shim.fsDriver();
+		const previousDirectory = await makeIsolatedShareCacheDirectory(true);
+		const originalRemove = driver.remove.bind(driver);
+		let cleanupAttempts = 0;
+		const removeSpy = jest.spyOn(driver, 'remove').mockImplementation(async path => {
+			if (path.endsWith('/sharedFiles/unlocked') && ++cleanupAttempts === 1) throw new Error('Temporary cleanup failure');
+			await originalRemove(path);
+		});
+		try {
+			await expect(clearUnlockedSharedFilesCache()).rejects.toThrow('Temporary cleanup failure');
+			const newDirectory = await makeIsolatedShareCacheDirectory(true);
+			expect(cleanupAttempts).toBe(2);
+			expect(await pathExists(previousDirectory)).toBe(false);
+			expect(await pathExists(newDirectory)).toBe(true);
+		} finally {
+			removeSpy.mockRestore();
+			await clearUnlockedSharedFilesCache();
+		}
+	});
+
+	test('does not create an unlocked share directory when the cleanup retry fails', async () => {
+		const driver = shim.fsDriver();
+		const removeSpy = jest.spyOn(driver, 'remove').mockRejectedValue(new Error('Cleanup unavailable'));
+		const mkdirSpy = jest.spyOn(driver, 'mkdir');
+		try {
+			await expect(clearUnlockedSharedFilesCache()).rejects.toThrow('Cleanup unavailable');
+			mkdirSpy.mockClear();
+			await expect(makeIsolatedShareCacheDirectory(true)).rejects.toThrow('Cleanup unavailable');
+			expect(removeSpy).toHaveBeenCalledTimes(2);
+			expect(mkdirSpy).not.toHaveBeenCalled();
+		} finally {
+			mkdirSpy.mockRestore();
+			removeSpy.mockRestore();
+			await clearUnlockedSharedFilesCache();
+		}
+	});
 });
