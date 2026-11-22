@@ -39,6 +39,7 @@ describe('renderedSelection', () => {
 		{ markdown: '```txt\ncode\n```', from: 3, to: 15, expected: '```txt\ncode\n```' },
 		{ markdown: '```txt\ncode\n```', from: 7, to: 11, expected: 'code' },
 		{ markdown: '~~strike~~', from: 2, to: 8, expected: '~~strike~~' },
+		{ markdown: '> quote', from: 2, to: 7, expected: '> quote' },
 	])('should select "$expected" from "$markdown" in both directions', async ({ markdown, from, to, expected }) => {
 		for (const backward of [false, true]) {
 			const editor = await createEditor(`${markdown}\n\nAway`);

@@ -58,9 +58,10 @@ const testCases: TestCase[] = [
 	{
 		label: 'blockquote',
 		markdown: '> Blockquote\n',
-		renderedText: ' Blockquote',
+		renderedText: 'Blockquote',
 		selectionFrom: 2,
 		selectionTo: 12,
+		expectedSelectionFrom: 0,
 		expectedSyntaxTreeTags: ['Blockquote'],
 		extensions: [replaceFormatCharacters],
 	},

@@ -38,12 +38,13 @@ const replaceFormatCharacters = [
 			return node.node.parent;
 		},
 		getDecorationRange: (node, state) => {
-			// Headers in the form "## Header" should have the "##"s and the
-			// space immediately after hidden
-			if (node.name === 'HeaderMark') {
+			// Headers in the form "## Header" and blockquotes in the form "> Quote"
+			// should have the marker and the space immediately after hidden
+			if (node.name === 'HeaderMark' || node.name === 'QuoteMark') {
 				const markerLine = state.doc.lineAt(node.from);
 
-				// Certain header styles DON'T have a space after the header mark:
+				// Certain header styles and empty markers (e.g. a bare ">" or "> ") DON'T have
+				// content after a trailing space:
 				const hasRoomForSpace = node.to + 1 >= markerLine.to;
 				if (hasRoomForSpace) {
 					return null;
