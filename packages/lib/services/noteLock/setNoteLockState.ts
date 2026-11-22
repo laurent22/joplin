@@ -13,20 +13,27 @@ import JoplinError from '../../JoplinError';
 import { ErrorCode } from '../../errors';
 import { _ } from '../../locale';
 
+// Shared with the bulk change, which skips these notes instead of failing. Only needs the validationFields.
+export const noteLockChangeBlockedReason = (note: NoteEntity) => {
+	if (note.deleted_time) return 'Cannot change the note lock of a deleted note';
+	if (note.is_conflict) return 'Cannot change the note lock of a conflict note';
+	if (itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, note as ItemSlice, Setting.value('sync.userId'), BaseItem.syncShareCache)) return 'Cannot change the note lock of a read-only note';
+	return '';
+};
+
 // The UI hides the enable/disable actions for these cases, but the commands can also be
 // invoked directly (keyboard, plugins), so the transitions fail closed here too.
 const checkCanChangeLockState = (note: NoteEntity, noteId: string) => {
 	if (!isNoteLockEnabled()) throw new Error('Note lock is not enabled');
 	if (!note) throw new Error(`No such note: ${noteId}`);
-	if (note.deleted_time) throw new Error('Cannot change the note lock of a deleted note');
-	if (note.is_conflict) throw new Error('Cannot change the note lock of a conflict note');
-	if (itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, note as ItemSlice, Setting.value('sync.userId'), BaseItem.syncShareCache)) throw new Error('Cannot change the note lock of a read-only note');
+	const blockedReason = noteLockChangeBlockedReason(note);
+	if (blockedReason) throw new Error(blockedReason);
 	if (!NoteLockSession.instance().isUnlocked()) throw new Error('Cannot change the note lock while the session is locked');
 	// The migration re-encrypts the locked notes it finds, so a note locked or unlocked meanwhile could be missed or fail it.
 	if (noteLockKeyConflict()) throw new JoplinError(_('Notes cannot be locked or unlocked while a note lock key migration is required.'), ErrorCode.NoteLockKeyConflict);
 };
 
-const validationFields = ['id', 'is_locked', 'deleted_time', 'is_conflict', 'share_id'];
+export const validationFields = ['id', 'is_locked', 'deleted_time', 'is_conflict', 'share_id'];
 
 // These only validate and emit: the note screen listens for the event and persists the
 // change with a scheduled gated save.

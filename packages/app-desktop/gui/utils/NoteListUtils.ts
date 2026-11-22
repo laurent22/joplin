@@ -15,6 +15,7 @@ import { Dispatch } from 'redux';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { MarkupLanguage } from '@joplin/renderer';
 import hasLockedNoteWhileSessionLocked from '@joplin/lib/services/noteLock/hasLockedNoteWhileSessionLocked';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
 
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
@@ -156,6 +157,14 @@ export default class NoteListUtils {
 						menuUtils.commandToStatefulMenuItem('convertNoteToMarkdown', noteIds),
 					),
 				);
+				menu.append(new MenuItem({ type: 'separator' }));
+			}
+
+			if (noteIds.length > 1 && isNoteLockEnabled()) {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- commandToStatefulMenuItem returns lib's MenuItem shape which doesn't structurally match Electron's MenuItemConstructorOptions
+				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('lockNotes', noteIds) as any));
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- commandToStatefulMenuItem returns lib's MenuItem shape which doesn't structurally match Electron's MenuItemConstructorOptions
+				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('removeNoteLockFromNotes', noteIds) as any));
 				menu.append(new MenuItem({ type: 'separator' }));
 			}
 

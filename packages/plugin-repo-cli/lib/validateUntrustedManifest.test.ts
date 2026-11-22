@@ -105,6 +105,19 @@ describe('validateUntrustedManifest', () => {
 		).toThrow('mark itself as recommended');
 	});
 
+	test('should not allow plugin authors to set their own blocked versions', () => {
+		const newManifest = {
+			id: 'joplin-plugin.this.is.another.test',
+			_blocked_versions: [] as string[],
+			_npm_package_name: 'joplin-plugin-another-test',
+			version: '1.2.3',
+		};
+
+		expect(
+			() => validateUntrustedManifest(newManifest as unknown as PluginManifest, originalManifests, { source: 'npm' }),
+		).toThrow('cannot set its own blocked versions');
+	});
+
 	test('should not allow changing the NPM package for an existing plugin', () => {
 		const newManifest = {
 			id: 'joplin-plugin.this.is.a.test',

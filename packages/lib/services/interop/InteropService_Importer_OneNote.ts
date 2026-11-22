@@ -11,6 +11,7 @@ import shim from '../../shim';
 import { unique } from '../../ArrayUtils';
 import xpsToPngPowerShellScript from './xpsToPngPowerShellScript';
 import Note from '../../models/Note';
+import resolvePathWithinDir from '../../utils/resolvePathWithinDir';
 
 // cspell:ignore oxps
 
@@ -175,6 +176,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		logger.info('Importing HTML into Joplin');
 		const importer = new OneNoteHtmlImporter(fileToMetadata);
 		importer.setMetadata({ fileExtensions: ['html'] });
+		importer.setLinkedFilesBaseDir(tempOutputDirectory);
 		await importer.init(outputDirectory2, {
 			...this.options_,
 			destinationFolder: null,
@@ -393,6 +395,10 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		}
 	}
 
+	private xpsPrintoutSourcePath_(baseFolder: string, src: string) {
+		return resolvePathWithinDir(baseFolder, this.safeDecodeFileSrc_(src));
+	}
+
 	private xpsPrintoutOutputFilename_(sourcePath: string, pageNumber: number) {
 		const extension = extname(sourcePath);
 		return `${basename(sourcePath, extension)}.page-${pageNumber}.png`;
@@ -521,7 +527,8 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			const src = image.getAttribute('src') ?? '';
 			const displayedPageNumber = this.xpsPrintoutDisplayedPageNumber_(image);
 			const pageNumber = displayedPageNumber === null ? 1 : displayedPageNumber + 1;
-			const sourcePath = resolve(baseFolder, this.safeDecodeFileSrc_(src));
+			const sourcePath = this.xpsPrintoutSourcePath_(baseFolder, src);
+			if (!sourcePath) continue;
 			const outputPath = join(dirname(sourcePath), this.xpsPrintoutOutputFilename_(sourcePath, pageNumber));
 			let sourceConversions = conversions.get(sourcePath);
 			if (!sourceConversions) {
@@ -544,7 +551,8 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			const src = image.getAttribute('src') ?? '';
 			const displayedPageNumber = this.xpsPrintoutDisplayedPageNumber_(image);
 			const pageNumber = displayedPageNumber === null ? 1 : displayedPageNumber + 1;
-			const sourcePath = resolve(baseFolder, this.safeDecodeFileSrc_(src));
+			const sourcePath = this.xpsPrintoutSourcePath_(baseFolder, src);
+			if (!sourcePath) continue;
 			const convertedPath = conversions.get(sourcePath)?.get(pageNumber);
 
 			if (convertedPath && await shim.fsDriver().exists(convertedPath)) {

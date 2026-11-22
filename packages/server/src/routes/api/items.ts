@@ -5,7 +5,7 @@ import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import * as fs from 'fs-extra';
-import { ErrorBadRequest, ErrorForbidden, ErrorMethodNotAllowed, ErrorNotFound, ErrorPayloadTooLarge, errorToPlainObject } from '../../utils/errors';
+import { ErrorBadRequest, ErrorForbidden, ErrorMethodNotAllowed, ErrorNotFound, ErrorPayloadTooLarge, errorToApiOutput, isUnexpectedError } from '../../utils/errors';
 import ItemModel, { ItemSaveOption, SaveFromRawContentItem } from '../../models/ItemModel';
 import { requestPagination } from '../../models/utils/pagination';
 import { AclAction } from '../../models/BaseModel';
@@ -13,8 +13,18 @@ import { safeRemove } from '../../utils/fileUtils';
 import { formatBytes, MB } from '../../utils/bytes';
 import { requestDeltaPagination } from '../../models/ChangeModel/ChangeModel';
 import { hasOwnProperty } from '@joplin/utils/object';
+import Logger from '@joplin/utils/Logger';
+import { uuidgen } from '@joplin/lib/uuid';
+
+const logger = Logger.create('api/items');
 
 const router = new Router(RouteType.Api);
+
+const itemErrorToApiOutput = (itemName: string, error: unknown) => {
+	const errorId = uuidgen();
+	if (isUnexpectedError(error)) logger.error(`Could not process item ${itemName}: Error ID ${errorId}:`, error);
+	return errorToApiOutput(error, errorId);
+};
 
 const batchMaxSize = 1 * MB;
 
@@ -81,7 +91,7 @@ export async function putItemContents(path: SubPath, ctx: AppContext, isBatch: b
 	const output = await ctx.joplin.models.item().saveFromRawContent(ctx.joplin.owner, items, saveOptions);
 	for (const [name] of Object.entries(output)) {
 		if (output[name].item) output[name].item = (await ctx.joplin.models.item().toApiOutput(output[name].item)) as Item;
-		if (output[name].error) output[name].error = errorToPlainObject(output[name].error);
+		if (output[name].error) output[name].error = itemErrorToApiOutput(name, output[name].error);
 	}
 
 	return output;
@@ -125,7 +135,7 @@ export async function delItems(path: SubPath, ctx: AppContext, isBatch: boolean)
 				batchResponse[item.name] = {};
 			} catch (error) {
 				batchResponse[item.name] = {
-					error: errorToPlainObject(error),
+					error: itemErrorToApiOutput(item.name, error),
 				};
 			}
 		}
@@ -134,16 +144,19 @@ export async function delItems(path: SubPath, ctx: AppContext, isBatch: boolean)
 			const wasLoaded: boolean = hasOwnProperty(batchResponse, item);
 			if (!wasLoaded) {
 				batchResponse[item] = {
-					error: errorToPlainObject(
-						new ErrorNotFound(`Not found: ${item}`),
-					),
+					error: itemErrorToApiOutput(item, new ErrorNotFound(`Not found: ${item}`)),
 				};
 			}
 		}
 	} else {
-		const item = await itemFromPath(ctx.joplin.owner.id, ctx.joplin.models.item(), path);
-		await checkCanDelete(item);
-		toDelete.push(item);
+		// An account can have access to several items with the same name, which the client sees as a single item, so
+		// they are all deleted, as in the batch case. Otherwise the remaining ones would come back on the client.
+		const items = await ctx.joplin.models.item().loadByNames(ctx.joplin.owner.id, [ctx.joplin.models.item().pathToName(path.id)]);
+		if (!items.length) throw new ErrorNotFound(`Not found: ${path.id}`);
+		for (const item of items) {
+			await checkCanDelete(item);
+			toDelete.push(item);
+		}
 	}
 
 	await ctx.joplin.models.item().deleteForUser(

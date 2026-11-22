@@ -14,9 +14,17 @@ const { pregQuote } = require('../../string-utils-common');
 import { MarkupToHtml } from '@joplin/renderer';
 import { isDataUrl } from '@joplin/utils/url';
 import { stripBom } from '../../string-utils';
+import resolvePathWithinDir from '../../utils/resolvePathWithinDir';
 
 export default class InteropService_Importer_Md extends InteropService_Importer_Base {
 	protected importedNotes: Record<string, NoteEntity> = {};
+	private linkedFilesBaseDir_: string|null = null;
+
+	// When set, linked files outside this directory are not imported. Needed when the imported
+	// content is untrusted (e.g. generated from a OneNote file), to prevent path traversal.
+	public setLinkedFilesBaseDir(dir: string) {
+		this.linkedFilesBaseDir_ = dir;
+	}
 
 	public async exec(result: ImportExportResult) {
 		let parentFolderId = null;
@@ -126,7 +134,9 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 				// Handle anchor links appropriately
 				const linkPosix = toForwardSlashes(link);
 				const trimmedLink = this.trimAnchorLink(linkPosix);
-				const pathWithExtension = shim.fsDriver().resolve(`${dirname(filePath)}/${trimmedLink}`);
+				const unresolvedPath = `${dirname(filePath)}/${trimmedLink}`;
+				const pathWithExtension = this.linkedFilesBaseDir_ ? resolvePathWithinDir(this.linkedFilesBaseDir_, unresolvedPath) : shim.fsDriver().resolve(unresolvedPath);
+				if (!pathWithExtension) continue;
 
 				// This check also means that non-files, such as web URLs, will not be processed by
 				// the code below and simply inserted as links.

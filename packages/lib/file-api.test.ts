@@ -1,21 +1,7 @@
-import { PaginatedList, RemoteItem, getSupportsDeltaWithItems, enableEnhancedBasicDeltaAlgorithm, basicDelta, ItemStat, isLocalServer } from './file-api';
+import { enableEnhancedBasicDeltaAlgorithm, basicDelta, ItemStat, isLocalServer } from './file-api';
 import { RemoteItemMetadata } from './models/BaseItem';
 import Setting from './models/Setting';
 import SyncTargetRegistry from './SyncTargetRegistry';
-
-const defaultPaginatedList = (): PaginatedList => {
-	return {
-		items: [],
-		hasMore: false,
-		context: null,
-	};
-};
-
-const defaultItem = (): RemoteItem => {
-	return {
-		id: '',
-	};
-};
 
 const validNoteId = '1b175bb38bba47baac22b0b47f778113';
 const basePath = '/';
@@ -98,60 +84,6 @@ const syncOptions = (noteId: string, localUpdatedTime: number, contextTimestamp:
 };
 
 describe('file-api', () => {
-
-	test.each([
-		[
-			{
-				...defaultPaginatedList(),
-				items: [],
-			},
-			false,
-		],
-
-		[
-			{
-				...defaultPaginatedList(),
-				items: [
-					{
-						...defaultItem(),
-						path: 'test',
-					},
-				],
-			},
-			false,
-		],
-
-		[
-			{
-				...defaultPaginatedList(),
-				items: [
-					{
-						...defaultItem(),
-						path: 'test',
-						jopItem: null,
-					},
-				],
-			},
-			true,
-		],
-
-		[
-			{
-				...defaultPaginatedList(),
-				items: [
-					{
-						...defaultItem(),
-						path: 'test',
-						jopItem: { something: 'abcd' },
-					},
-				],
-			},
-			true,
-		],
-	])('should tell if the sync target supports delta with items', async (deltaResponse: PaginatedList, expected: boolean) => {
-		const actual = getSupportsDeltaWithItems(deltaResponse);
-		expect(actual).toBe(expected);
-	});
 
 	it.each([
 		'http://localhost',

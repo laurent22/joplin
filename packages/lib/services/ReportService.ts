@@ -9,6 +9,8 @@ import ResourceFetcher from './ResourceFetcher';
 import Resource from '../models/Resource';
 import { _, _n } from '../locale';
 import { toTitleCase } from '../string-utils';
+import { ErrorCode } from '../errors';
+import { loadPlaintextUploadHeldBackItemGroups } from './synchronizer/utils/plaintextUploadHeldBackItems';
 
 enum CanRetryType {
 	E2EE = 'e2ee',
@@ -183,15 +185,27 @@ export default class ReportService {
 		let section: ReportSection = null;
 
 		const disabledItems = await BaseItem.syncDisabledItems(syncTarget);
+		type SyncDisabledItem = typeof disabledItems[0];
 
 		if (disabledItems.length) {
 			section = { title: _('Items that cannot be synchronised'), body: [] };
 
 			section.body.push(_('These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).'));
 
-			const processRow = (row: typeof disabledItems[0]) => {
+			const isHeldBack = (row: SyncDisabledItem) => row.syncInfo.sync_disabled_reason === ErrorCode.PlaintextUploadNotConfirmed;
+			const heldBackLabels = new Map<string, string[]>();
+			if (disabledItems.some(isHeldBack)) {
+				for (const group of await loadPlaintextUploadHeldBackItemGroups(syncTarget, BaseItem.shareService_?.shares ?? [])) {
+					for (const item of group.items) heldBackLabels.set(item.id, [...(heldBackLabels.get(item.id) ?? []), group.label]);
+				}
+			}
+
+			const processRow = (row: SyncDisabledItem) => {
+				const heldBack = isHeldBack(row);
 				let msg = '';
-				if (row.location === BaseItem.SYNC_ITEM_LOCATION_LOCAL) {
+				if (heldBack) {
+					msg = _('%s (%s) is waiting to be uploaded without encryption: %s', row.item.title, row.item.id, (heldBackLabels.get(row.item.id) ?? []).join('; '));
+				} else if (row.location === BaseItem.SYNC_ITEM_LOCATION_LOCAL) {
 					msg = _('%s (%s) could not be uploaded: %s', row.item.title, row.item.id, row.syncInfo.sync_disabled_reason);
 				} else {
 					msg = _('Item "%s" could not be downloaded: %s', row.syncInfo.item_id, row.syncInfo.sync_disabled_reason);
@@ -201,10 +215,17 @@ export default class ReportService {
 				const item = { type_: row.syncInfo.item_type, id: row.syncInfo.item_id };
 				section.body.push({
 					text: msg,
-					canRetry: true,
+					// Held-back items can only be retried if ignored. (In this case, retry just un-ignores them.)
+					canRetry: !heldBack || !!row.warning_ignored,
 					canRetryType: CanRetryType.ItemSync,
 					retryHandler: async () => {
-						await BaseItem.saveSyncEnabled(item.type_, item.id);
+						// A specific case is needed for held-back items: saveSyncEnabled drops the row
+						// from sync_items, which leads to unnecessary conflicts in some cases:
+						if (heldBack) {
+							await BaseItem.unignoreItemSyncWarning(syncTarget, item);
+						} else {
+							await BaseItem.saveSyncEnabled(item.type_, item.id);
+						}
 					},
 					canIgnore: !row.warning_ignored,
 					ignoreHandler: async () => {

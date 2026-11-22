@@ -6,6 +6,8 @@ import { Store } from 'redux';
 import { AppState } from '../../utils/types';
 import FocusControl from '../accessibility/FocusControl/FocusControl';
 import { SafeAreaProvider, Metrics } from 'react-native-safe-area-context';
+import DialogManager from '../DialogManager';
+import Setting from '@joplin/lib/models/Setting';
 
 interface Props {
 	store: Store<AppState>;
@@ -34,7 +36,9 @@ const TestProviderStack: React.FC<Props> = props => {
 			<FocusControl.Provider>
 				<MenuProvider closeButtonLabel='Dismiss'>
 					<PaperProvider>
-						{props.children}
+						<DialogManager themeId={Setting.THEME_LIGHT}>
+							{props.children}
+						</DialogManager>
 					</PaperProvider>
 				</MenuProvider>
 			</FocusControl.Provider>

@@ -17,6 +17,8 @@ describe('PromptDialog', () => {
 			answer: null,
 		});
 		instance.state = { visible: true, answer: 'some-answer' };
+		// The instance is never mounted, so a real setState() call would trigger a React warning
+		instance.setState = jest.fn();
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Accessing private property for test setup
 		(instance as unknown as any).menuIsOpened_ = menuIsOpened;
 

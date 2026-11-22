@@ -63,10 +63,12 @@ export default async function(env: Env, models: Models, config: Config, services
 			run: (models: Models) => models.user().handleOversizedAccounts(),
 		},
 
+		// Walks the whole items table, so it runs once a day rather than
+		// hourly. Orphans are rare and clients work around them meanwhile.
 		{
 			id: TaskId.ProcessOrphanedItems,
 			description: taskIdToLabel(TaskId.ProcessOrphanedItems),
-			schedule: '15 * * * *',
+			schedule: '15 4 * * *',
 			run: (models: Models) => models.item().processOrphanedItems(),
 		},
 

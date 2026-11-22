@@ -16,8 +16,9 @@ const logger = Logger.create('LocalEmbeddingProvider');
 // shim.onnxRuntime() so non-desktop builds without ONNX wired in degrade
 // cleanly instead of crashing on require().
 
-// Capped to keep background indexing from pegging every core.
-const INTRA_OP_NUM_THREADS = 2;
+// A single thread keeps background indexing at ~100% CPU at most. With one thread ONNX doesn't
+// create an intra-op thread pool, so there are no worker threads busy-waiting between runs either.
+const INTRA_OP_NUM_THREADS = 1;
 
 // Cap on how many texts go through a single ONNX run. The peak working set of
 // a transformer pass scales with batch_size × seq_len × hidden_dim × layers.

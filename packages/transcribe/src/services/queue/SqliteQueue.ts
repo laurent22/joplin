@@ -11,7 +11,7 @@ export default class SqliteQueue implements BaseQueue {
 
 	private sqlite: Knex<Knex.Table>;
 	private name: string;
-	private maintenanceIntervalRef: NodeJS.Timer | undefined;
+	private maintenanceIntervalRef: ReturnType<typeof setInterval> | undefined;
 	private isMaintenanceRunning = false;
 	private options: QueueConfiguration;
 

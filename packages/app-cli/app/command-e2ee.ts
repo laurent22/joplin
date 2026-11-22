@@ -7,8 +7,12 @@ import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import * as pathUtils from '@joplin/lib/path-utils';
 import { getEncryptionEnabled, localSyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import { generateMasterKeyAndEnableEncryption, loadMasterKeysFromSettings, masterPasswordIsValid, setupAndDisableEncryption } from '@joplin/lib/services/e2ee/utils';
+import { generateMasterKeyAndEnableEncryption, getMasterPassword, loadMasterKeysFromSettings, resolveE2eeEnabledStateConflict, masterPasswordIsValid, setupAndDisableEncryption } from '@joplin/lib/services/e2ee/utils';
 import { fromFile as fileTypeFromFile } from 'file-type';
+import { formatPublicKeyFingerprint, isPublicPrivateKeyPairValid, ppkPublicKeyFingerprint } from '@joplin/lib/services/e2ee/ppk/ppk';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('command-e2ee');
 
 class Command extends BaseCommand {
 	public usage() {
@@ -16,14 +20,14 @@ class Command extends BaseCommand {
 	}
 
 	public description() {
-		return _('Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.'); // `generate-ppk`
+		return _('Manages E2EE configuration. Commands are `enable`, `re-enable`, `disable`, `decrypt`, `status`, `public-key`, `decrypt-file`, and `target-status`.'); // `generate-ppk`
 	}
 
 	public options() {
 		return [
 			// This is here mostly for testing - shouldn't be used
 			['-p, --password <password>', 'Use this password as master password (For security reasons, it is not recommended to use this option).'],
-			['-v, --verbose', 'More verbose output for the `target-status` command'],
+			['-v, --verbose', 'More verbose output for the `target-status` and `public-key` commands'],
 			['-o, --output <directory>', 'Output directory'],
 			['--retry-failed-items', 'Applies to `decrypt` command - retries decrypting items that previously could not be decrypted.'],
 			['-f, --force', 'Do not ask for input on failure'],
@@ -79,6 +83,22 @@ class Command extends BaseCommand {
 			this.stdout(_('Completed decryption.'));
 		};
 
+		if (args.command === 're-enable') {
+			if (!localSyncInfo().e2ee) {
+				throw new Error(_('This command can only be used to resolve E2EE enabled state conflicts. To enable encryption for the first time, use "e2ee enable".'));
+			}
+
+			await resolveE2eeEnabledStateConflict(
+				EncryptionService.instance(),
+				true,
+				action => this.dispatch(action),
+			);
+			if (!localSyncInfo().e2ee) throw new Error('Failed to re-enable E2EE');
+
+			this.stdout(_('Re-enabled E2EE. Sync to apply changes.'));
+			return;
+		}
+
 		if (args.command === 'enable') {
 			const argPassword = options.password ? options.password.toString() : '';
 			const password = argPassword ? argPassword : await this.prompt(_('Enter master password:'), { type: 'string', secure: true });
@@ -124,7 +144,58 @@ class Command extends BaseCommand {
 		}
 
 		if (args.command === 'status') {
-			this.stdout(_('Encryption is: %s', getEncryptionEnabled() ? _('Enabled') : _('Disabled')));
+			const enabled = getEncryptionEnabled();
+			this.stdout(_('Encryption is: %s', enabled ? _('Enabled') : _('Disabled')));
+
+			if (enabled) {
+				const ppk = localSyncInfo().ppk;
+
+				if (!getMasterPassword(false)) {
+					this.stdout(_('Missing master password'));
+				} else if (!await masterPasswordIsValid(getMasterPassword())) {
+					this.stdout(_('Invalid master password'));
+				} else if (!ppk) {
+					this.stdout(_('No public-private key pair'));
+				} else {
+					try {
+						const ppkValid = await isPublicPrivateKeyPairValid(EncryptionService.instance(), ppk, getMasterPassword());
+						if (!ppkValid) {
+							this.stdout(_('Invalid public-private key pair'));
+						}
+					} catch (error) {
+						this.stdout(`Failed to check public-private key pair: ${error}`);
+					}
+				}
+			}
+			return;
+		}
+
+		if (args.command === 'public-key') {
+			const ppk = localSyncInfo().ppk;
+			try {
+				if (ppk) {
+					const ppkValid = await isPublicPrivateKeyPairValid(EncryptionService.instance(), ppk, getMasterPassword());
+					if (!ppkValid) {
+						throw new Error(_('Key pair is not valid.'));
+					}
+
+					const fingerprint = await ppkPublicKeyFingerprint(ppk);
+					this.stdout(_('Public key fingerprint: %s', formatPublicKeyFingerprint(fingerprint)));
+
+					if (options.verbose) {
+						this.stdout(_('Full public key: %s', ppk.publicKey));
+					}
+				} else {
+					this.stdout(_('No public-private key pair.'));
+
+					if (!getEncryptionEnabled()) {
+						this.stdout(_('Enable encryption ("%s") to create a key pair.', 'e2ee enable'));
+					}
+				}
+			} catch (error) {
+				logger.warn('Failed to get public key fingerprint:', error);
+				this.stdout(_('Failed to get public key fingerprint: %s', error.message));
+			}
 			return;
 		}
 
