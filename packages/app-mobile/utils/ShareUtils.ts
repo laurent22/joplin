@@ -46,3 +46,7 @@ export const writeTextToCacheFile = async (text: string, fileName: string): Prom
 export async function clearSharedFilesCache(): Promise<void> {
 	return shim.fsDriver().remove(`${shim.fsDriver().getCacheDirectoryPath()}/sharedFiles`);
 }
+
+export async function clearUnlockedSharedFilesCache(): Promise<void> {
+	return shim.fsDriver().remove(`${shim.fsDriver().getCacheDirectoryPath()}/${DIR_NAME}/unlocked`);
+}
