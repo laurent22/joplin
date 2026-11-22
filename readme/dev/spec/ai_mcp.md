@@ -19,7 +19,7 @@ External AI app                Joplin (running)
 
 ## Transport
 
-Single HTTP endpoint at `POST /mcp` on the existing Web Clipper port. Auth uses the same Web Clipper token (`api.token`). Stdio is not implemented in v1.
+Single HTTP endpoint at `POST /mcp` on the existing Web Clipper port. Auth uses the same Web Clipper token (`api.token`), passed either as a `token` query parameter or as an `Authorization: Bearer <token>` HTTP header (per RFC 6750). Stdio is not implemented in v1.
 
 The endpoint accepts a JSON-RPC 2.0 envelope (or a batch array). Requests without an `id` field are notifications and get no response body. Server-initiated messages aren't supported.
 

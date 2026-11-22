@@ -20,6 +20,6 @@ The token can also be requested programmatically, as is done for the web clipper
 
 - Once the user accepts the request in the application, the server returns `{ status: "accepted", token: "API_TOKEN" }`.
 
-- The client can now use this `API_TOKEN` to make requests.
+- The client can now use this `API_TOKEN` to make requests. It can be passed either as a `token` query parameter (the original form) or as an `Authorization: Bearer <API_TOKEN>` HTTP header (per [RFC 6750](https://www.rfc-editor.org/rfc/rfc6750)). Both are accepted; if both are provided the query parameter wins. A malformed `Authorization` value (empty token, wrong scheme) is treated the same as no header at all.
 
 - If the users rejects the request, the server returns `{ status: "rejected" }`, and the client can display an error message.

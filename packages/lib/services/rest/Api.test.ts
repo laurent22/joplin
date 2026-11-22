@@ -541,6 +541,60 @@ describe('services/rest/Api', () => {
 		expect(hasThrown).toBe(true);
 	}));
 
+	it('should accept token in the Authorization: Bearer header (RFC 6750)', (async () => {
+		api = new Api('mytoken');
+
+		// Query-parameter token still works (backward compatibility).
+		const viaQuery = await api.route(RequestMethod.GET, 'notes', { token: 'mytoken' });
+		expect(viaQuery.items.length).toBe(0);
+
+		// Same token passed via Authorization: Bearer.
+		const viaBearer = await api.route(RequestMethod.GET, 'notes', null, null, null, { authorization: 'Bearer mytoken' });
+		expect(viaBearer.items.length).toBe(0);
+
+		// Scheme matching is case-insensitive per RFC 7235.
+		const viaBearerLower = await api.route(RequestMethod.GET, 'notes', null, null, null, { authorization: 'bearer mytoken' });
+		expect(viaBearerLower.items.length).toBe(0);
+
+		// Query parameter wins when both are present, matching the previous behaviour.
+		const bothValid = await api.route(RequestMethod.GET, 'notes', { token: 'mytoken' }, null, null, { authorization: 'Bearer anything' });
+		expect(bothValid.items.length).toBe(0);
+
+		// Wrong Bearer token returns the same "Invalid" error as a wrong query token.
+		let caught: Error = null;
+		try {
+			await api.route(RequestMethod.GET, 'notes', null, null, null, { authorization: 'Bearer wrong-token' });
+		} catch (error) {
+			caught = error;
+		}
+		expect(caught).not.toBeNull();
+		expect(caught.message).toBe('Invalid "token" parameter');
+	}));
+
+	it('should treat a malformed Authorization header as a missing token', (async () => {
+		api = new Api('mytoken');
+
+		// Each entry is a header value we expect to be rejected as "missing".
+		const malformedValues = [
+			'Bearer', // No token after the scheme.
+			'Bearer ', // Empty token.
+			'Basic mytoken', // Wrong scheme.
+			'mytoken', // No scheme at all.
+			'', // Empty header.
+		];
+
+		for (const authorization of malformedValues) {
+			let caught: Error = null;
+			try {
+				await api.route(RequestMethod.GET, 'notes', null, null, null, { authorization });
+			} catch (error) {
+				caught = error;
+			}
+			expect(caught).not.toBeNull();
+			expect(caught.message).toBe('Missing "token" parameter');
+		}
+	}));
+
 	it('should add tags to notes', (async () => {
 		const tag = await Tag.save({ title: 'mon étiquette' });
 		const note = await Note.save({ title: 'ma note' });

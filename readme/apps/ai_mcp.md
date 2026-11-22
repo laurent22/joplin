@@ -54,11 +54,13 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) o
 
 Replace `PORT` with the Web Clipper port and `YOUR_TOKEN` with the authorisation token. Restart Claude Desktop. The Joplin tools become available to Claude when it judges them useful.
 
+Clients that prefer an HTTP header over a query parameter can send the token as `Authorization: Bearer YOUR_TOKEN` instead (per [RFC 6750](https://www.rfc-editor.org/rfc/rfc6750)), in which case the URL is just `http://127.0.0.1:PORT/mcp`. Both forms are equivalent.
+
 There's no list of MCP tools visible in Claude Desktop's UI today. The easiest way to verify is to ask Claude a question that requires note access — for example "What notebooks do I have in Joplin?".
 
 ## Connecting other apps
 
-Cursor, Zed, and a growing number of editors support MCP. The setup follows the same shape: point them at `http://127.0.0.1:PORT/mcp?token=YOUR_TOKEN`, possibly via the same `mcp-remote` bridge. Consult the host app's documentation for where its MCP config file lives.
+Cursor, Zed, and a growing number of editors support MCP. The setup follows the same shape: point them at `http://127.0.0.1:PORT/mcp?token=YOUR_TOKEN` (or `http://127.0.0.1:PORT/mcp` with an `Authorization: Bearer YOUR_TOKEN` header), possibly via the same `mcp-remote` bridge. Consult the host app's documentation for where its MCP config file lives.
 
 ## Privacy
 
@@ -74,5 +76,5 @@ To shut the server off, untick **Enable MCP server** or turn off the Web Clipper
 ## Troubleshooting
 
 - **Tools don't appear in the AI app.** Most apps cache the tool list when they start. After flipping a per-tool toggle in Joplin, restart the AI app completely (Cmd+Q on macOS, not just close the window) so it reconnects and refreshes.
-- **Connection refused / 403.** Check that the Web Clipper is started and that the MCP toggle is on in Joplin's settings. The token in the URL must exactly match the one shown in Joplin under Web Clipper.
+- **Connection refused / 403.** Check that the Web Clipper is started and that the MCP toggle is on in Joplin's settings. The token (passed as the `token` query parameter or as an `Authorization: Bearer` header) must exactly match the one shown in Joplin under Web Clipper.
 - **Write attempt says the tool isn't available.** The write tool is off in Joplin's settings, or wasn't on when the AI app last connected. Turn it on and restart the AI app.

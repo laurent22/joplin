@@ -56,6 +56,10 @@ interface RequestQuery {
 	include_conflicts?: string;
 }
 
+// Keys are the lowercased header names, matching Node's IncomingHttpHeaders
+// shape so headers from the HTTP server pass through unchanged.
+export type RequestHeaders = Record<string, string | string[] | undefined>;
+
 export interface Request {
 	method: RequestMethod;
 	path: string;
@@ -68,6 +72,7 @@ export interface Request {
 	bodyJson: any;
 	files: RequestFile[];
 	params: string[];
+	headers?: RequestHeaders;
 	action?: string;
 }
 
@@ -178,9 +183,10 @@ export default class Api {
 
 	// Response can be any valid JSON object, so a string, and array or an object (key/value pairs).
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Body is per-route; the response shape is per-route (entity/list/null); the consumer narrows
-	public async route(method: RequestMethod, path: string, query: RequestQuery = null, body: any = null, files: RequestFile[] = null): Promise<any> {
+	public async route(method: RequestMethod, path: string, query: RequestQuery = null, body: any = null, files: RequestFile[] = null, headers: RequestHeaders = null): Promise<any> {
 		if (!files) files = [];
 		if (!query) query = {};
+		if (!headers) headers = {};
 
 		const parsedPath = this.parsePath(path);
 		if (!parsedPath.fn) throw new ErrorNotFound(); // Nothing at the root yet
@@ -228,6 +234,7 @@ export default class Api {
 			},
 			files,
 			params,
+			headers,
 		};
 
 		this.checkToken_(request);
@@ -244,6 +251,19 @@ export default class Api {
 			if (!error.httpCode) error.httpCode = 500;
 			throw error;
 		}
+	}
+
+	// RFC 6750 §2.1 - "Authorization: Bearer <token>". The scheme is matched
+	// case-insensitively per RFC 7235. A malformed value (empty token, wrong
+	// scheme, missing header, or duplicate header) returns null so the caller
+	// treats it the same as no header at all, keeping the error message aligned
+	// with the missing-token case.
+	private bearerTokenFromHeaders_(headers: RequestHeaders): string | null {
+		if (!headers) return null;
+		const raw = headers['authorization'];
+		if (!raw || Array.isArray(raw)) return null;
+		const match = /^\s*Bearer\s+(\S+)\s*$/i.exec(raw);
+		return match ? match[1] : null;
 	}
 
 	private checkToken_(request: Request) {
@@ -266,8 +286,16 @@ export default class Api {
 		// needed. This is for example when it is used as the plugin data API.
 		if (!this.token) return;
 
-		if (!request.query || !request.query.token) throw new ErrorForbidden('Missing "token" parameter');
-		if (request.query.token !== this.token) throw new ErrorForbidden('Invalid "token" parameter');
+		// The ?token= query parameter remains the primary channel for backward
+		// compatibility; Authorization: Bearer is accepted as an alternative so
+		// clients that can't attach query params (e.g. MCP HTTP transports) can
+		// still authenticate.
+		const queryToken = request.query ? request.query.token : null;
+		const bearerToken = this.bearerTokenFromHeaders_(request.headers);
+		const token = queryToken || bearerToken;
+
+		if (!token) throw new ErrorForbidden('Missing "token" parameter');
+		if (token !== this.token) throw new ErrorForbidden('Invalid "token" parameter');
 	}
 
 	private async execServiceActionFromRequest_(externalApi: Record<string, (args: Omit<Request, 'action'>)=> unknown>, request: Request) {

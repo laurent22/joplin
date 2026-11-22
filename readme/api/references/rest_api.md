@@ -21,12 +21,18 @@ for (let portToTest = 41184; portToTest <= 41194; portToTest++) {
 
 ## Authorisation
 
-To prevent unauthorised applications from accessing the API, the calls must be authenticated. To do so, you must provide a token as a query parameter for each API call. You can get this token from the Joplin desktop application, on the Web Clipper Options screen.
+To prevent unauthorised applications from accessing the API, the calls must be authenticated. You can get the token from the Joplin desktop application, on the Web Clipper Options screen, and pass it in one of two ways:
 
-This would be an example of valid cURL call using a token:
+- As a `token` query parameter on each request.
+- As an `Authorization: Bearer <token>` HTTP header (per [RFC 6750](https://www.rfc-editor.org/rfc/rfc6750)).
+
+Both work interchangeably. If both are present, the query parameter wins.
+
+These two cURL calls are equivalent:
 
 ```shell
 curl http://localhost:41184/notes?token=ABCD123ABCD123ABCD123ABCD123ABCD123
+curl -H "Authorization: Bearer ABCD123ABCD123ABCD123ABCD123ABCD123" http://localhost:41184/notes
 ```
 
 In the documentation below, the token will not be specified every time however you will need to include it.
