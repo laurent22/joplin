@@ -1338,19 +1338,20 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		let shareDir: string = null;
 		let shareCallReturned = false;
 		let relockWatcher: ReturnType<typeof this.watchForRelockDuringShare_>|null = null;
+		const shouldStop = () => task.cancelled || !!relockWatcher?.wasRelocked();
 		try {
 			const noteId = this.state.note?.id || this.props.noteId;
 			if (!noteId) throw new Error(_('Cannot find the note to share.'));
 			await this.saveActionQueue(noteId).processAllNow();
-			if (task.cancelled) return;
+			if (shouldStop()) return;
 			const savedNote = await Note.load(noteId);
-			if (task.cancelled) return;
+			if (shouldStop()) return;
 			if (!savedNote) throw new Error(_('Cannot find the note to share.'));
 
 			const fromLockedNote = isNoteLockEnabled() && NoteLockNote.isLocked(savedNote);
 			if (fromLockedNote) relockWatcher = this.watchForRelockDuringShare_();
 			shareDir = await makeIsolatedShareCacheDirectory(fromLockedNote);
-			if (task.cancelled) return;
+			if (shouldStop()) return;
 			const filename = friendlySafeFilename(savedNote.title);
 			const htmlPath = `${shareDir}/${filename}.html`;
 
@@ -1365,7 +1366,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				packIntoSingleFile: true,
 				shouldEmbedOnlyImages: format !== 'html',
 			});
-			if (task.cancelled) return;
+			if (shouldStop()) return;
 			if (exportResult.warnings.length) {
 				this.setState({ exportInProgress: false });
 				const shouldShare = await new Promise<boolean>(resolve => {
@@ -1376,11 +1377,11 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				});
 				if (!shouldShare) return;
 			}
-			if (task.cancelled) return;
+			if (shouldStop()) return;
 			if (format === 'print') {
 				this.setState({ exportInProgress: true });
 				const html = await shim.fsDriver().readFile(htmlPath, 'utf8');
-				if (task.cancelled) return;
+				if (shouldStop()) return;
 				if (Platform.OS === 'web') {
 					printHtmlInSandboxedIframe(html);
 				} else {
@@ -1398,11 +1399,11 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			if (format === 'pdf') {
 				this.setState({ exportInProgress: true });
 				const html = await shim.fsDriver().readFile(htmlPath, 'utf8');
-				if (task.cancelled) return;
+				if (shouldStop()) return;
 				const { uri } = await printToFileAsync({ html });
 				const printedPath = fileUriToPath(uri);
 				try {
-					if (task.cancelled) return;
+					if (shouldStop()) return;
 					fileToShare = `${shareDir}/${filename}.pdf`;
 					await shim.fsDriver().copy(printedPath, fileToShare);
 				} finally {
@@ -1412,7 +1413,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 						logger.warn('Unable to remove temporary PDF:', error);
 					}
 				}
-				if (task.cancelled) return;
+				if (shouldStop()) return;
 				mime = 'application/pdf';
 			}
 			this.setState({ exportInProgress: false });
@@ -1471,8 +1472,10 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				// Using a .txt file extension causes a "No valid provider found from URL" error
 				// and blank share sheet on iOS for larger log files (around 200 KiB).
 				shareDir = await makeIsolatedShareCacheDirectory(fromLockedNote);
+				if (relockWatcher?.wasRelocked()) return;
 				const fileToShare = `${shareDir}/${filename}.md`;
 				await shim.fsDriver().writeFile(fileToShare, shareText, 'utf8');
+				if (relockWatcher?.wasRelocked()) return;
 				await shareFile(fileToShare, 'text/plain');
 				shareCallReturned = true;
 			} catch (e) {

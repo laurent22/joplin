@@ -6,6 +6,8 @@ import uuid from '@joplin/lib/uuid';
 // when refactoring this name, make sure to refactor the `SharePackage.java` (in android) as well
 const DIR_NAME = 'sharedFiles';
 
+let pendingUnlockedShareCleanup: Promise<void> = Promise.resolve();
+
 const makeShareCacheDirectory = async () => {
 	const targetDir = `${shim.fsDriver().getCacheDirectoryPath()}/${DIR_NAME}`;
 	await shim.fsDriver().mkdir(targetDir);
@@ -14,6 +16,7 @@ const makeShareCacheDirectory = async () => {
 };
 
 export const makeIsolatedShareCacheDirectory = async (fromLockedNote = false) => {
+	if (fromLockedNote) await pendingUnlockedShareCleanup;
 	// Keep each share's files separate so they cannot conflict and can be cleaned up independently.
 	const targetDir = `${await makeShareCacheDirectory()}${fromLockedNote ? '/unlocked' : ''}/${uuid.create()}`;
 	await shim.fsDriver().mkdir(targetDir);
@@ -47,6 +50,17 @@ export async function clearSharedFilesCache(): Promise<void> {
 	return shim.fsDriver().remove(`${shim.fsDriver().getCacheDirectoryPath()}/sharedFiles`);
 }
 
-export async function clearUnlockedSharedFilesCache(): Promise<void> {
-	return shim.fsDriver().remove(`${shim.fsDriver().getCacheDirectoryPath()}/${DIR_NAME}/unlocked`);
+export function clearUnlockedSharedFilesCache(): Promise<void> {
+	const previousCleanup = pendingUnlockedShareCleanup;
+	const cleanup = (async () => {
+		// An earlier failed cleanup has already been reported by its caller. Still try again.
+		try {
+			await previousCleanup;
+		} catch {
+			// Retry below.
+		}
+		await shim.fsDriver().remove(`${shim.fsDriver().getCacheDirectoryPath()}/${DIR_NAME}/unlocked`);
+	})();
+	pendingUnlockedShareCleanup = cleanup;
+	return cleanup;
 }

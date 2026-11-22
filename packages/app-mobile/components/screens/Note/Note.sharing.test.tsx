@@ -443,13 +443,15 @@ describe('screens/Note/Note.sharing', () => {
 				expect(shareFile).toHaveBeenCalledWith(expect.any(String), 'text/html');
 			});
 			expect(exportHtml.mock.calls[0][0].path).toContain('/sharedFiles/unlocked/');
+			await act(async () => {});
+			expect(await shim.fsDriver().exists(dirname(exportHtml.mock.calls[0][0].path))).toBe(true);
 		} finally {
 			unmount();
 			Setting.setValue('featureFlag.noteLock', false);
 		}
 	});
 
-	it('removes a locked note share recreated after relocking during export', async () => {
+	it.each(['html', 'pdf', 'print'] as const)('discards a relocked %s export before opening another dialog', async format => {
 		await setupUnlockedNoteLock('123456');
 		const noteId = await openNewNote({ title: 'Locked share', body: 'Secret body' });
 		const lockedNote = { ...await Note.load(noteId, { useNoteLock: true }), is_locked: 1, isDecrypted: true };
@@ -461,9 +463,13 @@ describe('screens/Note/Note.sharing', () => {
 			await exportFinished.promise;
 			await shim.fsDriver().mkdir(dirname(options.path));
 			await shim.fsDriver().writeFile(options.path, 'decrypted', 'utf8');
-			return { warnings: [] };
+			return { warnings: ['Missing resource'] };
 		});
-		const { dialogs } = makeShareDialogs('html');
+		const pendingShare = deferred<void>();
+		jest.mocked(shareFile).mockImplementation(async () => pendingShare.promise);
+		const { dialogs } = makeShareDialogs(format);
+		const prompt = jest.fn((..._args: Parameters<DialogControl['prompt']>) => {});
+		dialogs.prompt = prompt;
 		const { unmount } = render(<WrappedNoteScreen dialogs={dialogs}/>);
 		try {
 			await getNoteViewerDom();
@@ -474,7 +480,47 @@ describe('screens/Note/Note.sharing', () => {
 
 			await act(async () => { NoteLockSession.instance().lock(); });
 			await act(async () => { exportFinished.resolve(undefined); });
-			await waitFor(() => expect(shareFile).toHaveBeenCalled());
+			await waitFor(async () => expect(await shim.fsDriver().exists(shareDir)).toBe(false));
+			expect(prompt).not.toHaveBeenCalled();
+			expect(printAsync).not.toHaveBeenCalled();
+			expect(printToFileAsync).not.toHaveBeenCalled();
+			expect(shareFile).not.toHaveBeenCalled();
+		} finally {
+			pendingShare.resolve(undefined);
+			unmount();
+			Setting.setValue('featureFlag.noteLock', false);
+		}
+	});
+
+	it('does not open the share sheet if relocked while creating a PDF', async () => {
+		await setupUnlockedNoteLock('123456');
+		const noteId = await openNewNote({ title: 'Locked PDF', body: 'Secret body' });
+		const lockedNote = { ...await Note.load(noteId, { useNoteLock: true }), is_locked: 1, isDecrypted: true };
+		await Note.save(lockedNote, { useNoteLock: true });
+		store.dispatch({ type: 'SET_NOTE_LOCK_SESSION_UNLOCKED', value: true });
+
+		const exportHtml = jest.spyOn(InteropService.instance(), 'export').mockImplementation(async options => {
+			await shim.fsDriver().writeFile(options.path, 'decrypted', 'utf8');
+			return { warnings: [] };
+		});
+		const pdfFinished = deferred<{ uri: string; numberOfPages: number }>();
+		jest.mocked(printToFileAsync).mockImplementation(async () => pdfFinished.promise);
+		const copyFile = jest.spyOn(shim.fsDriver(), 'copy');
+		const unlinkFile = jest.spyOn(shim.fsDriver(), 'unlink').mockResolvedValue();
+		const { dialogs } = makeShareDialogs('pdf');
+		const { unmount } = render(<WrappedNoteScreen dialogs={dialogs}/>);
+		try {
+			await getNoteViewerDom();
+			await openNoteActionsMenu();
+			fireEvent.press(await screen.findByText('Share'));
+			await waitFor(() => expect(printToFileAsync).toHaveBeenCalled());
+			const shareDir = dirname(exportHtml.mock.calls[0][0].path);
+
+			await act(async () => { NoteLockSession.instance().lock(); });
+			await act(async () => { pdfFinished.resolve({ uri: 'file:///cache/printed.pdf', numberOfPages: 1 }); });
+			await waitFor(() => expect(unlinkFile).toHaveBeenCalledWith('/cache/printed.pdf'));
+			expect(copyFile).not.toHaveBeenCalled();
+			expect(shareFile).not.toHaveBeenCalled();
 			await waitFor(async () => expect(await shim.fsDriver().exists(shareDir)).toBe(false));
 		} finally {
 			unmount();
