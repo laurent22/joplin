@@ -1,25 +1,23 @@
 import * as React from 'react';
 
 import { afterEach, beforeEach, describe, it } from '@jest/globals';
-import { LayoutChangeEvent, Platform, Share } from 'react-native';
+import { Platform, Share } from 'react-native';
 import { Store } from 'redux';
 import { basename, dirname } from 'path';
 
-import { act, fireEvent, render, screen, userEvent, waitFor } from '../../../utils/testing/testingLibrary';
+import { act, fireEvent, render, screen, waitFor } from '../../../utils/testing/testingLibrary';
 import NoteScreen from './Note';
-import { encryptionService, runWithFakeTimers, setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
+import { deferred, createNoteTestHelpers } from './testUtils';
+import { encryptionService, setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 import NoteLockKey from '@joplin/lib/services/noteLock/NoteLockKey';
 import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
 import NoteLockService from '@joplin/lib/services/noteLock/NoteLockService';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
-import waitForWithRealTimers from '@joplin/lib/testing/waitFor';
 import Note from '@joplin/lib/models/Note';
 import { AppState } from '../../../utils/types';
 import createMockReduxStore from '../../../utils/testing/createMockReduxStore';
 import getWebViewDomById from '../../../utils/testing/getWebViewDomById';
-import { NoteEntity } from '@joplin/lib/services/database/types';
 import Folder from '@joplin/lib/models/Folder';
-import { getDisplayParentId } from '@joplin/lib/services/trash';
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 import TestProviderStack from '../../testing/TestProviderStack';
@@ -44,14 +42,7 @@ interface WrapperProps {
 }
 
 let store: Store<AppState>;
-
-function deferred<T>() {
-	let resolve: (value: T)=> void;
-	const promise = new Promise<T>(resolvePromise => {
-		resolve = resolvePromise;
-	});
-	return { promise, resolve: resolve! };
-}
+const { openNewNote, openNoteActionsMenu } = createNoteTestHelpers(() => store);
 
 const mockNavigation = { state: { } };
 const WrappedNoteScreen: React.FC<WrapperProps> = props => {
@@ -69,71 +60,6 @@ const makeShareDialogs = (choice: 'plainText'|'html'|'pdf'|'print'|'cancel') => 
 
 const getNoteViewerDom = async () => {
 	return await getWebViewDomById('NoteBodyViewer');
-};
-
-const waitForNoteToMatch = async (noteId: string, note: Partial<NoteEntity>) => {
-	await act(() => waitForWithRealTimers(async () => {
-		const loadedNote = await Note.load(noteId);
-		expect(loadedNote).toMatchObject(note);
-	}));
-};
-
-const openExistingNote = async (noteId: string) => {
-	const note = await Note.load(noteId);
-	const displayParentId = getDisplayParentId(note, await Folder.load(note.parent_id));
-
-	store.dispatch({
-		type: 'NOTE_UPDATE_ALL',
-		notes: await Note.previews(displayParentId),
-	});
-
-	store.dispatch({
-		type: 'FOLDER_AND_NOTE_SELECT',
-		id: note.id,
-		folderId: displayParentId,
-	});
-};
-
-const openNewNote = async (noteProperties: NoteEntity) => {
-	const note = await Note.save({
-		parent_id: (await Folder.defaultFolder()).id,
-		...noteProperties,
-	});
-
-	await openExistingNote(note.id);
-	await waitForNoteToMatch(note.id, { parent_id: note.parent_id, title: note.title, body: note.body });
-
-	return note.id;
-};
-
-const openNoteActionsMenu = async () => {
-	// It doesn't seem possible to find the menu trigger with role/label.
-	const actionMenuButton = await screen.findByTestId('screen-header-menu-trigger');
-
-	// react-native-action-menu only shows the menu content after receiving onLayout
-	// events from various components (including a View that wraps the screen).
-	let cursor = actionMenuButton;
-	while (cursor.parent) {
-		if (cursor.props.onLayout) {
-			const mockedEvent = { nativeEvent: { layout: { x: 0, y: 0, width: 120, height: 100 } } };
-			cursor.props.onLayout(mockedEvent as LayoutChangeEvent);
-		}
-		cursor = cursor.parent;
-	}
-
-	// act() rather than waitFor(): waitFor rejects if the timer mode changes while it polls, and
-	// draining the fake timers updates the menu drawer's state.
-	await act(async () => {
-		await runWithFakeTimers(async () => {
-			await userEvent.press(actionMenuButton);
-		});
-	});
-
-	// State can update until the menu content is marked as open (part of the
-	// menu transition).
-	await waitFor(async () => {
-		expect(await screen.findByTestId('menu-content-open')).toBeVisible();
-	});
 };
 
 const setupUnlockedNoteLock = async (password: string) => {
@@ -384,6 +310,33 @@ describe('screens/Note/Note.sharing', () => {
 		expect(shareFile).not.toHaveBeenCalled();
 		await waitFor(() => expect(removeDir).toHaveBeenCalledWith(dirname(exportHtml.mock.calls[0][0].path)));
 		expect(showErrorDialog).not.toHaveBeenCalled();
+		unmount();
+	});
+
+	it('shows export progress while printing after accepting a warning', async () => {
+		await openNewNote({ title: 'Print warning', body: 'Printable body' });
+		const { dialogs } = makeShareDialogs('print');
+		const prompt = jest.fn((..._args: Parameters<DialogControl['prompt']>) => {});
+		dialogs.prompt = prompt;
+		jest.spyOn(InteropService.instance(), 'export').mockImplementation(async options => {
+			await shim.fsDriver().writeFile(options.path, '<html>Printable body</html>', 'utf8');
+			return { warnings: ['Missing resource'] };
+		});
+		const printFinished = deferred<void>();
+		jest.mocked(printAsync).mockImplementation(async () => printFinished.promise);
+		const { unmount } = render(<WrappedNoteScreen dialogs={dialogs}/>);
+
+		await openNoteActionsMenu();
+		fireEvent.press(await screen.findByText('Share'));
+		await waitFor(() => expect(prompt).toHaveBeenCalled());
+		expect(screen.queryByText('Exporting...')).toBeNull();
+		const [, , buttons] = prompt.mock.calls[0];
+		await act(async () => { buttons.find(button => button.text === 'Yes').onPress(); });
+		await waitFor(() => expect(printAsync).toHaveBeenCalled());
+		expect(await screen.findByText('Exporting...')).toBeVisible();
+
+		await act(async () => { printFinished.resolve(undefined); });
+		await waitFor(() => expect(screen.queryByText('Exporting...')).toBeNull());
 		unmount();
 	});
 

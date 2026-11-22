@@ -1339,6 +1339,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			const filename = friendlySafeFilename(savedNote.title);
 			const htmlPath = `${shareDir}/${filename}.html`;
 
+			// Export runs in the app context, so renderer content scripts must not run here.
 			const exportResult = await InteropService.instance().export({
 				path: htmlPath,
 				format: ExportModuleOutputFormat.Html,
@@ -1346,7 +1347,6 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				sourceNoteIds: [savedNote.id],
 				includeConflicts: true,
 				decryptLockedNotes: true,
-				// Export runs in the app context, so renderer content scripts must not run here.
 				packIntoSingleFile: true,
 				shouldEmbedOnlyImages: format !== 'html',
 			});
@@ -1363,6 +1363,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			}
 			if (task.cancelled) return;
 			if (format === 'print') {
+				this.setState({ exportInProgress: true });
 				const html = await shim.fsDriver().readFile(htmlPath, 'utf8');
 				if (task.cancelled) return;
 				if (Platform.OS === 'web') {

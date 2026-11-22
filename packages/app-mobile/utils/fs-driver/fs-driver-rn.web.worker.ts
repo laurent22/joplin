@@ -57,7 +57,6 @@ export interface TransferableStat {
 const isNotFoundError = (error: Error) => error instanceof DOMException && error.name === 'NotFoundError';
 const isTypeMismatchError = (error: Error) => error instanceof DOMException && error.name === 'TypeMismatchError';
 const externalDirectoryPrefix = '/external/';
-const storedFileName = (path: string) => path.startsWith(externalDirectoryPrefix) ? basename(path) : removeReservedWords(basename(path));
 
 type AccessHandleDatabaseControl = {
 	clearExternalHandle(id: string): Promise<void>;
@@ -234,7 +233,7 @@ export class WorkerApi {
 
 		const parentDirs = dirname(path);
 		const parent = await this.pathToDirectoryHandle_(parentDirs, create);
-		const folderName = storedFileName(path);
+		const folderName = removeReservedWords(basename(path));
 
 		let handle: FileSystemDirectoryHandle;
 		if (!parent) {
@@ -275,7 +274,7 @@ export class WorkerApi {
 		}
 
 		try {
-			return parent.getFileHandle(storedFileName(path), { create });
+			return parent.getFileHandle(removeReservedWords(basename(path)), { create });
 		} catch (error) {
 			if (create) {
 				throw new Error(`${error} while getting file at path ${path}.`);
@@ -360,7 +359,7 @@ export class WorkerApi {
 			const dirHandle = await this.pathToDirectoryHandle_(dirname(path));
 
 			if (dirHandle) {
-				await dirHandle.removeEntry(storedFileName(path), { recursive });
+				await dirHandle.removeEntry(removeReservedWords(basename(path)), { recursive });
 			} else {
 				console.warn(`remove: ENOENT: Parent directory of path ${JSON.stringify(path)} does not exist.`);
 			}
@@ -471,7 +470,7 @@ export class WorkerApi {
 			const result: TransferableStat[] = [];
 			try {
 				for await (const [childInternalName, childHandle] of dirHandle.entries()) {
-					const childFileName = path.startsWith(externalDirectoryPrefix) ? childInternalName : restoreReservedWords(childInternalName);
+					const childFileName = restoreReservedWords(childInternalName);
 					const childPath = join(path, childFileName);
 
 					const stat = await this.stat(childPath, childHandle);
@@ -505,7 +504,7 @@ export class WorkerApi {
 		const parentDirectory = await this.pathToDirectoryHandle_(dirname(path));
 		if (!parentDirectory) return false;
 
-		const fileName = storedFileName(path);
+		const fileName = removeReservedWords(basename(path));
 		try {
 			const childHandle = await parentDirectory.getFileHandle(fileName);
 			return !!childHandle;

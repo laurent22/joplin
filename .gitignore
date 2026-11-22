@@ -966,6 +966,7 @@ packages/app-mobile/components/screens/Note/commands/index.js
 packages/app-mobile/components/screens/Note/commands/insertDateTime.js
 packages/app-mobile/components/screens/Note/commands/setTags.js
 packages/app-mobile/components/screens/Note/commands/toggleVisiblePanes.js
+packages/app-mobile/components/screens/Note/testUtils.js
 packages/app-mobile/components/screens/Note/types.js
 packages/app-mobile/components/screens/NoteLockMigrationScreen.test.js
 packages/app-mobile/components/screens/NoteLockMigrationScreen.js
