@@ -9,7 +9,7 @@ import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { connect } from 'react-redux';
 import { AppState } from '../../../utils/types';
 import PluginUserWebView from './PluginUserWebView';
-import { View, StyleSheet, AccessibilityInfo, ScrollView } from 'react-native';
+import { View, StyleSheet, AccessibilityInfo, LayoutChangeEvent, ScrollView } from 'react-native';
 import { _ } from '@joplin/lib/locale';
 import Setting from '@joplin/lib/models/Setting';
 import DismissibleDialog, { DialogVariant } from '../../../components/DismissibleDialog';
@@ -43,11 +43,17 @@ const styles = StyleSheet.create({
 	tabSelectorButtons: {
 		flexGrow: 1,
 	},
+	truncatedTabLabel: {
+		flexShrink: 1,
+	},
 });
+
+const maxOverflowTabWidth = 180;
 
 type ButtonInfo = {
 	value: string;
 	label: string;
+	accessibilityLabel: string;
 	icon: string;
 };
 
@@ -112,13 +118,30 @@ const PluginPanelViewer: React.FC<Props> = props => {
 			.filter(([_id, info]) => info.view.containerType === ContainerType.Panel)
 			.filter(([_id, info]) => info.view.opened)
 			.map(([id, info]) => {
+				const label = getTabLabel(info);
 				return {
 					value: id,
-					label: getTabLabel(info),
+					label,
+					accessibilityLabel: label,
 					icon: 'puzzle',
 				};
 			});
 	}, [viewInfoById]);
+	const [tabSelectorWidth, setTabSelectorWidth] = useState(0);
+	const [uncappedContentWidth, setUncappedContentWidth] = useState(0);
+	const [measuredButtonInfos, setMeasuredButtonInfos] = useState<ButtonInfo[]|null>(null);
+	const tabsOverflow = measuredButtonInfos === buttonInfos && tabSelectorWidth > 0 && uncappedContentWidth > tabSelectorWidth + 1;
+
+	const onTabSelectorLayout = useCallback((event: LayoutChangeEvent) => {
+		setTabSelectorWidth(event.nativeEvent.layout.width);
+	}, []);
+	const onTabSelectorContentSizeChange = useCallback((width: number) => {
+		// Keep the uncapped width while capped; measuring the shorter row would make the cap toggle.
+		if (!tabsOverflow) {
+			setUncappedContentWidth(width);
+			setMeasuredButtonInfos(buttonInfos);
+		}
+	}, [buttonInfos, tabsOverflow]);
 
 	const { selectedTabId, setSelectedTabId } = useSelectedTabId(buttonInfos, viewInfoById);
 
@@ -157,12 +180,16 @@ const PluginPanelViewer: React.FC<Props> = props => {
 		}
 
 		return (
-			<ScrollView horizontal={true} style={styles.tabSelector} contentContainerStyle={styles.tabSelectorContent}>
+			<ScrollView horizontal={true} style={styles.tabSelector} contentContainerStyle={styles.tabSelectorContent} onLayout={onTabSelectorLayout} onContentSizeChange={onTabSelectorContentSizeChange}>
 				<SegmentedButtons
 					style={styles.tabSelectorButtons}
 					value={selectedTabId}
 					onValueChange={setSelectedTabId}
-					buttons={buttonInfos}
+					buttons={tabsOverflow ? buttonInfos.map(info => ({
+						...info,
+						style: { maxWidth: Math.max(maxOverflowTabWidth, tabSelectorWidth / buttonInfos.length) },
+						labelStyle: styles.truncatedTabLabel,
+					})) : buttonInfos}
 				/>
 			</ScrollView>
 		);
