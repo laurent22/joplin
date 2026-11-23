@@ -1,4 +1,6 @@
-import emojiRegex from 'emoji-regex';
+// Use the CommonJS entry directly. Webpack resolves the package entry to an ES module,
+// which is incompatible with TypeScript's CommonJS default import wrapper.
+const emojiRegex: typeof import('emoji-regex').default = require('emoji-regex/index.js');
 
 const firstEmoji = (input: string): string => input.trim().match(emojiRegex())?.[0] ?? '';
 
