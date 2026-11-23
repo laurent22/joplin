@@ -30,6 +30,7 @@ import { unique } from './array';
 import fastDeepEqual = require('fast-deep-equal');
 import { ALL_NOTES_FILTER_ID } from './reserved-ids';
 import ItemChange from './models/ItemChange';
+import { PlaintextUploadHeldBackCauses } from './services/synchronizer/utils/plaintextUploadHeldBackItems';
 const { createSelectorCreator, defaultMemoize } = require('reselect');
 const { createCachedSelector } = require('re-reselect');
 
@@ -188,6 +189,7 @@ export interface State extends WindowState {
 	hasDisabledSyncItems: boolean;
 	// Held-back items that the user hasn't chosen to keep on this device
 	plaintextUploadHeldBackItemIds: string[];
+	plaintextUploadHeldBackCauses: PlaintextUploadHeldBackCauses;
 	hasDisabledEncryptionItems: boolean;
 	customViewerCss: string;
 	customChromeCssPaths: string[];
@@ -248,6 +250,7 @@ export const defaultState: State = {
 	biometricsDone: false,
 	hasDisabledSyncItems: false,
 	plaintextUploadHeldBackItemIds: [],
+	plaintextUploadHeldBackCauses: { published: false, unencryptedShare: false, shareRootTitle: '' },
 	hasDisabledEncryptionItems: false,
 	customViewerCss: '',
 	customChromeCssPaths: [],
@@ -1594,6 +1597,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'SYNC_PLAINTEXT_UPLOAD_HELD_BACK_ITEMS_SET':
 			draft.plaintextUploadHeldBackItemIds = action.itemIds;
+			draft.plaintextUploadHeldBackCauses = action.causes;
 			break;
 
 		case 'ENCRYPTION_HAS_DISABLED_ITEMS':

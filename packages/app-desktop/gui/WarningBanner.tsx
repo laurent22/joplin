@@ -21,7 +21,7 @@ import { NoteLockMigrationStatus } from '@joplin/lib/reducer';
 import { confirmAndSkipNoteLockKeyMigration, notMigratedMessage, withSkippedCount } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
 import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/config/shouldShowMissingPasswordWarning';
 import { connect } from 'react-redux';
-import { onAllowUnencryptedUploads, onKeepHeldBackChanges, plaintextUploadBannerMessage } from '@joplin/lib/services/synchronizer/utils/plaintextUploadHeldBackItems';
+import { onAllowUnencryptedUploads, onKeepHeldBackChanges, plaintextUploadBannerMessage, PlaintextUploadHeldBackCauses } from '@joplin/lib/services/synchronizer/utils/plaintextUploadHeldBackItems';
 import { reg } from '@joplin/lib/registry';
 
 const logger = Logger.create('WarningBanner');
@@ -38,6 +38,7 @@ interface Props {
 	shareInvitations: ShareInvitation[];
 	hasDisabledSyncItems: boolean;
 	plaintextUploadHeldBackItemIds: string[];
+	plaintextUploadHeldBackCauses: PlaintextUploadHeldBackCauses;
 	showUnknownKeyFormatMessage: boolean;
 	showMissingMasterKeyMessage: boolean;
 	noteLockBulkChangeRunning: boolean;
@@ -218,11 +219,11 @@ const WarningBanner: React.FC<Props> = props => {
 		);
 	} else if (props.plaintextUploadHeldBackItemIds.length) {
 		msg = renderNotificationMessage(
-			plaintextUploadBannerMessage(props.plaintextUploadHeldBackItemIds.length),
+			plaintextUploadBannerMessage(props.plaintextUploadHeldBackItemIds.length, props.plaintextUploadHeldBackCauses),
 			_('Allow on this device'),
-			() => void onAllowUnencryptedUploads(),
+			() => void onAllowUnencryptedUploads(props.plaintextUploadHeldBackCauses),
 			_('Don\'t upload'),
-			() => void onKeepHeldBackChanges(props.plaintextUploadHeldBackItemIds, props.dispatch),
+			() => void onKeepHeldBackChanges(props.plaintextUploadHeldBackItemIds, props.plaintextUploadHeldBackCauses, props.dispatch),
 		);
 	} else if (props.hasDisabledEncryptionItems) {
 		msg = renderNotificationMessage(
@@ -364,6 +365,7 @@ const mapStateToProps = (state: AppState) => {
 	return {
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
 		plaintextUploadHeldBackItemIds: state.plaintextUploadHeldBackItemIds,
+		plaintextUploadHeldBackCauses: state.plaintextUploadHeldBackCauses,
 		hasDisabledEncryptionItems: state.hasDisabledEncryptionItems,
 		showMissingMasterKeyMessage: showMissingMasterKeyMessage(syncInfo, state.notLoadedMasterKeys),
 		showUnknownKeyFormatMessage: showUnknownKeyFormatBanner(syncInfo),

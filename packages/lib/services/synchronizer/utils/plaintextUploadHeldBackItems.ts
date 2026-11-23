@@ -271,19 +271,61 @@ export const newlyPublishedConfirmations = async (noteIds: string[], attachmentI
 	];
 };
 
-export const onAllowUnencryptedUploads = async () => {
-	if (await shim.showConfirmationDialog([
+export interface PlaintextUploadHeldBackCauses {
+	published: boolean;
+	unencryptedShare: boolean;
+	shareRootTitle: string;
+}
+
+export const loadPlaintextUploadHeldBackCauses = async (syncTargetId: number, shares: StateShare[], itemIds: string[]): Promise<PlaintextUploadHeldBackCauses> => {
+	const ids = new Set(itemIds);
+	const groups = (await loadPlaintextUploadHeldBackItemGroups(syncTargetId, shares))
+		.filter(group => group.reason !== PlaintextUploadReason.None && group.items.some(item => ids.has(item.id)));
+	const shareGroups = groups.filter(group => group.reason !== PlaintextUploadReason.Published);
+	const shareIds = new Set(shareGroups.map(group => group.shareId));
+	const share = shareIds.size === 1 ? shares.find(s => s.id === [...shareIds][0]) : null;
+	const root = share?.folder_id ? await Folder.load(share.folder_id, { fields: ['id', 'title', 'encryption_applied'] }) : null;
+	return {
+		published: groups.length > shareGroups.length,
+		unencryptedShare: shareGroups.length > 0,
+		shareRootTitle: root && !root.encryption_applied ? root.title : '',
+	};
+};
+
+const allowUnencryptedUploadsMessage = (causes: PlaintextUploadHeldBackCauses) => {
+	const turnOffHint = _('Allow this on this device? You can turn it off in Settings > Synchronisation.');
+	if (causes.published && causes.unencryptedShare) {
+		return [
+			_('Allow unencrypted uploads?'),
+			`${_('Published notes, and notebooks shared with you without end-to-end encryption, can only be uploaded unencrypted.')} ${turnOffHint}`,
+		];
+	}
+	if (causes.unencryptedShare) {
+		const sharedWithoutEncryption = causes.shareRootTitle
+			? _('%s was shared with you without end-to-end encryption, so your changes to it can only be uploaded unencrypted.', quoteUntrustedText(causes.shareRootTitle))
+			: _('Some notebooks were shared with you without end-to-end encryption, so your changes to them can only be uploaded unencrypted.');
+		return [
+			_('Upload changes to notebooks shared without encryption?'),
+			`${sharedWithoutEncryption} ${turnOffHint}`,
+		];
+	}
+	return [
 		_('Allow publishing with end-to-end encryption on?'),
-		_('Changes to published notes and to notebooks shared without encryption will be uploaded without encryption from this device. Only allow this if you use published notes or unencrypted shared notebooks.'),
-	].join('\n\n'))) {
+		`${_('Published notes and their attachments are uploaded without encryption, so that they can be viewed on the web.')} ${turnOffHint}`,
+	];
+};
+
+export const onAllowUnencryptedUploads = async (causes: PlaintextUploadHeldBackCauses) => {
+	if (await shim.showConfirmationDialog(allowUnencryptedUploadsMessage(causes).join('\n\n'))) {
 		Setting.setValue('encryption.allowUnencryptedUploads', true);
 		void reg.waitForSyncFinishedThenSync();
 	}
 };
 
-export const onKeepHeldBackChanges = async (itemIds: string[], dispatch: Dispatch) => {
-	if (await shim.showConfirmationDialog(
-		_('These changes, and later changes to the same notes, will stay on this device. To upload them, enable "Allow publishing with end-to-end encryption on" in Settings > Synchronisation.'),
+export const onKeepHeldBackChanges = async (itemIds: string[], causes: PlaintextUploadHeldBackCauses, dispatch: Dispatch) => {
+	if (await shim.showConfirmationDialog(causes.unencryptedShare && !causes.published
+		? _('These changes, and later changes to the same notes, will stay on this device. Other people in the shared notebook won\'t see them. To upload them, enable "Allow unencrypted uploads when end-to-end encryption is on" in Settings > Synchronisation.')
+		: _('These changes, and later changes to the same notes, will stay on this device. To upload them, enable "Allow unencrypted uploads when end-to-end encryption is on" in Settings > Synchronisation.'),
 	)) {
 		await BaseItem.ignorePlaintextUploadHeldBackItems(Setting.value('sync.target'), itemIds);
 		await checkDisabledSyncItemsNotification(dispatch);
@@ -301,7 +343,21 @@ export const heldBackItemToLine = (item: HeldBackItem) => {
 	return `${item.typeLabel}: ${displayTitle(item.title)} (${item.id})`;
 };
 
-export const plaintextUploadBannerMessage = (count: number) => {
+export const plaintextUploadBannerMessage = (count: number, causes: PlaintextUploadHeldBackCauses) => {
+	if (causes.published && causes.unencryptedShare) {
+		return _n(
+			'%d change wasn\'t uploaded because it would be sent without encryption.',
+			'%d changes weren\'t uploaded because they would be sent without encryption.',
+			count, count,
+		);
+	}
+	if (causes.unencryptedShare) {
+		return _n(
+			'%d change to a notebook shared without encryption wasn\'t uploaded.',
+			'%d changes to notebooks shared without encryption weren\'t uploaded.',
+			count, count,
+		);
+	}
 	return _n(
 		'Publishing is turned off while end-to-end encryption is on: %d change wasn\'t uploaded.',
 		'Publishing is turned off while end-to-end encryption is on: %d changes weren\'t uploaded.',

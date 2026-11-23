@@ -227,7 +227,7 @@ describe('Synchronizer.plaintextUploads', () => {
 
 		const actions: AnyAction[] = [];
 		await checkDisabledSyncItemsNotification(action => actions.push(action) && action);
-		expect(actions).toContainEqual({ type: 'SYNC_PLAINTEXT_UPLOAD_HELD_BACK_ITEMS_SET', itemIds: [note.id] });
+		expect(actions).toContainEqual({ type: 'SYNC_PLAINTEXT_UPLOAD_HELD_BACK_ITEMS_SET', itemIds: [note.id], causes: { published: true, unencryptedShare: false, shareRootTitle: '' } });
 		expect(actions).toContainEqual({ type: 'SYNC_HAS_DISABLED_SYNC_ITEMS', value: false });
 		const section = (await new ReportService().status(syncTargetId())).find(s => s.title === 'Items that cannot be synchronised');
 		expect(section.body).toContainEqual(expect.objectContaining({ text: expect.stringContaining(note.id), canRetry: false }));
