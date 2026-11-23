@@ -16,11 +16,12 @@ import { FolderEntity, FolderIconType } from '@joplin/lib/services/database/type
 import { AppState } from '../../utils/types';
 import { Dispatch } from 'redux';
 import SidebarIcon from '../SideMenuContent/SidebarIcon';
-import { launchImageLibrary } from 'react-native-image-picker';
 import resizeImage from '../../utils/image/resizeImage';
 import firstEmoji from '../../utils/firstEmoji';
 import type FsDriverWeb from '../../utils/fs-driver/fs-driver-rn.web';
 import Logger from '@joplin/utils/Logger';
+import { fileUriToPath } from '@joplin/utils/url';
+import pickImageFile from '../../utils/pickImageFile';
 
 const logger = Logger.create('screens/folder');
 
@@ -128,14 +129,11 @@ class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 		const tempPath = `${Setting.value('tempDir')}/${uuid.createNano()}`;
 		let resizedPath = `${tempPath}.jpg`;
 		try {
-			const response = await launchImageLibrary({ mediaType: 'photo', selectionLimit: 1, assetRepresentationMode: 'compatible' });
-			if (response.didCancel) return;
-			if (response.errorCode) throw new Error(response.errorMessage || response.errorCode);
-			const [file] = response.assets ?? [];
-			if (!file?.uri) throw new Error(_('No image was selected'));
+			const file = await pickImageFile();
+			if (!file) return;
 
-			const mimeType = Platform.OS === 'web' ? /^data:([^;,]+);base64,/i.exec(file.uri)?.[1] : file.type;
-			const fileName = file.fileName || '';
+			const mimeType = file.type;
+			const fileName = file.fileName;
 			const isPng = mimeType === 'image/png' || /\.png$/i.test(fileName);
 			const isJpeg = mimeType === 'image/jpeg' || mimeType === 'image/jpg' || /\.jpe?g$/i.test(fileName);
 			if (!isPng && !isJpeg) {
@@ -143,14 +141,10 @@ class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 			}
 			resizedPath = `${tempPath}.${isPng ? 'png' : 'jpg'}`;
 
-			if (Platform.OS === 'web') {
-				const binary = atob(file.uri.slice(file.uri.indexOf(',') + 1));
-				const imageData = new ArrayBuffer(binary.length);
-				const imageBytes = new Uint8Array(imageData);
-				for (let i = 0; i < binary.length; i++) imageBytes[i] = binary.charCodeAt(i);
-				await (shim.fsDriver() as FsDriverWeb).writeFile(tempPath, imageData, 'Buffer');
+			if ('data' in file) {
+				await (shim.fsDriver() as FsDriverWeb).writeFile(tempPath, file.data, 'Buffer');
 			} else {
-				const sourcePath = Platform.OS === 'ios' ? decodeURIComponent(file.uri) : file.uri;
+				const sourcePath = Platform.OS === 'ios' ? fileUriToPath(file.uri) : file.uri;
 				await shim.fsDriver().copy(sourcePath, tempPath);
 			}
 			await resizeImage({ inputPath: tempPath, outputPath: resizedPath, maxWidth: 256, maxHeight: 256, format: isPng ? 'PNG' : 'JPEG', quality: 0.8 });
