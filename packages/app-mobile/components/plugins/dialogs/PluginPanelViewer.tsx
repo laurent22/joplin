@@ -9,7 +9,7 @@ import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { connect } from 'react-redux';
 import { AppState } from '../../../utils/types';
 import PluginUserWebView from './PluginUserWebView';
-import { View, StyleSheet, AccessibilityInfo, ScrollView, useWindowDimensions } from 'react-native';
+import { View, StyleSheet, AccessibilityInfo, ScrollView } from 'react-native';
 import { _ } from '@joplin/lib/locale';
 import Setting from '@joplin/lib/models/Setting';
 import DismissibleDialog, { DialogVariant } from '../../../components/DismissibleDialog';
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-const preferredMaxTabWidth = 160;
+const tabWidth = 160;
 
 type ButtonInfo = {
 	value: string;
@@ -104,7 +104,6 @@ const getTabLabel = (info: ViewInfo) => {
 	return PluginService.instance().pluginById(info.plugin.id).manifest.name;
 };
 const PluginPanelViewer: React.FC<Props> = props => {
-	const { width: windowWidth } = useWindowDimensions();
 	const viewInfos = useViewInfos(props.pluginStates);
 	const viewInfoById = useMemo(() => {
 		const result: Record<string, ViewInfo> = {};
@@ -164,16 +163,14 @@ const PluginPanelViewer: React.FC<Props> = props => {
 			);
 		}
 
-		const maxTabWidth = Math.max(preferredMaxTabWidth, windowWidth / Math.max(buttonInfos.length, 1));
 		return (
 			<ScrollView horizontal={true} style={styles.tabSelector} contentContainerStyle={styles.tabSelectorContent}>
 				<SegmentedButtons
-					style={styles.tabSelectorButtons}
+					style={[styles.tabSelectorButtons, { minWidth: buttonInfos.length * tabWidth }]}
 					value={selectedTabId}
 					onValueChange={setSelectedTabId}
 					buttons={buttonInfos.map(info => ({
 						...info,
-						style: { maxWidth: maxTabWidth },
 						labelStyle: styles.truncatedTabLabel,
 					}))}
 				/>
