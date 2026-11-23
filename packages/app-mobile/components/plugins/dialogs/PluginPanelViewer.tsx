@@ -9,11 +9,12 @@ import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { connect } from 'react-redux';
 import { AppState } from '../../../utils/types';
 import PluginUserWebView from './PluginUserWebView';
-import { View, StyleSheet, AccessibilityInfo, ScrollView, useWindowDimensions } from 'react-native';
+import { View, StyleSheet, AccessibilityInfo, ScrollView, LayoutChangeEvent } from 'react-native';
 import { _ } from '@joplin/lib/locale';
 import Setting from '@joplin/lib/models/Setting';
 import DismissibleDialog, { DialogVariant } from '../../../components/DismissibleDialog';
 import CommandService from '@joplin/lib/services/CommandService';
+import { getSelectedTabScrollOffset, getTabLayout } from './pluginPanelTabLayout';
 
 interface Props {
 	themeId: number;
@@ -44,12 +45,17 @@ const styles = StyleSheet.create({
 		flexGrow: 1,
 		flexShrink: 0,
 	},
+	hiddenTabSelector: {
+		opacity: 0,
+	},
+	uncappedTab: {
+		flexBasis: 'auto',
+		flexShrink: 0,
+	},
 	truncatedTabLabel: {
 		flexShrink: 1,
 	},
 });
-
-const tabWidth = 160;
 
 type ButtonInfo = {
 	value: string;
@@ -105,7 +111,6 @@ const getTabLabel = (info: ViewInfo) => {
 	return PluginService.instance().pluginById(info.plugin.id).manifest.name;
 };
 const PluginPanelViewer: React.FC<Props> = props => {
-	const { width: windowWidth } = useWindowDimensions();
 	const viewInfos = useViewInfos(props.pluginStates);
 	const viewInfoById = useMemo(() => {
 		const result: Record<string, ViewInfo> = {};
@@ -130,6 +135,52 @@ const PluginPanelViewer: React.FC<Props> = props => {
 			});
 	}, [viewInfoById]);
 	const { selectedTabId, setSelectedTabId } = useSelectedTabId(buttonInfos, viewInfoById);
+	const selectorKey = JSON.stringify(buttonInfos.map(info => [info.value, info.label]));
+	const [selectorWidth, setSelectorWidth] = useState(0);
+	const [naturalMeasurement, setNaturalMeasurement] = useState<{ key: string; selectorWidth: number; contentWidth: number }|null>(null);
+	const [positionedKey, setPositionedKey] = useState<string|null>(null);
+	const selectorRef = useRef<ScrollView>(null);
+	const scrollOffsetRef = useRef(0);
+	const measurementReady = naturalMeasurement?.key === selectorKey && naturalMeasurement.selectorWidth === selectorWidth && selectorWidth > 0;
+	const tabLayout = getTabLayout(measurementReady ? naturalMeasurement.contentWidth : 0, selectorWidth, buttonInfos.length);
+	const layoutKey = `${selectorKey}:${selectorWidth}`;
+
+	const onSelectorLayout = useCallback((event: LayoutChangeEvent) => {
+		setSelectorWidth(event.nativeEvent.layout.width);
+	}, []);
+	const onContentSizeChange = useCallback((width: number) => {
+		if (!selectorWidth) return;
+		if (!measurementReady) {
+			setNaturalMeasurement({ key: selectorKey, selectorWidth, contentWidth: width });
+		}
+	}, [selectorWidth, measurementReady, selectorKey]);
+	const onSelectorScroll = useCallback((event: { nativeEvent: { contentOffset: { x: number } } }) => {
+		scrollOffsetRef.current = event.nativeEvent.contentOffset.x;
+	}, []);
+
+	useEffect(() => {
+		scrollOffsetRef.current = 0;
+		setPositionedKey(null);
+	}, [selectorKey]);
+
+	useEffect(() => {
+		if (!props.visible) {
+			scrollOffsetRef.current = 0;
+			setPositionedKey(null);
+			return undefined;
+		}
+		if (!measurementReady || !selectedTabId) return undefined;
+
+		const frame = requestAnimationFrame(() => {
+			const selectedIndex = buttonInfos.findIndex(info => info.value === selectedTabId);
+			if (selectedIndex < 0) return;
+
+			const target = tabLayout.overflow ? getSelectedTabScrollOffset(tabLayout.tabWidth, buttonInfos.length, selectedIndex, selectorWidth, scrollOffsetRef.current) : 0;
+			selectorRef.current?.scrollTo({ x: target, animated: false });
+			setPositionedKey(layoutKey);
+		});
+		return () => cancelAnimationFrame(frame);
+	}, [props.visible, measurementReady, selectedTabId, buttonInfos, tabLayout.overflow, tabLayout.tabWidth, selectorWidth, layoutKey]);
 
 	const viewInfo = viewInfoById[selectedTabId];
 
@@ -165,16 +216,25 @@ const PluginPanelViewer: React.FC<Props> = props => {
 			);
 		}
 
-		const maxTabWidth = Math.max(tabWidth, windowWidth / Math.max(buttonInfos.length, 1));
 		return (
-			<ScrollView horizontal={true} style={styles.tabSelector} contentContainerStyle={styles.tabSelectorContent}>
+			<ScrollView
+				key={layoutKey}
+				ref={selectorRef}
+				horizontal={true}
+				style={[styles.tabSelector, (!measurementReady || positionedKey !== layoutKey) && styles.hiddenTabSelector]}
+				contentContainerStyle={styles.tabSelectorContent}
+				onLayout={onSelectorLayout}
+				onContentSizeChange={onContentSizeChange}
+				onScroll={onSelectorScroll}
+				scrollEventThrottle={16}
+			>
 				<SegmentedButtons
 					style={styles.tabSelectorButtons}
 					value={selectedTabId}
 					onValueChange={setSelectedTabId}
 					buttons={buttonInfos.map(info => ({
 						...info,
-						style: { flexBasis: 'auto', flexShrink: 0, maxWidth: maxTabWidth },
+						style: tabLayout.overflow ? { ...styles.uncappedTab, flexGrow: 0, width: tabLayout.tabWidth } : styles.uncappedTab,
 						labelStyle: styles.truncatedTabLabel,
 					}))}
 				/>

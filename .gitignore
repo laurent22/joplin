@@ -897,6 +897,8 @@ packages/app-mobile/components/plugins/dialogs/hooks/useDialogMessenger.js
 packages/app-mobile/components/plugins/dialogs/hooks/useDialogSize.js
 packages/app-mobile/components/plugins/dialogs/hooks/useViewInfos.js
 packages/app-mobile/components/plugins/dialogs/hooks/useWebViewSetup.js
+packages/app-mobile/components/plugins/dialogs/pluginPanelTabLayout.test.js
+packages/app-mobile/components/plugins/dialogs/pluginPanelTabLayout.js
 packages/app-mobile/components/plugins/types.js
 packages/app-mobile/components/plugins/utils/createOnLogHandler.js
 packages/app-mobile/components/plugins/utils/useOnDevPluginsUpdated.js
