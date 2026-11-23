@@ -41,6 +41,7 @@ interface State {
 
 class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 	private imageOperationId = 0;
+	private imagePickPending = false;
 
 	public constructor(props: Props) {
 		super(props);
@@ -116,10 +117,14 @@ class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 	}
 
 	private async selectImage_onPress() {
+		if (this.imagePickPending) return;
+		this.imagePickPending = true;
 		try {
 			await this.selectImage();
 		} catch (error) {
 			logger.error('Could not select notebook icon:', error);
+		} finally {
+			this.imagePickPending = false;
 		}
 	}
 
@@ -229,7 +234,7 @@ class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 					/>
 				</View>
 				<View style={styles.iconButtons}>
-					<Button title={_('Select image...')} onPress={() => void this.selectImage_onPress()} />
+					<Button title={_('Select image...')} disabled={this.state.imageProcessing} onPress={() => void this.selectImage_onPress()} />
 					{icon && <Button title={_('Clear')} onPress={() => this.icon_change('')} />}
 				</View>
 				<View style={{ flex: 1 }} />

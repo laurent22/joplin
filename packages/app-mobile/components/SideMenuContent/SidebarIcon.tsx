@@ -1,6 +1,6 @@
 import { FolderIcon, FolderIconType } from '@joplin/lib/services/database/types';
 import * as React from 'react';
-import { ImageStyle, TextStyle, Image, Text, StyleSheet, StyleProp, View } from 'react-native';
+import { ImageStyle, TextStyle, Image, Text, StyleSheet, StyleProp, View, useWindowDimensions } from 'react-native';
 import Icon from '../Icon';
 
 export type IconStyle = ImageStyle & TextStyle;
@@ -11,8 +11,11 @@ interface Props {
 }
 
 const SidebarIcon: React.FC<Props> = ({ icon, style }) => {
+	const { fontScale } = useWindowDimensions();
+	const slotStyle = { width: iconWidth * Math.max(1, fontScale) };
+
 	if (!icon) {
-		return <View style={styles.emptyIcon}/>;
+		return <View style={slotStyle}/>;
 	}
 
 	if (typeof icon === 'string') {
@@ -24,11 +27,11 @@ const SidebarIcon: React.FC<Props> = ({ icon, style }) => {
 		};
 	}
 	if (icon.type === FolderIconType.Emoji) {
-		return <Text numberOfLines={1} style={[styles.baseTextIcon, styles.emojiIcon, style]}>{icon.emoji}</Text>;
+		return <Text numberOfLines={1} style={[styles.baseTextIcon, styles.emojiIcon, slotStyle, style]}>{icon.emoji}</Text>;
 	} else if (icon.type === FolderIconType.DataUrl) {
-		return <Image style={[styles.imageIcon, style]} source={{ uri: icon.dataUrl }}/>;
+		return <Image style={[styles.imageIcon, slotStyle, style]} source={{ uri: icon.dataUrl }}/>;
 	} else if (icon.type === FolderIconType.FontAwesome) {
-		return <Icon style={[styles.baseTextIcon, styles.fontIcon, style]} name={icon.name} accessibilityLabel={null}/>;
+		return <Icon style={[styles.baseTextIcon, styles.fontIcon, slotStyle, style]} name={icon.name} accessibilityLabel={null}/>;
 	} else {
 		throw new Error(`Unsupported folder icon type: ${icon.type}`);
 	}
@@ -39,22 +42,16 @@ const styles = StyleSheet.create({
 	baseTextIcon: {
 		textAlign: 'center',
 		textAlignVertical: 'center',
-		minWidth: iconWidth,
 	},
 	imageIcon: {
 		height: 20,
 		resizeMode: 'contain',
-		width: iconWidth,
 	},
 	fontIcon: {
 		fontSize: 18,
 	},
 	emojiIcon: {
 		fontSize: 16,
-		width: iconWidth,
-	},
-	emptyIcon: {
-		width: iconWidth,
 	},
 });
 
