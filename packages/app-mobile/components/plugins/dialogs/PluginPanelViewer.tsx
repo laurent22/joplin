@@ -9,12 +9,12 @@ import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { connect } from 'react-redux';
 import { AppState } from '../../../utils/types';
 import PluginUserWebView from './PluginUserWebView';
-import { View, StyleSheet, AccessibilityInfo, ScrollView, LayoutChangeEvent } from 'react-native';
+import { View, StyleSheet, ScrollView, LayoutChangeEvent } from 'react-native';
 import { _ } from '@joplin/lib/locale';
-import Setting from '@joplin/lib/models/Setting';
 import DismissibleDialog, { DialogVariant } from '../../../components/DismissibleDialog';
 import CommandService from '@joplin/lib/services/CommandService';
 import { getSelectedTabScrollOffset, getTabLayout } from './pluginPanelTabLayout';
+import useSelectedTabId from './hooks/useSelectedTabId';
 
 interface Props {
 	themeId: number;
@@ -57,49 +57,6 @@ const styles = StyleSheet.create({
 	},
 });
 
-type ButtonInfo = {
-	value: string;
-	label: string;
-	accessibilityLabel: string;
-	icon: string;
-};
-
-const useSelectedTabId = (
-	buttonInfos: ButtonInfo[],
-	viewInfoById: Record<string, ViewInfo>,
-) => {
-	const viewInfoByIdRef = useRef(viewInfoById);
-	viewInfoByIdRef.current = viewInfoById;
-
-	const getDefaultSelectedTabId = useCallback((): string|undefined => {
-		const lastSelectedId = Setting.value('ui.lastSelectedPluginPanel');
-		const lastSelectedInfo = viewInfoByIdRef.current[lastSelectedId];
-		if (lastSelectedId && lastSelectedInfo && lastSelectedInfo.view.opened) {
-			return lastSelectedId;
-		} else {
-			return buttonInfos[0]?.value;
-		}
-	}, [buttonInfos]);
-
-	const [selectedTabId, setSelectedTabId] = useState<string|undefined>(getDefaultSelectedTabId);
-
-	useEffect(() => {
-		if (!selectedTabId || !viewInfoById[selectedTabId]?.view?.opened) {
-			setSelectedTabId(getDefaultSelectedTabId());
-		}
-	}, [selectedTabId, viewInfoById, getDefaultSelectedTabId]);
-
-	useEffect(() => {
-		if (!selectedTabId) return;
-
-		const info = viewInfoByIdRef.current[selectedTabId];
-		Setting.setValue('ui.lastSelectedPluginPanel', selectedTabId);
-		AccessibilityInfo.announceForAccessibility(_('%s tab opened', getTabLabel(info)));
-	}, [selectedTabId]);
-
-	return { setSelectedTabId, selectedTabId };
-};
-
 const emptyCallback = () => {};
 
 const getTabLabel = (info: ViewInfo) => {
@@ -134,7 +91,7 @@ const PluginPanelViewer: React.FC<Props> = props => {
 				};
 			});
 	}, [viewInfoById]);
-	const { selectedTabId, setSelectedTabId } = useSelectedTabId(buttonInfos, viewInfoById);
+	const { selectedTabId, setSelectedTabId } = useSelectedTabId(buttonInfos);
 	const selectorKey = JSON.stringify(buttonInfos.map(info => [info.value, info.label]));
 	const [selectorWidth, setSelectorWidth] = useState(0);
 	const [naturalMeasurement, setNaturalMeasurement] = useState<{ key: string; selectorWidth: number; contentWidth: number }|null>(null);
