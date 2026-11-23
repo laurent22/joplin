@@ -12,7 +12,9 @@ const useSelectedTabId = (tabs: TabInfo[]) => {
 	const rememberedTabIdRef = useRef<string>(Setting.value('ui.lastSelectedPluginPanel'));
 	const restorePendingRef = useRef(!!rememberedTabIdRef.current);
 	const tabsRef = useRef(tabs);
-	tabsRef.current = tabs;
+	useEffect(() => {
+		tabsRef.current = tabs;
+	}, [tabs]);
 	const [selectedTabId, setSelectedTabId] = useState<string|undefined>(() =>
 		tabs.find(tab => tab.value === rememberedTabIdRef.current)?.value ?? tabs[0]?.value,
 	);
