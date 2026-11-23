@@ -227,6 +227,7 @@ describe('PluginStates.installed', () => {
 		});
 
 		const panelSwitch = await screen.findByLabelText('Enable plugin panel');
+		expect(panelSwitch.props.accessibilityLabel).toBe('Enable plugin panel');
 		expect(panelSwitch.props.value).toBe(true);
 		fireEvent(panelSwitch, 'valueChange', false);
 

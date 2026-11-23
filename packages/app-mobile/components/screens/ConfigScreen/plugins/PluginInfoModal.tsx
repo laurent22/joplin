@@ -99,7 +99,7 @@ const EnabledSwitch: React.FC<EnabledSwitchProps> = props => {
 
 	return <View style={[styles.switchContainer, styles.enabledSwitchContainer, !props.hasPanelView && styles.panelEnabledSwitchContainer]}>
 		<Text nativeID='enabledLabel'>{_('Enabled')}</Text>
-		<Switch accessibilityLabelledBy='enabledLabel' value={props.item.enabled} onValueChange={onChange} />
+		<Switch accessibilityLabel={_('Enabled')} accessibilityLabelledBy='enabledLabel' value={props.item.enabled} onValueChange={onChange} />
 	</View>;
 };
 
@@ -118,7 +118,7 @@ const PanelEnabledSwitch: React.FC<PanelEnabledSwitchProps> = props => {
 
 	return <View style={[styles.switchContainer, styles.panelEnabledSwitchContainer]}>
 		<Text nativeID='pluginPanelEnabledLabel'>{_('Enable plugin panel')}</Text>
-		<Switch accessibilityLabelledBy='pluginPanelEnabledLabel' value={props.enabled} onValueChange={onChange} />
+		<Switch accessibilityLabel={_('Enable plugin panel')} accessibilityLabelledBy='pluginPanelEnabledLabel' value={props.enabled} onValueChange={onChange} />
 	</View>;
 };
 
