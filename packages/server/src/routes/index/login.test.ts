@@ -301,6 +301,22 @@ describe('login', () => {
 		expect(application).toMatchObject({ platform: ApplicationPlatform.MacOs, type: ApplicationType.Desktop, version: '3.7.21' });
 	});
 
+	test('should keep the app details when the password is wrong', async () => {
+		const user = await createUser(1);
+		const fields = { applicationAuthId: appAuthId, applicationPlatform: `${ApplicationPlatform.MacOs}`, applicationType: `${ApplicationType.Desktop}`, applicationVersion: '3.7.21' };
+
+		const failedLogin = await sendRequest('POST', '/login', { body: { email: user.email, password: 'wrong-password', ...fields } });
+		const doc = parseHtml(failedLogin.context.response.body as string);
+		const inputs = doc.querySelectorAll<HTMLInputElement>('input[type=hidden]');
+		const failedLoginFields = Object.fromEntries(Array.from(inputs, input => [input.name, input.value]));
+
+		const login = await sendRequest('POST', '/login', { body: { email: user.email, password: '123456', ...failedLoginFields } });
+		await sendRequest('GET', login.redirectUrl, { sessionId: cookieGet(login.context, 'sessionId') });
+
+		const application = await models().application().onAuthorizeUse(appAuthId, user.id);
+		expect(application).toMatchObject({ platform: ApplicationPlatform.MacOs, type: ApplicationType.Desktop, version: '3.7.21' });
+	});
+
 	test('should keep the app details when the login asks for the MFA code', async () => {
 		const user = await createUser(1);
 		await models().user().save({ id: user.id, totp_secret: 'totp_secret' });

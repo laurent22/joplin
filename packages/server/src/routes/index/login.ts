@@ -149,7 +149,14 @@ router.post('login', async (path: SubPath, ctx: AppContext) => {
 
 		return makeView(
 			error,
-			{ email: body.fields.email, password: body.fields.password, applicationAuthId: body.fields.applicationAuthId },
+			{
+				email: body.fields.email,
+				password: body.fields.password,
+				applicationAuthId: body.fields.applicationAuthId,
+				applicationPlatform: body.fields.applicationPlatform,
+				applicationType: body.fields.applicationType,
+				applicationVersion: body.fields.applicationVersion,
+			},
 			{ showMfaCodeInput: Boolean(body.fields.mfaCode) || (isBlocked && !body.fields.recoveryCode), showRecoveryCodeInput: Boolean(body.fields.recoveryCode) },
 		);
 	}
