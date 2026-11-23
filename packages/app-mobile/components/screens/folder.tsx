@@ -19,6 +19,10 @@ import SidebarIcon from '../SideMenuContent/SidebarIcon';
 import pickDocument from '../../utils/pickDocument';
 import resizeImage from '../../utils/image/resizeImage';
 import firstEmoji from '../../utils/firstEmoji';
+import type FsDriverWeb from '../../utils/fs-driver/fs-driver-rn.web';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('screens/folder');
 
 interface Props {
 	folderId: string;
@@ -102,14 +106,32 @@ class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 		}));
 	}
 
+	private async showImageError(error: Error) {
+		try {
+			await shim.showErrorDialog(_('The notebook icon could not be set: %s', error.message));
+		} catch (dialogError) {
+			logger.error('Could not show notebook icon error dialog:', dialogError);
+		}
+	}
+
+	private async selectImage_onPress() {
+		try {
+			await this.selectImage();
+		} catch (error) {
+			logger.error('Could not select notebook icon:', error);
+		}
+	}
+
 	private async selectImage() {
 		const operationId = ++this.imageOperationId;
 		this.setState({ imageProcessing: true });
 		const tempPath = `${Setting.value('tempDir')}/${uuid.createNano()}`;
 		let resizedPath = `${tempPath}.jpg`;
+		let pickedVirtualFilePath: string|null = null;
 		try {
 			const [file] = await pickDocument();
 			if (!file) return;
+			if (Platform.OS === 'web') pickedVirtualFilePath = file.uri;
 			if (!['image/jpeg', 'image/png'].includes(file.type) && !/\.(jpe?g|png)$/i.test(file.fileName)) {
 				throw new Error(_('Unsupported image type: %s', file.type || file.fileName));
 			}
@@ -126,11 +148,22 @@ class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 			});
 			this.setState(prevState => ({ folder: { ...prevState.folder, icon }, imageProcessing: false }));
 		} catch (error) {
-			if (operationId === this.imageOperationId) void shim.showErrorDialog(_('The notebook icon could not be set: %s', error.message));
+			if (operationId === this.imageOperationId) void this.showImageError(error);
 		} finally {
 			if (operationId === this.imageOperationId) this.setState({ imageProcessing: false });
+			if (pickedVirtualFilePath) {
+				try {
+					await (shim.fsDriver() as FsDriverWeb).releaseReadOnlyVirtualFile(pickedVirtualFilePath);
+				} catch (error) {
+					logger.warn('Could not release selected notebook icon file:', error);
+				}
+			}
 			await Promise.all([tempPath, resizedPath].map(async path => {
-				if (await shim.fsDriver().exists(path)) await shim.fsDriver().remove(path);
+				try {
+					if (await shim.fsDriver().exists(path)) await shim.fsDriver().remove(path);
+				} catch (error) {
+					logger.warn(`Could not remove temporary notebook icon file ${path}:`, error);
+				}
 			}));
 		}
 	}
@@ -196,7 +229,7 @@ class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 					/>
 				</View>
 				<View style={styles.iconButtons}>
-					<Button title={_('Select image...')} onPress={() => void this.selectImage()} />
+					<Button title={_('Select image...')} onPress={() => void this.selectImage_onPress()} />
 					{icon && <Button title={_('Clear')} onPress={() => this.icon_change('')} />}
 				</View>
 				<View style={{ flex: 1 }} />

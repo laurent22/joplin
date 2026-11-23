@@ -222,6 +222,10 @@ export default class FsDriverWeb extends FsDriverBase {
 		return this.messenger_.remoteApi.createReadOnlyVirtualFile(path, content);
 	}
 
+	public async releaseReadOnlyVirtualFile(path: string) {
+		return this.messenger_.remoteApi.releaseReadOnlyVirtualFile(path);
+	}
+
 	public async mountExternalDirectory(handle: FileSystemDirectoryHandle, id: string, mode: AccessMode) {
 		const externalUri = await this.messenger_.remoteApi.mountExternalDirectory(handle, id, mode);
 		logger.info('Mounted handle with ID', id, 'at', externalUri);
