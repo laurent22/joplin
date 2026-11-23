@@ -289,10 +289,20 @@ const adjacentElement = (node, direction) => {
   return sibling && sibling.nodeType === 1 ? sibling : null;
 };
 
+const isCheckboxInput = (node) => node.nodeName === 'INPUT' && node.type === 'checkbox';
+
+// Same positions as those handled by the GFM taskListItems rule
+const hasCheckboxInput = (listItem) => {
+  return Array.from(listItem.children).some(child => {
+    if (isCheckboxInput(child)) return true;
+    return (child.nodeName === 'LABEL' || child.nodeName === 'SPAN') && Array.from(child.children).some(isCheckboxInput);
+  });
+};
+
 const isChecklist = (node) => {
   if (!node || node.nodeName !== 'UL') return false;
   const firstItem = node.firstElementChild;
-  return !!firstItem && firstItem.nodeName === 'LI' && !!joplinCheckboxInfo(firstItem);
+  return !!firstItem && firstItem.nodeName === 'LI' && (!!joplinCheckboxInfo(firstItem) || hasCheckboxInput(firstItem));
 };
 
 // A bullet list directly next to a checklist would be merged with it when the Markdown is

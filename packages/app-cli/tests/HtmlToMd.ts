@@ -184,6 +184,7 @@ describe('HtmlToMd', () => {
 	it.each([
 		'<ul class="joplin-checklist"><li>Task</li></ul><ul><li>Bullet</li></ul>',
 		'<ul><li>Bullet</li></ul><ul class="joplin-checklist"><li>Task</li></ul>',
+		'<ul><li><input type="checkbox">Task</li></ul><ul><li>Bullet</li></ul>',
 	])('should keep a bullet list next to a checklist separate when the note is reopened: %j', async (html) => {
 		const htmlToMd = new HtmlToMd();
 
