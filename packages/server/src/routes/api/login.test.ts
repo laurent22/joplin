@@ -46,4 +46,24 @@ describe('api/login', () => {
 		expect(emails).toHaveLength(expectedEmailCount);
 		if (expectedEmailCount) expect(emails[0].body).toContain('IP address: 203.0.113.7');
 	});
+
+	test('should email the owner when an app signs in with a SAML code', async () => {
+		const user = await models().user().ssoLogin('user1@localhost', 'User 1', (await koaAppContext()).joplin.services);
+		await models().user().generateSsoCode(user);
+
+		const context = await koaAppContext({
+			request: {
+				method: 'GET',
+				url: `/api/login_with_code/${user.sso_auth_code}`,
+				headers: { 'x-real-ip': '203.0.113.7' },
+			},
+		});
+		await routeHandler(context);
+
+		expect(context.response.status).toBe(200);
+		const emails = (await models().email().all()).filter(e => e.subject.includes('New sign-in'));
+		expect(emails).toHaveLength(1);
+		expect(emails[0].body).toContain('Signed in from: Application');
+		expect(emails[0].body).toContain('IP address: 203.0.113.7');
+	});
 });

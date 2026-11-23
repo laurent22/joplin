@@ -98,6 +98,11 @@ router.get('api/login_with_code/:id', async (path: SubPath, ctx: AppContext) => 
 
 	if (user) {
 		const session = await ctx.joplin.models.session().createUserSession(user.id);
+		try {
+			await ctx.joplin.models.user().sendNewSignInEmail(user.id, { client: 'Application', ip: userIp(ctx) });
+		} catch (error) {
+			logger.error('Could not send the sign-in email:', error);
+		}
 
 		return {
 			id: session.id,
