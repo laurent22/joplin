@@ -18,6 +18,7 @@ import { Dispatch } from 'redux';
 import SidebarIcon from '../SideMenuContent/SidebarIcon';
 import pickDocument from '../../utils/pickDocument';
 import resizeImage from '../../utils/image/resizeImage';
+import firstEmoji from '../../utils/firstEmoji';
 
 interface Props {
 	folderId: string;
@@ -89,7 +90,8 @@ class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 	}
 
 	private emoji_changeText(emoji: string) {
-		this.icon_change(emoji ? Folder.serializeIcon({ type: FolderIconType.Emoji, emoji, name: '', dataUrl: '' }) : '');
+		const selectedEmoji = firstEmoji(emoji);
+		this.icon_change(selectedEmoji ? Folder.serializeIcon({ type: FolderIconType.Emoji, emoji: selectedEmoji, name: '', dataUrl: '' }) : '');
 	}
 
 	private icon_change(icon: string) {
@@ -104,21 +106,23 @@ class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 		const operationId = ++this.imageOperationId;
 		this.setState({ imageProcessing: true });
 		const tempPath = `${Setting.value('tempDir')}/${uuid.createNano()}`;
-		const resizedPath = `${tempPath}.jpg`;
+		let resizedPath = `${tempPath}.jpg`;
 		try {
 			const [file] = await pickDocument();
 			if (!file) return;
 			if (!['image/jpeg', 'image/png'].includes(file.type) && !/\.(jpe?g|png)$/i.test(file.fileName)) {
 				throw new Error(_('Unsupported image type: %s', file.type || file.fileName));
 			}
+			const isPng = file.type === 'image/png' || /\.png$/i.test(file.fileName);
+			resizedPath = `${tempPath}.${isPng ? 'png' : 'jpg'}`;
 
 			const sourcePath = Platform.OS === 'ios' ? decodeURIComponent(file.uri) : file.uri;
 			await shim.fsDriver().copy(sourcePath, tempPath);
-			await resizeImage({ inputPath: tempPath, outputPath: resizedPath, maxWidth: 256, maxHeight: 256, format: 'JPEG', quality: 0.8 });
+			await resizeImage({ inputPath: tempPath, outputPath: resizedPath, maxWidth: 256, maxHeight: 256, format: isPng ? 'PNG' : 'JPEG', quality: 0.8 });
 			const base64 = await shim.fsDriver().readFile(resizedPath, 'base64');
 			if (operationId !== this.imageOperationId) return;
 			const icon = Folder.serializeIcon({
-				type: FolderIconType.DataUrl, emoji: '', name: '', dataUrl: `data:image/jpeg;base64,${base64}`,
+				type: FolderIconType.DataUrl, emoji: '', name: '', dataUrl: `data:image/${isPng ? 'png' : 'jpeg'};base64,${base64}`,
 			});
 			this.setState(prevState => ({ folder: { ...prevState.folder, icon }, imageProcessing: false }));
 		} catch (error) {

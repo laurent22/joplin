@@ -24,7 +24,7 @@ const SidebarIcon: React.FC<Props> = ({ icon, style }) => {
 		};
 	}
 	if (icon.type === FolderIconType.Emoji) {
-		return <Text style={[styles.baseTextIcon, styles.emojiIcon, style]}>{icon.emoji}</Text>;
+		return <Text numberOfLines={1} style={[styles.baseTextIcon, styles.emojiIcon, style]}>{icon.emoji}</Text>;
 	} else if (icon.type === FolderIconType.DataUrl) {
 		return <Image style={[styles.imageIcon, style]} source={{ uri: icon.dataUrl }}/>;
 	} else if (icon.type === FolderIconType.FontAwesome) {
@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
 	},
 	emojiIcon: {
 		fontSize: 16,
+		width: iconWidth,
 	},
 	emptyIcon: {
 		width: iconWidth,

@@ -12647,6 +12647,7 @@ __metadata:
     constants-browserify: "npm:1.0.0"
     crypto-browserify: "npm:3.12.1"
     deprecated-react-native-prop-types: "npm:5.0.0"
+    emoji-regex: "npm:10.3.0"
     esbuild: "npm:0.27.5"
     events: "npm:3.3.0"
     expo: "patch:expo@npm%3A57.0.23#~/.yarn/patches/expo-npm-57.0.23-a2b19bd138.patch"
@@ -28316,7 +28317,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"emoji-regex@npm:^10.3.0":
+"emoji-regex@npm:10.3.0, emoji-regex@npm:^10.3.0":
   version: 10.3.0
   resolution: "emoji-regex@npm:10.3.0"
   checksum: 10/b9b084ebe904f13bb4b66ee4c29fb41a7a4a1165adcc33c1ce8056c0194b882cc91ebdc782f1a779b5d7ea7375c5064643a7734893d7c657b44c5c6b9d7bf1e7

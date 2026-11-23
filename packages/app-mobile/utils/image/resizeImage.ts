@@ -1,6 +1,7 @@
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
+import { Platform } from 'react-native';
 import fileToImage from './fileToImage.web';
 import FsDriverWeb from '../fs-driver/fs-driver-rn.web';
 import getImageDimensions from './getImageDimensions';
@@ -65,7 +66,9 @@ const resizeImage = async (options: Options) => {
 		const originalSize = await getImageDimensions(options.inputPath);
 		logger.debug('Processing image with size', originalSize.width, 'x', originalSize.height);
 
-		let context = ImageManipulator.manipulate(options.inputPath);
+		// Use a file URL so iOS can read local images without relying on the fallback image loader.
+		const inputUri = Platform.OS === 'ios' && options.inputPath.startsWith('/') ? `file://${options.inputPath}` : options.inputPath;
+		let context = ImageManipulator.manipulate(inputUri);
 
 		// Only rescale the image if it's bigger than the maximum size:
 		if (originalSize.width > options.maxWidth || originalSize.height > options.maxHeight) {
