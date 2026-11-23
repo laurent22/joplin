@@ -40,4 +40,5 @@ export interface PluginManifest {
 	_npm_package_name?: string;
 	_obsolete?: boolean;
 	_recommended?: boolean;
+	_blocked_versions?: string[];
 }

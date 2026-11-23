@@ -97,6 +97,16 @@ describe('UserModel', () => {
 		expect(email.error).toBe('');
 	});
 
+	test.each([
+		[1, true],
+		[0, false],
+	])('should mention MFA in the welcome email only if the MFA feature is enabled (MFA_ENABLED=%s)', async (mfaEnabled, expected) => {
+		config().MFA_ENABLED = mfaEnabled;
+		await createUserAndSession(1);
+		const email = (await models().email().all()).pop();
+		expect(email.body.includes('multi-factor authentication')).toBe(expected);
+	});
+
 	test('should clear must_set_password when a password is set', async () => {
 		const user = await models().user().save({ email: 'user1@localhost', password: uuidgen(), must_set_password: 1 });
 		await models().user().save({ id: user.id, password: uuidgen() });

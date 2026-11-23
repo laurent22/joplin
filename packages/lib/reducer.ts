@@ -186,6 +186,8 @@ export interface State extends WindowState {
 	appState: string;
 	biometricsDone: boolean;
 	hasDisabledSyncItems: boolean;
+	// Held-back items that the user hasn't chosen to keep on this device
+	plaintextUploadHeldBackItemIds: string[];
 	hasDisabledEncryptionItems: boolean;
 	customViewerCss: string;
 	customChromeCssPaths: string[];
@@ -199,6 +201,7 @@ export interface State extends WindowState {
 	isInsertingNotes: boolean;
 	hasEncryptedItems: boolean;
 	noteLockSessionUnlocked: boolean;
+	noteLockBulkChangeRunning: boolean;
 	noteLockMigrationStatus: NoteLockMigrationStatus|null;
 	needApiAuth: boolean;
 	profileConfig: ProfileConfig;
@@ -209,6 +212,8 @@ export interface State extends WindowState {
 	mustUpgradeAppMessage: string;
 	mustUpgradeAppMinVersion: string;
 	mustAuthenticate: boolean;
+	mustResolveE2eeEnabledConflict: boolean;
+	mustFixPpk: boolean;
 	toast: Toast | null;
 	editorNoteReloadTimeRequest: number;
 	allowSelectionInOtherFolders: boolean;
@@ -242,6 +247,7 @@ export const defaultState: State = {
 	appState: 'starting',
 	biometricsDone: false,
 	hasDisabledSyncItems: false,
+	plaintextUploadHeldBackItemIds: [],
 	hasDisabledEncryptionItems: false,
 	customViewerCss: '',
 	customChromeCssPaths: [],
@@ -272,6 +278,7 @@ export const defaultState: State = {
 	isInsertingNotes: false,
 	hasEncryptedItems: false,
 	noteLockSessionUnlocked: false,
+	noteLockBulkChangeRunning: false,
 	noteLockMigrationStatus: null,
 	needApiAuth: false,
 	profileConfig: null,
@@ -286,6 +293,8 @@ export const defaultState: State = {
 	mustUpgradeAppMessage: '',
 	mustUpgradeAppMinVersion: '',
 	mustAuthenticate: false,
+	mustResolveE2eeEnabledConflict: false,
+	mustFixPpk: false,
 	editorNoteReloadTimeRequest: 0,
 	allowSelectionInOtherFolders: false,
 	noteHtmlToMarkdownDone: '',
@@ -1583,12 +1592,20 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			draft.hasDisabledSyncItems = 'value' in action ? action.value : true;
 			break;
 
+		case 'SYNC_PLAINTEXT_UPLOAD_HELD_BACK_ITEMS_SET':
+			draft.plaintextUploadHeldBackItemIds = action.itemIds;
+			break;
+
 		case 'ENCRYPTION_HAS_DISABLED_ITEMS':
 			draft.hasDisabledEncryptionItems = action.value;
 			break;
 
 		case 'SET_NOTE_LOCK_SESSION_UNLOCKED':
 			draft.noteLockSessionUnlocked = action.value;
+			break;
+
+		case 'NOTE_LOCK_BULK_CHANGE_RUNNING_SET':
+			draft.noteLockBulkChangeRunning = action.value;
 			break;
 
 		case 'NOTE_LOCK_MIGRATION_STATUS_SET':
@@ -1677,6 +1694,14 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'MUST_AUTHENTICATE':
 			draft.mustAuthenticate = action.value;
+			break;
+
+		case 'MUST_RESOLVE_E2EE_ENABLED_CONFLICT':
+			draft.mustResolveE2eeEnabledConflict = action.value;
+			break;
+
+		case 'MUST_FIX_PPK':
+			draft.mustFixPpk = action.value;
 			break;
 
 		case 'NOTE_LIST_RENDERER_ADD':

@@ -1,4 +1,5 @@
 import { countryCodeOnly, languageCodeOnly, toIso639Alpha3 } from '../../locale';
+import BaseItem from '../../models/BaseItem';
 import Resource from '../../models/Resource';
 import Setting from '../../models/Setting';
 import shim from '../../shim';
@@ -11,6 +12,8 @@ import TaskQueue from '../../TaskQueue';
 import eventManager, { EventName } from '../../eventManager';
 import { bytesToHuman, MB } from '@joplin/utils/bytes';
 import { substrWithEllipsis } from '../../string-utils';
+import { getPlaintextUploadReason, PlaintextUploadReason } from '../synchronizer/utils/plaintextUploadHeldBackItems';
+import mustConfirmPlaintextUploads from '../synchronizer/utils/mustConfirmPlaintextUploads';
 
 const logger = Logger.create('OcrService');
 
@@ -253,7 +256,10 @@ export default class OcrService {
 					toSave.ocr_error = errorMessage || 'Unknown error';
 				}
 
-				await Resource.save(toSave);
+				// Workaround (2026-11): A new updated_time would hold the attachment back again, so the results stay on this device until the
+				// attachment next changes
+				const wouldUploadUnencrypted = mustConfirmPlaintextUploads() && getPlaintextUploadReason(resource, BaseItem.shareService_?.shares ?? []) !== PlaintextUploadReason.None;
+				await Resource.save(toSave, { autoTimestamp: !wouldUploadUnencrypted });
 			};
 		};
 
@@ -274,6 +280,8 @@ export default class OcrService {
 						'encryption_applied',
 						'ocr_driver_id',
 						'ocr_status',
+						'is_shared',
+						'share_id',
 					],
 				});
 

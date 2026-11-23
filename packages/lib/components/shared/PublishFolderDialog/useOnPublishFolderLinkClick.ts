@@ -5,6 +5,7 @@ import ShareService from '../../../services/share/ShareService';
 import { StateShare } from '../../../services/share/reducer';
 import shim from '../../../shim';
 import { SharingStatus } from '../ShareNoteDialog/types';
+import Folder from '../../../models/Folder';
 const { useCallback, useEffect, useRef } = shim.react();
 
 const logger = Logger.create('PublishFolderDialog/useOnPublishFolderLinkClick');
@@ -34,10 +35,26 @@ const useOnPublishFolderLinkClick = ({
 	return useCallback(async () => {
 		const service = ShareService.instance();
 
+		const loadExistingShare = async () => {
+			const folder = await Folder.load(folderId);
+			if (!folder) return null;
+
+			// Handle the case where the share was created on the server, but the item wasn't marked as shared locally
+			// (e.g. because of a crash just after publishing).
+			const existingShare = folder.is_shared ? publishedShare : null;
+			return existingShare;
+		};
+
 		let hasSynced = false;
 		let tryToSync = false;
 		while (true) {
 			try {
+				if (publishedShare && !await loadExistingShare()) {
+					// The folder may have been shared on another device
+					logger.info('Share found for folder', folderId, 'but folder is not marked as published. Trying to sync.');
+					tryToSync = true;
+				}
+
 				if (tryToSync) {
 					if (!isMountedRef.current) return;
 					setPublishFolderStatus(SharingStatus.Synchronizing);
@@ -50,10 +67,11 @@ const useOnPublishFolderLinkClick = ({
 				if (!isMountedRef.current) return;
 				setPublishFolderStatus(SharingStatus.Creating);
 
-				const share = publishedShare || await service.publishFolder(folderId);
+				const existingShare = await loadExistingShare();
+				const share = existingShare || await service.publishFolder(folderId);
 				if (!isMountedRef.current) return;
 
-				if (!publishedShare) {
+				if (!existingShare) {
 					setPublishFolderStatus(SharingStatus.Synchronizing);
 					await reg.waitForSyncFinishedThenSync();
 					if (!isMountedRef.current) return;

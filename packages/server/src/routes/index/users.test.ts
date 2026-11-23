@@ -222,6 +222,9 @@ describe('index/users', () => {
 		// "confirm_email" is set to 0.
 		user1 = await models().user().load(user1.id);
 		expect(user1.email_confirmed).toBe(0);
+
+		// The token is still required
+		await expectHttpError(() => execRequest('', 'GET', path, null, { query: { token: 'invalid', confirm_email: '0' } }), ErrorForbidden.httpCode);
 	});
 
 	test('should allow user to verify their email', async () => {

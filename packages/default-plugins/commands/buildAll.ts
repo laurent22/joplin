@@ -5,6 +5,7 @@ const buildAll = (outputDirectory: string) => {
 		outputParentDir: outputDirectory,
 		beforeInstall: async () => { },
 		beforePatch: async () => { },
+		useBuildCache: true,
 	});
 };
 

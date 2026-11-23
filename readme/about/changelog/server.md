@@ -1,5 +1,19 @@
 # Joplin Server Changelog
 
+## [server-v3.7.6](https://github.com/laurent22/joplin/releases/tag/server-v3.7.6) - 2026-11-16T11:06:16Z
+
+- Improved: Remove incorrect warning from log (7aeed5a)
+- Security: Do not return the message of unexpected errors, such as database errors, to clients, and escape request text in logged error messages (c934c17)
+- Security: Only accept a delta limit from 1 to 1000 (4360b81)
+- Security: Only return non-sensitive fields when listing users (e454395)
+- Security: Send at most one alert per hour when the recovery codes are viewed (926f9bf)
+
+## [server-v3.7.5](https://github.com/laurent22/joplin/releases/tag/server-v3.7.5) - 2026-11-11T19:32:46Z
+
+- Improved: Reduce database load of the orphaned items task (#17061)
+- Security: Check the token on the account confirmation page when confirm_email=0 (dfe4a24)
+- Security: Do not reveal the owner's user ID on public share API (fbf73e5)
+
 ## [server-v3.7.4](https://github.com/laurent22/joplin/releases/tag/server-v3.7.4) - 2026-11-05T08:18:56Z
 
 - New: Add a check that does not count to the per-account limiter (738590a)

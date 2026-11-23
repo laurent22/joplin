@@ -1,4 +1,26 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Joplin]]></title><description><![CDATA[Joplin, the open source note-taking application]]></description><link>https://joplinapp.org</link><generator>RSS for Node</generator><lastBuildDate>Mon, 02 Nov 2026 00:00:00 GMT</lastBuildDate><atom:link href="https://joplinapp.org/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Mon, 02 Nov 2026 00:00:00 GMT</pubDate><item><title><![CDATA[A full security review of Joplin Server and Joplin Cloud]]></title><description><![CDATA[<p>October 2026 has been nicknamed &quot;Black October&quot;: within weeks, critical vulnerabilities were disclosed in widely used open source software such as PHP, Node.js and GitLab, many of them found with the help of AI and exploited within a day. The same tools that help defenders find bugs now help attackers find them, and Joplin's code is public. The responsible thing to do was to get there first.</p>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Joplin]]></title><description><![CDATA[Joplin, the open source note-taking application]]></description><link>https://joplinapp.org</link><generator>RSS for Node</generator><lastBuildDate>Sat, 14 Nov 2026 00:00:00 GMT</lastBuildDate><atom:link href="https://joplinapp.org/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Sat, 14 Nov 2026 00:00:00 GMT</pubDate><item><title><![CDATA[Joplin Now Works with Hookmark]]></title><description><![CDATA[<p>Joplin now integrates with <a href="https://hookproductivity.com">Hookmark</a>, a macOS app that links information across your apps. From Joplin 3.7.21, you can link any Joplin note to PDFs, web pages, emails, files and more, and jump back to the note in one click.</p>
+<p>To celebrate, Joplin is Hookmark's Partner of the Month for November 2026, and the Hookmark team is offering Joplin users 30% off Hookmark Pro (details below).</p>
+<h2>What you can do<a name="what-you-can-do" href="#what-you-can-do" class="heading-anchor">🔗</a></h2>
+<p>Hookmark creates two-way links between items in different Mac apps. With Joplin, you can:</p>
+<ul>
+<li><strong>Link a note to its sources.</strong> Connect a Joplin note to the papers, web pages, emails, files and tasks it's about.</li>
+<li><strong>Create linked notes with Hook to New.</strong> Make a new Joplin note straight from Hookmark, already linked to what you're working on, such as an AI chat or a project plan.</li>
+<li><strong>Jump back and forth.</strong> From any linked item, open the matching Joplin note, and from a note, open everything linked to it.</li>
+</ul>
+<p>Hookmark is a paid macOS app from CogSci Apps. Joplin itself stays free and open source, and nothing changes for users who don't use Hookmark.</p>
+<h2>How it works<a name="how-it-works" href="#how-it-works" class="heading-anchor">🔗</a></h2>
+<p>The Hookmark team contacted us in July after many of their users asked for Joplin support. To make it possible, Joplin 3.7 added two <a href="https://github.com/laurent22/joplin/pull/16041">x-callback-url</a> actions: <code>getCurrentNote</code> returns the title and link of the open note, and <code>createNote</code> creates a note and returns the same. Any parameters in the <code>x-success</code> URL are passed back unchanged, so Hookmark always knows which request a reply belongs to.</p>
+<p>Other apps can use these actions too, so this also makes Joplin easier to automate on macOS. Note that a security fix in early 3.7 builds broke the callbacks; this was <a href="https://github.com/laurent22/joplin/pull/16497">fixed</a> in 3.7.21, so please update if you're on an older version.</p>
+<p>Many thanks to Bi Ling and Luc at CogSci Apps for their clear requirements and quick testing.</p>
+<h2>Get 30% off Hookmark Pro<a name="get-30-off-hookmark-pro" href="#get-30-off-hookmark-pro" class="heading-anchor">🔗</a></h2>
+<p>During November, Joplin users get 30% off Hookmark Pro with the coupon code <strong>Linking-Joplin</strong>.</p>
+<ol>
+<li>Update to <a href="https://joplinapp.org/">Joplin</a> 3.7.21 or later.</li>
+<li><a href="https://hookproductivity.com/download">Download Hookmark</a>.</li>
+<li>On the <a href="https://hookproductivity.com/buy">checkout page</a>, click a <strong>Buy</strong> button, then click <strong>Add discount</strong> in the checkout wizard and paste <strong>Linking-Joplin</strong>.</li>
+</ol>
+<p>For help setting up Hookmark with Joplin, see the <a href="https://discourse.hookproductivity.com/t/support-joplin-script-version-433/9920">Hookmark forum thread</a>. Questions about the Joplin side are welcome on the Joplin forum.</p>
+]]></description><link>https://joplinapp.org/news/20261114-hookmark</link><guid isPermaLink="false">20261114-hookmark</guid><pubDate>Sat, 14 Nov 2026 00:00:00 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[A full security review of Joplin Server and Joplin Cloud]]></title><description><![CDATA[<p>October 2026 has been nicknamed &quot;Black October&quot;: within weeks, critical vulnerabilities were disclosed in widely used open source software such as PHP, Node.js and GitLab, many of them found with the help of AI and exploited within a day. The same tools that help defenders find bugs now help attackers find them, and Joplin's code is public. The responsible thing to do was to get there first.</p>
 <h2>The review<a name="the-review" href="#the-review" class="heading-anchor">🔗</a></h2>
 <p>Anthropic gave Joplin access to the Defense Access tier of its Cyber Verification Program, which lets open source maintainers use Claude's full security capabilities on software they maintain. We used it for a complete review of Joplin Server, which also powers Joplin Cloud: every route of the server, and every flow end to end, from signing in to sharing, publishing and email-to-note. Each finding was verified independently, and each fix was reviewed again before release.</p>
 <p>No critical issues were found, but there were a number of high and medium severity ones, and many smaller ones. We have fixed more than 50 of them. Joplin Cloud is already updated, and the fixes are now in a new Joplin Server release. If you use Joplin Cloud, there's nothing you need to do.</p>
@@ -515,49 +537,4 @@ sys 1m24.207s</p>
 <p><strong>real 9m38.932s</strong><br/><br>
 user 1m10.119s<br/><br>
 sys 0m38.013s</p>
-]]></description><link>https://joplinapp.org/news/20231223-faster-sync</link><guid isPermaLink="false">20231223-faster-sync</guid><pubDate>Sat, 23 Dec 2023 00:00:00 GMT</pubDate><twitter-text>Faster synchronisation in upcoming Joplin version!</twitter-text></item><item><title><![CDATA[What's new in Joplin 2.13]]></title><description><![CDATA[<h2>Desktop<a name="desktop" href="#desktop" class="heading-anchor">🔗</a></h2>
-<h3>Rich Text Editor improvements<a name="rich-text-editor-improvements" href="#rich-text-editor-improvements" class="heading-anchor">🔗</a></h3>
-<p>In this update, significant enhancements have been implemented in the Rich Text Editor to enhance user experience. One notable improvement is the ability to seamlessly embed various content within tables, including lists and other tables, which was a frequently requested feature:</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20231203-rte-table.png" alt=""></p>
-<p>The interoperability with other text editors such as Word and Excel has also been improved, in particular when copying and pasting content between these tools and Joplin.</p>
-<h3>Improved ENEX import<a name="improved-enex-import" href="#improved-enex-import" class="heading-anchor">🔗</a></h3>
-<p>The Evernote Export format, known as ENEX, has always been challenging to support. This is because Evernote frequently changes it, breaking importers, and may also occasionally introduce bugs. At times, their own application struggles to import back files that it has exported, highlighting the volatility of the ENEX format.</p>
-<p>After undergoing continuous improvements for seven years, the importer has achieved a relatively stable state. The majority of issues encountered now stem from invalid files generated by Evernote, a result of bugs introduced in recent versions. Despite these challenges, we strive to enhance the import process by employing various heuristics to process the invalid data as effectively as possible.</p>
-<p>The list of bug fixes is below:</p>
-<ul>
-<li>Apply correct size to images imported from ENEX files</li>
-<li>ENEX files that contain resources with invalid mime types are imported correctly</li>
-<li>Ensure that ENEX resources with invalid filenames are imported correctly</li>
-<li>Prevent application from being stuck when importing an invalid ENEX file</li>
-</ul>
-<h3>New plugins APIs<a name="new-plugins-apis" href="#new-plugins-apis" class="heading-anchor">🔗</a></h3>
-<h4>Note list<a name="note-list" href="#note-list" class="heading-anchor">🔗</a></h4>
-<p>We are continuously improving the plugin API to make it as easy as possible to customize the application.</p>
-<p>One of the main addition is support note list plugins - it allows any plugins to customise what the list should display each note.</p>
-<p>See the <a href="https://joplinapp.org/api/references/plugin_api/classes/joplinviewsnotelist.html">Joplin Plugin Note List API</a> and the <a href="https://github.com/laurent22/joplin/blob/dev/packages/app-cli/tests/support/plugins/note_list_renderer/src/index.ts">Note List Demo</a> for more information.</p>
-<p>The demo includes three examples of note lists: a fundamental &quot;top to bottom&quot; version, a sophisticated &quot;left to right&quot; variant that additionally displays a note thumbnail, and a demonstration of an interactive note list, allowing direct modification of the note title from the list.</p>
-<p>This API was developed based on the feedback we got and we hope it will be useful. We remain open to further input from users and plugin developers regarding any potential missing features and areas for improvement!</p>
-<h4>Imaging API<a name="imaging-api" href="#imaging-api" class="heading-anchor">🔗</a></h4>
-<p>The imaging API was created to allow plugin developers to easily load and manipulate images. For now it is possible to load PNG and JPG files, and to resize and crop them.</p>
-<p><a href="https://joplinapp.org/api/references/plugin_api/classes/joplinimaging.html">https://joplinapp.org/api/references/plugin_api/classes/joplinimaging.html</a></p>
-<h4>And more<a name="and-more" href="#and-more" class="heading-anchor">🔗</a></h4>
-<p>A few more APIs have been added such as one to <a href="https://joplinapp.org/api/references/plugin_api/classes/joplinviewsdialogs.html#showopendialog">open dialog to select a file or folder</a> and a way to <a href="https://joplinapp.org/api/references/plugin_api/enums/contentscripttype.html#getting-the-settings-from-the-renderer">access the plugin settings from a renderer script</a>.</p>
-<h3>New beta Markdown editor<a name="new-beta-markdown-editor" href="#new-beta-markdown-editor" class="heading-anchor">🔗</a></h3>
-<p>This version also features a new Markdown editor based on <a href="https://codemirror.net/">CodeMirror 6</a>. This change means that we'll be able to use the same editor on both the desktop and mobile application (which already uses CodeMirror 6), which will allow a more consistent user experience across devices.</p>
-<p>Another benefit is that, in a future version, it will allow us to support plugins on the mobile application. There are several other advantages that Henry <a href="https://discourse.joplinapp.org/t/pre-release-v2-13-is-now-available-updated-18-11-2023/32697/12?u=laurent">listed in this forum post</a>.</p>
-<h2>Mobile<a name="mobile" href="#mobile" class="heading-anchor">🔗</a></h2>
-<h3>Drawing option<a name="drawing-option" href="#drawing-option" class="heading-anchor">🔗</a></h3>
-<p>In this new version, Henry integrated the js-draw editor to the mobile app. Js-draw is a powerful freehand drawing library which allows you to draw using a pen, touch screen or mouse.</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20231203-drawing.png" alt=""></p>
-<p>The editor is integrated to the mobile application. On desktop application, you can use the same library and edit your drawings using the <a href="https://github.com/personalizedrefrigerator/joplin-plugin-freehand-drawing">Freehand Drawing plugin</a>. We will make this plugin available by default in a future desktop release.</p>
-<h3>Setting screen<a name="setting-screen" href="#setting-screen" class="heading-anchor">🔗</a></h3>
-<p>The mobile version also features a redesigned configuration screen. It is now divided into multiple sections with clear titles, and you can also search for settings using the built-in search option.</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20231203-settings.png" alt=""></p>
-<h1>Full changelog<a name="full-changelog" href="#full-changelog" class="heading-anchor">🔗</a></h1>
-<p>This is just an overview of the main features. The full changelog is available there:</p>
-<ul>
-<li>Desktop: <a href="https://joplinapp.org/help/about/changelog/desktop">https://joplinapp.org/help/about/changelog/desktop</a></li>
-<li>Android: <a href="https://joplinapp.org/help/about/changelog/android/">https://joplinapp.org/help/about/changelog/android/</a></li>
-<li>iOS: <a href="https://joplinapp.org/help/about/changelog/ios/">https://joplinapp.org/help/about/changelog/ios/</a></li>
-</ul>
-]]></description><link>https://joplinapp.org/news/20231204-release-2-13</link><guid isPermaLink="false">20231204-release-2-13</guid><pubDate>Mon, 04 Dec 2023 00:00:00 GMT</pubDate><twitter-text>What&apos;s new in Joplin 2.13</twitter-text></item></channel></rss>
+]]></description><link>https://joplinapp.org/news/20231223-faster-sync</link><guid isPermaLink="false">20231223-faster-sync</guid><pubDate>Sat, 23 Dec 2023 00:00:00 GMT</pubDate><twitter-text>Faster synchronisation in upcoming Joplin version!</twitter-text></item></channel></rss>
