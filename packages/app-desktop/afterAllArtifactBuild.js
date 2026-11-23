@@ -27,9 +27,8 @@ const generateChecksumFile = () => {
 	const checksum = sha512.sha512(appImageContent);
 	const sha512FileName = `${appImageName}.sha512`;
 	const sha512FilePath = path.join(distPath, sha512FileName);
-	// The `.sha512` file is a bare hash for existing consumers, before `.sha512sum` was introduced.
+	// Bare hash, kept for backward compatibility with existing consumers.
 	fs.writeFileSync(sha512FilePath, checksum);
-	// This one supports `sha512sum --check <file>.sha512sum`.
 	const sha512sumFilePath = path.join(distPath, `${appImageName}.sha512sum`);
 	fs.writeFileSync(sha512sumFilePath, `${checksum}  ${appImageName}\n`);
 	return [sha512FilePath, sha512sumFilePath];
