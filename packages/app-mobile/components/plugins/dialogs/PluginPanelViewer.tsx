@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
 	},
 	tabSelectorButtons: {
 		flexGrow: 1,
+		flexShrink: 0,
 	},
 	truncatedTabLabel: {
 		flexShrink: 1,
@@ -168,12 +169,12 @@ const PluginPanelViewer: React.FC<Props> = props => {
 		return (
 			<ScrollView horizontal={true} style={styles.tabSelector} contentContainerStyle={styles.tabSelectorContent}>
 				<SegmentedButtons
-					style={[styles.tabSelectorButtons, { minWidth: buttonInfos.length * tabWidth }]}
+					style={styles.tabSelectorButtons}
 					value={selectedTabId}
 					onValueChange={setSelectedTabId}
 					buttons={buttonInfos.map(info => ({
 						...info,
-						style: { maxWidth: maxTabWidth },
+						style: { flexBasis: 'auto', flexShrink: 0, maxWidth: maxTabWidth },
 						labelStyle: styles.truncatedTabLabel,
 					}))}
 				/>
