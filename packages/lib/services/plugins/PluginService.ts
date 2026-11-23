@@ -55,6 +55,8 @@ export interface DefaultPluginsInfo {
 export interface PluginSetting {
 	enabled: boolean;
 	deleted: boolean;
+	// Mobile plugin panels remain visible for older settings without this property.
+	pluginPanelEnabled?: boolean;
 
 	// After a plugin has been updated, the user needs to restart the app before
 	// loading the new version. In the meantime, we set this property to `true`
@@ -67,6 +69,7 @@ export function defaultPluginSetting(): PluginSetting {
 	return {
 		enabled: true,
 		deleted: false,
+		pluginPanelEnabled: true,
 		hasBeenUpdated: false,
 	};
 }

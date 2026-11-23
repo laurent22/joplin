@@ -2,10 +2,9 @@
 import { PluginHtmlContents, PluginStates, ViewInfo } from '@joplin/lib/services/plugins/reducer';
 import * as React from 'react';
 import { Button, Portal, SegmentedButtons, Text } from 'react-native-paper';
-import useViewInfos from './hooks/useViewInfos';
-import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
+import { SerializedPluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { connect } from 'react-redux';
 import { AppState } from '../../../utils/types';
 import PluginUserWebView from './PluginUserWebView';
@@ -14,12 +13,14 @@ import { _ } from '@joplin/lib/locale';
 import Setting from '@joplin/lib/models/Setting';
 import DismissibleDialog, { DialogVariant } from '../../../components/DismissibleDialog';
 import CommandService from '@joplin/lib/services/CommandService';
+import visiblePluginPanelViewInfos from '../utils/visiblePluginPanelViewInfos';
 
 interface Props {
 	themeId: number;
 
 	pluginHtmlContents: PluginHtmlContents;
 	pluginStates: PluginStates;
+	pluginSettings: SerializedPluginSettings;
 	visible: boolean;
 	inert?: boolean;
 }
@@ -71,6 +72,7 @@ const useSelectedTabId = (
 		if (!selectedTabId) return;
 
 		const info = viewInfoByIdRef.current[selectedTabId];
+		if (!info) return;
 		Setting.setValue('ui.lastSelectedPluginPanel', selectedTabId);
 		AccessibilityInfo.announceForAccessibility(_('%s tab opened', getTabLabel(info)));
 	}, [selectedTabId]);
@@ -89,7 +91,7 @@ const getTabLabel = (info: ViewInfo) => {
 	return PluginService.instance().pluginById(info.plugin.id).manifest.name;
 };
 const PluginPanelViewer: React.FC<Props> = props => {
-	const viewInfos = useViewInfos(props.pluginStates);
+	const viewInfos = useMemo(() => visiblePluginPanelViewInfos(props.pluginStates, props.pluginSettings), [props.pluginStates, props.pluginSettings]);
 	const viewInfoById = useMemo(() => {
 		const result: Record<string, ViewInfo> = {};
 		for (const info of viewInfos) {
@@ -100,8 +102,6 @@ const PluginPanelViewer: React.FC<Props> = props => {
 
 	const buttonInfos = useMemo(() => {
 		return Object.entries(viewInfoById)
-			.filter(([_id, info]) => info.view.containerType === ContainerType.Panel)
-			.filter(([_id, info]) => info.view.opened)
 			.map(([id, info]) => {
 				return {
 					value: id,
@@ -183,5 +183,6 @@ export default connect((state: AppState) => {
 		pluginHtmlContents: state.pluginService.pluginHtmlContents,
 		visible: state.showPanelsDialog,
 		pluginStates: state.pluginService.plugins,
+		pluginSettings: state.settings['plugins.states'],
 	};
 })(PluginPanelViewer);

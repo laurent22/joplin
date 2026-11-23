@@ -900,6 +900,8 @@ packages/app-mobile/components/plugins/dialogs/hooks/useWebViewSetup.js
 packages/app-mobile/components/plugins/types.js
 packages/app-mobile/components/plugins/utils/createOnLogHandler.js
 packages/app-mobile/components/plugins/utils/useOnDevPluginsUpdated.js
+packages/app-mobile/components/plugins/utils/visiblePluginPanelViewInfos.test.js
+packages/app-mobile/components/plugins/utils/visiblePluginPanelViewInfos.js
 packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.js
 packages/app-mobile/components/screens/ConfigScreen/FileSystemPathSelector.js
 packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.js

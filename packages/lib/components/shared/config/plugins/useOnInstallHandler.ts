@@ -50,6 +50,7 @@ const useOnInstallHandler = (
 				if (isUpdate) {
 					if (pluginSettings[pluginId]) {
 						draft[pluginId].enabled = pluginSettings[pluginId].enabled;
+						draft[pluginId].pluginPanelEnabled = pluginSettings[pluginId].pluginPanelEnabled ?? true;
 					}
 					draft[pluginId].hasBeenUpdated = true;
 				}

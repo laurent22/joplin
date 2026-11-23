@@ -57,13 +57,17 @@ const styles = (() => {
 		fraudulentPluginButton: {
 			opacity: 0.6,
 		},
-		enabledSwitchContainer: {
+		switchContainer: {
 			display: 'flex',
 			flexDirection: 'row',
 			justifyContent: 'space-between',
 			alignItems: 'center',
 			paddingVertical: 10,
+		},
+		enabledSwitchContainer: {
 			marginTop: 12,
+		},
+		panelEnabledSwitchContainer: {
 			marginBottom: 14,
 		},
 		pluginDescriptionContainer: {
@@ -89,9 +93,26 @@ const EnabledSwitch: React.FC<EnabledSwitchProps> = props => {
 		return null;
 	}
 
-	return <View style={styles.enabledSwitchContainer}>
+	return <View style={[styles.switchContainer, styles.enabledSwitchContainer]}>
 		<Text nativeID='enabledLabel'>{_('Enabled')}</Text>
 		<Switch accessibilityLabelledBy='enabledLabel' value={props.item.enabled} onValueChange={onChange} />
+	</View>;
+};
+
+interface PanelEnabledSwitchProps extends EnabledSwitchProps {
+	enabled: boolean;
+}
+
+const PanelEnabledSwitch: React.FC<PanelEnabledSwitchProps> = props => {
+	const onChange = useCallback((value: boolean) => {
+		if (value !== props.enabled) props.onToggle({ item: props.item });
+	}, [props.enabled, props.item, props.onToggle]);
+
+	if (!props.item?.installed || props.item.deleted) return null;
+
+	return <View style={[styles.switchContainer, styles.panelEnabledSwitchContainer]}>
+		<Text nativeID='pluginPanelEnabledLabel'>{_('Enable plugin panel')}</Text>
+		<Switch accessibilityLabelledBy='pluginPanelEnabledLabel' value={props.enabled} onValueChange={onChange} />
 	</View>;
 };
 
@@ -229,6 +250,7 @@ const PluginInfoModalContent: React.FC<Props> = props => {
 		<ScrollView>
 			{aboutPlugin}
 			<EnabledSwitch item={item} onToggle={props.pluginCallbacks.onToggle}/>
+			<PanelEnabledSwitch item={item} enabled={props.pluginSettings[pluginId]?.pluginPanelEnabled !== false} onToggle={props.pluginCallbacks.onTogglePanel}/>
 			<Divider />
 			<View style={styles.buttonContainer}>
 				{!item.installed ? installButton : null}

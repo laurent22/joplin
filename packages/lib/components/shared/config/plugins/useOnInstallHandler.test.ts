@@ -19,12 +19,13 @@ const onPluginSettingsChange = jest.fn();
 const itemEvent = ({
 	item: { manifest: { id: pluginId } },
 } as ItemEvent);
-const callHook = (isUpdate: boolean, pluginEnabled = true, pluginInstalledViaGUI = true) => () => useOnInstallHandler(
+const callHook = (isUpdate: boolean, pluginEnabled = true, pluginInstalledViaGUI = true, pluginPanelEnabled = true) => () => useOnInstallHandler(
 	setInstallingPluginIds,
 	{ current: {
 		[pluginId]: pluginInstalledViaGUI ? {
 			enabled: pluginEnabled,
 			deleted: false,
+			pluginPanelEnabled,
 			hasBeenUpdated: false,
 		} : undefined,
 	} },
@@ -75,6 +76,17 @@ describe('useOnInstallHandler', () => {
 
 		const newSettings = onPluginSettingsChange.mock.calls[0][0].value;
 		expect(newSettings[pluginId].enabled).toBe(false);
+	});
+
+	test('preserves the panel preference on update and resets it on installation', async () => {
+		const { result: { current: onUpdate } } = renderHook(callHook(true, true, true, false));
+		await onUpdate(itemEvent);
+		expect(onPluginSettingsChange.mock.calls[0][0].value[pluginId].pluginPanelEnabled).toBe(false);
+
+		onPluginSettingsChange.mockClear();
+		const { result: { current: onInstall } } = renderHook(callHook(false, true, true, false));
+		await onInstall(itemEvent);
+		expect(onPluginSettingsChange.mock.calls[0][0].value[pluginId].pluginPanelEnabled).toBe(true);
 	});
 
 	test('should indicate it when plugin has been updated', async () => {

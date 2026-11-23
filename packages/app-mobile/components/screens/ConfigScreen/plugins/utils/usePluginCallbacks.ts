@@ -2,7 +2,7 @@ import { ItemEvent, OnPluginSettingChangeEvent } from '@joplin/lib/components/sh
 import useOnDeleteHandler from '@joplin/lib/components/shared/config/plugins/useOnDeleteHandler';
 import useOnInstallHandler from '@joplin/lib/components/shared/config/plugins/useOnInstallHandler';
 import NavService from '@joplin/lib/services/NavService';
-import { PluginSettings, defaultPluginSetting } from '@joplin/lib/services/plugins/PluginService';
+import { PluginSetting, PluginSettings, defaultPluginSetting } from '@joplin/lib/services/plugins/PluginService';
 import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
 import { useCallback, useMemo, useRef, useState } from 'react';
 
@@ -16,6 +16,7 @@ export type PluginCallback = (event: ItemEvent)=> void;
 
 export interface PluginCallbacks {
 	onToggle: PluginCallback;
+	onTogglePanel: PluginCallback;
 	onUpdate: PluginCallback;
 	onInstall: PluginCallback;
 	onDelete: PluginCallback;
@@ -27,12 +28,12 @@ const usePluginCallbacks = (props: Props) => {
 		props.updatePluginStates(event.value);
 	}, [props.updatePluginStates]);
 
-	const updatePluginEnabled = useCallback((pluginId: string, enabled: boolean) => {
+	const updatePluginSetting = useCallback((pluginId: string, change: Partial<PluginSetting>) => {
 		const newSettings = { ...props.pluginSettings };
 		newSettings[pluginId] = {
 			...defaultPluginSetting(),
 			...newSettings[pluginId],
-			enabled,
+			...change,
 		};
 
 		props.updatePluginStates(newSettings);
@@ -41,8 +42,14 @@ const usePluginCallbacks = (props: Props) => {
 	const onToggle = useCallback((event: ItemEvent) => {
 		const pluginId = event.item.manifest.id;
 		const settings = props.pluginSettings[pluginId] ?? defaultPluginSetting();
-		updatePluginEnabled(pluginId, !settings.enabled);
-	}, [props.pluginSettings, updatePluginEnabled]);
+		updatePluginSetting(pluginId, { enabled: !settings.enabled });
+	}, [props.pluginSettings, updatePluginSetting]);
+
+	const onTogglePanel = useCallback((event: ItemEvent) => {
+		const pluginId = event.item.manifest.id;
+		const enabled = props.pluginSettings[pluginId]?.pluginPanelEnabled !== false;
+		updatePluginSetting(pluginId, { pluginPanelEnabled: !enabled });
+	}, [props.pluginSettings, updatePluginSetting]);
 
 	const pluginSettingsRef = useRef(props.pluginSettings);
 	pluginSettingsRef.current = props.pluginSettings;
@@ -65,12 +72,13 @@ const usePluginCallbacks = (props: Props) => {
 	const callbacks = useMemo((): PluginCallbacks => {
 		return {
 			onToggle,
+			onTogglePanel,
 			onDelete,
 			onUpdate,
 			onInstall,
 			onShowPluginLog,
 		};
-	}, [onToggle, onDelete, onUpdate, onInstall, onShowPluginLog]);
+	}, [onToggle, onTogglePanel, onDelete, onUpdate, onInstall, onShowPluginLog]);
 
 	return {
 		callbacks,

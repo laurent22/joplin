@@ -17,9 +17,10 @@ import { itemIsInTrash } from '@joplin/lib/services/trash';
 import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
-import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
+import { SerializedPluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { Dispatch } from 'redux';
 import WarningBanner from './WarningBanner';
+import visiblePluginPanelViewInfos from '../plugins/utils/visiblePluginPanelViewInfos';
 
 import shim from '@joplin/lib/shim';
 import CommandService from '@joplin/lib/services/CommandService';
@@ -64,6 +65,7 @@ interface ScreenHeaderProps {
 	folders: FolderEntity[];
 	folderPickerOptions?: FolderPickerOptions;
 	plugins: PluginStates;
+	pluginSettings: SerializedPluginSettings;
 
 	dispatch: Dispatch;
 	onUndoButtonPress: OnPressCallback;
@@ -452,11 +454,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		};
 
 		const pluginPanelToggleButton = (styles: ScreenHeaderStyles, onPress: OnPressCallback) => {
-			const allPluginViews = Object.values(this.props.plugins).map(plugin => Object.values(plugin.views)).flat();
-			const allVisiblePanels = allPluginViews.filter(
-				view => view.containerType === ContainerType.Panel && view.opened,
-			);
-			if (allVisiblePanels.length === 0) return null;
+			if (visiblePluginPanelViewInfos(this.props.plugins, this.props.pluginSettings).length === 0) return null;
 
 			return (
 				<IconButton
@@ -754,6 +752,7 @@ const ScreenHeader = connect((state: State) => {
 		selectedFolderId: state.selectedFolderId,
 		notesParentType: state.notesParentType,
 		plugins: state.pluginService.plugins,
+		pluginSettings: state.settings['plugins.states'],
 	};
 })(ScreenHeaderComponent);
 

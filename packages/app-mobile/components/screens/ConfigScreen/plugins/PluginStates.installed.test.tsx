@@ -206,6 +206,30 @@ describe('PluginStates.installed', () => {
 		wrapper.unmount();
 	});
 
+	it('defaults the plugin panel switch to enabled and saves changes', async () => {
+		const legacyPluginSettings: PluginSettings = {
+			[abcPluginId]: { enabled: true, deleted: false, hasBeenUpdated: false },
+		};
+		await loadMockPlugin(abcPluginId, 'ABC Sheet Music', '1.2.3', legacyPluginSettings);
+
+		const wrapper = render(
+			<WrappedPluginStates initialPluginSettings={legacyPluginSettings} store={reduxStore}/>,
+		);
+		await userEvent.setup().press(await screen.findByText('ABC Sheet Music'));
+
+		const panelSwitch = await screen.findByLabelText('Enable plugin panel');
+		expect(panelSwitch.props.value).toBe(true);
+		fireEvent(panelSwitch, 'valueChange', false);
+
+		await waitFor(() => {
+			expect(Setting.value('plugins.states')).toMatchObject({
+				[abcPluginId]: { pluginPanelEnabled: false },
+			});
+		});
+		expect(screen.getByLabelText('Enable plugin panel').props.value).toBe(false);
+		wrapper.unmount();
+	});
+
 	it('should support updating plugins from the info modal', async () => {
 		await mockRepositoryApiConstructor();
 
