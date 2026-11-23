@@ -47,6 +47,18 @@ describe('markdownCommands', () => {
 		expect(editor.state.doc.toString()).toBe(initialText);
 	});
 
+	it('should place the cursor after the blockquote marker when toggling a blockquote on an empty line', async () => {
+		const initialText = 'Testing...\n';
+		const editor = await createTestEditor(initialText, EditorSelection.cursor(initialText.length), []);
+
+		toggleBlockQuote(editor);
+		expect(editor.state.doc.toString()).toBe('Testing...\n> ');
+		expect(editor.state.selection.main.head).toBe(editor.state.doc.length);
+
+		editor.dispatch(editor.state.replaceSelection('Quote'));
+		expect(editor.state.doc.toString()).toBe('Testing...\n> Quote');
+	});
+
 	it('should bold/italicize everything selected', async () => {
 		const initialDocText = 'Testing...';
 		const editor = await createTestEditor(
