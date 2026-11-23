@@ -212,6 +212,16 @@ const shim = {
 		throw new Error('Cannot determine platform');
 	},
 
+	getOsName: (platform: string) => {
+		if (platform === 'win32') return 'Windows';
+		if (platform === 'darwin') return 'macOS';
+		if (platform === 'linux') return 'Linux';
+		if (platform === 'android') return 'Android';
+		if (platform === 'ios') return 'iOS';
+		if (platform === 'web') return 'Web';
+		return '';
+	},
+
 	// Tells the computer CPU architecture. Which if different from the architecture the running
 	// version was built for. For example, the laptop CPU may be an ARM64, while the version was
 	// built for x64 architecture. Here we want to know the laptop CPU.

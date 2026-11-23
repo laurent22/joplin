@@ -1,6 +1,7 @@
 import { PluginSettings } from './services/plugins/PluginService';
 import type PluginService from './services/plugins/PluginService';
 import versionInfo, { PackageInfo } from './versionInfo';
+import shim from './shim';
 
 export const renderErrorBlock = (errors: (string | Error)[]): string => {
 	if (!errors.length) return '';
@@ -8,16 +9,6 @@ export const renderErrorBlock = (errors: (string | Error)[]): string => {
 		if (typeof e === 'string') return e.trim();
 		return e.message.trim() + e.stack ? `\n${e.stack}` : '';
 	}).map(l => l.trim()).join('\n\n')}\n\`\`\``;
-};
-
-export const getOsName = (platform: string) => {
-	if (platform === 'win32') return 'Windows';
-	if (platform === 'darwin') return 'macOS';
-	if (platform === 'linux') return 'Linux';
-	if (platform === 'android') return 'Android';
-	if (platform === 'ios') return 'iOS';
-	if (platform === 'web') return 'Web';
-	return '';
 };
 
 export default (title: string, body: string, errors: (string | Error)[], packageInfo: PackageInfo, pluginService: PluginService, pluginSettings: PluginSettings) => {
@@ -29,7 +20,7 @@ export default (title: string, body: string, errors: (string | Error)[], package
 		title,
 		category: 'support',
 		version: packageInfo.version,
-		os: getOsName(process.platform),
+		os: shim.getOsName(process.platform),
 		'desktop-about-content': v.body,
 		content: `#### Body\n\n${body}${errorBlock ? `\n\n#### Errors\n\n${errorBlock}` : ''}`,
 	};

@@ -8,7 +8,6 @@ import { reg } from '../registry';
 import SyncTargetRegistry from '../SyncTargetRegistry';
 import Logger from '@joplin/utils/Logger';
 import NavService from './NavService';
-import { getOsName } from '../makeDiscourseDebugUrl';
 
 const logger = Logger.create('joplinCloudUtils');
 
@@ -89,7 +88,7 @@ export const getApplicationInformation = async () => {
 export const getUserAgent = () => {
 	const appType = Setting.appTypeToLabel(Setting.value('appType'));
 	const platformName = shim.platformName();
-	return `Joplin/${shim.appVersion()} (${appType}; ${getOsName(platformName) || platformName})`;
+	return `Joplin/${shim.appVersion()} (${appType}; ${shim.getOsName(platformName) || platformName})`;
 };
 
 export const generateApplicationConfirmUrl = async (confirmUrl: string) => {
