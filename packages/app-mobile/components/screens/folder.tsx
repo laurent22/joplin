@@ -16,7 +16,7 @@ import { FolderEntity, FolderIconType } from '@joplin/lib/services/database/type
 import { AppState } from '../../utils/types';
 import { Dispatch } from 'redux';
 import SidebarIcon from '../SideMenuContent/SidebarIcon';
-import pickDocument from '../../utils/pickDocument';
+import { launchImageLibrary } from 'react-native-image-picker';
 import resizeImage from '../../utils/image/resizeImage';
 import firstEmoji from '../../utils/firstEmoji';
 import type FsDriverWeb from '../../utils/fs-driver/fs-driver-rn.web';
@@ -127,19 +127,32 @@ class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 		this.setState({ imageProcessing: true });
 		const tempPath = `${Setting.value('tempDir')}/${uuid.createNano()}`;
 		let resizedPath = `${tempPath}.jpg`;
-		let pickedVirtualFilePath: string|null = null;
 		try {
-			const [file] = await pickDocument();
-			if (!file) return;
-			if (Platform.OS === 'web') pickedVirtualFilePath = file.uri;
-			if (!['image/jpeg', 'image/png'].includes(file.type) && !/\.(jpe?g|png)$/i.test(file.fileName)) {
-				throw new Error(_('Unsupported image type: %s', file.type || file.fileName));
+			const response = await launchImageLibrary({ mediaType: 'photo', selectionLimit: 1, assetRepresentationMode: 'compatible' });
+			if (response.didCancel) return;
+			if (response.errorCode) throw new Error(response.errorMessage || response.errorCode);
+			const [file] = response.assets ?? [];
+			if (!file?.uri) throw new Error(_('No image was selected'));
+
+			const mimeType = Platform.OS === 'web' ? /^data:([^;,]+);base64,/i.exec(file.uri)?.[1] : file.type;
+			const fileName = file.fileName || '';
+			const isPng = mimeType === 'image/png' || /\.png$/i.test(fileName);
+			const isJpeg = mimeType === 'image/jpeg' || mimeType === 'image/jpg' || /\.jpe?g$/i.test(fileName);
+			if (!isPng && !isJpeg) {
+				throw new Error(_('Unsupported image type: %s', mimeType || fileName));
 			}
-			const isPng = file.type === 'image/png' || /\.png$/i.test(file.fileName);
 			resizedPath = `${tempPath}.${isPng ? 'png' : 'jpg'}`;
 
-			const sourcePath = Platform.OS === 'ios' ? decodeURIComponent(file.uri) : file.uri;
-			await shim.fsDriver().copy(sourcePath, tempPath);
+			if (Platform.OS === 'web') {
+				const binary = atob(file.uri.slice(file.uri.indexOf(',') + 1));
+				const imageData = new ArrayBuffer(binary.length);
+				const imageBytes = new Uint8Array(imageData);
+				for (let i = 0; i < binary.length; i++) imageBytes[i] = binary.charCodeAt(i);
+				await (shim.fsDriver() as FsDriverWeb).writeFile(tempPath, imageData, 'Buffer');
+			} else {
+				const sourcePath = Platform.OS === 'ios' ? decodeURIComponent(file.uri) : file.uri;
+				await shim.fsDriver().copy(sourcePath, tempPath);
+			}
 			await resizeImage({ inputPath: tempPath, outputPath: resizedPath, maxWidth: 256, maxHeight: 256, format: isPng ? 'PNG' : 'JPEG', quality: 0.8 });
 			const base64 = await shim.fsDriver().readFile(resizedPath, 'base64');
 			if (operationId !== this.imageOperationId) return;
@@ -151,13 +164,6 @@ class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 			if (operationId === this.imageOperationId) void this.showImageError(error);
 		} finally {
 			if (operationId === this.imageOperationId) this.setState({ imageProcessing: false });
-			if (pickedVirtualFilePath) {
-				try {
-					await (shim.fsDriver() as FsDriverWeb).releaseReadOnlyVirtualFile(pickedVirtualFilePath);
-				} catch (error) {
-					logger.warn('Could not release selected notebook icon file:', error);
-				}
-			}
 			await Promise.all([tempPath, resizedPath].map(async path => {
 				try {
 					if (await shim.fsDriver().exists(path)) await shim.fsDriver().remove(path);
