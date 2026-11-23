@@ -18,6 +18,9 @@ import InstallButton from './buttons/InstallButton';
 import { InstallState } from './PluginBox';
 import PluginChips from './PluginBox/PluginChips';
 import { PluginStatusRecord } from '../types';
+import { useSelector } from 'react-redux';
+import { AppState } from '../../../../utils/types';
+import { pluginHasPanelView } from '../../../plugins/utils/visiblePluginPanelViewInfos';
 
 interface Props {
 	themeId: number;
@@ -80,6 +83,7 @@ const styles = (() => {
 interface EnabledSwitchProps {
 	item: PluginItem;
 	onToggle: PluginCallback;
+	hasPanelView: boolean;
 }
 
 const EnabledSwitch: React.FC<EnabledSwitchProps> = props => {
@@ -93,13 +97,15 @@ const EnabledSwitch: React.FC<EnabledSwitchProps> = props => {
 		return null;
 	}
 
-	return <View style={[styles.switchContainer, styles.enabledSwitchContainer]}>
+	return <View style={[styles.switchContainer, styles.enabledSwitchContainer, !props.hasPanelView && styles.panelEnabledSwitchContainer]}>
 		<Text nativeID='enabledLabel'>{_('Enabled')}</Text>
 		<Switch accessibilityLabelledBy='enabledLabel' value={props.item.enabled} onValueChange={onChange} />
 	</View>;
 };
 
-interface PanelEnabledSwitchProps extends EnabledSwitchProps {
+interface PanelEnabledSwitchProps {
+	item: PluginItem;
+	onToggle: PluginCallback;
 	enabled: boolean;
 }
 
@@ -120,6 +126,7 @@ const PluginInfoModalContent: React.FC<Props> = props => {
 	const initialItem = props.item;
 	const pluginId = initialItem.manifest.id;
 	const item = usePluginItem(pluginId, props.pluginSettings, initialItem);
+	const hasPanelView = useSelector((state: AppState) => pluginHasPanelView(state.pluginService.plugins, pluginId));
 
 	const manifest = item.manifest;
 	const isCompatible = useMemo(() => {
@@ -249,8 +256,8 @@ const PluginInfoModalContent: React.FC<Props> = props => {
 	return <>
 		<ScrollView>
 			{aboutPlugin}
-			<EnabledSwitch item={item} onToggle={props.pluginCallbacks.onToggle}/>
-			<PanelEnabledSwitch item={item} enabled={props.pluginSettings[pluginId]?.pluginPanelEnabled !== false} onToggle={props.pluginCallbacks.onTogglePanel}/>
+			<EnabledSwitch item={item} onToggle={props.pluginCallbacks.onToggle} hasPanelView={hasPanelView}/>
+			{hasPanelView && <PanelEnabledSwitch item={item} enabled={props.pluginSettings[pluginId]?.pluginPanelEnabled !== false} onToggle={props.pluginCallbacks.onTogglePanel}/>}
 			<Divider />
 			<View style={styles.buttonContainer}>
 				{!item.installed ? installButton : null}

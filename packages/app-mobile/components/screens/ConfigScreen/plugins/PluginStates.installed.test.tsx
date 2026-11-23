@@ -15,6 +15,7 @@ import WrappedPluginStates from './testUtils/WrappedPluginStates';
 import mockRepositoryApiConstructor from './testUtils/mockRepositoryApiConstructor';
 import Setting from '@joplin/lib/models/Setting';
 import mockPluginServiceSetup from '../../../../utils/testing/mockPluginServiceSetup';
+import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 
 // Plugin install/uninstall tests have been observed to fail or time out in CI:
 jest.retryTimes(2);
@@ -216,6 +217,14 @@ describe('PluginStates.installed', () => {
 			<WrappedPluginStates initialPluginSettings={legacyPluginSettings} store={reduxStore}/>,
 		);
 		await userEvent.setup().press(await screen.findByText('ABC Sheet Music'));
+		expect(screen.queryByLabelText('Enable plugin panel')).toBeNull();
+
+		act(() => {
+			reduxStore.dispatch({
+				type: 'PLUGIN_VIEW_ADD', pluginId: abcPluginId,
+				view: { id: 'test-panel', type: 'webview', buttons: [], opened: false, containerType: ContainerType.Panel },
+			});
+		});
 
 		const panelSwitch = await screen.findByLabelText('Enable plugin panel');
 		expect(panelSwitch.props.value).toBe(true);
