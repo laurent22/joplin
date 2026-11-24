@@ -32694,10 +32694,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"globals@npm:17.7.0":
-  version: 17.7.0
-  resolution: "globals@npm:17.7.0"
-  checksum: 10/79304ccc4d2ca167ea15bdb25da346aa34ce3847b18fbd6c3cad182e152505305db3c9722fd5e292c62f6db97a8fa06e0c110a1e7703d7325498e5351d08cab4
+"globals@npm:17.8.0":
+  version: 17.8.0
+  resolution: "globals@npm:17.8.0"
+  checksum: 10/b7b854b2052d2608d1878884bf730c027e17b9e2d194834f48c3280a7f0005b06d5f51dba362d3149cc05eb90d36d990e5c996728ecd3585a43dc3b4a286ed85
   languageName: node
   linkType: hard
 
@@ -49677,7 +49677,7 @@ __metadata:
     execa: "npm:5.1.1"
     fs-extra: "npm:11.4.0"
     glob: "npm:11.1.0"
-    globals: "npm:17.7.0"
+    globals: "npm:17.8.0"
     gulp: "npm:5.0.1"
     http-server: "npm:14.1.1"
     husky: "npm:9.1.7"
