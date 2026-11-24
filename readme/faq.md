@@ -151,7 +151,7 @@ To fix this:
 1. If you recently changed your master password on another device, enter the new password on this device first. If the banner then goes away, no further steps are needed.
 2. Change your account password. For Joplin Server/Cloud, this can be done from the [profile screen](https://joplincloud.com/help#how-can-i-change-my-account-details).
 3. Regenerate the key pair. This can be done from Settings > Encryption.
-4. If the issue persists, change the encryption password and enter the new password on all devices. This can be done from the desktop app in Settings > Encryption.
+4. Sync each of your devices. If the encryption password is shown as invalid on any of the devices, enter the correct password.
 
 ## How can I publish notes with end-to-end encryption turned on?
 
