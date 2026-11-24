@@ -157,6 +157,9 @@
 
 		let checkoutSessionUser = null;
 
+		// Shared by all plans, so that only one checkout session is created at a time
+		let pendingCheckoutButton = null;
+
 		// Temporary setup to allow Beta users to start their subscription.
 		function setupBetaHandling(query) {
 			let accountType = Number(query.get('account_type'));

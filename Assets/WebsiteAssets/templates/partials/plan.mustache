@@ -77,14 +77,17 @@
 			const buttonId = 'subscribeButton-' + planName;
 			const buttonElement = document.getElementById(buttonId);
 
-			let checkoutPending = false;
 			let buttonLabel = '';
 
 			const setCheckoutPending = (pending) => {
-				if (pending === checkoutPending) return;
-				if (pending) buttonLabel = buttonElement.textContent;
-				buttonElement.textContent = pending ? 'Please wait...' : buttonLabel;
-				checkoutPending = pending;
+				if (pending) {
+					buttonLabel = buttonElement.textContent;
+					buttonElement.textContent = 'Please wait...';
+					pendingCheckoutButton = buttonElement;
+				} else if (pendingCheckoutButton === buttonElement) {
+					buttonElement.textContent = buttonLabel;
+					pendingCheckoutButton = null;
+				}
 			};
 
 			// Reset the button when the page is restored from the back/forward cache after going to Stripe
@@ -113,7 +116,7 @@
 
 				evt.preventDefault();
 
-				if (checkoutPending) return;
+				if (pendingCheckoutButton) return;
 				setCheckoutPending(true);
 
 				try {
