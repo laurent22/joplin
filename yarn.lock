@@ -13203,7 +13203,7 @@ __metadata:
     relative: "npm:3.0.2"
     request: "npm:2.88.2"
     rss: "npm:1.2.2"
-    sass: "npm:1.101.7"
+    sass: "npm:1.102.0"
     sharp: "npm:0.35.0"
     source-map-support: "npm:0.5.21"
     sqlite3: "npm:5.1.6"
@@ -49950,9 +49950,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:1.101.7":
-  version: 1.101.7
-  resolution: "sass@npm:1.101.7"
+"sass@npm:1.102.0":
+  version: 1.102.0
+  resolution: "sass@npm:1.102.0"
   dependencies:
     "@parcel/watcher": "npm:^2.4.1"
     chokidar: "npm:^5.0.0"
@@ -49963,7 +49963,7 @@ __metadata:
       optional: true
   bin:
     sass: sass.js
-  checksum: 10/78b0460aa6ec9b85643b536d512686377e0098b9c93f0b99a26e6882c44822759f5627cdc3feae431f92172906c3117f4ba2c4cb51df72e609264811ed9cab65
+  checksum: 10/c69c254db64274778cc2a7f00a0fd92c0c53b9c3d25e0e8e7cf8c18788ff998c1e51e1e16198a62f58513c8c406ecc2bb61c4f29f05a0f7109c2f26700161137
   languageName: node
   linkType: hard
 
