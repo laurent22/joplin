@@ -77,11 +77,33 @@
 			const buttonId = 'subscribeButton-' + planName;
 			const buttonElement = document.getElementById(buttonId);
 
-			function handleResult() {
-				console.info('Redirected to checkout');
-			}
+			let checkoutPending = false;
+			let buttonLabel = '';
 
-			buttonElement.addEventListener("click", function(evt) {
+			const setCheckoutPending = (pending) => {
+				if (pending === checkoutPending) return;
+				if (pending) buttonLabel = buttonElement.textContent;
+				buttonElement.textContent = pending ? 'Please wait...' : buttonLabel;
+				checkoutPending = pending;
+			};
+
+			// Reset the button when the page is restored from the back/forward cache after going to Stripe
+			window.addEventListener('pageshow', (event) => {
+				if (event.persisted) setCheckoutPending(false);
+			});
+
+			const redirectToCheckout = async (data) => {
+				if (data.url) {
+					window.location.assign(data.url);
+					return;
+				}
+
+				// Fallback for servers that only return the session ID
+				const result = await stripe.redirectToCheckout({ sessionId: data.sessionId });
+				if (result.error) throw result.error;
+			};
+
+			buttonElement.addEventListener("click", async function(evt) {
 				const priceId = stripePricesIds[subscriptionPeriod];
 
 				if (!priceId) {
@@ -91,12 +113,23 @@
 
 				evt.preventDefault();
 
-				createCheckoutSession(priceId).then(function(data) {
-					stripe.redirectToCheckout({
-						sessionId: data.sessionId
-					})
-					.then(handleResult);
-				});
+				if (checkoutPending) return;
+				setCheckoutPending(true);
+
+				try {
+					const data = await createCheckoutSession(priceId);
+					// createCheckoutSession has already shown the error
+					if (!data) {
+						setCheckoutPending(false);
+						return;
+					}
+
+					await redirectToCheckout(data);
+				} catch (error) {
+					console.error('Could not open the checkout page', error);
+					setCheckoutPending(false);
+					alert('The checkout page could not be opened. If you use an ad blocker or privacy extension, please disable it for this page and try again.');
+				}
 			});
 
 			for (const button of document.querySelectorAll('button.action-toggleIncreaseStorage')) {
