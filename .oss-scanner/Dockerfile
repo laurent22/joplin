@@ -1,6 +1,6 @@
 # Build environment for Anthropic's OSS Scanner (https://github.com/anthropics/oss-scanner). The scanner builds this
 # with the repository as context, then runs the image with no network, so everything must be fetched here.
-FROM node:24-bookworm
+FROM node:26-bookworm
 
 ENV DEBIAN_FRONTEND=noninteractive
 # libsecret-1-dev is for keytar, and the cairo/pango/jpeg/gif/rsvg libs are for node-canvas (used by tests). This

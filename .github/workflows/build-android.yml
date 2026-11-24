@@ -39,7 +39,7 @@ jobs:
 
       - uses: actions/setup-node@v6
         with:
-          node-version: '24'
+          node-version: '26'
           cache: 'yarn'
 
       - uses: ./.github/workflows/shared/install-yarn
