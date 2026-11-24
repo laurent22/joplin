@@ -108,6 +108,7 @@ const TextNode = ({ data, selected, id }: NodeProps<{ id: string; type: 'wbText'
 	const checkboxRef = useCheckboxToggle({
 		body: node.text,
 		onChange: onCheckboxToggleBody,
+		onOpenRef: ctx.onOpenRef,
 	});
 
 	return (

@@ -484,7 +484,13 @@ $hover-bg: rgba(127, 127, 127, 0.12);
 	hr { margin: 6px 0; border: none; border-top: 2px solid var(--joplin-divider-color); }
 	a {
 		color: var(--joplin-url-color, #{$selection-color});
+		cursor: pointer;
 		&:hover { text-decoration: underline; }
+	}
+	.resource-icon {
+		display: inline-block;
+		text-decoration: none;
+		margin-right: 2px;
 	}
 	mark {
 		background: var(--joplin-search-marker-background-color);

@@ -212,6 +212,7 @@ const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; da
 	const checkboxRef = useCheckboxToggle({
 		body: resolved?.kind === 'note' ? (resolved.body ?? '') : '',
 		onChange: onLinkedNoteBodyChange,
+		onOpenRef: ctx.onOpenRef,
 	});
 
 	const isInTrash = !!resolved?.deletedTime;

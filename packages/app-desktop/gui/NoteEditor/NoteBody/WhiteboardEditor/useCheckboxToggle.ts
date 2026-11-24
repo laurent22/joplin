@@ -1,20 +1,25 @@
 import { useCallback, useEffect, useRef } from 'react';
 
-// Joplin's renderer emits `<input type="checkbox">` elements for `- [ ]` /
-// `- [x]` markdown syntax, with an inline onclick that calls
-// `ipcProxySendToHost(...)` — that handler doesn't exist outside the note
-// viewer iframe, so clicks are no-ops in our card context.
+// Joplin's renderer emits `<input type="checkbox">` elements and `<a>` link
+// elements with inline onclick handlers that call `ipcProxySendToHost(...)` —
+// that handler doesn't exist outside the note viewer iframe, so clicks are
+// no-ops in our card context.
 //
 // This hook returns a callback ref. Attach it to the container that holds
 // the rendered HTML (`<div ref={checkboxRef} dangerouslySetInnerHTML={...} />`).
-// On every change to that container's children, the hook rewires checkboxes
-// inside it: it strips the broken inline onclick, makes them enabled, and
-// installs a click listener that flips the corresponding `[ ]` / `[x]` in
-// the source markdown by index.
+// On every change to that container's children, the hook rewires interactive
+// elements inside it:
+// - Checkboxes: strips the broken inline onclick, makes them enabled, and
+//   installs a click listener that flips the corresponding `[ ]` / `[x]` in
+//   the source markdown by index.
+// - Links: strips the broken inline onclick, adds the `nodrag` class, and
+//   installs click and auxclick listeners that invoke `onOpenRef` (or scroll
+//   to in-card anchors).
 
 interface Options {
 	body: string;
 	onChange: (newBody: string)=> void;
+	onOpenRef?: (ref: string)=> void;
 }
 
 // Matches a markdown task-list checkbox. The capture group is the inner
@@ -47,22 +52,58 @@ export const flipNthCheckbox = (body: string, index: number): string | null => {
 	return result + body.slice(lastIndex);
 };
 
-const useCheckboxToggle = ({ body, onChange }: Options) => {
+// Exported for tests. Extracts the target reference / URL from an anchor element
+// rendered by Joplin's markup renderer or raw HTML.
+export const extractLinkUrl = (a: HTMLAnchorElement): string | null => {
+	const onclick = a.getAttribute('onclick') || '';
+	// Joplin's renderer generates:
+	// ipcProxySendToHost("TARGET_URL", { resourceId: "..." }); return false;
+	// or in some configurations:
+	// postMessage("TARGET_URL", { resourceId: "..." }); return false;
+	const match = onclick.match(/(?:ipcProxySendToHost|postMessage)\(\s*(".*?"|'.*?')/);
+	if (match) {
+		try {
+			const parsed = JSON.parse(match[1]);
+			if (typeof parsed === 'string' && parsed.trim().length > 0) {
+				return parsed;
+			}
+		} catch {
+			const unquoted = match[1].slice(1, -1);
+			if (unquoted.trim().length > 0) return unquoted;
+		}
+	}
+
+	const resourceId = a.getAttribute('data-resource-id');
+	if (resourceId) {
+		return `joplin://${resourceId}`;
+	}
+
+	const href = a.getAttribute('href');
+	if (!href || href === '#') return null;
+
+	return href;
+};
+
+const useCheckboxToggle = ({ body, onChange, onOpenRef }: Options) => {
 	const bodyRef = useRef(body);
 	bodyRef.current = body;
 	const onChangeRef = useRef(onChange);
 	onChangeRef.current = onChange;
+	const onOpenRefRef = useRef(onOpenRef);
+	onOpenRefRef.current = onOpenRef;
 
 	const observerRef = useRef<MutationObserver | null>(null);
-	// Track which checkbox elements have already been wired up. WeakSet so
+	// Track which elements have already been wired up. WeakSet so
 	// removed elements can be GC'd without leaking entries.
-	const wiredRef = useRef<WeakSet<HTMLInputElement>>(new WeakSet());
+	const wiredCheckboxesRef = useRef<WeakSet<HTMLInputElement>>(new WeakSet());
+	const wiredLinksRef = useRef<WeakSet<HTMLAnchorElement>>(new WeakSet());
 
 	const wireUp = useCallback((root: HTMLElement) => {
+		// 1. Checkboxes
 		const checkboxes = root.querySelectorAll<HTMLInputElement>('input[type=checkbox]');
 		for (const cb of Array.from(checkboxes)) {
-			if (wiredRef.current.has(cb)) continue;
-			wiredRef.current.add(cb);
+			if (wiredCheckboxesRef.current.has(cb)) continue;
+			wiredCheckboxesRef.current.add(cb);
 			cb.disabled = false;
 			cb.removeAttribute('disabled');
 			// Strip the renderer's inline onclick — it tries to call
@@ -82,6 +123,49 @@ const useCheckboxToggle = ({ body, onChange }: Options) => {
 				if (next !== null) onChangeRef.current(next);
 			});
 			cb.addEventListener('mousedown', (e) => e.stopPropagation());
+		}
+
+		// 2. Links
+		const links = root.querySelectorAll<HTMLAnchorElement>('a');
+		for (const a of Array.from(links)) {
+			if (wiredLinksRef.current.has(a)) continue;
+			wiredLinksRef.current.add(a);
+
+			const url = extractLinkUrl(a);
+			// Always strip the renderer's broken inline onclick
+			a.removeAttribute('onclick');
+			(a as HTMLAnchorElement & { onclick: unknown }).onclick = null;
+
+			if (!url) continue;
+
+			// Prevent React Flow from dragging the card when interacting with the link
+			a.classList.add('nodrag');
+
+			// If the anchor doesn't already have a title, display the target on hover
+			if (!a.title && url !== '#') {
+				a.title = url;
+			}
+
+			const handleFollow = (e: MouseEvent) => {
+				e.preventDefault();
+				e.stopPropagation();
+				if (url.startsWith('#')) {
+					// In-card anchor navigation
+					const targetEl = root.querySelector(url);
+					if (targetEl) {
+						targetEl.scrollIntoView();
+					}
+				} else if (onOpenRefRef.current) {
+					onOpenRefRef.current(url);
+				}
+			};
+
+			a.addEventListener('click', handleFollow);
+			a.addEventListener('auxclick', (e) => {
+				if (e.button === 1) handleFollow(e);
+			});
+			a.addEventListener('mousedown', (e) => e.stopPropagation());
+			a.addEventListener('dblclick', (e) => e.stopPropagation());
 		}
 	}, []);
 
