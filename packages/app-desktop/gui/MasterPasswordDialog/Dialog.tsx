@@ -12,7 +12,7 @@ import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import KvStore from '@joplin/lib/services/KvStore';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import LabelledPasswordInput from '../PasswordInput/LabelledPasswordInput';
-import shim from '@joplin/lib/shim';
+import shim, { MessageBoxType } from '@joplin/lib/shim';
 import time from '@joplin/lib/time';
 
 interface Props {
@@ -48,6 +48,7 @@ export default function(props: Props) {
 		return true;
 
 	}, [status, mode]);
+	const resetWarningMessage = _('Attention: After resetting your password it will no longer be possible to decrypt any data encrypted with your current password. All encrypted shared notebooks will also be unshared, so please ask the notebook owner to share it again with you.');
 
 	const onClose = useCallback(() => {
 		props.dispatch({
@@ -75,6 +76,13 @@ export default function(props: Props) {
 		}
 
 		if (event.buttonName === 'ok') {
+			if (mode === Mode.Reset) {
+				const response = await shim.showMessageBox(`${resetWarningMessage}\n\n${_('Continue?')}`, {
+					buttons: [_('Yes'), _('No')],
+					type: MessageBoxType.Confirm,
+				});
+				if (response !== 0) return;
+			}
 			setUpdatingPassword(true);
 			try {
 				if (mode === Mode.Set) {
@@ -95,7 +103,7 @@ export default function(props: Props) {
 			return;
 		}
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [currentPassword, password1, onClose, mode]);
+	}, [currentPassword, password1, onClose, mode, resetWarningMessage]);
 
 	// Show the "Re-enter password" confirmation field
 	const needToRepeatPassword = useMemo(() => {
@@ -218,7 +226,7 @@ export default function(props: Props) {
 		if (mode === Mode.Reset) {
 			return (
 				<div className="dialog-content">
-					<p>{_('Attention: After resetting your password it will no longer be possible to decrypt any data encrypted with your current password. All encrypted shared notebooks will also be unshared, so please ask the notebook owner to share it again with you.')}</p>
+					<p>{resetWarningMessage}</p>
 					{renderPasswordForm()}
 				</div>
 			);
