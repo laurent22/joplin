@@ -281,6 +281,37 @@ const isEmptyTaskListItem = (content) => {
   return content.match(/^\[[xX \][ \n\t]*$/);
 };
 
+const adjacentElement = (node, direction) => {
+  let sibling = node[direction];
+  while (sibling && (sibling.nodeType === 8 || (sibling.nodeType === 3 && !sibling.nodeValue.trim()))) {
+    sibling = sibling[direction];
+  }
+  return sibling && sibling.nodeType === 1 ? sibling : null;
+};
+
+const isCheckboxInput = (node) => node.nodeName === 'INPUT' && node.type === 'checkbox';
+
+// Same positions as those handled by the GFM taskListItems rule
+const hasCheckboxInput = (listItem) => {
+  return Array.from(listItem.children).some(child => {
+    if (isCheckboxInput(child)) return true;
+    return (child.nodeName === 'LABEL' || child.nodeName === 'SPAN') && Array.from(child.children).some(isCheckboxInput);
+  });
+};
+
+const isChecklist = (node) => {
+  if (!node || node.nodeName !== 'UL') return false;
+  const firstItem = node.firstElementChild;
+  return !!firstItem && firstItem.nodeName === 'LI' && (!!joplinCheckboxInfo(firstItem) || hasCheckboxInput(firstItem));
+};
+
+// A bullet list directly next to a checklist would be merged with it when the Markdown is
+// parsed again, since both use "-", so a different marker is needed to keep them separate.
+// https://github.com/laurent22/joplin/issues/17008
+const isNextToChecklist = (listNode) => {
+  return isChecklist(adjacentElement(listNode, 'previousSibling')) || isChecklist(adjacentElement(listNode, 'nextSibling'));
+};
+
 rules.listItem = {
   filter: 'li',
 
@@ -300,7 +331,9 @@ rules.listItem = {
       prefix = '- [' + (joplinCheckbox.checked ? 'x' : ' ') + '] ';
     } else {
       var parent = node.parentNode
-      if (isOrderedList(parent)) {
+      if (options.bulletListMarker === '-' && !isOrderedList(parent) && isNextToChecklist(parent)) {
+        prefix = '* '
+      } else if (isOrderedList(parent)) {
         if (node.isCode) {
           // Ordered lists in code blocks are often for line numbers. Remove them. 
           // See https://github.com/laurent22/joplin/pull/10126

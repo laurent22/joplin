@@ -181,4 +181,20 @@ describe('HtmlToMd', () => {
 		expect(secondSave).toBe(firstSave);
 	});
 
+	it.each([
+		'<ul class="joplin-checklist"><li>Task</li></ul><ul><li>Bullet</li></ul>',
+		'<ul><li>Bullet</li></ul><ul class="joplin-checklist"><li>Task</li></ul>',
+		'<ul><li><input type="checkbox">Task</li></ul><ul><li>Bullet</li></ul>',
+	])('should keep a bullet list next to a checklist separate when the note is reopened: %j', async (html) => {
+		const htmlToMd = new HtmlToMd();
+
+		const firstSave = htmlToMd.parse(html);
+		const reopened = await new MdToHtml().render(firstSave, null, { bodyOnly: true, plugins: { checkbox: { checkboxRenderingType: 2 } } });
+		const secondSave = htmlToMd.parse(reopened.html);
+
+		expect(reopened.html.match(/<ul/g)).toHaveLength(2);
+		expect(reopened.html.match(/joplin-checklist/g)).toHaveLength(1);
+		expect(secondSave).toBe(firstSave);
+	});
+
 });

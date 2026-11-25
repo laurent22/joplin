@@ -61,14 +61,6 @@ const shimInitShared = () => {
 
 	shim.showMessageBox = makeShowMessageBox(null);
 
-	shim.waitForFrame = () => {
-		return new Promise<void>((resolve) => {
-			requestAnimationFrame(() => {
-				resolve();
-			});
-		});
-	};
-
 	shim.mobilePlatform = () => {
 		return Platform.OS as MobilePlatform;
 	};

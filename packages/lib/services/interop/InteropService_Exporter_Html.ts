@@ -56,7 +56,8 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 
 		await shim.fsDriver().mkdir(this.destDir_);
 		this.markupToHtml_ = markupLanguageUtils.newMarkupToHtml(null, {
-			extraRendererRules: contentScriptsToRendererRules(options.plugins),
+			// Mobile exports render in the app context, outside the note viewer WebView sandbox.
+			extraRendererRules: shim.mobilePlatform() ? null : contentScriptsToRendererRules(options.plugins),
 			customCss: this.customCss_ || '',
 		});
 		this.style_ = themeStyle(Setting.THEME_LIGHT);

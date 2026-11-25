@@ -36,6 +36,9 @@ const sqliteVec = require('sqlite-vec');
 
 shimInit({ nodeSqlite: sqlite3, React, sqliteVec });
 
+// The default waitFor/findBy timeout of 1s is often too low on CI
+require('@testing-library/react').configure({ asyncUtilTimeout: 5_000 });
+
 afterEach(async () => {
 	await afterEachCleanUp();
 });

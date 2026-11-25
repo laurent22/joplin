@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Joplin v3.7.18\n"
+"Project-Id-Version: Joplin v3.7.22\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2026-09-19 01:55+0200\n"
+"PO-Revision-Date: 2026-11-20 21:20+0100\n"
 "Last-Translator: Jozef Gaal <preklady@mayday.sk>\n"
 "Language-Team: Slovak <preklady@mayday.sk>\n"
 "Language: sk\n"
@@ -6826,7 +6826,7 @@ msgstr ""
 #: packages/app-desktop/gui/MainScreen.tsx:580
 #: packages/app-desktop/gui/MainScreen.tsx:627
 msgid "Set the password"
-msgstr "Set the password"
+msgstr "Nastavte heslo"
 
 #: packages/app-desktop/gui/NoteEditor/NoteLockPanel/NoteLockPanel.tsx:60
 msgid "Set up note lock"

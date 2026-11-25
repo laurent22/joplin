@@ -1,6 +1,6 @@
 {
   "name": "@joplin/app-desktop",
-  "version": "3.7.24",
+  "version": "3.8.4",
   "installConfig": {
     "hoistingLimits": "workspaces"
   },
@@ -63,22 +63,8 @@
       },
       "icon": "../../Assets/ImageSources/Joplin.ico",
       "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64",
-            "ia32",
-            "arm64"
-          ]
-        },
-        {
-          "target": "portable",
-          "arch": [
-            "x64",
-            "ia32",
-            "arm64"
-          ]
-        }
+        "nsis",
+        "portable"
       ],
       "extraFiles": [
         {
@@ -165,12 +151,12 @@
     "@electron/rebuild": "4.1.0",
     "@fortawesome/fontawesome-free": "5.15.4",
     "@joeattardi/emoji-button": "4.6.4",
-    "@joplin/default-plugins": "~3.7",
-    "@joplin/editor": "~3.7",
-    "@joplin/lib": "~3.7",
-    "@joplin/renderer": "~3.7",
-    "@joplin/tools": "~3.7",
-    "@joplin/utils": "~3.7",
+    "@joplin/default-plugins": "~3.8",
+    "@joplin/editor": "~3.8",
+    "@joplin/lib": "~3.8",
+    "@joplin/renderer": "~3.8",
+    "@joplin/tools": "~3.8",
+    "@joplin/utils": "~3.8",
     "@playwright/test": "1.61.1",
     "@sentry/electron": "4.24.0",
     "@testing-library/dom": "10.4.1",
@@ -240,9 +226,9 @@
   "dependencies": {
     "@electron/remote": "2.1.3",
     "@huggingface/transformers": "4.2.0",
-    "@joplin/onenote-converter": "~3.7",
+    "@joplin/onenote-converter": "~3.8",
     "@xyflow/react": "12.10.2",
-    "fs-extra": "11.3.6",
+    "fs-extra": "11.4.0",
     "keytar": "7.9.0",
     "onnxruntime-node": "1.27.0",
     "sqlite-vec": "0.1.9",
