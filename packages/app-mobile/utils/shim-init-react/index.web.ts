@@ -92,9 +92,17 @@ const shimInit = () => {
 	};
 
 	shim.waitForFrame = () => {
-		return new Promise<void>((resolve) => {
+		// Animation frames do not fire while the tab is hidden.
+		if (document.visibilityState !== 'visible') {
+			return Promise.resolve(Date.now());
+		}
+		return new Promise<number>((resolve) => {
+			// A backup timer ensures the wait completes if the tab becomes hidden
+			// after the visibility check but before the animation frame fires.
+			const timeout = setTimeout(() => resolve(Date.now()), 100);
 			requestAnimationFrame(() => {
-				resolve();
+				clearTimeout(timeout);
+				resolve(Date.now());
 			});
 		});
 	};

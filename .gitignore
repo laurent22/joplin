@@ -649,6 +649,7 @@ packages/app-desktop/integration-tests/multiWindow.spec.js
 packages/app-desktop/integration-tests/networking.spec.js
 packages/app-desktop/integration-tests/noteList.spec.js
 packages/app-desktop/integration-tests/pluginApi.spec.js
+packages/app-desktop/integration-tests/renderedMarkdownSelection.spec.js
 packages/app-desktop/integration-tests/resizableLayout.spec.js
 packages/app-desktop/integration-tests/richTextEditor.spec.js
 packages/app-desktop/integration-tests/settings.spec.js
@@ -895,8 +896,12 @@ packages/app-mobile/components/plugins/dialogs/PluginPanelViewer.js
 packages/app-mobile/components/plugins/dialogs/PluginUserWebView.js
 packages/app-mobile/components/plugins/dialogs/hooks/useDialogMessenger.js
 packages/app-mobile/components/plugins/dialogs/hooks/useDialogSize.js
+packages/app-mobile/components/plugins/dialogs/hooks/useSelectedTabId.test.js
+packages/app-mobile/components/plugins/dialogs/hooks/useSelectedTabId.js
 packages/app-mobile/components/plugins/dialogs/hooks/useViewInfos.js
 packages/app-mobile/components/plugins/dialogs/hooks/useWebViewSetup.js
+packages/app-mobile/components/plugins/dialogs/pluginPanelTabLayout.test.js
+packages/app-mobile/components/plugins/dialogs/pluginPanelTabLayout.js
 packages/app-mobile/components/plugins/types.js
 packages/app-mobile/components/plugins/utils/createOnLogHandler.js
 packages/app-mobile/components/plugins/utils/useOnDevPluginsUpdated.js
@@ -956,6 +961,7 @@ packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.js
 packages/app-mobile/components/screens/DocumentScanner/NotePreview.js
 packages/app-mobile/components/screens/JoplinCloudLoginScreen.js
 packages/app-mobile/components/screens/LogScreen.js
+packages/app-mobile/components/screens/Note/Note.sharing.test.js
 packages/app-mobile/components/screens/Note/Note.test.js
 packages/app-mobile/components/screens/Note/Note.js
 packages/app-mobile/components/screens/Note/NoteLockPanel.js
@@ -965,6 +971,7 @@ packages/app-mobile/components/screens/Note/commands/index.js
 packages/app-mobile/components/screens/Note/commands/insertDateTime.js
 packages/app-mobile/components/screens/Note/commands/setTags.js
 packages/app-mobile/components/screens/Note/commands/toggleVisiblePanes.js
+packages/app-mobile/components/screens/Note/testUtils.js
 packages/app-mobile/components/screens/Note/types.js
 packages/app-mobile/components/screens/NoteLockMigrationScreen.test.js
 packages/app-mobile/components/screens/NoteLockMigrationScreen.js
@@ -1077,9 +1084,12 @@ packages/app-mobile/utils/database-driver-react-native.web.js
 packages/app-mobile/utils/debounce.js
 packages/app-mobile/utils/focusView.js
 packages/app-mobile/utils/fs-driver/constants.js
+packages/app-mobile/utils/fs-driver/decodeAsciiChunk.test.js
+packages/app-mobile/utils/fs-driver/decodeAsciiChunk.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.test.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.web.js
+packages/app-mobile/utils/fs-driver/fs-driver-rn.web.worker.test.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.web.worker.js
 packages/app-mobile/utils/fs-driver/runOnDeviceTests.js
 packages/app-mobile/utils/fs-driver/tarCreate.js
@@ -1112,7 +1122,10 @@ packages/app-mobile/utils/polyfills/bufferPolyfill.js
 packages/app-mobile/utils/polyfills/crypto-polyfill/index.js
 packages/app-mobile/utils/polyfills/index.js
 packages/app-mobile/utils/polyfills/index.web.js
+packages/app-mobile/utils/printHtmlInSandboxedIframe.test.js
+packages/app-mobile/utils/printHtmlInSandboxedIframe.js
 packages/app-mobile/utils/setupNotifications.js
+packages/app-mobile/utils/shareFile.test.js
 packages/app-mobile/utils/shareFile.js
 packages/app-mobile/utils/shareHandler.js
 packages/app-mobile/utils/shim-init-react/index.js
@@ -1207,6 +1220,10 @@ packages/editor/CodeMirror/extensions/rendering/utils/makeHideReplaceExtension.j
 packages/editor/CodeMirror/extensions/rendering/utils/makeInlineReplaceExtension.test.js
 packages/editor/CodeMirror/extensions/rendering/utils/makeInlineReplaceExtension.js
 packages/editor/CodeMirror/extensions/rendering/utils/nodeIntersectsSelection.js
+packages/editor/CodeMirror/extensions/rendering/utils/normalizeRenderedSelection.test.js
+packages/editor/CodeMirror/extensions/rendering/utils/normalizeRenderedSelection.js
+packages/editor/CodeMirror/extensions/rendering/utils/renderedSelection.test.js
+packages/editor/CodeMirror/extensions/rendering/utils/renderedSelection.js
 packages/editor/CodeMirror/extensions/searchExtension.test.js
 packages/editor/CodeMirror/extensions/searchExtension.js
 packages/editor/CodeMirror/extensions/selectedNoteIdExtension.js
@@ -1986,6 +2003,8 @@ packages/lib/services/search/SearchEngineUtils.js
 packages/lib/services/search/SearchFilter.test.js
 packages/lib/services/search/filterParser.test.js
 packages/lib/services/search/filterParser.js
+packages/lib/services/search/ftsPhraseRegex.test.js
+packages/lib/services/search/ftsPhraseRegex.js
 packages/lib/services/search/gotoAnythingStyleQuery.test.js
 packages/lib/services/search/gotoAnythingStyleQuery.js
 packages/lib/services/search/queryBuilder.js

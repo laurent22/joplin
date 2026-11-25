@@ -70,7 +70,7 @@ SyncTargetRegistry.addClass(SyncTargetJoplinCloud);
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import MigrationService from '@joplin/lib/services/MigrationService';
-import { clearSharedFilesCache } from '../utils/ShareUtils';
+import { clearSharedFilesCache, clearUnlockedSharedFilesCache } from '../utils/ShareUtils';
 import setIgnoreTlsErrors from '../utils/TlsUtils';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import { loadMasterKeysFromSettings, migrateMasterPassword, migratePpk } from '@joplin/lib/services/e2ee/utils';
@@ -362,6 +362,15 @@ const buildStartupTasks = (
 				type: 'SET_NOTE_LOCK_SESSION_UNLOCKED',
 				value: event.unlocked,
 			});
+			if (!event.unlocked) {
+				void (async () => {
+					try {
+						await clearUnlockedSharedFilesCache();
+					} catch (error) {
+						logger.error('Could not clear unlocked shared files after relocking notes:', error);
+					}
+				})();
+			}
 		};
 		eventManager.on(EventName.NoteLockSessionChange, noteLockSessionChangeListener_);
 	});

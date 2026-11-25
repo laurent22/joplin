@@ -62,6 +62,9 @@ export interface ProcessResultsRow {
 	searchType: SearchType[];
 	is_todo?: number;
 	todo_completed?: number;
+	isPhraseMatch?: boolean;
+	// Only set for FTS note results
+	titleCoverage?: number;
 }
 
 export interface ComplexTerm {
@@ -396,6 +399,7 @@ export default class SearchEngine {
 
 		const K1 = 1.2;
 		const B = 0.75;
+		const TITLE_COVERAGE_WEIGHT = 2;
 
 		const TITLE_COLUMN = 1;
 		const BODY_COLUMN = 2;
@@ -454,6 +458,7 @@ export default class SearchEngine {
 		for (let i = 0; i < rows.length; i++) {
 			const row = rows[i];
 			row.weight = 0;
+			let termsInTitle = 0;
 			for (let j = 0; j < numPhrases; j++) {
 				// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 				columns.forEach(column => {
@@ -463,6 +468,14 @@ export default class SearchEngine {
 
 					row.weight += BM25(idf, frequencyHits, numTokens[column][i], avgTokens[column]);
 				});
+
+				if (hitsThisRow(X[i], TITLE_COLUMN, j)) termsInTitle++;
+			}
+
+			// Resource rows come from a different FTS query, so their matchinfo doesn't line up
+			if (numPhrases && row.item_type === ModelType.Note) {
+				row.titleCoverage = termsInTitle / numPhrases;
+				row.weight += row.titleCoverage * TITLE_COVERAGE_WEIGHT;
 			}
 
 			row.weight += weightForDaysSinceLastUpdate(row);
@@ -726,6 +739,24 @@ export default class SearchEngine {
 		return rows;
 	}
 
+	private async markPhraseMatches_(rows: ProcessResultsRow[], parsedQuery: ParsedQuery) {
+		const textTerms = parsedQuery.allTerms.filter(t => t.name === 'text' && !t.negated);
+		if (!rows.length || textTerms.length < 2 || textTerms.some(t => t.quoted)) return;
+
+		// filterParser wraps every word in quotes
+		const phrase = `"${textTerms.map(t => t.value.replace(/^"(.*)"$/, '$1')).join(' ')}"`;
+
+		try {
+			const phraseRows = await this.db().selectAll<{ id: string }>('SELECT id FROM notes_fts WHERE notes_fts MATCH ?', [phrase]);
+			const phraseIds = new Set(phraseRows.map(r => r.id));
+			for (const row of rows) {
+				if (phraseIds.has(row.id)) row.isPhraseMatch = true;
+			}
+		} catch (error) {
+			this.logger().warn(`Cannot execute phrase query: ${phrase}: ${error.message}`);
+		}
+	}
+
 	private determineSearchType_(query: string, parsedQuery: ParsedQuery, preferredSearchType: SearchType) {
 		if (preferredSearchType === SearchType.Basic) return SearchType.Basic;
 		if (preferredSearchType === SearchType.Nonlatin) return SearchType.Nonlatin;
@@ -875,6 +906,8 @@ export default class SearchEngine {
 					};
 				});
 
+				if (useFts) await this.markPhraseMatches_(rows, parsedQuery);
+
 				if (!queryHasFilters && Setting.value('ocr.searchInExtractedContent')) {
 					const toSearch = parsedQuery.allTerms.map(t => t.value).join(' ');
 
@@ -975,13 +1008,24 @@ export default class SearchEngine {
 	}
 }
 
+// Partial title matches only get a weight bonus, so that e.g. "up*" matching "Upcoming" doesn't win
+const titleMatchesAllTerms = (row: ProcessResultsRow) => {
+	if (row.titleCoverage === undefined) return row.fields.includes('title');
+	return row.titleCoverage >= 1;
+};
+
 const sortRows = (rows: ProcessResultsRow[]) => {
 	rows.sort((a, b) => {
 		const aIsNote = a.item_type === ModelType.Note;
 		const bIsNote = b.item_type === ModelType.Note;
 
-		if (a.fields.includes('title') && !b.fields.includes('title')) return -1;
-		if (!a.fields.includes('title') && b.fields.includes('title')) return +1;
+		if (a.isPhraseMatch && !b.isPhraseMatch) return -1;
+		if (!a.isPhraseMatch && b.isPhraseMatch) return +1;
+
+		const aTitleMatch = titleMatchesAllTerms(a);
+		const bTitleMatch = titleMatchesAllTerms(b);
+		if (aTitleMatch && !bTitleMatch) return -1;
+		if (!aTitleMatch && bTitleMatch) return +1;
 		if (a.weight < b.weight) return +1;
 		if (a.weight > b.weight) return -1;
 
@@ -1006,6 +1050,8 @@ const deduplicateAndSort = (rows: ProcessResultsRow[]) => {
 				weight: Math.max(existing.weight ?? 0, row.weight ?? 0),
 				fields: unique([...(row.fields ?? []), ...(existing.fields ?? [])]),
 				searchType: unique([...row.searchType, ...existing.searchType]),
+				isPhraseMatch: row.isPhraseMatch || existing.isPhraseMatch,
+				titleCoverage: row.titleCoverage ?? existing.titleCoverage,
 			};
 		}
 		idToRow.set(row.id, row);

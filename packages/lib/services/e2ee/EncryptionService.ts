@@ -13,6 +13,8 @@ const logger = Logger.create('EncryptionService');
 const perfLogger = PerformanceLogger.create();
 
 const emptyUint8Array = new Uint8Array(0);
+const frameWaitIntervalMs = 200;
+const encryptedFileWriteBufferSize = 1024 * 1024;
 
 function hexPad(s: string, length: number) {
 	return padLeft(s, length, '0');
@@ -636,6 +638,7 @@ export default class EncryptionService {
 		await destination.append(this.encodeHeader_(header, options.isNoteLock));
 
 		let doneSize = 0;
+		let lastFrameTimestamp = Date.now();
 
 		while (true) {
 			const block = await source.read(chunkSize);
@@ -645,14 +648,19 @@ export default class EncryptionService {
 			if (options.onProgress) options.onProgress({ doneSize: doneSize });
 
 			// Wait for a frame so that the app remains responsive in mobile.
+			// This wait is throttled to a maximum of one call per frameWaitIntervalMs.
 			// https://corbt.com/posts/2015/12/22/breaking-up-heavy-processing-in-react-native.html
-			await shim.waitForFrame();
+			const shouldWaitForFrame = Date.now() - lastFrameTimestamp >= frameWaitIntervalMs;
+			const [frameTimestamp, encrypted] = await Promise.all([
+				shouldWaitForFrame ? shim.waitForFrame() : lastFrameTimestamp,
+				this.encrypt(method, masterKeyPlainText, block),
+			]);
+			lastFrameTimestamp = frameTimestamp;
 
-			const encrypted = await this.encrypt(method, masterKeyPlainText, block);
 			await crypto.increaseNonce(this.encryptionNonce_);
 
-			await destination.append(padLeft(encrypted.length.toString(16), 6, '0'));
-			await destination.append(encrypted);
+			const output = padLeft(encrypted.length.toString(16), 6, '0') + encrypted;
+			await destination.append(output);
 		}
 	}
 
@@ -664,6 +672,7 @@ export default class EncryptionService {
 		const masterKeyPlainText = await this.masterKeyPlainText_(header.masterKeyId, options);
 
 		let doneSize = 0;
+		let lastFrameTimestamp = Date.now();
 
 		while (true) {
 			const lengthHex = await source.read(6);
@@ -675,9 +684,12 @@ export default class EncryptionService {
 			doneSize += length;
 			if (options.onProgress) options.onProgress({ doneSize: doneSize });
 
-			await shim.waitForFrame();
-
-			const block = await source.read(length);
+			const shouldWaitForFrame = Date.now() - lastFrameTimestamp >= frameWaitIntervalMs;
+			const [frameTimestamp, block] = await Promise.all([
+				shouldWaitForFrame ? shim.waitForFrame() : lastFrameTimestamp,
+				source.read(length),
+			]);
+			lastFrameTimestamp = frameTimestamp;
 
 			const plainText = await this.decrypt(header.encryptionMethod, masterKeyPlainText, block);
 			await destination.append(plainText);
@@ -733,12 +745,28 @@ export default class EncryptionService {
 		return reader;
 	}
 
-	private async fileWriter_(path: string, encoding: string) {
+	// Never use bufferSize with base64: joining padded blocks can discard subsequent data.
+	private async fileWriter_(path: string, encoding: string, bufferSize = 0) {
+		const pendingBlocks: string[] = [];
+		let pendingBlockSize = 0;
+		const flush = async () => {
+			if (!pendingBlockSize) return;
+			const data = pendingBlocks.join('');
+			pendingBlocks.length = 0;
+			pendingBlockSize = 0;
+			await this.fsDriver().appendFile(path, data, encoding);
+		};
+
 		return {
 			append: async (data: string) => {
-				return this.fsDriver().appendFile(path, data, encoding);
+				if (!bufferSize) return this.fsDriver().appendFile(path, data, encoding);
+				pendingBlocks.push(data);
+				pendingBlockSize += data.length;
+				if (pendingBlockSize >= bufferSize) await flush();
 			},
-			close: function() {},
+			close: async () => {
+				await flush();
+			},
 		};
 	}
 
@@ -759,28 +787,21 @@ export default class EncryptionService {
 	public async encryptFile(srcPath: string, destPath: string, options: EncryptOptions = null) {
 		options = { encryptionMethod: this.defaultFileEncryptionMethod(), ...options };
 
-		let source = await this.fileReader_(srcPath, 'base64');
-		let destination = await this.fileWriter_(destPath, 'ascii');
-
-		const cleanUp = async () => {
-			if (source) await source.close();
-			if (destination) await destination.close();
-			// eslint-disable-next-line require-atomic-updates
-			source = null;
-			// eslint-disable-next-line require-atomic-updates
-			destination = null;
-		};
+		const source = await this.fileReader_(srcPath, 'base64');
+		// All file encryption methods output ASCII text, so UTF-8 writes the same bytes
+		// while using the direct UTF-8 file path on native and TextEncoder on web.
+		const destination = await this.fileWriter_(destPath, 'utf8', encryptedFileWriteBufferSize);
 
 		try {
 			await this.fsDriver().unlink(destPath);
 			await this.encryptAbstract_(source, destination, options);
+			await destination.close();
 		} catch (error) {
-			await cleanUp();
 			await this.fsDriver().unlink(destPath);
 			throw error;
+		} finally {
+			await source.close();
 		}
-
-		await cleanUp();
 	}
 
 	public async decryptFile(srcPath: string, destPath: string, options: EncryptOptions = null) {

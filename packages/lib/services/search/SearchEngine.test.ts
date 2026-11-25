@@ -5,6 +5,7 @@ import ItemChange from '../../models/ItemChange';
 import Setting from '../../models/Setting';
 import Resource from '../../models/Resource';
 import { ResourceOcrStatus } from '../database/types';
+import gotoAnythingStyleQuery from './gotoAnythingStyleQuery';
 
 let engine: SearchEngine = null;
 
@@ -578,6 +579,31 @@ describe('SearchEngine', () => {
 		expect(rows.length).toBe(1);
 	}));
 
+	it('should rank notes that contain the query as an exact phrase first', (async () => {
+		const phraseNote = await Note.save({ title: 'Conference speaking options', body: 'Possible talk: Building AI Without Giving Up Privacy, about local models.' });
+		await Note.save({ title: 'Upcoming laptop', body: 'Building aims to go without giving away our privacy.' });
+		await Note.save({ title: 'AI companion offer', body: 'They are building a brand without giving up any privacy.' });
+
+		await engine.syncTables();
+
+		const rows = await engine.search(gotoAnythingStyleQuery('Building AI Without Giving Up Privacy'));
+		expect(rows.length).toBe(3);
+		expect(rows[0].id).toBe(phraseNote.id);
+	}));
+
+	it('should not rank a note first only because some of the search terms are in its title', (async () => {
+		const filler = Array(80).fill('lorem').join(' ');
+		for (let i = 0; i < 10; i++) await Note.save({ title: 'filler', body: 'nothing here' });
+		const partialTitleNote = await Note.save({ title: 'apple', body: `banana ${filler}` });
+		const bodyNote = await Note.save({ title: 'fruit', body: 'banana and apple' });
+		const fullTitleNote = await Note.save({ title: 'banana and apple', body: filler });
+
+		await engine.syncTables();
+
+		const rows = await engine.search('apple banana');
+		expect(rows.map(r => r.id)).toEqual([fullTitleNote.id, bodyNote.id, partialTitleNote.id]);
+	}));
+
 	// Disabled for now:
 	// https://github.com/laurent22/joplin/issues/9769#issuecomment-1912459744
 
@@ -654,5 +680,6 @@ describe('SearchEngine', () => {
 
 		expect(matchAnchoredTerm('test', 'testing')).toEqual([]);
 		expect(matchAnchoredTerm('test', 'test...')).toEqual(['test']);
+		expect(matchAnchoredTerm('ai*', 'main aims AI-assisted')).toEqual(['aims', 'AI']);
 	});
 });

@@ -683,10 +683,11 @@ export default class UserModel extends BaseModel<User> {
 		const user = await this.models().token().userFromToken(token, TokenPurpose.PasswordReset);
 
 		await this.withTransaction(async () => {
+			// Consume the token before saving, since saving a new password deletes all reset tokens
+			if (!(await this.models().token().deleteByValue(user.id, token, TokenPurpose.PasswordReset))) throw new ErrorNotFound('No such token');
 			await this.models().user().save({ id: user.id, password: fields.password });
 			await this.models().session().deleteByUserId(user.id);
 			await this.models().application().deleteByUserId(user.id);
-			await this.models().token().deleteByValue(user.id, token, TokenPurpose.PasswordReset);
 		}, 'UserModel::resetPassword');
 
 		// Anyone can block logins to an account by sending wrong passwords, and the reset link proves at least as much as

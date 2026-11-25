@@ -5,7 +5,7 @@ const { GeolocationReact } = require('../geolocation-react.js');
 import RNFetchBlob from 'rn-fetch-blob';
 import { randomBytes } from 'react-native-quick-crypto';
 import FsDriverRN from '../fs-driver/fs-driver-rn';
-import { Linking, Platform } from 'react-native';
+import { AppState, Linking, Platform } from 'react-native';
 import crypto from '../../services/e2ee/crypto';
 import { reloadAppAsync } from 'expo';
 
@@ -186,6 +186,18 @@ export default function shimInit() {
 
 	shim.restartApp = () => {
 		void reloadAppAsync();
+	};
+
+	shim.waitForFrame = () => {
+		// Animation frames do not fire while the app is in the background.
+		if (AppState.currentState !== 'active') {
+			return Promise.resolve(Date.now());
+		}
+		return new Promise<number>((resolve) => {
+			requestAnimationFrame(() => {
+				resolve(Date.now());
+			});
+		});
 	};
 
 	shimInitShared();

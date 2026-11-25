@@ -42,3 +42,5 @@ export function getIsMFAEnabled(user: User) {
 	if (!('totp_secret' in user)) throw new Error('Missing totp_secret property');
 	return user.totp_secret.length > 0;
 }
+
+export const mfaPromptMessage = 'Protect your account with multi-factor authentication (MFA): even if someone gets your password, they won’t be able to sign in.';

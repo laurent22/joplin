@@ -15,6 +15,7 @@ const replaceBackslashEscapes = makeInlineReplaceExtension({
 		// We only want to hide the backslash, not the escaped character.
 		return [node.from, node.from + 1];
 	},
+	getSelectionOwner: node => node,
 });
 
 export default replaceBackslashEscapes;
