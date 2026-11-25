@@ -142,14 +142,16 @@ In this case, [make sure you enter the correct WebDAV URL](https://github.com/la
 
 ## Why is my app showing an "invalid public-private key pair" banner?
 
-This indicates either:
+This could mean that:
 - The sync target state is corrupted. For example, after a partial/incomplete master password change.
-- An attacker has access to your account (e.g. via stolen username/password) and is trying to intercept a share invitation.
+- Different Joplin apps have different encryption passwords.
+- Someone has access to your account and is trying to read a share invitation.
 
-Suggested resolution steps:
+To fix this:
 1. If you recently changed your master password on another device, enter the new password on this device first. If the banner then goes away, no further steps are needed.
 2. Change your account password. For Joplin Server/Cloud, this can be done from the [profile screen](https://joplincloud.com/help#how-can-i-change-my-account-details).
 3. Regenerate the key pair. This can be done from Settings > Encryption.
+4. Sync each of your devices. If the encryption password is shown as invalid on any of the devices, enter the correct password.
 
 ## How can I publish notes with end-to-end encryption turned on?
 
