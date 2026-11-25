@@ -57,7 +57,7 @@ import { RefObject, useContext } from 'react';
 import { getNoteCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import { AppState } from '../../../utils/types';
 import restoreItems from '@joplin/lib/services/trash/restoreItems';
-import { getDisplayParentTitle } from '@joplin/lib/services/trash';
+import { getDisplayParentId, getDisplayParentTitle } from '@joplin/lib/services/trash';
 import { PluginHtmlContents, PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import debounce from '../../../utils/debounce';
 import { blur, focus } from '@joplin/lib/utils/focusHandler';
@@ -1504,7 +1504,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 
 	private revealInNotebook_onPress() {
-		const folderId = this.state.folder?.id;
+		const note = this.state.note;
+		const folderId = note.is_conflict && !note.deleted_time ? Folder.conflictFolderId() : getDisplayParentId(note, this.state.folder);
 		if (folderId) {
 			void NavService.go('Notes', { folderId: folderId });
 		} else {
