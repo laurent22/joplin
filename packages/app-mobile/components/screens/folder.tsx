@@ -96,8 +96,11 @@ class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 	}
 
 	private emoji_changeText(text: string) {
-		const selectedEmoji = lastEmoji(text);
+		const currentIcon = Folder.unserializeIcon(this.state.folder.icon);
+		const currentEmoji = currentIcon?.type === FolderIconType.Emoji ? currentIcon.emoji : '';
+		const selectedEmoji = lastEmoji(text, currentEmoji);
 		if (text && !selectedEmoji) return;
+		if (currentEmoji && selectedEmoji === currentEmoji) return;
 		this.icon_change(selectedEmoji ? Folder.serializeIcon({ type: FolderIconType.Emoji, emoji: selectedEmoji, name: '', dataUrl: '' }) : '');
 	}
 
