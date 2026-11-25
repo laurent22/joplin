@@ -7,6 +7,7 @@ import { createNanoForInboxEmail } from '@joplin/lib/uuid';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { resourceBlobPath } from '../utils/joplinUtils';
 import StorageDriverDatabase from './items/storage/StorageDriverDatabase';
+import Logger, { LogLevel } from '@joplin/utils/Logger';
 
 // Goes through the process of:
 // 1. Creating two users/sessions
@@ -578,6 +579,35 @@ describe('ShareModel', () => {
 			expect(changes.filter(c => c.item_id === newest.id && c.type !== ChangeType.Delete).length).toBe(1);
 			expect(changes.filter(c => c.item_id === oldest.id)).toEqual([]);
 		}
+	});
+
+	test('should leave a shared item alone when the user owns another item with the same name outside the share', async () => {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+		const noteId = '00000000000000000000000000000001';
+		const name = `${noteId}.md`;
+
+		const { share } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
+			{ id: '000000000000000000000000000000F1', children: [] },
+		]);
+		const ownItem = await createNote(session1.id, { id: noteId });
+		const sharedItem = await models().item().saveForUser(user2.id, {
+			name,
+			jop_id: noteId,
+			jop_type: ModelType.Note,
+			jop_parent_id: '000000000000000000000000000000F1',
+			jop_share_id: share.id,
+			content: Buffer.from('different content'),
+			content_size: 17,
+		});
+
+		const log = jest.spyOn(Logger.prototype, 'log');
+		await models().share().updateSharedItems3();
+		expect(log.mock.calls.filter(c => c[0] === LogLevel.Warn)).toEqual([]);
+		log.mockRestore();
+
+		expect((await models().item().loadByNames(user1.id, [name])).map(i => i.id)).toEqual([ownItem.id]);
+		expect((await models().item().loadByNames(user2.id, [name])).map(i => i.id)).toEqual([sharedItem.id]);
 	});
 
 	test.each([true, false])('should keep the file of an attachment from the same copy as its metadata (both have metadata: %s)', async (bothHaveMetadata) => {
