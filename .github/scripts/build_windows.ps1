@@ -47,12 +47,14 @@ function Build-WindowsApp {
 	Install-WindowsDeps
 
 	if ($env:PROCESSOR_ARCHITECTURE -eq 'ARM64') {
-		# NSIS gets an `-arm64` suffix on its own, but the portable name is fixed
-		# and the update metadata is `latest.yml` for every Windows arch. Both
-		# would clobber the x64 runner's artifacts.
+		# Without explicit names, the installer, portable app and update metadata
+		# all get the same names as the x64 runner's artifacts and overwrite them
+		# on the release. NSIS only adds an arch suffix when
+		# buildUniversalInstaller is false.
 		# https://github.com/electron-userland/electron-builder/issues/6372
 		$archArgs = @(
 			'--arm64'
+			'-c.nsis.artifactName=${productName}-Setup-${version}-arm64.${ext}'
 			'-c.portable.artifactName=${productName}Portable-arm64.${ext}'
 			'-c.publish.provider=github'
 			'-c.publish.channel=latest-win-arm64'
