@@ -1,6 +1,6 @@
 # Joplin iOS Changelog
 
-## [ios-v13.7.7](https://github.com/laurent22/joplin/releases/tag/ios-v13.7.7) - 2026-11-19T15:54:42Z
+## [ios-v13.7.8](https://github.com/laurent22/joplin/releases/tag/ios-v13.7.8) - 2026-11-20T09:11:46Z
 
 - Improved: Create the application authorisation ID in one place (79d954a)
 - Improved: Prioritize local changes to sync info over values with unchanged far-future remote timestamps (2624b35 by Henry Heino)

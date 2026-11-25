@@ -613,6 +613,19 @@ describe('UserModel', () => {
 		expect(await models().token().isValid(user.id, token, TokenPurpose.PasswordReset)).toBe(false);
 	});
 
+	test('should accept a reset token only once when it is used concurrently', async () => {
+		const user = await models().user().save({ email: 'test@example.com', password: '111111' });
+		const ctx = await koaAppContext();
+		const token = await models().token().generate(user.id, TokenPurpose.PasswordReset);
+		const passwords = Array.from({ length: 10 }, (_, index) => `password-${index}`);
+
+		const results = await Promise.allSettled(passwords.map(password => models().user().resetPassword(token, { password, password2: password })));
+
+		const successIndexes = results.flatMap((result, index) => result.status === 'fulfilled' ? [index] : []);
+		expect(successIndexes.length).toBe(1);
+		expect(await models().user().login('test@example.com', passwords[successIndexes[0]], ctx.joplin.services)).toBeTruthy();
+	});
+
 	test('should reject a password that is too long before checking its strength', async () => {
 		const user = await models().user().save({ email: 'test@example.com', password: '111111' });
 		const token = await models().token().generate(user.id, TokenPurpose.PasswordReset);

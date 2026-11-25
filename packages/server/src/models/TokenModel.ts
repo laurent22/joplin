@@ -63,7 +63,7 @@ export default class TokenModel extends BaseModel<Token> {
 		const token = await this.byToken(tokenValue);
 		if (!token) throw new ErrorNotFound(`No such token: ${tokenValue}`);
 		if (token.purpose !== purpose) throw new ErrorNotFound(`No such token: ${tokenValue}`);
-		const user = this.models().user().load(token.user_id);
+		const user = await this.models().user().load(token.user_id);
 		if (!user) throw new ErrorNotFound('No user associated with this token');
 		return user;
 	}
@@ -78,9 +78,15 @@ export default class TokenModel extends BaseModel<Token> {
 		await this.db(this.tableName).where('created_time', '<', cutOffDate).delete();
 	}
 
+	// A single conditional delete, so that when concurrent requests use the same token only one of them gets `true`
 	public async deleteByValue(userId: Uuid, value: string, purpose: TokenPurpose) {
-		const token = await this.byUser(userId, value, purpose);
-		if (token) await this.delete(token.id);
+		const deletedCount = await this
+			.db(this.tableName)
+			.where('user_id', '=', userId)
+			.where('value', '=', value)
+			.where('purpose', '=', purpose)
+			.delete();
+		return deletedCount > 0;
 	}
 
 	public async deleteByUserAndPurpose(userId: Uuid, purpose: TokenPurpose) {

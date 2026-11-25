@@ -157,6 +157,9 @@
 
 		let checkoutSessionUser = null;
 
+		// Shared by all plans, so that only one checkout session is created at a time
+		let pendingCheckoutButton = null;
+
 		// Temporary setup to allow Beta users to start their subscription.
 		function setupBetaHandling(query) {
 			let accountType = Number(query.get('account_type'));
@@ -196,7 +199,11 @@
 			}).then(async function(result) {
 				if (!result.ok) {
 					console.error('Could not create Stripe checkout session', await result.text());
-					alert('The checkout session could not be created. Please contact us on the forum for support.');
+					if (result.status === 429) {
+						alert('Too many checkout attempts. Please wait up to an hour and try again.');
+					} else {
+						alert('The checkout session could not be created. Please contact us on the forum for support.');
+					}
 				} else {
 					return result.json();
 				}

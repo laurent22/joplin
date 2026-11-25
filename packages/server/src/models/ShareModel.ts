@@ -437,15 +437,19 @@ export default class ShareModel extends BaseModel<Share> {
 					}
 
 					if (row.item_count < realShareItemCount) {
-						logger.warn(`checkForMissingUserItems: User is missing some items: Share ${share.id}: User ${row.user_id}: Has ${row.item_count} of ${realShareItemCount} items (share owner: ${share.owner_id})`);
-						await this.createSharedFolderUserItems(share.id, row.user_id);
+						logger.info(`checkForMissingUserItems: User is missing some items: Share ${share.id}: User ${row.user_id}: Has ${row.item_count} of ${realShareItemCount} items (share owner: ${share.owner_id})`);
+						const nameTakenItemIds = await this.createSharedFolderUserItems(share.id, row.user_id);
 
 						// If the count doesn't move, the repair is a no-op and the next run will
 						// log exactly the same warning. Record it so we can tell a stuck share
 						// apart from one that is simply being repaired.
 						const newCount = await this.itemCountByUserAndShareId(share.id, row.user_id);
 						if (newCount === row.item_count) {
-							logger.warn(`checkForMissingUserItems: Repair had no effect: Share ${share.id}: User ${row.user_id}: Still has ${newCount} of ${realShareItemCount} items`);
+							// Items refused because the user owns another item with the same name stay missing on purpose. They
+							// can't be resolved here, as that would mean modifying an item outside the share.
+							if (newCount + nameTakenItemIds.length < realShareItemCount) {
+								logger.warn(`checkForMissingUserItems: Repair had no effect: Share ${share.id}: User ${row.user_id}: Still has ${newCount} of ${realShareItemCount} items`);
+							}
 							sharesWithFailedRepair.set(share.id, share);
 						}
 					} else if (row.item_count > realShareItemCount) {
@@ -704,7 +708,7 @@ export default class ShareModel extends BaseModel<Share> {
 	// errors, but re-assigning all items to a user.
 	public async createSharedFolderUserItems(shareId: Uuid, userId: Uuid) {
 		const query = this.models().item().byShareIdQuery(shareId, { fields: ['id', 'name', 'owner_id'] });
-		await this.models().userItem().addMulti(
+		return this.models().userItem().addMulti(
 			// Don't throw if a (user_id, item_id) pair already exists to avoid race conditions.
 			userId, query, { ignoreAlreadyExists: true },
 		);
