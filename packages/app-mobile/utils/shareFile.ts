@@ -25,7 +25,7 @@ const shareFile = async (path: string, mime: string) => {
 		await Share.open({
 			type: mime,
 			filename: basename(path),
-			url: `file://${path}`,
+			url: `file://${path.split('/').map(encodeURIComponent).join('/')}`,
 			failOnCancel: false,
 		});
 	}
