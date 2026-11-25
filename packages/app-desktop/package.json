@@ -1,6 +1,6 @@
 {
   "name": "@joplin/app-desktop",
-  "version": "3.8.3",
+  "version": "3.8.4",
   "installConfig": {
     "hoistingLimits": "workspaces"
   },
@@ -63,22 +63,8 @@
       },
       "icon": "../../Assets/ImageSources/Joplin.ico",
       "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64",
-            "ia32",
-            "arm64"
-          ]
-        },
-        {
-          "target": "portable",
-          "arch": [
-            "x64",
-            "ia32",
-            "arm64"
-          ]
-        }
+        "nsis",
+        "portable"
       ],
       "extraFiles": [
         {
