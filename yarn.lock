@@ -12654,6 +12654,7 @@ __metadata:
     expo-camera: "npm:57.0.5"
     expo-image-manipulator: "npm:57.0.17"
     expo-local-authentication: "npm:57.0.3"
+    expo-print: "npm:57.0.2"
     expo-sqlite: "npm:57.0.3"
     fast-deep-equal: "npm:3.1.3"
     fs-extra: "npm:11.4.0"
@@ -30377,6 +30378,16 @@ __metadata:
   peerDependencies:
     react-native: "*"
   checksum: 10/555391fdc94aa3ff225ba05564e3fea727c695ddf06239480ca0e4038c7614e153dcfc5caf76512c6a53ed5417183735ae3e0d4bf9c09d6c5f9772e8825d92e5
+  languageName: node
+  linkType: hard
+
+"expo-print@npm:57.0.2":
+  version: 57.0.2
+  resolution: "expo-print@npm:57.0.2"
+  peerDependencies:
+    expo: "*"
+    react-native: "*"
+  checksum: 10/c9cd2e2847a5a123c9105f865b822b6f5b26a45b5fd337a84fbfd23c269e22f3303b2e3f9ff2e0473047dd7e363d32b20a1c8feb708b63157f31727f490a409d
   languageName: node
   linkType: hard
 

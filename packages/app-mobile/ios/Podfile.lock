@@ -77,6 +77,8 @@ PODS:
   - ExpoModulesWorklets (57.0.18):
     - ExpoModulesCore
     - ExpoModulesJSI
+  - ExpoPrint (57.0.2):
+    - ExpoModulesCore
   - ExpoSQLite (57.0.3):
     - ExpoModulesCore
   - FBLazyVector (0.86.3)
@@ -2419,6 +2421,7 @@ DEPENDENCIES:
   - ExpoModulesCore (from `../node_modules/expo-modules-core/ExpoModulesCore.podspec`)
   - ExpoModulesJSI (from `../node_modules/expo-modules-jsi/apple`)
   - ExpoModulesWorklets (from `../node_modules/expo-modules-core/ExpoModulesWorklets.podspec`)
+  - ExpoPrint (from `../node_modules/expo-print/ios`)
   - ExpoSQLite (from `../node_modules/expo-sqlite/ios`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
@@ -2565,6 +2568,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-modules-jsi/apple"
   ExpoModulesWorklets:
     :podspec: "../node_modules/expo-modules-core/ExpoModulesWorklets.podspec"
+  ExpoPrint:
+    :path: "../node_modules/expo-print/ios"
   ExpoSQLite:
     :path: "../node_modules/expo-sqlite/ios"
   FBLazyVector:
@@ -2801,6 +2806,7 @@ SPEC CHECKSUMS:
   ExpoModulesCore: 2cefa883a2f197f156c3f2ab2ea6e400af6381ed
   ExpoModulesJSI: 9df8e7c9719f59e8c001ec33611774137fc1484a
   ExpoModulesWorklets: 986cf72c18400743869b4642d243115f831e404d
+  ExpoPrint: a1c6a604252630d9be5ce94ebb5d1df0f2c25fc4
   ExpoSQLite: 72e6ada0504a27cd043eb1bf172db70485a761b6
   FBLazyVector: 2138c6c2ab66c31bf5754dc18097fbc498a49c7f
   hermes-engine: 63c5db7d529c36335fada6582fd293ae2a105d77

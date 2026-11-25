@@ -176,7 +176,7 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 
 		// Allows editor content to be left-aligned with the toolbar.
 		// See https://github.com/laurent22/joplin/issues/11279
-		[`${editorNoGuttersSelector} .cm-line`]: {
+		[`${editorNoGuttersSelector} .cm-line:not(.cm-blockQuote)`]: {
 			// Note: This cannot be zero:
 			paddingLeft: `${linePaddingLeft}px`,
 		},
