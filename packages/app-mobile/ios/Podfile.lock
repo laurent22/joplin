@@ -1561,7 +1561,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - react-native-alarm-notification (3.7.0):
+  - react-native-alarm-notification (3.8.0):
     - React
   - react-native-document-picker (12.0.2):
     - hermes-engine
@@ -1697,7 +1697,7 @@ PODS:
     - Yoga
   - react-native-rsa-native (2.0.5):
     - React
-  - react-native-saf-x (3.7.4):
+  - react-native-saf-x (3.8.0):
     - React-Core
   - react-native-safe-area-context (5.8.1):
     - hermes-engine
@@ -2380,7 +2380,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - WhisperVoiceTyping (3.7.0):
+  - WhisperVoiceTyping (3.8.0):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2421,7 +2421,7 @@ DEPENDENCIES:
   - ExpoModulesCore (from `../node_modules/expo-modules-core/ExpoModulesCore.podspec`)
   - ExpoModulesJSI (from `../node_modules/expo-modules-jsi/apple`)
   - ExpoModulesWorklets (from `../node_modules/expo-modules-core/ExpoModulesWorklets.podspec`)
-  - ExpoPrint (from `../node_modules/expo-print/ios`)
+  - ExpoPrint (from `../node_modules/expo-print/ios/ExpoPrint.podspec`)
   - ExpoSQLite (from `../node_modules/expo-sqlite/ios`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
@@ -2569,7 +2569,7 @@ EXTERNAL SOURCES:
   ExpoModulesWorklets:
     :podspec: "../node_modules/expo-modules-core/ExpoModulesWorklets.podspec"
   ExpoPrint:
-    :path: "../node_modules/expo-print/ios"
+    :podspec: "../node_modules/expo-print/ios/ExpoPrint.podspec"
   ExpoSQLite:
     :path: "../node_modules/expo-sqlite/ios"
   FBLazyVector:
@@ -2806,7 +2806,7 @@ SPEC CHECKSUMS:
   ExpoModulesCore: 2cefa883a2f197f156c3f2ab2ea6e400af6381ed
   ExpoModulesJSI: 9df8e7c9719f59e8c001ec33611774137fc1484a
   ExpoModulesWorklets: 986cf72c18400743869b4642d243115f831e404d
-  ExpoPrint: a1c6a604252630d9be5ce94ebb5d1df0f2c25fc4
+  ExpoPrint: 460476a4b6291114e4d515e8df4c0225b92161b0
   ExpoSQLite: 72e6ada0504a27cd043eb1bf172db70485a761b6
   FBLazyVector: 2138c6c2ab66c31bf5754dc18097fbc498a49c7f
   hermes-engine: 63c5db7d529c36335fada6582fd293ae2a105d77
@@ -2852,7 +2852,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 3c805ea54675b00ef1755f23b3c1fccf34962b93
   React-microtasksnativemodule: 97a771dbbb4315c71579995b53e4e3e351a99d89
   React-mutationobservernativemodule: 530bff1bba9511a5133e3cf8170e3b2c0df49e89
-  react-native-alarm-notification: 5236274a333fd40a14c3faafd8984edfc1b6ec62
+  react-native-alarm-notification: 1f83549cc095814ad50788eb1991f96998ea61e1
   react-native-document-picker: c3a7536f3ee52525b4714c3720537f941d0cb094
   react-native-geolocation: c41d1ad8e832fa800b4e457c721e348bcc5aa147
   react-native-get-random-values: 68792987aef40e8aa72dc448d97e009d1f440c88
@@ -2860,7 +2860,7 @@ SPEC CHECKSUMS:
   react-native-netinfo: 2f906d5d9a639090ed1c079135d6485a95f749f1
   react-native-quick-base64: 5c829c9016276132ac03c4d598c8d256b964e6ac
   react-native-rsa-native: a7931cdda1f73a8576a46d7f431378c5550f0c38
-  react-native-saf-x: f9defabc2694d54e22e023d5ab8907ae59e1b3df
+  react-native-saf-x: 9f0735be5e61d6f1115da3c7c4ba15a81656c62f
   react-native-safe-area-context: c4a6d0fbf9c77ee28dab7e4d4c369df7753f20d4
   react-native-vector-icons: 13bc49b91bc93d9a56f400d647cf3f368ccb1e36
   react-native-vector-icons-fontawesome5: 8fc01ef47557fd76959033bf2ba7e0258b9ff853
@@ -2915,7 +2915,7 @@ SPEC CHECKSUMS:
   RNQuickAction: c2c8f379e614428be0babe4d53a575739667744d
   RNShare: 7344a3a7d4e5df58c356ad0f79e4a3ef1325c635
   RNSVG: 6cae8d4082913be2eb43eaec2a456222c42195ed
-  WhisperVoiceTyping: c2142b4f0e5b39dee45a630298730ee794bec683
+  WhisperVoiceTyping: 57c6fed38d7655207c6865a5b04386313fbe1d2c
   Yoga: 18b74b3ade30bebc1904004dfaceae1dd02a330a
 
 PODFILE CHECKSUM: e0b9c6f6993877e1bbef91ed08839c62178d0fa5
