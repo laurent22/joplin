@@ -255,7 +255,7 @@ export const postHandlers: PostHandlers = {
 		// can create the right account, either Basic or Pro.
 		await ctx.joplin.models.keyValue().setValue(`stripeSessionToPriceId::${session.id}`, priceId);
 
-		return { sessionId: session.id };
+		return { sessionId: session.id, url: session.url };
 	},
 
 	webhook: async (stripe: Stripe, _path: SubPath, ctx: AppContext, event: Stripe.Event = null, logErrors = true) => {
