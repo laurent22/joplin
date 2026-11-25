@@ -277,19 +277,22 @@ export interface PlaintextUploadHeldBackCauses {
 	shareRootTitle: string;
 }
 
-export const loadPlaintextUploadHeldBackCauses = async (syncTargetId: number, shares: StateShare[], itemIds: string[]): Promise<PlaintextUploadHeldBackCauses> => {
+export const loadPlaintextUploadHeldBackCauses = async (syncTargetId: number, shares: StateShare[], itemIds: string[]) => {
+	if (!itemIds.length) return { itemIds, causes: { published: false, unencryptedShare: false, shareRootTitle: '' } };
 	const ids = new Set(itemIds);
 	const groups = (await loadPlaintextUploadHeldBackItemGroups(syncTargetId, shares))
 		.filter(group => group.reason !== PlaintextUploadReason.None && group.items.some(item => ids.has(item.id)));
+	const confirmIds = new Set(groups.flatMap(group => group.items.map(item => item.id)));
 	const shareGroups = groups.filter(group => group.reason !== PlaintextUploadReason.Published);
 	const shareIds = new Set(shareGroups.map(group => group.shareId));
 	const share = shareIds.size === 1 ? shares.find(s => s.id === [...shareIds][0]) : null;
 	const root = share?.folder_id ? await Folder.load(share.folder_id, { fields: ['id', 'title', 'encryption_applied'] }) : null;
-	return {
+	const causes: PlaintextUploadHeldBackCauses = {
 		published: groups.length > shareGroups.length,
 		unencryptedShare: shareGroups.length > 0,
 		shareRootTitle: root && !root.encryption_applied ? root.title : '',
 	};
+	return { itemIds: itemIds.filter(id => confirmIds.has(id)), causes };
 };
 
 const allowUnencryptedUploadsMessage = (causes: PlaintextUploadHeldBackCauses) => {
@@ -322,11 +325,18 @@ export const onAllowUnencryptedUploads = async (causes: PlaintextUploadHeldBackC
 	}
 };
 
+const keepHeldBackChangesMessage = (causes: PlaintextUploadHeldBackCauses) => {
+	if (causes.published && causes.unencryptedShare) {
+		return _('Changes to published notes, and to notebooks shared without end-to-end encryption, will stay on this device, so other people won\'t see them. To upload them, enable "Allow unencrypted uploads when end-to-end encryption is on" in Settings > Synchronisation.');
+	}
+	if (causes.unencryptedShare) {
+		return _('These changes, and later changes to the same notes, will stay on this device. Other people in the shared notebook won\'t see them. To upload them, enable "Allow unencrypted uploads when end-to-end encryption is on" in Settings > Synchronisation.');
+	}
+	return _('These changes, and later changes to the same notes, will stay on this device. To upload them, enable "Allow unencrypted uploads when end-to-end encryption is on" in Settings > Synchronisation.');
+};
+
 export const onKeepHeldBackChanges = async (itemIds: string[], causes: PlaintextUploadHeldBackCauses, dispatch: Dispatch) => {
-	if (await shim.showConfirmationDialog(causes.unencryptedShare && !causes.published
-		? _('These changes, and later changes to the same notes, will stay on this device. Other people in the shared notebook won\'t see them. To upload them, enable "Allow unencrypted uploads when end-to-end encryption is on" in Settings > Synchronisation.')
-		: _('These changes, and later changes to the same notes, will stay on this device. To upload them, enable "Allow unencrypted uploads when end-to-end encryption is on" in Settings > Synchronisation.'),
-	)) {
+	if (await shim.showConfirmationDialog(keepHeldBackChangesMessage(causes))) {
 		await BaseItem.ignorePlaintextUploadHeldBackItems(Setting.value('sync.target'), itemIds);
 		await checkDisabledSyncItemsNotification(dispatch);
 	}
