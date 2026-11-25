@@ -13,19 +13,16 @@ const mockQuickCryptoBinaryLikeToArrayBuffer = jest.fn();
 const mockQuickCryptoAb2str = jest.fn();
 
 const mockRnfs = {
+	appendFile: mockRnfsAppendFile,
 	exists: jest.fn(),
-	unlink: jest.fn(),
 	moveFile: jest.fn(),
+	read: mockRnfsRead,
+	unlink: jest.fn(),
 };
 
 jest.mock('rn-fetch-blob', () => ({
 	__esModule: true,
 	default: { fs: { appendFile: mockRnFetchBlobAppendFile } },
-}));
-
-jest.mock('@dr.pogodin/react-native-fs', () => ({
-	appendFile: mockRnfsAppendFile,
-	read: mockRnfsRead,
 }));
 
 jest.mock('react-native-quick-crypto', () => ({
