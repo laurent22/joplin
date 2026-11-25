@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 import { _ } from '@joplin/lib/locale';
 import { themeStyle } from '../global-style';
 import { AppState } from '../../utils/types';
-import { generateApplicationConfirmUrl, reducer, checkIfLoginWasSuccessful, saveApplicationAuthId, defaultState, createApplicationAuthId } from '@joplin/lib/services/joplinCloudUtils';
+import { generateApplicationConfirmUrl, reducer, checkIfLoginWasSuccessful, saveApplicationAuthId, defaultState } from '@joplin/lib/services/joplinCloudUtils';
+import { uuidgen } from '@joplin/lib/uuid';
 import { Button } from 'react-native-paper';
 import createRootStyle from '../../utils/createRootStyle';
 import ScreenHeader from '../ScreenHeader';
@@ -78,7 +79,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 	const [intervalIdentifier, setIntervalIdentifier] = React.useState(undefined);
 	const [state, dispatch] = React.useReducer(reducer, defaultState);
 
-	const applicationAuthId = React.useMemo(() => createApplicationAuthId(), []);
+	const applicationAuthId = React.useMemo(() => uuidgen(), []);
 
 	const styles = useStyle(props.themeId);
 

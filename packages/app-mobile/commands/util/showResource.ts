@@ -7,6 +7,7 @@ import makeSandboxedIframe from '@joplin/lib/utils/dom/makeSandboxedIframe';
 import Logger from '@joplin/utils/Logger';
 import FileViewer from 'react-native-file-viewer';
 import shareFile from '../../utils/shareFile';
+import { hasOwnProperty } from '@joplin/utils/object';
 
 enum DisplayType {
 	Download = 'download',
@@ -36,6 +37,9 @@ const openWebPreviewWindow = async (file: File, item: ResourceEntity, displayTyp
 	const previewWindow = window.open('about:blank', '_blank');
 	if (!previewWindow) {
 		throw new Error(_('Failed to open preview window'));
+	}
+	if (!hasOwnProperty(item, 'filename')) {
+		item = await Resource.load(item.id, { fields: ['id', 'filename'] });
 	}
 
 	const fileDisplayName = item.filename.trim() || file.name;

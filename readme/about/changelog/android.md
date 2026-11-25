@@ -1,5 +1,9 @@
 # Joplin Android Changelog
 
+## [android-v3.7.14](https://github.com/laurent22/joplin/releases/tag/android-v3.7.14) - 2026-11-19T23:05:35Z
+
+- Fixed regression when connecting to Joplin Cloud or Joplin Server.
+
 ## [android-v3.7.13](https://github.com/laurent22/joplin/releases/tag/android-v3.7.13) - 2026-11-19T17:31:20Z
 
 - Improved: Remove unused READ_MEDIA_IMAGES permission (85f43dd)
