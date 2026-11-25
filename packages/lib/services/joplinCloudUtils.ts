@@ -127,6 +127,7 @@ export const checkIfLoginWasSuccessful = async (applicationsUrl: string) => {
 				'X-JOPLIN-CUSTOM-API-KEY': Setting.value('sync.10.apiKey'),
 				'User-Agent': getUserAgent(),
 			},
+			maxRetry: 0,
 		});
 		const jsonBody = await response.json();
 

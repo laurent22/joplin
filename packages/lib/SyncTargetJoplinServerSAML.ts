@@ -37,6 +37,7 @@ export const authenticateWithCode = async (code: string) => {
 	try {
 		const response = await shim.fetch(`${Setting.value('sync.11.path')}/api/login_with_code/${code}`, {
 			headers: { 'User-Agent': getUserAgent() },
+			maxRetry: 0,
 		});
 		if (response.status !== 200) {
 			return false;
@@ -94,6 +95,7 @@ export default class SyncTargetJoplinServerSAML extends SyncTargetJoplinServer {
 			// Simulate a login request
 			const result = await shim.fetch(`${fileApi.path()}/api/saml`, {
 				headers: { 'User-Agent': getUserAgent() },
+				maxRetry: 0,
 			});
 
 			if (result.status === 200) { // The server successfully responded, SAML is enabled

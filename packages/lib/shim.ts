@@ -41,6 +41,7 @@ export interface FetchOptions {
 	body?: string;
 	agent?: unknown;
 	signal?: AbortSignal;
+	maxRetry?: number;
 }
 
 interface AttachFileToNoteOptions {
