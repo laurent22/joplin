@@ -6,6 +6,9 @@
 		{{> errorBanner}}
 		<form action="{{{global.baseUrl}}}/login" method="POST" id="login-form">
 			<input type="hidden" name="applicationAuthId" value="{{applicationAuthId}}"/>
+			<input type="hidden" name="applicationPlatform" value="{{applicationPlatform}}"/>
+			<input type="hidden" name="applicationType" value="{{applicationType}}"/>
+			<input type="hidden" name="applicationVersion" value="{{applicationVersion}}"/>
 			<div class="field">
 				<label class="label">Email</label>
 				<div class="field has-addons">

@@ -1,14 +1,39 @@
 import Resource from '@joplin/lib/models/Resource';
 import { ResourceEntity } from '@joplin/lib/services/database/types';
 import shim from '@joplin/lib/shim';
+import uuid from '@joplin/lib/uuid';
 
 // when refactoring this name, make sure to refactor the `SharePackage.java` (in android) as well
 const DIR_NAME = 'sharedFiles';
+
+let pendingUnlockedShareCleanup: Promise<void> = Promise.resolve();
+
+const waitForUnlockedShareCleanup = async () => {
+	while (true) {
+		const cleanup = pendingUnlockedShareCleanup;
+		try {
+			await cleanup;
+		} catch {
+			// A newer cleanup may already be queued. Otherwise, retry once before sharing.
+			if (cleanup === pendingUnlockedShareCleanup) await clearUnlockedSharedFilesCache();
+			continue;
+		}
+		if (cleanup === pendingUnlockedShareCleanup) return;
+	}
+};
 
 const makeShareCacheDirectory = async () => {
 	const targetDir = `${shim.fsDriver().getCacheDirectoryPath()}/${DIR_NAME}`;
 	await shim.fsDriver().mkdir(targetDir);
 
+	return targetDir;
+};
+
+export const makeIsolatedShareCacheDirectory = async (fromLockedNote = false) => {
+	if (fromLockedNote) await waitForUnlockedShareCleanup();
+	// Keep each share's files separate so they cannot conflict and can be cleaned up independently.
+	const targetDir = `${await makeShareCacheDirectory()}${fromLockedNote ? '/unlocked' : ''}/${uuid.create()}`;
+	await shim.fsDriver().mkdir(targetDir);
 	return targetDir;
 };
 
@@ -37,4 +62,19 @@ export const writeTextToCacheFile = async (text: string, fileName: string): Prom
 // Clear previously shared files from cache
 export async function clearSharedFilesCache(): Promise<void> {
 	return shim.fsDriver().remove(`${shim.fsDriver().getCacheDirectoryPath()}/sharedFiles`);
+}
+
+export function clearUnlockedSharedFilesCache(): Promise<void> {
+	const previousCleanup = pendingUnlockedShareCleanup;
+	const cleanup = (async () => {
+		// An earlier failed cleanup has already been reported by its caller. Still try again.
+		try {
+			await previousCleanup;
+		} catch {
+			// Retry below.
+		}
+		await shim.fsDriver().remove(`${shim.fsDriver().getCacheDirectoryPath()}/${DIR_NAME}/unlocked`);
+	})();
+	pendingUnlockedShareCleanup = cleanup;
+	return cleanup;
 }

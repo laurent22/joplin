@@ -70,10 +70,25 @@ export function changesUrl(): string {
 	return `${config().baseUrl}/changes`;
 }
 
-export function loginUrl(applicationAuthId?: string): string {
+export interface ApplicationClientDetails {
+	platform?: string;
+	type?: string;
+	version?: string;
+}
+
+const addApplicationClientDetails = (searchParams: URLSearchParams, client?: ApplicationClientDetails) => {
+	if (!client) return;
+	if (client.platform) searchParams.append('platform', client.platform);
+	if (client.type) searchParams.append('type', client.type);
+	if (client.version) searchParams.append('version', client.version);
+};
+
+export function loginUrl(applicationAuthId?: string, client?: ApplicationClientDetails): string {
 	const url = `${config().baseUrl}/login`;
 	if (!applicationAuthId) return url;
-	return `${url}?application_auth_id=${applicationAuthId}`;
+	const searchParams = new URLSearchParams({ application_auth_id: applicationAuthId });
+	addApplicationClientDetails(searchParams, client);
+	return `${url}?${searchParams.toString()}`;
 }
 
 export function adminUserDeletionsUrl(): string {
@@ -112,8 +127,12 @@ export function mfaUrl(userId: Uuid) {
 	return `${config().baseUrl}/mfa/${userId}`;
 }
 
-export function applicationsConfirmUrl(applicationAuthId: string) {
-	return `${config().baseUrl}/applications/${applicationAuthId}/confirm`;
+export function applicationsConfirmUrl(applicationAuthId: string, client?: ApplicationClientDetails) {
+	const url = `${config().baseUrl}/applications/${applicationAuthId}/confirm`;
+	const searchParams = new URLSearchParams();
+	addApplicationClientDetails(searchParams, client);
+	const query = searchParams.toString();
+	return query ? `${url}?${query}` : url;
 }
 
 export function recoveryCodesUrl() {
