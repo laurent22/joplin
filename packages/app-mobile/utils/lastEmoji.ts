@@ -3,8 +3,11 @@
 const emojiRegex: typeof import('emoji-regex').default = require('emoji-regex/index.js');
 
 const lastEmoji = (input: string, previousEmoji = ''): string => {
-	const insertedEmoji = previousEmoji ? input.replace(previousEmoji, '').trim().match(emojiRegex())?.pop() : undefined;
-	return insertedEmoji ?? input.trim().match(emojiRegex())?.pop() ?? '';
+	const matches: string[] = input.trim().match(emojiRegex()) ?? [];
+	const fallback = matches[matches.length - 1] ?? '';
+	const previousIndex = matches.indexOf(previousEmoji);
+	if (previousIndex >= 0) matches.splice(previousIndex, 1);
+	return matches[matches.length - 1] ?? fallback;
 };
 
 export default lastEmoji;

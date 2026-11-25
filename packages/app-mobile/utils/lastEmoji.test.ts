@@ -16,6 +16,7 @@ describe('lastEmoji', () => {
 		['😎😀', '😀', '😎'],
 		['😀😎', '😀', '😎'],
 		['😀a', '😀', '😀'],
+		['👩‍💻', '👩', '👩‍💻'],
 		['😎😀🇬🇧', '😀', '🇬🇧'],
 		['text 👩‍💻 🇬🇧', '😀', '🇬🇧'],
 	])('prefers the last newly inserted emoji in %j', (input, previousEmoji, expected) => {
