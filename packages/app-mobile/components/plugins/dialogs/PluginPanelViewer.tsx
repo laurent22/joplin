@@ -9,11 +9,12 @@ import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { connect } from 'react-redux';
 import { AppState } from '../../../utils/types';
 import PluginUserWebView from './PluginUserWebView';
-import { View, StyleSheet, AccessibilityInfo } from 'react-native';
+import { View, StyleSheet, ScrollView, LayoutChangeEvent } from 'react-native';
 import { _ } from '@joplin/lib/locale';
-import Setting from '@joplin/lib/models/Setting';
 import DismissibleDialog, { DialogVariant } from '../../../components/DismissibleDialog';
 import CommandService from '@joplin/lib/services/CommandService';
+import { getSelectedTabScrollOffset, getTabLayout } from './pluginPanelTabLayout';
+import useSelectedTabId from './hooks/useSelectedTabId';
 
 interface Props {
 	themeId: number;
@@ -34,49 +35,27 @@ const styles = StyleSheet.create({
 		flexGrow: 1,
 		flexShrink: 1,
 	},
+	tabSelector: {
+		flexGrow: 0,
+	},
+	tabSelectorContent: {
+		flexGrow: 1,
+	},
+	tabSelectorButtons: {
+		flexGrow: 1,
+		flexShrink: 0,
+	},
+	hiddenTabSelector: {
+		opacity: 0,
+	},
+	uncappedTab: {
+		flexBasis: 'auto',
+		flexShrink: 0,
+	},
+	truncatedTabLabel: {
+		flexShrink: 1,
+	},
 });
-
-type ButtonInfo = {
-	value: string;
-	label: string;
-	icon: string;
-};
-
-const useSelectedTabId = (
-	buttonInfos: ButtonInfo[],
-	viewInfoById: Record<string, ViewInfo>,
-) => {
-	const viewInfoByIdRef = useRef(viewInfoById);
-	viewInfoByIdRef.current = viewInfoById;
-
-	const getDefaultSelectedTabId = useCallback((): string|undefined => {
-		const lastSelectedId = Setting.value('ui.lastSelectedPluginPanel');
-		const lastSelectedInfo = viewInfoByIdRef.current[lastSelectedId];
-		if (lastSelectedId && lastSelectedInfo && lastSelectedInfo.view.opened) {
-			return lastSelectedId;
-		} else {
-			return buttonInfos[0]?.value;
-		}
-	}, [buttonInfos]);
-
-	const [selectedTabId, setSelectedTabId] = useState<string|undefined>(getDefaultSelectedTabId);
-
-	useEffect(() => {
-		if (!selectedTabId || !viewInfoById[selectedTabId]?.view?.opened) {
-			setSelectedTabId(getDefaultSelectedTabId());
-		}
-	}, [selectedTabId, viewInfoById, getDefaultSelectedTabId]);
-
-	useEffect(() => {
-		if (!selectedTabId) return;
-
-		const info = viewInfoByIdRef.current[selectedTabId];
-		Setting.setValue('ui.lastSelectedPluginPanel', selectedTabId);
-		AccessibilityInfo.announceForAccessibility(_('%s tab opened', getTabLabel(info)));
-	}, [selectedTabId]);
-
-	return { setSelectedTabId, selectedTabId };
-};
 
 const emptyCallback = () => {};
 
@@ -103,15 +82,62 @@ const PluginPanelViewer: React.FC<Props> = props => {
 			.filter(([_id, info]) => info.view.containerType === ContainerType.Panel)
 			.filter(([_id, info]) => info.view.opened)
 			.map(([id, info]) => {
+				const label = getTabLabel(info);
 				return {
 					value: id,
-					label: getTabLabel(info),
+					label,
+					accessibilityLabel: label,
 					icon: 'puzzle',
 				};
 			});
 	}, [viewInfoById]);
+	const { selectedTabId, setSelectedTabId } = useSelectedTabId(buttonInfos);
+	const selectorKey = JSON.stringify(buttonInfos.map(info => [info.value, info.label]));
+	const [selectorWidth, setSelectorWidth] = useState(0);
+	const [naturalMeasurement, setNaturalMeasurement] = useState<{ key: string; selectorWidth: number; contentWidth: number }|null>(null);
+	const [positionedKey, setPositionedKey] = useState<string|null>(null);
+	const selectorRef = useRef<ScrollView>(null);
+	const scrollOffsetRef = useRef(0);
+	const measurementReady = naturalMeasurement?.key === selectorKey && naturalMeasurement.selectorWidth === selectorWidth && selectorWidth > 0;
+	const tabLayout = getTabLayout(measurementReady ? naturalMeasurement.contentWidth : 0, selectorWidth, buttonInfos.length);
+	const layoutKey = `${selectorKey}:${selectorWidth}`;
 
-	const { selectedTabId, setSelectedTabId } = useSelectedTabId(buttonInfos, viewInfoById);
+	const onSelectorLayout = useCallback((event: LayoutChangeEvent) => {
+		setSelectorWidth(event.nativeEvent.layout.width);
+	}, []);
+	const onContentSizeChange = useCallback((width: number) => {
+		if (!selectorWidth) return;
+		if (!measurementReady) {
+			setNaturalMeasurement({ key: selectorKey, selectorWidth, contentWidth: width });
+		}
+	}, [selectorWidth, measurementReady, selectorKey]);
+	const onSelectorScroll = useCallback((event: { nativeEvent: { contentOffset: { x: number } } }) => {
+		scrollOffsetRef.current = event.nativeEvent.contentOffset.x;
+	}, []);
+
+	useEffect(() => {
+		scrollOffsetRef.current = 0;
+		setPositionedKey(null);
+	}, [selectorKey]);
+
+	useEffect(() => {
+		if (!props.visible) {
+			scrollOffsetRef.current = 0;
+			setPositionedKey(null);
+			return undefined;
+		}
+		if (!measurementReady || !selectedTabId) return undefined;
+
+		const frame = requestAnimationFrame(() => {
+			const selectedIndex = buttonInfos.findIndex(info => info.value === selectedTabId);
+			if (selectedIndex < 0) return;
+
+			const target = tabLayout.overflow ? getSelectedTabScrollOffset(tabLayout.tabWidth, buttonInfos.length, selectedIndex, selectorWidth, scrollOffsetRef.current) : 0;
+			selectorRef.current?.scrollTo({ x: target, animated: false });
+			setPositionedKey(layoutKey);
+		});
+		return () => cancelAnimationFrame(frame);
+	}, [props.visible, measurementReady, selectedTabId, buttonInfos, tabLayout.overflow, tabLayout.tabWidth, selectorWidth, layoutKey]);
 
 	const viewInfo = viewInfoById[selectedTabId];
 
@@ -148,11 +174,28 @@ const PluginPanelViewer: React.FC<Props> = props => {
 		}
 
 		return (
-			<SegmentedButtons
-				value={selectedTabId}
-				onValueChange={setSelectedTabId}
-				buttons={buttonInfos}
-			/>
+			<ScrollView
+				key={layoutKey}
+				ref={selectorRef}
+				horizontal={true}
+				style={[styles.tabSelector, (!measurementReady || positionedKey !== layoutKey) && styles.hiddenTabSelector]}
+				contentContainerStyle={styles.tabSelectorContent}
+				onLayout={onSelectorLayout}
+				onContentSizeChange={onContentSizeChange}
+				onScroll={onSelectorScroll}
+				scrollEventThrottle={16}
+			>
+				<SegmentedButtons
+					style={styles.tabSelectorButtons}
+					value={selectedTabId}
+					onValueChange={setSelectedTabId}
+					buttons={buttonInfos.map(info => ({
+						...info,
+						style: tabLayout.overflow ? { ...styles.uncappedTab, flexGrow: 0, width: tabLayout.tabWidth } : styles.uncappedTab,
+						labelStyle: styles.truncatedTabLabel,
+					}))}
+				/>
+			</ScrollView>
 		);
 	};
 
