@@ -13,6 +13,7 @@ import type { NoteLockKeyConflict } from '../../services/synchronizer/syncInfoUt
 import { EmptyObject } from '@joplin/utils/types';
 const ObjectUtils = require('../../ObjectUtils');
 import { toTitleCase } from '../../string-utils';
+import isJoplinServerVariant from '../utils/isJoplinServerVariant';
 
 const customCssFilePath = (Setting: typeof SettingType, filename: string): string => {
 	return `${Setting.value('rootProfileDir')}/${filename}`;
@@ -51,6 +52,17 @@ const buildJoplinServerConnectButton = (syncTargetId: number, syncTargetName: st
 };
 
 const addBetaMarker = (text: string) => _('%s (Beta)', text);
+
+// Duplicates how SyncInfo reads e2ee from syncInfoCache (see syncInfoUtils.ts), since importing it here would be circular.
+// `encryption.enabled` is a legacy setting and doesn't reflect whether encryption is actually enabled.
+const getEncryptionEnabled = (settings: { syncInfoCache?: string }) => {
+	if (!settings.syncInfoCache) return false;
+	try {
+		return !!JSON.parse(settings.syncInfoCache).e2ee?.value;
+	} catch {
+		return true;
+	}
+};
 
 export enum CameraDirection {
 	Back,
@@ -182,6 +194,12 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		'sync.startupOperation': {
 			value: SyncStartupOperation.None,
 			type: SettingItemType.Int,
+			public: false,
+		},
+
+		'sync.lastPpkConsistencyCheck': {
+			value: { valid: true, ppk: '' },
+			type: SettingItemType.Object,
 			public: false,
 		},
 
@@ -1642,6 +1660,19 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			type: SettingItemType.Object,
 			public: false,
 		},
+		'encryption.allowUnencryptedUploads': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			storage: SettingStorage.File,
+			section: 'sync',
+			label: () => _('Allow publishing with end-to-end encryption on'),
+			description: () => _('Published notes and their attachments are uploaded without encryption. Also needed to edit notebooks shared by users who don\'t use encryption.'),
+			show: settings => {
+				if (settings['encryption.allowUnencryptedUploads']) return true;
+				return getEncryptionEnabled(settings) && isJoplinServerVariant(settings['sync.target']);
+			},
+		},
 
 		'sync.userId': {
 			value: '',
@@ -2278,6 +2309,22 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		'syncInfoCache': {
 			value: '',
 			type: SettingItemType.String,
+			public: false,
+		},
+
+		'sync.lastLocalSyncInfo': {
+			value: '',
+			type: SettingItemType.String,
+			public: false,
+		},
+		'sync.lastRemoteSyncInfo': {
+			value: '',
+			type: SettingItemType.String,
+			public: false,
+		},
+		'sync.lastRemoteSyncInfo.target': {
+			value: -1,
+			type: SettingItemType.Int,
 			public: false,
 		},
 

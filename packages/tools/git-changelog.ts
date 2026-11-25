@@ -278,11 +278,11 @@ function filterLogs(logs: LogEntry[], platform: Platform) {
 			addIt = false;
 		}
 
-		// Translation updates often comes in format "Translation: Update pt_PT.po"
+		// Translation updates often comes in format "Translation: Update pt_PT.po" or "Translation: Add pt_PT.po"
 		// but that's not useful in a changelog especially since most people
 		// don't know country and language codes. So we catch all these and
 		// bundle them all up in a single "Updated translations" at the end.
-		if (log.message.match(/Translation:\sUpdate\s.*?(\.po|[a-zA-Z][a-zA-Z]|[a-zA-Z][a-zA-Z]_[a-zA-Z][a-zA-Z])/)
+		if (log.message.match(/Translation:\s(Update|Add)\s.*?(\.po|[a-zA-Z][a-zA-Z]|[a-zA-Z][a-zA-Z]_[a-zA-Z][a-zA-Z])/)
 			|| log.message.match(/Update.+\.po/)
 			|| log.message.match(/^All: Update translations/)
 		) {

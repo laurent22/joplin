@@ -13,7 +13,7 @@ const logger = Logger.create('UserItemModel');
 // as a sample.
 const maxLoggedItemIds = 20;
 
-const itemIdSample = (itemIds: Uuid[]) => {
+export const itemIdSample = (itemIds: Uuid[]) => {
 	const sample = itemIds.slice(0, maxLoggedItemIds).join(', ');
 	return itemIds.length > maxLoggedItemIds ? `${sample}, ... (${itemIds.length - maxLoggedItemIds} more)` : sample;
 };
@@ -154,7 +154,7 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		await this.addMulti(userId, [item], options);
 	}
 
-	public async addMulti(userId: Uuid, itemsQuery: Knex.QueryBuilder | Item[], options: UserItemSaveOptions = {}): Promise<void> {
+	public async addMulti(userId: Uuid, itemsQuery: Knex.QueryBuilder | Item[], options: UserItemSaveOptions = {}) {
 		const perfTimer = new PerformanceTimer(logger, 'addMulti');
 
 		perfTimer.push('Main');
@@ -167,7 +167,7 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		if (!items.length) {
 			logger.info(`addMulti: No item to add for user ${userId} (caller passed ${Array.isArray(itemsQuery) ? 'an array' : 'a query'})`);
 			perfTimer.pop();
-			return;
+			return [];
 		}
 
 		logger.info(`addMulti: Adding ${items.length} items for user ${userId}: ${itemIdSample(items.map(i => i.id))}`);
@@ -222,12 +222,14 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		}
 
 		if (nameTakenItemIds.length) {
-			logger.warn(`addMulti: Skipped ${nameTakenItemIds.length} items for user ${userId} because the user already has a different item with the same name: ${itemIdSample(nameTakenItemIds)}`);
+			logger.info(`addMulti: Skipped ${nameTakenItemIds.length} items for user ${userId} because the user already has a different item with the same name: ${itemIdSample(nameTakenItemIds)}`);
 		}
 
 		perfTimer.pop();
 
 		perfTimer.pop();
+
+		return nameTakenItemIds;
 	}
 
 	public async save(_userItem: UserItem, _options: SaveOptions = {}): Promise<UserItem> {

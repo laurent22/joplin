@@ -1,10 +1,11 @@
 import * as React from 'react';
 
 import { describe, it, beforeEach } from '@jest/globals';
-import { act, fireEvent, render, screen, userEvent, waitFor } from '../../../utils/testing/testingLibrary';
+import { act, fireEvent, render, screen, userEvent, waitFor, within } from '../../../utils/testing/testingLibrary';
 
 import NoteScreen from './Note';
-import { setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv, supportDir, synchronizerStart, resourceFetcher, runWithFakeTimers, encryptionService } from '@joplin/lib/testing/test-utils';
+import { deferred, createNoteTestHelpers } from './testUtils';
+import { setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv, supportDir, synchronizerStart, resourceFetcher, runWithFakeTimers, encryptionService, mockMobilePlatform } from '@joplin/lib/testing/test-utils';
 import NoteLockKey from '@joplin/lib/services/noteLock/NoteLockKey';
 import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
 import NoteLockService from '@joplin/lib/services/noteLock/NoteLockService';
@@ -21,10 +22,8 @@ import Folder from '@joplin/lib/models/Folder';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import { ModelType } from '@joplin/lib/BaseModel';
 import ItemChange from '@joplin/lib/models/ItemChange';
-import { getDisplayParentId } from '@joplin/lib/services/trash';
 import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly';
-import { LayoutChangeEvent } from 'react-native';
-import shim from '@joplin/lib/shim';
+import shim, { MobilePlatform } from '@joplin/lib/shim';
 import getWebViewWindowById from '../../../utils/testing/getWebViewWindowById';
 import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
 import Setting from '@joplin/lib/models/Setting';
@@ -34,7 +33,6 @@ import setupGlobalStore from '../../../utils/testing/setupGlobalStore';
 import CommandService from '@joplin/lib/services/CommandService';
 import BackButtonService from '../../../services/BackButtonService';
 import shared from '@joplin/lib/components/shared/note-screen-shared';
-import { DialogContext, DialogControl } from '../../DialogManager';
 import useVisiblePluginEditorViewIds from '@joplin/lib/hooks/plugins/useVisiblePluginEditorViewIds';
 import mockPluginServiceSetup from '../../../utils/testing/mockPluginServiceSetup';
 import createTestPlugin from '@joplin/lib/testing/plugins/createTestPlugin';
@@ -45,6 +43,7 @@ import getShownPluginEditorView from '@joplin/lib/services/plugins/utils/getShow
 import { defaultWindowId } from '@joplin/lib/reducer';
 
 jest.mock('@joplin/lib/hooks/plugins/useVisiblePluginEditorViewIds', () => jest.fn((): string[] => []));
+jest.mock('expo-print', () => ({ printAsync: jest.fn(), printToFileAsync: jest.fn() }));
 
 const mockUseVisiblePluginEditorViewIds = useVisiblePluginEditorViewIds as jest.MockedFunction<typeof useVisiblePluginEditorViewIds>;
 
@@ -54,14 +53,7 @@ interface WrapperProps {
 }
 
 let store: Store<AppState>;
-
-function deferred<T>() {
-	let resolve: (value: T)=> void;
-	const promise = new Promise<T>(resolvePromise => {
-		resolve = resolvePromise;
-	});
-	return { promise, resolve: resolve! };
-}
+const { waitForNoteToMatch, openExistingNote, openNewNote, openNoteActionsMenu } = createNoteTestHelpers(() => store);
 
 const mockNavigation = { state: { } };
 const WrappedNoteScreen: React.FC<WrapperProps> = _props => {
@@ -86,71 +78,6 @@ const getMarkdownEditorControl = async () => {
 		expect(getEditorControl()).toBeTruthy();
 	});
 	return getEditorControl();
-};
-
-const waitForNoteToMatch = async (noteId: string, note: Partial<NoteEntity>) => {
-	await act(() => waitForWithRealTimers(async () => {
-		const loadedNote = await Note.load(noteId);
-		expect(loadedNote).toMatchObject(note);
-	}));
-};
-
-const openExistingNote = async (noteId: string) => {
-	const note = await Note.load(noteId);
-	const displayParentId = getDisplayParentId(note, await Folder.load(note.parent_id));
-
-	store.dispatch({
-		type: 'NOTE_UPDATE_ALL',
-		notes: await Note.previews(displayParentId),
-	});
-
-	store.dispatch({
-		type: 'FOLDER_AND_NOTE_SELECT',
-		id: note.id,
-		folderId: displayParentId,
-	});
-};
-
-const openNewNote = async (noteProperties: NoteEntity) => {
-	const note = await Note.save({
-		parent_id: (await Folder.defaultFolder()).id,
-		...noteProperties,
-	});
-
-	await openExistingNote(note.id);
-	await waitForNoteToMatch(note.id, { parent_id: note.parent_id, title: note.title, body: note.body });
-
-	return note.id;
-};
-
-const openNoteActionsMenu = async () => {
-	// It doesn't seem possible to find the menu trigger with role/label.
-	const actionMenuButton = await screen.findByTestId('screen-header-menu-trigger');
-
-	// react-native-action-menu only shows the menu content after receiving onLayout
-	// events from various components (including a View that wraps the screen).
-	let cursor = actionMenuButton;
-	while (cursor.parent) {
-		if (cursor.props.onLayout) {
-			const mockedEvent = { nativeEvent: { layout: { x: 0, y: 0, width: 120, height: 100 } } };
-			cursor.props.onLayout(mockedEvent as LayoutChangeEvent);
-		}
-		cursor = cursor.parent;
-	}
-
-	// act() rather than waitFor(): waitFor rejects if the timer mode changes while it polls, and
-	// draining the fake timers updates the menu drawer's state.
-	await act(async () => {
-		await runWithFakeTimers(async () => {
-			await userEvent.press(actionMenuButton);
-		});
-	});
-
-	// State can update until the menu content is marked as open (part of the
-	// menu transition).
-	await waitFor(async () => {
-		expect(await screen.findByTestId('menu-content-open')).toBeVisible();
-	});
 };
 
 const setupUnlockedNoteLock = async (password: string) => {
@@ -659,17 +586,26 @@ describe('screens/Note/Note', () => {
 	});
 
 	it('should not tick the to-do checkbox of a locked note inside a share', async () => {
-		const noteId = await openNewNote({ title: 'Locked to-do', body: 'plain', is_todo: 1, is_locked: 1, share_id: 'share-1' });
-		const dialogs: Partial<DialogControl> = { error: jest.fn() };
-		const { unmount } = render(<DialogContext.Provider value={dialogs as DialogControl}><WrappedNoteScreen /></DialogContext.Provider>);
+		// Mock web so that dialogs use React components and not Alert.alert
+		const { reset } = mockMobilePlatform(MobilePlatform.Web);
+		let unmount;
+		try {
+			const noteId = await openNewNote({ title: 'Locked to-do', body: 'plain', is_todo: 1, is_locked: 1, share_id: 'share-1' });
+			({ unmount } = render(<WrappedNoteScreen />));
 
-		fireEvent.press(await screen.findByRole('checkbox'));
+			fireEvent.press(await screen.findByRole('checkbox'));
 
-		await waitFor(() => expect(dialogs.error).toHaveBeenCalledWith(expect.stringMatching(/read-only because it is locked/)));
-		expect(screen.getByRole('checkbox')).not.toBeChecked();
-		expect((await Note.load(noteId)).todo_completed).toBe(0);
+			await waitFor(() => {
+				const dialog = screen.getByTestId('prompt-dialog');
+				expect(within(dialog).getByText(/read-only because it is locked/)).toBeVisible();
+			});
 
-		unmount();
+			expect(screen.getByRole('checkbox')).not.toBeChecked();
+			expect((await Note.load(noteId)).todo_completed).toBe(0);
+		} finally {
+			unmount?.();
+			reset();
+		}
 	});
 
 	it('should hide the move picker for a locked note inside a read-only share', async () => {

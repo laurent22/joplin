@@ -1,0 +1,31 @@
+
+.copyable-code {
+	position: relative;
+
+	background-color: var(--joplin-code-background-color);
+	border: 1px solid var(--joplin-code-border-color);
+	color: var(--joplin-code-color);
+	border-radius: 4px;
+
+	> .content {
+		white-space: pre-wrap;
+		overflow-wrap: break-word;
+		margin: calc(var(--joplin-margin) / 2);
+	}
+
+	> .copy {
+		float: right;
+		border: none;
+		background: none;
+		font-size: 1.4em;
+		border-radius: 4px;
+		opacity: 0.8;
+		margin-top: 3px;
+
+		&:hover, &:active {
+			background-color: var(--joplin-raised-background-color);
+			color: var(--joplin-raised-color);
+			opacity: 1;
+		}
+	}
+}

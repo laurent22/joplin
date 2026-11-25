@@ -9,7 +9,6 @@
 	<uses-permission android:name="android.permission.USE_BIOMETRIC" />
 	<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
 	<!-- expo-audio recording
 		(see https://github.com/expo/expo/blob/51c14bb4b88afa4b8c21ea617b0096349098b098/packages/expo-audio/plugin/src/withAudio.ts#L78) -->
@@ -21,6 +20,12 @@
 	<!-- https://github.com/laurent22/joplin/issues/37 -->
 	<uses-feature android:name="android.hardware.camera" android:required="false" />
 	<uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+
+	<!-- Implied by dependencies: ACCESS_WIFI_STATE (netinfo, rn-fetch-blob) implies wifi, and the ML Kit
+		code scanner's portrait-locked activity implies screen.portrait. Without these, Google Play restricts
+		the app on devices lacking them (Chromebooks, tablets, Android XR). -->
+	<uses-feature android:name="android.hardware.wifi" android:required="false" />
+	<uses-feature android:name="android.hardware.screen.portrait" android:required="false" />
 
 	<!-- Need this block to support viewing files in with Android API 30 -->
 	<!-- https://github.com/vinzscam/react-native-file-viewer/issues/94#issuecomment-767743365 -->

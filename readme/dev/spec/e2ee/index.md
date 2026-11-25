@@ -98,3 +98,12 @@ At this point, both users have a copy of the key and can share notes over E2EE.
 A user can only have one PPK.
 
 PPKs are generated automatically when E2EE is enabled and when the user synchronises. They are then stored in info.json on the sync target. The key is generated during sync because otherwise multiple clients could generate a PPK, and then there would be a conflict to decide which PPK should be kept. By doing it during sync, it ensures that only one PPK is generated because the synchronizer fetches first info.json - and only generates a PPK if none is already present.
+
+## Unencrypted items
+
+Even with E2EE enabled, Joplin currently needs to upload certain items to the sync target unencrypted:
+
+- Published notes, notebooks, and their attachments
+- Items in folders shared without a master key, for example by a user with E2EE disabled
+
+A malicious sync target can mark private items as published or shared, to make a client upload them unencrypted. With E2EE enabled, these uploads are held back unless the per-device setting `encryption.allowUnencryptedUploads` ("Allow publishing with end-to-end encryption on") is enabled.

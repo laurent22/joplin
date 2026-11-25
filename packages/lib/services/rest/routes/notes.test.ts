@@ -245,7 +245,7 @@ describe('routes/notes', () => {
 		expect(metadata).toEqual({ id: note.id, parent_id: '', title: 'locked', deleted_time: 0, type_: ModelType.Note });
 		expect(await api.route(RequestMethod.GET, `notes/${note.id}`, { fields: 'id,body' })).toEqual({ id: note.id, body: lockedNoteBodyPlaceholder, type_: ModelType.Note });
 		expect((await api.route(RequestMethod.GET, `notes/${note.id}`, { fields: 'id,BODY' })).BODY).toBe(lockedNoteBodyPlaceholder);
-		expect((await api.route(RequestMethod.GET, `notes/${note.id}`, { fields: '*' })).body).toBe(lockedNoteBodyPlaceholder);
+		await expect(api.route(RequestMethod.GET, `notes/${note.id}`, { fields: '*' })).rejects.toThrow('Invalid field');
 		await expect(api.route(RequestMethod.GET, `notes/${note.id}/resources`)).rejects.toThrow('locked note');
 
 		const renamed = await api.route(RequestMethod.PUT, `notes/${note.id}`, null, JSON.stringify({ title: 'renamed' }));

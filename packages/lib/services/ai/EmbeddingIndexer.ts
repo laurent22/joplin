@@ -22,10 +22,12 @@ const perfLogger = PerformanceLogger.create();
 // within a few minutes.
 const maintenanceInterval = 3 * Minute;
 
-// Tick cadence while the initial scan is still walking the vault. Aggressive
-// because the user just opted in and expects activity; ticks rarely run
-// back-to-back because the per-tick work caps via `maintenanceRunning_`.
-const initialScanInterval = 30 * Second;
+// Tick cadence while there's a backlog (initial scan, or e.g. a large import). Ticks rarely
+// run back-to-back because the per-tick work caps via `maintenanceRunning_`.
+const catchUpInterval = 30 * Second;
+
+// Keeps the first tick (model load + embedding) from competing with app startup
+const startupDelay = 30 * Second;
 
 // Caps both the per-tick change-feed drain and the backfill top-up.
 const batchSize = 100;
@@ -49,6 +51,7 @@ export default class EmbeddingIndexer {
 	private maintenanceTimer_: ReturnType<typeof shim.setTimeout> = null;
 	private isRunningInBackground_ = false;
 	private maintenanceRunning_ = false;
+	private hasChangeBacklog_ = false;
 	// Notes that threw during this session's initial scan. Skipped for the
 	// remainder of the session so the scan can complete; reset on process
 	// restart so a fix to the underlying issue gets a fresh chance.
@@ -70,11 +73,7 @@ export default class EmbeddingIndexer {
 		this.isRunningInBackground_ = true;
 
 		logger.info('Starting background indexer');
-		// Fire-and-forget the first tick: model load + first embed batch can
-		// be 5-15s and would otherwise block app startup.
-		void this.maintenance();
-
-		this.scheduleNextTick();
+		this.scheduleNextTick(startupDelay);
 	}
 
 	public async stopRunInBackground() {
@@ -85,14 +84,13 @@ export default class EmbeddingIndexer {
 		this.isRunningInBackground_ = false;
 	}
 
-	// Cadence switches between an aggressive initial-scan tempo and a relaxed
+	// Cadence switches between an aggressive catch-up tempo and a relaxed
 	// steady-state tempo. Re-evaluated after each tick so the switch happens
-	// the moment the scan completes, not on the next process restart.
-	private scheduleNextTick() {
+	// the moment the backlog is cleared, not on the next process restart.
+	private scheduleNextTick(delay: number = null) {
 		if (!this.isRunningInBackground_) return;
-		const interval = Setting.value('ai.embedding.initialScanDone')
-			? maintenanceInterval
-			: initialScanInterval;
+		const isCatchingUp = !Setting.value('ai.embedding.initialScanDone') || this.hasChangeBacklog_;
+		const interval = delay ?? (isCatchingUp ? catchUpInterval : maintenanceInterval);
 		this.maintenanceTimer_ = shim.setTimeout(async () => {
 			await this.maintenance();
 			this.scheduleNextTick();
@@ -203,6 +201,7 @@ export default class EmbeddingIndexer {
 	private async processChangeBatch(provider: EmbeddingProvider): Promise<void> {
 		const cursor = Setting.value('ai.embedding.lastProcessedChangeId') as number;
 		const changes = await ItemChange.changesSinceId(cursor, { limit: batchSize });
+		this.hasChangeBacklog_ = changes.length >= batchSize;
 		if (!changes.length) return;
 
 		// Collapse duplicates so a note edited multiple times only gets

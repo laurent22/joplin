@@ -6,12 +6,14 @@ import { MasterKeyEntity } from './types';
 import EncryptionService, { EncryptionMethod } from './EncryptionService';
 import { getActiveMasterKey, getActiveMasterKeyId, localSyncInfo, masterKeyEnabled, saveLocalSyncInfo, setActiveMasterKeyId, setEncryptionEnabled, SyncInfo } from '../synchronizer/syncInfoUtils';
 import JoplinError from '../../JoplinError';
-import { generateKeyPair, pkReencryptPrivateKey, ppkPasswordIsValid, shouldUpdatePpk } from './ppk/ppk';
+import { generateKeyPair, pkReencryptPrivateKey, ppkPasswordIsValid, PublicPrivateKeyPair, shouldUpdatePpk } from './ppk/ppk';
 import KvStore from '../KvStore';
 import Folder from '../../models/Folder';
 import ShareService from '../share/ShareService';
 import { hasOwnProperty } from '@joplin/utils/object';
+import shim from '../../shim';
 import { _ } from '../../locale';
+import { Dispatch } from 'redux';
 
 const logger = Logger.create('e2ee/utils');
 
@@ -67,6 +69,27 @@ export async function toggleAndSetupEncryption(service: EncryptionService, enabl
 	await loadMasterKeysFromSettings(service);
 }
 
+export const disableEncryptionConfirmationMessage = () => _('Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?');
+
+export const resolveE2eeEnabledStateConflict = async (service: EncryptionService, reEnable: boolean, dispatch: Dispatch) => {
+	const syncInfo = localSyncInfo();
+	if (!syncInfo.e2ee) throw new Error('Invalid initial state: E2EE is not enabled locally');
+
+	if (reEnable) {
+		syncInfo.e2ee = true;
+		syncInfo.setKeyTimestamp('e2ee', Date.now());
+		saveLocalSyncInfo(syncInfo);
+	} else {
+		const answer = await shim.showConfirmationDialog(disableEncryptionConfirmationMessage());
+		if (!answer) return;
+
+		logger.info('Disabling encryption...');
+		await setupAndDisableEncryption(service);
+	}
+
+	dispatch({ type: 'MUST_RESOLVE_E2EE_ENABLED_CONFLICT', value: false });
+};
+
 export async function generateMasterKeyAndEnableEncryption(service: EncryptionService, password: string) {
 	let masterKey = await service.generateMasterKey(password);
 	masterKey = await MasterKey.save(masterKey);
@@ -115,6 +138,23 @@ export async function migrateMasterPassword() {
 	}
 }
 
+export const regeneratePpk = async (originalPpk: PublicPrivateKeyPair) => {
+	const password = getMasterPassword();
+	logger.info('Regenerating ppk...');
+
+	// Cache the previous PPK locally. If a share was created with the old public key,
+	// the user should still be able to accept it (even if the old public key
+	// is no longer published).
+	Setting.setValue(
+		'encryption.cachedPpk',
+		{ ppk: originalPpk, timestamp: Date.now() },
+	);
+
+	const syncInfo = localSyncInfo();
+	syncInfo.ppk = await generateKeyPair(EncryptionService.instance(), password);
+	saveLocalSyncInfo(syncInfo);
+};
+
 export const migratePpk = async () => {
 	const syncInfo = localSyncInfo();
 	const ppk = syncInfo.ppk;
@@ -124,17 +164,7 @@ export const migratePpk = async () => {
 	if (!password) return;
 
 	logger.info('Migrating PPK');
-
-	// Cache the previous PPK locally. If a share was created with the old public key,
-	// the user should still be able to accept it (even if the old public key
-	// is no longer published).
-	Setting.setValue(
-		'encryption.cachedPpk',
-		{ ppk, timestamp: Date.now() },
-	);
-
-	syncInfo.ppk = await generateKeyPair(EncryptionService.instance(), password);
-	saveLocalSyncInfo(syncInfo);
+	await regeneratePpk(ppk);
 };
 
 export const isKnownEncryptionMethod = (method: EncryptionMethod|number) => {

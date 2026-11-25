@@ -101,6 +101,7 @@ describe('api/users', () => {
 
 		const results = await getApi<{ items: User[] }>(adminSession.id, 'users');
 		expect(results.items.length).toBe(3);
+		expect(Object.keys(results.items[0]).sort()).toEqual(['account_type', 'created_time', 'email', 'full_name', 'id', 'updated_time']);
 	});
 
 

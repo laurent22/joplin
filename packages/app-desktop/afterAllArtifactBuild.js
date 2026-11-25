@@ -27,14 +27,15 @@ const generateChecksumFile = () => {
 	const checksum = sha512.sha512(appImageContent);
 	const sha512FileName = `${appImageName}.sha512`;
 	const sha512FilePath = path.join(distPath, sha512FileName);
+	// Bare hash, kept for backward compatibility with existing consumers.
 	fs.writeFileSync(sha512FilePath, checksum);
-	return sha512FilePath;
+	const sha512sumFilePath = path.join(distPath, `${appImageName}.sha512sum`);
+	fs.writeFileSync(sha512sumFilePath, `${checksum}  ${appImageName}\n`);
+	return [sha512FilePath, sha512sumFilePath];
 };
 
 const mainHook = () => {
-	const sha512FilePath = generateChecksumFile();
-	const outputFiles = [sha512FilePath].filter(item => item);
-	return outputFiles;
+	return generateChecksumFile() || [];
 };
 
 exports.default = mainHook;

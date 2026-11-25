@@ -1,5 +1,88 @@
 # Joplin Android Changelog
 
+## [android-v3.8.1](https://github.com/laurent22/joplin/releases/tag/android-v3.8.1) - 2026-11-25T12:35:07Z
+
+- New: Add a kill switch for compromised plugins (#17063)
+- New: Add an optional sync button to the editor toolbar (#16268 by [@mrjo118](https://github.com/mrjo118))
+- New: Add support for sharing notes as HTML and PDF, and allow printing them (#17114 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Add bulk lock and unlock for notebooks and selected notes (#16945) (#16882 by [@keshav0479](https://github.com/keshav0479))
+- Improved: Add button to toggle blockquotes in Markdown editor (#16385) (#16066 by [@Rygaa](https://github.com/Rygaa))
+- Improved: Add locked note handling to export and import (#16785) (#16140 by [@keshav0479](https://github.com/keshav0479))
+- Improved: Add note history support for locked notes (#16476) (#16038 by [@keshav0479](https://github.com/keshav0479))
+- Improved: Add note lock UI (#16069) (#16002 by [@keshav0479](https://github.com/keshav0479))
+- Improved: Adjust sidebar appearance (#16389 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Allow cancelling sync during potentially lengthy start and finish steps (#16362 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Allow changing and resetting the note lock password (#16931) (#16926 by [@keshav0479](https://github.com/keshav0479))
+- Improved: Automatically merge non-overlapping note changes on sync conflicts (#16023) (#16020 by Sriram Varun Kumar)
+- Improved: Auto-merge adds a blank line when one side deleted lines the other edited (#16706) (#16690 by Sriram Varun Kumar)
+- Improved: Database: Migrate to expo-sqlite (#16347 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Encrypt plaintext bodies on ungated saves of locked notes (#16131) (#16130 by [@keshav0479](https://github.com/keshav0479))
+- Improved: Extend the logged basic delta report to include the count of items ignored by the sync (#16567 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Handle locked notes inside shared notebooks (#16579) (#16336 by [@keshav0479](https://github.com/keshav0479))
+- Improved: Handle xlink: href in the note link sanitizer (#16616)
+- Improved: Implement redesigned screen header (#16345 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Improve E2EE UI when a key is stored in an unknown format (#16711) (#16710 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Improve performance of file system sync (#16321 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Improve performance of large attachment encryption and decryption on mobile and web (#17059 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Improve search ranking for multi-word queries (#17163)
+- Improved: Joplin Cloud login: Hide "invalid credentials" banner on login screen (#16490 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Keep all the CSS of clipped pages, and compact it in linear time (43edb08)
+- Improved: Label the note list padlock on desktop and match its colour to the title on mobile (#16725) (#16724 by [@keshav0479](https://github.com/keshav0479))
+- Improved: Make plugin panel tabs scrollable and fix the last selected tab not being restored on app start (#17174 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Make the note lock unlock dialog avoid covering the unlock button of the modal with the keyboard (#17126 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Mark wifi and portrait screen hardware features as optional (655f31e)
+- Improved: Migrate locked notes when the sync target uses a different note lock key (#16723) (#16382 by [@keshav0479](https://github.com/keshav0479))
+- Improved: Optimise finding media URLs in HTML (c8cffb7)
+- Improved: Optimise finding the resources and whiteboard of a note (7e7d722)
+- Improved: Prevent scenario which can cause the note list to become blocked and make the app appear unresponsive (#16612 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Refresh note when updated by the sync for editor plugins (#16688 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Support highlighting text in custom colours in the ProseMirror editor, to match TinyMCE behaviour (#16847 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Support syncing conflict notes (#16439 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Turn off editor plugins for locked notes, and return locked notes from the API and CLI with a placeholder body (#16932) (#16927 by [@keshav0479](https://github.com/keshav0479))
+- Improved: Updated packages @react-native-community/datetimepicker (v9), adm-zip (v0.5.18), fs-extra (v11.3.6), tar (v7.5.19), webpack-dev-server (v5.2.6)
+- Fixed: Avoid overriding the text selection colour (#16618) (#16597 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix S3 sync failing in the web app with getReader TypeError on some browsers (#16746) (#15601 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix data share not working after leaving by back button (#16906) (#8099 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix displayed note updated_time is reverted to the remote updated_time upon auto merging a conflict (#16727 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix false attachment conflicts for resources synced without blob_updated_time (#16987) (#16936 by [@b84330808](https://github.com/b84330808))
+- Fixed: Fix issues with modals created via plugins (#16674 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix quadratic conversion time for elements with many children (#16902) (#16895 by [@benbalter](https://github.com/benbalter))
+- Fixed: Fix revision service does not start if the sync on startup fails (#16761) (#16759 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix sync eligible conflicts not being synced, if the conflict is for a note in a share (#16726 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix sync status incorrectly calculated for conflict notes (#16621 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Joplin Cloud login screen: Fix loading indicator is difficult to see in dark mode (#16480 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Mobile: Tag list design should be consistent with the note list (#16386) (#15982 by [@Rygaa](https://github.com/Rygaa))
+- Fixed: Prevent the open side menu gesture when in multi selection mode (#16619) (#15892 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Throttle frame waits to ~5 Hz to improve encryption/decryption performance (#17087) (#17086 by Self Not Found)
+- Fixed: Upgrade CodeMirror View to v6.43.14 (#16835) (#16734 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Upgrade React Native to v0.86, Expo to v57 (#16636) (#16589 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [android-v3.7.14](https://github.com/laurent22/joplin/releases/tag/android-v3.7.14) - 2026-11-19T23:05:35Z
+
+- Fixed regression when connecting to Joplin Cloud or Joplin Server.
+
+## [android-v3.7.13](https://github.com/laurent22/joplin/releases/tag/android-v3.7.13) - 2026-11-19T17:31:20Z
+
+- Improved: Remove unused READ_MEDIA_IMAGES permission (85f43dd)
+
+## [android-v3.7.12](https://github.com/laurent22/joplin/releases/tag/android-v3.7.12) - 2026-11-19T15:30:58Z
+
+- Improved: Create the application authorisation ID in one place (79d954a)
+- Improved: Prioritize local changes to sync info over values with unchanged far-future remote timestamps (2624b35 by Henry Heino)
+- Improved: Sync/E2EE: Avoid propagating share/publish status until an item has decrypted (b6692eb by Henry Heino)
+- Improved: Upgrade app banner shows the wrong minimum app version (#16819) (#16721 by [@Rygaa](https://github.com/Rygaa))
+- Fixed: Fix encoding of generated event handler attributes in note viewer (#16794)
+- Security: Add UI to allow validating public key fingerprints when sharing notebooks (3fd2f2f by Henry Heino)
+- Security: Ask for confirmation before disabling E2EE (f4447dd by Henry Heino)
+- Security: Detect and allow recovering from invalid public-private key pairs (27944cf by Henry Heino)
+- Security: Disable unencrypted uploads by default when E2EE is enabled (cfce373 by Henry Heino)
+- Security: Fix SQL injection in data API (64522e0 by Henry Heino)
+- Security: Harden master key loading, add new encryption method forward compatibility (46c5442 by Henry Heino)
+- Security: Harden server share API response handling (64d513a by Henry Heino)
+- Security: Sync/E2EE: Do not mark items as published based on the list of shares returned by the server (2d1a179 by Henry Heino)
+- Security: Sync/E2EE: Harden marking items as published/shared (3cf1c1a by Henry Heino)
+- Security: Sync: Do not allow a remote item to decrypt/deserialize to an item with a different ID (b61ef1e by Henry Heino)
+
 ## [android-v3.7.11](https://github.com/laurent22/joplin/releases/tag/android-v3.7.11) - 2026-09-25T11:28:40Z
 
 - Fixed: Fix AI configuration test failing on reasoning models (#16594)

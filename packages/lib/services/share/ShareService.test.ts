@@ -1,11 +1,12 @@
+import { newlyPublishedConfirmations } from '../synchronizer/utils/plaintextUploadHeldBackItems';
 import Note from '../../models/Note';
-import { createFolderTree, encryptionService, loadEncryptionMasterKey, msleep, resourceService, setupDatabaseAndSynchronizer, simulateReadOnlyShareEnv, supportDir, switchClient, synchronizerStart } from '../../testing/test-utils';
-import ShareService, { ApiShare } from './ShareService';
+import { createFolderTree, encryptionService, loadEncryptionMasterKey, msleep, resourceService, setupDatabaseAndSynchronizer, simulateReadOnlyShareEnv, supportDir, switchClient, synchronizer, synchronizerStart } from '../../testing/test-utils';
+import ShareService, { ApiShare, PublicKeyStatus, UserPublicKeyResponse } from './ShareService';
 import { ShareType, StateShare } from './reducer';
 import { NoteEntity, ResourceEntity } from '../database/types';
 import Folder from '../../models/Folder';
 import { localSyncInfo, setEncryptionEnabled, setPpk } from '../synchronizer/syncInfoUtils';
-import { generateKeyPair } from '../e2ee/ppk/ppk';
+import { generateKeyPair, mkReencryptFromPasswordToPublicKey, PublicPrivateKeyPair } from '../e2ee/ppk/ppk';
 import MasterKey from '../../models/MasterKey';
 import { MasterKeyEntity } from '../e2ee/types';
 import { generateMasterKeyAndEnableEncryption, loadMasterKeysFromSettings, setupAndEnableEncryption, updateMasterPassword } from '../e2ee/utils';
@@ -37,9 +38,17 @@ describe('ShareService', () => {
 
 	jest.retryTimes(2);
 
+	let previousShareService: ShareService;
+
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
+		previousShareService = BaseItem.shareService_;
+	});
+
+	afterEach(() => {
+		BaseItem.shareService_ = previousShareService;
+		Resource.shareService_ = null;
 	});
 
 	it('should not change the note user timestamps when sharing or unsharing', async () => {
@@ -96,6 +105,7 @@ describe('ShareService', () => {
 		await msleep(1);
 		await Folder.updateAllShareIds(resourceService(), []);
 
+		synchronizer().confirmPlaintextUploads(await newlyPublishedConfirmations([note.id], (await Resource.all()).map(r => r.id)));
 		await synchronizerStart();
 
 		{
@@ -116,6 +126,10 @@ describe('ShareService', () => {
 	function testShareFolderService(extraExecHandlers: Record<string, (query: unknown, body: unknown)=> unknown> = {}) {
 		let nextShareId = 1;
 		let shares: ApiShare[] = [];
+		const toApiOutput = ({ master_key_id, ...share }: ApiShare) => (
+			// Drop `master_key_id: ''` to match the API
+			master_key_id ? { ...share, master_key_id } : share
+		);
 		const shareByFolderId = (folderId: string) => {
 			return shares.find(share => share.folder_id === folderId);
 		};
@@ -126,7 +140,7 @@ describe('ShareService', () => {
 
 				if (method === 'GET' && path === 'api/shares') {
 					return {
-						items: [...shares],
+						items: shares.map(toApiOutput),
 					};
 				}
 
@@ -136,7 +150,7 @@ describe('ShareService', () => {
 					// of Joplin Server.
 					const existingShare = shareByFolderId(b.folder_id);
 					if (existingShare) {
-						return existingShare;
+						return toApiOutput(existingShare);
 					}
 
 					// Use a predictable ID:
@@ -144,11 +158,12 @@ describe('ShareService', () => {
 
 					const share = {
 						id,
+						type: ShareType.Folder,
 						master_key_id: b.master_key_id,
 						folder_id: b.folder_id,
 					};
 					shares.push(share);
-					return share;
+					return toApiOutput(share);
 				}
 
 				if (method === 'DELETE' && path.startsWith('api/shares/')) {
@@ -161,6 +176,16 @@ describe('ShareService', () => {
 			},
 		});
 	}
+
+	const useShareService = (service: ShareService) => {
+		BaseItem.shareService_ = service;
+		Resource.shareService_ = service;
+	};
+
+	const expectNotUploadedUnencrypted = async (itemId: string) => {
+		const unencryptedRemoteItems = (await remoteNotesFoldersResources()).filter(item => item.id === itemId && !item.encryption_applied);
+		expect(unencryptedRemoteItems.map(item => item.id)).toEqual([]);
+	};
 
 	const prepareNoteFolderResource = async () => {
 		const folder = await Folder.save({});
@@ -247,7 +272,7 @@ describe('ShareService', () => {
 		}
 	});
 
-	it('should add a recipient', async () => {
+	it.each([false, true])('should add a recipient (public key passed as argument: %j)', async (publicKeyInOptions) => {
 		setEncryptionEnabled(true);
 		await updateMasterPassword('', '111111');
 		const ppk = await generateKeyPair(encryptionService(), '111111');
@@ -257,9 +282,11 @@ describe('ShareService', () => {
 
 		let uploadedEmail = '';
 		let uploadedMasterKey: MasterKeyEntity = null;
+		let fetchedPublicKey = false;
 
 		const service = testShareFolderService({
 			'GET api/users/toto%40example.com/public_key': async (_query, _body) => {
+				fetchedPublicKey = true;
 				return recipientPpk;
 			},
 			'POST api/shares/share_1/users': async (_query, body) => {
@@ -271,12 +298,21 @@ describe('ShareService', () => {
 
 		const { share } = await testShareFolder(service);
 
-		await service.addShareRecipient(share.id, share.master_key_id, 'toto@example.com', { can_read: 1, can_write: 1 });
+		await service.addShareRecipient({
+			shareId: share.id,
+			masterKeyId: share.master_key_id,
+			recipientEmail: 'toto@example.com',
+			permissions: { can_read: 1, can_write: 1 },
+			publicKey: publicKeyInOptions ? { ...recipientPpk, privateKey: undefined } : undefined,
+		});
 
 		expect(uploadedEmail).toBe('toto@example.com');
 
 		const content = JSON.parse(uploadedMasterKey.content);
 		expect(recipientPpk.id).toBe(content.ppkId);
+
+		// If a public key was passed as an option, addShareRecipient should not attempt to fetch
+		expect(fetchedPublicKey).toBe(!publicKeyInOptions);
 	});
 
 	it('should not update the folder\'s master_key_id when shareFolder is called multiple times', async () => {
@@ -531,7 +567,11 @@ describe('ShareService', () => {
 		expect((await Note.load(note.id)).is_shared).toBe(1);
 	});
 
-	it('should keep a separately published child folder and child note published', async () => {
+	it.each([false, true])('should keep a separately published child folder and child note published (e2ee: %j)', async (e2ee) => {
+		if (e2ee) {
+			await setupAndEnableEncryption(encryptionService(), await loadEncryptionMasterKey());
+		}
+
 		const folderA = await Folder.save({ title: 'folder A' });
 		const folderB = await Folder.save({ title: 'folder B', parent_id: folderA.id });
 		const noteA = await Note.save({ title: 'note A', parent_id: folderA.id });
@@ -571,6 +611,35 @@ describe('ShareService', () => {
 		expect((await Note.load(noteA.id)).is_shared).toBe(1);
 	});
 
+	it('should not publish unpublished notes based on server-provided share state when unpublishing a folder (E2EE)', async () => {
+		await setupAndEnableEncryption(encryptionService(), await loadEncryptionMasterKey());
+
+		const folder = await Folder.save({ title: 'folder', is_shared: 1 });
+		const unpublishedNote = await Note.save({ title: 'unpublished note', parent_id: folder.id, is_shared: 0 });
+		const conflictNote = await Note.save({ title: 'conflict', parent_id: folder.id, is_shared: 0, is_conflict: 1 });
+
+		// A malicious server claims that all notes in the folder are directly published:
+		const sharesReturnedByServer: Partial<StateShare>[] = [
+			{ id: 'published-folder', type: ShareType.PublishedFolder, folder_id: folder.id },
+			{ id: 'fake-note-share-1', type: ShareType.Note, note_id: unpublishedNote.id },
+			{ id: 'fake-note-share-2', type: ShareType.Note, note_id: conflictNote.id },
+		];
+		const service = mockShareService({
+			onExec: async (method, path) => {
+				if (method === 'GET' && path === 'api/shares') return { items: sharesReturnedByServer };
+				if (method === 'DELETE') return null;
+				throw new Error(`Unhandled: ${method} ${path}`);
+			},
+		});
+
+		await service.refreshShares();
+		await service.unpublishFolder(folder.id);
+
+		expect((await Folder.load(folder.id)).is_shared).toBe(0);
+		expect((await Note.load(unpublishedNote.id)).is_shared).toBe(0);
+		expect((await Note.load(conflictNote.id)).is_shared).toBe(0);
+	});
+
 	it('should throw when the folder or its published share does not exist', async () => {
 		const folderA = await Folder.save({ title: 'folder A' });
 		let deleteCallCount = 0;
@@ -604,4 +673,169 @@ describe('ShareService', () => {
 		await expect(service.publishFolder('000000000000000000000000000000F9')).rejects.toThrow('No such folder: 000000000000000000000000000000F9');
 	});
 
+	it.each([
+		undefined,
+		'0123456789abcdef0123456789abcdef',
+	])('should not upload shared items unencrypted when the server changes the share master key (new key: %j)', async (newMasterKeyId) => {
+		const masterKey = await loadEncryptionMasterKey();
+		await setupAndEnableEncryption(encryptionService(), masterKey, '111111');
+		setPpk(await generateKeyPair(encryptionService(), '111111'));
+
+		const service = testShareFolderService();
+		useShareService(service);
+		const folder = await Folder.save({});
+		const note = await Note.save({ parent_id: folder.id, body: 'secret' });
+		const share = await service.shareFolder(folder.id);
+		await loadMasterKeysFromSettings(encryptionService());
+		await service.refreshShares();
+		await synchronizerStart();
+
+		// After restarting the app, the share list is no longer in memory
+		const restartedService = testShareFolderService({
+			'GET api/shares': () => ({ items: [{ ...share, master_key_id: newMasterKeyId }] }),
+		});
+		useShareService(restartedService);
+		await expect(restartedService.refreshShares()).rejects.toThrow('Share has invalid master key ID');
+
+		await Note.save({ id: note.id, body: 'new secret' });
+		await synchronizerStart();
+
+		await expectNotUploadedUnencrypted(note.id);
+	});
+
+	it('should not reuse an existing share with a different master key when sharing a folder', async () => {
+		const service = testShareFolderService();
+		const folder = await Folder.save({});
+		// Shared before encryption was enabled. To the client, this looks the same as a share created by an attacker
+		// with access to the user's account.
+		await service.shareFolder(folder.id);
+		await service.refreshShares();
+
+		const masterKey = await loadEncryptionMasterKey();
+		await setupAndEnableEncryption(encryptionService(), masterKey, '111111');
+		setPpk(await generateKeyPair(encryptionService(), '111111'));
+
+		await expect(service.shareFolder(folder.id)).rejects.toThrow();
+		expect(await service.refreshShares()).toHaveLength(1);
+	});
+
+	const setUpInvitationTest = async () => {
+		setEncryptionEnabled(true);
+		await updateMasterPassword('', '111111');
+		const ppk = await generateKeyPair(encryptionService(), '111111');
+		setPpk(ppk);
+
+		let failNextResponse = false;
+		const acceptedShareUserIds: string[] = [];
+		const service = mockShareService({
+			onExec: async (method, path, _query, body) => {
+				const match = path.match(/^api\/share_users\/(.*)$/);
+				if (method === 'PATCH' && match) {
+					if (failNextResponse) {
+						failNextResponse = false;
+						throw new Error('Network error');
+					}
+					if ((body as { status: number }).status === 1) acceptedShareUserIds.push(match[1]);
+					return null;
+				}
+				throw new Error(`Unhandled: ${method} ${path}`);
+			},
+		});
+
+		const invitationMasterKey = async (id: string) => {
+			const key = { ...await encryptionService().generateMasterKey('sharer password'), id };
+			return mkReencryptFromPasswordToPublicKey(encryptionService(), key, 'sharer password', ppk);
+		};
+		const share = (id: string): StateShare => ({ id, type: ShareType.Folder, folder_id: '', note_id: '', master_key_id: '' });
+
+		return { service, share, invitationMasterKey, acceptedShareUserIds, failNextResponse: () => { failNextResponse = true; } };
+	};
+
+	const acceptedMasterKeyId = '0123456789abcdef0123456789abcdef';
+	const otherMasterKeyId = 'fedcba9876543210fedcba9876543210';
+
+	it.each([
+		{ secondShareId: 'share_2', secondMasterKeyId: acceptedMasterKeyId, expectedError: 'already exists and is different' },
+		{ secondShareId: 'share_1', secondMasterKeyId: otherMasterKeyId, expectedError: 'previously accepted with a different master key' },
+		{ secondShareId: 'share_1', secondMasterKeyId: null, expectedError: 'Refusing to accept invitation for unencrypted share' },
+	])('should reject invitations that would replace a master key or remove encryption from a share (%j)', async ({ secondShareId, secondMasterKeyId, expectedError }) => {
+		const { service, share, invitationMasterKey, acceptedShareUserIds } = await setUpInvitationTest();
+
+		await service.respondInvitation('share_user_1', share('share_1'), await invitationMasterKey(acceptedMasterKeyId), true);
+		const acceptedMasterKey = await MasterKey.load(acceptedMasterKeyId);
+		expect(acceptedMasterKey).toBeTruthy();
+
+		const secondMasterKey = secondMasterKeyId ? await invitationMasterKey(secondMasterKeyId) : null;
+		await expect(service.respondInvitation('share_user_2', share(secondShareId), secondMasterKey, true)).rejects.toThrow(expectedError);
+
+		expect(acceptedShareUserIds).toEqual(['share_user_1']);
+		expect(await MasterKey.load(acceptedMasterKeyId)).toEqual(acceptedMasterKey);
+		expect(await MasterKey.load(otherMasterKeyId)).toBeFalsy();
+	});
+
+	it('should allow accepting an encrypted invitation again after the previous attempt failed', async () => {
+		const { service, share, invitationMasterKey, acceptedShareUserIds, failNextResponse } = await setUpInvitationTest();
+		const masterKey = await invitationMasterKey('0123456789abcdef0123456789abcdef');
+
+		failNextResponse();
+		await expect(service.respondInvitation('share_user_1', share('share_1'), masterKey, true)).rejects.toThrow('Network error');
+		await service.respondInvitation('share_user_1', share('share_1'), masterKey, true);
+
+		expect(acceptedShareUserIds).toEqual(['share_user_1']);
+	});
+
+	it.each([
+		{ share_id: 'other_share' },
+		{ master_key_id: '0123456789abcdef0123456789abcdef' },
+	])('should not send the share key to a recipient when the shared folder does not match the share (%j)', async (folderChanges) => {
+		setEncryptionEnabled(true);
+		await updateMasterPassword('', '111111');
+		setPpk(await generateKeyPair(encryptionService(), '111111'));
+		const recipientPpk = await generateKeyPair(encryptionService(), '222222');
+
+		let postedRecipient = false;
+		const service = testShareFolderService({
+			'POST api/shares/share_1/users': async () => {
+				postedRecipient = true;
+			},
+			'GET api/users/toto%40example.com/public_key': async (_query, _body) => {
+				return { recipientPpk, privateKey: undefined };
+			},
+		});
+		const { share, folder } = await testShareFolder(service);
+		await service.refreshShares();
+		await Folder.save({ id: folder.id, ...folderChanges });
+
+		await expect(service.addShareRecipient({
+			shareId: share.id,
+			masterKeyId: share.master_key_id,
+			recipientEmail: 'toto@example.com',
+			permissions: { can_read: 1, can_write: 1 },
+			publicKey: undefined,
+		})).rejects.toThrow('Corrupt share');
+		expect(postedRecipient).toBe(false);
+	});
+
+	const testKeyA = { publicKey: 'key-a' } as PublicPrivateKeyPair;
+	const testKeyB = { publicKey: 'key-b' } as PublicPrivateKeyPair;
+	it.each([
+		{ label: 'no earlier key', seen: null, confirmed: [], current: testKeyA, expected: PublicKeyStatus.Unknown },
+		{ label: 'no current key', seen: testKeyA, confirmed: [], current: '', expected: PublicKeyStatus.Unknown },
+		{ label: 'seen key', seen: testKeyA, confirmed: [], current: testKeyA, expected: PublicKeyStatus.Seen },
+		{ label: 'key differs from seen key', seen: testKeyA, confirmed: [], current: testKeyB, expected: PublicKeyStatus.Changed },
+		{ label: 'key differs from confirmed key', seen: null, confirmed: [testKeyA], current: testKeyB, expected: PublicKeyStatus.Changed },
+		{ label: 'confirmed and seen key', seen: testKeyA, confirmed: [testKeyA], current: testKeyA, expected: PublicKeyStatus.Confirmed },
+		{ label: 'confirmed key after sharing with a different key', seen: testKeyB, confirmed: [testKeyA], current: testKeyA, expected: PublicKeyStatus.Confirmed },
+		{ label: 'confirmed key replaced by a later confirmation', seen: null, confirmed: [testKeyA, testKeyB], current: testKeyA, expected: PublicKeyStatus.Changed },
+	])('publicKeyStatus should handle: $label', async ({ seen, confirmed, current, expected }) => {
+		const service = ShareService.instance();
+		const email = 'test@example.com';
+		if (seen) await service.markPublicKeyAsSeen_(email, seen);
+		for (const key of confirmed) {
+			// Emails are case-insensitive
+			await service.markPublicKeyAsConfirmed(email.toUpperCase(), key);
+		}
+
+		expect(await service.publicKeyStatus(email, current as UserPublicKeyResponse)).toBe(expected);
+	});
 });

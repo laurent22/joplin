@@ -1,6 +1,6 @@
 {
   "name": "@joplin/plugin-repo-cli",
-  "version": "3.7.7",
+  "version": "3.8.0",
   "description": "",
   "repository": {
     "type": "git",
@@ -23,16 +23,16 @@
   "author": "",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
-    "fs-extra": "11.3.6",
+    "fs-extra": "11.4.0",
     "gh-release-assets": "2.0.1",
     "node-fetch": "2.6.7",
     "source-map-support": "0.5.21",
     "yargs": "17.7.2"
   },
   "devDependencies": {
-    "@joplin/lib": "^3.7.4",
-    "@joplin/tools": "^3.7.4",
-    "@joplin/utils": "^3.7.4",
+    "@joplin/lib": "~3.8",
+    "@joplin/tools": "~3.8",
+    "@joplin/utils": "~3.8",
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.14",
     "@types/node": "24.13.3",

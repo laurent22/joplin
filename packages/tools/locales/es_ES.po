@@ -711,7 +711,7 @@ msgstr "Permitir la actualización de notas"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1433
 msgid "Allows debugging mobile plugins. See %s for details."
-msgstr "Permite depurar plugins móviles. Consulte %s para obtener más detalles."
+msgstr "Permite depurar plugins móviles. Consulta %s para obtener más detalles."
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:267
 msgid "Already have an account? Log in"
@@ -749,9 +749,7 @@ msgstr "Redimensionar siempre"
 msgid ""
 "Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the short notebook id or use $b for current selected "
 "notebook"
-msgstr ""
-"Libreta ambigua «%s». por favor, utiliza el id de la libreta en su lugar- pulsa «ti» para ver el id abreviado o usa $b para la libreta "
-"seleccionada en ese momento"
+msgstr "Libreta ambigua «%s». Por favor, utiliza el id de la libreta en su lugar. Pulsa «ti» para ver el id abreviado o usa $b para la libreta seleccionada en ese momento"
 
 #: packages/app-cli/app/command-mkbook.ts:33 packages/app-cli/app/command-mv.ts:29
 msgid "Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti\" to see the short notebook id"
@@ -985,7 +983,7 @@ msgstr "Disponible"
 #: packages/app-mobile/components/CameraView/CameraViewMultiPage.tsx:84 packages/app-mobile/components/ScreenHeader/index.tsx:315
 #: packages/lib/commands/historyBackward.ts:6
 msgid "Back"
-msgstr "Retroceder"
+msgstr "Atrás"
 
 #: packages/lib/utils/joplinCloud/index.ts:449
 msgid "Back to %s"
@@ -1304,7 +1302,7 @@ msgstr "Caracteres chinos/japoneses/coreanos"
 
 #: packages/app-mobile/components/screens/Note/commands/attachFile.ts:98
 msgid "Choose an option"
-msgstr "Selecciona una opción"
+msgstr "Seleccionar una opción"
 
 #: packages/app-desktop/gui/ExtensionBadge.tsx:67
 msgid "Chrome Web Store"
@@ -1562,7 +1560,7 @@ msgstr "Conflictos (archivos adjuntos)"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:321 packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:479
 msgid "Connect to Joplin Cloud"
-msgstr "Conéctese a Joplin Cloud"
+msgstr "Conéctate a Joplin Cloud"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:345 packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:481
 msgid "Connect using your organisation account"
@@ -1749,7 +1747,7 @@ msgstr ""
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:26
 msgid "Could not verify your identity: %s"
-msgstr "No se ha podido verificar su identidad: %s"
+msgstr "No se ha podido verificar tu identidad: %s"
 
 #: packages/app-desktop/gui/PromptDialog.tsx:332
 msgid "Create"
@@ -1761,7 +1759,7 @@ msgstr "Cree una nueva libreta en una libreta principal."
 
 #: packages/app-mobile/components/NoteList.tsx:102
 msgid "Create a notebook"
-msgstr "Crea una libreta"
+msgstr "Crear una libreta"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:215
 msgid "Create accessible document"
@@ -1769,7 +1767,7 @@ msgstr "Crear un documento accesible"
 
 #: packages/app-mobile/components/FolderPicker.tsx:112
 msgid "Create new notebook"
-msgstr "Crea una nueva libreta"
+msgstr "Crear una nueva libreta"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addProfile.ts:10
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:88
@@ -1782,7 +1780,7 @@ msgstr "Crear nota"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:169
 msgid "Create notebook"
-msgstr "Crea libreta"
+msgstr "Crear libreta"
 
 #: packages/server/src/routes/admin/users.ts:271
 msgid "Create user"
@@ -2245,7 +2243,7 @@ msgstr "Muestra la nota dada."
 
 #: packages/app-cli/app/command-ls.ts:19
 msgid "Displays the notes in the current notebook. Use `ls /` to display the list of notebooks."
-msgstr "Muestra las notas en la libreta actual. Use `ls /` para mostrar la lista de libretas."
+msgstr "Muestra las notas en la libreta actual. Usa `ls /` para mostrar la lista de libretas."
 
 #: packages/app-cli/app/command-help.ts:13
 msgid "Displays usage information."
@@ -4275,7 +4273,7 @@ msgstr "Más información"
 
 #: packages/app-cli/app/app.ts:67
 msgid "More than one item match \"%s\". Please narrow down your query."
-msgstr "Hay más de un elemento que coincide con «%s». Intente mejorar su consulta."
+msgstr "Hay más de un elemento que coincide con «%s». Intenta afinar tu consulta."
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:115
 msgid "Most plugins have source code available for review on the plugin website."
@@ -4887,7 +4885,7 @@ msgstr "en línea"
 
 #: packages/app-desktop/gui/MainScreen.tsx:597
 msgid "One of your master keys use an obsolete encryption method."
-msgstr "Una de sus claves maestras usa un método de cifrado obsoleto."
+msgstr "Una de tus claves maestras usa un método de cifrado obsoleto."
 
 #: packages/app-cli/app/gui/NoteWidget.ts:56
 msgid ""
@@ -5630,11 +5628,11 @@ msgstr "Eliminar"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:166
 msgid "Remove %d tags from all notes? This cannot be undone."
-msgstr "¿Quitar %d etiquetas de todas las notas? Esta acción no se puede deshacer."
+msgstr "¿Quieres eliminar %d etiquetas de todas las notas? Esta acción no se puede deshacer."
 
 #: packages/app-mobile/components/TagEditor.tsx:136
 msgid "Remove %s"
-msgstr "Eliminar %s"
+msgstr "Quitar %s"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:361
 msgid "Remove %s from share"
@@ -6143,7 +6141,7 @@ msgstr "Establecer alarma:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1716
 msgid "Set it to 0 to make it take the complete available space. Recommended width is 600."
-msgstr "Estableczca el valor en 0 para que ocupe todo el espacio disponible. El ancho recomendado es 600."
+msgstr "Establece el valor en 0 para que ocupe todo el espacio disponible. El ancho recomendado es 600."
 
 #: packages/app-desktop/gui/MainScreen.tsx:580 packages/app-desktop/gui/MainScreen.tsx:627
 msgid "Set the password"
@@ -6330,7 +6328,7 @@ msgstr "Omitir esta versión"
 
 #: packages/app-cli/app/command-e2ee.ts:65
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
-msgstr "Elementos omitidos: %d (use --retry-failed-items para intentar descifrarlos nuevamente)"
+msgstr "Elementos omitidos: %d (usa --retry-failed-items para intentar descifrarlos nuevamente)"
 
 #: packages/app-cli/app/command-import.ts:55 packages/app-desktop/gui/ImportScreen.tsx:100
 msgid "Skipped: %d."
@@ -6350,7 +6348,7 @@ msgstr "Claro Solarizado"
 
 #: packages/lib/models/settings/settingValidations.ts:21
 msgid "Some attachments could not be downloaded. Please try to download them again."
-msgstr "No se han podido descargar algunos archivos adjuntos. Por favor, intente descargarlos de nuevo."
+msgstr "No se han podido descargar algunos archivos adjuntos. Por favor, intenta descargarlos de nuevo."
 
 #: packages/lib/models/settings/settingValidations.ts:18
 msgid "Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again."
@@ -6370,7 +6368,7 @@ msgstr "No se han podido sincronizar algunos de los elementos. Pulsa para más i
 
 #: packages/lib/models/settings/settingValidations.ts:24
 msgid "Some items could not be synchronised. Please try to synchronise them first."
-msgstr "Algunos elementos no se han podido sincronizar. Por favor, intente sincronizarlos primero."
+msgstr "Algunos elementos no se han podido sincronizar. Por favor, intenta sincronizarlos primero."
 
 #: packages/app-desktop/gui/ChatPanel/ChatPanel.tsx:308
 msgid "Something went wrong."
@@ -6832,7 +6830,7 @@ msgstr "Comando de editor de texto"
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:143 packages/app-mobile/components/ProfileSwitcher/utils/deleteProfile.ts:21
 msgid "The active profile cannot be deleted. Switch to a different profile and try again."
-msgstr "El perfil activo no puede eliminarse. Cambie de perfil e intente de nuevo."
+msgstr "El perfil activo no puede eliminarse. Cambia de perfil e inténtalo de nuevo."
 
 #: packages/lib/services/ai/availability.ts:48 packages/lib/services/ai/availability.ts:51
 msgid "The API key is missing. Set it in Settings → AI."
@@ -7897,9 +7895,7 @@ msgstr "Usar el editor Markdown heredado"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:581
 msgid "Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes."
-msgstr ""
-"Use esto para reparar el índice de búsqueda si hay un problema con la búsqueda. Puede tomar un largo tiempo dependiendo del número de "
-"notas."
+msgstr "Usa esto para reparar el índice de búsqueda si hay un problema con la búsqueda. Puede tardar bastante según el número de notas."
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:84
 msgid "Use your biometrics to secure access to your application. You can always set it up later in Settings."
@@ -8120,9 +8116,7 @@ msgstr ""
 msgid ""
 "When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these "
 "attachments."
-msgstr ""
-"Cuando está habilitado, la aplicación escaneará sus archivos adjuntos y extraerá el texto de ellos. Esto le permitirá buscar texto en "
-"estos archivos adjuntos."
+msgstr "Cuando está habilitado, la aplicación escaneará tus archivos adjuntos y extraerá el texto de ellos. Esto te permitirá buscar texto en estos archivos adjuntos."
 
 #: packages/app-desktop/ElectronAppWrapper.ts:320
 msgid "Window unresponsive."
@@ -8219,7 +8213,7 @@ msgstr "Tu cuenta no tiene acceso a esta función"
 
 #: packages/app-cli/app/cli-utils.ts:192
 msgid "Your choice: "
-msgstr "Su elección: "
+msgstr "Tu elección: "
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:72
 msgid "Your data is going to be re-encrypted and synced again."
@@ -8251,7 +8245,7 @@ msgstr "Tu contraseña es necesaria para descifrar algunos de tus datos. Escribe
 
 #: packages/app-desktop/checkForUpdates.ts:115
 msgid "Your version: %s"
-msgstr "Su versión: %s"
+msgstr "Tu versión: %s"
 
 #: packages/app-desktop/gui/MenuBar.tsx:817 packages/app-desktop/gui/MenuBar.tsx:823
 msgid "Zoom In"
