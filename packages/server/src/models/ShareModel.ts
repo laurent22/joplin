@@ -437,7 +437,7 @@ export default class ShareModel extends BaseModel<Share> {
 					}
 
 					if (row.item_count < realShareItemCount) {
-						logger.warn(`checkForMissingUserItems: User is missing some items: Share ${share.id}: User ${row.user_id}: Has ${row.item_count} of ${realShareItemCount} items (share owner: ${share.owner_id})`);
+						logger.info(`checkForMissingUserItems: User is missing some items: Share ${share.id}: User ${row.user_id}: Has ${row.item_count} of ${realShareItemCount} items (share owner: ${share.owner_id})`);
 						await this.createSharedFolderUserItems(share.id, row.user_id);
 
 						// If the count doesn't move, the repair is a no-op and the next run will
