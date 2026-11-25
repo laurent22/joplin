@@ -512,10 +512,6 @@ export class WorkerApi {
 		this.virtualFiles_.set(normalize(path), content);
 	}
 
-	public async releaseReadOnlyVirtualFile(path: string) {
-		this.virtualFiles_.delete(normalize(path));
-	}
-
 	public async mountExternalDirectory(handle: FileSystemDirectoryHandle, id: string, mode: AccessMode) {
 		if (await handle.requestPermission({ mode }) !== 'granted') {
 			throw new Error(`${mode} access is needed for ${id}.`);

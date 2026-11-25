@@ -2,6 +2,6 @@
 // which is incompatible with TypeScript's CommonJS default import wrapper.
 const emojiRegex: typeof import('emoji-regex').default = require('emoji-regex/index.js');
 
-const firstEmoji = (input: string): string => input.trim().match(emojiRegex())?.[0] ?? '';
+const lastEmoji = (input: string): string => input.trim().match(emojiRegex())?.pop() ?? '';
 
-export default firstEmoji;
+export default lastEmoji;

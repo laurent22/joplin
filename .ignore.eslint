@@ -1100,8 +1100,6 @@ packages/app-mobile/utils/createRootStyle.js
 packages/app-mobile/utils/database-driver-react-native.js
 packages/app-mobile/utils/database-driver-react-native.web.js
 packages/app-mobile/utils/debounce.js
-packages/app-mobile/utils/firstEmoji.test.js
-packages/app-mobile/utils/firstEmoji.js
 packages/app-mobile/utils/focusView.js
 packages/app-mobile/utils/fs-driver/constants.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.test.js
@@ -1131,6 +1129,8 @@ packages/app-mobile/utils/initReact.web.js
 packages/app-mobile/utils/initializeCommandService.js
 packages/app-mobile/utils/ipc/RNToWebViewMessenger.js
 packages/app-mobile/utils/ipc/WebViewToRNMessenger.js
+packages/app-mobile/utils/lastEmoji.test.js
+packages/app-mobile/utils/lastEmoji.js
 packages/app-mobile/utils/lockToSingleInstance.js
 packages/app-mobile/utils/makeShowMessageBox.test.js
 packages/app-mobile/utils/makeShowMessageBox.js

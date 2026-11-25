@@ -17,7 +17,7 @@ import { AppState } from '../../utils/types';
 import { Dispatch } from 'redux';
 import SidebarIcon from '../SideMenuContent/SidebarIcon';
 import resizeImage from '../../utils/image/resizeImage';
-import firstEmoji from '../../utils/firstEmoji';
+import lastEmoji from '../../utils/lastEmoji';
 import type FsDriverWeb from '../../utils/fs-driver/fs-driver-rn.web';
 import Logger from '@joplin/utils/Logger';
 import { fileUriToPath } from '@joplin/utils/url';
@@ -95,8 +95,9 @@ class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 		this.folderComponent_change('parent_id', parent);
 	}
 
-	private emoji_changeText(emoji: string) {
-		const selectedEmoji = firstEmoji(emoji);
+	private emoji_changeText(text: string) {
+		const selectedEmoji = lastEmoji(text);
+		if (text && !selectedEmoji) return;
 		this.icon_change(selectedEmoji ? Folder.serializeIcon({ type: FolderIconType.Emoji, emoji: selectedEmoji, name: '', dataUrl: '' }) : '');
 	}
 
