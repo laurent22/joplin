@@ -604,7 +604,7 @@ export default class BaseApplication {
 			if (store.getState().windowId !== newState.windowId) return result;
 			this.currentFolder_ = currentFolder;
 			refreshNotes = true;
-			refreshNotesUseSelectedNoteId = action.type === 'WINDOW_FOCUS';
+			refreshNotesUseSelectedNoteId = action.type === 'WINDOW_FOCUS' || action.type === 'WINDOW_CLOSE';
 		}
 
 		// Should refresh the notes when:

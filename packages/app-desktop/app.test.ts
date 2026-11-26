@@ -124,7 +124,7 @@ describe('app', () => {
 	});
 
 	test.each([
-		['the active window', true, [[expect.objectContaining({ windowId: defaultWindowId }), false, '']]],
+		['the active window', true, [[expect.objectContaining({ windowId: defaultWindowId }), true, '']]],
 		['a background window', false, []],
 	])('should only refresh notes when the active window is closed (closing %s)', async (_name, focusSecondaryWindow, expectedRefreshCalls) => {
 		let state = reducer(defaultState, { type: 'WINDOW_OPEN', windowId: 'secondary-window', folderId: 'folder', noteId: 'note' });
