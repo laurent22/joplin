@@ -29,6 +29,19 @@ describe('WebDavApi', () => {
 		shim.fetch = originalFetch;
 	});
 
+	test('should send string headers for PROPFIND requests', async () => {
+		let requestHeaders: Record<string, string> = null;
+		shim.fetch = (async (_url: string, options: FetchOptions) => {
+			requestHeaders = options.headers as Record<string, string>;
+			return makeResponse(404);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Test double only implements the response methods used by WebDavApi.
+		}) as any;
+
+		await expect(makeApi().execPropFind('dir/', 1)).rejects.toThrow();
+		expect(requestHeaders['Depth']).toBe('1');
+		expect(Object.values(requestHeaders).every(value => typeof value === 'string')).toBe(true);
+	});
+
 	test.each([
 		['MKCOL', true],
 		['PUT', false],
