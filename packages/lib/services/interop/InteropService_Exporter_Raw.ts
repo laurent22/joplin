@@ -14,6 +14,8 @@ export default class InteropService_Exporter_Raw extends InteropService_Exporter
 	private destDir_: string;
 	private resourceDir_: string;
 	private hasLockedNotes_ = false;
+	// Notes already moved to the synced key during a migration are no longer on the profile key.
+	private hasAnyLockedNotes_ = false;
 
 	public async init(destDir: string) {
 		this.destDir_ = destDir;
@@ -38,6 +40,7 @@ export default class InteropService_Exporter_Raw extends InteropService_Exporter
 
 	public async processItem(itemType: number, item: BaseItemEntity) {
 		if (itemType === BaseModel.TYPE_NOTE && !this.hasLockedNotes_) this.hasLockedNotes_ = await this.isLockedWithProfileKey_(item as NoteEntity);
+		if (itemType === BaseModel.TYPE_NOTE && (item as NoteEntity).is_locked) this.hasAnyLockedNotes_ = true;
 		const ItemClass = BaseItem.getClassByItemType(itemType);
 		const serialized = await ItemClass.serialize(item);
 		const filePath = `${this.destDir_}/${ItemClass.systemPath(item)}`;
@@ -57,6 +60,6 @@ export default class InteropService_Exporter_Raw extends InteropService_Exporter
 		}
 		// The profile only parks the synced key until the migration finishes, so a backup made meanwhile keeps it too.
 		const conflict = noteLockKeyConflict();
-		if (conflict) await shim.fsDriver().writeFile(`${this.destDir_}/${syncedNoteLockKeyFileName}`, JSON.stringify(conflict.noteLockKey), 'utf-8');
+		if (conflict && this.hasAnyLockedNotes_) await shim.fsDriver().writeFile(`${this.destDir_}/${syncedNoteLockKeyFileName}`, JSON.stringify(conflict.noteLockKey), 'utf-8');
 	}
 }

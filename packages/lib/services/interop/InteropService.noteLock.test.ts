@@ -222,14 +222,16 @@ describe('InteropService.noteLock', () => {
 		expect(JSON.parse(await fs.readFile(`${exportDir()}/${noteLockKeyFileName}`, 'utf-8')).id).toBe(NoteLockKey.instance().load().id);
 	});
 
-	it('should not write the key file when no note is locked', async () => {
+	it('should not write the key files when no note is locked', async () => {
 		await setUpUnlockedSession();
 		const folder = await Folder.save({ title: 'folder' });
 		await Note.save({ title: 'note', body: 'plain body', parent_id: folder.id });
+		Setting.setValue('noteLock.conflictNoteLockKey', { noteLockKey: { ...await encryptionService().generateMasterKey('654321'), id: 'synced-key', syncMigrationId: 'synced-lineage' } });
 
 		await InteropService.instance().export({ path: exportDir(), format: ExportModuleOutputFormat.Raw });
 
 		expect(await fs.pathExists(`${exportDir()}/${noteLockKeyFileName}`)).toBe(false);
+		expect(await fs.pathExists(`${exportDir()}/${syncedNoteLockKeyFileName}`)).toBe(false);
 	});
 
 	it('should write the key file for a note locked with the profile key even with note lock disabled', async () => {
