@@ -76,7 +76,10 @@ export const migrateLockedNotes = async (localPassword: string, targetPassword: 
 				const revision = await Revision.load(revisionId);
 				// Removed by the revision service since the list was read.
 				if (!revision) continue;
-				if (revision.encryption_applied) throw new Error('The revision is still encrypted by sync');
+				if (revision.encryption_applied) {
+					result.awaitingDecryption++;
+					continue;
+				}
 				const body = Revision.applyTextPatch('', revision.body_diff);
 				const { masterKeyId } = await encryptionService.decodeHeaderString(body, true);
 				if (masterKeyId !== localKey.id) continue;
@@ -145,17 +148,26 @@ export const notMigratedMessage = (status: NoteLockMigrationStatus) => {
 };
 
 // Notes already moved to the parked key need it, so a sync must not drop or replace it.
+const usesKey = async (body: string, keyId: string) => {
+	try {
+		return (await EncryptionService.instance().decodeHeaderString(body, true)).masterKeyId === keyId;
+	} catch {
+		// A body that is not note lock ciphertext cannot use the key.
+		return false;
+	}
+};
+
 export const parkedNoteLockKeyInUse = async () => {
 	const conflict = noteLockKeyConflict();
 	if (!conflict) return false;
 	for (const noteId of await Note.lockedNoteIds()) {
 		const { body, encryption_applied } = await Note.load(noteId, { fields: ['id', 'body', 'encryption_applied'] });
-		if (encryption_applied) continue;
-		try {
-			if ((await EncryptionService.instance().decodeHeaderString(body, true)).masterKeyId === conflict.noteLockKey.id) return true;
-		} catch {
-			// A body that is not note lock ciphertext cannot use the parked key.
-		}
+		if (!encryption_applied && await usesKey(body, conflict.noteLockKey.id)) return true;
+	}
+	// Note history moves even when some notes fail, so it can be the only thing on the parked key.
+	for (const revisionId of await Revision.lockedRevisionIds()) {
+		const revision = await Revision.load(revisionId);
+		if (revision && !revision.encryption_applied && await usesKey(Revision.applyTextPatch('', revision.body_diff), conflict.noteLockKey.id)) return true;
 	}
 	return false;
 };

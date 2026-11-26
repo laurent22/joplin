@@ -10,7 +10,7 @@ import NoteLockKey, { DecryptedNoteLockKey } from './NoteLockKey';
 import NoteLockNote from './NoteLockNote';
 import NoteLockService from './NoteLockService';
 import NoteLockSession from './NoteLockSession';
-import { confirmAndSkipNoteLockKeyMigration, finishNoteLockKeyMigration, migrateLockedNotes, notMigratedMessage, startNoteLockKeyMigration } from './NoteLockKeyMigration';
+import { confirmAndSkipNoteLockKeyMigration, finishNoteLockKeyMigration, migrateLockedNotes, parkedNoteLockKeyInUse, notMigratedMessage, startNoteLockKeyMigration } from './NoteLockKeyMigration';
 import eventManager, { EventName, NoteLockSessionChangeEvent } from '../../eventManager';
 import shim from '../../shim';
 import { LogLevel } from '@joplin/utils/Logger';
@@ -109,10 +109,29 @@ describe('NoteLockKeyMigration', () => {
 	it('should skip history removed by the revision service while the migration runs', async () => {
 		const note = await Note.save({ title: 'one', body: 'one', is_locked: 1 }, { useNoteLock: true });
 		const revision = await revisionService().createNoteRevision_(await Note.load(note.id), null, true);
-		jest.spyOn(Revision, 'lockedRevisionIds').mockResolvedValue(['removed-revision-id', revision.id]);
+		const spy = jest.spyOn(Revision, 'lockedRevisionIds').mockResolvedValue(['removed-revision-id', revision.id]);
+		try {
+			expect(await migrateLockedNotes(localPassword, targetPassword)).toMatchObject({ migrated: 1, failedRevisions: 0 });
+		} finally {
+			spy.mockRestore();
+		}
+	});
 
-		expect(await migrateLockedNotes(localPassword, targetPassword)).toMatchObject({ migrated: 1, failedRevisions: 0 });
-		jest.restoreAllMocks();
+	it('should count history still encrypted by sync as waiting, not failed', async () => {
+		const note = await Note.save({ title: 'one', body: 'one', is_locked: 1 }, { useNoteLock: true });
+		const revision = await revisionService().createNoteRevision_(await Note.load(note.id), null, true);
+		await db().exec('UPDATE revisions SET encryption_applied = 1 WHERE id = ?', [revision.id]);
+
+		expect(await migrateLockedNotes(localPassword, targetPassword)).toMatchObject({ awaitingDecryption: 1, failedRevisions: 0 });
+	});
+
+	it('should treat the parked key as in use when only note history uses it', async () => {
+		const note = await Note.save({ title: 'one', body: 'one', is_locked: 1 }, { useNoteLock: true });
+		await revisionService().createNoteRevision_(await Note.load(note.id), null, true);
+		await migrateLockedNotes(localPassword, targetPassword);
+		await db().exec('DELETE FROM notes WHERE id = ?', [note.id]);
+
+		expect(await parkedNoteLockKeyInUse()).toBe(true);
 	});
 
 	it('should leave notes already under the target key alone on retry', async () => {
