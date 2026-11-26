@@ -3,6 +3,7 @@ import { EditorCommandType } from '../../types';
 import commands from './commands';
 import createTestEditor from '../testing/createTestEditor';
 import selectDocumentEnd from './selectDocumentEnd';
+import { search, SearchQuery, setSearchState } from 'prosemirror-search';
 
 const selectAll = (editor: EditorView) => {
 	commands[EditorCommandType.SelectAll](editor.state, editor.dispatch, editor);
@@ -13,6 +14,31 @@ const moveCursorToEnd = (editor: EditorView) => {
 };
 
 describe('commands', () => {
+	test.each([
+		{ command: EditorCommandType.FindNext, matchPosition: 'below', top: window.innerHeight + 190, bottom: window.innerHeight + 200, scroll: 216 },
+		{ command: EditorCommandType.FindPrevious, matchPosition: 'above', top: -20, bottom: -10, scroll: -36 },
+	])('$command scrolls to a match $matchPosition the viewport without editor focus', ({ command, top, bottom, scroll }) => {
+		const editor = createTestEditor({ html: '<p>First match</p><p>Second match</p>', plugins: [search({})] });
+		editor.dispatch(setSearchState(editor.state.tr, new SearchQuery({ search: 'match' })));
+		const coordsSpy = jest.spyOn(editor, 'coordsAtPos').mockReturnValue({ top, bottom, left: 0, right: 0 });
+		const scrollSpy = jest.spyOn(window, 'scrollBy').mockImplementation(() => {});
+		try {
+			document.getSelection()?.removeAllRanges();
+			expect(commands[command](editor.state, editor.dispatch, editor)).toBe(true);
+			expect(editor.state.doc.textBetween(editor.state.selection.from, editor.state.selection.to)).toBe('match');
+			expect(scrollSpy).toHaveBeenCalledWith(0, scroll);
+
+			coordsSpy.mockReturnValue({ top: 100, bottom: 120, left: 0, right: 0 });
+			scrollSpy.mockClear();
+			expect(commands[command](editor.state, editor.dispatch, editor)).toBe(true);
+			expect(scrollSpy).not.toHaveBeenCalled();
+		} finally {
+			coordsSpy.mockRestore();
+			scrollSpy.mockRestore();
+			editor.destroy();
+		}
+	});
+
 	test('textBold should toggle bold formatting', () => {
 		const editor = createTestEditor({ html: '<p>Test</p>' });
 

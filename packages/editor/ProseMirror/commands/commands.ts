@@ -20,6 +20,23 @@ import getTextBetween from '../utils/getTextBetween';
 type Dispatch = (tr: Transaction)=> void;
 type ExtendedCommand = (state: EditorState, dispatch: Dispatch, view?: EditorView, options?: string[])=> boolean;
 
+const findAndScroll = (command: Command): Command => (state, dispatch, view) => {
+	const found = command(state, dispatch, view);
+	if (found && dispatch && view) {
+		// ProseMirror skips its own scroll when the DOM selection is outside the editor,
+		// which can happen while the mobile search controls have focus.
+		const rect = view.coordsAtPos(view.state.selection.from);
+		const editorWindow = view.dom.ownerDocument.defaultView;
+		const margin = 16;
+		if (rect.top < margin) {
+			editorWindow.scrollBy(0, rect.top - margin);
+		} else if (rect.bottom > editorWindow.innerHeight - margin) {
+			editorWindow.scrollBy(0, rect.bottom - editorWindow.innerHeight + margin);
+		}
+	}
+	return found;
+};
+
 const toggleHeading = (level: number): Command => {
 	const enableCommand: Command = (state, dispatch) => {
 		const result = extractSelectedLinesTo({
@@ -198,8 +215,8 @@ const commands: Record<EditorCommandType, ExtendedCommand|null> = {
 	},
 	[EditorCommandType.ShowSearch]: setSearchVisible(true),
 	[EditorCommandType.HideSearch]: setSearchVisible(false),
-	[EditorCommandType.FindNext]: findNext,
-	[EditorCommandType.FindPrevious]: findPrev,
+	[EditorCommandType.FindNext]: findAndScroll(findNext),
+	[EditorCommandType.FindPrevious]: findAndScroll(findPrev),
 	[EditorCommandType.ReplaceNext]: replaceNext,
 	[EditorCommandType.ReplaceAll]: replaceAll,
 	[EditorCommandType.EditLink]: (state: EditorState, dispatch) => {
