@@ -266,9 +266,10 @@ describe('WarningBanner', () => {
 
 	test('the unencrypted upload banner should allow uploads on this device, or keep the changes until another one is held back', async () => {
 		const mock = createMockStore();
+		setEncryptionEnabled(true);
 		const folder = await Folder.save({ title: 'folder' });
 		const holdBack = async (title: string) => {
-			const note = await Note.save({ title, parent_id: folder.id });
+			const note = await Note.save({ title, parent_id: folder.id, is_shared: 1 });
 			await BaseItem.saveSyncDisabled(Setting.value('sync.target'), note, ErrorCode.PlaintextUploadNotConfirmed);
 			await act(() => checkDisabledSyncItemsNotification(mock.store.dispatch));
 		};
