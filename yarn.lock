@@ -12714,6 +12714,7 @@ __metadata:
     typescript: "npm:5.9.3"
     url: "npm:0.11.4"
     url-loader: "npm:4.1.1"
+    web-streams-polyfill: "npm:3.3.3"
     webpack: "npm:5.97.1"
     webpack-cli: "npm:5.1.4"
     webpack-dev-server: "npm:5.2.6"
@@ -56331,6 +56332,13 @@ __metadata:
   version: 2.0.1
   resolution: "web-namespaces@npm:2.0.1"
   checksum: 10/b6d9f02f1a43d0ef0848a812d89c83801d5bbad57d8bb61f02eb6d7eb794c3736f6cc2e1191664bb26136594c8218ac609f4069722c6f56d9fc2d808fa9271c6
+  languageName: node
+  linkType: hard
+
+"web-streams-polyfill@npm:3.3.3":
+  version: 3.3.3
+  resolution: "web-streams-polyfill@npm:3.3.3"
+  checksum: 10/8e7e13501b3834094a50abe7c0b6456155a55d7571312b89570012ef47ec2a46d766934768c50aabad10a9c30dd764a407623e8bfcc74fcb58495c29130edea9
   languageName: node
   linkType: hard
 
