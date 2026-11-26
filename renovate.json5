@@ -73,11 +73,22 @@
 		"@lezer/common",
 		"@lezer/highlight",
 		"@lezer/markdown",
+
+		"prosemirror-commands",
+		"prosemirror-dropcursor",
+		"prosemirror-example-setup",
+		"prosemirror-gapcursor",
+		"prosemirror-history",
+		"prosemirror-inputrules",
+		"prosemirror-keymap",
 		"prosemirror-model",
+		"prosemirror-schema-list",
+		"prosemirror-search",
 		"prosemirror-state",
-		"prosemirror-view",
 		"prosemirror-tables",
 		"prosemirror-transform",
+		"prosemirror-view",
+
 		// Does not use semver
 		"@dr.pogodin/react-native-fs",
 		"@fortawesome/fontawesome-svg-core",
