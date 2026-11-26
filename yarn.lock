@@ -12714,7 +12714,7 @@ __metadata:
     typescript: "npm:5.9.3"
     url: "npm:0.11.4"
     url-loader: "npm:4.1.1"
-    web-streams-polyfill: "npm:3.3.3"
+    web-streams-polyfill: "npm:4.2.0"
     webpack: "npm:5.97.1"
     webpack-cli: "npm:5.1.4"
     webpack-dev-server: "npm:5.2.6"
@@ -56335,10 +56335,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"web-streams-polyfill@npm:3.3.3":
-  version: 3.3.3
-  resolution: "web-streams-polyfill@npm:3.3.3"
-  checksum: 10/8e7e13501b3834094a50abe7c0b6456155a55d7571312b89570012ef47ec2a46d766934768c50aabad10a9c30dd764a407623e8bfcc74fcb58495c29130edea9
+"web-streams-polyfill@npm:4.2.0":
+  version: 4.2.0
+  resolution: "web-streams-polyfill@npm:4.2.0"
+  checksum: 10/137e79549d0b567d7af08711e91956379b168f2c66d8d08d25498f3bd0b63859b7305bc3ea9e82ed6587ed41fad9435eedd7f1d0a25647c9acf2b3922c0963b6
   languageName: node
   linkType: hard
 

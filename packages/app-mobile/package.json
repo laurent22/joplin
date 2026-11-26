@@ -98,7 +98,7 @@
     "tar-stream": "3.2.0",
     "timers": "0.1.1",
     "url": "0.11.4",
-    "web-streams-polyfill": "3.3.3"
+    "web-streams-polyfill": "4.2.0"
   },
   "devDependencies": {
     "@babel/core": "7.29.0",
