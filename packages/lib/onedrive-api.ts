@@ -217,7 +217,7 @@ export default class OneDriveApi {
 					}
 					logger.debug(`Uploading File Fragment ${(startByte / 1048576).toFixed(2)} - ${(endByte / 1048576).toFixed(2)} from ${(byteSize / 1048576).toFixed(2)} Mbit ...`);
 					const headers = {
-						'Content-Length': contentLength,
+						'Content-Length': `${contentLength}`,
 						'Content-Range': `bytes ${startByte}-${endByte}/${byteSize}`,
 						'Content-Type': 'application/octet-stream; charset=utf-8',
 					};
