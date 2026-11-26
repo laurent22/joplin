@@ -57,13 +57,12 @@ const visiblePlugin = new Plugin({
 export const getSearchVisible = (state: EditorState) => {
 	return visiblePlugin.getState(state);
 };
-export const setSearchVisible = (visible: boolean): Command => (state, dispatch, view) => {
+export const setSearchVisible = (visible: boolean): Command => (state, dispatch) => {
 	if (getSearchVisible(state) === visible) {
 		return false;
 	}
 	if (dispatch) {
 		dispatch(setVisibleMeta(state.tr, { visible, changeSource: 'setSearchVisible' }));
-		if (visible && view) selectAndScrollToMatch(view);
 	}
 	return true;
 };
@@ -119,8 +118,8 @@ const searchExtension = (onEditorEvent: (event: EditorEvent)=> void) => {
 		],
 		updateState: (view: EditorView, searchState: SearchState, changeSource: string) => {
 			const previousQuery = getSearchState(view.state).query;
-			const shouldSelectMatch = searchState.dialogVisible && !!searchState.searchText && (
-				!getSearchVisible(view.state) || searchState.searchText !== previousQuery.search || searchState.caseSensitive !== previousQuery.caseSensitive || searchState.useRegex !== previousQuery.regexp
+			const shouldSelectMatch = getSearchVisible(view.state) && searchState.dialogVisible && !!searchState.searchText && (
+				searchState.searchText !== previousQuery.search || searchState.caseSensitive !== previousQuery.caseSensitive || searchState.useRegex !== previousQuery.regexp
 			);
 			let transaction = view.state.tr;
 			transaction = setSearchState(transaction, new SearchQuery({

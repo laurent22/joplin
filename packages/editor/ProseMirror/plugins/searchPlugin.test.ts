@@ -48,7 +48,7 @@ describe('searchPlugin', () => {
 	test.each([
 		{ name: 'ShowSearch', command: EditorCommandType.ShowSearch },
 		{ name: 'ToggleSearch', command: EditorCommandType.ToggleSearch },
-	])('$name reveals a pre-existing match when search opens', ({ command }) => {
+	])('$name keeps the scroll position when search opens', ({ command }) => {
 		const extension = searchExtension(jest.fn());
 		const editor = createTestEditor({ html: '<p>Earlier</p><p>Target</p>', plugins: extension.plugin });
 		const coordsSpy = jest.spyOn(editor, 'coordsAtPos').mockReturnValue({ top: window.innerHeight + 190, bottom: window.innerHeight + 200, left: 0, right: 0 });
@@ -59,8 +59,9 @@ describe('searchPlugin', () => {
 			expect(scrollSpy).not.toHaveBeenCalled();
 
 			commands[command](editor.state, editor.dispatch, editor);
-			expect(editor.state.doc.textBetween(editor.state.selection.from, editor.state.selection.to)).toBe('Target');
-			expect(scrollSpy).toHaveBeenCalledWith(0, 216);
+			expect(editor.state.selection.from).toBe(1);
+			expect(scrollSpy).not.toHaveBeenCalled();
+			expect(coordsSpy).not.toHaveBeenCalled();
 		} finally {
 			coordsSpy.mockRestore();
 			scrollSpy.mockRestore();
@@ -68,15 +69,19 @@ describe('searchPlugin', () => {
 		}
 	});
 
-	test('opening search and setting a term in one update reveals the match', () => {
+	test('opening search with a term does not scroll until the term changes', () => {
 		const extension = searchExtension(jest.fn());
-		const editor = createTestEditor({ html: '<p>Target</p>', plugins: extension.plugin });
+		const editor = createTestEditor({ html: '<p>Targeted</p>', plugins: extension.plugin });
 		const coordsSpy = jest.spyOn(editor, 'coordsAtPos').mockReturnValue({ top: window.innerHeight + 190, bottom: window.innerHeight + 200, left: 0, right: 0 });
 		const scrollSpy = jest.spyOn(window, 'scrollBy').mockImplementation(() => {});
 		try {
 			document.getSelection()?.removeAllRanges();
 			extension.updateState(editor, { ...searchState, searchText: 'Target' }, 'test');
-			expect(editor.state.doc.textBetween(editor.state.selection.from, editor.state.selection.to)).toBe('Target');
+			expect(editor.state.selection.from).toBe(1);
+			expect(scrollSpy).not.toHaveBeenCalled();
+
+			extension.updateState(editor, { ...searchState, searchText: 'Targeted' }, 'test');
+			expect(editor.state.doc.textBetween(editor.state.selection.from, editor.state.selection.to)).toBe('Targeted');
 			expect(scrollSpy).toHaveBeenCalledWith(0, 216);
 		} finally {
 			coordsSpy.mockRestore();
