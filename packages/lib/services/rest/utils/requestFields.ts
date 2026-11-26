@@ -1,5 +1,6 @@
 import { Request } from '../Api';
 import BaseItem from '../../../models/BaseItem';
+import validateField from './validateField';
 
 function defaultFieldsByModelType(modelType: number): string[] {
 	const ModelClass = BaseItem.getClassByItemType(modelType);
@@ -19,10 +20,11 @@ export default function(request: Request, modelType: number, defaultFields: stri
 
 	const query = request.query;
 	if (!query || !query.fields) return getDefaults();
-	if (Array.isArray(query.fields)) return query.fields.slice();
+	if (Array.isArray(query.fields)) return query.fields.map(validateField);
 	const fields = query.fields
 		.split(',')
 		.map((f: string) => f.trim())
-		.filter((f: string) => !!f);
+		.filter((f: string) => !!f)
+		.map(validateField);
 	return fields.length ? fields : getDefaults();
 }

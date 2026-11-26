@@ -12,6 +12,7 @@ import bridge from '../../services/bridge';
 import styled from 'styled-components';
 import { AppState } from '../../app.reducer';
 import { writeFileSync } from 'fs';
+import checkDisabledSyncItemsNotification from '@joplin/lib/services/synchronizer/utils/checkDisabledSyncItemsNotification';
 
 interface Props {
 	themeId: number;
@@ -121,6 +122,7 @@ function StatusScreen(props: Props) {
 					const onClick = async () => {
 						await item.ignoreHandler();
 						void refreshScreen();
+						await checkDisabledSyncItemsNotification(props.dispatch);
 					};
 					ignoreLink = (
 						<a href="#" onClick={onClick} style={inlineLinkStyle}>
@@ -132,6 +134,7 @@ function StatusScreen(props: Props) {
 					const onClick = async () => {
 						await item.retryHandler();
 						void refreshScreen();
+						await checkDisabledSyncItemsNotification(props.dispatch);
 					};
 
 					retryLink = (

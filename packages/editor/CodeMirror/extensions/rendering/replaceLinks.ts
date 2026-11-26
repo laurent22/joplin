@@ -49,6 +49,7 @@ const replaceLinks = [
 		shouldHide: (node, state) => {
 			return shouldFullReplace(node, state);
 		},
+		getSelectionOwner: node => node.node.parent,
 		getDecorationRange: (node, state) => {
 			const previous = node.name === 'URL' ? node.node.prevSibling : null;
 			if (previous?.name !== 'LinkMark') return null;

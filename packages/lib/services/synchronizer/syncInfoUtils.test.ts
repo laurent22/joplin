@@ -1,4 +1,4 @@
-import { afterAllCleanUp, setupDatabaseAndSynchronizer, logger, switchClient, encryptionService, msleep, fileApi } from '../../testing/test-utils';
+import { afterAllCleanUp, setupDatabaseAndSynchronizer, logger, switchClient, encryptionService, msleep, fileApi, withWarningSilenced, expectNotThrow, runWithFakeTimers, expectThrow } from '../../testing/test-utils';
 import MasterKey from '../../models/MasterKey';
 import { checkIfCanSync, localSyncInfo, localSyncInfoSelector, masterKeyEnabled, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyEnabled, setMasterKeyHasBeenUsed, SyncInfo, syncInfoEquals, checkSyncTargetIsValid, fetchSyncInfo, onRevisionServiceSettingsChanged, setAppMinVersion, checkNoteLockKeyConflict, checkNoteLockKeyMigrationId } from './syncInfoUtils';
 import Setting from '../../models/Setting';
@@ -8,6 +8,9 @@ import Logger from '@joplin/utils/Logger';
 import { State } from '../../reducer';
 import { MasterKeyEntity } from '../e2ee/types';
 import { ErrorCode } from '../../errors';
+import { Second, Day } from '@joplin/utils/time';
+
+const mergeSyncInfosWithoutHistory = (s1: SyncInfo, s2: SyncInfo) => mergeSyncInfos({ s1, s2, lastS1: undefined, lastS2: undefined });
 
 describe('syncInfoUtils', () => {
 	it('should keep selected sync info stable while the cache is unchanged', () => {
@@ -132,24 +135,24 @@ describe('syncInfoUtils', () => {
 		syncInfo1.appMinVersion = '1.0.5';
 		const syncInfo2 = new SyncInfo();
 		syncInfo2.appMinVersion = '1.0.2';
-		expect(mergeSyncInfos(syncInfo1, syncInfo2).appMinVersion).toBe('1.0.5');
+		expect(mergeSyncInfosWithoutHistory(syncInfo1, syncInfo2).appMinVersion).toBe('1.0.5');
 
 		syncInfo1.appMinVersion = '2.1.0';
 		syncInfo2.appMinVersion = '2.2.5';
-		expect(mergeSyncInfos(syncInfo1, syncInfo2).appMinVersion).toBe('2.2.5');
+		expect(mergeSyncInfosWithoutHistory(syncInfo1, syncInfo2).appMinVersion).toBe('2.2.5');
 
 		syncInfo1.appMinVersion = '1.0.0';
 		syncInfo2.appMinVersion = '1.0.0';
-		expect(mergeSyncInfos(syncInfo1, syncInfo2).appMinVersion).toBe('1.0.0');
+		expect(mergeSyncInfosWithoutHistory(syncInfo1, syncInfo2).appMinVersion).toBe('1.0.0');
 
 		// Should prefer the version from syncInfo1 if versions are otherwise equal.
 		syncInfo1.appMinVersion = '1.00';
 		syncInfo2.appMinVersion = '1.0.0';
-		expect(mergeSyncInfos(syncInfo1, syncInfo2).appMinVersion).toBe('1.00');
+		expect(mergeSyncInfosWithoutHistory(syncInfo1, syncInfo2).appMinVersion).toBe('1.00');
 
 		syncInfo1.appMinVersion = '0.0.0';
 		syncInfo2.appMinVersion = '0.00';
-		expect(mergeSyncInfos(syncInfo1, syncInfo2).appMinVersion).toBe('0.0.0');
+		expect(mergeSyncInfosWithoutHistory(syncInfo1, syncInfo2).appMinVersion).toBe('0.0.0');
 	});
 
 	const noteLockKey = (id: string, updated_time: number): MasterKeyEntity => ({ id, content: `content${id}-${updated_time}`, updated_time });
@@ -172,7 +175,7 @@ describe('syncInfoUtils', () => {
 		const remote = syncInfoWithNoteLockKey(remoteKey, remoteLineage);
 		const expected = winner === 'local' ? local : remote;
 
-		const merged = mergeSyncInfos(local, remote, { resetPropagates });
+		const merged = mergeSyncInfos({ s1: local, s2: remote, lastS1: undefined, lastS2: undefined, resetPropagates });
 
 		expect(merged.noteLockKey).toEqual(expected.noteLockKey);
 	});
@@ -181,7 +184,7 @@ describe('syncInfoUtils', () => {
 		const local = syncInfoWithNoteLockKey(noteLockKey('2', 300), 'L2');
 		const remote = syncInfoWithNoteLockKey(noteLockKey('1', 200), 'L1');
 
-		expect(() => mergeSyncInfos(local, remote, { hasLocalLockedNotes: true })).toThrow('different lineage');
+		expect(() => mergeSyncInfos({ s1: local, s2: remote, lastS1: undefined, lastS2: undefined, hasLocalLockedNotes: true })).toThrow('different lineage');
 	});
 
 	it('should stop the sync and park the remote key when lineages differ and local notes are locked', () => {
@@ -270,12 +273,12 @@ describe('syncInfoUtils', () => {
 
 		// If one master key has been used and the other not, it should select
 		// the one that's been used regardless of timestamps.
-		expect(mergeSyncInfos(syncInfo1, syncInfo2).activeMasterKeyId).toBe('1');
+		expect(mergeSyncInfosWithoutHistory(syncInfo1, syncInfo2).activeMasterKeyId).toBe('1');
 
 		// If both master keys have been used it should rely on timestamp
 		// (latest modified is picked).
 		syncInfo2.masterKeys[0].hasBeenUsed = true;
-		expect(mergeSyncInfos(syncInfo1, syncInfo2).activeMasterKeyId).toBe('2');
+		expect(mergeSyncInfosWithoutHistory(syncInfo1, syncInfo2).activeMasterKeyId).toBe('2');
 	});
 
 	it('should merge sync target info, but should not make a disabled key the active one', async () => {
@@ -304,13 +307,28 @@ describe('syncInfoUtils', () => {
 		// **However**, if the key 1 has been disabled by user, it should
 		// **not** be picked as the active one. Instead it should use key 2,
 		// because it's still enabled.
-		expect(mergeSyncInfos(syncInfo1, syncInfo2).activeMasterKeyId).toBe('2');
+		expect(mergeSyncInfosWithoutHistory(syncInfo1, syncInfo2).activeMasterKeyId).toBe('2');
 
 		// If both key are disabled, we go back to the original logic, where we
 		// select the key that's been used.
 		syncInfo2.masterKeys[0].enabled = 0;
-		expect(mergeSyncInfos(syncInfo1, syncInfo2).activeMasterKeyId).toBe('1');
+		expect(mergeSyncInfosWithoutHistory(syncInfo1, syncInfo2).activeMasterKeyId).toBe('1');
 	});
+
+	it('should throw rather than disable E2EE locally when disabled remotely', () => runWithFakeTimers(async () => {
+		const syncInfo1 = new SyncInfo();
+		const syncInfo2 = new SyncInfo();
+
+		syncInfo1.e2ee = true;
+		syncInfo2.e2ee = true;
+
+		jest.advanceTimersByTime(Second);
+
+		syncInfo2.e2ee = false;
+
+		await expectThrow(() => mergeSyncInfosWithoutHistory(syncInfo1, syncInfo2), 'e2eeEnabledStateConflict');
+		await expectNotThrow(() => mergeSyncInfosWithoutHistory(syncInfo2, syncInfo1));
+	}));
 
 	it('should fix the sync info if it contains invalid data', async () => {
 		logger.enabled = false;
@@ -331,6 +349,80 @@ describe('syncInfoUtils', () => {
 		expect(loaded.masterKeys.length).toBe(1);
 
 		logger.enabled = true;
+	});
+
+	it('should prefer a changed revisionServiceEnabled to an unchanged revisionServiceEnabled with far-future updatedTime', async () => {
+		const lastSyncInfo1 = new SyncInfo();
+		lastSyncInfo1.revisionServiceEnabled = true;
+		lastSyncInfo1.setKeyTimestamp('revisionServiceEnabled', Date.now() - Day);
+
+		const syncInfo1 = new SyncInfo();
+		syncInfo1.revisionServiceEnabled = true;
+		syncInfo1.setKeyTimestamp('revisionServiceEnabled', Date.now());
+
+		const syncInfo2 = new SyncInfo();
+		syncInfo2.revisionServiceEnabled = false;
+		syncInfo2.setKeyTimestamp('revisionServiceEnabled', Date.now() + 500 * Day);
+		const lastSyncInfo2 = syncInfo2;
+
+		// Should use timestamps when no history is available
+		expect(mergeSyncInfosWithoutHistory(syncInfo1, syncInfo2).revisionServiceEnabled).toBe(syncInfo2.revisionServiceEnabled);
+		expect(mergeSyncInfosWithoutHistory(syncInfo2, syncInfo1).revisionServiceEnabled).toBe(syncInfo2.revisionServiceEnabled);
+
+		// Should use differences otherwise
+		await withWarningSilenced(/Overriding future-timestamped key/, async () => {
+			expect(
+				mergeSyncInfos({ s1: syncInfo1, s2: syncInfo2, lastS1: lastSyncInfo1, lastS2: lastSyncInfo2 }).revisionServiceEnabled,
+			).toBe(syncInfo1.revisionServiceEnabled);
+
+			// Should be symmetric
+			expect(
+				mergeSyncInfos({ s1: syncInfo2, s2: syncInfo1, lastS1: lastSyncInfo2, lastS2: lastSyncInfo1 }).revisionServiceEnabled,
+			).toBe(syncInfo1.revisionServiceEnabled);
+		}, { requireWarning: true });
+	});
+
+	it('should prefer a changed master key to an unchanged master key with a far-future updated_time', async () => {
+		const lastSyncInfo1 = new SyncInfo();
+		lastSyncInfo1.masterKeys = [{
+			id: '1',
+			content: 'content1',
+			hasBeenUsed: true,
+			updated_time: Date.now() - Day,
+		}];
+
+		const syncInfo1 = new SyncInfo();
+		syncInfo1.masterKeys = [{
+			id: '1',
+			content: 'content2',
+			hasBeenUsed: true,
+			updated_time: Date.now(),
+		}];
+
+		const syncInfo2 = new SyncInfo();
+		syncInfo2.masterKeys = [{
+			id: '1',
+			content: 'content3',
+			hasBeenUsed: true,
+			updated_time: Date.now() + 500 * Day,
+		}];
+		const lastSyncInfo2 = syncInfo2;
+
+		// Should base on updated_time when no history is provided
+		expect(mergeSyncInfosWithoutHistory(syncInfo1, syncInfo2).masterKeys).toMatchObject([{ content: 'content3' }]);
+
+		await withWarningSilenced(/Overriding future-timestamped key with changed local value\. Key: masterKeys\.1/, async () => {
+			expect(
+				mergeSyncInfos({ s1: syncInfo1, s2: syncInfo2, lastS1: lastSyncInfo1, lastS2: lastSyncInfo2 }).masterKeys,
+			).toMatchObject([{ content: 'content2' }]);
+		}, { requireWarning: true });
+
+		// Should be symmetric
+		await withWarningSilenced(/Overriding future-timestamped key with changed remote value\. Key: masterKeys\.1/, async () => {
+			expect(
+				mergeSyncInfos({ s1: syncInfo2, s2: syncInfo1, lastS1: lastSyncInfo2, lastS2: lastSyncInfo1 }).masterKeys,
+			).toMatchObject([{ content: 'content2' }]);
+		}, { requireWarning: true });
 	});
 
 	// cSpell:disable
@@ -439,6 +531,25 @@ describe('syncInfoUtils', () => {
 		});
 	});
 	// cSpell:enable
+
+	it('should handle the case where noteLockKey is absent in history', async () => {
+		const local = new SyncInfo();
+		local.noteLockKey = {
+			id: 'key-1',
+			content: 'test',
+			updated_time: Date.now(),
+		};
+		const remote = new SyncInfo();
+		remote.noteLockKey = {
+			id: 'key-2',
+			content: 'test',
+			updated_time: Date.now(),
+		};
+
+		await expectNotThrow(async () => {
+			mergeSyncInfos({ s1: local, s2: remote, lastS1: new SyncInfo(), lastS2: new SyncInfo() });
+		});
+	});
 
 	test.each([
 		['1.0.0', '1.0.4', true],
@@ -577,7 +688,7 @@ describe('syncInfoUtils', () => {
 		s2.setKeyTimestamp('revisionServiceEnabled', 100);
 		s2.setKeyTimestamp('revisionServiceTtlDays', 200);
 
-		const merged = mergeSyncInfos(s1, s2);
+		const merged = mergeSyncInfosWithoutHistory(s1, s2);
 		expect(merged.revisionServiceEnabled).toBe(false);
 		expect(merged.revisionServiceTtlDays).toBe(90);
 	});

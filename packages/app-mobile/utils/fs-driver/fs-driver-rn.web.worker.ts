@@ -19,7 +19,7 @@ declare global {
 	interface FileSystemSyncAccessHandle {
 		close(): void;
 		truncate(to: number): void;
-		write(buffer: ArrayBuffer|ArrayBufferView, options?: { at: number }): void;
+		write(buffer: ArrayBuffer|ArrayBufferView, options?: { at: number }): number;
 		read(buffer: ArrayBuffer|ArrayBufferView, options?: { at: number }): number;
 		getSize(): number;
 		flush(): void;
@@ -310,7 +310,17 @@ export class WorkerApi {
 					at = writer.getSize();
 				}
 
-				write = (data: BufferSource) => writer.write(data, { at });
+				write = (data: BufferSource) => {
+					const bytes = data instanceof ArrayBuffer ? new Uint8Array(data) : new Uint8Array(data.buffer, data.byteOffset, data.byteLength);
+					let written = 0;
+					while (written < bytes.byteLength) {
+						const count = writer.write(bytes.subarray(written), { at: at + written });
+						if (!Number.isInteger(count) || count <= 0 || count > bytes.byteLength - written) {
+							throw new Error(`Failed to write file ${path}`);
+						}
+						written += count;
+					}
+				};
 				close = () => writer.close();
 			} catch (error) {
 				// In some cases, createSyncAccessHandle isn't available. In other cases,
@@ -341,7 +351,7 @@ export class WorkerApi {
 	}
 
 	public async remove(path: string, { recursive = true }: RemoveOptions = {}) {
-		path = normalize(path);
+		path = resolve('/', path);
 
 		this.directoryHandleCache_.clear();
 
@@ -349,7 +359,7 @@ export class WorkerApi {
 			const dirHandle = await this.pathToDirectoryHandle_(dirname(path));
 
 			if (dirHandle) {
-				await dirHandle.removeEntry(basename(path), { recursive });
+				await dirHandle.removeEntry(removeReservedWords(basename(path)), { recursive });
 			} else {
 				console.warn(`remove: ENOENT: Parent directory of path ${JSON.stringify(path)} does not exist.`);
 			}
@@ -407,6 +417,12 @@ export class WorkerApi {
 		await this.writeFile(to, await fromFile.arrayBuffer(), 'Buffer');
 	}
 
+	public async move(from: string, to: string) {
+		if (resolve('/', from) === resolve('/', to)) return;
+		await this.copy(from, to);
+		await this.unlink(from);
+	}
+
 	public async stat(path: string, handle?: FileSystemDirectoryHandle|FileSystemFileHandle): Promise<TransferableStat|null> {
 		logger.debug('stat', path, handle ? 'with handle' : '');
 		try {
@@ -446,6 +462,7 @@ export class WorkerApi {
 	}
 
 	public async readDirStats(path: string, options: ReadDirStatsOptions = { recursive: false }): Promise<TransferableStat[]|null> {
+		path = resolve('/', path);
 		const readDirStats = async (basePath: string, path: string, dirHandle?: FileSystemDirectoryHandle) => {
 			dirHandle ??= await this.pathToDirectoryHandle_(path);
 			if (!dirHandle) return null;

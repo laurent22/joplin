@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { connect } from 'react-redux';
 import { Platform } from 'react-native';
 import { AppState } from '../../utils/types';
 import WarningBox, { WarningBoxAction, WarningBoxTarget } from './WarningBox';
 import NavService from '@joplin/lib/services/NavService';
 import { _ } from '@joplin/lib/locale';
-import { showMissingMasterKeyMessage, showUnknownKeyFormatBanner } from '@joplin/lib/services/e2ee/utils';
+import { resolveE2eeEnabledStateConflict, showMissingMasterKeyMessage, showUnknownKeyFormatBanner } from '@joplin/lib/services/e2ee/utils';
 import { localSyncInfoFromState, noteLockKeyConflictFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { NoteLockMigrationStatus } from '@joplin/lib/reducer';
 import { confirmAndSkipNoteLockKeyMigration, notMigratedMessage, withSkippedCount } from '@joplin/lib/services/noteLock/NoteLockKeyMigration';
@@ -18,14 +18,19 @@ import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import { reg } from '@joplin/lib/registry';
+import { DialogContext } from '../DialogManager';
+import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
+import { onAllowUnencryptedUploads, onKeepHeldBackChanges, plaintextUploadBannerMessage } from '@joplin/lib/services/synchronizer/utils/plaintextUploadHeldBackItems';
 
 const logger = Logger.create('WarningBanner');
 
 interface Props {
 	themeId: number;
+	routeName: string;
 	showMissingMasterKeyMessage: boolean;
 	showUnknownKeyFormatMessage: boolean;
 	hasDisabledSyncItems: boolean;
+	plaintextUploadHeldBackItemIds: string[];
 	shouldUpgradeSyncTarget: boolean;
 	showShouldUpgradeSyncTargetMessage: boolean|undefined;
 	hasDisabledEncryptionItems: boolean;
@@ -34,6 +39,8 @@ interface Props {
 	shareInvitations: ShareInvitation[];
 	processingShareInvitationResponse: boolean;
 	showInvalidJoplinCloudCredential: boolean;
+	showReEnableEncryptionBanner: boolean;
+	mustFixPpk: boolean;
 	noteLockBulkChangeRunning: boolean;
 	noteLockKeyConflict: boolean;
 	showNoteLockKeyConflictMessage: boolean|undefined;
@@ -54,6 +61,8 @@ const fetchAndroidVersionIsPreRelease = async (version: string) => {
 
 const WarningBannerComponent: React.FC<Props> = props => {
 	const warningComps = [];
+
+	const dialogs = useContext(DialogContext);
 
 	const [isAndroidTargetPreRelease, setIsAndroidTargetPreRelease] = useState<boolean|null>(null);
 
@@ -79,6 +88,26 @@ const WarningBannerComponent: React.FC<Props> = props => {
 			actions={actions}
 		/>;
 	};
+
+	const renderPlaintextUploadWarning = () => {
+		const message = plaintextUploadBannerMessage(props.plaintextUploadHeldBackItemIds.length);
+		const onPress = async () => {
+			const allowId = 0;
+			const keepId = 1;
+			const cancelId = 2;
+			const choice = await shim.showMessageBox(message, {
+				buttons: [_('Allow on this device'), _('Don\'t upload'), _('Cancel')],
+				cancelId,
+				defaultId: cancelId,
+			});
+			if (choice === allowId) await onAllowUnencryptedUploads();
+			else if (choice === keepId) await onKeepHeldBackChanges(props.plaintextUploadHeldBackItemIds, props.dispatch);
+		};
+		return renderWarningBox('plaintextUpload', message, { onPress: () => void onPress() });
+	};
+
+	// The status screen already lists the changes
+	const showPlaintextUploadWarning = props.routeName !== 'Status' && props.plaintextUploadHeldBackItemIds.length > 0;
 
 	const renderMustUpgradeAppMessage = () => {
 		if (props.syncTargetAppMinVersion) {
@@ -121,6 +150,9 @@ const WarningBannerComponent: React.FC<Props> = props => {
 	if (props.showMissingMasterKeyMessage) {
 		warningComps.push(renderWarningBox('missingDecryptionPassword', _('Press to set the decryption password.'), { screen: 'EncryptionConfig' }));
 	}
+	if (showPlaintextUploadWarning) {
+		warningComps.push(renderPlaintextUploadWarning());
+	}
 	if (props.showUnknownKeyFormatMessage) {
 		warningComps.push(
 			renderWarningBox('unknownKeyFormat', _('One or more encryption keys are stored in an unknown format. Press for more info.'), { screen: 'EncryptionConfig' }),
@@ -157,6 +189,36 @@ const WarningBannerComponent: React.FC<Props> = props => {
 	if (props.showInvalidJoplinCloudCredential) {
 		const target = { screen: 'JoplinCloudLogin' };
 		warningComps.push(renderWarningBox('syncLogin', _('Your Joplin Cloud credentials are invalid, please login.'), target));
+	}
+	if (props.showReEnableEncryptionBanner) {
+		warningComps.push(
+			renderWarningBox('reEnableEncryption', _('Encryption needs to be reconfigured.'), {
+				onPress: () => {
+					const resolveConflict = async (reEnable: boolean) => {
+						await resolveE2eeEnabledStateConflict(
+							EncryptionService.instance(),
+							reEnable,
+							props.dispatch,
+						);
+						void reg.scheduleSync(0);
+					};
+
+					dialogs.prompt(
+						'',
+						_('Encryption has been disabled on the sync target.'),
+						[
+							{ text: _('Disable encryption'), style: 'destructive', onPress: () => resolveConflict(false) },
+							{ text: _('Keep encryption enabled'), style: 'default', onPress: () => resolveConflict(true) },
+						],
+					);
+				},
+			}),
+		);
+	}
+	if (props.mustFixPpk) {
+		warningComps.push(
+			renderWarningBox('ppkError', _('Unable to sync: Invalid public-private key pair.'), { screen: 'EncryptionConfig' }),
+		);
 	}
 	if (props.noteLockBulkChangeRunning) {
 		warningComps.push(renderWarningBox('noteLockBulkChange', _('Applying note lock changes. Please wait…'), null));
@@ -208,12 +270,16 @@ export default connect((state: AppState) => {
 		showMissingMasterKeyMessage: !isEncryptionConfigRoute(state) && showMissingMasterKeyMessage(syncInfo, state.notLoadedMasterKeys),
 		showUnknownKeyFormatMessage: !isEncryptionConfigRoute(state) && showUnknownKeyFormatBanner(syncInfo),
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
+		plaintextUploadHeldBackItemIds: state.plaintextUploadHeldBackItemIds,
+		routeName: state.route?.routeName,
 		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
 		syncTargetAppMinVersion: state.mustUpgradeAppMinVersion,
 		shareInvitations: state.shareService.shareInvitations,
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
 		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && !isSyncLoginRoute(state) && state.mustAuthenticate,
+		showReEnableEncryptionBanner: syncInfo.e2ee && state.mustResolveE2eeEnabledConflict,
+		mustFixPpk: state.mustFixPpk,
 		noteLockBulkChangeRunning: state.noteLockBulkChangeRunning,
 		noteLockKeyConflict: noteLockKeyConflictFromState(state),
 		noteLockMigrationStatus: state.noteLockMigrationStatus,

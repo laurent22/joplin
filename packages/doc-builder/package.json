@@ -1,6 +1,9 @@
 {
   "name": "@joplin/doc-builder",
   "version": "0.0.0",
+  "installConfig": {
+    "hoistingLimits": "workspaces"
+  },
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",

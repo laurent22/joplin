@@ -4,7 +4,7 @@ import Setting from '@joplin/lib/models/Setting';
 import mockShareService from '@joplin/lib/testing/share/mockShareService';
 import { act, render, screen, userEvent, waitFor } from '../../../utils/testing/testingLibrary';
 import { ShareInvitation, ShareUserStatus } from '@joplin/lib/services/share/reducer';
-import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
+import { runWithFakeTimers, setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import makeMockShareInvitation from '@joplin/lib/testing/share/makeMockShareInvitation';
 import { Provider } from 'react-redux';
@@ -99,9 +99,10 @@ describe('ShareManager/index', () => {
 		expect(acceptButton).toBeVisible();
 
 		// Use fake timers to silence a userEvents warning.
-		jest.useFakeTimers();
-		const user = userEvent.setup();
-		await user.press(acceptButton);
+		await runWithFakeTimers(async () => {
+			const user = userEvent.setup();
+			await user.press(acceptButton);
+		});
 
 		await waitFor(() => {
 			expect(onUpdateShareItems).toHaveBeenCalledWith(ShareUserStatus.Accepted);

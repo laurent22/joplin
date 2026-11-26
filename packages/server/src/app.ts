@@ -39,6 +39,8 @@ interface Argv {
 import * as nodeSqlite from 'sqlite3';
 import { shimInit } from '@joplin/lib/shim-init-node';
 import { isSameSite } from './utils/urlUtils';
+import { errorMessageForLog, isUnexpectedError, unexpectedErrorMessage } from './utils/errors';
+import { uuidgen } from '@joplin/lib/uuid';
 const cors = require('@koa/cors');
 shimInit({ nodeSqlite });
 
@@ -174,11 +176,13 @@ async function main() {
 			await next();
 		} catch (error) {
 			ctx.status = error.httpCode || 500;
+			const errorId = uuidgen();
+			const publicMessage = isUnexpectedError(error) ? unexpectedErrorMessage(errorId) : error.message;
 
 			if (ctx.status >= 500) {
-				appLogger().error(`Middleware error on ${ctx.path}:`, error);
+				appLogger().error(`Middleware error on ${ctx.path}: Error ID ${errorId}:`, error);
 			} else {
-				appLogger().info(`Middleware error on ${ctx.path}:`, error);
+				appLogger().info(`Middleware error on ${ctx.path}: ${errorMessageForLog(String(error.message))}`);
 			}
 
 			const responseFormat = routeResponseFormat(ctx);
@@ -193,15 +197,15 @@ async function main() {
 						title: 'Error',
 						path: 'index/error',
 						showFooter: true,
-						content: { error },
+						content: { error: { message: publicMessage } },
 					});
 				} catch (anotherError) {
 					ctx.response.set('Content-Type', 'application/json');
-					ctx.body = JSON.stringify({ error: `${error.message} (Check the server log for more information)` });
+					ctx.body = JSON.stringify({ error: `${publicMessage} (Check the server log for more information)` });
 				}
 			} else {
 				ctx.response.set('Content-Type', 'application/json');
-				ctx.body = JSON.stringify({ error: error.message });
+				ctx.body = JSON.stringify({ error: publicMessage });
 			}
 		}
 	});

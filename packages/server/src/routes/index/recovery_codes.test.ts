@@ -155,7 +155,7 @@ describe('index/recovery_codes', () => {
 		expect(!!emails.find(e => e.subject === '[Joplin Server] Your multi-factor authentication recovery codes were viewed')).toBe(false);
 	});
 
-	test('should send a email to user when the recovery codes are accessed, but the first time', async () => {
+	test('should send a email to user when the recovery codes are accessed, but the first time, at most once per hour', async () => {
 		const { session, user } = await createUserAndSession(1, undefined, { email: 'user@localhost' });
 		await models().user().enableMFA(user.id, 'asdf', session.id);
 
@@ -175,13 +175,13 @@ describe('index/recovery_codes', () => {
 		// first time doesn't send an email
 		await accessRecoveryCodes();
 
-		// second time upwards should receive and email alert
+		// second time upwards should receive an email alert, but only one per hour
 		await accessRecoveryCodes();
 		await accessRecoveryCodes();
 		await accessRecoveryCodes();
 
 		const emails = await models().email().all();
 
-		expect(emails.filter(e => e.subject === '[Joplin Server] Your multi-factor authentication recovery codes were viewed').length).toBe(3);
+		expect(emails.filter(e => e.subject === '[Joplin Server] Your multi-factor authentication recovery codes were viewed').length).toBe(1);
 	});
 });

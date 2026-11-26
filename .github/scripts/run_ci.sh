@@ -53,7 +53,7 @@ if [ "$IS_SERVER_RELEASE" = 0 ] && [ "$IS_DESKTOP_RELEASE" = 0 ] && [ "$IS_TRANS
 	RUN_TESTS=1
 fi
 
-if [ "$RUNNER_ARCH" == "ARM64" ]; then
+if [ "$RUNNER_ARCH" == "ARM64" ] && [ "$IS_LINUX" == "1" ]; then
 	if [ "$IS_SERVER_RELEASE" == "0" ] && [ "$IS_TRANSCRIBE_RELEASE" == "0" ]; then
 		# We exit now because nothing works properly with the ARM64 architecture.
 		# We only proceed  if building the server image.
@@ -62,7 +62,7 @@ if [ "$RUNNER_ARCH" == "ARM64" ]; then
 	fi
 fi
 
-if [ "$RUNNER_ARCH" == "ARM64" ]; then
+if [ "$RUNNER_ARCH" == "ARM64" ] && [ "$IS_LINUX" == "1" ]; then
 	# Canvas is only needed for tests and it doesn't build in ARM64 so remove it
 	RUN_TESTS=0
 	cd "$ROOT_DIR/packages/lib"
@@ -289,17 +289,14 @@ if [ "$IS_LINUX" == "1" ]; then
 fi
 
 # =============================================================================
-# Find out if we should run the build or not. Electron-builder gets stuck when
-# building PRs so we disable it in this case. The Linux build should provide
-# enough info if the app builds or not.
-# https://github.com/electron-userland/electron-builder/issues/4263
+# Find out if we should run the build or not. On macOS, the Intel app is only
+# built for desktop releases, on an Intel runner. Otherwise the job runs on
+# Apple Silicon and the app is already built by build-macos-m1.yml.
 # =============================================================================
 
-if [ "$IS_PULL_REQUEST" == "1" ]; then
-	if [ "$IS_MACOS" == "1" ]; then
-		echo "Step: Not building Electron app"
-		exit 0
-	fi
+if [ "$IS_MACOS" == "1" ] && [ "$IS_DESKTOP_RELEASE" == "0" ]; then
+	echo "Step: Not building Electron app"
+	exit 0
 fi
 
 # =============================================================================

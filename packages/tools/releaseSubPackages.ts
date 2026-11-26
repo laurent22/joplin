@@ -118,7 +118,25 @@ const publishPackage = async (dir: string, rootLicensePath: string, dryRun: bool
 	}
 };
 
-const versionAll = async () => {
+// The CLI app is a private package because it is published from its build directory
+const publishCliApp = async (rootDir: string, dryRun: boolean) => {
+	const buildDir = join(rootDir, 'packages', 'app-cli', 'build');
+	await execCommand(['yarn', 'workspace', 'joplin', 'build']);
+	await copy(join(rootDir, 'README.md'), join(buildDir, 'README.md'));
+	await publishPackage(buildDir, join(rootDir, 'LICENSE'), dryRun);
+};
+
+const publishIfNeeded = async (manifest: PackageJson, publish: ()=> Promise<void>) => {
+	const id = `${manifest.name}@${manifest.version}`;
+	if (await isPublished(manifest)) {
+		console.info(`Skipping ${id}: already published`);
+		return;
+	}
+	console.info(`Publishing ${id}...`);
+	await publish();
+};
+
+export const versionAll = async () => {
 	const packages = await loadPublicPackages(await getRootDir());
 	const bumped = bumpVersions(packages.map(p => p.manifest));
 	for (const [index, { dir, manifest }] of packages.entries()) {
@@ -127,19 +145,17 @@ const versionAll = async () => {
 	}
 };
 
-// Packages are published one at a time, dependencies first, so that a failure leaves the registry in a
-// consistent state. Already published versions are skipped, so the command can be re-run after a failure.
+// Packages are published one at a time, dependencies first and the CLI app last, so that a failure leaves
+// the registry in a consistent state. Already published versions are skipped, so the command can be
+// re-run after a failure, and the CLI app is only published when its version has been bumped.
 const publishAll = async (dryRun: boolean) => {
 	const rootDir = await getRootDir();
 	for (const { dir, manifest } of sortByDependencies(await loadPublicPackages(rootDir))) {
-		const id = `${manifest.name}@${manifest.version}`;
-		if (await isPublished(manifest)) {
-			console.info(`Skipping ${id}: already published`);
-			continue;
-		}
-		console.info(`Publishing ${id}...`);
-		await publishPackage(dir, join(rootDir, 'LICENSE'), dryRun);
+		await publishIfNeeded(manifest, () => publishPackage(dir, join(rootDir, 'LICENSE'), dryRun));
 	}
+
+	const cliManifest: PackageJson = JSON.parse(await readFile(join(rootDir, 'packages', 'app-cli', 'package.json'), 'utf8'));
+	await publishIfNeeded(cliManifest, () => publishCliApp(rootDir, dryRun));
 };
 
 if (require.main === module) {
@@ -147,7 +163,7 @@ if (require.main === module) {
 		try {
 			await yargs(hideBin(process.argv))
 				.command('version', 'Bumps the patch version of all public packages', {}, () => versionAll())
-				.command('publish', 'Publishes all public packages whose version is not on the registry yet', yargs => {
+				.command('publish', 'Publishes all public packages and the CLI app whose version is not on the registry yet', yargs => {
 					return yargs.option('dry-run', {
 						type: 'boolean',
 						default: false,

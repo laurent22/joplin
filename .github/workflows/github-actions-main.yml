@@ -15,7 +15,9 @@ jobs:
         # Visual Studio 2026 in late September 2026, and that job compiles
         # sqlite3 from source.
         # https://github.com/actions/runner-images/issues/14602
-        os: [macos-15-intel, ubuntu-22.04, windows-2025, ubuntu-22.04-arm, windows-11-vs2026-arm]
+        #
+        # The slower Intel macOS runner is only needed to build the Intel app for desktop releases.
+        os: ["${{ startsWith(github.ref, 'refs/tags/v') && 'macos-15-intel' || 'macos-15' }}", ubuntu-22.04, windows-2025, ubuntu-22.04-arm, windows-11-vs2026-arm]
     steps:
       - uses: actions/checkout@v6
 
@@ -89,6 +91,16 @@ jobs:
           CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
         run: |
           "${GITHUB_WORKSPACE}/.github/scripts/run_ci.sh"
+
+      # When a Jest worker is killed by a signal, the macOS crash report is the
+      # only way to find out whether V8 or a native module crashed.
+      - uses: actions/upload-artifact@v7
+        if: failure() && runner.os == 'macOS'
+        with:
+          name: crash-reports-${{ matrix.os }}
+          path: ~/Library/Logs/DiagnosticReports/node*.ips
+          if-no-files-found: ignore
+          retention-days: 14
 
       - name: Build and publish Windows app
         if: runner.os == 'Windows' && startsWith(github.ref, 'refs/tags/v')

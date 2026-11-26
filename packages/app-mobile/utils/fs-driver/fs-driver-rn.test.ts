@@ -6,10 +6,31 @@ const mockSaf = {
 	writeFile: jest.fn(),
 	writeFileInDirectory: jest.fn(),
 };
+const mockRnFetchBlobAppendFile = jest.fn();
+const mockRnfsAppendFile = jest.fn();
+const mockRnfsRead = jest.fn();
+const mockQuickCryptoBinaryLikeToArrayBuffer = jest.fn();
+const mockQuickCryptoAb2str = jest.fn();
+
+const mockRnfs = {
+	appendFile: mockRnfsAppendFile,
+	exists: jest.fn(),
+	moveFile: jest.fn(),
+	read: mockRnfsRead,
+	unlink: jest.fn(),
+};
 
 jest.mock('rn-fetch-blob', () => ({
 	__esModule: true,
-	default: { fs: {} },
+	default: { fs: { appendFile: mockRnFetchBlobAppendFile } },
+}));
+
+jest.mock('react-native-quick-crypto', () => ({
+	__esModule: true,
+	default: {
+		binaryLikeToArrayBuffer: mockQuickCryptoBinaryLikeToArrayBuffer,
+		ab2str: mockQuickCryptoAb2str,
+	},
 }));
 
 jest.mock('@joplin/react-native-saf-x', () => ({
@@ -18,6 +39,9 @@ jest.mock('@joplin/react-native-saf-x', () => ({
 	openDocumentTree: jest.fn(),
 }));
 
+jest.mock('@dr.pogodin/react-native-fs', () => mockRnfs);
+
+import { Platform } from 'react-native';
 import FsDriverRN from './fs-driver-rn';
 
 describe('fs-driver-rn', () => {
@@ -37,6 +61,115 @@ describe('fs-driver-rn', () => {
 		mockSaf.copyFile.mockResolvedValue(undefined);
 		mockSaf.writeFileInDirectory.mockResolvedValue({ uri: `${parentPath}/new.md` });
 		mockSaf.copyFileToDirectory.mockResolvedValue({ uri: `${parentPath}/new.md` });
+		mockRnFetchBlobAppendFile.mockResolvedValue(0);
+		mockRnfsAppendFile.mockResolvedValue(undefined);
+		mockRnfsRead.mockResolvedValue('');
+		mockQuickCryptoBinaryLikeToArrayBuffer.mockImplementation((data: string, encoding: BufferEncoding) => {
+			const bytes = Buffer.from(data, encoding);
+			return bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength);
+		});
+		mockQuickCryptoAb2str.mockImplementation((data: ArrayBuffer, encoding: BufferEncoding) => Buffer.from(data).toString(encoding));
+	});
+
+	it('appends internal UTF-8 text without encoding it as base64 for RNFS', async () => {
+		const driver = new FsDriverRN();
+		const path = '/local/export.html';
+		// cSpell:disable
+		const content = 'a 𝓈𝓅𝑒𝒸𝒾𝒶𝓁 attachment';
+		// cSpell:enable
+		await driver.appendFile(path, content, 'utf-8');
+
+		expect(mockRnFetchBlobAppendFile).toHaveBeenCalledWith(path, content, 'utf8');
+		expect(mockRnfsAppendFile).not.toHaveBeenCalled();
+	});
+
+	it('keeps base64 and scoped URI appends on their existing paths', async () => {
+		const driver = new FsDriverRN();
+		await driver.appendFile('/local/export.bin', 'dGVzdA==', 'base64');
+		await driver.appendFile(destinationPath, 'more text', 'utf8');
+
+		expect(mockRnfsAppendFile).toHaveBeenCalledWith('/local/export.bin', 'dGVzdA==', 'base64');
+		expect(mockSaf.writeFile).toHaveBeenCalledWith(destinationPath, 'more text', { encoding: 'utf8', append: true });
+		expect(mockRnFetchBlobAppendFile).not.toHaveBeenCalled();
+	});
+
+	it('decodes ASCII reads via native conversions while preserving Latin-1 bytes and offsets', async () => {
+		const driver = new FsDriverRN();
+		const path = '/local/encrypted';
+		const handle = { path, offset: 0, mode: 'r', stat: { size: 5 } };
+		const firstBase64 = Buffer.from([0x4a, 0x45, 0x44]).toString('base64');
+		const secondBase64 = Buffer.from([0x80, 0xff]).toString('base64');
+		mockRnfsRead.mockResolvedValueOnce(firstBase64).mockResolvedValueOnce(secondBase64);
+
+		expect(await driver.readFileChunk(handle, 3, 'ascii')).toBe('JED');
+		expect(await driver.readFileChunk(handle, 2, 'ascii')).toBe('\u0080\u00ff');
+		expect(handle.offset).toBe(5);
+		expect(await driver.readFileChunk(handle, 1, 'ascii')).toBeNull();
+		expect(mockRnfsRead).toHaveBeenNthCalledWith(1, path, 3, 0, 'base64');
+		expect(mockRnfsRead).toHaveBeenNthCalledWith(2, path, 2, 3, 'base64');
+		expect(mockRnfsRead).toHaveBeenCalledTimes(2);
+		expect(mockQuickCryptoBinaryLikeToArrayBuffer).toHaveBeenCalledWith(firstBase64, 'base64');
+		expect(mockQuickCryptoBinaryLikeToArrayBuffer).toHaveBeenCalledWith(secondBase64, 'base64');
+		expect(mockQuickCryptoAb2str).toHaveBeenCalledWith(expect.any(ArrayBuffer), 'latin1');
+	});
+
+	it('keeps base64 and UTF-8 reads on the RNFS path', async () => {
+		const driver = new FsDriverRN();
+		const path = '/local/file';
+		const handle = { path, offset: 0, mode: 'r', stat: { size: 4 } };
+		mockRnfsRead.mockResolvedValueOnce('YWI=').mockResolvedValueOnce('cd');
+
+		expect(await driver.readFileChunk(handle, 2, 'base64')).toBe('YWI=');
+		expect(await driver.readFileChunk(handle, 2, 'utf8')).toBe('cd');
+		expect(mockRnfsRead).toHaveBeenNthCalledWith(1, path, 2, 0, 'base64');
+		expect(mockRnfsRead).toHaveBeenNthCalledWith(2, path, 2, 2, 'utf8');
+		expect(mockQuickCryptoBinaryLikeToArrayBuffer).not.toHaveBeenCalled();
+		expect(mockQuickCryptoAb2str).not.toHaveBeenCalled();
+	});
+
+	it.each([
+		{ scenario: 'iOS destination exists', platform: 'ios', exists: true, samePath: false, unlinks: true },
+		{ scenario: 'iOS destination is absent', platform: 'ios', exists: false, samePath: false, unlinks: false },
+		{ scenario: 'Android destination exists', platform: 'android', exists: true, samePath: false, unlinks: false },
+		{ scenario: 'iOS source equals destination', platform: 'ios', exists: true, samePath: true, unlinks: false },
+	] as const)('moves a local file when $scenario', async ({ platform, exists, samePath, unlinks }) => {
+		const originalPlatform = Platform.OS;
+		Platform.OS = platform;
+		const source = '/local/source.md';
+		const dest = samePath ? source : '/local/destination.md';
+		try {
+			mockRnfs.exists.mockImplementation(async path => path === source || exists);
+			mockRnfs.unlink.mockResolvedValue(undefined);
+			mockRnfs.moveFile.mockResolvedValue(undefined);
+			await new FsDriverRN().move(source, dest);
+
+			expect(mockRnfs.exists).toHaveBeenCalledTimes(platform === 'ios' && !samePath ? 2 : 0);
+			expect(mockRnfs.unlink).toHaveBeenCalledTimes(unlinks ? 1 : 0);
+			if (unlinks) {
+				expect(mockRnfs.unlink).toHaveBeenCalledWith(dest);
+				expect(mockRnfs.unlink.mock.invocationCallOrder[0]).toBeLessThan(mockRnfs.moveFile.mock.invocationCallOrder[0]);
+			}
+			expect(mockRnfs.moveFile).toHaveBeenCalledWith(source, dest);
+		} finally {
+			Platform.OS = originalPlatform;
+		}
+	});
+
+	it('keeps an existing iOS destination when the move source is missing', async () => {
+		const originalPlatform = Platform.OS;
+		Platform.OS = 'ios';
+		const source = '/local/missing.md';
+		const dest = '/local/existing.md';
+		try {
+			mockRnfs.exists.mockImplementation(async path => path === dest);
+			mockRnfs.moveFile.mockRejectedValueOnce(new Error('Source does not exist'));
+			await expect(new FsDriverRN().move(source, dest)).rejects.toThrow('Source does not exist');
+			expect(mockRnfs.exists).toHaveBeenCalledWith(source);
+			expect(mockRnfs.unlink).not.toHaveBeenCalled();
+			expect(mockRnfs.moveFile).toHaveBeenCalledWith(source, dest);
+		} finally {
+			Platform.OS = originalPlatform;
+		}
 	});
 
 	it('should overwrite an existing file discovered while warming an empty cache', async () => {

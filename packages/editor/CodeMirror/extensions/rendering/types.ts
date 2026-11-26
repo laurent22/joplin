@@ -15,6 +15,11 @@ export interface ReplacementExtension {
 	// Only a single number should be returned to create a point/full line range.
 	getDecorationRange?(node: SyntaxNodeRef, state: EditorState, parentTags: ParentTags): DecorationRange|null;
 
+	// Opt hidden syntax into mouse-selection completion. The owner is the complete
+	// rendered construct (e.g. StrongEmphasis), including its source delimiters.
+	// Only return an owner for decorations that hide source text, not visible widgets.
+	getSelectionOwner?(node: SyntaxNodeRef, state: EditorState, parentTags: ParentTags): { from: number; to: number }|null;
+
 	// Disable the decoration when near the cursor. Defaults to true.
 	hideWhenContainsSelection?: boolean;
 

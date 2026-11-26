@@ -121,13 +121,10 @@ describe('NoteEditor', () => {
 		for (const [height, visible] of testCases) {
 			setRootHeight(height);
 
-			await waitFor(async () => {
-				const toolbarButton = await screen.queryByLabelText(_('Bold'));
-				if (visible) {
-					expect(toolbarButton).not.toBeNull();
-				} else {
-					expect(toolbarButton).toBeNull();
-				}
+			// Assert on a boolean: a failing toBeNull() pretty-prints the whole fiber, which takes
+			// long enough to starve waitFor's polling on slow CI runners.
+			await waitFor(() => {
+				expect(screen.queryByLabelText(_('Bold')) !== null).toBe(visible);
 			});
 		}
 
