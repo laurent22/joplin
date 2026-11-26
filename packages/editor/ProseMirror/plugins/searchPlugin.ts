@@ -9,11 +9,24 @@ export const scrollSearchSelectionIntoView = (view: EditorView) => {
 	// which can happen while the mobile search controls have focus.
 	const rect = view.coordsAtPos(view.state.selection.from);
 	const editorWindow = view.dom.ownerDocument.defaultView;
+	const viewportTop = editorWindow.visualViewport?.offsetTop ?? 0;
+	const viewportBottom = viewportTop + (editorWindow.visualViewport?.height ?? editorWindow.innerHeight);
 	const margin = 16;
-	if (rect.top < margin) {
-		editorWindow.scrollBy(0, rect.top - margin);
-	} else if (rect.bottom > editorWindow.innerHeight - margin) {
-		editorWindow.scrollBy(0, rect.bottom - editorWindow.innerHeight + margin);
+	if (rect.top < viewportTop + margin) {
+		editorWindow.scrollBy(0, rect.top - viewportTop - margin);
+	} else if (rect.bottom > viewportBottom - margin) {
+		editorWindow.scrollBy(0, rect.bottom - viewportBottom + margin);
+	}
+};
+
+const selectAndScrollToMatch = (view: EditorView) => {
+	const state = view.state;
+	const query = getSearchState(state).query;
+	if (!query.valid) return;
+	const match = query.findNext(state, state.selection.from) ?? query.findNext(state, 0);
+	if (match && match.from < match.to) {
+		view.dispatch(state.tr.setSelection(TextSelection.create(state.doc, match.from, match.to)).scrollIntoView());
+		scrollSearchSelectionIntoView(view);
 	}
 };
 
@@ -44,12 +57,13 @@ const visiblePlugin = new Plugin({
 export const getSearchVisible = (state: EditorState) => {
 	return visiblePlugin.getState(state);
 };
-export const setSearchVisible = (visible: boolean): Command => (state, dispatch) => {
+export const setSearchVisible = (visible: boolean): Command => (state, dispatch, view) => {
 	if (getSearchVisible(state) === visible) {
 		return false;
 	}
 	if (dispatch) {
 		dispatch(setVisibleMeta(state.tr, { visible, changeSource: 'setSearchVisible' }));
+		if (visible && view) selectAndScrollToMatch(view);
 	}
 	return true;
 };
@@ -97,7 +111,6 @@ const searchExtension = (onEditorEvent: (event: EditorEvent)=> void) => {
 			},
 		},
 	});
-
 	return {
 		plugin: [
 			search({}),
@@ -106,10 +119,9 @@ const searchExtension = (onEditorEvent: (event: EditorEvent)=> void) => {
 		],
 		updateState: (view: EditorView, searchState: SearchState, changeSource: string) => {
 			const previousQuery = getSearchState(view.state).query;
-			const shouldSelectMatch = getSearchVisible(view.state) && searchState.dialogVisible && !!searchState.searchText && (
-				searchState.searchText !== previousQuery.search || searchState.caseSensitive !== previousQuery.caseSensitive || searchState.useRegex !== previousQuery.regexp
+			const shouldSelectMatch = searchState.dialogVisible && !!searchState.searchText && (
+				!getSearchVisible(view.state) || searchState.searchText !== previousQuery.search || searchState.caseSensitive !== previousQuery.caseSensitive || searchState.useRegex !== previousQuery.regexp
 			);
-
 			let transaction = view.state.tr;
 			transaction = setSearchState(transaction, new SearchQuery({
 				search: searchState.searchText,
@@ -120,16 +132,7 @@ const searchExtension = (onEditorEvent: (event: EditorEvent)=> void) => {
 			setVisibleMeta(transaction, { changeSource, visible: searchState.dialogVisible });
 			lastState = { ...searchState };
 			view.dispatch(transaction);
-
-			if (shouldSelectMatch) {
-				const state = view.state;
-				const query = getSearchState(state).query;
-				const match = query.findNext(state, state.selection.from) ?? query.findNext(state, 0);
-				if (match && match.from < match.to) {
-					view.dispatch(state.tr.setSelection(TextSelection.create(state.doc, match.from, match.to)).scrollIntoView());
-					scrollSearchSelectionIntoView(view);
-				}
-			}
+			if (shouldSelectMatch) selectAndScrollToMatch(view);
 		},
 	};
 };
