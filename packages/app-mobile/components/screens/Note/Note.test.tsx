@@ -43,6 +43,7 @@ import JoplinViewsEditors from '@joplin/lib/services/plugins/api/JoplinViewsEdit
 import WebviewController from '@joplin/lib/services/plugins/WebviewController';
 import getShownPluginEditorView from '@joplin/lib/services/plugins/utils/getShownPluginEditorView';
 import { defaultWindowId } from '@joplin/lib/reducer';
+import { ALL_NOTES_FILTER_ID } from '@joplin/lib/reserved-ids';
 
 jest.mock('@joplin/lib/hooks/plugins/useVisiblePluginEditorViewIds', () => jest.fn((): string[] => []));
 jest.mock('expo-print', () => ({ printAsync: jest.fn(), printToFileAsync: jest.fn() }));
@@ -542,7 +543,28 @@ describe('screens/Note/Note', () => {
 			const goSpy = jest.spyOn(NavService, 'go').mockResolvedValue(false);
 			try {
 				fireEvent.press(await screen.findByText('Reveal in notebook'));
-				expect(goSpy).toHaveBeenCalledWith('Notes', { folderId: expectedFolderId });
+				await waitFor(() => expect(goSpy).toHaveBeenCalledWith('Notes', { folderId: expectedFolderId }));
+			} finally {
+				goSpy.mockRestore();
+			}
+		} finally {
+			unmount();
+		}
+	});
+
+	it('reveals an orphaned note in All notes', async () => {
+		const noteId = await openNewNote({ title: 'Orphaned note', body: '...' });
+		const parentId = (await Note.load(noteId)).parent_id;
+		await Folder.save({ title: 'Another notebook', parent_id: '' });
+		await Folder.delete(parentId, { deleteChildren: false });
+		expect((await Note.previews(null)).some(note => note.id === noteId)).toBe(true);
+		const { unmount } = render(<WrappedNoteScreen />);
+		try {
+			await openNoteActionsMenu();
+			const goSpy = jest.spyOn(NavService, 'go').mockResolvedValue(false);
+			try {
+				fireEvent.press(await screen.findByText('Reveal in notebook'));
+				await waitFor(() => expect(goSpy).toHaveBeenCalledWith('Notes', { smartFilterId: ALL_NOTES_FILTER_ID }));
 			} finally {
 				goSpy.mockRestore();
 			}
