@@ -1,5 +1,9 @@
 # Joplin iOS Changelog
 
+## [ios-v13.8.2](https://github.com/laurent22/joplin/releases/tag/ios-v13.8.2) - 2026-11-26T10:17:25Z
+
+- Fixed: Fix S3 sync on Android (#17203) (#17202 by [@mrjo118](https://github.com/mrjo118))
+
 ## [ios-v13.8.1](https://github.com/laurent22/joplin/releases/tag/ios-v13.8.1) - 2026-11-26T08:40:03Z
 
 - New: Add a kill switch for compromised plugins (#17063)
