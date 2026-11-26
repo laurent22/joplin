@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Window background, so the logo is shown instead of a blank screen while the app is starting -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:drawable="?android:attr/colorBackground" />
+	<item
+		android:width="160dp"
+		android:height="160dp"
+		android:drawable="@mipmap/ic_launcher"
+		android:gravity="center" />
+</layer-list>
