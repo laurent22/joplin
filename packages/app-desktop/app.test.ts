@@ -124,6 +124,38 @@ describe('app', () => {
 	});
 
 	test.each([
+		['the selected note is listed', ['selected-note', 'remembered-note'], 'selected-note', false],
+		['the selected note has moved out of the list', ['first-note', 'remembered-note'], 'remembered-note', false],
+		['the selected and remembered notes have both moved', ['first-note'], 'first-note', false],
+		['selection outside the list is allowed', ['first-note'], 'selected-note', true],
+	])('should select the appropriate note when %s', async (_description, noteIds, expectedSelectedNoteId, allowSelectionInOtherFolders) => {
+		const state = {
+			...defaultState,
+			allowSelectionInOtherFolders,
+			notesParentType: 'Folder',
+			selectedFolderId: 'folder',
+			selectedNoteIds: ['selected-note'],
+			lastSelectedNotesIds: { ...defaultState.lastSelectedNotesIds, Folder: { folder: ['remembered-note'] } },
+		} as State;
+		let currentState = state;
+		const dispatch = jest.fn(action => { currentState = reducer(currentState, action); });
+		const storeMock = jest.spyOn(app(), 'store').mockReturnValue({
+			dispatch,
+			getState: () => currentState,
+		} as unknown as ReturnType<ReturnType<typeof app>['store']>);
+		const previewsMock = jest.spyOn(Note, 'previews').mockResolvedValue(noteIds.map(id => ({ id })) as NoteEntity[]);
+
+		try {
+			await app().refreshNotes(state, true);
+			const noteSelection = dispatch.mock.calls.map(call => call[0]).find(action => action.type === 'NOTE_SELECT');
+			expect(noteSelection.id).toBe(expectedSelectedNoteId);
+		} finally {
+			previewsMock.mockRestore();
+			storeMock.mockRestore();
+		}
+	});
+
+	test.each([
 		['the active window', true, [[expect.objectContaining({ windowId: defaultWindowId }), true, '']]],
 		['a background window', false, []],
 	])('should only refresh notes when the active window is closed (closing %s)', async (_name, focusSecondaryWindow, expectedRefreshCalls) => {

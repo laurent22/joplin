@@ -307,10 +307,13 @@ export default class BaseApplication {
 			notesSource: source,
 		});
 
-		if (useSelectedNoteId) {
+		const selectedNoteId = state.selectedNoteIds?.[0];
+		// NOTE_UPDATE_ALL has already removed selections missing from the refreshed list.
+		const selectedNoteIsAvailable = this.store().getState().selectedNoteIds?.[0] === selectedNoteId;
+		if (useSelectedNoteId && (state.allowSelectionInOtherFolders || (selectedNoteId && selectedNoteIsAvailable))) {
 			this.store().dispatch({
 				type: 'NOTE_SELECT',
-				id: state.selectedNoteIds && state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
+				id: selectedNoteId,
 				hash: noteHash,
 			});
 		} else {
