@@ -1,7 +1,21 @@
 import { getSearchState, search, SearchQuery, setSearchState } from 'prosemirror-search';
 import { SearchState } from '../../types';
-import { Plugin, EditorState, Command, Transaction } from 'prosemirror-state';
+import { Plugin, EditorState, Command, Transaction, TextSelection } from 'prosemirror-state';
 import { EditorEvent, EditorEventType } from '../../events';
+import { EditorView } from 'prosemirror-view';
+
+export const scrollSearchSelectionIntoView = (view: EditorView) => {
+	// ProseMirror skips its own scroll when the DOM selection is outside the editor,
+	// which can happen while the mobile search controls have focus.
+	const rect = view.coordsAtPos(view.state.selection.from);
+	const editorWindow = view.dom.ownerDocument.defaultView;
+	const margin = 16;
+	if (rect.top < margin) {
+		editorWindow.scrollBy(0, rect.top - margin);
+	} else if (rect.bottom > editorWindow.innerHeight - margin) {
+		editorWindow.scrollBy(0, rect.bottom - editorWindow.innerHeight + margin);
+	}
+};
 
 type VisibleMetaState = {
 	visible: boolean;
@@ -90,8 +104,13 @@ const searchExtension = (onEditorEvent: (event: EditorEvent)=> void) => {
 			visiblePlugin,
 			checkStateChangePlugin,
 		],
-		updateState: (editorState: EditorState, searchState: SearchState, changeSource: string) => {
-			let transaction = editorState.tr;
+		updateState: (view: EditorView, searchState: SearchState, changeSource: string) => {
+			const previousQuery = getSearchState(view.state).query;
+			const shouldSelectMatch = getSearchVisible(view.state) && searchState.dialogVisible && !!searchState.searchText && (
+				searchState.searchText !== previousQuery.search || searchState.caseSensitive !== previousQuery.caseSensitive || searchState.useRegex !== previousQuery.regexp
+			);
+
+			let transaction = view.state.tr;
 			transaction = setSearchState(transaction, new SearchQuery({
 				search: searchState.searchText,
 				caseSensitive: searchState.caseSensitive,
@@ -100,8 +119,17 @@ const searchExtension = (onEditorEvent: (event: EditorEvent)=> void) => {
 			}));
 			setVisibleMeta(transaction, { changeSource, visible: searchState.dialogVisible });
 			lastState = { ...searchState };
+			view.dispatch(transaction);
 
-			return transaction;
+			if (shouldSelectMatch) {
+				const state = view.state;
+				const query = getSearchState(state).query;
+				const match = query.findNext(state, state.selection.from) ?? query.findNext(state, 0);
+				if (match && match.from < match.to) {
+					view.dispatch(state.tr.setSelection(TextSelection.create(state.doc, match.from, match.to)).scrollIntoView());
+					scrollSearchSelectionIntoView(view);
+				}
+			}
 		},
 	};
 };

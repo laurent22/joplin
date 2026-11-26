@@ -5,7 +5,7 @@ import { autoJoin, selectAll, setBlockType, toggleMark } from 'prosemirror-comma
 import schema from '../schema';
 import { liftListItem, sinkListItem, wrapRangeInList } from 'prosemirror-schema-list';
 import { NodeType, Slice } from 'prosemirror-model';
-import { getSearchVisible, setSearchVisible } from '../plugins/searchPlugin';
+import { getSearchVisible, scrollSearchSelectionIntoView, setSearchVisible } from '../plugins/searchPlugin';
 import { findNext, findPrev, replaceAll, replaceNext } from 'prosemirror-search';
 import { getEditorApi } from '../plugins/joplinEditorApiPlugin';
 import { EditorEventType } from '../../events';
@@ -23,16 +23,7 @@ type ExtendedCommand = (state: EditorState, dispatch: Dispatch, view?: EditorVie
 const findAndScroll = (command: Command): Command => (state, dispatch, view) => {
 	const found = command(state, dispatch, view);
 	if (found && dispatch && view) {
-		// ProseMirror skips its own scroll when the DOM selection is outside the editor,
-		// which can happen while the mobile search controls have focus.
-		const rect = view.coordsAtPos(view.state.selection.from);
-		const editorWindow = view.dom.ownerDocument.defaultView;
-		const margin = 16;
-		if (rect.top < margin) {
-			editorWindow.scrollBy(0, rect.top - margin);
-		} else if (rect.bottom > editorWindow.innerHeight - margin) {
-			editorWindow.scrollBy(0, rect.bottom - editorWindow.innerHeight + margin);
-		}
+		scrollSearchSelectionIntoView(view);
 	}
 	return found;
 };
