@@ -121,6 +121,9 @@ describe('RevisionService.noteLock', () => {
 		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, note.id);
 		expect(revisions.length).toBe(2);
 		expect(revisions[1].is_locked).toBe(1);
+		// Standalone, since a diff against the previous ciphertext could not be rebuilt once that revision moves to another key.
+		expect(revisions[1].parent_id).toBe('');
+		expect(Revision.applyTextPatch('', revisions[1].body_diff)).toBe((await Note.load(note.id)).body);
 	});
 
 	it('should not chain a locked revision onto plaintext history while the feature flag is off', async () => {
