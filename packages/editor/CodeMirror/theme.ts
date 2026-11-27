@@ -112,6 +112,25 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 
 		'&.cm-focused .cm-cursor': baseCursorStyle,
 
+		// Hide the iOS selection handles when the editor is not focused,
+		// mirroring how the cursor is hidden. CodeMirror draws its own
+		// selection handles on iOS (drawSelection, iosSelectionHandles),
+		// but unlike the cursor they were shown even when the editor was
+		// blurred, leaving orphaned drag handles after dismissing a menu.
+		// This backports the upstream fix for
+		// https://github.com/codemirror/dev/issues/1797
+		// ("Only show iOS selection handles when the editor has focus"),
+		// which is not yet in a released @codemirror/view version
+		// (latest is 6.44.2, 26 Nov 2026). Remove this once Joplin
+		// upgrades to a @codemirror/view version containing that fix.
+		// See https://github.com/laurent22/joplin/issues/17215
+		'& .cm-selectionHandle': {
+			display: 'none',
+		},
+		'&.cm-focused > .cm-scroller > .cm-cursorLayer .cm-selectionHandle': {
+			display: 'block',
+		},
+
 		// The desktop app sets the font for these elements to a specific font.
 		// Override this.
 		'& div, & span, & a': {
