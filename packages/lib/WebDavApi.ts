@@ -290,7 +290,7 @@ class WebDavApi {
 				</d:prop>
 			</d:propfind>`;
 
-		return this.exec('PROPFIND', path, body, { Depth: depth }, options);
+		return this.exec('PROPFIND', path, body, { Depth: `${depth}` }, options);
 	}
 
 	// Used for debugging - can be uncommented in exec() to log curl commands
@@ -426,7 +426,7 @@ class WebDavApi {
 	//    </d:prop>
 	//  </d:propfind>'
 
-	public async exec(method: string, path = '', body: string | null = null, headers: Record<string, string | number> | null = null, options: ExecOptions | null = null): Promise<JsonValue> {
+	public async exec(method: string, path = '', body: string | null = null, headers: Record<string, string> | null = null, options: ExecOptions | null = null): Promise<JsonValue> {
 		headers = { ...headers };
 		options = { ...options };
 
