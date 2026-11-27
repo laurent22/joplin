@@ -123,11 +123,15 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 		// which is not yet in a released @codemirror/view version
 		// (latest is 6.44.2, 26 Nov 2026). Remove this once Joplin
 		// upgrades to a @codemirror/view version containing that fix.
+		// NOTE: CodeMirror draws the handles in .cm-selectionLayer, not
+		// .cm-cursorLayer (see drawSelection in @codemirror/view) — the
+		// show rule below must target the selection layer or it never
+		// matches and focused editors lose their drag handles entirely.
 		// See https://github.com/laurent22/joplin/issues/17215
 		'& .cm-selectionHandle': {
 			display: 'none',
 		},
-		'&.cm-focused > .cm-scroller > .cm-cursorLayer .cm-selectionHandle': {
+		'&.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionHandle': {
 			display: 'block',
 		},
 
