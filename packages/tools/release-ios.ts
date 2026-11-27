@@ -1,5 +1,5 @@
 import * as fs from 'fs-extra';
-import { rootDir, gitPullTry, completeReleaseWithChangelog } from './tool-utils';
+import { rootDir, gitPullTry, completeReleaseWithChangelog, execCommandWithPipes } from './tool-utils';
 import { unique } from '@joplin/lib/ArrayUtils';
 import * as readline from 'readline';
 
@@ -83,7 +83,39 @@ async function checkDeploymentTargets(filePath: string) {
 	if (!versions.length) throw new Error(`Could not find IPHONEOS_DEPLOYMENT_TARGET in ${filePath}`);
 }
 
+const archiveAndUpload = async () => {
+	const iosDir = `${mobileDir}/ios`;
+	const buildDir = `${iosDir}/build/release`;
+	const archivePath = `${buildDir}/Joplin.xcarchive`;
+
+	await fs.remove(buildDir);
+
+	console.info('Archiving...');
+	await execCommandWithPipes('xcodebuild', [
+		'archive',
+		'-quiet',
+		'-workspace', `${iosDir}/Joplin.xcworkspace`,
+		'-scheme', 'Joplin',
+		'-configuration', 'Release',
+		'-destination', 'generic/platform=iOS',
+		'-archivePath', archivePath,
+		'-allowProvisioningUpdates',
+	]);
+
+	// ExportOptions.plist has "destination: upload", so this sends the build to App Store Connect
+	console.info('Uploading to App Store Connect...');
+	await execCommandWithPipes('xcodebuild', [
+		'-exportArchive',
+		'-archivePath', archivePath,
+		'-exportOptionsPlist', `${iosDir}/ExportOptions.plist`,
+		'-exportPath', `${buildDir}/export`,
+		'-allowProvisioningUpdates',
+	]);
+};
+
 async function main() {
+	const argv = require('yargs').argv;
+
 	await gitPullTry();
 
 	await warningMessage();
@@ -102,6 +134,8 @@ async function main() {
 
 	const { newVersion, newVersionId } = await updateCodeProjVersions(pbxprojFilePath);
 	console.info(`New version: ${newVersion} (${newVersionId})`);
+
+	if (argv.upload) await archiveAndUpload();
 
 	const tagName = `ios-v${newVersion}`;
 	console.info(`Tag name: ${tagName}`);
