@@ -13063,7 +13063,7 @@ __metadata:
     jest-environment-jsdom: "npm:29.7.0"
     json-stringify-safe: "npm:5.0.1"
     json5: "npm:2.2.3"
-    katex: "npm:0.18.1"
+    katex: "npm:0.18.4"
     markdown-it: "npm:13.0.2"
     markdown-it-abbr: "npm:1.0.4"
     markdown-it-anchor: "npm:5.3.0"
@@ -37558,14 +37558,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"katex@npm:0.18.1":
-  version: 0.18.1
-  resolution: "katex@npm:0.18.1"
+"katex@npm:0.18.4":
+  version: 0.18.4
+  resolution: "katex@npm:0.18.4"
   dependencies:
     commander: "npm:^8.3.0"
   bin:
     katex: cli.js
-  checksum: 10/57c8832760a3466e84bd3d01f409fb3149c0450f156de24ddd447a414b309a286980a4a3cfcd41c8f7179ea3c49bd5a04d3c7ffb6ea14a68aa965a9f5dcf061d
+  checksum: 10/cf760043aaccba10aa2a1f73905b2922fa9bf471eb79f779f10680e77feba2edfdf7067a67123ef1b61bbb4c083af26a83ab91394a62f9b14ec7745df5393dfa
   languageName: node
   linkType: hard
 
