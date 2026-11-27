@@ -53,15 +53,11 @@ function loadPluginAssets(assets) {
 
 ## Development
 
-# Updating a markdown-it plugin
-
-Whenever updating a Markdown-it plugin, such as Katex or Mermaid, make sure to run `npm run buildAssets`, which will compile the CSS and JS for use in the Joplin applications.
-
 ### Adding asset files
 
 A plugin (or rule) can have any number of assets, such as CSS or font files, associated with it. To add an asset to a plugin, follow these steps:
 
-- Add the file under `/assets/PLUGIN_NAME/your-asset-file.css`
+- Add a `copyFile()` call in `Tools/buildAssets.js` so that the file is copied to `/assets/PLUGIN_NAME/your-asset-file.css`. The `/assets` directory is generated on install and is not committed.
 - Register this file within the plugin using `context.pluginAssets[PLUGIN_NAME] = [{ name: 'your-asset-file.css' }]`
 
 See katex.js for an example of how this is done.

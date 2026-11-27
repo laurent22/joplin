@@ -255,11 +255,6 @@
 
 		"react-test-renderer",
 
-		// Don't upgrade katex and mermaid automatically because we need to run
-		// `yarn buildAssets` after the package has been updated
-		"katex",
-		"mermaid",
-
 		// We keep using v5 for now. Upgrading to v7 would require updating the icon names.
 		"@fortawesome/fontawesome-free",
 
