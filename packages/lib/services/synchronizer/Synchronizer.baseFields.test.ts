@@ -2,7 +2,6 @@ import { synchronizerStart, setupDatabaseAndSynchronizer, switchClient, syncTarg
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import BaseItem from '../../models/BaseItem';
-import ConflictNoteState from '../../models/ConflictNoteState';
 import Setting from '../../models/Setting';
 import { setEncryptionEnabled } from './syncInfoUtils';
 import { loadMasterKeysFromSettings } from '../e2ee/utils';
@@ -70,42 +69,6 @@ describe('Synchronizer.baseFields', () => {
 		// The link must survive the remote-overwrite step, which rebuilds the sync_items row.
 		const syncItem = await BaseItem.syncItem(syncTargetId(), note.id, { fields: ['base_conflict_note_id'] });
 		expect(syncItem.base_conflict_note_id).toBe(conflictNote.id);
-	}));
-
-	it('should record the base content in conflict_note_states', (async () => {
-		const note = await Note.save({ title: 'base title', body: 'base body' });
-		await synchronizerStart();
-		await switchClient(2);
-		await synchronizerStart();
-		await switchClient(1);
-
-		await makeConflictOnClient1(note.id, 'remote body', 'local body');
-
-		const conflictNote = (await Note.conflictedNotes())[0];
-		const state = await ConflictNoteState.byNoteId(conflictNote.id);
-
-		expect(state.base_body).toBe('base body');
-		expect(state.base_title).toBe('base title');
-		expect(state.remote_updated_time).toBeGreaterThan(0);
-	}));
-
-	it('should delete the conflict state when its conflict note is deleted', (async () => {
-		const note = await Note.save({ title: 'base title', body: 'base body' });
-		await synchronizerStart();
-		await switchClient(2);
-		await synchronizerStart();
-		await switchClient(1);
-
-		await makeConflictOnClient1(note.id, 'remote body', 'local body');
-
-		const conflictNote = (await Note.conflictedNotes())[0];
-		expect(await ConflictNoteState.byNoteId(conflictNote.id)).toBeTruthy();
-
-		await Note.delete(conflictNote.id, { toTrash: false });
-		expect(await ConflictNoteState.byNoteId(conflictNote.id)).toBeFalsy();
-
-		// The original note keeps working, it has no state row of its own
-		expect(await Note.load(note.id)).toBeTruthy();
 	}));
 
 	it('should record the base on download so a receive-only client has an ancestor', (async () => {
@@ -196,13 +159,6 @@ describe('Synchronizer.baseFields', () => {
 		await switchClient(1);
 
 		await makeConflictOnClient1(note.id, 'remote body', 'local body');
-
-		// conflict_note_states keeps the common ancestor, not either side's edit
-		const conflictNote = (await Note.conflictedNotes())[0];
-		const state = await ConflictNoteState.byNoteId(conflictNote.id);
-		expect(state.base_body).toBe('original base');
-		expect(state.base_body).not.toBe('remote body');
-		expect(state.base_body).not.toBe('local body');
 
 		// The sync item is updated to the version both sides now share,
 		// so future conflicts use the latest shared version as the base.

@@ -13,6 +13,8 @@ interface EditorSettingsProps {
 	disabled: boolean;
 	tabMovesFocus: boolean;
 	baseTheme: EditorTheme;
+	// True while the conflict resolution UI is showing both versions
+	resolvingConflict: boolean;
 }
 
 const useEditorSettings = (props: EditorSettingsProps) => {
@@ -42,15 +44,18 @@ const useEditorSettings = (props: EditorSettingsProps) => {
 			keyboardMode = EditorKeymap.Emacs;
 		}
 
+		const plainText = props.resolvingConflict;
+
 		return {
 			language: isHTMLNote ? EditorLanguageType.Html : EditorLanguageType.Markdown,
 			readOnly: props.disabled,
 			markdownMarkEnabled: settings.markdownMark,
 			markdownInsertEnabled: settings.markdownInsert,
 			katexEnabled: settings.katex,
-			inlineRenderingEnabled: settings.inlineRendering,
-			tableEditingEnabled: settings.tableEditing,
-			imageRenderingEnabled: settings.imageRendering,
+			inlineRenderingEnabled: settings.inlineRendering && !plainText,
+			plainTextEnabled: plainText,
+			tableEditingEnabled: settings.tableEditing && !plainText,
+			imageRenderingEnabled: settings.imageRendering && !plainText,
 			highlightActiveLine: settings.highlightActiveLine,
 			themeData: {
 				...props.baseTheme,
@@ -72,7 +77,7 @@ const useEditorSettings = (props: EditorSettingsProps) => {
 		};
 	}, [
 		props.contentMarkupLanguage, props.disabled, props.keyboardMode, props.baseTheme,
-		props.tabMovesFocus, settings,
+		props.tabMovesFocus, props.resolvingConflict, settings,
 	]);
 };
 
