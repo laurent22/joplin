@@ -1,5 +1,9 @@
 # Joplin iOS Changelog
 
+## [ios-v13.8.3](https://github.com/laurent22/joplin/releases/tag/ios-v13.8.3) - 2026-11-27T11:28:22Z
+
+- Fixed: Fix WebDAV and OneDrive sync on Android (#17214) (#17209 by [@mrjo118](https://github.com/mrjo118))
+
 ## [ios-v13.8.2](https://github.com/laurent22/joplin/releases/tag/ios-v13.8.2) - 2026-11-26T10:17:25Z
 
 - Fixed: Fix S3 sync on Android (#17203) (#17202 by [@mrjo118](https://github.com/mrjo118))
