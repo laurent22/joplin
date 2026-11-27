@@ -12987,7 +12987,7 @@ __metadata:
     "@types/styled-components": "npm:5.1.32"
     async-mutex: "npm:0.5.0"
     babel-jest: "npm:29.7.0"
-    css-loader: "npm:7.1.4"
+    css-loader: "npm:7.1.5"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
     pdfjs-dist: "npm:2.16.105"
@@ -25722,9 +25722,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-loader@npm:7.1.4":
-  version: 7.1.4
-  resolution: "css-loader@npm:7.1.4"
+"css-loader@npm:7.1.5":
+  version: 7.1.5
+  resolution: "css-loader@npm:7.1.5"
   dependencies:
     icss-utils: "npm:^5.1.0"
     postcss: "npm:^8.4.40"
@@ -25742,7 +25742,7 @@ __metadata:
       optional: true
     webpack:
       optional: true
-  checksum: 10/4a37f3bd5db6d7d13a71f6ffff6d7afc3b243d4e2105c98dd1df9c1ae719cf95c3b46c47aeb6c5fd3675caf60bdb144e9baeba979a432df0906613e8f07b7623
+  checksum: 10/f7e75f19336eab641a5bacf9e4fa6a5d0a7cba660efc2902d07d5017931413541608117d5c582cce2f9aba96a6974cceae5f61ac21c43bb69e6dd3fb5245897d
   languageName: node
   linkType: hard
 
