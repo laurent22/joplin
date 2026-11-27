@@ -1,6 +1,7 @@
 import * as fs from 'fs-extra';
 import { rootDir, gitPullTry, completeReleaseWithChangelog, execCommandWithPipes } from './tool-utils';
 import { unique } from '@joplin/lib/ArrayUtils';
+import { credentialFile, readCredentialFileJson } from '@joplin/lib/utils/credentialFiles';
 import * as readline from 'readline';
 
 const mobileDir = `${rootDir}/packages/app-mobile`;
@@ -83,8 +84,30 @@ async function checkDeploymentTargets(filePath: string) {
 	if (!versions.length) throw new Error(`Could not find IPHONEOS_DEPLOYMENT_TARGET in ${filePath}`);
 }
 
+interface AppStoreConnectKey {
+	keyId: string;
+	issuerId: string;
+}
+
+// Xcode's Apple ID login periodically expires, and xcodebuild then fails instead of prompting to
+// sign in again, so prefer an App Store Connect API key when one is available.
+const authenticationArgs = () => {
+	const key = readCredentialFileJson<AppStoreConnectKey>('app-store-connect.json');
+	if (!key) {
+		console.info('No app-store-connect.json credential file - using the Apple ID signed in to Xcode');
+		return [];
+	}
+
+	return [
+		'-authenticationKeyPath', credentialFile(`AuthKey_${key.keyId}.p8`),
+		'-authenticationKeyID', key.keyId,
+		'-authenticationKeyIssuerID', key.issuerId,
+	];
+};
+
 const archiveAndUpload = async () => {
 	const iosDir = `${mobileDir}/ios`;
+	const authArgs = authenticationArgs();
 	const buildDir = `${iosDir}/build/release`;
 	const archivePath = `${buildDir}/Joplin.xcarchive`;
 
@@ -104,6 +127,7 @@ const archiveAndUpload = async () => {
 		'-destination', 'generic/platform=iOS',
 		'-archivePath', archivePath,
 		'-allowProvisioningUpdates',
+		...authArgs,
 	]);
 
 	// ExportOptions.plist has "destination: upload", so this sends the build to App Store Connect
@@ -114,6 +138,7 @@ const archiveAndUpload = async () => {
 		'-exportOptionsPlist', `${iosDir}/ExportOptions.plist`,
 		'-exportPath', `${buildDir}/export`,
 		'-allowProvisioningUpdates',
+		...authArgs,
 	]);
 };
 
