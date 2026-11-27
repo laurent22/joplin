@@ -143,12 +143,12 @@ describe('NoteLockSession', () => {
 	it('should keep the sync migration id and the first replaced key id through password resets', async () => {
 		const session = NoteLockSession.instance();
 		const firstKey = await NoteLockKey.instance().create('123456');
-		const syncMigrationId = localSyncInfo().syncMigrationId;
+		const syncMigrationId = localSyncInfo().noteLockKey.syncMigrationId;
 		expect(syncMigrationId).toHaveLength(32);
 		expect(Setting.value('noteLock.passwordReset')).toBe(false);
 
 		await session.reset('654321');
-		expect(localSyncInfo().syncMigrationId).toBe(syncMigrationId);
+		expect(localSyncInfo().noteLockKey.syncMigrationId).toBe(syncMigrationId);
 		expect(Setting.value('noteLock.passwordReset')).toBe(true);
 		expect(Setting.value('noteLock.keyIdToReset')).toBe(firstKey.id);
 

@@ -88,7 +88,7 @@ describe('setNoteLockState', () => {
 		await setUpUnlockedSession();
 		const note = await Note.save({ title: 'note', body: 'secret' });
 		const lockedNote = await Note.save({ title: 'locked note', body: 'secret', is_locked: 1 }, { useNoteLock: true });
-		Setting.setValue('noteLock.conflictNoteLockKey', { noteLockKey: NoteLockKey.instance().load(), syncMigrationId: 'remote' });
+		Setting.setValue('noteLock.conflictNoteLockKey', { noteLockKey: { ...NoteLockKey.instance().load(), syncMigrationId: 'remote' } });
 
 		await expect(enableNoteLock(note.id)).rejects.toThrow('note lock key migration is required');
 		await expect(disableNoteLock(lockedNote.id)).rejects.toThrow('note lock key migration is required');
