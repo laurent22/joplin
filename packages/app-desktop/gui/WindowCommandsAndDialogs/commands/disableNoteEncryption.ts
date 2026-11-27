@@ -24,6 +24,8 @@ export const runtime = (): CommandRuntime => {
 				return;
 			}
 
+			if (!bridge().showConfirmMessageBox(_('Are you sure you want to remove lock from this note?'), { buttons: [_('Yes'), _('No')] })) return;
+
 			try {
 				await disableNoteLock(noteId);
 			} catch (error) {

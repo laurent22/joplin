@@ -15,7 +15,8 @@ export const declaration: CommandDeclaration = {
 
 export const runtime = (): CommandRuntime => {
 	return {
-		execute: async (context: DesktopCommandContext, noteId: string = null) => {
+		// afterUnlock: the run that follows the unlock dialog, which was already confirmed, so it does not ask again.
+		execute: async (context: DesktopCommandContext, noteId: string = null, afterUnlock = false) => {
 			if (!isNoteLockEnabled()) return;
 			if (noteId === null) {
 				if (context.state.selectedNoteIds.length !== 1) return;
@@ -43,13 +44,17 @@ export const runtime = (): CommandRuntime => {
 				return;
 			}
 
+			// Locking deletes the note history, so a click by accident is confirmed first, also before the unlock dialog,
+			// whose text does not say what asked for it.
+			if (!afterUnlock && !bridge().showConfirmMessageBox(_('Are you sure you want to lock this note?'), { buttons: [_('Yes'), _('No')] })) return;
+
 			// A note that is not yet encrypted has no unlock overlay, so the session unlock has to
 			// happen through the dialog here.
 			if (!NoteLockSession.instance().isUnlocked()) {
 				context.dispatch({
 					type: 'DIALOG_OPEN',
 					name: 'noteLockUnlock',
-					props: { successCommand: { name: 'enableNoteEncryption', args: [noteId] } },
+					props: { successCommand: { name: 'enableNoteEncryption', args: [noteId, true] } },
 				});
 				return;
 			}
