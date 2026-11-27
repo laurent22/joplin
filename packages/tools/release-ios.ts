@@ -90,6 +90,10 @@ const archiveAndUpload = async () => {
 
 	await fs.remove(buildDir);
 
+	// Xcode's /usr/bin/rsync spawns whichever `rsync` is first in PATH as its server side. If that's
+	// Homebrew's rsync 3.x, it rejects Apple's flags and the export fails with "Copy failed".
+	process.env.PATH = `/usr/bin:${process.env.PATH}`;
+
 	console.info('Archiving...');
 	await execCommandWithPipes('xcodebuild', [
 		'archive',
