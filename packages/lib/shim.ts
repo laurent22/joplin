@@ -41,6 +41,7 @@ export interface FetchOptions {
 	body?: string;
 	agent?: unknown;
 	signal?: AbortSignal;
+	maxRetry?: number;
 }
 
 interface AttachFileToNoteOptions {
@@ -210,6 +211,16 @@ const shim = {
 		if (shim.isFreeBSD()) return 'freebsd';
 		if (typeof process !== 'undefined' && process.platform) return process.platform;
 		throw new Error('Cannot determine platform');
+	},
+
+	getOsName: (platform: string) => {
+		if (platform === 'win32') return 'Windows';
+		if (platform === 'darwin') return 'macOS';
+		if (platform === 'linux') return 'Linux';
+		if (platform === 'android') return 'Android';
+		if (platform === 'ios') return 'iOS';
+		if (platform === 'web') return 'Web';
+		return '';
 	},
 
 	// Tells the computer CPU architecture. Which if different from the architecture the running

@@ -85,6 +85,12 @@ export const getApplicationInformation = async () => {
 	}
 };
 
+export const getUserAgent = () => {
+	const appType = Setting.appTypeToLabel(Setting.value('appType'));
+	const platformName = shim.platformName();
+	return `Joplin/${shim.appVersion()} (${appType}; ${shim.getOsName(platformName) || platformName})`;
+};
+
 export const generateApplicationConfirmUrl = async (confirmUrl: string) => {
 	const applicationInfo = await getApplicationInformation();
 	const searchParams = new URLSearchParams();
@@ -116,10 +122,12 @@ export const checkIfLoginWasSuccessful = async (applicationsUrl: string) => {
 		if (isWaitingResponse) return undefined;
 		isWaitingResponse = true;
 
-		const response = await fetch(applicationsUrl, {
+		const response = await shim.fetch(applicationsUrl, {
 			headers: {
 				'X-JOPLIN-CUSTOM-API-KEY': Setting.value('sync.10.apiKey'),
+				'User-Agent': getUserAgent(),
 			},
+			maxRetry: 0,
 		});
 		const jsonBody = await response.json();
 

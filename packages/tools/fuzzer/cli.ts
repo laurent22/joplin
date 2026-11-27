@@ -9,6 +9,7 @@ import { readFile } from 'fs/promises';
 import Fuzzer, { FuzzerConfig } from './Fuzzer';
 import { isTTY } from '@joplin/utils/cli';
 import { shimInit } from '@joplin/lib/shim-init-node';
+import { AppType } from '@joplin/lib/models/settings/types';
 
 const globalLogger = new Logger();
 globalLogger.addTarget(TargetType.Console);
@@ -18,6 +19,7 @@ const logger = Logger.create('fuzzer');
 const main = async (config: FuzzerConfig, restoreFromSnapshot: boolean) => {
 	shimInit();
 	Setting.setConstant('env', Env.Dev);
+	Setting.setConstant('appType', AppType.Cli);
 
 	const cleanupTasks: CleanupTask[] = [];
 
