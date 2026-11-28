@@ -19,6 +19,8 @@ import createMockReduxStore from '../../../utils/testing/createMockReduxStore';
 import getWebViewDomById from '../../../utils/testing/getWebViewDomById';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import Folder from '@joplin/lib/models/Folder';
+import { getTrashFolderId } from '@joplin/lib/services/trash';
+import NavService from '@joplin/lib/services/NavService';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import { ModelType } from '@joplin/lib/BaseModel';
 import ItemChange from '@joplin/lib/models/ItemChange';
@@ -41,6 +43,7 @@ import JoplinViewsEditors from '@joplin/lib/services/plugins/api/JoplinViewsEdit
 import WebviewController from '@joplin/lib/services/plugins/WebviewController';
 import getShownPluginEditorView from '@joplin/lib/services/plugins/utils/getShownPluginEditorView';
 import { defaultWindowId } from '@joplin/lib/reducer';
+import { ALL_NOTES_FILTER_ID } from '@joplin/lib/reserved-ids';
 
 jest.mock('@joplin/lib/hooks/plugins/useVisiblePluginEditorViewIds', () => jest.fn((): string[] => []));
 jest.mock('expo-print', () => ({ printAsync: jest.fn(), printToFileAsync: jest.fn() }));
@@ -519,6 +522,55 @@ describe('screens/Note/Note', () => {
 
 		unmount();
 		Setting.setValue('featureFlag.noteLock', false);
+	});
+
+	it.each([
+		{ description: 'a regular note', deleted: false, conflict: false },
+		{ description: 'a trashed note', deleted: true, conflict: false },
+		{ description: 'a conflict note', deleted: false, conflict: true },
+		{ description: 'a trashed conflict note', deleted: true, conflict: true },
+	])('reveals $description in its displayed folder', async ({ deleted, conflict }) => {
+		const noteId = await openNewNote({
+			title: 'Reveal target', body: '...',
+			deleted_time: deleted ? Date.now() : 0,
+			is_conflict: conflict ? 1 : 0,
+		});
+		const parentId = (await Note.load(noteId)).parent_id;
+		const expectedFolderId = deleted ? getTrashFolderId() : conflict ? Folder.conflictFolderId() : parentId;
+		const { unmount } = render(<WrappedNoteScreen />);
+		try {
+			await openNoteActionsMenu();
+			const goSpy = jest.spyOn(NavService, 'go').mockResolvedValue(false);
+			try {
+				fireEvent.press(await screen.findByText('Reveal in notebook'));
+				await waitFor(() => expect(goSpy).toHaveBeenCalledWith('Notes', { folderId: expectedFolderId }));
+			} finally {
+				goSpy.mockRestore();
+			}
+		} finally {
+			unmount();
+		}
+	});
+
+	it('reveals an orphaned note in All notes', async () => {
+		const noteId = await openNewNote({ title: 'Orphaned note', body: '...' });
+		const parentId = (await Note.load(noteId)).parent_id;
+		await Folder.save({ title: 'Another notebook', parent_id: '' });
+		await Folder.delete(parentId, { deleteChildren: false });
+		expect((await Note.previews(null)).some(note => note.id === noteId)).toBe(true);
+		const { unmount } = render(<WrappedNoteScreen />);
+		try {
+			await openNoteActionsMenu();
+			const goSpy = jest.spyOn(NavService, 'go').mockResolvedValue(false);
+			try {
+				fireEvent.press(await screen.findByText('Reveal in notebook'));
+				await waitFor(() => expect(goSpy).toHaveBeenCalledWith('Notes', { smartFilterId: ALL_NOTES_FILTER_ID }));
+			} finally {
+				goSpy.mockRestore();
+			}
+		} finally {
+			unmount();
+		}
 	});
 
 	it('pressing "delete" should move the note to the trash', async () => {

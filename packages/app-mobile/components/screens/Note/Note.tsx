@@ -57,7 +57,7 @@ import { RefObject, useContext } from 'react';
 import { getNoteCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import { AppState } from '../../../utils/types';
 import restoreItems from '@joplin/lib/services/trash/restoreItems';
-import { getDisplayParentTitle } from '@joplin/lib/services/trash';
+import { getDisplayParentId, getDisplayParentTitle, getTrashFolderId } from '@joplin/lib/services/trash';
 import { PluginHtmlContents, PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import debounce from '../../../utils/debounce';
 import { blur, focus } from '@joplin/lib/utils/focusHandler';
@@ -1503,9 +1503,11 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		this.props.dispatch({ type: 'SIDE_MENU_OPEN' });
 	}
 
-	private revealInNotebook_onPress() {
-		const folderId = this.state.folder?.id;
-		if (folderId) {
+	private async revealInNotebook_onPress() {
+		const note = this.state.note;
+		const folderId = note.is_conflict && !note.deleted_time ? Folder.conflictFolderId() : getDisplayParentId(note, this.state.folder);
+		const folderExists = folderId && (folderId === Folder.conflictFolderId() || folderId === getTrashFolderId() || await Folder.load(folderId));
+		if (folderExists) {
 			void NavService.go('Notes', { folderId: folderId });
 		} else {
 			void NavService.go('Notes', { smartFilterId: ALL_NOTES_FILTER_ID });
@@ -1829,7 +1831,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			title: _('Reveal in notebook'),
 			icon: 'material folder-file-outline',
 			onPress: () => {
-				this.revealInNotebook_onPress();
+				void this.revealInNotebook_onPress();
 			},
 		});
 
