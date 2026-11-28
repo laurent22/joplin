@@ -2,6 +2,7 @@ import BaseModel, { AclAction, LoadOptions, SaveOptions, ValidateOptions } from 
 import { EmailSender, Item, NotificationLevel, Subscription, User, UserFlagType, Uuid } from '../services/database/types';
 import { isHashedPassword, hashPassword, checkPassword } from '../utils/auth';
 import { randomBytes } from 'crypto';
+import { isIP } from 'net';
 import { limiterLoginAccountBruteForce } from '../utils/request/limiterAccountBruteForce';
 import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge, ErrorNotFound, ErrorBadRequest } from '../utils/errors';
 import { ModelType } from '@joplin/lib/BaseModel';
@@ -24,10 +25,11 @@ import oversizedAccount1 from '../views/emails/oversizedAccount1';
 import oversizedAccount2 from '../views/emails/oversizedAccount2';
 import dayjs = require('dayjs');
 import { failedPaymentFinalAccount } from './SubscriptionModel';
-import { Day } from '../utils/time';
+import { Day, formatDateOnServer } from '../utils/time';
 import paymentFailedAccountDisabledTemplate from '../views/emails/paymentFailedAccountDisabledTemplate';
 import changeEmailConfirmationTemplate from '../views/emails/changeEmailConfirmationTemplate';
 import changeEmailNotificationTemplate from '../views/emails/changeEmailNotificationTemplate';
+import newSignInTemplate, { NewSignInView } from '../views/emails/newSignInTemplate';
 import { NotificationKey } from './NotificationModel';
 import prettyBytes = require('pretty-bytes');
 import { isValidEmailRecipient, validateEmail } from '../utils/validation';
@@ -642,6 +644,20 @@ export default class UserModel extends BaseModel<User> {
 			...changeEmailNotificationTemplate(),
 			...this.userEmailDetails(user),
 			recipient_email: recipientEmail,
+		});
+	}
+
+	public async sendNewSignInEmail(userId: Uuid, signIn: Pick<NewSignInView, 'client' | 'ip'>) {
+		const user = await this.load(userId);
+
+		await this.models().email().push({
+			...newSignInTemplate({
+				...signIn,
+				ip: isIP(signIn.ip) ? signIn.ip : 'Unknown',
+				signInTime: formatDateOnServer(Date.now()),
+				canEnableMfa: !!config().MFA_ENABLED && !getIsMFAEnabled(user),
+			}),
+			...this.userEmailDetails(user),
 		});
 	}
 

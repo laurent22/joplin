@@ -9,6 +9,9 @@ import { cookieSet } from '../../utils/cookies';
 import defaultView from '../../utils/defaultView';
 import limiterLoginBruteForce from '../../utils/request/limiterLoginBruteForce';
 import { checkLoginCodeFailures, countLoginCodeFailure } from '../../utils/request/limiterLoginCodeFailures';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('api/login');
 
 export const router = new Router(RouteType.Api);
 
@@ -53,6 +56,11 @@ router.post('api/saml', async (_path: SubPath, ctx: AppContext) => {
 		case 'web-login': { // If the user wanted to load a page from Joplin Server, we set the cookie for this session
 			const session = await ctx.joplin.models.session().createUserSession(user.id);
 			cookieSet(ctx, 'sessionId', session.id);
+			try {
+				await ctx.joplin.models.user().sendNewSignInEmail(user.id, { client: 'Website', ip: userIp(ctx) });
+			} catch (error) {
+				logger.error('Could not send the sign-in email:', error);
+			}
 
 			return redirect(ctx, `${config().baseUrl}/home`);
 		}
@@ -90,6 +98,11 @@ router.get('api/login_with_code/:id', async (path: SubPath, ctx: AppContext) => 
 
 	if (user) {
 		const session = await ctx.joplin.models.session().createUserSession(user.id);
+		try {
+			await ctx.joplin.models.user().sendNewSignInEmail(user.id, { client: 'Application', ip: userIp(ctx) });
+		} catch (error) {
+			logger.error('Could not send the sign-in email:', error);
+		}
 
 		return {
 			id: session.id,

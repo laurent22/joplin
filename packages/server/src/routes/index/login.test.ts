@@ -44,6 +44,8 @@ async function doLoginWithMFA(email: string, password: string, mfaCode: string, 
 	return context;
 }
 
+const signInEmails = async () => (await models().email().all()).filter(e => e.subject.includes('New sign-in'));
+
 const appAuthId = 'asdf';
 const appQuery = `platform=${ApplicationPlatform.MacOs}&type=${ApplicationType.Desktop}&version=3.7.21`;
 
@@ -96,6 +98,67 @@ describe('login', () => {
 		const sessionId = cookieGet(context, 'sessionId');
 		const session: Session = await models().session().load(sessionId);
 		expect(session.user_id).toBe(user.id);
+	});
+
+	test('should email the owner on each login', async () => {
+		const user = await createUser(1);
+
+		await doLogin(user.email, '123456', { 'x-real-ip': '203.0.113.7' });
+		await doLogin(user.email, '123456', { 'x-real-ip': '203.0.113.8' });
+
+		const emails = await signInEmails();
+		expect(emails).toHaveLength(2);
+		expect(emails[0].recipient_id).toBe(user.id);
+		expect(emails[0].body).toContain('Signed in from: Website');
+		expect(emails[0].body).toContain('IP address: 203.0.113.7');
+		expect(emails[0].body).not.toContain('http');
+		expect(emails[1].body).toContain('IP address: 203.0.113.8');
+	});
+
+	test.each([
+		'[Secure your account](https://evil.example)',
+		'https://evil.example',
+		'evil.example',
+	])('should show Unknown if the IP is not an IP: "%s"', async (ip) => {
+		const user = await createUser(1);
+
+		await doLogin(user.email, '123456', { 'x-real-ip': ip });
+
+		const [email] = await signInEmails();
+		expect(email.body).toContain('IP address: Unknown');
+		expect(email.body).not.toContain('evil.example');
+	});
+
+	test.each([
+		[0, '', false],
+		[1, '', true],
+		[1, 'totp_secret', false],
+	])('should only ask to enable MFA if the owner can: MFA_ENABLED=%s, totp_secret="%s"', async (mfaEnabled, totpSecret, expected) => {
+		const previous = config().MFA_ENABLED;
+		config().MFA_ENABLED = mfaEnabled;
+
+		try {
+			const user = await createUser(1);
+			await models().user().save({ id: user.id, totp_secret: totpSecret });
+
+			await models().user().sendNewSignInEmail(user.id, { client: 'Website', ip: '203.0.113.7' });
+
+			const [email] = await signInEmails();
+			expect(email.body.includes('enable multi-factor authentication')).toBe(expected);
+		} finally {
+			config().MFA_ENABLED = previous;
+		}
+	});
+
+	test('should not email the owner if the login failed or is waiting for the MFA code', async () => {
+		const user = await createUser(1);
+
+		await doLogin(user.email, 'wrong');
+
+		await models().user().save({ id: user.id, totp_secret: 'totp_secret' });
+		await doLogin(user.email, '123456');
+
+		expect(await signInEmails()).toHaveLength(0);
 	});
 
 	test.each([
