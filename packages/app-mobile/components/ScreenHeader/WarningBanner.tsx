@@ -20,7 +20,7 @@ import Logger from '@joplin/utils/Logger';
 import { reg } from '@joplin/lib/registry';
 import { DialogContext } from '../DialogManager';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
-import { onAllowUnencryptedUploads, onKeepHeldBackChanges, plaintextUploadBannerMessage } from '@joplin/lib/services/synchronizer/utils/plaintextUploadHeldBackItems';
+import { onAllowUnencryptedUploads, onKeepHeldBackChanges, plaintextUploadBannerMessage, PlaintextUploadHeldBackCauses } from '@joplin/lib/services/synchronizer/utils/plaintextUploadHeldBackItems';
 
 const logger = Logger.create('WarningBanner');
 
@@ -31,6 +31,7 @@ interface Props {
 	showUnknownKeyFormatMessage: boolean;
 	hasDisabledSyncItems: boolean;
 	plaintextUploadHeldBackItemIds: string[];
+	plaintextUploadHeldBackCauses: PlaintextUploadHeldBackCauses;
 	shouldUpgradeSyncTarget: boolean;
 	showShouldUpgradeSyncTargetMessage: boolean|undefined;
 	hasDisabledEncryptionItems: boolean;
@@ -90,7 +91,7 @@ const WarningBannerComponent: React.FC<Props> = props => {
 	};
 
 	const renderPlaintextUploadWarning = () => {
-		const message = plaintextUploadBannerMessage(props.plaintextUploadHeldBackItemIds.length);
+		const message = plaintextUploadBannerMessage(props.plaintextUploadHeldBackItemIds.length, props.plaintextUploadHeldBackCauses);
 		const onPress = async () => {
 			const allowId = 0;
 			const keepId = 1;
@@ -100,8 +101,8 @@ const WarningBannerComponent: React.FC<Props> = props => {
 				cancelId,
 				defaultId: cancelId,
 			});
-			if (choice === allowId) await onAllowUnencryptedUploads();
-			else if (choice === keepId) await onKeepHeldBackChanges(props.plaintextUploadHeldBackItemIds, props.dispatch);
+			if (choice === allowId) await onAllowUnencryptedUploads(props.plaintextUploadHeldBackCauses);
+			else if (choice === keepId) await onKeepHeldBackChanges(props.plaintextUploadHeldBackItemIds, props.plaintextUploadHeldBackCauses, props.dispatch);
 		};
 		return renderWarningBox('plaintextUpload', message, { onPress: () => void onPress() });
 	};
@@ -271,6 +272,7 @@ export default connect((state: AppState) => {
 		showUnknownKeyFormatMessage: !isEncryptionConfigRoute(state) && showUnknownKeyFormatBanner(syncInfo),
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
 		plaintextUploadHeldBackItemIds: state.plaintextUploadHeldBackItemIds,
+		plaintextUploadHeldBackCauses: state.plaintextUploadHeldBackCauses,
 		routeName: state.route?.routeName,
 		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,

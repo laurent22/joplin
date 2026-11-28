@@ -290,7 +290,12 @@ class Command extends BaseCommand {
 		if (!items.length) return;
 
 		const maxListedItems = 10;
-		const lines = [`/!\\ ${plaintextUploadBannerMessage(heldBackItemsToConfirm(groups).length)}`];
+		const causes = {
+			published: items.some(({ group }) => group.reason === PlaintextUploadReason.Published),
+			unencryptedShare: items.some(({ group }) => group.reason !== PlaintextUploadReason.Published),
+			shareRootTitle: '',
+		};
+		const lines = [`/!\\ ${plaintextUploadBannerMessage(heldBackItemsToConfirm(groups).length, causes)}`];
 		for (const { item, group } of items.slice(0, maxListedItems)) {
 			lines.push(`  ${heldBackItemToLine(item)}: ${group.label}`);
 		}

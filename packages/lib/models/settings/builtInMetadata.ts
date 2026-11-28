@@ -1666,7 +1666,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			public: true,
 			storage: SettingStorage.File,
 			section: 'sync',
-			label: () => _('Allow publishing with end-to-end encryption on'),
+			label: () => _('Allow unencrypted uploads when end-to-end encryption is on'),
 			description: () => _('Published notes and their attachments are uploaded without encryption. Also needed to edit notebooks shared by users who don\'t use encryption.'),
 			show: settings => {
 				if (settings['encryption.allowUnencryptedUploads']) return true;
