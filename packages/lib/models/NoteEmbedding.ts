@@ -29,6 +29,9 @@ interface SimilaritySearchOptions {
 	maxDistance?: number;
 	// Pre-resolved scope filter. Empty array = search nothing.
 	noteIds?: string[];
+	// When set, the scope and this exclusion are applied before vec0 picks
+	// the k nearest, so filtered-out chunks don't take any of the k slots.
+	excludeNoteIds?: string[];
 }
 
 export default class NoteEmbedding extends BaseModel {
@@ -200,12 +203,22 @@ export default class NoteEmbedding extends BaseModel {
 		// after a JOIN isn't visible to its planner. With a noteIds filter we
 		// over-fetch 4× and trim after, so the post-join filter has room to
 		// drop non-matches. Pathological vaults can still under-fill.
-		const fetchSize = options.noteIds?.length ? k * 4 : k;
+		const preFilter = !!options.excludeNoteIds?.length;
+		const fetchSize = options.noteIds?.length && !preFilter ? k * 4 : k;
 
 		const whereParts: string[] = [`v.embedding MATCH ? AND k = ${fetchSize}`];
 		const params: (string|number)[] = [JSON.stringify(queryVector)];
 
-		if (options.noteIds && options.noteIds.length) {
+		if (preFilter) {
+			// vec0 applies a rowid IN constraint before the KNN.
+			const filterParts = [`note_id NOT IN (${options.excludeNoteIds.map(() => '?').join(',')})`];
+			params.push(...options.excludeNoteIds);
+			if (options.noteIds?.length) {
+				filterParts.push(`note_id IN (${options.noteIds.map(() => '?').join(',')})`);
+				params.push(...options.noteIds);
+			}
+			whereParts.push(`v.rowid IN (SELECT id FROM note_embeddings_meta WHERE ${filterParts.join(' AND ')})`);
+		} else if (options.noteIds && options.noteIds.length) {
 			whereParts.push(`m.note_id IN (${options.noteIds.map(() => '?').join(',')})`);
 			params.push(...options.noteIds);
 		}
@@ -309,6 +322,20 @@ export default class NoteEmbedding extends BaseModel {
 			[noteId],
 		);
 		return rows.map(r => JSON.parse(r.embedding) as number[]);
+	}
+
+	// Unlike countByNoteId(), only counts chunks that actually have a vector.
+	public static async vectorCountByNoteId(noteId: string): Promise<number> {
+		this.requireVec();
+		if (!await this.vecTableExists()) return 0;
+		const row = await this.db().selectOne(
+			`SELECT COUNT(*) AS c
+			 FROM note_embeddings_vec v
+			 JOIN note_embeddings_meta m ON m.id = v.rowid
+			 WHERE m.note_id = ?`,
+			[noteId],
+		) as { c: number } | null;
+		return row?.c ?? 0;
 	}
 
 	// Drops every embedding. Used when the active model's id changes.
