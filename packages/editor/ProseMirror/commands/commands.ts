@@ -5,7 +5,7 @@ import { autoJoin, selectAll, setBlockType, toggleMark } from 'prosemirror-comma
 import schema from '../schema';
 import { liftListItem, sinkListItem, wrapRangeInList } from 'prosemirror-schema-list';
 import { NodeType, Slice } from 'prosemirror-model';
-import { getSearchVisible, setSearchVisible } from '../plugins/searchPlugin';
+import { getSearchVisible, scrollSearchSelectionIntoView, setSearchVisible } from '../plugins/searchPlugin';
 import { findNext, findPrev, replaceAll, replaceNext } from 'prosemirror-search';
 import { getEditorApi } from '../plugins/joplinEditorApiPlugin';
 import { EditorEventType } from '../../events';
@@ -19,6 +19,14 @@ import getTextBetween from '../utils/getTextBetween';
 
 type Dispatch = (tr: Transaction)=> void;
 type ExtendedCommand = (state: EditorState, dispatch: Dispatch, view?: EditorView, options?: string[])=> boolean;
+
+const findAndScroll = (command: Command): Command => (state, dispatch, view) => {
+	const found = command(state, dispatch, view);
+	if (found && dispatch && view) {
+		scrollSearchSelectionIntoView(view);
+	}
+	return found;
+};
 
 const toggleHeading = (level: number): Command => {
 	const enableCommand: Command = (state, dispatch) => {
@@ -198,8 +206,8 @@ const commands: Record<EditorCommandType, ExtendedCommand|null> = {
 	},
 	[EditorCommandType.ShowSearch]: setSearchVisible(true),
 	[EditorCommandType.HideSearch]: setSearchVisible(false),
-	[EditorCommandType.FindNext]: findNext,
-	[EditorCommandType.FindPrevious]: findPrev,
+	[EditorCommandType.FindNext]: findAndScroll(findNext),
+	[EditorCommandType.FindPrevious]: findAndScroll(findPrev),
 	[EditorCommandType.ReplaceNext]: replaceNext,
 	[EditorCommandType.ReplaceAll]: replaceAll,
 	[EditorCommandType.EditLink]: (state: EditorState, dispatch) => {
